@@ -11,14 +11,14 @@ import KeyboardShortcuts
 struct KeybindingSettingsView: View {
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Resize Window")
+            Text("Quick Controls")
                 .fontWeight(.medium)
             VStack(spacing: 10) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(.white.opacity(0.2), lineWidth: 0.5)
+                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
                     RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color(.systemGray).opacity(0.03))
+                        .foregroundColor(Color("Monochrome").opacity(0.03))
                     
                     VStack {
                         HStack {
@@ -31,9 +31,9 @@ struct KeybindingSettingsView: View {
                 }
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(.white.opacity(0.2), lineWidth: 0.5)
+                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
                     RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color(.systemGray).opacity(0.03))
+                        .foregroundColor(Color("Monochrome").opacity(0.03))
                     
                     VStack {
                         HStack {
@@ -64,9 +64,9 @@ struct KeybindingSettingsView: View {
                 }
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(.white.opacity(0.2), lineWidth: 0.5)
+                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
                     RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color(.systemGray).opacity(0.03))
+                        .foregroundColor(Color("Monochrome").opacity(0.03))
                     
                     VStack {
                         HStack {
@@ -98,11 +98,5 @@ struct KeybindingSettingsView: View {
             }
         }
         .padding(20)
-    }
-}
-
-struct KeybindingSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        KeybindingSettingsView()
     }
 }

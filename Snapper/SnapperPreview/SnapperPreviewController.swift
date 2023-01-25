@@ -32,7 +32,6 @@ class SnapperPreviewController {
         
         if let screen = windowResizer.getScreenWithMouse() {
             panel.setFrame(CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.visibleFrame.width, height: screen.visibleFrame.height), display: false)
-            print(CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.visibleFrame.width, height: screen.visibleFrame.height))
         }
         
         self.snapperPreviewWindowManager = .init(window: panel)

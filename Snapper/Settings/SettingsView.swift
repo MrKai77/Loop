@@ -33,6 +33,15 @@ struct SettingsView: View {
                     .onAppear {
                         self.currentWindowHeight = 450
                     }
+                
+                RadialMenuSettingsView()
+                    .tabItem {
+                        Image(systemName: "circle.dashed")
+                        Text("Radial Menu")
+                    }
+                    .onAppear {
+                        self.currentWindowHeight = 452
+                    }
             }
         }
         .frame(width: 450, height: CGFloat(self.currentWindowHeight))

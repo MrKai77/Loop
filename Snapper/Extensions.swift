@@ -24,9 +24,14 @@ extension KeyboardShortcuts.Name {
 }
 
 extension Defaults.Keys {
-    static let snapperTrigger = Key<Int>("snapperTrigger", default: 262401)
+    static let snapperTrigger = Key<Int>("snapperTrigger", default: 524608)
     static let showPreviewWhenSnapping = Key<Bool>("showPreviewWhenSnapping", default: true)
     static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
+    
+    static let snapperCornerRadius = Key<CGFloat>("snapperCornerRadius", default: 50)
+    static let snapperThickness = Key<CGFloat>("snapperThickness", default: 20)
+    static let snapperUsesSystemAccentColor = Key<Bool>("snapperUsesSystemAccentColor", default: false)
+    static let snapperAccentColor = Key<Color>("snapperAccentColor", default: Color(.white))
 }
 
 extension Notification.Name {

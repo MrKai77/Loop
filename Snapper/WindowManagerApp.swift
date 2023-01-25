@@ -43,7 +43,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.setKeybindings()
         radialMenu.AddObservers()
         snapperMenu.show()
+        
+        if #available(macOS 13, *) {
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        } else {
+            NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+        }
     }
+    
     
     func setKeybindings() {
         KeyboardShortcuts.onKeyDown(for: .resizeMaximize) { [self] in
