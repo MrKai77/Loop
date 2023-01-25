@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import WindowManagement
+import KeyboardShortcuts
 
 @main
 struct SnapperApp: App {
@@ -13,9 +15,14 @@ struct SnapperApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     var body: some Scene {
-        MenuBarExtra("WindowManager", systemImage: "hammer.fill") {
-            Text("Boo!")
+        Settings {
+            SettingsView()
+                .frame(width: 450, height: 450)
         }
+        .registerSettingsWindow()
+        .titlebarAppearsTransparent(true)
+        .windowButton(.miniaturizeButton, hidden: true)
+        .windowButton(.zoomButton, hidden: true)
     }
 }
 
@@ -25,13 +32,47 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var screenHeight:CGFloat = 0
     
     let windowResizer = WindowResizer()
-    let radialMenu = RadialMenu()
+    let radialMenu = RadialMenuController()
+    let snapperMenu = SnapperMenuController()
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        checkScreenRecordingAccess()
-        checkAccessibilityAccess()
-        
+        self.checkScreenRecordingAccess()
+        self.checkAccessibilityAccess()
+        self.setKeybindings()
         radialMenu.AddObservers()
+        snapperMenu.show()
+    }
+    
+    func setKeybindings() {
+        KeyboardShortcuts.onKeyDown(for: .resizeMaximize) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.maximize)
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .resizeTopHalf) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.topHalf)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeRightHalf) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.rightHalf)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeBottomHalf) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.bottomHalf)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeLeftHalf) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.leftHalf)
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .resizeTopRightQuarter) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.topRightQuarter)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeTopLeftQuarter) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.topLeftQuarter)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeBottomRightQuarter) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.bottomRightQuarter)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeBottomLeftQuarter) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.bottomLeftQuarter)
+        }
     }
     
     func checkScreenRecordingAccess() {

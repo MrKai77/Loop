@@ -16,23 +16,25 @@ class WindowResizer {
             print("Window Resized: \(direction)")
             
             switch direction {
-            case .north:
+            case .topHalf:
                 self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight/2))
-            case .northEast:
-                self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: 0, width: screenWidth/2, height: screenHeight/2))
-            case .east:
+            case .rightHalf:
                 self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: 0, width: screenWidth/2, height: screenHeight))
-            case .southEast:
-                self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: screenHeight/2, width: screenWidth/2, height: screenHeight/2))
-            case .south:
+            case .bottomHalf:
                 self.resizeFrontmostWindow(CGRect(x: 0, y: screenHeight/2, width: screenWidth, height: screenHeight/2))
-            case .southWest:
-                self.resizeFrontmostWindow(CGRect(x: 0, y: screenHeight/2, width: screenWidth/2, height: screenHeight/2))
-            case .west:
+            case .leftHalf:
                 self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth/2, height: screenHeight))
-            case .northWest:
+                
+            case .topRightQuarter:
+                self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: 0, width: screenWidth/2, height: screenHeight/2))
+            case .topLeftQuarter:
                 self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth/2, height: screenHeight/2))
-            case .maximized:
+            case .bottomRightQuarter:
+                self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: screenHeight/2, width: screenWidth/2, height: screenHeight/2))
+            case .bottomLeftQuarter:
+                self.resizeFrontmostWindow(CGRect(x: 0, y: screenHeight/2, width: screenWidth/2, height: screenHeight/2))
+                
+            case .maximize:
                 self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
             case .doNothing:
                 return
@@ -50,7 +52,6 @@ class WindowResizer {
         if let frontmostWindow = frontmostWindow {
             for window in visibleWindows! {
                 let owner:String = window["kCGWindowOwnerName"] as! String
-                var bounds = window["kCGWindowBounds"] as? [String: Int]
                 let pid = window["kCGWindowOwnerPID"] as? Int32
                 
                 if owner == frontmostWindow {
@@ -60,7 +61,7 @@ class WindowResizer {
                     
                     if let windowList = value as? [AXUIElement] {
 //                        print ("windowList #\(windowList)")
-                        if let window = windowList.first {
+                        if windowList.first != nil {
                             var position : CFTypeRef
                             var size : CFTypeRef
                             var newPoint: CGPoint = frame.origin

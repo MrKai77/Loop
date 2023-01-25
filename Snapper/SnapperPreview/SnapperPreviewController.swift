@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class SnapperPreview {
+class SnapperPreviewController {
     
     var snapperPreviewWindowManager: NSWindowController?
     
@@ -27,7 +27,7 @@ class SnapperPreview {
         panel.level = .screenSaver
         panel.contentView = NSHostingView(rootView: SnapperPreviewView())
         panel.alphaValue = 0
-        panel.makeKeyAndOrderFront(nil)
+        panel.orderFrontRegardless()
         
         if let screen = NSScreen.main {
             panel.setFrame(CGRect(x: 0, y: 0, width: screen.visibleFrame.width, height: screen.visibleFrame.height), display: false)

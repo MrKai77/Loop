@@ -13,9 +13,9 @@ struct SnapperPreviewView: View {
     
     var body: some View {
         VStack {
-            if (self.currentSnappingDirection == .south ||
-                self.currentSnappingDirection == .southEast ||
-                self.currentSnappingDirection == .southWest ||
+            if (self.currentSnappingDirection == .bottomHalf ||
+                self.currentSnappingDirection == .bottomRightQuarter ||
+                self.currentSnappingDirection == .bottomLeftQuarter ||
                 self.currentSnappingDirection == .doNothing) {
                 Rectangle()
                     .foregroundColor(.clear)
@@ -23,9 +23,9 @@ struct SnapperPreviewView: View {
             
             HStack {
                 
-                if (self.currentSnappingDirection == .northEast ||
-                    self.currentSnappingDirection == .east ||
-                    self.currentSnappingDirection == .southEast ||
+                if (self.currentSnappingDirection == .topRightQuarter ||
+                    self.currentSnappingDirection == .rightHalf ||
+                    self.currentSnappingDirection == .bottomRightQuarter ||
                     self.currentSnappingDirection == .doNothing) {
                     Rectangle()
                         .foregroundColor(.clear)
@@ -38,18 +38,18 @@ struct SnapperPreviewView: View {
                     .frame(width: self.currentSnappingDirection == .doNothing ? 0 : nil,
                            height: self.currentSnappingDirection == .doNothing ? 0 : nil)
                 
-                if (self.currentSnappingDirection == .northWest ||
-                    self.currentSnappingDirection == .west ||
-                    self.currentSnappingDirection == .southWest ||
+                if (self.currentSnappingDirection == .topLeftQuarter ||
+                    self.currentSnappingDirection == .leftHalf ||
+                    self.currentSnappingDirection == .bottomLeftQuarter ||
                     self.currentSnappingDirection == .doNothing) {
                     Rectangle()
                         .foregroundColor(.clear)
                 }
             }
             
-            if (self.currentSnappingDirection == .north ||
-                self.currentSnappingDirection == .northEast ||
-                self.currentSnappingDirection == .northWest ||
+            if (self.currentSnappingDirection == .topHalf ||
+                self.currentSnappingDirection == .topRightQuarter ||
+                self.currentSnappingDirection == .topLeftQuarter ||
                 self.currentSnappingDirection == .doNothing) {
                 Rectangle()
                     .foregroundColor(.clear)

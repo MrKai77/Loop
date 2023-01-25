@@ -9,27 +9,38 @@
 /* Begin PBXBuildFile section */
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* SnapperPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* SnapperPreviewView.swift */; };
+		A87D36962980A75D002B0D2F /* WindowManagement in Frameworks */ = {isa = PBXBuildFile; productRef = A87D36952980A75D002B0D2F /* WindowManagement */; };
+		A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */; };
+		A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */; };
+		A88266002980931C00BCB197 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88265FF2980931C00BCB197 /* SettingsView.swift */; };
+		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
+		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
+		A8DCC97E2980DDD400D41065 /* SnapperMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */; };
 		A8E59C39297F5E9A0064D4BA /* WindowManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */; };
 		A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */; };
 		A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */; };
-		A8E59C4A297F98670064D4BA /* RadialMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C49297F98670064D4BA /* RadialMenu.swift */; };
+		A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C49297F98670064D4BA /* RadialMenuController.swift */; };
 		A8E59C4C29803A4D0064D4BA /* WindowResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */; };
 		A8E59C4E29803FBD0064D4BA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4D29803FBD0064D4BA /* Extensions.swift */; };
-		A8E59C50298045D90064D4BA /* SnapperPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4F298045D90064D4BA /* SnapperPreview.swift */; };
+		A8E59C50298045D90064D4BA /* SnapperPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4F298045D90064D4BA /* SnapperPreviewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* SnapperPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperPreviewView.swift; sourceTree = "<group>"; };
+		A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingSettingsView.swift; sourceTree = "<group>"; };
+		A88265FF2980931C00BCB197 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A882660729809F6F00BCB197 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperMenuController.swift; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Snapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snapper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerApp.swift; sourceTree = "<group>"; };
 		A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A8E59C41297F5E9B0064D4BA /* Snapper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Snapper.entitlements; sourceTree = "<group>"; };
-		A8E59C49297F98670064D4BA /* RadialMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenu.swift; sourceTree = "<group>"; };
+		A8E59C49297F98670064D4BA /* RadialMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuController.swift; sourceTree = "<group>"; };
 		A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowResizer.swift; sourceTree = "<group>"; };
 		A8E59C4D29803FBD0064D4BA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		A8E59C4F298045D90064D4BA /* SnapperPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperPreview.swift; sourceTree = "<group>"; };
+		A8E59C4F298045D90064D4BA /* SnapperPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperPreviewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,12 +48,59 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
+				A87D36962980A75D002B0D2F /* WindowManagement in Frameworks */,
+				A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A88265FA29808DED00BCB197 /* SnapperPreview */ = {
+			isa = PBXGroup;
+			children = (
+				A8E59C4F298045D90064D4BA /* SnapperPreviewController.swift */,
+				A8789F6829805B340040512E /* SnapperPreviewView.swift */,
+			);
+			path = SnapperPreview;
+			sourceTree = "<group>";
+		};
+		A88265FB29808E0D00BCB197 /* RadialMenu */ = {
+			isa = PBXGroup;
+			children = (
+				A8E59C49297F98670064D4BA /* RadialMenuController.swift */,
+				A8789F6629805B190040512E /* RadialMenuView.swift */,
+			);
+			path = RadialMenu;
+			sourceTree = "<group>";
+		};
+		A88265FC298092B500BCB197 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A88265FF2980931C00BCB197 /* SettingsView.swift */,
+				A882660429809F4E00BCB197 /* SettingsTabs */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A882660429809F4E00BCB197 /* SettingsTabs */ = {
+			isa = PBXGroup;
+			children = (
+				A882660729809F6F00BCB197 /* GeneralSettingsView.swift */,
+				A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */,
+			);
+			path = SettingsTabs;
+			sourceTree = "<group>";
+		};
+		A8DCC97C2980DDC300D41065 /* Menubar */ = {
+			isa = PBXGroup;
+			children = (
+				A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */,
+			);
+			path = Menubar;
+			sourceTree = "<group>";
+		};
 		A8E59C2C297F5E9A0064D4BA = {
 			isa = PBXGroup;
 			children = (
@@ -62,13 +120,13 @@
 		A8E59C37297F5E9A0064D4BA /* Snapper */ = {
 			isa = PBXGroup;
 			children = (
-				A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */,
-				A8E59C49297F98670064D4BA /* RadialMenu.swift */,
-				A8789F6629805B190040512E /* RadialMenuView.swift */,
-				A8E59C4F298045D90064D4BA /* SnapperPreview.swift */,
-				A8789F6829805B340040512E /* SnapperPreviewView.swift */,
 				A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */,
+				A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */,
 				A8E59C4D29803FBD0064D4BA /* Extensions.swift */,
+				A8DCC97C2980DDC300D41065 /* Menubar */,
+				A88265FB29808E0D00BCB197 /* RadialMenu */,
+				A88265FA29808DED00BCB197 /* SnapperPreview */,
+				A88265FC298092B500BCB197 /* Settings */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
 				A8E59C41297F5E9B0064D4BA /* Snapper.entitlements */,
 				A8E59C3E297F5E9B0064D4BA /* Preview Content */,
@@ -100,6 +158,11 @@
 			dependencies = (
 			);
 			name = Snapper;
+			packageProductDependencies = (
+				A87D36952980A75D002B0D2F /* WindowManagement */,
+				A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */,
+				A8DCC97A2980D5F500D41065 /* Defaults */,
+			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Snapper.app */;
 			productType = "com.apple.product-type.application";
@@ -128,6 +191,11 @@
 				Base,
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
+			packageReferences = (
+				A87D36942980A75D002B0D2F /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */,
+				A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
+			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -155,12 +223,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
+				A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */,
 				A8789F6929805B340040512E /* SnapperPreviewView.swift in Sources */,
-				A8E59C50298045D90064D4BA /* SnapperPreview.swift in Sources */,
+				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,
+				A88266002980931C00BCB197 /* SettingsView.swift in Sources */,
+				A8E59C50298045D90064D4BA /* SnapperPreviewController.swift in Sources */,
 				A8E59C4E29803FBD0064D4BA /* Extensions.swift in Sources */,
 				A8E59C39297F5E9A0064D4BA /* WindowManagerApp.swift in Sources */,
+				A8DCC97E2980DDD400D41065 /* SnapperMenuController.swift in Sources */,
 				A8E59C4C29803A4D0064D4BA /* WindowResizer.swift in Sources */,
-				A8E59C4A297F98670064D4BA /* RadialMenu.swift in Sources */,
+				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +289,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -271,7 +343,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -295,12 +367,14 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Snapper;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Snapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -324,12 +398,14 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Snapper;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Snapper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -360,6 +436,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A87D36942980A75D002B0D2F /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Wouter01/SwiftUI-WindowManagement";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Defaults";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A87D36952980A75D002B0D2F /* WindowManagement */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A87D36942980A75D002B0D2F /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */;
+			productName = WindowManagement;
+		};
+		A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+		A8DCC97A2980D5F500D41065 /* Defaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */;
+			productName = Defaults;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A8E59C2D297F5E9A0064D4BA /* Project object */;
 }

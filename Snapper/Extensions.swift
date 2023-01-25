@@ -6,21 +6,42 @@
 //
 
 import SwiftUI
+import KeyboardShortcuts
+import Defaults
+
+extension KeyboardShortcuts.Name {
+    static let resizeMaximize = Self("resizeMaximize", default: .init(.slash, modifiers: [.control, .option]))
+    
+    static let resizeTopHalf = Self("resizeTopHalf", default: .init(.upArrow, modifiers: [.control, .option]))
+    static let resizeRightHalf = Self("resizeRightHalf", default: .init(.rightArrow, modifiers: [.control, .option]))
+    static let resizeBottomHalf = Self("resizeBottomHalf", default: .init(.downArrow, modifiers: [.control, .option]))
+    static let resizeLeftHalf = Self("resizeLeftHalf", default: .init(.leftArrow, modifiers: [.control, .option]))
+    
+    static let resizeTopRightQuarter = Self("resizeTopRightQuarter", default: .init(.i, modifiers: [.control, .option]))
+    static let resizeTopLeftQuarter = Self("resizeTopLeftQuarter", default: .init(.u, modifiers: [.control, .option]))
+    static let resizeBottomRightQuarter = Self("resizeBottomRightQuarter", default: .init(.k, modifiers: [.control, .option]))
+    static let resizeBottomLeftQuarter = Self("resizeBottomLeftQuarter", default: .init(.j, modifiers: [.control, .option]))
+}
+
+extension Defaults.Keys {
+    static let snapperTrigger = Key<Int>("snapperTrigger", default: 262401)
+}
 
 extension Notification.Name {
     static let currentSnappingDirectionChanged = Notification.Name("currentSnappingDirectionChanged")
+    static let finishedLaunching = Notification.Name("finishedLaunching")
 }
 
 enum WindowSnappingOptions {
-    case north
-    case northEast
-    case east
-    case southEast
-    case south
-    case southWest
-    case west
-    case northWest
-    case maximized
+    case topHalf
+    case rightHalf
+    case bottomHalf
+    case leftHalf
+    case topRightQuarter
+    case topLeftQuarter
+    case bottomRightQuarter
+    case bottomLeftQuarter
+    case maximize
     case doNothing
 }
 
@@ -107,5 +128,14 @@ extension NSWindow {    // This extension allows the window to be put on "top" o
         let windows = [NSNumber(value: windowNumber)]
         
         CGSAddWindowsToSpaces(CGSConnectionID(contextID), windows as CFArray, spaces)
+    }
+}
+
+struct VerticalLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        VStack {
+            configuration.icon
+            configuration.title
+        }
     }
 }

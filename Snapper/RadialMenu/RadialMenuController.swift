@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import Defaults
 
-class RadialMenu {
+class RadialMenuController {
     
     let windowResizer = WindowResizer()
-    let snapperPreview = SnapperPreview()
+    let snapperPreview = SnapperPreviewController()
     
     var currentSnappingDirection: WindowSnappingOptions = .doNothing
     var isInSnappingMode:Bool = false
@@ -61,19 +62,19 @@ class RadialMenu {
     
     func AddObservers() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { (event) -> Void in
-            if (event.modifierFlags.rawValue == 256 && self.isInSnappingMode == true) {
+            print(event.modifierFlags.rawValue)
+            if (event.modifierFlags.description == "" && self.isInSnappingMode == true) {
                 self.isInSnappingMode = false
                 self.closeMenu()
                 self.snapperPreview.closePreview()
                 self.windowResizer.resizeFrontmostWindowWithDirection(self.currentSnappingDirection)
-                
-            } else if (event.modifierFlags.rawValue == 524576) {
+            } else if (event.modifierFlags.rawValue == Defaults[.snapperTrigger]) {
                 self.isInSnappingMode = true
                 self.showMenu()
                 self.snapperPreview.showPreview()
             }
         })
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleCurrentSnappingDirectionChanged(notification:)), name: Notification.Name.currentSnappingDirectionChanged, object: nil)
     }
     
