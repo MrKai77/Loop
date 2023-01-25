@@ -141,3 +141,10 @@ struct VerticalLabelStyle: LabelStyle {
         }
     }
 }
+
+extension NSScreen {
+    var displayID: CGDirectDisplayID {
+        let key = NSDeviceDescriptionKey("NSScreenNumber")
+        return self.deviceDescription[key] as! CGDirectDisplayID
+    }
+}

@@ -17,43 +17,39 @@ class WindowResizer {
     }
     
     func resizeFrontmostWindowWithDirection(_ direction: WindowSnappingOptions) {
-        if let screen  = getScreenWithMouse() {
-            let screenWidth = screen.visibleFrame.width
-            let screenHeight = screen.visibleFrame.height + (screen.frame.height - screen.visibleFrame.height)
-            
-//            print("\nWindow Resized: \(direction)")
-//            print("Screen Size: \(screenWidth)*\(screenHeight)")
-            
-            switch direction {
-            case .topHalf:
-                self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight/2))
-            case .rightHalf:
-                self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: 0, width: screenWidth/2, height: screenHeight))
-            case .bottomHalf:
-                self.resizeFrontmostWindow(CGRect(x: 0, y: screenHeight/2, width: screenWidth, height: screenHeight/2))
-            case .leftHalf:
-                self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth/2, height: screenHeight))
-                
-            case .topRightQuarter:
-                self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: 0, width: screenWidth/2, height: screenHeight/2))
-            case .topLeftQuarter:
-                self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth/2, height: screenHeight/2))
-            case .bottomRightQuarter:
-                self.resizeFrontmostWindow(CGRect(x: screenWidth/2, y: screenHeight/2, width: screenWidth/2, height: screenHeight/2))
-            case .bottomLeftQuarter:
-                self.resizeFrontmostWindow(CGRect(x: 0, y: screenHeight/2, width: screenWidth/2, height: screenHeight/2))
-                
-            case .maximize:
-                self.resizeFrontmostWindow(CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-            case .doNothing:
-                return
-            }
+        guard let screen = getScreenWithMouse() else { return }
+        let bounds = CGDisplayBounds(screen.displayID)
+        let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
+        let screenWidth = bounds.width
+        let screenHeight = bounds.height - menubarHeight
+        let screenOriginX = bounds.origin.x
+        let screenOriginY = bounds.origin.y + menubarHeight
+        
+        switch direction {
+        case .topHalf:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/2))
+        case .rightHalf:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight))
+        case .bottomHalf:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth, height: screenHeight/2))
+        case .leftHalf:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight))
+        case .topRightQuarter:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
+        case .topLeftQuarter:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
+        case .bottomRightQuarter:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
+        case .bottomLeftQuarter:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
+        case .maximize:
+            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight))
+        case .doNothing:
+            return
         }
     }
     
     func resizeFrontmostWindow(_ frame: CGRect) {
-        print(frame)
-        
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
         let windowsList = windowsListInfo as NSArray? as? [[String: AnyObject]]
