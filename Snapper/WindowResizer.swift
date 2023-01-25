@@ -8,12 +8,21 @@
 import Cocoa
 
 class WindowResizer {
+    func getScreenWithMouse() -> NSScreen? {
+        let mouseLocation = NSEvent.mouseLocation
+        let screens = NSScreen.screens
+        let screenWithMouse = (screens.first { NSMouseInRect(mouseLocation, $0.frame, false) })
+
+        return screenWithMouse
+    }
+    
     func resizeFrontmostWindowWithDirection(_ direction: WindowSnappingOptions) {
-        if let screen  = NSScreen.main {
-            let screenWidth = screen.frame.width
-            let screenHeight = screen.frame.height
+        if let screen  = getScreenWithMouse() {
+            let screenWidth = screen.visibleFrame.width
+            let screenHeight = screen.visibleFrame.height + (screen.frame.height - screen.visibleFrame.height)
             
-            print("Window Resized: \(direction)")
+//            print("\nWindow Resized: \(direction)")
+//            print("Screen Size: \(screenWidth)*\(screenHeight)")
             
             switch direction {
             case .topHalf:
@@ -43,6 +52,8 @@ class WindowResizer {
     }
     
     func resizeFrontmostWindow(_ frame: CGRect) {
+        print(frame)
+        
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
         let windowsList = windowsListInfo as NSArray? as? [[String: AnyObject]]
@@ -57,7 +68,7 @@ class WindowResizer {
                 if owner == frontmostWindow {
                     let appRef = AXUIElementCreateApplication(pid!);
                     var value: AnyObject?
-                    let result = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+                    _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
                     
                     if let windowList = value as? [AXUIElement] {
 //                        print ("windowList #\(windowList)")

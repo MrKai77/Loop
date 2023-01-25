@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct SettingsView: View {
+    
+    @State var currentWindowHeight = 1
+    
     var body: some View {
         ZStack {
             VisualEffectView(material: .fullScreenUI, blendingMode: .behindWindow)
@@ -19,13 +22,20 @@ struct SettingsView: View {
                         Image(systemName: "gear")
                         Text("General")
                     }
+                    .onAppear {
+                        self.currentWindowHeight = 237
+                    }
                 KeybindingSettingsView()
                     .tabItem {
                         Image(systemName: "keyboard")
                         Text("Keybindings")
                     }
+                    .onAppear {
+                        self.currentWindowHeight = 450
+                    }
             }
         }
+        .frame(width: 450, height: CGFloat(self.currentWindowHeight))
     }
 }
 

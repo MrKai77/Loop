@@ -10,6 +10,7 @@ import SwiftUI
 class SnapperPreviewController {
     
     var snapperPreviewWindowManager: NSWindowController?
+    let windowResizer = WindowResizer()
     
     func showPreview() {
         if let windowController = self.snapperPreviewWindowManager {
@@ -29,8 +30,9 @@ class SnapperPreviewController {
         panel.alphaValue = 0
         panel.orderFrontRegardless()
         
-        if let screen = NSScreen.main {
-            panel.setFrame(CGRect(x: 0, y: 0, width: screen.visibleFrame.width, height: screen.visibleFrame.height), display: false)
+        if let screen = windowResizer.getScreenWithMouse() {
+            panel.setFrame(CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.visibleFrame.width, height: screen.visibleFrame.height), display: false)
+            print(CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.visibleFrame.width, height: screen.visibleFrame.height))
         }
         
         self.snapperPreviewWindowManager = .init(window: panel)

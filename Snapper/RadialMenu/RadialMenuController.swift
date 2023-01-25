@@ -62,7 +62,7 @@ class RadialMenuController {
     
     func AddObservers() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { (event) -> Void in
-            print(event.modifierFlags.rawValue)
+//            print(event.modifierFlags.rawValue)
             if (event.modifierFlags.description == "" && self.isInSnappingMode == true) {
                 self.isInSnappingMode = false
                 self.closeMenu()
@@ -71,7 +71,9 @@ class RadialMenuController {
             } else if (event.modifierFlags.rawValue == Defaults[.snapperTrigger]) {
                 self.isInSnappingMode = true
                 self.showMenu()
-                self.snapperPreview.showPreview()
+                if (Defaults[.showPreviewWhenSnapping] == true) {
+                    self.snapperPreview.showPreview()
+                }
             }
         })
 

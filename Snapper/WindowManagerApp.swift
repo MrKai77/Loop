@@ -5,9 +5,11 @@
 //  Created by Kai Azim on 2023-01-23.
 //
 
-import SwiftUI
+
 import WindowManagement
+import SwiftUI
 import KeyboardShortcuts
+import Defaults
 
 @main
 struct SnapperApp: App {
@@ -17,10 +19,11 @@ struct SnapperApp: App {
     var body: some Scene {
         Settings {
             SettingsView()
-                .frame(width: 450, height: 450)
         }
         .registerSettingsWindow()
         .titlebarAppearsTransparent(true)
+        
+        
         .windowButton(.miniaturizeButton, hidden: true)
         .windowButton(.zoomButton, hidden: true)
     }
@@ -36,7 +39,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let snapperMenu = SnapperMenuController()
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        self.checkScreenRecordingAccess()
         self.checkAccessibilityAccess()
         self.setKeybindings()
         radialMenu.AddObservers()
@@ -75,31 +77,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func checkScreenRecordingAccess() {
-        if (!CGPreflightScreenCaptureAccess()) {
-            print("not granted!")
-            let result = CGRequestScreenCaptureAccess()
-            if(result == true) {
-                print("Screen recording granted, thank you.")
-            } else {
-                print("Not granted! Bye-bye...")
-                NSApp.terminate(nil)
-            }
-        }
-    }
-    
-    func checkAccessibilityAccess() {
-        //get the value for accessibility
-        let checkOptPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString
-        let options = [checkOptPrompt: true]
+    @discardableResult
+    func checkAccessibilityAccess() -> Bool {
+        // Get current state for accessibility access
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
+        let status = AXIsProcessTrustedWithOptions(options)
         
-        //translate into boolean value
-        let accessEnabled = AXIsProcessTrustedWithOptions(options as CFDictionary?)
-        
-        if !accessEnabled {
-            print("Prompted user for accessibility access!")
-        }
-        
-        print("Accessibility access has been checked!")
+        Defaults[.isAccessibilityAccessGranted] = status
+        return status
     }
 }

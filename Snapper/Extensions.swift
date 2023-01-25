@@ -25,6 +25,8 @@ extension KeyboardShortcuts.Name {
 
 extension Defaults.Keys {
     static let snapperTrigger = Key<Int>("snapperTrigger", default: 262401)
+    static let showPreviewWhenSnapping = Key<Bool>("showPreviewWhenSnapping", default: true)
+    static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
 }
 
 extension Notification.Name {

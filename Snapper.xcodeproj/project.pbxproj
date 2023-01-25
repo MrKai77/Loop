@@ -16,6 +16,7 @@
 		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
 		A8DCC97E2980DDD400D41065 /* SnapperMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */; };
+		A8DCC986298102A900D41065 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC985298102A900D41065 /* LaunchAtLogin */; };
 		A8E59C39297F5E9A0064D4BA /* WindowManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */; };
 		A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */; };
 		A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */; };
@@ -50,6 +51,7 @@
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				A87D36962980A75D002B0D2F /* WindowManagement in Frameworks */,
+				A8DCC986298102A900D41065 /* LaunchAtLogin in Frameworks */,
 				A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -162,6 +164,7 @@
 				A87D36952980A75D002B0D2F /* WindowManagement */,
 				A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */,
 				A8DCC97A2980D5F500D41065 /* Defaults */,
+				A8DCC985298102A900D41065 /* LaunchAtLogin */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Snapper.app */;
@@ -195,6 +198,7 @@
 				A87D36942980A75D002B0D2F /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */,
 				A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
+				A8DCC984298102A900D41065 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -462,6 +466,14 @@
 				kind = branch;
 			};
 		};
+		A8DCC984298102A900D41065 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -479,6 +491,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		A8DCC985298102A900D41065 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A8DCC984298102A900D41065 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
+			productName = LaunchAtLogin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

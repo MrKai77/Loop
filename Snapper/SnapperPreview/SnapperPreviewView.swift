@@ -55,7 +55,7 @@ struct SnapperPreviewView: View {
                     .foregroundColor(.clear)
             }
         }
-        .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: self.currentSnappingDirection)
+        .animation(.interpolatingSpring(stiffness: 250, damping: 30), value: self.currentSnappingDirection)
         
         .onReceive(.currentSnappingDirectionChanged) { obj in
             if let direction = obj.userInfo?["Direction"] as? WindowSnappingOptions {

@@ -12,7 +12,7 @@ struct KeybindingSettingsView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Resize Window")
-                .fontWeight(.bold)
+                .fontWeight(.medium)
             VStack(spacing: 10) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
