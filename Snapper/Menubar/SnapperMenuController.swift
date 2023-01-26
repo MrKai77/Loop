@@ -15,7 +15,7 @@ class SnapperMenuController {
     func show() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "viewfinder", accessibilityDescription: "Snapper")
+            button.image = NSImage(systemSymbolName: "circle.dashed", accessibilityDescription: "Snapper")
         }
         
         let resizeWindow = NSMenuItem(title: "Resize Window", action: nil, keyEquivalent: "")

@@ -59,9 +59,12 @@ class WindowResizer {
         if let frontmostWindow = frontmostWindow {
             for window in visibleWindows! {
                 let owner:String = window["kCGWindowOwnerName"] as! String
+                let bounds = window["kCGWindowBounds"] as? [String: Int]
                 let pid = window["kCGWindowOwnerPID"] as? Int32
                 
                 if owner == frontmostWindow {
+                    print(window)
+                    
                     let appRef = AXUIElementCreateApplication(pid!);
                     var value: AnyObject?
                     _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)

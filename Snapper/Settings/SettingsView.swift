@@ -69,6 +69,7 @@ struct setSettingsWindowProperties: NSViewRepresentable {
             self.window?.titlebarAppearsTransparent = true
             self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
             self.window?.standardWindowButton(.zoomButton)?.isHidden = true
+            self.window?.orderFrontRegardless()
         }
         return view
     }
