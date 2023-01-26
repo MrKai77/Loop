@@ -6,10 +6,19 @@
 //
 
 import SwiftUI
+import Defaults
 
 struct SnapperPreviewView: View {
     
     @State var currentSnappingDirection: WindowSnappingOptions = .doNothing
+    
+    @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
+    @Default(.snapperAccentColor) var snapperAccentColor
+    
+    @Default(.showPreviewWhenSnapping) var showPreviewWhenSnapping
+    @Default(.snapperPreviewPadding) var snapperPreviewPadding
+    @Default(.snapperPreviewCornerRadius) var snapperPreviewCornerRadius
+    @Default(.snapperPreviewBorderThickness) var snapperPreviewBorderThickness
     
     var body: some View {
         VStack {
@@ -31,12 +40,16 @@ struct SnapperPreviewView: View {
                         .foregroundColor(.clear)
                 }
                 
-                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                    .mask(RoundedRectangle(cornerRadius: 15).foregroundColor(.white))
-                    .shadow(radius: 10)
-                    .padding(10)
-                    .frame(width: self.currentSnappingDirection == .doNothing ? 0 : nil,
-                           height: self.currentSnappingDirection == .doNothing ? 0 : nil)
+                ZStack {
+                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                        .mask(RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius).foregroundColor(.white))
+                        .shadow(radius: 10)
+                    RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius)
+                        .strokeBorder(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
+                }
+                .padding(self.snapperPreviewPadding)
+                .frame(width: self.currentSnappingDirection == .doNothing ? 0 : nil,
+                       height: self.currentSnappingDirection == .doNothing ? 0 : nil)
                 
                 if (self.currentSnappingDirection == .topLeftQuarter ||
                     self.currentSnappingDirection == .leftHalf ||

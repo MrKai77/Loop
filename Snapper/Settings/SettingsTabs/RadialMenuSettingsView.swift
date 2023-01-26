@@ -12,8 +12,6 @@ struct RadialMenuSettingsView: View {
     
     @Default(.snapperCornerRadius) var snapperCornerRadius
     @Default(.snapperThickness) var snapperThickness
-    @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
-    @Default(.snapperAccentColor) var snapperAccentColor
     @Default(.snapperTrigger) var snapperTrigger
     
     @State private var selectedSnapperTrigger = "􀆪 Function"
@@ -35,7 +33,7 @@ struct RadialMenuSettingsView: View {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
                     RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color("Monochrome Inverted").opacity(0.1))
+                        .foregroundColor(Color("Monochrome Inverted").opacity(0.25))
                     
                     ZStack {    // Grid Background
                         VStack {
@@ -70,59 +68,47 @@ struct RadialMenuSettingsView: View {
                             Text("Corner Radius")
                             Spacer()
                             
-                            Text("0")
-                                .font(.caption)
-                                .opacity(0.5)
-                            Slider(
-                                value: self.$snapperCornerRadius,
-                                in: 0...50,
-                                step: 5
-                            )
-                            .frame(width: 200)
-                            
-                            Text("50")
-                                .font(.caption)
-                                .opacity(0.5)
+                            HStack {
+                                Text("0")
+                                    .font(.caption)
+                                    .opacity(0.5)
+                                Slider(
+                                    value: self.$snapperCornerRadius,
+                                    in: 0...50,
+                                    step: 5
+                                )
+                                
+                                Text("50")
+                                    .font(.caption)
+                                    .opacity(0.5)
+                            }
+                            .frame(width: 230)
                         }
                         Divider()
                         HStack {
                             Text("Thickness")
                             Spacer()
                             
-                            Text("10")
-                                .font(.caption)
-                                .opacity(0.5)
-                            Slider(
-                                value: self.$snapperThickness,
-                                in: 10...30,
-                                step: 2
-                            )
-                            .frame(width: 200)
-                            
-                            Text("30")
-                                .font(.caption)
-                                .opacity(0.5)
+                            HStack {
+                                Text("10")
+                                    .font(.caption)
+                                    .opacity(0.5)
+                                Slider(
+                                    value: self.$snapperThickness,
+                                    in: 10...30,
+                                    step: 2
+                                )
+                                
+                                Text("30")
+                                    .font(.caption)
+                                    .opacity(0.5)
+                            }
+                            .frame(width: 230)
                         }
-                        Divider()
-                        HStack {
-                            Text("Follow System Accent Color")
-                            Spacer()
-                            Toggle("", isOn: self.$snapperUsesSystemAccentColor)
-                                .scaleEffect(0.7)
-                                .toggleStyle(.switch)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Accent Color")
-                            Spacer()
-                            ColorPicker("", selection: self.$snapperAccentColor, supportsOpacity: false)
-                                .disabled(self.snapperUsesSystemAccentColor)
-                        }
-                        .opacity(self.snapperUsesSystemAccentColor ? 0.5 : 1)
                     }
                     .padding(.horizontal, 10)
                 }
-                .frame(height: 152)
+                .frame(height: 76)
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
@@ -140,11 +126,9 @@ struct RadialMenuSettingsView: View {
                             }
                             .frame(width: 160)
                         }
-                        if (self.selectedSnapperTrigger == "􀆡 Caps Lock") {
-                            Text("Remap Caps Lock to Control in System Settings.")
-                                .font(.caption)
-                                .opacity(0.5)
-                        }
+                        Text("To use caps lock, remap it to control in System Settings.")
+                            .font(.caption)
+                            .opacity(0.5)
                     }
                     .padding(.horizontal, 10)
                     .onAppear {
@@ -162,7 +146,7 @@ struct RadialMenuSettingsView: View {
                         }
                     }
                 }
-                .frame(height: self.selectedSnapperTrigger == "􀆡 Caps Lock" ? 65 : 38)
+                .frame(height: 65)
             }
         }
         .padding(20)

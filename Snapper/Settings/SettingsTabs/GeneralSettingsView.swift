@@ -15,8 +15,9 @@ struct GeneralSettingsView: View {
     
     @ObservedObject private var launchAtLogin = LaunchAtLogin.observable
     
-    @Default(.showPreviewWhenSnapping) var showPreviewWhenSnapping
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
+    @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
+    @Default(.snapperAccentColor) var snapperAccentColor
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -39,32 +40,47 @@ struct GeneralSettingsView: View {
             }
             .frame(height: 38)
             
+            Text("Accent Color")
+                .fontWeight(.medium)
+                .padding(.top, 20)
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
                 RoundedRectangle(cornerRadius: 5)
                     .foregroundColor(Color("Monochrome").opacity(0.03))
                 
-                HStack {
-                    Text("Show Preview when snapping")
-                    Spacer()
-                    
-                    Toggle("", isOn: $showPreviewWhenSnapping)
-                        .scaleEffect(0.7)
-                        .toggleStyle(.switch)
+                VStack {
+                    HStack {
+                        Text("Follow System Accent Color")
+                        Spacer()
+                        Toggle("", isOn: self.$snapperUsesSystemAccentColor)
+                            .scaleEffect(0.7)
+                            .toggleStyle(.switch)
+                    }
+                    Divider()
+                    HStack {
+                        Text("Accent Color")
+                        Spacer()
+                        ColorPicker("", selection: self.$snapperAccentColor, supportsOpacity: false)
+                    }
+                    .disabled(self.snapperUsesSystemAccentColor)
+                    .opacity(self.snapperUsesSystemAccentColor ? 0.5 : 1)
                 }
-                .padding([.horizontal], 10)
+                .padding(.horizontal, 10)
             }
-            .frame(height: 38)
+            .frame(height: 76)
             
             HStack {
                 Text("Permissions")
                     .fontWeight(.medium)
                 Spacer()
-                Button("Refresh", action: {
-                    appDelegate.checkAccessibilityAccess()
-                })
+                if (!self.isAccessibilityAccessGranted) {
+                    Button("Refresh", action: {
+                        appDelegate.checkAccessibilityAccess()
+                    })
+                }
             }
+            .frame(height: 20)
             .padding(.top, 20)
             ZStack {
                 RoundedRectangle(cornerRadius: 5)

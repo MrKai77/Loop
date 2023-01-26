@@ -23,15 +23,7 @@ struct SettingsView: View {
                         Text("General")
                     }
                     .onAppear {
-                        self.currentWindowHeight = 237
-                    }
-                KeybindingSettingsView()
-                    .tabItem {
-                        Image(systemName: "keyboard")
-                        Text("Keybindings")
-                    }
-                    .onAppear {
-                        self.currentWindowHeight = 450
+                        self.currentWindowHeight = 328
                     }
                 
                 RadialMenuSettingsView()
@@ -40,7 +32,25 @@ struct SettingsView: View {
                         Text("Radial Menu")
                     }
                     .onAppear {
-                        self.currentWindowHeight = 452
+                        self.currentWindowHeight = 377
+                    }
+                
+                PreviewSettingsView()
+                    .tabItem {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                        Text("Preview")
+                    }
+                    .onAppear {
+                        self.currentWindowHeight = 388
+                    }
+                
+                KeybindingSettingsView()
+                    .tabItem {
+                        Image(systemName: "keyboard")
+                        Text("Keybindings")
+                    }
+                    .onAppear {
+                        self.currentWindowHeight = 454
                     }
             }
         }

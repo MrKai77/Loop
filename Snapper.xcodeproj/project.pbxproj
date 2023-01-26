@@ -18,6 +18,7 @@
 		A8DCC97E2980DDD400D41065 /* SnapperMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */; };
 		A8DCC986298102A900D41065 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC985298102A900D41065 /* LaunchAtLogin */; };
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
+		A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */; };
 		A8E59C39297F5E9A0064D4BA /* WindowManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */; };
 		A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */; };
 		A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		A882660729809F6F00BCB197 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperMenuController.swift; sourceTree = "<group>"; };
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
+		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Snapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snapper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerApp.swift; sourceTree = "<group>"; };
 		A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -92,8 +94,9 @@
 			isa = PBXGroup;
 			children = (
 				A882660729809F6F00BCB197 /* GeneralSettingsView.swift */,
-				A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */,
 				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
+				A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */,
+				A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */,
 			);
 			path = SettingsTabs;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
 				A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */,
+				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A8789F6929805B340040512E /* SnapperPreviewView.swift in Sources */,
 				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,
 				A88266002980931C00BCB197 /* SettingsView.swift in Sources */,
