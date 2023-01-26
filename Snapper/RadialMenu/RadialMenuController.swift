@@ -13,7 +13,7 @@ class RadialMenuController {
     let windowResizer = WindowResizer()
     let snapperPreview = SnapperPreviewController()
     
-    var currentSnappingDirection: WindowSnappingOptions = .doNothing
+    var currentSnappingDirection: WindowSnappingOptions = .noAction
     var isInSnappingMode:Bool = false
     var snapperPopupWindowManager: NSWindowController?
     
@@ -26,7 +26,7 @@ class RadialMenuController {
         let mouseX: CGFloat = NSEvent.mouseLocation.x
         let mouseY: CGFloat = NSEvent.mouseLocation.y
         
-        let windowSize: CGFloat = 200
+        let windowSize: CGFloat = 500
         
         let panel = NSPanel(contentRect: .zero,
                             styleMask: [.borderless, .nonactivatingPanel],
@@ -38,7 +38,7 @@ class RadialMenuController {
         panel.level = .screenSaver
         panel.contentView = NSHostingView(rootView: RadialMenuView())
         panel.alphaValue = 0
-        panel.setFrame(CGRect(x: mouseX-100, y: mouseY-100, width: windowSize, height: windowSize), display: false)
+        panel.setFrame(CGRect(x: mouseX-windowSize/2, y: mouseY-windowSize/2, width: windowSize, height: windowSize), display: false)
         panel.makeKeyAndOrderInFrontOfSpaces() // Makes window stay in same spot as you swich spaces
         
         self.snapperPopupWindowManager = .init(window: panel)

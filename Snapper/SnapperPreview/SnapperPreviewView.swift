@@ -13,7 +13,7 @@ struct SnapperPreviewView: View {
     // Used to preview inside the app's settings
     @State var previewMode = false
     
-    @State var currentSnappingDirection: WindowSnappingOptions = .doNothing
+    @State var currentSnappingDirection: WindowSnappingOptions = .noAction
     
     @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
     @Default(.snapperAccentColor) var snapperAccentColor
@@ -27,22 +27,32 @@ struct SnapperPreviewView: View {
     
     var body: some View {
         VStack {
-            if (self.currentSnappingDirection == .bottomHalf ||
+            if (self.currentSnappingDirection == .bottomThird ||
+                self.currentSnappingDirection == .bottomHalf ||
                 self.currentSnappingDirection == .bottomRightQuarter ||
                 self.currentSnappingDirection == .bottomLeftQuarter ||
-                self.currentSnappingDirection == .doNothing) {
+                self.currentSnappingDirection == .noAction) {
                 Rectangle()
                     .foregroundColor(.clear)
+                if (self.currentSnappingDirection == .bottomThird) {
+                    Rectangle()
+                        .foregroundColor(.clear)
+                }
             }
             
             HStack {
                 
-                if (self.currentSnappingDirection == .topRightQuarter ||
+                if (self.currentSnappingDirection == .rightThird ||
+                    self.currentSnappingDirection == .topRightQuarter ||
                     self.currentSnappingDirection == .rightHalf ||
                     self.currentSnappingDirection == .bottomRightQuarter ||
-                    self.currentSnappingDirection == .doNothing) {
+                    self.currentSnappingDirection == .noAction) {
                     Rectangle()
                         .foregroundColor(.clear)
+                    if (self.currentSnappingDirection == .rightThird) {
+                        Rectangle()
+                            .foregroundColor(.clear)
+                    }
                 }
                 
                 ZStack {
@@ -58,25 +68,35 @@ struct SnapperPreviewView: View {
                                 endPoint: .bottomTrailing), lineWidth: self.snapperPreviewBorderThickness)
                 }
                 .padding(self.snapperPreviewPadding + self.snapperPreviewBorderThickness/2)
-                .frame(width: self.currentSnappingDirection == .doNothing ? 0 : nil,
-                       height: self.currentSnappingDirection == .doNothing ? 0 : nil)
-                .blur(radius: self.currentSnappingDirection == .doNothing ? 20 : 0)
+                .frame(width: self.currentSnappingDirection == .noAction ? 0 : nil,
+                       height: self.currentSnappingDirection == .noAction ? 0 : nil)
+                .blur(radius: self.currentSnappingDirection == .noAction ? 20 : 0)
                 
-                if (self.currentSnappingDirection == .topLeftQuarter ||
+                if (self.currentSnappingDirection == .leftThird ||
+                    self.currentSnappingDirection == .topLeftQuarter ||
                     self.currentSnappingDirection == .leftHalf ||
                     self.currentSnappingDirection == .bottomLeftQuarter ||
-                    self.currentSnappingDirection == .doNothing) {
+                    self.currentSnappingDirection == .noAction) {
                     Rectangle()
                         .foregroundColor(.clear)
+                    if (self.currentSnappingDirection == .leftThird) {
+                        Rectangle()
+                            .foregroundColor(.clear)
+                    }
                 }
             }
             
-            if (self.currentSnappingDirection == .topHalf ||
+            if (self.currentSnappingDirection == .topThird ||
+                self.currentSnappingDirection == .topHalf ||
                 self.currentSnappingDirection == .topRightQuarter ||
                 self.currentSnappingDirection == .topLeftQuarter ||
-                self.currentSnappingDirection == .doNothing) {
+                self.currentSnappingDirection == .noAction) {
                 Rectangle()
                     .foregroundColor(.clear)
+                if (self.currentSnappingDirection == .topThird) {
+                    Rectangle()
+                        .foregroundColor(.clear)
+                }
             }
         }
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: self.currentSnappingDirection)

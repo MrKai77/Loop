@@ -27,24 +27,41 @@ class WindowResizer {
         
         switch direction {
         case .topHalf:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/2))
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/2))
         case .rightHalf:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight))
+            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight))
         case .bottomHalf:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth, height: screenHeight/2))
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth, height: screenHeight/2))
         case .leftHalf:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight))
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight))
         case .topRightQuarter:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
+            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
         case .topLeftQuarter:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
         case .bottomRightQuarter:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
+            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
         case .bottomLeftQuarter:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
         case .maximize:
-            self.resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight))
-        case .doNothing:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight))
+        case .rightThird:
+            resizeFrontmostWindow(CGRect(x: screenOriginX+2*screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight))
+        case .rightTwoThirds:
+            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight))
+        case .leftThird:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/3, height: screenHeight))
+        case .leftTwoThirds:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight))
+        case .topThird:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/3))
+        case .topTwoThirds:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: 2*screenHeight/3))
+        case .bottomThird:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+2*screenHeight/3, width: screenWidth, height: screenHeight/3))
+        case .bottomTwoThirds:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/3, width: screenWidth, height: 2*screenHeight/3))
+            
+        default:
             return
         }
     }
@@ -54,36 +71,32 @@ class WindowResizer {
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
         let windowsList = windowsListInfo as NSArray? as? [[String: AnyObject]]
         let visibleWindows = windowsList?.filter{ $0["kCGWindowLayer"] as! Int == 0 }
-        let frontmostWindow = NSWorkspace.shared.frontmostApplication?.localizedName
         
-        if let frontmostWindow = frontmostWindow {
-            for window in visibleWindows! {
-                let owner:String = window["kCGWindowOwnerName"] as! String
-                let bounds = window["kCGWindowBounds"] as? [String: Int]
-                let pid = window["kCGWindowOwnerPID"] as? Int32
+        guard let frontmostWindow = NSWorkspace.shared.frontmostApplication?.localizedName else { return }
                 
-                if owner == frontmostWindow {
-                    print(window)
-                    
-                    let appRef = AXUIElementCreateApplication(pid!);
-                    var value: AnyObject?
-                    _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
-                    
-                    if let windowList = value as? [AXUIElement] {
-                        if windowList.first != nil {
-                            var position : CFTypeRef
-                            var size : CFTypeRef
-                            var newPoint: CGPoint = frame.origin
-                            var newSize: CGSize = frame.size
-                            
-                            size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!;
-                            position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!;
-                            
-                            AXUIElementSetAttributeValue(windowList.first!, kAXPositionAttribute as CFString, position);
-                            AXUIElementSetAttributeValue(windowList.first!, kAXSizeAttribute as CFString, size);
-                        }
-                    }
-                }
+        for window in visibleWindows! {
+            let windowOwnerName:String = window["kCGWindowOwnerName"] as! String
+            let windowPID = window["kCGWindowOwnerPID"] as? Int32
+            
+            if windowOwnerName == frontmostWindow {
+                print(window)
+                
+                let appRef = AXUIElementCreateApplication(windowPID!);
+                var value: AnyObject?
+                _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+                
+                guard let windowList = value as? [AXUIElement] else { return }
+                
+                var position : CFTypeRef
+                var size : CFTypeRef
+                var newPoint: CGPoint = frame.origin
+                var newSize: CGSize = frame.size
+                
+                size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!;
+                position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!;
+                
+                AXUIElementSetAttributeValue(windowList.first!, kAXPositionAttribute as CFString, position);
+                AXUIElementSetAttributeValue(windowList.first!, kAXSizeAttribute as CFString, size);
             }
         }
     }

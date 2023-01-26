@@ -19,7 +19,7 @@ struct RadialMenuView: View {
     
     // Data to be tracked using the timer
     @State private var initialMousePosition: CGPoint = CGPoint()
-    @State private var currentAngle: WindowSnappingOptions = .doNothing
+    @State private var currentAngle: WindowSnappingOptions = .noAction
     
     @Default(.snapperCornerRadius) var snapperCornerRadius
     @Default(.snapperThickness) var snapperThickness
@@ -55,13 +55,13 @@ struct RadialMenuView: View {
                     RoundedRectangle(cornerRadius: self.snapperCornerRadius)
                         .strokeBorder(.black, lineWidth: self.snapperThickness)
                 }
-                .blur(radius: self.currentAngle == .doNothing ? 5 : 0)
+                .blur(radius: self.currentAngle == .noAction ? 5 : 0)
                 
                 Spacer()
             }
             Spacer()
         }
-        .shadow(radius: self.currentAngle == .doNothing ? 0 : 10)
+        .shadow(radius: self.currentAngle == .noAction ? 0 : 10)
         
         // Make window get smaller when selecting maximize (ironic haha)
         .scaleEffect(self.currentAngle == .maximize ? 0.9 : 1)
@@ -71,6 +71,10 @@ struct RadialMenuView: View {
         .onAppear {
             self.initialMousePosition = CGPoint(x: NSEvent.mouseLocation.x,
                                                 y: NSEvent.mouseLocation.y)
+            
+            self.currentAngle = .noAction
+            NotificationCenter.default.post(name: Notification.Name.currentSnappingDirectionChanged, object: nil, userInfo: ["Direction": self.currentAngle])
+            
             if (previewMode) {
                 self.currentAngle = .topHalf
             }
@@ -81,10 +85,10 @@ struct RadialMenuView: View {
                 
                 // Get angle & distance to mouse
                 let angleToMouse = Angle(radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y)))
-                let distanceToMouse = initialMousePosition.distance(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
+                let distanceToMouse = initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
                 
                 // If mouse over 1000 units away, select half or quarter positions
-                if (distanceToMouse > 1000) {
+                if (distanceToMouse > pow(50-self.snapperThickness, 2)) {
                     switch Int((angleToMouse.normalized().degrees+45/2)/45) {
                     case 0, 8: self.currentAngle = .rightHalf
                     case 1:    self.currentAngle = .bottomRightQuarter
@@ -94,12 +98,12 @@ struct RadialMenuView: View {
                     case 5:    self.currentAngle = .topLeftQuarter
                     case 6:    self.currentAngle = .topHalf
                     case 7:    self.currentAngle = .topRightQuarter
-                    default:   self.currentAngle = .doNothing
+                    default:   self.currentAngle = .noAction
                     }
                     
                 // If mouse is less than 50 units away, do nothing
-                } else if (distanceToMouse < 50) {
-                    self.currentAngle = .doNothing
+                } else if (distanceToMouse < pow(10, 2)) {
+                    self.currentAngle = .noAction
                     
                 // Otherwise, set position to maximize
                 } else {
@@ -107,6 +111,10 @@ struct RadialMenuView: View {
                 }
             } else {
                 self.currentAngle = self.currentAngle.next()
+                
+                if (self.currentAngle == .rightThird) {
+                    self.currentAngle = .topHalf
+                }
             }
         }
         // When current angle changes, send haptic feedback and post a notification which is used to position the preview window
@@ -137,19 +145,19 @@ struct RadialMenu: View {
                     .overlay {
                         HStack(spacing: 0) {
                             VStack(spacing: 0) {
-                                angleSelectorRectangle(.topLeftQuarter, self.activeAngle)
-                                angleSelectorRectangle(.leftHalf, self.activeAngle)
-                                angleSelectorRectangle(.bottomLeftQuarter, self.activeAngle)
+                                angleSelectorRectangle([.topLeftQuarter], self.activeAngle)
+                                angleSelectorRectangle([.leftHalf], self.activeAngle)
+                                angleSelectorRectangle([.bottomLeftQuarter], self.activeAngle)
                             }
                             VStack(spacing: 0) {
-                                angleSelectorRectangle(.topHalf, self.activeAngle)
+                                angleSelectorRectangle([.topHalf], self.activeAngle)
                                 Spacer().frame(width: 100/3, height: 100/3)
-                                angleSelectorRectangle(.bottomHalf, self.activeAngle)
+                                angleSelectorRectangle([.bottomHalf], self.activeAngle)
                             }
                             VStack(spacing: 0) {
-                                angleSelectorRectangle(.topRightQuarter, self.activeAngle)
-                                angleSelectorRectangle(.rightHalf, self.activeAngle)
-                                angleSelectorRectangle(.bottomRightQuarter, self.activeAngle)
+                                angleSelectorRectangle([.topRightQuarter], self.activeAngle)
+                                angleSelectorRectangle([.rightHalf], self.activeAngle)
+                                angleSelectorRectangle([.bottomRightQuarter], self.activeAngle)
                             }
                         }
                     }
@@ -158,14 +166,14 @@ struct RadialMenu: View {
                 // This is used when the user configures the radial menu to be a circle
                 Color.clear
                     .overlay {
-                        angleSelectorCirclePart(-22.5, .rightHalf, self.activeAngle)
-                        angleSelectorCirclePart(22.5, .bottomRightQuarter, self.activeAngle)
-                        angleSelectorCirclePart(67.5, .bottomHalf, self.activeAngle)
-                        angleSelectorCirclePart(112.5, .bottomLeftQuarter, self.activeAngle)
-                        angleSelectorCirclePart(157.5, .leftHalf, self.activeAngle)
-                        angleSelectorCirclePart(202.5, .topLeftQuarter, self.activeAngle)
-                        angleSelectorCirclePart(247.5, .topHalf, self.activeAngle)
-                        angleSelectorCirclePart(292.5, .topRightQuarter, self.activeAngle)
+                        angleSelectorCirclePart(-22.5, [.rightHalf], self.activeAngle)
+                        angleSelectorCirclePart(22.5, [.bottomRightQuarter], self.activeAngle)
+                        angleSelectorCirclePart(67.5, [.bottomHalf], self.activeAngle)
+                        angleSelectorCirclePart(112.5, [.bottomLeftQuarter], self.activeAngle)
+                        angleSelectorCirclePart(157.5, [.leftHalf], self.activeAngle)
+                        angleSelectorCirclePart(202.5, [.topLeftQuarter], self.activeAngle)
+                        angleSelectorCirclePart(247.5, [.topHalf], self.activeAngle)
+                        angleSelectorCirclePart(292.5, [.topRightQuarter], self.activeAngle)
                     }
             }
     }
@@ -176,8 +184,8 @@ struct angleSelectorRectangle: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ snapPosition: WindowSnappingOptions, _ currentSnapPosition: WindowSnappingOptions) {
-        if (snapPosition == currentSnapPosition || currentSnapPosition == .maximize) {
+    init(_ snapPosition: [WindowSnappingOptions], _ currentSnapPosition: WindowSnappingOptions) {
+        if (snapPosition.contains(currentSnapPosition) || currentSnapPosition == .maximize) {
             self.isActive = true
         } else {
             self.isActive = false
@@ -197,9 +205,9 @@ struct angleSelectorCirclePart: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ angle: Double, _ snapPosition: WindowSnappingOptions, _ currentSnapPosition: WindowSnappingOptions) {
+    init(_ angle: Double, _ snapPosition: [WindowSnappingOptions], _ currentSnapPosition: WindowSnappingOptions) {
         self.startingAngle = angle
-        if (snapPosition == currentSnapPosition || currentSnapPosition == .maximize) {
+        if (snapPosition.contains(currentSnapPosition) || currentSnapPosition == .maximize) {
             self.isActive = true
         } else {
             self.isActive = false

@@ -51,6 +51,7 @@ extension Notification.Name {
 
 // Enum that stores all possible resizing options
 enum WindowSnappingOptions: CaseIterable {
+    // These are accessible from the radial menu
     case topHalf
     case topRightQuarter
     case rightHalf
@@ -60,7 +61,17 @@ enum WindowSnappingOptions: CaseIterable {
     case leftHalf
     case topLeftQuarter
     case maximize
-    case doNothing
+    case noAction
+    
+    // These aren't accessible from the radial menu
+    case rightThird
+    case rightTwoThirds
+    case leftThird
+    case leftTwoThirds
+    case topThird
+    case topTwoThirds
+    case bottomThird
+    case bottomTwoThirds
 }
 
 extension CaseIterable where Self: Equatable {
@@ -117,7 +128,7 @@ extension CGPoint {
         return CGFloat(bearingRadians)
     }
     
-    func distance(to comparisonPoint: CGPoint) -> CGFloat {
+    func distanceSquared(to comparisonPoint: CGPoint) -> CGFloat {
         let from = CGPoint(x: x, y: y)
         let to = comparisonPoint
         
