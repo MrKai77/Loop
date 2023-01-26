@@ -53,7 +53,7 @@ struct RadialMenuSettingsView: View {
                         }
                     }
                     
-                    RadialMenuView(previewMode: true)
+                    RadialMenuView(previewMode: true, timer: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
                 }
                 .frame(height: 150)
                 
@@ -95,11 +95,11 @@ struct RadialMenuSettingsView: View {
                                     .opacity(0.5)
                                 Slider(
                                     value: self.$snapperThickness,
-                                    in: 10...30,
+                                    in: 10...34,
                                     step: 2
                                 )
                                 
-                                Text("30")
+                                Text("35")
                                     .font(.caption)
                                     .opacity(0.5)
                             }

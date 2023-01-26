@@ -10,10 +10,15 @@ import Defaults
 
 struct SnapperPreviewView: View {
     
+    // Used to preview inside the app's settings
+    @State var previewMode = false
+    
     @State var currentSnappingDirection: WindowSnappingOptions = .doNothing
     
     @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
     @Default(.snapperAccentColor) var snapperAccentColor
+    @Default(.snapperAccentColorUseGradient) var snapperAccentColorUseGradient
+    @Default(.snapperAccentColorGradient) var snapperAccentColorGradient
     
     @Default(.showPreviewWhenSnapping) var showPreviewWhenSnapping
     @Default(.snapperPreviewPadding) var snapperPreviewPadding
@@ -45,11 +50,17 @@ struct SnapperPreviewView: View {
                         .mask(RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius).foregroundColor(.white))
                         .shadow(radius: 10)
                     RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius)
-                        .stroke(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
+                        .stroke(LinearGradient(
+                            gradient: Gradient(colors: [
+                                self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor,
+                                self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColorUseGradient ? self.snapperAccentColorGradient : self.snapperAccentColor]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing), lineWidth: self.snapperPreviewBorderThickness)
                 }
                 .padding(self.snapperPreviewPadding + self.snapperPreviewBorderThickness/2)
                 .frame(width: self.currentSnappingDirection == .doNothing ? 0 : nil,
                        height: self.currentSnappingDirection == .doNothing ? 0 : nil)
+                .blur(radius: self.currentSnappingDirection == .doNothing ? 20 : 0)
                 
                 if (self.currentSnappingDirection == .topLeftQuarter ||
                     self.currentSnappingDirection == .leftHalf ||
@@ -71,8 +82,16 @@ struct SnapperPreviewView: View {
         .animation(.interpolatingSpring(stiffness: 250, damping: 30), value: self.currentSnappingDirection)
         
         .onReceive(.currentSnappingDirectionChanged) { obj in
-            if let direction = obj.userInfo?["Direction"] as? WindowSnappingOptions {
-                self.currentSnappingDirection = direction
+            if (!self.previewMode) {
+                if let direction = obj.userInfo?["Direction"] as? WindowSnappingOptions {
+                    self.currentSnappingDirection = direction
+                }
+            }
+        }
+        
+        .onAppear {
+            if (self.previewMode) {
+                self.currentSnappingDirection = .maximize
             }
         }
     }

@@ -12,6 +12,8 @@ struct PreviewSettingsView: View {
     
     @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
     @Default(.snapperAccentColor) var snapperAccentColor
+    @Default(.snapperAccentColorUseGradient) var snapperAccentColorUseGradient
+    @Default(.snapperAccentColorGradient) var snapperAccentColorGradient
     
     @Default(.showPreviewWhenSnapping) var showPreviewWhenSnapping
     @Default(.snapperPreviewPadding) var snapperPreviewPadding
@@ -66,16 +68,8 @@ struct PreviewSettingsView: View {
                             }
                         }
                         
-                        ZStack {
-                            VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                                .mask(RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius).foregroundColor(.white))
-                                .shadow(radius: 10)
-                            
-                            RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius)
-                                .stroke(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
-                        }
-                        .padding(self.snapperPreviewPadding + self.snapperPreviewBorderThickness/2)
-                        .padding(.horizontal, 30)
+                        SnapperPreviewView(previewMode: true)
+                            .padding(.horizontal, 30)
                     }
                     .frame(height: 150)
                     

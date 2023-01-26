@@ -52,13 +52,13 @@ extension Notification.Name {
 // Enum that stores all possible resizing options
 enum WindowSnappingOptions: CaseIterable {
     case topHalf
-    case rightHalf
-    case bottomHalf
-    case leftHalf
     case topRightQuarter
-    case topLeftQuarter
+    case rightHalf
     case bottomRightQuarter
+    case bottomHalf
     case bottomLeftQuarter
+    case leftHalf
+    case topLeftQuarter
     case maximize
     case doNothing
 }

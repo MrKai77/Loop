@@ -10,8 +10,12 @@ import Combine
 import Defaults
 
 struct RadialMenuView: View {
+    
+    // Used to preview inside the app's settings
+    @State var previewMode = false
+    
     // This is how often the current angle is refreshed
-    @State private var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
+    @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     
     // Data to be tracked using the timer
     @State private var initialMousePosition: CGPoint = CGPoint()
@@ -25,9 +29,6 @@ struct RadialMenuView: View {
     @Default(.snapperAccentColor) var snapperAccentColor
     @Default(.snapperAccentColorUseGradient) var snapperAccentColorUseGradient
     @Default(.snapperAccentColorGradient) var snapperAccentColorGradient
-    
-    // Used to preview inside the app's settings
-    @State var previewMode = false
     
     var body: some View {
         VStack {
@@ -54,12 +55,13 @@ struct RadialMenuView: View {
                     RoundedRectangle(cornerRadius: self.snapperCornerRadius)
                         .strokeBorder(.black, lineWidth: self.snapperThickness)
                 }
+                .blur(radius: self.currentAngle == .doNothing ? 5 : 0)
                 
                 Spacer()
             }
             Spacer()
         }
-        .shadow(radius: 10)
+        .shadow(radius: self.currentAngle == .doNothing ? 0 : 10)
         
         // Make window get smaller when selecting maximize (ironic haha)
         .scaleEffect(self.currentAngle == .maximize ? 0.9 : 1)
@@ -103,9 +105,10 @@ struct RadialMenuView: View {
                 } else {
                     self.currentAngle = .maximize
                 }
+            } else {
+                self.currentAngle = self.currentAngle.next()
             }
         }
-        
         // When current angle changes, send haptic feedback and post a notification which is used to position the preview window
         .onChange(of: self.currentAngle) { _ in
             if (!previewMode) {
