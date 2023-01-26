@@ -46,14 +46,14 @@ struct RadialMenuSettingsView: View {
                         
                         HStack {
                             Spacer()
-                            ForEach(1...29, id: \.self) {_ in
+                            ForEach(1...27, id: \.self) {_ in
                                 Divider()
                                 Spacer()
                             }
                         }
                     }
                     
-                    RadialMenuView(configureMode: true)
+                    RadialMenuView(previewMode: true)
                 }
                 .frame(height: 150)
                 

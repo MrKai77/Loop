@@ -45,9 +45,9 @@ struct SnapperPreviewView: View {
                         .mask(RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius).foregroundColor(.white))
                         .shadow(radius: 10)
                     RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius)
-                        .strokeBorder(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
+                        .stroke(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
                 }
-                .padding(self.snapperPreviewPadding)
+                .padding(self.snapperPreviewPadding + self.snapperPreviewBorderThickness/2)
                 .frame(width: self.currentSnappingDirection == .doNothing ? 0 : nil,
                        height: self.currentSnappingDirection == .doNothing ? 0 : nil)
                 

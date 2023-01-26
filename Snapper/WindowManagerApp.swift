@@ -5,8 +5,6 @@
 //  Created by Kai Azim on 2023-01-23.
 //
 
-
-import WindowManagement
 import SwiftUI
 import KeyboardShortcuts
 import Defaults
@@ -20,12 +18,6 @@ struct SnapperApp: App {
         Settings {
             SettingsView()
         }
-        .registerSettingsWindow()
-        .titlebarAppearsTransparent(true)
-        
-        
-        .windowButton(.miniaturizeButton, hidden: true)
-        .windowButton(.zoomButton, hidden: true)
     }
 }
 

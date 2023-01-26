@@ -27,8 +27,9 @@ class SnapperPreviewController {
         panel.backgroundColor = .clear
         panel.level = .screenSaver
         panel.contentView = NSHostingView(rootView: SnapperPreviewView())
+        panel.collectionBehavior = .canJoinAllSpaces
         panel.alphaValue = 0
-        panel.orderFrontRegardless()
+        panel.makeKeyAndOrderInFrontOfSpaces()
         
         if let screen = windowResizer.getScreenWithMouse() {
             panel.setFrame(CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.visibleFrame.width, height: screen.visibleFrame.height), display: false)

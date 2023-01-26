@@ -73,6 +73,7 @@ class RadialMenuController {
                 self.showMenu()
                 if (Defaults[.showPreviewWhenSnapping] == true) {
                     self.snapperPreview.showPreview()
+                    self.snapperPopupWindowManager?.window?.makeKeyAndOrderInFrontOfSpaces()
                 }
             }
         })

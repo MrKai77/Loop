@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* SnapperPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* SnapperPreviewView.swift */; };
-		A87D36962980A75D002B0D2F /* WindowManagement in Frameworks */ = {isa = PBXBuildFile; productRef = A87D36952980A75D002B0D2F /* WindowManagement */; };
 		A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */; };
 		A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */; };
 		A88266002980931C00BCB197 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88265FF2980931C00BCB197 /* SettingsView.swift */; };
@@ -54,7 +53,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				A87D36962980A75D002B0D2F /* WindowManagement in Frameworks */,
 				A8DCC986298102A900D41065 /* LaunchAtLogin in Frameworks */,
 				A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */,
 			);
@@ -167,7 +165,6 @@
 			);
 			name = Snapper;
 			packageProductDependencies = (
-				A87D36952980A75D002B0D2F /* WindowManagement */,
 				A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */,
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				A8DCC985298102A900D41065 /* LaunchAtLogin */,
@@ -201,7 +198,6 @@
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
-				A87D36942980A75D002B0D2F /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */,
 				A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				A8DCC984298102A900D41065 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
@@ -450,14 +446,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A87D36942980A75D002B0D2F /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Wouter01/SwiftUI-WindowManagement";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
@@ -485,11 +473,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A87D36952980A75D002B0D2F /* WindowManagement */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A87D36942980A75D002B0D2F /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */;
-			productName = WindowManagement;
-		};
 		A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;

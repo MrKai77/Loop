@@ -10,6 +10,7 @@ import KeyboardShortcuts
 import CoreImage.CIFilterBuiltins
 import Defaults
 
+// Add variables for keyboard shortcuts
 extension KeyboardShortcuts.Name {
     static let resizeMaximize = Self("resizeMaximize", default: .init(.slash, modifiers: [.control, .option]))
     
@@ -24,6 +25,7 @@ extension KeyboardShortcuts.Name {
     static let resizeBottomLeftQuarter = Self("resizeBottomLeftQuarter", default: .init(.j, modifiers: [.control, .option]))
 }
 
+// Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
     static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
     
@@ -40,11 +42,12 @@ extension Defaults.Keys {
     static let snapperPreviewBorderThickness = Key<CGFloat>("snapperPreviewBorderThickness", default: 0)
 }
 
+// Add a notification name to specify then the user changes their snapping direction in the radial menu
 extension Notification.Name {
     static let currentSnappingDirectionChanged = Notification.Name("currentSnappingDirectionChanged")
-    static let finishedLaunching = Notification.Name("finishedLaunching")
 }
 
+// Enum that stores all possible resizing options
 enum WindowSnappingOptions {
     case topHalf
     case rightHalf
@@ -58,6 +61,7 @@ enum WindowSnappingOptions {
     case doNothing
 }
 
+// SwiftUI view for NSVisualEffect
 struct VisualEffectView: NSViewRepresentable {
     let material: NSVisualEffectView.Material
     let blendingMode: NSVisualEffectView.BlendingMode
@@ -77,6 +81,7 @@ struct VisualEffectView: NSViewRepresentable {
     }
 }
 
+// Make it easier to recieve notifications SwiftUI views
 extension View {
     func onReceive(
         _ name: Notification.Name,
@@ -91,6 +96,7 @@ extension View {
     }
 }
 
+// Add two extensions: one to detect the angle between two CGPoints and one to detect the distance
 extension CGPoint {
     func angle(to comparisonPoint: CGPoint) -> CGFloat {
         let originX = comparisonPoint.x - x
@@ -108,8 +114,8 @@ extension CGPoint {
     }
 }
 
+// Returns an Angle in the range 0° ..< 360°
 extension Angle {
-    // Returns an Angle in the range 0° ..< 360°
     func normalized() -> Angle {
         let degrees = (self.degrees.truncatingRemainder(dividingBy: 360) + 360)
                       .truncatingRemainder(dividingBy: 360)
@@ -118,6 +124,7 @@ extension Angle {
     }
 }
 
+// Define some types for the next function (which uses Apple's private APIs)
 private typealias CGSConnectionID = UInt
 private typealias CGSSpaceID = UInt64
 @_silgen_name("CGSCopySpaces")
@@ -125,7 +132,8 @@ private func CGSCopySpaces(_: Int, _: Int) -> CFArray
 @_silgen_name("CGSAddWindowsToSpaces")
 private func CGSAddWindowsToSpaces(_ cid: CGSConnectionID, _ windows: NSArray, _ spaces: NSArray)
 
-extension NSWindow {    // This extension allows the window to be put on "top" of spaces, making it slide with you when you change spaces!
+// This extension allows the window to be put on "top" of spaces, making it slide with you when you change spaces!
+extension NSWindow {
     func makeKeyAndOrderInFrontOfSpaces() {
         self.orderFrontRegardless()
         let contextID = NSApp.value(forKey: "contextID") as! Int
@@ -144,15 +152,7 @@ extension NSWindow {    // This extension allows the window to be put on "top" o
     }
 }
 
-struct VerticalLabelStyle: LabelStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        VStack {
-            configuration.icon
-            configuration.title
-        }
-    }
-}
-
+// Return the CGDirectDisplayID (used in WindowResizer.swift)
 extension NSScreen {
     var displayID: CGDirectDisplayID {
         let key = NSDeviceDescriptionKey("NSScreenNumber")

@@ -26,15 +26,6 @@
         "branch" : "main",
         "revision" : "7ad6331f9c38953eb1ce8737758e18f7607e984a"
       }
-    },
-    {
-      "identity" : "swiftui-windowmanagement",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Wouter01/SwiftUI-WindowManagement",
-      "state" : {
-        "branch" : "main",
-        "revision" : "859f9c48d2dbbe301e896ef4e879eabe5962b75b"
-      }
     }
   ],
   "version" : 2

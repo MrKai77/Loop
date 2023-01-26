@@ -54,12 +54,24 @@ struct SettingsView: View {
                     }
             }
         }
-        .frame(width: 450, height: CGFloat(self.currentWindowHeight))
+        .frame(width: 420, height: CGFloat(self.currentWindowHeight))
+        .background(setSettingsWindowProperties())
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
+struct setSettingsWindowProperties: NSViewRepresentable {
+    @State var window: NSWindow?
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            self.window = view.window
+            self.window?.titlebarAppearsTransparent = true
+            self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            self.window?.standardWindowButton(.zoomButton)?.isHidden = true
+        }
+        return view
     }
+
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }

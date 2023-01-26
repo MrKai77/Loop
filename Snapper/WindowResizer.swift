@@ -17,7 +17,7 @@ class WindowResizer {
     }
     
     func resizeFrontmostWindowWithDirection(_ direction: WindowSnappingOptions) {
-        guard let screen = getScreenWithMouse() else { return }
+        guard let screen = self.getScreenWithMouse() else { return }
         let bounds = CGDisplayBounds(screen.displayID)
         let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
         let screenWidth = bounds.width
@@ -67,7 +67,6 @@ class WindowResizer {
                     _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
                     
                     if let windowList = value as? [AXUIElement] {
-//                        print ("windowList #\(windowList)")
                         if windowList.first != nil {
                             var position : CFTypeRef
                             var size : CFTypeRef

@@ -59,7 +59,7 @@ struct PreviewSettingsView: View {
                             
                             HStack {
                                 Spacer()
-                                ForEach(1...29, id: \.self) {_ in
+                                ForEach(1...27, id: \.self) {_ in
                                     Divider()
                                     Spacer()
                                 }
@@ -72,10 +72,10 @@ struct PreviewSettingsView: View {
                                 .shadow(radius: 10)
                             
                             RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius)
-                                .strokeBorder(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
+                                .stroke(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
                         }
                         .aspectRatio(2/1, contentMode: .fit)
-                        .padding(self.snapperPreviewPadding)
+                        .padding(self.snapperPreviewPadding + self.snapperPreviewBorderThickness/2)
                     }
                     .frame(height: 150)
                     
