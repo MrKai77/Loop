@@ -31,6 +31,8 @@ extension Defaults.Keys {
     
     static let snapperUsesSystemAccentColor = Key<Bool>("snapperUsesSystemAccentColor", default: false)
     static let snapperAccentColor = Key<Color>("snapperAccentColor", default: Color(.white))
+    static let snapperAccentColorUseGradient = Key<Bool>("snapperAccentColorUseGradient", default: false)
+    static let snapperAccentColorGradient = Key<Color>("snapperAccentColorGradient", default: Color(.black))
     
     static let snapperTrigger = Key<Int>("snapperTrigger", default: 524608)
     static let snapperCornerRadius = Key<CGFloat>("snapperCornerRadius", default: 50)
@@ -48,7 +50,7 @@ extension Notification.Name {
 }
 
 // Enum that stores all possible resizing options
-enum WindowSnappingOptions {
+enum WindowSnappingOptions: CaseIterable {
     case topHalf
     case rightHalf
     case bottomHalf
@@ -59,6 +61,15 @@ enum WindowSnappingOptions {
     case bottomLeftQuarter
     case maximize
     case doNothing
+}
+
+extension CaseIterable where Self: Equatable {
+    func next() -> Self {
+        let all = Self.allCases
+        let idx = all.firstIndex(of: self)!
+        let next = all.index(after: idx)
+        return all[next == all.endIndex ? all.startIndex : next]
+    }
 }
 
 // SwiftUI view for NSVisualEffect

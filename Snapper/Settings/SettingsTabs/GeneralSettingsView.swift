@@ -18,6 +18,8 @@ struct GeneralSettingsView: View {
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
     @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
     @Default(.snapperAccentColor) var snapperAccentColor
+    @Default(.snapperAccentColorUseGradient) var snapperAccentColorUseGradient
+    @Default(.snapperAccentColorGradient) var snapperAccentColorGradient
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -58,17 +60,35 @@ struct GeneralSettingsView: View {
                             .toggleStyle(.switch)
                     }
                     Divider()
-                    HStack {
-                        Text("Accent Color")
-                        Spacer()
-                        ColorPicker("", selection: self.$snapperAccentColor, supportsOpacity: false)
+                    VStack {
+                        HStack {
+                            Text("Accent Color")
+                            Spacer()
+                            ColorPicker("", selection: self.$snapperAccentColor, supportsOpacity: false)
+                        }
+                        Divider()
+                        HStack {
+                            Text("Use Gradient")
+                            Spacer()
+                            Toggle("", isOn: self.$snapperAccentColorUseGradient)
+                                .scaleEffect(0.7)
+                                .toggleStyle(.switch)
+                        }
+                        Divider()
+                        HStack {
+                            Text("Gradient Color")
+                            Spacer()
+                            ColorPicker("", selection: self.$snapperAccentColorGradient, supportsOpacity: false)
+                        }
+                        .disabled(!self.snapperAccentColorUseGradient)
+                        .opacity(!self.snapperAccentColorUseGradient ? 0.5 : 1)
                     }
                     .disabled(self.snapperUsesSystemAccentColor)
                     .opacity(self.snapperUsesSystemAccentColor ? 0.5 : 1)
                 }
                 .padding(.horizontal, 10)
             }
-            .frame(height: 76)
+            .frame(height: 38*4+6)
             
             HStack {
                 Text("Permissions")

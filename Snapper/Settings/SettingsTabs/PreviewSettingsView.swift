@@ -74,8 +74,8 @@ struct PreviewSettingsView: View {
                             RoundedRectangle(cornerRadius: self.snapperPreviewCornerRadius)
                                 .stroke(self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor, lineWidth: self.snapperPreviewBorderThickness)
                         }
-                        .aspectRatio(2/1, contentMode: .fit)
                         .padding(self.snapperPreviewPadding + self.snapperPreviewBorderThickness/2)
+                        .padding(.horizontal, 30)
                     }
                     .frame(height: 150)
                     
