@@ -50,7 +50,7 @@ struct SettingsView: View {
                         Text("Keybindings")
                     }
                     .onAppear {
-                        self.currentWindowHeight = 454
+                        self.currentWindowHeight = 655
                     }
             }
         }
@@ -69,7 +69,6 @@ struct setSettingsWindowProperties: NSViewRepresentable {
             self.window?.titlebarAppearsTransparent = true
             self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
             self.window?.standardWindowButton(.zoomButton)?.isHidden = true
-            self.window?.orderFrontRegardless()
         }
         return view
     }

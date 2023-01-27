@@ -48,6 +48,8 @@ class WindowResizer {
             resizeFrontmostWindow(CGRect(x: screenOriginX+2*screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight))
         case .rightTwoThirds:
             resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight))
+        case .RLcenterThird:
+            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight))
         case .leftThird:
             resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/3, height: screenHeight))
         case .leftTwoThirds:
@@ -56,6 +58,8 @@ class WindowResizer {
             resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/3))
         case .topTwoThirds:
             resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: 2*screenHeight/3))
+        case .TBcenterThird:
+            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/3, width: screenWidth, height: screenHeight/3))
         case .bottomThird:
             resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+2*screenHeight/3, width: screenWidth, height: screenHeight/3))
         case .bottomTwoThirds:

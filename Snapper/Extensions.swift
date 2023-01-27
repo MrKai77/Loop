@@ -23,6 +23,12 @@ extension KeyboardShortcuts.Name {
     static let resizeTopLeftQuarter = Self("resizeTopLeftQuarter", default: .init(.u, modifiers: [.control, .option]))
     static let resizeBottomRightQuarter = Self("resizeBottomRightQuarter", default: .init(.k, modifiers: [.control, .option]))
     static let resizeBottomLeftQuarter = Self("resizeBottomLeftQuarter", default: .init(.j, modifiers: [.control, .option]))
+    
+    static let resizeRightThird = Self("resizeRightThird", default: .init(.d, modifiers: [.control, .option]))
+    static let resizeRightTwoThirds = Self("resizeRightTwoThirds", default: .init(.e, modifiers: [.control, .option]))
+    static let resizeRLCenterThird = Self("resizeRLCenterThird", default: .init(.s, modifiers: [.control, .option]))
+    static let resizeLeftThird = Self("resizeLeftThird", default: .init(.a, modifiers: [.control, .option]))
+    static let resizeLeftTwoThirds = Self("resizeLeftTwoThirds", default: .init(.q, modifiers: [.control, .option]))
 }
 
 // Add variables for default values (which are stored even then the app is closed)
@@ -66,10 +72,12 @@ enum WindowSnappingOptions: CaseIterable {
     // These aren't accessible from the radial menu
     case rightThird
     case rightTwoThirds
+    case RLcenterThird
     case leftThird
     case leftTwoThirds
     case topThird
     case topTwoThirds
+    case TBcenterThird
     case bottomThird
     case bottomTwoThirds
 }

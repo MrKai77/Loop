@@ -74,6 +74,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyDown(for: .resizeBottomLeftQuarter) { [self] in
             windowResizer.resizeFrontmostWindowWithDirection(.bottomLeftQuarter)
         }
+        
+        KeyboardShortcuts.onKeyDown(for: .resizeRightThird) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.rightThird)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeRightTwoThirds) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.rightTwoThirds)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeRLCenterThird) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.RLcenterThird)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeLeftThird) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.leftThird)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeLeftTwoThirds) { [self] in
+            windowResizer.resizeFrontmostWindowWithDirection(.leftTwoThirds)
+        }
     }
     
     @discardableResult

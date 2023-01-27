@@ -95,6 +95,44 @@ struct KeybindingSettingsView: View {
                     }
                     .padding(10)
                 }
+                ZStack {
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
+                    RoundedRectangle(cornerRadius: 5)
+                        .foregroundColor(Color("Monochrome").opacity(0.03))
+                    
+                    VStack {
+                        HStack {
+                            Text("Right Third")
+                            Spacer()
+                            KeyboardShortcuts.Recorder("", name: .resizeRightThird)
+                        }
+                        Divider()
+                        HStack {
+                            Text("Right Two Thirds")
+                            Spacer()
+                            KeyboardShortcuts.Recorder("", name: .resizeRightTwoThirds)
+                        }
+                        Divider()
+                        HStack {
+                            Text("Center Third")
+                            Spacer()
+                            KeyboardShortcuts.Recorder("", name: .resizeRLCenterThird)
+                        }
+                        Divider()
+                        HStack {
+                            Text("Left Two Thirds")
+                            Spacer()
+                            KeyboardShortcuts.Recorder("", name: .resizeLeftTwoThirds)
+                        }
+                        HStack {
+                            Text("Left Third")
+                            Spacer()
+                            KeyboardShortcuts.Recorder("", name: .resizeLeftThird)
+                        }
+                    }
+                    .padding(10)
+                }
             }
         }
         .padding(20)

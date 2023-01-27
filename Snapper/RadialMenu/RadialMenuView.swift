@@ -73,7 +73,7 @@ struct RadialMenuView: View {
         
         // Animate window
         .blur(radius: self.currentAngle == .noAction ? 5 : 0)
-        .scaleEffect(self.currentAngle == .maximize ? 0.9 : 1)
+        .scaleEffect(self.currentAngle == .maximize ? 0.8 : 1)
         .animation(.easeInOut, value: self.currentAngle)
         
         // Get initial mouse position when window appears
@@ -96,7 +96,7 @@ struct RadialMenuView: View {
                 let angleToMouse = Angle(radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y)))
                 let distanceToMouse = initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
                 
-                // If mouse over 1000 units away, select half or quarter positions
+                // If mouse over 50 points away, select half or quarter positions
                 if (distanceToMouse > pow(50-self.snapperThickness, 2)) {
                     switch Int((angleToMouse.normalized().degrees+45/2)/45) {
                     case 0, 8: self.currentAngle = .rightHalf
@@ -110,7 +110,7 @@ struct RadialMenuView: View {
                     default:   self.currentAngle = .noAction
                     }
                     
-                // If mouse is less than 50 units away, do nothing
+                // If mouse is less than 10 points away, do nothing
                 } else if (distanceToMouse < pow(10, 2)) {
                     self.currentAngle = .noAction
                     
