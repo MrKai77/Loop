@@ -38,6 +38,15 @@ struct RadialMenuView: View {
                 
                 ZStack {
                     VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                    
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor,
+                            self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColorUseGradient ? self.snapperAccentColorGradient : self.snapperAccentColor]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing)
+                    .opacity(self.currentAngle == .maximize ? 1 : 0)
+                    
                     Rectangle()
                         .fill(LinearGradient(
                             gradient: Gradient(colors: [
@@ -145,19 +154,19 @@ struct RadialMenu: View {
                     .overlay {
                         HStack(spacing: 0) {
                             VStack(spacing: 0) {
-                                angleSelectorRectangle([.topLeftQuarter], self.activeAngle)
-                                angleSelectorRectangle([.leftHalf], self.activeAngle)
-                                angleSelectorRectangle([.bottomLeftQuarter], self.activeAngle)
+                                angleSelectorRectangle(.topLeftQuarter, self.activeAngle)
+                                angleSelectorRectangle(.leftHalf, self.activeAngle)
+                                angleSelectorRectangle(.bottomLeftQuarter, self.activeAngle)
                             }
                             VStack(spacing: 0) {
-                                angleSelectorRectangle([.topHalf], self.activeAngle)
+                                angleSelectorRectangle(.topHalf, self.activeAngle)
                                 Spacer().frame(width: 100/3, height: 100/3)
-                                angleSelectorRectangle([.bottomHalf], self.activeAngle)
+                                angleSelectorRectangle(.bottomHalf, self.activeAngle)
                             }
                             VStack(spacing: 0) {
-                                angleSelectorRectangle([.topRightQuarter], self.activeAngle)
-                                angleSelectorRectangle([.rightHalf], self.activeAngle)
-                                angleSelectorRectangle([.bottomRightQuarter], self.activeAngle)
+                                angleSelectorRectangle(.topRightQuarter, self.activeAngle)
+                                angleSelectorRectangle(.rightHalf, self.activeAngle)
+                                angleSelectorRectangle(.bottomRightQuarter, self.activeAngle)
                             }
                         }
                     }
@@ -166,14 +175,14 @@ struct RadialMenu: View {
                 // This is used when the user configures the radial menu to be a circle
                 Color.clear
                     .overlay {
-                        angleSelectorCirclePart(-22.5, [.rightHalf], self.activeAngle)
-                        angleSelectorCirclePart(22.5, [.bottomRightQuarter], self.activeAngle)
-                        angleSelectorCirclePart(67.5, [.bottomHalf], self.activeAngle)
-                        angleSelectorCirclePart(112.5, [.bottomLeftQuarter], self.activeAngle)
-                        angleSelectorCirclePart(157.5, [.leftHalf], self.activeAngle)
-                        angleSelectorCirclePart(202.5, [.topLeftQuarter], self.activeAngle)
-                        angleSelectorCirclePart(247.5, [.topHalf], self.activeAngle)
-                        angleSelectorCirclePart(292.5, [.topRightQuarter], self.activeAngle)
+                        angleSelectorCirclePart(-22.5, .rightHalf, self.activeAngle)
+                        angleSelectorCirclePart(22.5, .bottomRightQuarter, self.activeAngle)
+                        angleSelectorCirclePart(67.5, .bottomHalf, self.activeAngle)
+                        angleSelectorCirclePart(112.5, .bottomLeftQuarter, self.activeAngle)
+                        angleSelectorCirclePart(157.5, .leftHalf, self.activeAngle)
+                        angleSelectorCirclePart(202.5, .topLeftQuarter, self.activeAngle)
+                        angleSelectorCirclePart(247.5, .topHalf, self.activeAngle)
+                        angleSelectorCirclePart(292.5, .topRightQuarter, self.activeAngle)
                     }
             }
     }
@@ -184,8 +193,8 @@ struct angleSelectorRectangle: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ snapPosition: [WindowSnappingOptions], _ currentSnapPosition: WindowSnappingOptions) {
-        if (snapPosition.contains(currentSnapPosition) || currentSnapPosition == .maximize) {
+    init(_ snapPosition: WindowSnappingOptions, _ currentSnapPosition: WindowSnappingOptions) {
+        if (snapPosition == currentSnapPosition) {
             self.isActive = true
         } else {
             self.isActive = false
@@ -205,9 +214,9 @@ struct angleSelectorCirclePart: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ angle: Double, _ snapPosition: [WindowSnappingOptions], _ currentSnapPosition: WindowSnappingOptions) {
+    init(_ angle: Double, _ snapPosition: WindowSnappingOptions, _ currentSnapPosition: WindowSnappingOptions) {
         self.startingAngle = angle
-        if (snapPosition.contains(currentSnapPosition) || currentSnapPosition == .maximize) {
+        if (snapPosition == currentSnapPosition) {
             self.isActive = true
         } else {
             self.isActive = false
