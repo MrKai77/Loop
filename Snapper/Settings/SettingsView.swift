@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @State var currentSettingsTab = 1
     @State var currentWindowHeight = 1
     
     var body: some View {
@@ -16,8 +17,9 @@ struct SettingsView: View {
             VisualEffectView(material: .fullScreenUI, blendingMode: .behindWindow)
                 .ignoresSafeArea()
             
-            TabView {
+            TabView(selection: self.$currentSettingsTab) {
                 GeneralSettingsView()
+                    .tag(1)
                     .tabItem {
                         Image(systemName: "gear")
                         Text("General")
@@ -27,6 +29,7 @@ struct SettingsView: View {
                     }
                 
                 RadialMenuSettingsView()
+                    .tag(2)
                     .tabItem {
                         Image(systemName: "circle.dashed")
                         Text("Radial Menu")
@@ -36,6 +39,7 @@ struct SettingsView: View {
                     }
                 
                 PreviewSettingsView()
+                    .tag(3)
                     .tabItem {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                         Text("Preview")
@@ -45,6 +49,7 @@ struct SettingsView: View {
                     }
                 
                 KeybindingSettingsView()
+                    .tag(4)
                     .tabItem {
                         Image(systemName: "keyboard")
                         Text("Keybindings")
@@ -69,6 +74,7 @@ struct setSettingsWindowProperties: NSViewRepresentable {
             self.window?.titlebarAppearsTransparent = true
             self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
             self.window?.standardWindowButton(.zoomButton)?.isHidden = true
+            self.window?.isMovableByWindowBackground = true
         }
         return view
     }
