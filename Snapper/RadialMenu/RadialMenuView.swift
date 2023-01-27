@@ -57,9 +57,6 @@ struct RadialMenuView: View {
                         )
                         .mask {
                             RadialMenu(activeAngle: self.currentAngle)
-                                .transaction { transaction in
-                                    transaction.animation = nil
-                                }
                         }
                 }
                 .mask {
@@ -77,7 +74,7 @@ struct RadialMenuView: View {
         // Animate window
         .blur(radius: self.currentAngle == .noAction ? 5 : 0)
         .scaleEffect(self.currentAngle == .maximize ? 0.9 : 1)
-        .animation(.easeOut, value: self.currentAngle)
+        .animation(.easeInOut, value: self.currentAngle)
         
         // Get initial mouse position when window appears
         .onAppear {

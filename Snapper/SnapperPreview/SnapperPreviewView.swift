@@ -68,8 +68,8 @@ struct SnapperPreviewView: View {
                                 endPoint: .bottomTrailing), lineWidth: self.snapperPreviewBorderThickness)
                 }
                 .padding(self.snapperPreviewPadding + self.snapperPreviewBorderThickness/2)
-                .frame(width: self.currentSnappingDirection == .noAction ? 0 : nil,
-                       height: self.currentSnappingDirection == .noAction ? 0 : nil)
+                .frame(width: self.currentSnappingDirection == .noAction ? 1 : nil,
+                       height: self.currentSnappingDirection == .noAction ? 1 : nil)
                 .blur(radius: self.currentSnappingDirection == .noAction ? 20 : 0)
                 
                 if (self.currentSnappingDirection == .leftThird ||
