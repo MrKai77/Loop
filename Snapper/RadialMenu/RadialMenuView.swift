@@ -57,14 +57,16 @@ struct RadialMenuView: View {
                         )
                         .mask {
                             RadialMenu(activeAngle: self.currentAngle)
+                                .transaction { transaction in
+                                    transaction.animation = nil
+                                }
                         }
                 }
-                .frame(width: 100, height: 100)
                 .mask {
                     RoundedRectangle(cornerRadius: self.snapperCornerRadius)
                         .strokeBorder(.black, lineWidth: self.snapperThickness)
                 }
-                .blur(radius: self.currentAngle == .noAction ? 5 : 0)
+                .frame(width: 100, height: 100)
                 
                 Spacer()
             }
@@ -72,7 +74,8 @@ struct RadialMenuView: View {
         }
         .shadow(radius: self.currentAngle == .noAction ? 0 : 10)
         
-        // Make window get smaller when selecting maximize (ironic haha)
+        // Animate window
+        .blur(radius: self.currentAngle == .noAction ? 5 : 0)
         .scaleEffect(self.currentAngle == .maximize ? 0.9 : 1)
         .animation(.easeOut, value: self.currentAngle)
         
