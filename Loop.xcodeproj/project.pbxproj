@@ -132,7 +132,6 @@
 		A8E59C37297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXGroup;
 			children = (
-				A8F063712985B2730010C33D /* Info.plist */,
 				A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */,
 				A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */,
 				A8E59C4D29803FBD0064D4BA /* Extensions.swift */,
@@ -141,6 +140,7 @@
 				A88265FA29808DED00BCB197 /* LoopPreview */,
 				A88265FC298092B500BCB197 /* Settings */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
+				A8F063712985B2730010C33D /* Info.plist */,
 				A8E59C41297F5E9B0064D4BA /* Loop.entitlements */,
 				A8E59C3E297F5E9B0064D4BA /* Preview Content */,
 			);
@@ -379,7 +379,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -411,7 +411,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;

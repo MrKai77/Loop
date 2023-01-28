@@ -12,12 +12,15 @@ struct MoreSettingsView: View {
     
     @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
     private let updater: SPUUpdater
+    
+    @State private var sparkleAutomaticallyChecksForUpdates: Bool
         
     init(updater: SPUUpdater) {
         self.updater = updater
         
         // Create our view model for our CheckForUpdatesView
         self.checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
+        self.sparkleAutomaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
     }
     
     var body: some View {
@@ -29,6 +32,7 @@ struct MoreSettingsView: View {
                     Text("Current version: \(Bundle.main.appVersion) (build \(Bundle.main.appBuild))")
                         .font(.caption)
                         .opacity(0.6)
+                        .textSelection(.enabled)
                 }
                 Spacer()
                 Button("Check for Updates…", action: updater.checkForUpdates)
@@ -43,10 +47,14 @@ struct MoreSettingsView: View {
                 HStack {
                     Text("Check for Updates Automatically")
                     Spacer()
+                    Toggle("", isOn: self.$sparkleAutomaticallyChecksForUpdates)
+                        .scaleEffect(0.7)
+                        .toggleStyle(.switch)
+                        .onChange(of: sparkleAutomaticallyChecksForUpdates) { newValue in
+                            updater.automaticallyChecksForUpdates = newValue
+                        }
                 }
                 .padding([.horizontal], 10)
-                .disabled(true)
-                .opacity(0.5)
             }
             .frame(height: 38)
         }
