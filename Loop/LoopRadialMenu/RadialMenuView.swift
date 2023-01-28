@@ -14,13 +14,16 @@ struct RadialMenuView: View {
     // Used to preview inside the app's settings
     @State var previewMode = false
     
-    // This is how often the current angle is refreshed
+    // Variable to store the initial position of the mouse
+    @State private var initialMousePosition: CGPoint = CGPoint()
+    
+    // This is how often the current resize direction is refreshed
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     
     // Data to be tracked using the timer
-    @State private var initialMousePosition: CGPoint = CGPoint()
     @State private var currentResizeDirection: WindowResizingOptions = .noAction
     
+    // Variables that store the radial menu's shape
     @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
     @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
     
@@ -37,9 +40,11 @@ struct RadialMenuView: View {
                 Spacer()
                 
                 ZStack {
+                    // NSVisualEffect on background
                     VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                     
-                    LinearGradient( // Used for .maximize
+                    // Used as the background when resize direction is .maximize
+                    LinearGradient(
                         gradient: Gradient(colors: [
                             self.loopUsesSystemAccentColor ? Color.accentColor : self.loopAccentColor,
                             self.loopUsesSystemAccentColor ? Color.accentColor : self.loopUsesAccentColorGradient ? self.loopAccentColorGradient : self.loopAccentColor]),
@@ -47,7 +52,8 @@ struct RadialMenuView: View {
                             endPoint: .bottomTrailing)
                     .opacity(self.currentResizeDirection == .maximize ? 1 : 0)
                     
-                    Rectangle()     // Used showing current angle
+                    // This rectangle with a gradient is masked with the current direction radial menu view
+                    Rectangle()
                         .fill(LinearGradient(
                             gradient: Gradient(colors: [
                                 self.loopUsesSystemAccentColor ? Color.accentColor : self.loopAccentColor,
@@ -59,6 +65,7 @@ struct RadialMenuView: View {
                             RadialMenu(activeAngle: self.currentResizeDirection)
                         }
                 }
+                // Mask the whole ZStack with the shape the user defines
                 .mask {
                     RoundedRectangle(cornerRadius: self.loopRadialMenuCornerRadius)
                         .strokeBorder(.black, lineWidth: self.loopRadialMenuThickness)
@@ -88,7 +95,7 @@ struct RadialMenuView: View {
             }
         }
         
-        .onReceive(timer) { input in
+        .onReceive(timer) { _ in
             if (!previewMode) {
                 
                 // Get angle & distance to mouse

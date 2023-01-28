@@ -79,8 +79,8 @@ class WindowResizer {
         guard let frontmostWindow = NSWorkspace.shared.frontmostApplication?.localizedName else { return }
                 
         for window in visibleWindows! {
-            let windowOwnerName:String = window["kCGWindowOwnerName"] as! String
-            let windowPID = window["kCGWindowOwnerPID"] as? Int32
+            let windowOwnerName:String = window[kCGWindowOwnerName as String] as! String
+            let windowPID = window[kCGWindowOwnerPID as String] as? Int32
             
             if windowOwnerName == frontmostWindow {
                 print(window)
