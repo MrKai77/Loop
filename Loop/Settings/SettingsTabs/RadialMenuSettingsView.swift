@@ -128,7 +128,7 @@ struct RadialMenuSettingsView: View {
                         }
                         Text("To use caps lock, remap it to control in System Settings.")
                             .font(.caption)
-                            .opacity(0.5)
+                            .opacity(0.6)
                     }
                     .padding(.horizontal, 10)
                     .onAppear {

@@ -6,8 +6,15 @@
 //
 
 import SwiftUI
+import Sparkle
 
 struct SettingsView: View {
+    
+    private let updaterController: SPUStandardUpdaterController
+        
+    init() {
+        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+    }
     
     @State var currentSettingsTab = 1
     @State var currentWindowHeight = 1
@@ -56,6 +63,16 @@ struct SettingsView: View {
                     }
                     .onAppear {
                         self.currentWindowHeight = 663
+                    }
+                
+                MoreSettingsView(updater: updaterController.updater)
+                    .tag(5)
+                    .tabItem {
+                        Image(systemName: "ellipsis.circle")
+                        Text("More")
+                    }
+                    .onAppear {
+                        self.currentWindowHeight = 116
                     }
             }
         }

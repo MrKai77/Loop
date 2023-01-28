@@ -189,3 +189,15 @@ extension NSScreen {
         return self.deviceDescription[key] as! CGDirectDisplayID
     }
 }
+
+// Returns the current build number
+extension Bundle {
+    public var appName: String { getInfo("CFBundleName")  }
+    public var displayName: String {getInfo("CFBundleDisplayName")}
+    public var bundleID: String {getInfo("CFBundleIdentifier")}
+    
+    public var appBuild: String { getInfo("CFBundleVersion") }
+    public var appVersion: String { getInfo("CFBundleShortVersionString") }
+    
+    fileprivate func getInfo(_ str: String) -> String { infoDictionary?[str] as? String ?? "⚠️" }
+}

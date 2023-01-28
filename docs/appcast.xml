@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Loop</title>
+        <item>
+            <title>0.1.0</title>
+            <pubDate>Sat, 28 Jan 2023 13:36:58 -0700</pubDate>
+            <sparkle:version>5</sparkle:version>
+            <sparkle:shortVersionString>0.1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://github.com/MrKai77/Loop/releases/tag/0.1.0</sparkle:releaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.1.0/Loop.zip" length="5325729" type="application/octet-stream" sparkle:edSignature="jqMbczBCCWYJj7OyEki303JnlGlXXUH6gArYUHMlqgUEoenM3zLshky3MfflG4RAwIBtbzNEu8w28CQmR9b4BA=="/>
+        </item>
+    </channel>
+</rss>

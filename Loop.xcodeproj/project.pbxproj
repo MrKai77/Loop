@@ -25,6 +25,8 @@
 		A8E59C4C29803A4D0064D4BA /* WindowResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */; };
 		A8E59C4E29803FBD0064D4BA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4D29803FBD0064D4BA /* Extensions.swift */; };
 		A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4F298045D90064D4BA /* PreviewController.swift */; };
+		A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */; };
+		A8F063702985B2220010C33D /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A8F0636F2985B2220010C33D /* Sparkle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowResizer.swift; sourceTree = "<group>"; };
 		A8E59C4D29803FBD0064D4BA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A8E59C4F298045D90064D4BA /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
+		A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreSettingsView.swift; sourceTree = "<group>"; };
+		A8F063712985B2730010C33D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
+				A8F063702985B2220010C33D /* Sparkle in Frameworks */,
 				A8DCC986298102A900D41065 /* LaunchAtLogin in Frameworks */,
 				A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */,
 			);
@@ -95,6 +100,7 @@
 				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
 				A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */,
 				A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */,
+				A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */,
 			);
 			path = SettingsTabs;
 			sourceTree = "<group>";
@@ -126,6 +132,7 @@
 		A8E59C37297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXGroup;
 			children = (
+				A8F063712985B2730010C33D /* Info.plist */,
 				A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */,
 				A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */,
 				A8E59C4D29803FBD0064D4BA /* Extensions.swift */,
@@ -168,6 +175,7 @@
 				A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */,
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				A8DCC985298102A900D41065 /* LaunchAtLogin */,
+				A8F0636F2985B2220010C33D /* Sparkle */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -201,6 +209,7 @@
 				A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				A8DCC984298102A900D41065 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */,
+				A8F0636E2985B2220010C33D /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -230,6 +239,7 @@
 			files = (
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
+				A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */,
 				A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
@@ -369,12 +379,13 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Loop/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Loop;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -400,12 +411,13 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Loop/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Loop;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -470,6 +482,14 @@
 				kind = branch;
 			};
 		};
+		A8F0636E2985B2220010C33D /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				branch = 2.x;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -487,6 +507,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A8DCC984298102A900D41065 /* XCRemoteSwiftPackageReference "LaunchAtLogin" */;
 			productName = LaunchAtLogin;
+		};
+		A8F0636F2985B2220010C33D /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A8F0636E2985B2220010C33D /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
