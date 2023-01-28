@@ -1,19 +1,19 @@
 //
-//  SnapperPreview.swift
-//  WindowManager
+//  PreviewController.swift
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-24.
 //
 
 import SwiftUI
 
-class SnapperPreviewController {
+class PreviewController {
     
-    var snapperPreviewWindowManager: NSWindowController?
+    var loopPreviewWindowController: NSWindowController?
     let windowResizer = WindowResizer()
     
     func showPreview() {
-        if let windowController = self.snapperPreviewWindowManager {
+        if let windowController = self.loopPreviewWindowController {
             windowController.window?.orderFrontRegardless()
             return
         }
@@ -26,7 +26,7 @@ class SnapperPreviewController {
         panel.hasShadow = false
         panel.backgroundColor = .clear
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(rootView: SnapperPreviewView())
+        panel.contentView = NSHostingView(rootView: PreviewView())
         panel.collectionBehavior = .canJoinAllSpaces
         panel.alphaValue = 0
         panel.makeKeyAndOrderInFrontOfSpaces()
@@ -35,7 +35,7 @@ class SnapperPreviewController {
             panel.setFrame(CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.visibleFrame.width, height: screen.visibleFrame.height), display: false)
         }
         
-        self.snapperPreviewWindowManager = .init(window: panel)
+        self.loopPreviewWindowController = .init(window: panel)
         
         NSAnimationContext.runAnimationGroup({ (context) -> Void in
             panel.animator().alphaValue = 1
@@ -43,8 +43,8 @@ class SnapperPreviewController {
     }
     
     func closePreview() {
-        guard let windowController = snapperPreviewWindowManager else { return }
-        self.snapperPreviewWindowManager = nil
+        guard let windowController = loopPreviewWindowController else { return }
+        self.loopPreviewWindowController = nil
         
         windowController.window?.animator().alphaValue = 1
         NSAnimationContext.runAnimationGroup({ (context) -> Void in

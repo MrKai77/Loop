@@ -1,6 +1,6 @@
 //
 //  KeybindingSettingsView.swift
-//  Snapper
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-24.
 //
@@ -125,6 +125,7 @@ struct KeybindingSettingsView: View {
                             Spacer()
                             KeyboardShortcuts.Recorder("", name: .resizeLeftTwoThirds)
                         }
+                        Divider()
                         HStack {
                             Text("Left Third")
                             Spacer()

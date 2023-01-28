@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  Snapper
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-24.
 //
@@ -55,7 +55,7 @@ struct SettingsView: View {
                         Text("Keybindings")
                     }
                     .onAppear {
-                        self.currentWindowHeight = 655
+                        self.currentWindowHeight = 663
                     }
             }
         }

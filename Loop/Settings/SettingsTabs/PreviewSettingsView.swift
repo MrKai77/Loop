@@ -1,6 +1,6 @@
 //
 //  PreviewSettingsView.swift
-//  Snapper
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-25.
 //
@@ -10,15 +10,10 @@ import Defaults
 
 struct PreviewSettingsView: View {
     
-    @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
-    @Default(.snapperAccentColor) var snapperAccentColor
-    @Default(.snapperAccentColorUseGradient) var snapperAccentColorUseGradient
-    @Default(.snapperAccentColorGradient) var snapperAccentColorGradient
-    
-    @Default(.showPreviewWhenSnapping) var showPreviewWhenSnapping
-    @Default(.snapperPreviewPadding) var snapperPreviewPadding
-    @Default(.snapperPreviewCornerRadius) var snapperPreviewCornerRadius
-    @Default(.snapperPreviewBorderThickness) var snapperPreviewBorderThickness
+    @Default(.loopPreviewVisibility) var loopPreviewVisibility
+    @Default(.loopPreviewPadding) var loopPreviewPadding
+    @Default(.loopPreviewCornerRadius) var loopPreviewCornerRadius
+    @Default(.loopPreviewBorderThickness) var loopPreviewBorderThickness
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -32,10 +27,10 @@ struct PreviewSettingsView: View {
                         .foregroundColor(Color("Monochrome").opacity(0.03))
                     
                     HStack {
-                        Text("Show Preview when snapping")
+                        Text("Show Preview when looping")
                         Spacer()
                         
-                        Toggle("", isOn: $showPreviewWhenSnapping)
+                        Toggle("", isOn: $loopPreviewVisibility)
                             .scaleEffect(0.7)
                             .toggleStyle(.switch)
                     }
@@ -68,7 +63,7 @@ struct PreviewSettingsView: View {
                             }
                         }
                         
-                        SnapperPreviewView(previewMode: true)
+                        PreviewView(previewMode: true)
                             .padding(.horizontal, 30)
                     }
                     .frame(height: 150)
@@ -89,7 +84,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .opacity(0.5)
                                     Slider(
-                                        value: self.$snapperPreviewPadding,
+                                        value: self.$loopPreviewPadding,
                                         in: 0...20,
                                         step: 2
                                     )
@@ -110,7 +105,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .opacity(0.5)
                                     Slider(
-                                        value: self.$snapperPreviewCornerRadius,
+                                        value: self.$loopPreviewCornerRadius,
                                         in: 0...20,
                                         step: 2
                                     )
@@ -131,7 +126,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .opacity(0.5)
                                     Slider(
-                                        value: self.$snapperPreviewBorderThickness,
+                                        value: self.$loopPreviewBorderThickness,
                                         in: 0...10,
                                         step: 1
                                     )
@@ -147,8 +142,8 @@ struct PreviewSettingsView: View {
                     }
                     .frame(height: 114)
                 }
-                .disabled(!self.showPreviewWhenSnapping)
-                .opacity(!self.showPreviewWhenSnapping ? 0.5 : 1)
+                .disabled(!self.loopPreviewVisibility)
+                .opacity(!self.loopPreviewVisibility ? 0.5 : 1)
             }
         }
         .padding(20)

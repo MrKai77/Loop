@@ -1,13 +1,13 @@
 //
-//  SnapperMenuController.swift
-//  Snapper
+//  LoopMenubarController.swift
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-24.
 //
 
 import Cocoa
 
-class SnapperMenuController {
+class LoopMenubarController {
     
     let windowResizer = WindowResizer()
     private var statusItem: NSStatusItem!
@@ -15,7 +15,7 @@ class SnapperMenuController {
     func show() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "circle.dashed", accessibilityDescription: "Snapper")
+            button.image = NSImage(systemSymbolName: "circle.dashed", accessibilityDescription: "Loop")
         }
         
         let resizeWindow = NSMenuItem(title: "Resize Window", action: nil, keyEquivalent: "")
@@ -43,13 +43,13 @@ class SnapperMenuController {
             }
         }
         
-        let snapperMenu = NSMenu()
-        snapperMenu.addItem(resizeWindow)
-        snapperMenu.addItem(NSMenuItem.separator())
-        snapperMenu.addItem(withTitle: "Preferences", action: #selector(self.openSettings), keyEquivalent: ",").target = self
-        snapperMenu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
+        let loopMenu = NSMenu()
+        loopMenu.addItem(resizeWindow)
+        loopMenu.addItem(NSMenuItem.separator())
+        loopMenu.addItem(withTitle: "Preferences", action: #selector(self.openSettings), keyEquivalent: ",").target = self
+        loopMenu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
         
-        statusItem.menu = snapperMenu
+        statusItem.menu = loopMenu
     }
     
     @objc func resizeWindowMaximize() {

@@ -1,6 +1,6 @@
 //
 //  WindowResizer.swift
-//  WindowManager
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-23.
 //
@@ -16,7 +16,7 @@ class WindowResizer {
         return screenWithMouse
     }
     
-    func resizeFrontmostWindowWithDirection(_ direction: WindowSnappingOptions) {
+    func resizeFrontmostWindowWithDirection(_ direction: WindowResizingOptions) {
         guard let screen = self.getScreenWithMouse() else { return }
         let bounds = CGDisplayBounds(screen.displayID)
         let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0

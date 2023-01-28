@@ -1,6 +1,6 @@
 //
-//  SnapperApp.swift
-//  WindowManager
+//  LoopApp.swift
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-23.
 //
@@ -10,7 +10,7 @@ import KeyboardShortcuts
 import Defaults
 
 @main
-struct SnapperApp: App {
+struct LoopApp: App {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
@@ -28,13 +28,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     let windowResizer = WindowResizer()
     let radialMenu = RadialMenuController()
-    let snapperMenu = SnapperMenuController()
+    let loopMenubarController = LoopMenubarController()
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         self.checkAccessibilityAccess()
         self.setKeybindings()
         radialMenu.AddObservers()
-        snapperMenu.show()
+        loopMenubarController.show()
         
         if #available(macOS 13, *) {
             NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)

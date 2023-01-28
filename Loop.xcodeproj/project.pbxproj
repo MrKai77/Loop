@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
-		A8789F6929805B340040512E /* SnapperPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* SnapperPreviewView.swift */; };
+		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
 		A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */; };
 		A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */; };
 		A88266002980931C00BCB197 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88265FF2980931C00BCB197 /* SettingsView.swift */; };
 		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
-		A8DCC97E2980DDD400D41065 /* SnapperMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */; };
+		A8DCC97E2980DDD400D41065 /* LoopMenubarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC97D2980DDD400D41065 /* LoopMenubarController.swift */; };
 		A8DCC986298102A900D41065 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC985298102A900D41065 /* LaunchAtLogin */; };
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
 		A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */; };
@@ -24,27 +24,27 @@
 		A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C49297F98670064D4BA /* RadialMenuController.swift */; };
 		A8E59C4C29803A4D0064D4BA /* WindowResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */; };
 		A8E59C4E29803FBD0064D4BA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4D29803FBD0064D4BA /* Extensions.swift */; };
-		A8E59C50298045D90064D4BA /* SnapperPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4F298045D90064D4BA /* SnapperPreviewController.swift */; };
+		A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4F298045D90064D4BA /* PreviewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
-		A8789F6829805B340040512E /* SnapperPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperPreviewView.swift; sourceTree = "<group>"; };
+		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingSettingsView.swift; sourceTree = "<group>"; };
 		A88265FF2980931C00BCB197 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A882660729809F6F00BCB197 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
-		A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperMenuController.swift; sourceTree = "<group>"; };
+		A8DCC97D2980DDD400D41065 /* LoopMenubarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopMenubarController.swift; sourceTree = "<group>"; };
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
-		A8E59C35297F5E9A0064D4BA /* Snapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snapper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A8E59C35297F5E9A0064D4BA /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerApp.swift; sourceTree = "<group>"; };
 		A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A8E59C41297F5E9B0064D4BA /* Snapper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Snapper.entitlements; sourceTree = "<group>"; };
+		A8E59C41297F5E9B0064D4BA /* Loop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Loop.entitlements; sourceTree = "<group>"; };
 		A8E59C49297F98670064D4BA /* RadialMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuController.swift; sourceTree = "<group>"; };
 		A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowResizer.swift; sourceTree = "<group>"; };
 		A8E59C4D29803FBD0064D4BA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		A8E59C4F298045D90064D4BA /* SnapperPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapperPreviewController.swift; sourceTree = "<group>"; };
+		A8E59C4F298045D90064D4BA /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,22 +61,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A88265FA29808DED00BCB197 /* SnapperPreview */ = {
+		A88265FA29808DED00BCB197 /* LoopPreview */ = {
 			isa = PBXGroup;
 			children = (
-				A8E59C4F298045D90064D4BA /* SnapperPreviewController.swift */,
-				A8789F6829805B340040512E /* SnapperPreviewView.swift */,
+				A8E59C4F298045D90064D4BA /* PreviewController.swift */,
+				A8789F6829805B340040512E /* PreviewView.swift */,
 			);
-			path = SnapperPreview;
+			path = LoopPreview;
 			sourceTree = "<group>";
 		};
-		A88265FB29808E0D00BCB197 /* RadialMenu */ = {
+		A88265FB29808E0D00BCB197 /* LoopRadialMenu */ = {
 			isa = PBXGroup;
 			children = (
 				A8E59C49297F98670064D4BA /* RadialMenuController.swift */,
 				A8789F6629805B190040512E /* RadialMenuView.swift */,
 			);
-			path = RadialMenu;
+			path = LoopRadialMenu;
 			sourceTree = "<group>";
 		};
 		A88265FC298092B500BCB197 /* Settings */ = {
@@ -102,7 +102,7 @@
 		A8DCC97C2980DDC300D41065 /* Menubar */ = {
 			isa = PBXGroup;
 			children = (
-				A8DCC97D2980DDD400D41065 /* SnapperMenuController.swift */,
+				A8DCC97D2980DDD400D41065 /* LoopMenubarController.swift */,
 			);
 			path = Menubar;
 			sourceTree = "<group>";
@@ -110,7 +110,7 @@
 		A8E59C2C297F5E9A0064D4BA = {
 			isa = PBXGroup;
 			children = (
-				A8E59C37297F5E9A0064D4BA /* Snapper */,
+				A8E59C37297F5E9A0064D4BA /* Loop */,
 				A8E59C36297F5E9A0064D4BA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,26 +118,26 @@
 		A8E59C36297F5E9A0064D4BA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A8E59C35297F5E9A0064D4BA /* Snapper.app */,
+				A8E59C35297F5E9A0064D4BA /* Loop.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A8E59C37297F5E9A0064D4BA /* Snapper */ = {
+		A8E59C37297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXGroup;
 			children = (
 				A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */,
 				A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */,
 				A8E59C4D29803FBD0064D4BA /* Extensions.swift */,
 				A8DCC97C2980DDC300D41065 /* Menubar */,
-				A88265FB29808E0D00BCB197 /* RadialMenu */,
-				A88265FA29808DED00BCB197 /* SnapperPreview */,
+				A88265FB29808E0D00BCB197 /* LoopRadialMenu */,
+				A88265FA29808DED00BCB197 /* LoopPreview */,
 				A88265FC298092B500BCB197 /* Settings */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
-				A8E59C41297F5E9B0064D4BA /* Snapper.entitlements */,
+				A8E59C41297F5E9B0064D4BA /* Loop.entitlements */,
 				A8E59C3E297F5E9B0064D4BA /* Preview Content */,
 			);
-			path = Snapper;
+			path = Loop;
 			sourceTree = "<group>";
 		};
 		A8E59C3E297F5E9B0064D4BA /* Preview Content */ = {
@@ -151,9 +151,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A8E59C34297F5E9A0064D4BA /* Snapper */ = {
+		A8E59C34297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Snapper" */;
+			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */;
 			buildPhases = (
 				A8E59C31297F5E9A0064D4BA /* Sources */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
@@ -163,14 +163,14 @@
 			);
 			dependencies = (
 			);
-			name = Snapper;
+			name = Loop;
 			packageProductDependencies = (
 				A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */,
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				A8DCC985298102A900D41065 /* LaunchAtLogin */,
 			);
 			productName = WindowManager;
-			productReference = A8E59C35297F5E9A0064D4BA /* Snapper.app */;
+			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -188,7 +188,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A8E59C30297F5E9A0064D4BA /* Build configuration list for PBXProject "Snapper" */;
+			buildConfigurationList = A8E59C30297F5E9A0064D4BA /* Build configuration list for PBXProject "Loop" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -206,7 +206,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A8E59C34297F5E9A0064D4BA /* Snapper */,
+				A8E59C34297F5E9A0064D4BA /* Loop */,
 			);
 		};
 /* End PBXProject section */
@@ -232,13 +232,13 @@
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
 				A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
-				A8789F6929805B340040512E /* SnapperPreviewView.swift in Sources */,
+				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,
 				A88266002980931C00BCB197 /* SettingsView.swift in Sources */,
-				A8E59C50298045D90064D4BA /* SnapperPreviewController.swift in Sources */,
+				A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */,
 				A8E59C4E29803FBD0064D4BA /* Extensions.swift in Sources */,
 				A8E59C39297F5E9A0064D4BA /* WindowManagerApp.swift in Sources */,
-				A8DCC97E2980DDD400D41065 /* SnapperMenuController.swift in Sources */,
+				A8DCC97E2980DDD400D41065 /* LoopMenubarController.swift in Sources */,
 				A8E59C4C29803A4D0064D4BA /* WindowResizer.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
 			);
@@ -365,17 +365,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Snapper/Snapper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Loop/Loop.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Snapper/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Snapper;
+				INFOPLIST_KEY_CFBundleDisplayName = Loop;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -384,7 +384,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Snapper;
+				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -396,17 +396,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Snapper/Snapper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Loop/Loop.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Snapper/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Snapper;
+				INFOPLIST_KEY_CFBundleDisplayName = Loop;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -415,7 +415,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Snapper;
+				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -425,7 +425,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A8E59C30297F5E9A0064D4BA /* Build configuration list for PBXProject "Snapper" */ = {
+		A8E59C30297F5E9A0064D4BA /* Build configuration list for PBXProject "Loop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A8E59C42297F5E9B0064D4BA /* Debug */,
@@ -434,7 +434,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Snapper" */ = {
+		A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A8E59C45297F5E9B0064D4BA /* Debug */,

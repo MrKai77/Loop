@@ -1,6 +1,6 @@
 //
 //  RadialMenuView.swift
-//  Snapper
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-24.
 //
@@ -19,16 +19,16 @@ struct RadialMenuView: View {
     
     // Data to be tracked using the timer
     @State private var initialMousePosition: CGPoint = CGPoint()
-    @State private var currentAngle: WindowSnappingOptions = .noAction
+    @State private var currentAngle: WindowResizingOptions = .noAction
     
-    @Default(.snapperCornerRadius) var snapperCornerRadius
-    @Default(.snapperThickness) var snapperThickness
+    @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
+    @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
     
     // Color variables
-    @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
-    @Default(.snapperAccentColor) var snapperAccentColor
-    @Default(.snapperAccentColorUseGradient) var snapperAccentColorUseGradient
-    @Default(.snapperAccentColorGradient) var snapperAccentColorGradient
+    @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
+    @Default(.loopAccentColor) var loopAccentColor
+    @Default(.loopUsesAccentColorGradient) var loopUsesAccentColorGradient
+    @Default(.loopAccentColorGradient) var loopAccentColorGradient
     
     var body: some View {
         VStack {
@@ -39,19 +39,19 @@ struct RadialMenuView: View {
                 ZStack {
                     VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                     
-                    LinearGradient(
+                    LinearGradient( // Used for .maximize
                         gradient: Gradient(colors: [
-                            self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor,
-                            self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColorUseGradient ? self.snapperAccentColorGradient : self.snapperAccentColor]),
+                            self.loopUsesSystemAccentColor ? Color.accentColor : self.loopAccentColor,
+                            self.loopUsesSystemAccentColor ? Color.accentColor : self.loopUsesAccentColorGradient ? self.loopAccentColorGradient : self.loopAccentColor]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing)
                     .opacity(self.currentAngle == .maximize ? 1 : 0)
                     
-                    Rectangle()
+                    Rectangle()     // Used showing current angle
                         .fill(LinearGradient(
                             gradient: Gradient(colors: [
-                                self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColor,
-                                self.snapperUsesSystemAccentColor ? Color.accentColor : self.snapperAccentColorUseGradient ? self.snapperAccentColorGradient : self.snapperAccentColor]),
+                                self.loopUsesSystemAccentColor ? Color.accentColor : self.loopAccentColor,
+                                self.loopUsesSystemAccentColor ? Color.accentColor : self.loopUsesAccentColorGradient ? self.loopAccentColorGradient : self.loopAccentColor]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing)
                         )
@@ -60,8 +60,8 @@ struct RadialMenuView: View {
                         }
                 }
                 .mask {
-                    RoundedRectangle(cornerRadius: self.snapperCornerRadius)
-                        .strokeBorder(.black, lineWidth: self.snapperThickness)
+                    RoundedRectangle(cornerRadius: self.loopRadialMenuCornerRadius)
+                        .strokeBorder(.black, lineWidth: self.loopRadialMenuThickness)
                 }
                 .frame(width: 100, height: 100)
                 
@@ -69,10 +69,9 @@ struct RadialMenuView: View {
             }
             Spacer()
         }
-        .shadow(radius: self.currentAngle == .noAction ? 0 : 10)
+        .shadow(radius: 10)
         
         // Animate window
-        .blur(radius: self.currentAngle == .noAction ? 5 : 0)
         .scaleEffect(self.currentAngle == .maximize ? 0.8 : 1)
         .animation(.easeInOut, value: self.currentAngle)
         
@@ -82,7 +81,7 @@ struct RadialMenuView: View {
                                                 y: NSEvent.mouseLocation.y)
             
             self.currentAngle = .noAction
-            NotificationCenter.default.post(name: Notification.Name.currentSnappingDirectionChanged, object: nil, userInfo: ["Direction": self.currentAngle])
+            NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": self.currentAngle])
             
             if (previewMode) {
                 self.currentAngle = .topHalf
@@ -97,7 +96,7 @@ struct RadialMenuView: View {
                 let distanceToMouse = initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
                 
                 // If mouse over 50 points away, select half or quarter positions
-                if (distanceToMouse > pow(50-self.snapperThickness, 2)) {
+                if (distanceToMouse > pow(50-self.loopRadialMenuThickness, 2)) {
                     switch Int((angleToMouse.normalized().degrees+45/2)/45) {
                     case 0, 8: self.currentAngle = .rightHalf
                     case 1:    self.currentAngle = .bottomRightQuarter
@@ -134,7 +133,7 @@ struct RadialMenuView: View {
                     performanceTime: NSHapticFeedbackManager.PerformanceTime.now
                 )
                 
-                NotificationCenter.default.post(name: Notification.Name.currentSnappingDirectionChanged, object: nil, userInfo: ["Direction": self.currentAngle])
+                NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": self.currentAngle])
             }
         }
     }
@@ -142,13 +141,12 @@ struct RadialMenuView: View {
 
 struct RadialMenu: View {
     
-    @Default(.snapperCornerRadius) var snapperCornerRadius
-    @Default(.snapperThickness) var snapperThickness
+    @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
     
-    var activeAngle: WindowSnappingOptions
+    var activeAngle: WindowResizingOptions
     
     var body: some View {
-            if (self.snapperCornerRadius < 40) {
+            if (self.loopRadialMenuCornerRadius < 40) {
                 // This is used when the user configures the radial menu to be a square
                 Color.clear
                     .overlay {
@@ -193,8 +191,8 @@ struct angleSelectorRectangle: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ snapPosition: WindowSnappingOptions, _ currentSnapPosition: WindowSnappingOptions) {
-        if (snapPosition == currentSnapPosition) {
+    init(_ resizePosition: WindowResizingOptions, _ activeResizePosition: WindowResizingOptions) {
+        if (resizePosition == activeResizePosition) {
             self.isActive = true
         } else {
             self.isActive = false
@@ -214,9 +212,9 @@ struct angleSelectorCirclePart: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ angle: Double, _ snapPosition: WindowSnappingOptions, _ currentSnapPosition: WindowSnappingOptions) {
+    init(_ angle: Double, _ resizePosition: WindowResizingOptions, _ activeResizePosition: WindowResizingOptions) {
         self.startingAngle = angle
-        if (snapPosition == currentSnapPosition) {
+        if (resizePosition == activeResizePosition) {
             self.isActive = true
         } else {
             self.isActive = false

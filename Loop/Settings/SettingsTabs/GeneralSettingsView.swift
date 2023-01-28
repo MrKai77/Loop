@@ -1,6 +1,6 @@
 //
 //  GeneralSettingsView.swift
-//  Snapper
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-24.
 //
@@ -16,10 +16,10 @@ struct GeneralSettingsView: View {
     @ObservedObject private var launchAtLogin = LaunchAtLogin.observable
     
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
-    @Default(.snapperUsesSystemAccentColor) var snapperUsesSystemAccentColor
-    @Default(.snapperAccentColor) var snapperAccentColor
-    @Default(.snapperAccentColorUseGradient) var snapperAccentColorUseGradient
-    @Default(.snapperAccentColorGradient) var snapperAccentColorGradient
+    @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
+    @Default(.loopAccentColor) var loopAccentColor
+    @Default(.loopUsesAccentColorGradient) var loopUsesAccentColorGradient
+    @Default(.loopAccentColorGradient) var loopAccentColorGradient
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -55,7 +55,7 @@ struct GeneralSettingsView: View {
                     HStack {
                         Text("Follow System Accent Color")
                         Spacer()
-                        Toggle("", isOn: self.$snapperUsesSystemAccentColor)
+                        Toggle("", isOn: self.$loopUsesSystemAccentColor)
                             .scaleEffect(0.7)
                             .toggleStyle(.switch)
                     }
@@ -64,13 +64,13 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Accent Color")
                             Spacer()
-                            ColorPicker("", selection: self.$snapperAccentColor, supportsOpacity: false)
+                            ColorPicker("", selection: self.$loopAccentColor, supportsOpacity: false)
                         }
                         Divider()
                         HStack {
                             Text("Use Gradient")
                             Spacer()
-                            Toggle("", isOn: self.$snapperAccentColorUseGradient)
+                            Toggle("", isOn: self.$loopUsesAccentColorGradient)
                                 .scaleEffect(0.7)
                                 .toggleStyle(.switch)
                         }
@@ -78,13 +78,13 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Gradient Color")
                             Spacer()
-                            ColorPicker("", selection: self.$snapperAccentColorGradient, supportsOpacity: false)
+                            ColorPicker("", selection: self.$loopAccentColorGradient, supportsOpacity: false)
                         }
-                        .disabled(!self.snapperAccentColorUseGradient)
-                        .opacity(!self.snapperAccentColorUseGradient ? 0.5 : 1)
+                        .disabled(!self.loopUsesAccentColorGradient)
+                        .opacity(self.loopUsesAccentColorGradient ? 1 : 0.5)
                     }
-                    .disabled(self.snapperUsesSystemAccentColor)
-                    .opacity(self.snapperUsesSystemAccentColor ? 0.5 : 1)
+                    .disabled(self.loopUsesSystemAccentColor)
+                    .opacity(self.loopUsesSystemAccentColor ? 0.5 : 1)
                 }
                 .padding(.horizontal, 10)
             }

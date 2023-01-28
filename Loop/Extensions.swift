@@ -1,6 +1,6 @@
 //
 //  Extensions.swift
-//  WindowManager
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-24.
 //
@@ -35,28 +35,28 @@ extension KeyboardShortcuts.Name {
 extension Defaults.Keys {
     static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
     
-    static let snapperUsesSystemAccentColor = Key<Bool>("snapperUsesSystemAccentColor", default: false)
-    static let snapperAccentColor = Key<Color>("snapperAccentColor", default: Color(.white))
-    static let snapperAccentColorUseGradient = Key<Bool>("snapperAccentColorUseGradient", default: false)
-    static let snapperAccentColorGradient = Key<Color>("snapperAccentColorGradient", default: Color(.black))
+    static let loopUsesSystemAccentColor = Key<Bool>("loopUsesSystemAccentColor", default: false)
+    static let loopAccentColor = Key<Color>("loopAccentColor", default: Color(.white))
+    static let loopUsesAccentColorGradient = Key<Bool>("loopUsesAccentColorGradient", default: false)
+    static let loopAccentColorGradient = Key<Color>("loopAccentColorGradient", default: Color(.black))
     
-    static let snapperTrigger = Key<Int>("snapperTrigger", default: 524608)
-    static let snapperCornerRadius = Key<CGFloat>("snapperCornerRadius", default: 50)
-    static let snapperThickness = Key<CGFloat>("snapperThickness", default: 20)
+    static let loopRadialMenuTrigger = Key<Int>("loopTrigger", default: 524608)
+    static let loopRadialMenuCornerRadius = Key<CGFloat>("loopCornerRadius", default: 50)
+    static let loopRadialMenuThickness = Key<CGFloat>("loopThickness", default: 20)
     
-    static let showPreviewWhenSnapping = Key<Bool>("showPreviewWhenSnapping", default: true)
-    static let snapperPreviewCornerRadius = Key<CGFloat>("snapperPreviewCornerRadius", default: 15)
-    static let snapperPreviewPadding = Key<CGFloat>("snapperPreviewPadding", default: 10)
-    static let snapperPreviewBorderThickness = Key<CGFloat>("snapperPreviewBorderThickness", default: 0)
+    static let loopPreviewVisibility = Key<Bool>("loopPreviewVisibility", default: true)
+    static let loopPreviewCornerRadius = Key<CGFloat>("loopPreviewCornerRadius", default: 15)
+    static let loopPreviewPadding = Key<CGFloat>("loopPreviewPadding", default: 10)
+    static let loopPreviewBorderThickness = Key<CGFloat>("loopPreviewBorderThickness", default: 0)
 }
 
-// Add a notification name to specify then the user changes their snapping direction in the radial menu
+// Add a notification name to specify then the user changes their resizing direction in the radial menu
 extension Notification.Name {
-    static let currentSnappingDirectionChanged = Notification.Name("currentSnappingDirectionChanged")
+    static let currentResizingDirectionChanged = Notification.Name("currentResizingDirectionChanged")
 }
 
 // Enum that stores all possible resizing options
-enum WindowSnappingOptions: CaseIterable {
+enum WindowResizingOptions: CaseIterable {
     // These are accessible from the radial menu
     case topHalf
     case topRightQuarter

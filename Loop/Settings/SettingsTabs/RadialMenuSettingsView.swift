@@ -1,6 +1,6 @@
 //
 //  RadialMenuSettingsView.swift
-//  Snapper
+//  Loop
 //
 //  Created by Kai Azim on 2023-01-25.
 //
@@ -10,12 +10,12 @@ import Defaults
 
 struct RadialMenuSettingsView: View {
     
-    @Default(.snapperCornerRadius) var snapperCornerRadius
-    @Default(.snapperThickness) var snapperThickness
-    @Default(.snapperTrigger) var snapperTrigger
+    @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
+    @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
+    @Default(.loopRadialMenuTrigger) var loopRadialMenuTrigger
     
-    @State private var selectedSnapperTrigger = "􀆪 Function"
-    let snapperTriggerKeyOptions = [
+    @State private var selectedLoopTrigger = "􀆪 Function"
+    let loopTriggerKeyOptions = [
         "􀆍 Left Control": 262401,
         "􀆕 Left Option": 524576,
         "􀆕 Right Option": 524608,
@@ -73,7 +73,7 @@ struct RadialMenuSettingsView: View {
                                     .font(.caption)
                                     .opacity(0.5)
                                 Slider(
-                                    value: self.$snapperCornerRadius,
+                                    value: self.$loopRadialMenuCornerRadius,
                                     in: 0...50,
                                     step: 5
                                 )
@@ -94,7 +94,7 @@ struct RadialMenuSettingsView: View {
                                     .font(.caption)
                                     .opacity(0.5)
                                 Slider(
-                                    value: self.$snapperThickness,
+                                    value: self.$loopRadialMenuThickness,
                                     in: 10...34,
                                     step: 2
                                 )
@@ -117,10 +117,10 @@ struct RadialMenuSettingsView: View {
                         .foregroundColor(Color("Monochrome").opacity(0.03))
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
-                            Text("Trigger Snapper")
+                            Text("Trigger Loop")
                             Spacer()
-                            Picker("", selection: $selectedSnapperTrigger) {
-                                ForEach(Array(snapperTriggerKeyOptions.keys), id: \.self) {
+                            Picker("", selection: $selectedLoopTrigger) {
+                                ForEach(Array(loopTriggerKeyOptions.keys), id: \.self) {
                                     Text($0)
                                 }
                             }
@@ -132,16 +132,16 @@ struct RadialMenuSettingsView: View {
                     }
                     .padding(.horizontal, 10)
                     .onAppear {
-                        for dictEntry in snapperTriggerKeyOptions {
-                            if (dictEntry.value == self.snapperTrigger) {
-                                self.selectedSnapperTrigger = dictEntry.key
+                        for dictEntry in loopTriggerKeyOptions {
+                            if (dictEntry.value == self.loopRadialMenuTrigger) {
+                                self.selectedLoopTrigger = dictEntry.key
                             }
                         }
                     }
-                    .onChange(of: self.selectedSnapperTrigger) { _ in
-                        for dictEntry in snapperTriggerKeyOptions {
-                            if (dictEntry.key == self.selectedSnapperTrigger) {
-                                self.snapperTrigger = dictEntry.value
+                    .onChange(of: self.selectedLoopTrigger) { _ in
+                        for dictEntry in loopTriggerKeyOptions {
+                            if (dictEntry.key == self.selectedLoopTrigger) {
+                                self.loopRadialMenuTrigger = dictEntry.value
                             }
                         }
                     }
