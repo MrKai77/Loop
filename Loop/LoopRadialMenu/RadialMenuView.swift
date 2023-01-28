@@ -19,7 +19,7 @@ struct RadialMenuView: View {
     
     // Data to be tracked using the timer
     @State private var initialMousePosition: CGPoint = CGPoint()
-    @State private var currentAngle: WindowResizingOptions = .noAction
+    @State private var currentResizeDirection: WindowResizingOptions = .noAction
     
     @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
     @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
@@ -45,7 +45,7 @@ struct RadialMenuView: View {
                             self.loopUsesSystemAccentColor ? Color.accentColor : self.loopUsesAccentColorGradient ? self.loopAccentColorGradient : self.loopAccentColor]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing)
-                    .opacity(self.currentAngle == .maximize ? 1 : 0)
+                    .opacity(self.currentResizeDirection == .maximize ? 1 : 0)
                     
                     Rectangle()     // Used showing current angle
                         .fill(LinearGradient(
@@ -56,7 +56,7 @@ struct RadialMenuView: View {
                                 endPoint: .bottomTrailing)
                         )
                         .mask {
-                            RadialMenu(activeAngle: self.currentAngle)
+                            RadialMenu(activeAngle: self.currentResizeDirection)
                         }
                 }
                 .mask {
@@ -72,19 +72,19 @@ struct RadialMenuView: View {
         .shadow(radius: 10)
         
         // Animate window
-        .scaleEffect(self.currentAngle == .maximize ? 0.8 : 1)
-        .animation(.easeInOut, value: self.currentAngle)
+        .scaleEffect(self.currentResizeDirection == .maximize ? 0.8 : 1)
+        .animation(.easeInOut, value: self.currentResizeDirection)
         
         // Get initial mouse position when window appears
         .onAppear {
             self.initialMousePosition = CGPoint(x: NSEvent.mouseLocation.x,
                                                 y: NSEvent.mouseLocation.y)
             
-            self.currentAngle = .noAction
-            NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": self.currentAngle])
+            self.currentResizeDirection = .noAction
+            NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": self.currentResizeDirection])
             
             if (previewMode) {
-                self.currentAngle = .topHalf
+                self.currentResizeDirection = .topHalf
             }
         }
         
@@ -98,42 +98,42 @@ struct RadialMenuView: View {
                 // If mouse over 50 points away, select half or quarter positions
                 if (distanceToMouse > pow(50-self.loopRadialMenuThickness, 2)) {
                     switch Int((angleToMouse.normalized().degrees+45/2)/45) {
-                    case 0, 8: self.currentAngle = .rightHalf
-                    case 1:    self.currentAngle = .bottomRightQuarter
-                    case 2:    self.currentAngle = .bottomHalf
-                    case 3:    self.currentAngle = .bottomLeftQuarter
-                    case 4:    self.currentAngle = .leftHalf
-                    case 5:    self.currentAngle = .topLeftQuarter
-                    case 6:    self.currentAngle = .topHalf
-                    case 7:    self.currentAngle = .topRightQuarter
-                    default:   self.currentAngle = .noAction
+                    case 0, 8: self.currentResizeDirection = .rightHalf
+                    case 1:    self.currentResizeDirection = .bottomRightQuarter
+                    case 2:    self.currentResizeDirection = .bottomHalf
+                    case 3:    self.currentResizeDirection = .bottomLeftQuarter
+                    case 4:    self.currentResizeDirection = .leftHalf
+                    case 5:    self.currentResizeDirection = .topLeftQuarter
+                    case 6:    self.currentResizeDirection = .topHalf
+                    case 7:    self.currentResizeDirection = .topRightQuarter
+                    default:   self.currentResizeDirection = .noAction
                     }
                     
                 // If mouse is less than 10 points away, do nothing
                 } else if (distanceToMouse < pow(10, 2)) {
-                    self.currentAngle = .noAction
+                    self.currentResizeDirection = .noAction
                     
                 // Otherwise, set position to maximize
                 } else {
-                    self.currentAngle = .maximize
+                    self.currentResizeDirection = .maximize
                 }
             } else {
-                self.currentAngle = self.currentAngle.next()
+                self.currentResizeDirection = self.currentResizeDirection.next()
                 
-                if (self.currentAngle == .rightThird) {
-                    self.currentAngle = .topHalf
+                if (self.currentResizeDirection == .rightThird) {
+                    self.currentResizeDirection = .topHalf
                 }
             }
         }
         // When current angle changes, send haptic feedback and post a notification which is used to position the preview window
-        .onChange(of: self.currentAngle) { _ in
+        .onChange(of: self.currentResizeDirection) { _ in
             if (!previewMode) {
                 NSHapticFeedbackManager.defaultPerformer.perform(
                     NSHapticFeedbackManager.FeedbackPattern.alignment,
                     performanceTime: NSHapticFeedbackManager.PerformanceTime.now
                 )
                 
-                NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": self.currentAngle])
+                NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": self.currentResizeDirection])
             }
         }
     }

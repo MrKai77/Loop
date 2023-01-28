@@ -60,9 +60,8 @@ struct PreviewView: View {
                                 endPoint: .bottomTrailing), lineWidth: self.loopPreviewBorderThickness)
                 }
                 .padding(self.loopPreviewPadding + self.loopPreviewBorderThickness/2)
-                .frame(width: self.currentResizingDirection == .noAction ? 1 : nil,
-                       height: self.currentResizingDirection == .noAction ? 1 : nil)
-                .blur(radius: self.currentResizingDirection == .noAction ? 20 : 0)
+                .frame(width: self.currentResizingDirection == .noAction ? 0 : nil,
+                       height: self.currentResizingDirection == .noAction ? 0 : nil)
                 
                 if (self.currentResizingDirection == .leftThird ||
                     self.currentResizingDirection == .topLeftQuarter ||
