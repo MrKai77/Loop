@@ -195,6 +195,7 @@ extension Bundle {
     public var appName: String { getInfo("CFBundleName")  }
     public var displayName: String {getInfo("CFBundleDisplayName")}
     public var bundleID: String {getInfo("CFBundleIdentifier")}
+    public var copyright: String {getInfo("NSHumanReadableCopyright")}
     
     public var appBuild: String { getInfo("CFBundleVersion") }
     public var appVersion: String { getInfo("CFBundleShortVersionString") }

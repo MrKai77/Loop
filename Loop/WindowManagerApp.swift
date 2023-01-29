@@ -18,6 +18,11 @@ struct LoopApp: App {
         Settings {
             SettingsView()
         }
+        .commands {
+            CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+                Button("About \(Bundle.main.appName)") { appDelegate.showAboutWindow() }
+            }
+        }
     }
 }
 
@@ -29,6 +34,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let windowResizer = WindowResizer()
     let radialMenu = RadialMenuController()
     let loopMenubarController = LoopMenubarController()
+    
+    var aboutWindowController: NSWindowController?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         self.checkAccessibilityAccess()
@@ -90,6 +97,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         KeyboardShortcuts.onKeyDown(for: .resizeLeftTwoThirds) { [self] in
             windowResizer.resizeFrontmostWindowWithDirection(.leftTwoThirds)
         }
+    }
+    
+    func showAboutWindow() {
+        if aboutWindowController == nil {
+            let window = NSWindow()
+            window.styleMask = [.closable, .titled, .fullSizeContentView]
+            window.title = "About \(Bundle.main.appName)"
+            window.contentView = NSHostingView(rootView: AboutView())
+            window.titlebarAppearsTransparent = true
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            window.standardWindowButton(.zoomButton)?.isHidden = true
+            window.isMovableByWindowBackground = true
+            window.center()
+            aboutWindowController = .init(window: window)
+        }
+        
+        aboutWindowController?.showWindow(aboutWindowController?.window)
     }
     
     @discardableResult
