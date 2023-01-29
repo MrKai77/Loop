@@ -15,7 +15,7 @@ class LoopMenubarController {
     func show() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "circle.dashed", accessibilityDescription: "Loop")
+            button.image = NSImage(named: NSImage.Name("menubarIcon"))
         }
         
         let resizeWindow = NSMenuItem(title: "Resize Window", action: nil, keyEquivalent: "")
