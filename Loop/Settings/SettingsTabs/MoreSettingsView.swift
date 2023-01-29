@@ -29,9 +29,9 @@ struct MoreSettingsView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Updates")
                         .fontWeight(.medium)
-                    Text("Current version: \(Bundle.main.appVersion) (build \(Bundle.main.appBuild))")
+                    Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
                         .font(.caption)
-                        .opacity(0.6)
+                        .foregroundColor(.secondary)
                         .textSelection(.enabled)
                 }
                 Spacer()
@@ -39,10 +39,10 @@ struct MoreSettingsView: View {
                     .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
             }
             ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                RoundedRectangle(cornerRadius: 5)
-                    .foregroundColor(Color("Monochrome").opacity(0.03))
+                Rectangle()
+                    .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                    .background(.secondary.opacity(0.05))
+                    .cornerRadius(5)
                 
                 HStack {
                     Text("Check for Updates Automatically")

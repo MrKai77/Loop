@@ -26,10 +26,10 @@ struct GeneralSettingsView: View {
             Text("Behavior")
                 .fontWeight(.medium)
             ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                RoundedRectangle(cornerRadius: 5)
-                    .foregroundColor(Color("Monochrome").opacity(0.03))
+                Rectangle()
+                    .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                    .background(.secondary.opacity(0.05))
+                    .cornerRadius(5)
                 
                 HStack {
                     Text("Launch at login")
@@ -46,10 +46,10 @@ struct GeneralSettingsView: View {
                 .fontWeight(.medium)
                 .padding(.top, 20)
             ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                RoundedRectangle(cornerRadius: 5)
-                    .foregroundColor(Color("Monochrome").opacity(0.03))
+                Rectangle()
+                    .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                    .background(.secondary.opacity(0.05))
+                    .cornerRadius(5)
                 
                 VStack {
                     HStack {
@@ -81,10 +81,10 @@ struct GeneralSettingsView: View {
                             ColorPicker("", selection: self.$loopAccentColorGradient, supportsOpacity: false)
                         }
                         .disabled(!self.loopUsesAccentColorGradient)
-                        .opacity(self.loopUsesAccentColorGradient ? 1 : 0.5)
+                        .foregroundColor(self.loopUsesAccentColorGradient ? (self.loopUsesSystemAccentColor ? .secondary : nil) : .secondary)
                     }
                     .disabled(self.loopUsesSystemAccentColor)
-                    .opacity(self.loopUsesSystemAccentColor ? 0.5 : 1)
+                    .foregroundColor(self.loopUsesSystemAccentColor ? .secondary : nil)
                 }
                 .padding(.horizontal, 10)
             }
@@ -103,10 +103,10 @@ struct GeneralSettingsView: View {
             .frame(height: 20)
             .padding(.top, 20)
             ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                RoundedRectangle(cornerRadius: 5)
-                    .foregroundColor(Color("Monochrome").opacity(0.03))
+                Rectangle()
+                    .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                    .background(.secondary.opacity(0.05))
+                    .cornerRadius(5)
                 
                 VStack {
                     HStack {

@@ -30,10 +30,10 @@ struct RadialMenuSettingsView: View {
                 .fontWeight(.medium)
             VStack(spacing: 10) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color("Monochrome Inverted").opacity(0.25))
+                    Rectangle()
+                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                        .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
+                        .cornerRadius(5)
                     
                     ZStack {    // Grid Background
                         VStack {
@@ -58,10 +58,10 @@ struct RadialMenuSettingsView: View {
                 .frame(height: 150)
                 
                 ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color("Monochrome").opacity(0.03))
+                    Rectangle()
+                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                        .background(.secondary.opacity(0.05))
+                        .cornerRadius(5)
                     
                     VStack {
                         HStack {
@@ -71,7 +71,7 @@ struct RadialMenuSettingsView: View {
                             HStack {
                                 Text("0")
                                     .font(.caption)
-                                    .opacity(0.5)
+                                    .foregroundColor(.secondary)
                                 Slider(
                                     value: self.$loopRadialMenuCornerRadius,
                                     in: 0...50,
@@ -80,7 +80,7 @@ struct RadialMenuSettingsView: View {
                                 
                                 Text("50")
                                     .font(.caption)
-                                    .opacity(0.5)
+                                    .foregroundColor(.secondary)
                             }
                             .frame(width: 230)
                         }
@@ -92,7 +92,7 @@ struct RadialMenuSettingsView: View {
                             HStack {
                                 Text("10")
                                     .font(.caption)
-                                    .opacity(0.5)
+                                    .foregroundColor(.secondary)
                                 Slider(
                                     value: self.$loopRadialMenuThickness,
                                     in: 10...34,
@@ -101,7 +101,7 @@ struct RadialMenuSettingsView: View {
                                 
                                 Text("35")
                                     .font(.caption)
-                                    .opacity(0.5)
+                                    .foregroundColor(.secondary)
                             }
                             .frame(width: 230)
                         }
@@ -111,10 +111,11 @@ struct RadialMenuSettingsView: View {
                 .frame(height: 76)
                 
                 ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color("Monochrome").opacity(0.03))
+                    Rectangle()
+                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                        .background(.secondary.opacity(0.05))
+                        .cornerRadius(5)
+                    
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
                             Text("Trigger Loop")
@@ -128,7 +129,7 @@ struct RadialMenuSettingsView: View {
                         }
                         Text("To use caps lock, remap it to control in System Settings.")
                             .font(.caption)
-                            .opacity(0.6)
+                            .foregroundColor(.secondary)
                     }
                     .padding(.horizontal, 10)
                     .onAppear {

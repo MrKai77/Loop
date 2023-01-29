@@ -29,7 +29,7 @@ struct AboutView: View {
                     .font(.title)
                     .fontWeight(.bold)
                 
-                Text("Version \(Bundle.main.appVersion) (build \(Bundle.main.appBuild))")
+                Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
                     .font(.caption2)
                     .textSelection(.enabled)
                     .foregroundColor(.secondary)

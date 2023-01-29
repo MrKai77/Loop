@@ -21,10 +21,10 @@ struct PreviewSettingsView: View {
                 .fontWeight(.medium)
             VStack(spacing: 10) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(Color("Monochrome").opacity(0.03))
+                    Rectangle()
+                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                        .background(.secondary.opacity(0.05))
+                        .cornerRadius(5)
                     
                     HStack {
                         Text("Show Preview when looping")
@@ -40,10 +40,10 @@ struct PreviewSettingsView: View {
                 
                 VStack(spacing: 10) {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                        RoundedRectangle(cornerRadius: 5)
-                            .foregroundColor(Color("Monochrome Inverted").opacity(0.25))
+                        Rectangle()
+                            .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                            .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
+                            .cornerRadius(5)
                         
                         ZStack {    // Grid Background
                             VStack {
@@ -69,10 +69,10 @@ struct PreviewSettingsView: View {
                     .frame(height: 150)
                     
                     ZStack {
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color("Monochrome").opacity(0.2), lineWidth: 0.5)
-                        RoundedRectangle(cornerRadius: 5)
-                            .foregroundColor(Color("Monochrome").opacity(0.03))
+                        Rectangle()
+                            .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                            .background(.secondary.opacity(0.05))
+                            .cornerRadius(5)
                         
                         VStack {
                             HStack {
@@ -82,7 +82,7 @@ struct PreviewSettingsView: View {
                                 HStack {
                                     Text("0")
                                         .font(.caption)
-                                        .opacity(0.5)
+                                        .foregroundColor(.secondary)
                                     Slider(
                                         value: self.$loopPreviewPadding,
                                         in: 0...20,
@@ -91,7 +91,7 @@ struct PreviewSettingsView: View {
 
                                     Text("20")
                                         .font(.caption)
-                                        .opacity(0.5)
+                                        .foregroundColor(.secondary)
                                 }
                                 .frame(width: 230)
                             }
@@ -103,7 +103,7 @@ struct PreviewSettingsView: View {
                                 HStack {
                                     Text("0")
                                         .font(.caption)
-                                        .opacity(0.5)
+                                        .foregroundColor(.secondary)
                                     Slider(
                                         value: self.$loopPreviewCornerRadius,
                                         in: 0...20,
@@ -112,7 +112,7 @@ struct PreviewSettingsView: View {
                                     
                                     Text("20")
                                         .font(.caption)
-                                        .opacity(0.5)
+                                        .foregroundColor(.secondary)
                                 }
                                 .frame(width: 230)
                             }
@@ -124,7 +124,7 @@ struct PreviewSettingsView: View {
                                 HStack {
                                     Text("0")
                                         .font(.caption)
-                                        .opacity(0.5)
+                                        .foregroundColor(.secondary)
                                     Slider(
                                         value: self.$loopPreviewBorderThickness,
                                         in: 0...10,
@@ -133,7 +133,7 @@ struct PreviewSettingsView: View {
                                     
                                     Text("10")
                                         .font(.caption)
-                                        .opacity(0.5)
+                                        .foregroundColor(.secondary)
                                 }
                                 .frame(width: 230)
                             }
@@ -143,7 +143,7 @@ struct PreviewSettingsView: View {
                     .frame(height: 114)
                 }
                 .disabled(!self.loopPreviewVisibility)
-                .opacity(!self.loopPreviewVisibility ? 0.5 : 1)
+                .foregroundColor(!self.loopPreviewVisibility ? .secondary : nil)
             }
         }
         .padding(20)
