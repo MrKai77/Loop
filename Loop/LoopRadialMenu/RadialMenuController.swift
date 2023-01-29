@@ -34,7 +34,7 @@ class RadialMenuController {
                             defer: true,
                             screen: NSApp.keyWindow?.screen)
         panel.hasShadow = false
-        panel.backgroundColor = .clear
+        panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
         panel.contentView = NSHostingView(rootView: RadialMenuView())
         panel.alphaValue = 0
