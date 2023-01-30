@@ -31,9 +31,26 @@ class PreviewController {
         panel.alphaValue = 0
         panel.makeKeyAndOrderInFrontOfSpaces()
         
-        if let screen = windowResizer.getScreenWithMouse() {
-            panel.setFrame(CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.visibleFrame.width, height: screen.visibleFrame.height), display: false)
-        }
+        guard let screen = windowResizer.getScreenWithMouse() else { return }
+        let bounds = CGDisplayBounds(screen.displayID)
+        let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
+        
+        let screenWidth = bounds.width
+        let screenHeight = bounds.height - menubarHeight
+        let screenOriginX = bounds.origin.x
+        let screenOriginY = bounds.origin.y
+        
+        panel.setFrame(NSRect(x: screenOriginX,
+                              y: screenOriginY,
+                              width: screenWidth,
+                              height: screenHeight), display: false)
+        
+//        if let screen = windowResizer.getScreenWithMouse() {
+//            panel.setFrame(NSRect(x: screen.frame.origin.x,
+//                                  y: screen.frame.origin.y,
+//                                  width: screen.visibleFrame.width,
+//                                  height: screen.visibleFrame.height), display: false)
+//        }
         
         self.loopPreviewWindowController = .init(window: panel)
         

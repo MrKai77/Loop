@@ -20,6 +20,7 @@ class WindowResizer {
         guard let screen = self.getScreenWithMouse() else { return }
         let bounds = CGDisplayBounds(screen.displayID)
         let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
+        
         let screenWidth = bounds.width
         let screenHeight = bounds.height - menubarHeight
         let screenOriginX = bounds.origin.x
