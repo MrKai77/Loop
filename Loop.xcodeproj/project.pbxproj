@@ -253,7 +253,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/scripts/set_build_number.sh\n";
+			shellScript = "$SRCROOT/resources/set_build_number.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

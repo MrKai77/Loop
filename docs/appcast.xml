@@ -3,6 +3,15 @@
     <channel>
         <title>Loop</title>
         <item>
+            <title>0.2.0</title>
+            <pubDate>Sun, 29 Jan 2023 18:18:38 -0700</pubDate>
+            <sparkle:version>35</sparkle:version>
+            <sparkle:shortVersionString>0.2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://github.com/MrKai77/Loop/releases/tag/0.2.0</sparkle:releaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.0/Loop.zip" length="6465953" type="application/octet-stream" sparkle:edSignature="7cGC6Ml3TsR3hdjGrjHL2q16s1+fTCBMvvl2LxBq2Gb7P+ADne2siNXmyrZGje574vQNZ1ENghvi9g7Ft6fwAQ=="/>
+        </item>
+        <item>
             <title>0.1.0</title>
             <pubDate>Sat, 28 Jan 2023 13:36:58 -0700</pubDate>
             <sparkle:version>5</sparkle:version>
