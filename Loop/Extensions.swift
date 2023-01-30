@@ -42,7 +42,7 @@ extension Defaults.Keys {
     
     static let loopRadialMenuTrigger = Key<Int>("loopTrigger", default: 524608)
     static let loopRadialMenuCornerRadius = Key<CGFloat>("loopCornerRadius", default: 50)
-    static let loopRadialMenuThickness = Key<CGFloat>("loopThickness", default: 20)
+    static let loopRadialMenuThickness = Key<CGFloat>("loopThickness", default: 22)
     
     static let loopPreviewVisibility = Key<Bool>("loopPreviewVisibility", default: true)
     static let loopPreviewCornerRadius = Key<CGFloat>("loopPreviewCornerRadius", default: 15)
