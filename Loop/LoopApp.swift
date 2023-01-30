@@ -21,6 +21,11 @@ struct LoopApp: App {
         .commands {
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
                 Button("About \(Bundle.main.appName)") { appDelegate.showAboutWindow() }
+                    .keyboardShortcut("i")
+            }
+            CommandGroup(replacing: CommandGroupPlacement.appTermination) {
+                Button("Quit \(Bundle.main.appName)") { NSApp.terminate(nil) }
+                    .keyboardShortcut("q")
             }
         }
     }
@@ -43,11 +48,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         radialMenu.AddObservers()
         loopMenubarController.show()
         
+        // Show settings window on launch if this is a debug build
+        #if DEBUG
         if #available(macOS 13, *) {
             NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         } else {
             NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
         }
+        print("Debug build!")
+        #endif
     }
     
     
