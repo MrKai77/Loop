@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A86AFD7629888B29008F4892 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A86AFD7529888B29008F4892 /* README.md */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
 		A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingSettingsView.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		A8E59C2C297F5E9A0064D4BA = {
 			isa = PBXGroup;
 			children = (
+				A86AFD7529888B29008F4892 /* README.md */,
 				A8E59C37297F5E9A0064D4BA /* Loop */,
 				A8E59C36297F5E9A0064D4BA /* Products */,
 			);
@@ -229,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A86AFD7629888B29008F4892 /* README.md in Resources */,
 				A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */,
 				A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */,
 			);
