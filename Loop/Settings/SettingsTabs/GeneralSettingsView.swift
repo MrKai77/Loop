@@ -13,7 +13,8 @@ struct GeneralSettingsView: View {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @ObservedObject private var launchAtLogin = LaunchAtLogin.observable
+    @ObservedObject private var loopLaunchAtLogin = LaunchAtLogin.observable
+    @State var launchAtLogin: Bool = false
     
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
     @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
@@ -34,11 +35,17 @@ struct GeneralSettingsView: View {
                 HStack {
                     Text("Launch at login")
                     Spacer()
-                    Toggle("", isOn: $launchAtLogin.isEnabled)
+                    Toggle("", isOn: self.$launchAtLogin)
                         .scaleEffect(0.7)
                         .toggleStyle(.switch)
                 }
                 .padding([.horizontal], 10)
+                .onAppear {
+                    self.launchAtLogin = loopLaunchAtLogin.isEnabled
+                }
+                .onChange(of: self.launchAtLogin) { _ in
+                    loopLaunchAtLogin.isEnabled = self.launchAtLogin
+                }
             }
             .frame(height: 38)
             
