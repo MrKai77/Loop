@@ -8,6 +8,7 @@
             <sparkle:version>46</sparkle:version>
             <sparkle:shortVersionString>0.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
             <sparkle:fullReleaseNotesLink>https://github.com/MrKai77/Loop/releases/tag/0.2.1</sparkle:fullReleaseNotesLink>
             <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.1/Loop.zip" length="6471001" type="application/octet-stream" sparkle:edSignature="8R3lFd4G2FBr5WCeAcB02eff7Mf0rm5r+ak1ZMaMCa2iR1VONiraEirUJMMxB1icFV1ziJN9wLS731C00gt3DA=="/>
         </item>
@@ -17,6 +18,7 @@
             <sparkle:version>35</sparkle:version>
             <sparkle:shortVersionString>0.2.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
             <sparkle:fullReleaseNotesLink>https://github.com/MrKai77/Loop/releases/tag/0.2.0</sparkle:fullReleaseNotesLink>
             <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.0/Loop.zip" length="6465953" type="application/octet-stream" sparkle:edSignature="7cGC6Ml3TsR3hdjGrjHL2q16s1+fTCBMvvl2LxBq2Gb7P+ADne2siNXmyrZGje574vQNZ1ENghvi9g7Ft6fwAQ=="/>
         </item>
@@ -26,6 +28,7 @@
             <sparkle:version>5</sparkle:version>
             <sparkle:shortVersionString>0.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
             <sparkle:fullReleaseNotesLink>https://github.com/MrKai77/Loop/releases/tag/0.1.0</sparkle:fullReleaseNotesLink>
             <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.0/Loop.zip" length="5325729" type="application/octet-stream" sparkle:edSignature="jqMbczBCCWYJj7OyEki303JnlGlXXUH6gArYUHMlqgUEoenM3zLshky3MfflG4RAwIBtbzNEu8w28CQmR9b4BA=="/>
         </item>
