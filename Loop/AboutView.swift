@@ -37,7 +37,7 @@ struct AboutView: View {
             
             Spacer()
             
-            Text("The missing app from the stock MacOS experience")
+            Text("The missing window manager from the stock MacOS experience")
                 .multilineTextAlignment(.center)
             
             Spacer()

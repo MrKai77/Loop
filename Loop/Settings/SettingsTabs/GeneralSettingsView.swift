@@ -103,7 +103,7 @@ struct GeneralSettingsView: View {
                 Spacer()
                 if (!self.isAccessibilityAccessGranted) {
                     Button("Refresh", action: {
-                        appDelegate.checkAccessibilityAccess()
+                        appDelegate.checkAccessibilityAccess(ask: true)
                     })
                 }
             }

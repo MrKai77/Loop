@@ -43,7 +43,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var aboutWindowController: NSWindowController?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        self.checkAccessibilityAccess()
+        
+        // Check accessibility access, then if access is not granted, show a more informative alert asking for accessibility access
+        if(!self.checkAccessibilityAccess(ask: false)) {
+            accessibilityAccessAlert()
+        }
+        
         self.setKeybindings()
         radialMenu.AddObservers()
         loopMenubarController.show()
@@ -126,12 +131,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @discardableResult
-    func checkAccessibilityAccess() -> Bool {
+    func checkAccessibilityAccess(ask: Bool) -> Bool {
         // Get current state for accessibility access
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: ask]
         let status = AXIsProcessTrustedWithOptions(options)
         
         Defaults[.isAccessibilityAccessGranted] = status
         return status
+    }
+    
+    func accessibilityAccessAlert() {
+        let alert = NSAlert()
+        alert.messageText = "\(Bundle.main.appName) Needs Accessibility Permissions"
+        alert.informativeText = "This is only needed to resize windows. We respect your privacy, and won't collect any data."
+        alert.runModal()
+        
+        checkAccessibilityAccess(ask: true)
     }
 }
