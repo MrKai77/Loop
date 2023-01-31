@@ -37,6 +37,11 @@ struct AboutView: View {
             
             Spacer()
             
+            Text("The missing window manager from the stock MacOS experience")
+                .multilineTextAlignment(.center)
+            
+            Spacer()
+            
             Button {
                 openURL(URL(string: "https://github.com/MrKai77/Loop")!)
             } label: {
@@ -61,7 +66,7 @@ struct AboutView: View {
                 .font(.caption)
         }
         .padding(20)
-        .frame(width: 250, height: 300)
+        .frame(width: 260, height: 360)
         .background(VisualEffectView(material: .hudWindow, blendingMode: .behindWindow).ignoresSafeArea())
     }
 }

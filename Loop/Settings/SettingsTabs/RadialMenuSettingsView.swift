@@ -8,20 +8,26 @@
 import SwiftUI
 import Defaults
 
+struct loopTriggerOptions {
+    var symbol: String
+    var description: String
+    var keycode: Int
+}
+
 struct RadialMenuSettingsView: View {
     
     @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
     @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
     @Default(.loopRadialMenuTrigger) var loopRadialMenuTrigger
     
-    @State private var selectedLoopTrigger = "􀆪 Function"
+    @State private var selectedLoopTriggerKeyCode = 59
     let loopTriggerKeyOptions = [
-        "􀆍 Left Control": 262401,
-        "􀆕 Left Option": 524576,
-        "􀆕 Right Option": 524608,
-        "􀆔 Right Command": 1048848,
-        "􀆡 Caps Lock": 270592,
-        "􀆪 Function": 8388864
+        loopTriggerOptions(symbol: "control", description: "Left Control", keycode: 59),
+        loopTriggerOptions(symbol: "option", description: "Left Option", keycode: 58),
+        loopTriggerOptions(symbol: "option", description: "Right Option", keycode: 61),
+        loopTriggerOptions(symbol: "command", description: "Right Command", keycode: 54),
+        loopTriggerOptions(symbol: "capslock", description: "Caps Lock", keycode: 62),
+        loopTriggerOptions(symbol: "fn", description: "Function", keycode: 63)
     ]
     
     var body: some View {
@@ -120,9 +126,13 @@ struct RadialMenuSettingsView: View {
                         HStack {
                             Text("Trigger Loop")
                             Spacer()
-                            Picker("", selection: $selectedLoopTrigger) {
-                                ForEach(Array(loopTriggerKeyOptions.keys), id: \.self) {
-                                    Text($0)
+                            Picker("", selection: $selectedLoopTriggerKeyCode) {
+                                ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
+                                    HStack {
+                                        Image(systemName: loopTriggerKeyOptions[i].symbol)
+                                        Text(loopTriggerKeyOptions[i].description)
+                                    }
+                                    .tag(loopTriggerKeyOptions[i].keycode)
                                 }
                             }
                             .frame(width: 160)
@@ -133,18 +143,10 @@ struct RadialMenuSettingsView: View {
                     }
                     .padding(.horizontal, 10)
                     .onAppear {
-                        for dictEntry in loopTriggerKeyOptions {
-                            if (dictEntry.value == self.loopRadialMenuTrigger) {
-                                self.selectedLoopTrigger = dictEntry.key
-                            }
-                        }
+                        self.selectedLoopTriggerKeyCode = self.loopRadialMenuTrigger
                     }
-                    .onChange(of: self.selectedLoopTrigger) { _ in
-                        for dictEntry in loopTriggerKeyOptions {
-                            if (dictEntry.key == self.selectedLoopTrigger) {
-                                self.loopRadialMenuTrigger = dictEntry.value
-                            }
-                        }
+                    .onChange(of: self.selectedLoopTriggerKeyCode) { _ in
+                        self.loopRadialMenuTrigger = self.selectedLoopTriggerKeyCode
                     }
                 }
                 .frame(height: 65)

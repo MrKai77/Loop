@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A86AFD7629888B29008F4892 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A86AFD7529888B29008F4892 /* README.md */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
 		A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */; };
@@ -19,7 +20,7 @@
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
 		A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */; };
 		A8E1575F298654960005761C /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E1575E298654960005761C /* AboutView.swift */; };
-		A8E59C39297F5E9A0064D4BA /* WindowManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */; };
+		A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C38297F5E9A0064D4BA /* LoopApp.swift */; };
 		A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */; };
 		A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */; };
 		A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C49297F98670064D4BA /* RadialMenuController.swift */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingSettingsView.swift; sourceTree = "<group>"; };
@@ -41,7 +43,7 @@
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
 		A8E1575E298654960005761C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManagerApp.swift; sourceTree = "<group>"; };
+		A8E59C38297F5E9A0064D4BA /* LoopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopApp.swift; sourceTree = "<group>"; };
 		A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A8E59C41297F5E9B0064D4BA /* Loop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Loop.entitlements; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		A8E59C2C297F5E9A0064D4BA = {
 			isa = PBXGroup;
 			children = (
+				A86AFD7529888B29008F4892 /* README.md */,
 				A8E59C37297F5E9A0064D4BA /* Loop */,
 				A8E59C36297F5E9A0064D4BA /* Products */,
 			);
@@ -134,7 +137,7 @@
 		A8E59C37297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXGroup;
 			children = (
-				A8E59C38297F5E9A0064D4BA /* WindowManagerApp.swift */,
+				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */,
 				A8E59C4D29803FBD0064D4BA /* Extensions.swift */,
 				A8E1575E298654960005761C /* AboutView.swift */,
@@ -229,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A86AFD7629888B29008F4892 /* README.md in Resources */,
 				A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */,
 				A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */,
 			);
@@ -274,7 +278,7 @@
 				A88266002980931C00BCB197 /* SettingsView.swift in Sources */,
 				A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */,
 				A8E59C4E29803FBD0064D4BA /* Extensions.swift in Sources */,
-				A8E59C39297F5E9A0064D4BA /* WindowManagerApp.swift in Sources */,
+				A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */,
 				A8DCC97E2980DDD400D41065 /* LoopMenubarController.swift in Sources */,
 				A8E59C4C29803A4D0064D4BA /* WindowResizer.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
@@ -406,7 +410,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = DEBUG;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -421,7 +425,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -438,7 +442,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = DEBUG;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -453,7 +457,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 0.2.0;
+				MARKETING_VERSION = 0.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

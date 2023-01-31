@@ -21,6 +21,11 @@ struct LoopApp: App {
         .commands {
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
                 Button("About \(Bundle.main.appName)") { appDelegate.showAboutWindow() }
+                    .keyboardShortcut("i")
+            }
+            CommandGroup(replacing: CommandGroupPlacement.appTermination) {
+                Button("Quit \(Bundle.main.appName)") { NSApp.terminate(nil) }
+                    .keyboardShortcut("q")
             }
         }
     }
@@ -38,16 +43,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var aboutWindowController: NSWindowController?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        self.checkAccessibilityAccess()
+        
+        // Check accessibility access, then if access is not granted, show a more informative alert asking for accessibility access
+        if(!self.checkAccessibilityAccess(ask: false)) {
+            accessibilityAccessAlert()
+        }
+        
         self.setKeybindings()
         radialMenu.AddObservers()
         loopMenubarController.show()
         
+        // Show settings window on launch if this is a debug build
+        #if DEBUG
         if #available(macOS 13, *) {
             NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         } else {
             NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
         }
+        print("Debug build!")
+        #endif
     }
     
     
@@ -117,12 +131,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @discardableResult
-    func checkAccessibilityAccess() -> Bool {
+    func checkAccessibilityAccess(ask: Bool) -> Bool {
         // Get current state for accessibility access
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: ask]
         let status = AXIsProcessTrustedWithOptions(options)
         
         Defaults[.isAccessibilityAccessGranted] = status
         return status
+    }
+    
+    func accessibilityAccessAlert() {
+        let alert = NSAlert()
+        alert.messageText = "\(Bundle.main.appName) Needs Accessibility Permissions"
+        alert.informativeText = "This is only needed to resize windows. We respect your privacy, and won't collect any data."
+        alert.runModal()
+        
+        checkAccessibilityAccess(ask: true)
     }
 }
