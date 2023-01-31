@@ -16,12 +16,12 @@ struct RadialMenuSettingsView: View {
     
     @State private var selectedLoopTrigger = "􀆪 Function"
     let loopTriggerKeyOptions = [
-        "􀆍 Left Control": 262401,
-        "􀆕 Left Option": 524576,
-        "􀆕 Right Option": 524608,
-        "􀆔 Right Command": 1048848,
-        "􀆡 Caps Lock": 270592,
-        "􀆪 Function": 8388864
+        "⌃ Left Control": 262401,
+        "⌥ Left Option": 524576,
+        "⌥ Right Option": 524608,
+        "⌘ Right Command": 1048848,
+        "⇪ Caps Lock": 270592,
+        "ƒ Function": 8388864
     ]
     
     var body: some View {
