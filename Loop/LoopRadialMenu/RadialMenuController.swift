@@ -62,17 +62,19 @@ class RadialMenuController {
     
     func AddObservers() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { (event) -> Void in
-            if (event.modifierFlags.rawValue == 256 && self.isLoopRadialMenuShown == true) {
-                self.isLoopRadialMenuShown = false
-                self.closeMenu()
-                self.loopPreview.closePreview()
-                self.windowResizer.resizeFrontmostWindowWithDirection(self.currentResizingDirection)
-            } else if (event.modifierFlags.rawValue == Defaults[.loopRadialMenuTrigger]) {
-                self.isLoopRadialMenuShown = true
-                self.showMenu()
-                if (Defaults[.loopPreviewVisibility] == true) {
-                    self.loopPreview.showPreview()
-                    self.loopRadialMenuWindowController?.window?.makeKeyAndOrderInFrontOfSpaces()
+            if(Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]) {  // If selected trigger key is pressed
+                if(event.modifierFlags.rawValue == 256) {   // Key down event
+                    self.isLoopRadialMenuShown = false
+                    self.closeMenu()
+                    self.loopPreview.closePreview()
+                    self.windowResizer.resizeFrontmostWindowWithDirection(self.currentResizingDirection)
+                } else {                                    // Key up event
+                    self.isLoopRadialMenuShown = true
+                    self.showMenu()
+                    if (Defaults[.loopPreviewVisibility] == true) {
+                        self.loopPreview.showPreview()
+                        self.loopRadialMenuWindowController?.window?.makeKeyAndOrderInFrontOfSpaces()
+                    }
                 }
             }
         })

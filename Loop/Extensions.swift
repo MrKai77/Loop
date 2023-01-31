@@ -40,7 +40,7 @@ extension Defaults.Keys {
     static let loopUsesAccentColorGradient = Key<Bool>("loopUsesAccentColorGradient", default: false)
     static let loopAccentColorGradient = Key<Color>("loopAccentColorGradient", default: Color(.black))
     
-    static let loopRadialMenuTrigger = Key<Int>("loopTrigger", default: 524608)
+    static let loopRadialMenuTrigger = Key<Int>("loopTriggerKeyCode", default: 59)
     static let loopRadialMenuCornerRadius = Key<CGFloat>("loopCornerRadius", default: 50)
     static let loopRadialMenuThickness = Key<CGFloat>("loopThickness", default: 22)
     
