@@ -46,7 +46,11 @@ class LoopMenubarController {
         let loopMenu = NSMenu()
         loopMenu.addItem(resizeWindow)
         loopMenu.addItem(NSMenuItem.separator())
-        loopMenu.addItem(withTitle: "Preferences", action: #selector(self.openSettings), keyEquivalent: ",").target = self
+        if #available(macOS 13, *) {
+            loopMenu.addItem(withTitle: "Settings", action: #selector(self.openSettings), keyEquivalent: ",").target = self
+        } else {
+            loopMenu.addItem(withTitle: "Preferences", action: #selector(self.openSettings), keyEquivalent: ",").target = self
+        }
         loopMenu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
         
         statusItem.menu = loopMenu
