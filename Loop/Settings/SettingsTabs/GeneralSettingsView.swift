@@ -27,10 +27,10 @@ struct GeneralSettingsView: View {
             Text("Behavior")
                 .fontWeight(.medium)
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                     .background(.secondary.opacity(0.05))
-                    .cornerRadius(5)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
                 
                 HStack {
                     Text("Launch at login")
@@ -45,6 +45,7 @@ struct GeneralSettingsView: View {
                 }
                 .onChange(of: self.launchAtLogin) { _ in
                     loopLaunchAtLogin.isEnabled = self.launchAtLogin
+                    print(LaunchAtLogin.isEnabled)
                 }
             }
             .frame(height: 38)
@@ -53,10 +54,10 @@ struct GeneralSettingsView: View {
                 .fontWeight(.medium)
                 .padding(.top, 20)
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                     .background(.secondary.opacity(0.05))
-                    .cornerRadius(5)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
                 
                 VStack {
                     HStack {
@@ -110,10 +111,10 @@ struct GeneralSettingsView: View {
             .frame(height: 20)
             .padding(.top, 20)
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                     .background(.secondary.opacity(0.05))
-                    .cornerRadius(5)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
                 
                 VStack {
                     HStack {

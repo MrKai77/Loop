@@ -21,10 +21,10 @@ struct PreviewSettingsView: View {
                 .fontWeight(.medium)
             VStack(spacing: 10) {
                 ZStack {
-                    Rectangle()
+                    RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                         .background(.secondary.opacity(0.05))
-                        .cornerRadius(5)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
                     
                     HStack {
                         Text("Show Preview when looping")
@@ -40,10 +40,10 @@ struct PreviewSettingsView: View {
                 
                 VStack(spacing: 10) {
                     ZStack {
-                        Rectangle()
+                        RoundedRectangle(cornerRadius: 5)
                             .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                             .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
-                            .cornerRadius(5)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
                         
                         ZStack {    // Grid Background
                             VStack {
@@ -69,10 +69,10 @@ struct PreviewSettingsView: View {
                     .frame(height: 150)
                     
                     ZStack {
-                        Rectangle()
+                        RoundedRectangle(cornerRadius: 5)
                             .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                             .background(.secondary.opacity(0.05))
-                            .cornerRadius(5)
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
                         
                         VStack {
                             HStack {

@@ -26,7 +26,7 @@ class RadialMenuController {
         let mouseX: CGFloat = NSEvent.mouseLocation.x
         let mouseY: CGFloat = NSEvent.mouseLocation.y
         
-        let windowSize: CGFloat = 500
+        let windowSize: CGFloat = 250
         
         let panel = NSPanel(contentRect: .zero,
                             styleMask: [.borderless, .nonactivatingPanel],

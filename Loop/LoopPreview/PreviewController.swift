@@ -45,13 +45,6 @@ class PreviewController {
                               width: screenWidth,
                               height: screenHeight), display: false)
         
-//        if let screen = windowResizer.getScreenWithMouse() {
-//            panel.setFrame(NSRect(x: screen.frame.origin.x,
-//                                  y: screen.frame.origin.y,
-//                                  width: screen.visibleFrame.width,
-//                                  height: screen.visibleFrame.height), display: false)
-//        }
-        
         self.loopPreviewWindowController = .init(window: panel)
         
         NSAnimationContext.runAnimationGroup({ (context) -> Void in

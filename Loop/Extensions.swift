@@ -7,7 +7,6 @@
 
 import SwiftUI
 import KeyboardShortcuts
-import CoreImage.CIFilterBuiltins
 import Defaults
 
 // Add variables for keyboard shortcuts
