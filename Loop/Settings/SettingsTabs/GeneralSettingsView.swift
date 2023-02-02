@@ -7,20 +7,23 @@
 
 import SwiftUI
 import Defaults
-import LaunchAtLogin
+import ServiceManagement
 
 struct GeneralSettingsView: View {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @ObservedObject private var loopLaunchAtLogin = LaunchAtLogin.observable
-    @State var launchAtLogin: Bool = false
-    
+    @Default(.loopLaunchAtLogin) var launchAtLogin {
+        didSet {
+            SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin)
+        }
+    }
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
     @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
     @Default(.loopAccentColor) var loopAccentColor
     @Default(.loopUsesAccentColorGradient) var loopUsesAccentColorGradient
     @Default(.loopAccentColorGradient) var loopAccentColorGradient
+    
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -36,17 +39,11 @@ struct GeneralSettingsView: View {
                     Text("Launch at login")
                     Spacer()
                     Toggle("", isOn: self.$launchAtLogin)
+                        .labelsHidden()
                         .scaleEffect(0.7)
                         .toggleStyle(.switch)
                 }
                 .padding([.horizontal], 10)
-                .onAppear {
-                    self.launchAtLogin = loopLaunchAtLogin.isEnabled
-                }
-                .onChange(of: self.launchAtLogin) { _ in
-                    loopLaunchAtLogin.isEnabled = self.launchAtLogin
-                    print(LaunchAtLogin.isEnabled)
-                }
             }
             .frame(height: 38)
             
