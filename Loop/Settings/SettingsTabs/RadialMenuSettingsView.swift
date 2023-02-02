@@ -20,7 +20,6 @@ struct RadialMenuSettingsView: View {
     @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
     @Default(.loopRadialMenuTrigger) var loopRadialMenuTrigger
     
-    @State private var selectedLoopTriggerKeyCode = 59
     let loopTriggerKeyOptions = [
         loopTriggerOptions(symbol: "control", description: "Left Control", keycode: 59),
         loopTriggerOptions(symbol: "option", description: "Left Option", keycode: 58),
@@ -126,7 +125,7 @@ struct RadialMenuSettingsView: View {
                         HStack {
                             Text("Trigger Loop")
                             Spacer()
-                            Picker("", selection: $selectedLoopTriggerKeyCode) {
+                            Picker("", selection: self.$loopRadialMenuTrigger) {
                                 ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
                                     HStack {
                                         Image(systemName: loopTriggerKeyOptions[i].symbol)
@@ -142,12 +141,6 @@ struct RadialMenuSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                     .padding(.horizontal, 10)
-                    .onAppear {
-                        self.selectedLoopTriggerKeyCode = self.loopRadialMenuTrigger
-                    }
-                    .onChange(of: self.selectedLoopTriggerKeyCode) { _ in
-                        self.loopRadialMenuTrigger = self.selectedLoopTriggerKeyCode
-                    }
                 }
                 .frame(height: 65)
             }

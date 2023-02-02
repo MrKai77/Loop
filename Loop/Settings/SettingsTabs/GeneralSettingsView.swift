@@ -65,7 +65,7 @@ struct GeneralSettingsView: View {
                             .toggleStyle(.switch)
                     }
                     Divider()
-                    VStack {
+                    Group {
                         HStack {
                             Text("Accent Color")
                             Spacer()

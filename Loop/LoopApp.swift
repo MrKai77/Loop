@@ -45,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         
-        // Launch at login
+        // If launched at login, kill login launch helper
         let runningApps = NSWorkspace.shared.runningApplications
         let isRunning = !runningApps.filter { $0.bundleIdentifier == LoopHelper.helperBundleID }.isEmpty
         if isRunning {
@@ -151,7 +151,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func accessibilityAccessAlert() {
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName) Needs Accessibility Permissions"
-        alert.informativeText = "This is only needed to resize windows. We respect your privacy, and won't collect any data."
+        alert.informativeText = "Welcome to \(Bundle.main.appName)! Please grant accessibility access to be able to resize windows."
         alert.runModal()
         
         checkAccessibilityAccess(ask: true)

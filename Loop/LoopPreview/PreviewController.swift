@@ -10,7 +10,6 @@ import SwiftUI
 class PreviewController {
     
     var loopPreviewWindowController: NSWindowController?
-    let windowResizer = WindowResizer()
     
     func showPreview() {
         if let windowController = self.loopPreviewWindowController {
@@ -31,7 +30,7 @@ class PreviewController {
         panel.alphaValue = 0
         panel.makeKeyAndOrderInFrontOfSpaces()
         
-        guard let screen = windowResizer.getScreenWithMouse() else { return }
+        guard let screen = NSScreen().screenWithMouse() else { return }
         let bounds = CGDisplayBounds(screen.displayID)
         let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
         

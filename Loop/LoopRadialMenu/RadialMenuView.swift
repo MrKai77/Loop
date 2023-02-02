@@ -15,7 +15,7 @@ struct RadialMenuView: View {
     @State var previewMode = false
     
     // Variable to store the initial position of the mouse
-    @State private var initialMousePosition: CGPoint = CGPoint()
+    @State var initialMousePosition: CGPoint = CGPoint()
     
     // This is how often the current resize direction is refreshed
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
@@ -82,19 +82,11 @@ struct RadialMenuView: View {
         .scaleEffect(self.currentResizeDirection == .maximize ? 0.8 : 1)
         .animation(.easeInOut, value: self.currentResizeDirection)
         
-        // Get initial mouse position when window appears
         .onAppear {
-            self.initialMousePosition = CGPoint(x: NSEvent.mouseLocation.x,
-                                                y: NSEvent.mouseLocation.y)
-            
-            self.currentResizeDirection = .noAction
-            NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": self.currentResizeDirection])
-            
-            if (previewMode) {
+            if (self.previewMode) {
                 self.currentResizeDirection = .topHalf
             }
         }
-        
         .onReceive(timer) { _ in
             if (!previewMode) {
                 
@@ -103,7 +95,7 @@ struct RadialMenuView: View {
                 let distanceToMouse = initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
                 
                 // If mouse over 50 points away, select half or quarter positions
-                if (distanceToMouse > pow(50-self.loopRadialMenuThickness, 2)) {
+                if (distanceToMouse > pow(50 - self.loopRadialMenuThickness, 2)) {
                     switch Int((angleToMouse.normalized().degrees+45/2)/45) {
                     case 0, 8: self.currentResizeDirection = .rightHalf
                     case 1:    self.currentResizeDirection = .bottomRightQuarter

@@ -7,17 +7,9 @@
 
 import Cocoa
 
-class WindowResizer {
-    func getScreenWithMouse() -> NSScreen? {
-        let mouseLocation = NSEvent.mouseLocation
-        let screens = NSScreen.screens
-        let screenWithMouse = (screens.first { NSMouseInRect(mouseLocation, $0.frame, false) })
-
-        return screenWithMouse
-    }
-    
+class WindowResizer {    
     func resizeFrontmostWindowWithDirection(_ direction: WindowResizingOptions) {
-        guard let screen = self.getScreenWithMouse() else { return }
+        guard let screen = NSScreen().screenWithMouse() else { return }
         let bounds = CGDisplayBounds(screen.displayID)
         let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
         
@@ -79,30 +71,25 @@ class WindowResizer {
         
         guard let frontmostWindow = NSWorkspace.shared.frontmostApplication?.localizedName else { return }
                 
-        for window in visibleWindows! {
-            let windowOwnerName:String = window[kCGWindowOwnerName as String] as! String
+        for window in visibleWindows! where window[kCGWindowOwnerName as String] as! String == frontmostWindow {
             let windowPID = window[kCGWindowOwnerPID as String] as? Int32
             
-            if windowOwnerName == frontmostWindow {
-                print(window)
-                
-                let appRef = AXUIElementCreateApplication(windowPID!);
-                var value: AnyObject?
-                _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
-                
-                guard let windowList = value as? [AXUIElement] else { return }
-                
-                var position : CFTypeRef
-                var size : CFTypeRef
-                var newPoint: CGPoint = frame.origin
-                var newSize: CGSize = frame.size
-                
-                size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!;
-                position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!;
-                
-                AXUIElementSetAttributeValue(windowList.first!, kAXPositionAttribute as CFString, position);
-                AXUIElementSetAttributeValue(windowList.first!, kAXSizeAttribute as CFString, size);
-            }
+            let appRef = AXUIElementCreateApplication(windowPID!);
+            var value: AnyObject?
+            _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+            
+            guard let windowList = value as? [AXUIElement] else { return }
+            
+            var position : CFTypeRef
+            var size : CFTypeRef
+            var newPoint: CGPoint = frame.origin
+            var newSize: CGSize = frame.size
+            
+            size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!;
+            position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!;
+            
+            AXUIElementSetAttributeValue(windowList.first!, kAXPositionAttribute as CFString, position);
+            AXUIElementSetAttributeValue(windowList.first!, kAXSizeAttribute as CFString, size);
         }
     }
 }
