@@ -78,6 +78,7 @@ struct SettingsView: View {
 }
 
 struct setSettingsWindowProperties: NSViewRepresentable {
+    
     @State var window: NSWindow?
 
     func makeNSView(context: Context) -> NSView {
@@ -88,7 +89,6 @@ struct setSettingsWindowProperties: NSViewRepresentable {
             self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
             self.window?.standardWindowButton(.zoomButton)?.isHidden = true
             self.window?.isMovableByWindowBackground = true
-            self.window?.level = .floating
         }
         return view
     }

@@ -20,7 +20,6 @@ struct RadialMenuSettingsView: View {
     @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
     @Default(.loopRadialMenuTrigger) var loopRadialMenuTrigger
     
-    @State private var selectedLoopTriggerKeyCode = 59
     let loopTriggerKeyOptions = [
         loopTriggerOptions(symbol: "control", description: "Left Control", keycode: 59),
         loopTriggerOptions(symbol: "option", description: "Left Option", keycode: 58),
@@ -36,10 +35,10 @@ struct RadialMenuSettingsView: View {
                 .fontWeight(.medium)
             VStack(spacing: 10) {
                 ZStack {
-                    Rectangle()
+                    RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                         .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
-                        .cornerRadius(5)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
                     
                     ZStack {    // Grid Background
                         VStack {
@@ -64,10 +63,10 @@ struct RadialMenuSettingsView: View {
                 .frame(height: 150)
                 
                 ZStack {
-                    Rectangle()
+                    RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                         .background(.secondary.opacity(0.05))
-                        .cornerRadius(5)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
                     
                     VStack {
                         HStack {
@@ -75,12 +74,12 @@ struct RadialMenuSettingsView: View {
                             Spacer()
                             
                             HStack {
-                                Text("0")
+                                Text("25")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Slider(
                                     value: self.$loopRadialMenuCornerRadius,
-                                    in: 0...50,
+                                    in: 25...50,
                                     step: 5
                                 )
                                 
@@ -117,16 +116,16 @@ struct RadialMenuSettingsView: View {
                 .frame(height: 76)
                 
                 ZStack {
-                    Rectangle()
+                    RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                         .background(.secondary.opacity(0.05))
-                        .cornerRadius(5)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
                     
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
                             Text("Trigger Loop")
                             Spacer()
-                            Picker("", selection: $selectedLoopTriggerKeyCode) {
+                            Picker("", selection: self.$loopRadialMenuTrigger) {
                                 ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
                                     HStack {
                                         Image(systemName: loopTriggerKeyOptions[i].symbol)
@@ -142,12 +141,6 @@ struct RadialMenuSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                     .padding(.horizontal, 10)
-                    .onAppear {
-                        self.selectedLoopTriggerKeyCode = self.loopRadialMenuTrigger
-                    }
-                    .onChange(of: self.selectedLoopTriggerKeyCode) { _ in
-                        self.loopRadialMenuTrigger = self.selectedLoopTriggerKeyCode
-                    }
                 }
                 .frame(height: 65)
             }

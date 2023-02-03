@@ -23,10 +23,12 @@ class RadialMenuController {
             return
         }
         
+        self.currentResizingDirection = .noAction
+        
         let mouseX: CGFloat = NSEvent.mouseLocation.x
         let mouseY: CGFloat = NSEvent.mouseLocation.y
         
-        let windowSize: CGFloat = 500
+        let windowSize: CGFloat = 250
         
         let panel = NSPanel(contentRect: .zero,
                             styleMask: [.borderless, .nonactivatingPanel],
@@ -36,7 +38,7 @@ class RadialMenuController {
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(rootView: RadialMenuView())
+        panel.contentView = NSHostingView(rootView: RadialMenuView(initialMousePosition: CGPoint(x: mouseX, y: mouseY)))
         panel.alphaValue = 0
         panel.setFrame(CGRect(x: mouseX-windowSize/2, y: mouseY-windowSize/2, width: windowSize, height: windowSize), display: false)
         panel.makeKeyAndOrderInFrontOfSpaces() // Makes window stay in same spot as you swich spaces

@@ -7,7 +7,6 @@
 
 import SwiftUI
 import KeyboardShortcuts
-import CoreImage.CIFilterBuiltins
 import Defaults
 
 // Add variables for keyboard shortcuts
@@ -33,6 +32,7 @@ extension KeyboardShortcuts.Name {
 
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
+    static let loopLaunchAtLogin = Key<Bool>("loopLaunchAtLogin", default: false)
     static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
     
     static let loopUsesSystemAccentColor = Key<Bool>("loopUsesSystemAccentColor", default: false)
@@ -53,6 +53,12 @@ extension Defaults.Keys {
 // Add a notification name to specify then the user changes their resizing direction in the radial menu
 extension Notification.Name {
     static let currentResizingDirectionChanged = Notification.Name("currentResizingDirectionChanged")
+    static let killHelper = Notification.Name("killHelper")
+}
+
+// Launch at login
+struct LoopHelper {
+    static let helperBundleID = "com.KaiAzim.Loop.LoopHelper"
 }
 
 // Enum that stores all possible resizing options
@@ -187,6 +193,14 @@ extension NSScreen {
     var displayID: CGDirectDisplayID {
         let key = NSDeviceDescriptionKey("NSScreenNumber")
         return self.deviceDescription[key] as! CGDirectDisplayID
+    }
+    
+    func screenWithMouse() -> NSScreen? {
+        let mouseLocation = NSEvent.mouseLocation
+        let screens = NSScreen.screens
+        let screenWithMouse = (screens.first { NSMouseInRect(mouseLocation, $0.frame, false) })
+
+        return screenWithMouse
     }
 }
 

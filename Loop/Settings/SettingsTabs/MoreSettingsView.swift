@@ -39,10 +39,10 @@ struct MoreSettingsView: View {
                     .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
             }
             ZStack {
-                Rectangle()
+                RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
                     .background(.secondary.opacity(0.05))
-                    .cornerRadius(5)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
                 
                 HStack {
                     Text("Check for Updates Automatically")
@@ -67,7 +67,6 @@ final class CheckForUpdatesViewModel: ObservableObject {
     @Published var canCheckForUpdates = false
 
     init(updater: SPUUpdater) {
-        updater.publisher(for: \.canCheckForUpdates)
-            .assign(to: &$canCheckForUpdates)
+        updater.publisher(for: \.canCheckForUpdates).assign(to: &$canCheckForUpdates)
     }
 }

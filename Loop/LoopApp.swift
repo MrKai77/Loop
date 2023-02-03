@@ -8,6 +8,7 @@
 import SwiftUI
 import KeyboardShortcuts
 import Defaults
+import ServiceManagement
 
 @main
 struct LoopApp: App {
@@ -43,6 +44,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var aboutWindowController: NSWindowController?
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        
+        // If launched at login, kill login launch helper
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isRunning = !runningApps.filter { $0.bundleIdentifier == LoopHelper.helperBundleID }.isEmpty
+        if isRunning {
+            DistributedNotificationCenter.default().post(name: .killHelper, object: Bundle.main.bundleID)
+        }
         
         // Check accessibility access, then if access is not granted, show a more informative alert asking for accessibility access
         if(!self.checkAccessibilityAccess(ask: false)) {
@@ -143,7 +151,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func accessibilityAccessAlert() {
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName) Needs Accessibility Permissions"
-        alert.informativeText = "This is only needed to resize windows. We respect your privacy, and won't collect any data."
+        alert.informativeText = "Welcome to \(Bundle.main.appName)! Please grant accessibility access to be able to resize windows."
         alert.runModal()
         
         checkAccessibilityAccess(ask: true)
