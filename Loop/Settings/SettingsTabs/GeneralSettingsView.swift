@@ -15,7 +15,17 @@ struct GeneralSettingsView: View {
     
     @Default(.loopLaunchAtLogin) var launchAtLogin {
         didSet {
-            SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin)
+            if #available(macOS 13.0, *) {
+                if (launchAtLogin) {
+                    try? SMAppService().register()
+                } else {
+                    try? SMAppService().unregister()
+                }
+            } else {
+                if !SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin) {
+                    fatalError()
+                }
+            }
         }
     }
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
