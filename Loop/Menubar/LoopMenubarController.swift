@@ -126,5 +126,6 @@ class LoopMenubarController {
         } else {
             NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
         }
+        NSApp.activate(ignoringOtherApps: true)
     }
 }

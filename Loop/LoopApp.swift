@@ -68,6 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
         }
+        NSApp.activate(ignoringOtherApps: true)
         print("Debug build!")
         #endif
     }
