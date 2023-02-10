@@ -109,7 +109,7 @@ struct RadialMenuView: View {
                     }
                     
                 // If mouse is less than 10 points away, do nothing
-                } else if (distanceToMouse < pow(10, 2)) {
+                } else if (distanceToMouse < pow(5, 2)) {
                     self.currentResizeDirection = .noAction
                     
                 // Otherwise, set position to maximize
