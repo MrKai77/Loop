@@ -82,6 +82,7 @@ struct GeneralSettingsView: View {
                         Text("Loop more to unlock more icons! (You've looped \(self.timesLooped) times!)")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                            .textSelection(.enabled)
                     }
                 }
                 .padding([.horizontal], 10)

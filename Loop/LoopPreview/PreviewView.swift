@@ -58,6 +58,13 @@ struct PreviewView: View {
                                 self.loopUsesSystemAccentColor ? Color.accentColor : self.loopUsesAccentColorGradient ? self.loopAccentColorGradient : self.loopAccentColor]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing), lineWidth: self.loopPreviewBorderThickness)
+                    
+                    #if (DEBUG)
+                    Image(nsImage: NSApplication.shared.applicationIconImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 200, maxHeight: 200)
+                    #endif
                 }
                 .padding(self.loopPreviewPadding + self.loopPreviewBorderThickness/2)
                 .frame(width: self.currentResizingDirection == .noAction ? 0 : nil,
