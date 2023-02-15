@@ -28,7 +28,7 @@ struct SettingsView: View {
                     Text("General")
                 }
                 .onAppear {
-                    self.currentWindowHeight = 410
+                    self.currentWindowHeight = 475
                 }
             
             RadialMenuSettingsView()

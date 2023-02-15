@@ -33,6 +33,10 @@ struct GeneralSettingsView: View {
     @Default(.loopAccentColor) var loopAccentColor
     @Default(.loopUsesAccentColorGradient) var loopUsesAccentColorGradient
     @Default(.loopAccentColorGradient) var loopAccentColorGradient
+    @Default(.currentIcon) var currentIcon
+    @Default(.timesLooped) var timesLooped
+    
+    let iconManager = IconManager()
     
     
     var body: some View {
@@ -56,6 +60,36 @@ struct GeneralSettingsView: View {
                 .padding([.horizontal], 10)
             }
             .frame(height: 38)
+            
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
+                    .background(.secondary.opacity(0.05))
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                
+                HStack {
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Text("Loop's Icon")
+                            Spacer()
+                            Picker("", selection: self.$currentIcon) {
+                                Text("Loop").tag("Loop")
+                                Text("Donut").tag("Donut")
+                            }
+                            .frame(width: 160)
+                        }
+                        Text("Loop more to unlock more icons! (You've looped \(self.timesLooped) times!)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding([.horizontal], 10)
+                .onChange(of: self.currentIcon) { _ in
+                    iconManager.changeIcon(self.currentIcon)
+                }
+            }
+            .frame(height: 65)
             
             Text("Accent Color")
                 .fontWeight(.medium)

@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import Defaults
 
 class WindowResizer {    
     func resizeFrontmostWindowWithDirection(_ direction: WindowResizingOptions) {
@@ -61,6 +62,8 @@ class WindowResizer {
         default:
             return
         }
+        
+        Defaults[.timesLooped] += 1
     }
     
     func resizeFrontmostWindow(_ frame: CGRect) {
