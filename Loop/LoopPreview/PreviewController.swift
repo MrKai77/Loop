@@ -31,13 +31,12 @@ class PreviewController {
         panel.makeKeyAndOrderInFrontOfSpaces()
         
         guard let screen = NSScreen().screenWithMouse() else { return }
-        let bounds = CGDisplayBounds(screen.displayID)
         let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
         
-        let screenWidth = bounds.width
-        let screenHeight = bounds.height - menubarHeight
-        let screenOriginX = bounds.origin.x
-        let screenOriginY = bounds.origin.y
+        let screenWidth = screen.frame.size.width
+        let screenHeight = screen.frame.size.height - menubarHeight
+        let screenOriginX = screen.frame.origin.x
+        let screenOriginY = screen.frame.origin.y
         
         panel.setFrame(NSRect(x: screenOriginX,
                               y: screenOriginY,
