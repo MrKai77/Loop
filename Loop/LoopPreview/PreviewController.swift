@@ -31,7 +31,7 @@ class PreviewController {
         panel.makeKeyAndOrderInFrontOfSpaces()
         
         guard let screen = NSScreen().screenWithMouse() else { return }
-        let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
+        let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
         
         let screenWidth = screen.frame.size.width
         let screenHeight = screen.frame.size.height - menubarHeight

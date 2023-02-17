@@ -12,7 +12,7 @@ class WindowResizer {
     func resizeFrontmostWindowWithDirection(_ direction: WindowResizingOptions) {
         guard let screen = NSScreen().screenWithMouse() else { return }
         let bounds = CGDisplayBounds(screen.displayID)
-        let menubarHeight = NSApp.mainMenu?.menuBarHeight ?? 0
+        let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
         
         let screenWidth = bounds.width
         let screenHeight = bounds.height - menubarHeight
