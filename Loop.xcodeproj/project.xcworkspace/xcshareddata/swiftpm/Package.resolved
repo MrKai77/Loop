@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "appmover",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iamcalledrob/AppMover",
+      "state" : {
+        "branch" : "master",
+        "revision" : "953b050dba48450856386c4ade6367196560b292"
+      }
+    },
+    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",

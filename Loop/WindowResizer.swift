@@ -64,6 +64,7 @@ class WindowResizer {
         }
         
         Defaults[.timesLooped] += 1
+        IconManager().didUnlockNewIcon()
     }
     
     func resizeFrontmostWindow(_ frame: CGRect) {

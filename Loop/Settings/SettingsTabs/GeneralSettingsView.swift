@@ -75,7 +75,14 @@ struct GeneralSettingsView: View {
                             Spacer()
                             Picker("", selection: self.$currentIcon) {
                                 Text("Loop").tag("Loop")
-                                Text("Donut").tag("Donut")
+                                
+                                if (self.timesLooped >= iconManager.timesThatUnlockNewIcons[0]) {
+                                    Text("Donut").tag("Donut")
+                                }
+                                
+                                if (self.timesLooped >= iconManager.timesThatUnlockNewIcons[1]) {
+                                    Text("Sci-fi").tag("Sci-fi")
+                                }
                             }
                             .frame(width: 160)
                         }
