@@ -74,12 +74,12 @@ struct RadialMenuSettingsView: View {
                             Spacer()
                             
                             HStack {
-                                Text("25")
+                                Text("30")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Slider(
                                     value: self.$loopRadialMenuCornerRadius,
-                                    in: 25...50,
+                                    in: 30...50,
                                     step: 5
                                 )
                                 

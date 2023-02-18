@@ -11,19 +11,12 @@ struct AboutView: View {
     
     @Environment(\.openURL) private var openURL
     
-    @State var isIconHovered: Bool = false
-    
     var body: some View {
         VStack {
             VStack(spacing: 5) {
-                Image(nsImage: NSImage(named: "AppIcon")!)
+                Image(nsImage: NSApplication.shared.applicationIconImage)
                     .resizable()
                     .frame(width: 120, height: 120)
-                    .onHover { hover in
-                        self.isIconHovered = hover
-                    }
-                    .scaleEffect(self.isIconHovered ? 1.1 : 1)
-                    .animation(.easeInOut, value: self.isIconHovered)
                 
                 Text("\(Bundle.main.appName)")
                     .font(.title)
@@ -50,7 +43,21 @@ struct AboutView: View {
                     .frame(maxWidth: .infinity)
             }
             .controlSize(.large)
-            .padding(.vertical)
+            
+            #if DEBUG
+            Button {
+                let alert = NSAlert()
+                alert.messageText = "\(Bundle.main.appName)"
+                alert.informativeText = "You triggered an alert!"
+                alert.runModal()
+            } label: {
+                Text("DEBUG: TRIGGER ALERT")
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                    .frame(maxWidth: .infinity)
+            }
+            .controlSize(.large)
+            #endif
             
             Link(destination: URL(string: "https://github.com/MrKai77/Loop/blob/main/LICENSE")!) {
                 Text("Apache License 2.0")

@@ -9,6 +9,7 @@ import SwiftUI
 import KeyboardShortcuts
 import Defaults
 import ServiceManagement
+import AppMover
 
 @main
 struct LoopApp: App {
@@ -45,6 +46,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         
+        do {
+            try AppMover.moveApp()
+        } catch {
+            NSLog("Moving app failed: \(error)")
+        }
+
         // If launched at login, kill login launch helper
         let runningApps = NSWorkspace.shared.runningApplications
         let isRunning = !runningApps.filter { $0.bundleIdentifier == LoopHelper.helperBundleID }.isEmpty
@@ -68,6 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
         }
+        NSApp.activate(ignoringOtherApps: true)
         print("Debug build!")
         #endif
     }

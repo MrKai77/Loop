@@ -3,6 +3,15 @@
     <channel>
         <title>Loop</title>
         <item>
+            <title>0.3.0</title>
+            <pubDate>Fri, 17 Feb 2023 21:41:35 -0700</pubDate>
+            <sparkle:version>88</sparkle:version>
+            <sparkle:shortVersionString>0.3.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.3.0/Loop.zip" length="3542411" type="application/octet-stream" sparkle:edSignature="fv1ewFjnZjWm4NeU7pQfUFE9IHSMemUDwbXtpDzNG4jpqgzU5IEv8yroTe7Ch8oWZkhi3zddgF5vXEkMCIDrDQ=="/>
+        </item>
+        <item>
             <title>0.2.2</title>
             <pubDate>Thu, 02 Feb 2023 17:27:02 -0700</pubDate>
             <sparkle:version>61</sparkle:version>
@@ -19,15 +28,6 @@
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
             <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
             <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.1/Loop.zip" length="6471001" type="application/octet-stream" sparkle:edSignature="8R3lFd4G2FBr5WCeAcB02eff7Mf0rm5r+ak1ZMaMCa2iR1VONiraEirUJMMxB1icFV1ziJN9wLS731C00gt3DA=="/>
-        </item>
-        <item>
-            <title>0.2.0</title>
-            <pubDate>Sun, 29 Jan 2023 18:18:38 -0700</pubDate>
-            <sparkle:version>35</sparkle:version>
-            <sparkle:shortVersionString>0.2.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.0/Loop.zip" length="6465953" type="application/octet-stream" sparkle:edSignature="7cGC6Ml3TsR3hdjGrjHL2q16s1+fTCBMvvl2LxBq2Gb7P+ADne2siNXmyrZGje574vQNZ1ENghvi9g7Ft6fwAQ=="/>
         </item>
     </channel>
 </rss>

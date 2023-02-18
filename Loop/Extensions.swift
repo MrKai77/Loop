@@ -32,6 +32,9 @@ extension KeyboardShortcuts.Name {
 
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
+    static let currentIcon = Key<String>("loopCurrentIcon", default: "Loop")
+    static let timesLooped = Key<Int>("timesLooped", default: 0)
+    
     static let loopLaunchAtLogin = Key<Bool>("loopLaunchAtLogin", default: false)
     static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
     
@@ -207,9 +210,9 @@ extension NSScreen {
 // Returns the current build number
 extension Bundle {
     public var appName: String { getInfo("CFBundleName")  }
-    public var displayName: String {getInfo("CFBundleDisplayName")}
-    public var bundleID: String {getInfo("CFBundleIdentifier")}
-    public var copyright: String {getInfo("NSHumanReadableCopyright")}
+    public var displayName: String { getInfo("CFBundleDisplayName") }
+    public var bundleID: String { getInfo("CFBundleIdentifier") }
+    public var copyright: String { getInfo("NSHumanReadableCopyright") }
     
     public var appBuild: String { getInfo("CFBundleVersion") }
     public var appVersion: String { getInfo("CFBundleShortVersionString") }
