@@ -41,6 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let windowResizer = WindowResizer()
     let radialMenu = RadialMenuController()
     let loopMenubarController = LoopMenubarController()
+    let spaceIndicatorController = SpaceIndicatorController()
     
     var aboutWindowController: NSWindowController?
     
@@ -66,6 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.setKeybindings()
         radialMenu.AddObservers()
+        spaceIndicatorController.setup()
         loopMenubarController.show()
         
         // Show settings window on launch if this is a debug build

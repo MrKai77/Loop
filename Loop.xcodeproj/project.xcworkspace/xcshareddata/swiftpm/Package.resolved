@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "appmover",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iamcalledrob/AppMover",
+      "state" : {
+        "branch" : "master",
+        "revision" : "953b050dba48450856386c4ade6367196560b292"
+      }
+    },
+    {
+      "identity" : "defaults",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/Defaults",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d71bfd8ffbf944ef08eacbca5fb96d6f69bf7696"
+      }
+    },
+    {
+      "identity" : "keyboardshortcuts",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d7b349f6822e24228141e560aa48a32dca23b22c"
+      }
+    },
+    {
+      "identity" : "sparkle",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sparkle-project/Sparkle",
+      "state" : {
+        "branch" : "2.x",
+        "revision" : "077d7228ba24fd11cc301147d569db81e842082f"
+      }
+    }
+  ],
+  "version" : 2
+}

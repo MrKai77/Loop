@@ -56,6 +56,7 @@ extension Defaults.Keys {
 // Add a notification name to specify then the user changes their resizing direction in the radial menu
 extension Notification.Name {
     static let currentResizingDirectionChanged = Notification.Name("currentResizingDirectionChanged")
+    static let currentSpaceChanged = Notification.Name("currentSpaceChanged")
     static let killHelper = Notification.Name("killHelper")
 }
 
@@ -165,7 +166,6 @@ extension Angle {
 
 // Define some types for the next function (which uses Apple's private APIs)
 private typealias CGSConnectionID = UInt
-private typealias CGSSpaceID = UInt64
 @_silgen_name("CGSCopySpaces")
 private func CGSCopySpaces(_: Int, _: Int) -> CFArray
 @_silgen_name("CGSAddWindowsToSpaces")
