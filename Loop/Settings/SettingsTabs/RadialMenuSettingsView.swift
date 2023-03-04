@@ -37,7 +37,7 @@ struct RadialMenuSettingsView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
+                        .background(VisualEffectView(material: .sidebar, blendingMode: .behindWindow))
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                     
                     ZStack {    // Grid Background

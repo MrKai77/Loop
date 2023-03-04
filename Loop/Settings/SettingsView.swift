@@ -72,26 +72,5 @@ struct SettingsView: View {
                 }
         }
         .frame(width: 420, height: CGFloat(self.currentWindowHeight))
-        .background(VisualEffectView(material: .hudWindow, blendingMode: .behindWindow).ignoresSafeArea())
-        .background(setSettingsWindowProperties())
     }
-}
-
-struct setSettingsWindowProperties: NSViewRepresentable {
-    
-    @State var window: NSWindow?
-
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async {
-            self.window = view.window
-            self.window?.titlebarAppearsTransparent = true
-            self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
-            self.window?.standardWindowButton(.zoomButton)?.isHidden = true
-            self.window?.isMovableByWindowBackground = true
-        }
-        return view
-    }
-
-    func updateNSView(_ nsView: NSView, context: Context) {}
 }
