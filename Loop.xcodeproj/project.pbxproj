@@ -19,8 +19,7 @@
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8836437298B7301005D6C19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8836436298B7301005D6C19 /* AppDelegate.swift */; };
 		A8836443298B7333005D6C19 /* LoopHelper.app in Resources */ = {isa = PBXBuildFile; fileRef = A8836434298B7301005D6C19 /* LoopHelper.app */; };
-		A88CA0CE29A44F8F00D5B509 /* SpaceIndicatorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88CA0CD29A44F8F00D5B509 /* SpaceIndicatorController.swift */; };
-		A88CA0D129A469FD00D5B509 /* SpaceIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88CA0D029A469FD00D5B509 /* SpaceIndicatorView.swift */; };
+		A8A7685129B6E62E00CAC0FD /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = A8A1F1C829A07B2900CC84D5 /* AppMover */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
 		A8DCC97E2980DDD400D41065 /* LoopMenubarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC97D2980DDD400D41065 /* LoopMenubarController.swift */; };
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
@@ -87,9 +86,6 @@
 		A8836434298B7301005D6C19 /* LoopHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoopHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8836436298B7301005D6C19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A883643F298B7302005D6C19 /* LoopHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LoopHelper.entitlements; sourceTree = "<group>"; };
-		A88CA0CD29A44F8F00D5B509 /* SpaceIndicatorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceIndicatorController.swift; sourceTree = "<group>"; };
-		A88CA0CF29A4524D00D5B509 /* Loop-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Loop-Bridging-Header.h"; sourceTree = "<group>"; };
-		A88CA0D029A469FD00D5B509 /* SpaceIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceIndicatorView.swift; sourceTree = "<group>"; };
 		A8DCC97D2980DDD400D41065 /* LoopMenubarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopMenubarController.swift; sourceTree = "<group>"; };
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
@@ -120,8 +116,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8A7685129B6E62E00CAC0FD /* AppMover in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				A8A1F1C929A07B2900CC84D5 /* AppMover in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 				A8F063702985B2220010C33D /* Sparkle in Frameworks */,
 				A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */,
@@ -188,15 +184,6 @@
 			path = LoopHelper;
 			sourceTree = "<group>";
 		};
-		A88CA0CC29A44F6000D5B509 /* SpaceIndicator */ = {
-			isa = PBXGroup;
-			children = (
-				A88CA0CD29A44F8F00D5B509 /* SpaceIndicatorController.swift */,
-				A88CA0D029A469FD00D5B509 /* SpaceIndicatorView.swift */,
-			);
-			path = SpaceIndicator;
-			sourceTree = "<group>";
-		};
 		A8DCC97C2980DDC300D41065 /* Menubar */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,7 +215,6 @@
 		A8E59C37297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXGroup;
 			children = (
-				A88CA0CF29A4524D00D5B509 /* Loop-Bridging-Header.h */,
 				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A8E59C4B29803A4D0064D4BA /* WindowResizer.swift */,
 				A8E59C4D29803FBD0064D4BA /* Extensions.swift */,
@@ -237,7 +223,6 @@
 				A8DCC97C2980DDC300D41065 /* Menubar */,
 				A88265FB29808E0D00BCB197 /* LoopRadialMenu */,
 				A88265FA29808DED00BCB197 /* LoopPreview */,
-				A88CA0CC29A44F6000D5B509 /* SpaceIndicator */,
 				A88265FC298092B500BCB197 /* Settings */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
 				A8F063712985B2730010C33D /* Info.plist */,
@@ -410,7 +395,6 @@
 				A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */,
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
-				A88CA0CE29A44F8F00D5B509 /* SpaceIndicatorController.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,
 				A88266002980931C00BCB197 /* SettingsView.swift in Sources */,
@@ -418,7 +402,6 @@
 				A8E59C4E29803FBD0064D4BA /* Extensions.swift in Sources */,
 				A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */,
 				A8DCC97E2980DDD400D41065 /* LoopMenubarController.swift in Sources */,
-				A88CA0D129A469FD00D5B509 /* SpaceIndicatorView.swift in Sources */,
 				A8E59C4C29803A4D0064D4BA /* WindowResizer.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
 			);
@@ -650,7 +633,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Loop/Loop-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -685,7 +668,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.KaiAzim.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Loop/Loop-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
