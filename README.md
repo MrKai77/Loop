@@ -48,7 +48,7 @@ Installation with Homebrew is planned :3
 1. Press the designated hotkey (see [here](#triggering-loop)) to trigger the radial menu.
 1. Move your mouse to the direction you want your window to move.
 1. Release the hotkey to apply the window movement.
-1. To customize Loop's settings, click on the Loop icon in the menu bar and select "Preferences". From there, you can customize the hotkey, colors, and other settings to your liking.
+1. To customize Loop's settings, click on the Loop icon in the menu bar and select "Settings". From there, you can customize the hotkey, colors, and other settings to your liking.
 
 That's it! With Loop, window management is a breeze.
 

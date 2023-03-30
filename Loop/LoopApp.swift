@@ -70,62 +70,58 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Show settings window on launch if this is a debug build
         #if DEBUG
-        if #available(macOS 13, *) {
-            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-        } else {
-            NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-        }
+        loopMenubarController.openSettings()
         NSApp.activate(ignoringOtherApps: true)
         print("Debug build!")
         #endif
     }
     
     
-    func setKeybindings() {
+    private func setKeybindings() {
         KeyboardShortcuts.onKeyDown(for: .resizeMaximize) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.maximize)
+            windowResizer.resizeFrontmostWindow(.maximize)
         }
         
         KeyboardShortcuts.onKeyDown(for: .resizeTopHalf) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.topHalf)
+            windowResizer.resizeFrontmostWindow(.topHalf)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeRightHalf) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.rightHalf)
+            windowResizer.resizeFrontmostWindow(.rightHalf)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeBottomHalf) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.bottomHalf)
+            windowResizer.resizeFrontmostWindow(.bottomHalf)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeLeftHalf) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.leftHalf)
+            windowResizer.resizeFrontmostWindow(.leftHalf)
         }
         
         KeyboardShortcuts.onKeyDown(for: .resizeTopRightQuarter) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.topRightQuarter)
+            windowResizer.resizeFrontmostWindow(.topRightQuarter)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeTopLeftQuarter) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.topLeftQuarter)
+            windowResizer.resizeFrontmostWindow(.topLeftQuarter)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeBottomRightQuarter) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.bottomRightQuarter)
+            windowResizer.resizeFrontmostWindow(.bottomRightQuarter)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeBottomLeftQuarter) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.bottomLeftQuarter)
+            windowResizer.resizeFrontmostWindow(.bottomLeftQuarter)
         }
         
         KeyboardShortcuts.onKeyDown(for: .resizeRightThird) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.rightThird)
+            windowResizer.resizeFrontmostWindow(.rightThird)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeRightTwoThirds) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.rightTwoThirds)
+            windowResizer.resizeFrontmostWindow(.rightTwoThirds)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeRLCenterThird) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.RLcenterThird)
+            windowResizer.resizeFrontmostWindow(.RLcenterThird)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeLeftThird) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.leftThird)
+            windowResizer.resizeFrontmostWindow(.leftThird)
         }
         KeyboardShortcuts.onKeyDown(for: .resizeLeftTwoThirds) { [self] in
-            windowResizer.resizeFrontmostWindowWithDirection(.leftTwoThirds)
+            windowResizer.resizeFrontmostWindow(.leftTwoThirds)
         }
     }
     

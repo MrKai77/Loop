@@ -8,66 +8,10 @@
 import Cocoa
 import Defaults
 
-class WindowResizer {    
-    func resizeFrontmostWindowWithDirection(_ direction: WindowResizingOptions) {
-        guard let screen = NSScreen().screenWithMouse() else { return }
-        let bounds = CGDisplayBounds(screen.displayID)
-        let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
+class WindowResizer {
+    func resizeFrontmostWindow(_ direction: WindowResizingOptions) {
         
-        let screenWidth = bounds.width
-        let screenHeight = bounds.height - menubarHeight
-        let screenOriginX = bounds.origin.x
-        let screenOriginY = bounds.origin.y + menubarHeight
-        
-        switch direction {
-        case .topHalf:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/2))
-        case .rightHalf:
-            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight))
-        case .bottomHalf:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth, height: screenHeight/2))
-        case .leftHalf:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight))
-        case .topRightQuarter:
-            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
-        case .topLeftQuarter:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight/2))
-        case .bottomRightQuarter:
-            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
-        case .bottomLeftQuarter:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2))
-        case .maximize:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight))
-        case .rightThird:
-            resizeFrontmostWindow(CGRect(x: screenOriginX+2*screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight))
-        case .rightTwoThirds:
-            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight))
-        case .RLcenterThird:
-            resizeFrontmostWindow(CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight))
-        case .leftThird:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/3, height: screenHeight))
-        case .leftTwoThirds:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight))
-        case .topThird:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/3))
-        case .topTwoThirds:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: 2*screenHeight/3))
-        case .TBcenterThird:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/3, width: screenWidth, height: screenHeight/3))
-        case .bottomThird:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+2*screenHeight/3, width: screenWidth, height: screenHeight/3))
-        case .bottomTwoThirds:
-            resizeFrontmostWindow(CGRect(x: screenOriginX, y: screenOriginY+screenHeight/3, width: screenWidth, height: 2*screenHeight/3))
-            
-        default:
-            return
-        }
-        
-        Defaults[.timesLooped] += 1
-        IconManager().didUnlockNewIcon()
-    }
-    
-    func resizeFrontmostWindow(_ frame: CGRect) {
+        guard let frame = directionToCGRect(direction) else { return }
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
         let windowsList = windowsListInfo as? [[String: AnyObject]]
@@ -78,22 +22,90 @@ class WindowResizer {
         for window in visibleWindows! where window[kCGWindowOwnerName as String] as! String == frontmostWindow {
             let windowPID = window[kCGWindowOwnerPID as String] as? Int32
             
-            let appRef = AXUIElementCreateApplication(windowPID!);
-            var value: AnyObject?
-            _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+            let windowList = getWindowList(for: windowPID!)
             
-            guard let windowList = value as? [AXUIElement] else { return }
+            resizeWindow(windowList.first!, withFrame: frame)
+        }
+        
+        Defaults[.timesLooped] += 1
+        IconManager().didUnlockNewIcon()
+    }
+
+    private func getWindowList(for pid: Int32) -> [AXUIElement] {
+        let appRef = AXUIElementCreateApplication(pid);
+        var value: AnyObject?
+        _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+        
+        guard let windowList = value as? [AXUIElement] else { return [] }
+        
+        return windowList
+    }
+
+    private func resizeWindow(_ window: AXUIElement, withFrame frame: CGRect) {
+        var position: CFTypeRef
+        var size: CFTypeRef
+        var newPoint: CGPoint = frame.origin
+        var newSize: CGSize = frame.size
+        
+        size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!;
+        position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!;
+        
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position);
+        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, size);
+    }
+    
+    private func directionToCGRect(_ direction: WindowResizingOptions) -> CGRect? {
+        guard let screen = NSScreen().screenWithMouse() else { return nil }
+        let bounds = CGDisplayBounds(screen.displayID)
+        let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
+        
+        let screenWidth = bounds.width
+        let screenHeight = bounds.height - menubarHeight
+        let screenOriginX = bounds.origin.x
+        let screenOriginY = bounds.origin.y + menubarHeight
+        
+        switch direction {
+        case .topHalf:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/2)
+        case .rightHalf:
+            return CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight)
+        case .bottomHalf:
+            return CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth, height: screenHeight/2)
+        case .leftHalf:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight)
+        case .topRightQuarter:
+            return CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY, width: screenWidth/2, height: screenHeight/2)
+        case .topLeftQuarter:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/2, height: screenHeight/2)
+        case .bottomRightQuarter:
+            return CGRect(x: screenOriginX+screenWidth/2, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2)
+        case .bottomLeftQuarter:
+            return CGRect(x: screenOriginX, y: screenOriginY+screenHeight/2, width: screenWidth/2, height: screenHeight/2)
+        case .maximize:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight)
+        case .rightThird:
+            return CGRect(x: screenOriginX+2*screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight)
+        case .rightTwoThirds:
+            return CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight)
+        case .RLcenterThird:
+            return CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight)
+        case .leftThird:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/3, height: screenHeight)
+        case .leftTwoThirds:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight)
+        case .topThird:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/3)
+        case .topTwoThirds:
+            return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: 2*screenHeight/3)
+        case .TBcenterThird:
+            return CGRect(x: screenOriginX, y: screenOriginY+screenHeight/3, width: screenWidth, height: screenHeight/3)
+        case .bottomThird:
+            return CGRect(x: screenOriginX, y: screenOriginY+2*screenHeight/3, width: screenWidth, height: screenHeight/3)
+        case .bottomTwoThirds:
+            return CGRect(x: screenOriginX, y: screenOriginY+screenHeight/3, width: screenWidth, height: 2*screenHeight/3)
             
-            var position : CFTypeRef
-            var size : CFTypeRef
-            var newPoint: CGPoint = frame.origin
-            var newSize: CGSize = frame.size
-            
-            size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!;
-            position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!;
-            
-            AXUIElementSetAttributeValue(windowList.first!, kAXPositionAttribute as CFString, position);
-            AXUIElementSetAttributeValue(windowList.first!, kAXSizeAttribute as CFString, size);
+        default:
+            return nil
         }
     }
 }

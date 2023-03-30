@@ -69,7 +69,7 @@ class RadialMenuController {
                     self.isLoopRadialMenuShown = false
                     self.closeMenu()
                     self.loopPreview.closePreview()
-                    self.windowResizer.resizeFrontmostWindowWithDirection(self.currentResizingDirection)
+                    self.windowResizer.resizeFrontmostWindow(self.currentResizingDirection)
                 } else {                                    // Show Loop
                     self.isLoopRadialMenuShown = true
                     self.showMenu()
