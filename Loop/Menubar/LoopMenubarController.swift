@@ -34,7 +34,7 @@ class LoopMenubarController {
         resizeWindowMenuItem(title: "Right Two Thirds", selector: #selector(resizeWindowRightTwoThirds), shortcut: .resizeRightTwoThirds),
         resizeWindowMenuItem(title: "Center Third", selector: #selector(resizeWindowRLCenterThird), shortcut: .resizeRLCenterThird),
         resizeWindowMenuItem(title: "Left Two Thirds", selector: #selector(resizeWindowLeftTwoThirds), shortcut: .resizeLeftTwoThirds),
-        resizeWindowMenuItem(title: "Left Third", selector: #selector(resizeWindowLeftThird), shortcut: .resizeLeftThird)
+        resizeWindowMenuItem(title: "Left Third", selector: #selector(resizeWindowLeftThird), shortcut: .resizeLeftThird),
     ]
     
     let windowResizer = WindowResizer()
@@ -65,9 +65,9 @@ class LoopMenubarController {
         loopMenu.addItem(resizeWindow)
         loopMenu.addItem(NSMenuItem.separator())
         if #available(macOS 13, *) {
-            loopMenu.addItem(withTitle: "Settings", action: #selector(self.openSettings), keyEquivalent: ",").target = self
+            loopMenu.addItem(withTitle: "Settings", action: #selector(openSettings), keyEquivalent: ",").target = self
         } else {
-            loopMenu.addItem(withTitle: "Preferences", action: #selector(self.openSettings), keyEquivalent: ",").target = self
+            loopMenu.addItem(withTitle: "Preferences", action: #selector(openSettings), keyEquivalent: ",").target = self
         }
         loopMenu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
         
@@ -75,49 +75,49 @@ class LoopMenubarController {
     }
     
     @objc func resizeWindowMaximize() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.maximize)
+        windowResizer.resizeFrontmostWindowWithDirection(.maximize)
     }
     
     @objc func resizeWindowTopHalf() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.topHalf)
+        windowResizer.resizeFrontmostWindowWithDirection(.topHalf)
     }
     @objc func resizeWindowBottomHalf() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.bottomHalf)
+        windowResizer.resizeFrontmostWindowWithDirection(.bottomHalf)
     }
     @objc func resizeWindowRightHalf() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.rightHalf)
+        windowResizer.resizeFrontmostWindowWithDirection(.rightHalf)
     }
     @objc func resizeWindowLeftHalf() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.leftHalf)
+        windowResizer.resizeFrontmostWindowWithDirection(.leftHalf)
     }
     
     @objc func resizeWindowTopRightQuarter() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.topRightQuarter)
+        windowResizer.resizeFrontmostWindowWithDirection(.topRightQuarter)
     }
     @objc func resizeWindowTopLeftQuarter() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.topLeftQuarter)
+        windowResizer.resizeFrontmostWindowWithDirection(.topLeftQuarter)
     }
     @objc func resizeWindowBottomRightQuarter() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.bottomRightQuarter)
+        windowResizer.resizeFrontmostWindowWithDirection(.bottomRightQuarter)
     }
     @objc func resizeWindowBottomLeftQuarter() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.bottomLeftQuarter)
+        windowResizer.resizeFrontmostWindowWithDirection(.bottomLeftQuarter)
     }
     
     @objc func resizeWindowRightThird() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.rightThird)
+        windowResizer.resizeFrontmostWindowWithDirection(.rightThird)
     }
     @objc func resizeWindowRightTwoThirds() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.rightTwoThirds)
+        windowResizer.resizeFrontmostWindowWithDirection(.rightTwoThirds)
     }
     @objc func resizeWindowRLCenterThird() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.RLcenterThird)
+        windowResizer.resizeFrontmostWindowWithDirection(.RLcenterThird)
     }
     @objc func resizeWindowLeftTwoThirds() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.leftTwoThirds)
+        windowResizer.resizeFrontmostWindowWithDirection(.leftTwoThirds)
     }
     @objc func resizeWindowLeftThird() {
-        self.windowResizer.resizeFrontmostWindowWithDirection(.leftThird)
+        windowResizer.resizeFrontmostWindowWithDirection(.leftThird)
     }
     
     @objc func openSettings() {

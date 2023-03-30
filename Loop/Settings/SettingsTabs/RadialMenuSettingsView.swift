@@ -78,7 +78,7 @@ struct RadialMenuSettingsView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Slider(
-                                    value: self.$loopRadialMenuCornerRadius,
+                                    value: $loopRadialMenuCornerRadius,
                                     in: 30...50,
                                     step: 5
                                 )
@@ -99,7 +99,7 @@ struct RadialMenuSettingsView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Slider(
-                                    value: self.$loopRadialMenuThickness,
+                                    value: $loopRadialMenuThickness,
                                     in: 10...34,
                                     step: 2
                                 )
@@ -125,7 +125,7 @@ struct RadialMenuSettingsView: View {
                         HStack {
                             Text("Trigger Loop")
                             Spacer()
-                            Picker("", selection: self.$loopRadialMenuTrigger) {
+                            Picker("", selection: $loopRadialMenuTrigger) {
                                 ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
                                     HStack {
                                         Image(systemName: loopTriggerKeyOptions[i].symbol)

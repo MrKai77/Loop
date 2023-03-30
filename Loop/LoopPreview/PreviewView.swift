@@ -27,74 +27,74 @@ struct PreviewView: View {
     
     var body: some View {
         VStack {
-            if (self.currentResizingDirection == .bottomThird ||
-                self.currentResizingDirection == .bottomHalf ||
-                self.currentResizingDirection == .bottomRightQuarter ||
-                self.currentResizingDirection == .bottomLeftQuarter ||
-                self.currentResizingDirection == .noAction) {
+            if currentResizingDirection == .bottomThird ||
+               currentResizingDirection == .bottomHalf ||
+               currentResizingDirection == .bottomRightQuarter ||
+               currentResizingDirection == .bottomLeftQuarter ||
+               currentResizingDirection == .noAction {
                 Rectangle()
                     .foregroundColor(.clear)
             }
             
             HStack {
                 
-                if (self.currentResizingDirection == .rightThird ||
-                    self.currentResizingDirection == .topRightQuarter ||
-                    self.currentResizingDirection == .rightHalf ||
-                    self.currentResizingDirection == .bottomRightQuarter ||
-                    self.currentResizingDirection == .noAction) {
+                if currentResizingDirection == .rightThird ||
+                   currentResizingDirection == .topRightQuarter ||
+                   currentResizingDirection == .rightHalf ||
+                   currentResizingDirection == .bottomRightQuarter ||
+                   currentResizingDirection == .noAction {
                     Rectangle()
                         .foregroundColor(.clear)
                 }
                 
                 ZStack {
                     VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                        .mask(RoundedRectangle(cornerRadius: self.loopPreviewCornerRadius).foregroundColor(.white))
+                        .mask(RoundedRectangle(cornerRadius: loopPreviewCornerRadius).foregroundColor(.white))
                         .shadow(radius: 10)
-                    RoundedRectangle(cornerRadius: self.loopPreviewCornerRadius)
+                    RoundedRectangle(cornerRadius: loopPreviewCornerRadius)
                         .stroke(LinearGradient(
                             gradient: Gradient(colors: [
-                                self.loopUsesSystemAccentColor ? Color.accentColor : self.loopAccentColor,
-                                self.loopUsesSystemAccentColor ? Color.accentColor : self.loopUsesAccentColorGradient ? self.loopAccentColorGradient : self.loopAccentColor]),
+                                loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
+                                loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
                                 startPoint: .topLeading,
-                                endPoint: .bottomTrailing), lineWidth: self.loopPreviewBorderThickness)
+                                endPoint: .bottomTrailing), lineWidth: loopPreviewBorderThickness)
                 }
-                .padding(self.loopPreviewPadding + self.loopPreviewBorderThickness/2)
-                .frame(width: self.currentResizingDirection == .noAction ? 0 : nil,
-                       height: self.currentResizingDirection == .noAction ? 0 : nil)
+                .padding(loopPreviewPadding + loopPreviewBorderThickness/2)
+                .frame(width: currentResizingDirection == .noAction ? 0 : nil,
+                       height: currentResizingDirection == .noAction ? 0 : nil)
                 
-                if (self.currentResizingDirection == .leftThird ||
-                    self.currentResizingDirection == .topLeftQuarter ||
-                    self.currentResizingDirection == .leftHalf ||
-                    self.currentResizingDirection == .bottomLeftQuarter ||
-                    self.currentResizingDirection == .noAction) {
+                if currentResizingDirection == .leftThird ||
+                   currentResizingDirection == .topLeftQuarter ||
+                   currentResizingDirection == .leftHalf ||
+                   currentResizingDirection == .bottomLeftQuarter ||
+                   currentResizingDirection == .noAction {
                     Rectangle()
                         .foregroundColor(.clear)
                 }
             }
             
-            if (self.currentResizingDirection == .topThird ||
-                self.currentResizingDirection == .topHalf ||
-                self.currentResizingDirection == .topRightQuarter ||
-                self.currentResizingDirection == .topLeftQuarter ||
-                self.currentResizingDirection == .noAction) {
+            if currentResizingDirection == .topThird ||
+               currentResizingDirection == .topHalf ||
+               currentResizingDirection == .topRightQuarter ||
+               currentResizingDirection == .topLeftQuarter ||
+               currentResizingDirection == .noAction {
                 Rectangle()
                     .foregroundColor(.clear)
             }
         }
-        .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: self.currentResizingDirection)
+        .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizingDirection)
         
         .onReceive(.currentResizingDirectionChanged) { obj in
-            if (!self.previewMode) {
+            if !previewMode {
                 if let direction = obj.userInfo?["Direction"] as? WindowResizingOptions {
-                    self.currentResizingDirection = direction
+                    currentResizingDirection = direction
                 }
             }
         }
         
         .onAppear {
-            if (self.previewMode) {
-                self.currentResizingDirection = .maximize
+            if previewMode {
+                currentResizingDirection = .maximize
             }
         }
     }

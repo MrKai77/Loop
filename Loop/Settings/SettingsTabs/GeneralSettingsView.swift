@@ -15,11 +15,22 @@ struct GeneralSettingsView: View {
     
     @Default(.loopLaunchAtLogin) var launchAtLogin {
         didSet {
+            print("TEST")
             if #available(macOS 13.0, *) {
-                if (launchAtLogin) {
-                    try? SMAppService().register()
+                if launchAtLogin {
+                    do {
+                        try SMAppService().register()
+                        print("Launch at login: Enabled")
+                    } catch {
+                        print(error)
+                    }
                 } else {
-                    try? SMAppService().unregister()
+                    do {
+                        try SMAppService().unregister()
+                        print("Launch at login: Disabled")
+                    } catch {
+                        print(error)
+                    }
                 }
             } else {
                 if !SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin) {
@@ -52,7 +63,7 @@ struct GeneralSettingsView: View {
                 HStack {
                     Text("Launch at login")
                     Spacer()
-                    Toggle("", isOn: self.$launchAtLogin)
+                    Toggle("", isOn: $launchAtLogin)
                         .labelsHidden()
                         .scaleEffect(0.7)
                         .toggleStyle(.switch)
@@ -73,28 +84,28 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Loop's Icon")
                             Spacer()
-                            Picker("", selection: self.$currentIcon) {
+                            Picker("", selection: $currentIcon) {
                                 Text("Loop").tag("Loop")
                                 
-                                if (self.timesLooped >= iconManager.timesThatUnlockNewIcons[0]) {
+                                if timesLooped >= iconManager.timesThatUnlockNewIcons[0] {
                                     Text("Donut").tag("Donut")
                                 }
                                 
-                                if (self.timesLooped >= iconManager.timesThatUnlockNewIcons[1]) {
+                                if timesLooped >= iconManager.timesThatUnlockNewIcons[1] {
                                     Text("Sci-fi").tag("Sci-fi")
                                 }
                             }
                             .frame(width: 160)
                         }
-                        Text("Loop more to unlock more icons! (You've looped \(self.timesLooped) times!)")
+                        Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .textSelection(.enabled)
                     }
                 }
                 .padding([.horizontal], 10)
-                .onChange(of: self.currentIcon) { _ in
-                    iconManager.changeIcon(self.currentIcon)
+                .onChange(of: currentIcon) { _ in
+                    iconManager.changeIcon(currentIcon)
                 }
             }
             .frame(height: 65)
@@ -112,7 +123,7 @@ struct GeneralSettingsView: View {
                     HStack {
                         Text("Follow System Accent Color")
                         Spacer()
-                        Toggle("", isOn: self.$loopUsesSystemAccentColor)
+                        Toggle("", isOn: $loopUsesSystemAccentColor)
                             .scaleEffect(0.7)
                             .toggleStyle(.switch)
                     }
@@ -121,13 +132,13 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Accent Color")
                             Spacer()
-                            ColorPicker("", selection: self.$loopAccentColor, supportsOpacity: false)
+                            ColorPicker("", selection: $loopAccentColor, supportsOpacity: false)
                         }
                         Divider()
                         HStack {
                             Text("Use Gradient")
                             Spacer()
-                            Toggle("", isOn: self.$loopUsesAccentColorGradient)
+                            Toggle("", isOn: $loopUsesAccentColorGradient)
                                 .scaleEffect(0.7)
                                 .toggleStyle(.switch)
                         }
@@ -135,13 +146,13 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Gradient Color")
                             Spacer()
-                            ColorPicker("", selection: self.$loopAccentColorGradient, supportsOpacity: false)
+                            ColorPicker("", selection: $loopAccentColorGradient, supportsOpacity: false)
                         }
-                        .disabled(!self.loopUsesAccentColorGradient)
-                        .foregroundColor(self.loopUsesAccentColorGradient ? (self.loopUsesSystemAccentColor ? .secondary : nil) : .secondary)
+                        .disabled(!loopUsesAccentColorGradient)
+                        .foregroundColor(loopUsesAccentColorGradient ? (loopUsesSystemAccentColor ? .secondary : nil) : .secondary)
                     }
-                    .disabled(self.loopUsesSystemAccentColor)
-                    .foregroundColor(self.loopUsesSystemAccentColor ? .secondary : nil)
+                    .disabled(loopUsesSystemAccentColor)
+                    .foregroundColor(loopUsesSystemAccentColor ? .secondary : nil)
                 }
                 .padding(.horizontal, 10)
             }
@@ -151,7 +162,7 @@ struct GeneralSettingsView: View {
                 Text("Permissions")
                     .fontWeight(.medium)
                 Spacer()
-                if (!self.isAccessibilityAccessGranted) {
+                if !isAccessibilityAccessGranted {
                     Button("Refresh", action: {
                         appDelegate.checkAccessibilityAccess(ask: true)
                     })
@@ -169,12 +180,12 @@ struct GeneralSettingsView: View {
                     HStack {
                         Text("Accessibility Access")
                         Spacer()
-                        Text(self.isAccessibilityAccessGranted ? "Granted" : "Not Granted")
+                        Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
                         Circle()
                             .frame(width: 8, height: 8)
                             .padding(.trailing, 5)
-                            .foregroundColor(self.isAccessibilityAccessGranted ? .green : .red)
-                            .shadow(color: self.isAccessibilityAccessGranted ? .green : .red, radius: 8)
+                            .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
+                            .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
                     }
                 }
                 .padding([.horizontal], 10)

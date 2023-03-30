@@ -12,7 +12,7 @@ class PreviewController {
     var loopPreviewWindowController: NSWindowController?
     
     func showPreview() {
-        if let windowController = self.loopPreviewWindowController {
+        if let windowController = loopPreviewWindowController {
             windowController.window?.orderFrontRegardless()
             return
         }
@@ -43,7 +43,7 @@ class PreviewController {
                               width: screenWidth,
                               height: screenHeight), display: false)
         
-        self.loopPreviewWindowController = .init(window: panel)
+        loopPreviewWindowController = .init(window: panel)
         
         NSAnimationContext.runAnimationGroup({ (context) -> Void in
             panel.animator().alphaValue = 1
@@ -52,7 +52,7 @@ class PreviewController {
     
     func closePreview() {
         guard let windowController = loopPreviewWindowController else { return }
-        self.loopPreviewWindowController = nil
+        loopPreviewWindowController = nil
         
         windowController.window?.animator().alphaValue = 1
         NSAnimationContext.runAnimationGroup({ (context) -> Void in

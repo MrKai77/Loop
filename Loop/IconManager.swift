@@ -62,8 +62,8 @@ class IconManager {
             NSApp.activate(ignoringOtherApps: true)
             let response = alert.runModal()
             
-            if (response == NSApplication.ModalResponse.alertFirstButtonReturn) {
-                self.changeIcon(iconToChangeTo)
+            if response == NSApplication.ModalResponse.alertFirstButtonReturn {
+                changeIcon(iconToChangeTo)
             }
         }
     }

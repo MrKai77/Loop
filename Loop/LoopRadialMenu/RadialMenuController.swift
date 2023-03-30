@@ -18,12 +18,12 @@ class RadialMenuController {
     var loopRadialMenuWindowController: NSWindowController?
     
     func showMenu() {
-        if let windowController = self.loopRadialMenuWindowController {
+        if let windowController = loopRadialMenuWindowController {
             windowController.window?.orderFrontRegardless()
             return
         }
         
-        self.currentResizingDirection = .noAction
+        currentResizingDirection = .noAction
         
         let mouseX: CGFloat = NSEvent.mouseLocation.x
         let mouseY: CGFloat = NSEvent.mouseLocation.y
@@ -43,19 +43,19 @@ class RadialMenuController {
         panel.setFrame(CGRect(x: mouseX-windowSize/2, y: mouseY-windowSize/2, width: windowSize, height: windowSize), display: false)
         panel.makeKeyAndOrderInFrontOfSpaces() // Makes window stay in same spot as you swich spaces
         
-        self.loopRadialMenuWindowController = .init(window: panel)
+        loopRadialMenuWindowController = .init(window: panel)
         
-        NSAnimationContext.runAnimationGroup({ (context) -> Void in
+        NSAnimationContext.runAnimationGroup({ context in
             panel.animator().alphaValue = 1
         })
     }
     
     func closeMenu() {
         guard let windowController = loopRadialMenuWindowController else { return }
-        self.loopRadialMenuWindowController = nil
+        loopRadialMenuWindowController = nil
         
         windowController.window?.animator().alphaValue = 1
-        NSAnimationContext.runAnimationGroup({ (context) -> Void in
+        NSAnimationContext.runAnimationGroup({ context in
             windowController.window?.animator().alphaValue = 0
         }, completionHandler: {
             windowController.close()
@@ -64,16 +64,16 @@ class RadialMenuController {
     
     func AddObservers() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { (event) -> Void in
-            if(Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]) {  // If selected trigger key is pressed
-                if(event.modifierFlags.rawValue == 256) {   // Key down event
+            if Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]  {  // If selected trigger key is pressed
+                if event.modifierFlags.rawValue == 256 {   // Close Loop
                     self.isLoopRadialMenuShown = false
                     self.closeMenu()
                     self.loopPreview.closePreview()
                     self.windowResizer.resizeFrontmostWindowWithDirection(self.currentResizingDirection)
-                } else {                                    // Key up event
+                } else {                                    // Show Loop
                     self.isLoopRadialMenuShown = true
                     self.showMenu()
-                    if (Defaults[.loopPreviewVisibility] == true) {
+                    if Defaults[.loopPreviewVisibility] == true {
                         self.loopPreview.showPreview()
                         self.loopRadialMenuWindowController?.window?.makeKeyAndOrderInFrontOfSpaces()
                     }
@@ -81,12 +81,12 @@ class RadialMenuController {
             }
         })
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.handleCurrentResizingDirectionChanged(notification:)), name: Notification.Name.currentResizingDirectionChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleCurrentResizingDirectionChanged(notification:)), name: Notification.Name.currentResizingDirectionChanged, object: nil)
     }
     
     @objc func handleCurrentResizingDirectionChanged(notification: Notification) {
         if let direction = notification.userInfo?["Direction"] as? WindowResizingOptions {
-            self.currentResizingDirection = direction
+            currentResizingDirection = direction
         }
     }
 }

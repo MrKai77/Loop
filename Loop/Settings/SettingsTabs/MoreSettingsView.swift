@@ -19,8 +19,8 @@ struct MoreSettingsView: View {
         self.updater = updater
         
         // Create our view model for our CheckForUpdatesView
-        self.checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
-        self.sparkleAutomaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
+        checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
+        sparkleAutomaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
     }
     
     var body: some View {
@@ -47,7 +47,7 @@ struct MoreSettingsView: View {
                 HStack {
                     Text("Check for Updates Automatically")
                     Spacer()
-                    Toggle("", isOn: self.$sparkleAutomaticallyChecksForUpdates)
+                    Toggle("", isOn: $sparkleAutomaticallyChecksForUpdates)
                         .scaleEffect(0.7)
                         .toggleStyle(.switch)
                         .onChange(of: sparkleAutomaticallyChecksForUpdates) { newValue in

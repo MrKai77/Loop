@@ -49,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try AppMover.moveApp()
         } catch {
-            NSLog("Moving app failed: \(error)")
+            print("Moving app failed: \(error)")
         }
 
         // If launched at login, kill login launch helper
@@ -60,11 +60,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         // Check accessibility access, then if access is not granted, show a more informative alert asking for accessibility access
-        if(!self.checkAccessibilityAccess(ask: false)) {
+        if !checkAccessibilityAccess(ask: false) {
             accessibilityAccessAlert()
         }
         
-        self.setKeybindings()
+        setKeybindings()
         radialMenu.AddObservers()
         loopMenubarController.show()
         

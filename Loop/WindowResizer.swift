@@ -70,7 +70,7 @@ class WindowResizer {
     func resizeFrontmostWindow(_ frame: CGRect) {
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
-        let windowsList = windowsListInfo as NSArray? as? [[String: AnyObject]]
+        let windowsList = windowsListInfo as? [[String: AnyObject]]
         let visibleWindows = windowsList?.filter{ $0["kCGWindowLayer"] as! Int == 0 }
         
         guard let frontmostWindow = NSWorkspace.shared.frontmostApplication?.localizedName else { return }

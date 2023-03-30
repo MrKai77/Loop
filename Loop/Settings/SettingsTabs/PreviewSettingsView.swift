@@ -84,7 +84,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Slider(
-                                        value: self.$loopPreviewPadding,
+                                        value: $loopPreviewPadding,
                                         in: 0...20,
                                         step: 2
                                     )
@@ -105,7 +105,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Slider(
-                                        value: self.$loopPreviewCornerRadius,
+                                        value: $loopPreviewCornerRadius,
                                         in: 0...20,
                                         step: 2
                                     )
@@ -126,7 +126,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Slider(
-                                        value: self.$loopPreviewBorderThickness,
+                                        value: $loopPreviewBorderThickness,
                                         in: 0...10,
                                         step: 1
                                     )
@@ -142,8 +142,8 @@ struct PreviewSettingsView: View {
                     }
                     .frame(height: 114)
                 }
-                .disabled(!self.loopPreviewVisibility)
-                .foregroundColor(!self.loopPreviewVisibility ? .secondary : nil)
+                .disabled(!loopPreviewVisibility)
+                .foregroundColor(!loopPreviewVisibility ? .secondary : nil)
             }
         }
         .padding(20)
