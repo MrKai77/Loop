@@ -13,32 +13,7 @@ struct GeneralSettingsView: View {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @Default(.loopLaunchAtLogin) var launchAtLogin {
-        didSet {
-            print("TEST")
-            if #available(macOS 13.0, *) {
-                if launchAtLogin {
-                    do {
-                        try SMAppService().register()
-                        print("Launch at login: Enabled")
-                    } catch {
-                        print(error)
-                    }
-                } else {
-                    do {
-                        try SMAppService().unregister()
-                        print("Launch at login: Disabled")
-                    } catch {
-                        print(error)
-                    }
-                }
-            } else {
-                if !SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin) {
-                    fatalError()
-                }
-            }
-        }
-    }
+    @Default(.loopLaunchAtLogin) var launchAtLogin
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
     @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
     @Default(.loopAccentColor) var loopAccentColor
@@ -69,6 +44,19 @@ struct GeneralSettingsView: View {
                         .toggleStyle(.switch)
                 }
                 .padding([.horizontal], 10)
+                .onChange(of: launchAtLogin) { _ in
+                    if #available(macOS 13.0, *) {
+                        if launchAtLogin {
+                            try? SMAppService().register()
+                        } else {
+                            try? SMAppService().unregister()
+                        }
+                    } else {
+                        if !SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin) {
+                            fatalError()
+                        }
+                    }
+                }
             }
             .frame(height: 38)
             
