@@ -33,7 +33,10 @@ struct RadialMenuSettingsView: View {
         VStack(alignment: .leading) {
             Text("Behavior")
                 .fontWeight(.medium)
+            
             VStack(spacing: 10) {
+                
+                // Loop radial menu preview
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -62,6 +65,7 @@ struct RadialMenuSettingsView: View {
                 }
                 .frame(height: 150)
                 
+                // Loop appearance settings
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -115,6 +119,7 @@ struct RadialMenuSettingsView: View {
                 }
                 .frame(height: 76)
                 
+                // Loop trigger key
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)

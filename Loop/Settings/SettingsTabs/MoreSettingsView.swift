@@ -25,6 +25,8 @@ struct MoreSettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
+            
+            // Auto-updater (Sparkle)
             HStack {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Updates")

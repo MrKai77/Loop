@@ -27,8 +27,10 @@ struct GeneralSettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Behavior")
+            Text("General")
                 .fontWeight(.medium)
+            
+            // Launch at login
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -60,7 +62,7 @@ struct GeneralSettingsView: View {
             }
             .frame(height: 38)
             
-            
+            // Loop's icon
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -98,6 +100,7 @@ struct GeneralSettingsView: View {
             }
             .frame(height: 65)
             
+            // Color choice
             Text("Accent Color")
                 .fontWeight(.medium)
                 .padding(.top, 20)
@@ -146,6 +149,7 @@ struct GeneralSettingsView: View {
             }
             .frame(height: 38*4+6)
             
+            // Accessibility Permissions
             HStack {
                 Text("Permissions")
                     .fontWeight(.medium)
