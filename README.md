@@ -4,7 +4,8 @@
 	<p><em>The elegant, mouse-oriented window manager</em></p>
 </div>
 
-Loop is a MacOS app made to help you manage your windows. Utilizing a radial menu when triggered, all you have to do is select a direction with your cursor then release the trigger key. It also contains a lot of customization options, so that you can personalize nearly everything to your likings, such as custom colors!
+Introducing Loop, the MacOS app that simplifies window management! Use a radial menu triggered by a key press to effortlessly choose your window direction with your cursor, and customize to your heart's content with personalized colors and settings.  
+To show your support, make sure to fork and star this repository!
 
 <div align="center">
     <img src="resources/screenshots/Loop Demo.gif" width="100%">
@@ -15,8 +16,8 @@ Loop is a MacOS app made to help you manage your windows. Utilizing a radial men
 
 **Compatible with MacOS 12 and later**
 
-Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! It will prompt you to move it to the Applications folder, and for accessibility access, and then you're all set!  
-Installation with Homebrew is planned.
+Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! After downloading the application, simply move it to the Applications folder and grant accessibility access to start using it!
+Installation with Homebrew is planned :3
 
 
 # Features
@@ -35,7 +36,7 @@ You can set your own custom trigger key for Loop! Currently, the available optio
 - `Left Option`
 - `Right Option`
 - `Right Command`
-- `Caps Lock` ([Additinal setup needed](#using-caps-lock))
+- `Caps Lock` ([Additional setup needed](#using-caps-lock))
 - `Function`
 
 ### Using Caps Lock
@@ -44,9 +45,8 @@ You can set your own custom trigger key for Loop! Currently, the available optio
     <img src="resources/screenshots/Remap Caps Lock.gif">
 </div>
 
-To use the `Caps Lock` key as your trigger key, you will need to remap it to Control in System Settings, as shown above. This will need to be repeated with every keyboard connected to your Mac. Note that even though you're remapping it to control, Loop won't trigger from the actual control key :)
+To set Caps Lock as the trigger key, remap it to Control in System Settings, and repeat the process for every connected keyboard. Note that Loop won't be triggered by the actual Control key, despite the remapping. :)
 
 # Additional Notes
 
-This project is licensed under the [Apache-2.0 license](LICENSE).  
-To show your support, make sure to fork and star this repository!
+This project is licensed under the [Apache-2.0 license](LICENSE).
