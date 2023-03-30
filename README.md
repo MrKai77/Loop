@@ -1,7 +1,7 @@
 <div align="center">
 	<img src="resources/icon/icon.png" width="250px">
 	<h1>Loop</h1>
-	<p><em>The missing window manager from the stock MacOS experience</em></p>
+	<p><em>The elegant, mouse-oriented window manager</em></p>
 </div>
 
 Loop is a MacOS app made to help you manage your windows. Utilizing a radial menu when triggered, all you have to do is select a direction with your cursor then release the trigger key. It also contains a lot of customization options, so that you can personalize nearly everything to your likings, such as custom colors!
@@ -48,5 +48,5 @@ To use the `Caps Lock` key as your trigger key, you will need to remap it to Con
 
 # Additional Notes
 
-This project is licensed with the [Apache-2.0 license](LICENSE).  
+This project is licensed under the [Apache-2.0 license](LICENSE).  
 To show your support, make sure to fork and star this repository!
