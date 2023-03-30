@@ -30,7 +30,7 @@ struct AboutView: View {
             
             Spacer()
             
-            Text("The missing window manager from the stock MacOS experience")
+            Text("The elegant, mouse-oriented window manager")
                 .multilineTextAlignment(.center)
             
             Spacer()

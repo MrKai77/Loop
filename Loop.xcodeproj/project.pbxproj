@@ -184,14 +184,6 @@
 			path = LoopHelper;
 			sourceTree = "<group>";
 		};
-		A8DCC97C2980DDC300D41065 /* Menubar */ = {
-			isa = PBXGroup;
-			children = (
-				A8DCC97D2980DDD400D41065 /* LoopMenubarController.swift */,
-			);
-			path = Menubar;
-			sourceTree = "<group>";
-		};
 		A8E59C2C297F5E9A0064D4BA = {
 			isa = PBXGroup;
 			children = (
@@ -220,7 +212,7 @@
 				A8E59C4D29803FBD0064D4BA /* Extensions.swift */,
 				A8E1575E298654960005761C /* AboutView.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
-				A8DCC97C2980DDC300D41065 /* Menubar */,
+				A8DCC97D2980DDD400D41065 /* LoopMenubarController.swift */,
 				A88265FB29808E0D00BCB197 /* LoopRadialMenu */,
 				A88265FA29808DED00BCB197 /* LoopPreview */,
 				A88265FC298092B500BCB197 /* Settings */,
