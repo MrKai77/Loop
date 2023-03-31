@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Donut-icon-256.png",
+      "filename" : "Loop 2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Donut-icon-512.png",
+      "filename" : "Loop 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Donut-icon-1024.png",
+      "filename" : "Loop.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

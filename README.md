@@ -6,11 +6,11 @@
 
 <p align="center">
     <a href="https://github.com/mrkai77/loop/stargazers">
-        <img alt="Stargazers" src="https://img.shields.io/github/stars/mrkai77/loop?style=for-the-badge&logo=starship&color=F9E2AF&logoColor=D9E0EE&labelColor=302D41"></a>
+        <img alt="Stargazers" src="https://img.shields.io/github/stars/mrkai77/loop?style=for-the-badge&logo=starship&color=F6C177&logoColor=D9E0EE&labelColor=302D41"></a>
     <a href="https://github.com/mrkai77/loop/releases/latest">
-        <img alt="Releases" src="https://img.shields.io/github/release/mrkai77/loop.svg?style=for-the-badge&logo=github&color=EBA0AC&logoColor=D9E0EE&labelColor=302D41"/></a>
+        <img alt="Releases" src="https://img.shields.io/github/release/mrkai77/loop.svg?style=for-the-badge&logo=github&color=EBBCBA&logoColor=D9E0EE&labelColor=302D41"/></a>
     <a href="https://github.com/mrkai77/loop/issues">
-        <img alt="Issues" src="https://img.shields.io/github/issues/mrkai77/loop?style=for-the-badge&logo=gitbook&color=74C7EC&logoColor=D9E0EE&labelColor=302D41"></a>
+        <img alt="Issues" src="https://img.shields.io/github/issues/mrkai77/loop?style=for-the-badge&logo=gitbook&color=C4A7E7&logoColor=D9E0EE&labelColor=302D41"></a>
 </p>
 
 Introducing Loop, the revolutionary MacOS app that simplifies window management for you! With Loop, you can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings.

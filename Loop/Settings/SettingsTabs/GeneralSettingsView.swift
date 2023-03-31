@@ -75,14 +75,8 @@ struct GeneralSettingsView: View {
                             Text("Loop's Icon")
                             Spacer()
                             Picker("", selection: $currentIcon) {
-                                Text("Loop").tag("Loop")
-                                
-                                if timesLooped >= iconManager.timesThatUnlockNewIcons[0] {
-                                    Text("Donut").tag("Donut")
-                                }
-                                
-                                if timesLooped >= iconManager.timesThatUnlockNewIcons[1] {
-                                    Text("Sci-fi").tag("Sci-fi")
+                                ForEach(iconManager.returnUnlockedIcons(), id: \.self) { icon in
+                                    Text(Icon.nameWithoutPrefix(name: icon)).tag(icon)
                                 }
                             }
                             .frame(width: 160)
@@ -95,7 +89,7 @@ struct GeneralSettingsView: View {
                 }
                 .padding([.horizontal], 10)
                 .onChange(of: currentIcon) { _ in
-                    iconManager.changeIcon(currentIcon)
+                    iconManager.setAppIcon(to: currentIcon)
                 }
             }
             .frame(height: 65)
