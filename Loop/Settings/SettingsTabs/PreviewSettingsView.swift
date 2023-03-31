@@ -19,7 +19,10 @@ struct PreviewSettingsView: View {
         VStack(alignment: .leading) {
             Text("Behavior")
                 .fontWeight(.medium)
+            
             VStack(spacing: 10) {
+                
+                // Ability to toggle showing Loop's resize preview
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -39,10 +42,12 @@ struct PreviewSettingsView: View {
                 .frame(height: 38)
                 
                 VStack(spacing: 10) {
+                    
+                    // Loop's preview window preview
                     ZStack {
                         RoundedRectangle(cornerRadius: 5)
                             .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                            .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
+                            .background(VisualEffectView(material: .sidebar, blendingMode: .behindWindow))
                             .clipShape(RoundedRectangle(cornerRadius: 5))
                         
                         ZStack {    // Grid Background
@@ -68,6 +73,7 @@ struct PreviewSettingsView: View {
                     }
                     .frame(height: 150)
                     
+                    // Preview window settings
                     ZStack {
                         RoundedRectangle(cornerRadius: 5)
                             .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -84,7 +90,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Slider(
-                                        value: self.$loopPreviewPadding,
+                                        value: $loopPreviewPadding,
                                         in: 0...20,
                                         step: 2
                                     )
@@ -105,7 +111,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Slider(
-                                        value: self.$loopPreviewCornerRadius,
+                                        value: $loopPreviewCornerRadius,
                                         in: 0...20,
                                         step: 2
                                     )
@@ -126,7 +132,7 @@ struct PreviewSettingsView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Slider(
-                                        value: self.$loopPreviewBorderThickness,
+                                        value: $loopPreviewBorderThickness,
                                         in: 0...10,
                                         step: 1
                                     )
@@ -142,8 +148,8 @@ struct PreviewSettingsView: View {
                     }
                     .frame(height: 114)
                 }
-                .disabled(!self.loopPreviewVisibility)
-                .foregroundColor(!self.loopPreviewVisibility ? .secondary : nil)
+                .disabled(!loopPreviewVisibility)
+                .foregroundColor(!loopPreviewVisibility ? .secondary : nil)
             }
         }
         .padding(20)

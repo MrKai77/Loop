@@ -30,7 +30,7 @@ struct AboutView: View {
             
             Spacer()
             
-            Text("The missing window manager from the stock MacOS experience")
+            Text("The elegant, mouse-oriented window manager")
                 .multilineTextAlignment(.center)
             
             Spacer()
@@ -43,21 +43,6 @@ struct AboutView: View {
                     .frame(maxWidth: .infinity)
             }
             .controlSize(.large)
-            
-            #if DEBUG
-            Button {
-                let alert = NSAlert()
-                alert.messageText = "\(Bundle.main.appName)"
-                alert.informativeText = "You triggered an alert!"
-                alert.runModal()
-            } label: {
-                Text("DEBUG: TRIGGER ALERT")
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                    .frame(maxWidth: .infinity)
-            }
-            .controlSize(.large)
-            #endif
             
             Link(destination: URL(string: "https://github.com/MrKai77/Loop/blob/main/LICENSE")!) {
                 Text("Apache License 2.0")

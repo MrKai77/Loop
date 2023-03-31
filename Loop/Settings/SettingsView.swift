@@ -20,7 +20,7 @@ struct SettingsView: View {
     @State var currentWindowHeight = 1
     
     var body: some View {
-        TabView(selection: self.$currentSettingsTab) {
+        TabView(selection: $currentSettingsTab) {
             GeneralSettingsView()
                 .tag(1)
                 .tabItem {
@@ -28,7 +28,7 @@ struct SettingsView: View {
                     Text("General")
                 }
                 .onAppear {
-                    self.currentWindowHeight = 475
+                    currentWindowHeight = 483
                 }
             
             RadialMenuSettingsView()
@@ -38,7 +38,7 @@ struct SettingsView: View {
                     Text("Radial Menu")
                 }
                 .onAppear {
-                    self.currentWindowHeight = 377
+                    currentWindowHeight = 377
                 }
             
             PreviewSettingsView()
@@ -48,7 +48,7 @@ struct SettingsView: View {
                     Text("Preview")
                 }
                 .onAppear {
-                    self.currentWindowHeight = 388
+                    currentWindowHeight = 388
                 }
             
             KeybindingSettingsView()
@@ -58,7 +58,7 @@ struct SettingsView: View {
                     Text("Keybindings")
                 }
                 .onAppear {
-                    self.currentWindowHeight = 663
+                    currentWindowHeight = 663
                 }
             
             MoreSettingsView(updater: updaterController.updater)
@@ -68,30 +68,9 @@ struct SettingsView: View {
                     Text("More")
                 }
                 .onAppear {
-                    self.currentWindowHeight = 116
+                    currentWindowHeight = 116
                 }
         }
-        .frame(width: 420, height: CGFloat(self.currentWindowHeight))
-        .background(VisualEffectView(material: .hudWindow, blendingMode: .behindWindow).ignoresSafeArea())
-        .background(setSettingsWindowProperties())
+        .frame(width: 420, height: CGFloat(currentWindowHeight))
     }
-}
-
-struct setSettingsWindowProperties: NSViewRepresentable {
-    
-    @State var window: NSWindow?
-
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async {
-            self.window = view.window
-            self.window?.titlebarAppearsTransparent = true
-            self.window?.standardWindowButton(.miniaturizeButton)?.isHidden = true
-            self.window?.standardWindowButton(.zoomButton)?.isHidden = true
-            self.window?.isMovableByWindowBackground = true
-        }
-        return view
-    }
-
-    func updateNSView(_ nsView: NSView, context: Context) {}
 }

@@ -13,21 +13,7 @@ struct GeneralSettingsView: View {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @Default(.loopLaunchAtLogin) var launchAtLogin {
-        didSet {
-            if #available(macOS 13.0, *) {
-                if (launchAtLogin) {
-                    try? SMAppService().register()
-                } else {
-                    try? SMAppService().unregister()
-                }
-            } else {
-                if !SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin) {
-                    fatalError()
-                }
-            }
-        }
-    }
+    @Default(.loopLaunchAtLogin) var launchAtLogin
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
     @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
     @Default(.loopAccentColor) var loopAccentColor
@@ -41,8 +27,10 @@ struct GeneralSettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Behavior")
+            Text("General")
                 .fontWeight(.medium)
+            
+            // Launch at login
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -52,16 +40,29 @@ struct GeneralSettingsView: View {
                 HStack {
                     Text("Launch at login")
                     Spacer()
-                    Toggle("", isOn: self.$launchAtLogin)
+                    Toggle("", isOn: $launchAtLogin)
                         .labelsHidden()
                         .scaleEffect(0.7)
                         .toggleStyle(.switch)
                 }
                 .padding([.horizontal], 10)
+                .onChange(of: launchAtLogin) { _ in
+                    if #available(macOS 13.0, *) {
+                        if launchAtLogin {
+                            try? SMAppService().register()
+                        } else {
+                            try? SMAppService().unregister()
+                        }
+                    } else {
+                        if !SMLoginItemSetEnabled(LoopHelper.helperBundleID as CFString, launchAtLogin) {
+                            fatalError()
+                        }
+                    }
+                }
             }
             .frame(height: 38)
             
-            
+            // Loop's icon
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -73,32 +74,27 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Loop's Icon")
                             Spacer()
-                            Picker("", selection: self.$currentIcon) {
-                                Text("Loop").tag("Loop")
-                                
-                                if (self.timesLooped >= iconManager.timesThatUnlockNewIcons[0]) {
-                                    Text("Donut").tag("Donut")
-                                }
-                                
-                                if (self.timesLooped >= iconManager.timesThatUnlockNewIcons[1]) {
-                                    Text("Sci-fi").tag("Sci-fi")
+                            Picker("", selection: $currentIcon) {
+                                ForEach(iconManager.returnUnlockedIcons(), id: \.self) { icon in
+                                    Text(Icon.nameWithoutPrefix(name: icon)).tag(icon)
                                 }
                             }
                             .frame(width: 160)
                         }
-                        Text("Loop more to unlock more icons! (You've looped \(self.timesLooped) times!)")
+                        Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .textSelection(.enabled)
                     }
                 }
                 .padding([.horizontal], 10)
-                .onChange(of: self.currentIcon) { _ in
-                    iconManager.changeIcon(self.currentIcon)
+                .onChange(of: currentIcon) { _ in
+                    iconManager.setAppIcon(to: currentIcon)
                 }
             }
             .frame(height: 65)
             
+            // Color choice
             Text("Accent Color")
                 .fontWeight(.medium)
                 .padding(.top, 20)
@@ -112,7 +108,7 @@ struct GeneralSettingsView: View {
                     HStack {
                         Text("Follow System Accent Color")
                         Spacer()
-                        Toggle("", isOn: self.$loopUsesSystemAccentColor)
+                        Toggle("", isOn: $loopUsesSystemAccentColor)
                             .scaleEffect(0.7)
                             .toggleStyle(.switch)
                     }
@@ -121,13 +117,13 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Accent Color")
                             Spacer()
-                            ColorPicker("", selection: self.$loopAccentColor, supportsOpacity: false)
+                            ColorPicker("", selection: $loopAccentColor, supportsOpacity: false)
                         }
                         Divider()
                         HStack {
                             Text("Use Gradient")
                             Spacer()
-                            Toggle("", isOn: self.$loopUsesAccentColorGradient)
+                            Toggle("", isOn: $loopUsesAccentColorGradient)
                                 .scaleEffect(0.7)
                                 .toggleStyle(.switch)
                         }
@@ -135,23 +131,24 @@ struct GeneralSettingsView: View {
                         HStack {
                             Text("Gradient Color")
                             Spacer()
-                            ColorPicker("", selection: self.$loopAccentColorGradient, supportsOpacity: false)
+                            ColorPicker("", selection: $loopAccentColorGradient, supportsOpacity: false)
                         }
-                        .disabled(!self.loopUsesAccentColorGradient)
-                        .foregroundColor(self.loopUsesAccentColorGradient ? (self.loopUsesSystemAccentColor ? .secondary : nil) : .secondary)
+                        .disabled(!loopUsesAccentColorGradient)
+                        .foregroundColor(loopUsesAccentColorGradient ? (loopUsesSystemAccentColor ? .secondary : nil) : .secondary)
                     }
-                    .disabled(self.loopUsesSystemAccentColor)
-                    .foregroundColor(self.loopUsesSystemAccentColor ? .secondary : nil)
+                    .disabled(loopUsesSystemAccentColor)
+                    .foregroundColor(loopUsesSystemAccentColor ? .secondary : nil)
                 }
                 .padding(.horizontal, 10)
             }
             .frame(height: 38*4+6)
             
+            // Accessibility Permissions
             HStack {
                 Text("Permissions")
                     .fontWeight(.medium)
                 Spacer()
-                if (!self.isAccessibilityAccessGranted) {
+                if !isAccessibilityAccessGranted {
                     Button("Refresh", action: {
                         appDelegate.checkAccessibilityAccess(ask: true)
                     })
@@ -169,12 +166,12 @@ struct GeneralSettingsView: View {
                     HStack {
                         Text("Accessibility Access")
                         Spacer()
-                        Text(self.isAccessibilityAccessGranted ? "Granted" : "Not Granted")
+                        Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
                         Circle()
                             .frame(width: 8, height: 8)
                             .padding(.trailing, 5)
-                            .foregroundColor(self.isAccessibilityAccessGranted ? .green : .red)
-                            .shadow(color: self.isAccessibilityAccessGranted ? .green : .red, radius: 8)
+                            .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
+                            .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
                     }
                 }
                 .padding([.horizontal], 10)

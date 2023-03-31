@@ -33,11 +33,14 @@ struct RadialMenuSettingsView: View {
         VStack(alignment: .leading) {
             Text("Behavior")
                 .fontWeight(.medium)
+            
             VStack(spacing: 10) {
+                
+                // Loop radial menu preview
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(VisualEffectView(material: .popover, blendingMode: .behindWindow))
+                        .background(VisualEffectView(material: .sidebar, blendingMode: .behindWindow))
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                     
                     ZStack {    // Grid Background
@@ -62,6 +65,7 @@ struct RadialMenuSettingsView: View {
                 }
                 .frame(height: 150)
                 
+                // Loop appearance settings
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -78,7 +82,7 @@ struct RadialMenuSettingsView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Slider(
-                                    value: self.$loopRadialMenuCornerRadius,
+                                    value: $loopRadialMenuCornerRadius,
                                     in: 30...50,
                                     step: 5
                                 )
@@ -99,7 +103,7 @@ struct RadialMenuSettingsView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 Slider(
-                                    value: self.$loopRadialMenuThickness,
+                                    value: $loopRadialMenuThickness,
                                     in: 10...34,
                                     step: 2
                                 )
@@ -115,6 +119,7 @@ struct RadialMenuSettingsView: View {
                 }
                 .frame(height: 76)
                 
+                // Loop trigger key
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -125,7 +130,7 @@ struct RadialMenuSettingsView: View {
                         HStack {
                             Text("Trigger Loop")
                             Spacer()
-                            Picker("", selection: self.$loopRadialMenuTrigger) {
+                            Picker("", selection: $loopRadialMenuTrigger) {
                                 ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
                                     HStack {
                                         Image(systemName: loopTriggerKeyOptions[i].symbol)

@@ -13,7 +13,10 @@ struct KeybindingSettingsView: View {
         VStack(alignment: .leading) {
             Text("Quick Controls")
                 .fontWeight(.medium)
+            
             VStack(spacing: 10) {
+                
+                // Maximize window
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -29,6 +32,8 @@ struct KeybindingSettingsView: View {
                     }
                     .padding(10)
                 }
+                
+                // Halves
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -62,6 +67,8 @@ struct KeybindingSettingsView: View {
                     }
                     .padding(10)
                 }
+                
+                // Quarters
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
@@ -95,6 +102,8 @@ struct KeybindingSettingsView: View {
                     }
                     .padding(10)
                 }
+                
+                // Thirds
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.secondary.opacity(0.35), lineWidth: 0.5)

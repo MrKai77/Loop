@@ -32,7 +32,7 @@ extension KeyboardShortcuts.Name {
 
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
-    static let currentIcon = Key<String>("loopCurrentIcon", default: "Loop")
+    static let currentIcon = Key<String>("loopCurrentIcon", default: "AppIcon-Default")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
     
     static let loopLaunchAtLogin = Key<Bool>("loopLaunchAtLogin", default: false)
