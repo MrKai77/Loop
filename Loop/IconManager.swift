@@ -23,8 +23,6 @@ struct Icon {
 
 class IconManager {
     
-    let loopDockTile = DSFDockTile.Image()
-    
     let timesThatUnlockNewIcons = [50, 100]
     
     func returnUnlockedIcons() -> [String] {
@@ -41,6 +39,8 @@ class IconManager {
     }
     
     func setAppIcon(to icon: String) {
+        let loopDockTile = DSFDockTile.Image()
+        
         loopDockTile.display(NSImage(named: icon)!)
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName)"
@@ -49,6 +49,11 @@ class IconManager {
         alert.runModal()
         
         Defaults[.currentIcon] = icon
+    }
+    
+    func setCurrentAppIcon() {
+        let loopDockTile = DSFDockTile.Image()
+        loopDockTile.display(NSImage(named: Defaults[.currentIcon])!)
     }
     
     func didUnlockNewIcon() {

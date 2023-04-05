@@ -41,6 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let windowResizer = WindowResizer()
     let radialMenu = RadialMenuController()
     let loopMenubarController = LoopMenubarController()
+    let iconManager = IconManager()
     
     var aboutWindowController: NSWindowController?
     
@@ -74,6 +75,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
         print("Debug build!")
         #endif
+        
+        iconManager.setCurrentAppIcon()
     }
     
     
