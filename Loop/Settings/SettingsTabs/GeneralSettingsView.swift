@@ -76,7 +76,7 @@ struct GeneralSettingsView: View {
                             Spacer()
                             Picker("", selection: $currentIcon) {
                                 ForEach(iconManager.returnUnlockedIcons(), id: \.self) { icon in
-                                    Text(Icon.nameWithoutPrefix(name: icon)).tag(icon)
+                                    Text(iconManager.nameWithoutPrefix(name: icon))
                                 }
                             }
                             .frame(width: 160)

@@ -7,44 +7,36 @@
 
 import Cocoa
 import Defaults
-import DSFDockTile
-
-struct Icon {
-    static let defaultIcon = "AppIcon-Default"
-    static let donut = "AppIcon-Donut"
-    static let sciFi = "AppIcon-Scifi"
-    static let roséPine = "AppIcon-Rosé Pine"
-    
-    static func nameWithoutPrefix(name: String) -> String {
-        let prefix = "AppIcon-"
-        return name.replacingOccurrences(of: prefix, with: "")
-    }
-}
 
 class IconManager {
     
-    let timesThatUnlockNewIcons = [50, 100]
+    // Icon name, times looped needed to unlock it
+    let icons: [String: Int] = [
+        "AppIcon-Default": 0,
+        "AppIcon-Scifi": 50,
+        "AppIcon-Rosé Pine": 100,
+    ]
+    
+    func nameWithoutPrefix(name: String) -> String {
+        let prefix = "AppIcon-"
+        return name.replacingOccurrences(of: prefix, with: "")
+    }
     
     func returnUnlockedIcons() -> [String] {
-        var returnValue = [Icon.defaultIcon]
-        
-        if Defaults[.timesLooped] >= timesThatUnlockNewIcons[0] {
-            returnValue.append(Icon.sciFi)
+        var returnValue: [String] = []
+        for (icon, unlockTimes) in icons where unlockTimes <= Defaults[.timesLooped] {
+            returnValue.append(icon)
         }
-        if Defaults[.timesLooped] >= timesThatUnlockNewIcons[1] {
-            returnValue.append(Icon.roséPine)
-        }
-        
-        return returnValue
+        return returnValue.reversed()
     }
     
     func setAppIcon(to icon: String) {
-        let loopDockTile = DSFDockTile.Image()
+        NSWorkspace.shared.setIcon(NSImage(named: icon), forFile: Bundle.main.bundlePath, options: [])
+        NSApp.applicationIconImage = NSImage(named: icon)
         
-        loopDockTile.display(NSImage(named: icon)!)
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName)"
-        alert.informativeText = "Current icon is now \(Icon.nameWithoutPrefix(name: icon))!"
+        alert.informativeText = "Current icon is now \(nameWithoutPrefix(name: icon))!"
         alert.icon = NSImage(named: icon)
         alert.runModal()
         
@@ -52,30 +44,14 @@ class IconManager {
     }
     
     func setCurrentAppIcon() {
-        let loopDockTile = DSFDockTile.Image()
-        loopDockTile.display(NSImage(named: Defaults[.currentIcon])!)
+        NSWorkspace.shared.setIcon(NSImage(named: Defaults[.currentIcon]), forFile: Bundle.main.bundlePath, options: [])
     }
     
-    func didUnlockNewIcon() {
-        if timesThatUnlockNewIcons.contains(Defaults[.timesLooped]) {
+    func checkIfUnlockedNewIcon() {
+        for (icon, unlockTimes) in icons where unlockTimes == Defaults[.timesLooped] {
             let alert = NSAlert()
-            var iconToChangeTo = ""
-
-            switch(Defaults[.timesLooped]) {
-            case timesThatUnlockNewIcons[0]:
-                iconToChangeTo = Icon.sciFi
-                alert.icon = NSImage(named: iconToChangeTo)
-                alert.messageText = "You've unlocked a new icon: \(Icon.nameWithoutPrefix(name: iconToChangeTo))!"
-                
-            case timesThatUnlockNewIcons[1]:
-                iconToChangeTo = Icon.roséPine
-                alert.icon = NSImage(named: iconToChangeTo)
-                alert.messageText = "You've unlocked a new icon: \(Icon.nameWithoutPrefix(name: iconToChangeTo))!"
-
-            default:
-                return
-            }
-
+            alert.icon = NSImage(named: icon)
+            alert.messageText = "You've unlocked a new icon: \(nameWithoutPrefix(name: icon))!"
             alert.informativeText = "Would you like to set this as \(Bundle.main.appName)'s new icon?"
             alert.alertStyle = .informational
             alert.addButton(withTitle: "Yes").keyEquivalent = "\r"
@@ -85,7 +61,7 @@ class IconManager {
             let response = alert.runModal()
 
             if response == NSApplication.ModalResponse.alertFirstButtonReturn {
-                setAppIcon(to: iconToChangeTo)
+                setAppIcon(to: icon)
             }
         }
     }

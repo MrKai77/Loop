@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A808F3C329D785CC00C9FE14 /* DSFDockTile in Frameworks */ = {isa = PBXBuildFile; productRef = A808F3C229D785CC00C9FE14 /* DSFDockTile */; };
 		A8562326298B736900C400CB /* LoopHelper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = A8836434298B7301005D6C19 /* LoopHelper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A8562328298B757400C400CB /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8562327298B757400C400CB /* main.swift */; };
 		A86AFD7629888B29008F4892 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A86AFD7529888B29008F4892 /* README.md */; };
@@ -120,7 +119,6 @@
 				A8A7685129B6E62E00CAC0FD /* AppMover in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
-				A808F3C329D785CC00C9FE14 /* DSFDockTile in Frameworks */,
 				A8F063702985B2220010C33D /* Sparkle in Frameworks */,
 				A87D369B2980A9DC002B0D2F /* KeyboardShortcuts in Frameworks */,
 			);
@@ -277,7 +275,6 @@
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				A8F0636F2985B2220010C33D /* Sparkle */,
 				A8A1F1C829A07B2900CC84D5 /* AppMover */,
-				A808F3C229D785CC00C9FE14 /* DSFDockTile */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -291,7 +288,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					A8836433298B7301005D6C19 = {
 						CreatedOnToolsVersion = 14.2;
@@ -315,7 +312,6 @@
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				A8F0636E2985B2220010C33D /* XCRemoteSwiftPackageReference "Sparkle" */,
 				A8A1F1C729A07B2900CC84D5 /* XCRemoteSwiftPackageReference "AppMover" */,
-				A808F3C129D785CC00C9FE14 /* XCRemoteSwiftPackageReference "DSFDockTile" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -434,6 +430,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -465,6 +462,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -519,6 +517,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -579,6 +578,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -609,6 +609,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = DEBUG;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -643,6 +644,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = DEBUG;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
 				DEVELOPMENT_TEAM = CK2YS5GSMD;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -700,14 +702,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A808F3C129D785CC00C9FE14 /* XCRemoteSwiftPackageReference "DSFDockTile" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dagronf/DSFDockTile";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.7.1;
-			};
-		};
 		A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
@@ -743,11 +737,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A808F3C229D785CC00C9FE14 /* DSFDockTile */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A808F3C129D785CC00C9FE14 /* XCRemoteSwiftPackageReference "DSFDockTile" */;
-			productName = DSFDockTile;
-		};
 		A87D369A2980A9DC002B0D2F /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A87D36992980A9DC002B0D2F /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;

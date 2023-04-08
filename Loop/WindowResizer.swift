@@ -9,6 +9,9 @@ import Cocoa
 import Defaults
 
 class WindowResizer {
+    
+    let iconManager = IconManager()
+    
     func resizeFrontmostWindow(_ direction: WindowResizingOptions) {
         
         guard let frame = directionToCGRect(direction) else { return }
@@ -28,7 +31,7 @@ class WindowResizer {
         }
         
         Defaults[.timesLooped] += 1
-        IconManager().didUnlockNewIcon()
+        iconManager.checkIfUnlockedNewIcon()
     }
 
     private func getWindowList(for pid: Int32) -> [AXUIElement] {
