@@ -5,8 +5,9 @@
 //  Created by Kai Azim on 2023-01-23.
 //
 
-import Cocoa
+import SwiftUI
 import Defaults
+import KeyboardShortcuts
 
 class WindowResizer {
     
@@ -109,6 +110,54 @@ class WindowResizer {
             
         default:
             return nil
+        }
+    }
+    
+    func setKeybindings() {
+        KeyboardShortcuts.onKeyDown(for: .resizeMaximize) { [self] in
+            resizeFrontmostWindow(.maximize)
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .resizeTopHalf) { [self] in
+            resizeFrontmostWindow(.topHalf)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeRightHalf) { [self] in
+            resizeFrontmostWindow(.rightHalf)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeBottomHalf) { [self] in
+            resizeFrontmostWindow(.bottomHalf)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeLeftHalf) { [self] in
+            resizeFrontmostWindow(.leftHalf)
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .resizeTopRightQuarter) { [self] in
+            resizeFrontmostWindow(.topRightQuarter)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeTopLeftQuarter) { [self] in
+            resizeFrontmostWindow(.topLeftQuarter)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeBottomRightQuarter) { [self] in
+            resizeFrontmostWindow(.bottomRightQuarter)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeBottomLeftQuarter) { [self] in
+            resizeFrontmostWindow(.bottomLeftQuarter)
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .resizeRightThird) { [self] in
+            resizeFrontmostWindow(.rightThird)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeRightTwoThirds) { [self] in
+            resizeFrontmostWindow(.rightTwoThirds)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeRLCenterThird) { [self] in
+            resizeFrontmostWindow(.RLcenterThird)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeLeftThird) { [self] in
+            resizeFrontmostWindow(.leftThird)
+        }
+        KeyboardShortcuts.onKeyDown(for: .resizeLeftTwoThirds) { [self] in
+            resizeFrontmostWindow(.leftTwoThirds)
         }
     }
 }

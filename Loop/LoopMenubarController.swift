@@ -5,7 +5,7 @@
 //  Created by Kai Azim on 2023-01-24.
 //
 
-import Cocoa
+import SwiftUI
 import KeyboardShortcuts
 
 struct resizeWindowMenuItem {

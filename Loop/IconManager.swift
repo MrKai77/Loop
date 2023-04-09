@@ -5,7 +5,7 @@
 //  Created by Kai Azim on 2023-02-14.
 //
 
-import Cocoa
+import SwiftUI
 import Defaults
 
 class IconManager {
@@ -45,6 +45,7 @@ class IconManager {
     
     func setCurrentAppIcon() {
         NSWorkspace.shared.setIcon(NSImage(named: Defaults[.currentIcon]), forFile: Bundle.main.bundlePath, options: [])
+        NSApp.applicationIconImage = NSImage(named: Defaults[.currentIcon])
     }
     
     func checkIfUnlockedNewIcon() {

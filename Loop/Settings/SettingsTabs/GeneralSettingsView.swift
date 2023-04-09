@@ -23,7 +23,7 @@ struct GeneralSettingsView: View {
     @Default(.timesLooped) var timesLooped
     
     let iconManager = IconManager()
-    
+    let accessibilityAccessManager = AccessibilityAccessManager()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -150,7 +150,7 @@ struct GeneralSettingsView: View {
                 Spacer()
                 if !isAccessibilityAccessGranted {
                     Button("Refresh", action: {
-                        appDelegate.checkAccessibilityAccess(ask: true)
+                        accessibilityAccessManager.checkAccessibilityAccess(ask: true)
                     })
                 }
             }

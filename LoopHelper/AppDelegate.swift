@@ -5,7 +5,7 @@
 //  Created by Kai Azim on 2023-02-01.
 //
 
-import Cocoa
+import SwiftUI
 
 extension Notification.Name {
     static let killHelper = Notification.Name("killHelper")
