@@ -13,8 +13,8 @@ class IconManager {
     // Icon name, times looped needed to unlock it
     let icons: [String: Int] = [
         "AppIcon-Default": 0,
+        "AppIcon-Rosé Pine": 25,
         "AppIcon-Scifi": 50,
-        "AppIcon-Rosé Pine": 100,
     ]
     
     func nameWithoutPrefix(name: String) -> String {

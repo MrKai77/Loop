@@ -27,7 +27,7 @@ struct GeneralSettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("General")
+            Text("Behavior")
                 .fontWeight(.medium)
             
             // Launch at login
@@ -76,7 +76,7 @@ struct GeneralSettingsView: View {
                             Spacer()
                             Picker("", selection: $currentIcon) {
                                 ForEach(iconManager.returnUnlockedIcons(), id: \.self) { icon in
-                                    Text(iconManager.nameWithoutPrefix(name: icon))
+                                    Text(iconManager.nameWithoutPrefix(name: icon)).tag(icon)
                                 }
                             }
                             .frame(width: 160)
@@ -156,6 +156,7 @@ struct GeneralSettingsView: View {
             }
             .frame(height: 20)
             .padding(.top, 20)
+            
             ZStack {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(.secondary.opacity(0.35), lineWidth: 0.5)

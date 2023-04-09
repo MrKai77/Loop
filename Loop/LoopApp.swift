@@ -36,9 +36,6 @@ struct LoopApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    var screenWidth:CGFloat = 0
-    var screenHeight:CGFloat = 0
-    
     let windowResizer = WindowResizer()
     let radialMenuController = RadialMenuController()
     let aboutViewController = AboutViewController()
@@ -65,6 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !accessibilityAccessManager.checkAccessibilityAccess(ask: false) {
             accessibilityAccessManager.accessibilityAccessAlert()
         }
+        iconManager.setCurrentAppIcon()
         
         windowResizer.setKeybindings()
         radialMenuController.AddObservers()
@@ -76,7 +74,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
         print("Debug build!")
         #endif
-        
-        iconManager.setCurrentAppIcon()
     }
 }

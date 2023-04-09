@@ -1,5 +1,5 @@
 <div align="center">
-	<img src="resources/icon/icon.png" width="250px">
+	<img src="Loop/Assets.xcassets/AppIcon-Default.appiconset/icon_512x512@2x@2x-1024.png" width="250px">
 	<h1>Loop</h1>
 	<p><em>The elegant, mouse-oriented window manager</em></p>
 </div>
