@@ -26,7 +26,7 @@ struct RadialMenuSettingsView: View {
         loopTriggerOptions(symbol: "option", description: "Right Option", keycode: 61),
         loopTriggerOptions(symbol: "command", description: "Right Command", keycode: 54),
         loopTriggerOptions(symbol: "capslock", description: "Caps Lock", keycode: 62),
-        loopTriggerOptions(symbol: "fn", description: "Function", keycode: 63)
+        loopTriggerOptions(symbol: "globe", description: "Globe", keycode: 63)
     ]
     
     var body: some View {
