@@ -21,12 +21,10 @@ struct RadialMenuSettingsView: View {
     @Default(.loopRadialMenuTrigger) var loopRadialMenuTrigger
     
     let loopTriggerKeyOptions = [
-        loopTriggerOptions(symbol: "control", description: "Left Control", keycode: 59),
-        loopTriggerOptions(symbol: "option", description: "Left Option", keycode: 58),
+        loopTriggerOptions(symbol: "globe", description: "Globe", keycode: 63),
+        loopTriggerOptions(symbol: "control", description: "Right Control", keycode: 62),
         loopTriggerOptions(symbol: "option", description: "Right Option", keycode: 61),
         loopTriggerOptions(symbol: "command", description: "Right Command", keycode: 54),
-        loopTriggerOptions(symbol: "capslock", description: "Caps Lock", keycode: 62),
-        loopTriggerOptions(symbol: "globe", description: "Globe", keycode: 63)
     ]
     
     var body: some View {
@@ -141,13 +139,18 @@ struct RadialMenuSettingsView: View {
                             }
                             .frame(width: 160)
                         }
-                        Text("To use caps lock, remap it to control in System Settings.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        if loopRadialMenuTrigger == loopTriggerKeyOptions[1].keycode {
+                            Text("Tip: To use caps lock, remap it to control in System Settings!")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                     }
                     .padding(.horizontal, 10)
                 }
-                .frame(height: 65)
+                .frame(height: loopRadialMenuTrigger == loopTriggerKeyOptions[1].keycode ? 65 : 38)
+            }
+            if loopRadialMenuTrigger != loopTriggerKeyOptions[1].keycode {
+                Spacer()
             }
         }
         .padding(20)

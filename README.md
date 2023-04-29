@@ -55,12 +55,10 @@ That's it! With Loop, window management is a breeze.
 # Triggering Loop
 
 You can set your own custom trigger key for Loop! Currently, the available options for triggering loop are:
-- `Left Control`
-- `Left Option`
+- `Globe`
+- `Right Control` (To use Caps Lock, look [here](#using-caps-lock))
 - `Right Option`
 - `Right Command`
-- `Caps Lock` ([Additional setup needed](#using-caps-lock))
-- `Function`
 
 ### Using Caps Lock
 
@@ -68,7 +66,7 @@ You can set your own custom trigger key for Loop! Currently, the available optio
     <img src="resources/screenshots/Remap Caps Lock.gif">
 </div>
 
-To set Caps Lock as the trigger key, remap it to Control in System Settings, and repeat the process for every connected keyboard. Note that Loop won't be triggered by the actual Control key, despite the remapping.
+To set `Caps Lock` as the trigger key, remap it to `Control` in System Settings, and repeat the process for every connected keyboard. In Loop, make sure the `Right Control` key is selected as your trigger.
 
 # Additional Notes
 
