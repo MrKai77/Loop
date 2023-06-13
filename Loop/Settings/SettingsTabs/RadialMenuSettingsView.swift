@@ -28,131 +28,39 @@ struct RadialMenuSettingsView: View {
     ]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Behavior")
-                .fontWeight(.medium)
-            
-            VStack(spacing: 10) {
-                
-                // Loop radial menu preview
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(VisualEffectView(material: .sidebar, blendingMode: .behindWindow))
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    
-                    ZStack {    // Grid Background
-                        VStack {
-                            Spacer()
-                            ForEach(1...10, id: \.self) {_ in
-                                Divider()
-                                Spacer()
-                            }
-                        }
-                        
-                        HStack {
-                            Spacer()
-                            ForEach(1...27, id: \.self) {_ in
-                                Divider()
-                                Spacer()
-                            }
-                        }
-                    }
-                    
-                    RadialMenuView(previewMode: true, timer: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
-                }
-                .frame(height: 150)
-                
-                // Loop appearance settings
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(.secondary.opacity(0.05))
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    
-                    VStack {
-                        HStack {
-                            Text("Corner Radius")
-                            Spacer()
-                            
-                            HStack {
-                                Text("30")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Slider(
-                                    value: $loopRadialMenuCornerRadius,
-                                    in: 30...50,
-                                    step: 5
-                                )
-                                
-                                Text("50")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .frame(width: 230)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Thickness")
-                            Spacer()
-                            
-                            HStack {
-                                Text("10")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Slider(
-                                    value: $loopRadialMenuThickness,
-                                    in: 10...34,
-                                    step: 2
-                                )
-                                
-                                Text("35")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .frame(width: 230)
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                }
-                .frame(height: 76)
-                
-                // Loop trigger key
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(.secondary.opacity(0.05))
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    
-                    VStack(alignment: .leading, spacing: 5) {
-                        HStack {
-                            Text("Trigger Loop")
-                            Spacer()
-                            Picker("", selection: $loopRadialMenuTrigger) {
-                                ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
-                                    HStack {
-                                        Image(systemName: loopTriggerKeyOptions[i].symbol)
-                                        Text(loopTriggerKeyOptions[i].description)
-                                    }
-                                    .tag(loopTriggerKeyOptions[i].keycode)
-                                }
-                            }
-                            .frame(width: 160)
-                        }
-                        if loopRadialMenuTrigger == loopTriggerKeyOptions[1].keycode {
-                            Text("Tip: To use caps lock, remap it to control in System Settings!")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .padding(.horizontal, 10)
-                }
-                .frame(height: loopRadialMenuTrigger == loopTriggerKeyOptions[1].keycode ? 65 : 38)
+        Form {
+            Section("Behavior") {
+                RadialMenuView(previewMode: true, timer: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
             }
-            if loopRadialMenuTrigger != loopTriggerKeyOptions[1].keycode {
-                Spacer()
+            
+            Section {
+                Slider(value: $loopRadialMenuCornerRadius, in: 30...50, step: 5, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
+                    Text("Corner Radius")
+                }
+                Slider(value: $loopRadialMenuThickness, in: 10...34, step: 5, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
+                    Text("Thickness")
+                }
+            }
+            
+            Section {
+                VStack(alignment: .leading) {
+                    Picker("Trigger Loop", selection: $loopRadialMenuTrigger) {
+                        ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
+                            HStack {
+                                Image(systemName: loopTriggerKeyOptions[i].symbol)
+                                Text(loopTriggerKeyOptions[i].description)
+                            }
+                            .tag(loopTriggerKeyOptions[i].keycode)
+                        }
+                    }
+                    if loopRadialMenuTrigger == loopTriggerKeyOptions[1].keycode {
+                        Text("Tip: To use caps lock, remap it to control in System Settings!")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
         }
-        .padding(20)
+        .formStyle(.grouped)
     }
 }

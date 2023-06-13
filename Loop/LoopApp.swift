@@ -31,6 +31,22 @@ struct LoopApp: App {
                     .keyboardShortcut("q")
             }
         }
+        
+        
+        MenuBarExtra("Loop", image: "menubarIcon") {
+            if #available(macOS 14, *) {
+                SettingsLink()
+            }
+            else {
+                Button("Settings") {
+                    NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                }
+            }
+            
+            Button("Quit") {
+                NSApp.terminate(nil)
+            }
+        }
     }
 }
 
@@ -39,7 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let windowResizer = WindowResizer()
     let radialMenuController = RadialMenuController()
     let aboutViewController = AboutViewController()
-    let loopMenubarController = LoopMenubarController()
+//    let loopMenubarController = LoopMenubarController()
     let iconManager = IconManager()
     let accessibilityAccessManager = AccessibilityAccessManager()
     
@@ -50,13 +66,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Moving app failed: \(error)")
         }
-
-        // If launched at login, kill login launch helper
-        let runningApps = NSWorkspace.shared.runningApplications
-        let isRunning = !runningApps.filter { $0.bundleIdentifier == LoopHelper.helperBundleID }.isEmpty
-        if isRunning {
-            DistributedNotificationCenter.default().post(name: .killHelper, object: Bundle.main.bundleID)
-        }
         
         // Check accessibility access, then if access is not granted, show a more informative alert asking for accessibility access
         if !accessibilityAccessManager.checkAccessibilityAccess(ask: false) {
@@ -66,12 +75,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         windowResizer.setKeybindings()
         radialMenuController.AddObservers()
-        loopMenubarController.show()
+//        loopMenubarController.show()
         
         // Show settings window on launch if this is a debug build
         #if DEBUG
-        loopMenubarController.openSettings()
-        NSApp.activate(ignoringOtherApps: true)
         print("Debug build!")
         #endif
     }
