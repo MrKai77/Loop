@@ -91,7 +91,7 @@ class WindowResizer {
             return CGRect(x: screenOriginX+2*screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight)
         case .rightTwoThirds:
             return CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: 2*screenWidth/3, height: screenHeight)
-        case .RLcenterThird:
+        case .horizontalCenterThird:
             return CGRect(x: screenOriginX+screenWidth/3, y: screenOriginY, width: screenWidth/3, height: screenHeight)
         case .leftThird:
             return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth/3, height: screenHeight)
@@ -101,7 +101,7 @@ class WindowResizer {
             return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: screenHeight/3)
         case .topTwoThirds:
             return CGRect(x: screenOriginX, y: screenOriginY, width: screenWidth, height: 2*screenHeight/3)
-        case .TBcenterThird:
+        case .verticalCenterThird:
             return CGRect(x: screenOriginX, y: screenOriginY+screenHeight/3, width: screenWidth, height: screenHeight/3)
         case .bottomThird:
             return CGRect(x: screenOriginX, y: screenOriginY+2*screenHeight/3, width: screenWidth, height: screenHeight/3)
@@ -114,49 +114,49 @@ class WindowResizer {
     }
     
     func setKeybindings() {
-        KeyboardShortcuts.onKeyDown(for: .resizeMaximize) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .maximize) { [self] in
             resizeFrontmostWindow(.maximize)
         }
         
-        KeyboardShortcuts.onKeyDown(for: .resizeTopHalf) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .topHalf) { [self] in
             resizeFrontmostWindow(.topHalf)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeRightHalf) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .rightHalf) { [self] in
             resizeFrontmostWindow(.rightHalf)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeBottomHalf) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .bottomHalf) { [self] in
             resizeFrontmostWindow(.bottomHalf)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeLeftHalf) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .leftHalf) { [self] in
             resizeFrontmostWindow(.leftHalf)
         }
         
-        KeyboardShortcuts.onKeyDown(for: .resizeTopRightQuarter) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .topRightQuarter) { [self] in
             resizeFrontmostWindow(.topRightQuarter)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeTopLeftQuarter) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .topLeftQuarter) { [self] in
             resizeFrontmostWindow(.topLeftQuarter)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeBottomRightQuarter) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .bottomRightQuarter) { [self] in
             resizeFrontmostWindow(.bottomRightQuarter)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeBottomLeftQuarter) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .bottomLeftQuarter) { [self] in
             resizeFrontmostWindow(.bottomLeftQuarter)
         }
         
-        KeyboardShortcuts.onKeyDown(for: .resizeRightThird) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .rightThird) { [self] in
             resizeFrontmostWindow(.rightThird)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeRightTwoThirds) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .rightTwoThirds) { [self] in
             resizeFrontmostWindow(.rightTwoThirds)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeRLCenterThird) { [self] in
-            resizeFrontmostWindow(.RLcenterThird)
+        KeyboardShortcuts.onKeyDown(for: .horizontalCenterThird) { [self] in
+            resizeFrontmostWindow(.horizontalCenterThird)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeLeftThird) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .leftThird) { [self] in
             resizeFrontmostWindow(.leftThird)
         }
-        KeyboardShortcuts.onKeyDown(for: .resizeLeftTwoThirds) { [self] in
+        KeyboardShortcuts.onKeyDown(for: .leftTwoThirds) { [self] in
             resizeFrontmostWindow(.leftTwoThirds)
         }
     }

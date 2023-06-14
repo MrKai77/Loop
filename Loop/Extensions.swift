@@ -11,23 +11,23 @@ import Defaults
 
 // Add variables for keyboard shortcuts
 extension KeyboardShortcuts.Name {
-    static let resizeMaximize = Self("resizeMaximize", default: .init(.slash, modifiers: [.control, .option]))
+    static let maximize = Self("resizeMaximize", default: .init(.slash, modifiers: [.control, .option]))
     
-    static let resizeTopHalf = Self("resizeTopHalf", default: .init(.upArrow, modifiers: [.control, .option]))
-    static let resizeRightHalf = Self("resizeRightHalf", default: .init(.rightArrow, modifiers: [.control, .option]))
-    static let resizeBottomHalf = Self("resizeBottomHalf", default: .init(.downArrow, modifiers: [.control, .option]))
-    static let resizeLeftHalf = Self("resizeLeftHalf", default: .init(.leftArrow, modifiers: [.control, .option]))
+    static let topHalf = Self("topHalf", default: .init(.upArrow, modifiers: [.control, .option]))
+    static let rightHalf = Self("rightHalf", default: .init(.rightArrow, modifiers: [.control, .option]))
+    static let bottomHalf = Self("bottomHalf", default: .init(.downArrow, modifiers: [.control, .option]))
+    static let leftHalf = Self("leftHalf", default: .init(.leftArrow, modifiers: [.control, .option]))
     
-    static let resizeTopRightQuarter = Self("resizeTopRightQuarter", default: .init(.i, modifiers: [.control, .option]))
-    static let resizeTopLeftQuarter = Self("resizeTopLeftQuarter", default: .init(.u, modifiers: [.control, .option]))
-    static let resizeBottomRightQuarter = Self("resizeBottomRightQuarter", default: .init(.k, modifiers: [.control, .option]))
-    static let resizeBottomLeftQuarter = Self("resizeBottomLeftQuarter", default: .init(.j, modifiers: [.control, .option]))
+    static let topRightQuarter = Self("topRightQuarter", default: .init(.i, modifiers: [.control, .option]))
+    static let topLeftQuarter = Self("topLeftQuarter", default: .init(.u, modifiers: [.control, .option]))
+    static let bottomRightQuarter = Self("bottomRightQuarter", default: .init(.k, modifiers: [.control, .option]))
+    static let bottomLeftQuarter = Self("bottomLeftQuarter", default: .init(.j, modifiers: [.control, .option]))
     
-    static let resizeRightThird = Self("resizeRightThird", default: .init(.d, modifiers: [.control, .option]))
-    static let resizeRightTwoThirds = Self("resizeRightTwoThirds", default: .init(.e, modifiers: [.control, .option]))
-    static let resizeRLCenterThird = Self("resizeRLCenterThird", default: .init(.s, modifiers: [.control, .option]))
-    static let resizeLeftThird = Self("resizeLeftThird", default: .init(.a, modifiers: [.control, .option]))
-    static let resizeLeftTwoThirds = Self("resizeLeftTwoThirds", default: .init(.q, modifiers: [.control, .option]))
+    static let rightThird = Self("rightThird", default: .init(.d, modifiers: [.control, .option]))
+    static let rightTwoThirds = Self("rightTwoThirds", default: .init(.e, modifiers: [.control, .option]))
+    static let horizontalCenterThird = Self("HorizontalCenterThird", default: .init(.s, modifiers: [.control, .option]))
+    static let leftThird = Self("leftThird", default: .init(.a, modifiers: [.control, .option]))
+    static let leftTwoThirds = Self("leftTwoThirds", default: .init(.q, modifiers: [.control, .option]))
 }
 
 // Add variables for default values (which are stored even then the app is closed)
@@ -66,7 +66,7 @@ struct LoopHelper {
 
 // Enum that stores all possible resizing options
 enum WindowResizingOptions: CaseIterable {
-    // These are accessible from the radial menu
+    
     case topHalf
     case topRightQuarter
     case rightHalf
@@ -78,15 +78,16 @@ enum WindowResizingOptions: CaseIterable {
     case maximize
     case noAction
     
-    // These aren't accessible from the radial menu
+    // The following aren't accessible from the radial menu
     case rightThird
     case rightTwoThirds
-    case RLcenterThird
+    case horizontalCenterThird
     case leftThird
     case leftTwoThirds
+    
     case topThird
     case topTwoThirds
-    case TBcenterThird
+    case verticalCenterThird
     case bottomThird
     case bottomTwoThirds
 }

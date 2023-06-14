@@ -40,6 +40,7 @@ struct LoopApp: App {
             else {
                 Button("Settings") {
                     NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                    NSApp.activate(ignoringOtherApps: true)
                 }
             }
             
@@ -55,7 +56,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let windowResizer = WindowResizer()
     let radialMenuController = RadialMenuController()
     let aboutViewController = AboutViewController()
-//    let loopMenubarController = LoopMenubarController()
     let iconManager = IconManager()
     let accessibilityAccessManager = AccessibilityAccessManager()
     
@@ -75,7 +75,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         windowResizer.setKeybindings()
         radialMenuController.AddObservers()
-//        loopMenubarController.show()
         
         // Show settings window on launch if this is a debug build
         #if DEBUG
