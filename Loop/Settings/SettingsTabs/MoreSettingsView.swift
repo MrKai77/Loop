@@ -24,43 +24,30 @@ struct MoreSettingsView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            
-            // Auto-updater (Sparkle)
-            HStack {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Updates")
-                        .fontWeight(.medium)
-                    Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .textSelection(.enabled)
-                }
-                Spacer()
-                Button("Check for Updates…", action: updater.checkForUpdates)
-                    .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
-            }
-            ZStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                    .background(.secondary.opacity(0.05))
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                
+        Form {
+            Section(content: {
+                Toggle("Check for Updates Automatically", isOn: $sparkleAutomaticallyChecksForUpdates)
+                    .onChange(of: sparkleAutomaticallyChecksForUpdates) { newValue in
+                        updater.automaticallyChecksForUpdates = newValue
+                    }
+            }, header: {
                 HStack {
-                    Text("Check for Updates Automatically")
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Updates")
+                        Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
                     Spacer()
-                    Toggle("", isOn: $sparkleAutomaticallyChecksForUpdates)
-                        .scaleEffect(0.7)
-                        .toggleStyle(.switch)
-                        .onChange(of: sparkleAutomaticallyChecksForUpdates) { newValue in
-                            updater.automaticallyChecksForUpdates = newValue
-                        }
+                    
+                    Button("Check for Updates…", action: updater.checkForUpdates)
+                        .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
+                        .buttonStyle(.link)
                 }
-                .padding([.horizontal], 10)
-            }
-            .frame(height: 38)
+            })
         }
-        .padding(20)
+        .formStyle(.grouped)
     }
 }
 

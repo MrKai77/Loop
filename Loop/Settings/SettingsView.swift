@@ -17,7 +17,6 @@ struct SettingsView: View {
     }
     
     @State var currentSettingsTab = 1
-    @State var currentWindowHeight = 1
     
     var body: some View {
         TabView(selection: $currentSettingsTab) {
@@ -27,18 +26,12 @@ struct SettingsView: View {
                     Image(systemName: "gear")
                     Text("General")
                 }
-                .onAppear {
-                    currentWindowHeight = 483
-                }
             
             RadialMenuSettingsView()
                 .tag(2)
                 .tabItem {
                     Image("RadialMenuImage")
                     Text("Radial Menu")
-                }
-                .onAppear {
-                    currentWindowHeight = 377
                 }
             
             PreviewSettingsView()
@@ -47,18 +40,12 @@ struct SettingsView: View {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                     Text("Preview")
                 }
-                .onAppear {
-                    currentWindowHeight = 388
-                }
             
             KeybindingSettingsView()
                 .tag(4)
                 .tabItem {
                     Image(systemName: "keyboard")
                     Text("Keybindings")
-                }
-                .onAppear {
-                    currentWindowHeight = 663
                 }
             
             MoreSettingsView(updater: updaterController.updater)
@@ -67,10 +54,7 @@ struct SettingsView: View {
                     Image(systemName: "ellipsis.circle")
                     Text("More")
                 }
-                .onAppear {
-                    currentWindowHeight = 116
-                }
         }
-        .frame(width: 420, height: CGFloat(currentWindowHeight))
+        .frame(width: 420)
     }
 }

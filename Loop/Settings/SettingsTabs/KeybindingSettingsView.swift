@@ -10,141 +10,33 @@ import KeyboardShortcuts
 
 struct KeybindingSettingsView: View {
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Quick Controls")
-                .fontWeight(.medium)
+        Form {
+            Section("Keybindings") {
+                KeyboardShortcuts.Recorder("Maximize", name: .resizeMaximize)
+            }
             
-            VStack(spacing: 10) {
-                
-                // Maximize window
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(.secondary.opacity(0.05))
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    
-                    VStack {
-                        HStack {
-                            Text("Maximize")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeMaximize)
-                        }
-                    }
-                    .padding(10)
-                }
-                
-                // Halves
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(.secondary.opacity(0.05))
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    
-                    VStack {
-                        HStack {
-                            Text("Top Half")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeTopHalf)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Right Half")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeRightHalf)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Bottom Half")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeBottomHalf)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Left Half")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeLeftHalf)
-                        }
-                    }
-                    .padding(10)
-                }
-                
-                // Quarters
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(.secondary.opacity(0.05))
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    
-                    VStack {
-                        HStack {
-                            Text("Top Right Quarter")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeTopRightQuarter)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Top Left Quarter")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeTopLeftQuarter)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Bottom Right Quarter")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeBottomRightQuarter)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Bottom Left Quarter")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeBottomLeftQuarter)
-                        }
-                    }
-                    .padding(10)
-                }
-                
-                // Thirds
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.secondary.opacity(0.35), lineWidth: 0.5)
-                        .background(.secondary.opacity(0.05))
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    
-                    VStack {
-                        HStack {
-                            Text("Right Third")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeRightThird)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Right Two Thirds")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeRightTwoThirds)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Center Third")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeRLCenterThird)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Left Two Thirds")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeLeftTwoThirds)
-                        }
-                        Divider()
-                        HStack {
-                            Text("Left Third")
-                            Spacer()
-                            KeyboardShortcuts.Recorder("", name: .resizeLeftThird)
-                        }
-                    }
-                    .padding(10)
-                }
+            Section {
+                KeyboardShortcuts.Recorder("Top Half", name: .resizeTopHalf)
+                KeyboardShortcuts.Recorder("Bottom Half", name: .resizeBottomHalf)
+                KeyboardShortcuts.Recorder("Right Half", name: .resizeRightHalf)
+                KeyboardShortcuts.Recorder("Left Half", name: .resizeLeftHalf)
+            }
+            
+            Section {
+                KeyboardShortcuts.Recorder("Top Right Quarter", name: .resizeTopRightQuarter)
+                KeyboardShortcuts.Recorder("Top Left Quarter", name: .resizeTopLeftQuarter)
+                KeyboardShortcuts.Recorder("Bottom Right Quarter", name: .resizeBottomRightQuarter)
+                KeyboardShortcuts.Recorder("Bottom Left Quarter", name: .resizeBottomLeftQuarter)
+            }
+            
+            Section {
+                KeyboardShortcuts.Recorder("Right Third", name: .resizeRightThird)
+                KeyboardShortcuts.Recorder("Right Two Thirds", name: .resizeRightTwoThirds)
+                KeyboardShortcuts.Recorder("Center Third", name: .resizeRLCenterThird)
+                KeyboardShortcuts.Recorder("Left Two Thirds", name: .resizeLeftTwoThirds)
+                KeyboardShortcuts.Recorder("Left Third", name: .resizeLeftThird)
             }
         }
-        .padding(20)
+        .formStyle(.grouped)
     }
 }

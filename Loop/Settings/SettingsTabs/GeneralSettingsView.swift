@@ -88,6 +88,7 @@ struct GeneralSettingsView: View {
                     })
                     .buttonStyle(.link)
                     .disabled(isAccessibilityAccessGranted)
+                    .help("Refresh the current accessibility permissions")
                 }
             })
         }
