@@ -67,8 +67,14 @@ struct RadialMenuView: View {
                 }
                 // Mask the whole ZStack with the shape the user defines
                 .mask {
-                    RoundedRectangle(cornerRadius: loopRadialMenuCornerRadius)
-                        .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                    if loopRadialMenuCornerRadius == 50 {
+                        Circle()
+                            .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                    }
+                    else {
+                        RoundedRectangle(cornerRadius: loopRadialMenuCornerRadius)
+                            .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                    }
                 }
                 .frame(width: 100, height: 100)
                 
