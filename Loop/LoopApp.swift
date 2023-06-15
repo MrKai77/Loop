@@ -44,6 +44,10 @@ struct LoopApp: App {
                 }
             }
             
+            Button("About \(Bundle.main.appName)") {
+                aboutViewController.showAboutWindow()
+            }
+            
             Button("Quit") {
                 NSApp.terminate(nil)
             }
