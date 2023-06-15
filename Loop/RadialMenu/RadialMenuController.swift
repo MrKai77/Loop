@@ -63,30 +63,52 @@ class RadialMenuController {
     }
     
     func AddObservers() {
-        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { (event) -> Void in
-            if Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]  {  // If selected trigger key is pressed
-                if event.modifierFlags.rawValue == 256 {   // Close Loop
-                    self.isLoopRadialMenuShown = false
-                    self.closeMenu()
-                    self.loopPreview.closePreview()
-                    self.windowResizer.resizeFrontmostWindow(self.currentResizingDirection)
-                } else {                                    // Show Loop
-                    self.isLoopRadialMenuShown = true
-                    self.showMenu()
-                    if Defaults[.loopPreviewVisibility] == true {
-                        self.loopPreview.showPreview()
-                        self.loopRadialMenuWindowController?.window?.makeKeyAndOrderInFrontOfSpaces()
-                    }
+        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { event -> Void in
+            if Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]  {
+                if event.modifierFlags.rawValue == 256 {
+                    self.closeLoop()
+                }
+                else {
+                    self.openLoop()
                 }
             }
         })
-
+        
+        NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { event in
+            self.checkEscapeKey(with: event)
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(handleCurrentResizingDirectionChanged(notification:)), name: Notification.Name.currentResizingDirectionChanged, object: nil)
     }
     
-    @objc func handleCurrentResizingDirectionChanged(notification: Notification) {
+    @objc private func handleCurrentResizingDirectionChanged(notification: Notification) {
         if let direction = notification.userInfo?["Direction"] as? WindowResizingOptions {
             currentResizingDirection = direction
         }
+    }
+    
+    private func checkEscapeKey(with event: NSEvent) {
+        if isLoopRadialMenuShown && event.keyCode == 53 {
+            closeLoop(wasForceClosed: true)
+        }
+    }
+    
+    private func openLoop() {
+        if Defaults[.loopPreviewVisibility] == true {
+            loopPreview.showPreview()
+        }
+        showMenu()
+        
+        isLoopRadialMenuShown = true
+    }
+    
+    private func closeLoop(wasForceClosed: Bool = false) {
+        closeMenu()
+        loopPreview.closePreview()
+        if wasForceClosed != true && isLoopRadialMenuShown == true {
+            windowResizer.resizeFrontmostWindow(self.currentResizingDirection)
+        }
+        
+        isLoopRadialMenuShown = false
     }
 }

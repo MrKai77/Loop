@@ -23,7 +23,6 @@ struct PreviewSettingsView: View {
             
             Section {
                 PreviewView(previewMode: true)
-                    .padding(.horizontal, 30)
             }
             .frame(height: 150)
             

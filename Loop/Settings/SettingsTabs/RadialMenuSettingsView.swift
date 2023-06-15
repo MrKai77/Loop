@@ -34,10 +34,10 @@ struct RadialMenuSettingsView: View {
             }
             
             Section {
-                Slider(value: $loopRadialMenuCornerRadius, in: 30...50, step: 5, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
+                Slider(value: $loopRadialMenuCornerRadius, in: 30...50, step: 4, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
                     Text("Corner Radius")
                 }
-                Slider(value: $loopRadialMenuThickness, in: 10...34, step: 5, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
+                Slider(value: $loopRadialMenuThickness, in: 10...34, step: 4, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
                     Text("Thickness")
                 }
             }

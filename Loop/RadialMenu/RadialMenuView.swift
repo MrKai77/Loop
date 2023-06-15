@@ -11,6 +11,8 @@ import Defaults
 
 struct RadialMenuView: View {
     
+    let NO_ACTION_CURSOR_DISTANCE: CGFloat = 8
+    
     // Used to preview inside the app's settings
     @State var previewMode = false
     
@@ -48,8 +50,8 @@ struct RadialMenuView: View {
                         gradient: Gradient(colors: [
                             loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
                             loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing)
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing)
                     .opacity(currentResizeDirection == .maximize ? 1 : 0)
                     
                     // This rectangle with a gradient is masked with the current direction radial menu view
@@ -58,8 +60,8 @@ struct RadialMenuView: View {
                             gradient: Gradient(colors: [
                                 loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
                                 loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing)
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing)
                         )
                         .mask {
                             RadialMenu(activeAngle: currentResizeDirection)
@@ -72,7 +74,7 @@ struct RadialMenuView: View {
                             .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
                     }
                     else {
-                        RoundedRectangle(cornerRadius: loopRadialMenuCornerRadius)
+                        RoundedRectangle(cornerRadius: loopRadialMenuCornerRadius, style: .continuous)
                             .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
                     }
                 }
@@ -85,7 +87,7 @@ struct RadialMenuView: View {
         .shadow(radius: 10)
         
         // Animate window
-        .scaleEffect(currentResizeDirection == .maximize ? 0.8 : 1)
+        .scaleEffect(currentResizeDirection == .maximize ? 0.85 : 1)
         .animation(.easeInOut, value: currentResizeDirection)
         
         .onAppear {
@@ -102,7 +104,7 @@ struct RadialMenuView: View {
                 
                 // If mouse over 50 points away, select half or quarter positions
                 if distanceToMouse > pow(50 - loopRadialMenuThickness, 2) {
-                    switch Int((angleToMouse.normalized().degrees+45/2)/45) {
+                    switch Int((angleToMouse.normalized().degrees + 45 / 2) / 45) {
                     case 0, 8: currentResizeDirection = .rightHalf
                     case 1:    currentResizeDirection = .bottomRightQuarter
                     case 2:    currentResizeDirection = .bottomHalf
@@ -114,8 +116,7 @@ struct RadialMenuView: View {
                     default:   currentResizeDirection = .noAction
                     }
                     
-                // If mouse is less than 10 points away, do nothing
-                } else if distanceToMouse < pow(5, 2) {
+                } else if distanceToMouse < pow(NO_ACTION_CURSOR_DISTANCE, 2) {
                     currentResizeDirection = .noAction
                     
                 // Otherwise, set position to maximize
