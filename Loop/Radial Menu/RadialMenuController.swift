@@ -50,7 +50,7 @@ class RadialMenuController {
         })
     }
     
-    func closeMenu() {
+    private func closeMenu() {
         guard let windowController = loopRadialMenuWindowController else { return }
         loopRadialMenuWindowController = nil
         
@@ -62,7 +62,7 @@ class RadialMenuController {
         })
     }
     
-    func AddObservers() {
+    public func AddObservers() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { event -> Void in
             if Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]  {
                 if event.modifierFlags.rawValue == 256 {

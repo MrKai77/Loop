@@ -13,7 +13,7 @@ class WindowResizer {
     
     let iconManager = IconManager()
     
-    func resizeFrontmostWindow(_ direction: WindowResizingOptions) {
+    public func resizeFrontmostWindow(_ direction: WindowResizingOptions) {
         
         guard let frame = directionToCGRect(direction) else { return }
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
@@ -113,7 +113,7 @@ class WindowResizer {
         }
     }
     
-    func setKeybindings() {
+    public func setKeybindings() {
         KeyboardShortcuts.onKeyDown(for: .maximize) { [self] in
             resizeFrontmostWindow(.maximize)
         }

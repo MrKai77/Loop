@@ -10,7 +10,7 @@ import SwiftUI
 class AboutViewController {
     var aboutWindowController: NSWindowController?
     
-    func showAboutWindow() {
+    public func showAboutWindow() {
         if aboutWindowController == nil {
             let window = NSWindow()
             window.styleMask = [.closable, .titled, .fullSizeContentView]

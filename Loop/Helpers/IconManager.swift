@@ -17,12 +17,12 @@ class IconManager {
         "AppIcon-Rosé Pine": 50,
     ]
     
-    func nameWithoutPrefix(name: String) -> String {
+    public func nameWithoutPrefix(name: String) -> String {
         let prefix = "AppIcon-"
         return name.replacingOccurrences(of: prefix, with: "")
     }
     
-    func returnUnlockedIcons() -> [String] {
+    public func returnUnlockedIcons() -> [String] {
         var returnValue: [String] = []
         for (icon, unlockTimes) in icons where unlockTimes <= Defaults[.timesLooped] {
             returnValue.append(icon)
@@ -30,7 +30,7 @@ class IconManager {
         return returnValue.reversed()
     }
     
-    func setAppIcon(to icon: String) {
+    public func setAppIcon(to icon: String) {
         NSWorkspace.shared.setIcon(NSImage(named: icon), forFile: Bundle.main.bundlePath, options: [])
         NSApp.applicationIconImage = NSImage(named: icon)
         
@@ -43,12 +43,13 @@ class IconManager {
         Defaults[.currentIcon] = icon
     }
     
-    func setCurrentAppIcon() {
+    // This function is run at startup to set the current icon to the user's set icon.
+    public func setCurrentAppIcon() {
         NSWorkspace.shared.setIcon(NSImage(named: Defaults[.currentIcon]), forFile: Bundle.main.bundlePath, options: [])
         NSApp.applicationIconImage = NSImage(named: Defaults[.currentIcon])
     }
     
-    func checkIfUnlockedNewIcon() {
+    public func checkIfUnlockedNewIcon() {
         for (icon, unlockTimes) in icons where unlockTimes == Defaults[.timesLooped] {
             let alert = NSAlert()
             alert.icon = NSImage(named: icon)

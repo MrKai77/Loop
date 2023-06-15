@@ -26,7 +26,7 @@ The best part? Loop is incredibly intuitive and user-friendly, so even if you're
 
 # Installation
 
-**Compatible with MacOS 12 and later**
+**Compatible with MacOS 13 and later**
 
 Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! After downloading the application, simply move it to the Applications folder and grant accessibility access to start using it!  
 Installation with Homebrew is planned :3
