@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-// Return the CGDirectDisplayID (used in WindowResizer.swift)
+// Return the CGDirectDisplayID
+// Used in to help calculate the size a window needs to be resized to
 extension NSScreen {
     var displayID: CGDirectDisplayID {
         let key = NSDeviceDescriptionKey("NSScreenNumber")

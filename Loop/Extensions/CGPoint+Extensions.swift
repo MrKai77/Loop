@@ -8,6 +8,7 @@
 import Foundation
 
 // Add two extensions: one to detect the angle between two CGPoints and one to detect the distance
+// This is used to calculate the distance and angle of the cursor from loop's radial menu.
 extension CGPoint {
     func angle(to comparisonPoint: CGPoint) -> CGFloat {
         let originX = comparisonPoint.x - x

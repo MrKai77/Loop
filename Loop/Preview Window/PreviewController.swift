@@ -28,7 +28,7 @@ class PreviewController {
         panel.contentView = NSHostingView(rootView: PreviewView())
         panel.collectionBehavior = .canJoinAllSpaces
         panel.alphaValue = 0
-        panel.makeKeyAndOrderInFrontOfSpaces()
+        panel.orderFrontRegardless()
         
         guard let screen = NSScreen().screenWithMouse() else { return }
         let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height

@@ -25,5 +25,6 @@ class AboutViewController {
         }
         
         aboutWindowController?.showWindow(aboutWindowController?.window)
+        NSApp.activate(ignoringOtherApps: true)
     }
 }

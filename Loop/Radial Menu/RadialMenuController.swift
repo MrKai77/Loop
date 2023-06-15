@@ -41,7 +41,7 @@ class RadialMenuController {
         panel.contentView = NSHostingView(rootView: RadialMenuView(initialMousePosition: CGPoint(x: mouseX, y: mouseY)))
         panel.alphaValue = 0
         panel.setFrame(CGRect(x: mouseX-windowSize/2, y: mouseY-windowSize/2, width: windowSize, height: windowSize), display: false)
-        panel.makeKeyAndOrderInFrontOfSpaces() // Makes window stay in same spot as you swich spaces
+        panel.orderFrontRegardless() // Makes window stay in same spot as you swich spaces
         
         loopRadialMenuWindowController = .init(window: panel)
         
