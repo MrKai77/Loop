@@ -16,8 +16,9 @@ class RadialMenuController {
     var currentResizingDirection: WindowResizingOptions = .noAction
     var isLoopRadialMenuShown:Bool = false
     var loopRadialMenuWindowController: NSWindowController?
+    var frontmostWindow: AXUIElement?
     
-    func showMenu() {
+    func showRadialMenu(frontmostWindow: AXUIElement?) {
         if let windowController = loopRadialMenuWindowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -38,7 +39,7 @@ class RadialMenuController {
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(rootView: RadialMenuView(initialMousePosition: CGPoint(x: mouseX, y: mouseY)))
+        panel.contentView = NSHostingView(rootView: RadialMenuView(frontmostWindow: frontmostWindow, initialMousePosition: CGPoint(x: mouseX, y: mouseY)))
         panel.alphaValue = 0
         panel.setFrame(CGRect(x: mouseX-windowSize/2, y: mouseY-windowSize/2, width: windowSize, height: windowSize), display: false)
         panel.orderFrontRegardless() // Makes window stay in same spot as you swich spaces
@@ -50,7 +51,7 @@ class RadialMenuController {
         })
     }
     
-    private func closeMenu() {
+    private func closeRadialMenu() {
         guard let windowController = loopRadialMenuWindowController else { return }
         loopRadialMenuWindowController = nil
         
@@ -94,21 +95,24 @@ class RadialMenuController {
     }
     
     private func openLoop() {
-        if Defaults[.loopPreviewVisibility] == true {
+        frontmostWindow = windowResizer.getFrontmostWindow()
+        
+        if Defaults[.loopPreviewVisibility] == true && frontmostWindow != nil{
             loopPreview.showPreview()
         }
-        showMenu()
+        showRadialMenu(frontmostWindow: frontmostWindow)
         
         isLoopRadialMenuShown = true
     }
     
     private func closeLoop(wasForceClosed: Bool = false) {
-        closeMenu()
+        closeRadialMenu()
         loopPreview.closePreview()
-        if wasForceClosed != true && isLoopRadialMenuShown == true {
-            windowResizer.resizeFrontmostWindow(self.currentResizingDirection)
+        if wasForceClosed == false && isLoopRadialMenuShown == true && frontmostWindow != nil {
+            windowResizer.resizeWindow(frontmostWindow!, with: currentResizingDirection)
         }
         
         isLoopRadialMenuShown = false
+        frontmostWindow = nil
     }
 }

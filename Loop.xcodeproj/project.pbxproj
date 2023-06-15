@@ -14,7 +14,6 @@
 		A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */; };
 		A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */; };
 		A8330AC72A3AC19500673C8D /* NSScreen+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC62A3AC19500673C8D /* NSScreen+Extensions.swift */; };
-		A8330AC92A3AC1AF00673C8D /* NSWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC82A3AC1AF00673C8D /* NSWindow+Extensions.swift */; };
 		A8330ACB2A3AC1C000673C8D /* Angle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ACA2A3AC1C000673C8D /* Angle+Extensions.swift */; };
 		A8330ACD2A3AC1D100673C8D /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */; };
 		A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */; };
@@ -81,7 +80,6 @@
 		A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AC62A3AC19500673C8D /* NSScreen+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScreen+Extensions.swift"; sourceTree = "<group>"; };
-		A8330AC82A3AC1AF00673C8D /* NSWindow+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSWindow+Extensions.swift"; sourceTree = "<group>"; };
 		A8330ACA2A3AC1C000673C8D /* Angle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Angle+Extensions.swift"; sourceTree = "<group>"; };
 		A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
 		A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 				A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */,
 				A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */,
 				A8330AC62A3AC19500673C8D /* NSScreen+Extensions.swift */,
-				A8330AC82A3AC1AF00673C8D /* NSWindow+Extensions.swift */,
 				A8330ACA2A3AC1C000673C8D /* Angle+Extensions.swift */,
 				A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */,
 				A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */,
@@ -372,7 +369,6 @@
 				A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */,
 				A8330ACD2A3AC1D100673C8D /* CGPoint+Extensions.swift in Sources */,
 				A8330AC72A3AC19500673C8D /* NSScreen+Extensions.swift in Sources */,
-				A8330AC92A3AC1AF00673C8D /* NSWindow+Extensions.swift in Sources */,
 				A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */,
 				A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */,
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,

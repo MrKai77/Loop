@@ -30,7 +30,7 @@ struct RadialMenuSettingsView: View {
     var body: some View {
         Form {
             Section("Behavior") {
-                RadialMenuView(previewMode: true, timer: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
+                RadialMenuView(frontmostWindow: nil, previewMode: true, timer: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
             }
             
             Section {

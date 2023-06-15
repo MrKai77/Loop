@@ -13,39 +13,33 @@ class WindowResizer {
     
     let iconManager = IconManager()
     
-    public func resizeFrontmostWindow(_ direction: WindowResizingOptions) {
-        
-        guard let frame = directionToCGRect(direction) else { return }
+    public func getFrontmostWindow() -> AXUIElement? {
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
         let windowsList = windowsListInfo as? [[String: AnyObject]]
         let visibleWindows = windowsList?.filter{ $0["kCGWindowLayer"] as! Int == 0 }
         
-        guard let frontmostWindow = NSWorkspace.shared.frontmostApplication?.localizedName else { return }
-                
+        guard let frontmostWindow = NSWorkspace.shared.frontmostApplication?.localizedName else { return nil }
+
         for window in visibleWindows! where window[kCGWindowOwnerName as String] as! String == frontmostWindow {
             let windowPID = window[kCGWindowOwnerPID as String] as? Int32
             
-            let windowList = getWindowList(for: windowPID!)
+            let windowList = self.getWindowList(for: windowPID!)
             
-            resizeWindow(windowList.first!, withFrame: frame)
+            return windowList.first!
         }
         
-        Defaults[.timesLooped] += 1
-        iconManager.checkIfUnlockedNewIcon()
+        return nil
+    }
+    
+    public func resizeFrontmostWindow(_ direction: WindowResizingOptions) {
+        guard let frontmostWindow = self.getFrontmostWindow() else { return }
+        self.resizeWindow(frontmostWindow, with: direction)
     }
 
-    private func getWindowList(for pid: Int32) -> [AXUIElement] {
-        let appRef = AXUIElementCreateApplication(pid);
-        var value: AnyObject?
-        _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+    public func resizeWindow(_ window: AXUIElement, with direction: WindowResizingOptions) {
+        guard let frame = directionToCGRect(direction) else { return }
         
-        guard let windowList = value as? [AXUIElement] else { return [] }
-        
-        return windowList
-    }
-
-    private func resizeWindow(_ window: AXUIElement, withFrame frame: CGRect) {
         var position: CFTypeRef
         var size: CFTypeRef
         var newPoint: CGPoint = frame.origin
@@ -56,6 +50,19 @@ class WindowResizer {
         
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position);
         AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, size);
+        
+        Defaults[.timesLooped] += 1
+        iconManager.checkIfUnlockedNewIcon()
+    }
+    
+    private func getWindowList(for pid: Int32) -> [AXUIElement] {
+        let appRef = AXUIElementCreateApplication(pid);
+        var value: AnyObject?
+        _ = AXUIElementCopyAttributeValue(appRef, kAXWindowsAttribute as CFString, &value)
+        
+        guard let windowList = value as? [AXUIElement] else { return [] }
+        
+        return windowList
     }
     
     private func directionToCGRect(_ direction: WindowResizingOptions) -> CGRect? {

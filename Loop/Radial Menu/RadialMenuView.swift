@@ -12,18 +12,16 @@ import Defaults
 struct RadialMenuView: View {
     
     let NO_ACTION_CURSOR_DISTANCE: CGFloat = 8
+    let RADIAL_MENU_SIZE: CGFloat = 100
     
-    // Used to preview inside the app's settings
+    // This will determine whether Loop needs to show a warning that there isn't a frontmost window
+    let frontmostWindow: AXUIElement?
+    
     @State var previewMode = false
-    
-    // Variable to store the initial position of the mouse
     @State var initialMousePosition: CGPoint = CGPoint()
-    
-    // This is how often the current resize direction is refreshed
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
-    
-    // Data to be tracked using the timer
     @State private var currentResizeDirection: WindowResizingOptions = .noAction
+    @State private var isHoveringOverWarning = false
     
     // Variables that store the radial menu's shape
     @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
@@ -42,43 +40,59 @@ struct RadialMenuView: View {
                 Spacer()
                 
                 ZStack {
-                    // NSVisualEffect on background
-                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                    
-                    // Used as the background when resize direction is .maximize
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
-                            loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing)
-                    .opacity(currentResizeDirection == .maximize ? 1 : 0)
-                    
-                    // This rectangle with a gradient is masked with the current direction radial menu view
-                    Rectangle()
-                        .fill(LinearGradient(
+                    ZStack {
+                        // NSVisualEffect on background
+                        VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                        
+                        // Used as the background when resize direction is .maximize
+                        LinearGradient(
                             gradient: Gradient(colors: [
                                 loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
                                 loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing)
-                        )
-                        .mask {
-                            RadialMenu(activeAngle: currentResizeDirection)
+                        .opacity(currentResizeDirection == .maximize ? 1 : 0)
+                        
+                        // This rectangle with a gradient is masked with the current direction radial menu view
+                        Rectangle()
+                            .fill(LinearGradient(
+                                gradient: Gradient(colors: [
+                                    loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
+                                    loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing)
+                            )
+                            .mask {
+                                RadialMenu(activeAngle: currentResizeDirection)
+                            }
+                    }
+                    // Mask the whole ZStack with the shape the user defines
+                    .mask {
+                        if loopRadialMenuCornerRadius == RADIAL_MENU_SIZE / 2 {
+                            Circle()
+                                .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
                         }
-                }
-                // Mask the whole ZStack with the shape the user defines
-                .mask {
-                    if loopRadialMenuCornerRadius == 50 {
-                        Circle()
-                            .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                        else {
+                            RoundedRectangle(cornerRadius: loopRadialMenuCornerRadius, style: .continuous)
+                                .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                        }
                     }
-                    else {
-                        RoundedRectangle(cornerRadius: loopRadialMenuCornerRadius, style: .continuous)
-                            .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                    
+                    if frontmostWindow == nil && previewMode == false {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .resizable()
+                            .foregroundStyle(loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor)
+                            .frame(width: RADIAL_MENU_SIZE / 4, height: RADIAL_MENU_SIZE / 4)
+                            .onHover { hover in
+                                self.isHoveringOverWarning = hover
+                            }
+                            .popover(isPresented: $isHoveringOverWarning) {
+                                Text("No active window found!")
+                                    .padding(10)
+                            }
                     }
                 }
-                .frame(width: 100, height: 100)
+                .frame(width: RADIAL_MENU_SIZE, height: RADIAL_MENU_SIZE)
                 
                 Spacer()
             }
@@ -140,6 +154,8 @@ struct RadialMenuView: View {
                 )
                 
                 NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": currentResizeDirection])
+                
+                
             }
         }
     }
