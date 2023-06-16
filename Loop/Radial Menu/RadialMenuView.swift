@@ -11,8 +11,8 @@ import Defaults
 
 struct RadialMenuView: View {
     
-    let NO_ACTION_CURSOR_DISTANCE: CGFloat = 8
-    let RADIAL_MENU_SIZE: CGFloat = 100
+    let NoActionCursorDistance: CGFloat = 8
+    let RadialMenuSize: CGFloat = 100
     
     // This will determine whether Loop needs to show a warning that there isn't a frontmost window
     let frontmostWindow: AXUIElement?
@@ -21,7 +21,6 @@ struct RadialMenuView: View {
     @State var initialMousePosition: CGPoint = CGPoint()
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     @State private var currentResizeDirection: WindowResizingOptions = .noAction
-    @State private var isHoveringOverWarning = false
     
     // Variables that store the radial menu's shape
     @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
@@ -68,7 +67,7 @@ struct RadialMenuView: View {
                     }
                     // Mask the whole ZStack with the shape the user defines
                     .mask {
-                        if loopRadialMenuCornerRadius == RADIAL_MENU_SIZE / 2 {
+                        if loopRadialMenuCornerRadius == RadialMenuSize / 2 {
                             Circle()
                                 .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
                         }
@@ -82,17 +81,10 @@ struct RadialMenuView: View {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .resizable()
                             .foregroundStyle(loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor)
-                            .frame(width: RADIAL_MENU_SIZE / 4, height: RADIAL_MENU_SIZE / 4)
-                            .onHover { hover in
-                                self.isHoveringOverWarning = hover
-                            }
-                            .popover(isPresented: $isHoveringOverWarning) {
-                                Text("No active window found!")
-                                    .padding(10)
-                            }
+                            .frame(width: RadialMenuSize / 4, height: RadialMenuSize / 4)
                     }
                 }
-                .frame(width: RADIAL_MENU_SIZE, height: RADIAL_MENU_SIZE)
+                .frame(width: RadialMenuSize, height: RadialMenuSize)
                 
                 Spacer()
             }
@@ -130,7 +122,7 @@ struct RadialMenuView: View {
                     default:   currentResizeDirection = .noAction
                     }
                     
-                } else if distanceToMouse < pow(NO_ACTION_CURSOR_DISTANCE, 2) {
+                } else if distanceToMouse < pow(NoActionCursorDistance, 2) {
                     currentResizeDirection = .noAction
                     
                 // Otherwise, set position to maximize

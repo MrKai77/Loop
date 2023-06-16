@@ -13,7 +13,7 @@ class WindowResizer {
     
     let iconManager = IconManager()
     
-    public func getFrontmostWindow() -> AXUIElement? {
+    func getFrontmostWindow() -> AXUIElement? {
         let options = CGWindowListOption(arrayLiteral: .excludeDesktopElements, .optionOnScreenOnly)
         let windowsListInfo = CGWindowListCopyWindowInfo(options, CGWindowID(0))
         let windowsList = windowsListInfo as? [[String: AnyObject]]
@@ -26,18 +26,20 @@ class WindowResizer {
             
             let windowList = self.getWindowList(for: windowPID!)
             
-            return windowList.first!
+            return windowList.first ?? nil
         }
         
         return nil
     }
     
-    public func resizeFrontmostWindow(_ direction: WindowResizingOptions) {
-        guard let frontmostWindow = self.getFrontmostWindow() else { return }
-        self.resizeWindow(frontmostWindow, with: direction)
+    func resizeFrontmostWindowFromKeybind(_ direction: WindowResizingOptions) {
+        if Defaults[.useKeyboardShortcuts] {
+            guard let frontmostWindow = self.getFrontmostWindow() else { return }
+            self.resizeWindow(frontmostWindow, with: direction)
+        }
     }
 
-    public func resizeWindow(_ window: AXUIElement, with direction: WindowResizingOptions) {
+    func resizeWindow(_ window: AXUIElement, with direction: WindowResizingOptions) {
         guard let frame = directionToCGRect(direction) else { return }
         
         var position: CFTypeRef
@@ -45,14 +47,16 @@ class WindowResizer {
         var newPoint: CGPoint = frame.origin
         var newSize: CGSize = frame.size
         
-        size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!;
-        position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!;
+        size = AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!,&newSize)!
+        position = AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!,&newPoint)!
         
-        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position);
-        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, size);
+        AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, position)
+        AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, size)
         
         Defaults[.timesLooped] += 1
         iconManager.checkIfUnlockedNewIcon()
+        
+        print("Resized: \(window)")
     }
     
     private func getWindowList(for pid: Int32) -> [AXUIElement] {
@@ -120,51 +124,51 @@ class WindowResizer {
         }
     }
     
-    public func setKeybindings() {
+    func setKeybindings() {
         KeyboardShortcuts.onKeyDown(for: .maximize) { [self] in
-            resizeFrontmostWindow(.maximize)
+            resizeFrontmostWindowFromKeybind(.maximize)
         }
         
         KeyboardShortcuts.onKeyDown(for: .topHalf) { [self] in
-            resizeFrontmostWindow(.topHalf)
+            resizeFrontmostWindowFromKeybind(.topHalf)
         }
         KeyboardShortcuts.onKeyDown(for: .rightHalf) { [self] in
-            resizeFrontmostWindow(.rightHalf)
+            resizeFrontmostWindowFromKeybind(.rightHalf)
         }
         KeyboardShortcuts.onKeyDown(for: .bottomHalf) { [self] in
-            resizeFrontmostWindow(.bottomHalf)
+            resizeFrontmostWindowFromKeybind(.bottomHalf)
         }
         KeyboardShortcuts.onKeyDown(for: .leftHalf) { [self] in
-            resizeFrontmostWindow(.leftHalf)
+            resizeFrontmostWindowFromKeybind(.leftHalf)
         }
         
         KeyboardShortcuts.onKeyDown(for: .topRightQuarter) { [self] in
-            resizeFrontmostWindow(.topRightQuarter)
+            resizeFrontmostWindowFromKeybind(.topRightQuarter)
         }
         KeyboardShortcuts.onKeyDown(for: .topLeftQuarter) { [self] in
-            resizeFrontmostWindow(.topLeftQuarter)
+            resizeFrontmostWindowFromKeybind(.topLeftQuarter)
         }
         KeyboardShortcuts.onKeyDown(for: .bottomRightQuarter) { [self] in
-            resizeFrontmostWindow(.bottomRightQuarter)
+            resizeFrontmostWindowFromKeybind(.bottomRightQuarter)
         }
         KeyboardShortcuts.onKeyDown(for: .bottomLeftQuarter) { [self] in
-            resizeFrontmostWindow(.bottomLeftQuarter)
+            resizeFrontmostWindowFromKeybind(.bottomLeftQuarter)
         }
         
         KeyboardShortcuts.onKeyDown(for: .rightThird) { [self] in
-            resizeFrontmostWindow(.rightThird)
+            resizeFrontmostWindowFromKeybind(.rightThird)
         }
         KeyboardShortcuts.onKeyDown(for: .rightTwoThirds) { [self] in
-            resizeFrontmostWindow(.rightTwoThirds)
+            resizeFrontmostWindowFromKeybind(.rightTwoThirds)
         }
         KeyboardShortcuts.onKeyDown(for: .horizontalCenterThird) { [self] in
-            resizeFrontmostWindow(.horizontalCenterThird)
+            resizeFrontmostWindowFromKeybind(.horizontalCenterThird)
         }
         KeyboardShortcuts.onKeyDown(for: .leftThird) { [self] in
-            resizeFrontmostWindow(.leftThird)
+            resizeFrontmostWindowFromKeybind(.leftThird)
         }
         KeyboardShortcuts.onKeyDown(for: .leftTwoThirds) { [self] in
-            resizeFrontmostWindow(.leftTwoThirds)
+            resizeFrontmostWindowFromKeybind(.leftTwoThirds)
         }
     }
 }

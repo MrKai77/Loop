@@ -9,13 +9,15 @@ import Foundation
 
 // Returns the current build number
 extension Bundle {
-    public var appName: String { getInfo("CFBundleName")  }
-    public var displayName: String { getInfo("CFBundleDisplayName") }
-    public var bundleID: String { getInfo("CFBundleIdentifier") }
-    public var copyright: String { getInfo("NSHumanReadableCopyright") }
+    var appName: String { getInfo("CFBundleName")  }
+    var displayName: String { getInfo("CFBundleDisplayName") }
+    var bundleID: String { getInfo("CFBundleIdentifier") }
+    var copyright: String { getInfo("NSHumanReadableCopyright") }
     
-    public var appBuild: String { getInfo("CFBundleVersion") }
-    public var appVersion: String { getInfo("CFBundleShortVersionString") }
+    var appBuild: String { getInfo("CFBundleVersion") }
+    var appVersion: String { getInfo("CFBundleShortVersionString") }
     
-    fileprivate func getInfo(_ str: String) -> String { infoDictionary?[str] as? String ?? "⚠️" }
+    func getInfo(_ str: String) -> String {
+        infoDictionary?[str] as? String ?? "⚠️"
+    }
 }

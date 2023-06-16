@@ -12,6 +12,7 @@ import Defaults
 extension Defaults.Keys {
     static let currentIcon = Key<String>("loopCurrentIcon", default: "AppIcon-Default")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
+    static let useKeyboardShortcuts = Key<Bool>("useKeyboardShortcuts", default: false)
     
     static let loopLaunchAtLogin = Key<Bool>("loopLaunchAtLogin", default: false)
     static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)

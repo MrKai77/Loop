@@ -36,13 +36,14 @@ class RadialMenuController {
                             backing: .buffered,
                             defer: true,
                             screen: NSApp.keyWindow?.screen)
+        panel.collectionBehavior = .canJoinAllSpaces
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
         panel.contentView = NSHostingView(rootView: RadialMenuView(frontmostWindow: frontmostWindow, initialMousePosition: CGPoint(x: mouseX, y: mouseY)))
         panel.alphaValue = 0
         panel.setFrame(CGRect(x: mouseX-windowSize/2, y: mouseY-windowSize/2, width: windowSize, height: windowSize), display: false)
-        panel.orderFrontRegardless() // Makes window stay in same spot as you swich spaces
+        panel.orderFrontRegardless()
         
         loopRadialMenuWindowController = .init(window: panel)
         
@@ -63,7 +64,7 @@ class RadialMenuController {
         })
     }
     
-    public func AddObservers() {
+    func AddObservers() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { event -> Void in
             if Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]  {
                 if event.modifierFlags.rawValue == 256 {
@@ -108,6 +109,7 @@ class RadialMenuController {
     private func closeLoop(wasForceClosed: Bool = false) {
         closeRadialMenu()
         loopPreview.closePreview()
+      
         if wasForceClosed == false && isLoopRadialMenuShown == true && frontmostWindow != nil {
             windowResizer.resizeWindow(frontmostWindow!, with: currentResizingDirection)
         }

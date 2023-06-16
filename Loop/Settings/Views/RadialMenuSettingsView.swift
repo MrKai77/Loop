@@ -20,7 +20,7 @@ struct RadialMenuSettingsView: View {
     @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
     @Default(.loopRadialMenuTrigger) var loopRadialMenuTrigger
     
-    let loopTriggerKeyOptions = [
+    let LoopTriggerKeyOptions = [
         loopTriggerOptions(symbol: "globe", description: "Globe", keycode: 63),
         loopTriggerOptions(symbol: "control", description: "Right Control", keycode: 62),
         loopTriggerOptions(symbol: "option", description: "Right Option", keycode: 61),
@@ -45,15 +45,15 @@ struct RadialMenuSettingsView: View {
             Section {
                 VStack(alignment: .leading) {
                     Picker("Trigger Loop", selection: $loopRadialMenuTrigger) {
-                        ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { i in
+                        ForEach(0..<LoopTriggerKeyOptions.count, id: \.self) { i in
                             HStack {
-                                Image(systemName: loopTriggerKeyOptions[i].symbol)
-                                Text(loopTriggerKeyOptions[i].description)
+                                Image(systemName: LoopTriggerKeyOptions[i].symbol)
+                                Text(LoopTriggerKeyOptions[i].description)
                             }
-                            .tag(loopTriggerKeyOptions[i].keycode)
+                            .tag(LoopTriggerKeyOptions[i].keycode)
                         }
                     }
-                    if loopRadialMenuTrigger == loopTriggerKeyOptions[1].keycode {
+                    if loopRadialMenuTrigger == LoopTriggerKeyOptions[1].keycode {
                         Text("Tip: To use caps lock, remap it to control in System Settings!")
                             .font(.caption)
                             .foregroundColor(.secondary)

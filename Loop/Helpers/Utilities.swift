@@ -8,7 +8,7 @@
 import SwiftUI
 
 // Enum that stores all possible resizing options
-public enum WindowResizingOptions: CaseIterable {
+enum WindowResizingOptions: CaseIterable {
     
     case topHalf
     case topRightQuarter
