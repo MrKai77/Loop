@@ -9,26 +9,36 @@ import SwiftUI
 import Sparkle
 
 struct MoreSettingsView: View {
-    
-    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
+        
     private let updater: SPUUpdater
+    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel  // This is used when the user manually checks for updates
     
-    @State private var sparkleAutomaticallyChecksForUpdates: Bool
+    @State private var automaticallyChecksForUpdates: Bool
+    @State private var automaticallyDownloadsUpdates: Bool
         
     init(updater: SPUUpdater) {
+        
+        
         self.updater = updater
         
         // Create our view model for our CheckForUpdatesView
         checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
-        sparkleAutomaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
+        
+        self.automaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
+        self.automaticallyDownloadsUpdates = updater.automaticallyDownloadsUpdates
     }
     
     var body: some View {
         Form {
             Section(content: {
-                Toggle("Check for Updates Automatically", isOn: $sparkleAutomaticallyChecksForUpdates)
-                    .onChange(of: sparkleAutomaticallyChecksForUpdates) { newValue in
+                Toggle("Automatically check for updates", isOn: $automaticallyChecksForUpdates)
+                    .onChange(of: automaticallyChecksForUpdates) { newValue in
                         updater.automaticallyChecksForUpdates = newValue
+                    }
+                Toggle("Automatically download updates", isOn: $automaticallyDownloadsUpdates)
+                    .disabled(!automaticallyChecksForUpdates)
+                    .onChange(of: automaticallyDownloadsUpdates) { newValue in
+                        updater.automaticallyDownloadsUpdates = newValue
                     }
             }, header: {
                 HStack {
@@ -56,6 +66,7 @@ final class CheckForUpdatesViewModel: ObservableObject {
     @Published var canCheckForUpdates = false
 
     init(updater: SPUUpdater) {
-        updater.publisher(for: \.canCheckForUpdates).assign(to: &$canCheckForUpdates)
+        updater.publisher(for: \.canCheckForUpdates)
+            .assign(to: &$canCheckForUpdates)
     }
 }
