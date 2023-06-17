@@ -57,7 +57,7 @@ struct LoopApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    let windowResizer = WindowResizer()
+    let windowEngine = WindowEngine()
     let radialMenuController = RadialMenuController()
     let aboutViewController = AboutViewController()
     let iconManager = IconManager()
@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         iconManager.setCurrentAppIcon()
         
-        windowResizer.setKeybindings()
+        windowEngine.setKeybindings()
         radialMenuController.AddObservers()
         
         // Show settings window on launch if this is a debug build

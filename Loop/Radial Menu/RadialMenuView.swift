@@ -146,8 +146,6 @@ struct RadialMenuView: View {
                 )
                 
                 NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": currentResizeDirection])
-                
-                
             }
         }
     }

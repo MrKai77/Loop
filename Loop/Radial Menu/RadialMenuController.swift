@@ -10,7 +10,8 @@ import Defaults
 
 class RadialMenuController {
     
-    let windowResizer = WindowResizer()
+    let windowEngine = WindowEngine()
+    
     let loopPreview = PreviewController()
     
     var currentResizingDirection: WindowResizingOptions = .noAction
@@ -96,7 +97,7 @@ class RadialMenuController {
     }
     
     private func openLoop() {
-        frontmostWindow = windowResizer.getFrontmostWindow()
+        frontmostWindow = windowEngine.getFrontmostWindow()
         
         if Defaults[.loopPreviewVisibility] == true && frontmostWindow != nil{
             loopPreview.showPreview()
@@ -104,14 +105,16 @@ class RadialMenuController {
         showRadialMenu(frontmostWindow: frontmostWindow)
         
         isLoopRadialMenuShown = true
+        
+        print("-----------------------------------")
     }
     
     private func closeLoop(wasForceClosed: Bool = false) {
         closeRadialMenu()
         loopPreview.closePreview()
       
-        if wasForceClosed == false && isLoopRadialMenuShown == true && frontmostWindow != nil {
-            windowResizer.resizeWindow(frontmostWindow!, with: currentResizingDirection)
+        if frontmostWindow != nil && wasForceClosed == false && isLoopRadialMenuShown == true && frontmostWindow != nil {
+            windowEngine.resize(window: frontmostWindow!, direction: currentResizingDirection)
         }
         
         isLoopRadialMenuShown = false
