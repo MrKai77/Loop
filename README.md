@@ -15,7 +15,7 @@
 
 Introducing Loop, the revolutionary MacOS app that simplifies window management for you! With Loop, you can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings.
 
-Gone are the days of frustratingly juggling between multiple windows and applications on your screen. With Loop, you can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
+Gone are the days of frustratingly juggling between multiple windows and applications on your screen. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
 
 The best part? Loop is incredibly intuitive and user-friendly, so even if you're not tech-savvy, you can still enjoy its benefits without any hassle. Plus, its sleek and modern design adds a touch of elegance to your desktop.
 
@@ -28,7 +28,7 @@ The best part? Loop is incredibly intuitive and user-friendly, so even if you're
 
 **Compatible with MacOS 13 and later**
 
-Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! After downloading the application, simply move it to the Applications folder and grant accessibility access to start using it!  
+Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! Simply unzip the file, and open it, and grant it accessibility access!
 Installation with Homebrew is planned :3
 
 
@@ -70,4 +70,4 @@ To set `Caps Lock` as the trigger key, remap it to `Control` in System Settings,
 
 # Additional Notes
 
-This project is licensed under the [Apache-2.0 license](LICENSE).
+This project is licensed under the [MIT license](LICENSE).
