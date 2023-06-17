@@ -10,15 +10,15 @@ import Defaults
 
 struct PreviewSettingsView: View {
     
-    @Default(.loopPreviewVisibility) var loopPreviewVisibility
-    @Default(.loopPreviewPadding) var loopPreviewPadding
-    @Default(.loopPreviewCornerRadius) var loopPreviewCornerRadius
-    @Default(.loopPreviewBorderThickness) var loopPreviewBorderThickness
+    @Default(.previewVisibility) var previewVisibility
+    @Default(.previewPadding) var previewPadding
+    @Default(.previewCornerRadius) var previewCornerRadius
+    @Default(.previewBorderThickness) var previewBorderThickness
     
     var body: some View {
         Form {
             Section("Behavior") {
-                Toggle("Show Preview when looping", isOn: $loopPreviewVisibility)
+                Toggle("Show Preview when looping", isOn: $previewVisibility)
             }
             
             Section {
@@ -27,18 +27,18 @@ struct PreviewSettingsView: View {
             .frame(height: 150)
             
             Section {
-                Slider(value: $loopPreviewPadding, in: 0...20, step: 2, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                Slider(value: $previewPadding, in: 0...20, step: 2, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
                     Text("Padding")
                 }
-                Slider(value: $loopPreviewCornerRadius, in: 0...20, step: 2, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                Slider(value: $previewCornerRadius, in: 0...20, step: 2, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
                     Text("Corner Radius")
                 }
-                Slider(value: $loopPreviewBorderThickness, in: 0...10, step: 1, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                Slider(value: $previewBorderThickness, in: 0...10, step: 1, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
                     Text("Border Thickness")
                 }
             }
-            .disabled(!loopPreviewVisibility)
-            .foregroundColor(!loopPreviewVisibility ? .secondary : nil)
+            .disabled(!previewVisibility)
+            .foregroundColor(!previewVisibility ? .secondary : nil)
         }
         .formStyle(.grouped)
     }

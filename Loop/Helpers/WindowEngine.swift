@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Defaults
 import KeyboardShortcuts
 
 fileprivate let kAXFullScreenAttribute = "AXFullScreen"
@@ -23,12 +24,14 @@ struct WindowEngine {
         return window
     }
     
-    func resizeFrontmostWindow(direction: WindowResizingOptions) {
-        guard let frontmostWindow = self.getFrontmostWindow() else { return }
-        resize(window: frontmostWindow, direction: direction)
+    func resizeFrontmostWindow(direction: WindowDirection) {
+        if Defaults[.useKeyboardShortcuts] {
+            guard let frontmostWindow = self.getFrontmostWindow() else { return }
+            resize(window: frontmostWindow, direction: direction)
+        }
     }
     
-    func resize(window: AXUIElement, direction: WindowResizingOptions) {
+    func resize(window: AXUIElement, direction: WindowDirection) {
         guard let screenFrame = getScreenFrame(),
                 let newWindowFrame = generateWindowFrame(screenFrame, direction)
         else { return }
@@ -87,7 +90,7 @@ struct WindowEngine {
         return screenFrame
     }
     
-    private func generateWindowFrame(_ screenFrame: CGRect, _ direction: WindowResizingOptions) -> CGRect? {
+    private func generateWindowFrame(_ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
         
         let screenWidth = screenFrame.size.width
         let screenHeight = screenFrame.size.height

@@ -13,12 +13,12 @@ struct GeneralSettingsView: View {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @Default(.loopLaunchAtLogin) var launchAtLogin
+    @Default(.launchAtLogin) var launchAtLogin
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
-    @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
-    @Default(.loopAccentColor) var loopAccentColor
-    @Default(.loopUsesAccentColorGradient) var loopUsesAccentColorGradient
-    @Default(.loopAccentColorGradient) var loopAccentColorGradient
+    @Default(.useSystemAccentColor) var useSystemAccentColor
+    @Default(.accentColor) var accentColor
+    @Default(.useGradientAccentColor) var useGradientAccentColor
+    @Default(.gradientAccentColor) var gradientAccentColor
     @Default(.currentIcon) var currentIcon
     @Default(.timesLooped) var timesLooped
     
@@ -53,17 +53,17 @@ struct GeneralSettingsView: View {
             }
             
             Section("Accent Color") {
-                Toggle("Follow System Accent Color", isOn: $loopUsesSystemAccentColor)
+                Toggle("Follow System Accent Color", isOn: $useSystemAccentColor)
                 
                 Group {
-                    ColorPicker("Accent Color", selection: $loopAccentColor, supportsOpacity: false)
-                    Toggle("Use Gradient", isOn: $loopUsesAccentColorGradient)
-                    ColorPicker("Gradient's color", selection: $loopAccentColorGradient, supportsOpacity: false)
-                        .disabled(!loopUsesAccentColorGradient)
-                        .foregroundColor(loopUsesAccentColorGradient ? (loopUsesSystemAccentColor ? .secondary : nil) : .secondary)
+                    ColorPicker("Accent Color", selection: $accentColor, supportsOpacity: false)
+                    Toggle("Use Gradient", isOn: $useGradientAccentColor)
+                    ColorPicker("Gradient's color", selection: $gradientAccentColor, supportsOpacity: false)
+                        .disabled(!useGradientAccentColor)
+                        .foregroundColor(useGradientAccentColor ? (useSystemAccentColor ? .secondary : nil) : .secondary)
                 }
-                .disabled(loopUsesSystemAccentColor)
-                .foregroundColor(loopUsesSystemAccentColor ? .secondary : nil)
+                .disabled(useSystemAccentColor)
+                .foregroundColor(useSystemAccentColor ? .secondary : nil)
             }
             
             Section(content: {

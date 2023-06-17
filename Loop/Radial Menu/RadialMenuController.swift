@@ -14,7 +14,7 @@ class RadialMenuController {
     
     let loopPreview = PreviewController()
     
-    var currentResizingDirection: WindowResizingOptions = .noAction
+    var currentResizingDirection: WindowDirection = .noAction
     var isLoopRadialMenuShown:Bool = false
     var loopRadialMenuWindowController: NSWindowController?
     var frontmostWindow: AXUIElement?
@@ -67,7 +67,7 @@ class RadialMenuController {
     
     func AddObservers() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { event -> Void in
-            if Int(event.keyCode) == Defaults[.loopRadialMenuTrigger]  {
+            if Int(event.keyCode) == Defaults[.radialMenuTrigger]  {
                 if event.modifierFlags.rawValue == 256 {
                     self.closeLoop()
                 }
@@ -85,7 +85,7 @@ class RadialMenuController {
     }
     
     @objc private func handleCurrentResizingDirectionChanged(notification: Notification) {
-        if let direction = notification.userInfo?["Direction"] as? WindowResizingOptions {
+        if let direction = notification.userInfo?["Direction"] as? WindowDirection {
             currentResizingDirection = direction
         }
     }
@@ -99,7 +99,7 @@ class RadialMenuController {
     private func openLoop() {
         frontmostWindow = windowEngine.getFrontmostWindow()
         
-        if Defaults[.loopPreviewVisibility] == true && frontmostWindow != nil{
+        if Defaults[.previewVisibility] == true && frontmostWindow != nil{
             loopPreview.showPreview()
         }
         showRadialMenu(frontmostWindow: frontmostWindow)

@@ -13,17 +13,17 @@ struct PreviewView: View {
     // Used to preview inside the app's settings
     @State var previewMode = false
     
-    @State var currentResizingDirection: WindowResizingOptions = .noAction
+    @State var currentResizingDirection: WindowDirection = .noAction
     
-    @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
-    @Default(.loopAccentColor) var loopAccentColor
-    @Default(.loopUsesAccentColorGradient) var loopUsesAccentColorGradient
-    @Default(.loopAccentColorGradient) var loopAccentColorGradient
+    @Default(.useSystemAccentColor) var useSystemAccentColor
+    @Default(.accentColor) var accentColor
+    @Default(.useGradientAccentColor) var useGradientAccentColor
+    @Default(.gradientAccentColor) var gradientAccentColor
     
-    @Default(.loopPreviewVisibility) var loopPreviewVisibility
-    @Default(.loopPreviewPadding) var loopPreviewPadding
-    @Default(.loopPreviewCornerRadius) var loopPreviewCornerRadius
-    @Default(.loopPreviewBorderThickness) var loopPreviewBorderThickness
+    @Default(.previewVisibility) var previewVisibility
+    @Default(.previewPadding) var previewPadding
+    @Default(.previewCornerRadius) var previewCornerRadius
+    @Default(.previewBorderThickness) var previewBorderThickness
     
     var body: some View {
         VStack {
@@ -49,17 +49,17 @@ struct PreviewView: View {
                 
                 ZStack {
                     VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                        .mask(RoundedRectangle(cornerRadius: loopPreviewCornerRadius).foregroundColor(.white))
+                        .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
                         .shadow(radius: 10)
-                    RoundedRectangle(cornerRadius: loopPreviewCornerRadius)
+                    RoundedRectangle(cornerRadius: previewCornerRadius)
                         .stroke(LinearGradient(
                             gradient: Gradient(colors: [
-                                loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
-                                loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
+                                useSystemAccentColor ? Color.accentColor : accentColor,
+                                useSystemAccentColor ? Color.accentColor : useGradientAccentColor ? gradientAccentColor : accentColor]),
                                 startPoint: .topLeading,
-                                endPoint: .bottomTrailing), lineWidth: loopPreviewBorderThickness)
+                                endPoint: .bottomTrailing), lineWidth: previewBorderThickness)
                 }
-                .padding(loopPreviewPadding + loopPreviewBorderThickness/2)
+                .padding(previewPadding + previewBorderThickness/2)
                 .frame(width: currentResizingDirection == .noAction ? 0 : nil,
                        height: currentResizingDirection == .noAction ? 0 : nil)
                 
@@ -86,7 +86,7 @@ struct PreviewView: View {
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizingDirection)
         .onReceive(.currentResizingDirectionChanged) { obj in
             if !previewMode {
-                if let direction = obj.userInfo?["Direction"] as? WindowResizingOptions {
+                if let direction = obj.userInfo?["Direction"] as? WindowDirection {
                     currentResizingDirection = direction
                 }
             }

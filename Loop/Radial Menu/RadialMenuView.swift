@@ -14,23 +14,23 @@ struct RadialMenuView: View {
     let NoActionCursorDistance: CGFloat = 8
     let RadialMenuSize: CGFloat = 100
     
-    // This will determine whether Loop needs to show a warning that there isn't a frontmost window
+    // This will determine whether Loop needs to show a warning (if it's nil)
     let frontmostWindow: AXUIElement?
     
     @State var previewMode = false
     @State var initialMousePosition: CGPoint = CGPoint()
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
-    @State private var currentResizeDirection: WindowResizingOptions = .noAction
+    @State private var currentResizeDirection: WindowDirection = .noAction
     
     // Variables that store the radial menu's shape
-    @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
-    @Default(.loopRadialMenuThickness) var loopRadialMenuThickness
+    @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
+    @Default(.radialMenuThickness) var radialMenuThickness
     
     // Color variables
-    @Default(.loopUsesSystemAccentColor) var loopUsesSystemAccentColor
-    @Default(.loopAccentColor) var loopAccentColor
-    @Default(.loopUsesAccentColorGradient) var loopUsesAccentColorGradient
-    @Default(.loopAccentColorGradient) var loopAccentColorGradient
+    @Default(.useSystemAccentColor) var useSystemAccentColor
+    @Default(.accentColor) var accentColor
+    @Default(.useGradientAccentColor) var useGradientAccentColor
+    @Default(.gradientAccentColor) var gradientAccentColor
     
     var body: some View {
         VStack {
@@ -46,8 +46,8 @@ struct RadialMenuView: View {
                         // Used as the background when resize direction is .maximize
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
-                                loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
+                                useSystemAccentColor ? Color.accentColor : accentColor,
+                                useSystemAccentColor ? Color.accentColor : useGradientAccentColor ? gradientAccentColor : accentColor]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing)
                         .opacity(currentResizeDirection == .maximize ? 1 : 0)
@@ -56,8 +56,8 @@ struct RadialMenuView: View {
                         Rectangle()
                             .fill(LinearGradient(
                                 gradient: Gradient(colors: [
-                                    loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor,
-                                    loopUsesSystemAccentColor ? Color.accentColor : loopUsesAccentColorGradient ? loopAccentColorGradient : loopAccentColor]),
+                                    useSystemAccentColor ? Color.accentColor : accentColor,
+                                    useSystemAccentColor ? Color.accentColor : useGradientAccentColor ? gradientAccentColor : accentColor]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing)
                             )
@@ -67,20 +67,20 @@ struct RadialMenuView: View {
                     }
                     // Mask the whole ZStack with the shape the user defines
                     .mask {
-                        if loopRadialMenuCornerRadius == RadialMenuSize / 2 {
+                        if radialMenuCornerRadius == RadialMenuSize / 2 {
                             Circle()
-                                .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                                .strokeBorder(.black, lineWidth: radialMenuThickness)
                         }
                         else {
-                            RoundedRectangle(cornerRadius: loopRadialMenuCornerRadius, style: .continuous)
-                                .strokeBorder(.black, lineWidth: loopRadialMenuThickness)
+                            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+                                .strokeBorder(.black, lineWidth: radialMenuThickness)
                         }
                     }
                     
                     if frontmostWindow == nil && previewMode == false {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .resizable()
-                            .foregroundStyle(loopUsesSystemAccentColor ? Color.accentColor : loopAccentColor)
+                            .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
                             .frame(width: RadialMenuSize / 4, height: RadialMenuSize / 4)
                     }
                 }
@@ -109,7 +109,7 @@ struct RadialMenuView: View {
                 let distanceToMouse = initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
                 
                 // If mouse over 50 points away, select half or quarter positions
-                if distanceToMouse > pow(50 - loopRadialMenuThickness, 2) {
+                if distanceToMouse > pow(50 - radialMenuThickness, 2) {
                     switch Int((angleToMouse.normalized().degrees + 45 / 2) / 45) {
                     case 0, 8: currentResizeDirection = .rightHalf
                     case 1:    currentResizeDirection = .bottomRightQuarter
@@ -153,12 +153,12 @@ struct RadialMenuView: View {
 
 struct RadialMenu: View {
     
-    @Default(.loopRadialMenuCornerRadius) var loopRadialMenuCornerRadius
+    @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     
-    var activeAngle: WindowResizingOptions
+    var activeAngle: WindowDirection
     
     var body: some View {
-            if loopRadialMenuCornerRadius < 40 {
+            if radialMenuCornerRadius < 40 {
                 // This is used when the user configures the radial menu to be a square
                 Color.clear
                     .overlay {
@@ -203,7 +203,7 @@ struct angleSelectorRectangle: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ resizePosition: WindowResizingOptions, _ activeResizePosition: WindowResizingOptions) {
+    init(_ resizePosition: WindowDirection, _ activeResizePosition: WindowDirection) {
         if resizePosition == activeResizePosition {
             isActive = true
         } else {
@@ -224,7 +224,7 @@ struct angleSelectorCirclePart: View {
     var isActive: Bool = false
     var isMaximize: Bool = false
     
-    init(_ angle: Double, _ resizePosition: WindowResizingOptions, _ activeResizePosition: WindowResizingOptions) {
+    init(_ angle: Double, _ resizePosition: WindowDirection, _ activeResizePosition: WindowDirection) {
         startingAngle = angle
         if resizePosition == activeResizePosition {
             isActive = true
