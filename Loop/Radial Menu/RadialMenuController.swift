@@ -105,8 +105,6 @@ class RadialMenuController {
         showRadialMenu(frontmostWindow: frontmostWindow)
         
         isLoopRadialMenuShown = true
-        
-        print("-----------------------------------")
     }
     
     private func closeLoop(wasForceClosed: Bool = false) {

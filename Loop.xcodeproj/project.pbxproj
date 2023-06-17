@@ -19,6 +19,7 @@
 		A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */; };
 		A8330AD12A3AC25100673C8D /* CaseIterable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */; };
 		A8330AD42A3AC27600673C8D /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AD32A3AC27600673C8D /* Utilities.swift */; };
+		A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */; };
 		A86AFD7629888B29008F4892 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A86AFD7529888B29008F4892 /* README.md */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
@@ -85,6 +86,7 @@
 		A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseIterable+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AD32A3AC27600673C8D /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AXUIElement+Extensions.swift"; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
@@ -147,12 +149,13 @@
 		A8330AD52A3AC29C00673C8D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */,
+				A8330ACA2A3AC1C000673C8D /* Angle+Extensions.swift */,
 				A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */,
 				A8330ABE2A3AC11200673C8D /* KeyboardShortcuts+Extensions.swift */,
 				A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */,
 				A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */,
 				A8330AC62A3AC19500673C8D /* NSScreen+Extensions.swift */,
-				A8330ACA2A3AC1C000673C8D /* Angle+Extensions.swift */,
 				A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */,
 				A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */,
 				A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */,
@@ -374,6 +377,7 @@
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */,
+				A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */,
 				A8330AD42A3AC27600673C8D /* Utilities.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,

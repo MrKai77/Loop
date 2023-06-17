@@ -36,49 +36,25 @@ struct WindowEngine {
         self.setPosition(element: window, position: newWindowFrame.origin)
         self.setSize(element: window, size: newWindowFrame.size)
     }
-
-    // MARK: Get Attribute Names of an AXUIElement (used when debugging)
-    private func getAttributeNames(element: AXUIElement) -> [String]? {
-        var ref: CFArray? = nil
-        let error = AXUIElementCopyAttributeNames(element, &ref)
-        if error == .success {
-            return ref! as [AnyObject] as? [String]
-        }
-        return nil
-    }
-
-    private func copyAttributeValue(_ element: AXUIElement, attribute: String) -> CFTypeRef? {
-        var ref: CFTypeRef? = nil
-        let error = AXUIElementCopyAttributeValue(element, attribute as CFString, &ref)
-        if error == .success {
-            return ref
-        }
-        return .none
-    }
-    
-    private func setAttributeValue(_ element: AXUIElement, attribute: String, value: CFTypeRef) -> Bool {
-        let error = AXUIElementSetAttributeValue(element, attribute as CFString, value)
-        return error == .success
-    }
     
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
         let element = AXUIElementCreateApplication(pid)
-        if let window = self.copyAttributeValue(element, attribute: kAXFocusedWindowAttribute) {
+        if let window = element.copyAttributeValue(attribute: kAXFocusedWindowAttribute) {
             return (window as! AXUIElement)
         }
         return nil
     }
     
     private func getRole(element: AXUIElement) -> String? {
-        return self.copyAttributeValue(element, attribute: kAXRoleAttribute) as? String
+        return element.copyAttributeValue(attribute: kAXRoleAttribute) as? String
     }
 
     private func getSubRole(element: AXUIElement) -> String? {
-        return self.copyAttributeValue(element, attribute: kAXSubroleAttribute) as? String
+        return element.copyAttributeValue(attribute: kAXSubroleAttribute) as? String
     }
 
     private func isFullscreen(element: AXUIElement) -> Bool {
-        let result = self.copyAttributeValue(element, attribute: kAXFullScreenAttribute) as? NSNumber
+        let result = element.copyAttributeValue(attribute: kAXFullScreenAttribute) as? NSNumber
         
         return result?.boolValue ?? false
     }
@@ -87,7 +63,7 @@ struct WindowEngine {
     private func setPosition(element: AXUIElement, position: CGPoint) -> Bool {
         var position = position
         if let value = AXValueCreate(AXValueType.cgPoint, &position) {
-            return self.setAttributeValue(element, attribute: kAXPositionAttribute, value: value)
+            return element.setAttributeValue(attribute: kAXPositionAttribute, value: value)
         }
         return false
     }
@@ -96,7 +72,7 @@ struct WindowEngine {
     private func setSize(element: AXUIElement, size: CGSize) -> Bool {
         var size = size
         if let value = AXValueCreate(AXValueType.cgSize, &size) {
-            return self.setAttributeValue(element, attribute: kAXSizeAttribute, value: value)
+            return element.setAttributeValue(attribute: kAXSizeAttribute, value: value)
         }
         return false
     }
@@ -160,54 +136,6 @@ struct WindowEngine {
             
         default:
             return nil
-        }
-    }
-    
-    func setKeybindings() {
-        KeyboardShortcuts.onKeyDown(for: .maximize) { [self] in
-            self.resizeFrontmostWindow(direction: .maximize)
-        }
-        
-        KeyboardShortcuts.onKeyDown(for: .topHalf) { [self] in
-            self.resizeFrontmostWindow(direction: .topHalf)
-        }
-        KeyboardShortcuts.onKeyDown(for: .rightHalf) { [self] in
-            self.resizeFrontmostWindow(direction: .rightHalf)
-        }
-        KeyboardShortcuts.onKeyDown(for: .bottomHalf) { [self] in
-            self.resizeFrontmostWindow(direction: .bottomHalf)
-        }
-        KeyboardShortcuts.onKeyDown(for: .leftHalf) { [self] in
-            self.resizeFrontmostWindow(direction: .leftHalf)
-        }
-        
-        KeyboardShortcuts.onKeyDown(for: .topRightQuarter) { [self] in
-            self.resizeFrontmostWindow(direction: .topRightQuarter)
-        }
-        KeyboardShortcuts.onKeyDown(for: .topLeftQuarter) { [self] in
-            self.resizeFrontmostWindow(direction: .topLeftQuarter)
-        }
-        KeyboardShortcuts.onKeyDown(for: .bottomRightQuarter) { [self] in
-            self.resizeFrontmostWindow(direction: .bottomRightQuarter)
-        }
-        KeyboardShortcuts.onKeyDown(for: .bottomLeftQuarter) { [self] in
-            self.resizeFrontmostWindow(direction: .bottomLeftQuarter)
-        }
-        
-        KeyboardShortcuts.onKeyDown(for: .rightThird) { [self] in
-            self.resizeFrontmostWindow(direction: .rightThird)
-        }
-        KeyboardShortcuts.onKeyDown(for: .rightTwoThirds) { [self] in
-            self.resizeFrontmostWindow(direction: .rightTwoThirds)
-        }
-        KeyboardShortcuts.onKeyDown(for: .horizontalCenterThird) { [self] in
-            self.resizeFrontmostWindow(direction: .horizontalCenterThird)
-        }
-        KeyboardShortcuts.onKeyDown(for: .leftThird) { [self] in
-            self.resizeFrontmostWindow(direction: .leftThird)
-        }
-        KeyboardShortcuts.onKeyDown(for: .leftTwoThirds) { [self] in
-            self.resizeFrontmostWindow(direction: .leftTwoThirds)
         }
     }
 }
