@@ -13,6 +13,13 @@ fileprivate let kAXFullScreenAttribute = "AXFullScreen"
 
 struct WindowEngine {
     
+    func resizeFrontmostWindow(direction: WindowDirection) {
+        if Defaults[.useKeyboardShortcuts] {
+            guard let frontmostWindow = self.getFrontmostWindow() else { return }
+            resize(window: frontmostWindow, direction: direction)
+        }
+    }
+    
     func getFrontmostWindow() -> AXUIElement? {
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
                 let window = self.getFocusedWindow(pid: app.processIdentifier),
@@ -24,20 +31,17 @@ struct WindowEngine {
         return window
     }
     
-    func resizeFrontmostWindow(direction: WindowDirection) {
-        if Defaults[.useKeyboardShortcuts] {
-            guard let frontmostWindow = self.getFrontmostWindow() else { return }
-            resize(window: frontmostWindow, direction: direction)
-        }
-    }
-    
     func resize(window: AXUIElement, direction: WindowDirection) {
-        guard let screenFrame = getScreenFrame(),
+        guard let screenFrame = getActiveScreenFrame(),
                 let newWindowFrame = generateWindowFrame(screenFrame, direction)
         else { return }
         
         self.setPosition(element: window, position: newWindowFrame.origin)
         self.setSize(element: window, size: newWindowFrame.size)
+        
+        if self.getRect(element: window) != newWindowFrame {
+            self.handleSizeConstrainedWindow(element: window, windowFrame: self.getRect(element: window), screenFrame: screenFrame)
+        }
     }
     
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
@@ -47,18 +51,14 @@ struct WindowEngine {
         }
         return nil
     }
-    
     private func getRole(element: AXUIElement) -> String? {
         return element.copyAttributeValue(attribute: kAXRoleAttribute) as? String
     }
-
     private func getSubRole(element: AXUIElement) -> String? {
         return element.copyAttributeValue(attribute: kAXSubroleAttribute) as? String
     }
-
     private func isFullscreen(element: AXUIElement) -> Bool {
         let result = element.copyAttributeValue(attribute: kAXFullScreenAttribute) as? NSNumber
-        
         return result?.boolValue ?? false
     }
     
@@ -70,7 +70,13 @@ struct WindowEngine {
         }
         return false
     }
-
+    private func getPosition(element: AXUIElement) -> CGPoint {
+        var point: CGPoint = .zero
+        guard let axValue = element.copyAttributeValue(attribute: kAXPositionAttribute) else { return point }
+        AXValueGetValue(axValue as! AXValue, .cgPoint, &point)
+        return point
+    }
+    
     @discardableResult
     private func setSize(element: AXUIElement, size: CGSize) -> Bool {
         var size = size
@@ -79,8 +85,18 @@ struct WindowEngine {
         }
         return false
     }
+    private func getSize(element: AXUIElement) -> CGSize {
+        var size: CGSize = .zero
+        guard let axValue = element.copyAttributeValue(attribute: kAXSizeAttribute) else { return size }
+        AXValueGetValue(axValue as! AXValue, .cgSize, &size)
+        return size
+    }
     
-    private func getScreenFrame() -> CGRect? {
+    private func getRect(element: AXUIElement) -> CGRect {
+        return CGRect(origin: getPosition(element: element), size: getSize(element: element))
+    }
+    
+    private func getActiveScreenFrame() -> CGRect? {
         guard let screen = NSScreen().screenWithMouse() else { return nil }
         let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
         var screenFrame = CGDisplayBounds(screen.displayID)
@@ -89,7 +105,6 @@ struct WindowEngine {
         
         return screenFrame
     }
-    
     private func generateWindowFrame(_ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
         
         let screenWidth = screenFrame.size.width
@@ -140,5 +155,26 @@ struct WindowEngine {
         default:
             return nil
         }
+    }
+    
+    private func handleSizeConstrainedWindow(element: AXUIElement, windowFrame: CGRect, screenFrame: CGRect) {
+        if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
+            print("Window is still within screen frames; no correction needed")
+            return
+        }
+        
+        print("Correction needed, fixing...")
+        
+        var fixedWindowFrame = windowFrame
+        
+        if fixedWindowFrame.maxX > screenFrame.maxX {
+            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width
+        }
+        
+        if fixedWindowFrame.maxY > screenFrame.maxY {
+            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height
+        }
+        
+        setPosition(element: element, position: fixedWindowFrame.origin)
     }
 }
