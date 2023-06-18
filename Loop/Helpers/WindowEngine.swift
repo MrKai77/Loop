@@ -158,13 +158,13 @@ struct WindowEngine {
     }
     
     private func handleSizeConstrainedWindow(element: AXUIElement, windowFrame: CGRect, screenFrame: CGRect) {
+        
+        // If the window is fully shown on the screen
         if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
-            print("Window is still within screen frames; no correction needed")
             return
         }
         
-        print("Correction needed, fixing...")
-        
+        // If not, then Loop will auto re-adjust the window size to be fully shown on the screen
         var fixedWindowFrame = windowFrame
         
         if fixedWindowFrame.maxX > screenFrame.maxX {
