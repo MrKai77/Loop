@@ -18,7 +18,7 @@
 		A8330ACD2A3AC1D100673C8D /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */; };
 		A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */; };
 		A8330AD12A3AC25100673C8D /* CaseIterable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */; };
-		A8330AD42A3AC27600673C8D /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AD32A3AC27600673C8D /* Utilities.swift */; };
+		A8330AD42A3AC27600673C8D /* WindowDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AD32A3AC27600673C8D /* WindowDirection.swift */; };
 		A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */; };
 		A86AFD7629888B29008F4892 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A86AFD7529888B29008F4892 /* README.md */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
@@ -30,6 +30,8 @@
 		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8A2ABE72A3FB0370067B5A9 /* RadialMenuKeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* RadialMenuKeybindMonitor.swift */; };
+		A8A2ABE92A3FBEA00067B5A9 /* KeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE82A3FBEA00067B5A9 /* KeyCode.swift */; };
+		A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */; };
 		A8A7685129B6E62E00CAC0FD /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = A8A1F1C829A07B2900CC84D5 /* AppMover */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
@@ -86,7 +88,7 @@
 		A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
 		A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseIterable+Extensions.swift"; sourceTree = "<group>"; };
-		A8330AD32A3AC27600673C8D /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		A8330AD32A3AC27600673C8D /* WindowDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDirection.swift; sourceTree = "<group>"; };
 		A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AXUIElement+Extensions.swift"; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
@@ -97,6 +99,8 @@
 		A882660729809F6F00BCB197 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		A883642E298B7288005D6C19 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		A8A2ABE62A3FB0370067B5A9 /* RadialMenuKeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuKeybindMonitor.swift; sourceTree = "<group>"; };
+		A8A2ABE82A3FBEA00067B5A9 /* KeyCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCode.swift; sourceTree = "<group>"; };
+		A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
 		A8E1575E298654960005761C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
@@ -144,7 +148,9 @@
 				A8A2ABE62A3FB0370067B5A9 /* RadialMenuKeybindMonitor.swift */,
 				A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
-				A8330AD32A3AC27600673C8D /* Utilities.swift */,
+				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
+				A8A2ABE82A3FBEA00067B5A9 /* KeyCode.swift */,
+				A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -370,6 +376,8 @@
 				A8330AD12A3AC25100673C8D /* CaseIterable+Extensions.swift in Sources */,
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
+				A8A2ABE92A3FBEA00067B5A9 /* KeyCode.swift in Sources */,
+				A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
 				A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */,
@@ -381,7 +389,7 @@
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */,
 				A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */,
-				A8330AD42A3AC27600673C8D /* Utilities.swift in Sources */,
+				A8330AD42A3AC27600673C8D /* WindowDirection.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,
 				A88266002980931C00BCB197 /* SettingsView.swift in Sources */,
