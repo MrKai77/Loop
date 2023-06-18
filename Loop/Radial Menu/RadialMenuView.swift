@@ -22,6 +22,9 @@ struct RadialMenuView: View {
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
     @State private var currentResizeDirection: WindowDirection = .noAction
     
+    @State var angleToMouse: Angle = Angle(degrees: 0)
+    @State var distanceToMouse: CGFloat = 0
+    
     // Variables that store the radial menu's shape
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
@@ -104,15 +107,20 @@ struct RadialMenuView: View {
         .onReceive(timer) { _ in
             if !previewMode {
                 
+                if (Angle(radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))) == angleToMouse) &&
+                    (distanceToMouse == initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))) {
+                    return
+                }
+                
                 // Get angle & distance to mouse
-                let angleToMouse = Angle(radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y)))
-                let distanceToMouse = initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
+                angleToMouse = Angle(radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y)))
+                distanceToMouse = initialMousePosition.distanceSquared(to: CGPoint(x: NSEvent.mouseLocation.x, y: NSEvent.mouseLocation.y))
                 
                 // If mouse over 50 points away, select half or quarter positions
                 if distanceToMouse > pow(50 - radialMenuThickness, 2) {
                     switch Int((angleToMouse.normalized().degrees + 45 / 2) / 45) {
                     case 0, 8: currentResizeDirection = .rightHalf
-                    case 1:    currentResizeDirection = .bottomRightQuarter
+                  case 1:    currentResizeDirection = .bottomRightQuarter
                     case 2:    currentResizeDirection = .bottomHalf
                     case 3:    currentResizeDirection = .bottomLeftQuarter
                     case 4:    currentResizeDirection = .leftHalf
@@ -145,7 +153,13 @@ struct RadialMenuView: View {
                     performanceTime: NSHapticFeedbackManager.PerformanceTime.now
                 )
                 
-                NotificationCenter.default.post(name: Notification.Name.currentResizingDirectionChanged, object: nil, userInfo: ["Direction": currentResizeDirection])
+                NotificationCenter.default.post(name: Notification.Name.currentDirectionChanged, object: nil, userInfo: ["Direction": currentResizeDirection])
+            }
+        }
+        
+        .onReceive(.currentDirectionChanged) { obj in
+            if let direction = obj.userInfo?["Direction"] as? WindowDirection {
+                self.currentResizeDirection = direction
             }
         }
     }

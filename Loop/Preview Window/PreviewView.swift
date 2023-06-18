@@ -84,7 +84,7 @@ struct PreviewView: View {
         }
         .opacity(currentResizingDirection == .noAction ? 0 : 1)
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizingDirection)
-        .onReceive(.currentResizingDirectionChanged) { obj in
+        .onReceive(.currentDirectionChanged) { obj in
             if !previewMode {
                 if let direction = obj.userInfo?["Direction"] as? WindowDirection {
                     currentResizingDirection = direction

@@ -8,5 +8,6 @@
 import Foundation
 
 extension Notification.Name {
-    static let currentResizingDirectionChanged = Notification.Name("currentResizingDirectionChanged")
+    static let currentDirectionChanged = Notification.Name("currentResizingDirectionChanged")
+    static let closeLoop = Notification.Name("closeLoop")
 }
