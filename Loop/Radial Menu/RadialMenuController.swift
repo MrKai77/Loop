@@ -10,8 +10,8 @@ import Defaults
 
 class RadialMenuController {
     
+    let radialMenuKeybindMonitor = RadialMenuKeybindMonitor.shared
     let windowEngine = WindowEngine()
-    
     let loopPreview = PreviewController()
     
     var currentResizingDirection: WindowDirection = .noAction
@@ -66,7 +66,8 @@ class RadialMenuController {
     }
     
     func AddObservers() {
-        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged, handler: { event -> Void in
+        
+        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
             if Int(event.keyCode) == Defaults[.radialMenuTrigger]  {
                 if event.modifierFlags.rawValue == 256 {
                     self.closeLoop()
@@ -75,13 +76,29 @@ class RadialMenuController {
                     self.openLoop()
                 }
             }
-        })
-        
-        NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { event in
-            self.checkEscapeKey(with: event)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleCurrentResizingDirectionChanged(notification:)), name: Notification.Name.currentResizingDirectionChanged, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(
+                handleCurrentResizingDirectionChanged(
+                    notification:
+                )
+            ),
+            name: Notification.Name.currentDirectionChanged,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(
+                closeLoopFromNotification(
+                    notification:
+                )
+            ),
+            name: Notification.Name.closeLoop,
+            object: nil
+        )
     }
     
     @objc private func handleCurrentResizingDirectionChanged(notification: Notification) {
@@ -90,9 +107,9 @@ class RadialMenuController {
         }
     }
     
-    private func checkEscapeKey(with event: NSEvent) {
-        if isLoopRadialMenuShown && event.keyCode == 53 {
-            closeLoop(wasForceClosed: true)
+    @objc private func closeLoopFromNotification(notification: Notification) {
+        if let forceClosed = notification.userInfo?["wasForceClosed"] as? Bool {
+            self.closeLoop(wasForceClosed: forceClosed)
         }
     }
     
@@ -104,6 +121,8 @@ class RadialMenuController {
         }
         showRadialMenu(frontmostWindow: frontmostWindow)
         
+        radialMenuKeybindMonitor.start()
+        
         isLoopRadialMenuShown = true
     }
     
@@ -114,6 +133,8 @@ class RadialMenuController {
         if frontmostWindow != nil && wasForceClosed == false && isLoopRadialMenuShown == true && frontmostWindow != nil {
             windowEngine.resize(window: frontmostWindow!, direction: currentResizingDirection)
         }
+        
+        radialMenuKeybindMonitor.stop()
         
         isLoopRadialMenuShown = false
         frontmostWindow = nil
