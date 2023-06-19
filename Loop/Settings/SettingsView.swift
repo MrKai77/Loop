@@ -55,6 +55,6 @@ struct SettingsView: View {
                     Text("More")
                 }
         }
-        .frame(width: 420)
+        .frame(width: 450)
     }
 }

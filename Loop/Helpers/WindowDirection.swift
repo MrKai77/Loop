@@ -53,6 +53,12 @@ enum WindowDirection: CaseIterable {
         case .bottomLeftQuarter:    [[KeyCode.s, KeyCode.a], [KeyCode.downArrow, KeyCode.leftArrow]]
         case .topLeftQuarter:       [[KeyCode.w, KeyCode.a], [KeyCode.upArrow, KeyCode.leftArrow]]
             
+        case .leftThird:            [[KeyCode.j]]
+        case .leftTwoThirds:        [[KeyCode.u]]
+        case .horizontalCenterThird:[[KeyCode.k]]
+        case .rightTwoThirds:       [[KeyCode.o]]
+        case .rightThird:           [[KeyCode.l]]
+        
         default:                    [[]]
         }
     }
