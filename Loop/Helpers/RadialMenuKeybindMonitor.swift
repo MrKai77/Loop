@@ -14,10 +14,11 @@ class RadialMenuKeybindMonitor {
     private var eventTap: CFMachPort?
     private var isEnabled = false
     private var pressedKeys = Set<UInt16>()
-    
     private var lastKeyReleaseTime: Date = Date.now
     
-    private func performKeybind(event: NSEvent) {
+    private func performKeybind(event: NSEvent) -> Bool {
+        
+        var isValidKeybind = false
         
         // If the current key up event is within 100 ms of the last key up event, return.
         // This is used when the user is pressing 2+ keys so that it doesn't switch back
@@ -26,7 +27,7 @@ class RadialMenuKeybindMonitor {
             if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
                 lastKeyReleaseTime = Date.now
             }
-            return
+            return false
         }
         
         if pressedKeys == [KeyCode.escape] {
@@ -35,6 +36,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["wasForceClosed": true]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.w] || pressedKeys == [KeyCode.upArrow] {
@@ -43,6 +45,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.topHalf]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.w, KeyCode.a] || pressedKeys == [KeyCode.upArrow, KeyCode.leftArrow] {
@@ -51,6 +54,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.topLeftQuarter]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.a] || pressedKeys == [KeyCode.leftArrow] {
@@ -59,6 +63,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.leftHalf]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.a, KeyCode.s] || pressedKeys == [KeyCode.leftArrow, KeyCode.downArrow] {
@@ -67,6 +72,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.bottomLeftQuarter]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.s] || pressedKeys == [KeyCode.downArrow] {
@@ -75,6 +81,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.bottomHalf]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.s, KeyCode.d] || pressedKeys == [KeyCode.downArrow, KeyCode.rightArrow] {
@@ -83,6 +90,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.bottomRightQuarter]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.d] || pressedKeys == [KeyCode.rightArrow] {
@@ -91,6 +99,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.rightHalf]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.d, KeyCode.w] || pressedKeys == [KeyCode.rightArrow, KeyCode.upArrow] {
@@ -99,6 +108,7 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.topRightQuarter]
             )
+            isValidKeybind = true
         }
         
         if pressedKeys == [KeyCode.space] {
@@ -107,7 +117,10 @@ class RadialMenuKeybindMonitor {
                 object: nil,
                 userInfo: ["Direction": WindowDirection.maximize]
             )
+            isValidKeybind = true
         }
+        
+        return isValidKeybind
     }
     
     func start() {
@@ -126,14 +139,12 @@ class RadialMenuKeybindMonitor {
                         }
                     }
                     
-                    RadialMenuKeybindMonitor.shared.performKeybind(event: keyEvent)
+                    if RadialMenuKeybindMonitor.shared.performKeybind(event: keyEvent) {
+                        return nil
+                    }
                 }
-
-                // Don't forward the event to other apps
-                return nil
                 
-                // If we want to forward the event to other apps, we'd need to use
-                // Unmanaged.passRetained(event)
+                 return Unmanaged.passRetained(event)
             }
 
             let newEventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
@@ -159,5 +170,6 @@ class RadialMenuKeybindMonitor {
             self.eventTap = nil
         }
         isEnabled = false
+        
     }
 }
