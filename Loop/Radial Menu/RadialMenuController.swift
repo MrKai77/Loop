@@ -10,7 +10,7 @@ import Defaults
 
 class RadialMenuController {
     
-    let radialMenuKeybindMonitor = RadialMenuKeybindMonitor.shared
+    let radialMenuKeybindMonitor = KeybindMonitor.shared
     let windowEngine = WindowEngine()
     let loopPreview = PreviewController()
     
@@ -68,7 +68,7 @@ class RadialMenuController {
     func AddObservers() {
         
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
-            if Int(event.keyCode) == Defaults[.radialMenuTrigger]  {
+            if event.keyCode == Defaults[.triggerKey]  {
                 if event.modifierFlags.rawValue == 256 {
                     self.closeLoop()
                 }
