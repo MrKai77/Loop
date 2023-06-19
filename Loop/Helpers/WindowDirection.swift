@@ -38,6 +38,22 @@ enum WindowDirection: CaseIterable {
     case bottomThird
     case bottomTwoThirds
     
+    var nextWindowDirection: WindowDirection {
+        switch self {
+        case .noAction:             .topHalf
+        case .topHalf:              .topRightQuarter
+        case .topRightQuarter:      .rightHalf
+        case .rightHalf:            .bottomRightQuarter
+        case .bottomRightQuarter:   .bottomHalf
+        case .bottomHalf:           .bottomLeftQuarter
+        case .bottomLeftQuarter:    .leftHalf
+        case .leftHalf:             .topLeftQuarter
+        case .topLeftQuarter:       .maximize
+        case .maximize:             .noAction
+        default:                    .noAction
+        }
+    }
+    
     var keybindings: [Set<UInt16>] {
         switch self {
         case .noAction:             [[]]

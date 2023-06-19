@@ -137,7 +137,7 @@ struct RadialMenuView: View {
                     currentResizeDirection = .maximize
                 }
             } else {
-                currentResizeDirection = currentResizeDirection.next()
+                currentResizeDirection = currentResizeDirection.nextWindowDirection
                 
                 if currentResizeDirection == .rightThird {
                     currentResizeDirection = .topHalf
