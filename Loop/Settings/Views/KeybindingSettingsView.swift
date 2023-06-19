@@ -49,7 +49,7 @@ struct KeybindingSettingsView: View {
     @Default(.accentColor) var accentColor
     
     let LoopTriggerKeyOptions = LoopTriggerKeys.options
-    @State var triggerKeySymbol: String = ""
+    @State var triggerKeySymbol: String = "custom.globe.rectangle.fill" // This is just a placeholder
     
     var body: some View {
         Form {
@@ -98,17 +98,18 @@ struct KeybindingSettingsView: View {
                     }
                     .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
-                    .backport.symbolEffectPulse()
+//                    .backport.symbolEffectPulse()
                 }
                 
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Use arrow keys to resize into halves:")
-                        Text("Press two keys to for quarters!")
-                        
-                        Text("Tip: You can also use WASD keys!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Group {
+                            Text("Press two keys to for to resize into quarters!")
+                            Text("Tip: You can also use WASD keys!")
+                        }
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                     }
                     
                     Spacer()
@@ -125,7 +126,7 @@ struct KeybindingSettingsView: View {
                     }
                     .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
-                    .backport.symbolEffectPulse()
+//                    .backport.symbolEffectPulse()
                 }
                 
                 HStack {
@@ -151,7 +152,7 @@ struct KeybindingSettingsView: View {
                     }
                     .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
-                    .backport.symbolEffectPulse()
+//                    .backport.symbolEffectPulse()
                 }
             }
         }
@@ -173,29 +174,5 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         KeybindingSettingsView()
             .frame(width: 450)
-    }
-}
-
-
-struct Backport<Content> {
-    let content: Content
-}
-
-extension View {
-    var backport: Backport<Self> { Backport(content: self) }
-}
-
-extension Backport where Content: View {
-    @ViewBuilder func symbolEffectPulse(wholeSymbol: Bool = false) -> some View {
-        if #available(macOS 14, *) {
-            if wholeSymbol {
-                content.symbolEffect(.pulse.wholeSymbol)
-            }
-            else {
-                content.symbolEffect(.pulse)
-            }
-        } else {
-            content
-        }
     }
 }

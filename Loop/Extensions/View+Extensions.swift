@@ -21,3 +21,27 @@ extension View {
         )
     }
 }
+
+// Used in Keybindings settings tab
+struct Backport<Content> {
+    let content: Content
+}
+
+extension View {
+    var backport: Backport<Self> { Backport(content: self) }
+}
+
+extension Backport where Content: View {
+    @ViewBuilder func symbolEffectPulse(wholeSymbol: Bool = false) -> some View {
+        if #available(macOS 14, *) {
+            if wholeSymbol {
+                content.symbolEffect(.pulse.wholeSymbol)
+            }
+            else {
+                content.symbolEffect(.pulse)
+            }
+        } else {
+            content
+        }
+    }
+}
