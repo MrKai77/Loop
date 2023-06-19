@@ -78,10 +78,9 @@ struct RadialMenuView: View {
                     }
                     
                     if frontmostWindow == nil && previewMode == false {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .resizable()
+                        Image("custom.macwindow.trianglebadge.exclamationmark")
                             .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
-                            .frame(width: RadialMenuSize / 4, height: RadialMenuSize / 4)
+                            .font(Font.system(size: 20, weight: .bold))
                     }
                 }
                 .frame(width: RadialMenuSize, height: RadialMenuSize)
