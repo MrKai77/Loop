@@ -16,6 +16,26 @@ class KeybindMonitor {
     private var pressedKeys = Set<UInt16>()
     private var lastKeyReleaseTime: Date = Date.now
     
+    init() {
+        // There's a weird bug I was encoutering when testing - this code sometimes
+        // wouldn't take out unpressed keys from previous window resizes.
+        // Clearing this variable every time the user loops seems to have fixed this.
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(
+                resetPressedKeys(
+                    notification:
+                )
+            ),
+            name: Notification.Name.resizedWindow,
+            object: nil
+        )
+    }
+    
+    @objc private func resetPressedKeys(notification: Notification) {
+        KeybindMonitor.shared.pressedKeys = []
+    }
+    
     private func performKeybind(event: NSEvent) -> Bool {
         
         var isValidKeybind = false
@@ -36,22 +56,25 @@ class KeybindMonitor {
                 object: nil,
                 userInfo: ["wasForceClosed": true]
             )
+            KeybindMonitor.shared.pressedKeys = []
             isValidKeybind = true
         }
-        
-        for direction in WindowDirection.allCases {
-            for keybind in direction.keybindings {
-                if keybind == pressedKeys {
-                    NotificationCenter.default.post(
-                        name: Notification.Name.currentDirectionChanged,
-                        object: nil,
-                        userInfo: ["Direction": direction]
-                    )
+        else {
+            // Since this is one for loop inside another, we can break from inside by breaking from the outerloop
+            outerLoop: for direction in WindowDirection.allCases {
+                for keybind in direction.keybindings {
+                    if keybind == pressedKeys {
+                        NotificationCenter.default.post(
+                            name: Notification.Name.currentDirectionChanged,
+                            object: nil,
+                            userInfo: ["Direction": direction]
+                        )
+                        isValidKeybind = true
+                        break outerLoop
+                    }
                 }
-                isValidKeybind = true
             }
         }
-        
         return isValidKeybind
     }
     
@@ -76,7 +99,9 @@ class KeybindMonitor {
                     }
                 }
                 
-                 return Unmanaged.passRetained(event)
+                // If we wanted to forward the key event to the frontmost app, we'd use:
+                // return Unmanaged.passRetained(event)
+                return nil
             }
 
             let newEventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,

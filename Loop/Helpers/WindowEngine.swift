@@ -38,6 +38,8 @@ struct WindowEngine {
         if self.getRect(element: window) != newWindowFrame {
             self.handleSizeConstrainedWindow(element: window, windowFrame: self.getRect(element: window), screenFrame: screenFrame)
         }
+        
+        NotificationCenter.default.post(name: Notification.Name.resizedWindow, object: nil)
     }
     
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
