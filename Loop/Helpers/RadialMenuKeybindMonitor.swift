@@ -13,48 +13,79 @@ class RadialMenuKeybindMonitor {
     
     private var eventTap: CFMachPort?
     private var isEnabled = false
+    private var pressedKeys = Set<UInt16>()
+    
+    private func performKeybind(event: NSEvent) {
+        if pressedKeys == [KeyCode.escape] {
+            NotificationCenter.default.post(
+                name: Notification.Name.closeLoop,
+                object: nil,
+                userInfo: ["wasForceClosed": true]
+            )
+        }
+        
+        if pressedKeys == [KeyCode.w] || pressedKeys == [KeyCode.upArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.topHalf]
+            )
+        }
+        
+        if pressedKeys == [KeyCode.a] || pressedKeys == [KeyCode.leftArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.leftHalf]
+            )
+        }
+        
+        if pressedKeys == [KeyCode.s] || pressedKeys == [KeyCode.downArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.bottomHalf]
+            )
+        }
+        
+        if pressedKeys == [KeyCode.d] || pressedKeys == [KeyCode.rightArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.rightHalf]
+            )
+        }
+        
+        if pressedKeys == [KeyCode.space] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.maximize]
+            )
+        }
+    }
     
     func start() {
         if eventTap == nil {
-            let eventMask = CGEventMask(1 << CGEventType.keyDown.rawValue)
+            let eventMask = CGEventMask((1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue))
+            
             let eventCallback: CGEventTapCallBack = { _, _, event, _ in
                 if RadialMenuKeybindMonitor.shared.isEnabled,
                     let keyEvent = NSEvent(cgEvent: event) {
                     
-                 
-                    if keyEvent.keyCode == KeyCode.escape {
-                        NotificationCenter.default.post(name: Notification.Name.closeLoop, object: nil, userInfo: ["wasForceClosed": true])
-                        return nil
+                    if !keyEvent.isARepeat {
+                        if keyEvent.type == .keyUp {
+                            RadialMenuKeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode)
+                        } else if keyEvent.type == .keyDown {
+                            RadialMenuKeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode)
+                        }
                     }
                     
-                    if keyEvent.keyCode == KeyCode.w || keyEvent.keyCode == KeyCode.upArrow {
-                        NotificationCenter.default.post(name: Notification.Name.currentDirectionChanged, object: nil, userInfo: ["Direction": WindowDirection.topHalf])
-                        return nil
-                    }
-                    
-                    if keyEvent.keyCode == KeyCode.a || keyEvent.keyCode == KeyCode.leftArrow {
-                        NotificationCenter.default.post(name: Notification.Name.currentDirectionChanged, object: nil, userInfo: ["Direction": WindowDirection.leftHalf])
-                        return nil
-                    }
-                    
-                    if keyEvent.keyCode == KeyCode.s || keyEvent.keyCode == KeyCode.downArrow {
-                        NotificationCenter.default.post(name: Notification.Name.currentDirectionChanged, object: nil, userInfo: ["Direction": WindowDirection.bottomHalf])
-                        return nil
-                    }
-                    
-                    if keyEvent.keyCode == KeyCode.d || keyEvent.keyCode == KeyCode.rightArrow {
-                        NotificationCenter.default.post(name: Notification.Name.currentDirectionChanged, object: nil, userInfo: ["Direction": WindowDirection.rightHalf])
-                        return nil
-                    }
-                    
-                    if keyEvent.keyCode == KeyCode.space {  // Space Key
-                        NotificationCenter.default.post(name: Notification.Name.currentDirectionChanged, object: nil, userInfo: ["Direction": WindowDirection.maximize])
-                        return nil
-                    }
+                    RadialMenuKeybindMonitor.shared.performKeybind(event: keyEvent)
                 }
 
                 // Forward the event to other apps
-                return Unmanaged.passRetained(event)
+                return nil
             }
 
             let newEventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
