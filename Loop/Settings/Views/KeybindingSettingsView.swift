@@ -7,47 +7,44 @@
 
 import SwiftUI
 import Defaults
-import KeyboardShortcuts
+
+struct loopTriggerOptions {
+    var symbol: String
+    var description: String
+    var keycode: UInt16
+}
 
 struct KeybindingSettingsView: View {
     
-    @Default(.useKeyboardShortcuts) var useKeyboardShortcuts
+    @Default(.triggerKey) var triggerKey
+    
+    let LoopTriggerKeyOptions = [
+        loopTriggerOptions(symbol: "globe", description: "Globe", keycode: KeyCode.function),
+        loopTriggerOptions(symbol: "control", description: "Right Control", keycode: KeyCode.rightControl),
+        loopTriggerOptions(symbol: "option", description: "Right Option", keycode: KeyCode.rightOption),
+        loopTriggerOptions(symbol: "command", description: "Right Command", keycode: KeyCode.rightCommand),
+    ]
     
     var body: some View {
         Form {
             Section("Keybindings") {
-                Toggle("Enabled", isOn: $useKeyboardShortcuts)
-            }
-            
-            Group {
-                Section {
-                    KeyboardShortcuts.Recorder("Maximize", name: .maximize)
-                }
-                
-                Section {
-                    KeyboardShortcuts.Recorder("Top Half", name: .topHalf)
-                    KeyboardShortcuts.Recorder("Bottom Half", name: .bottomHalf)
-                    KeyboardShortcuts.Recorder("Right Half", name: .rightHalf)
-                    KeyboardShortcuts.Recorder("Left Half", name: .leftHalf)
-                }
-                
-                Section {
-                    KeyboardShortcuts.Recorder("Top Right Quarter", name: .topRightQuarter)
-                    KeyboardShortcuts.Recorder("Top Left Quarter", name: .topLeftQuarter)
-                    KeyboardShortcuts.Recorder("Bottom Right Quarter", name: .bottomRightQuarter)
-                    KeyboardShortcuts.Recorder("Bottom Left Quarter", name: .bottomLeftQuarter)
-                }
-                
-                Section {
-                    KeyboardShortcuts.Recorder("Right Third", name: .rightThird)
-                    KeyboardShortcuts.Recorder("Right Two Thirds", name: .rightTwoThirds)
-                    KeyboardShortcuts.Recorder("Center Third", name: .horizontalCenterThird)
-                    KeyboardShortcuts.Recorder("Left Two Thirds", name: .leftTwoThirds)
-                    KeyboardShortcuts.Recorder("Left Third", name: .leftThird)
+                VStack(alignment: .leading) {
+                    Picker("Trigger Loop", selection: $triggerKey) {
+                        ForEach(0..<LoopTriggerKeyOptions.count, id: \.self) { i in
+                            HStack {
+                                Image(systemName: LoopTriggerKeyOptions[i].symbol)
+                                Text(LoopTriggerKeyOptions[i].description)
+                            }
+                            .tag(LoopTriggerKeyOptions[i].keycode)
+                        }
+                    }
+                    if triggerKey == LoopTriggerKeyOptions[1].keycode {
+                        Text("Tip: To use caps lock, remap it to control in System Settings!")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
-            .disabled(!useKeyboardShortcuts)
-            .foregroundColor(!useKeyboardShortcuts ? .secondary : nil)
         }
         .formStyle(.grouped)
     }

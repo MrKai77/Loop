@@ -8,24 +8,10 @@
 import SwiftUI
 import Defaults
 
-struct loopTriggerOptions {
-    var symbol: String
-    var description: String
-    var keycode: Int
-}
-
 struct RadialMenuSettingsView: View {
     
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
-    @Default(.radialMenuTrigger) var radialMenuTrigger
-    
-    let LoopTriggerKeyOptions = [
-        loopTriggerOptions(symbol: "globe", description: "Globe", keycode: 63),
-        loopTriggerOptions(symbol: "control", description: "Right Control", keycode: 62),
-        loopTriggerOptions(symbol: "option", description: "Right Option", keycode: 61),
-        loopTriggerOptions(symbol: "command", description: "Right Command", keycode: 54),
-    ]
     
     var body: some View {
         Form {
@@ -33,33 +19,22 @@ struct RadialMenuSettingsView: View {
                 RadialMenuView(frontmostWindow: nil, previewMode: true, timer: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
             }
             
-            Section {
+            Section(content: {
                 Slider(value: $radialMenuCornerRadius, in: 30...50, step: 4, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
                     Text("Corner Radius")
                 }
                 Slider(value: $radialMenuThickness, in: 10...34, step: 4, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
                     Text("Thickness")
                 }
-            }
-            
-            Section {
-                VStack(alignment: .leading) {
-                    Picker("Trigger Loop", selection: $radialMenuTrigger) {
-                        ForEach(0..<LoopTriggerKeyOptions.count, id: \.self) { i in
-                            HStack {
-                                Image(systemName: LoopTriggerKeyOptions[i].symbol)
-                                Text(LoopTriggerKeyOptions[i].description)
-                            }
-                            .tag(LoopTriggerKeyOptions[i].keycode)
-                        }
-                    }
-                    if radialMenuTrigger == LoopTriggerKeyOptions[1].keycode {
-                        Text("Tip: To use caps lock, remap it to control in System Settings!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+            }, footer: {
+                HStack {
+                    Text("Customize Loop's trigger key in the Keybindings tab!")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Spacer()
                 }
-            }
+                .padding(.leading, 10)
+            })
         }
         .formStyle(.grouped)
     }
