@@ -10,16 +10,20 @@ import SwiftUI
 // Enum that stores all possible resizing options
 enum WindowDirection: CaseIterable {
     
-    case topHalf
-    case topRightQuarter
-    case rightHalf
-    case bottomRightQuarter
-    case bottomHalf
-    case bottomLeftQuarter
-    case leftHalf
-    case topLeftQuarter
-    case maximize
     case noAction
+    case maximize
+    
+    // Halves
+    case topHalf
+    case rightHalf
+    case bottomHalf
+    case leftHalf
+    
+    // Quarters
+    case topRightQuarter
+    case bottomRightQuarter
+    case bottomLeftQuarter
+    case topLeftQuarter
     
     // The following aren't accessible from the radial menu
     case rightThird
@@ -33,4 +37,23 @@ enum WindowDirection: CaseIterable {
     case verticalCenterThird
     case bottomThird
     case bottomTwoThirds
+    
+    var keybindings: [Set<UInt16>] {
+        switch self {
+        case .noAction:             [[]]
+        case .maximize:             [[KeyCode.space]]
+            
+        case .topHalf:              [[KeyCode.w], [KeyCode.upArrow]]
+        case .rightHalf:            [[KeyCode.d], [KeyCode.rightArrow]]
+        case .bottomHalf:           [[KeyCode.s], [KeyCode.downArrow]]
+        case .leftHalf:             [[KeyCode.a], [KeyCode.leftArrow]]
+            
+        case .topRightQuarter:      [[KeyCode.w, KeyCode.d], [KeyCode.upArrow, KeyCode.rightArrow]]
+        case .bottomRightQuarter:   [[KeyCode.s, KeyCode.d], [KeyCode.downArrow, KeyCode.rightArrow]]
+        case .bottomLeftQuarter:    [[KeyCode.s, KeyCode.a], [KeyCode.downArrow, KeyCode.leftArrow]]
+        case .topLeftQuarter:       [[KeyCode.w, KeyCode.a], [KeyCode.upArrow, KeyCode.leftArrow]]
+            
+        default:                    [[]]
+        }
+    }
 }
