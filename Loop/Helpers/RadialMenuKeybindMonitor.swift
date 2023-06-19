@@ -15,7 +15,20 @@ class RadialMenuKeybindMonitor {
     private var isEnabled = false
     private var pressedKeys = Set<UInt16>()
     
+    private var lastKeyReleaseTime: Date = Date.now
+    
     private func performKeybind(event: NSEvent) {
+        
+        // If the current key up event is within 100 ms of the last key up event, return.
+        // This is used when the user is pressing 2+ keys so that it doesn't switch back
+        // to the one key direction when they're letting go of the keys.
+        if event.type == .keyUp {
+            if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
+                lastKeyReleaseTime = Date.now
+            }
+            return
+        }
+        
         if pressedKeys == [KeyCode.escape] {
             NotificationCenter.default.post(
                 name: Notification.Name.closeLoop,
@@ -32,11 +45,27 @@ class RadialMenuKeybindMonitor {
             )
         }
         
+        if pressedKeys == [KeyCode.w, KeyCode.a] || pressedKeys == [KeyCode.upArrow, KeyCode.leftArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.topLeftQuarter]
+            )
+        }
+        
         if pressedKeys == [KeyCode.a] || pressedKeys == [KeyCode.leftArrow] {
             NotificationCenter.default.post(
                 name: Notification.Name.currentDirectionChanged,
                 object: nil,
                 userInfo: ["Direction": WindowDirection.leftHalf]
+            )
+        }
+        
+        if pressedKeys == [KeyCode.a, KeyCode.s] || pressedKeys == [KeyCode.leftArrow, KeyCode.downArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.bottomLeftQuarter]
             )
         }
         
@@ -48,11 +77,27 @@ class RadialMenuKeybindMonitor {
             )
         }
         
+        if pressedKeys == [KeyCode.s, KeyCode.d] || pressedKeys == [KeyCode.downArrow, KeyCode.rightArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.bottomRightQuarter]
+            )
+        }
+        
         if pressedKeys == [KeyCode.d] || pressedKeys == [KeyCode.rightArrow] {
             NotificationCenter.default.post(
                 name: Notification.Name.currentDirectionChanged,
                 object: nil,
                 userInfo: ["Direction": WindowDirection.rightHalf]
+            )
+        }
+        
+        if pressedKeys == [KeyCode.d, KeyCode.w] || pressedKeys == [KeyCode.rightArrow, KeyCode.upArrow] {
+            NotificationCenter.default.post(
+                name: Notification.Name.currentDirectionChanged,
+                object: nil,
+                userInfo: ["Direction": WindowDirection.topRightQuarter]
             )
         }
         
@@ -84,8 +129,11 @@ class RadialMenuKeybindMonitor {
                     RadialMenuKeybindMonitor.shared.performKeybind(event: keyEvent)
                 }
 
-                // Forward the event to other apps
+                // Don't forward the event to other apps
                 return nil
+                
+                // If we want to forward the event to other apps, we'd need to use
+                // Unmanaged.passRetained(event)
             }
 
             let newEventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
