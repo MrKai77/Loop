@@ -20,7 +20,7 @@ extension Defaults.Keys {
     static let useGradientAccentColor = Key<Bool>("useGradientAccentColor", default: false)
     static let gradientAccentColor = Key<Color>("gradientAccentColor", default: Color(.black))
     
-    static let radialMenuTrigger = Key<Int>("radialMenuTrigger", default: 59)
+    static let triggerKey = Key<UInt16>("triggerKey", default: KeyCode.function)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
     
@@ -28,6 +28,4 @@ extension Defaults.Keys {
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 15)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 0)
-    
-    static let useKeyboardShortcuts = Key<Bool>("useKeyboardShortcuts", default: false)
 }

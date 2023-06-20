@@ -6,18 +6,14 @@
 //
 
 import SwiftUI
-import Defaults
-import KeyboardShortcuts
 
 fileprivate let kAXFullScreenAttribute = "AXFullScreen"
 
 struct WindowEngine {
     
     func resizeFrontmostWindow(direction: WindowDirection) {
-        if Defaults[.useKeyboardShortcuts] {
-            guard let frontmostWindow = self.getFrontmostWindow() else { return }
-            resize(window: frontmostWindow, direction: direction)
-        }
+        guard let frontmostWindow = self.getFrontmostWindow() else { return }
+        resize(window: frontmostWindow, direction: direction)
     }
     
     func getFrontmostWindow() -> AXUIElement? {
@@ -42,6 +38,8 @@ struct WindowEngine {
         if self.getRect(element: window) != newWindowFrame {
             self.handleSizeConstrainedWindow(element: window, windowFrame: self.getRect(element: window), screenFrame: screenFrame)
         }
+        
+        KeybindMonitor.shared.resetPressedKeys()
     }
     
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {

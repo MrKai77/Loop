@@ -23,7 +23,6 @@ struct AboutView: View {
     let PACKAGES: [packageDescription] = [
         packageDescription(name: "AppMover", url: URL(string: "https://github.com/iamcalledrob/AppMover")!, license: URL(string: "https://github.com/iamcalledrob/AppMover#license")!),
         packageDescription(name: "Defaults", url: URL(string: "https://github.com/sindresorhus/Defaults")!, license: URL(string: "https://github.com/sindresorhus/Defaults/blob/main/license")!),
-        packageDescription(name: "KeyboardShortcuts", url: URL(string: "https://github.com/sindresorhus/KeyboardShortcuts")!, license: URL(string: "https://github.com/sindresorhus/KeyboardShortcuts/blob/main/license")!),
         packageDescription(name: "Sparkle", url: URL(string: "https://sparkle-project.org")!, license: URL(string: "https://github.com/sparkle-project/Sparkle/blob/2.x/LICENSE")!),
     ]
     
