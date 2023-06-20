@@ -16,23 +16,7 @@ class KeybindMonitor {
     private var pressedKeys = Set<UInt16>()
     private var lastKeyReleaseTime: Date = Date.now
     
-    init() {
-        // There's a weird bug I was encoutering when testing - this code sometimes
-        // wouldn't take out unpressed keys from previous window resizes.
-        // Clearing this variable every time the user loops seems to have fixed this.
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                resetPressedKeys(
-                    notification:
-                )
-            ),
-            name: Notification.Name.resizedWindow,
-            object: nil
-        )
-    }
-    
-    @objc private func resetPressedKeys(notification: Notification) {
+    func resetPressedKeys() {
         KeybindMonitor.shared.pressedKeys = []
     }
     
@@ -56,7 +40,7 @@ class KeybindMonitor {
                 object: nil,
                 userInfo: ["wasForceClosed": true]
             )
-            KeybindMonitor.shared.pressedKeys = []
+            KeybindMonitor.shared.resetPressedKeys()
             isValidKeybind = true
         }
         else {

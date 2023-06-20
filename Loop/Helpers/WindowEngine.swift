@@ -39,7 +39,7 @@ struct WindowEngine {
             self.handleSizeConstrainedWindow(element: window, windowFrame: self.getRect(element: window), screenFrame: screenFrame)
         }
         
-        NotificationCenter.default.post(name: Notification.Name.resizedWindow, object: nil)
+        KeybindMonitor.shared.resetPressedKeys()
     }
     
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {

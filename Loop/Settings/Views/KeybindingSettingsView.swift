@@ -8,40 +8,6 @@
 import SwiftUI
 import Defaults
 
-struct LoopTriggerKeys {
-    var symbol: String
-    var keySymbol: String
-    var description: String
-    var keycode: UInt16
-    
-    static let options: [LoopTriggerKeys] = [
-        LoopTriggerKeys(
-            symbol: "globe",
-            keySymbol: "custom.globe.rectangle.fill",
-            description: "Globe",
-            keycode: KeyCode.function
-        ),
-        LoopTriggerKeys(
-            symbol: "control",
-            keySymbol: "custom.control.rectangle.fill",
-            description: "Right Control",
-            keycode: KeyCode.rightControl
-        ),
-        LoopTriggerKeys(
-            symbol: "option",
-            keySymbol: "custom.option.rectangle.fill",
-            description: "Right Option",
-            keycode: KeyCode.rightOption
-        ),
-        LoopTriggerKeys(
-            symbol: "command",
-            keySymbol: "custom.command.rectangle.fill",
-            description: "Right Command",
-            keycode: KeyCode.rightCommand
-        ),
-    ]
-}
-
 struct KeybindingSettingsView: View {
     
     @Default(.triggerKey) var triggerKey
@@ -49,7 +15,7 @@ struct KeybindingSettingsView: View {
     @Default(.accentColor) var accentColor
     
     let LoopTriggerKeyOptions = LoopTriggerKeys.options
-    @State var triggerKeySymbol: String = "custom.globe.rectangle.fill" // This is just a placeholder
+    @State var triggerKeySymbol: String = "custom.globe.rectangle.fill" // This is just a placeholder, but it's a valid image
     
     var body: some View {
         Form {
@@ -86,7 +52,7 @@ struct KeybindingSettingsView: View {
                     
                     Spacer()
                     
-                    Group {
+                    HStack {
                         Image(triggerKeySymbol)
                             .font(Font.system(size: 30, weight: .regular))
                         
@@ -95,10 +61,9 @@ struct KeybindingSettingsView: View {
                         
                         Image("custom.space.rectangle.fill")
                             .font(Font.system(size: 30, weight: .regular))
+                            .frame(width: 60)
                     }
-                    .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
-//                    .backport.symbolEffectPulse()
                 }
                 
                 HStack {
@@ -114,7 +79,7 @@ struct KeybindingSettingsView: View {
                     
                     Spacer()
                     
-                    Group {
+                    HStack {
                         Image(triggerKeySymbol)
                             .font(Font.system(size: 30, weight: .regular))
                         
@@ -123,10 +88,9 @@ struct KeybindingSettingsView: View {
                         
                         Image(systemName: "arrowkeys.up.filled")
                             .font(Font.system(size: 30, weight: .regular))
+                            .frame(width: 60)
                     }
-                    .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
-//                    .backport.symbolEffectPulse()
                 }
                 
                 HStack {
@@ -140,7 +104,7 @@ struct KeybindingSettingsView: View {
                     
                     Spacer()
                     
-                    Group {
+                    HStack {
                         Image(triggerKeySymbol)
                             .font(Font.system(size: 30, weight: .regular))
                         
@@ -149,12 +113,12 @@ struct KeybindingSettingsView: View {
                         
                         Image(systemName: "j.square.fill")
                             .font(Font.system(size: 30, weight: .regular))
+                            .frame(width: 60)
                     }
-                    .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
-//                    .backport.symbolEffectPulse()
                 }
             }
+            .symbolRenderingMode(.hierarchical)
         }
         .formStyle(.grouped)
     }
@@ -167,12 +131,5 @@ struct KeybindingSettingsView: View {
             }
         }
         self.triggerKeySymbol = trigger.keySymbol
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        KeybindingSettingsView()
-            .frame(width: 450)
     }
 }
