@@ -28,11 +28,11 @@ jobs:
 
       - name: Zip Loop.app
         run: |
-          cd ./Archive.xcarchive/Products/Applications/
+          cd Archive.xcarchive/Products/Applications/
           ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
           
       - name: Upload achived app
         uses: actions/upload-artifact@v3.1.2
         with:
           name: app
-          path: Release/Loop.zip
+          path: Archive.xcarchive/Products/Applications/Loop.zip
