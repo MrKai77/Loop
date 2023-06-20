@@ -25,10 +25,14 @@ jobs:
       - name: Generate xcarchive of project
         run: |
           xcodebuild clean archive -project ./Loop.xcodeproj -scheme Loop -archivePath ./Archive CODE_SIGN_IDENTITY="-"
-
+      
+      - name: Extract Loop.app from xcarchive
+        run: |
+          xcodebuild -exportArchive -archivePath Archive.xcarchive -exportPath Release -exportOptionsPlist "resources/sparkle/export_options.plist"
+      
       - name: Zip Loop.app
         run: |
-          cd ./Archive.xcarchive/Products/Applications/
+          cd Release/
           ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
           
       - name: Upload achived app
