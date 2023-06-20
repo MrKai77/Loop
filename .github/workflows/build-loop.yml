@@ -1,7 +1,7 @@
 name: Build Loop
 
 on:
-  workflow_dispatch
+  workflow_dispatch: 
   pull_request:
     branches: [ "develop" ]
     types: [ ready_for_review, review_requested ]
