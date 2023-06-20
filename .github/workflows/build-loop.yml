@@ -14,6 +14,9 @@ jobs:
     runs-on: macos-13
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3.5.3
+    
       - name: Switch Xcode version
         run: |
           sudo xcode-select -s "/Applications/Xcode_15.0.app"
