@@ -3,10 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>method</key>
-	<string>developer-id</string>
+	<string>mac-application</string>
 	<key>signingCertificate</key>
-	<string>Apple Development</string>
+	<string>Mac App Distribution</string>
 	<key>signingStyle</key>
-	<string>manual</string>
+	<string>automatic</string>
+	<key>teamID</key>
+	<string>com.MrKai77</string>
 </dict>
 </plist>
