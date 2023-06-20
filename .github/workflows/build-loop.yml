@@ -1,0 +1,38 @@
+name: Build Loop
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+    types: [ ready_for_review, review_requested ]
+  schedule:
+    - cron: "0 14 * * 1"
+
+jobs:
+  build:
+    name: Build Loop
+    runs-on: macos-13
+
+    steps:
+      - name: Switch Xcode version
+        run: |
+          sudo xcode-select -s "/Applications/Xcode_15.0.app"
+          /usr/bin/xcodebuild -version
+          
+      - name: Generate xcarchive of project
+        run: |
+          xcodebuild clean archive -project ./Loop.xcodeproj -scheme Loop -archivePath ./Archive
+         
+      - name: Extract Loop.app from xcarchive
+        run: |
+          xcodebuild -exportArchive -archivePath Archive.xcarchive -exportPath Release -exportOptionsPlist "resources/sparkle/export_options.plist"
+          
+      - name: Zip Loop.app
+        run: |
+          cd Release
+          ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
+          
+      - name: Upload achived app
+        uses: actions/upload-artifact@master
+        with:
+          name: app
+          path: Release/Loop.zip
