@@ -9,28 +9,30 @@ import SwiftUI
 import Defaults
 
 struct KeybindingSettingsView: View {
-    
+
     @Default(.triggerKey) var triggerKey
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.accentColor) var accentColor
-    
-    let LoopTriggerKeyOptions = LoopTriggerKeys.options
-    @State var triggerKeySymbol: String = "custom.globe.rectangle.fill" // This is just a placeholder, but it's a valid image
-    
+
+    let loopTriggerKeyOptions = LoopTriggerKeys.options
+
+    // This is just a placeholder, but it's a valid image
+    @State var triggerKeySymbol: String = "custom.globe.rectangle.fill"
+
     var body: some View {
         Form {
             Section("Keybindings") {
                 VStack(alignment: .leading) {
                     Picker("Trigger Loop", selection: $triggerKey) {
-                        ForEach(0..<LoopTriggerKeyOptions.count, id: \.self) { i in
+                        ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { idx in
                             HStack {
-                                Image(systemName: LoopTriggerKeyOptions[i].symbol)
-                                Text(LoopTriggerKeyOptions[i].description)
+                                Image(systemName: loopTriggerKeyOptions[idx].symbol)
+                                Text(loopTriggerKeyOptions[idx].description)
                             }
-                            .tag(LoopTriggerKeyOptions[i].keycode)
+                            .tag(loopTriggerKeyOptions[idx].keycode)
                         }
                     }
-                    if triggerKey == LoopTriggerKeyOptions[1].keycode {
+                    if triggerKey == loopTriggerKeyOptions[1].keycode {
                         Text("Tip: To use caps lock, remap it to control in System Settings!")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -43,29 +45,29 @@ struct KeybindingSettingsView: View {
                     refreshTriggerKeySymbol()
                 }
             }
-            
+
             Section("Instructions") {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Press the spacebar with your trigger\nkey to maximize a window:")
                     }
-                    
+
                     Spacer()
-                    
+
                     HStack {
                         Image(triggerKeySymbol)
                             .font(Font.system(size: 30, weight: .regular))
-                        
+
                         Image(systemName: "plus")
                             .font(Font.system(size: 15, weight: .bold))
-                        
+
                         Image("custom.space.rectangle.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
                 }
-                
+
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Use arrow keys to resize into halves:")
@@ -76,41 +78,41 @@ struct KeybindingSettingsView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     }
-                    
+
                     Spacer()
-                    
+
                     HStack {
                         Image(triggerKeySymbol)
                             .font(Font.system(size: 30, weight: .regular))
-                        
+
                         Image(systemName: "plus")
                             .font(Font.system(size: 15, weight: .bold))
-                        
+
                         Image(systemName: "arrowkeys.up.filled")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
                     .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
                 }
-                
+
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Use JKL to resize into thirds:")
-                        
+
                         Text("Use U and O keys for 2/3-sized windows!")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     Spacer()
-                    
+
                     HStack {
                         Image(triggerKeySymbol)
                             .font(Font.system(size: 30, weight: .regular))
-                        
+
                         Image(systemName: "plus")
                             .font(Font.system(size: 15, weight: .bold))
-                        
+
                         Image(systemName: "j.square.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
@@ -122,13 +124,11 @@ struct KeybindingSettingsView: View {
         }
         .formStyle(.grouped)
     }
-    
+
     func refreshTriggerKeySymbol() {
-        var trigger: LoopTriggerKeys = LoopTriggerKeyOptions[0]
-        for loopTriggerKey in LoopTriggerKeyOptions {
-            if loopTriggerKey.keycode == triggerKey {
-                trigger = loopTriggerKey
-            }
+        var trigger: LoopTriggerKeys = loopTriggerKeyOptions[0]
+        for loopTriggerKey in loopTriggerKeyOptions where loopTriggerKey.keycode == triggerKey {
+            trigger = loopTriggerKey
         }
         self.triggerKeySymbol = trigger.keySymbol
     }

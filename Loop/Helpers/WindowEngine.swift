@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-fileprivate let kAXFullScreenAttribute = "AXFullScreen"
-
 struct WindowEngine {
-    
+
+    private let kAXFullScreenAttribute = "AXFullScreen"
+
     func resizeFrontmostWindow(direction: WindowDirection) {
         guard let frontmostWindow = self.getFrontmostWindow() else { return }
         resize(window: frontmostWindow, direction: direction)
     }
-    
+
     func getFrontmostWindow() -> AXUIElement? {
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
                 let window = self.getFocusedWindow(pid: app.processIdentifier),
@@ -23,29 +23,35 @@ struct WindowEngine {
                 self.getSubRole(element: window) == kAXStandardWindowSubrole,
                 self.isFullscreen(element: window) == false
         else { return nil }
-        
+
         return window
     }
-    
+
     func resize(window: AXUIElement, direction: WindowDirection) {
         guard let screenFrame = getActiveScreenFrame(),
                 let newWindowFrame = generateWindowFrame(screenFrame, direction)
         else { return }
-        
+
         self.setPosition(element: window, position: newWindowFrame.origin)
         self.setSize(element: window, size: newWindowFrame.size)
-        
+
         if self.getRect(element: window) != newWindowFrame {
-            self.handleSizeConstrainedWindow(element: window, windowFrame: self.getRect(element: window), screenFrame: screenFrame)
+            self.handleSizeConstrainedWindow(
+                element: window,
+                windowFrame: self.getRect(element: window),
+                screenFrame: screenFrame
+            )
         }
-        
+
         KeybindMonitor.shared.resetPressedKeys()
     }
-    
+
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
         let element = AXUIElementCreateApplication(pid)
         if let window = element.copyAttributeValue(attribute: kAXFocusedWindowAttribute) {
+            // swiftlint:disable force_cast
             return (window as! AXUIElement)
+            // swiftlint:enable force_cast
         }
         return nil
     }
@@ -59,7 +65,7 @@ struct WindowEngine {
         let result = element.copyAttributeValue(attribute: kAXFullScreenAttribute) as? NSNumber
         return result?.boolValue ?? false
     }
-    
+
     @discardableResult
     private func setPosition(element: AXUIElement, position: CGPoint) -> Bool {
         var position = position
@@ -71,10 +77,12 @@ struct WindowEngine {
     private func getPosition(element: AXUIElement) -> CGPoint {
         var point: CGPoint = .zero
         guard let axValue = element.copyAttributeValue(attribute: kAXPositionAttribute) else { return point }
+        // swiftlint:disable force_cast
         AXValueGetValue(axValue as! AXValue, .cgPoint, &point)
+        // swiftlint:enable force_cast
         return point
     }
-    
+
     @discardableResult
     private func setSize(element: AXUIElement, size: CGSize) -> Bool {
         var size = size
@@ -86,30 +94,33 @@ struct WindowEngine {
     private func getSize(element: AXUIElement) -> CGSize {
         var size: CGSize = .zero
         guard let axValue = element.copyAttributeValue(attribute: kAXSizeAttribute) else { return size }
+        // swiftlint:disable force_cast
         AXValueGetValue(axValue as! AXValue, .cgSize, &size)
+        // swiftlint:enable force_cast
         return size
     }
-    
+
     private func getRect(element: AXUIElement) -> CGRect {
         return CGRect(origin: getPosition(element: element), size: getSize(element: element))
     }
-    
+
     private func getActiveScreenFrame() -> CGRect? {
         guard let screen = NSScreen().screenWithMouse() else { return nil }
+        guard let displayID = screen.displayID else { return nil }
         let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
-        var screenFrame = CGDisplayBounds(screen.displayID)
+        var screenFrame = CGDisplayBounds(displayID)
         screenFrame.size.height -= menubarHeight
         screenFrame.origin.y += menubarHeight
-        
+
         return screenFrame
     }
     private func generateWindowFrame(_ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
-        
+
         let screenWidth = screenFrame.size.width
         let screenHeight = screenFrame.size.height
         let screenX = screenFrame.origin.x
         let screenY = screenFrame.origin.y
-        
+
         switch direction {
         case .topHalf:
             return CGRect(x: screenX, y: screenY, width: screenWidth, height: screenHeight/2)
@@ -149,30 +160,30 @@ struct WindowEngine {
             return CGRect(x: screenX, y: screenY+2*screenHeight/3, width: screenWidth, height: screenHeight/3)
         case .bottomTwoThirds:
             return CGRect(x: screenX, y: screenY+screenHeight/3, width: screenWidth, height: 2*screenHeight/3)
-            
+
         default:
             return nil
         }
     }
-    
+
     private func handleSizeConstrainedWindow(element: AXUIElement, windowFrame: CGRect, screenFrame: CGRect) {
-        
+
         // If the window is fully shown on the screen
         if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
             return
         }
-        
+
         // If not, then Loop will auto re-adjust the window size to be fully shown on the screen
         var fixedWindowFrame = windowFrame
-        
+
         if fixedWindowFrame.maxX > screenFrame.maxX {
             fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width
         }
-        
+
         if fixedWindowFrame.maxY > screenFrame.maxY {
             fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height
         }
-        
+
         setPosition(element: element, position: fixedWindowFrame.origin)
     }
 }

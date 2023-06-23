@@ -10,9 +10,9 @@ import Defaults
 import ServiceManagement
 
 struct GeneralSettingsView: View {
-    
+
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
     @Default(.launchAtLogin) var launchAtLogin
     @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
     @Default(.useSystemAccentColor) var useSystemAccentColor
@@ -21,10 +21,10 @@ struct GeneralSettingsView: View {
     @Default(.gradientAccentColor) var gradientAccentColor
     @Default(.currentIcon) var currentIcon
     @Default(.timesLooped) var timesLooped
-    
+
     let iconManager = IconManager()
     let accessibilityAccessManager = AccessibilityAccessManager()
-    
+
     var body: some View {
         Form {
             Section("Behavior") {
@@ -37,7 +37,7 @@ struct GeneralSettingsView: View {
                         }
                     }
             }
-            
+
             Section("Loop's icon") {
                 VStack(alignment: .leading) {
                     Picker("Selected icon:", selection: $currentIcon) {
@@ -51,21 +51,23 @@ struct GeneralSettingsView: View {
                         .textSelection(.enabled)
                 }
             }
-            
+
             Section("Accent Color") {
                 Toggle("Follow System Accent Color", isOn: $useSystemAccentColor)
-                
+
                 Group {
                     ColorPicker("Accent Color", selection: $accentColor, supportsOpacity: false)
                     Toggle("Use Gradient", isOn: $useGradientAccentColor)
                     ColorPicker("Gradient's color", selection: $gradientAccentColor, supportsOpacity: false)
                         .disabled(!useGradientAccentColor)
-                        .foregroundColor(useGradientAccentColor ? (useSystemAccentColor ? .secondary : nil) : .secondary)
+                        .foregroundColor(
+                            useGradientAccentColor ? (useSystemAccentColor ? .secondary : nil) : .secondary
+                        )
                 }
                 .disabled(useSystemAccentColor)
                 .foregroundColor(useSystemAccentColor ? .secondary : nil)
             }
-            
+
             Section(content: {
                 HStack {
                     Text("Accessibility Access")
@@ -80,9 +82,9 @@ struct GeneralSettingsView: View {
             }, header: {
                 HStack {
                     Text("Permissions")
-                    
+
                     Spacer()
-                    
+
                     Button("Refresh Status", action: {
                         accessibilityAccessManager.checkAccessibilityAccess(ask: true)
                     })

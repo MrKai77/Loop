@@ -12,7 +12,7 @@ struct LoopTriggerKeys {
     var keySymbol: String
     var description: String
     var keycode: UInt16
-    
+
     static let options: [LoopTriggerKeys] = [
         LoopTriggerKeys(
             symbol: "globe",
@@ -37,6 +37,6 @@ struct LoopTriggerKeys {
             keySymbol: "custom.command.rectangle.fill",
             description: "Right Command",
             keycode: KeyCode.rightCommand
-        ),
+        )
     ]
 }

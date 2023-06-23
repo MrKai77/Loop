@@ -9,79 +9,83 @@ import SwiftUI
 import Defaults
 
 struct PreviewView: View {
-    
+
     // Used to preview inside the app's settings
     @State var previewMode = false
-    
+
     @State var currentResizingDirection: WindowDirection = .noAction
-    
+
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.accentColor) var accentColor
     @Default(.useGradientAccentColor) var useGradientAccentColor
     @Default(.gradientAccentColor) var gradientAccentColor
-    
+
     @Default(.previewVisibility) var previewVisibility
     @Default(.previewPadding) var previewPadding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
-    
+
     var body: some View {
-        VStack {
-            if currentResizingDirection == .bottomThird ||
-               currentResizingDirection == .bottomHalf ||
-               currentResizingDirection == .bottomRightQuarter ||
-               currentResizingDirection == .bottomLeftQuarter ||
-               currentResizingDirection == .noAction {
-                Rectangle()
-                    .foregroundColor(.clear)
-            }
-            
-            HStack {
-                
-                if currentResizingDirection == .rightThird ||
-                   currentResizingDirection == .topRightQuarter ||
-                   currentResizingDirection == .rightHalf ||
-                   currentResizingDirection == .bottomRightQuarter ||
-                   currentResizingDirection == .noAction {
+        GeometryReader { geo in
+            VStack {
+                switch currentResizingDirection {
+                case .bottomHalf, .bottomRightQuarter, .bottomLeftQuarter, .verticalCenterThird, .bottomThird, .bottomTwoThirds, .noAction:
                     Rectangle()
-                        .foregroundColor(.clear)
+                        .frame(width: currentResizingDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
+                default:
+                    EmptyView()
                 }
-                
-                ZStack {
-                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                        .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
-                        .shadow(radius: 10)
-                    RoundedRectangle(cornerRadius: previewCornerRadius)
-                        .stroke(LinearGradient(
-                            gradient: Gradient(colors: [
-                                useSystemAccentColor ? Color.accentColor : accentColor,
-                                useSystemAccentColor ? Color.accentColor : useGradientAccentColor ? gradientAccentColor : accentColor]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing), lineWidth: previewBorderThickness)
+
+                HStack {
+                    switch currentResizingDirection {
+                    case .rightHalf, .topRightQuarter, .bottomRightQuarter, .horizontalCenterThird, .rightThird, .rightTwoThirds, .noAction:
+                        Rectangle()
+                            .frame(width: currentResizingDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
+                    default:
+                        EmptyView()
+                    }
+
+                    ZStack {
+                        VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                            .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
+                            .shadow(radius: 10)
+                        RoundedRectangle(cornerRadius: previewCornerRadius)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(
+                                        colors: [useSystemAccentColor ? Color.accentColor : accentColor,
+                                                 useSystemAccentColor ? Color.accentColor :
+                                                    (useGradientAccentColor ? gradientAccentColor : accentColor)]
+                                    ),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: previewBorderThickness
+                            )
+                    }
+                    .padding(previewPadding + previewBorderThickness/2)
+                    .frame(width: currentResizingDirection == .noAction ? 0 : nil,
+                           height: currentResizingDirection == .noAction ? 0 : nil)
+
+                    switch currentResizingDirection {
+                    case .leftHalf, .topLeftQuarter, .bottomLeftQuarter, .horizontalCenterThird, .leftThird, .leftTwoThirds, .noAction:
+                        Rectangle()
+                            .frame(width: currentResizingDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
+                    default:
+                        EmptyView()
+                    }
                 }
-                .padding(previewPadding + previewBorderThickness/2)
-                .frame(width: currentResizingDirection == .noAction ? 0 : nil,
-                       height: currentResizingDirection == .noAction ? 0 : nil)
-                
-                if currentResizingDirection == .leftThird ||
-                   currentResizingDirection == .topLeftQuarter ||
-                   currentResizingDirection == .leftHalf ||
-                   currentResizingDirection == .bottomLeftQuarter ||
-                   currentResizingDirection == .noAction {
+
+                switch currentResizingDirection {
+                case .topHalf, .topRightQuarter, .topLeftQuarter, .verticalCenterThird, .topThird, .topTwoThirds, .noAction:
                     Rectangle()
-                        .foregroundColor(.clear)
+                        .frame(width: currentResizingDirection == .topThird ? geo.size.width / 3 * 2 : nil)
+                default:
+                    EmptyView()
                 }
-            }
-            
-            if currentResizingDirection == .topThird ||
-               currentResizingDirection == .topHalf ||
-               currentResizingDirection == .topRightQuarter ||
-               currentResizingDirection == .topLeftQuarter ||
-               currentResizingDirection == .noAction {
-                Rectangle()
-                    .foregroundColor(.clear)
             }
         }
+        .foregroundColor(.clear)
         .opacity(currentResizingDirection == .noAction ? 0 : 1)
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizingDirection)
         .onReceive(.currentDirectionChanged) { obj in
@@ -91,7 +95,7 @@ struct PreviewView: View {
                 }
             }
         }
-        
+
         .onAppear {
             if previewMode {
                 currentResizingDirection = .maximize

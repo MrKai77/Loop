@@ -34,7 +34,7 @@ struct KeyCode {
     static let x = UInt16(kVK_ANSI_X)
     static let y = UInt16(kVK_ANSI_Y)
     static let z = UInt16(kVK_ANSI_Z)
-    
+
     static let number0 = UInt16(kVK_ANSI_0)
     static let number1 = UInt16(kVK_ANSI_1)
     static let number2 = UInt16(kVK_ANSI_2)
@@ -45,7 +45,7 @@ struct KeyCode {
     static let number7 = UInt16(kVK_ANSI_7)
     static let number8 = UInt16(kVK_ANSI_8)
     static let number9 = UInt16(kVK_ANSI_9)
-    
+
     static let keypad0 = UInt16(kVK_ANSI_Keypad0)
     static let keypad1 = UInt16(kVK_ANSI_Keypad1)
     static let keypad2 = UInt16(kVK_ANSI_Keypad2)
@@ -123,7 +123,7 @@ struct KeyCode {
     static let rightOption = UInt16(kVK_RightOption)
     static let shift = UInt16(kVK_Shift)
     static let rightShift = UInt16(kVK_RightShift)
-    
+
     static let downArrow = UInt16(kVK_DownArrow)
     static let leftArrow = UInt16(kVK_LeftArrow)
     static let rightArrow = UInt16(kVK_RightArrow)

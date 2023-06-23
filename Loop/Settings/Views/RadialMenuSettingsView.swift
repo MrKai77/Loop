@@ -9,21 +9,37 @@ import SwiftUI
 import Defaults
 
 struct RadialMenuSettingsView: View {
-    
+
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
-    
+
     var body: some View {
         Form {
             Section("Behavior") {
-                RadialMenuView(frontmostWindow: nil, previewMode: true, timer: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
+                RadialMenuView(
+                    frontmostWindow: nil,
+                    previewMode: true,
+                    timer: Timer.publish(every: 1,
+                                         on: .main,
+                                         in: .common).autoconnect()
+                )
             }
-            
+
             Section(content: {
-                Slider(value: $radialMenuCornerRadius, in: 30...50, step: 4, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
+                Slider(value: $radialMenuCornerRadius,
+                       in: 30...50,
+                       step: 4,
+                       minimumValueLabel: Text("10%"),
+                       maximumValueLabel: Text("100%")) {
                     Text("Corner Radius")
                 }
-                Slider(value: $radialMenuThickness, in: 10...34, step: 4, minimumValueLabel: Text("10%"), maximumValueLabel: Text("100%")) {
+                Slider(
+                    value: $radialMenuThickness,
+                    in: 10...34,
+                    step: 4,
+                    minimumValueLabel: Text("10%"),
+                    maximumValueLabel: Text("100%")
+                ) {
                     Text("Thickness")
                 }
             }, footer: {

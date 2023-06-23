@@ -9,31 +9,49 @@ import SwiftUI
 import Defaults
 
 struct PreviewSettingsView: View {
-    
+
     @Default(.previewVisibility) var previewVisibility
     @Default(.previewPadding) var previewPadding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
-    
+
     var body: some View {
         Form {
             Section("Behavior") {
                 Toggle("Show Preview when looping", isOn: $previewVisibility)
             }
-            
+
             Section {
                 PreviewView(previewMode: true)
             }
             .frame(height: 150)
-            
+
             Section {
-                Slider(value: $previewPadding, in: 0...20, step: 2, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                Slider(
+                    value: $previewPadding,
+                    in: 0...20,
+                    step: 2,
+                    minimumValueLabel: Text("0%"),
+                    maximumValueLabel: Text("100%")
+                ) {
                     Text("Padding")
                 }
-                Slider(value: $previewCornerRadius, in: 0...20, step: 2, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                Slider(
+                    value: $previewCornerRadius,
+                    in: 0...20,
+                    step: 2,
+                    minimumValueLabel: Text("0%"),
+                    maximumValueLabel: Text("100%")
+                ) {
                     Text("Corner Radius")
                 }
-                Slider(value: $previewBorderThickness, in: 0...10, step: 1, minimumValueLabel: Text("0%"), maximumValueLabel: Text("100%")) {
+                Slider(
+                    value: $previewBorderThickness,
+                    in: 0...10,
+                    step: 1,
+                    minimumValueLabel: Text("0%"),
+                    maximumValueLabel: Text("100%")
+                ) {
                     Text("Border Thickness")
                 }
             }

@@ -9,7 +9,7 @@ import SwiftUI
 
 class AboutViewController {
     var aboutWindowController: NSWindowController?
-    
+
     func showAboutWindow() {
         if aboutWindowController == nil {
             let window = NSWindow()
@@ -23,7 +23,7 @@ class AboutViewController {
             window.center()
             aboutWindowController = .init(window: window)
         }
-        
+
         aboutWindowController?.showWindow(aboutWindowController?.window)
         NSApp.activate(ignoringOtherApps: true)
     }

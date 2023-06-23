@@ -14,16 +14,16 @@ extension Defaults.Keys {
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Default")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
     static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
-    
+
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: false)
     static let accentColor = Key<Color>("accentColor", default: Color(.white))
     static let useGradientAccentColor = Key<Bool>("useGradientAccentColor", default: false)
     static let gradientAccentColor = Key<Color>("gradientAccentColor", default: Color(.black))
-    
+
     static let triggerKey = Key<UInt16>("triggerKey", default: KeyCode.function)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
-    
+
     static let previewVisibility = Key<Bool>("previewVisibility", default: true)
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 15)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)

@@ -12,18 +12,18 @@ extension AXUIElement {
         let error = AXUIElementSetAttributeValue(self, attribute as CFString, value)
         return error == .success
     }
-    
+
     func copyAttributeValue(attribute: String) -> CFTypeRef? {
-        var ref: CFTypeRef? = nil
+        var ref: CFTypeRef?
         let error = AXUIElementCopyAttributeValue(self, attribute as CFString, &ref)
         if error == .success {
             return ref
         }
         return .none
     }
-    
+
     func getAttributeNames() -> [String]? {
-        var ref: CFArray? = nil
+        var ref: CFArray?
         let error = AXUIElementCopyAttributeNames(self, &ref)
         if error == .success {
             return ref! as [AnyObject] as? [String]

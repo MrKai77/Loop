@@ -17,11 +17,12 @@ extension CGPoint {
 
         return CGFloat(bearingRadians)
     }
-    
+
     func distanceSquared(to comparisonPoint: CGPoint) -> CGFloat {
         let from = CGPoint(x: x, y: y)
-        let to = comparisonPoint
-        
-        return (from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y)
+        return (from.x - comparisonPoint.x)
+            * (from.x - comparisonPoint.x)
+            + (from.y - comparisonPoint.y)
+            * (from.y - comparisonPoint.y)
     }
 }

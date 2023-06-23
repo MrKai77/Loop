@@ -1,0 +1,9 @@
+excluded:
+  - Loop/Helpers/KeyCode.swift
+
+cyclomatic_complexity:
+  ignores_case_statements: true
+
+force_cast: warning
+
+line_length: 140

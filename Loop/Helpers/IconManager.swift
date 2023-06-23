@@ -9,19 +9,19 @@ import SwiftUI
 import Defaults
 
 class IconManager {
-    
+
     // Icon name, times looped needed to unlock it
     let icons: [String: Int] = [
         "AppIcon-Default": 0,
         "AppIcon-Scifi": 25,
-        "AppIcon-Rosé Pine": 50,
+        "AppIcon-Rosé Pine": 50
     ]
-    
+
     func nameWithoutPrefix(name: String) -> String {
         let prefix = "AppIcon-"
         return name.replacingOccurrences(of: prefix, with: "")
     }
-    
+
     func returnUnlockedIcons() -> [String] {
         var returnValue: [String] = []
         for (icon, unlockTimes) in icons where unlockTimes <= Defaults[.timesLooped] {
@@ -29,26 +29,26 @@ class IconManager {
         }
         return returnValue.reversed()
     }
-    
+
     func setAppIcon(to icon: String) {
         NSWorkspace.shared.setIcon(NSImage(named: icon), forFile: Bundle.main.bundlePath, options: [])
         NSApp.applicationIconImage = NSImage(named: icon)
-        
+
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName)"
         alert.informativeText = "Current icon is now \(nameWithoutPrefix(name: icon))!"
         alert.icon = NSImage(named: icon)
         alert.runModal()
-        
+
         Defaults[.currentIcon] = icon
     }
-    
+
     // This function is run at startup to set the current icon to the user's set icon.
     func setCurrentAppIcon() {
         NSWorkspace.shared.setIcon(NSImage(named: Defaults[.currentIcon]), forFile: Bundle.main.bundlePath, options: [])
         NSApp.applicationIconImage = NSImage(named: Defaults[.currentIcon])
     }
-    
+
     func checkIfUnlockedNewIcon() {
         for (icon, unlockTimes) in icons where unlockTimes == Defaults[.timesLooped] {
             let alert = NSAlert()

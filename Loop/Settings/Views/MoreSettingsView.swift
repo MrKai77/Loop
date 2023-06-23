@@ -9,25 +9,25 @@ import SwiftUI
 import Sparkle
 
 struct MoreSettingsView: View {
-        
+
     private let updater: SPUUpdater
-    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel  // This is used when the user manually checks for updates
-    
+
+    // This is used when the user manually checks for updates
+    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
+
     @State private var automaticallyChecksForUpdates: Bool
     @State private var automaticallyDownloadsUpdates: Bool
-        
+
     init(updater: SPUUpdater) {
-        
-        
         self.updater = updater
-        
+
         // Create our view model for our CheckForUpdatesView
         checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
-        
+
         self.automaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
         self.automaticallyDownloadsUpdates = updater.automaticallyDownloadsUpdates
     }
-    
+
     var body: some View {
         Form {
             Section(content: {
@@ -48,9 +48,9 @@ struct MoreSettingsView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     Spacer()
-                    
+
                     Button("Check for Updates…", action: updater.checkForUpdates)
                         .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
                         .buttonStyle(.link)
