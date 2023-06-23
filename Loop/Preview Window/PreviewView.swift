@@ -13,7 +13,7 @@ struct PreviewView: View {
     // Used to preview inside the app's settings
     @State var previewMode = false
 
-    @State var currentResizingDirection: WindowDirection = .noAction
+    @State var currentResizeDirection: WindowDirection = .noAction
 
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.accentColor) var accentColor
@@ -28,19 +28,19 @@ struct PreviewView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
-                switch currentResizingDirection {
+                switch currentResizeDirection {
                 case .bottomHalf, .bottomRightQuarter, .bottomLeftQuarter, .verticalCenterThird, .bottomThird, .bottomTwoThirds, .noAction:
                     Rectangle()
-                        .frame(width: currentResizingDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
+                        .frame(width: currentResizeDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
                 default:
                     EmptyView()
                 }
 
                 HStack {
-                    switch currentResizingDirection {
+                    switch currentResizeDirection {
                     case .rightHalf, .topRightQuarter, .bottomRightQuarter, .horizontalCenterThird, .rightThird, .rightTwoThirds, .noAction:
                         Rectangle()
-                            .frame(width: currentResizingDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
+                            .frame(width: currentResizeDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
                     default:
                         EmptyView()
                     }
@@ -64,41 +64,45 @@ struct PreviewView: View {
                             )
                     }
                     .padding(previewPadding + previewBorderThickness/2)
-                    .frame(width: currentResizingDirection == .noAction ? 0 : nil,
-                           height: currentResizingDirection == .noAction ? 0 : nil)
+                    .frame(width: currentResizeDirection == .noAction ? 0 : nil,
+                           height: currentResizeDirection == .noAction ? 0 : nil)
+                    .frame(width: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
+                    .frame(width: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
+                    .frame(width: currentResizeDirection == .rightTwoThirds ? geo.size.width / 3 * 2 : nil)
+                    .frame(width: currentResizeDirection == .leftTwoThirds ? geo.size.width / 3 * 2 : nil)
 
-                    switch currentResizingDirection {
+                    switch currentResizeDirection {
                     case .leftHalf, .topLeftQuarter, .bottomLeftQuarter, .horizontalCenterThird, .leftThird, .leftTwoThirds, .noAction:
                         Rectangle()
-                            .frame(width: currentResizingDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
+                            .frame(width: currentResizeDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
                     default:
                         EmptyView()
                     }
                 }
 
-                switch currentResizingDirection {
+                switch currentResizeDirection {
                 case .topHalf, .topRightQuarter, .topLeftQuarter, .verticalCenterThird, .topThird, .topTwoThirds, .noAction:
                     Rectangle()
-                        .frame(width: currentResizingDirection == .topThird ? geo.size.width / 3 * 2 : nil)
+                        .frame(width: currentResizeDirection == .topThird ? geo.size.width / 3 * 2 : nil)
                 default:
                     EmptyView()
                 }
             }
         }
         .foregroundColor(.clear)
-        .opacity(currentResizingDirection == .noAction ? 0 : 1)
-        .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizingDirection)
+        .opacity(currentResizeDirection == .noAction ? 0 : 1)
+        .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizeDirection)
         .onReceive(.currentDirectionChanged) { obj in
             if !previewMode {
                 if let direction = obj.userInfo?["Direction"] as? WindowDirection {
-                    currentResizingDirection = direction
+                    currentResizeDirection = direction
                 }
             }
         }
 
         .onAppear {
             if previewMode {
-                currentResizingDirection = .maximize
+                currentResizeDirection = .maximize
             }
         }
     }
