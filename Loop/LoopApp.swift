@@ -54,11 +54,9 @@ struct LoopApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    let windowEngine = WindowEngine()
-    let radialMenuController = RadialMenuController()
-    let aboutViewController = AboutViewController()
-    let iconManager = IconManager()
     let accessibilityAccessManager = AccessibilityAccessManager()
+    let iconManager = IconManager()
+    let radialMenuController = RadialMenuController()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         do {
@@ -69,16 +67,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Check accessibility access, then if access is not granted,
         // show a more informative alert asking for accessibility access
-        if !accessibilityAccessManager.checkAccessibilityAccess(ask: false) {
+        if !accessibilityAccessManager.checkAccessibilityAccess() {
             accessibilityAccessManager.accessibilityAccessAlert()
         }
         iconManager.setCurrentAppIcon()
 
         radialMenuController.addObservers()
-
-        // Show settings window on launch if this is a debug build
-        #if DEBUG
-        print("Debug build!")
-        #endif
     }
 }
