@@ -48,12 +48,10 @@ struct WindowEngine {
 
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
         let element = AXUIElementCreateApplication(pid)
-        if let window = element.copyAttributeValue(attribute: kAXFocusedWindowAttribute) {
-            // swiftlint:disable force_cast
-            return (window as! AXUIElement)
-            // swiftlint:enable force_cast
-        }
-        return nil
+        guard let window = element.copyAttributeValue(attribute: kAXFocusedWindowAttribute) else { return nil }
+        // swiftlint:disable force_cast
+        return (window as! AXUIElement)
+        // swiftlint:enable force_cast
     }
     private func getRole(element: AXUIElement) -> String? {
         return element.copyAttributeValue(attribute: kAXRoleAttribute) as? String
@@ -76,9 +74,9 @@ struct WindowEngine {
     }
     private func getPosition(element: AXUIElement) -> CGPoint {
         var point: CGPoint = .zero
-        guard let axValue = element.copyAttributeValue(attribute: kAXPositionAttribute) else { return point }
+        guard let value = element.copyAttributeValue(attribute: kAXPositionAttribute) else { return point }
         // swiftlint:disable force_cast
-        AXValueGetValue(axValue as! AXValue, .cgPoint, &point)
+        AXValueGetValue(value as! AXValue, .cgPoint, &point)    // Convert to CGPoint
         // swiftlint:enable force_cast
         return point
     }
@@ -93,9 +91,9 @@ struct WindowEngine {
     }
     private func getSize(element: AXUIElement) -> CGSize {
         var size: CGSize = .zero
-        guard let axValue = element.copyAttributeValue(attribute: kAXSizeAttribute) else { return size }
+        guard let value = element.copyAttributeValue(attribute: kAXSizeAttribute) else { return size }
         // swiftlint:disable force_cast
-        AXValueGetValue(axValue as! AXValue, .cgSize, &size)
+        AXValueGetValue(value as! AXValue, .cgSize, &size)      // Convert to CGSize
         // swiftlint:enable force_cast
         return size
     }

@@ -10,7 +10,7 @@ import Defaults
 
 class AccessibilityAccessManager {
     @discardableResult
-    func checkAccessibilityAccess(ask: Bool) -> Bool {
+    func checkAccessibilityAccess(ask: Bool = false) -> Bool {
         // Get current state for accessibility access
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: ask]
         let status = AXIsProcessTrustedWithOptions(options)
