@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Defaults
 
 // Enum that stores all possible resizing options
 enum WindowDirection: CaseIterable {
@@ -54,28 +55,51 @@ enum WindowDirection: CaseIterable {
         }
     }
 
-    var keybindings: [Set<UInt16>] {
+    var keybind: [Set<UInt16>] {
         switch self {
         case .noAction:                 [[]]
-        case .maximize:                 [[KeyCode.space]]
+        case .maximize:                 Defaults[.maximizeKeybind]
 
-        case .topHalf:                  [[KeyCode.w], [KeyCode.upArrow]]
-        case .rightHalf:                [[KeyCode.d], [KeyCode.rightArrow]]
-        case .bottomHalf:               [[KeyCode.s], [KeyCode.downArrow]]
-        case .leftHalf:                 [[KeyCode.a], [KeyCode.leftArrow]]
+        case .topHalf:                  Defaults[.topHalfKeybind]
+        case .rightHalf:                Defaults[.rightHalfKeybind]
+        case .bottomHalf:               Defaults[.bottomHalfKeybind]
+        case .leftHalf:                 Defaults[.leftHalfKeybind]
 
-        case .topRightQuarter:          [[KeyCode.w, KeyCode.d], [KeyCode.upArrow, KeyCode.rightArrow]]
-        case .bottomRightQuarter:       [[KeyCode.s, KeyCode.d], [KeyCode.downArrow, KeyCode.rightArrow]]
-        case .bottomLeftQuarter:        [[KeyCode.s, KeyCode.a], [KeyCode.downArrow, KeyCode.leftArrow]]
-        case .topLeftQuarter:           [[KeyCode.w, KeyCode.a], [KeyCode.upArrow, KeyCode.leftArrow]]
+        case .topRightQuarter:          Defaults[.topRightQuarter]
+        case .bottomRightQuarter:       Defaults[.bottomRightQuarter]
+        case .bottomLeftQuarter:        Defaults[.bottomLeftQuarter]
+        case .topLeftQuarter:           Defaults[.topLeftQuarter]
 
-        case .leftThird:                [[KeyCode.j]]
-        case .leftTwoThirds:            [[KeyCode.u]]
-        case .horizontalCenterThird:    [[KeyCode.k]]
-        case .rightTwoThirds:           [[KeyCode.o]]
-        case .rightThird:               [[KeyCode.l]]
+        case .leftThird:                Defaults[.leftThird]
+        case .leftTwoThirds:            Defaults[.leftTwoThirds]
+        case .horizontalCenterThird:    Defaults[.horizontalCenterThird]
+        case .rightTwoThirds:           Defaults[.rightTwoThirds]
+        case .rightThird:               Defaults[.rightThird]
 
         default:                        [[]]
+        }
+    }
+
+    func setKeybind(_ keybind: [Set<UInt16>]) {
+        switch self {
+        case .maximize:                 Defaults[.maximizeKeybind] = keybind
+
+        case .topHalf:                  Defaults[.topHalfKeybind] = keybind
+        case .rightHalf:                Defaults[.rightHalfKeybind] = keybind
+        case .bottomHalf:               Defaults[.bottomHalfKeybind] = keybind
+        case .leftHalf:                 Defaults[.leftHalfKeybind] = keybind
+
+        case .topRightQuarter:          Defaults[.topRightQuarter] = keybind
+        case .bottomRightQuarter:       Defaults[.bottomRightQuarter] = keybind
+        case .bottomLeftQuarter:        Defaults[.bottomLeftQuarter] = keybind
+        case .topLeftQuarter:           Defaults[.topLeftQuarter] = keybind
+
+        case .leftThird:                Defaults[.leftThird] = keybind
+        case .leftTwoThirds:            Defaults[.leftTwoThirds] = keybind
+        case .horizontalCenterThird:    Defaults[.horizontalCenterThird] = keybind
+        case .rightTwoThirds:           Defaults[.rightTwoThirds] = keybind
+        case .rightThird:               Defaults[.rightThird] = keybind
+        default: return
         }
     }
 }

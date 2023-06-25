@@ -28,4 +28,71 @@ extension Defaults.Keys {
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 15)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 0)
+
+    static let maximizeKeybind = Key<[Set<UInt16>]>(
+        "maximizeKeybind",
+        default: [[KeyCode.space], [KeyCode.return]]
+    )
+
+    // Halves
+    static let topHalfKeybind = Key<[Set<UInt16>]>(
+        "topHalfKeybind",
+        default: [[KeyCode.w], [KeyCode.upArrow]]
+    )
+    static let bottomHalfKeybind = Key<[Set<UInt16>]>(
+        "bottomHalfKeybind",
+        default: [[KeyCode.s], [KeyCode.downArrow]]
+    )
+    static let rightHalfKeybind = Key<[Set<UInt16>]>(
+        "rightHalfKeybind",
+        default: [[KeyCode.d], [KeyCode.rightArrow]]
+    )
+    static let leftHalfKeybind = Key<[Set<UInt16>]>(
+        "leftHalfKeybind",
+        default: [[KeyCode.a], [KeyCode.leftArrow]]
+    )
+
+    // Quarters
+    static let topLeftQuarter = Key<[Set<UInt16>]>(
+        "topLeftQuarter",
+        default: [[KeyCode.w, KeyCode.a],
+                  [KeyCode.upArrow, KeyCode.leftArrow]]
+    )
+    static let topRightQuarter = Key<[Set<UInt16>]>(
+        "topRightQuarter",
+        default: [[KeyCode.w, KeyCode.d],
+                  [KeyCode.upArrow, KeyCode.rightArrow]]
+    )
+    static let bottomRightQuarter = Key<[Set<UInt16>]>(
+        "bottomRightQuarter",
+        default: [[KeyCode.s, KeyCode.d],
+                  [KeyCode.downArrow, KeyCode.rightArrow]]
+    )
+    static let bottomLeftQuarter = Key<[Set<UInt16>]>(
+        "bottomLeftQuarter",
+        default: [[KeyCode.s, KeyCode.a],
+                  [KeyCode.downArrow, KeyCode.leftArrow]]
+    )
+
+    // Thirds
+    static let leftThird = Key<[Set<UInt16>]>(
+        "leftThird",
+        default: [[KeyCode.j]]
+    )
+    static let leftTwoThirds = Key<[Set<UInt16>]>(
+        "leftTwoThirds",
+        default: [[KeyCode.u]]
+    )
+    static let horizontalCenterThird = Key<[Set<UInt16>]>(
+        "horizontalCenterThird",
+        default: [[KeyCode.k]]
+    )
+    static let rightTwoThirds = Key<[Set<UInt16>]>(
+        "rightTwoThirds",
+        default: [[KeyCode.o]]
+    )
+    static let rightThird = Key<[Set<UInt16>]>(
+        "rightThird",
+        default: [[KeyCode.l]]
+    )
 }
