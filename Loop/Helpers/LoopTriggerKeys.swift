@@ -6,37 +6,38 @@
 //
 
 import Foundation
+import CoreGraphics
 
 struct LoopTriggerKeys {
     var symbol: String
     var keySymbol: String
     var description: String
-    var keycode: UInt16
+    var keycode: CGKeyCode
 
     static let options: [LoopTriggerKeys] = [
         LoopTriggerKeys(
             symbol: "globe",
             keySymbol: "custom.globe.rectangle.fill",
             description: "Globe",
-            keycode: KeyCode.function
+            keycode: .kVK_Function
         ),
         LoopTriggerKeys(
             symbol: "control",
             keySymbol: "custom.control.rectangle.fill",
             description: "Right Control",
-            keycode: KeyCode.rightControl
+            keycode: .kVK_RightControl
         ),
         LoopTriggerKeys(
             symbol: "option",
             keySymbol: "custom.option.rectangle.fill",
             description: "Right Option",
-            keycode: KeyCode.rightOption
+            keycode: .kVK_RightOption
         ),
         LoopTriggerKeys(
             symbol: "command",
             keySymbol: "custom.command.rectangle.fill",
             description: "Right Command",
-            keycode: KeyCode.rightCommand
+            keycode: .kVK_RightCommand
         )
     ]
 }

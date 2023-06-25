@@ -50,6 +50,9 @@ struct KeybindingSettingsView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Press the spacebar with your trigger\nkey to maximize a window:")
+                        Text("You can also use the enter key!")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
 
                     Spacer()
@@ -88,7 +91,7 @@ struct KeybindingSettingsView: View {
                         Image(systemName: "plus")
                             .font(Font.system(size: 15, weight: .bold))
 
-                        Image(systemName: "arrowkeys.up.filled")
+                        Image("arrowkeys.up.filled")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }

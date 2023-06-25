@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521EB29E234EB00139654 /* AboutViewController.swift */; };
 		A82521EE29E235AC00139654 /* AccessibilityAccessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */; };
+		A8263BDE2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8263BDD2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift */; };
 		A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */; };
 		A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */; };
 		A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */; };
@@ -27,7 +28,6 @@
 		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
-		A8A2ABE92A3FBEA00067B5A9 /* KeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE82A3FBEA00067B5A9 /* KeyCode.swift */; };
 		A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */; };
 		A8A7685129B6E62E00CAC0FD /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = A8A1F1C829A07B2900CC84D5 /* AppMover */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
@@ -48,6 +48,7 @@
 /* Begin PBXFileReference section */
 		A82521EB29E234EB00139654 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityAccessManager.swift; sourceTree = "<group>"; };
+		A8263BDD2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A8291D6D2A4513D200C5CB69 /* .swiftlint.yml */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; tabWidth = 2; };
 		A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extensions.swift"; sourceTree = "<group>"; };
@@ -68,7 +69,6 @@
 		A882660729809F6F00BCB197 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		A883642E298B7288005D6C19 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
-		A8A2ABE82A3FBEA00067B5A9 /* KeyCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCode.swift; sourceTree = "<group>"; };
 		A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
@@ -119,7 +119,6 @@
 				A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
 				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
-				A8A2ABE82A3FBEA00067B5A9 /* KeyCode.swift */,
 				A8E6D2002A416494005751D4 /* LoopTriggerKeys.swift */,
 				A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */,
 			);
@@ -134,6 +133,7 @@
 				A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */,
 				A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */,
 				A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */,
+				A8263BDD2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift */,
 				A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */,
 				A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */,
 				A8330AC62A3AC19500673C8D /* NSScreen+Extensions.swift */,
@@ -243,10 +243,10 @@
 			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */;
 			buildPhases = (
 				A8291D6C2A450C2700C5CB69 /* Run SwiftLint */,
+				A83F608129874F18005796CE /* Set Build Number */,
 				A8E59C31297F5E9A0064D4BA /* Sources */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
 				A8E59C33297F5E9A0064D4BA /* Resources */,
-				A83F608129874F18005796CE /* Set Build Number */,
 			);
 			buildRules = (
 			);
@@ -363,7 +363,6 @@
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
 				A8E6D2012A416494005751D4 /* LoopTriggerKeys.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
-				A8A2ABE92A3FBEA00067B5A9 /* KeyCode.swift in Sources */,
 				A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
@@ -386,6 +385,7 @@
 				A8330ACB2A3AC1C000673C8D /* Angle+Extensions.swift in Sources */,
 				A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */,
 				A82521EE29E235AC00139654 /* AccessibilityAccessManager.swift in Sources */,
+				A8263BDE2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
 				A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */,
 			);
@@ -515,7 +515,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Default";
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CODE_SIGN_ENTITLEMENTS = Loop/Loop.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -550,7 +550,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Default";
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CODE_SIGN_ENTITLEMENTS = Loop/Loop.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

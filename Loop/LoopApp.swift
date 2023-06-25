@@ -73,5 +73,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         iconManager.setCurrentAppIcon()
 
         radialMenuController.addObservers()
+
+        NSApp.setActivationPolicy(.accessory)
     }
 }

@@ -13,7 +13,7 @@ class KeybindMonitor {
 
     private var eventTap: CFMachPort?
     private var isEnabled = false
-    private var pressedKeys = Set<UInt16>()
+    private var pressedKeys = Set<CGKeyCode>()
     private var lastKeyReleaseTime: Date = Date.now
 
     func resetPressedKeys() {
@@ -33,7 +33,7 @@ class KeybindMonitor {
             return false
         }
 
-        if pressedKeys == [KeyCode.escape] {
+        if pressedKeys == [.kVK_Escape] {
             NotificationCenter.default.post(
                 name: Notification.Name.closeLoop,
                 object: nil,
@@ -44,7 +44,7 @@ class KeybindMonitor {
         } else {
             // Since this is one for loop inside another, we can break from inside by breaking from the outerloop
             outerLoop: for direction in WindowDirection.allCases {
-                for keybind in direction.keybindings where keybind == pressedKeys {
+                for keybind in direction.keybind where keybind == pressedKeys {
                     NotificationCenter.default.post(
                         name: Notification.Name.currentDirectionChanged,
                         object: nil,

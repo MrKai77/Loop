@@ -21,18 +21,19 @@ enum WindowDirection: CaseIterable {
     case leftHalf
 
     // Quarters
+    case topLeftQuarter
     case topRightQuarter
     case bottomRightQuarter
     case bottomLeftQuarter
-    case topLeftQuarter
 
-    // The following aren't accessible from the radial menu
+    // Horizontal Thirds
     case rightThird
     case rightTwoThirds
     case horizontalCenterThird
     case leftThird
     case leftTwoThirds
 
+    // Vertical Thirds
     case topThird
     case topTwoThirds
     case verticalCenterThird
@@ -55,6 +56,47 @@ enum WindowDirection: CaseIterable {
         }
     }
 
+    var halves: [WindowDirection] {
+        return [.topHalf, .rightHalf, .bottomHalf, .leftHalf]
+    }
+
+    var horizontalThirds: [WindowDirection] {
+        return [.leftThird, .leftTwoThirds, .horizontalCenterThird, .rightTwoThirds, .rightThird]
+    }
+
+    var verticalThirds: [WindowDirection] {
+        return [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
+    }
+
+    var name: String? {
+        switch self {
+        case .noAction:                 nil
+        case .maximize:                 "Maximize"
+
+        case .topHalf:                  "Top Half"
+        case .rightHalf:                "Right Half"
+        case .bottomHalf:               "Bottom Half"
+        case .leftHalf:                 "Left Half"
+
+        case .topLeftQuarter:           "Top Left Quarter"
+        case .topRightQuarter:          "Top Right Quarter"
+        case .bottomRightQuarter:       "Bottom Right Quarter"
+        case .bottomLeftQuarter:        "Bottom Left Quarter"
+
+        case .leftThird:                "Left Third"
+        case .leftTwoThirds:            "Left Two Thirds"
+        case .horizontalCenterThird:    "Horizontal Center Third"
+        case .rightTwoThirds:           "Right Two Thirds"
+        case .rightThird:               "Right Third"
+
+        case .topThird:                  "Top Third"
+        case .topTwoThirds:              "Top Two Thirds"
+        case .verticalCenterThird:       "Vertical Center Third"
+        case .bottomThird:               "Bottom Third"
+        case .bottomTwoThirds:           "Bottom Two Thirds"
+        }
+    }
+
     var keybind: [Set<UInt16>] {
         switch self {
         case .noAction:                 [[]]
@@ -65,10 +107,10 @@ enum WindowDirection: CaseIterable {
         case .bottomHalf:               Defaults[.bottomHalfKeybind]
         case .leftHalf:                 Defaults[.leftHalfKeybind]
 
+        case .topLeftQuarter:           Defaults[.topLeftQuarter]
         case .topRightQuarter:          Defaults[.topRightQuarter]
         case .bottomRightQuarter:       Defaults[.bottomRightQuarter]
         case .bottomLeftQuarter:        Defaults[.bottomLeftQuarter]
-        case .topLeftQuarter:           Defaults[.topLeftQuarter]
 
         case .leftThird:                Defaults[.leftThird]
         case .leftTwoThirds:            Defaults[.leftTwoThirds]
@@ -89,10 +131,10 @@ enum WindowDirection: CaseIterable {
         case .bottomHalf:               Defaults[.bottomHalfKeybind] = keybind
         case .leftHalf:                 Defaults[.leftHalfKeybind] = keybind
 
+        case .topLeftQuarter:           Defaults[.topLeftQuarter] = keybind
         case .topRightQuarter:          Defaults[.topRightQuarter] = keybind
         case .bottomRightQuarter:       Defaults[.bottomRightQuarter] = keybind
         case .bottomLeftQuarter:        Defaults[.bottomLeftQuarter] = keybind
-        case .topLeftQuarter:           Defaults[.topLeftQuarter] = keybind
 
         case .leftThird:                Defaults[.leftThird] = keybind
         case .leftTwoThirds:            Defaults[.leftTwoThirds] = keybind

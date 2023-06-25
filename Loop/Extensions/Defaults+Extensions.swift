@@ -20,7 +20,7 @@ extension Defaults.Keys {
     static let useGradientAccentColor = Key<Bool>("useGradientAccentColor", default: false)
     static let gradientAccentColor = Key<Color>("gradientAccentColor", default: Color(.black))
 
-    static let triggerKey = Key<UInt16>("triggerKey", default: KeyCode.function)
+    static let triggerKey = Key<CGKeyCode>("triggerKey", default: .kVK_Function)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
 
@@ -29,70 +29,70 @@ extension Defaults.Keys {
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 0)
 
-    static let maximizeKeybind = Key<[Set<UInt16>]>(
+    static let maximizeKeybind = Key<[Set<CGKeyCode>]>(
         "maximizeKeybind",
-        default: [[KeyCode.space], [KeyCode.return]]
+        default: [[.kVK_Space], [.kVK_Return]]
     )
 
     // Halves
     static let topHalfKeybind = Key<[Set<UInt16>]>(
         "topHalfKeybind",
-        default: [[KeyCode.w], [KeyCode.upArrow]]
+        default: [[.kVK_ANSI_W], [.kVK_UpArrow]]
     )
     static let bottomHalfKeybind = Key<[Set<UInt16>]>(
         "bottomHalfKeybind",
-        default: [[KeyCode.s], [KeyCode.downArrow]]
+        default: [[.kVK_ANSI_S], [.kVK_DownArrow]]
     )
     static let rightHalfKeybind = Key<[Set<UInt16>]>(
         "rightHalfKeybind",
-        default: [[KeyCode.d], [KeyCode.rightArrow]]
+        default: [[.kVK_ANSI_D], [.kVK_RightArrow]]
     )
     static let leftHalfKeybind = Key<[Set<UInt16>]>(
         "leftHalfKeybind",
-        default: [[KeyCode.a], [KeyCode.leftArrow]]
+        default: [[.kVK_ANSI_A], [.kVK_LeftArrow]]
     )
 
     // Quarters
     static let topLeftQuarter = Key<[Set<UInt16>]>(
         "topLeftQuarter",
-        default: [[KeyCode.w, KeyCode.a],
-                  [KeyCode.upArrow, KeyCode.leftArrow]]
+        default: [[.kVK_ANSI_W, .kVK_ANSI_A],
+                  [.kVK_UpArrow, .kVK_LeftArrow]]
     )
     static let topRightQuarter = Key<[Set<UInt16>]>(
         "topRightQuarter",
-        default: [[KeyCode.w, KeyCode.d],
-                  [KeyCode.upArrow, KeyCode.rightArrow]]
+        default: [[.kVK_ANSI_W, .kVK_ANSI_D],
+                  [.kVK_UpArrow, .kVK_RightArrow]]
     )
     static let bottomRightQuarter = Key<[Set<UInt16>]>(
         "bottomRightQuarter",
-        default: [[KeyCode.s, KeyCode.d],
-                  [KeyCode.downArrow, KeyCode.rightArrow]]
+        default: [[.kVK_ANSI_S, .kVK_ANSI_D],
+                  [.kVK_DownArrow, .kVK_RightArrow]]
     )
     static let bottomLeftQuarter = Key<[Set<UInt16>]>(
         "bottomLeftQuarter",
-        default: [[KeyCode.s, KeyCode.a],
-                  [KeyCode.downArrow, KeyCode.leftArrow]]
+        default: [[.kVK_ANSI_S, .kVK_ANSI_A],
+                  [.kVK_DownArrow, .kVK_LeftArrow]]
     )
 
     // Thirds
     static let leftThird = Key<[Set<UInt16>]>(
         "leftThird",
-        default: [[KeyCode.j]]
+        default: [[.kVK_ANSI_J]]
     )
     static let leftTwoThirds = Key<[Set<UInt16>]>(
         "leftTwoThirds",
-        default: [[KeyCode.u]]
+        default: [[.kVK_ANSI_U]]
     )
     static let horizontalCenterThird = Key<[Set<UInt16>]>(
         "horizontalCenterThird",
-        default: [[KeyCode.k]]
+        default: [[.kVK_ANSI_K]]
     )
     static let rightTwoThirds = Key<[Set<UInt16>]>(
         "rightTwoThirds",
-        default: [[KeyCode.o]]
+        default: [[.kVK_ANSI_O]]
     )
     static let rightThird = Key<[Set<UInt16>]>(
         "rightThird",
-        default: [[KeyCode.l]]
+        default: [[.kVK_ANSI_L]]
     )
 }

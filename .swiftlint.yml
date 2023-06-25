@@ -1,5 +1,6 @@
 excluded:
   - Loop/Helpers/KeyCode.swift
+  - Loop/Extensions/CGKeyCode+Extensions.swift
 
 cyclomatic_complexity:
   ignores_case_statements: true
