@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Defaults
 
 struct WindowEngine {
 
@@ -44,6 +45,8 @@ struct WindowEngine {
         }
 
         KeybindMonitor.shared.resetPressedKeys()
+
+        Defaults[.timesLooped] += 1
     }
 
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
