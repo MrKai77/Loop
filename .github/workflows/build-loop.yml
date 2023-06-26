@@ -18,15 +18,15 @@ jobs:
           sudo xcode-select -s "/Applications/Xcode_15.0.app"
           /usr/bin/xcodebuild -version
           
-      - name: Build Loop.app
-        run: |
-          sh ./resources/build_loop.sh
-          
       - name: Codesign Loop.app
         uses: apple-actions/import-codesign-certs@v2
         with: 
-          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
-          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+          p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
+          
+      - name: Build Loop.app
+        run: |
+          sh ./resources/build_loop.sh
       
 #       - name: Codesign executable
 #         env: 
