@@ -58,5 +58,5 @@ jobs:
       - name: Upload achived app
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: app
+          name: Loop.zip
           path: Loop.zip
