@@ -50,7 +50,7 @@ jobs:
           
       - name: Zip Loop.app
         run: |
-          ditto -c -k --sequesterRsrc --keepParent Loop.app Loop-.zip
+          ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
           
           # Testing purposes
           git rev-parse --short HEAD
@@ -59,4 +59,4 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: app
-          path: Release/Loop.zip
+          path: Loop.zip
