@@ -50,7 +50,6 @@ jobs:
           
       - name: Zip Loop.app
         run: |
-          cd Release/
           ditto -c -k --sequesterRsrc --keepParent Loop.app Loop-.zip
           
           # Testing purposes
