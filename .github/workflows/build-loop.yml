@@ -8,6 +8,9 @@ on:
     paths:
       - Loop/**
 
+permissions:
+  contents: write
+
 jobs:
   build_with_signing:
     name: Build Loop
@@ -42,14 +45,13 @@ jobs:
           name: Loop.zip
           path: Loop.zip
       
-      - name: Make release notes
-        run: |
-          sha_short=$(git rev-parse --short HEAD)
-          echo $sha_short: ${{ github.event.head_commit.message }} > Release.txt
+      - name: Publish Prerelease
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Github Actions Loop Autobuild
+          prerelease: true
+          files: Loop.zip
+          fail_on_unmatched_files: true
+          generate_release_notes: true
           
-          # Check Release Notes
-          cat Release.txt
-      
-#       - name: Publish Prerelease
-#         uses: softprops/action-gh-release@v1
         
