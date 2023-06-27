@@ -51,6 +51,7 @@ jobs:
           name: Github Actions Loop Autobuild
           prerelease: true
           files: Loop.zip
+          tag_name: prerelease
           fail_on_unmatched_files: true
           generate_release_notes: true
           
