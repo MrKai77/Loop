@@ -2,7 +2,11 @@ name: Build Loop
 
 on:
   workflow_dispatch: 
-  push: 
+  push:
+    branches:
+      - develop
+    paths:
+      - Loop/**
 
 jobs:
   build_with_signing:
@@ -27,36 +31,25 @@ jobs:
       - name: Build Loop.app
         run: |
           sh ./resources/build_loop.sh
-      
-#       - name: Codesign executable
-#         env: 
-#           MACOS_CERTIFICATE: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-#           MACOS_CERTIFICATE_PWD: ${{ secrets.P12_PASSWORD }}
-#         run: |
-#           echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
-          
-#           # Make new keychain & unlock it
-#           security create-keychain -p 12345678 build.keychain
-#           security default-keychain -s build.keychain
-#           security unlock-keychain -p 12345678 build.keychain
-          
-#           # Add codesign certificate to keychain 
-#           security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-          
-#           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k 12345678 build.keychain
-          
-#           # Codesign Loop
-#           /usr/bin/codesign --force -s <identity-id> ./path/to/you/app -v
-          
+
       - name: Zip Loop.app
         run: |
           ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
-          
-          # Testing purposes
-          git rev-parse --short HEAD
-          
+      
       - name: Upload achived app
         uses: actions/upload-artifact@v3.1.2
         with:
           name: Loop.zip
           path: Loop.zip
+      
+      - name: Make release notes
+        run: |
+          sha_short=$(git rev-parse --short HEAD)
+          echo $sha_short: ${{ github.event.head_commit.message }} > Release.txt
+          
+          # Check Release Notes
+          cat Release.txt
+      
+#       - name: Publish Prerelease
+#         uses: softprops/action-gh-release@v1
+        
