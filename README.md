@@ -1,28 +1,10 @@
-<div align="center">
-	<img src="Loop/Assets.xcassets/AppIcon-Default.appiconset/Defaultx1-1024.png" width="250px">
-	<h1>Loop</h1>
-	<p><em>The elegant, mouse-oriented window manager</em></p>
-</div>
+![](resources/graphics/social_preview.png)
 
-<p align="center">
-    <a href="https://github.com/mrkai77/loop/stargazers">
-        <img alt="Stargazers" src="https://img.shields.io/github/stars/mrkai77/loop?style=for-the-badge&logo=starship&color=F6C177&logoColor=D9E0EE&labelColor=302D41"></a>
-    <a href="https://github.com/mrkai77/loop/releases/latest">
-        <img alt="Releases" src="https://img.shields.io/github/release/mrkai77/loop.svg?style=for-the-badge&logo=github&color=EBBCBA&logoColor=D9E0EE&labelColor=302D41"/></a>
-    <a href="https://github.com/mrkai77/loop/issues">
-        <img alt="Issues" src="https://img.shields.io/github/issues/mrkai77/loop?style=for-the-badge&logo=gitbook&color=C4A7E7&logoColor=D9E0EE&labelColor=302D41"></a>
-</p>
-
-Introducing Loop, the revolutionary MacOS app that simplifies window management for you! With Loop, you can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings.
-
-Gone are the days of frustratingly juggling between multiple windows and applications on your screen. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
-
-The best part? Loop is incredibly intuitive and user-friendly, so even if you're not tech-savvy, you can still enjoy its benefits without any hassle. Plus, its sleek and modern design adds a touch of elegance to your desktop.
+Loop is a revolutionary MacOS app that simplifies window management for you! You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
 
 <div align="center">
-    <img src="resources/graphics/Loop Demo.gif" width="100%">
+    <img src="resources/graphics/loop_demo.gif" width="100%">
 </div>
-
 
 # Installation
 
@@ -30,7 +12,6 @@ The best part? Loop is incredibly intuitive and user-friendly, so even if you're
 
 Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! Simply unzip the file, and open it, and grant it accessibility access!
 Installation with Homebrew is planned :3
-
 
 # Features
 
@@ -62,9 +43,7 @@ You can set your own custom trigger key for Loop! Currently, the available optio
 
 ### Using Caps Lock
 
-<div align="left">
-    <img src="resources/graphics/Remap Caps Lock.gif">
-</div>
+![](resources/graphics/caps_lock.gif)
 
 To set `Caps Lock` as the trigger key, remap it to `Control` in System Settings, and repeat the process for every connected keyboard. In Loop, make sure the `Right Control` key is selected as your trigger.
 
