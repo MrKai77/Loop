@@ -157,11 +157,6 @@ struct RadialMenuView: View {
         // notification which is used to position the preview window
         .onChange(of: currentResizeDirection) { _ in
             if !previewMode {
-                NSHapticFeedbackManager.defaultPerformer.perform(
-                    NSHapticFeedbackManager.FeedbackPattern.alignment,
-                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                )
-
                 NotificationCenter.default.post(
                     name: Notification.Name.currentDirectionChanged,
                     object: nil,

@@ -10,14 +10,15 @@ import Defaults
 
 class RadialMenuController {
 
-    let radialMenuKeybindMonitor = KeybindMonitor.shared
-    let windowEngine = WindowEngine()
-    let loopPreview = PreviewController()
+    private let radialMenuKeybindMonitor = KeybindMonitor.shared
+    private let windowEngine = WindowEngine()
+    private let loopPreview = PreviewController()
+    private let iconManager = IconManager()
 
-    var currentResizingDirection: WindowDirection = .noAction
-    var isLoopRadialMenuShown: Bool = false
-    var loopRadialMenuWindowController: NSWindowController?
-    var frontmostWindow: AXUIElement?
+    private var currentResizingDirection: WindowDirection = .noAction
+    private var isLoopRadialMenuShown: Bool = false
+    private var loopRadialMenuWindowController: NSWindowController?
+    private var frontmostWindow: AXUIElement?
 
     func showRadialMenu(frontmostWindow: AXUIElement?) {
         if let windowController = loopRadialMenuWindowController {
@@ -116,6 +117,14 @@ class RadialMenuController {
     @objc private func handleCurrentResizingDirectionChanged(notification: Notification) {
         if let direction = notification.userInfo?["Direction"] as? WindowDirection {
             currentResizingDirection = direction
+
+            // Haptic feedback on the trackpad
+            if self.isLoopRadialMenuShown {
+                NSHapticFeedbackManager.defaultPerformer.perform(
+                    NSHapticFeedbackManager.FeedbackPattern.alignment,
+                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+                )
+            }
         }
     }
 
@@ -146,12 +155,17 @@ class RadialMenuController {
             wasForceClosed == false &&
             isLoopRadialMenuShown == true &&
             frontmostWindow != nil {
+
             windowEngine.resize(window: frontmostWindow!, direction: currentResizingDirection)
+
+            Defaults[.timesLooped] += 1
         }
 
         radialMenuKeybindMonitor.stop()
 
         isLoopRadialMenuShown = false
         frontmostWindow = nil
+
+        iconManager.checkIfUnlockedNewIcon()
     }
 }

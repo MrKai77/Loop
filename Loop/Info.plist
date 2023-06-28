@@ -10,7 +10,5 @@
 	<string>https://mrkai77.github.io/Loop/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>dvll25ZImYv+YmmHcYrYjUm3pGSJ+I9xQ5A2e/E4SH8=</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>Loop uses this to resize windows!</string>
 </dict>
 </plist>

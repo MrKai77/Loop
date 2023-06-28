@@ -18,6 +18,16 @@ struct WindowEngine {
     }
 
     func getFrontmostWindow() -> AXUIElement? {
+
+        print("--------------------------------")
+        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }) else { return nil }
+        print("Frontmost app: \(app)")
+        guard let window = self.getFocusedWindow(pid: app.processIdentifier) else { return nil }
+        print("AXUIElement: \(window)")
+        print("Is kAXWindowRole: \(self.getRole(element: window) == kAXWindowRole)")
+        print("Is kAXStandardWindowSubrole: \(self.getSubRole(element: window) == kAXStandardWindowSubrole)")
+        print("Fullscreen: \(self.isFullscreen(element: window) == false)")
+
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
                 let window = self.getFocusedWindow(pid: app.processIdentifier),
                 self.getRole(element: window) == kAXWindowRole,
@@ -45,8 +55,6 @@ struct WindowEngine {
         }
 
         KeybindMonitor.shared.resetPressedKeys()
-
-        Defaults[.timesLooped] += 1
     }
 
     private func getFocusedWindow(pid: pid_t) -> AXUIElement? {
