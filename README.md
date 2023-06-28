@@ -20,7 +20,7 @@ Gone are the days of frustratingly juggling between multiple windows and applica
 The best part? Loop is incredibly intuitive and user-friendly, so even if you're not tech-savvy, you can still enjoy its benefits without any hassle. Plus, its sleek and modern design adds a touch of elegance to your desktop.
 
 <div align="center">
-    <img src="resources/screenshots/Loop Demo.gif" width="100%">
+    <img src="resources/graphics/Loop Demo.gif" width="100%">
 </div>
 
 
@@ -63,7 +63,7 @@ You can set your own custom trigger key for Loop! Currently, the available optio
 ### Using Caps Lock
 
 <div align="left">
-    <img src="resources/screenshots/Remap Caps Lock.gif">
+    <img src="resources/graphics/Remap Caps Lock.gif">
 </div>
 
 To set `Caps Lock` as the trigger key, remap it to `Control` in System Settings, and repeat the process for every connected keyboard. In Loop, make sure the `Right Control` key is selected as your trigger.
