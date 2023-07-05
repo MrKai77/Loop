@@ -17,10 +17,25 @@ class IconManager {
     }
 
     let icons: [Icon] = [
-        Icon(name: "AppIcon-Default", unlockTime: 0),
-        Icon(name: "AppIcon-Scifi", unlockTime: 25),
-        Icon(name: "AppIcon-Rosé Pine", unlockTime: 50),
-        Icon(name: "AppIcon-Master", unlockTime: 100, unlockMessage: "100 loops conquered! Witness the birth of a Loop Master! Enjoy your well-deserved reward: a brand-new icon!")
+        Icon(
+            name: "AppIcon-Default",
+            unlockTime: 0
+        ),
+        Icon(
+            name: "AppIcon-Scifi",
+            unlockTime: 25
+        ),
+        Icon(
+            name: "AppIcon-Rosé Pine",
+            unlockTime: 50
+        ),
+        Icon(
+            name: "AppIcon-Loop Master",
+            unlockTime: 100,
+            unlockMessage: ("100 loops conquered! "
+                + "The universe has witnessed the birth of a Loop Master! "
+                + "Enjoy your well-deserved reward: a brand-new icon!")
+        )
     ]
 
     func nameWithoutPrefix(name: String) -> String {
