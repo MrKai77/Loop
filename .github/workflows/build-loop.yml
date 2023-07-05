@@ -44,15 +44,3 @@ jobs:
         with:
           name: Loop.zip
           path: Loop.zip
-      
-      - name: Publish Prerelease
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Github Actions Loop Autobuild
-          prerelease: true
-          files: Loop.zip
-          tag_name: prerelease
-          fail_on_unmatched_files: true
-          generate_release_notes: true
-          
-        
