@@ -10,7 +10,7 @@ import Defaults
 
 struct WindowEngine {
 
-    private let kAXFullScreenAttribute = "AXFullScreen"
+    private let kAXFullscreenAttribute = "AXFullScreen"
 
     func resizeFrontmostWindow(direction: WindowDirection) {
         guard let frontmostWindow = self.getFrontmostWindow() else { return }
@@ -26,19 +26,19 @@ struct WindowEngine {
         print("AXUIElement: \(window)")
         print("Is kAXWindowRole: \(self.getRole(element: window) == kAXWindowRole)")
         print("Is kAXStandardWindowSubrole: \(self.getSubRole(element: window) == kAXStandardWindowSubrole)")
-        print("Fullscreen: \(self.isFullscreen(element: window) == false)")
 
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
                 let window = self.getFocusedWindow(pid: app.processIdentifier),
                 self.getRole(element: window) == kAXWindowRole,
-                self.getSubRole(element: window) == kAXStandardWindowSubrole,
-                self.isFullscreen(element: window) == false
+                self.getSubRole(element: window) == kAXStandardWindowSubrole
         else { return nil }
 
         return window
     }
 
     func resize(window: AXUIElement, direction: WindowDirection) {
+        self.setFullscreen(element: window, state: false)
+
         guard let screenFrame = getActiveScreenFrame(),
                 let newWindowFrame = generateWindowFrame(screenFrame, direction)
         else { return }
@@ -70,8 +70,13 @@ struct WindowEngine {
     private func getSubRole(element: AXUIElement) -> String? {
         return element.copyAttributeValue(attribute: kAXSubroleAttribute) as? String
     }
-    private func isFullscreen(element: AXUIElement) -> Bool {
-        let result = element.copyAttributeValue(attribute: kAXFullScreenAttribute) as? NSNumber
+
+    @discardableResult
+    private func setFullscreen(element: AXUIElement, state: Bool) -> Bool {
+        return element.setAttributeValue(attribute: kAXFullscreenAttribute, value: state ? kCFBooleanTrue : kCFBooleanFalse)
+    }
+    private func getFullscreen(element: AXUIElement) -> Bool {
+        let result = element.copyAttributeValue(attribute: kAXFullscreenAttribute) as? NSNumber
         return result?.boolValue ?? false
     }
 
