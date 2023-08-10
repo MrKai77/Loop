@@ -34,20 +34,26 @@ struct LoopApp: App {
         MenuBarExtra("Loop", image: "menubarIcon") {
             if #available(macOS 14, *) {
                 SettingsLink()
+                    .keyboardShortcut(",", modifiers: .command)
             } else {
                 Button("Settings") {
                     NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
                     NSApp.activate(ignoringOtherApps: true)
                 }
+                .keyboardShortcut(",", modifiers: .command)
             }
 
             Button("About \(Bundle.main.appName)") {
                 aboutViewController.showAboutWindow()
             }
+            .keyboardShortcut("i", modifiers: .command)
+
+            Divider()
 
             Button("Quit") {
                 NSApp.terminate(nil)
             }
+            .keyboardShortcut("q", modifiers: .command)
         }
     }
 }
