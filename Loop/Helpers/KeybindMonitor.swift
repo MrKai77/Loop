@@ -9,6 +9,7 @@ import Cocoa
 
 class KeybindMonitor {
 
+    static private let accessibilityAccessManager = AccessibilityAccessManager()
     static let shared = KeybindMonitor()
 
     private var eventTap: CFMachPort?
@@ -93,9 +94,11 @@ class KeybindMonitor {
 
             self.eventTap = newEventTap
 
-            let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, newEventTap, 0)
-            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-            CGEvent.tapEnable(tap: newEventTap!, enable: true)
+            if KeybindMonitor.accessibilityAccessManager.checkAccessibilityAccess() {
+                let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, newEventTap, 0)
+                CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
+                CGEvent.tapEnable(tap: newEventTap!, enable: true)
+            }
         }
         isEnabled = true
     }
