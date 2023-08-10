@@ -32,6 +32,10 @@ struct LoopApp: App {
         }
 
         MenuBarExtra("Loop", image: "menubarIcon") {
+            #if DEBUG
+            Text("\(Bundle.main.appVersion) DEBUG (\(Bundle.main.appBuild))")
+            #endif
+
             if #available(macOS 14, *) {
                 SettingsLink()
                     .keyboardShortcut(",", modifiers: .command)
@@ -80,6 +84,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         radialMenuController.addObservers()
 
-        NSApp.setActivationPolicy(.accessory)
+//        NSApp.setActivationPolicy(.accessory)
     }
 }
