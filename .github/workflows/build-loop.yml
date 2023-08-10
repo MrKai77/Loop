@@ -37,6 +37,7 @@ jobs:
 
       - name: Zip Loop.app
         run: |
+          ls
           ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
       
       - name: Upload achived app
