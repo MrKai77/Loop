@@ -34,10 +34,6 @@ jobs:
       - name: Build Loop.app
         run: |
           sh ./resources/build_loop.sh debug
-
-      - name: Zip Loop.app
-        run: |
-          ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
       
       - name: Upload achived app
         uses: actions/upload-artifact@v3.1.2

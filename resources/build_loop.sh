@@ -3,6 +3,7 @@
 
 echo "Preparing..."
 rm -rf ./Loop.app
+rm -rf ./Loop.zip
 
 echo "Building Loop..."
 xcodebuild clean archive -project ./Loop.xcodeproj -scheme Loop -archivePath ./Archive
@@ -21,6 +22,9 @@ mv Build/*.app .
 echo "Cleaning up..."
 rm -rf Archive.xcarchive
 rm -rf Build
+
+echo "Compressing..."
+ditto -c -k --sequesterRsrc --keepParent Loop.app Loop.zip
 
 open .
 echo "Done!"
