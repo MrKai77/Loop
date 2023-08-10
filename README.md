@@ -11,7 +11,10 @@ Loop is a revolutionary MacOS app that simplifies window management for you! You
 **Compatible with MacOS 13 and later**
 
 Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! Simply unzip the file, and open it, and grant it accessibility access!
-Installation with Homebrew is planned :3
+
+**NEW! Install with Homebrew**
+
+<code>brew install mrkai77/cask/loop-prerelease</code>
 
 # Features
 
@@ -48,5 +51,7 @@ You can set your own custom trigger key for Loop! Currently, the available optio
 To set `Caps Lock` as the trigger key, remap it to `Control` in System Settings, and repeat the process for every connected keyboard. In Loop, make sure the `Right Control` key is selected as your trigger.
 
 # Additional Notes
+
+There are plenty of easter eggs hidden for your enjoyment! Search away!!
 
 This project is licensed under the [MIT license](LICENSE).
