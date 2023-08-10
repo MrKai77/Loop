@@ -9,17 +9,8 @@ import SwiftUI
 import Sparkle
 
 struct SettingsView: View {
-    private let updaterController: SPUStandardUpdaterController
-
-    init() {
-        updaterController = SPUStandardUpdaterController(
-            startingUpdater: true,
-            updaterDelegate: nil,
-            userDriverDelegate: nil
-        )
-    }
-
     @State var currentSettingsTab = 1
+    private let updater = SoftwareUpdater()
 
     var body: some View {
         TabView(selection: $currentSettingsTab) {
@@ -51,12 +42,13 @@ struct SettingsView: View {
                     Text("Keybindings")
                 }
 
-            MoreSettingsView(updater: updaterController.updater)
+            MoreSettingsView()
                 .tag(5)
                 .tabItem {
                     Image(systemName: "ellipsis.circle")
                     Text("More")
                 }
+                .environmentObject(updater)
         }
         .frame(width: 450)
     }

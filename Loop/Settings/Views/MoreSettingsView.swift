@@ -10,36 +10,15 @@ import Sparkle
 
 struct MoreSettingsView: View {
 
-    private let updater: SPUUpdater
-
-    // This is used when the user manually checks for updates
-    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
-
-    @State private var automaticallyChecksForUpdates: Bool
-    @State private var automaticallyDownloadsUpdates: Bool
-
-    init(updater: SPUUpdater) {
-        self.updater = updater
-
-        // Create our view model for our CheckForUpdatesView
-        checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
-
-        self.automaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
-        self.automaticallyDownloadsUpdates = updater.automaticallyDownloadsUpdates
-    }
+    @EnvironmentObject var updater: SoftwareUpdater
 
     var body: some View {
         Form {
             Section(content: {
-                Toggle("Automatically check for updates", isOn: $automaticallyChecksForUpdates)
-                    .onChange(of: automaticallyChecksForUpdates) { newValue in
-                        updater.automaticallyChecksForUpdates = newValue
-                    }
-                Toggle("Automatically download updates", isOn: $automaticallyDownloadsUpdates)
-                    .disabled(!automaticallyChecksForUpdates)
-                    .onChange(of: automaticallyDownloadsUpdates) { newValue in
-                        updater.automaticallyDownloadsUpdates = newValue
-                    }
+                Toggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
+//                Toggle("Automatically download updates", isOn: $updater.a)
+//                    .disabled(!automaticallyChecksForUpdates)
+                Toggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
             }, header: {
                 HStack {
                     VStack(alignment: .leading, spacing: 0) {
@@ -51,22 +30,13 @@ struct MoreSettingsView: View {
 
                     Spacer()
 
-                    Button("Check for Updates…", action: updater.checkForUpdates)
-                        .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
-                        .buttonStyle(.link)
+                    Button("Check for Updates…") {
+                        updater.checkForUpdates()
+                    }
+                    .buttonStyle(.link)
                 }
             })
         }
         .formStyle(.grouped)
-    }
-}
-
-// This view model class publishes when new updates can be checked by the user
-final class CheckForUpdatesViewModel: ObservableObject {
-    @Published var canCheckForUpdates = false
-
-    init(updater: SPUUpdater) {
-        updater.publisher(for: \.canCheckForUpdates)
-            .assign(to: &$canCheckForUpdates)
     }
 }
