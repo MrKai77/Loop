@@ -10,6 +10,7 @@ import Defaults
 
 class RadialMenuController {
 
+    private let accessibilityAccessManager = AccessibilityAccessManager()
     private let radialMenuKeybindMonitor = KeybindMonitor.shared
     private let windowEngine = WindowEngine()
     private let loopPreview = PreviewController()
@@ -135,16 +136,19 @@ class RadialMenuController {
     }
 
     private func openLoop() {
-        frontmostWindow = windowEngine.getFrontmostWindow()
+        // Loop will only open if accessibility access has been granted
+        if accessibilityAccessManager.checkAccessibilityAccess() {
+            frontmostWindow = windowEngine.getFrontmostWindow()
 
-        if Defaults[.previewVisibility] == true && frontmostWindow != nil {
-            loopPreview.showPreview()
+            if Defaults[.previewVisibility] == true && frontmostWindow != nil {
+                loopPreview.showPreview()
+            }
+            showRadialMenu(frontmostWindow: frontmostWindow)
+
+            radialMenuKeybindMonitor.start()
+
+            isLoopRadialMenuShown = true
         }
-        showRadialMenu(frontmostWindow: frontmostWindow)
-
-        radialMenuKeybindMonitor.start()
-
-        isLoopRadialMenuShown = true
     }
 
     private func closeLoop(wasForceClosed: Bool = false) {
