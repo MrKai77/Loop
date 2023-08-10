@@ -25,9 +25,9 @@ extension Defaults.Keys {
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
 
     static let previewVisibility = Key<Bool>("previewVisibility", default: true)
-    static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 15)
+    static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
-    static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 0)
+    static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
 
     static let maximizeKeybind = Key<[Set<CGKeyCode>]>(
         "maximizeKeybind",
