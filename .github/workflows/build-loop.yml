@@ -44,3 +44,12 @@ jobs:
         with:
           name: Loop.zip
           path: Loop.zip
+          
+      - name: Publish Prerelease
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "prerelease"
+          prerelease: true
+          title: "Prerelease"
+          files: Loop.zip
