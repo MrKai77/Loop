@@ -33,7 +33,7 @@ jobs:
           
       - name: Build Loop.app
         run: |
-          sh ./resources/build_loop.sh
+          sh ./resources/build_loop.sh debug
 
       - name: Zip Loop.app
         run: |
@@ -49,7 +49,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "prerelease"
+          automatic_release_tag: "development_build"
           prerelease: true
-          title: "Prerelease"
+          title: "Development Build"
           files: Loop.zip

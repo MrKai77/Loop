@@ -6,14 +6,21 @@ rm -rf ./Loop.app
 
 echo "Building Loop..."
 xcodebuild clean archive -project ./Loop.xcodeproj -scheme Loop -archivePath ./Archive
-xcodebuild -exportArchive -archivePath Archive.xcarchive -exportPath Release -exportOptionsPlist "resources/sparkle/export_options.plist"
+
+if [$1 -eq "debug"]; then
+    echo "Debug Build!"
+    xcodebuild -exportArchive -archivePath Archive.xcarchive -configuration Debug -exportPath Build -exportOptionsPlist "resources/sparkle/export_options.plist"
+else
+    echo "Release Build!"
+    xcodebuild -exportArchive -archivePath Archive.xcarchive -configuration Release -exportPath Build -exportOptionsPlist "resources/sparkle/export_options.plist"
+fi
 
 echo "Moving Loop into current directory"
-mv Release/*.app .
+mv Build/*.app .
 
 echo "Cleaning up..."
 rm -rf Archive.xcarchive
-rm -rf Release
+rm -rf Build
 
 open .
 echo "Done!"

@@ -33,7 +33,7 @@ struct LoopApp: App {
 
         MenuBarExtra("Loop", image: "menubarIcon") {
             #if DEBUG
-            Text("\(Bundle.main.appVersion) DEBUG (\(Bundle.main.appBuild))")
+            Text("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif
 
             if #available(macOS 14, *) {
