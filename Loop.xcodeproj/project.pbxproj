@@ -46,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A82521EB29E234EB00139654 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityAccessManager.swift; sourceTree = "<group>"; };
 		A8263BDD2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
@@ -212,6 +213,7 @@
 		A8E59C37297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXGroup;
 			children = (
+				A80521312A84878200BF7E22 /* Config.xcconfig */,
 				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A8330ABB2A3AC05200673C8D /* Helpers */,
 				A82521EA29E2349700139654 /* About Window */,
@@ -243,7 +245,6 @@
 			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */;
 			buildPhases = (
 				A8291D6C2A450C2700C5CB69 /* Run SwiftLint */,
-				A83F608129874F18005796CE /* Set Build Number */,
 				A8E59C31297F5E9A0064D4BA /* Sources */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
 				A8E59C33297F5E9A0064D4BA /* Resources */,
@@ -332,25 +333,6 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		A83F608129874F18005796CE /* Set Build Number */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Set Build Number";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/resources/set_build_number.sh\n";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -396,6 +378,7 @@
 /* Begin XCBuildConfiguration section */
 		A8E59C42297F5E9B0064D4BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A80521312A84878200BF7E22 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -428,6 +411,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(BUILD_NUMBER)";
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -447,6 +431,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = "$(VERSION)";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -458,6 +443,7 @@
 		};
 		A8E59C43297F5E9B0064D4BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A80521312A84878200BF7E22 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -490,6 +476,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(BUILD_NUMBER)";
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -503,6 +490,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = "$(VERSION)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -520,10 +508,9 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
-				DEVELOPMENT_TEAM = F679LF3JPM;
+				DEVELOPMENT_TEAM = 6783T5MU9D;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -536,7 +523,6 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.Debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -555,10 +541,9 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
-				DEVELOPMENT_TEAM = F679LF3JPM;
+				DEVELOPMENT_TEAM = 6783T5MU9D;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -571,7 +556,6 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";

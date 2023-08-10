@@ -1,25 +1,11 @@
 #!/bin/bash
 
-echo "Settings build number!"
+echo "--- Setting build number! ---"
 
-git=$(sh /etc/profile; which git)
-number_of_commits=$("$git" rev-list HEAD --count)
+cd "$SRCROOT"
 
-target_plist="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
-dsym_plist="$DWARF_DSYM_FOLDER_PATH/$DWARF_DSYM_FILE_NAME/Contents/Info.plist"
+sed -i -e "/BUILD_NUMBER =/ s/= .*/= $(git rev-list --count HEAD)/" Loop/Config.xcconfig
 
-for plist in "$target_plist" "$dsym_plist"; do
-  if [ -f "$plist" ]; then
-    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${number_of_commits}" "$plist"
-  fi
-done
+rm Loop/Config.xcconfig-e
 
-settings_root_plist="$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Settings.bundle/Root.plist"
-
-if [ -f "$settings_root_plist" ]; then
-  settingsVersion="$APP_MARKETING_VERSION (${number_of_commits})"
-  /usr/libexec/PlistBuddy -c "Set :PreferenceSpecifiers:1:DefaultValue $settingsVersion" "$settings_root_plist"
-else
-  echo "Could not find: $settings_root_plist"
-  exit 0
-fi
+echo "--- Done! ---"
