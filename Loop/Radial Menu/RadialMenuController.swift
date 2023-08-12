@@ -158,7 +158,8 @@ class RadialMenuController {
         if frontmostWindow != nil &&
             wasForceClosed == false &&
             isLoopRadialMenuShown == true &&
-            frontmostWindow != nil {
+            frontmostWindow != nil &&
+            currentResizingDirection != .noAction {
 
             windowEngine.resize(window: frontmostWindow!, direction: currentResizingDirection)
 
