@@ -18,11 +18,11 @@ class IconManager {
 
     let icons: [Icon] = [
         Icon(
-            name: "AppIcon-Default",
+            name: "AppIcon-Classic",
             unlockTime: 0
         ),
         Icon(
-            name: "AppIcon-Scifi",
+            name: "AppIcon-Sci-fi",
             unlockTime: 25
         ),
         Icon(
