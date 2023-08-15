@@ -158,14 +158,14 @@ struct RadialMenuView: View {
         .onChange(of: currentResizeDirection) { _ in
             if !previewMode {
                 NotificationCenter.default.post(
-                    name: Notification.Name.currentDirectionChanged,
+                    name: Notification.Name.directionChanged,
                     object: nil,
                     userInfo: ["Direction": currentResizeDirection]
                 )
             }
         }
 
-        .onReceive(.currentDirectionChanged) { obj in
+        .onReceive(.directionChanged) { obj in
             if let direction = obj.userInfo?["Direction"] as? WindowDirection {
                 self.currentResizeDirection = direction
             }

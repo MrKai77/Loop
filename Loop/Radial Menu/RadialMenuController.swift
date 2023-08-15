@@ -10,24 +10,13 @@ import Defaults
 
 class RadialMenuController {
 
-    private let accessibilityAccessManager = AccessibilityAccessManager()
-    private let radialMenuKeybindMonitor = KeybindMonitor.shared
-    private let windowEngine = WindowEngine()
-    private let loopPreview = PreviewController()
-    private let iconManager = IconManager()
-
-    private var currentResizingDirection: WindowDirection = .noAction
-    private var isLoopRadialMenuShown: Bool = false
     private var loopRadialMenuWindowController: NSWindowController?
-    private var frontmostWindow: AXUIElement?
 
     func showRadialMenu(frontmostWindow: AXUIElement?) {
         if let windowController = loopRadialMenuWindowController {
             windowController.window?.orderFrontRegardless()
             return
         }
-
-        currentResizingDirection = .noAction
 
         let mouseX: CGFloat = NSEvent.mouseLocation.x
         let mouseY: CGFloat = NSEvent.mouseLocation.y
@@ -69,7 +58,7 @@ class RadialMenuController {
         })
     }
 
-    private func closeRadialMenu() {
+    func closeRadialMenu() {
         guard let windowController = loopRadialMenuWindowController else { return }
         loopRadialMenuWindowController = nil
 
@@ -79,101 +68,5 @@ class RadialMenuController {
         }, completionHandler: {
             windowController.close()
         })
-    }
-
-    func addObservers() {
-        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
-            if event.keyCode == Defaults[.triggerKey] {
-                if event.modifierFlags.rawValue == 256 {
-                    self.closeLoop()
-                } else {
-                    self.openLoop()
-                }
-            }
-        }
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                handleCurrentResizingDirectionChanged(
-                    notification:
-                )
-            ),
-            name: Notification.Name.currentDirectionChanged,
-            object: nil
-        )
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                closeLoopFromNotification(
-                    notification:
-                )
-            ),
-            name: Notification.Name.closeLoop,
-            object: nil
-        )
-    }
-
-    @objc private func handleCurrentResizingDirectionChanged(notification: Notification) {
-        if let direction = notification.userInfo?["Direction"] as? WindowDirection {
-            currentResizingDirection = direction
-
-            // Haptic feedback on the trackpad
-            if self.isLoopRadialMenuShown {
-                NSHapticFeedbackManager.defaultPerformer.perform(
-                    NSHapticFeedbackManager.FeedbackPattern.alignment,
-                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                )
-            }
-        }
-    }
-
-    @objc private func closeLoopFromNotification(notification: Notification) {
-        if let forceClosed = notification.userInfo?["wasForceClosed"] as? Bool {
-            self.closeLoop(wasForceClosed: forceClosed)
-        }
-    }
-
-    private func openLoop() {
-        // Loop will only open if accessibility access has been granted
-        if accessibilityAccessManager.checkAccessibilityAccess() {
-            frontmostWindow = windowEngine.getFrontmostWindow()
-
-            if Defaults[.previewVisibility] == true && frontmostWindow != nil {
-                loopPreview.showPreview()
-            }
-            showRadialMenu(frontmostWindow: frontmostWindow)
-
-            radialMenuKeybindMonitor.start()
-
-            isLoopRadialMenuShown = true
-        }
-    }
-
-    private func closeLoop(wasForceClosed: Bool = false) {
-        var needsToCheckForNewIcons: Bool = false
-
-        closeRadialMenu()
-        loopPreview.closePreview()
-        radialMenuKeybindMonitor.stop()
-
-        if frontmostWindow != nil &&
-            wasForceClosed == false &&
-            isLoopRadialMenuShown == true &&
-            currentResizingDirection != .noAction {
-
-            windowEngine.resize(window: frontmostWindow!, direction: currentResizingDirection)
-
-            Defaults[.timesLooped] += 1
-            needsToCheckForNewIcons = true
-        }
-
-        isLoopRadialMenuShown = false
-        frontmostWindow = nil
-
-        if needsToCheckForNewIcons {
-            iconManager.checkIfUnlockedNewIcon()
-        }
     }
 }

@@ -36,9 +36,9 @@ class KeybindMonitor {
 
         if pressedKeys == [.kVK_Escape] {
             NotificationCenter.default.post(
-                name: Notification.Name.closeLoop,
+                name: Notification.Name.forceCloseLoop,
                 object: nil,
-                userInfo: ["wasForceClosed": true]
+                userInfo: ["forceClose": true]
             )
             KeybindMonitor.shared.resetPressedKeys()
             isValidKeybind = true
@@ -47,9 +47,10 @@ class KeybindMonitor {
             outerLoop: for direction in WindowDirection.allCases {
                 for keybind in direction.keybind where keybind == pressedKeys {
                     NotificationCenter.default.post(
-                        name: Notification.Name.currentDirectionChanged,
+                        name: Notification.Name.directionChanged,
                         object: nil,
-                        userInfo: ["Direction": direction]
+                        userInfo: ["Direction": direction,
+                                   "Keybind": true]
                     )
                     isValidKeybind = true
                     break outerLoop

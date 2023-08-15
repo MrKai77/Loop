@@ -64,9 +64,9 @@ struct LoopApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    let accessibilityAccessManager = AccessibilityAccessManager()
-    let iconManager = IconManager()
-    let radialMenuController = RadialMenuController()
+    private let accessibilityAccessManager = AccessibilityAccessManager()
+    private let iconManager = IconManager()
+    private let loopManager = LoopManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         do {
@@ -82,7 +82,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         iconManager.setCurrentAppIcon()
 
-        radialMenuController.addObservers()
+        loopManager.startObservingKeys()
 
 //        NSApp.setActivationPolicy(.accessory)
     }
