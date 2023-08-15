@@ -152,25 +152,28 @@ class RadialMenuController {
     }
 
     private func closeLoop(wasForceClosed: Bool = false) {
+        var needsToCheckForNewIcons: Bool = false
+
         closeRadialMenu()
         loopPreview.closePreview()
+        radialMenuKeybindMonitor.stop()
 
         if frontmostWindow != nil &&
             wasForceClosed == false &&
             isLoopRadialMenuShown == true &&
-            frontmostWindow != nil &&
             currentResizingDirection != .noAction {
 
             windowEngine.resize(window: frontmostWindow!, direction: currentResizingDirection)
 
             Defaults[.timesLooped] += 1
+            needsToCheckForNewIcons = true
         }
-
-        radialMenuKeybindMonitor.stop()
 
         isLoopRadialMenuShown = false
         frontmostWindow = nil
 
-        iconManager.checkIfUnlockedNewIcon()
+        if needsToCheckForNewIcons {
+            iconManager.checkIfUnlockedNewIcon()
+        }
     }
 }
