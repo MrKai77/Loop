@@ -81,13 +81,13 @@ class LoopManager {
         frontmostWindow = nil
 
         // Loop will only open if accessibility access has been granted
-        if accessibilityAccessManager.checkAccessibilityAccess() {
+        if accessibilityAccessManager.getStatus() {
             self.frontmostWindow = windowEngine.getFrontmostWindow()
 
             if Defaults[.previewVisibility] == true && frontmostWindow != nil {
-                previewController.showPreview()
+                previewController.show()
             }
-            radialMenuController.showRadialMenu(frontmostWindow: frontmostWindow)
+            radialMenuController.show(frontmostWindow: frontmostWindow)
 
             keybindMonitor.start()
 
@@ -98,8 +98,8 @@ class LoopManager {
     private func closeLoop(forceClose: Bool = false) {
         var willResizeWindow: Bool = false
 
-        radialMenuController.closeRadialMenu()
-        previewController.closePreview()
+        radialMenuController.close()
+        previewController.close()
         keybindMonitor.stop()
 
         if self.frontmostWindow != nil &&

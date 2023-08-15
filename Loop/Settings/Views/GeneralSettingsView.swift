@@ -14,7 +14,6 @@ struct GeneralSettingsView: View {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @Default(.launchAtLogin) var launchAtLogin
-    @Default(.isAccessibilityAccessGranted) var isAccessibilityAccessGranted
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.accentColor) var accentColor
     @Default(.useGradientAccentColor) var useGradientAccentColor
@@ -24,6 +23,8 @@ struct GeneralSettingsView: View {
 
     let iconManager = IconManager()
     let accessibilityAccessManager = AccessibilityAccessManager()
+
+    @State var isAccessibilityAccessGranted = false
 
     var body: some View {
         Form {
@@ -86,11 +87,14 @@ struct GeneralSettingsView: View {
                     Spacer()
 
                     Button("Refresh Status", action: {
-                        accessibilityAccessManager.checkAccessibilityAccess(ask: true)
+                        self.isAccessibilityAccessGranted = accessibilityAccessManager.requestAccess()
                     })
                     .buttonStyle(.link)
                     .disabled(isAccessibilityAccessGranted)
                     .help("Refresh the current accessibility permissions")
+                    .onAppear {
+                        self.isAccessibilityAccessGranted = accessibilityAccessManager.getStatus()
+                    }
                 }
             })
         }

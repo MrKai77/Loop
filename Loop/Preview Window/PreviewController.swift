@@ -11,7 +11,7 @@ class PreviewController {
 
     var loopPreviewWindowController: NSWindowController?
 
-    func showPreview() {
+    func show() {
         if let windowController = loopPreviewWindowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -50,7 +50,7 @@ class PreviewController {
         })
     }
 
-    func closePreview() {
+    func close() {
         guard let windowController = loopPreviewWindowController else { return }
         loopPreviewWindowController = nil
 

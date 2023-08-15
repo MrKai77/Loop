@@ -13,7 +13,6 @@ extension Defaults.Keys {
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Default")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
-    static let isAccessibilityAccessGranted = Key<Bool>("isAccessibilityAccessGranted", default: false)
 
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: false)
     static let accentColor = Key<Color>("accentColor", default: Color(.white))

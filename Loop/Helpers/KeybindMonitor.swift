@@ -95,7 +95,7 @@ class KeybindMonitor {
 
             self.eventTap = newEventTap
 
-            if KeybindMonitor.accessibilityAccessManager.checkAccessibilityAccess() {
+            if KeybindMonitor.accessibilityAccessManager.getStatus() {
                 let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, newEventTap, 0)
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
                 CGEvent.tapEnable(tap: newEventTap!, enable: true)

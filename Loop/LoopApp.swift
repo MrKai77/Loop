@@ -77,8 +77,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Check accessibility access, then if access is not granted,
         // show a more informative alert asking for accessibility access
-        if !accessibilityAccessManager.checkAccessibilityAccess() {
-            accessibilityAccessManager.accessibilityAccessAlert()
+        if !accessibilityAccessManager.getStatus() {
+            accessibilityAccessManager.requestAccess()
         }
         iconManager.setCurrentAppIcon()
 
