@@ -12,7 +12,7 @@ class RadialMenuController {
 
     private var loopRadialMenuWindowController: NSWindowController?
 
-    func showRadialMenu(frontmostWindow: AXUIElement?) {
+    func show(frontmostWindow: AXUIElement?) {
         if let windowController = loopRadialMenuWindowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -53,17 +53,19 @@ class RadialMenuController {
 
         loopRadialMenuWindowController = .init(window: panel)
 
-        NSAnimationContext.runAnimationGroup({ _ in
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0.15
             panel.animator().alphaValue = 1
         })
     }
 
-    func closeRadialMenu() {
+    func close() {
         guard let windowController = loopRadialMenuWindowController else { return }
         loopRadialMenuWindowController = nil
 
         windowController.window?.animator().alphaValue = 1
-        NSAnimationContext.runAnimationGroup({ _ in
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0.15
             windowController.window?.animator().alphaValue = 0
         }, completionHandler: {
             windowController.close()
