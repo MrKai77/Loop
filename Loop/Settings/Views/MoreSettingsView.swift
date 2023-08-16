@@ -32,6 +32,7 @@ struct MoreSettingsView: View {
                         updater.checkForUpdates()
                     }
                     .buttonStyle(.link)
+                    .foregroundStyle(Color.accentColor)
                 }
             })
         }

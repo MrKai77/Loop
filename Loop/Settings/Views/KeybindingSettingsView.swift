@@ -68,7 +68,7 @@ struct KeybindingSettingsView: View {
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
-                    .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
+                    .foregroundStyle(Color.accentColor)
                 }
 
                 HStack {
@@ -95,7 +95,7 @@ struct KeybindingSettingsView: View {
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
-                    .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
+                    .foregroundStyle(Color.accentColor)
                 }
 
                 HStack {
@@ -119,7 +119,7 @@ struct KeybindingSettingsView: View {
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
-                    .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
+                    .foregroundStyle(Color.accentColor)
                 }
 
                 HStack {
@@ -143,7 +143,7 @@ struct KeybindingSettingsView: View {
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
-                    .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
+                    .foregroundStyle(Color.accentColor)
                 }
             }
             .symbolRenderingMode(.hierarchical)

@@ -90,6 +90,7 @@ struct GeneralSettingsView: View {
                         self.isAccessibilityAccessGranted = accessibilityAccessManager.requestAccess()
                     })
                     .buttonStyle(.link)
+                    .foregroundStyle(Color.accentColor)
                     .disabled(isAccessibilityAccessGranted)
                     .help("Refresh the current accessibility permissions")
                     .onAppear {
