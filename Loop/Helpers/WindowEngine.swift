@@ -19,6 +19,7 @@ struct WindowEngine {
 
     func getFrontmostWindow() -> AXUIElement? {
 
+        #if DEBUG
         print("--------------------------------")
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }) else { return nil }
         print("Frontmost app: \(app)")
@@ -26,6 +27,7 @@ struct WindowEngine {
         print("AXUIElement: \(window)")
         print("Is kAXWindowRole: \(self.getRole(element: window) == kAXWindowRole)")
         print("Is kAXStandardWindowSubrole: \(self.getSubRole(element: window) == kAXStandardWindowSubrole)")
+        #endif
 
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
                 let window = self.getFocusedWindow(pid: app.processIdentifier),
@@ -39,8 +41,9 @@ struct WindowEngine {
     func resize(window: AXUIElement, direction: WindowDirection) {
         self.setFullscreen(element: window, state: false)
 
+        let windowFrame = getRect(element: window)
         guard let screenFrame = getActiveScreenFrame(),
-                let newWindowFrame = generateWindowFrame(screenFrame, direction)
+              let newWindowFrame = generateWindowFrame(windowFrame, screenFrame, direction)
         else { return }
 
         self.setPosition(element: window, position: newWindowFrame.origin)
@@ -128,14 +131,20 @@ struct WindowEngine {
 
         return screenFrame
     }
-    private func generateWindowFrame(_ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
-
+    private func generateWindowFrame(_ windowFrame: CGRect, _ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
         let screenWidth = screenFrame.size.width
         let screenHeight = screenFrame.size.height
         let screenX = screenFrame.origin.x
         let screenY = screenFrame.origin.y
 
         switch direction {
+        case .maximize:
+            return CGRect(x: screenX, y: screenY, width: screenWidth, height: screenHeight)
+        case .center:
+            return CGRect(x: screenFrame.midX - windowFrame.width/2,
+                          y: screenFrame.midY - windowFrame.height/2,
+                          width: windowFrame.width,
+                          height: windowFrame.height)
         case .topHalf:
             return CGRect(x: screenX, y: screenY, width: screenWidth, height: screenHeight/2)
         case .rightHalf:
@@ -152,8 +161,6 @@ struct WindowEngine {
             return CGRect(x: screenX+screenWidth/2, y: screenY+screenHeight/2, width: screenWidth/2, height: screenHeight/2)
         case .bottomLeftQuarter:
             return CGRect(x: screenX, y: screenY+screenHeight/2, width: screenWidth/2, height: screenHeight/2)
-        case .maximize:
-            return CGRect(x: screenX, y: screenY, width: screenWidth, height: screenHeight)
         case .rightThird:
             return CGRect(x: screenX+2*screenWidth/3, y: screenY, width: screenWidth/3, height: screenHeight)
         case .rightTwoThirds:
@@ -174,7 +181,6 @@ struct WindowEngine {
             return CGRect(x: screenX, y: screenY+2*screenHeight/3, width: screenWidth, height: screenHeight/3)
         case .bottomTwoThirds:
             return CGRect(x: screenX, y: screenY+screenHeight/3, width: screenWidth, height: 2*screenHeight/3)
-
         default:
             return nil
         }

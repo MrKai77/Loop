@@ -80,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !accessibilityAccessManager.getStatus() {
             accessibilityAccessManager.requestAccess()
         }
-        iconManager.setCurrentAppIcon()
+        iconManager.restoreCurrentAppIcon()
 
         loopManager.startObservingKeys()
 

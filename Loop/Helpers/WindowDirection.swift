@@ -13,6 +13,7 @@ enum WindowDirection: CaseIterable {
 
     case noAction
     case maximize
+    case center
 
     // Halves
     case topHalf
@@ -72,6 +73,7 @@ enum WindowDirection: CaseIterable {
         switch self {
         case .noAction:                 nil
         case .maximize:                 "Maximize"
+        case .center:                   "Center"
 
         case .topHalf:                  "Top Half"
         case .rightHalf:                "Right Half"
@@ -101,6 +103,7 @@ enum WindowDirection: CaseIterable {
         switch self {
         case .noAction:                 [[]]
         case .maximize:                 Defaults[.maximizeKeybind]
+        case .center:                   Defaults[.centerKeybind]
 
         case .topHalf:                  Defaults[.topHalfKeybind]
         case .rightHalf:                Defaults[.rightHalfKeybind]
@@ -119,29 +122,6 @@ enum WindowDirection: CaseIterable {
         case .rightThird:               Defaults[.rightThird]
 
         default:                        [[]]
-        }
-    }
-
-    func setKeybind(_ keybind: [Set<UInt16>]) {
-        switch self {
-        case .maximize:                 Defaults[.maximizeKeybind] = keybind
-
-        case .topHalf:                  Defaults[.topHalfKeybind] = keybind
-        case .rightHalf:                Defaults[.rightHalfKeybind] = keybind
-        case .bottomHalf:               Defaults[.bottomHalfKeybind] = keybind
-        case .leftHalf:                 Defaults[.leftHalfKeybind] = keybind
-
-        case .topLeftQuarter:           Defaults[.topLeftQuarter] = keybind
-        case .topRightQuarter:          Defaults[.topRightQuarter] = keybind
-        case .bottomRightQuarter:       Defaults[.bottomRightQuarter] = keybind
-        case .bottomLeftQuarter:        Defaults[.bottomLeftQuarter] = keybind
-
-        case .leftThird:                Defaults[.leftThird] = keybind
-        case .leftTwoThirds:            Defaults[.leftTwoThirds] = keybind
-        case .horizontalCenterThird:    Defaults[.horizontalCenterThird] = keybind
-        case .rightTwoThirds:           Defaults[.rightTwoThirds] = keybind
-        case .rightThird:               Defaults[.rightThird] = keybind
-        default: return
         }
     }
 }

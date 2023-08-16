@@ -16,8 +16,6 @@ struct MoreSettingsView: View {
         Form {
             Section(content: {
                 Toggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
-//                Toggle("Automatically download updates", isOn: $updater.a)
-//                    .disabled(!automaticallyChecksForUpdates)
                 Toggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
             }, header: {
                 HStack {

@@ -11,7 +11,7 @@ import Defaults
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
-    static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Default")
+    static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
 
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: false)
@@ -30,7 +30,11 @@ extension Defaults.Keys {
 
     static let maximizeKeybind = Key<[Set<CGKeyCode>]>(
         "maximizeKeybind",
-        default: [[.kVK_Space], [.kVK_Return]]
+        default: [[.kVK_Return]]
+    )
+    static let centerKeybind = Key<[Set<CGKeyCode>]>(
+        "centerKeybind",
+        default: [[.kVK_Space]]
     )
 
     // Halves

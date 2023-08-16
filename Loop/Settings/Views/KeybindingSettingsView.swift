@@ -49,8 +49,8 @@ struct KeybindingSettingsView: View {
             Section("Instructions") {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Press the spacebar with your trigger\nkey to maximize a window:")
-                        Text("You can also use the enter key!")
+                        Text("Press return to maximize a window:")
+                        Text("Make sure to be pressing your trigger key!")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -64,7 +64,7 @@ struct KeybindingSettingsView: View {
                         Image(systemName: "plus")
                             .font(Font.system(size: 15, weight: .bold))
 
-                        Image("custom.space.rectangle.fill")
+                        Image("custom.return.rectangle.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
@@ -101,7 +101,6 @@ struct KeybindingSettingsView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Use JKL to resize into thirds:")
-
                         Text("Use U and O keys for 2/3-sized windows!")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -117,6 +116,30 @@ struct KeybindingSettingsView: View {
                             .font(Font.system(size: 15, weight: .bold))
 
                         Image(systemName: "j.square.fill")
+                            .font(Font.system(size: 30, weight: .regular))
+                            .frame(width: 60)
+                    }
+                    .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
+                }
+
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Press the spacebar to center a window:")
+                        Text("This will not alter the window's current size!")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+
+                    Spacer()
+
+                    HStack {
+                        Image(triggerKeySymbol)
+                            .font(Font.system(size: 30, weight: .regular))
+
+                        Image(systemName: "plus")
+                            .font(Font.system(size: 15, weight: .bold))
+
+                        Image("custom.space.rectangle.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }

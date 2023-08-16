@@ -29,16 +29,28 @@ struct PreviewView: View {
         GeometryReader { geo in
             VStack {
                 switch currentResizeDirection {
-                case .bottomHalf, .bottomRightQuarter, .bottomLeftQuarter, .verticalCenterThird, .bottomThird, .bottomTwoThirds, .noAction:
+                case .bottomHalf,
+                        .bottomRightQuarter,
+                        .bottomLeftQuarter,
+                        .verticalCenterThird,
+                        .bottomThird,
+                        .bottomTwoThirds,
+                        .noAction:
                     Rectangle()
-                        .frame(width: currentResizeDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
+                        .frame(height: currentResizeDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
                 default:
                     EmptyView()
                 }
 
                 HStack {
                     switch currentResizeDirection {
-                    case .rightHalf, .topRightQuarter, .bottomRightQuarter, .horizontalCenterThird, .rightThird, .rightTwoThirds, .noAction:
+                    case .rightHalf,
+                            .topRightQuarter,
+                            .bottomRightQuarter,
+                            .horizontalCenterThird,
+                            .rightThird,
+                            .rightTwoThirds,
+                            .noAction:
                         Rectangle()
                             .frame(width: currentResizeDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
                     default:
@@ -72,7 +84,13 @@ struct PreviewView: View {
                     .frame(width: currentResizeDirection == .leftTwoThirds ? geo.size.width / 3 * 2 : nil)
 
                     switch currentResizeDirection {
-                    case .leftHalf, .topLeftQuarter, .bottomLeftQuarter, .horizontalCenterThird, .leftThird, .leftTwoThirds, .noAction:
+                    case .leftHalf,
+                            .topLeftQuarter,
+                            .bottomLeftQuarter,
+                            .horizontalCenterThird,
+                            .leftThird,
+                            .leftTwoThirds,
+                            .noAction:
                         Rectangle()
                             .frame(width: currentResizeDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
                     default:
@@ -81,9 +99,15 @@ struct PreviewView: View {
                 }
 
                 switch currentResizeDirection {
-                case .topHalf, .topRightQuarter, .topLeftQuarter, .verticalCenterThird, .topThird, .topTwoThirds, .noAction:
+                case .topHalf,
+                        .topRightQuarter,
+                        .topLeftQuarter,
+                        .verticalCenterThird,
+                        .topThird,
+                        .topTwoThirds,
+                        .noAction:
                     Rectangle()
-                        .frame(width: currentResizeDirection == .topThird ? geo.size.width / 3 * 2 : nil)
+                        .frame(height: currentResizeDirection == .topThird ? geo.size.width / 3 * 2 : nil)
                 default:
                     EmptyView()
                 }
@@ -91,6 +115,7 @@ struct PreviewView: View {
         }
         .foregroundColor(.clear)
         .opacity(currentResizeDirection == .noAction ? 0 : 1)
+        .scaleEffect(currentResizeDirection == .center ? 0.8 : 1)
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizeDirection)
         .onReceive(.directionChanged) { obj in
             if !previewMode {
