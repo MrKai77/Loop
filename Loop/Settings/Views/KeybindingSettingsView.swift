@@ -12,7 +12,7 @@ struct KeybindingSettingsView: View {
 
     @Default(.triggerKey) var triggerKey
     @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.accentColor) var accentColor
+    @Default(.customAccentColor) var customAccentColor
 
     let loopTriggerKeyOptions = LoopTriggerKeys.options
 

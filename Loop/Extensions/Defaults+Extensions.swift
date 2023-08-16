@@ -14,10 +14,10 @@ extension Defaults.Keys {
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
 
-    static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: false)
-    static let accentColor = Key<Color>("accentColor", default: Color(.white))
-    static let useGradientAccentColor = Key<Bool>("useGradientAccentColor", default: false)
-    static let gradientAccentColor = Key<Color>("gradientAccentColor", default: Color(.black))
+    static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
+    static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white))
+    static let useGradient = Key<Bool>("useGradient", default: true)
+    static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
 
     static let triggerKey = Key<CGKeyCode>("triggerKey", default: .kVK_Function)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)

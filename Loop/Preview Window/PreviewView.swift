@@ -16,9 +16,9 @@ struct PreviewView: View {
     @State var currentResizeDirection: WindowDirection = .noAction
 
     @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.accentColor) var accentColor
-    @Default(.useGradientAccentColor) var useGradientAccentColor
-    @Default(.gradientAccentColor) var gradientAccentColor
+    @Default(.customAccentColor) var customAccentColor
+    @Default(.useGradient) var useGradient
+    @Default(.gradientColor) var gradientColor
 
     @Default(.previewVisibility) var previewVisibility
     @Default(.previewPadding) var previewPadding
@@ -65,9 +65,18 @@ struct PreviewView: View {
                             .stroke(
                                 LinearGradient(
                                     gradient: Gradient(
-                                        colors: [useSystemAccentColor ? Color.accentColor : accentColor,
-                                                 useSystemAccentColor ? Color.accentColor :
-                                                    (useGradientAccentColor ? gradientAccentColor : accentColor)]
+                                        colors: [
+                                            useSystemAccentColor ?
+                                                Color.accentColor :
+                                                customAccentColor,
+                                            useGradient ?
+                                                useSystemAccentColor ?
+                                                    Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) :
+                                                    gradientColor :
+                                                useSystemAccentColor ?
+                                                    Color.accentColor :
+                                                    customAccentColor
+                                            ]
                                     ),
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing

@@ -31,9 +31,9 @@ struct RadialMenuView: View {
 
     // Color variables
     @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.accentColor) var accentColor
-    @Default(.useGradientAccentColor) var useGradientAccentColor
-    @Default(.gradientAccentColor) var gradientAccentColor
+    @Default(.customAccentColor) var customAccentColor
+    @Default(.useGradient) var useGradient
+    @Default(.gradientColor) var gradientColor
 
     var body: some View {
         VStack {
@@ -50,8 +50,17 @@ struct RadialMenuView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    useSystemAccentColor ? Color.accentColor : accentColor,
-                                    useSystemAccentColor ? Color.accentColor : useGradientAccentColor ? gradientAccentColor : accentColor]
+                                    useSystemAccentColor ?
+                                        Color.accentColor :
+                                        customAccentColor,
+                                    useGradient ?
+                                        useSystemAccentColor ?
+                                            Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) :
+                                            gradientColor :
+                                        useSystemAccentColor ?
+                                            Color.accentColor :
+                                            customAccentColor
+                                    ]
                             ),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -60,12 +69,25 @@ struct RadialMenuView: View {
 
                         // This rectangle with a gradient is masked with the current direction radial menu view
                         Rectangle()
-                            .fill(LinearGradient(
-                                gradient: Gradient(colors: [
-                                    useSystemAccentColor ? Color.accentColor : accentColor,
-                                    useSystemAccentColor ? Color.accentColor : useGradientAccentColor ? gradientAccentColor : accentColor]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing)
+                            .fill(
+                                LinearGradient(
+                                    gradient: Gradient(
+                                        colors: [
+                                            useSystemAccentColor ?
+                                                Color.accentColor :
+                                                customAccentColor,
+                                            useGradient ?
+                                                useSystemAccentColor ?
+                                                    Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) :
+                                                    gradientColor :
+                                                useSystemAccentColor ?
+                                                    Color.accentColor :
+                                                    customAccentColor
+                                            ]
+                                    ),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
                             )
                             .mask {
                                 RadialMenu(activeAngle: currentResizeDirection)
@@ -84,7 +106,7 @@ struct RadialMenuView: View {
 
                     if frontmostWindow == nil && previewMode == false {
                         Image("custom.macwindow.trianglebadge.exclamationmark")
-                            .foregroundStyle(useSystemAccentColor ? Color.accentColor : accentColor)
+                            .foregroundStyle(useSystemAccentColor ? Color.accentColor : customAccentColor)
                             .font(Font.system(size: 20, weight: .bold))
                     }
                 }

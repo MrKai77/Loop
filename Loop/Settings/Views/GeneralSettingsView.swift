@@ -15,9 +15,9 @@ struct GeneralSettingsView: View {
 
     @Default(.launchAtLogin) var launchAtLogin
     @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.accentColor) var accentColor
-    @Default(.useGradientAccentColor) var useGradientAccentColor
-    @Default(.gradientAccentColor) var gradientAccentColor
+    @Default(.customAccentColor) var customAccentColor
+    @Default(.useGradient) var useGradient
+    @Default(.gradientColor) var gradientColor
     @Default(.currentIcon) var currentIcon
     @Default(.timesLooped) var timesLooped
 
@@ -54,19 +54,21 @@ struct GeneralSettingsView: View {
             }
 
             Section("Accent Color") {
-                Toggle("Follow System Accent Color", isOn: $useSystemAccentColor)
+                Toggle("Use System Accent Color", isOn: $useSystemAccentColor)
 
-                Group {
-                    ColorPicker("Accent Color", selection: $accentColor, supportsOpacity: false)
-                    Toggle("Use Gradient", isOn: $useGradientAccentColor)
-                    ColorPicker("Gradient's color", selection: $gradientAccentColor, supportsOpacity: false)
-                        .disabled(!useGradientAccentColor)
+                if !useSystemAccentColor {
+                    ColorPicker("Custom Accent Color", selection: $customAccentColor, supportsOpacity: false)
+                }
+
+                Toggle("Use Gradient", isOn: $useGradient)
+
+                if !useSystemAccentColor && useGradient {
+                    ColorPicker("Custom Gradient color", selection: $gradientColor, supportsOpacity: false)
+                        .disabled(!useGradient)
                         .foregroundColor(
-                            useGradientAccentColor ? (useSystemAccentColor ? .secondary : nil) : .secondary
+                            useGradient ? (useSystemAccentColor ? .secondary : nil) : .secondary
                         )
                 }
-                .disabled(useSystemAccentColor)
-                .foregroundColor(useSystemAccentColor ? .secondary : nil)
             }
 
             Section(content: {
