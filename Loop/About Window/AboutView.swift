@@ -18,7 +18,6 @@ struct AboutView: View {
     @Environment(\.openURL) private var openURL
 
     @State private var isShowingAcknowledgements = false
-    @State private var isHoveringOverIcon = false
 
     let packages: [PackageDescription] = [
         PackageDescription(
@@ -42,31 +41,13 @@ struct AboutView: View {
         )
     ]
 
-    var iconAnimation: Animation {
-        Animation.snappy
-            .speed(0.5)
-    }
-
     var body: some View {
         VStack {
             VStack(spacing: 5) {
 
-                // When user puts their cursor at the center of the icon, the icon will spin
-                ZStack {
-                    Image(nsImage: NSApplication.shared.applicationIconImage)
-                        .resizable()
-                        .frame(width: 120, height: 120)
-                        .rotationEffect(Angle.degrees(isHoveringOverIcon ? 360 : 0))
-                        .animation(iconAnimation, value: isHoveringOverIcon)
-
-                    // This is what the user needs to hover over
-                    Circle()
-                        .foregroundColor(.clear)
-                        .frame(width: 30, height: 30)
-                        .onHover { hover in
-                            self.isHoveringOverIcon = hover
-                        }
-                }
+                Image(nsImage: NSApplication.shared.applicationIconImage)
+                    .resizable()
+                    .frame(width: 120, height: 120)
 
                 Text("\(Bundle.main.appName)")
                     .font(.title)

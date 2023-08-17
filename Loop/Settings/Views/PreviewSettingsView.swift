@@ -25,6 +25,7 @@ struct PreviewSettingsView: View {
                 PreviewView(previewMode: true)
             }
             .frame(height: 150)
+            .opacity(previewVisibility ? 1 : 0.5)
 
             Section {
                 Slider(

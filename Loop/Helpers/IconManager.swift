@@ -72,12 +72,6 @@ class IconManager {
 
     func checkIfUnlockedNewIcon() {
         for icon in icons where icon.unlockTime == Defaults[.timesLooped] {
-            if #available(macOS 14.0, *) {
-                NSApp.activate()
-            } else {
-                NSApp.activate(ignoringOtherApps: true)
-            }
-
             let alert = NSAlert()
             alert.icon = NSImage(named: icon.name)
             if let message = icon.unlockMessage {
