@@ -44,7 +44,7 @@ jobs:
             BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
             P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
         run: |
-            echo $BUILD_CERTIFICATE_BASE64 | base64 —decode > certificate.p12
+            echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o certificate.p12
             security create-keychain -p 12345678 build.keychain
             security default-keychain -s build.keychain
             security unlock-keychain -p 12345678 build.keychain
