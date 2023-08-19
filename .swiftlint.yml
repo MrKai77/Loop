@@ -1,5 +1,4 @@
 excluded:
-  - Loop/Helpers/KeyCode.swift
   - Loop/Extensions/CGKeyCode+Extensions.swift
 
 cyclomatic_complexity:
@@ -8,3 +7,4 @@ cyclomatic_complexity:
 force_cast: warning
 
 line_length: 140
+function_body_length: 60
