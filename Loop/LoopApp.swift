@@ -30,30 +30,6 @@ struct LoopApp: App {
                     .keyboardShortcut("q")
             }
         }
-
-//        MenuBarExtra("Loop", image: "menubarIcon") {
-//            #if DEBUG
-//            Text("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-//            #endif
-//
-//            Button("Settings") {
-//                NSApp.openSettings()
-//                NSApp.activate(ignoringOtherApps: true)
-//            }
-//            .keyboardShortcut(",", modifiers: .command)
-//
-//            Button("About \(Bundle.main.appName)") {
-//                aboutViewController.showAboutWindow()
-//            }
-//            .keyboardShortcut("i", modifiers: .command)
-//
-//            Divider()
-//
-//            Button("Quit") {
-//                NSApp.terminate(nil)
-//            }
-//            .keyboardShortcut("q", modifiers: .command)
-//        }
     }
 }
 
