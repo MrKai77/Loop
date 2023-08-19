@@ -50,7 +50,7 @@ jobs:
             security unlock-keychain -p 12345678 build.keychain
             security import certificate.p12 -k build.keychain -P $P12_PASSWORD -T /usr/bin/codesign
             security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k 12345678 build.keychain
-            /usr/bin/codesign --force -s 9E3E2D5B7F0332BC44EA38F14A9714DEB8700A35 ./Build/Loop.app -v
+            /usr/bin/codesign --force -s H6PL5YU4S3 ./Build/Loop.app -v
       
       - name: Make zip & dmg
         run: |
