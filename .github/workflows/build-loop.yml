@@ -53,7 +53,7 @@ jobs:
             /usr/bin/codesign --force -s 9E3E2D5B7F0332BC44EA38F14A9714DEB8700A35 ./Build/Loop.app -v
       
       - name: Make zip & dmg
-        with: |
+        run: |
           create-dmg \
             --volname "Loop" \
             --background "./assets/graphics/dmg-background.png" \
