@@ -1,5 +1,4 @@
 macos-release:
-	rm  -r ./Build/
 	set -o pipefail && xcodebuild archive \
 		-project ./Loop.xcodeproj \
 		-destination "generic/platform=macOS" \
