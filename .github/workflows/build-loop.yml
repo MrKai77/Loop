@@ -24,51 +24,14 @@ jobs:
         run: |
           sudo xcode-select -s "/Applications/Xcode_15.0.app"
           /usr/bin/xcodebuild -version
-          
-      # - name: Codesign Loop.app
-      #   uses: apple-actions/import-codesign-certs@v2
-      #   with: 
-      #     p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-      #     p12-password: ${{ secrets.P12_PASSWORD }}
-          
+
       - name: Install dependencies
         run: |
           brew install xcbeautify create-dmg
 
       - name: Build Loop.app
         run: |
-          make app 
-
-      - name: Codesign executable
-        env: 
-            BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-            P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-        run: |
-            echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o certificate.p12
-            security create-keychain -p 12345678 build.keychain
-            security default-keychain -s build.keychain
-            security unlock-keychain -p 12345678 build.keychain
-            security import certificate.p12 -k build.keychain -P $P12_PASSWORD -T /usr/bin/codesign
-            security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k 12345678 build.keychain
-
-            # /usr/bin/codesign --force -s H6PL5YU4S3 ./Build/Loop.app -v
-            codesign -f -o runtime --timestamp -s "Apple Development: mrkai77@protonmail.com (H6PL5YU4S3)" ./Build/Loop.app
-      
-      - name: Make zip & dmg
-        run: |
-          create-dmg \
-            --volname "Loop" \
-            --background "./assets/graphics/dmg-background.png" \
-            --window-pos 200 120 \
-            --window-size 660 400 \
-            --icon-size 160 \
-            --icon "Loop.app" 180 170 \
-            --hide-extension "Loop.app" \
-            --app-drop-link 480 170 \
-            --no-internet-enable \
-            "./Build/Loop.dmg" \
-            "./Build/Loop.app"
-          ditto -c -k --sequesterRsrc --keepParent ./Build/Loop.app ./Build/Loop.zip
+          make debug
 
       - name: Upload build
         uses: actions/upload-artifact@v3.1.2
