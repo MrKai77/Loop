@@ -12,7 +12,6 @@ import WindowManagement
 
 @main
 struct LoopApp: App {
-
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     let aboutViewController = AboutViewController()
 
@@ -20,6 +19,7 @@ struct LoopApp: App {
         Settings {
             SettingsView()
         }
+        .registerSettingsWindow()
         .enableOpenWindow()
         .commands {
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {

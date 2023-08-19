@@ -9,7 +9,6 @@ import SwiftUI
 import WindowManagement
 
 class StatusItemController {
-
     private let aboutViewController = AboutViewController()
     private var statusItem: NSStatusItem!
 
@@ -38,7 +37,7 @@ class StatusItemController {
         } else {
             NSApp.activate(ignoringOtherApps: true)
         }
-        for window in NSApp.windows where window.hasShadow == true && window.isMovableByWindowBackground == false {
+        for window in NSApp.windows where window.title != "About \(Bundle.main.appName)" {
             window.orderFrontRegardless()
         }
     }
@@ -51,7 +50,7 @@ class StatusItemController {
         } else {
             NSApp.activate(ignoringOtherApps: true)
         }
-        for window in NSApp.windows where window.hasShadow == true && window.isMovableByWindowBackground == true {
+        for window in NSApp.windows where window.title == "About \(Bundle.main.appName)" {
             window.orderFrontRegardless()
         }
     }
