@@ -1,4 +1,4 @@
-![](resources/graphics/social_preview.png)
+![](assets/graphics/social_preview.png)
 
 Loop is a MacOS app that simplifies window management for you! You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
 
