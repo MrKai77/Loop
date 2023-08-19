@@ -23,7 +23,7 @@ class StatusItemController {
 
         let loopMenu = NSMenu()
         #if DEBUG
-        loopMenu.addItem(withTitle: "DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))", action: nil, keyEquivalent: "")
+        loopMenu.addItem(withTitle: "DEBUG BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))", action: nil, keyEquivalent: "")
         #endif
         loopMenu.addItem(withTitle: "Settings", action: #selector(self.openSettingsWindow), keyEquivalent: ",").target = self
         loopMenu.addItem(withTitle: "About Loop", action: #selector(self.openAboutWindow), keyEquivalent: "i").target = self
