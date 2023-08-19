@@ -52,7 +52,7 @@ jobs:
             security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k 12345678 build.keychain
 
             # /usr/bin/codesign --force -s H6PL5YU4S3 ./Build/Loop.app -v
-            /usr/bin/codesign --force --deep --sign "Apple Development: mrkai77@protonmail.com" ./Build/Loop.app
+            codesign -f -o runtime --timestamp -s "Apple Development: mrkai77@protonmail.com (H6PL5YU4S3)" ./Build/Loop.app
       
       - name: Make zip & dmg
         run: |
