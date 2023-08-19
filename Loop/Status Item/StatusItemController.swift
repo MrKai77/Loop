@@ -22,8 +22,12 @@ class StatusItemController {
         button.addSubview(view)
 
         let loopMenu = NSMenu()
+        #if DEBUG
+        loopMenu.addItem(withTitle: "DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))", action: nil, keyEquivalent: "")
+        #endif
         loopMenu.addItem(withTitle: "Settings", action: #selector(self.openSettingsWindow), keyEquivalent: ",").target = self
         loopMenu.addItem(withTitle: "About Loop", action: #selector(self.openAboutWindow), keyEquivalent: "i").target = self
+        loopMenu.addItem(NSMenuItem.separator())
         loopMenu.addItem(withTitle: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
 
         statusItem.menu = loopMenu
