@@ -25,27 +25,24 @@ jobs:
           sudo xcode-select -s "/Applications/Xcode_15.0.app"
           /usr/bin/xcodebuild -version
           
-      - name: Codesign Loop.app
-        uses: apple-actions/import-codesign-certs@v2
-        with: 
-          p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          p12-password: ${{ secrets.P12_PASSWORD }}
+      # - name: Codesign Loop.app
+      #   uses: apple-actions/import-codesign-certs@v2
+      #   with: 
+      #     p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+      #     p12-password: ${{ secrets.P12_PASSWORD }}
           
+      - name: Install xcbeautify
+        run: |
+          brew install xcbeautify
+
       - name: Build Loop.app
         run: |
-          sh ./resources/build_loop.sh debug
+          make
       
       - name: Upload achived app
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: Loop.zip
-          path: Loop.zip
-          
-      - name: Publish Prerelease
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "development_build"
-          prerelease: true
-          title: "Development Build"
-          files: Loop.zip
+          name: Loop Build
+          path: |
+            Build/Loop.zip
+            Build/Loop.dmg

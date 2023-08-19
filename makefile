@@ -27,3 +27,4 @@ macos-release:
 		"./Build/Loop.dmg" \
 		"./Build/Loop.xcarchive/Products/Applications/"
 	cp -R ./Build/Loop.xcarchive/Products/Applications/ ./Build/
+	ditto -c -k --sequesterRsrc --keepParent ./Build/Loop.app ./Build/Loop.zip
