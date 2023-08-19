@@ -31,9 +31,9 @@ jobs:
       #     p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
       #     p12-password: ${{ secrets.P12_PASSWORD }}
           
-      - name: Install xcbeautify
+      - name: Install dependencies
         run: |
-          brew install xcbeautify
+          brew install xcbeautify create-dmg
 
       - name: Build Loop.app
         run: |
