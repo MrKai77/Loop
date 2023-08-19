@@ -72,6 +72,8 @@ class IconManager {
 
     func checkIfUnlockedNewIcon() {
         for icon in icons where icon.unlockTime == Defaults[.timesLooped] {
+            NSApp.setActivationPolicy(.regular)
+
             let alert = NSAlert()
             alert.icon = NSImage(named: icon.name)
             if let message = icon.unlockMessage {
@@ -84,9 +86,7 @@ class IconManager {
             alert.addButton(withTitle: "Yes").keyEquivalent = "\r"
             alert.addButton(withTitle: "No")
 
-            NSApp.activate(ignoringOtherApps: true)
             let response = alert.runModal()
-
             if response == NSApplication.ModalResponse.alertFirstButtonReturn {
                 setAppIcon(to: icon)
             }

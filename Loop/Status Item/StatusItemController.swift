@@ -32,10 +32,28 @@ class StatusItemController {
 
     @objc func openSettingsWindow() {
         NSApp.openSettings()
+        NSApp.setActivationPolicy(.regular)
+        if #available(macOS 14.0, *) {
+            NSApp.activate()
+        } else {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        for window in NSApp.windows where window.hasShadow == true && window.isMovableByWindowBackground == false {
+            window.orderFrontRegardless()
+        }
     }
 
     @objc func openAboutWindow() {
         self.aboutViewController.showAboutWindow()
+        NSApp.setActivationPolicy(.regular)
+        if #available(macOS 14.0, *) {
+            NSApp.activate()
+        } else {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        for window in NSApp.windows where window.hasShadow == true && window.isMovableByWindowBackground == true {
+            window.orderFrontRegardless()
+        }
     }
 }
 

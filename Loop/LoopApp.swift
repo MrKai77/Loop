@@ -20,6 +20,7 @@ struct LoopApp: App {
         Settings {
             SettingsView()
         }
+        .enableOpenWindow()
         .commands {
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
                 Button("About \(Bundle.main.appName)") { aboutViewController.showAboutWindow() }
@@ -42,6 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItemController.show()
+        NSApp.setActivationPolicy(.accessory)
 
         // Check accessibility access, then if access is not granted,
         // show a more informative alert asking for accessibility access
@@ -51,7 +53,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         iconManager.restoreCurrentAppIcon()
 
         loopManager.startObservingKeys()
+    }
 
-//        NSApp.setActivationPolicy(.accessory)
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        NSApp.setActivationPolicy(.accessory)
+        return false
     }
 }
