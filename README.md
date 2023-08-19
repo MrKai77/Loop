@@ -3,7 +3,7 @@
 Loop is a MacOS app that simplifies window management for you! You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
 
 <div align="center">
-    <img src="resources/graphics/loop_demo.gif" width="100%">
+    <img src="assets/graphics/loop_demo.gif" width="100%">
 </div>
 
 # Installation
@@ -46,7 +46,7 @@ You can set your own custom trigger key for Loop! Currently, the available optio
 
 ### Using Caps Lock
 
-![](resources/graphics/caps_lock.gif)
+![](assets/graphics/caps_lock.gif)
 
 To set `Caps Lock` as the trigger key, remap it to `Control` in System Settings, and repeat the process for every connected keyboard. In Loop, make sure the `Right Control` key is selected as your trigger.
 
