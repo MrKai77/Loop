@@ -10,4 +10,5 @@ import Foundation
 extension Notification.Name {
     static let directionChanged = Notification.Name("directionChanged")
     static let forceCloseLoop = Notification.Name("forceCloseLoop")
+    static let finishedLooping = Notification.Name("finishedLooping")
 }

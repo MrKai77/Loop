@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "appmover",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/iamcalledrob/AppMover",
-      "state" : {
-        "branch" : "master",
-        "revision" : "953b050dba48450856386c4ade6367196560b292"
-      }
-    },
-    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
@@ -25,6 +16,15 @@
       "state" : {
         "branch" : "2.x",
         "revision" : "077d7228ba24fd11cc301147d569db81e842082f"
+      }
+    },
+    {
+      "identity" : "swiftui-windowmanagement",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Wouter01/SwiftUI-WindowManagement",
+      "state" : {
+        "revision" : "adbebf5d7df325f3d7bf07dc832e5e162a9003f5",
+        "version" : "2.1.1"
       }
     }
   ],

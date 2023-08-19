@@ -8,7 +8,7 @@
 import SwiftUI
 import Defaults
 import ServiceManagement
-import AppMover
+import WindowManagement
 
 @main
 struct LoopApp: App {
@@ -31,49 +31,41 @@ struct LoopApp: App {
             }
         }
 
-        MenuBarExtra("Loop", image: "menubarIcon") {
-            #if DEBUG
-            Text("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-            #endif
-
-            if #available(macOS 14, *) {
-                SettingsLink()
-                    .keyboardShortcut(",", modifiers: .command)
-            } else {
-                Button("Settings") {
-                    NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                    NSApp.activate(ignoringOtherApps: true)
-                }
-                .keyboardShortcut(",", modifiers: .command)
-            }
-
-            Button("About \(Bundle.main.appName)") {
-                aboutViewController.showAboutWindow()
-            }
-            .keyboardShortcut("i", modifiers: .command)
-
-            Divider()
-
-            Button("Quit") {
-                NSApp.terminate(nil)
-            }
-            .keyboardShortcut("q", modifiers: .command)
-        }
+//        MenuBarExtra("Loop", image: "menubarIcon") {
+//            #if DEBUG
+//            Text("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+//            #endif
+//
+//            Button("Settings") {
+//                NSApp.openSettings()
+//                NSApp.activate(ignoringOtherApps: true)
+//            }
+//            .keyboardShortcut(",", modifiers: .command)
+//
+//            Button("About \(Bundle.main.appName)") {
+//                aboutViewController.showAboutWindow()
+//            }
+//            .keyboardShortcut("i", modifiers: .command)
+//
+//            Divider()
+//
+//            Button("Quit") {
+//                NSApp.terminate(nil)
+//            }
+//            .keyboardShortcut("q", modifiers: .command)
+//        }
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let accessibilityAccessManager = AccessibilityAccessManager()
+    private let statusItemController = StatusItemController()
     private let iconManager = IconManager()
     private let loopManager = LoopManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        do {
-            try AppMover.moveApp()
-        } catch {
-            print("Moving app failed: \(error)")
-        }
+        statusItemController.show()
 
         // Check accessibility access, then if access is not granted,
         // show a more informative alert asking for accessibility access

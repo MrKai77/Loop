@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521EB29E234EB00139654 /* AboutViewController.swift */; };
 		A82521EE29E235AC00139654 /* AccessibilityAccessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */; };
-		A8263BDE2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8263BDD2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift */; };
 		A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */; };
 		A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */; };
 		A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */; };
@@ -22,6 +21,7 @@
 		A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */; };
 		A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A848D8A62A8C2F3F00060834 /* LoopManager.swift */; };
 		A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */; };
+		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
@@ -29,13 +29,14 @@
 		A88266002980931C00BCB197 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88265FF2980931C00BCB197 /* SettingsView.swift */; };
 		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
+		A88627372A900CCA00A479CA /* WindowManagement in Frameworks */ = {isa = PBXBuildFile; productRef = A88627362A900CCA00A479CA /* WindowManagement */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
 		A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */; };
-		A8A7685129B6E62E00CAC0FD /* AppMover in Frameworks */ = {isa = PBXBuildFile; productRef = A8A1F1C829A07B2900CC84D5 /* AppMover */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
 		A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */; };
 		A8E1575F298654960005761C /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E1575E298654960005761C /* AboutView.swift */; };
+		A8E3EDAA2A90323500C999B9 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3EDA92A90323500C999B9 /* StatusItemController.swift */; };
 		A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C38297F5E9A0064D4BA /* LoopApp.swift */; };
 		A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */; };
 		A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */; };
@@ -51,7 +52,6 @@
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A82521EB29E234EB00139654 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityAccessManager.swift; sourceTree = "<group>"; };
-		A8263BDD2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A8291D6D2A4513D200C5CB69 /* .swiftlint.yml */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; tabWidth = 2; };
 		A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extensions.swift"; sourceTree = "<group>"; };
@@ -65,6 +65,7 @@
 		A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AXUIElement+Extensions.swift"; sourceTree = "<group>"; };
 		A848D8A62A8C2F3F00060834 /* LoopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopManager.swift; sourceTree = "<group>"; };
 		A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdater.swift; sourceTree = "<group>"; };
+		A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
@@ -78,6 +79,7 @@
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
 		A8E1575E298654960005761C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		A8E3EDA92A90323500C999B9 /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E59C38297F5E9A0064D4BA /* LoopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopApp.swift; sourceTree = "<group>"; };
 		A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -97,8 +99,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8A7685129B6E62E00CAC0FD /* AppMover in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
+				A88627372A900CCA00A479CA /* WindowManagement in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 				A8F063702985B2220010C33D /* Sparkle in Frameworks */,
 			);
@@ -125,8 +127,8 @@
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
 				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
 				A8E6D2002A416494005751D4 /* LoopTriggerKeys.swift */,
-				A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */,
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
+				A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */,
 				A848D8A62A8C2F3F00060834 /* LoopManager.swift */,
 			);
 			path = Helpers;
@@ -140,7 +142,7 @@
 				A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */,
 				A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */,
 				A8330ACC2A3AC1D100673C8D /* CGPoint+Extensions.swift */,
-				A8263BDD2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift */,
+				A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */,
 				A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */,
 				A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */,
 				A8330AC62A3AC19500673C8D /* NSScreen+Extensions.swift */,
@@ -196,6 +198,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A8E3EDAB2A90401800C999B9 /* Status Item */ = {
+			isa = PBXGroup;
+			children = (
+				A8E3EDA92A90323500C999B9 /* StatusItemController.swift */,
+			);
+			path = "Status Item";
+			sourceTree = "<group>";
+		};
 		A8E59C2C297F5E9A0064D4BA = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +232,7 @@
 				A80521312A84878200BF7E22 /* Config.xcconfig */,
 				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A8330ABB2A3AC05200673C8D /* Helpers */,
+				A8E3EDAB2A90401800C999B9 /* Status Item */,
 				A82521EA29E2349700139654 /* About Window */,
 				A88265FB29808E0D00BCB197 /* Radial Menu */,
 				A88265FA29808DED00BCB197 /* Preview Window */,
@@ -263,7 +274,7 @@
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				A8F0636F2985B2220010C33D /* Sparkle */,
-				A8A1F1C829A07B2900CC84D5 /* AppMover */,
+				A88627362A900CCA00A479CA /* WindowManagement */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -296,7 +307,7 @@
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				A8F0636E2985B2220010C33D /* XCRemoteSwiftPackageReference "Sparkle" */,
-				A8A1F1C729A07B2900CC84D5 /* XCRemoteSwiftPackageReference "AppMover" */,
+				A88627352A900CCA00A479CA /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -354,6 +365,7 @@
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
+				A8E3EDAA2A90323500C999B9 /* StatusItemController.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
 				A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */,
 				A8330ACD2A3AC1D100673C8D /* CGPoint+Extensions.swift in Sources */,
@@ -375,8 +387,8 @@
 				A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */,
 				A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */,
 				A82521EE29E235AC00139654 /* AccessibilityAccessManager.swift in Sources */,
-				A8263BDE2A48FA4C00E86EAA /* CGKeyCode+Extensions.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
+				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
 				A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +525,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Classic";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CODE_SIGN_ENTITLEMENTS = Loop/Loop.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -534,6 +547,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
@@ -546,6 +560,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Classic";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CODE_SIGN_ENTITLEMENTS = Loop/Loop.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -567,6 +582,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
@@ -597,12 +613,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A8A1F1C729A07B2900CC84D5 /* XCRemoteSwiftPackageReference "AppMover" */ = {
+		A88627352A900CCA00A479CA /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/iamcalledrob/AppMover";
+			repositoryURL = "https://github.com/Wouter01/SwiftUI-WindowManagement";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
 			};
 		};
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
@@ -624,10 +640,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A8A1F1C829A07B2900CC84D5 /* AppMover */ = {
+		A88627362A900CCA00A479CA /* WindowManagement */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A8A1F1C729A07B2900CC84D5 /* XCRemoteSwiftPackageReference "AppMover" */;
-			productName = AppMover;
+			package = A88627352A900CCA00A479CA /* XCRemoteSwiftPackageReference "SwiftUI-WindowManagement" */;
+			productName = WindowManagement;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -114,6 +114,11 @@ class LoopManager {
         if willResizeWindow {
             windowEngine.resize(window: self.frontmostWindow!, direction: self.currentResizingDirection)
 
+            NotificationCenter.default.post(
+                name: Notification.Name.finishedLooping,
+                object: nil
+            )
+
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()
         }
