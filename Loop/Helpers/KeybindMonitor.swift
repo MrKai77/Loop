@@ -49,8 +49,7 @@ class KeybindMonitor {
                     NotificationCenter.default.post(
                         name: Notification.Name.directionChanged,
                         object: nil,
-                        userInfo: ["Direction": direction,
-                                   "Keybind": true]
+                        userInfo: ["direction": direction]
                     )
                     isValidKeybind = true
                     break outerLoop

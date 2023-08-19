@@ -32,6 +32,9 @@
 		A88627372A900CCA00A479CA /* WindowManagement in Frameworks */ = {isa = PBXBuildFile; productRef = A88627362A900CCA00A479CA /* WindowManagement */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
 		A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */; };
+		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
+		A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */; };
+		A8D5A7DA2A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D92A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
 		A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */; };
@@ -76,6 +79,9 @@
 		A883642E298B7288005D6C19 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
 		A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
+		A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorCircleSegment.swift; sourceTree = "<group>"; };
+		A8D5A7D92A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuDirectionSelectorView.swift; sourceTree = "<group>"; };
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
 		A8E1575E298654960005761C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
@@ -165,6 +171,9 @@
 			children = (
 				A8E59C49297F98670064D4BA /* RadialMenuController.swift */,
 				A8789F6629805B190040512E /* RadialMenuView.swift */,
+				A8D5A7D92A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift */,
+				A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */,
+				A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */,
 			);
 			path = "Radial Menu";
 			sourceTree = "<group>";
@@ -360,6 +369,7 @@
 				A8EF1F09299C87DF00633440 /* IconManager.swift in Sources */,
 				A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */,
 				A8330AD12A3AC25100673C8D /* CaseIterable+Extensions.swift in Sources */,
+				A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */,
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
 				A8E6D2012A416494005751D4 /* LoopTriggerKeys.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
@@ -375,10 +385,12 @@
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */,
+				A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */,
 				A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */,
 				A8330AD42A3AC27600673C8D /* WindowDirection.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,
+				A8D5A7DA2A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift in Sources */,
 				A88266002980931C00BCB197 /* SettingsView.swift in Sources */,
 				A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */,
 				A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */,

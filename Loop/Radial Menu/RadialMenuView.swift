@@ -46,27 +46,6 @@ struct RadialMenuView: View {
                         // NSVisualEffect on background
                         VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
 
-                        // Used as the background when resize direction is .maximize
-                        LinearGradient(
-                            gradient: Gradient(
-                                colors: [
-                                    useSystemAccentColor ?
-                                        Color.accentColor :
-                                        customAccentColor,
-                                    useGradient ?
-                                        useSystemAccentColor ?
-                                            Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) :
-                                            gradientColor :
-                                        useSystemAccentColor ?
-                                            Color.accentColor :
-                                            customAccentColor
-                                    ]
-                            ),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                        .opacity(currentResizeDirection == .maximize ? 1 : 0)
-
                         // This rectangle with a gradient is masked with the current direction radial menu view
                         Rectangle()
                             .fill(
@@ -90,7 +69,7 @@ struct RadialMenuView: View {
                                 )
                             )
                             .mask {
-                                RadialMenu(activeAngle: currentResizeDirection)
+                                RadialMenuDirectionSelectorView(activeAngle: currentResizeDirection, radialMenuSize: self.radialMenuSize)
                             }
                     }
                     // Mask the whole ZStack with the shape the user defines
@@ -121,7 +100,6 @@ struct RadialMenuView: View {
         // Animate window
         .scaleEffect(currentResizeDirection == .maximize ? 0.85 : 1)
         .animation(.easeInOut, value: currentResizeDirection)
-
         .onAppear {
             if previewMode {
                 currentResizeDirection = .topHalf
@@ -129,165 +107,71 @@ struct RadialMenuView: View {
         }
         .onReceive(timer) { _ in
             if !previewMode {
-                let currentAngleToMouse = Angle(
-                    radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x,
-                                                                    y: NSEvent.mouseLocation.y))
-                )
-
-                let currentDistanceToMouse = initialMousePosition.distanceSquared(
-                    to: CGPoint(
-                        x: NSEvent.mouseLocation.x,
-                        y: NSEvent.mouseLocation.y
-                    )
-                )
-
-                if (currentAngleToMouse == angleToMouse) && (currentDistanceToMouse == distanceToMouse) {
-                    return
-                }
-
-                // Get angle & distance to mouse
-                self.angleToMouse = currentAngleToMouse
-                self.distanceToMouse = currentDistanceToMouse
-
-                // If mouse over 50 points away, select half or quarter positions
-                if distanceToMouse > pow(50 - radialMenuThickness, 2) {
-                    switch Int((angleToMouse.normalized().degrees + 45 / 2) / 45) {
-                    case 0, 8: currentResizeDirection = .rightHalf
-                    case 1:    currentResizeDirection = .bottomRightQuarter
-                    case 2:    currentResizeDirection = .bottomHalf
-                    case 3:    currentResizeDirection = .bottomLeftQuarter
-                    case 4:    currentResizeDirection = .leftHalf
-                    case 5:    currentResizeDirection = .topLeftQuarter
-                    case 6:    currentResizeDirection = .topHalf
-                    case 7:    currentResizeDirection = .topRightQuarter
-                    default:   currentResizeDirection = .noAction
-                    }
-                } else if distanceToMouse < pow(noActionCursorDistance, 2) {
-                    currentResizeDirection = .noAction
-                } else {
-                    currentResizeDirection = .maximize
-                }
+                self.refreshCurrentAngle()
             } else {
-                currentResizeDirection = currentResizeDirection.nextWindowDirection
+                currentResizeDirection = currentResizeDirection.nextPreviewDirection
 
                 if currentResizeDirection == .rightThird {
                     currentResizeDirection = .topHalf
                 }
             }
         }
-        // When direction changes, send haptic feedback and post a
-        // notification which is used to position the preview window
-        .onChange(of: currentResizeDirection) { _ in
-            if !previewMode {
-                NotificationCenter.default.post(
-                    name: Notification.Name.directionChanged,
-                    object: nil,
-                    userInfo: ["Direction": currentResizeDirection]
-                )
-            }
-        }
-
         .onReceive(.directionChanged) { obj in
-            if let direction = obj.userInfo?["Direction"] as? WindowDirection {
+            if let direction = obj.userInfo?["direction"] as? WindowDirection {
                 self.currentResizeDirection = direction
             }
         }
     }
-}
 
-struct RadialMenu: View {
-    @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
+    private func refreshCurrentAngle() {
+        let currentAngleToMouse = Angle(
+            radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x,
+                                                            y: NSEvent.mouseLocation.y))
+        )
 
-    var activeAngle: WindowDirection
+        let currentDistanceToMouse = initialMousePosition.distanceSquared(
+            to: CGPoint(
+                x: NSEvent.mouseLocation.x,
+                y: NSEvent.mouseLocation.y
+            )
+        )
 
-    var body: some View {
-            if radialMenuCornerRadius < 40 {
-                // This is used when the user configures the radial menu to be a square
-                Color.clear
-                    .overlay {
-                        HStack(spacing: 0) {
-                            VStack(spacing: 0) {
-                                AngleSelectorRectangle(.topLeftQuarter, activeAngle)
-                                AngleSelectorRectangle(.leftHalf, activeAngle)
-                                AngleSelectorRectangle(.bottomLeftQuarter, activeAngle)
-                            }
-                            VStack(spacing: 0) {
-                                AngleSelectorRectangle(.topHalf, activeAngle)
-                                Spacer().frame(width: 100/3, height: 100/3)
-                                AngleSelectorRectangle(.bottomHalf, activeAngle)
-                            }
-                            VStack(spacing: 0) {
-                                AngleSelectorRectangle(.topRightQuarter, activeAngle)
-                                AngleSelectorRectangle(.rightHalf, activeAngle)
-                                AngleSelectorRectangle(.bottomRightQuarter, activeAngle)
-                            }
-                        }
-                    }
+        if (currentAngleToMouse == angleToMouse) && (currentDistanceToMouse == distanceToMouse) {
+            return
+        }
 
-            } else {
-                // This is used when the user configures the radial menu to be a circle
-                Color.clear
-                    .overlay {
-                        AngleSelectorCircleSegment(-22.5, .rightHalf, activeAngle)
-                        AngleSelectorCircleSegment(22.5, .bottomRightQuarter, activeAngle)
-                        AngleSelectorCircleSegment(67.5, .bottomHalf, activeAngle)
-                        AngleSelectorCircleSegment(112.5, .bottomLeftQuarter, activeAngle)
-                        AngleSelectorCircleSegment(157.5, .leftHalf, activeAngle)
-                        AngleSelectorCircleSegment(202.5, .topLeftQuarter, activeAngle)
-                        AngleSelectorCircleSegment(247.5, .topHalf, activeAngle)
-                        AngleSelectorCircleSegment(292.5, .topRightQuarter, activeAngle)
-                    }
+        // Get angle & distance to mouse
+        self.angleToMouse = currentAngleToMouse
+        self.distanceToMouse = currentDistanceToMouse
+
+        // If mouse over 50 points away, select half or quarter positions
+        let previousResizeDirection = currentResizeDirection
+        if distanceToMouse > pow(50 - radialMenuThickness, 2) {
+            switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
+            case 0, 8: currentResizeDirection = .rightHalf
+            case 1:    currentResizeDirection = .bottomRightQuarter
+            case 2:    currentResizeDirection = .bottomHalf
+            case 3:    currentResizeDirection = .bottomLeftQuarter
+            case 4:    currentResizeDirection = .leftHalf
+            case 5:    currentResizeDirection = .topLeftQuarter
+            case 6:    currentResizeDirection = .topHalf
+            case 7:    currentResizeDirection = .topRightQuarter
+            default:   currentResizeDirection = .noAction
             }
-    }
-}
-
-struct AngleSelectorRectangle: View {
-
-    var isActive: Bool = false
-    var isMaximize: Bool = false
-
-    init(_ resizePosition: WindowDirection, _ activeResizePosition: WindowDirection) {
-        if resizePosition == activeResizePosition {
-            isActive = true
+        } else if distanceToMouse < pow(noActionCursorDistance, 2) {
+            currentResizeDirection = .noAction
         } else {
-            isActive = false
+            currentResizeDirection = .maximize
         }
-    }
 
-    var body: some View {
-        Rectangle()
-            .foregroundColor(isActive ? Color.black : Color.clear)
-            .frame(width: 100/3, height: 100/3)
-    }
-}
-
-struct AngleSelectorCircleSegment: View {
-
-    var startingAngle: Double = 0
-    var isActive: Bool = false
-    var isMaximize: Bool = false
-
-    init(_ angle: Double, _ resizePosition: WindowDirection, _ activeResizePosition: WindowDirection) {
-        startingAngle = angle
-        if resizePosition == activeResizePosition {
-            isActive = true
-        } else {
-            isActive = false
-        }
-    }
-
-    var body: some View {
-        Path { path in
-            path.move(to: CGPoint(x: 50, y: 50))
-            path.addArc(
-                center: CGPoint(x: 50,
-                                y: 50),
-                radius: 90,
-                startAngle: .degrees(startingAngle),
-                endAngle: .degrees(startingAngle+45),
-                clockwise: false
+        // When direction changes, send haptic feedback and post a
+        // notification which is used to position the preview window
+        if currentResizeDirection != previousResizeDirection {
+            NotificationCenter.default.post(
+                name: Notification.Name.directionChanged,
+                object: nil,
+                userInfo: ["direction": currentResizeDirection]
             )
         }
-        .foregroundColor(isActive ? Color.black : Color.clear)
     }
 }

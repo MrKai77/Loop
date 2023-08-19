@@ -56,12 +56,11 @@ class LoopManager {
     }
 
     @objc private func currentWindowDirectionChanged(notification: Notification) {
-        if let direction = notification.userInfo?["Direction"] as? WindowDirection,
-           let keybind = notification.userInfo?["Keybind"] as? Bool? {
+        if let direction = notification.userInfo?["direction"] as? WindowDirection {
             currentResizingDirection = direction
 
             // Haptic feedback on the trackpad
-            if self.isLoopShown && keybind == nil {
+            if self.isLoopShown {
                 NSHapticFeedbackManager.defaultPerformer.perform(
                     NSHapticFeedbackManager.FeedbackPattern.alignment,
                     performanceTime: NSHapticFeedbackManager.PerformanceTime.now

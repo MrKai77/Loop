@@ -41,7 +41,7 @@ enum WindowDirection: CaseIterable {
     case bottomThird
     case bottomTwoThirds
 
-    var nextWindowDirection: WindowDirection {
+    var nextPreviewDirection: WindowDirection {
         switch self {
         case .noAction:             .topHalf
         case .topHalf:              .topRightQuarter
@@ -56,17 +56,20 @@ enum WindowDirection: CaseIterable {
         default:                    .noAction
         }
     }
-
-    var halves: [WindowDirection] {
-        return [.topHalf, .rightHalf, .bottomHalf, .leftHalf]
-    }
-
-    var horizontalThirds: [WindowDirection] {
-        return [.leftThird, .leftTwoThirds, .horizontalCenterThird, .rightTwoThirds, .rightThird]
-    }
-
-    var verticalThirds: [WindowDirection] {
-        return [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
+    
+    var radialMenuAngle: Double? {
+        switch self {
+        case .topHalf:              0
+        case .topRightQuarter:      45
+        case .rightHalf:            90
+        case .bottomRightQuarter:   135
+        case .bottomHalf:           180
+        case .bottomLeftQuarter:    225
+        case .leftHalf:             270
+        case .topLeftQuarter:       315
+        case .maximize:             0
+        default:                    nil
+        }
     }
 
     var name: String? {
