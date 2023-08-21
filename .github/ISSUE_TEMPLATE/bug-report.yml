@@ -46,7 +46,8 @@ body:
     attributes:
       label: MacOS Version
       description: Apple Logo -> About This Mac
-      placeholder: [ex. Ventura 13.1]
+      placeholder: |
+        [ex. Ventura 13.1]
     validations:
       required: true
 
@@ -54,7 +55,8 @@ body:
     attributes:
       label: Loop version
       description: You can find this in Loop\'s about window!
-      placeholder: [ex. Version 1.0.0 (246)]
+      placeholder: |
+        [ex. Version 1.0.0 (246)]
     validations:
       required: true
 
