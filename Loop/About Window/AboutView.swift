@@ -21,11 +21,6 @@ struct AboutView: View {
 
     let packages: [PackageDescription] = [
         PackageDescription(
-            name: "AppMover",
-            url: URL(string: "https://github.com/iamcalledrob/AppMover")!,
-            license: URL(string: "https://github.com/iamcalledrob/AppMover#license")!
-        ),
-        PackageDescription(
             name: "Defaults",
             url: URL(
                 string: "https://github.com/sindresorhus/Defaults"
@@ -38,6 +33,13 @@ struct AboutView: View {
             license: URL(
                 string: "https://github.com/sparkle-project/Sparkle/blob/2.x/LICENSE"
             )!
+        ),
+        PackageDescription(
+            name: "SwiftUI-WindowManagement",
+            url: URL(
+                string: "https://github.com/Wouter01/SwiftUI-WindowManagement"
+            )!,
+            license: URL(string: "https://github.com/Wouter01/SwiftUI-WindowManagement/blob/main/LICENSE")!
         )
     ]
 
@@ -100,7 +102,7 @@ struct AboutView: View {
                             Button(action: {
                                 openURL(packages[idx].license)
                             }, label: {
-                                Image(systemName: "info.circle")
+                                Image(systemName: "scroll")
                             })
                             .help("license")
                         }

@@ -24,7 +24,7 @@ struct SettingsView: View {
             RadialMenuSettingsView()
                 .tag(2)
                 .tabItem {
-                    Image("RadialMenuImage")
+                    Image(.radialMenu)
                     Text("Radial Menu")
                 }
 
