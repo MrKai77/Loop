@@ -1,0 +1,70 @@
+name: Bug Report
+description: Create a report about a bug you experienced while using Loop.
+title: "🐛 [Title here]"
+labels: ["bug"]
+body:
+  - type: textarea
+    attributes:
+      label: Bug Description
+      description: Provide a clear and concise description of this bug.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps To Reproduce
+      description: Provide steps to reproduce this bug.
+      placeholder: |
+        1. [First Step]
+        2. [Second Step]
+        3. [and so on...]
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: Provide a clear and concise description of what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Actual Behavior
+      description: Provide a clear and concise description of what happened.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Screenshots
+      description: Add screenshots to help explain this bug, if applicable.
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: MacOS Version
+      description: Apple Logo -> About This Mac
+      placeholder: [ex. Ventura 13.1]
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Loop version
+      description: You can find this in Loop\'s about window!
+      placeholder: [ex. Version 1.0.0 (246)]
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: Provide any additional information about this bug.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: Thank you for taking the time to report this bug.
