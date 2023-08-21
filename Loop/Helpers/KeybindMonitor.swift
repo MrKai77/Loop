@@ -21,9 +21,7 @@ class KeybindMonitor {
         KeybindMonitor.shared.pressedKeys = []
     }
 
-    private func performKeybind(event: NSEvent) -> Bool {
-        var isValidKeybind = false
-
+    private func performKeybind(event: NSEvent) {
         // If the current key up event is within 100 ms of the last key up event, return.
         // This is used when the user is pressing 2+ keys so that it doesn't switch back
         // to the one key direction when they're letting go of the keys.
@@ -31,7 +29,7 @@ class KeybindMonitor {
             if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
                 lastKeyReleaseTime = Date.now
             }
-            return false
+            return
         }
 
         if pressedKeys == [.kVK_Escape] {
@@ -41,7 +39,6 @@ class KeybindMonitor {
                 userInfo: ["forceClose": true]
             )
             KeybindMonitor.shared.resetPressedKeys()
-            isValidKeybind = true
         } else {
             // Since this is one for loop inside another, we can break from inside by breaking from the outerloop
             outerLoop: for direction in WindowDirection.allCases {
@@ -51,12 +48,10 @@ class KeybindMonitor {
                         object: nil,
                         userInfo: ["direction": direction]
                     )
-                    isValidKeybind = true
                     break outerLoop
                 }
             }
         }
-        return isValidKeybind
     }
 
     func start() {
@@ -67,17 +62,17 @@ class KeybindMonitor {
                 if KeybindMonitor.shared.isEnabled,
                     let keyEvent = NSEvent(cgEvent: event) {
 
-                    if !keyEvent.isARepeat {
-                        if keyEvent.type == .keyUp {
-                            KeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode)
-                        } else if keyEvent.type == .keyDown {
-                            KeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode)
-                        }
-                    }
-
-                    if KeybindMonitor.shared.performKeybind(event: keyEvent) {
+                    if keyEvent.isARepeat {
                         return nil
                     }
+
+                    if keyEvent.type == .keyUp {
+                        KeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode)
+                    } else if keyEvent.type == .keyDown {
+                        KeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode)
+                    }
+
+                    KeybindMonitor.shared.performKeybind(event: keyEvent)
                 }
 
                 // If we wanted to forward the key event to the frontmost app, we'd use:
