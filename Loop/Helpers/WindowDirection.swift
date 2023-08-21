@@ -56,7 +56,7 @@ enum WindowDirection: CaseIterable {
         default:                    .noAction
         }
     }
-    
+
     var radialMenuAngle: Double? {
         switch self {
         case .topHalf:              0

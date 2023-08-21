@@ -10,21 +10,21 @@
       }
     },
     {
+      "identity" : "menubarextraaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/orchetect/MenuBarExtraAccess",
+      "state" : {
+        "revision" : "f5896b47e15e114975897354c7e1082c51a2bffd",
+        "version" : "1.0.5"
+      }
+    },
+    {
       "identity" : "sparkle",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
         "branch" : "2.x",
         "revision" : "077d7228ba24fd11cc301147d569db81e842082f"
-      }
-    },
-    {
-      "identity" : "swiftui-windowmanagement",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Wouter01/SwiftUI-WindowManagement",
-      "state" : {
-        "revision" : "adbebf5d7df325f3d7bf07dc832e5e162a9003f5",
-        "version" : "2.1.1"
       }
     }
   ],

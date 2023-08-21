@@ -14,7 +14,6 @@ struct PackageDescription {
 }
 
 struct AboutView: View {
-
     @Environment(\.openURL) private var openURL
 
     @State private var isShowingAcknowledgements = false
@@ -28,18 +27,18 @@ struct AboutView: View {
             license: URL(string: "https://github.com/sindresorhus/Defaults/blob/main/license")!
         ),
         PackageDescription(
+            name: "MenuBarExtraAccess",
+            url: URL(
+                string: "https://github.com/orchetect/MenuBarExtraAccess"
+            )!,
+            license: URL(string: "https://github.com/orchetect/MenuBarExtraAccess/blob/main/LICENSE")!
+        ),
+        PackageDescription(
             name: "Sparkle",
             url: URL(string: "https://sparkle-project.org")!,
             license: URL(
                 string: "https://github.com/sparkle-project/Sparkle/blob/2.x/LICENSE"
             )!
-        ),
-        PackageDescription(
-            name: "SwiftUI-WindowManagement",
-            url: URL(
-                string: "https://github.com/Wouter01/SwiftUI-WindowManagement"
-            )!,
-            license: URL(string: "https://github.com/Wouter01/SwiftUI-WindowManagement/blob/main/LICENSE")!
         )
     ]
 
