@@ -1,5 +1,5 @@
 name: Bug Report
-description: Create a report about a bug you experienced while using Loop.
+description: File a bug report.
 title: "🐛 [Title here]"
 labels: ["bug"]
 body:
