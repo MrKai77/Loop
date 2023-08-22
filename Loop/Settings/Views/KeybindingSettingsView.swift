@@ -49,7 +49,7 @@ struct KeybindingSettingsView: View {
             Section("Instructions") {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Press return to maximize a window:")
+                        Text("Press the spacebar to maximize a window:")
                         Text("Make sure to be pressing your trigger key!")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -64,7 +64,7 @@ struct KeybindingSettingsView: View {
                         Image(systemName: "plus")
                             .font(Font.system(size: 15, weight: .bold))
 
-                        Image("custom.return.rectangle.fill")
+                        Image("custom.space.rectangle.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
@@ -124,7 +124,7 @@ struct KeybindingSettingsView: View {
 
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Press the spacebar to center a window:")
+                        Text("Press return to center a window:")
                         Text("This will not alter the window's current size!")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -139,7 +139,7 @@ struct KeybindingSettingsView: View {
                         Image(systemName: "plus")
                             .font(Font.system(size: 15, weight: .bold))
 
-                        Image("custom.space.rectangle.fill")
+                        Image("custom.return.rectangle.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }

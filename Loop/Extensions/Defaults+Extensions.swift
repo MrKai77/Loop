@@ -30,11 +30,11 @@ extension Defaults.Keys {
 
     static let maximizeKeybind = Key<[Set<CGKeyCode>]>(
         "maximizeKeybind",
-        default: [[.kVK_Return]]
+        default: [[.kVK_Space]]
     )
     static let centerKeybind = Key<[Set<CGKeyCode>]>(
         "centerKeybind",
-        default: [[.kVK_Space]]
+        default: [[.kVK_Return]]
     )
 
     // Halves
