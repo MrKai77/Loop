@@ -101,7 +101,7 @@ struct KeybindingSettingsView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Use JKL to resize into thirds:")
-                        Text("Use U and O keys for 2/3-sized windows!")
+                        Text("Press two keys for 2/3-sized windows!")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

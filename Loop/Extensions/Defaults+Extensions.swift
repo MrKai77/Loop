@@ -84,7 +84,7 @@ extension Defaults.Keys {
     )
     static let leftTwoThirds = Key<[Set<CGKeyCode>]>(
         "leftTwoThirds",
-        default: [[.kVK_ANSI_U]]
+        default: [[.kVK_ANSI_J, .kVK_ANSI_K]]
     )
     static let horizontalCenterThird = Key<[Set<CGKeyCode>]>(
         "horizontalCenterThird",
@@ -92,7 +92,7 @@ extension Defaults.Keys {
     )
     static let rightTwoThirds = Key<[Set<CGKeyCode>]>(
         "rightTwoThirds",
-        default: [[.kVK_ANSI_O]]
+        default: [[.kVK_ANSI_K, .kVK_ANSI_L]]
     )
     static let rightThird = Key<[Set<CGKeyCode>]>(
         "rightThird",
