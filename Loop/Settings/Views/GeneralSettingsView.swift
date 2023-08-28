@@ -64,7 +64,6 @@ struct GeneralSettingsView: View {
 
                 if !useSystemAccentColor && useGradient {
                     ColorPicker("Custom Gradient color", selection: $gradientColor, supportsOpacity: false)
-                        .disabled(!useGradient)
                         .foregroundColor(
                             useGradient ? (useSystemAccentColor ? .secondary : nil) : .secondary
                         )
@@ -94,6 +93,7 @@ struct GeneralSettingsView: View {
                     .buttonStyle(.link)
                     .foregroundStyle(Color.accentColor)
                     .disabled(isAccessibilityAccessGranted)
+                    .opacity(isAccessibilityAccessGranted ? 0.6 : 1)
                     .help("Refresh the current accessibility permissions")
                     .onAppear {
                         self.isAccessibilityAccessGranted = accessibilityAccessManager.getStatus()
