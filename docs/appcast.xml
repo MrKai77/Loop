@@ -4,12 +4,12 @@
         <title>Loop</title>
         <item>
             <title>1.0.0-beta.7</title>
-            <pubDate>Tue, 29 Aug 2023 17:38:35 -0600</pubDate>
+            <pubDate>Tue, 29 Aug 2023 17:38:54 -0600</pubDate>
             <sparkle:version>256</sparkle:version>
             <sparkle:shortVersionString>1.0.0-beta.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.7/Loop.zip" length="6668579" type="application/octet-stream" sparkle:edSignature="OyvmDuMuGzWSsv4I8VQjvGpWkGA3ME2xJYBAMXHjHQ/zZaW2ahXZWO43YaLrsNiFHtkvxtUnj9wUKfTmc7ydAg=="/>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.7/Loop.zip" length="6563293" type="application/octet-stream" sparkle:edSignature="rlofHgG08BwQKvVx2qBBQfxKNbs2PLXCx6qn4851bb2Aikdt+WUwbqIcR6m00lkBYHMZCDbieIWRP0D7i8IYDg=="/>
         </item>
         <item>
             <title>1.0.0-beta.6</title>
