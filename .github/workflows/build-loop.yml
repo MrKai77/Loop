@@ -1,0 +1,42 @@
+name: Build Loop
+
+on:
+  workflow_dispatch: 
+  push:
+    branches:
+      - develop
+    paths:
+      - Loop/**
+
+permissions:
+  contents: write
+
+jobs:
+  build_with_signing:
+    name: Build Loop
+    runs-on: macos-13
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3.5.3
+    
+      - name: Switch Xcode version
+        run: |
+          sudo xcode-select -s "/Applications/Xcode_15.0.app"
+          /usr/bin/xcodebuild -version
+
+      - name: Install dependencies
+        run: |
+          brew install xcbeautify create-dmg
+
+      - name: Build Loop.app
+        run: |
+          make debug
+
+      - name: Upload build
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: Loop Build
+          path: |
+            Build/Loop.zip
+            Build/Loop.dmg

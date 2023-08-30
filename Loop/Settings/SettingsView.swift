@@ -9,16 +9,9 @@ import SwiftUI
 import Sparkle
 
 struct SettingsView: View {
-    
-    private let updaterController: SPUStandardUpdaterController
-        
-    init() {
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
-    }
-    
     @State var currentSettingsTab = 1
-    @State var currentWindowHeight = 1
-    
+    private let updater = SoftwareUpdater()
+
     var body: some View {
         TabView(selection: $currentSettingsTab) {
             GeneralSettingsView()
@@ -27,50 +20,36 @@ struct SettingsView: View {
                     Image(systemName: "gear")
                     Text("General")
                 }
-                .onAppear {
-                    currentWindowHeight = 483
-                }
-            
+
             RadialMenuSettingsView()
                 .tag(2)
                 .tabItem {
-                    Image("RadialMenuImage")
+                    Image(.radialMenu)
                     Text("Radial Menu")
                 }
-                .onAppear {
-                    currentWindowHeight = 377
-                }
-            
+
             PreviewSettingsView()
                 .tag(3)
                 .tabItem {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                     Text("Preview")
                 }
-                .onAppear {
-                    currentWindowHeight = 388
-                }
-            
+
             KeybindingSettingsView()
                 .tag(4)
                 .tabItem {
                     Image(systemName: "keyboard")
                     Text("Keybindings")
                 }
-                .onAppear {
-                    currentWindowHeight = 663
-                }
-            
-            MoreSettingsView(updater: updaterController.updater)
+
+            MoreSettingsView()
                 .tag(5)
                 .tabItem {
                     Image(systemName: "ellipsis.circle")
                     Text("More")
                 }
-                .onAppear {
-                    currentWindowHeight = 116
-                }
+                .environmentObject(updater)
         }
-        .frame(width: 420, height: CGFloat(currentWindowHeight))
+        .frame(width: 450)
     }
 }

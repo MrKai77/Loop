@@ -1,0 +1,29 @@
+name: Feature Request
+description: Request a new feature.
+title: "✨ [Title here]"
+labels: ["enhancement"]
+body:
+  - type: textarea
+    attributes:
+      label: Feature Request Description
+      description: Provide a clear and concise description of this feature request with any problems and solutions.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Screenshots
+      description: Add screenshots to help explain this feature request, if applicable.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: Provide any additional information about this feature request.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: Thank you for taking the time to report this feature request!

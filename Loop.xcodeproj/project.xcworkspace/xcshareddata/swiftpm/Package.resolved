@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "appmover",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/iamcalledrob/AppMover",
-      "state" : {
-        "branch" : "master",
-        "revision" : "953b050dba48450856386c4ade6367196560b292"
-      }
-    },
-    {
       "identity" : "defaults",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sindresorhus/Defaults",
@@ -19,30 +10,12 @@
       }
     },
     {
-      "identity" : "dsfdocktile",
+      "identity" : "menubarextraaccess",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/DSFDockTile",
+      "location" : "https://github.com/orchetect/MenuBarExtraAccess",
       "state" : {
-        "revision" : "5d34a5ef6941d7a11209564668ed335dfcec4df8",
-        "version" : "0.7.1"
-      }
-    },
-    {
-      "identity" : "dsfimageflipbook",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/DSFImageFlipbook",
-      "state" : {
-        "revision" : "8b6e1e7f862c1d39ce34c59705f9fa731d9fd539",
-        "version" : "1.0.1"
-      }
-    },
-    {
-      "identity" : "keyboardshortcuts",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/KeyboardShortcuts",
-      "state" : {
-        "branch" : "main",
-        "revision" : "d7b349f6822e24228141e560aa48a32dca23b22c"
+        "revision" : "f5896b47e15e114975897354c7e1082c51a2bffd",
+        "version" : "1.0.5"
       }
     },
     {

@@ -1,0 +1,10 @@
+excluded:
+  - Loop/Extensions/CGKeyCode+Extensions.swift
+
+cyclomatic_complexity:
+  ignores_case_statements: true
+
+force_cast: warning
+
+line_length: 140
+function_body_length: 60
