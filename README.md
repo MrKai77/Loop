@@ -6,15 +6,14 @@ Loop is a MacOS app that simplifies window management for you! You can effortles
     <img src="assets/graphics/loop_demo.gif" width="100%">
 </div>
 
-# Installation
+# Installation  
+> **Compatible with MacOS 13 and later**
 
-| :warning: | Loop is currently still in development. You are welcome to test the latest [build](https://github.com/MrKai77/Loop/releases/latest) at your own risk. Please leave any feedback [here](https://github.com/MrKai77/Loop/issues). |
-| - |:-|
+### [Homebrew](https://brew.sh)
+`brew install mrkai77/cask/loop`  
 
-**Compatible with MacOS 13 and later**
-
-Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! Simply unzip the file, and open it, and grant it accessibility access!
-Installation with Homebrew is planned :3
+### Manual  
+Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! Unzip the file, and open the app, grant it accessibility access, and you're good to go!
 
 # Features
 
