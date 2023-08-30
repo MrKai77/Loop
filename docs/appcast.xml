@@ -3,6 +3,15 @@
     <channel>
         <title>Loop</title>
         <item>
+            <title>1.0.0-beta.7</title>
+            <pubDate>Tue, 29 Aug 2023 17:38:35 -0600</pubDate>
+            <sparkle:version>256</sparkle:version>
+            <sparkle:shortVersionString>1.0.0-beta.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.7/Loop.zip" length="6668579" type="application/octet-stream" sparkle:edSignature="OyvmDuMuGzWSsv4I8VQjvGpWkGA3ME2xJYBAMXHjHQ/zZaW2ahXZWO43YaLrsNiFHtkvxtUnj9wUKfTmc7ydAg=="/>
+        </item>
+        <item>
             <title>1.0.0-beta.6</title>
             <pubDate>Fri, 31 Mar 2023 16:17:41 -0600</pubDate>
             <sparkle:version>100</sparkle:version>
@@ -10,33 +19,6 @@
             <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
             <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
             <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.6/Loop.zip" length="3267632" type="application/octet-stream" sparkle:edSignature="ja+DDLANqxbRfcnlHaZPth80IevdPEVOFhiG+QTiOGJXRVUes7AWmjGd27dIlu9izWHV/FSRjunm1XHU7mDYBg=="/>
-        </item>
-        <item>
-            <title>0.3.0</title>
-            <pubDate>Fri, 17 Feb 2023 21:41:35 -0700</pubDate>
-            <sparkle:version>88</sparkle:version>
-            <sparkle:shortVersionString>0.3.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.3.0/Loop.zip" length="3542411" type="application/octet-stream" sparkle:edSignature="fv1ewFjnZjWm4NeU7pQfUFE9IHSMemUDwbXtpDzNG4jpqgzU5IEv8yroTe7Ch8oWZkhi3zddgF5vXEkMCIDrDQ=="/>
-        </item>
-        <item>
-            <title>0.2.2</title>
-            <pubDate>Thu, 02 Feb 2023 17:27:02 -0700</pubDate>
-            <sparkle:version>61</sparkle:version>
-            <sparkle:shortVersionString>0.2.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.2/Loop.zip" length="3123007" type="application/octet-stream" sparkle:edSignature="asY6NTejnBrA+KvNz7vwGuM1SBASAsVF90zndxKwRtAGvtqy70bJYPmB1HycF4A41/sdW+UDKlu04KhM0nKUAA=="/>
-        </item>
-        <item>
-            <title>0.2.1</title>
-            <pubDate>Mon, 30 Jan 2023 18:43:06 -0700</pubDate>
-            <sparkle:version>46</sparkle:version>
-            <sparkle:shortVersionString>0.2.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
-            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/0.2.1/Loop.zip" length="6471001" type="application/octet-stream" sparkle:edSignature="8R3lFd4G2FBr5WCeAcB02eff7Mf0rm5r+ak1ZMaMCa2iR1VONiraEirUJMMxB1icFV1ziJN9wLS731C00gt3DA=="/>
         </item>
     </channel>
 </rss>
