@@ -11,7 +11,7 @@ class PreviewController {
 
     var loopPreviewWindowController: NSWindowController?
 
-    func show() {
+    func show(screen: NSScreen) {
         if let windowController = loopPreviewWindowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -30,18 +30,7 @@ class PreviewController {
         panel.alphaValue = 0
         panel.orderFrontRegardless()
 
-        guard let screen = NSScreen.screenWithMouse else { return }
-        let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
-
-        let screenWidth = screen.frame.size.width
-        let screenHeight = screen.frame.size.height - menubarHeight
-        let screenOriginX = screen.frame.origin.x
-        let screenOriginY = screen.frame.origin.y
-
-        panel.setFrame(NSRect(x: screenOriginX,
-                              y: screenOriginY,
-                              width: screenWidth,
-                              height: screenHeight), display: false)
+        panel.setFrame(screen.visibleFrame, display: false)
 
         loopPreviewWindowController = .init(window: panel)
 
