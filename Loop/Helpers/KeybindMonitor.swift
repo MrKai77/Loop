@@ -67,9 +67,9 @@ class KeybindMonitor {
                     }
 
                     if keyEvent.type == .keyUp {
-                        KeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode)
+                        KeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode.baseKey)
                     } else if keyEvent.type == .keyDown {
-                        KeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode)
+                        KeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode.baseKey)
                     }
 
                     KeybindMonitor.shared.performKeybind(event: keyEvent)
