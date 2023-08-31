@@ -141,6 +141,12 @@ extension CGKeyCode {
     static let kVK_DownArrow: CGKeyCode = 0x7D
     static let kVK_UpArrow: CGKeyCode = 0x7E
 
+    // When the globe key is being pressed
+    static let kVK_LeftArrow_Globe: CGKeyCode = 0x73
+    static let kVK_RightArrow_Globe: CGKeyCode = 0x77
+    static let kVK_DownArrow_Globe: CGKeyCode = 0x79
+    static let kVK_UpArrow_Globe: CGKeyCode = 0x74
+
     // ISO keyboards only
     static let kVK_ISO_Section: CGKeyCode = 0x0A
 
@@ -150,6 +156,18 @@ extension CGKeyCode {
     static let kVK_JIS_KeypadComma: CGKeyCode = 0x5F
     static let kVK_JIS_Eisu: CGKeyCode = 0x66
     static let kVK_JIS_Kana: CGKeyCode = 0x68
+
+    // Some keycodes seem to alter when a modifier key (ex. the globe key) is being pressed.
+    var baseKey: CGKeyCode {
+        switch self {
+        case .kVK_ANSI_KeypadEnter: CGKeyCode.kVK_Return
+        case .kVK_LeftArrow_Globe: CGKeyCode.kVK_LeftArrow
+        case .kVK_RightArrow_Globe: CGKeyCode.kVK_RightArrow
+        case .kVK_DownArrow_Globe: CGKeyCode.kVK_DownArrow
+        case .kVK_UpArrow_Globe: CGKeyCode.kVK_UpArrow
+        default: self
+        }
+    }
 
     var isModifier: Bool {
         return (.kVK_RightCommand ... .kVK_Function).contains(self)
