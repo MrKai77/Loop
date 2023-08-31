@@ -13,8 +13,9 @@ struct WindowEngine {
     private let kAXFullscreenAttribute = "AXFullScreen"
 
     func resizeFrontmostWindow(direction: WindowDirection) {
-        guard let frontmostWindow = self.getFrontmostWindow() else { return }
-        resize(window: frontmostWindow, direction: direction)
+        guard let frontmostWindow = self.getFrontmostWindow(),
+              let screenWithMouse = NSScreen.screenWithMouse else { return }
+        resize(window: frontmostWindow, direction: direction, screen: screenWithMouse)
     }
 
     func getFrontmostWindow() -> AXUIElement? {
@@ -38,11 +39,11 @@ struct WindowEngine {
         return window
     }
 
-    func resize(window: AXUIElement, direction: WindowDirection) {
+    func resize(window: AXUIElement, direction: WindowDirection, screen: NSScreen) {
         self.setFullscreen(element: window, state: false)
 
         let windowFrame = getRect(element: window)
-        guard let screenFrame = getActiveScreenFrame(),
+        guard let screenFrame = getScreenFrame(screen: screen),
               let newWindowFrame = generateWindowFrame(windowFrame, screenFrame, direction)
         else { return }
 
@@ -121,8 +122,7 @@ struct WindowEngine {
         return CGRect(origin: getPosition(element: element), size: getSize(element: element))
     }
 
-    private func getActiveScreenFrame() -> CGRect? {
-        guard let screen = NSScreen().screenWithMouse() else { return nil }
+    private func getScreenFrame(screen: NSScreen) -> CGRect? {
         guard let displayID = screen.displayID else { return nil }
         let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
         var screenFrame = CGDisplayBounds(displayID)

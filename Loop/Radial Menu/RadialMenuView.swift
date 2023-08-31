@@ -124,17 +124,9 @@ struct RadialMenuView: View {
     }
 
     private func refreshCurrentAngle() {
-        let currentAngleToMouse = Angle(
-            radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x,
-                                                            y: NSEvent.mouseLocation.y))
-        )
-
-        let currentDistanceToMouse = initialMousePosition.distanceSquared(
-            to: CGPoint(
-                x: NSEvent.mouseLocation.x,
-                y: NSEvent.mouseLocation.y
-            )
-        )
+        let currentMouseLocation = NSEvent.mouseLocation
+        let currentAngleToMouse = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
+        let currentDistanceToMouse = initialMousePosition.distanceSquared(to: currentMouseLocation)
 
         if (currentAngleToMouse == angleToMouse) && (currentDistanceToMouse == distanceToMouse) {
             return

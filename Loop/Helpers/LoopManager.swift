@@ -21,6 +21,7 @@ class LoopManager {
     private var currentResizingDirection: WindowDirection = .noAction
     private var isLoopShown: Bool = false
     private var frontmostWindow: AXUIElement?
+    private var screenWithMouse: NSScreen?
 
     func startObservingKeys() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
@@ -82,12 +83,12 @@ class LoopManager {
         // Loop will only open if accessibility access has been granted
         if accessibilityAccessManager.getStatus() {
             self.frontmostWindow = windowEngine.getFrontmostWindow()
+            self.screenWithMouse = NSScreen.screenWithMouse
 
             if Defaults[.previewVisibility] == true && frontmostWindow != nil {
                 previewController.show()
             }
             radialMenuController.show(frontmostWindow: frontmostWindow)
-
             keybindMonitor.start()
 
             isLoopShown = true
@@ -102,6 +103,7 @@ class LoopManager {
         keybindMonitor.stop()
 
         if self.frontmostWindow != nil &&
+            self.screenWithMouse != nil &&
             forceClose == false &&
             self.isLoopShown == true &&
             self.currentResizingDirection != .noAction {
@@ -111,7 +113,7 @@ class LoopManager {
         isLoopShown = false
 
         if willResizeWindow {
-            windowEngine.resize(window: self.frontmostWindow!, direction: self.currentResizingDirection)
+            windowEngine.resize(window: self.frontmostWindow!, direction: self.currentResizingDirection, screen: self.screenWithMouse!)
 
             NotificationCenter.default.post(
                 name: Notification.Name.finishedLooping,

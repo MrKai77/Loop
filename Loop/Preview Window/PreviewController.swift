@@ -30,7 +30,7 @@ class PreviewController {
         panel.alphaValue = 0
         panel.orderFrontRegardless()
 
-        guard let screen = NSScreen().screenWithMouse() else { return }
+        guard let screen = NSScreen.screenWithMouse else { return }
         let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
 
         let screenWidth = screen.frame.size.width
