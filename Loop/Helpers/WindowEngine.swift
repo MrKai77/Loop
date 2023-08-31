@@ -124,13 +124,21 @@ struct WindowEngine {
 
     private func getScreenFrame(screen: NSScreen) -> CGRect? {
         guard let displayID = screen.displayID else { return nil }
-        let menubarHeight = screen.frame.size.height - screen.visibleFrame.size.height
-        var screenFrame = CGDisplayBounds(displayID)
-        screenFrame.size.height -= menubarHeight
-        screenFrame.origin.y += menubarHeight
+        let screenFrameOrigin = CGDisplayBounds(displayID).origin
+        var screenFrame: CGRect = screen.visibleFrame
+
+        // Set position of the screenFrame (useful for multiple displays)
+        screenFrame.origin = screenFrameOrigin
+
+        // Move screenFrame's y origin to compensate for menubar & dock, if it's on the bottom
+        screenFrame.origin.y += (screen.frame.size.height - screen.visibleFrame.size.height)
+
+        // Move screenFrame's x origin when dock is shown on left/right
+        screenFrame.origin.x += (screen.frame.size.width - screen.visibleFrame.size.width)
 
         return screenFrame
     }
+
     private func generateWindowFrame(_ windowFrame: CGRect, _ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
         let screenWidth = screenFrame.size.width
         let screenHeight = screenFrame.size.height
