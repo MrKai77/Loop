@@ -98,4 +98,6 @@ extension Defaults.Keys {
         "rightThird",
         default: [[.kVK_ANSI_L]]
     )
+
+    static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
 }

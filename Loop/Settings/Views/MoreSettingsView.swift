@@ -7,10 +7,12 @@
 
 import SwiftUI
 import Sparkle
+import Defaults
 
 struct MoreSettingsView: View {
 
     @EnvironmentObject var updater: SoftwareUpdater
+    @Default(.windowPadding) var windowPadding
 
     var body: some View {
         Form {
@@ -35,6 +37,18 @@ struct MoreSettingsView: View {
                     .foregroundStyle(Color.accentColor)
                 }
             })
+
+            Section {
+                Slider(
+                    value: $windowPadding,
+                    in: 0...25,
+                    step: 1,
+                    minimumValueLabel: Text("0"),
+                    maximumValueLabel: Text("25")
+                ) {
+                    Text("Window Padding")
+                }
+            }
         }
         .formStyle(.grouped)
     }
