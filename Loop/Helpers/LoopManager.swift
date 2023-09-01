@@ -124,7 +124,9 @@ class LoopManager {
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()
         } else {
-            NSSound.beep()
+            if self.frontmostWindow == nil {
+                NSSound.beep()
+            }
         }
     }
 }
