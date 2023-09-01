@@ -127,4 +127,29 @@ enum WindowDirection: CaseIterable {
         default:                        [[]]
         }
     }
+
+    var sidesThatTouchScreen: [Edge] {
+        switch self {
+        case .maximize:                 [.top, .bottom, .leading, .trailing]
+        case .topHalf:                  [.top, .leading, .trailing]
+        case .rightHalf:                [.top, .bottom, .trailing]
+        case .bottomHalf:               [.bottom, .leading, .trailing]
+        case .leftHalf:                 [.top, .bottom, .leading]
+        case .topLeftQuarter:           [.top, .leading]
+        case .topRightQuarter:          [.top, .trailing]
+        case .bottomRightQuarter:       [.bottom, .trailing]
+        case .bottomLeftQuarter:        [.bottom, .leading]
+        case .rightThird:               [.top, .bottom, .trailing]
+        case .rightTwoThirds:           [.top, .bottom, .trailing]
+        case .horizontalCenterThird:    [.top, .bottom]
+        case .leftThird:                [.top, .bottom, .leading]
+        case .leftTwoThirds:            [.top, .bottom, .leading]
+        case .topThird:                 [.top, .leading, .trailing]
+        case .topTwoThirds:             [.top, .leading, .trailing]
+        case .verticalCenterThird:      [.leading, .trailing]
+        case .bottomThird:              [.bottom, .leading, .trailing]
+        case .bottomTwoThirds:          [.bottom, .leading, .trailing]
+        default:                        []
+        }
+    }
 }

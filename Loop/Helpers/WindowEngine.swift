@@ -44,17 +44,19 @@ struct WindowEngine {
 
         let windowFrame = getRect(element: window)
         guard let screenFrame = getScreenFrame(screen: screen),
-              let newWindowFrame = generateWindowFrame(windowFrame, screenFrame, direction)
-        else { return }
+              let windowFrame = generateWindowFrame(windowFrame, screenFrame, direction) else { return }
 
-        self.setPosition(element: window, position: newWindowFrame.origin)
-        self.setSize(element: window, size: newWindowFrame.size)
+        let windowFrameWithPadding = applyPadding(windowFrame, direction)
 
-        if self.getRect(element: window) != newWindowFrame {
+        self.setPosition(element: window, position: windowFrameWithPadding.origin)
+        self.setSize(element: window, size: windowFrameWithPadding.size)
+
+        if self.getRect(element: window) != windowFrameWithPadding {
             self.handleSizeConstrainedWindow(
                 element: window,
                 windowFrame: self.getRect(element: window),
-                screenFrame: screenFrame
+                screenFrame: screenFrame,
+                direction: direction
             )
         }
 
@@ -194,7 +196,19 @@ struct WindowEngine {
         }
     }
 
-    private func handleSizeConstrainedWindow(element: AXUIElement, windowFrame: CGRect, screenFrame: CGRect) {
+    private func applyPadding(_ windowFrame: CGRect, _ direction: WindowDirection) -> CGRect {
+        var paddingAppliedRect = windowFrame
+        for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
+            if direction.sidesThatTouchScreen.contains(side) {
+                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
+            } else {
+                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
+            }
+        }
+        return paddingAppliedRect
+    }
+
+    private func handleSizeConstrainedWindow(element: AXUIElement, windowFrame: CGRect, screenFrame: CGRect, direction: WindowDirection) {
 
         // If the window is fully shown on the screen
         if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
@@ -205,13 +219,31 @@ struct WindowEngine {
         var fixedWindowFrame = windowFrame
 
         if fixedWindowFrame.maxX > screenFrame.maxX {
-            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width
+            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width - Defaults[.windowPadding]
         }
 
         if fixedWindowFrame.maxY > screenFrame.maxY {
-            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height
+            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.windowPadding]
         }
 
+//        fixedWindowFrame = applyPadding(fixedWindowFrame, direction)
         setPosition(element: element, position: fixedWindowFrame.origin)
+    }
+}
+
+extension CGRect {
+    mutating func inset(_ side: Edge, amount: CGFloat) {
+        switch side {
+        case .top:
+            self.origin.y += amount
+            self.size.height -= amount
+        case .leading:
+            self.origin.x += amount
+            self.size.width -= amount
+        case .bottom:
+            self.size.height -= amount
+        case .trailing:
+            self.size.width -= amount
+        }
     }
 }
