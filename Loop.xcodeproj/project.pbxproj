@@ -26,6 +26,7 @@
 		A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
+		A87376F62AA288EB001890F4 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87376F52AA288EB001890F4 /* Window.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
 		A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */; };
@@ -74,6 +75,7 @@
 		A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
+		A87376F52AA288EB001890F4 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingSettingsView.swift; sourceTree = "<group>"; };
@@ -130,10 +132,11 @@
 			isa = PBXGroup;
 			children = (
 				A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */,
+				A87376F52AA288EB001890F4 /* Window.swift */,
+				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
 				A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */,
 				A82521ED29E235AC00139654 /* AccessibilityAccessManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
-				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
 				A8E6D2002A416494005751D4 /* LoopTriggerKeys.swift */,
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */,
@@ -378,6 +381,7 @@
 				A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */,
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
+				A87376F62AA288EB001890F4 /* Window.swift in Sources */,
 				A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */,
 				A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */,
 				A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */,

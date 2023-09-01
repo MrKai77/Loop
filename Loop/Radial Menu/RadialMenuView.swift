@@ -15,7 +15,7 @@ struct RadialMenuView: View {
     let radialMenuSize: CGFloat = 100
 
     // This will determine whether Loop needs to show a warning (if it's nil)
-    let frontmostWindow: AXUIElement?
+    let frontmostWindow: Window?
 
     @State var previewMode = false
     @State var initialMousePosition: CGPoint = CGPoint()
