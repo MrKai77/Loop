@@ -13,18 +13,21 @@ struct WindowEngine {
         window.setFullscreen(false)
 
         let oldWindowFrame = window.frame
-        guard let screenFrame = screen.safeScreenFrame,
-              let newWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction)
-        else { return }
+        guard let screenFrame = screen.safeScreenFrame else { return }
+        guard var targetWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction) else { return }
 
-        window.setFrame(newWindowFrame)
+        // Calculate the window's minimum window size and change the target accordingly
+        window.getMinSize(screen: screen) { minSize in
+            if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
+                targetWindowFrame.origin.x = screen.frame.maxX - minSize.width
+            }
 
-        if window.frame != newWindowFrame {
-            WindowEngine.handleSizeConstrainedWindow(
-                window: window,
-                windowFrame: window.frame,
-                screenFrame: screenFrame
-            )
+            if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
+                targetWindowFrame.origin.y = screen.frame.maxY - minSize.height
+            }
+
+            // Resize window
+            window.setFrame(targetWindowFrame, animate: true)
         }
     }
 
@@ -33,7 +36,7 @@ struct WindowEngine {
               let window = Window(pid: app.processIdentifier) else { return nil }
 
         #if DEBUG
-        print("=== NEW WINDOW ===")
+        print("===== NEW WINDOW =====")
         print("Frontmost app: \(app)")
         print("kAXWindowRole: \(window.role ?? "N/A")")
         print("kAXStandardWindowSubrole: \(window.subrole ?? "N/A")")
@@ -97,26 +100,5 @@ struct WindowEngine {
         default:
             return nil
         }
-    }
-
-    private static func handleSizeConstrainedWindow(window: Window, windowFrame: CGRect, screenFrame: CGRect) {
-
-        // If the window is fully shown on the screen
-        if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
-            return
-        }
-
-        // If not, then Loop will auto re-adjust the window size to be fully shown on the screen
-        var fixedWindowFrame = windowFrame
-
-        if fixedWindowFrame.maxX > screenFrame.maxX {
-            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width
-        }
-
-        if fixedWindowFrame.maxY > screenFrame.maxY {
-            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height
-        }
-
-        window.setOrigin(fixedWindowFrame.origin)
     }
 }
