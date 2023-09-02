@@ -22,9 +22,9 @@ struct GeneralSettingsView: View {
     @Default(.timesLooped) var timesLooped
 
     let iconManager = IconManager()
-    let accessibilityAccessManager = AccessibilityAccessManager()
 
     @State var isAccessibilityAccessGranted = false
+    @State var isScreenRecordingAccessGranted = false
 
     var body: some View {
         Form {
@@ -81,6 +81,22 @@ struct GeneralSettingsView: View {
                         .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
                         .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
                 }
+
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Screen Recording Access")
+                        Spacer()
+                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
+                        Circle()
+                            .frame(width: 8, height: 8)
+                            .padding(.trailing, 5)
+                            .foregroundColor(isScreenRecordingAccessGranted ? .green : .red)
+                            .shadow(color: isScreenRecordingAccessGranted ? .green : .red, radius: 8)
+                    }
+                    Text("This is only needed to animate windows being resized.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }, header: {
                 HStack {
                     Text("Permissions")
@@ -88,7 +104,11 @@ struct GeneralSettingsView: View {
                     Spacer()
 
                     Button("Refresh Status", action: {
-                        self.isAccessibilityAccessGranted = accessibilityAccessManager.requestAccess()
+                        PermissionsManager.Accessibility.requestAccess()
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+
+                        PermissionsManager.ScreenRecording.requestAccess()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
                     })
                     .buttonStyle(.link)
                     .foregroundStyle(Color.accentColor)
@@ -96,7 +116,8 @@ struct GeneralSettingsView: View {
                     .opacity(isAccessibilityAccessGranted ? 0.6 : 1)
                     .help("Refresh the current accessibility permissions")
                     .onAppear {
-                        self.isAccessibilityAccessGranted = accessibilityAccessManager.getStatus()
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
                     }
                 }
             })

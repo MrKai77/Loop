@@ -86,7 +86,6 @@ struct LoopApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    private let accessibilityAccessManager = AccessibilityAccessManager()
     private let iconManager = IconManager()
     private let loopManager = LoopManager()
 
@@ -95,9 +94,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Check accessibility access, then if access is not granted,
         // show a more informative alert asking for accessibility access
-        if !accessibilityAccessManager.getStatus() {
-            accessibilityAccessManager.requestAccess()
-        }
+        PermissionsManager.Accessibility.requestAccess()
+        PermissionsManager.ScreenRecording.requestAccess()
+
         iconManager.restoreCurrentAppIcon()
 
         loopManager.startObservingKeys()

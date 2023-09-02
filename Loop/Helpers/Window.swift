@@ -98,11 +98,63 @@ class Window {
         return CGRect(origin: self.origin, size: self.size)
     }
 
-    @discardableResult
-    func setFrame(_ rect: CGRect) -> Bool {
-        if self.setOrigin(rect.origin) && self.setSize(rect.size) {
-            return true
+    func setFrame(_ rect: CGRect, animate: Bool = false) {
+        if animate {
+            let animation = WindowTransformAnimation(rect, window: self)
+            animation.startInBackground()
+        } else {
+            self.setOrigin(rect.origin)
+            self.setSize(rect.size)
         }
-        return false
+    }
+    
+    /// MacOS doesn't provide us a way to find the minimum size of a window from the accessibility API.
+    /// So we deliberately force-resize the window to 0x0 and see how small it goes, take note of the frame,
+    /// then we resotere the original window size. However, this does have one big consequence. The user
+    /// can see a single frame when the window is being resized to 0x0, then restored. So to counteract this,
+    /// we take a screenshot of the screen, overlay it, and get the minimum size then close the overlay window.
+    /// - Parameters:
+    ///   - screen: The screen the window is on
+    ///   - completion: What to do with the minimum size
+    func getMinSize(screen: NSScreen, completion: @escaping (CGSize) -> Void) {
+        // Take screenshot of screen
+        guard let displayID = screen.displayID else { return }
+        let imageRef = CGDisplayCreateImage(displayID)
+        let image = NSImage(cgImage: imageRef!, size: .zero)
+
+        // Initialize the overlay NSPanel
+        let panel = NSPanel(
+            contentRect: .zero,
+            styleMask: [.borderless, .nonactivatingPanel],
+            backing: .buffered,
+            defer: false
+        )
+        panel.hasShadow = false
+        panel.backgroundColor  = NSColor.white.withAlphaComponent(0.00001)
+        panel.level = .floating
+        panel.ignoresMouseEvents = true
+        panel.setFrame(screen.frame, display: false)
+        panel.contentView = NSImageView(image: image)
+        panel.orderFrontRegardless()
+
+        var minSize: CGSize = .zero
+        DispatchQueue.main.async {
+
+            // Force-resize the window to 0x0
+            let startingSize = self.size
+            self.setSize(CGSize(width: 0, height: 0))
+
+            // Take note of the minimum size
+            minSize = self.size
+
+            // Restore original window size
+            self.setSize(startingSize)
+
+            DispatchQueue.main.async {
+                // Close window, then activate completion handler
+                panel.close()
+                completion(minSize)
+            }
+        }
     }
 }
