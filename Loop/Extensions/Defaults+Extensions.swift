@@ -98,4 +98,7 @@ extension Defaults.Keys {
         "rightThird",
         default: [[.kVK_ANSI_L]]
     )
+
+    // BETA
+    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false)
 }

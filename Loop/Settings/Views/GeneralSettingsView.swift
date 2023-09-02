@@ -20,6 +20,7 @@ struct GeneralSettingsView: View {
     @Default(.gradientColor) var gradientColor
     @Default(.currentIcon) var currentIcon
     @Default(.timesLooped) var timesLooped
+    @Default(.animateWindowResizes) var animateWindowResizes
 
     let iconManager = IconManager()
 
@@ -37,6 +38,13 @@ struct GeneralSettingsView: View {
                             try? SMAppService().unregister()
                         }
                     }
+
+                Toggle(isOn: $animateWindowResizes, label: {
+                    HStack {
+                        Text("Animate windows being resized")
+                        BetaIndicator("BETA")
+                    }
+                })
             }
 
             Section("Loop's icon") {
