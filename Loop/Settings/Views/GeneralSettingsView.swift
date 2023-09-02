@@ -21,6 +21,7 @@ struct GeneralSettingsView: View {
     @Default(.currentIcon) var currentIcon
     @Default(.timesLooped) var timesLooped
     @Default(.animateWindowResizes) var animateWindowResizes
+    @Default(.windowPadding) var windowPadding
 
     let iconManager = IconManager()
 
@@ -39,12 +40,23 @@ struct GeneralSettingsView: View {
                         }
                     }
 
-                Toggle(isOn: $animateWindowResizes, label: {
+                Toggle(isOn: $animateWindowResizes) {
                     HStack {
                         Text("Animate windows being resized")
                         BetaIndicator("BETA")
                     }
-                })
+                }
+
+                Slider(value: $windowPadding,
+                       in: 0...25,
+                       step: 5,
+                       minimumValueLabel: Text("0"),
+                       maximumValueLabel: Text("25")) {
+                    HStack {
+                        Text("Window Padding")
+                        BetaIndicator("BETA")
+                    }
+                }
             }
 
             Section("Loop's icon") {

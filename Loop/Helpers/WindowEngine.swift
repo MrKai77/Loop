@@ -15,19 +15,20 @@ struct WindowEngine {
         let oldWindowFrame = window.frame
         guard let screenFrame = screen.safeScreenFrame else { return }
         guard var targetWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction) else { return }
+        targetWindowFrame = WindowEngine.applyPadding(targetWindowFrame, direction)
 
         // Calculate the window's minimum window size and change the target accordingly
         window.getMinSize(screen: screen) { minSize in
             if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
-                targetWindowFrame.origin.x = screen.frame.maxX - minSize.width
+                targetWindowFrame.origin.x = screen.frame.maxX - minSize.width - Defaults[.windowPadding]
             }
 
             if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
-                targetWindowFrame.origin.y = screen.frame.maxY - minSize.height
+                targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
             }
 
             // Resize window
-            window.setFrame(targetWindowFrame, animate: true)
+            window.setFrame(targetWindowFrame, animate: Defaults[.animateWindowResizes])
         }
     }
 
@@ -99,6 +100,35 @@ struct WindowEngine {
             return CGRect(x: screenX, y: screenY+screenHeight/3, width: screenWidth, height: 2*screenHeight/3)
         default:
             return nil
+        }
+    }
+
+    private static func applyPadding(_ windowFrame: CGRect, _ direction: WindowDirection) -> CGRect {
+        var paddingAppliedRect = windowFrame
+        for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
+            if direction.sidesThatTouchScreen.contains(side) {
+                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
+            } else {
+                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
+            }
+        }
+        return paddingAppliedRect
+    }
+}
+
+extension CGRect {
+    mutating func inset(_ side: Edge, amount: CGFloat) {
+        switch side {
+        case .top:
+            self.origin.y += amount
+            self.size.height -= amount
+        case .leading:
+            self.origin.x += amount
+            self.size.width -= amount
+        case .bottom:
+            self.size.height -= amount
+        case .trailing:
+            self.size.width -= amount
         }
     }
 }

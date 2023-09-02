@@ -20,7 +20,7 @@ struct BetaIndicator: View {
         Text(text)
             .font(.caption2)
             .padding(.horizontal, 4)
-            .padding(.vertical, 2)
+            .padding(.vertical, 1)
             .background {
                 RoundedRectangle(cornerRadius: 50)
                     .stroke(lineWidth: 1)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Sparkle
+import Defaults
 
 struct MoreSettingsView: View {
 
