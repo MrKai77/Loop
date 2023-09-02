@@ -10,8 +10,7 @@ import Defaults
 
 class LoopManager {
 
-    private let accessibilityAccessManager = AccessibilityAccessManager()
-    private let windowEngine = WindowEngine()
+    private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
     private let iconManager = IconManager()
 
@@ -20,7 +19,7 @@ class LoopManager {
 
     private var currentResizingDirection: WindowDirection = .noAction
     private var isLoopShown: Bool = false
-    private var frontmostWindow: AXUIElement?
+    private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
     func startObservingKeys() {
@@ -81,8 +80,8 @@ class LoopManager {
         frontmostWindow = nil
 
         // Loop will only open if accessibility access has been granted
-        if accessibilityAccessManager.getStatus() {
-            self.frontmostWindow = windowEngine.getFrontmostWindow()
+        if PermissionsManager.Accessibility.getStatus() {
+            self.frontmostWindow = WindowEngine.getFrontmostWindow()
             self.screenWithMouse = NSScreen.screenWithMouse
 
             if Defaults[.previewVisibility] == true && frontmostWindow != nil {
@@ -100,6 +99,8 @@ class LoopManager {
 
         radialMenuController.close()
         previewController.close()
+
+        keybindMonitor.resetPressedKeys()
         keybindMonitor.stop()
 
         if self.frontmostWindow != nil &&
@@ -113,7 +114,7 @@ class LoopManager {
         isLoopShown = false
 
         if willResizeWindow {
-            windowEngine.resize(window: self.frontmostWindow!, direction: self.currentResizingDirection, screen: self.screenWithMouse!)
+            WindowEngine.resize(window: self.frontmostWindow!, direction: self.currentResizingDirection, screen: self.screenWithMouse!)
 
             NotificationCenter.default.post(
                 name: Notification.Name.finishedLooping,
@@ -122,6 +123,10 @@ class LoopManager {
 
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()
+        } else {
+            if self.frontmostWindow == nil {
+                NSSound.beep()
+            }
         }
     }
 }
