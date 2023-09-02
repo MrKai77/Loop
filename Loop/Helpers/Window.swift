@@ -107,7 +107,7 @@ class Window {
             self.setSize(rect.size)
         }
     }
-    
+
     /// MacOS doesn't provide us a way to find the minimum size of a window from the accessibility API.
     /// So we deliberately force-resize the window to 0x0 and see how small it goes, take note of the frame,
     /// then we resotere the original window size. However, this does have one big consequence. The user

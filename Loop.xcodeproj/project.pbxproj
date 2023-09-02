@@ -10,6 +10,8 @@
 		A80397CF2A9327FA006D2796 /* NSApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397CE2A9327FA006D2796 /* NSApplication+Extensions.swift */; };
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; };
 		A80397D42A932993006D2796 /* MenubarIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397D32A932993006D2796 /* MenubarIconView.swift */; };
+		A80900D42AA3F9F30085C63B /* BetaIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D22AA3F9F20085C63B /* BetaIndicator.swift */; };
+		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521EB29E234EB00139654 /* AboutViewController.swift */; };
 		A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* PermissionsManager.swift */; };
 		A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */; };
@@ -35,7 +37,6 @@
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
-		A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */; };
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
 		A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */; };
 		A8D5A7DA2A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D92A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift */; };
@@ -58,6 +59,8 @@
 		A80397CE2A9327FA006D2796 /* NSApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSApplication+Extensions.swift"; sourceTree = "<group>"; };
 		A80397D32A932993006D2796 /* MenubarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenubarIconView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		A80900D22AA3F9F20085C63B /* BetaIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaIndicator.swift; sourceTree = "<group>"; };
+		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A82521EB29E234EB00139654 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A82521ED29E235AC00139654 /* PermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsManager.swift; sourceTree = "<group>"; };
 		A8291D6D2A4513D200C5CB69 /* .swiftlint.yml */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; tabWidth = 2; };
@@ -85,7 +88,6 @@
 		A883642E298B7288005D6C19 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTransformAnimation.swift; sourceTree = "<group>"; };
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
-		A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
 		A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorCircleSegment.swift; sourceTree = "<group>"; };
 		A8D5A7D92A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuDirectionSelectorView.swift; sourceTree = "<group>"; };
@@ -121,6 +123,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A80900D12AA3F9F20085C63B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A80900D22AA3F9F20085C63B /* BetaIndicator.swift */,
+				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		A82521EA29E2349700139654 /* About Window */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,7 +154,7 @@
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
 				A8E6D2002A416494005751D4 /* LoopTriggerKeys.swift */,
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
-				A8A2ABEA2A3FBFBA0067B5A9 /* VisualEffectView.swift */,
+				A80900D12AA3F9F20085C63B /* Views */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -374,14 +385,15 @@
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
 				A8E6D2012A416494005751D4 /* LoopTriggerKeys.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
-				A8A2ABEB2A3FBFBA0067B5A9 /* VisualEffectView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
 				A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */,
 				A8330ACD2A3AC1D100673C8D /* CGPoint+Extensions.swift in Sources */,
 				A8330AC72A3AC19500673C8D /* NSScreen+Extensions.swift in Sources */,
+				A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */,
 				A87D36982980A89D002B0D2F /* KeybindingSettingsView.swift in Sources */,
 				A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */,
+				A80900D42AA3F9F30085C63B /* BetaIndicator.swift in Sources */,
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A87376F62AA288EB001890F4 /* Window.swift in Sources */,
