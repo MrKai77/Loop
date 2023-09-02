@@ -15,21 +15,20 @@ struct WindowEngine {
         let oldWindowFrame = window.frame
         guard let screenFrame = screen.safeScreenFrame else { return }
         guard var targetWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction) else { return }
+        targetWindowFrame = WindowEngine.applyPadding(targetWindowFrame, direction)
 
         // Calculate the window's minimum window size and change the target accordingly
         window.getMinSize(screen: screen) { minSize in
             if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
-                targetWindowFrame.origin.x = screen.frame.maxX - minSize.width
+                targetWindowFrame.origin.x = screen.frame.maxX - minSize.width - Defaults[.windowPadding]
             }
 
             if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
-                targetWindowFrame.origin.y = screen.frame.maxY - minSize.height
+                targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
             }
 
-            targetWindowFrame = WindowEngine.applyPadding(targetWindowFrame, direction)
-
             // Resize window
-            window.setFrame(targetWindowFrame, animate: true)
+            window.setFrame(targetWindowFrame, animate: Defaults[.animateWindowResizes])
         }
     }
 
