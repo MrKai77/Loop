@@ -10,7 +10,7 @@ import Defaults
 
 class LoopManager {
 
-    private let accessibilityAccessManager = AccessibilityAccessManager()
+    private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
     private let iconManager = IconManager()
 
@@ -80,7 +80,7 @@ class LoopManager {
         frontmostWindow = nil
 
         // Loop will only open if accessibility access has been granted
-        if accessibilityAccessManager.getStatus() {
+        if PermissionsManager.Accessibility.getStatus() {
             self.frontmostWindow = WindowEngine.getFrontmostWindow()
             self.screenWithMouse = NSScreen.screenWithMouse
 
