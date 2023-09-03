@@ -283,9 +283,11 @@
 			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */;
 			buildPhases = (
 				A8291D6C2A450C2700C5CB69 /* Run SwiftLint */,
+				A8388B932AA5483600975152 /* Set Build Number */,
 				A8E59C31297F5E9A0064D4BA /* Sources */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
 				A8E59C33297F5E9A0064D4BA /* Resources */,
+				A8388B942AA548BD00975152 /* Reset Build Number */,
 			);
 			buildRules = (
 			);
@@ -370,6 +372,44 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		A8388B932AA5483600975152 /* Set Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Set Build Number";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "$SRCROOT/assets/set_build_number.sh\n";
+		};
+		A8388B942AA548BD00975152 /* Reset Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Reset Build Number";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/assets/reset_build_number.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
