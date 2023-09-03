@@ -46,6 +46,11 @@ struct GeneralSettingsView: View {
                         BetaIndicator("BETA")
                     }
                 }
+                .onChange(of: animateWindowResizes) { _ in
+                    if animateWindowResizes == true {
+                        PermissionsManager.ScreenRecording.requestAccess()
+                    }
+                }
 
                 Slider(value: $windowPadding,
                        in: 0...25,
@@ -124,16 +129,14 @@ struct GeneralSettingsView: View {
                     Spacer()
 
                     Button("Refresh Status", action: {
-                        PermissionsManager.Accessibility.requestAccess()
+                        PermissionsManager.requestAccess()
                         self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-
-                        PermissionsManager.ScreenRecording.requestAccess()
                         self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
                     })
                     .buttonStyle(.link)
                     .foregroundStyle(Color.accentColor)
-                    .disabled(isAccessibilityAccessGranted)
-                    .opacity(isAccessibilityAccessGranted ? 0.6 : 1)
+                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
+                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
                     .help("Refresh the current accessibility permissions")
                     .onAppear {
                         self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()

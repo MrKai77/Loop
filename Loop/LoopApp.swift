@@ -92,10 +92,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
-        // Check accessibility access, then if access is not granted,
-        // show a more informative alert asking for accessibility access
+        // Check & ask for accessibility access
         PermissionsManager.Accessibility.requestAccess()
-        PermissionsManager.ScreenRecording.requestAccess()
 
         iconManager.restoreCurrentAppIcon()
 

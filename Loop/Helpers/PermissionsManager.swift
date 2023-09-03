@@ -9,6 +9,11 @@ import SwiftUI
 import Defaults
 
 class PermissionsManager {
+    static func requestAccess() {
+        PermissionsManager.Accessibility.requestAccess()
+        PermissionsManager.ScreenRecording.requestAccess()
+    }
+
     class Accessibility {
         static func getStatus() -> Bool {
             // Get current state for accessibility access
@@ -18,14 +23,20 @@ class PermissionsManager {
             return status
         }
 
-        static func requestAccess() {
+        @discardableResult
+        static func requestAccess() -> Bool {
             if PermissionsManager.Accessibility.getStatus() {
-                return
+                return true
             }
             let alert = NSAlert()
             alert.messageText = "\(Bundle.main.appName) Needs Accessibility Permissions"
-            alert.informativeText = "Please grant accessibility access to be able to resize windows."
+            alert.informativeText = "Please grant access to be able to resize windows."
             alert.runModal()
+
+            let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
+            let status = AXIsProcessTrustedWithOptions(options)
+
+            return status
         }
     }
 
@@ -41,7 +52,7 @@ class PermissionsManager {
 
             let alert = NSAlert()
             alert.messageText = "\(Bundle.main.appName) Needs Screen Recording Permissions"
-            alert.informativeText = "Please grant screen recording access to be able to resize windows (with animation)."
+            alert.informativeText = "Screen recording permissions are required to animate windows being resized."
             alert.runModal()
 
             CGRequestScreenCaptureAccess()
