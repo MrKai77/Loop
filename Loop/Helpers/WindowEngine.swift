@@ -9,6 +9,12 @@ import SwiftUI
 import Defaults
 
 struct WindowEngine {
+
+    /// Resize a Window
+    /// - Parameters:
+    ///   - window: Window to be resized
+    ///   - direction: WindowDirection
+    ///   - screen: Screen the window should be resized on
     static func resize(window: Window, direction: WindowDirection, screen: NSScreen) {
         window.setFullscreen(false)
 
@@ -17,21 +23,33 @@ struct WindowEngine {
         guard var targetWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction) else { return }
         targetWindowFrame = WindowEngine.applyPadding(targetWindowFrame, direction)
 
-        // Calculate the window's minimum window size and change the target accordingly
-        window.getMinSize(screen: screen) { minSize in
-            if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
-                targetWindowFrame.origin.x = screen.frame.maxX - minSize.width - Defaults[.windowPadding]
-            }
+        var animate =  Defaults[.animateWindowResizes]
+        if PermissionsManager.ScreenRecording.getStatus() == false {
+            PermissionsManager.ScreenRecording.requestAccess()
+            animate = false
+        }
 
-            if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
-                targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
-            }
+        if animate {
+            // Calculate the window's minimum window size and change the target accordingly
+            window.getMinSize(screen: screen) { minSize in
+                if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
+                    targetWindowFrame.origin.x = screen.frame.maxX - minSize.width - Defaults[.windowPadding]
+                }
 
-            // Resize window
-            window.setFrame(targetWindowFrame, animate: Defaults[.animateWindowResizes])
+                if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
+                    targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
+                }
+
+                window.setFrame(targetWindowFrame, animate: true)
+            }
+        } else {
+            window.setFrame(targetWindowFrame, animate: false)
+            WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
         }
     }
 
+    /// Get the frontmost Window
+    /// - Returns: Window?
     static func getFrontmostWindow() -> Window? {
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
               let window = Window(pid: app.processIdentifier) else { return nil }
@@ -46,6 +64,12 @@ struct WindowEngine {
         return window
     }
 
+    /// Generate a window frame using the provided WindowDirection
+    /// - Parameters:
+    ///   - windowFrame: The window's current frame. Used when centering a window
+    ///   - screenFrame: The frame of the screen you want the window to be resized on
+    ///   - direction: WindowDirection
+    /// - Returns: A CGRect of the generated frame. If direction was .noAction, nil is returned.
     private static func generateWindowFrame(_ windowFrame: CGRect, _ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
         let screenWidth = screenFrame.size.width
         let screenHeight = screenFrame.size.height
@@ -103,6 +127,11 @@ struct WindowEngine {
         }
     }
 
+    /// Apply padding on a CGRect, using the provided WindowDirection
+    /// - Parameters:
+    ///   - windowFrame: The frame the window WILL be resized to
+    ///   - direction: The direction the window WILL be resized to
+    /// - Returns: CGRect with padding applied
     private static func applyPadding(_ windowFrame: CGRect, _ direction: WindowDirection) -> CGRect {
         var paddingAppliedRect = windowFrame
         for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
@@ -113,6 +142,31 @@ struct WindowEngine {
             }
         }
         return paddingAppliedRect
+    }
+
+    /// Will move a window back onto the screen. To be run AFTER a window has been resized.
+    /// - Parameters:
+    ///   - window: Window
+    ///   - screenFrame: The screen's frame
+    private static func handleSizeConstrainedWindow(window: Window, screenFrame: CGRect) {
+        let windowFrame = window.frame
+        // If the window is fully shown on the screen
+        if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
+            return
+        }
+
+        // If not, then Loop will auto re-adjust the window size to be fully shown on the screen
+        var fixedWindowFrame = windowFrame
+
+        if fixedWindowFrame.maxX > screenFrame.maxX {
+            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width - Defaults[.windowPadding]
+        }
+
+        if fixedWindowFrame.maxY > screenFrame.maxY {
+            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.windowPadding]
+        }
+
+        window.setOrigin(fixedWindowFrame.origin)
     }
 }
 
