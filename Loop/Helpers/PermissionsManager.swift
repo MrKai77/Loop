@@ -52,7 +52,8 @@ class PermissionsManager {
 
             let alert = NSAlert()
             alert.messageText = "\(Bundle.main.appName) Needs Screen Recording Permissions"
-            alert.informativeText = "Screen recording permissions are required to animate windows being resized."
+            alert.informativeText = "Screen recording permissions are required to animate windows being resized. "
+                                  + "\(Bundle.main.appName) may need to be relaunched to reflect these changes."
             alert.runModal()
 
             CGRequestScreenCaptureAccess()

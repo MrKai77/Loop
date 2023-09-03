@@ -128,7 +128,7 @@ struct GeneralSettingsView: View {
 
                     Spacer()
 
-                    Button("Refresh Status", action: {
+                    Button("Request Access", action: {
                         PermissionsManager.requestAccess()
                         self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
                         self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
