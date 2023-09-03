@@ -141,6 +141,10 @@ struct GeneralSettingsView: View {
                     .onAppear {
                         self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
                         self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+
+                        if !isScreenRecordingAccessGranted {
+                            self.animateWindowResizes = false
+                        }
                     }
                 }
             })
