@@ -123,13 +123,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A80900D12AA3F9F20085C63B /* Views */ = {
+		A80900D12AA3F9F20085C63B /* Extras */ = {
 			isa = PBXGroup;
 			children = (
+				A8E6D2002A416494005751D4 /* LoopTriggerKeys.swift */,
+				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A80900D22AA3F9F20085C63B /* BetaIndicator.swift */,
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
 			);
-			path = Views;
+			path = Extras;
 			sourceTree = "<group>";
 		};
 		A82521EA29E2349700139654 /* About Window */ = {
@@ -141,22 +143,15 @@
 			path = "About Window";
 			sourceTree = "<group>";
 		};
-		A8330ABB2A3AC05200673C8D /* Helpers */ = {
+		A8330ABB2A3AC05200673C8D /* Managers */ = {
 			isa = PBXGroup;
 			children = (
 				A848D8A62A8C2F3F00060834 /* LoopManager.swift */,
-				A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */,
-				A87376F52AA288EB001890F4 /* Window.swift */,
-				A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */,
-				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
 				A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */,
 				A82521ED29E235AC00139654 /* PermissionsManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
-				A8E6D2002A416494005751D4 /* LoopTriggerKeys.swift */,
-				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
-				A80900D12AA3F9F20085C63B /* Views */,
 			);
-			path = Helpers;
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		A8330AD52A3AC29C00673C8D /* Extensions */ = {
@@ -175,6 +170,17 @@
 				A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A864F4662AA65EC200579738 /* Window */ = {
+			isa = PBXGroup;
+			children = (
+				A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */,
+				A87376F52AA288EB001890F4 /* Window.swift */,
+				A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */,
+				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
+			);
+			path = Window;
 			sourceTree = "<group>";
 		};
 		A88265FA29808DED00BCB197 /* Preview Window */ = {
@@ -202,21 +208,13 @@
 			isa = PBXGroup;
 			children = (
 				A88265FF2980931C00BCB197 /* SettingsView.swift */,
-				A882660429809F4E00BCB197 /* Views */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		A882660429809F4E00BCB197 /* Views */ = {
-			isa = PBXGroup;
-			children = (
 				A882660729809F6F00BCB197 /* GeneralSettingsView.swift */,
 				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
 				A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */,
 				A87D36972980A89D002B0D2F /* KeybindingSettingsView.swift */,
 				A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */,
 			);
-			path = Views;
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		A883642D298B7288005D6C19 /* Frameworks */ = {
@@ -253,11 +251,13 @@
 				A80521312A84878200BF7E22 /* Config.xcconfig */,
 				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A80397D32A932993006D2796 /* MenubarIconView.swift */,
-				A8330ABB2A3AC05200673C8D /* Helpers */,
+				A864F4662AA65EC200579738 /* Window */,
+				A8330ABB2A3AC05200673C8D /* Managers */,
 				A82521EA29E2349700139654 /* About Window */,
 				A88265FB29808E0D00BCB197 /* Radial Menu */,
 				A88265FA29808DED00BCB197 /* Preview Window */,
 				A88265FC298092B500BCB197 /* Settings */,
+				A80900D12AA3F9F20085C63B /* Extras */,
 				A8330AD52A3AC29C00673C8D /* Extensions */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
 				A8F063712985B2730010C33D /* Info.plist */,
