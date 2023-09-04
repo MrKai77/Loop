@@ -156,33 +156,33 @@ enum WindowDirection: CaseIterable {
     static func snapDirection(mouseLocation: CGPoint, screenFrame: CGRect, ignoredFrame: CGRect) -> WindowDirection {
 
         if mouseLocation.x < ignoredFrame.minX {
-            if mouseLocation.y < screenFrame.maxY * 1/4 {
+            if mouseLocation.y < screenFrame.maxY * 1/8 {
                 return .topLeftQuarter
-            } else if mouseLocation.y > screenFrame.maxY * 3/4 {
+            } else if mouseLocation.y > screenFrame.maxY * 7/8 {
                 return .bottomLeftQuarter
             } else {
                 return .leftHalf
             }
         } else if mouseLocation.x > ignoredFrame.maxX {
-            if mouseLocation.y < screenFrame.maxY * 1/4 {
+            if mouseLocation.y < screenFrame.maxY * 1/8 {
                 return .topRightQuarter
-            } else if mouseLocation.y > screenFrame.maxY * 3/4 {
+            } else if mouseLocation.y > screenFrame.maxY * 7/8 {
                 return .bottomRightQuarter
             } else {
                 return .rightHalf
             }
         } else if mouseLocation.y < ignoredFrame.minY {
-            if mouseLocation.x < screenFrame.maxX * 1/4 {
+            if mouseLocation.x < screenFrame.maxX * 1/8 {
                 return .topLeftQuarter
-            } else if mouseLocation.x > screenFrame.maxX * 3/4 {
+            } else if mouseLocation.x > screenFrame.maxX * 7/8 {
                 return .topRightQuarter
             } else {
                 return .maximize
             }
         } else if mouseLocation.y > ignoredFrame.maxY {
-            if mouseLocation.x < screenFrame.maxX * 1/4 {
+            if mouseLocation.x < screenFrame.maxX * 1/8 {
                 return .bottomLeftQuarter
-            } else if mouseLocation.x > screenFrame.maxX * 3/4 {
+            } else if mouseLocation.x > screenFrame.maxX * 7/8 {
                 return .bottomRightQuarter
             } else {
                 return .maximize

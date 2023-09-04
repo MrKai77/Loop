@@ -64,8 +64,8 @@ class SnappingManager {
                self.initialPosition != window.position {
                 WindowEngine.resize(window: window, direction: self.direction, screen: screen)
                 self.previewController.close()
-                self.draggingWindow = nil
             }
+            self.draggingWindow = nil
         }
     }
 }
