@@ -11,8 +11,8 @@ class Window {
     private let kAXFullscreenAttribute = "AXFullScreen"
     let axWindow: AXUIElement
 
-    init?(window: AXUIElement) {
-        self.axWindow = window
+    init?(element: AXUIElement) {
+        self.axWindow = element
 
         if role != kAXWindowRole,
            subrole != kAXStandardWindowSubrole {
@@ -24,7 +24,7 @@ class Window {
         let element = AXUIElementCreateApplication(pid)
         guard let window = element.getValue(attribute: kAXFocusedWindowAttribute) else { return nil }
         // swiftlint:disable force_cast
-        self.init(window: window as! AXUIElement)
+        self.init(element: window as! AXUIElement)
         // swiftlint:enable force_cast
     }
 
@@ -34,6 +34,10 @@ class Window {
 
     var subrole: String? {
         return self.axWindow.getValue(attribute: kAXSubroleAttribute) as? String
+    }
+
+    var title: String? {
+        return self.axWindow.getValue(attribute: kAXTitleAttribute) as? String
     }
 
     var isFullscreen: Bool {
@@ -60,7 +64,7 @@ class Window {
         )
     }
 
-    var origin: CGPoint {
+    var position: CGPoint {
         var point: CGPoint = .zero
         guard let value = self.axWindow.getValue(attribute: kAXPositionAttribute) else { return point }
         // swiftlint:disable force_cast
@@ -69,7 +73,7 @@ class Window {
         return point
     }
     @discardableResult
-    func setOrigin(_ origin: CGPoint) -> Bool {
+    func setPosition(_ origin: CGPoint) -> Bool {
         var position = origin
         if let value = AXValueCreate(AXValueType.cgPoint, &position) {
             return self.axWindow.setValue(attribute: kAXPositionAttribute, value: value)
@@ -95,7 +99,7 @@ class Window {
     }
 
     var frame: CGRect {
-        return CGRect(origin: self.origin, size: self.size)
+        return CGRect(origin: self.position, size: self.size)
     }
 
     func setFrame(_ rect: CGRect, animate: Bool = false) {
@@ -103,7 +107,7 @@ class Window {
             let animation = WindowTransformAnimation(rect, window: self)
             animation.startInBackground()
         } else {
-            self.setOrigin(rect.origin)
+            self.setPosition(rect.origin)
             self.setSize(rect.size)
         }
     }
