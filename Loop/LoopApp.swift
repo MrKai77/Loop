@@ -88,6 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let iconManager = IconManager()
     private let loopManager = LoopManager()
+    private let snappingManager = SnappingManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)

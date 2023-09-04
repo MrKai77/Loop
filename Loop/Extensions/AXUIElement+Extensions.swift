@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension AXUIElement {
+    static let systemWide = AXUIElementCreateSystemWide()
+
     func getValue(attribute: String) -> CFTypeRef? {
         var ref: CFTypeRef?
         let error = AXUIElementCopyAttributeValue(self, attribute as CFString, &ref)

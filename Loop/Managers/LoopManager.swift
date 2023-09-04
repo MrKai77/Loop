@@ -81,7 +81,7 @@ class LoopManager {
 
         // Loop will only open if accessibility access has been granted
         if PermissionsManager.Accessibility.getStatus() {
-            self.frontmostWindow = WindowEngine.getFrontmostWindow()
+            self.frontmostWindow = WindowEngine.frontmostWindow
             self.screenWithMouse = NSScreen.screenWithMouse
 
             if Defaults[.previewVisibility] == true && frontmostWindow != nil {

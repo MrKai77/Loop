@@ -128,7 +128,7 @@ enum WindowDirection: CaseIterable {
         }
     }
 
-    var sidesThatTouchScreen: [Edge] {
+    var edgesTouchingScreen: [Edge] {
         switch self {
         case .maximize:                 [.top, .bottom, .leading, .trailing]
         case .topHalf:                  [.top, .leading, .trailing]
@@ -151,5 +151,44 @@ enum WindowDirection: CaseIterable {
         case .bottomTwoThirds:          [.bottom, .leading, .trailing]
         default:                        []
         }
+    }
+
+    static func snapDirection(mouseLocation: CGPoint, screenFrame: CGRect, ignoredFrame: CGRect) -> WindowDirection {
+
+        if mouseLocation.x < ignoredFrame.minX {
+            if mouseLocation.y < screenFrame.maxY * 1/4 {
+                return .topLeftQuarter
+            } else if mouseLocation.y > screenFrame.maxY * 3/4 {
+                return .bottomLeftQuarter
+            } else {
+                return .leftHalf
+            }
+        } else if mouseLocation.x > ignoredFrame.maxX {
+            if mouseLocation.y < screenFrame.maxY * 1/4 {
+                return .topRightQuarter
+            } else if mouseLocation.y > screenFrame.maxY * 3/4 {
+                return .bottomRightQuarter
+            } else {
+                return .rightHalf
+            }
+        } else if mouseLocation.y < ignoredFrame.minY {
+            if mouseLocation.x < screenFrame.maxX * 1/4 {
+                return .topLeftQuarter
+            } else if mouseLocation.x > screenFrame.maxX * 3/4 {
+                return .topRightQuarter
+            } else {
+                return .maximize
+            }
+        } else if mouseLocation.y > ignoredFrame.maxY {
+            if mouseLocation.x < screenFrame.maxX * 1/4 {
+                return .bottomLeftQuarter
+            } else if mouseLocation.x > screenFrame.maxX * 3/4 {
+                return .bottomRightQuarter
+            } else {
+                return .maximize
+            }
+        }
+
+        return .noAction
     }
 }
