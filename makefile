@@ -1,3 +1,20 @@
+app-standalone:
+	set -o pipefail && xcodebuild archive \
+		-project ./Loop.xcodeproj \
+		-destination "generic/platform=macOS" \
+		-scheme "Loop" \
+		-archivePath "./Build/Loop.xcarchive" \
+		-xcconfig "./Loop/Config.xcconfig" \
+		CODE_SIGNING_REQUIRED=NO \
+		CODE_SIGNING_ALLOWED=NO \
+		CODE_SIGN_IDENTITY= \
+		CODE_SIGN_ENTITLEMENTS= \
+		GCC_OPTIMIZATION_LEVEL=s \
+		SWIFT_OPTIMIZATION_LEVEL=-O \
+		GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
+		DEBUG_INFORMATION_FORMAT=dwarf-with-dsym | xcbeautify
+	cp -R ./Build/Loop.xcarchive/Products/Applications/ ./Build/
+
 release:
 	set -o pipefail && xcodebuild archive \
 		-project ./Loop.xcodeproj \
@@ -58,20 +75,3 @@ debug:
 		"./Build/Loop.xcarchive/Products/Applications/"
 	cp -R ./Build/Loop.xcarchive/Products/Applications/ ./Build/
 	ditto -c -k --sequesterRsrc --keepParent ./Build/Loop.app ./Build/Loop.zip
-
-app-standalone:
-	set -o pipefail && xcodebuild archive \
-		-project ./Loop.xcodeproj \
-		-destination "generic/platform=macOS" \
-		-scheme "Loop" \
-		-archivePath "./Build/Loop.xcarchive" \
-		-xcconfig "./Loop/Config.xcconfig" \
-		CODE_SIGNING_REQUIRED=NO \
-		CODE_SIGNING_ALLOWED=NO \
-		CODE_SIGN_IDENTITY= \
-		CODE_SIGN_ENTITLEMENTS= \
-		GCC_OPTIMIZATION_LEVEL=s \
-		SWIFT_OPTIMIZATION_LEVEL=-O \
-		GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
-		DEBUG_INFORMATION_FORMAT=dwarf-with-dsym | xcbeautify
-	cp -R ./Build/Loop.xcarchive/Products/Applications/ ./Build/
