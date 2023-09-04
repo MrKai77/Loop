@@ -150,7 +150,7 @@ class Window {
             // Restore original window size
             self.setSize(startingSize)
 
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
                 // Close window, then activate completion handler
                 panel.close()
                 completion(minSize)
