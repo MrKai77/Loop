@@ -15,7 +15,7 @@ struct RadialMenuView: View {
     let radialMenuSize: CGFloat = 100
 
     // This will determine whether Loop needs to show a warning (if it's nil)
-    let frontmostWindow: AXUIElement?
+    let frontmostWindow: Window?
 
     @State var previewMode = false
     @State var initialMousePosition: CGPoint = CGPoint()
@@ -124,17 +124,9 @@ struct RadialMenuView: View {
     }
 
     private func refreshCurrentAngle() {
-        let currentAngleToMouse = Angle(
-            radians: initialMousePosition.angle(to: CGPoint(x: NSEvent.mouseLocation.x,
-                                                            y: NSEvent.mouseLocation.y))
-        )
-
-        let currentDistanceToMouse = initialMousePosition.distanceSquared(
-            to: CGPoint(
-                x: NSEvent.mouseLocation.x,
-                y: NSEvent.mouseLocation.y
-            )
-        )
+        let currentMouseLocation = NSEvent.mouseLocation
+        let currentAngleToMouse = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
+        let currentDistanceToMouse = initialMousePosition.distanceSquared(to: currentMouseLocation)
 
         if (currentAngleToMouse == angleToMouse) && (currentDistanceToMouse == distanceToMouse) {
             return

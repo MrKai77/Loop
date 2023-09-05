@@ -4,7 +4,13 @@ echo "--- Setting build number! ---"
 
 cd "$SRCROOT"
 
-sed -i -e "/BUILD_NUMBER =/ s/= .*/= $(git rev-list --count HEAD)/" Loop/Config.xcconfig
+# Set VERSION
+latest_tag=$(git describe --tags --abbrev=0)
+sed -i -e "/VERSION =/ s/= .*/= $latest_tag/" Loop/Config.xcconfig
+
+# Set BUILD_NUMBER
+latest_commit_number=$(git rev-list --count HEAD)
+sed -i -e "/BUILD_NUMBER =/ s/= .*/= $latest_commit_number/" Loop/Config.xcconfig
 
 rm Loop/Config.xcconfig-e
 

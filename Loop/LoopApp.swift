@@ -86,18 +86,15 @@ struct LoopApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    private let accessibilityAccessManager = AccessibilityAccessManager()
     private let iconManager = IconManager()
     private let loopManager = LoopManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
-        // Check accessibility access, then if access is not granted,
-        // show a more informative alert asking for accessibility access
-        if !accessibilityAccessManager.getStatus() {
-            accessibilityAccessManager.requestAccess()
-        }
+        // Check & ask for accessibility access
+        PermissionsManager.Accessibility.requestAccess()
+
         iconManager.restoreCurrentAppIcon()
 
         loopManager.startObservingKeys()

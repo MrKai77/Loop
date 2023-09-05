@@ -20,11 +20,13 @@ struct GeneralSettingsView: View {
     @Default(.gradientColor) var gradientColor
     @Default(.currentIcon) var currentIcon
     @Default(.timesLooped) var timesLooped
+    @Default(.animateWindowResizes) var animateWindowResizes
+    @Default(.windowPadding) var windowPadding
 
     let iconManager = IconManager()
-    let accessibilityAccessManager = AccessibilityAccessManager()
 
     @State var isAccessibilityAccessGranted = false
+    @State var isScreenRecordingAccessGranted = false
 
     var body: some View {
         Form {
@@ -37,6 +39,29 @@ struct GeneralSettingsView: View {
                             try? SMAppService().unregister()
                         }
                     }
+
+                Toggle(isOn: $animateWindowResizes) {
+                    HStack {
+                        Text("Animate windows being resized")
+                        BetaIndicator("BETA")
+                    }
+                }
+                .onChange(of: animateWindowResizes) { _ in
+                    if animateWindowResizes == true {
+                        PermissionsManager.ScreenRecording.requestAccess()
+                    }
+                }
+
+                Slider(value: $windowPadding,
+                       in: 0...25,
+                       step: 5,
+                       minimumValueLabel: Text("0"),
+                       maximumValueLabel: Text("25")) {
+                    HStack {
+                        Text("Window Padding")
+                        BetaIndicator("BETA")
+                    }
+                }
             }
 
             Section("Loop's icon") {
@@ -81,22 +106,45 @@ struct GeneralSettingsView: View {
                         .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
                         .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
                 }
+
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Screen Recording Access")
+                        Spacer()
+                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
+                        Circle()
+                            .frame(width: 8, height: 8)
+                            .padding(.trailing, 5)
+                            .foregroundColor(isScreenRecordingAccessGranted ? .green : .red)
+                            .shadow(color: isScreenRecordingAccessGranted ? .green : .red, radius: 8)
+                    }
+                    Text("This is only needed to animate windows being resized.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
             }, header: {
                 HStack {
                     Text("Permissions")
 
                     Spacer()
 
-                    Button("Refresh Status", action: {
-                        self.isAccessibilityAccessGranted = accessibilityAccessManager.requestAccess()
+                    Button("Request Access", action: {
+                        PermissionsManager.requestAccess()
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
                     })
                     .buttonStyle(.link)
                     .foregroundStyle(Color.accentColor)
-                    .disabled(isAccessibilityAccessGranted)
-                    .opacity(isAccessibilityAccessGranted ? 0.6 : 1)
+                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
+                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
                     .help("Refresh the current accessibility permissions")
                     .onAppear {
-                        self.isAccessibilityAccessGranted = accessibilityAccessManager.getStatus()
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+
+                        if !isScreenRecordingAccessGranted {
+                            self.animateWindowResizes = false
+                        }
                     }
                 }
             })

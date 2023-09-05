@@ -8,8 +8,6 @@
 import Cocoa
 
 class KeybindMonitor {
-
-    static private let accessibilityAccessManager = AccessibilityAccessManager()
     static let shared = KeybindMonitor()
 
     private var eventTap: CFMachPort?
@@ -67,9 +65,9 @@ class KeybindMonitor {
                     }
 
                     if keyEvent.type == .keyUp {
-                        KeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode)
+                        KeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode.baseKey)
                     } else if keyEvent.type == .keyDown {
-                        KeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode)
+                        KeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode.baseKey)
                     }
 
                     KeybindMonitor.shared.performKeybind(event: keyEvent)
@@ -89,7 +87,7 @@ class KeybindMonitor {
 
             self.eventTap = newEventTap
 
-            if KeybindMonitor.accessibilityAccessManager.getStatus() {
+            if PermissionsManager.Accessibility.getStatus() {
                 let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, newEventTap, 0)
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
                 CGEvent.tapEnable(tap: newEventTap!, enable: true)
