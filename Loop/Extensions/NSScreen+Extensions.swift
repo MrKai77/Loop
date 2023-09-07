@@ -36,7 +36,7 @@ extension NSScreen {
         // work correctly, so we instead use screenFrame's origin.
         safeScreenFrame.origin = screenFrame.origin
         safeScreenFrame.origin.y += menubarHeight
-        safeScreenFrame.origin.x += visibleFrame.minX
+        safeScreenFrame.origin.x -= screenFrame.minX - visibleFrame.minX
 
         return safeScreenFrame
     }
