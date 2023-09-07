@@ -56,9 +56,9 @@ struct WindowEngine {
 
         #if DEBUG
         print("===== NEW WINDOW =====")
-        print("Frontmost app: \(app)")
-        print("kAXWindowRole: \(window.role ?? "N/A")")
-        print("kAXStandardWindowSubrole: \(window.subrole ?? "N/A")")
+        print("Frontmost window: \(window.axWindow)")
+        print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
+        print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
         #endif
 
         return window
@@ -166,7 +166,7 @@ struct WindowEngine {
             fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.windowPadding]
         }
 
-        window.setOrigin(fixedWindowFrame.origin)
+        window.setPosition(fixedWindowFrame.origin)
     }
 }
 

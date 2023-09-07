@@ -8,78 +8,70 @@
 import SwiftUI
 
 class Window {
-    private let kAXFullscreenAttribute = "AXFullScreen"
+//    private let kAXFullscreenAttribute = "AXFullScreen"
     let axWindow: AXUIElement
 
     init?(window: AXUIElement) {
         self.axWindow = window
 
-        if role != kAXWindowRole,
-           subrole != kAXStandardWindowSubrole {
+        if role != .window,
+           subrole != .standardWindow {
             return nil
         }
     }
 
     convenience init?(pid: pid_t) {
         let element = AXUIElementCreateApplication(pid)
-        guard let window = element.getValue(attribute: kAXFocusedWindowAttribute) else { return nil }
+        guard let window = element.getValue(.focusedWindow) else { return nil }
         // swiftlint:disable force_cast
         self.init(window: window as! AXUIElement)
         // swiftlint:enable force_cast
     }
 
-    var role: String? {
-        return self.axWindow.getValue(attribute: kAXRoleAttribute) as? String
+    var role: NSAccessibility.Role? {
+        guard let value = self.axWindow.getValue(.role) as? String else { return nil }
+        return NSAccessibility.Role(rawValue: value)
     }
 
-    var subrole: String? {
-        return self.axWindow.getValue(attribute: kAXSubroleAttribute) as? String
+    var subrole: NSAccessibility.Subrole? {
+        guard let value = self.axWindow.getValue(.subrole) as? String else { return nil }
+        return NSAccessibility.Subrole(rawValue: value)
     }
 
     var isFullscreen: Bool {
-        let result = self.axWindow.getValue(attribute: kAXFullscreenAttribute) as? NSNumber
+        let result = self.axWindow.getValue(.fullScreen) as? NSNumber
         return result?.boolValue ?? false
     }
     @discardableResult
     func setFullscreen(_ state: Bool) -> Bool {
-        return self.axWindow.setValue(
-            attribute: kAXFullscreenAttribute,
-            value: state ? kCFBooleanTrue : kCFBooleanFalse
-        )
+        return self.axWindow.setValue(.fullScreen, value: state)
     }
 
     var isMinimized: Bool {
-        let result = self.axWindow.getValue(attribute: kAXMinimizedAttribute) as? NSNumber
+        let result = self.axWindow.getValue(.minimized) as? NSNumber
         return result?.boolValue ?? false
     }
     @discardableResult
     func setMinimized(_ state: Bool) -> Bool {
-        return self.axWindow.setValue(
-            attribute: kAXMinimizedAttribute,
-            value: state ? kCFBooleanTrue : kCFBooleanFalse
-        )
+        return self.axWindow.setValue(.minimized, value: state)
     }
 
-    var origin: CGPoint {
+    var position: CGPoint {
         var point: CGPoint = .zero
-        guard let value = self.axWindow.getValue(attribute: kAXPositionAttribute) else { return point }
+        guard let value = self.axWindow.getValue(.position) else { return point }
         // swiftlint:disable force_cast
         AXValueGetValue(value as! AXValue, .cgPoint, &point)    // Convert to CGPoint
         // swiftlint:enable force_cast
         return point
     }
     @discardableResult
-    func setOrigin(_ origin: CGPoint) -> Bool {
-        var position = origin
-        if let value = AXValueCreate(AXValueType.cgPoint, &position) {
-            return self.axWindow.setValue(attribute: kAXPositionAttribute, value: value)
-        }
-        return false
+    func setPosition(_ position: CGPoint) -> Bool {
+        return self.axWindow.setValue(.position, value: position)
     }
 
     var size: CGSize {
         var size: CGSize = .zero
-        guard let value = self.axWindow.getValue(attribute: kAXSizeAttribute) else { return size }
+        guard let value = self.axWindow.getValue(.size) else { return size }
         // swiftlint:disable force_cast
         AXValueGetValue(value as! AXValue, .cgSize, &size)      // Convert to CGSize
         // swiftlint:enable force_cast
@@ -87,15 +79,11 @@ class Window {
     }
     @discardableResult
     func setSize(_ size: CGSize) -> Bool {
-        var size = size
-        if let value = AXValueCreate(AXValueType.cgSize, &size) {
-            return self.axWindow.setValue(attribute: kAXSizeAttribute, value: value)
-        }
-        return false
+        return self.axWindow.setValue(.size, value: size)
     }
 
     var frame: CGRect {
-        return CGRect(origin: self.origin, size: self.size)
+        return CGRect(origin: self.position, size: self.size)
     }
 
     func setFrame(_ rect: CGRect, animate: Bool = false) {
@@ -103,7 +91,7 @@ class Window {
             let animation = WindowTransformAnimation(rect, window: self)
             animation.startInBackground()
         } else {
-            self.setOrigin(rect.origin)
+            self.setPosition(rect.origin)
             self.setSize(rect.size)
         }
     }
