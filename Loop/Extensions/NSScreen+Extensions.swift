@@ -24,19 +24,20 @@ extension NSScreen {
     }
 
     var safeScreenFrame: CGRect? {
-        guard let displayID = self.displayID else { return nil }
-        let screenFrameOrigin = CGDisplayBounds(displayID).origin
-        var screenFrame: CGRect = self.visibleFrame
+        guard let displayID = self.displayID,
+              let visibleFrame = self.visibleFrame.flipY else { return nil }
+        let screenFrame = CGDisplayBounds(displayID)
+        let menubarHeight = visibleFrame.origin.y
 
-        // Set position of the screenFrame (useful for multiple displays)
-        screenFrame.origin = screenFrameOrigin
+        // By setting safeScreenFrame to visibleFrame, we won't need to adjust its size.
+        var safeScreenFrame: CGRect = visibleFrame
 
-        // Move screenFrame's y origin to compensate for menubar & dock, if it's on the bottom
-        screenFrame.origin.y += (self.frame.size.height - self.visibleFrame.size.height)
+        // By using visibleFrame, coordinates of multiple displays won't
+        // work correctly, so we instead use screenFrame's origin.
+        safeScreenFrame.origin = screenFrame.origin
+        safeScreenFrame.origin.y += menubarHeight
+        safeScreenFrame.origin.x += visibleFrame.minX
 
-        // Move screenFrame's x origin when dock is shown on left/right
-        screenFrame.origin.x += (self.frame.size.width - self.visibleFrame.size.width)
-
-        return screenFrame
+        return safeScreenFrame
     }
 }

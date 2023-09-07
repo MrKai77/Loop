@@ -5,10 +5,8 @@
 //  Created by Kai Azim on 2023-06-14.
 //
 
-import Foundation
+import AppKit
 
-// Add two extensions: one to detect the angle between two CGPoints and one to detect the distance
-// This is used to calculate the distance and angle of the cursor from loop's radial menu.
 extension CGPoint {
     func angle(to comparisonPoint: CGPoint) -> CGFloat {
         let originX = comparisonPoint.x - x
@@ -24,5 +22,21 @@ extension CGPoint {
             * (from.x - comparisonPoint.x)
             + (from.y - comparisonPoint.y)
             * (from.y - comparisonPoint.y)
+    }
+
+    var flipY: CGPoint? {
+        guard let screen = NSScreen.screenWithMouse else { return nil }
+        return CGPoint(x: self.x, y: screen.frame.maxY - self.y)
+    }
+}
+
+extension CGRect {
+    var flipY: CGRect? {
+        guard let screen = NSScreen.screenWithMouse else { return nil }
+        return CGRect(
+            x: self.minX,
+            y: screen.frame.maxY - self.maxY,
+            width: self.width,
+            height: self.height)
     }
 }
