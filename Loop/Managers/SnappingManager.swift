@@ -20,11 +20,11 @@ class SnappingManager {
     }
 
     func addObservers() {
-        NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDragged) { _ in
+        let leftMouseDraggedMonitor = EventMonitor(eventMask: .leftMouseDragged) { cgEvent in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 guard let mousePosition = NSEvent.mouseLocation.flipY,
-                      let draggingWindow = WindowEngine.windowAtPosition(mousePosition) else { return }
+                      let draggingWindow = WindowEngine.windowAtPosition(mousePosition) else { return Unmanaged.passRetained(cgEvent) }
                 self.draggingWindow = draggingWindow
                 self.initialPosition = draggingWindow.position
             }
@@ -56,9 +56,11 @@ class SnappingManager {
                     self.previewController.close()
                 }
             }
+
+            return Unmanaged.passRetained(cgEvent)
         }
 
-        NSEvent.addGlobalMonitorForEvents(matching: .leftMouseUp) { _ in
+        let leftMouseUpMonitor = EventMonitor(eventMask: .leftMouseUp) { cgEvent in
             if let window = self.draggingWindow,
                let screen = NSScreen.screenWithMouse,
                self.initialPosition != window.position {
@@ -66,6 +68,10 @@ class SnappingManager {
                 self.previewController.close()
             }
             self.draggingWindow = nil
+            return Unmanaged.passRetained(cgEvent)
         }
+
+        leftMouseDraggedMonitor.start()
+        leftMouseUpMonitor.start()
     }
 }
