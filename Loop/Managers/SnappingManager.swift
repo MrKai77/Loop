@@ -65,7 +65,9 @@ class SnappingManager {
             if let window = self.draggingWindow,
                let screen = NSScreen.screenWithMouse,
                self.initialWindowPosition != window.position {
-                WindowEngine.resize(window: window, direction: self.direction, screen: screen)
+                DispatchQueue.main.async {
+                    WindowEngine.resize(window: window, direction: self.direction, screen: screen)
+                }
             }
             self.previewController.close()
             self.draggingWindow = nil
