@@ -69,21 +69,3 @@ class SnappingManager {
         }
     }
 }
-
-extension CGPoint {
-    var flipY: CGPoint? {
-        guard let screen = NSScreen.screenWithMouse else { return nil }
-        return CGPoint(x: self.x, y: screen.frame.maxY - self.y)
-    }
-}
-
-extension CGRect {
-    var flipY: CGRect? {
-        guard let screen = NSScreen.screenWithMouse else { return nil }
-        return CGRect(
-            x: self.minX,
-            y: screen.frame.maxY - self.maxY,
-            width: self.width,
-            height: self.height)
-    }
-}
