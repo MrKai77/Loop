@@ -34,7 +34,7 @@ class SnappingManager {
                let screen = NSScreen.screenWithMouse,
                let screenFrame = screen.visibleFrame.flipY,
                self.initialWindowPosition != window.position {
-                let ignoredFrame = screenFrame.insetBy(dx: 40, dy: 40)  // 20px of snap area on each side
+                let ignoredFrame = screenFrame.insetBy(dx: 20, dy: 20)  // 10px of snap area on each side
 
                 if !ignoredFrame.contains(mousePosition) {
                     self.direction = WindowDirection.snapDirection(

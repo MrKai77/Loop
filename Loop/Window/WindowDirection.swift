@@ -211,39 +211,34 @@ enum WindowDirection: CaseIterable {
     }
 
     static func processTopSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
-        if mouseX < maxX * 1/8 {
-            return .topLeftQuarter
-        } else if mouseX > maxX * 7/8 {
-            return .topRightQuarter
-        } else {
-            return .maximize
+        var newDirection: WindowDirection = .noAction
+
+        if mouseX < maxX * 1/5 {
+            newDirection = .topHalf
+        } else if mouseX < maxX * 4/5 {
+            newDirection = .maximize
+        } else if mouseX < maxX {
+            newDirection = .topHalf
         }
+
+        return newDirection
     }
 
     static func processBottomSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
-        // Don't do anything if the WindowDirection is set to two thirds
-        if currentDirection == .leftTwoThirds || currentDirection == .rightTwoThirds {
-            return currentDirection
-        }
-
         var newDirection: WindowDirection = .noAction
 
         if mouseX < maxX * 1/3 {
             newDirection = .leftThird
         } else if mouseX < maxX * 2/3 {
-            newDirection = .horizontalCenterThird
+            if currentDirection == .leftThird || currentDirection == .leftTwoThirds {
+                newDirection = .leftTwoThirds
+            } else if currentDirection == .rightThird || currentDirection == .rightTwoThirds {
+                newDirection = .rightTwoThirds
+            } else {
+                newDirection = .bottomHalf
+            }
         } else if mouseX < maxX {
             newDirection = .rightThird
-        }
-
-        if (currentDirection == .leftThird && newDirection == .horizontalCenterThird) ||
-            (currentDirection == .horizontalCenterThird && newDirection == .leftThird) {
-            newDirection = .leftTwoThirds
-        }
-
-        if (currentDirection == .rightThird && newDirection == .horizontalCenterThird) ||
-            (currentDirection == .horizontalCenterThird && newDirection == .rightThird) {
-            newDirection = .rightTwoThirds
         }
 
         return newDirection
