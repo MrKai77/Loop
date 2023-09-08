@@ -153,42 +153,99 @@ enum WindowDirection: CaseIterable {
         }
     }
 
-    static func snapDirection(mouseLocation: CGPoint, screenFrame: CGRect, ignoredFrame: CGRect) -> WindowDirection {
+    static func snapDirection(
+        mouseLocation: CGPoint,
+        currentDirection: WindowDirection,
+        screenFrame: CGRect,
+        ignoredFrame: CGRect
+    ) -> WindowDirection {
+        var newDirection: WindowDirection = .noAction
 
         if mouseLocation.x < ignoredFrame.minX {
-            if mouseLocation.y < screenFrame.maxY * 1/8 {
-                return .topLeftQuarter
-            } else if mouseLocation.y > screenFrame.maxY * 7/8 {
-                return .bottomLeftQuarter
-            } else {
-                return .leftHalf
-            }
+            newDirection = WindowDirection.processLeftSnap(
+                mouseY: mouseLocation.y,
+                maxY: screenFrame.maxY,
+                currentDirection: currentDirection
+            )
         } else if mouseLocation.x > ignoredFrame.maxX {
-            if mouseLocation.y < screenFrame.maxY * 1/8 {
-                return .topRightQuarter
-            } else if mouseLocation.y > screenFrame.maxY * 7/8 {
-                return .bottomRightQuarter
-            } else {
-                return .rightHalf
-            }
+            newDirection = WindowDirection.processRightSnap(
+                mouseY: mouseLocation.y,
+                maxY: screenFrame.maxY,
+                currentDirection: currentDirection
+            )
         } else if mouseLocation.y < ignoredFrame.minY {
-            if mouseLocation.x < screenFrame.maxX * 1/8 {
-                return .topLeftQuarter
-            } else if mouseLocation.x > screenFrame.maxX * 7/8 {
-                return .topRightQuarter
-            } else {
-                return .maximize
-            }
+            newDirection = WindowDirection.processTopSnap(
+                mouseX: mouseLocation.x,
+                maxX: screenFrame.maxX,
+                currentDirection: currentDirection
+            )
         } else if mouseLocation.y > ignoredFrame.maxY {
-            if mouseLocation.x < screenFrame.maxX * 1/8 {
-                return .bottomLeftQuarter
-            } else if mouseLocation.x > screenFrame.maxX * 7/8 {
-                return .bottomRightQuarter
-            } else {
-                return .maximize
-            }
+            newDirection = WindowDirection.processBottomSnap(
+                mouseX: mouseLocation.x,
+                maxX: screenFrame.maxX,
+                currentDirection: currentDirection
+            )
         }
 
-        return .noAction
+        return newDirection
+    }
+
+    static func processLeftSnap(mouseY: CGFloat, maxY: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        if mouseY < maxY * 1/8 {
+            return .topLeftQuarter
+        } else if mouseY > maxY * 7/8 {
+            return .bottomLeftQuarter
+        } else {
+            return .leftHalf
+        }
+    }
+
+    static func processRightSnap(mouseY: CGFloat, maxY: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        if mouseY < maxY * 1/8 {
+            return .topRightQuarter
+        } else if mouseY > maxY * 7/8 {
+            return .bottomRightQuarter
+        } else {
+            return .rightHalf
+        }
+    }
+
+    static func processTopSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        if mouseX < maxX * 1/8 {
+            return .topLeftQuarter
+        } else if mouseX > maxX * 7/8 {
+            return .topRightQuarter
+        } else {
+            return .maximize
+        }
+    }
+
+    static func processBottomSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        // Don't do anything if the WindowDirection is set to two thirds
+        if currentDirection == .leftTwoThirds || currentDirection == .rightTwoThirds {
+            return currentDirection
+        }
+
+        var newDirection: WindowDirection = .noAction
+
+        if mouseX < maxX * 1/3 {
+            newDirection = .leftThird
+        } else if mouseX < maxX * 2/3 {
+            newDirection = .horizontalCenterThird
+        } else if mouseX < maxX {
+            newDirection = .rightThird
+        }
+
+        if (currentDirection == .leftThird && newDirection == .horizontalCenterThird) ||
+            (currentDirection == .horizontalCenterThird && newDirection == .leftThird) {
+            newDirection = .leftTwoThirds
+        }
+
+        if (currentDirection == .rightThird && newDirection == .horizontalCenterThird) ||
+            (currentDirection == .horizontalCenterThird && newDirection == .rightThird) {
+            newDirection = .rightTwoThirds
+        }
+
+        return newDirection
     }
 }
