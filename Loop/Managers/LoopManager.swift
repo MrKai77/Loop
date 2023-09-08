@@ -22,13 +22,28 @@ class LoopManager {
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
+    private var timer: DispatchSourceTimer?    // Used when user has configured a trigger delay
+
     func startObservingKeys() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
             if event.keyCode == Defaults[.triggerKey] {
                 if event.modifierFlags.rawValue == 256 {
-                    self.closeLoop()
+                    if self.timer != nil {
+                        self.timer?.cancel()
+                        self.timer = nil
+                    } else {
+                        self.closeLoop()
+                    }
                 } else {
-                    self.openLoop()
+                    if self.timer == nil {
+                        self.timer = DispatchSource.makeTimerSource(queue: .main)
+                        self.timer!.schedule(deadline: .now() + .milliseconds(Int(Defaults[.triggerDelay]*1000)))
+                        self.timer!.setEventHandler {
+                            self.openLoop()
+                            self.timer = nil
+                        }
+                        self.timer!.resume()
+                    }
                 }
             }
         }
