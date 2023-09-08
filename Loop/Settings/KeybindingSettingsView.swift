@@ -11,6 +11,7 @@ import Defaults
 struct KeybindingSettingsView: View {
 
     @Default(.triggerKey) var triggerKey
+    @Default(.triggerDelay) var triggerDelay
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
 
@@ -43,6 +44,21 @@ struct KeybindingSettingsView: View {
                 }
                 .onChange(of: triggerKey) { _ in
                     refreshTriggerKeySymbol()
+                }
+
+                HStack {
+                    Stepper(
+                        "Trigger Delay",
+                        value: Binding<Double>(
+                            get: { Double(self.triggerDelay) },
+                            set: { self.triggerDelay = Float($0) }
+                        ),
+                        in: 0...1,
+                        step: 0.1,
+                        format: .number
+                    )
+                    Text("seconds")
+                        .foregroundColor(.secondary)
                 }
             }
 
