@@ -128,7 +128,7 @@ enum WindowDirection: CaseIterable {
         }
     }
 
-    var sidesThatTouchScreen: [Edge] {
+    var edgesTouchingScreen: [Edge] {
         switch self {
         case .maximize:                 [.top, .bottom, .leading, .trailing]
         case .topHalf:                  [.top, .leading, .trailing]
@@ -151,5 +151,96 @@ enum WindowDirection: CaseIterable {
         case .bottomTwoThirds:          [.bottom, .leading, .trailing]
         default:                        []
         }
+    }
+
+    static func snapDirection(
+        mouseLocation: CGPoint,
+        currentDirection: WindowDirection,
+        screenFrame: CGRect,
+        ignoredFrame: CGRect
+    ) -> WindowDirection {
+        var newDirection: WindowDirection = .noAction
+
+        if mouseLocation.x < ignoredFrame.minX {
+            newDirection = WindowDirection.processLeftSnap(
+                mouseY: mouseLocation.y,
+                maxY: screenFrame.maxY,
+                currentDirection: currentDirection
+            )
+        } else if mouseLocation.x > ignoredFrame.maxX {
+            newDirection = WindowDirection.processRightSnap(
+                mouseY: mouseLocation.y,
+                maxY: screenFrame.maxY,
+                currentDirection: currentDirection
+            )
+        } else if mouseLocation.y < ignoredFrame.minY {
+            newDirection = WindowDirection.processTopSnap(
+                mouseX: mouseLocation.x,
+                maxX: screenFrame.maxX,
+                currentDirection: currentDirection
+            )
+        } else if mouseLocation.y > ignoredFrame.maxY {
+            newDirection = WindowDirection.processBottomSnap(
+                mouseX: mouseLocation.x,
+                maxX: screenFrame.maxX,
+                currentDirection: currentDirection
+            )
+        }
+
+        return newDirection
+    }
+
+    static func processLeftSnap(mouseY: CGFloat, maxY: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        if mouseY < maxY * 1/8 {
+            return .topLeftQuarter
+        } else if mouseY > maxY * 7/8 {
+            return .bottomLeftQuarter
+        } else {
+            return .leftHalf
+        }
+    }
+
+    static func processRightSnap(mouseY: CGFloat, maxY: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        if mouseY < maxY * 1/8 {
+            return .topRightQuarter
+        } else if mouseY > maxY * 7/8 {
+            return .bottomRightQuarter
+        } else {
+            return .rightHalf
+        }
+    }
+
+    static func processTopSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        var newDirection: WindowDirection = .noAction
+
+        if mouseX < maxX * 1/5 {
+            newDirection = .topHalf
+        } else if mouseX < maxX * 4/5 {
+            newDirection = .maximize
+        } else if mouseX < maxX {
+            newDirection = .topHalf
+        }
+
+        return newDirection
+    }
+
+    static func processBottomSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+        var newDirection: WindowDirection = .noAction
+
+        if mouseX < maxX * 1/3 {
+            newDirection = .leftThird
+        } else if mouseX < maxX * 2/3 {
+            if currentDirection == .leftThird || currentDirection == .leftTwoThirds {
+                newDirection = .leftTwoThirds
+            } else if currentDirection == .rightThird || currentDirection == .rightTwoThirds {
+                newDirection = .rightTwoThirds
+            } else {
+                newDirection = .bottomHalf
+            }
+        } else if mouseX < maxX {
+            newDirection = .rightThird
+        }
+
+        return newDirection
     }
 }

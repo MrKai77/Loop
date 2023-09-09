@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension AXUIElement {
+    static let systemWide = AXUIElementCreateSystemWide()
+
     func getValue(_ attribute: NSAccessibility.Attribute) -> AnyObject? {
         var value: AnyObject?
         let result = AXUIElementCopyAttributeValue(self, attribute as CFString, &value)

@@ -11,8 +11,8 @@ class Window {
 //    private let kAXFullscreenAttribute = "AXFullScreen"
     let axWindow: AXUIElement
 
-    init?(window: AXUIElement) {
-        self.axWindow = window
+    init?(element: AXUIElement) {
+        self.axWindow = element
 
         if role != .window,
            subrole != .standardWindow {
@@ -24,7 +24,7 @@ class Window {
         let element = AXUIElementCreateApplication(pid)
         guard let window = element.getValue(.focusedWindow) else { return nil }
         // swiftlint:disable force_cast
-        self.init(window: window as! AXUIElement)
+        self.init(element: window as! AXUIElement)
         // swiftlint:enable force_cast
     }
 
@@ -36,6 +36,10 @@ class Window {
     var subrole: NSAccessibility.Subrole? {
         guard let value = self.axWindow.getValue(.subrole) as? String else { return nil }
         return NSAccessibility.Subrole(rawValue: value)
+    }
+
+    var title: String? {
+        return self.axWindow.getValue(.title) as? String
     }
 
     var isFullscreen: Bool {

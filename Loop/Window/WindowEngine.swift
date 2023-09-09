@@ -50,7 +50,7 @@ struct WindowEngine {
 
     /// Get the frontmost Window
     /// - Returns: Window?
-    static func getFrontmostWindow() -> Window? {
+    static var frontmostWindow: Window? {
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
               let window = Window(pid: app.processIdentifier) else { return nil }
 
@@ -62,6 +62,39 @@ struct WindowEngine {
         #endif
 
         return window
+    }
+
+    static var windowList: [Window] {
+        guard let list = CGWindowListCopyWindowInfo(
+            [.optionOnScreenOnly, .excludeDesktopElements],
+            kCGNullWindowID
+        ) as NSArray? as? [[String: AnyObject]] else {
+            return []
+        }
+
+        var windowList: [Window] = []
+        for window in list {
+            if let pid = window[kCGWindowOwnerPID as String] as? Int32,
+               let window = Window(pid: pid) {
+                windowList.append(window)
+            }
+        }
+
+        return windowList
+    }
+
+    static func windowAtPosition(_ position: CGPoint) -> Window? {
+        if let element = AXUIElement.systemWide.getElementAtPosition(position),
+           let window = Window(element: element) {
+            return window
+        }
+
+        let windowList = WindowEngine.windowList
+        if let window = (windowList.first { $0.frame.contains(position) }) {
+            return window
+        }
+
+        return nil
     }
 
     /// Generate a window frame using the provided WindowDirection
@@ -135,7 +168,7 @@ struct WindowEngine {
     private static func applyPadding(_ windowFrame: CGRect, _ direction: WindowDirection) -> CGRect {
         var paddingAppliedRect = windowFrame
         for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
-            if direction.sidesThatTouchScreen.contains(side) {
+            if direction.edgesTouchingScreen.contains(side) {
                 paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
             } else {
                 paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
