@@ -103,4 +103,5 @@ extension Defaults.Keys {
     // BETA
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false)
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
+    static let windowSnapping = Key<Bool>("windowSnapping", default: false)
 }

@@ -9,18 +9,19 @@ import Cocoa
 
 class SnappingManager {
 
+    static let shared = SnappingManager()
+
     private var draggingWindow: Window?
     private var initialWindowPosition: CGPoint?
     private var direction: WindowDirection = .noAction
 
     private let previewController = PreviewController()
 
-    init() {
-        self.addObservers()
-    }
+    private var leftMouseDraggedMonitor: EventMonitor?
+    private var leftMouseUpMonitor: EventMonitor?
 
     func addObservers() {
-        let leftMouseDraggedMonitor = EventMonitor(eventMask: .leftMouseDragged) { cgEvent in
+        self.leftMouseDraggedMonitor = EventMonitor(eventMask: .leftMouseDragged) { cgEvent in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 guard let mousePosition = NSEvent.mouseLocation.flipY,
@@ -61,7 +62,7 @@ class SnappingManager {
             return Unmanaged.passRetained(cgEvent)
         }
 
-        let leftMouseUpMonitor = EventMonitor(eventMask: .leftMouseUp) { cgEvent in
+        self.leftMouseUpMonitor = EventMonitor(eventMask: .leftMouseUp) { cgEvent in
             if let window = self.draggingWindow,
                let screen = NSScreen.screenWithMouse,
                self.initialWindowPosition != window.position {
@@ -74,7 +75,12 @@ class SnappingManager {
             return Unmanaged.passRetained(cgEvent)
         }
 
-        leftMouseDraggedMonitor.start()
-        leftMouseUpMonitor.start()
+        leftMouseDraggedMonitor!.start()
+        leftMouseUpMonitor!.start()
+    }
+
+    func removeObservers() {
+        leftMouseDraggedMonitor!.stop()
+        leftMouseUpMonitor!.stop()
     }
 }

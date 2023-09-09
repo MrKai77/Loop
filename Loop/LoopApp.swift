@@ -88,7 +88,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let iconManager = IconManager()
     private let loopManager = LoopManager()
-    private let snappingManager = SnappingManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -99,6 +98,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         iconManager.restoreCurrentAppIcon()
 
         loopManager.startObservingKeys()
+
+        if Defaults[.windowSnapping] {
+            SnappingManager.shared.addObservers()
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
