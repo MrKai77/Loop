@@ -22,6 +22,7 @@ struct GeneralSettingsView: View {
     @Default(.timesLooped) var timesLooped
     @Default(.animateWindowResizes) var animateWindowResizes
     @Default(.windowPadding) var windowPadding
+    @Default(.windowSnapping) var windowSnapping
 
     let iconManager = IconManager()
 
@@ -39,6 +40,22 @@ struct GeneralSettingsView: View {
                             try? SMAppService().unregister()
                         }
                     }
+            }
+
+            Section {
+                Toggle(isOn: $windowSnapping) {
+                    HStack {
+                        Text("Window Snapping")
+                        BetaIndicator("BETA")
+                    }
+                }
+                .onChange(of: windowSnapping) { _ in
+                    if windowSnapping {
+                        SnappingManager.shared.addObservers()
+                    } else {
+                        SnappingManager.shared.removeObservers()
+                    }
+                }
 
                 Toggle(isOn: $animateWindowResizes) {
                     HStack {
@@ -57,10 +74,7 @@ struct GeneralSettingsView: View {
                        step: 5,
                        minimumValueLabel: Text("0"),
                        maximumValueLabel: Text("25")) {
-                    HStack {
-                        Text("Window Padding")
-                        BetaIndicator("BETA")
-                    }
+                    Text("Window Padding")
                 }
             }
 

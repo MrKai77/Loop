@@ -20,6 +20,7 @@ extension Defaults.Keys {
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
 
     static let triggerKey = Key<CGKeyCode>("triggerKey", default: .kVK_Function)
+    static let triggerDelay = Key<Float>("triggerDelay", default: 0)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
 
@@ -102,4 +103,5 @@ extension Defaults.Keys {
     // BETA
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false)
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
+    static let windowSnapping = Key<Bool>("windowSnapping", default: false)
 }
