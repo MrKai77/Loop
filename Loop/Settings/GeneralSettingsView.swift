@@ -74,10 +74,7 @@ struct GeneralSettingsView: View {
                        step: 5,
                        minimumValueLabel: Text("0"),
                        maximumValueLabel: Text("25")) {
-                    HStack {
-                        Text("Window Padding")
-                        BetaIndicator("BETA")
-                    }
+                    Text("Window Padding")
                 }
             }
 
