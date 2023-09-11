@@ -3,6 +3,14 @@
     <channel>
         <title>Loop</title>
         <item>
+            <title>1.0.0-beta.9</title>
+            <pubDate>Mon, 11 Sep 2023 17:13:48 -0600</pubDate>
+            <sparkle:version>323</sparkle:version>
+            <sparkle:shortVersionString>1.0.0-beta.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.9/Loop.zip" length="6599813" type="application/octet-stream" sparkle:edSignature="5exTM2vSQR5syg0bWxIi/AKV8IdJGyS+FPGl47OhqVwutl+nDmY9RN3Oz8s8cy+wVV83VQnUb9ia8wtSqqlDDw=="/>
+        </item>
+        <item>
             <title>1.0.0-beta.8</title>
             <pubDate>Mon, 04 Sep 2023 17:18:58 -0600</pubDate>
             <sparkle:version>298</sparkle:version>
