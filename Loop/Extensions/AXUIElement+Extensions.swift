@@ -70,7 +70,8 @@ extension NSAccessibility.Attribute {
 
 extension AXValue {
     static func from(value: Any, type: AXValueType) -> AXValue? {
-        var value = value
-        return AXValueCreate(type, &value)
+        return withUnsafePointer(to: value) { ptr in
+            AXValueCreate(type, ptr)
+        }
     }
 }
