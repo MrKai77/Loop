@@ -15,13 +15,15 @@ struct WindowEngine {
     ///   - window: Window to be resized
     ///   - direction: WindowDirection
     ///   - screen: Screen the window should be resized on
-    static func resize(window: Window, direction: WindowDirection, screen: NSScreen) {
+    static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
         window.setFullscreen(false)
 
         let oldWindowFrame = window.frame
-        guard let screenFrame = screen.safeScreenFrame else { return }
-        guard var targetWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction) else { return }
-        targetWindowFrame = WindowEngine.applyPadding(targetWindowFrame, direction)
+        guard let screenFrame = screen.safeScreenFrame,
+              let currentWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction) else {
+            return
+        }
+        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
 
         var animate =  Defaults[.animateWindowResizes]
         if PermissionsManager.ScreenRecording.getStatus() == false {

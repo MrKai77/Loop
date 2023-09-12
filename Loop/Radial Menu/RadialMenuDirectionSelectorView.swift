@@ -14,6 +14,11 @@ struct RadialMenuDirectionSelectorView: View {
     let activeAngle: WindowDirection
     let radialMenuSize: CGFloat
 
+    init(activeAngle: WindowDirection, size: CGFloat) {
+        self.activeAngle = activeAngle
+        self.radialMenuSize = size
+    }
+
     var body: some View {
         if activeAngle == .maximize {
             Color.white

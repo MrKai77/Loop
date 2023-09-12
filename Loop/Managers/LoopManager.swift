@@ -129,7 +129,7 @@ class LoopManager {
         isLoopShown = false
 
         if willResizeWindow {
-            WindowEngine.resize(window: self.frontmostWindow!, direction: self.currentResizingDirection, screen: self.screenWithMouse!)
+            WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
 
             NotificationCenter.default.post(
                 name: Notification.Name.finishedLooping,
