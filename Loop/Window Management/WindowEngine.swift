@@ -105,61 +105,38 @@ struct WindowEngine {
     ///   - screenFrame: The frame of the screen you want the window to be resized on
     ///   - direction: WindowDirection
     /// - Returns: A CGRect of the generated frame. If direction was .noAction, nil is returned.
-    private static func generateWindowFrame(_ windowFrame: CGRect, _ screenFrame: CGRect, _ direction: WindowDirection) -> CGRect? {
+    private static func generateWindowFrame(
+        _ windowFrame: CGRect,
+        _ screenFrame: CGRect,
+        _ direction: WindowDirection
+    ) -> CGRect? {
         let screenWidth = screenFrame.size.width
         let screenHeight = screenFrame.size.height
-        let screenX = screenFrame.origin.x
-        let screenY = screenFrame.origin.y
+
+        var newWindowFrame: CGRect = CGRect(
+            x: screenFrame.origin.x,
+            y: screenFrame.origin.y,
+            width: 0,
+            height: 0
+        )
 
         switch direction {
-        case .maximize:
-            return CGRect(x: screenX, y: screenY, width: screenWidth, height: screenHeight)
         case .center:
-            return CGRect(
+            newWindowFrame = CGRect(
                 x: screenFrame.midX - windowFrame.width/2,
                 y: screenFrame.midY - windowFrame.height/2,
                 width: windowFrame.width,
                 height: windowFrame.height
             )
-        case .topHalf:
-            return CGRect(x: screenX, y: screenY, width: screenWidth, height: screenHeight/2)
-        case .rightHalf:
-            return CGRect(x: screenX+screenWidth/2, y: screenY, width: screenWidth/2, height: screenHeight)
-        case .bottomHalf:
-            return CGRect(x: screenX, y: screenY+screenHeight/2, width: screenWidth, height: screenHeight/2)
-        case .leftHalf:
-            return CGRect(x: screenX, y: screenY, width: screenWidth/2, height: screenHeight)
-        case .topRightQuarter:
-            return CGRect(x: screenX+screenWidth/2, y: screenY, width: screenWidth/2, height: screenHeight/2)
-        case .topLeftQuarter:
-            return CGRect(x: screenX, y: screenY, width: screenWidth/2, height: screenHeight/2)
-        case .bottomRightQuarter:
-            return CGRect(x: screenX+screenWidth/2, y: screenY+screenHeight/2, width: screenWidth/2, height: screenHeight/2)
-        case .bottomLeftQuarter:
-            return CGRect(x: screenX, y: screenY+screenHeight/2, width: screenWidth/2, height: screenHeight/2)
-        case .rightThird:
-            return CGRect(x: screenX+2*screenWidth/3, y: screenY, width: screenWidth/3, height: screenHeight)
-        case .rightTwoThirds:
-            return CGRect(x: screenX+screenWidth/3, y: screenY, width: 2*screenWidth/3, height: screenHeight)
-        case .horizontalCenterThird:
-            return CGRect(x: screenX+screenWidth/3, y: screenY, width: screenWidth/3, height: screenHeight)
-        case .leftThird:
-            return CGRect(x: screenX, y: screenY, width: screenWidth/3, height: screenHeight)
-        case .leftTwoThirds:
-            return CGRect(x: screenX, y: screenY, width: 2*screenWidth/3, height: screenHeight)
-        case .topThird:
-            return CGRect(x: screenX, y: screenY, width: screenWidth, height: screenHeight/3)
-        case .topTwoThirds:
-            return CGRect(x: screenX, y: screenY, width: screenWidth, height: 2*screenHeight/3)
-        case .verticalCenterThird:
-            return CGRect(x: screenX, y: screenY+screenHeight/3, width: screenWidth, height: screenHeight/3)
-        case .bottomThird:
-            return CGRect(x: screenX, y: screenY+2*screenHeight/3, width: screenWidth, height: screenHeight/3)
-        case .bottomTwoThirds:
-            return CGRect(x: screenX, y: screenY+screenHeight/3, width: screenWidth, height: 2*screenHeight/3)
         default:
-            return nil
+            guard let frameMultiplyValues = direction.frameMultiplyValues else { return nil}
+            newWindowFrame.origin.x += screenWidth * frameMultiplyValues.minX
+            newWindowFrame.origin.y += screenHeight * frameMultiplyValues.minY
+            newWindowFrame.size.width += screenWidth * frameMultiplyValues.width
+            newWindowFrame.size.height += screenHeight * frameMultiplyValues.height
         }
+
+        return newWindowFrame
     }
 
     /// Apply padding on a CGRect, using the provided WindowDirection
