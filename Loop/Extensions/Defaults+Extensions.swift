@@ -19,7 +19,7 @@ extension Defaults.Keys {
     static let useGradient = Key<Bool>("useGradient", default: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
 
-    static let triggerKey = Key<CGKeyCode>("triggerKey", default: .kVK_Function)
+    static let triggerKey = Key<TriggerKey>("trigger", default: TriggerKey.options[0])
     static let triggerDelay = Key<Float>("triggerDelay", default: 0)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
