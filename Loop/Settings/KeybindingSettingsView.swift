@@ -16,6 +16,7 @@ struct KeybindingSettingsView: View {
     @Default(.customAccentColor) var customAccentColor
 
     let loopTriggerKeyOptions = TriggerKey.options
+    @State var suggestAddingTriggerDelay: Bool = false
 
     var body: some View {
         Form {
@@ -34,6 +35,26 @@ struct KeybindingSettingsView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .onChange(of: self.triggerKey) { _ in
+                    print("\(self.triggerKey.triggerDelayRecommended)")
+                    print("\(self.triggerDelay) \(type(of: self.triggerDelay))")
+                    if self.triggerKey.triggerDelayRecommended &&
+                        self.triggerDelay < 0.1 {
+                        self.suggestAddingTriggerDelay.toggle()
+                    }
+                }
+                .alert(
+                    "The \(self.triggerKey.name.lowercased()) key is frequently used in other apps.",
+                    isPresented: self.$suggestAddingTriggerDelay, actions: {
+                        Button("OK") {
+                            self.triggerDelay = 0.5
+                        }
+                        Button("Cancel", role: .cancel) {
+                            return
+                        }
+                    }, message: {
+                        Text("Would you like to add a trigger delay? You can always change this later.")
+                    })
 
                 HStack {
                     Stepper(

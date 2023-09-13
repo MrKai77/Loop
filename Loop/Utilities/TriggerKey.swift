@@ -14,6 +14,7 @@ struct TriggerKey: Codable, Hashable, Defaults.Serializable {
     var symbol: String
     var keySymbol: String
     var keycode: CGKeyCode
+    var triggerDelayRecommended: Bool = false
 
     static let options: [TriggerKey] = [
         TriggerKey(
@@ -26,7 +27,8 @@ struct TriggerKey: Codable, Hashable, Defaults.Serializable {
             name: "Left Control",
             symbol: "control",
             keySymbol: "custom.control.rectangle.fill",
-            keycode: .kVK_Control
+            keycode: .kVK_Control,
+            triggerDelayRecommended: true
         ),
         TriggerKey(
             name: "Right Control",
@@ -38,7 +40,8 @@ struct TriggerKey: Codable, Hashable, Defaults.Serializable {
             name: "Left Option",
             symbol: "option",
             keySymbol: "custom.option.rectangle.fill",
-            keycode: .kVK_Option
+            keycode: .kVK_Option,
+            triggerDelayRecommended: true
         ),
         TriggerKey(
             name: "Right Option",
@@ -50,7 +53,8 @@ struct TriggerKey: Codable, Hashable, Defaults.Serializable {
             name: "Left Command",
             symbol: "command",
             keySymbol: "custom.command.rectangle.fill",
-            keycode: .kVK_Command
+            keycode: .kVK_Command,
+            triggerDelayRecommended: true
         ),
         TriggerKey(
             name: "Right Command",
@@ -62,7 +66,8 @@ struct TriggerKey: Codable, Hashable, Defaults.Serializable {
             name: "Left Shift",
             symbol: "shift",
             keySymbol: "custom.shift.rectangle.fill",
-            keycode: .kVK_Shift
+            keycode: .kVK_Shift,
+            triggerDelayRecommended: true
         ),
         TriggerKey(
             name: "Right Shift",

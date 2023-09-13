@@ -80,25 +80,19 @@ struct Keycorder: View {
         .onChange(of: self.selectionKey) { _ in
             if self.selectionKey == nil {
                 self.isActive = true
-            }
-        }
-        .onChange(of: self.isActive) { _ in
-            if self.isActive {
-                self.registerObserver()
-            } else {
-                self.unregisterObserver()
+                self.startObservingKeys()
             }
         }
     }
 
-    func registerObserver() {
+    func startObservingKeys() {
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: .flagsChanged) { event in
             self.selectionKey = self.onChange(event)
             let keyUp = 256
 
             if event.modifierFlags.rawValue == keyUp && self.selectionKey != nil {
                 self.isActive = false
-                self.unregisterObserver()
+                self.finishedObservingKeys()
                 return
             }
 
@@ -114,7 +108,7 @@ struct Keycorder: View {
         self.eventMonitor!.start()
     }
 
-    func unregisterObserver() {
+    func finishedObservingKeys() {
         self.eventMonitor?.stop()
         self.eventMonitor = nil
     }
