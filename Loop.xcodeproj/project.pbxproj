@@ -138,8 +138,8 @@
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A80900D22AA3F9F20085C63B /* BetaIndicator.swift */,
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
-				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,
 				A82740992AB0208500B9BDC5 /* Keycorder.swift */,
+				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";

@@ -12,7 +12,7 @@ struct Keycorder: View {
     @State private var validCurrentKey: Binding<TriggerKey>
     private let onChange: (NSEvent) -> TriggerKey?
 
-    @State private var eventMonitor: EventMonitor?
+    @State private var eventMonitor: NSEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var isHovering: Bool = false
 
@@ -92,27 +92,23 @@ struct Keycorder: View {
     }
 
     func registerObserver() {
-        self.eventMonitor = EventMonitor(eventMask: .flagsChanged) { cgEvent in
-            if let event = NSEvent(cgEvent: cgEvent) {
-                self.selectionKey = self.onChange(event)
+        self.eventMonitor = NSEventMonitor(scope: .local, eventMask: .flagsChanged) { event in
+            self.selectionKey = self.onChange(event)
+            let keyUp = 256
 
-                if event.modifierFlags.rawValue == 256 && self.selectionKey != nil {
-                    self.isActive = false
-                    self.unregisterObserver()
-                    print("------")
-                    return Unmanaged.passRetained(cgEvent)
-                }
-
-                if self.selectionKey == nil {
-                    self.shouldShake.toggle()    // This will trigger a shake animation
-                }
-
-                if let key = selectionKey {
-                    self.validCurrentKey.wrappedValue = key
-                }
+            if event.modifierFlags.rawValue == keyUp && self.selectionKey != nil {
+                self.isActive = false
+                self.unregisterObserver()
+                return
             }
 
-            return Unmanaged.passRetained(cgEvent)
+            if event.modifierFlags.rawValue != keyUp && self.selectionKey == nil {
+                self.shouldShake.toggle()
+            }
+
+            if let key = selectionKey {
+                self.validCurrentKey.wrappedValue = key
+            }
         }
 
         self.eventMonitor!.start()

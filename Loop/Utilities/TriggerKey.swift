@@ -57,6 +57,18 @@ struct TriggerKey: Codable, Hashable, Defaults.Serializable {
             symbol: "command",
             keySymbol: "custom.command.rectangle.fill",
             keycode: .kVK_RightCommand
+        ),
+        TriggerKey(
+            name: "Left Shift",
+            symbol: "shift",
+            keySymbol: "custom.shift.rectangle.fill",
+            keycode: .kVK_Shift
+        ),
+        TriggerKey(
+            name: "Right Shift",
+            symbol: "shift",
+            keySymbol: "custom.shift.rectangle.fill",
+            keycode: .kVK_RightShift
         )
     ]
 }
