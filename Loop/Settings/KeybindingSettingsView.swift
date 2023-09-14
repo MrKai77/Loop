@@ -15,36 +15,44 @@ struct KeybindingSettingsView: View {
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
 
-    let loopTriggerKeyOptions = LoopTriggerKeys.options
-
-    // This is just a placeholder, but it's a valid image
-    @State var triggerKeySymbol: String = "custom.globe.rectangle.fill"
+    let loopTriggerKeyOptions = TriggerKey.options
+    @State var suggestAddingTriggerDelay: Bool = false
 
     var body: some View {
         Form {
             Section("Keybindings") {
                 VStack(alignment: .leading) {
-                    Picker("Trigger Loop", selection: $triggerKey) {
-                        ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { idx in
-                            HStack {
-                                Image(systemName: loopTriggerKeyOptions[idx].symbol)
-                                Text(loopTriggerKeyOptions[idx].description)
-                            }
-                            .tag(loopTriggerKeyOptions[idx].keycode)
+                    Keycorder("Trigger Key", key: self.$triggerKey, onChange: { event in
+                        for key in TriggerKey.options where key.keycode == event.keyCode {
+                            return key
                         }
-                    }
-                    if triggerKey == loopTriggerKeyOptions[1].keycode {
+                        return nil
+                    })
+
+                    if triggerKey.keycode == .kVK_RightControl {
                         Text("Tip: To use caps lock, remap it to control in System Settings!")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                .onAppear {
-                    refreshTriggerKeySymbol()
+                .onChange(of: self.triggerKey) { _ in
+                    if self.triggerKey.triggerDelayRecommended &&
+                        self.triggerDelay < 0.1 {
+                        self.suggestAddingTriggerDelay.toggle()
+                    }
                 }
-                .onChange(of: triggerKey) { _ in
-                    refreshTriggerKeySymbol()
-                }
+                .alert(
+                    "The \(self.triggerKey.name.lowercased()) key is frequently used in other apps.",
+                    isPresented: self.$suggestAddingTriggerDelay, actions: {
+                        Button("OK") {
+                            self.triggerDelay = 0.5
+                        }
+                        Button("Cancel", role: .cancel) {
+                            return
+                        }
+                    }, message: {
+                        Text("Would you like to add a trigger delay? You can always change this later.")
+                    })
 
                 HStack {
                     Stepper(
@@ -74,7 +82,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -101,7 +109,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -125,7 +133,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -149,7 +157,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -165,13 +173,5 @@ struct KeybindingSettingsView: View {
             .symbolRenderingMode(.hierarchical)
         }
         .formStyle(.grouped)
-    }
-
-    func refreshTriggerKeySymbol() {
-        var trigger: LoopTriggerKeys = loopTriggerKeyOptions[0]
-        for loopTriggerKey in loopTriggerKeyOptions where loopTriggerKey.keycode == triggerKey {
-            trigger = loopTriggerKey
-        }
-        self.triggerKeySymbol = trigger.keySymbol
     }
 }

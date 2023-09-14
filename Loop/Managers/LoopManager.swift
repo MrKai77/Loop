@@ -26,7 +26,7 @@ class LoopManager {
 
     func startObservingKeys() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
-            if event.keyCode == Defaults[.triggerKey] {
+            if event.keyCode == Defaults[.triggerKey].keycode {
                 if event.modifierFlags.rawValue == 256 {
                     if self.timer != nil {
                         self.timer?.cancel()
