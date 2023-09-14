@@ -36,8 +36,6 @@ struct KeybindingSettingsView: View {
                     }
                 }
                 .onChange(of: self.triggerKey) { _ in
-                    print("\(self.triggerKey.triggerDelayRecommended)")
-                    print("\(self.triggerDelay) \(type(of: self.triggerDelay))")
                     if self.triggerKey.triggerDelayRecommended &&
                         self.triggerDelay < 0.1 {
                         self.suggestAddingTriggerDelay.toggle()
