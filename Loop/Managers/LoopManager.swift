@@ -22,27 +22,43 @@ class LoopManager {
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
-    private var timer: DispatchSourceTimer?    // Used when user has configured a trigger delay
+    private var triggerDelayTimer: DispatchSourceTimer?
+    private var lastTriggerKeyClick: Date = Date.now
 
     func startObservingKeys() {
-        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
+        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event in
             if event.keyCode == Defaults[.triggerKey].keycode {
-                if event.modifierFlags.rawValue == 256 {
-                    if self.timer != nil {
-                        self.timer?.cancel()
-                        self.timer = nil
-                    } else {
-                        self.closeLoop()
+
+                let useTriggerDelay = Defaults[.triggerDelay] > 0.1
+                let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
+
+                if event.modifierFlags.rawValue ==  256 {
+                    if useTriggerDelay {
+                        self.cancelTriggerDelayTimer()
                     }
+                    self.closeLoop()
                 } else {
-                    if self.timer == nil {
-                        self.timer = DispatchSource.makeTimerSource(queue: .main)
-                        self.timer!.schedule(deadline: .now() + .milliseconds(Int(Defaults[.triggerDelay]*1000)))
-                        self.timer!.setEventHandler {
-                            self.openLoop()
-                            self.timer = nil
+                    if useDoubleClickTrigger {
+                        if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                            if useTriggerDelay {
+                                if self.triggerDelayTimer == nil {
+                                    self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                                        self.openLoop()
+                                    }
+                                }
+                            } else {
+                                self.openLoop()
+                            }
                         }
-                        self.timer!.resume()
+                        self.lastTriggerKeyClick = Date.now
+                    } else if useTriggerDelay {
+                        if self.triggerDelayTimer == nil {
+                            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                                self.openLoop()
+                            }
+                        }
+                    } else {
+                        self.openLoop()
                     }
                 }
             }
@@ -68,6 +84,21 @@ class LoopManager {
             name: Notification.Name.forceCloseLoop,
             object: nil
         )
+    }
+
+    private func cancelTriggerDelayTimer() {
+        self.triggerDelayTimer?.cancel()
+        self.triggerDelayTimer = nil
+    }
+
+    private func startTriggerDelayTimer(seconds: Float, handler: @escaping () -> Void) {
+        self.triggerDelayTimer = DispatchSource.makeTimerSource(queue: .main)
+        self.triggerDelayTimer!.schedule(deadline: .now() + .milliseconds(Int(seconds*1000)))
+        self.triggerDelayTimer!.setEventHandler {
+            handler()
+            self.triggerDelayTimer = nil
+        }
+        self.triggerDelayTimer!.resume()
     }
 
     @objc private func currentWindowDirectionChanged(notification: Notification) {
