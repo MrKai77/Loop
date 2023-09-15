@@ -11,6 +11,7 @@ import Defaults
 struct KeybindingSettingsView: View {
 
     @Default(.triggerKey) var triggerKey
+    @Default(.doubleClickToTrigger) var doubleClickToTrigger
     @Default(.triggerDelay) var triggerDelay
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
@@ -36,8 +37,8 @@ struct KeybindingSettingsView: View {
                     }
                 }
                 .onChange(of: self.triggerKey) { _ in
-                    if self.triggerKey.triggerDelayRecommended &&
-                        self.triggerDelay < 0.1 {
+                    if self.triggerKey.doubleClickRecommended &&
+                        !self.doubleClickToTrigger {
                         self.suggestAddingTriggerDelay.toggle()
                     }
                 }
@@ -45,14 +46,18 @@ struct KeybindingSettingsView: View {
                     "The \(self.triggerKey.name.lowercased()) key is frequently used in other apps.",
                     isPresented: self.$suggestAddingTriggerDelay, actions: {
                         Button("OK") {
-                            self.triggerDelay = 0.5
+                            self.doubleClickToTrigger = true
                         }
                         Button("Cancel", role: .cancel) {
                             return
                         }
                     }, message: {
-                        Text("Would you like to add a trigger delay? You can always change this later.")
-                    })
+                        Text("Would you like to enable \"Double-click to trigger Loop\"? "
+                           + "You can always change this later.")
+                    }
+                )
+
+                Toggle("Double-click to trigger Loop", isOn: $doubleClickToTrigger)
 
                 HStack {
                     Stepper(

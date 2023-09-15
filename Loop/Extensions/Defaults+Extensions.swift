@@ -20,6 +20,7 @@ extension Defaults.Keys {
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
 
     static let triggerKey = Key<TriggerKey>("trigger", default: TriggerKey.options[0])
+    static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let triggerDelay = Key<Float>("triggerDelay", default: 0)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
