@@ -27,41 +27,7 @@ class LoopManager {
 
     func startObservingKeys() {
         NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event in
-            if event.keyCode == Defaults[.triggerKey].keycode {
-
-                let useTriggerDelay = Defaults[.triggerDelay] > 0.1
-                let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
-
-                if event.modifierFlags.rawValue ==  256 {
-                    if useTriggerDelay {
-                        self.cancelTriggerDelayTimer()
-                    }
-                    self.closeLoop()
-                } else {
-                    if useDoubleClickTrigger {
-                        if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                            if useTriggerDelay {
-                                if self.triggerDelayTimer == nil {
-                                    self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                                        self.openLoop()
-                                    }
-                                }
-                            } else {
-                                self.openLoop()
-                            }
-                        }
-                        self.lastTriggerKeyClick = Date.now
-                    } else if useTriggerDelay {
-                        if self.triggerDelayTimer == nil {
-                            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                                self.openLoop()
-                            }
-                        }
-                    } else {
-                        self.openLoop()
-                    }
-                }
-            }
+            self.handleLoopKeypress(event)
         }
 
         NotificationCenter.default.addObserver(
@@ -118,6 +84,44 @@ class LoopManager {
     @objc private func forceCloseLoop(notification: Notification) {
         if let forceClose = notification.userInfo?["forceClose"] as? Bool {
             self.closeLoop(forceClose: forceClose)
+        }
+    }
+
+    private func handleLoopKeypress(_ event: NSEvent) {
+        if event.keyCode == Defaults[.triggerKey].keycode {
+
+            let useTriggerDelay = Defaults[.triggerDelay] > 0.1
+            let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
+
+            if event.modifierFlags.rawValue ==  256 {
+                if useTriggerDelay {
+                    self.cancelTriggerDelayTimer()
+                }
+                self.closeLoop()
+            } else {
+                if useDoubleClickTrigger {
+                    if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                        if useTriggerDelay {
+                            if self.triggerDelayTimer == nil {
+                                self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                                    self.openLoop()
+                                }
+                            }
+                        } else {
+                            self.openLoop()
+                        }
+                    }
+                    self.lastTriggerKeyClick = Date.now
+                } else if useTriggerDelay {
+                    if self.triggerDelayTimer == nil {
+                        self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                            self.openLoop()
+                        }
+                    }
+                } else {
+                    self.openLoop()
+                }
+            }
         }
     }
 
