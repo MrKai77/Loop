@@ -146,14 +146,8 @@ struct RadialMenuView: View {
             currentResizeDirection = .maximize
         }
 
-        // When direction changes, send haptic feedback and post a
-        // notification which is used to position the preview window
         if currentResizeDirection != previousResizeDirection {
-            NotificationCenter.default.post(
-                name: Notification.Name.directionChanged,
-                object: nil,
-                userInfo: ["direction": currentResizeDirection]
-            )
+            Notification.Name.directionChanged.post(userInfo: ["direction": currentResizeDirection])
         }
     }
 }

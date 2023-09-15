@@ -10,5 +10,19 @@ import Foundation
 extension Notification.Name {
     static let directionChanged = Notification.Name("directionChanged")
     static let forceCloseLoop = Notification.Name("forceCloseLoop")
-    static let finishedLooping = Notification.Name("finishedLooping")
+    static let didLoop = Notification.Name("didLoop")
+
+    @discardableResult
+    func onRecieve(object: Any? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return NotificationCenter.default.addObserver(
+            forName: self,
+            object: object,
+            queue: .main,
+            using: using
+        )
+    }
+
+    func post(object: Any? = nil, userInfo: [AnyHashable: Any]? = nil) {
+        NotificationCenter.default.post(name: self, object: object, userInfo: userInfo)
+    }
 }

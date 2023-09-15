@@ -22,34 +22,23 @@ class LoopManager {
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
+    private var eventMonitor: NSEventMonitor?
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
     func startObservingKeys() {
-        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event in
+        self.eventMonitor = NSEventMonitor(scope: .global, eventMask: .flagsChanged) { event in
             self.handleLoopKeypress(event)
         }
+        self.eventMonitor!.start()
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                currentWindowDirectionChanged(
-                    notification:
-                )
-            ),
-            name: Notification.Name.directionChanged,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                forceCloseLoop(
-                    notification:
-                )
-            ),
-            name: Notification.Name.forceCloseLoop,
-            object: nil
-        )
+        Notification.Name.directionChanged.onRecieve { notification in
+            self.currentWindowDirectionChanged(notification)
+        }
+
+        Notification.Name.forceCloseLoop.onRecieve { _ in
+            self.closeLoop(forceClose: true)
+        }
     }
 
     private func cancelTriggerDelayTimer() {
@@ -67,7 +56,7 @@ class LoopManager {
         self.triggerDelayTimer!.resume()
     }
 
-    @objc private func currentWindowDirectionChanged(notification: Notification) {
+    private func currentWindowDirectionChanged(_ notification: Notification) {
         if let direction = notification.userInfo?["direction"] as? WindowDirection {
             currentResizingDirection = direction
 
@@ -78,12 +67,6 @@ class LoopManager {
                     performanceTime: NSHapticFeedbackManager.PerformanceTime.now
                 )
             }
-        }
-    }
-
-    @objc private func forceCloseLoop(notification: Notification) {
-        if let forceClose = notification.userInfo?["forceClose"] as? Bool {
-            self.closeLoop(forceClose: forceClose)
         }
     }
 
@@ -166,10 +149,7 @@ class LoopManager {
         if willResizeWindow {
             WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
 
-            NotificationCenter.default.post(
-                name: Notification.Name.finishedLooping,
-                object: nil
-            )
+            Notification.Name.didLoop.post()
 
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()
