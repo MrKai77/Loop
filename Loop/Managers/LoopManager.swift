@@ -22,15 +22,24 @@ class LoopManager {
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
-    private var eventMonitor: NSEventMonitor?
+    private var flagsChangedEventMonitor: NSEventMonitor?
+    private var keyDownEventMonitor: NSEventMonitor?
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
     func startObservingKeys() {
-        self.eventMonitor = NSEventMonitor(scope: .global, eventMask: .flagsChanged) { event in
+        self.flagsChangedEventMonitor = NSEventMonitor(scope: .global, eventMask: .flagsChanged) { event in
             self.handleLoopKeypress(event)
         }
-        self.eventMonitor!.start()
+        self.flagsChangedEventMonitor!.start()
+
+        self.keyDownEventMonitor = NSEventMonitor(scope: .global, eventMask: .keyDown) { _ in
+            if Defaults[.doubleClickToTrigger] &&
+                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                self.lastTriggerKeyClick = Date.distantPast
+            }
+        }
+        self.keyDownEventMonitor!.start()
 
         Notification.Name.directionChanged.onRecieve { notification in
             self.currentWindowDirectionChanged(notification)
