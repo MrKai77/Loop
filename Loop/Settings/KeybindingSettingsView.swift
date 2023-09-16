@@ -18,17 +18,33 @@ struct KeybindingSettingsView: View {
 
     let loopTriggerKeyOptions = TriggerKey.options
     @State var suggestAddingTriggerDelay: Bool = false
+    @State var suggestDisablingCapsLock: Bool = false
 
     var body: some View {
         Form {
             Section("Keybindings") {
                 VStack(alignment: .leading) {
-                    Keycorder("Trigger Key", key: self.$triggerKey, onChange: { event in
-                        for key in TriggerKey.options where key.keycode == event.keyCode {
-                            return key
+                    HStack {
+                        Text("Trigger Key")
+                        Spacer()
+                        Keycorder(key: self.$triggerKey) { event in
+                            if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
+                                self.suggestDisablingCapsLock = true
+                                return nil
+                            } else {
+                                self.suggestDisablingCapsLock = false
+                            }
+
+                            for key in TriggerKey.options where key.keycode == event.keyCode {
+                                return key
+                            }
+                            return nil
                         }
-                        return nil
-                    })
+                        .popover(isPresented: $suggestDisablingCapsLock, arrowEdge: .bottom, content: {
+                            Text("Your Caps Lock key is on! Disable it to correctly assign a key.")
+                                .padding(8)
+                        })
+                    }
 
                     if triggerKey.keycode == .kVK_RightControl {
                         Text("Tip: To use caps lock, remap it to control in System Settings!")
