@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct Keycorder: View {
-    private let label: String
     @State private var validCurrentKey: Binding<TriggerKey>
     private let onChange: (NSEvent) -> TriggerKey?
 
@@ -20,10 +19,8 @@ struct Keycorder: View {
     @State private var isActive: Bool = false
 
     init(
-        _ label: String,
         key: Binding<TriggerKey>,
         onChange: @escaping (NSEvent) -> (TriggerKey?)) {
-            self.label = label
             self.validCurrentKey = key
             self.selectionKey = key.wrappedValue
             self.onChange = onChange
@@ -33,70 +30,63 @@ struct Keycorder: View {
     let noAnimation = Animation.linear(duration: 0)
 
     var body: some View {
-        HStack(spacing: 5) {
-            Text(label)
+        Button(action: {
+            self.selectionKey = nil
+        }, label: {
+            HStack(spacing: 5) {
+                if let symbol = selectionKey?.symbol {
+                    Image(systemName: symbol)
+                }
+                Text(self.selectionKey?.name ?? "Click a modifier key...")
 
-            Spacer()
-
-            Button(action: {
-                self.selectionKey = nil
-            }, label: {
-                HStack(spacing: 5) {
-                    if let symbol = selectionKey?.symbol {
-                        Image(systemName: symbol)
+                Image(systemName: "xmark")
+                    .fontWeight(.bold)
+                    .scaleEffect(0.7)
+                    .foregroundStyle(.white)
+                    .padding(1)
+                    .background {
+                        RoundedRectangle(cornerRadius: 4)
+                            .foregroundStyle(.quaternary)
+                            .opacity(!(self.isHovering || self.isActive) ? 1 : 0)
                     }
-                    Text(self.selectionKey?.name ?? "Click a modifier key...")
-
-                    Image(systemName: "xmark")
-                        .fontWeight(.bold)
-                        .scaleEffect(0.7)
-                        .foregroundStyle(.white)
-                        .padding(1)
-                        .background {
-                            RoundedRectangle(cornerRadius: 4)
-                                .foregroundStyle(.quaternary)
-                                .opacity(!(self.isHovering || self.isActive) ? 1 : 0)
-                        }
-                }
-                .padding(2)
-                .padding(.leading, 5)
-                .background {
-                    RoundedRectangle(cornerRadius: 6)
-                        .foregroundStyle(.secondary.shadow(.inner(color: .white, radius: 0, x: 0, y: 0.5)))
-                        .shadow(color: .black, radius: 0.5, x: 0, y: 1)
-                        .opacity(0.5)
-                        .opacity(isActive ? 0.5 : 1)
-                        .animation(isActive ? activeAnimation : noAnimation, value: isActive)
-                        .opacity((self.isHovering || self.isActive) ? 1 : 0)
-                }
-            })
-            .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
-            .animation(Animation.default, value: shouldShake)
-            .onHover { hovering in
-                self.isHovering = hovering
             }
+            .padding(2)
+            .padding(.leading, 5)
+            .background {
+                RoundedRectangle(cornerRadius: 6)
+                    .foregroundStyle(.secondary.shadow(.inner(color: .white, radius: 0, x: 0, y: 0.5)))
+                    .shadow(color: .black, radius: 0.5, x: 0, y: 1)
+                    .opacity(0.5)
+                    .opacity(isActive ? 0.5 : 1)
+                    .animation(isActive ? activeAnimation : noAnimation, value: isActive)
+                    .opacity((self.isHovering || self.isActive) ? 1 : 0)
+            }
+        })
+        .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
+        .animation(Animation.default, value: shouldShake)
+        .onHover { hovering in
+            self.isHovering = hovering
         }
         .buttonStyle(.plain)
         .onChange(of: self.selectionKey) { _ in
             if self.selectionKey == nil {
-                self.isActive = true
                 self.startObservingKeys()
             }
         }
     }
 
     func startObservingKeys() {
+        self.isActive = true
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: .flagsChanged) { event in
             self.selectionKey = self.onChange(event)
-            let keyUp = 256
+            let keyUpValue = 256
 
-            if event.modifierFlags.rawValue == keyUp && self.selectionKey != nil {
-                self.isActive = false
+            if event.modifierFlags.rawValue == keyUpValue && self.selectionKey != nil {
                 self.finishedObservingKeys()
                 return
             }
 
-            if event.modifierFlags.rawValue != keyUp && self.selectionKey == nil {
+            if event.modifierFlags.rawValue != keyUpValue && self.selectionKey == nil {
                 self.shouldShake.toggle()
             }
 
@@ -109,6 +99,7 @@ struct Keycorder: View {
     }
 
     func finishedObservingKeys() {
+        self.isActive = false
         self.eventMonitor?.stop()
         self.eventMonitor = nil
     }

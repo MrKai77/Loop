@@ -71,15 +71,16 @@ class LoopManager {
     }
 
     private func handleLoopKeypress(_ event: NSEvent) {
+        if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
+            self.closeLoop(forceClose: true)
+            return
+        }
         if event.keyCode == Defaults[.triggerKey].keycode {
 
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
-            if event.modifierFlags.rawValue ==  256 {
-                if useTriggerDelay {
-                    self.cancelTriggerDelayTimer()
-                }
+            if event.modifierFlags.rawValue == 256 {
                 self.closeLoop()
             } else {
                 if useDoubleClickTrigger {
@@ -130,6 +131,7 @@ class LoopManager {
     private func closeLoop(forceClose: Bool = false) {
         var willResizeWindow: Bool = false
 
+        self.cancelTriggerDelayTimer()
         radialMenuController.close()
         previewController.close()
 
