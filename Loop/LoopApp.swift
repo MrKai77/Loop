@@ -96,6 +96,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         PermissionsManager.Accessibility.requestAccess()
 
         iconManager.refreshCurrentAppIcon()
+        loopManager.startObservingKeys()
 
         if Defaults[.windowSnapping] {
             SnappingManager.shared.addObservers()

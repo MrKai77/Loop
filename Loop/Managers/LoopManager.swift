@@ -27,10 +27,6 @@ class LoopManager {
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
-    init() {
-        self.startObservingKeys()
-    }
-
     func startObservingKeys() {
         self.flagsChangedEventMonitor = NSEventMonitor(scope: .global, eventMask: .flagsChanged) { event in
             self.handleLoopKeypress(event)
