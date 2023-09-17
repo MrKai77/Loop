@@ -22,7 +22,7 @@ struct LoopApp: App {
         }
         .commands {
             CommandGroup(replacing: CommandGroupPlacement.appInfo) {
-                Button("About \(Bundle.main.appName)") { aboutViewController.showAboutWindow() }
+                Button("About \(Bundle.main.appName)") { aboutViewController.open() }
                     .keyboardShortcut("i")
             }
             CommandGroup(replacing: CommandGroupPlacement.appTermination) {
@@ -51,7 +51,7 @@ struct LoopApp: App {
             .keyboardShortcut(",", modifiers: .command)
 
             Button("About \(Bundle.main.appName)") {
-                aboutViewController.showAboutWindow()
+                aboutViewController.open()
                 NSApp.setActivationPolicy(.regular)
                 if #available(macOS 14.0, *) {
                     NSApp.activate()
