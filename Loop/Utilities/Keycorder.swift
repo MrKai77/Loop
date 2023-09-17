@@ -104,24 +104,3 @@ struct Keycorder: View {
         self.eventMonitor = nil
     }
 }
-
-struct ShakeEffect: GeometryEffect {
-    func effectValue(size: CGSize) -> ProjectionTransform {
-        return ProjectionTransform(
-            CGAffineTransform(
-                translationX: 3 * sin(position * 3 * .pi),
-                y: 0
-            )
-        )
-    }
-
-    init(shakes: Int) {
-        position = CGFloat(shakes)
-    }
-
-    var position: CGFloat
-    var animatableData: CGFloat {
-        get { position }
-        set { position = newValue }
-    }
-}
