@@ -97,8 +97,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         iconManager.restoreCurrentAppIcon()
 
-        loopManager.startObservingKeys()
-
         if Defaults[.windowSnapping] {
             SnappingManager.shared.addObservers()
         }
