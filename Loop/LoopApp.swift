@@ -95,7 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Check & ask for accessibility access
         PermissionsManager.Accessibility.requestAccess()
 
-        iconManager.restoreCurrentAppIcon()
+        iconManager.refreshCurrentAppIcon()
 
         if Defaults[.windowSnapping] {
             SnappingManager.shared.addObservers()
