@@ -138,8 +138,6 @@ class LoopManager {
     }
 
     private func closeLoop(forceClose: Bool = false) {
-        var willResizeWindow: Bool = false
-
         self.cancelTriggerDelayTimer()
         radialMenuController.close()
         previewController.close()
@@ -150,24 +148,20 @@ class LoopManager {
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
-            self.isLoopShown == true &&
+            self.isLoopShown &&
             self.currentResizingDirection != .noAction {
-            willResizeWindow = true
-        }
 
-        isLoopShown = false
+            isLoopShown = false
 
-        if willResizeWindow {
             WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
-
             Notification.Name.didLoop.post()
-
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()
         } else {
-            if self.frontmostWindow == nil {
+            if self.frontmostWindow == nil && isLoopShown {
                 NSSound.beep()
             }
+            isLoopShown = false
         }
     }
 }
