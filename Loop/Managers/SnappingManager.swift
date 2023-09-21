@@ -35,7 +35,7 @@ class SnappingManager {
                 let ignoredFrame = screenFrame.insetBy(dx: 20, dy: 20)  // 10px of snap area on each side
 
                 if !ignoredFrame.contains(mousePosition) {
-                    self.direction = WindowDirection.snapDirection(
+                    self.direction = WindowDirection.processSnap(
                         mouseLocation: mousePosition,
                         currentDirection: self.direction,
                         screenFrame: screenFrame,

@@ -153,7 +153,7 @@ enum WindowDirection: CaseIterable {
         }
     }
 
-    static func snapDirection(
+    static func processSnap(
         mouseLocation: CGPoint,
         currentDirection: WindowDirection,
         screenFrame: CGRect,
