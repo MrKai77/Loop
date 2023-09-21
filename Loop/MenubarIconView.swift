@@ -12,7 +12,7 @@ struct MenubarIconView: View {
     var body: some View {
         Image(.menubarIcon)
             .rotationEffect(Angle.degrees(self.rotationAngle))
-            .onReceive(.finishedLooping) { _ in
+            .onReceive(.didLoop) { _ in
                 self.rotationAngle = 0
                 withAnimation(.interpolatingSpring(stiffness: 100, damping: 15)) {
                     self.rotationAngle += 360

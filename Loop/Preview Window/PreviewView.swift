@@ -66,17 +66,9 @@ struct PreviewView: View {
                                 LinearGradient(
                                     gradient: Gradient(
                                         colors: [
-                                            useSystemAccentColor ?
-                                                Color.accentColor :
-                                                customAccentColor,
-                                            useGradient ?
-                                                useSystemAccentColor ?
-                                                    Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) :
-                                                    gradientColor :
-                                                useSystemAccentColor ?
-                                                    Color.accentColor :
-                                                    customAccentColor
-                                            ]
+                                            Color.getLoopAccent(tone: .normal),
+                                            Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+                                        ]
                                     ),
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing

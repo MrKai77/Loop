@@ -4,7 +4,10 @@ excluded:
 cyclomatic_complexity:
   ignores_case_statements: true
 
-force_cast: warning
-
-line_length: 140
-function_body_length: 60
+custom_rules:
+  spaces_over_tabs:
+    included: ".*\\.swift"
+    name: "Spaces over Tabs"
+    regex: "\t"
+    message: "Prefer spaces for indents over tabs. See Xcode setting: 'Text Editing' -> 'Indentation'"
+    severity: warning

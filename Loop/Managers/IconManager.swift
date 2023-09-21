@@ -52,20 +52,18 @@ class IconManager {
     }
 
     func setAppIcon(to icon: Icon) {
-        NSWorkspace.shared.setIcon(NSImage(named: icon.name), forFile: Bundle.main.bundlePath, options: [])
-        NSApp.applicationIconImage = NSImage(named: icon.name)
+        Defaults[.currentIcon] = icon.name
+        self.refreshCurrentAppIcon()
 
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName)"
         alert.informativeText = "Current icon is now \(nameWithoutPrefix(name: icon.name))!"
         alert.icon = NSImage(named: icon.name)
         alert.runModal()
-
-        Defaults[.currentIcon] = icon.name
     }
 
     // This function is run at startup to set the current icon to the user's set icon.
-    func restoreCurrentAppIcon() {
+    func refreshCurrentAppIcon() {
         NSWorkspace.shared.setIcon(NSImage(named: Defaults[.currentIcon]), forFile: Bundle.main.bundlePath, options: [])
         NSApp.applicationIconImage = NSImage(named: Defaults[.currentIcon])
     }

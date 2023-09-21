@@ -28,12 +28,7 @@ struct RadialMenuView: View {
     // Variables that store the radial menu's shape
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
-
-    // Color variables
-    @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.customAccentColor) var customAccentColor
     @Default(.useGradient) var useGradient
-    @Default(.gradientColor) var gradientColor
 
     var body: some View {
         VStack {
@@ -52,24 +47,19 @@ struct RadialMenuView: View {
                                 LinearGradient(
                                     gradient: Gradient(
                                         colors: [
-                                            useSystemAccentColor ?
-                                                Color.accentColor :
-                                                customAccentColor,
-                                            useGradient ?
-                                                useSystemAccentColor ?
-                                                    Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) :
-                                                    gradientColor :
-                                                useSystemAccentColor ?
-                                                    Color.accentColor :
-                                                    customAccentColor
-                                            ]
+                                            Color.getLoopAccent(tone: .normal),
+                                            Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+                                        ]
                                     ),
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
                             )
                             .mask {
-                                RadialMenuDirectionSelectorView(activeAngle: currentResizeDirection, radialMenuSize: self.radialMenuSize)
+                                RadialMenuDirectionSelectorView(
+                                    activeAngle: currentResizeDirection,
+                                    size: self.radialMenuSize
+                                )
                             }
                     }
                     // Mask the whole ZStack with the shape the user defines
@@ -85,7 +75,7 @@ struct RadialMenuView: View {
 
                     if frontmostWindow == nil && previewMode == false {
                         Image("custom.macwindow.trianglebadge.exclamationmark")
-                            .foregroundStyle(useSystemAccentColor ? Color.accentColor : customAccentColor)
+                            .foregroundStyle(Color.getLoopAccent(tone: .normal))
                             .font(Font.system(size: 20, weight: .bold))
                     }
                 }
@@ -156,14 +146,8 @@ struct RadialMenuView: View {
             currentResizeDirection = .maximize
         }
 
-        // When direction changes, send haptic feedback and post a
-        // notification which is used to position the preview window
         if currentResizeDirection != previousResizeDirection {
-            NotificationCenter.default.post(
-                name: Notification.Name.directionChanged,
-                object: nil,
-                userInfo: ["direction": currentResizeDirection]
-            )
+            Notification.Name.directionChanged.post(userInfo: ["direction": currentResizeDirection])
         }
     }
 }

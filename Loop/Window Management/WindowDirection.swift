@@ -162,35 +162,23 @@ enum WindowDirection: CaseIterable {
         var newDirection: WindowDirection = .noAction
 
         if mouseLocation.x < ignoredFrame.minX {
-            newDirection = WindowDirection.processLeftSnap(
-                mouseY: mouseLocation.y,
-                maxY: screenFrame.maxY,
-                currentDirection: currentDirection
-            )
+            newDirection = WindowDirection.processLeftSnap(mouseLocation.y, screenFrame.maxY, currentDirection)
         } else if mouseLocation.x > ignoredFrame.maxX {
-            newDirection = WindowDirection.processRightSnap(
-                mouseY: mouseLocation.y,
-                maxY: screenFrame.maxY,
-                currentDirection: currentDirection
-            )
+            newDirection = WindowDirection.processRightSnap(mouseLocation.y, screenFrame.maxY, currentDirection)
         } else if mouseLocation.y < ignoredFrame.minY {
-            newDirection = WindowDirection.processTopSnap(
-                mouseX: mouseLocation.x,
-                maxX: screenFrame.maxX,
-                currentDirection: currentDirection
-            )
+            newDirection = WindowDirection.processTopSnap(mouseLocation.x, screenFrame.maxX, currentDirection)
         } else if mouseLocation.y > ignoredFrame.maxY {
-            newDirection = WindowDirection.processBottomSnap(
-                mouseX: mouseLocation.x,
-                maxX: screenFrame.maxX,
-                currentDirection: currentDirection
-            )
+            newDirection = WindowDirection.processBottomSnap(mouseLocation.x, screenFrame.maxX, currentDirection)
         }
 
         return newDirection
     }
 
-    static func processLeftSnap(mouseY: CGFloat, maxY: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+    static func processLeftSnap(
+        _ mouseY: CGFloat,
+        _ maxY: CGFloat,
+        _ currentDirection: WindowDirection
+    ) -> WindowDirection {
         if mouseY < maxY * 1/8 {
             return .topLeftQuarter
         } else if mouseY > maxY * 7/8 {
@@ -200,7 +188,11 @@ enum WindowDirection: CaseIterable {
         }
     }
 
-    static func processRightSnap(mouseY: CGFloat, maxY: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+    static func processRightSnap(
+        _ mouseY: CGFloat,
+        _ maxY: CGFloat,
+        _ currentDirection: WindowDirection
+    ) -> WindowDirection {
         if mouseY < maxY * 1/8 {
             return .topRightQuarter
         } else if mouseY > maxY * 7/8 {
@@ -210,7 +202,11 @@ enum WindowDirection: CaseIterable {
         }
     }
 
-    static func processTopSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+    static func processTopSnap(
+        _ mouseX: CGFloat,
+        _ maxX: CGFloat,
+        _ currentDirection: WindowDirection
+    ) -> WindowDirection {
         var newDirection: WindowDirection = .noAction
 
         if mouseX < maxX * 1/5 {
@@ -224,7 +220,11 @@ enum WindowDirection: CaseIterable {
         return newDirection
     }
 
-    static func processBottomSnap(mouseX: CGFloat, maxX: CGFloat, currentDirection: WindowDirection) -> WindowDirection {
+    static func processBottomSnap(
+        _ mouseX: CGFloat,
+        _ maxX: CGFloat,
+        _ currentDirection: WindowDirection
+    ) -> WindowDirection {
         var newDirection: WindowDirection = .noAction
 
         if mouseX < maxX * 1/3 {
@@ -242,5 +242,39 @@ enum WindowDirection: CaseIterable {
         }
 
         return newDirection
+    }
+
+    var frameMultiplyValues: CGRect? {
+        switch self {
+        case .noAction:                 nil
+        case .maximize:                 CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
+        case .center:                   nil
+
+        // Halves
+        case .topHalf:                  CGRect(x: 0, y: 0, width: 1.0, height: 1.0/2.0)
+        case .rightHalf:                CGRect(x: 1.0/2.0, y: 0, width: 1.0/2.0, height: 1.0)
+        case .bottomHalf:               CGRect(x: 0, y: 1.0/2.0, width: 1.0, height: 1.0/2.0)
+        case .leftHalf:                 CGRect(x: 0, y: 0, width: 1.0/2.0, height: 1.0)
+
+        // Quarters
+        case .topLeftQuarter:           CGRect(x: 0, y: 0, width: 1.0/2.0, height: 1.0/2.0)
+        case .topRightQuarter:          CGRect(x: 1.0/2.0, y: 0, width: 1.0/2.0, height: 1.0/2.0)
+        case .bottomRightQuarter:       CGRect(x: 1.0/2.0, y: 1.0/2.0, width: 1.0/2.0, height: 1.0/2.0)
+        case .bottomLeftQuarter:        CGRect(x: 0, y: 1.0/2.0, width: 1.0/2.0, height: 1.0/2.0)
+
+        // Thirds (Horizontal)
+        case .rightThird:               CGRect(x: 2.0/3.0, y: 0, width: 1.0/3.0, height: 1.0)
+        case .rightTwoThirds:           CGRect(x: 1.0/3.0, y: 0, width: 2.0/3.0, height: 1.0)
+        case .horizontalCenterThird:    CGRect(x: 1.0/3.0, y: 0, width: 1.0/3.0, height: 1.0)
+        case .leftThird:                CGRect(x: 0, y: 0, width: 1.0/3.0, height: 1.0)
+        case .leftTwoThirds:            CGRect(x: 0, y: 0, width: 2.0/3.0, height: 1.0)
+
+        // Thirds (Vertical)
+        case .topThird:                 CGRect(x: 0, y: 0, width: 1.0, height: 1.0/3.0)
+        case .topTwoThirds:             CGRect(x: 0, y: 0, width: 1.0, height: 2.0/3.0)
+        case .verticalCenterThird:      CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
+        case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
+        case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
+        }
     }
 }

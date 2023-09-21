@@ -31,21 +31,13 @@ class KeybindMonitor {
         }
 
         if pressedKeys == [.kVK_Escape] {
-            NotificationCenter.default.post(
-                name: Notification.Name.forceCloseLoop,
-                object: nil,
-                userInfo: ["forceClose": true]
-            )
+            Notification.Name.forceCloseLoop.post()
             KeybindMonitor.shared.resetPressedKeys()
         } else {
             // Since this is one for loop inside another, we can break from inside by breaking from the outerloop
             outerLoop: for direction in WindowDirection.allCases {
                 for keybind in direction.keybind where keybind == pressedKeys {
-                    NotificationCenter.default.post(
-                        name: Notification.Name.directionChanged,
-                        object: nil,
-                        userInfo: ["direction": direction]
-                    )
+                    Notification.Name.directionChanged.post(userInfo: ["direction": direction])
                     break outerLoop
                 }
             }

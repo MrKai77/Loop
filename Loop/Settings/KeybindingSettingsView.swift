@@ -11,40 +11,69 @@ import Defaults
 struct KeybindingSettingsView: View {
 
     @Default(.triggerKey) var triggerKey
+    @Default(.doubleClickToTrigger) var doubleClickToTrigger
     @Default(.triggerDelay) var triggerDelay
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
 
-    let loopTriggerKeyOptions = LoopTriggerKeys.options
-
-    // This is just a placeholder, but it's a valid image
-    @State var triggerKeySymbol: String = "custom.globe.rectangle.fill"
+    let loopTriggerKeyOptions = TriggerKey.options
+    @State var suggestAddingTriggerDelay: Bool = false
+    @State var suggestDisablingCapsLock: Bool = false
 
     var body: some View {
         Form {
             Section("Keybindings") {
                 VStack(alignment: .leading) {
-                    Picker("Trigger Loop", selection: $triggerKey) {
-                        ForEach(0..<loopTriggerKeyOptions.count, id: \.self) { idx in
-                            HStack {
-                                Image(systemName: loopTriggerKeyOptions[idx].symbol)
-                                Text(loopTriggerKeyOptions[idx].description)
+                    HStack {
+                        Text("Trigger Key")
+                        Spacer()
+                        Keycorder(key: self.$triggerKey) { event in
+                            if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
+                                self.suggestDisablingCapsLock = true
+                                return nil
+                            } else {
+                                self.suggestDisablingCapsLock = false
                             }
-                            .tag(loopTriggerKeyOptions[idx].keycode)
+
+                            for key in TriggerKey.options where key.keycode == event.keyCode {
+                                return key
+                            }
+                            return nil
                         }
+                        .popover(isPresented: $suggestDisablingCapsLock, arrowEdge: .bottom, content: {
+                            Text("Your Caps Lock key is on! Disable it to correctly assign a key.")
+                                .padding(8)
+                        })
                     }
-                    if triggerKey == loopTriggerKeyOptions[1].keycode {
+
+                    if triggerKey.keycode == .kVK_RightControl {
                         Text("Tip: To use caps lock, remap it to control in System Settings!")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                .onAppear {
-                    refreshTriggerKeySymbol()
+                .onChange(of: self.triggerKey) { _ in
+                    if self.triggerKey.doubleClickRecommended &&
+                        !self.doubleClickToTrigger {
+                        self.suggestAddingTriggerDelay.toggle()
+                    }
                 }
-                .onChange(of: triggerKey) { _ in
-                    refreshTriggerKeySymbol()
-                }
+                .alert(
+                    "The \(self.triggerKey.name.lowercased()) key is frequently used in other apps.",
+                    isPresented: self.$suggestAddingTriggerDelay, actions: {
+                        Button("OK") {
+                            self.doubleClickToTrigger = true
+                        }
+                        Button("Cancel", role: .cancel) {
+                            return
+                        }
+                    }, message: {
+                        Text("Would you like to enable \"Double-click to trigger Loop\"? "
+                           + "You can always change this later.")
+                    }
+                )
+
+                Toggle("Double-click to trigger Loop", isOn: $doubleClickToTrigger)
 
                 HStack {
                     Stepper(
@@ -74,7 +103,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -101,7 +130,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -125,7 +154,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -149,7 +178,7 @@ struct KeybindingSettingsView: View {
                     Spacer()
 
                     HStack {
-                        Image(triggerKeySymbol)
+                        Image(self.triggerKey.keySymbol)
                             .font(Font.system(size: 30, weight: .regular))
 
                         Image(systemName: "plus")
@@ -165,13 +194,5 @@ struct KeybindingSettingsView: View {
             .symbolRenderingMode(.hierarchical)
         }
         .formStyle(.grouped)
-    }
-
-    func refreshTriggerKeySymbol() {
-        var trigger: LoopTriggerKeys = loopTriggerKeyOptions[0]
-        for loopTriggerKey in loopTriggerKeyOptions where loopTriggerKey.keycode == triggerKey {
-            trigger = loopTriggerKey
-        }
-        self.triggerKeySymbol = trigger.keySymbol
     }
 }

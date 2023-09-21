@@ -11,7 +11,7 @@ class PreviewController {
 
     var loopPreviewWindowController: NSWindowController?
 
-    func show(screen: NSScreen) {
+    func open(screen: NSScreen) {
         if let windowController = loopPreviewWindowController {
             windowController.window?.orderFrontRegardless()
             return

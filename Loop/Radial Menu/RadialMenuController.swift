@@ -12,7 +12,7 @@ class RadialMenuController {
 
     private var loopRadialMenuWindowController: NSWindowController?
 
-    func show(frontmostWindow: Window?) {
+    func open(frontmostWindow: Window?) {
         if let windowController = loopRadialMenuWindowController {
             windowController.window?.orderFrontRegardless()
             return

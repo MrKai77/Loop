@@ -22,55 +22,50 @@ class LoopManager {
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
-    private var timer: DispatchSourceTimer?    // Used when user has configured a trigger delay
+    private var flagsChangedEventMonitor: NSEventMonitor?
+    private var keyDownEventMonitor: NSEventMonitor?
+    private var triggerDelayTimer: DispatchSourceTimer?
+    private var lastTriggerKeyClick: Date = Date.now
 
     func startObservingKeys() {
-        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) { event -> Void in
-            if event.keyCode == Defaults[.triggerKey] {
-                if event.modifierFlags.rawValue == 256 {
-                    if self.timer != nil {
-                        self.timer?.cancel()
-                        self.timer = nil
-                    } else {
-                        self.closeLoop()
-                    }
-                } else {
-                    if self.timer == nil {
-                        self.timer = DispatchSource.makeTimerSource(queue: .main)
-                        self.timer!.schedule(deadline: .now() + .milliseconds(Int(Defaults[.triggerDelay]*1000)))
-                        self.timer!.setEventHandler {
-                            self.openLoop()
-                            self.timer = nil
-                        }
-                        self.timer!.resume()
-                    }
-                }
+        self.flagsChangedEventMonitor = NSEventMonitor(scope: .global, eventMask: .flagsChanged) { event in
+            self.handleLoopKeypress(event)
+        }
+        self.flagsChangedEventMonitor!.start()
+
+        self.keyDownEventMonitor = NSEventMonitor(scope: .global, eventMask: .keyDown) { _ in
+            if Defaults[.doubleClickToTrigger] &&
+                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                self.lastTriggerKeyClick = Date.distantPast
             }
         }
+        self.keyDownEventMonitor!.start()
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                currentWindowDirectionChanged(
-                    notification:
-                )
-            ),
-            name: Notification.Name.directionChanged,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(
-                forceCloseLoop(
-                    notification:
-                )
-            ),
-            name: Notification.Name.forceCloseLoop,
-            object: nil
-        )
+        Notification.Name.directionChanged.onRecieve { notification in
+            self.currentWindowDirectionChanged(notification)
+        }
+
+        Notification.Name.forceCloseLoop.onRecieve { _ in
+            self.closeLoop(forceClose: true)
+        }
     }
 
-    @objc private func currentWindowDirectionChanged(notification: Notification) {
+    private func cancelTriggerDelayTimer() {
+        self.triggerDelayTimer?.cancel()
+        self.triggerDelayTimer = nil
+    }
+
+    private func startTriggerDelayTimer(seconds: Float, handler: @escaping () -> Void) {
+        self.triggerDelayTimer = DispatchSource.makeTimerSource(queue: .main)
+        self.triggerDelayTimer!.schedule(deadline: .now() + .milliseconds(Int(seconds*1000)))
+        self.triggerDelayTimer!.setEventHandler {
+            handler()
+            self.triggerDelayTimer = nil
+        }
+        self.triggerDelayTimer!.resume()
+    }
+
+    private func currentWindowDirectionChanged(_ notification: Notification) {
         if let direction = notification.userInfo?["direction"] as? WindowDirection {
             currentResizingDirection = direction
 
@@ -84,9 +79,42 @@ class LoopManager {
         }
     }
 
-    @objc private func forceCloseLoop(notification: Notification) {
-        if let forceClose = notification.userInfo?["forceClose"] as? Bool {
-            self.closeLoop(forceClose: forceClose)
+    private func handleLoopKeypress(_ event: NSEvent) {
+        if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
+            self.closeLoop(forceClose: true)
+            return
+        }
+        if event.keyCode == Defaults[.triggerKey].keycode {
+
+            let useTriggerDelay = Defaults[.triggerDelay] > 0.1
+            let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
+
+            if event.modifierFlags.rawValue == 256 {
+                self.closeLoop()
+            } else {
+                if useDoubleClickTrigger {
+                    if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                        if useTriggerDelay {
+                            if self.triggerDelayTimer == nil {
+                                self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                                    self.openLoop()
+                                }
+                            }
+                        } else {
+                            self.openLoop()
+                        }
+                    }
+                    self.lastTriggerKeyClick = Date.now
+                } else if useTriggerDelay {
+                    if self.triggerDelayTimer == nil {
+                        self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                            self.openLoop()
+                        }
+                    }
+                } else {
+                    self.openLoop()
+                }
+            }
         }
     }
 
@@ -100,9 +128,9 @@ class LoopManager {
             self.screenWithMouse = NSScreen.screenWithMouse
 
             if Defaults[.previewVisibility] == true && frontmostWindow != nil {
-                previewController.show(screen: self.screenWithMouse!)
+                previewController.open(screen: self.screenWithMouse!)
             }
-            radialMenuController.show(frontmostWindow: frontmostWindow)
+            radialMenuController.open(frontmostWindow: frontmostWindow)
             keybindMonitor.start()
 
             isLoopShown = true
@@ -110,8 +138,7 @@ class LoopManager {
     }
 
     private func closeLoop(forceClose: Bool = false) {
-        var willResizeWindow: Bool = false
-
+        self.cancelTriggerDelayTimer()
         radialMenuController.close()
         previewController.close()
 
@@ -121,27 +148,20 @@ class LoopManager {
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
-            self.isLoopShown == true &&
+            self.isLoopShown &&
             self.currentResizingDirection != .noAction {
-            willResizeWindow = true
-        }
 
-        isLoopShown = false
+            isLoopShown = false
 
-        if willResizeWindow {
-            WindowEngine.resize(window: self.frontmostWindow!, direction: self.currentResizingDirection, screen: self.screenWithMouse!)
-
-            NotificationCenter.default.post(
-                name: Notification.Name.finishedLooping,
-                object: nil
-            )
-
+            WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
+            Notification.Name.didLoop.post()
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()
         } else {
-            if self.frontmostWindow == nil {
+            if self.frontmostWindow == nil && isLoopShown {
                 NSSound.beep()
             }
+            isLoopShown = false
         }
     }
 }
