@@ -39,9 +39,14 @@ That's it! With Loop, window management is a breeze.
 
 You can set your own custom trigger key for Loop! Currently, the available options for triggering loop are:
 - `Globe`
+- `Left Control`
 - `Right Control` (To use Caps Lock, look [here](#using-caps-lock))
+- `Left Option`
 - `Right Option`
+- `Left Command`
 - `Right Command`
+- `Left Shift` 
+- `Right Shift`
 
 ### Using Caps Lock
 
