@@ -9,12 +9,19 @@ import SwiftUI
 
 class Window {
     let axWindow: AXUIElement
+    let cgWindowID: CGWindowID
 
     init?(element: AXUIElement) {
         self.axWindow = element
 
-        if role != .window,
-           subrole != .standardWindow {
+        // Set self's CGWindowID
+        var windowId = CGWindowID(0)
+        let result = _AXUIElementGetWindow(self.axWindow, &windowId)
+        guard result == .success else { return nil }
+        self.cgWindowID = windowId
+
+        if self.role != .window,
+           self.subrole != .standardWindow {
             return nil
         }
     }
@@ -97,13 +104,6 @@ class Window {
             self.setPosition(rect.origin)
             self.setSize(rect.size)
         }
-    }
-
-    var cgWindowID: CGWindowID? {
-        var windowId = CGWindowID(0)
-        let result = _AXUIElementGetWindow(self.axWindow, &windowId)
-        guard result == .success else { return nil }
-        return windowId
     }
 
     /// MacOS doesn't provide us a way to find the minimum size of a window from the accessibility API.

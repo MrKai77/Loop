@@ -21,12 +21,11 @@ struct WindowRecords {
     /// This will erase ALL previous records of the window, and start a fresh new record for the selected window.
     /// - Parameter window: The window to record
     static func recordFirst(for window: Window) {
-        guard let cgWindowID = window.cgWindowID else { return }
-        WindowRecords.records.removeAll(where: { $0.cgWindowID == cgWindowID })
+        WindowRecords.records.removeAll(where: { $0.cgWindowID == window.cgWindowID })
 
         WindowRecords.records.append(
             WindowRecords.Record(
-                cgWindowID: cgWindowID,
+                cgWindowID: window.cgWindowID,
                 initialFrame: window.frame,
                 currentFrame: window.frame,
                 directionRecords: [.noAction]
@@ -35,9 +34,8 @@ struct WindowRecords {
     }
 
     static func record(_ window: Window, _ direction: WindowDirection) {
-        guard let cgWindowID = window.cgWindowID,
-              WindowRecords.hasBeenRecorded(window),
-              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == cgWindowID }) else {
+        guard WindowRecords.hasBeenRecorded(window),
+              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
             return
         }
 
@@ -46,14 +44,12 @@ struct WindowRecords {
     }
 
     static func hasBeenRecorded(_ window: Window) -> Bool {
-        guard let cgWindowID = window.cgWindowID else { return false }
-        return WindowRecords.records.contains(where: { $0.cgWindowID == cgWindowID })
+        return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
     }
 
     static func getLastDirection(for window: Window) -> WindowDirection {
-        guard let cgWindowID = window.cgWindowID,
-              WindowRecords.hasBeenRecorded(window),
-              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == cgWindowID }) else {
+        guard WindowRecords.hasBeenRecorded(window),
+              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
             return .noAction
         }
 
