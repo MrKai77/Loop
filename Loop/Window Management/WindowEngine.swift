@@ -8,6 +8,55 @@
 import SwiftUI
 import Defaults
 
+struct WindowRecords {
+    static private var records: [WindowRecords.Record] = []
+
+    private struct Record {
+        var cgWindowID: CGWindowID
+        var initialFrame: CGRect
+        var currentFrame: CGRect
+        var directionRecords: [WindowDirection]
+    }
+
+    /// This will erase ALL previous records of the window, and start a fresh new record for the selected window.
+    /// - Parameter window: The window to record
+    static func recordFirst(for window: Window) {
+        WindowRecords.records.removeAll(where: { $0.cgWindowID == window.cgWindowID })
+
+        WindowRecords.records.append(
+            WindowRecords.Record(
+                cgWindowID: window.cgWindowID,
+                initialFrame: window.frame,
+                currentFrame: window.frame,
+                directionRecords: [.noAction]
+            )
+        )
+    }
+
+    static func record(_ window: Window, _ direction: WindowDirection) {
+        guard WindowRecords.hasBeenRecorded(window),
+              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
+            return
+        }
+
+        WindowRecords.records[idx].currentFrame = window.frame
+        WindowRecords.records[idx].directionRecords.insert(direction, at: 0)
+    }
+
+    static func hasBeenRecorded(_ window: Window) -> Bool {
+        return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
+    }
+
+    static func getLastDirection(for window: Window) -> WindowDirection {
+        guard WindowRecords.hasBeenRecorded(window),
+              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
+            return .noAction
+        }
+
+        return WindowRecords.records[idx].directionRecords[1]
+    }
+}
+
 struct WindowEngine {
 
     /// Resize a Window
@@ -16,7 +65,12 @@ struct WindowEngine {
     ///   - direction: WindowDirection
     ///   - screen: Screen the window should be resized on
     static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
+        guard direction != .noAction else { return }
         window.setFullscreen(false)
+
+        if !WindowRecords.hasBeenRecorded(window) {
+            WindowRecords.recordFirst(for: window)
+        }
 
         let oldWindowFrame = window.frame
         guard let screenFrame = screen.safeScreenFrame,
@@ -47,6 +101,8 @@ struct WindowEngine {
         } else {
             window.setFrame(targetWindowFrame, animate: false)
             WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
+
+            WindowRecords.record(window, direction)
         }
     }
 
@@ -56,12 +112,12 @@ struct WindowEngine {
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
               let window = Window(pid: app.processIdentifier) else { return nil }
 
-        #if DEBUG
-        print("===== NEW WINDOW =====")
-        print("Frontmost window: \(window.axWindow)")
-        print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
-        print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
-        #endif
+//        #if DEBUG
+//        print("===== NEW WINDOW =====")
+//        print("Frontmost window: \(window.axWindow)")
+//        print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
+//        print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
+//        #endif
 
         return window
     }
