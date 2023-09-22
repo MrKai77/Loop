@@ -54,10 +54,10 @@ class NSEventMonitor {
 class CGEventMonitor {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private var eventCallback: (CGEvent) -> Unmanaged<CGEvent>
+    private var eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
     private var isEnabled: Bool = false
 
-    init(eventMask: NSEvent.EventTypeMask, callback: @escaping (CGEvent) -> Unmanaged<CGEvent>) {
+    init(eventMask: NSEvent.EventTypeMask, callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?) {
         self.eventCallback = callback
 
         self.eventTap = CGEvent.tapCreate(
@@ -82,7 +82,7 @@ class CGEventMonitor {
         }
     }
 
-    private func handleEvent(event: CGEvent) -> Unmanaged<CGEvent> {
+    private func handleEvent(event: CGEvent) -> Unmanaged<CGEvent>? {
         return self.eventCallback(event)
     }
 

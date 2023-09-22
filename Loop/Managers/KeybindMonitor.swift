@@ -10,8 +10,7 @@ import Cocoa
 class KeybindMonitor {
     static let shared = KeybindMonitor()
 
-    private var eventTap: CFMachPort?
-    private var isEnabled = false
+    private var eventMonitor: CGEventMonitor?
     private var pressedKeys = Set<CGKeyCode>()
     private var lastKeyReleaseTime: Date = Date.now
 
@@ -45,55 +44,34 @@ class KeybindMonitor {
     }
 
     func start() {
-        if eventTap == nil {
-            let eventMask = CGEventMask((1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue))
+        guard self.eventMonitor == nil,
+              PermissionsManager.Accessibility.getStatus() else {
+            return
+        }
 
-            let eventCallback: CGEventTapCallBack = { _, _, event, _ in
-                if KeybindMonitor.shared.isEnabled,
-                    let keyEvent = NSEvent(cgEvent: event) {
+        self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
 
-                    if keyEvent.isARepeat {
-                        return nil
-                    }
+            // Even though we already told it its eventMask, not doing the below line throws me a bunch of errors :/
+            if (cgEvent.type == .keyDown || cgEvent.type == .keyUp),
+               let event = NSEvent(cgEvent: cgEvent),
+               !event.isARepeat {
 
-                    if keyEvent.type == .keyUp {
-                        KeybindMonitor.shared.pressedKeys.remove(keyEvent.keyCode.baseKey)
-                    } else if keyEvent.type == .keyDown {
-                        KeybindMonitor.shared.pressedKeys.insert(keyEvent.keyCode.baseKey)
-                    }
-
-                    KeybindMonitor.shared.performKeybind(event: keyEvent)
+                if event.type == .keyUp {
+                    KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
+                } else if event.type == .keyDown {
+                    KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
                 }
 
-                // If we wanted to forward the key event to the frontmost app, we'd use:
-                // return Unmanaged.passRetained(event)
-                return nil
+                self.performKeybind(event: event)
             }
-
-            let newEventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
-                                                place: .headInsertEventTap,
-                                                options: .defaultTap,
-                                                eventsOfInterest: eventMask,
-                                                callback: eventCallback,
-                                                userInfo: nil)
-
-            self.eventTap = newEventTap
-
-            if PermissionsManager.Accessibility.getStatus() {
-                let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, newEventTap, 0)
-                CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-                CGEvent.tapEnable(tap: newEventTap!, enable: true)
-            }
+            return nil
         }
-        isEnabled = true
+        self.eventMonitor!.start()
     }
 
     func stop() {
-        if let eventTap = eventTap {
-            CGEvent.tapEnable(tap: eventTap, enable: false)
-            CFMachPortInvalidate(eventTap)
-            self.eventTap = nil
-        }
-        isEnabled = false
+        guard self.eventMonitor != nil else { return }
+        self.eventMonitor!.stop()
+        self.eventMonitor = nil
     }
 }
