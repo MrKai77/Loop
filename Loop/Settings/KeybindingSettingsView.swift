@@ -190,6 +190,27 @@ struct KeybindingSettingsView: View {
                     }
                     .foregroundStyle(Color.accentColor)
                 }
+
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Press Z to toggle between the last position of the window:")
+                    }
+
+                    Spacer()
+
+                    HStack {
+                        Image(self.triggerKey.keySymbol)
+                            .font(Font.system(size: 30, weight: .regular))
+
+                        Image(systemName: "plus")
+                            .font(Font.system(size: 15, weight: .bold))
+
+                        Image(systemName: "z.square.fill")
+                            .font(Font.system(size: 30, weight: .regular))
+                            .frame(width: 60)
+                    }
+                    .foregroundStyle(Color.accentColor)
+                }
             }
             .symbolRenderingMode(.hierarchical)
         }

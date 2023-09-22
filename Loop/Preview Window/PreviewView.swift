@@ -35,7 +35,8 @@ struct PreviewView: View {
                         .verticalCenterThird,
                         .bottomThird,
                         .bottomTwoThirds,
-                        .noAction:
+                        .noAction,
+                        .lastDirection:
                     Rectangle()
                         .frame(height: currentResizeDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
                 default:
@@ -50,7 +51,8 @@ struct PreviewView: View {
                             .horizontalCenterThird,
                             .rightThird,
                             .rightTwoThirds,
-                            .noAction:
+                            .noAction,
+                            .lastDirection:
                         Rectangle()
                             .frame(width: currentResizeDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
                     default:
@@ -79,6 +81,8 @@ struct PreviewView: View {
                     .padding(previewPadding + previewBorderThickness/2)
                     .frame(width: currentResizeDirection == .noAction ? 0 : nil,
                            height: currentResizeDirection == .noAction ? 0 : nil)
+                    .frame(width: currentResizeDirection == .lastDirection ? 0 : nil,
+                           height: currentResizeDirection == .lastDirection ? 0 : nil)
                     .frame(width: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
                     .frame(width: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
                     .frame(width: currentResizeDirection == .rightTwoThirds ? geo.size.width / 3 * 2 : nil)
@@ -91,7 +95,8 @@ struct PreviewView: View {
                             .horizontalCenterThird,
                             .leftThird,
                             .leftTwoThirds,
-                            .noAction:
+                            .noAction,
+                            .lastDirection:
                         Rectangle()
                             .frame(width: currentResizeDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
                     default:
@@ -106,7 +111,8 @@ struct PreviewView: View {
                         .verticalCenterThird,
                         .topThird,
                         .topTwoThirds,
-                        .noAction:
+                        .noAction,
+                        .lastDirection:
                     Rectangle()
                         .frame(height: currentResizeDirection == .topThird ? geo.size.width / 3 * 2 : nil)
                 default:
@@ -121,6 +127,7 @@ struct PreviewView: View {
         .onReceive(.directionChanged) { obj in
             if !previewMode {
                 if let direction = obj.userInfo?["direction"] as? WindowDirection {
+                    print(direction)
                     currentResizeDirection = direction
                 }
             }

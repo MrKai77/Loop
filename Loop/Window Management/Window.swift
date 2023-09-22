@@ -8,14 +8,20 @@
 import SwiftUI
 
 class Window {
-//    private let kAXFullscreenAttribute = "AXFullScreen"
     let axWindow: AXUIElement
+    let cgWindowID: CGWindowID
 
     init?(element: AXUIElement) {
         self.axWindow = element
 
-        if role != .window,
-           subrole != .standardWindow {
+        // Set self's CGWindowID
+        var windowId = CGWindowID(0)
+        let result = _AXUIElementGetWindow(self.axWindow, &windowId)
+        guard result == .success else { return nil }
+        self.cgWindowID = windowId
+
+        if self.role != .window,
+           self.subrole != .standardWindow {
             return nil
         }
     }
@@ -150,3 +156,6 @@ class Window {
         }
     }
 }
+
+@_silgen_name("_AXUIElementGetWindow") @discardableResult
+func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError

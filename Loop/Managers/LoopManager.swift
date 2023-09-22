@@ -67,14 +67,24 @@ class LoopManager {
 
     private func currentWindowDirectionChanged(_ notification: Notification) {
         if let direction = notification.userInfo?["direction"] as? WindowDirection {
-            currentResizingDirection = direction
+            self.currentResizingDirection = direction
 
-            // Haptic feedback on the trackpad
-            if self.isLoopShown {
-                NSHapticFeedbackManager.defaultPerformer.perform(
-                    NSHapticFeedbackManager.FeedbackPattern.alignment,
-                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                )
+            if let window = self.frontmostWindow,
+               self.currentResizingDirection == .lastDirection {
+
+                // If the user sets .lastDirection as the last direction
+                self.currentResizingDirection = WindowRecords.getLastDirection(for: window)
+                DispatchQueue.main.async {
+                    Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
+                }
+            } else {
+                // Haptic feedback on the trackpad
+                if self.isLoopShown {
+                    NSHapticFeedbackManager.defaultPerformer.perform(
+                        NSHapticFeedbackManager.FeedbackPattern.alignment,
+                        performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+                    )
+                }
             }
         }
     }
