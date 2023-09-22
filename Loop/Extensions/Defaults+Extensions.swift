@@ -38,6 +38,10 @@ extension Defaults.Keys {
         "centerKeybind",
         default: [[.kVK_Return]]
     )
+    static let lastDirectionKeybind = Key<[Set<CGKeyCode>]>(
+        "lastDirectionKeybind",
+        default: [[.kVK_ANSI_Z]]
+    )
 
     // Halves
     static let topHalfKeybind = Key<[Set<CGKeyCode>]>(

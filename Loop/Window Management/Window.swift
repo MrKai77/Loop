@@ -8,7 +8,6 @@
 import SwiftUI
 
 class Window {
-//    private let kAXFullscreenAttribute = "AXFullScreen"
     let axWindow: AXUIElement
 
     init?(element: AXUIElement) {
@@ -100,6 +99,13 @@ class Window {
         }
     }
 
+    var cgWindowID: CGWindowID? {
+        var windowId = CGWindowID(0)
+        let result = _AXUIElementGetWindow(self.axWindow, &windowId)
+        guard result == .success else { return nil }
+        return windowId
+    }
+
     /// MacOS doesn't provide us a way to find the minimum size of a window from the accessibility API.
     /// So we deliberately force-resize the window to 0x0 and see how small it goes, take note of the frame,
     /// then we resotere the original window size. However, this does have one big consequence. The user
@@ -150,3 +156,6 @@ class Window {
         }
     }
 }
+
+@_silgen_name("_AXUIElementGetWindow") @discardableResult
+func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError
