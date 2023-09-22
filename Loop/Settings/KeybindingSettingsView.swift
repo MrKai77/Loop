@@ -193,7 +193,7 @@ struct KeybindingSettingsView: View {
 
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Press Z to toggle between the last position of the window:")
+                        Text("Use Z to toggle between the last position of the window:")
                     }
 
                     Spacer()
@@ -206,6 +206,27 @@ struct KeybindingSettingsView: View {
                             .font(Font.system(size: 15, weight: .bold))
 
                         Image(systemName: "z.square.fill")
+                            .font(Font.system(size: 30, weight: .regular))
+                            .frame(width: 60)
+                    }
+                    .foregroundStyle(Color.accentColor)
+                }
+
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("Use F to toggle fullscreen:")
+                    }
+
+                    Spacer()
+
+                    HStack {
+                        Image(self.triggerKey.keySymbol)
+                            .font(Font.system(size: 30, weight: .regular))
+
+                        Image(systemName: "plus")
+                            .font(Font.system(size: 15, weight: .bold))
+
+                        Image(systemName: "f.square.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
