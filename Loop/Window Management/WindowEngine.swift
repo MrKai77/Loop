@@ -43,8 +43,6 @@ struct WindowRecords {
 
         WindowRecords.records[idx].currentFrame = window.frame
         WindowRecords.records[idx].directionRecords.insert(direction, at: 0)
-
-        print(WindowRecords.records)
     }
 
     static func hasBeenRecorded(_ window: Window) -> Bool {

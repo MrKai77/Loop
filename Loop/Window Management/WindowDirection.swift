@@ -42,6 +42,7 @@ enum WindowDirection: CaseIterable {
     case bottomThird
     case bottomTwoThirds
 
+    // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
         switch self {
         case .noAction:             .topHalf
