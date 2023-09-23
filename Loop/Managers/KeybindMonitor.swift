@@ -6,11 +6,13 @@
 //
 
 import Cocoa
+import Defaults
 
 class KeybindMonitor {
     static let shared = KeybindMonitor()
 
     private var eventMonitor: CGEventMonitor?
+    private var shiftKeyEventMonitor: CGEventMonitor?
     private var pressedKeys = Set<CGKeyCode>()
     private var lastKeyReleaseTime: Date = Date.now
 
@@ -22,14 +24,14 @@ class KeybindMonitor {
         // If the current key up event is within 100 ms of the last key up event, return.
         // This is used when the user is pressing 2+ keys so that it doesn't switch back
         // to the one key direction when they're letting go of the keys.
-        if event.type == .keyUp {
+        if event.type == .keyUp || event.modifierFlags.rawValue == 262401 {
             if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
-                lastKeyReleaseTime = Date.now
+                return
             }
-            return
+            lastKeyReleaseTime = Date.now
         }
 
-        if pressedKeys == [.kVK_Escape] {
+        if pressedKeys.contains(.kVK_Escape) {
             Notification.Name.forceCloseLoop.post()
             KeybindMonitor.shared.resetPressedKeys()
         } else {
@@ -50,9 +52,7 @@ class KeybindMonitor {
         }
 
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
-
-            // Even though we already told it its eventMask, not doing the below line throws me a bunch of errors :/
-            if (cgEvent.type == .keyDown || cgEvent.type == .keyUp),
+             if (cgEvent.type == .keyDown || cgEvent.type == .keyUp),
                let event = NSEvent(cgEvent: cgEvent),
                !event.isARepeat {
 
@@ -64,14 +64,38 @@ class KeybindMonitor {
 
                 self.performKeybind(event: event)
             }
+
             return nil
         }
+
+        self.shiftKeyEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
+            if (cgEvent.type == .flagsChanged),
+               let event = NSEvent(cgEvent: cgEvent),
+               event.keyCode != Defaults[.triggerKey].keycode {
+
+                if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.shift) {
+                    KeybindMonitor.shared.pressedKeys.insert(.kVK_Shift)
+                } else {
+                    KeybindMonitor.shared.pressedKeys.remove(.kVK_Shift)
+                }
+                self.performKeybind(event: event)
+            }
+            return Unmanaged.passUnretained(cgEvent)
+        }
+
         self.eventMonitor!.start()
+        self.shiftKeyEventMonitor!.start()
     }
 
     func stop() {
-        guard self.eventMonitor != nil else { return }
-        self.eventMonitor!.stop()
+        guard self.eventMonitor != nil &&
+              self.shiftKeyEventMonitor != nil else {
+            return
+        }
+        self.eventMonitor?.stop()
         self.eventMonitor = nil
+
+        self.shiftKeyEventMonitor?.stop()
+        self.shiftKeyEventMonitor = nil
     }
 }

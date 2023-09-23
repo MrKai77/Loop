@@ -36,7 +36,7 @@ extension Defaults.Keys {
     )
     static let fullscreenKeybind = Key<[Set<CGKeyCode>]>(
         "fullscreenKeybind",
-        default: [[.kVK_ANSI_F]]
+        default: [[.kVK_Space, .kVK_Shift]]
     )
     static let centerKeybind = Key<[Set<CGKeyCode>]>(
         "centerKeybind",

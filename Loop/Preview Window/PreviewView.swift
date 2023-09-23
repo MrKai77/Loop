@@ -127,7 +127,6 @@ struct PreviewView: View {
         .onReceive(.directionChanged) { obj in
             if !previewMode {
                 if let direction = obj.userInfo?["direction"] as? WindowDirection {
-                    print(direction)
                     currentResizeDirection = direction
                 }
             }
