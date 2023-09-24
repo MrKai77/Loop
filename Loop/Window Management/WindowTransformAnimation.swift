@@ -12,12 +12,11 @@ class WindowTransformAnimation: NSAnimation {
     private var targetFrame: CGRect
     private let oldFrame: CGRect
     private let window: Window
-    private let completionHandler: () -> Void
-    init(_ newRect: CGRect, window: Window, completionHandler: @escaping () -> Void = {}) {
+
+    init(_ newRect: CGRect, window: Window) {
         self.targetFrame = newRect
         self.oldFrame = window.frame
         self.window = window
-        self.completionHandler = completionHandler
         super.init(duration: 0.3, animationCurve: .linear)
         self.frameRate = 60.0
         self.animationBlockingMode = .nonblocking
@@ -45,11 +44,6 @@ class WindowTransformAnimation: NSAnimation {
             )
 
             window.setFrame(newFrame)
-
-            // On finish
-            if value == 1 {
-                self.completionHandler()
-            }
         }
     }
 }
