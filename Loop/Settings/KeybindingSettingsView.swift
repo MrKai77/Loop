@@ -95,7 +95,7 @@ struct KeybindingSettingsView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Press the spacebar to maximize a window:")
-                        Text("Make sure to be pressing your trigger key!")
+                        Text("Use the shift key to toggle fullscreen!")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -206,27 +206,6 @@ struct KeybindingSettingsView: View {
                             .font(Font.system(size: 15, weight: .bold))
 
                         Image(systemName: "z.square.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
-                }
-
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Use F to toggle fullscreen:")
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image(systemName: "f.square.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }
