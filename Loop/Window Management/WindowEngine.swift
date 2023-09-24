@@ -96,13 +96,15 @@ struct WindowEngine {
                     targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
                 }
 
-                window.setFrame(targetWindowFrame, animate: true)
+                window.setFrame(targetWindowFrame, animate: true, completionHandler: {
+                    WindowRecords.record(window, direction)
+                })
             }
         } else {
-            window.setFrame(targetWindowFrame, animate: false)
-            WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-
-            WindowRecords.record(window, direction)
+            window.setFrame(targetWindowFrame, completionHandler: {
+                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
+                WindowRecords.record(window, direction)
+            })
         }
     }
 

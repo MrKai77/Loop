@@ -12,12 +12,13 @@ class WindowTransformAnimation: NSAnimation {
     private var targetFrame: CGRect
     private let oldFrame: CGRect
     private let window: Window
-
-    init(_ newRect: CGRect, window: Window) {
+    private let completionHandler: () -> Void
+    init(_ newRect: CGRect, window: Window, completionHandler: @escaping () -> Void = {}) {
         self.targetFrame = newRect
         self.oldFrame = window.frame
         self.window = window
-        super.init(duration: 0.4, animationCurve: .linear)
+        self.completionHandler = completionHandler
+        super.init(duration: 0.3, animationCurve: .linear)
         self.frameRate = 60.0
         self.animationBlockingMode = .nonblocking
     }
@@ -35,7 +36,7 @@ class WindowTransformAnimation: NSAnimation {
 
     override public var currentProgress: NSAnimation.Progress {
         didSet {
-            let value = CGFloat(1.0 - pow(1.0 - self.currentValue, 4))
+            let value = CGFloat(1.0 - pow(1.0 - self.currentValue, 3))
             let newFrame = CGRect(
                 x: oldFrame.origin.x + value * (targetFrame.origin.x - oldFrame.origin.x),
                 y: oldFrame.origin.y + value * (targetFrame.origin.y - oldFrame.origin.y),
@@ -44,6 +45,11 @@ class WindowTransformAnimation: NSAnimation {
             )
 
             window.setFrame(newFrame)
+
+            // On finish
+            if value == 1 {
+                self.completionHandler()
+            }
         }
     }
 }
