@@ -95,7 +95,7 @@ struct KeybindingSettingsView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text("Press the spacebar to maximize a window:")
-                        Text("Make sure to be pressing your trigger key!")
+                        Text("Use the shift key to toggle fullscreen!")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -193,7 +193,7 @@ struct KeybindingSettingsView: View {
 
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Press Z to toggle between the last position of the window:")
+                        Text("Use Z to toggle between the last position of the window:")
                     }
 
                     Spacer()

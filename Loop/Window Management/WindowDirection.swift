@@ -13,6 +13,7 @@ enum WindowDirection: CaseIterable {
 
     case noAction
     case maximize
+    case fullscreen
     case center
     case lastDirection
 
@@ -78,6 +79,7 @@ enum WindowDirection: CaseIterable {
         switch self {
         case .noAction:                 nil
         case .maximize:                 "Maximize"
+        case .fullscreen:                "Fullscreen"
         case .center:                   "Center"
         case .lastDirection:            nil
 
@@ -109,6 +111,7 @@ enum WindowDirection: CaseIterable {
         switch self {
         case .noAction:                 [[]]
         case .maximize:                 Defaults[.maximizeKeybind]
+        case .fullscreen:               Defaults[.fullscreenKeybind]
         case .center:                   Defaults[.centerKeybind]
         case .lastDirection:            Defaults[.lastDirectionKeybind]
 
@@ -252,6 +255,7 @@ enum WindowDirection: CaseIterable {
         switch self {
         case .noAction:                 nil
         case .maximize:                 CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
+        case .fullscreen:               CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
         case .center:                   nil
         case .lastDirection:            nil
 

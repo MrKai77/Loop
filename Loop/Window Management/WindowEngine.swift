@@ -17,6 +17,18 @@ struct WindowEngine {
     ///   - screen: Screen the window should be resized on
     static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
         guard direction != .noAction else { return }
+
+        if direction == .fullscreen {
+            if window.isFullscreen {
+                window.setFullscreen(false)
+            } else {
+                window.setFullscreen(true)
+            }
+
+            WindowRecords.record(window, direction)
+            return
+        }
+
         window.setFullscreen(false)
 
         if !WindowRecords.hasBeenRecorded(window) {
