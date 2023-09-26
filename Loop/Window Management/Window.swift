@@ -10,9 +10,17 @@ import SwiftUI
 class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
+    var processID: pid_t
 
-    init?(element: AXUIElement) {
+    init?(element: AXUIElement, pid: pid_t? = nil) {
         self.axWindow = element
+
+        if pid == nil {
+            self.processID = 0
+            AXUIElementGetPid(self.axWindow, &processID)
+        } else {
+            self.processID = pid!
+        }
 
         // Set self's CGWindowID
         var windowId = CGWindowID(0)
@@ -30,7 +38,7 @@ class Window {
         let element = AXUIElementCreateApplication(pid)
         guard let window = element.getValue(.focusedWindow) else { return nil }
         // swiftlint:disable force_cast
-        self.init(element: window as! AXUIElement)
+        self.init(element: window as! AXUIElement, pid: pid)
         // swiftlint:enable force_cast
     }
 
@@ -159,3 +167,4 @@ class Window {
 
 @_silgen_name("_AXUIElementGetWindow") @discardableResult
 func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError
+

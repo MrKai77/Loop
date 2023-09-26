@@ -25,7 +25,7 @@ struct WindowEngine {
                 window.setFullscreen(true)
             }
 
-            WindowRecords.record(window, direction)
+            WindowRecords.recordDirection(window, direction)
             return
         }
 
@@ -75,12 +75,13 @@ struct WindowEngine {
         guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
               let window = Window(pid: app.processIdentifier) else { return nil }
 
-//        #if DEBUG
-//        print("===== NEW WINDOW =====")
-//        print("Frontmost window: \(window.axWindow)")
-//        print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
-//        print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
-//        #endif
+        #if DEBUG
+        print("===== NEW WINDOW =====")
+        print("Frontmost window: \(window.cgWindowID)")
+        print("Process ID: \(window.processID)")
+        print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
+        print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
+        #endif
 
         return window
     }
