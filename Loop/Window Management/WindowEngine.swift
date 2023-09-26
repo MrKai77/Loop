@@ -60,12 +60,12 @@ struct WindowEngine {
                 }
 
                 window.setFrame(targetWindowFrame, animate: true)
+                WindowRecords.recordDirection(window, direction)
             }
         } else {
-            window.setFrame(targetWindowFrame, animate: false)
+            window.setFrame(targetWindowFrame)
             WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-
-            WindowRecords.record(window, direction)
+            WindowRecords.recordDirection(window, direction)
         }
     }
 

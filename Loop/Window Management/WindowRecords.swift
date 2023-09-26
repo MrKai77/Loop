@@ -2,7 +2,7 @@
 //  WindowRecords.swift
 //  Loop
 //
-//  Created by Kai Azim on 2023-09-22.
+//  Created by Kai Azim on 2023-09-23.
 //
 
 import SwiftUI
@@ -13,7 +13,6 @@ struct WindowRecords {
     private struct Record {
         var cgWindowID: CGWindowID
         var initialFrame: CGRect
-        var currentFrame: CGRect
         var directionRecords: [WindowDirection]
     }
 
@@ -26,19 +25,17 @@ struct WindowRecords {
             WindowRecords.Record(
                 cgWindowID: window.cgWindowID,
                 initialFrame: window.frame,
-                currentFrame: window.frame,
                 directionRecords: [.noAction]
             )
         )
     }
 
-    static func record(_ window: Window, _ direction: WindowDirection) {
+    static func recordDirection(_ window: Window, _ direction: WindowDirection) {
         guard WindowRecords.hasBeenRecorded(window),
               let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
             return
         }
 
-        WindowRecords.records[idx].currentFrame = window.frame
         WindowRecords.records[idx].directionRecords.insert(direction, at: 0)
     }
 

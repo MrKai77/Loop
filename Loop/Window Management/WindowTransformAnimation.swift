@@ -17,7 +17,7 @@ class WindowTransformAnimation: NSAnimation {
         self.targetFrame = newRect
         self.oldFrame = window.frame
         self.window = window
-        super.init(duration: 0.4, animationCurve: .linear)
+        super.init(duration: 0.3, animationCurve: .linear)
         self.frameRate = 60.0
         self.animationBlockingMode = .nonblocking
     }
@@ -35,7 +35,7 @@ class WindowTransformAnimation: NSAnimation {
 
     override public var currentProgress: NSAnimation.Progress {
         didSet {
-            let value = CGFloat(1.0 - pow(1.0 - self.currentValue, 4))
+            let value = CGFloat(1.0 - pow(1.0 - self.currentValue, 3))
             let newFrame = CGRect(
                 x: oldFrame.origin.x + value * (targetFrame.origin.x - oldFrame.origin.x),
                 y: oldFrame.origin.y + value * (targetFrame.origin.y - oldFrame.origin.y),
