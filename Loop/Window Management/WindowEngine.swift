@@ -43,12 +43,13 @@ struct WindowEngine {
         var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
 
         var animate =  Defaults[.animateWindowResizes]
-        if PermissionsManager.ScreenRecording.getStatus() == false {
-            PermissionsManager.ScreenRecording.requestAccess()
-            animate = false
-        }
-
         if animate {
+            if PermissionsManager.ScreenRecording.getStatus() == false {
+                PermissionsManager.ScreenRecording.requestAccess()
+                animate = false
+                return
+            }
+
             // Calculate the window's minimum window size and change the target accordingly
             window.getMinSize(screen: screen) { minSize in
                 if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
