@@ -77,7 +77,7 @@ struct KeybindingsSettingsView: View {
 
                 HStack {
                     Stepper(
-                        "Trigger Delay",
+                        "Trigger Delay (seconds)",
                         value: Binding<Double>(
                             get: { Double(self.triggerDelay) },
                             set: { self.triggerDelay = Float($0) }
@@ -86,8 +86,6 @@ struct KeybindingsSettingsView: View {
                         step: 0.1,
                         format: .number
                     )
-                    Text("seconds")
-                        .foregroundColor(.secondary)
                 }
             }
 
