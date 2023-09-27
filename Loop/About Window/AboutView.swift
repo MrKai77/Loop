@@ -34,8 +34,19 @@ struct AboutView: View {
             license: URL(string: "https://github.com/orchetect/MenuBarExtraAccess/blob/main/LICENSE")!
         ),
         PackageDescription(
+            name: "Settings",
+            url: URL(
+                string: "https://github.com/sindresorhus/Settings"
+            )!,
+            license: URL(
+                string: "https://github.com/sindresorhus/Settings/blob/main/license"
+            )!
+        ),
+        PackageDescription(
             name: "Sparkle",
-            url: URL(string: "https://sparkle-project.org")!,
+            url: URL(
+                string: "https://sparkle-project.org"
+            )!,
             license: URL(
                 string: "https://github.com/sparkle-project/Sparkle/blob/2.x/LICENSE"
             )!

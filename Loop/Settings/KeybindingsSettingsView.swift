@@ -8,7 +8,7 @@
 import SwiftUI
 import Defaults
 
-struct KeybindingSettingsView: View {
+struct KeybindingsSettingsView: View {
 
     @Default(.triggerKey) var triggerKey
     @Default(.doubleClickToTrigger) var doubleClickToTrigger
@@ -193,7 +193,7 @@ struct KeybindingSettingsView: View {
 
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Use Z to toggle between the last position of the window:")
+                        Text("Use Z undo window operations:")
                     }
 
                     Spacer()

@@ -25,10 +25,6 @@ class AboutViewController {
         }
 
         aboutWindowController?.showWindow(aboutWindowController?.window)
-        if #available(macOS 14.0, *) {
-            NSApp.activate()
-        } else {
-            NSApp.activate(ignoringOtherApps: true)
-        }
+        aboutWindowController?.window?.orderFrontRegardless()
     }
 }
