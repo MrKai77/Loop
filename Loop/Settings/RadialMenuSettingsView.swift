@@ -53,5 +53,6 @@ struct RadialMenuSettingsView: View {
             })
         }
         .formStyle(.grouped)
+        .scrollDisabled(true)
     }
 }

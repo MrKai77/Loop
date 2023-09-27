@@ -38,5 +38,6 @@ struct MoreSettingsView: View {
             })
         }
         .formStyle(.grouped)
+        .scrollDisabled(true)
     }
 }

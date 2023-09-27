@@ -164,5 +164,6 @@ struct GeneralSettingsView: View {
             })
         }
         .formStyle(.grouped)
+        .scrollDisabled(true)
     }
 }

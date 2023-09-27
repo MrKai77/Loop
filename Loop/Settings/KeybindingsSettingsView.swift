@@ -213,5 +213,6 @@ struct KeybindingsSettingsView: View {
             .symbolRenderingMode(.hierarchical)
         }
         .formStyle(.grouped)
+        .scrollDisabled(true)
     }
 }

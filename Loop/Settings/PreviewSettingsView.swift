@@ -60,5 +60,6 @@ struct PreviewSettingsView: View {
             .foregroundColor(!previewVisibility ? .secondary : nil)
         }
         .formStyle(.grouped)
+        .scrollDisabled(true)
     }
 }
