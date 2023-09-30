@@ -42,7 +42,7 @@ class SnappingManager {
                         ignoredFrame: ignoredFrame
                     )
 
-                    self.previewController.open(screen: screen)
+                    self.previewController.open(screen: screen, window: nil)
                     DispatchQueue.main.async {
                         NotificationCenter.default.post(
                             name: Notification.Name.directionChanged,
