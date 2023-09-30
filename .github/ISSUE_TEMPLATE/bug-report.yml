@@ -71,7 +71,7 @@ body:
     attributes:
       label: Final Checks
       options:
-        - label: Yes, my issue title is descriptive
+        - label: My issue title is descriptive
           required: true
 
   - type: markdown
