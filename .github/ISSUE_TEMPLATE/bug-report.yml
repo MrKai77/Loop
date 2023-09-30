@@ -73,7 +73,7 @@ body:
       options:
         - label: My issue title is descriptive
           required: true
-        - label: This is a single bug (bugs should be reported indivdually)
+        - label: This is a single bug (multiple bugs should be reported indivdually)
           required: true
 
   - type: markdown
