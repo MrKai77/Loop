@@ -24,6 +24,13 @@ body:
     validations:
       required: false
 
+  - type: checkboxes
+    attributes:
+      label: Final Checks
+      options:
+        - label: Yes, my issue title is descriptive
+          required: true
+
   - type: markdown
     attributes:
       value: Thank you for taking the time to report this feature request!
