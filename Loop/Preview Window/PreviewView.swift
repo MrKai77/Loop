@@ -14,6 +14,13 @@ struct PreviewView: View {
     @State var previewMode = false
 
     @State var currentResizeDirection: WindowDirection = .noAction
+    private let window: Window?
+    private var sidePadding: CGFloat = 0
+
+    init(previewMode: Bool = false, window: Window?) {
+        self.window = window
+        self.sidePadding = previewPadding + previewBorderThickness / 2
+    }
 
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
@@ -29,7 +36,8 @@ struct PreviewView: View {
         GeometryReader { geo in
             VStack {
                 switch currentResizeDirection {
-                case .bottomHalf,
+                case .center,
+                        .bottomHalf,
                         .bottomRightQuarter,
                         .bottomLeftQuarter,
                         .verticalCenterThird,
@@ -45,7 +53,8 @@ struct PreviewView: View {
 
                 HStack {
                     switch currentResizeDirection {
-                    case .rightHalf,
+                    case .center,
+                            .rightHalf,
                             .topRightQuarter,
                             .bottomRightQuarter,
                             .horizontalCenterThird,
@@ -78,9 +87,12 @@ struct PreviewView: View {
                                 lineWidth: previewBorderThickness
                             )
                     }
-                    .padding(previewPadding + previewBorderThickness/2)
+                    .padding(sidePadding)
                     .frame(width: currentResizeDirection == .noAction ? 0 : nil,
                            height: currentResizeDirection == .noAction ? 0 : nil)
+                    .frame(width: currentResizeDirection == .center ? (window?.size.width ?? 10) - sidePadding : nil,
+                           height: currentResizeDirection == .center ? (window?.size.height ?? 10) - sidePadding : nil)
+
                     .frame(width: currentResizeDirection == .lastDirection ? 0 : nil,
                            height: currentResizeDirection == .lastDirection ? 0 : nil)
                     .frame(width: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
@@ -89,7 +101,8 @@ struct PreviewView: View {
                     .frame(width: currentResizeDirection == .leftTwoThirds ? geo.size.width / 3 * 2 : nil)
 
                     switch currentResizeDirection {
-                    case .leftHalf,
+                    case .center,
+                            .leftHalf,
                             .topLeftQuarter,
                             .bottomLeftQuarter,
                             .horizontalCenterThird,
@@ -105,7 +118,8 @@ struct PreviewView: View {
                 }
 
                 switch currentResizeDirection {
-                case .topHalf,
+                case .center,
+                        .topHalf,
                         .topRightQuarter,
                         .topLeftQuarter,
                         .verticalCenterThird,
@@ -122,7 +136,6 @@ struct PreviewView: View {
         }
         .foregroundColor(.clear)
         .opacity(currentResizeDirection == .noAction ? 0 : 1)
-        .scaleEffect(currentResizeDirection == .center ? 0.8 : 1)
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizeDirection)
         .onReceive(.directionChanged) { obj in
             if !previewMode {

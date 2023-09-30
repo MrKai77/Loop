@@ -138,7 +138,7 @@ class LoopManager {
             self.screenWithMouse = NSScreen.screenWithMouse
 
             if Defaults[.previewVisibility] == true && frontmostWindow != nil {
-                previewController.open(screen: self.screenWithMouse!)
+                previewController.open(screen: self.screenWithMouse!, window: frontmostWindow)
             }
             radialMenuController.open(frontmostWindow: frontmostWindow)
             keybindMonitor.start()

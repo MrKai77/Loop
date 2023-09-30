@@ -22,7 +22,7 @@ struct PreviewSettingsView: View {
             }
 
             Section {
-                PreviewView(previewMode: true)
+                PreviewView(previewMode: true, window: nil)
             }
             .frame(height: 150)
             .opacity(previewVisibility ? 1 : 0.5)

@@ -11,7 +11,7 @@ class PreviewController {
 
     var loopPreviewWindowController: NSWindowController?
 
-    func open(screen: NSScreen) {
+    func open(screen: NSScreen, window: Window?) {
         if let windowController = loopPreviewWindowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -25,7 +25,7 @@ class PreviewController {
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(rootView: PreviewView())
+        panel.contentView = NSHostingView(rootView: PreviewView(window: window))
         panel.collectionBehavior = .canJoinAllSpaces
         panel.alphaValue = 0
         panel.orderFrontRegardless()
