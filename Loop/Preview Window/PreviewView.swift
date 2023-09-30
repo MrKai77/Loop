@@ -10,16 +10,13 @@ import Defaults
 
 struct PreviewView: View {
 
-    // Used to preview inside the app's settings
-    @State var previewMode = false
-
     @State var currentResizeDirection: WindowDirection = .noAction
     private let window: Window?
-    private var sidePadding: CGFloat = 0
+    private let previewMode: Bool
 
     init(previewMode: Bool = false, window: Window?) {
         self.window = window
-        self.sidePadding = previewPadding + previewBorderThickness / 2
+        self.previewMode = previewMode
     }
 
     @Default(.useSystemAccentColor) var useSystemAccentColor
@@ -87,12 +84,11 @@ struct PreviewView: View {
                                 lineWidth: previewBorderThickness
                             )
                     }
-                    .padding(sidePadding)
+                    .padding(previewPadding + previewBorderThickness / 2)
                     .frame(width: currentResizeDirection == .noAction ? 0 : nil,
                            height: currentResizeDirection == .noAction ? 0 : nil)
-                    .frame(width: currentResizeDirection == .center ? (window?.size.width ?? 10) - sidePadding : nil,
-                           height: currentResizeDirection == .center ? (window?.size.height ?? 10) - sidePadding : nil)
-
+//                    .frame(width: currentResizeDirection == .center ? (window?.size.width ?? 10) - sidePadding : nil,
+//                           height: currentResizeDirection == .center ? (window?.size.height ?? 10) - sidePadding : nil)
                     .frame(width: currentResizeDirection == .lastDirection ? 0 : nil,
                            height: currentResizeDirection == .lastDirection ? 0 : nil)
                     .frame(width: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
@@ -138,16 +134,15 @@ struct PreviewView: View {
         .opacity(currentResizeDirection == .noAction ? 0 : 1)
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizeDirection)
         .onReceive(.directionChanged) { obj in
-            if !previewMode {
+            if !self.previewMode {
                 if let direction = obj.userInfo?["direction"] as? WindowDirection {
                     currentResizeDirection = direction
                 }
             }
         }
-
         .onAppear {
-            if previewMode {
-                currentResizeDirection = .maximize
+            if self.previewMode {
+                self.currentResizeDirection = .maximize
             }
         }
     }

@@ -25,7 +25,7 @@ class KeybindMonitor {
         // This is used when the user is pressing 2+ keys so that it doesn't switch back
         // to the one key direction when they're letting go of the keys.
         if event.type == .keyUp ||
-            (event.type == .flagsChanged && 
+            (event.type == .flagsChanged &&
              !event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.shift)) {
             if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
                 return
