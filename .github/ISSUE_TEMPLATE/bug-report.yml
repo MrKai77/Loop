@@ -72,10 +72,8 @@ body:
       label: Final Checks
       options:
         - label: My issue title is descriptive
-          description: Refer to existing issues for good naming examples :)
           required: true
-        - label: This is a single bug
-          description: Multiple bugs should be reported as multiple issues.
+        - label: This is a single bug (Multiple bugs should be reported as multiple issues)
           required: true
 
   - type: markdown
