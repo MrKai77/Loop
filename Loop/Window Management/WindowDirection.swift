@@ -9,7 +9,8 @@ import SwiftUI
 import Defaults
 
 // Enum that stores all possible resizing options
-enum WindowDirection: CaseIterable {
+enum WindowDirection: CaseIterable, Identifiable {
+    var id: Self { return self }
 
     case noAction
     case maximize
@@ -42,6 +43,23 @@ enum WindowDirection: CaseIterable {
     case verticalCenterThird
     case bottomThird
     case bottomTwoThirds
+
+    // These are used in the menubar item
+    static var general: [WindowDirection] {
+        [.maximize, .fullscreen, .center, .lastDirection]
+    }
+    static var halves: [WindowDirection] {
+        [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
+    }
+    static var quarters: [WindowDirection] {
+        [.topLeftQuarter, .topRightQuarter, .bottomLeftQuarter, .bottomRightQuarter]
+    }
+    static var horizontalThirds: [WindowDirection] {
+        [.rightThird, .rightTwoThirds, .horizontalCenterThird, .leftTwoThirds, .leftThird]
+    }
+    static var verticalThirds: [WindowDirection] {
+        [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
+    }
 
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
@@ -79,7 +97,7 @@ enum WindowDirection: CaseIterable {
         switch self {
         case .noAction:                 nil
         case .maximize:                 "Maximize"
-        case .fullscreen:                "Fullscreen"
+        case .fullscreen:               "Fullscreen"
         case .center:                   "Center"
         case .lastDirection:            nil
 
@@ -99,15 +117,15 @@ enum WindowDirection: CaseIterable {
         case .rightTwoThirds:           "Right Two Thirds"
         case .rightThird:               "Right Third"
 
-        case .topThird:                  "Top Third"
-        case .topTwoThirds:              "Top Two Thirds"
-        case .verticalCenterThird:       "Vertical Center Third"
-        case .bottomThird:               "Bottom Third"
-        case .bottomTwoThirds:           "Bottom Two Thirds"
+        case .topThird:                 "Top Third"
+        case .topTwoThirds:             "Top Two Thirds"
+        case .verticalCenterThird:      "Vertical Center Third"
+        case .bottomThird:              "Bottom Third"
+        case .bottomTwoThirds:          "Bottom Two Thirds"
         }
     }
 
-    var keybind: [Set<UInt16>] {
+    var keybind: [Set<CGKeyCode>] {
         switch self {
         case .noAction:                 [[]]
         case .maximize:                 Defaults[.maximizeKeybind]

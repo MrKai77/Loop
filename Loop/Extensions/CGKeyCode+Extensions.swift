@@ -4,27 +4,12 @@
 //
 //  Created by Kai Azim on 2023-06-25.
 //
-// From https://gist.github.com/chrispaynter/07c9b16219c3d58f57a6e2b0249db4bf (but formatted)
+// From https://gist.github.com/chrispaynter/07c9b16219c3d58f57a6e2b0249db4bf (but edited a lot)
 
 import CoreGraphics
+import Carbon
 
 extension CGKeyCode {
-    /*
-     * From Events.h in Carbon.framework
-     *  Summary:
-     *    Virtual keycodes
-     *
-     *  Discussion:
-     *    These constants are the virtual keycodes defined originally in
-     *    Inside Mac Volume V, pg. V-191. They identify physical keys on a
-     *    keyboard. Those constants with "ANSI" in the name are labeled
-     *    according to the key position on an ANSI-standard US keyboard.
-     *    For example, kVK_ANSI_A indicates the virtual keycode for the key
-     *    with the letter 'A' in the US keyboard layout. Other keyboard
-     *    layouts may have the 'A' key label on a different physical key;
-     *    in this case, pressing 'A' will generate a different virtual
-     *    keycode.
-     */
     static let kVK_ANSI_A: CGKeyCode = 0x00
     static let kVK_ANSI_S: CGKeyCode = 0x01
     static let kVK_ANSI_D: CGKeyCode = 0x02
@@ -190,5 +175,35 @@ extension CGKeyCode {
 
     var isPressed: Bool {
         CGEventSource.keyState(.combinedSessionState, key: self)
+    }
+
+    var keyCodeToString: Character? {
+        let source = TISCopyCurrentKeyboardInputSource().takeRetainedValue()
+        let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)!.assumingMemoryBound(to: UCKeyboardLayout.self)
+        let layoutData = unsafeBitCast(layoutDataPointer, to: CFData.self)
+        let keyLayout = unsafeBitCast(CFDataGetBytePtr(layoutData), to: UnsafePointer<CoreServices.UCKeyboardLayout>.self)
+
+        var deadKeyState: UInt32 = 0
+        var chars: [UniChar] = [0, 0, 0, 0]
+        var length = 0
+
+        let result = UCKeyTranslate(
+            keyLayout,
+            UInt16(self),
+            UInt16(kUCKeyActionDown),
+            0,
+            UInt32(LMGetKbdType()),
+            OptionBits(kUCKeyTranslateNoDeadKeysBit),
+            &deadKeyState,
+            4,
+            &length,
+            &chars
+        )
+
+        if result == noErr {
+            return String(utf16CodeUnits: chars, count: length).first
+        } else {
+            return nil
+        }
     }
 }

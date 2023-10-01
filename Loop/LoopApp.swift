@@ -20,8 +20,29 @@ struct LoopApp: App {
     var body: some Scene {
         MenuBarExtra("Loop", image: "") {
             #if DEBUG
-            Text("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+            MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif
+
+            Menu("Resize…") {
+                MenuBarHeaderText("General")
+                ForEach(WindowDirection.general) { MenuBarResizeButton($0) }
+                Divider()
+
+                MenuBarHeaderText("Halves")
+                ForEach(WindowDirection.halves) { MenuBarResizeButton($0) }
+                Divider()
+
+                MenuBarHeaderText("Quarters")
+                ForEach(WindowDirection.quarters) { MenuBarResizeButton($0) }
+                Divider()
+
+                MenuBarHeaderText("Horizontal Thirds")
+                ForEach(WindowDirection.horizontalThirds) { MenuBarResizeButton($0) }
+                Divider()
+
+                MenuBarHeaderText("Vertical Thirds")
+                ForEach(WindowDirection.verticalThirds) { MenuBarResizeButton($0) }
+            }
 
             Button("Settings") {
                 NSApp.setActivationPolicy(.regular)
@@ -48,7 +69,7 @@ struct LoopApp: App {
 
             guard let button = statusItem.button else { return }
 
-            let view = NSHostingView(rootView: MenubarIconView())
+            let view = NSHostingView(rootView: MenuBarIconView())
             view.frame.size = NSSize(width: 22, height: 22)
             button.addSubview(view)
         }
