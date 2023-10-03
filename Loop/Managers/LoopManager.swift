@@ -94,8 +94,8 @@ class LoopManager {
             self.closeLoop(forceClose: true)
             return
         }
-        if event.keyCode == Defaults[.triggerKey].keycode {
 
+        if event.keyCode == Defaults[.triggerKey].keycode {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
@@ -114,7 +114,6 @@ class LoopManager {
                             self.openLoop()
                         }
                     }
-                    self.lastTriggerKeyClick = Date.now
                 } else if useTriggerDelay {
                     if self.triggerDelayTimer == nil {
                         self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
@@ -124,6 +123,12 @@ class LoopManager {
                 } else {
                     self.openLoop()
                 }
+                self.lastTriggerKeyClick = Date.now
+            }
+        } else {
+            if event.modifierFlags.rawValue == 256 &&
+                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                self.closeLoop()
             }
         }
     }
