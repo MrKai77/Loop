@@ -16,7 +16,6 @@ struct KeybindingsSettingsView: View {
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
 
-    let loopTriggerKeyOptions = TriggerKey.options
     @State var suggestAddingTriggerDelay: Bool = false
     @State var suggestDisablingCapsLock: Bool = false
 
