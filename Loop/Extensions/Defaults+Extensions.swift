@@ -42,6 +42,10 @@ extension Defaults.Keys {
         "centerKeybind",
         default: [[.kVK_Return]]
     )
+    static let initialFrameKeybind = Key<[Set<CGKeyCode>]>(
+        "initialFrameKeybind",
+        default: [[.kVK_ANSI_I]]
+    )
     static let lastDirectionKeybind = Key<[Set<CGKeyCode>]>(
         "lastDirectionKeybind",
         default: [[.kVK_ANSI_Z]]

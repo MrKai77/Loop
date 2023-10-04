@@ -36,8 +36,12 @@ struct WindowEngine {
         }
 
         let oldWindowFrame = window.frame
-        guard let screenFrame = screen.safeScreenFrame,
-              let currentWindowFrame = WindowEngine.generateWindowFrame(oldWindowFrame, screenFrame, direction) else {
+        guard let screenFrame = screen.safeScreenFrame, let currentWindowFrame = WindowEngine.generateWindowFrame(
+            oldWindowFrame,
+            screenFrame,
+            direction,
+            window
+        ) else {
             return
         }
         var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
@@ -129,7 +133,8 @@ struct WindowEngine {
     private static func generateWindowFrame(
         _ windowFrame: CGRect,
         _ screenFrame: CGRect,
-        _ direction: WindowDirection
+        _ direction: WindowDirection,
+        _ window: Window
     ) -> CGRect? {
         let screenWidth = screenFrame.size.width
         let screenHeight = screenFrame.size.height
@@ -149,6 +154,24 @@ struct WindowEngine {
                 width: windowFrame.width,
                 height: windowFrame.height
             )
+        case .lastDirection:
+            let previousDirection = WindowRecords.getLastDirection(for: window, willResize: true)
+            if let previousResizeFrame = self.generateWindowFrame(
+                windowFrame,
+                screenFrame,
+                previousDirection,
+                window
+            ) {
+                newWindowFrame = previousResizeFrame
+            } else {
+                return nil
+            }
+        case .initialFrame:
+            if let initalFrame = WindowRecords.getInitialFrame(for: window) {
+                newWindowFrame = initalFrame
+            } else {
+                return nil
+            }
         default:
             guard let frameMultiplyValues = direction.frameMultiplyValues else { return nil}
             newWindowFrame.origin.x += screenWidth * frameMultiplyValues.minX
