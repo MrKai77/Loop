@@ -87,6 +87,8 @@ struct PreviewView: View {
                     .padding(previewPadding + previewBorderThickness / 2)
                     .frame(width: currentResizeDirection == .noAction ? 0 : nil,
                            height: currentResizeDirection == .noAction ? 0 : nil)
+                    .frame(width: currentResizeDirection == .initialFrame ? 0 : nil,
+                           height: currentResizeDirection == .initialFrame ? 0 : nil)
                     .frame(width: currentResizeDirection == .center ?
                                 (window?.size.width ?? 10) - previewPadding + previewBorderThickness / 2 :
                                 nil,
