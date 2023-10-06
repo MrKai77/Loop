@@ -16,6 +16,14 @@ struct WindowRecords {
         var directionRecords: [WindowDirection]
     }
 
+    static private func getIndex(of window: Window) -> Int? {
+        guard WindowRecords.hasBeenRecorded(window),
+              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
+            return nil
+        }
+        return idx
+    }
+
     /// This will erase ALL previous records of the window, and start a fresh new record for the selected window.
     /// - Parameter window: The window to record
     static func recordFirst(for window: Window) {
@@ -25,14 +33,13 @@ struct WindowRecords {
             WindowRecords.Record(
                 cgWindowID: window.cgWindowID,
                 initialFrame: window.frame,
-                directionRecords: [.noAction]
+                directionRecords: [.initialFrame]
             )
         )
     }
 
     static func recordDirection(_ window: Window, _ direction: WindowDirection) {
-        guard WindowRecords.hasBeenRecorded(window),
-              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
+        guard let idx = WindowRecords.getIndex(of: window) else {
             return
         }
 
@@ -43,12 +50,24 @@ struct WindowRecords {
         return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
     }
 
-    static func getLastDirection(for window: Window) -> WindowDirection {
-        guard WindowRecords.hasBeenRecorded(window),
-              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
+    static func getLastDirection(for window: Window, willResize: Bool = false) -> WindowDirection {
+        guard let idx = WindowRecords.getIndex(of: window),
+                WindowRecords.records[idx].directionRecords.count > 1 else {
             return .noAction
         }
 
-        return WindowRecords.records[idx].directionRecords[1]
+        let lastDirection = WindowRecords.records[idx].directionRecords[1]
+        if willResize && WindowRecords.records[idx].directionRecords.count > 2 {
+            WindowRecords.records[idx].directionRecords.removeFirst(2)
+        }
+        return lastDirection
+    }
+
+    static func getInitialFrame(for window: Window) -> CGRect? {
+        guard let idx = WindowRecords.getIndex(of: window) else {
+            return nil
+        }
+
+        return WindowRecords.records[idx].initialFrame
     }
 }
