@@ -15,8 +15,9 @@ enum WindowDirection: CaseIterable, Identifiable {
     case noAction
     case maximize
     case fullscreen
-    case center
     case lastDirection
+    case center
+    case initialFrame
 
     // Halves
     case topHalf
@@ -98,8 +99,9 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .noAction:                 nil
         case .maximize:                 "Maximize"
         case .fullscreen:               "Fullscreen"
-        case .center:                   "Center"
         case .lastDirection:            nil
+        case .center:                   "Center"
+        case .initialFrame:             "Restore Initial Frame"
 
         case .topHalf:                  "Top Half"
         case .rightHalf:                "Right Half"
@@ -130,8 +132,9 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .noAction:                 [[]]
         case .maximize:                 Defaults[.maximizeKeybind]
         case .fullscreen:               Defaults[.fullscreenKeybind]
-        case .center:                   Defaults[.centerKeybind]
         case .lastDirection:            Defaults[.lastDirectionKeybind]
+        case .center:                   Defaults[.centerKeybind]
+        case .initialFrame:             Defaults[.initialFrameKeybind]
 
         case .topHalf:                  Defaults[.topHalfKeybind]
         case .rightHalf:                Defaults[.rightHalfKeybind]
@@ -274,8 +277,9 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .noAction:                 nil
         case .maximize:                 CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
         case .fullscreen:               CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
-        case .center:                   nil
         case .lastDirection:            nil
+        case .center:                   nil
+        case .initialFrame:             nil
 
         // Halves
         case .topHalf:                  CGRect(x: 0, y: 0, width: 1.0, height: 1.0/2.0)

@@ -18,6 +18,7 @@ class LoopManager {
     private let previewController = PreviewController()
 
     private var currentResizingDirection: WindowDirection = .noAction
+    private var actualCurrentResizingDirection: WindowDirection = .noAction // Used when direction is .lastDirection
     private var isLoopShown: Bool = false
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
@@ -69,13 +70,19 @@ class LoopManager {
         if let direction = notification.userInfo?["direction"] as? WindowDirection {
             self.currentResizingDirection = direction
 
-            if let window = self.frontmostWindow,
-               self.currentResizingDirection == .lastDirection {
+            if notification.userInfo?["isActualDirection"] as? Bool == nil ||
+               notification.userInfo?["isActualDirection"] as? Bool == true {
+                self.actualCurrentResizingDirection = direction
+            }
 
+            if let window = self.frontmostWindow, self.currentResizingDirection == .lastDirection {
                 // If the user sets .lastDirection as the last direction
                 self.currentResizingDirection = WindowRecords.getLastDirection(for: window)
                 DispatchQueue.main.async {
-                    Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
+                    Notification.Name.directionChanged.post(userInfo: [
+                        "direction": self.currentResizingDirection,
+                        "isActualDirection": false]
+                    )
                 }
             } else {
                 // Haptic feedback on the trackpad
@@ -94,8 +101,8 @@ class LoopManager {
             self.closeLoop(forceClose: true)
             return
         }
-        if event.keyCode == Defaults[.triggerKey].keycode {
 
+        if event.keyCode == Defaults[.triggerKey].keycode {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
@@ -114,7 +121,6 @@ class LoopManager {
                             self.openLoop()
                         }
                     }
-                    self.lastTriggerKeyClick = Date.now
                 } else if useTriggerDelay {
                     if self.triggerDelayTimer == nil {
                         self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
@@ -124,13 +130,20 @@ class LoopManager {
                 } else {
                     self.openLoop()
                 }
+                self.lastTriggerKeyClick = Date.now
+            }
+        } else {
+            if event.modifierFlags.rawValue == 256 &&
+                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                self.closeLoop()
             }
         }
     }
 
     private func openLoop() {
-        currentResizingDirection = .noAction
-        frontmostWindow = nil
+        self.currentResizingDirection = .noAction
+        self.actualCurrentResizingDirection = .noAction
+        self.frontmostWindow = nil
 
         // Loop will only open if accessibility access has been granted
         if PermissionsManager.Accessibility.getStatus() {
@@ -159,11 +172,11 @@ class LoopManager {
             self.screenWithMouse != nil &&
             forceClose == false &&
             self.isLoopShown &&
-            self.currentResizingDirection != .noAction {
+            self.actualCurrentResizingDirection != .noAction {
 
             isLoopShown = false
 
-            WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
+            WindowEngine.resize(self.frontmostWindow!, to: self.actualCurrentResizingDirection, self.screenWithMouse!)
             Notification.Name.didLoop.post()
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()
