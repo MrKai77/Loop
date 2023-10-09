@@ -47,7 +47,7 @@ enum WindowDirection: CaseIterable, Identifiable {
 
     // These are used in the menubar item
     static var general: [WindowDirection] {
-        [.maximize, .fullscreen, .center, .lastDirection]
+        [.maximize, .fullscreen, .center, .lastDirection, .initialFrame]
     }
     static var halves: [WindowDirection] {
         [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
@@ -99,9 +99,9 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .noAction:                 nil
         case .maximize:                 "Maximize"
         case .fullscreen:               "Fullscreen"
-        case .lastDirection:            nil
+        case .lastDirection:            "Last Direction"
         case .center:                   "Center"
-        case .initialFrame:             "Restore Initial Frame"
+        case .initialFrame:             "Initial Frame"
 
         case .topHalf:                  "Top Half"
         case .rightHalf:                "Right Half"
@@ -129,7 +129,6 @@ enum WindowDirection: CaseIterable, Identifiable {
 
     var keybind: [Set<CGKeyCode>] {
         switch self {
-        case .noAction:                 [[]]
         case .maximize:                 Defaults[.maximizeKeybind]
         case .fullscreen:               Defaults[.fullscreenKeybind]
         case .lastDirection:            Defaults[.lastDirectionKeybind]
@@ -156,35 +155,35 @@ enum WindowDirection: CaseIterable, Identifiable {
         }
     }
 
-    var image: NSImage? {
+    var image: Image? {
         switch self {
-        case .maximize:                 NSImage(systemSymbolName: "rectangle.inset.filled", accessibilityDescription: nil)
-        case .fullscreen:               NSImage(systemSymbolName: "rectangle.fill", accessibilityDescription: nil)
-//        case .lastDirection:
-        case .center:                   NSImage(systemSymbolName: "rectangle.center.inset.filled", accessibilityDescription: nil)
-        case .initialFrame:             NSImage(systemSymbolName: "macwindow", accessibilityDescription: nil)
+        case .maximize:                 Image(systemName: "rectangle.inset.filled")
+        case .fullscreen:               Image(systemName: "rectangle.fill")
+        case .center:                   Image(systemName: "rectangle.center.inset.filled")
+        case .lastDirection:            Image("custom.backward.fill.rectangle.fill")
+        case .initialFrame:             Image(systemName: "macwindow")
 
-        case .topHalf:                  NSImage(systemSymbolName: "rectangle.tophalf.inset.filled", accessibilityDescription: nil)
-        case .rightHalf:                NSImage(systemSymbolName: "rectangle.righthalf.inset.filled", accessibilityDescription: nil)
-        case .bottomHalf:               NSImage(systemSymbolName: "rectangle.bottomhalf.inset.filled", accessibilityDescription: nil)
-        case .leftHalf:                 NSImage(systemSymbolName: "rectangle.lefthalf.inset.filled", accessibilityDescription: nil)
+        case .topHalf:                  Image(systemName: "rectangle.tophalf.inset.filled")
+        case .rightHalf:                Image(systemName: "rectangle.righthalf.inset.filled")
+        case .bottomHalf:               Image(systemName: "rectangle.bottomhalf.inset.filled")
+        case .leftHalf:                 Image(systemName: "rectangle.lefthalf.inset.filled")
 
-        case .topLeftQuarter:           NSImage(systemSymbolName: "rectangle.inset.topleft.filled", accessibilityDescription: nil)
-        case .topRightQuarter:          NSImage(systemSymbolName: "rectangle.inset.topright.filled", accessibilityDescription: nil)
-        case .bottomRightQuarter:       NSImage(systemSymbolName: "rectangle.inset.bottomright.filled", accessibilityDescription: nil)
-        case .bottomLeftQuarter:        NSImage(systemSymbolName: "rectangle.inset.bottomleft.filled", accessibilityDescription: nil)
+        case .topLeftQuarter:           Image(systemName: "rectangle.inset.topleft.filled")
+        case .topRightQuarter:          Image(systemName: "rectangle.inset.topright.filled")
+        case .bottomRightQuarter:       Image(systemName: "rectangle.inset.bottomright.filled")
+        case .bottomLeftQuarter:        Image(systemName: "rectangle.inset.bottomleft.filled")
 
-        case .rightThird:               NSImage(systemSymbolName: "rectangle.rightthird.inset.filled", accessibilityDescription: nil)
-        case .rightTwoThirds:           NSImage(named: "rectangle.righttwothirds.inset.filled")
-        case .horizontalCenterThird:    NSImage(named: "rectangle.centerthird.inset.filled")
-        case .leftThird:                NSImage(systemSymbolName: "rectangle.leftthird.inset.filled", accessibilityDescription: nil)
-        case .leftTwoThirds:            NSImage(named: "rectangle.lefttwothirds.inset.filled")
+        case .rightThird:               Image(systemName: "rectangle.rightthird.inset.filled")
+        case .rightTwoThirds:           Image("custom.rectangle.righttwothirds.inset.filled")
+        case .horizontalCenterThird:    Image("custom.rectangle.horizontalcenterthird.inset.filled")
+        case .leftThird:                Image(systemName: "rectangle.leftthird.inset.filled")
+        case .leftTwoThirds:            Image("custom.rectangle.lefttwothirds.inset.filled")
 
-        case .topThird:                 NSImage(systemSymbolName: "rectangle.topthird.inset.filled", accessibilityDescription: nil)
-//        case .topTwoThirds:
-//        case .verticalCenterThird:
-        case .bottomThird:              NSImage(systemSymbolName: "rectangle.bottomthird.inset.filled", accessibilityDescription: nil)
-//        case .bottomTwoThirds:
+        case .topThird:                 Image(systemName: "rectangle.topthird.inset.filled")
+        case .topTwoThirds:             Image("custom.rectangle.toptwothirds.inset.filled")
+        case .verticalCenterThird:      Image("custom.rectangle.verticalcenterthird.inset.filled")
+        case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
+        case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
         default:                        nil
         }
     }
