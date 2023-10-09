@@ -1,5 +1,5 @@
 //
-//  MenubarIconView.swift
+//  MenuBarIconView.swift
 //  Loop
 //
 //  Created by Kai Azim on 2023-08-20.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MenubarIconView: View {
+struct MenuBarIconView: View {
     @State var rotationAngle: Double = 0.0
     var body: some View {
         Image(.menubarIcon)

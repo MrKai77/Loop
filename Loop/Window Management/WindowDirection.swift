@@ -9,7 +9,8 @@ import SwiftUI
 import Defaults
 
 // Enum that stores all possible resizing options
-enum WindowDirection: CaseIterable {
+enum WindowDirection: CaseIterable, Identifiable {
+    var id: Self { return self }
 
     case noAction
     case maximize
@@ -43,6 +44,23 @@ enum WindowDirection: CaseIterable {
     case verticalCenterThird
     case bottomThird
     case bottomTwoThirds
+
+    // These are used in the menubar item
+    static var general: [WindowDirection] {
+        [.initialFrame, .lastDirection, .center, .maximize, .fullscreen]
+    }
+    static var halves: [WindowDirection] {
+        [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
+    }
+    static var quarters: [WindowDirection] {
+        [.topLeftQuarter, .topRightQuarter, .bottomLeftQuarter, .bottomRightQuarter]
+    }
+    static var horizontalThirds: [WindowDirection] {
+        [.rightThird, .rightTwoThirds, .horizontalCenterThird, .leftTwoThirds, .leftThird]
+    }
+    static var verticalThirds: [WindowDirection] {
+        [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
+    }
 
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
@@ -81,9 +99,9 @@ enum WindowDirection: CaseIterable {
         case .noAction:                 nil
         case .maximize:                 "Maximize"
         case .fullscreen:               "Fullscreen"
-        case .lastDirection:            nil
+        case .lastDirection:            "Last Direction"
         case .center:                   "Center"
-        case .initialFrame:             "Restore Initial Frame"
+        case .initialFrame:             "Initial Frame"
 
         case .topHalf:                  "Top Half"
         case .rightHalf:                "Right Half"
@@ -101,17 +119,16 @@ enum WindowDirection: CaseIterable {
         case .rightTwoThirds:           "Right Two Thirds"
         case .rightThird:               "Right Third"
 
-        case .topThird:                  "Top Third"
-        case .topTwoThirds:              "Top Two Thirds"
-        case .verticalCenterThird:       "Vertical Center Third"
-        case .bottomThird:               "Bottom Third"
-        case .bottomTwoThirds:           "Bottom Two Thirds"
+        case .topThird:                 "Top Third"
+        case .topTwoThirds:             "Top Two Thirds"
+        case .verticalCenterThird:      "Vertical Center Third"
+        case .bottomThird:              "Bottom Third"
+        case .bottomTwoThirds:          "Bottom Two Thirds"
         }
     }
 
-    var keybind: [Set<UInt16>] {
+    var keybind: [Set<CGKeyCode>] {
         switch self {
-        case .noAction:                 [[]]
         case .maximize:                 Defaults[.maximizeKeybind]
         case .fullscreen:               Defaults[.fullscreenKeybind]
         case .lastDirection:            Defaults[.lastDirectionKeybind]
@@ -135,6 +152,39 @@ enum WindowDirection: CaseIterable {
         case .rightThird:               Defaults[.rightThird]
 
         default:                        [[]]
+        }
+    }
+
+    var image: Image? {
+        switch self {
+        case .maximize:                 Image(systemName: "rectangle.inset.filled")
+        case .fullscreen:               Image(systemName: "rectangle.fill")
+        case .center:                   Image(systemName: "rectangle.center.inset.filled")
+        case .lastDirection:            Image("custom.backward.fill.rectangle.fill")
+        case .initialFrame:             Image("custom.backward.end.alt.fill.rectangle.fill")
+
+        case .topHalf:                  Image(systemName: "rectangle.tophalf.inset.filled")
+        case .rightHalf:                Image(systemName: "rectangle.righthalf.inset.filled")
+        case .bottomHalf:               Image(systemName: "rectangle.bottomhalf.inset.filled")
+        case .leftHalf:                 Image(systemName: "rectangle.lefthalf.inset.filled")
+
+        case .topLeftQuarter:           Image(systemName: "rectangle.inset.topleft.filled")
+        case .topRightQuarter:          Image(systemName: "rectangle.inset.topright.filled")
+        case .bottomRightQuarter:       Image(systemName: "rectangle.inset.bottomright.filled")
+        case .bottomLeftQuarter:        Image(systemName: "rectangle.inset.bottomleft.filled")
+
+        case .rightThird:               Image(systemName: "rectangle.rightthird.inset.filled")
+        case .rightTwoThirds:           Image("custom.rectangle.righttwothirds.inset.filled")
+        case .horizontalCenterThird:    Image("custom.rectangle.horizontalcenterthird.inset.filled")
+        case .leftThird:                Image(systemName: "rectangle.leftthird.inset.filled")
+        case .leftTwoThirds:            Image("custom.rectangle.lefttwothirds.inset.filled")
+
+        case .topThird:                 Image(systemName: "rectangle.topthird.inset.filled")
+        case .topTwoThirds:             Image("custom.rectangle.toptwothirds.inset.filled")
+        case .verticalCenterThird:      Image("custom.rectangle.verticalcenterthird.inset.filled")
+        case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
+        case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
+        default:                        nil
         }
     }
 
