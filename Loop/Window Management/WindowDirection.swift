@@ -47,7 +47,7 @@ enum WindowDirection: CaseIterable, Identifiable {
 
     // These are used in the menubar item
     static var general: [WindowDirection] {
-        [.maximize, .fullscreen, .center, .lastDirection, .initialFrame]
+        [.initialFrame, .lastDirection, .center, .maximize, .fullscreen]
     }
     static var halves: [WindowDirection] {
         [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
@@ -161,7 +161,7 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .fullscreen:               Image(systemName: "rectangle.fill")
         case .center:                   Image(systemName: "rectangle.center.inset.filled")
         case .lastDirection:            Image("custom.backward.fill.rectangle.fill")
-        case .initialFrame:             Image(systemName: "macwindow")
+        case .initialFrame:             Image("custom.backward.end.alt.fill.rectangle.fill")
 
         case .topHalf:                  Image(systemName: "rectangle.tophalf.inset.filled")
         case .rightHalf:                Image(systemName: "rectangle.righthalf.inset.filled")
