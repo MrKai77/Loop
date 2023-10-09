@@ -156,6 +156,39 @@ enum WindowDirection: CaseIterable, Identifiable {
         }
     }
 
+    var image: NSImage? {
+        switch self {
+        case .maximize:                 NSImage(systemSymbolName: "rectangle.inset.filled", accessibilityDescription: nil)
+        case .fullscreen:               NSImage(systemSymbolName: "rectangle.fill", accessibilityDescription: nil)
+//        case .lastDirection:
+        case .center:                   NSImage(systemSymbolName: "rectangle.center.inset.filled", accessibilityDescription: nil)
+        case .initialFrame:             NSImage(systemSymbolName: "macwindow", accessibilityDescription: nil)
+
+        case .topHalf:                  NSImage(systemSymbolName: "rectangle.tophalf.inset.filled", accessibilityDescription: nil)
+        case .rightHalf:                NSImage(systemSymbolName: "rectangle.righthalf.inset.filled", accessibilityDescription: nil)
+        case .bottomHalf:               NSImage(systemSymbolName: "rectangle.bottomhalf.inset.filled", accessibilityDescription: nil)
+        case .leftHalf:                 NSImage(systemSymbolName: "rectangle.lefthalf.inset.filled", accessibilityDescription: nil)
+
+        case .topLeftQuarter:           NSImage(systemSymbolName: "rectangle.inset.topleft.filled", accessibilityDescription: nil)
+        case .topRightQuarter:          NSImage(systemSymbolName: "rectangle.inset.topright.filled", accessibilityDescription: nil)
+        case .bottomRightQuarter:       NSImage(systemSymbolName: "rectangle.inset.bottomright.filled", accessibilityDescription: nil)
+        case .bottomLeftQuarter:        NSImage(systemSymbolName: "rectangle.inset.bottomleft.filled", accessibilityDescription: nil)
+
+        case .rightThird:               NSImage(systemSymbolName: "rectangle.rightthird.inset.filled", accessibilityDescription: nil)
+        case .rightTwoThirds:           NSImage(named: "rectangle.righttwothirds.inset.filled")
+        case .horizontalCenterThird:    NSImage(named: "rectangle.centerthird.inset.filled")
+        case .leftThird:                NSImage(systemSymbolName: "rectangle.leftthird.inset.filled", accessibilityDescription: nil)
+        case .leftTwoThirds:            NSImage(named: "rectangle.lefttwothirds.inset.filled")
+
+        case .topThird:                 NSImage(systemSymbolName: "rectangle.topthird.inset.filled", accessibilityDescription: nil)
+//        case .topTwoThirds:
+//        case .verticalCenterThird:
+        case .bottomThird:              NSImage(systemSymbolName: "rectangle.bottomthird.inset.filled", accessibilityDescription: nil)
+//        case .bottomTwoThirds:
+        default:                        nil
+        }
+    }
+
     var edgesTouchingScreen: [Edge] {
         switch self {
         case .maximize:                 [.top, .bottom, .leading, .trailing]
