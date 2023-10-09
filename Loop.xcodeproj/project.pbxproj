@@ -195,6 +195,16 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		A83EEEB02AD46BAC00F3EA2D /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */,
+				A80397D32A932993006D2796 /* MenuBarIconView.swift */,
+				A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */,
+			);
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
 		A864F4662AA65EC200579738 /* Window Management */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,9 +284,7 @@
 				A80521312A84878200BF7E22 /* Config.xcconfig */,
 				A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */,
 				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
-				A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */,
-				A80397D32A932993006D2796 /* MenuBarIconView.swift */,
-				A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */,
+				A83EEEB02AD46BAC00F3EA2D /* MenuBar */,
 				A864F4662AA65EC200579738 /* Window Management */,
 				A8330ABB2A3AC05200673C8D /* Managers */,
 				A82521EA29E2349700139654 /* About Window */,
