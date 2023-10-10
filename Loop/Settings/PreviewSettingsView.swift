@@ -32,8 +32,8 @@ struct PreviewSettingsView: View {
                     value: $previewPadding,
                     in: 0...20,
                     step: 2,
-                    minimumValueLabel: Text("0%"),
-                    maximumValueLabel: Text("100%")
+                    minimumValueLabel: Text("0px"),
+                    maximumValueLabel: Text("20px")
                 ) {
                     Text("Padding")
                 }
@@ -41,8 +41,8 @@ struct PreviewSettingsView: View {
                     value: $previewCornerRadius,
                     in: 0...20,
                     step: 2,
-                    minimumValueLabel: Text("0%"),
-                    maximumValueLabel: Text("100%")
+                    minimumValueLabel: Text("0px"),
+                    maximumValueLabel: Text("20px")
                 ) {
                     Text("Corner Radius")
                 }
@@ -50,8 +50,8 @@ struct PreviewSettingsView: View {
                     value: $previewBorderThickness,
                     in: 0...10,
                     step: 1,
-                    minimumValueLabel: Text("0%"),
-                    maximumValueLabel: Text("100%")
+                    minimumValueLabel: Text("0px"),
+                    maximumValueLabel: Text("10px")
                 ) {
                     Text("Border Thickness")
                 }

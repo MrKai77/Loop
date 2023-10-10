@@ -13,6 +13,9 @@ extension Defaults.Keys {
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
+    static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
+    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
+    static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
 
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
     static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white))
@@ -112,9 +115,4 @@ extension Defaults.Keys {
         "rightThird",
         default: [[.kVK_ANSI_L]]
     )
-
-    // BETA
-    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false)
-    static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
-    static let windowSnapping = Key<Bool>("windowSnapping", default: false)
 }
