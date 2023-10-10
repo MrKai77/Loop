@@ -26,6 +26,7 @@ struct PreviewView: View {
 
     @Default(.previewVisibility) var previewVisibility
     @Default(.previewPadding) var previewPadding
+    @Default(.windowPadding) var windowPadding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
 
@@ -84,7 +85,7 @@ struct PreviewView: View {
                                 lineWidth: previewBorderThickness
                             )
                     }
-                    .padding(previewPadding + previewBorderThickness / 2)
+                    .padding(windowPadding + previewPadding + previewBorderThickness / 2)
                     .frame(width: currentResizeDirection == .noAction ? 0 : nil,
                            height: currentResizeDirection == .noAction ? 0 : nil)
                     .frame(width: currentResizeDirection == .initialFrame ? 0 : nil,
