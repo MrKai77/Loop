@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="3300px" height="2200px" viewBox="0 0 3300 2200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>rectangle.verticalcenterthird.inset.filled</title>
+    <title>rectangle.vericalcenterthird.inset.filled</title>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="rectangle.verticalcenterthird.inset.filled">
+        <g id="rectangle.vericalcenterthird.inset.filled">
             <g id="Notes">
                 <rect id="artboard" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="3300" height="2200"></rect>
                 <line x1="263" y1="292" x2="3036" y2="292" id="Path" stroke="#000000" stroke-width="0.5"></line>
@@ -97,7 +97,7 @@
                     <tspan x="2865" y="1951">Requires Xcode 15 or greater</tspan>
                 </text>
                 <text id="descriptive-name" fill="#000000" fill-rule="nonzero" font-family="Helvetica" font-size="13" font-weight="normal">
-                    <tspan x="2779" y="1969">Generated from rectangle.topthird.inset.filled</tspan>
+                    <tspan x="2757" y="1969">Generated from rectangle.bottomthird.inset.filled</tspan>
                 </text>
                 <text id="Typeset-at-100.0-points" fill="#000000" fill-rule="nonzero" font-family="Helvetica" font-size="13" font-weight="normal">
                     <tspan x="2901" y="1987">Typeset at 100.0 points</tspan>
@@ -142,7 +142,7 @@
                 <g id="Regular-S" transform="translate(889.088, 2.539)">
                     <path d="M15.44438,25.8008 L74.44438,25.8008 C76.1012342,25.8008 77.44438,27.1439458 77.44438,28.8008 L77.44438,41.8008 C77.44438,43.4576542 76.1012342,44.8008 74.44438,44.8008 L15.44438,44.8008 C13.7875258,44.8008 12.44438,43.4576542 12.44438,41.8008 L12.44438,28.8008 C12.44438,27.1439458 13.7875258,25.8008 15.44438,25.8008 Z M12.45118,71.191425 L78.12498,71.191425 C86.47458,71.191425 90.57638,67.08986 90.57638,58.8867 L90.57638,12.3047 C90.57638,4.1016 86.47458,0 78.12498,0 L12.45118,0 C4.15038,0 1.77635684e-15,4.1016 1.77635684e-15,12.3047 L1.77635684e-15,58.8867 C1.77635684e-15,67.08986 4.15038,71.191425 12.45118,71.191425 Z M12.54888,64.11135 C9.03318,64.11135 7.03128,62.20705 7.03128,58.5449 L7.03128,12.6465 C7.03128,8.9356 9.03318,7.0801 12.54888,7.0801 L78.02738,7.0801 C81.54298,7.0801 83.54488,8.9356 83.54488,12.6465 L83.54488,58.5449 C83.54488,62.20705 81.54298,64.11135 78.02738,64.11135 L12.54888,64.11135 Z" id="Shape"></path>
                 </g>
-                <g id="Ultralight-S" transform="translate(-0, 4.4916)">
+                <g id="Ultralight-S" transform="translate(0, 4.4916)">
                     <path d="M9,24 L79,24 C81.209139,24 83,25.790861 83,28 L83,40 C83,42.209139 81.209139,44 79,44 L9,44 C6.790861,44 5,42.209139 5,40 L5,28 C5,25.790861 6.790861,24 9,24 Z M9.99908,67.19538 L78.48828,67.19538 C85.02148,67.19538 88.48728,63.63874 88.48728,57.2066 L88.48728,9.9888 C88.48728,3.5567 85.02148,0 78.48828,0 L9.99908,0 C3.46928,0 1.77635684e-15,3.4659 1.77635684e-15,9.9888 L1.77635684e-15,57.2066 C1.77635684e-15,63.72956 3.46928,67.19538 9.99908,67.19538 Z M10.09668,64.97415 C4.90088,64.97415 2.21778,62.29789 2.21778,57.0918 L2.21778,10.1036 C2.21778,4.8941 4.90088,2.2213 10.09668,2.2213 L78.39058,2.2213 C83.40478,2.2213 86.26948,4.8941 86.26948,10.1036 L86.26948,57.0918 C86.26948,62.29789 83.40478,64.97415 78.39058,64.97415 L10.09668,64.97415 Z" id="Shape"></path>
                 </g>
             </g>
