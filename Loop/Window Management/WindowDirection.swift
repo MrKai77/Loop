@@ -9,15 +9,23 @@ import SwiftUI
 import Defaults
 
 // Enum that stores all possible resizing options
+// swiftlint:disable:next type_body_length
 enum WindowDirection: CaseIterable, Identifiable {
     var id: Self { return self }
 
+    // General
     case noAction
     case maximize
     case fullscreen
     case lastDirection
     case center
     case initialFrame
+
+    // To cycle through directions
+    case cycleTop
+    case cycleBottom
+    case cycleRight
+    case cycleLeft
 
     // Halves
     case topHalf
@@ -102,6 +110,11 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .lastDirection:            "Last Direction"
         case .center:                   "Center"
         case .initialFrame:             "Initial Frame"
+
+        case .cycleTop:                 "Cycle Top"
+        case .cycleBottom:              "Cycle Bottom"
+        case .cycleRight:               "Cycle Right"
+        case .cycleLeft:                "Cycle Left"
 
         case .topHalf:                  "Top Half"
         case .rightHalf:                "Right Half"
@@ -338,6 +351,7 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .verticalCenterThird:      CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
+        default: nil
         }
     }
 }
