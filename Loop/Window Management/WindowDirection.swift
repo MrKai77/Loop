@@ -355,53 +355,56 @@ enum WindowDirection: CaseIterable, Identifiable {
         }
     }
 
-    func getRawDirection(window: Window) -> WindowDirection {
-        let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window)
-        var rawDirection: WindowDirection = self
+    func getActualDirection(window: Window) -> WindowDirection {
+        let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window, offset: 0)
+        var actualDirection: WindowDirection = self
         switch self {
         case .cycleTop:
             if lastDirection == .topThird {
-                rawDirection = .topTwoThirds
-            }
-            if lastDirection == .topHalf {
-                rawDirection = .topThird
-            }
-            if lastDirection == .topTwoThirds {
-                rawDirection = .topHalf
+                actualDirection = .topTwoThirds
+            } else if lastDirection == .topHalf {
+                actualDirection = .topThird
+            } else if lastDirection == .topTwoThirds {
+                actualDirection = .topHalf
+            } else {
+                actualDirection = .topHalf
             }
         case .cycleBottom:
             if lastDirection == .bottomThird {
-                rawDirection = .bottomTwoThirds
-            }
-            if lastDirection == .bottomHalf {
-                rawDirection = .bottomThird
-            }
-            if lastDirection == .bottomTwoThirds {
-                rawDirection = .bottomHalf
+                actualDirection = .bottomTwoThirds
+            } else if lastDirection == .bottomHalf {
+                actualDirection = .bottomThird
+            } else if lastDirection == .bottomTwoThirds {
+                actualDirection = .bottomHalf
+            } else {
+                actualDirection = .bottomHalf
             }
         case .cycleRight:
             if lastDirection == .rightThird {
-                rawDirection = .rightTwoThirds
-            }
-            if lastDirection == .rightHalf {
-                rawDirection = .rightThird
-            }
-            if lastDirection == .rightTwoThirds {
-                rawDirection = .rightHalf
+                actualDirection = .rightTwoThirds
+            } else if lastDirection == .rightHalf {
+                actualDirection = .rightThird
+            } else if lastDirection == .rightTwoThirds {
+                actualDirection = .rightHalf
+            } else {
+                actualDirection = .rightHalf
             }
         case .cycleLeft:
             if lastDirection == .leftThird {
-                rawDirection = .leftTwoThirds
+                actualDirection = .leftTwoThirds
+            } else if lastDirection == .leftHalf {
+                actualDirection = .leftThird
+            } else if lastDirection == .leftTwoThirds {
+                actualDirection = .leftHalf
+            } else {
+                actualDirection = .leftHalf
             }
-            if lastDirection == .leftHalf {
-                rawDirection = .leftThird
-            }
-            if lastDirection == .leftTwoThirds {
-                rawDirection = .leftHalf
-            }
+        case .lastDirection:
+            actualDirection = lastDirection
         default: break
         }
 
-        return rawDirection
+        print("Actual Direction: \(actualDirection)")
+        return actualDirection
     }
 }

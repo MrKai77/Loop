@@ -18,7 +18,6 @@ class LoopManager {
     private let previewController = PreviewController()
 
     private var currentResizingDirection: WindowDirection = .noAction
-    private var actualCurrentResizingDirection: WindowDirection = .noAction // Used when direction is .lastDirection
     private var isLoopShown: Bool = false
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
@@ -70,19 +69,11 @@ class LoopManager {
         if let direction = notification.userInfo?["direction"] as? WindowDirection {
             self.currentResizingDirection = direction
 
-            if notification.userInfo?["isActualDirection"] as? Bool == nil ||
-               notification.userInfo?["isActualDirection"] as? Bool == true {
-                self.actualCurrentResizingDirection = direction
-            }
-
             if let window = self.frontmostWindow, self.currentResizingDirection == .lastDirection {
                 // If the user sets .lastDirection as the last direction
                 self.currentResizingDirection = WindowRecords.getLastDirection(for: window)
                 DispatchQueue.main.async {
-                    Notification.Name.directionChanged.post(userInfo: [
-                        "direction": self.currentResizingDirection,
-                        "isActualDirection": false]
-                    )
+                    Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
                 }
             } else {
                 // Haptic feedback on the trackpad
@@ -142,7 +133,6 @@ class LoopManager {
 
     private func openLoop() {
         self.currentResizingDirection = .noAction
-        self.actualCurrentResizingDirection = .noAction
         self.frontmostWindow = nil
 
         // Loop will only open if accessibility access has been granted
@@ -171,12 +161,11 @@ class LoopManager {
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
-            self.isLoopShown &&
-            self.actualCurrentResizingDirection != .noAction {
+            self.isLoopShown {
 
             isLoopShown = false
 
-            WindowEngine.resize(self.frontmostWindow!, to: self.actualCurrentResizingDirection, self.screenWithMouse!)
+            WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
             Notification.Name.didLoop.post()
             Defaults[.timesLooped] += 1
             iconManager.checkIfUnlockedNewIcon()

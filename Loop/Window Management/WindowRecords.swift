@@ -50,15 +50,15 @@ struct WindowRecords {
         return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
     }
 
-    static func getLastDirection(for window: Window, willResize: Bool = false) -> WindowDirection {
+    static func getLastDirection(for window: Window, willResize: Bool = false, offset: Int = 1) -> WindowDirection {
         guard let idx = WindowRecords.getIndex(of: window),
-                WindowRecords.records[idx].directionRecords.count > 1 else {
+                WindowRecords.records[idx].directionRecords.count > offset else {
             return .noAction
         }
 
-        let lastDirection = WindowRecords.records[idx].directionRecords[1]
-        if willResize && WindowRecords.records[idx].directionRecords.count > 2 {
-            WindowRecords.records[idx].directionRecords.removeFirst(2)
+        let lastDirection = WindowRecords.records[idx].directionRecords[offset]
+        if willResize && WindowRecords.records[idx].directionRecords.count > offset + 1 {
+            WindowRecords.records[idx].directionRecords.removeFirst(offset + 1)
         }
         return lastDirection
     }
