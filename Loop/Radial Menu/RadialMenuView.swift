@@ -130,13 +130,13 @@ struct RadialMenuView: View {
         let previousResizeDirection = currentResizeDirection
         if distanceToMouse > pow(50 - radialMenuThickness, 2) {
             switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-            case 0, 8: currentResizeDirection = .rightHalf
+            case 0, 8: currentResizeDirection = .cycleRight
             case 1:    currentResizeDirection = .bottomRightQuarter
-            case 2:    currentResizeDirection = .bottomHalf
+            case 2:    currentResizeDirection = .cycleBottom
             case 3:    currentResizeDirection = .bottomLeftQuarter
-            case 4:    currentResizeDirection = .leftHalf
+            case 4:    currentResizeDirection = .cycleLeft
             case 5:    currentResizeDirection = .topLeftQuarter
-            case 6:    currentResizeDirection = .topHalf
+            case 6:    currentResizeDirection = .cycleTop
             case 7:    currentResizeDirection = .topRightQuarter
             default:   currentResizeDirection = .noAction
             }

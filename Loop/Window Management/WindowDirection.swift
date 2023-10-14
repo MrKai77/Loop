@@ -354,4 +354,54 @@ enum WindowDirection: CaseIterable, Identifiable {
         default: nil
         }
     }
+
+    func getRawDirection(window: Window) -> WindowDirection {
+        let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window)
+        var rawDirection: WindowDirection = self
+        switch self {
+        case .cycleTop:
+            if lastDirection == .topThird {
+                rawDirection = .topTwoThirds
+            }
+            if lastDirection == .topHalf {
+                rawDirection = .topThird
+            }
+            if lastDirection == .topTwoThirds {
+                rawDirection = .topHalf
+            }
+        case .cycleBottom:
+            if lastDirection == .bottomThird {
+                rawDirection = .bottomTwoThirds
+            }
+            if lastDirection == .bottomHalf {
+                rawDirection = .bottomThird
+            }
+            if lastDirection == .bottomTwoThirds {
+                rawDirection = .bottomHalf
+            }
+        case .cycleRight:
+            if lastDirection == .rightThird {
+                rawDirection = .rightTwoThirds
+            }
+            if lastDirection == .rightHalf {
+                rawDirection = .rightThird
+            }
+            if lastDirection == .rightTwoThirds {
+                rawDirection = .rightHalf
+            }
+        case .cycleLeft:
+            if lastDirection == .leftThird {
+                rawDirection = .leftTwoThirds
+            }
+            if lastDirection == .leftHalf {
+                rawDirection = .leftThird
+            }
+            if lastDirection == .leftTwoThirds {
+                rawDirection = .leftHalf
+            }
+        default: break
+        }
+
+        return rawDirection
+    }
 }
