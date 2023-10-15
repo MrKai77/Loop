@@ -99,8 +99,8 @@ struct PreviewView: View {
                     )
                     .frame(width: currentResizeDirection == .lastDirection ? 0 : nil,
                            height: currentResizeDirection == .lastDirection ? 0 : nil)
-                    .frame(width: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
-                    .frame(width: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
+                    .frame(height: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
+                    .frame(height: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
                     .frame(width: currentResizeDirection == .rightTwoThirds ? geo.size.width / 3 * 2 : nil)
                     .frame(width: currentResizeDirection == .leftTwoThirds ? geo.size.width / 3 * 2 : nil)
 
