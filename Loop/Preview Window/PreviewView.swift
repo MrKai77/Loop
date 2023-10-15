@@ -132,7 +132,7 @@ struct PreviewView: View {
                         .noAction,
                         .lastDirection:
                     Rectangle()
-                        .frame(height: currentResizeDirection == .topThird ? geo.size.width / 3 * 2 : nil)
+                        .frame(height: currentResizeDirection == .topThird ? geo.size.height / 3 * 2 : nil)
                 default:
                     EmptyView()
                 }

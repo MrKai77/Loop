@@ -67,6 +67,10 @@ class LoopManager {
 
     private func currentWindowDirectionChanged(_ notification: Notification) {
         if let direction = notification.userInfo?["direction"] as? WindowDirection {
+            if self.currentResizingDirection == direction, let window = self.frontmostWindow, WindowRecords.hasBeenRecorded(window) {
+                WindowRecords.recordDirection(window, direction.getActualDirection(window: window))
+            }
+
             self.currentResizingDirection = direction
 
             if let window = self.frontmostWindow, self.currentResizingDirection == .lastDirection {

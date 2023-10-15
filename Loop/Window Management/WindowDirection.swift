@@ -404,7 +404,6 @@ enum WindowDirection: CaseIterable, Identifiable {
         default: break
         }
 
-        print("Actual Direction: \(actualDirection)")
         return actualDirection
     }
 }
