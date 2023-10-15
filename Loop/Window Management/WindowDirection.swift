@@ -148,10 +148,10 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .center:                   Defaults[.centerKeybind]
         case .initialFrame:             Defaults[.initialFrameKeybind]
 
-        case .topHalf:                  Defaults[.topHalfKeybind]
-        case .rightHalf:                Defaults[.rightHalfKeybind]
-        case .bottomHalf:               Defaults[.bottomHalfKeybind]
-        case .leftHalf:                 Defaults[.leftHalfKeybind]
+        case .cycleTop:                 Defaults[.cycleTopKeybind]
+        case .cycleRight:               Defaults[.cycleRightKeybind]
+        case .cycleBottom:              Defaults[.cycleBottomKeybind]
+        case .cycleLeft:                Defaults[.cycleLeftKeybind]
 
         case .topLeftQuarter:           Defaults[.topLeftQuarter]
         case .topRightQuarter:          Defaults[.topRightQuarter]
