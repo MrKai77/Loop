@@ -30,17 +30,17 @@ struct RadialMenuDirectionSelectorView: View {
                         HStack(spacing: 0) {
                             VStack(spacing: 0) {
                                 DirectionSelectorSquareSegment(.topLeftQuarter, activeAngle, radialMenuSize)
-                                DirectionSelectorSquareSegment(.leftHalf, activeAngle, radialMenuSize)
+                                DirectionSelectorSquareSegment(.cycleLeft, activeAngle, radialMenuSize)
                                 DirectionSelectorSquareSegment(.bottomLeftQuarter, activeAngle, radialMenuSize)
                             }
                             VStack(spacing: 0) {
-                                DirectionSelectorSquareSegment(.topHalf, activeAngle, radialMenuSize)
+                                DirectionSelectorSquareSegment(.cycleTop, activeAngle, radialMenuSize)
                                 Spacer().frame(width: radialMenuSize/3, height: radialMenuSize/3)
-                                DirectionSelectorSquareSegment(.bottomHalf, activeAngle, radialMenuSize)
+                                DirectionSelectorSquareSegment(.cycleBottom, activeAngle, radialMenuSize)
                             }
                             VStack(spacing: 0) {
                                 DirectionSelectorSquareSegment(.topRightQuarter, activeAngle, radialMenuSize)
-                                DirectionSelectorSquareSegment(.rightHalf, activeAngle, radialMenuSize)
+                                DirectionSelectorSquareSegment(.cycleRight, activeAngle, radialMenuSize)
                                 DirectionSelectorSquareSegment(.bottomRightQuarter, activeAngle, radialMenuSize)
                             }
                         }
@@ -49,13 +49,13 @@ struct RadialMenuDirectionSelectorView: View {
                 // This is used when the user configures the radial menu to be a circle
                 Color.clear
                     .overlay {
-                        DirectionSelectorCircleSegment(.rightHalf, activeAngle, radialMenuSize)
+                        DirectionSelectorCircleSegment(.cycleRight, activeAngle, radialMenuSize)
                         DirectionSelectorCircleSegment(.bottomRightQuarter, activeAngle, radialMenuSize)
-                        DirectionSelectorCircleSegment(.bottomHalf, activeAngle, radialMenuSize)
+                        DirectionSelectorCircleSegment(.cycleBottom, activeAngle, radialMenuSize)
                         DirectionSelectorCircleSegment(.bottomLeftQuarter, activeAngle, radialMenuSize)
-                        DirectionSelectorCircleSegment(.leftHalf, activeAngle, radialMenuSize)
+                        DirectionSelectorCircleSegment(.cycleLeft, activeAngle, radialMenuSize)
                         DirectionSelectorCircleSegment(.topLeftQuarter, activeAngle, radialMenuSize)
-                        DirectionSelectorCircleSegment(.topHalf, activeAngle, radialMenuSize)
+                        DirectionSelectorCircleSegment(.cycleTop, activeAngle, radialMenuSize)
                         DirectionSelectorCircleSegment(.topRightQuarter, activeAngle, radialMenuSize)
                     }
             }
