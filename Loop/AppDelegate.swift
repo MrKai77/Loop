@@ -11,7 +11,6 @@ import Defaults
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    private let iconManager = IconManager()
     private let loopManager = LoopManager()
 
     private let updater = SoftwareUpdater()
@@ -78,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Check & ask for accessibility access
         PermissionsManager.Accessibility.requestAccess()
 
-        iconManager.refreshCurrentAppIcon()
+        IconManager.refreshCurrentAppIcon()
         loopManager.startObservingKeys()
 
         if Defaults[.windowSnapping] {
