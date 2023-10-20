@@ -15,7 +15,7 @@ struct LoopApp: App {
     @State var isMenubarItemPresented: Bool = false
 
     var body: some Scene {
-        MenuBarExtra("Loop", image: "") {
+        MenuBarExtra("Loop", image: "empty") {
             #if DEBUG
             MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif

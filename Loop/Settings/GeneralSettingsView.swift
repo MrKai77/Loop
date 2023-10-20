@@ -24,8 +24,6 @@ struct GeneralSettingsView: View {
     @Default(.windowPadding) var windowPadding
     @Default(.windowSnapping) var windowSnapping
 
-    let iconManager = IconManager()
-
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
 
@@ -81,14 +79,21 @@ struct GeneralSettingsView: View {
             Section("Loop's icon") {
                 VStack(alignment: .leading) {
                     Picker("Selected icon:", selection: $currentIcon) {
-                        ForEach(iconManager.returnUnlockedIcons(), id: \.self) { icon in
-                            Text(iconManager.nameWithoutPrefix(name: icon)).tag(icon)
+                        ForEach(IconManager.returnUnlockedIcons(), id: \.self) { icon in
+                            HStack {
+                                Image(nsImage: NSImage(named: icon.name)!)
+                                Text(IconManager.nameWithoutPrefix(name: icon.name))
+                            }
+                            .tag(icon.name)
                         }
                     }
                     Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .textSelection(.enabled)
+                }
+                .onChange(of: self.currentIcon) { _ in
+                    IconManager.refreshCurrentAppIcon()
                 }
             }
 

@@ -57,7 +57,7 @@ struct AboutView: View {
         VStack {
             VStack(spacing: 5) {
 
-                Image(nsImage: NSApplication.shared.applicationIconImage)
+                Image(nsImage: NSImage(named: IconManager.currentAppIcon.name)!)
                     .resizable()
                     .frame(width: 120, height: 120)
 
