@@ -22,6 +22,9 @@ class AboutViewController {
             window.isMovableByWindowBackground = true
             window.center()
             aboutWindowController = .init(window: window)
+        } else {
+            // Refresh view, in case user changed app icon
+            aboutWindowController?.window?.contentView = NSHostingView(rootView: AboutView())
         }
 
         aboutWindowController?.showWindow(aboutWindowController?.window)

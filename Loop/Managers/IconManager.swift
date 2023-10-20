@@ -10,13 +10,13 @@ import Defaults
 
 class IconManager {
 
-    struct Icon {
+    struct Icon: Hashable {
         var name: String
         var unlockTime: Int
         var unlockMessage: String?
     }
 
-    let icons: [Icon] = [
+    private static let icons: [Icon] = [
         Icon(
             name: "AppIcon-Classic",
             unlockTime: 0
@@ -30,28 +30,32 @@ class IconManager {
             unlockTime: 50
         ),
         Icon(
+            name: "AppIcon-Metaloop",
+            unlockTime: 100
+        ),
+        Icon(
             name: "AppIcon-Loop Master",
-            unlockTime: 100,
-            unlockMessage: ("100 loops conquered! "
+            unlockTime: 500,
+            unlockMessage: ("500 loops conquered! "
                 + "The universe has witnessed the birth of a Loop Master! "
                 + "Enjoy your well-deserved reward: a brand-new icon!")
         )
     ]
 
-    func nameWithoutPrefix(name: String) -> String {
+    static func nameWithoutPrefix(name: String) -> String {
         let prefix = "AppIcon-"
         return name.replacingOccurrences(of: prefix, with: "")
     }
 
-    func returnUnlockedIcons() -> [String] {
-        var returnValue: [String] = []
+    static func returnUnlockedIcons() -> [Icon] {
+        var returnValue: [Icon] = []
         for icon in icons where icon.unlockTime <= Defaults[.timesLooped] {
-            returnValue.append(icon.name)
+            returnValue.append(icon)
         }
         return returnValue.reversed()
     }
 
-    func setAppIcon(to icon: Icon) {
+    static func setAppIcon(to icon: Icon) {
         Defaults[.currentIcon] = icon.name
         self.refreshCurrentAppIcon()
 
@@ -63,12 +67,12 @@ class IconManager {
     }
 
     // This function is run at startup to set the current icon to the user's set icon.
-    func refreshCurrentAppIcon() {
+    static func refreshCurrentAppIcon() {
         NSWorkspace.shared.setIcon(NSImage(named: Defaults[.currentIcon]), forFile: Bundle.main.bundlePath, options: [])
         NSApp.applicationIconImage = NSImage(named: Defaults[.currentIcon])
     }
 
-    func checkIfUnlockedNewIcon() {
+    static func checkIfUnlockedNewIcon() {
         for icon in icons where icon.unlockTime == Defaults[.timesLooped] {
             NSApp.setActivationPolicy(.regular)
 
@@ -89,5 +93,9 @@ class IconManager {
                 setAppIcon(to: icon)
             }
         }
+    }
+
+    static var currentAppIcon: Icon {
+        return icons.first(where: { $0.name == Defaults[.currentIcon] }) ?? icons.first!
     }
 }

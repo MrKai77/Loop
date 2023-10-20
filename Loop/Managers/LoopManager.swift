@@ -12,7 +12,6 @@ class LoopManager {
 
     private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
-    private let iconManager = IconManager()
 
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
@@ -179,7 +178,7 @@ class LoopManager {
             WindowEngine.resize(self.frontmostWindow!, to: self.actualCurrentResizingDirection, self.screenWithMouse!)
             Notification.Name.didLoop.post()
             Defaults[.timesLooped] += 1
-            iconManager.checkIfUnlockedNewIcon()
+            IconManager.checkIfUnlockedNewIcon()
         } else {
             if self.frontmostWindow == nil && isLoopShown {
                 NSSound.beep()
