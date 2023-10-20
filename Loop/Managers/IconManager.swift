@@ -30,7 +30,7 @@ class IconManager {
             unlockTime: 50
         ),
         Icon(
-            name: "AppIcon-Metaloop",
+            name: "AppIcon-Meta Loop",
             unlockTime: 100
         ),
         Icon(
