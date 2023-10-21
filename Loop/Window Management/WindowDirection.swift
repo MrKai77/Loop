@@ -78,14 +78,14 @@ enum WindowDirection: CaseIterable, Identifiable {
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
         switch self {
-        case .noAction:             .topHalf
-        case .topHalf:              .topRightQuarter
-        case .topRightQuarter:      .rightHalf
-        case .rightHalf:            .bottomRightQuarter
-        case .bottomRightQuarter:   .bottomHalf
-        case .bottomHalf:           .bottomLeftQuarter
-        case .bottomLeftQuarter:    .leftHalf
-        case .leftHalf:             .topLeftQuarter
+        case .noAction:             .cycleTop
+        case .cycleTop:             .topRightQuarter
+        case .topRightQuarter:      .cycleRight
+        case .cycleRight:           .bottomRightQuarter
+        case .bottomRightQuarter:   .cycleBottom
+        case .cycleBottom:          .bottomLeftQuarter
+        case .bottomLeftQuarter:    .cycleLeft
+        case .cycleLeft:            .topLeftQuarter
         case .topLeftQuarter:       .maximize
         case .maximize:             .noAction
         default:                    .noAction
