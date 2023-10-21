@@ -17,7 +17,6 @@ class LoopManager {
     private let previewController = PreviewController()
 
     private var currentResizingDirection: WindowDirection = .noAction
-    private var actualCurrentResizingDirection: WindowDirection = .noAction // Used when direction is .lastDirection
     private var isLoopShown: Bool = false
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
@@ -66,31 +65,25 @@ class LoopManager {
     }
 
     private func currentWindowDirectionChanged(_ notification: Notification) {
-        if let direction = notification.userInfo?["direction"] as? WindowDirection {
-            self.currentResizingDirection = direction
+        if let newDirection = notification.userInfo?["direction"] as? WindowDirection,
+           let window = self.frontmostWindow {
 
-            if notification.userInfo?["isActualDirection"] as? Bool == nil ||
-               notification.userInfo?["isActualDirection"] as? Bool == true {
-                self.actualCurrentResizingDirection = direction
+            if !WindowRecords.hasBeenRecorded(window) {
+                WindowRecords.recordFirst(for: window)
             }
 
-            if let window = self.frontmostWindow, self.currentResizingDirection == .lastDirection {
-                // If the user sets .lastDirection as the last direction
-                self.currentResizingDirection = WindowRecords.getLastDirection(for: window)
-                DispatchQueue.main.async {
-                    Notification.Name.directionChanged.post(userInfo: [
-                        "direction": self.currentResizingDirection,
-                        "isActualDirection": false]
-                    )
-                }
-            } else {
-                // Haptic feedback on the trackpad
-                if self.isLoopShown {
-                    NSHapticFeedbackManager.defaultPerformer.perform(
-                        NSHapticFeedbackManager.FeedbackPattern.alignment,
-                        performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                    )
-                }
+            if self.currentResizingDirection == newDirection && WindowDirection.cyclable.contains(newDirection) {
+                WindowRecords.recordDirection(window, newDirection.getActualDirection(window: window), isCycling: true)
+            }
+
+            self.currentResizingDirection = newDirection
+
+            // Haptic feedback on the trackpad
+            if self.isLoopShown {
+                NSHapticFeedbackManager.defaultPerformer.perform(
+                    NSHapticFeedbackManager.FeedbackPattern.alignment,
+                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+                )
             }
         }
     }
@@ -141,7 +134,6 @@ class LoopManager {
 
     private func openLoop() {
         self.currentResizingDirection = .noAction
-        self.actualCurrentResizingDirection = .noAction
         self.frontmostWindow = nil
 
         // Loop will only open if accessibility access has been granted
@@ -170,12 +162,11 @@ class LoopManager {
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
-            self.isLoopShown &&
-            self.actualCurrentResizingDirection != .noAction {
+            self.isLoopShown {
 
             isLoopShown = false
 
-            WindowEngine.resize(self.frontmostWindow!, to: self.actualCurrentResizingDirection, self.screenWithMouse!)
+            WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
             Notification.Name.didLoop.post()
             Defaults[.timesLooped] += 1
             IconManager.checkIfUnlockedNewIcon()

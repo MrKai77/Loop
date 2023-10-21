@@ -9,15 +9,23 @@ import SwiftUI
 import Defaults
 
 // Enum that stores all possible resizing options
+// swiftlint:disable:next type_body_length
 enum WindowDirection: CaseIterable, Identifiable {
     var id: Self { return self }
 
+    // General
     case noAction
     case maximize
     case fullscreen
     case lastDirection
     case center
     case initialFrame
+
+    // To cycle through directions
+    case cycleTop
+    case cycleBottom
+    case cycleRight
+    case cycleLeft
 
     // Halves
     case topHalf
@@ -62,6 +70,10 @@ enum WindowDirection: CaseIterable, Identifiable {
         [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
     }
 
+    static var cyclable: [WindowDirection] {
+        [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
+    }
+
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
         switch self {
@@ -103,6 +115,11 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .center:                   "Center"
         case .initialFrame:             "Initial Frame"
 
+        case .cycleTop:                 "Cycle Top"
+        case .cycleBottom:              "Cycle Bottom"
+        case .cycleRight:               "Cycle Right"
+        case .cycleLeft:                "Cycle Left"
+
         case .topHalf:                  "Top Half"
         case .rightHalf:                "Right Half"
         case .bottomHalf:               "Bottom Half"
@@ -135,10 +152,10 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .center:                   Defaults[.centerKeybind]
         case .initialFrame:             Defaults[.initialFrameKeybind]
 
-        case .topHalf:                  Defaults[.topHalfKeybind]
-        case .rightHalf:                Defaults[.rightHalfKeybind]
-        case .bottomHalf:               Defaults[.bottomHalfKeybind]
-        case .leftHalf:                 Defaults[.leftHalfKeybind]
+        case .cycleTop:                 Defaults[.cycleTopKeybind]
+        case .cycleRight:               Defaults[.cycleRightKeybind]
+        case .cycleBottom:              Defaults[.cycleBottomKeybind]
+        case .cycleLeft:                Defaults[.cycleLeftKeybind]
 
         case .topLeftQuarter:           Defaults[.topLeftQuarter]
         case .topRightQuarter:          Defaults[.topRightQuarter]
@@ -338,6 +355,58 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .verticalCenterThird:      CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
+        default: nil
         }
+    }
+
+    func getActualDirection(window: Window) -> WindowDirection {
+        let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window, offset: 0, canBeCycling: true)
+        print(lastDirection)
+        var actualDirection: WindowDirection = self
+        switch self {
+        case .cycleTop:
+            if lastDirection == .topThird {
+                actualDirection = .topTwoThirds
+            } else if lastDirection == .topHalf {
+                actualDirection = .topThird
+            } else if lastDirection == .topTwoThirds {
+                actualDirection = .topHalf
+            } else {
+                actualDirection = .topHalf
+            }
+        case .cycleBottom:
+            if lastDirection == .bottomThird {
+                actualDirection = .bottomTwoThirds
+            } else if lastDirection == .bottomHalf {
+                actualDirection = .bottomThird
+            } else if lastDirection == .bottomTwoThirds {
+                actualDirection = .bottomHalf
+            } else {
+                actualDirection = .bottomHalf
+            }
+        case .cycleRight:
+            if lastDirection == .rightThird {
+                actualDirection = .rightTwoThirds
+            } else if lastDirection == .rightHalf {
+                actualDirection = .rightThird
+            } else if lastDirection == .rightTwoThirds {
+                actualDirection = .rightHalf
+            } else {
+                actualDirection = .rightHalf
+            }
+        case .cycleLeft:
+            if lastDirection == .leftThird {
+                actualDirection = .leftTwoThirds
+            } else if lastDirection == .leftHalf {
+                actualDirection = .leftThird
+            } else if lastDirection == .leftTwoThirds {
+                actualDirection = .leftHalf
+            } else {
+                actualDirection = .leftHalf
+            }
+        default: break
+        }
+
+        return actualDirection
     }
 }

@@ -10,10 +10,20 @@ import SwiftUI
 struct WindowRecords {
     static private var records: [WindowRecords.Record] = []
 
-    private struct Record {
+    struct Record {
         var cgWindowID: CGWindowID
         var initialFrame: CGRect
-        var directionRecords: [WindowDirection]
+        var directionRecords: [DirectionRecord]
+    }
+
+    struct DirectionRecord {
+        init(_ direction: WindowDirection, _ isCycling: Bool = false) {
+            self.direction = direction
+            self.isCycling = isCycling
+        }
+
+        var direction: WindowDirection
+        var isCycling: Bool
     }
 
     static private func getIndex(of window: Window) -> Int? {
@@ -33,34 +43,47 @@ struct WindowRecords {
             WindowRecords.Record(
                 cgWindowID: window.cgWindowID,
                 initialFrame: window.frame,
-                directionRecords: [.initialFrame]
+                directionRecords: [DirectionRecord(.initialFrame)]
             )
         )
     }
 
-    static func recordDirection(_ window: Window, _ direction: WindowDirection) {
+    static func recordDirection(_ window: Window, _ direction: WindowDirection, isCycling: Bool = false) {
         guard let idx = WindowRecords.getIndex(of: window) else {
             return
         }
 
-        WindowRecords.records[idx].directionRecords.insert(direction, at: 0)
+        WindowRecords.records[idx].directionRecords.insert(DirectionRecord(direction, isCycling), at: 0)
     }
 
     static func hasBeenRecorded(_ window: Window) -> Bool {
         return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
     }
 
-    static func getLastDirection(for window: Window, willResize: Bool = false) -> WindowDirection {
+    static func getLastDirection(
+        for window: Window,
+        willResize: Bool = false,
+        offset: Int = 1,
+        canBeCycling: Bool = false
+    ) -> WindowDirection {
         guard let idx = WindowRecords.getIndex(of: window),
-                WindowRecords.records[idx].directionRecords.count > 1 else {
+                WindowRecords.records[idx].directionRecords.count > offset else {
             return .noAction
         }
+        let directionRecords = WindowRecords.records[idx].directionRecords
+        var lastDirection = directionRecords[offset]
+        var actualOffset = offset
 
-        let lastDirection = WindowRecords.records[idx].directionRecords[1]
-        if willResize && WindowRecords.records[idx].directionRecords.count > 2 {
-            WindowRecords.records[idx].directionRecords.removeFirst(2)
+        while lastDirection.isCycling && !canBeCycling {
+            actualOffset += 1
+            lastDirection = directionRecords[actualOffset]
         }
-        return lastDirection
+
+        if willResize && WindowRecords.records[idx].directionRecords.count > actualOffset + 1 {
+            WindowRecords.records[idx].directionRecords.removeFirst(actualOffset + 1)
+        }
+
+        return lastDirection.direction
     }
 
     static func getInitialFrame(for window: Window) -> CGRect? {

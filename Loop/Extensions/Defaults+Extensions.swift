@@ -54,21 +54,21 @@ extension Defaults.Keys {
         default: [[.kVK_ANSI_Z]]
     )
 
-    // Halves
-    static let topHalfKeybind = Key<[Set<CGKeyCode>]>(
-        "topHalfKeybind",
+    // Cycle Halves
+    static let cycleTopKeybind = Key<[Set<CGKeyCode>]>(
+        "cycleTopKeybind",
         default: [[.kVK_ANSI_W], [.kVK_UpArrow]]
     )
-    static let bottomHalfKeybind = Key<[Set<CGKeyCode>]>(
-        "bottomHalfKeybind",
+    static let cycleBottomKeybind = Key<[Set<CGKeyCode>]>(
+        "cycleBottomKeybind",
         default: [[.kVK_ANSI_S], [.kVK_DownArrow]]
     )
-    static let rightHalfKeybind = Key<[Set<CGKeyCode>]>(
-        "rightHalfKeybind",
+    static let cycleRightKeybind = Key<[Set<CGKeyCode>]>(
+        "cycleRightKeybind",
         default: [[.kVK_ANSI_D], [.kVK_RightArrow]]
     )
-    static let leftHalfKeybind = Key<[Set<CGKeyCode>]>(
-        "leftHalfKeybind",
+    static let cycleLeftKeybind = Key<[Set<CGKeyCode>]>(
+        "cycleLeftKeybind",
         default: [[.kVK_ANSI_A], [.kVK_LeftArrow]]
     )
 

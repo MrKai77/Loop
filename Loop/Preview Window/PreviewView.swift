@@ -99,8 +99,8 @@ struct PreviewView: View {
                     )
                     .frame(width: currentResizeDirection == .lastDirection ? 0 : nil,
                            height: currentResizeDirection == .lastDirection ? 0 : nil)
-                    .frame(width: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
-                    .frame(width: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
+                    .frame(height: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
+                    .frame(height: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
                     .frame(width: currentResizeDirection == .rightTwoThirds ? geo.size.width / 3 * 2 : nil)
                     .frame(width: currentResizeDirection == .leftTwoThirds ? geo.size.width / 3 * 2 : nil)
 
@@ -132,7 +132,7 @@ struct PreviewView: View {
                         .noAction,
                         .lastDirection:
                     Rectangle()
-                        .frame(height: currentResizeDirection == .topThird ? geo.size.width / 3 * 2 : nil)
+                        .frame(height: currentResizeDirection == .topThird ? geo.size.height / 3 * 2 : nil)
                 default:
                     EmptyView()
                 }
@@ -142,9 +142,11 @@ struct PreviewView: View {
         .opacity(currentResizeDirection == .noAction ? 0 : 1)
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizeDirection)
         .onReceive(.directionChanged) { obj in
-            if !self.previewMode {
-                if let direction = obj.userInfo?["direction"] as? WindowDirection {
-                    currentResizeDirection = direction
+            if !self.previewMode, let direction = obj.userInfo?["direction"] as? WindowDirection, self.window != nil {
+                self.currentResizeDirection = direction.getActualDirection(window: self.window!)
+
+                if self.currentResizeDirection == .lastDirection && self.window != nil {
+                    self.currentResizeDirection = WindowRecords.getLastDirection(for: self.window!)
                 }
             }
         }

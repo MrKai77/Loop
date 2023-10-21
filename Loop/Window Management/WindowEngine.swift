@@ -17,34 +17,31 @@ struct WindowEngine {
     ///   - screen: Screen the window should be resized on
     static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
         guard direction != .noAction else { return }
+        let actualDirection = direction.getActualDirection(window: window)
 
-        if direction == .fullscreen {
+        if actualDirection == .fullscreen {
             if window.isFullscreen {
                 window.setFullscreen(false)
             } else {
                 window.setFullscreen(true)
             }
 
-            WindowRecords.recordDirection(window, direction)
+            WindowRecords.recordDirection(window, actualDirection)
             return
         }
 
         window.setFullscreen(false)
 
-        if !WindowRecords.hasBeenRecorded(window) {
-            WindowRecords.recordFirst(for: window)
-        }
-
         let oldWindowFrame = window.frame
         guard let screenFrame = screen.safeScreenFrame, let currentWindowFrame = WindowEngine.generateWindowFrame(
             oldWindowFrame,
             screenFrame,
-            direction,
+            actualDirection,
             window
         ) else {
             return
         }
-        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
+        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, actualDirection)
 
         var animate =  Defaults[.animateWindowResizes]
         if animate {
@@ -65,12 +62,12 @@ struct WindowEngine {
                 }
 
                 window.setFrame(targetWindowFrame, animate: true)
-                WindowRecords.recordDirection(window, direction)
+                WindowRecords.recordDirection(window, actualDirection)
             }
         } else {
             window.setFrame(targetWindowFrame)
             WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-            WindowRecords.recordDirection(window, direction)
+            WindowRecords.recordDirection(window, actualDirection)
         }
     }
 
@@ -84,6 +81,7 @@ struct WindowEngine {
         print("===== NEW WINDOW =====")
         print("Frontmost window: \(window.cgWindowID)")
         print("Process ID: \(window.processID)")
+        print("Last Direction: \(WindowRecords.getLastDirection(for: window))")
         print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
         print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
         #endif
