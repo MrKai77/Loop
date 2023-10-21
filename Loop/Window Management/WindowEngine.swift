@@ -32,10 +32,6 @@ struct WindowEngine {
 
         window.setFullscreen(false)
 
-        if !WindowRecords.hasBeenRecorded(window) {
-            WindowRecords.recordFirst(for: window)
-        }
-
         let oldWindowFrame = window.frame
         guard let screenFrame = screen.safeScreenFrame, let currentWindowFrame = WindowEngine.generateWindowFrame(
             oldWindowFrame,

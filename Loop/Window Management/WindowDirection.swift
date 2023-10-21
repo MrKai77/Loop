@@ -70,6 +70,10 @@ enum WindowDirection: CaseIterable, Identifiable {
         [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
     }
 
+    static var cyclable: [WindowDirection] {
+        [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
+    }
+
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
         switch self {
@@ -399,8 +403,6 @@ enum WindowDirection: CaseIterable, Identifiable {
             } else {
                 actualDirection = .leftHalf
             }
-        case .lastDirection:
-            actualDirection = lastDirection
         default: break
         }
 

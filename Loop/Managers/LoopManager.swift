@@ -65,27 +65,25 @@ class LoopManager {
     }
 
     private func currentWindowDirectionChanged(_ notification: Notification) {
-        if let direction = notification.userInfo?["direction"] as? WindowDirection {
-            if self.currentResizingDirection == direction, let window = self.frontmostWindow, WindowRecords.hasBeenRecorded(window) {
-                WindowRecords.recordDirection(window, direction.getActualDirection(window: window))
+        if let newDirection = notification.userInfo?["direction"] as? WindowDirection,
+           let window = self.frontmostWindow {
+
+            if !WindowRecords.hasBeenRecorded(window) {
+                WindowRecords.recordFirst(for: window)
             }
 
-            self.currentResizingDirection = direction
+            if self.currentResizingDirection == newDirection && WindowDirection.cyclable.contains(newDirection) {
+                WindowRecords.recordDirection(window, newDirection.getActualDirection(window: window))
+            }
 
-            if let window = self.frontmostWindow, self.currentResizingDirection == .lastDirection {
-                // If the user sets .lastDirection as the last direction
-                self.currentResizingDirection = WindowRecords.getLastDirection(for: window)
-                DispatchQueue.main.async {
-                    Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
-                }
-            } else {
-                // Haptic feedback on the trackpad
-                if self.isLoopShown {
-                    NSHapticFeedbackManager.defaultPerformer.perform(
-                        NSHapticFeedbackManager.FeedbackPattern.alignment,
-                        performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                    )
-                }
+            self.currentResizingDirection = newDirection
+
+            // Haptic feedback on the trackpad
+            if self.isLoopShown {
+                NSHapticFeedbackManager.defaultPerformer.perform(
+                    NSHapticFeedbackManager.FeedbackPattern.alignment,
+                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+                )
             }
         }
     }
