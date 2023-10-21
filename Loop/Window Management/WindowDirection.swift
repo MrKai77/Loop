@@ -4,6 +4,7 @@
 //
 //  Created by Kai Azim on 2023-06-14.
 //
+// swiftlint:disable file_length
 
 import SwiftUI
 import Defaults
@@ -359,6 +360,7 @@ enum WindowDirection: CaseIterable, Identifiable {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func getActualDirection(window: Window) -> WindowDirection {
         let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window, offset: 0, canBeCycling: true)
 
