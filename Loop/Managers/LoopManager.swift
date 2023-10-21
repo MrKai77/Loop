@@ -73,7 +73,7 @@ class LoopManager {
             }
 
             if self.currentResizingDirection == newDirection && WindowDirection.cyclable.contains(newDirection) {
-                WindowRecords.recordDirection(window, newDirection.getActualDirection(window: window))
+                WindowRecords.recordDirection(window, newDirection.getActualDirection(window: window), isCycling: true)
             }
 
             self.currentResizingDirection = newDirection

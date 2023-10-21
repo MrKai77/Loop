@@ -360,7 +360,8 @@ enum WindowDirection: CaseIterable, Identifiable {
     }
 
     func getActualDirection(window: Window) -> WindowDirection {
-        let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window, offset: 0)
+        let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window, offset: 0, canBeCycling: true)
+        print(lastDirection)
         var actualDirection: WindowDirection = self
         switch self {
         case .cycleTop:
