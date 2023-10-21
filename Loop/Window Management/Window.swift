@@ -104,13 +104,17 @@ class Window {
         return CGRect(origin: self.position, size: self.size)
     }
 
-    func setFrame(_ rect: CGRect, animate: Bool = false) {
+    func setFrame(_ rect: CGRect, animate: Bool = false, completionHandler: (() -> Void)? = nil) {
         if animate {
-            let animation = WindowTransformAnimation(rect, window: self)
+            let animation = WindowTransformAnimation(rect, window: self, completionHandler: completionHandler)
             animation.startInBackground()
         } else {
             self.setPosition(rect.origin)
             self.setSize(rect.size)
+
+            if let completionHandler = completionHandler {
+                completionHandler()
+            }
         }
     }
 

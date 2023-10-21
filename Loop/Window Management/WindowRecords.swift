@@ -13,6 +13,7 @@ struct WindowRecords {
     struct Record {
         var cgWindowID: CGWindowID
         var initialFrame: CGRect
+        var currentFrame: CGRect
         var directionRecords: [DirectionRecord]
     }
 
@@ -26,38 +27,43 @@ struct WindowRecords {
         var isCycling: Bool
     }
 
-    static private func getIndex(of window: Window) -> Int? {
-        guard WindowRecords.hasBeenRecorded(window),
-              let idx = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
+    static func hasBeenRecorded(_ window: Window) -> Bool {
+        return WindowRecords.records.contains(where: { record in
+            return record.cgWindowID == window.cgWindowID && record.currentFrame == window.frame
+        })
+    }
+
+    static private func findRecordsID(for window: Window) -> Int? {
+        guard let id = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
             return nil
         }
-        return idx
+        return id
     }
 
     /// This will erase ALL previous records of the window, and start a fresh new record for the selected window.
     /// - Parameter window: The window to record
     static func recordFirst(for window: Window) {
+
         WindowRecords.records.removeAll(where: { $0.cgWindowID == window.cgWindowID })
+        let frame = window.frame
 
         WindowRecords.records.append(
             WindowRecords.Record(
                 cgWindowID: window.cgWindowID,
-                initialFrame: window.frame,
+                initialFrame: frame,
+                currentFrame: frame,
                 directionRecords: [DirectionRecord(.initialFrame)]
             )
         )
     }
 
     static func recordDirection(_ window: Window, _ direction: WindowDirection, isCycling: Bool = false) {
-        guard let idx = WindowRecords.getIndex(of: window) else {
+        guard let id = WindowRecords.findRecordsID(for: window) else {
             return
         }
 
-        WindowRecords.records[idx].directionRecords.insert(DirectionRecord(direction, isCycling), at: 0)
-    }
-
-    static func hasBeenRecorded(_ window: Window) -> Bool {
-        return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
+        WindowRecords.records[id].directionRecords.insert(DirectionRecord(direction, isCycling), at: 0)
+        WindowRecords.records[id].currentFrame = window.frame
     }
 
     static func getLastDirection(
@@ -66,11 +72,11 @@ struct WindowRecords {
         offset: Int = 1,
         canBeCycling: Bool = false
     ) -> WindowDirection {
-        guard let idx = WindowRecords.getIndex(of: window),
-                WindowRecords.records[idx].directionRecords.count > offset else {
+        guard let id = WindowRecords.findRecordsID(for: window),
+                WindowRecords.records[id].directionRecords.count > offset else {
             return .noAction
         }
-        let directionRecords = WindowRecords.records[idx].directionRecords
+        let directionRecords = WindowRecords.records[id].directionRecords
         var lastDirection = directionRecords[offset]
         var actualOffset = offset
 
@@ -79,18 +85,18 @@ struct WindowRecords {
             lastDirection = directionRecords[actualOffset]
         }
 
-        if willResize && WindowRecords.records[idx].directionRecords.count > actualOffset + 1 {
-            WindowRecords.records[idx].directionRecords.removeFirst(actualOffset + 1)
+        if willResize && WindowRecords.records[id].directionRecords.count > actualOffset + 1 {
+            WindowRecords.records[id].directionRecords.removeFirst(actualOffset + 1)
         }
 
         return lastDirection.direction
     }
 
     static func getInitialFrame(for window: Window) -> CGRect? {
-        guard let idx = WindowRecords.getIndex(of: window) else {
+        guard let id = WindowRecords.findRecordsID(for: window) else {
             return nil
         }
 
-        return WindowRecords.records[idx].initialFrame
+        return WindowRecords.records[id].initialFrame
     }
 }
