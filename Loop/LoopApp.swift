@@ -62,12 +62,10 @@ struct LoopApp: App {
         }
         .menuBarExtraStyle(.menu)
         .menuBarExtraAccess(isPresented: $isMenubarItemPresented) { statusItem in
-            statusItem.length = 22
-
             guard let button = statusItem.button else { return }
 
             let view = NSHostingView(rootView: MenuBarIconView())
-            view.frame.size = NSSize(width: 22, height: 22)
+            view.frame.size = NSSize(width: 26, height: 22)
             button.addSubview(view)
         }
     }
