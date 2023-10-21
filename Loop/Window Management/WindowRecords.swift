@@ -27,12 +27,18 @@ struct WindowRecords {
         var isCycling: Bool
     }
 
+    /// Has the window has been previously recorded, and does its size match the one in record?
+    /// - Parameter window: The window to check
+    /// - Returns: true or false
     static func hasBeenRecorded(_ window: Window) -> Bool {
         return WindowRecords.records.contains(where: { record in
             return record.cgWindowID == window.cgWindowID && record.currentFrame == window.frame
         })
     }
 
+    /// The index of the window's record in the records array
+    /// - Parameter window: Window to check
+    /// - Returns: The index of the window's records
     static private func findRecordsID(for window: Window) -> Int? {
         guard let id = WindowRecords.records.firstIndex(where: { $0.cgWindowID == window.cgWindowID }) else {
             return nil
@@ -41,7 +47,7 @@ struct WindowRecords {
     }
 
     /// This will erase ALL previous records of the window, and start a fresh new record for the selected window.
-    /// - Parameter window: The window to record
+    /// - Parameter window: Window to record
     static func recordFirst(for window: Window) {
 
         WindowRecords.records.removeAll(where: { $0.cgWindowID == window.cgWindowID })
@@ -57,6 +63,11 @@ struct WindowRecords {
         )
     }
 
+    /// Record a window's direction in the records array
+    /// - Parameters:
+    ///   - window: Window to record
+    ///   - direction: Direction to record
+    ///   - isCycling: Are we cycling through directions?
     static func recordDirection(_ window: Window, _ direction: WindowDirection, isCycling: Bool = false) {
         guard let id = WindowRecords.findRecordsID(for: window) else {
             return
@@ -66,6 +77,13 @@ struct WindowRecords {
         WindowRecords.records[id].currentFrame = window.frame
     }
 
+    /// What was this window's last direction?
+    /// - Parameters:
+    ///   - window: Window to check
+    ///   - willResize: Will we resize the window after this function? If so, we will also remove the last direction.
+    ///   - offset: Which "last direction" do we want? 1 means the last one, 2 means the one before the last one etc.
+    ///   - canBeCycling: Can we return lastDirections with isCycling being true?
+    /// - Returns: The last direction
     static func getLastDirection(
         for window: Window,
         willResize: Bool = false,
