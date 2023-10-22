@@ -92,7 +92,7 @@ struct RadialMenuView: View {
         .animation(.easeOut, value: currentResizeDirection)
         .onAppear {
             if previewMode {
-                currentResizeDirection = .topHalf
+                currentResizeDirection = currentResizeDirection.nextPreviewDirection
             }
         }
         .onReceive(timer) { _ in
@@ -100,10 +100,6 @@ struct RadialMenuView: View {
                 self.refreshCurrentAngle()
             } else {
                 currentResizeDirection = currentResizeDirection.nextPreviewDirection
-
-                if currentResizeDirection == .rightThird {
-                    currentResizeDirection = .topHalf
-                }
             }
         }
         .onReceive(.directionChanged) { obj in
