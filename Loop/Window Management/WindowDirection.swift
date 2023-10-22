@@ -75,6 +75,10 @@ enum WindowDirection: CaseIterable, Identifiable {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
     }
 
+    var cyclable: Bool {
+        WindowDirection.cyclable.contains(self)
+    }
+
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
         switch self {
@@ -356,59 +360,37 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .verticalCenterThird:      CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
-        default: nil
+        default:                        nil
         }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
-    func getActualDirection(window: Window) -> WindowDirection {
-        let lastDirection: WindowDirection = WindowRecords.getLastDirection(for: window, offset: 0, canBeCycling: true)
-
-        var actualDirection: WindowDirection = self
+    func nextCyclingDirection(from: WindowDirection) -> WindowDirection {
         switch self {
         case .cycleTop:
-            if lastDirection == .topThird {
-                actualDirection = .topTwoThirds
-            } else if lastDirection == .topHalf {
-                actualDirection = .topThird
-            } else if lastDirection == .topTwoThirds {
-                actualDirection = .topHalf
-            } else {
-                actualDirection = .topHalf
+            switch from {
+            case .topHalf:              return .topThird
+            case .topThird:             return .topTwoThirds
+            default:                    return .topHalf
             }
         case .cycleBottom:
-            if lastDirection == .bottomThird {
-                actualDirection = .bottomTwoThirds
-            } else if lastDirection == .bottomHalf {
-                actualDirection = .bottomThird
-            } else if lastDirection == .bottomTwoThirds {
-                actualDirection = .bottomHalf
-            } else {
-                actualDirection = .bottomHalf
-            }
-        case .cycleRight:
-            if lastDirection == .rightThird {
-                actualDirection = .rightTwoThirds
-            } else if lastDirection == .rightHalf {
-                actualDirection = .rightThird
-            } else if lastDirection == .rightTwoThirds {
-                actualDirection = .rightHalf
-            } else {
-                actualDirection = .rightHalf
+            switch from {
+            case .bottomHalf:           return .bottomThird
+            case .bottomThird:          return .bottomTwoThirds
+            default:                    return .bottomHalf
             }
         case .cycleLeft:
-            if lastDirection == .leftThird {
-                actualDirection = .leftTwoThirds
-            } else if lastDirection == .leftHalf {
-                actualDirection = .leftThird
-            } else if lastDirection == .leftTwoThirds {
-                actualDirection = .leftHalf
-            } else {
-                actualDirection = .leftHalf
+            switch from {
+            case .leftHalf:             return .leftThird
+            case .leftThird:            return .leftTwoThirds
+            default:                    return .leftHalf
             }
-        default: break
+        case .cycleRight:
+            switch from {
+            case .rightHalf:            return .rightThird
+            case .rightThird:           return .rightTwoThirds
+            default:                    return .rightHalf
+            }
+        default: return .noAction
         }
-
-        return actualDirection
     }
 }

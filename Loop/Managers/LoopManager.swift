@@ -67,16 +67,12 @@ class LoopManager {
     private func currentWindowDirectionChanged(_ notification: Notification) {
         if let newDirection = notification.userInfo?["direction"] as? WindowDirection,
            let window = self.frontmostWindow {
-
-            if !WindowRecords.hasBeenRecorded(window) {
-                WindowRecords.recordFirst(for: window)
+            if newDirection.cyclable {
+                self.currentResizingDirection = newDirection.nextCyclingDirection(from: self.currentResizingDirection)
+                Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
+            } else {
+                self.currentResizingDirection = newDirection
             }
-
-            if self.currentResizingDirection == newDirection && WindowDirection.cyclable.contains(newDirection) {
-                WindowRecords.recordDirection(window, newDirection.getActualDirection(window: window), isCycling: true)
-            }
-
-            self.currentResizingDirection = newDirection
 
             // Haptic feedback on the trackpad
             if self.isLoopShown {

@@ -17,16 +17,19 @@ struct WindowEngine {
     ///   - screen: Screen the window should be resized on
     static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
         guard direction != .noAction else { return }
-        let actualDirection = direction.getActualDirection(window: window)
 
-        if actualDirection == .fullscreen {
+        if !WindowRecords.hasBeenRecorded(window) {
+            WindowRecords.recordFirst(for: window)
+        }
+
+        if direction == .fullscreen {
             if window.isFullscreen {
                 window.setFullscreen(false)
             } else {
                 window.setFullscreen(true)
             }
 
-            WindowRecords.recordDirection(window, actualDirection)
+            WindowRecords.recordDirection(window, direction)
             return
         }
 
@@ -36,12 +39,12 @@ struct WindowEngine {
         guard let screenFrame = screen.safeScreenFrame, let currentWindowFrame = WindowEngine.generateWindowFrame(
             oldWindowFrame,
             screenFrame,
-            actualDirection,
+            direction,
             window
         ) else {
             return
         }
-        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, actualDirection)
+        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
 
         var animate =  Defaults[.animateWindowResizes]
         if animate {
@@ -62,13 +65,13 @@ struct WindowEngine {
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
-                    WindowRecords.recordDirection(window, actualDirection)
+                    WindowRecords.recordDirection(window, direction)
                 }
             }
         } else {
             window.setFrame(targetWindowFrame) {
                 WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-                WindowRecords.recordDirection(window, actualDirection)
+                WindowRecords.recordDirection(window, direction)
             }
         }
     }
