@@ -89,7 +89,7 @@ struct RadialMenuView: View {
 
         // Animate window
         .scaleEffect(currentResizeDirection == .maximize ? 0.85 : 1)
-        .animation(.easeInOut, value: currentResizeDirection)
+        .animation(.easeOut, value: currentResizeDirection)
         .onAppear {
             if previewMode {
                 currentResizeDirection = .topHalf
