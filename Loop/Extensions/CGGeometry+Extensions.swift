@@ -39,4 +39,11 @@ extension CGRect {
             width: self.width,
             height: self.height)
     }
+
+    func approximatelyEqual(to rect: CGRect, tolerance: CGFloat = 10) -> Bool {
+        return abs(origin.x - rect.origin.x) < tolerance &&
+                abs(origin.y - rect.origin.y) < tolerance &&
+                abs(width - rect.width) < tolerance &&
+                abs(height - rect.height) < tolerance
+    }
 }

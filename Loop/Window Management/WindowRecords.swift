@@ -32,7 +32,8 @@ struct WindowRecords {
     /// - Returns: true or false
     static func hasBeenRecorded(_ window: Window) -> Bool {
         return WindowRecords.records.contains(where: { record in
-            return record.cgWindowID == window.cgWindowID && record.currentFrame == window.frame
+            return record.cgWindowID == window.cgWindowID &&
+                   record.currentFrame.approximatelyEqual(to: window.frame)
         })
     }
 
