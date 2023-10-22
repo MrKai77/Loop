@@ -157,6 +157,7 @@ class LoopManager {
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
+            self.currentResizingDirection != .noAction &&
             self.isLoopShown {
 
             isLoopShown = false
