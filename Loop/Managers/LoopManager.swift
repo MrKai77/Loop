@@ -69,9 +69,10 @@ class LoopManager {
             if newDirection.cyclable {
                 self.currentResizingDirection = newDirection.nextCyclingDirection(from: self.currentResizingDirection)
                 Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
-            } else {
-                self.currentResizingDirection = newDirection
+                return
             }
+
+            self.currentResizingDirection = newDirection
 
             // Haptic feedback on the trackpad
             if self.isLoopShown {
