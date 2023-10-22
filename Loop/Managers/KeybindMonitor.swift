@@ -71,7 +71,7 @@ class KeybindMonitor {
         }
 
         self.shiftKeyEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
-            if (cgEvent.type == .flagsChanged),
+            if cgEvent.type == .flagsChanged,
                let event = NSEvent(cgEvent: cgEvent),
                event.keyCode != Defaults[.triggerKey].keycode {
 

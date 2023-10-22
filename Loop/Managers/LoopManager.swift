@@ -21,8 +21,9 @@ class LoopManager {
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
-    private var flagsChangedEventMonitor: NSEventMonitor?
-    private var keyDownEventMonitor: NSEventMonitor?
+    private var flagsChangedEventMonitor: EventMonitor?
+    private var keyDownEventMonitor: EventMonitor?
+    private var scrollEventMonitor: EventMonitor?
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
@@ -39,6 +40,22 @@ class LoopManager {
             }
         }
         self.keyDownEventMonitor!.start()
+
+        self.scrollEventMonitor = CGEventMonitor(eventMask: [.scrollWheel]) { cgEvent in
+            if cgEvent.type == .scrollWheel, self.isLoopShown, let event = NSEvent(cgEvent: cgEvent) {
+
+                if event.deltaY > 1 && self.currentResizingDirection != .hide {
+                    Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.hide])
+                }
+
+                if event.deltaY < -1 && self.currentResizingDirection == .hide {
+                    Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.noAction])
+                }
+
+                return nil
+            }
+            return Unmanaged.passUnretained(cgEvent)
+        }
 
         Notification.Name.directionChanged.onRecieve { notification in
             self.currentWindowDirectionChanged(notification)
@@ -137,11 +154,12 @@ class LoopManager {
             self.frontmostWindow = WindowEngine.frontmostWindow
             self.screenWithMouse = NSScreen.screenWithMouse
 
-            if Defaults[.previewVisibility] == true && frontmostWindow != nil {
-                previewController.open(screen: self.screenWithMouse!, window: frontmostWindow)
+            if Defaults[.previewVisibility] == true && self.frontmostWindow != nil {
+                self.previewController.open(screen: self.screenWithMouse!, window: frontmostWindow)
             }
-            radialMenuController.open(frontmostWindow: frontmostWindow)
-            keybindMonitor.start()
+            self.radialMenuController.open(frontmostWindow: frontmostWindow)
+            self.keybindMonitor.start()
+            self.scrollEventMonitor?.start()
 
             isLoopShown = true
         }
@@ -149,11 +167,12 @@ class LoopManager {
 
     private func closeLoop(forceClose: Bool = false) {
         self.cancelTriggerDelayTimer()
-        radialMenuController.close()
-        previewController.close()
+        self.radialMenuController.close()
+        self.previewController.close()
 
-        keybindMonitor.resetPressedKeys()
-        keybindMonitor.stop()
+        self.keybindMonitor.resetPressedKeys()
+        self.keybindMonitor.stop()
+        self.scrollEventMonitor?.stop()
 
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&

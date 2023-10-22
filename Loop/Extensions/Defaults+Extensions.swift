@@ -53,6 +53,10 @@ extension Defaults.Keys {
         "lastDirectionKeybind",
         default: [[.kVK_ANSI_Z]]
     )
+    static let hideKeybind = Key<[Set<CGKeyCode>]>(
+        "hideKeybind",
+        default: [[.kVK_ANSI_H]]
+    )
 
     // Cycle Halves
     static let cycleTopKeybind = Key<[Set<CGKeyCode>]>(

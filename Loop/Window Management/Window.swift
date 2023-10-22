@@ -65,6 +65,15 @@ class Window {
         return self.axWindow.setValue(.fullScreen, value: state)
     }
 
+    var isHidden: Bool {
+        let result = self.axWindow.getValue(.hidden) as? NSNumber
+        return result?.boolValue ?? false
+    }
+    @discardableResult
+    func setHidden(_ state: Bool) -> Bool {
+        return self.axWindow.setValue(.hidden, value: state)
+    }
+
     var isMinimized: Bool {
         let result = self.axWindow.getValue(.minimized) as? NSNumber
         return result?.boolValue ?? false
