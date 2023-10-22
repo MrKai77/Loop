@@ -4,7 +4,6 @@
 //
 //  Created by Kai Azim on 2023-06-14.
 //
-// swiftlint:disable file_length
 
 import SwiftUI
 import Defaults
@@ -70,7 +69,6 @@ enum WindowDirection: CaseIterable, Identifiable {
     static var verticalThirds: [WindowDirection] {
         [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
     }
-
     static var cyclable: [WindowDirection] {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
     }

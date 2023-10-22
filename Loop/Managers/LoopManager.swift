@@ -56,7 +56,7 @@ class LoopManager {
 
     private func startTriggerDelayTimer(seconds: Float, handler: @escaping () -> Void) {
         self.triggerDelayTimer = DispatchSource.makeTimerSource(queue: .main)
-        self.triggerDelayTimer!.schedule(deadline: .now() + .milliseconds(Int(seconds*1000)))
+        self.triggerDelayTimer!.schedule(deadline: .now() + .milliseconds(Int(seconds * 1000)))
         self.triggerDelayTimer!.setEventHandler {
             handler()
             self.triggerDelayTimer = nil
@@ -65,8 +65,7 @@ class LoopManager {
     }
 
     private func currentWindowDirectionChanged(_ notification: Notification) {
-        if let newDirection = notification.userInfo?["direction"] as? WindowDirection,
-           let window = self.frontmostWindow {
+        if let newDirection = notification.userInfo?["direction"] as? WindowDirection {
             if newDirection.cyclable {
                 self.currentResizingDirection = newDirection.nextCyclingDirection(from: self.currentResizingDirection)
                 Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
