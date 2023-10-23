@@ -17,26 +17,24 @@ class IconManager {
     }
 
     private static let icons: [Icon] = [
+        Icon(name: "AppIcon-Classic", unlockTime: 0),
         Icon(
-            name: "AppIcon-Classic",
-            unlockTime: 0
+            name: "AppIcon-Holo",
+            unlockTime: 25,
+            unlockMessage: ("You've already looped 25 times! "
+                + "As a reward, here's new icon: Holo. "
+                + "Continue to loop more to unlock new icons!")
         ),
-        Icon(
-            name: "AppIcon-Sci-fi",
-            unlockTime: 25
-        ),
-        Icon(
-            name: "AppIcon-Rosé Pine",
-            unlockTime: 50
-        ),
-        Icon(
-            name: "AppIcon-Meta Loop",
-            unlockTime: 100
-        ),
+        Icon(name: "AppIcon-Sci-fi", unlockTime: 50),
+        Icon(name: "AppIcon-Rosé Pine", unlockTime: 100),
+        Icon(name: "AppIcon-Meta Loop", unlockTime: 200),
+        Icon(name: "AppIcon-Keycap", unlockTime: 300),
+        Icon(name: "AppIcon-White", unlockTime: 400),
+        Icon(name: "AppIcon-Black", unlockTime: 500),
         Icon(
             name: "AppIcon-Loop Master",
-            unlockTime: 500,
-            unlockMessage: ("500 loops conquered! "
+            unlockTime: 1000,
+            unlockMessage: ("1000 loops conquered! "
                 + "The universe has witnessed the birth of a Loop Master! "
                 + "Enjoy your well-deserved reward: a brand-new icon!")
         )

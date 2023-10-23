@@ -1,61 +1,61 @@
 {
   "images" : [
     {
-      "filename" : "WindowMetaLoop-16.png",
+      "filename" : "Holo-16.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
-      "filename" : "WindowMetaLoop-32.png",
+      "filename" : "Holo-32.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
-      "filename" : "WindowMetaLoop-32.png",
+      "filename" : "Holo-32.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
-      "filename" : "WindowMetaLoop-64.png",
+      "filename" : "Holo-64.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
-      "filename" : "WindowMetaLoop-128.png",
+      "filename" : "Holo-128.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "WindowMetaLoop-256.png",
+      "filename" : "Holo-256.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "WindowMetaLoop-256.png",
+      "filename" : "Holo-256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
-      "filename" : "WindowMetaLoop-512.png",
+      "filename" : "Holo-512.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "WindowMetaLoop-512.png",
+      "filename" : "Holo-512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "WindowMetaLoop-1024.png",
+      "filename" : "Holo-1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
