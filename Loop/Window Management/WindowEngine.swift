@@ -34,18 +34,14 @@ struct WindowEngine {
         }
 
         if direction == .hide {
-            if window.isMinimized {
-                window.setMinimized(false)
+            if window.isHidden {
+                window.setHidden(false)
             } else {
-                window.setMinimized(true)
+                window.setHidden(true)
             }
-
-            WindowRecords.recordDirection(window, direction)
-            return
         }
 
         window.setFullscreen(false)
-        window.setMinimized(false)
 
         let oldWindowFrame = window.frame
         guard let screenFrame = screen.safeScreenFrame, let currentWindowFrame = WindowEngine.generateWindowFrame(
@@ -104,8 +100,6 @@ struct WindowEngine {
         #endif
 
         return window
-
-        return nil
     }
 
     static var windowList: [Window] {
