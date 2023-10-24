@@ -42,7 +42,8 @@ struct PreviewView: View {
                         .bottomThird,
                         .bottomTwoThirds,
                         .noAction,
-                        .lastDirection:
+                        .lastDirection,
+                        .hide:
                     Rectangle()
                         .frame(height: currentResizeDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
                 default:
@@ -59,7 +60,8 @@ struct PreviewView: View {
                             .rightThird,
                             .rightTwoThirds,
                             .noAction,
-                            .lastDirection:
+                            .lastDirection,
+                            .hide:
                         Rectangle()
                             .frame(width: currentResizeDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
                     default:
@@ -92,6 +94,8 @@ struct PreviewView: View {
                            height: currentResizeDirection == .initialFrame ? 0 : nil)
                     .frame(width: currentResizeDirection == .lastDirection ? 0 : nil,
                            height: currentResizeDirection == .lastDirection ? 0 : nil)
+                    .frame(width: currentResizeDirection == .hide ? 0 : nil,
+                           height: currentResizeDirection == .hide ? 0 : nil)
 
                     .frame(width: currentResizeDirection == .center ?
                                 (window?.size.width ?? 10) - previewPadding + previewBorderThickness / 2 : nil,
@@ -112,7 +116,8 @@ struct PreviewView: View {
                             .leftThird,
                             .leftTwoThirds,
                             .noAction,
-                            .lastDirection:
+                            .lastDirection,
+                            .hide:
                         Rectangle()
                             .frame(width: currentResizeDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
                     default:
@@ -129,7 +134,8 @@ struct PreviewView: View {
                         .topThird,
                         .topTwoThirds,
                         .noAction,
-                        .lastDirection:
+                        .lastDirection,
+                        .hide:
                     Rectangle()
                         .frame(height: currentResizeDirection == .topThird ? geo.size.height / 3 * 2 : nil)
                 default:
@@ -139,6 +145,7 @@ struct PreviewView: View {
         }
         .foregroundColor(.clear)
         .opacity(currentResizeDirection == .noAction ? 0 : 1)
+        .opacity(currentResizeDirection == .hide ? 0 : 1)
         .animation(.interpolatingSpring(stiffness: 250, damping: 25), value: currentResizeDirection)
         .onReceive(.directionChanged) { obj in
             if let direction = obj.userInfo?["direction"] as? WindowDirection, !self.previewMode, !direction.cyclable {

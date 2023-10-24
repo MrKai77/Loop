@@ -73,11 +73,15 @@ struct RadialMenuView: View {
                         }
                     }
 
-                    if frontmostWindow == nil && previewMode == false {
-                        Image("custom.macwindow.trianglebadge.exclamationmark")
-                            .foregroundStyle(Color.getLoopAccent(tone: .normal))
-                            .font(Font.system(size: 20, weight: .bold))
+                    Group {
+                        if frontmostWindow == nil && previewMode == false {
+                            Image("custom.macwindow.trianglebadge.exclamationmark")
+                        } else if let image = self.currentResizeDirection.radialMenuImage {
+                            image
+                        }
                     }
+                    .foregroundStyle(Color.getLoopAccent(tone: .normal))
+                    .font(Font.system(size: 20, weight: .bold))
                 }
                 .frame(width: radialMenuSize, height: radialMenuSize)
 

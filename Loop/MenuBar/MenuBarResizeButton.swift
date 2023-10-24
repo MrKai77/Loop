@@ -23,7 +23,7 @@ struct MenuBarResizeButton: View {
                 }
             } label: {
                 HStack {
-                    if let image = direction.image {
+                    if let image = direction.menuBarImage {
                         image
                     }
                     Text(name)

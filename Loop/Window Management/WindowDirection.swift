@@ -178,7 +178,7 @@ enum WindowDirection: CaseIterable, Identifiable {
         }
     }
 
-    var image: Image? {
+    var menuBarImage: Image? {
         switch self {
         case .maximize:                 Image(systemName: "rectangle.inset.filled")
         case .fullscreen:               Image(systemName: "rectangle.fill")
@@ -207,6 +207,13 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .verticalCenterThird:      Image("custom.rectangle.verticalcenterthird.inset.filled")
         case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
         case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
+        default:                        nil
+        }
+    }
+
+    var radialMenuImage: Image? {
+        switch self {
+        case .hide:                     Image("custom.rectangle.inset.filled.slash")
         default:                        nil
         }
     }
