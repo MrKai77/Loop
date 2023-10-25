@@ -44,12 +44,22 @@ class LoopManager {
         self.scrollEventMonitor = CGEventMonitor(eventMask: [.scrollWheel]) { cgEvent in
             if cgEvent.type == .scrollWheel, self.isLoopShown, let event = NSEvent(cgEvent: cgEvent) {
 
-                if event.deltaY > 1 && self.currentResizingDirection != .hide {
-                    Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.hide])
-                }
+                if Defaults[.preferMinimizeWithScrollDown] {
+                    if event.deltaY > 1 && self.currentResizingDirection != .minimize {
+                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.minimize])
+                    }
 
-                if event.deltaY < -1 && self.currentResizingDirection == .hide {
-                    Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.noAction])
+                    if event.deltaY < -1 && self.currentResizingDirection == .minimize {
+                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.noAction])
+                    }
+                } else {
+                    if event.deltaY > 1 && self.currentResizingDirection != .hide {
+                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.hide])
+                    }
+
+                    if event.deltaY < -1 && self.currentResizingDirection == .hide {
+                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.noAction])
+                    }
                 }
 
                 return nil

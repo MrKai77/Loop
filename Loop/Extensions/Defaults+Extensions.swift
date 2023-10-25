@@ -33,6 +33,8 @@ extension Defaults.Keys {
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
 
+    static let preferMinimizeWithScrollDown = Key<Bool>("preferMinimizeWithScrollDown", default: false)
+
     static let maximizeKeybind = Key<[Set<CGKeyCode>]>(
         "maximizeKeybind",
         default: [[.kVK_Space]]
@@ -56,6 +58,10 @@ extension Defaults.Keys {
     static let hideKeybind = Key<[Set<CGKeyCode>]>(
         "hideKeybind",
         default: [[.kVK_ANSI_H]]
+    )
+    static let minimizeKeybind = Key<[Set<CGKeyCode>]>(
+        "minimizeKeybind",
+        default: [[.kVK_ANSI_M]]
     )
 
     // Cycle Halves

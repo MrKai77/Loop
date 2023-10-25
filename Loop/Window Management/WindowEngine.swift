@@ -41,6 +41,14 @@ struct WindowEngine {
             }
         }
 
+        if direction == .minimize {
+            if window.isMinimized {
+                window.setMinimized(false)
+            } else {
+                window.setMinimized(true)
+            }
+        }
+
         window.setFullscreen(false)
 
         let oldWindowFrame = window.frame
