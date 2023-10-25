@@ -33,6 +33,22 @@ struct WindowEngine {
             return
         }
 
+        if direction == .hide {
+            if window.isHidden {
+                window.setHidden(false)
+            } else {
+                window.setHidden(true)
+            }
+        }
+
+        if direction == .minimize {
+            if window.isMinimized {
+                window.setMinimized(false)
+            } else {
+                window.setMinimized(true)
+            }
+        }
+
         window.setFullscreen(false)
 
         let oldWindowFrame = window.frame

@@ -168,8 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				A848D8A62A8C2F3F00060834 /* LoopManager.swift */,
-				A864F4672AA660CD00579738 /* SnappingManager.swift */,
 				A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */,
+				A864F4672AA660CD00579738 /* SnappingManager.swift */,
 				A82521ED29E235AC00139654 /* PermissionsManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
 			);

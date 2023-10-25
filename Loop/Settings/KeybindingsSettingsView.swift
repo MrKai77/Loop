@@ -15,6 +15,7 @@ struct KeybindingsSettingsView: View {
     @Default(.triggerDelay) var triggerDelay
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
+    @Default(.preferMinimizeWithScrollDown) var preferMinimizeWithScrollDown
 
     @State var suggestAddingTriggerDelay: Bool = false
     @State var suggestDisablingCapsLock: Bool = false
@@ -190,7 +191,7 @@ struct KeybindingsSettingsView: View {
 
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Use Z undo window operations:")
+                        Text("Press Z undo window operations:")
                     }
 
                     Spacer()
@@ -203,6 +204,31 @@ struct KeybindingsSettingsView: View {
                             .font(Font.system(size: 15, weight: .bold))
 
                         Image(systemName: "z.square.fill")
+                            .font(Font.system(size: 30, weight: .regular))
+                            .frame(width: 60)
+                    }
+                    .foregroundStyle(Color.accentColor)
+                }
+
+                HStack {
+                    VStack(alignment: .leading) {
+                        if self.preferMinimizeWithScrollDown {
+                            Text("Scroll down to minimize a window:")
+                        } else {
+                            Text("Scroll down to hide a window:")
+                        }
+                    }
+
+                    Spacer()
+
+                    HStack {
+                        Image(self.triggerKey.keySymbol)
+                            .font(Font.system(size: 30, weight: .regular))
+
+                        Image(systemName: "plus")
+                            .font(Font.system(size: 15, weight: .bold))
+
+                        Image(systemName: "arrow.up.and.down.square.fill")
                             .font(Font.system(size: 30, weight: .regular))
                             .frame(width: 60)
                     }

@@ -20,6 +20,8 @@ enum WindowDirection: CaseIterable, Identifiable {
     case lastDirection
     case center
     case initialFrame
+    case hide
+    case minimize
 
     // To cycle through directions
     case cycleTop
@@ -53,7 +55,7 @@ enum WindowDirection: CaseIterable, Identifiable {
     case bottomThird
     case bottomTwoThirds
 
-    // These are used in the menubar item
+    // These are used in the menubar resize submenu
     static var general: [WindowDirection] {
         [.initialFrame, .lastDirection, .center, .maximize, .fullscreen]
     }
@@ -117,6 +119,8 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .lastDirection:            "Last Direction"
         case .center:                   "Center"
         case .initialFrame:             "Initial Frame"
+        case .hide:                     "Hide"
+        case .minimize:                 "Minimize"
 
         case .cycleTop:                 "Cycle Top"
         case .cycleBottom:              "Cycle Bottom"
@@ -154,6 +158,8 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .lastDirection:            Defaults[.lastDirectionKeybind]
         case .center:                   Defaults[.centerKeybind]
         case .initialFrame:             Defaults[.initialFrameKeybind]
+        case .hide:                     Defaults[.hideKeybind]
+        case .minimize:                 Defaults[.minimizeKeybind]
 
         case .cycleTop:                 Defaults[.cycleTopKeybind]
         case .cycleRight:               Defaults[.cycleRightKeybind]
@@ -175,7 +181,7 @@ enum WindowDirection: CaseIterable, Identifiable {
         }
     }
 
-    var image: Image? {
+    var menuBarImage: Image? {
         switch self {
         case .maximize:                 Image(systemName: "rectangle.inset.filled")
         case .fullscreen:               Image(systemName: "rectangle.fill")
@@ -204,6 +210,14 @@ enum WindowDirection: CaseIterable, Identifiable {
         case .verticalCenterThird:      Image("custom.rectangle.verticalcenterthird.inset.filled")
         case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
         case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
+        default:                        nil
+        }
+    }
+
+    var radialMenuImage: Image? {
+        switch self {
+        case .hide:                     Image("custom.rectangle.slash")
+        case .minimize:                 Image("custom.arrow.down.right.and.arrow.up.left.rectangle")
         default:                        nil
         }
     }
@@ -326,12 +340,8 @@ enum WindowDirection: CaseIterable, Identifiable {
 
     var frameMultiplyValues: CGRect? {
         switch self {
-        case .noAction:                 nil
         case .maximize:                 CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
         case .fullscreen:               CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
-        case .lastDirection:            nil
-        case .center:                   nil
-        case .initialFrame:             nil
 
         // Halves
         case .topHalf:                  CGRect(x: 0, y: 0, width: 1.0, height: 1.0/2.0)

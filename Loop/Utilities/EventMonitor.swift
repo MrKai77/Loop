@@ -7,7 +7,12 @@
 
 import Cocoa
 
-class NSEventMonitor {
+protocol EventMonitor {
+    func start()
+    func stop()
+}
+
+class NSEventMonitor: EventMonitor {
     private var localEventMonitor: Any?
     private var globalEventMonitor: Any?
 
@@ -51,7 +56,7 @@ class NSEventMonitor {
     }
 }
 
-class CGEventMonitor {
+class CGEventMonitor: EventMonitor {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var eventCallback: (CGEvent) -> Unmanaged<CGEvent>?

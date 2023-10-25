@@ -10,6 +10,7 @@ import SwiftUI
 class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
+    let nsRunningApplication: NSRunningApplication?
     var processID: pid_t
 
     init?(element: AXUIElement, pid: pid_t? = nil) {
@@ -21,6 +22,10 @@ class Window {
         } else {
             self.processID = pid!
         }
+
+        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first(where: {
+            $0.processIdentifier == pid!
+        })
 
         // Set self's CGWindowID
         var windowId = CGWindowID(0)
@@ -63,6 +68,20 @@ class Window {
     @discardableResult
     func setFullscreen(_ state: Bool) -> Bool {
         return self.axWindow.setValue(.fullScreen, value: state)
+    }
+
+    var isHidden: Bool {
+        return self.nsRunningApplication?.isHidden ?? false
+    }
+    @discardableResult
+    func setHidden(_ state: Bool) -> Bool {
+        var result = false
+        if state {
+            result = self.nsRunningApplication?.hide() ?? false
+        } else {
+            result = self.nsRunningApplication?.unhide() ?? false
+        }
+        return result
     }
 
     var isMinimized: Bool {
