@@ -88,7 +88,7 @@ struct KeybindingsSettingsView: View {
                 }
 
                 Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
-                Toggle("Also use mouse middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
+                Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
             }
 
             Section("Instructions") {
