@@ -93,7 +93,7 @@ class CGEventMonitor: EventMonitor {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
             }
         } else {
-            fatalError("Failed to create event tap")
+            print("ERROR: Failed to create event tap (event mask: \(eventMask)")
         }
     }
 

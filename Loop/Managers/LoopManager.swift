@@ -42,20 +42,11 @@ class LoopManager {
         }
         self.keyDownEventMonitor!.start()
 
-        self.middleClickMonitor = CGEventMonitor(eventMask: [.otherMouseDragged, .otherMouseUp]) { cgEvent in
-            if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
-                if event.type == .otherMouseDragged && !self.isLoopShown {
-                    self.openLoop()
-                    return nil
-                }
-
-                if event.type == .otherMouseUp && self.isLoopShown {
-                    self.closeLoop()
-                    return nil
-                }
-            }
-            return Unmanaged.passUnretained(cgEvent)
-        }
+        self.middleClickMonitor = CGEventMonitor(
+            eventMask: [.otherMouseDragged, .otherMouseUp],
+            callback: handleMiddleClick(cgEvent:)
+        )
+        self.middleClickMonitor?.start()
 
         self.scrollEventMonitor = CGEventMonitor(eventMask: [.scrollWheel]) { cgEvent in
             if cgEvent.type == .scrollWheel, self.isLoopShown, let event = NSEvent(cgEvent: cgEvent) {
@@ -90,8 +81,21 @@ class LoopManager {
         Notification.Name.forceCloseLoop.onRecieve { _ in
             self.closeLoop(forceClose: true)
         }
+    }
 
-        middleClickMonitor?.start()
+    func handleMiddleClick(cgEvent: CGEvent) -> Unmanaged<CGEvent>? {
+        if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
+            if event.type == .otherMouseDragged && !self.isLoopShown {
+                self.openLoop()
+                return nil
+            }
+
+            if event.type == .otherMouseUp && self.isLoopShown {
+                self.closeLoop()
+                return nil
+            }
+        }
+        return Unmanaged.passUnretained(cgEvent)
     }
 
     private func cancelTriggerDelayTimer() {
