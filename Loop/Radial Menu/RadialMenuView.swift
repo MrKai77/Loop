@@ -64,7 +64,7 @@ struct RadialMenuView: View {
                     }
                     // Mask the whole ZStack with the shape the user defines
                     .mask {
-                        if radialMenuCornerRadius == radialMenuSize / 2 {
+                        if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
                             Circle()
                                 .strokeBorder(.black, lineWidth: radialMenuThickness)
                         } else {
