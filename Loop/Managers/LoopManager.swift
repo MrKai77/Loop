@@ -23,6 +23,7 @@ class LoopManager {
 
     private var flagsChangedEventMonitor: EventMonitor?
     private var keyDownEventMonitor: EventMonitor?
+    private var middleClickMonitor: EventMonitor?
     private var scrollEventMonitor: EventMonitor?
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
@@ -40,6 +41,21 @@ class LoopManager {
             }
         }
         self.keyDownEventMonitor!.start()
+
+        self.middleClickMonitor = CGEventMonitor(eventMask: [.otherMouseDown, .otherMouseUp]) { cgEvent in
+            if Defaults[.middleClickTriggersLoop] {
+                if cgEvent.type == .otherMouseDown, !self.isLoopShown {
+                    self.openLoop()
+                    return nil
+                }
+
+                if cgEvent.type == .otherMouseUp, self.isLoopShown {
+                    self.closeLoop()
+                    return nil
+                }
+            }
+            return Unmanaged.passUnretained(cgEvent)
+        }
 
         self.scrollEventMonitor = CGEventMonitor(eventMask: [.scrollWheel]) { cgEvent in
             if cgEvent.type == .scrollWheel, self.isLoopShown, let event = NSEvent(cgEvent: cgEvent) {
@@ -74,6 +90,8 @@ class LoopManager {
         Notification.Name.forceCloseLoop.onRecieve { _ in
             self.closeLoop(forceClose: true)
         }
+
+        middleClickMonitor?.start()
     }
 
     private func cancelTriggerDelayTimer() {
