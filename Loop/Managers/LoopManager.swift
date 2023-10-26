@@ -42,14 +42,14 @@ class LoopManager {
         }
         self.keyDownEventMonitor!.start()
 
-        self.middleClickMonitor = CGEventMonitor(eventMask: [.otherMouseDown, .otherMouseUp]) { cgEvent in
-            if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
-                if cgEvent.type == .otherMouseDown, !self.isLoopShown {
+        self.middleClickMonitor = CGEventMonitor(eventMask: [.otherMouseDragged, .otherMouseUp]) { cgEvent in
+            if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2 {
+                if event.type == .otherMouseDragged && !self.isLoopShown {
                     self.openLoop()
                     return nil
                 }
 
-                if cgEvent.type == .otherMouseUp, self.isLoopShown {
+                if event.type == .otherMouseUp && self.isLoopShown {
                     self.closeLoop()
                     return nil
                 }
