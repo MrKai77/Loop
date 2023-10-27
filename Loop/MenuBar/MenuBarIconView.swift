@@ -14,6 +14,7 @@ struct MenuBarIconView: View {
             .resizable()
             .scaledToFit()
             .frame(width: 16, height: 16)
+            .fontWeight(.light)
             .rotationEffect(Angle.degrees(self.rotationAngle))
             .onReceive(.didLoop) { _ in
                 self.rotationAngle = 0
