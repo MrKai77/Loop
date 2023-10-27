@@ -17,11 +17,13 @@ extension Defaults.Keys {
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
 
+    static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
+
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
     static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white))
     static let useGradient = Key<Bool>("useGradient", default: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
-    
+
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
 
