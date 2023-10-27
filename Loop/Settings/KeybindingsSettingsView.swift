@@ -13,6 +13,7 @@ struct KeybindingsSettingsView: View {
     @Default(.triggerKey) var triggerKey
     @Default(.doubleClickToTrigger) var doubleClickToTrigger
     @Default(.triggerDelay) var triggerDelay
+    @Default(.middleClickTriggersLoop) var middleClickTriggersLoop
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
     @Default(.preferMinimizeWithScrollDown) var preferMinimizeWithScrollDown
@@ -73,8 +74,6 @@ struct KeybindingsSettingsView: View {
                     }
                 )
 
-                Toggle("Double-click to trigger Loop", isOn: $doubleClickToTrigger)
-
                 HStack {
                     Stepper(
                         "Trigger Delay (seconds)",
@@ -87,6 +86,9 @@ struct KeybindingsSettingsView: View {
                         format: .number
                     )
                 }
+
+                Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
+                Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
             }
 
             Section("Instructions") {

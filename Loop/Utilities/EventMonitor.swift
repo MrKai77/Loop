@@ -8,6 +8,7 @@
 import Cocoa
 
 protocol EventMonitor {
+    var isEnabled: Bool { get }
     func start()
     func stop()
 }
@@ -19,6 +20,7 @@ class NSEventMonitor: EventMonitor {
     private var scope: NSEventMonitor.Scope
     private var eventTypeMask: NSEvent.EventTypeMask
     private var eventHandler: (NSEvent) -> Void
+    var isEnabled: Bool = false
 
     enum Scope {
         case local
@@ -33,6 +35,8 @@ class NSEventMonitor: EventMonitor {
     }
 
     public func start() {
+        guard self.isEnabled == false else { return }
+
         if self.scope == .local || self.scope == .all {
             self.localEventMonitor = NSEvent.addLocalMonitorForEvents(matching: eventTypeMask) { event in
                 self.eventHandler(event)
@@ -42,9 +46,13 @@ class NSEventMonitor: EventMonitor {
         if self.scope == .global || self.scope == .all {
             self.globalEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: eventTypeMask, handler: eventHandler)
         }
+
+        self.isEnabled = true
     }
 
     public func stop() {
+        guard self.isEnabled == true else { return }
+
         if self.localEventMonitor != nil {
             NSEvent.removeMonitor(self.localEventMonitor!)
             self.localEventMonitor = nil
@@ -53,6 +61,8 @@ class NSEventMonitor: EventMonitor {
             NSEvent.removeMonitor(self.globalEventMonitor!)
             self.globalEventMonitor = nil
         }
+
+        self.isEnabled = false
     }
 }
 
@@ -60,7 +70,7 @@ class CGEventMonitor: EventMonitor {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
-    private var isEnabled: Bool = false
+    var isEnabled: Bool = false
 
     init(eventMask: NSEvent.EventTypeMask, callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?) {
         self.eventCallback = callback
@@ -83,7 +93,7 @@ class CGEventMonitor: EventMonitor {
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
             }
         } else {
-            fatalError("Failed to create event tap")
+            print("ERROR: Failed to create event tap (event mask: \(eventMask)")
         }
     }
 

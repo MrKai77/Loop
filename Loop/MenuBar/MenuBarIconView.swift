@@ -10,7 +10,11 @@ import SwiftUI
 struct MenuBarIconView: View {
     @State var rotationAngle: Double = 0.0
     var body: some View {
-        Image(.menubarIcon)
+        Image("loop")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 16, height: 16)
+            .fontWeight(.light)
             .rotationEffect(Angle.degrees(self.rotationAngle))
             .onReceive(.didLoop) { _ in
                 self.rotationAngle = 0

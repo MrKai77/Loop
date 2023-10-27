@@ -28,6 +28,7 @@ extension Defaults.Keys {
     static let triggerKey = Key<TriggerKey>("trigger", default: TriggerKey.options[0])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let triggerDelay = Key<Float>("triggerDelay", default: 0)
+    static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false)
 
     static let previewVisibility = Key<Bool>("previewVisibility", default: true)
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
