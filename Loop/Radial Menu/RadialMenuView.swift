@@ -29,6 +29,7 @@ struct RadialMenuView: View {
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
     @Default(.useGradient) var useGradient
+    @Default(.animationConfiguration) var animationConfiguration
 
     var body: some View {
         VStack {
@@ -93,7 +94,7 @@ struct RadialMenuView: View {
 
         // Animate window
         .scaleEffect(currentResizeDirection == .maximize ? 0.85 : 1)
-        .animation(.easeOut, value: currentResizeDirection)
+        .animation(animationConfiguration.radialMenuAnimation, value: currentResizeDirection)
         .onAppear {
             if previewMode {
                 currentResizeDirection = currentResizeDirection.nextPreviewDirection

@@ -23,6 +23,7 @@ struct GeneralSettingsView: View {
     @Default(.animateWindowResizes) var animateWindowResizes
     @Default(.windowPadding) var windowPadding
     @Default(.windowSnapping) var windowSnapping
+    @Default(.animationConfiguration) var animationConfiguration
 
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -73,6 +74,14 @@ struct GeneralSettingsView: View {
                        minimumValueLabel: Text("0px"),
                        maximumValueLabel: Text("20px")) {
                     Text("Window Padding")
+                }
+            }
+
+            Section {
+                Picker("Animation Speed", selection: $animationConfiguration) {
+                    ForEach(AnimationConfiguration.allCases) { configuration in
+                        Text(configuration.name)
+                    }
                 }
             }
 

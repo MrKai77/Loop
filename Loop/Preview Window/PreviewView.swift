@@ -29,7 +29,8 @@ struct PreviewView: View {
     @Default(.windowPadding) var windowPadding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
-    @Default(.previewAnimationDuration) var previewAnimationDuration
+    @Default(.animationConfiguration) var animationConfiguration
+
     var body: some View {
         GeometryReader { geo in
             VStack {
@@ -146,14 +147,7 @@ struct PreviewView: View {
         .foregroundColor(.clear)
         .opacity(currentResizeDirection == .noAction ? 0 : 1)
         .opacity(currentResizeDirection == .hide ? 0 : 1)
-        .animation(
-            .interpolatingSpring(
-                duration: previewAnimationDuration,
-                bounce: previewAnimationDuration * 2/5,
-                initialVelocity: 1/2
-            ),
-            value: currentResizeDirection
-        )
+        .animation(animationConfiguration.previewWindowAnimation, value: currentResizeDirection)
         .onReceive(.directionChanged) { obj in
             if let direction = obj.userInfo?["direction"] as? WindowDirection, !self.previewMode, !direction.cyclable {
                 self.currentResizeDirection = direction

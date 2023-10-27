@@ -17,6 +17,8 @@ extension Defaults.Keys {
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
 
+    static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
+
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
     static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white))
     static let useGradient = Key<Bool>("useGradient", default: true)
@@ -34,7 +36,6 @@ extension Defaults.Keys {
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
-    static let previewAnimationDuration = Key<Double>("previewAnimationDuration", default: 0.30)
 
     static let preferMinimizeWithScrollDown = Key<Bool>("preferMinimizeWithScrollDown", default: false)
 
