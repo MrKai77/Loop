@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             Settings.Pane(
                 identifier: .radialMenu,
                 title: "Radial Menu",
-                toolbarIcon: NSImage(resource: .radialMenu)
+                toolbarIcon: NSImage(named: "loop")!
             ) {
                 RadialMenuSettingsView()
             },
