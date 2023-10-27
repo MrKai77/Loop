@@ -23,6 +23,7 @@ class LoopManager {
 
     private var flagsChangedEventMonitor: EventMonitor?
     private var keyDownEventMonitor: EventMonitor?
+    private var middleClickMonitor: EventMonitor?
     private var scrollEventMonitor: EventMonitor?
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
@@ -40,6 +41,12 @@ class LoopManager {
             }
         }
         self.keyDownEventMonitor!.start()
+
+        self.middleClickMonitor = CGEventMonitor(
+            eventMask: [.otherMouseDragged, .otherMouseUp],
+            callback: handleMiddleClick(cgEvent:)
+        )
+        self.middleClickMonitor?.start()
 
         self.scrollEventMonitor = CGEventMonitor(eventMask: [.scrollWheel]) { cgEvent in
             if cgEvent.type == .scrollWheel, self.isLoopShown, let event = NSEvent(cgEvent: cgEvent) {
@@ -64,7 +71,7 @@ class LoopManager {
 
                 return nil
             }
-            return Unmanaged.passUnretained(cgEvent)
+            return Unmanaged.passRetained(cgEvent)
         }
 
         Notification.Name.directionChanged.onRecieve { notification in
@@ -74,6 +81,21 @@ class LoopManager {
         Notification.Name.forceCloseLoop.onRecieve { _ in
             self.closeLoop(forceClose: true)
         }
+    }
+
+    func handleMiddleClick(cgEvent: CGEvent) -> Unmanaged<CGEvent>? {
+        if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
+            if event.type == .otherMouseDragged && !self.isLoopShown {
+                self.openLoop()
+                return nil
+            }
+
+            if event.type == .otherMouseUp && self.isLoopShown {
+                self.closeLoop()
+                return nil
+            }
+        }
+        return Unmanaged.passRetained(cgEvent)
     }
 
     private func cancelTriggerDelayTimer() {
