@@ -71,7 +71,7 @@ class LoopManager {
 
                 return nil
             }
-            return Unmanaged.passUnretained(cgEvent)
+            return Unmanaged.passRetained(cgEvent)
         }
 
         Notification.Name.directionChanged.onRecieve { notification in
@@ -95,7 +95,7 @@ class LoopManager {
                 return nil
             }
         }
-        return Unmanaged.passUnretained(cgEvent)
+        return Unmanaged.passRetained(cgEvent)
     }
 
     private func cancelTriggerDelayTimer() {
