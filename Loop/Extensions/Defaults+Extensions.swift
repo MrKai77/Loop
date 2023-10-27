@@ -22,16 +22,18 @@ extension Defaults.Keys {
     static let useGradient = Key<Bool>("useGradient", default: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
 
+    static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
+    static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
+
     static let triggerKey = Key<TriggerKey>("trigger", default: TriggerKey.options[0])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let triggerDelay = Key<Float>("triggerDelay", default: 0)
-    static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
-    static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
 
     static let previewVisibility = Key<Bool>("previewVisibility", default: true)
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
+    static let previewAnimationDuration = Key<Double>("previewAnimationDuration", default: 0.30)
 
     static let preferMinimizeWithScrollDown = Key<Bool>("preferMinimizeWithScrollDown", default: false)
 
