@@ -10,11 +10,10 @@ import SwiftUI
 struct MenuBarIconView: View {
     @State var rotationAngle: Double = 0.0
     var body: some View {
-        Image("loop")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 16, height: 16)
-            .fontWeight(.light)
+        // We don't use the symbol since it is *ever so slightly* off center. This is not a
+        // problem with only Loop's symbol symbol, but the circle.circle SF symbol also is slightly
+        // off center. Will need to investigate that later.
+        Image(.menubarIcon)
             .rotationEffect(Angle.degrees(self.rotationAngle))
             .onReceive(.didLoop) { _ in
                 self.rotationAngle = 0
