@@ -5,11 +5,11 @@
         <item>
             <title>1.0.0-beta.11</title>
             <pubDate>Fri, 27 Oct 2023 20:11:01 -0600</pubDate>
-            <sparkle:version>463</sparkle:version>
+            <sparkle:version>464</sparkle:version>
             <sparkle:shortVersionString>1.0.0-beta.11</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.11/Loop.zip" length="12016932" type="application/octet-stream" sparkle:edSignature="qew7xhBgwRYUOLvCFhLlTHuRonNsdV64LO56TpASY4U9rbnWT76E0EVpsZr3La9zqGn2P08axonX9gcHR6Q2BQ=="/>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.11/Loop.zip" length="12016932" type="application/octet-stream" sparkle:edSignature="cWpo4fMj/5Fnco8cy/ho5Yelz6q3zZFvD9LdOBU5K+NPtWwrPB40Dc5rwtmwBEYzUSp1DYbgoX8mP3ANH3+pCA=="/>
         </item>
         <item>
             <title>1.0.0-beta.10</title>
