@@ -25,12 +25,11 @@ class IconManager {
                 + "As a reward, here's new icon: Holo. "
                 + "Continue to loop more to unlock new icons!")
         ),
-        Icon(name: "AppIcon-Sci-fi", unlockTime: 50),
-        Icon(name: "AppIcon-Rosé Pine", unlockTime: 100),
-        Icon(name: "AppIcon-Meta Loop", unlockTime: 200),
-        Icon(name: "AppIcon-Keycap", unlockTime: 300),
-        Icon(name: "AppIcon-White", unlockTime: 400),
-        Icon(name: "AppIcon-Black", unlockTime: 500),
+        Icon(name: "AppIcon-Rosé Pine", unlockTime: 50),
+        Icon(name: "AppIcon-Meta Loop", unlockTime: 100),
+        Icon(name: "AppIcon-Keycap", unlockTime: 200),
+        Icon(name: "AppIcon-White", unlockTime: 300),
+        Icon(name: "AppIcon-Black", unlockTime: 400),
         Icon(
             name: "AppIcon-Loop Master",
             unlockTime: 1000,
