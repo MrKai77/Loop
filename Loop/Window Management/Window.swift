@@ -24,7 +24,7 @@ class Window {
         }
 
         self.nsRunningApplication = NSWorkspace.shared.runningApplications.first(where: {
-            $0.processIdentifier == pid!
+            $0.processIdentifier == pid
         })
 
         // Set self's CGWindowID
