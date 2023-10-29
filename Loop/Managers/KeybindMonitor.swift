@@ -54,7 +54,7 @@ class KeybindMonitor {
         }
 
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
-             if (cgEvent.type == .keyDown || cgEvent.type == .keyUp),
+             if cgEvent.type == .keyDown || cgEvent.type == .keyUp,
                let event = NSEvent(cgEvent: cgEvent),
                !event.isARepeat {
 

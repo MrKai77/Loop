@@ -10,7 +10,7 @@ import Defaults
 
 // Enum that stores all possible resizing options
 // swiftlint:disable:next type_body_length
-enum WindowDirection: CaseIterable, Identifiable {
+enum WindowDirection: CaseIterable, Identifiable, Codable {
     var id: Self { return self }
 
     // General
@@ -152,33 +152,11 @@ enum WindowDirection: CaseIterable, Identifiable {
     }
 
     var keybind: [Set<CGKeyCode>] {
-        switch self {
-        case .maximize:                 Defaults[.maximizeKeybind]
-        case .fullscreen:               Defaults[.fullscreenKeybind]
-        case .lastDirection:            Defaults[.lastDirectionKeybind]
-        case .center:                   Defaults[.centerKeybind]
-        case .initialFrame:             Defaults[.initialFrameKeybind]
-        case .hide:                     Defaults[.hideKeybind]
-        case .minimize:                 Defaults[.minimizeKeybind]
-
-        case .cycleTop:                 Defaults[.cycleTopKeybind]
-        case .cycleRight:               Defaults[.cycleRightKeybind]
-        case .cycleBottom:              Defaults[.cycleBottomKeybind]
-        case .cycleLeft:                Defaults[.cycleLeftKeybind]
-
-        case .topLeftQuarter:           Defaults[.topLeftQuarter]
-        case .topRightQuarter:          Defaults[.topRightQuarter]
-        case .bottomRightQuarter:       Defaults[.bottomRightQuarter]
-        case .bottomLeftQuarter:        Defaults[.bottomLeftQuarter]
-
-        case .leftThird:                Defaults[.leftThird]
-        case .leftTwoThirds:            Defaults[.leftTwoThirds]
-        case .horizontalCenterThird:    Defaults[.horizontalCenterThird]
-        case .rightTwoThirds:           Defaults[.rightTwoThirds]
-        case .rightThird:               Defaults[.rightThird]
-
-        default:                        [[]]
+        var keybinds: [Set<CGKeyCode>] = [[]]
+        for keybind in Defaults[.keybinds] where keybind.direction == self {
+            keybinds.append(keybind.keybind)
         }
+        return keybinds
     }
 
     var menuBarImage: Image? {
