@@ -1,61 +1,61 @@
 {
   "images" : [
     {
-      "filename" : "WhiteWhite-16.png",
+      "filename" : "White-16.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
-      "filename" : "WhiteWhite-32.png",
+      "filename" : "White-32.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
-      "filename" : "WhiteWhite-32.png",
+      "filename" : "White-32.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
-      "filename" : "WhiteWhite-64.png",
+      "filename" : "White-64.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
-      "filename" : "WhiteWhite-128.png",
+      "filename" : "White-128.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "WhiteWhite-256.png",
+      "filename" : "White-256.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "WhiteWhite-256.png",
+      "filename" : "White-256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
-      "filename" : "WhiteWhite-512.png",
+      "filename" : "White-512.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "WhiteWhite-512.png",
+      "filename" : "White-512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "WhiteWhite-1024.png",
+      "filename" : "White-1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
