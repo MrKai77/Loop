@@ -37,12 +37,8 @@ class KeybindMonitor {
             Notification.Name.forceCloseLoop.post()
             KeybindMonitor.shared.resetPressedKeys()
         } else {
-            // Since this is one for loop inside another, we can break from inside by breaking from the outerloop
-            outerLoop: for direction in WindowDirection.allCases {
-                for keybind in direction.keybind where keybind == pressedKeys {
-                    Notification.Name.directionChanged.post(userInfo: ["direction": direction])
-                    break outerLoop
-                }
+            if let newDirection = WindowDirection.getDirection(for: pressedKeys) {
+                Notification.Name.directionChanged.post(userInfo: ["direction": newDirection])
             }
         }
     }

@@ -151,12 +151,11 @@ enum WindowDirection: CaseIterable, Identifiable, Codable {
         }
     }
 
-    var keybind: [Set<CGKeyCode>] {
-        var keybinds: [Set<CGKeyCode>] = [[]]
-        for keybind in Defaults[.keybinds] where keybind.direction == self {
-            keybinds.append(keybind.keybind)
+    static func getDirection(for keybind: Set<CGKeyCode>) -> WindowDirection? {
+        for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
+            return keybinding.direction
         }
-        return keybinds
+        return nil
     }
 
     var menuBarImage: Image? {
