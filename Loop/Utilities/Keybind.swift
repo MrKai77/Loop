@@ -8,7 +8,9 @@
 import Cocoa
 import Defaults
 
-struct Keybind: Codable, Defaults.Serializable {
+struct Keybind: Codable, Identifiable, Hashable, Defaults.Serializable {
+    var id = UUID()
+
     init(_ direction: WindowDirection, keycode: Set<CGKeyCode>) {
         self.direction = direction
         self.keybind = keycode

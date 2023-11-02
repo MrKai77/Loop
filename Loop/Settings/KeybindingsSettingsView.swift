@@ -1,9 +1,11 @@
 //
-//  KeybindingSettingsView.swift
+//  KeybindingsSettingsView.swift
 //  Loop
 //
-//  Created by Kai Azim on 2023-01-24.
+//  Created by Kai Azim on 2023-10-28.
 //
+
+import Foundation
 
 import SwiftUI
 import Defaults
@@ -23,7 +25,7 @@ struct KeybindingsSettingsView: View {
 
     var body: some View {
         Form {
-            Section("Keybindings") {
+            Section("Trigger Key") {
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Trigger Key")
@@ -91,153 +93,9 @@ struct KeybindingsSettingsView: View {
                 Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
             }
 
-            Section("Instructions") {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Press the spacebar to maximize a window:")
-                        Text("Use the shift key to toggle fullscreen!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image("custom.space.rectangle.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
-                }
-
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Use arrow keys to resize into halves:")
-                        Group {
-                            Text("Press two keys to for to resize into quarters!")
-                            Text("Tip: You can also use WASD keys!")
-                        }
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image("arrowkeys.up.filled")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
-                }
-
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Use JKL to resize into thirds:")
-                        Text("Press two keys for 2/3-sized windows!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image(systemName: "j.square.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
-                }
-
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Press return to center a window:")
-                        Text("This will not alter the window's current size!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image("custom.return.rectangle.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
-                }
-
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Press Z undo window operations:")
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image(systemName: "z.square.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
-                }
-
-                HStack {
-                    VStack(alignment: .leading) {
-                        if self.preferMinimizeWithScrollDown {
-                            Text("Scroll down to minimize a window:")
-                        } else {
-                            Text("Scroll down to hide a window:")
-                        }
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image(systemName: "arrow.up.and.down.square.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
-                }
+            Section("Keybinds") {
+                KeybindCustomizationView()
             }
-            .symbolRenderingMode(.hierarchical)
         }
         .formStyle(.grouped)
         .scrollDisabled(true)

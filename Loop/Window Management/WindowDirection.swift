@@ -10,50 +10,50 @@ import Defaults
 
 // Enum that stores all possible resizing options
 // swiftlint:disable:next type_body_length
-enum WindowDirection: CaseIterable, Identifiable, Codable {
+enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
     var id: Self { return self }
 
     // General
-    case noAction
-    case maximize
-    case fullscreen
-    case lastDirection
-    case center
-    case initialFrame
-    case hide
-    case minimize
+    case noAction = 0
+    case maximize = 1
+    case fullscreen = 2
+    case lastDirection = 3
+    case center = 4
+    case initialFrame = 5
+    case hide = 6
+    case minimize = 7
 
     // To cycle through directions
-    case cycleTop
-    case cycleBottom
-    case cycleRight
-    case cycleLeft
+    case cycleTop = 8
+    case cycleBottom = 9
+    case cycleRight = 10
+    case cycleLeft = 11
 
     // Halves
-    case topHalf
-    case rightHalf
-    case bottomHalf
-    case leftHalf
+    case topHalf = 12
+    case rightHalf = 13
+    case bottomHalf = 14
+    case leftHalf = 15
 
     // Quarters
-    case topLeftQuarter
-    case topRightQuarter
-    case bottomRightQuarter
-    case bottomLeftQuarter
+    case topLeftQuarter = 16
+    case topRightQuarter = 17
+    case bottomRightQuarter = 18
+    case bottomLeftQuarter = 19
 
     // Horizontal Thirds
-    case rightThird
-    case rightTwoThirds
-    case horizontalCenterThird
-    case leftThird
-    case leftTwoThirds
+    case rightThird = 20
+    case rightTwoThirds = 21
+    case horizontalCenterThird = 22
+    case leftThird = 23
+    case leftTwoThirds = 24
 
     // Vertical Thirds
-    case topThird
-    case topTwoThirds
-    case verticalCenterThird
-    case bottomThird
-    case bottomTwoThirds
+    case topThird = 25
+    case topTwoThirds = 26
+    case verticalCenterThird = 27
+    case bottomThird = 28
+    case bottomTwoThirds = 29
 
     // These are used in the menubar resize submenu
     static var general: [WindowDirection] {
@@ -111,9 +111,9 @@ enum WindowDirection: CaseIterable, Identifiable, Codable {
         }
     }
 
-    var name: String? {
+    var name: String {
         switch self {
-        case .noAction:                 nil
+        case .noAction:                 "No Action"
         case .maximize:                 "Maximize"
         case .fullscreen:               "Fullscreen"
         case .lastDirection:            "Last Direction"
@@ -165,6 +165,13 @@ enum WindowDirection: CaseIterable, Identifiable, Codable {
         case .center:                   Image(systemName: "rectangle.center.inset.filled")
         case .lastDirection:            Image("custom.backward.fill.rectangle.fill")
         case .initialFrame:             Image("custom.backward.end.alt.fill.rectangle.fill")
+        case .hide:                     Image("custom.rectangle.slash")
+        case .minimize:                 Image("custom.arrow.down.right.and.arrow.up.left.rectangle")
+
+        case .cycleTop:                 Image(systemName: "rectangle.tophalf.inset.filled")
+        case .cycleBottom:              Image(systemName: "rectangle.bottomhalf.inset.filled")
+        case .cycleRight:               Image(systemName: "rectangle.righthalf.inset.filled")
+        case .cycleLeft:                Image(systemName: "rectangle.lefthalf.inset.filled")
 
         case .topHalf:                  Image(systemName: "rectangle.tophalf.inset.filled")
         case .rightHalf:                Image(systemName: "rectangle.righthalf.inset.filled")
