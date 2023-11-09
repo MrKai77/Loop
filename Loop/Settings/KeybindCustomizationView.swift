@@ -8,77 +8,38 @@
 import SwiftUI
 import Defaults
 
-struct KeybindCustomizationView: View {
-    @Default(.keybinds) var keybinds
-
-    var body: some View {
-        ScrollView {
-                ForEach(self.$keybinds) { keybind in
-                    KeybindCustomizationViewItem(keybind: keybind)
-                }
-        }
-        .frame(height: 300)
-    }
-}
-
 struct KeybindCustomizationViewItem: View {
-    let keybind: Binding<Keybind>
-
-    @State var isOpen = false
-
-    init?(keybind: Binding<Keybind>) {
-        self.keybind = keybind
-    }
+    @Binding var keybind: Keybind
 
     var body: some View {
-        GeometryReader { _ in
-            VStack(spacing: 0) {
-                HStack {
-                    Button(action: {
-                        withAnimation(.easeInOut(duration: 0.25)) {
-                            self.isOpen.toggle()
+        VStack(spacing: 0) {
+            HStack {
+                keybind.direction.menuBarImage
+                Text(keybind.direction.name)
+
+                Spacer()
+
+                Text("\(keybind.keybind.description)")
+                    .padding(5)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 5)
+                                .foregroundStyle(.quinary.opacity(0.5))
+                            RoundedRectangle(cornerRadius: 5)
+                                .strokeBorder(.quaternary, lineWidth: 1)
                         }
-                    }, label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.bold)
-                            .rotationEffect(self.isOpen ? .degrees(90) : .zero)
-                    })
-
-                    keybind.direction.wrappedValue.menuBarImage
-                    Text(keybind.direction.wrappedValue.name)
-
-                    Spacer()
-                    Text("\(keybind.keybind.wrappedValue.description)")
-                }
-                .fixedSize(horizontal: false, vertical: true)
-
-                ZStack {
-                    Rectangle()
-                        .foregroundStyle(.clear)
-
-                    Text("Hello World")
-                }
-
-                .rotation3DEffect(self.isOpen ? .zero : .degrees(-90), axis: (x: 1, y: 0, z: 0), anchor: .top)
+                    }
             }
         }
-        .padding(8)
-        .frame(height: self.isOpen ? 100 : 30)
-        .background(.quinary)
-        .mask(RoundedRectangle(cornerRadius: 8))
-        .background(content: {
-            RoundedRectangle(cornerRadius: 8)
-                .strokeBorder(.quinary, lineWidth: 1)
-        })
-        .buttonStyle(.plain)
+        .padding(5)
+        .padding(.leading, 5)
+        .background(.quinary.opacity(0.5))
+        .mask(RoundedRectangle(cornerRadius: 5))
+        .background {
+            RoundedRectangle(cornerRadius: 5)
+                .strokeBorder(.quaternary.opacity(0.7), lineWidth: 1)
+        }
     }
-}
-
-#Preview {
-    KeybindCustomizationView()
-        .frame(width: 350)
-        .padding()
 }
 
 // FOR REFERENCE

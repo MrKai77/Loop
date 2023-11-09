@@ -12,17 +12,35 @@ import Defaults
 
 struct KeybindingsSettingsView: View {
 
+    @Default(.keybinds) var keybinds
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
     @Default(.preferMinimizeWithScrollDown) var preferMinimizeWithScrollDown
 
     var body: some View {
-        Form {
-            Section("Keybinds") {
-                KeybindCustomizationView()
+        VStack(spacing: 0) {
+            ScrollView {
+                ForEach(self.$keybinds) { keybind in
+                    KeybindCustomizationViewItem(keybind: keybind)
+                }
+                .padding(20)
             }
+
+            Divider()
+
+            Rectangle()
+                .frame(height: 30)
+                .foregroundStyle(.background)
+                .overlay {
+                    HStack {
+                        Button("+") {
+                            print("ADD NEW ITEM")
+                        }
+                        .frame(width: 30)
+                    }
+                }
         }
-        .formStyle(.grouped)
-        .scrollDisabled(true)
+        .frame(width: 490)
+        .frame(maxHeight: 510)
     }
 }
