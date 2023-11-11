@@ -57,7 +57,7 @@ struct RadialMenuSettingsView: View {
                     HStack {
                         Text("Trigger Key")
                         Spacer()
-                        Keycorder(key: self.$triggerKey) { event in
+                        TriggerKeycorder(key: self.$triggerKey) { event in
                             if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
                                 self.suggestDisablingCapsLock = true
                                 return nil

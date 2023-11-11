@@ -36,8 +36,14 @@ struct KeybindingsSettingsView: View {
                         Button("+") {
                             print("ADD NEW ITEM")
                         }
-                        .frame(width: 30)
+
+                        Spacer()
+
+                        Button("Reset Defaults...") {
+                            _keybinds.reset()
+                        }
                     }
+                    .padding(4)
                 }
         }
         .frame(width: 490)

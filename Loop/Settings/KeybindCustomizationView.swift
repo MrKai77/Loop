@@ -19,16 +19,17 @@ struct KeybindCustomizationViewItem: View {
 
                 Spacer()
 
-                Text("\(keybind.keybind.description)")
-                    .padding(5)
-                    .background {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 5)
-                                .foregroundStyle(.quinary.opacity(0.5))
-                            RoundedRectangle(cornerRadius: 5)
-                                .strokeBorder(.quaternary, lineWidth: 1)
-                        }
-                    }
+                Keycorder(key: $keybind.keybind)
+//                Text("\(keybind.keybind.description)")
+//                    .padding(5)
+//                    .background {
+//                        ZStack {
+//                            RoundedRectangle(cornerRadius: 5)
+//                                .foregroundStyle(.background.opacity(0.5))
+//                            RoundedRectangle(cornerRadius: 5)
+//                                .strokeBorder(.quaternary, lineWidth: 1)
+//                        }
+//                    }
             }
         }
         .padding(5)
@@ -41,22 +42,3 @@ struct KeybindCustomizationViewItem: View {
         }
     }
 }
-
-// FOR REFERENCE
-//            Picker("", selection: keybind.direction) {
-//                ForEach(WindowDirection.allCases) { direction in
-//                    if let image = direction.menuBarImage,
-//                       let name = direction.name {
-//                        HStack {
-//                            image
-//                            Text(name)
-//                        }
-//                        .tag(direction)
-//                        .onAppear {
-//                            print("TEST")
-//                        }
-//                    }
-//                }
-//            }
-//            .fixedSize()
-//            .padding(.leading, -10)

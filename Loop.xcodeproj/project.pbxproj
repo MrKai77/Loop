@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; };
 		A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397D32A932993006D2796 /* MenuBarIconView.swift */; };
+		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
 		A80900D42AA3F9F30085C63B /* BetaIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D22AA3F9F20085C63B /* BetaIndicator.swift */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
@@ -16,7 +17,7 @@
 		A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521EB29E234EB00139654 /* AboutViewController.swift */; };
 		A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* PermissionsManager.swift */; };
 		A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */; };
-		A827409A2AB0208500B9BDC5 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740992AB0208500B9BDC5 /* Keycorder.swift */; };
+		A827409A2AB0208500B9BDC5 /* TriggerKeycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */; };
 		A82DDBDE2AEC736300D7F974 /* AnimationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */; };
 		A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */; };
 		A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */; };
@@ -70,6 +71,7 @@
 /* Begin PBXFileReference section */
 		A80397D32A932993006D2796 /* MenuBarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
 		A80900D22AA3F9F20085C63B /* BetaIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaIndicator.swift; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
@@ -77,7 +79,7 @@
 		A82521EB29E234EB00139654 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A82521ED29E235AC00139654 /* PermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsManager.swift; sourceTree = "<group>"; };
 		A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
-		A82740992AB0208500B9BDC5 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
+		A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerKeycorder.swift; sourceTree = "<group>"; };
 		A8291D6D2A4513D200C5CB69 /* .swiftlint.yml */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; tabWidth = 2; };
 		A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConfiguration.swift; sourceTree = "<group>"; };
 		A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
@@ -155,7 +157,8 @@
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A80900D22AA3F9F20085C63B /* BetaIndicator.swift */,
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
-				A82740992AB0208500B9BDC5 /* Keycorder.swift */,
+				A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */,
+				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
 				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,
 				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
 				A8F0125A2AEDD7660017307F /* Keybind.swift */,
@@ -445,10 +448,11 @@
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A87376F62AA288EB001890F4 /* Window.swift in Sources */,
+				A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */,
 				A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */,
 				A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */,
 				A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */,
-				A827409A2AB0208500B9BDC5 /* Keycorder.swift in Sources */,
+				A827409A2AB0208500B9BDC5 /* TriggerKeycorder.swift in Sources */,
 				A85FEEBC2AF15CDE00354D79 /* KeybindCustomizationView.swift in Sources */,
 				A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */,
 				A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */,
