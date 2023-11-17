@@ -14,65 +14,7 @@ struct KeybindCustomizationViewItem: View {
     var body: some View {
         Section {
             HStack {
-                Menu(content: {
-                    Picker("General", selection: $keybind.direction) {
-                        ForEach(WindowDirection.general) { direction in
-                            HStack {
-                                direction.menuBarImage
-                                Text(direction.name)
-                            }
-                            .tag(direction)
-                        }
-                    }
-
-                    Picker("Halves", selection: $keybind.direction) {
-                        ForEach(WindowDirection.halves) { direction in
-                            HStack {
-                                direction.menuBarImage
-                                Text(direction.name)
-                            }
-                            .tag(direction)
-                        }
-                    }
-
-                    Picker("Quarters", selection: $keybind.direction) {
-                        ForEach(WindowDirection.quarters) { direction in
-                            HStack {
-                                direction.menuBarImage
-                                Text(direction.name)
-                            }
-                            .tag(direction)
-
-                        }
-                    }
-
-                    Picker("Horizontal Thirds", selection: $keybind.direction) {
-                        ForEach(WindowDirection.horizontalThirds) { direction in
-                            HStack {
-                                direction.menuBarImage
-                                Text(direction.name)
-                            }
-                            .tag(direction)
-                        }
-                    }
-
-                    Picker("Vertical Thirds", selection: $keybind.direction) {
-                        ForEach(WindowDirection.verticalThirds) { direction in
-                            HStack {
-                                direction.menuBarImage
-                                Text(direction.name)
-                            }
-                            .tag(direction)
-                        }
-                    }
-                }, label: {
-                    HStack {
-                        keybind.direction.menuBarImage
-                        Text(keybind.direction.name)
-                    }
-                })
-                .pickerStyle(InlinePickerStyle())
-                .fixedSize()
+                directionPicker(selection: $keybind.direction)
 
                 Spacer()
 
@@ -83,5 +25,67 @@ struct KeybindCustomizationViewItem: View {
             .padding(.vertical, -10)
             .offset(y: 0.5)
         }
+    }
+
+    @ViewBuilder
+    func directionPicker(selection: Binding<WindowDirection>) -> some View {
+        Menu(content: {
+            Picker("General", selection: $keybind.direction) {
+                ForEach(WindowDirection.general) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Cyclable", selection: $keybind.direction) {
+                ForEach(WindowDirection.cyclable) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Halves", selection: $keybind.direction) {
+                ForEach(WindowDirection.halves) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Quarters", selection: $keybind.direction) {
+                ForEach(WindowDirection.quarters) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Horizontal Thirds", selection: $keybind.direction) {
+                ForEach(WindowDirection.horizontalThirds) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Vertical Thirds", selection: $keybind.direction) {
+                ForEach(WindowDirection.verticalThirds) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("More", selection: $keybind.direction) {
+                ForEach(WindowDirection.more) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+        }, label: {
+            HStack {
+                keybind.direction.icon
+                Text(keybind.direction.name)
+            }
+        })
+        .fixedSize()
+    }
+
+    @ViewBuilder
+    func directionPickerItem(_ direction: WindowDirection) -> some View {
+        HStack {
+            direction.icon
+            Text(direction.name)
+        }
+        .tag(direction)
     }
 }

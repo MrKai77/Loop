@@ -55,9 +55,9 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
     case bottomThird = 28
     case bottomTwoThirds = 29
 
-    // These are used in the menubar resize submenu
+    // These are used in the menubar resize submenu & keybind configuration
     static var general: [WindowDirection] {
-        [.initialFrame, .lastDirection, .center, .maximize, .fullscreen]
+        [.center, .maximize, .fullscreen, .minimize, .hide]
     }
     static var halves: [WindowDirection] {
         [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
@@ -73,6 +73,9 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
     }
     static var cyclable: [WindowDirection] {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
+    }
+    static var more: [WindowDirection] {
+        [.initialFrame, .lastDirection]
     }
 
     var cyclable: Bool {
@@ -158,7 +161,7 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
         return nil
     }
 
-    var menuBarImage: Image? {
+    var icon: Image? {
         switch self {
         case .maximize:                 Image(systemName: "rectangle.inset.filled")
         case .fullscreen:               Image(systemName: "rectangle.fill")
