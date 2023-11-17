@@ -19,12 +19,12 @@ struct KeybindingsSettingsView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
+            Form {
                 ForEach(self.$keybinds) { keybind in
                     KeybindCustomizationViewItem(keybind: keybind)
                 }
-                .padding(20)
             }
+            .formStyle(.grouped)
 
             Divider()
 
