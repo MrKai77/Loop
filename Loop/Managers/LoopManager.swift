@@ -87,12 +87,10 @@ class LoopManager {
         if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
             if event.type == .otherMouseDragged && !self.isLoopShown {
                 self.openLoop()
-                return nil
             }
 
             if event.type == .otherMouseUp && self.isLoopShown {
                 self.closeLoop()
-                return nil
             }
         }
         return Unmanaged.passRetained(cgEvent)
