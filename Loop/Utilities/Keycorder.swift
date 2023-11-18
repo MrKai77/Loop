@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Carbon.HIToolbox
 
 struct Keycorder: View {
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
@@ -30,15 +31,16 @@ struct Keycorder: View {
             self.startObservingKeys()
         }, label: {
             HStack(spacing: 5) {
-                Text(self.selectionKeybind.description == "[]" ? "Press a key..." : self.selectionKeybind.description)
+                Text((self.selectionKeybind.isEmpty ? "Press a key..." : self.keybindToCharacter(self.selectionKeybind)) ?? "ERROR")
+                    .fontDesign(.monospaced)
             }
             .padding(5)
             .background {
                 ZStack {
                     RoundedRectangle(cornerRadius: 6)
-                        .foregroundStyle(.background.opacity(self.isHovering ? 0.1 : self.isActive ? 0.1 : 0.8))
+                        .foregroundStyle(.background.opacity(self.isActive ? 0.1 : 0.8))
                     RoundedRectangle(cornerRadius: 6)
-                        .strokeBorder(.quaternary, lineWidth: 1)
+                        .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
                 }
             }
         })
@@ -75,5 +77,68 @@ struct Keycorder: View {
         self.isActive = false
         self.eventMonitor?.stop()
         self.eventMonitor = nil
+    }
+
+    // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
+    func keybindToCharacter(_ keybind: Set<CGKeyCode>) -> String? {
+        guard let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
+              let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
+        else {
+            return nil
+        }
+
+        let layoutData = unsafeBitCast(
+            layoutDataPointer,
+            to: CFData.self
+        )
+        let keyLayout = unsafeBitCast(
+            CFDataGetBytePtr(layoutData),
+            to: UnsafePointer<CoreServices.UCKeyboardLayout>.self
+        )
+        var deadKeyState: UInt32 = 0
+        let maxLength = 4
+        var length = 0
+        var characters = [UniChar](repeating: 0, count: maxLength)
+
+        var resultString = ""
+
+        for keyCode in keybind {
+            var keyString = ""
+
+            if let character = CGKeyCode.keyToCharacterMapping[keyCode] {
+                keyString = character
+            } else {
+                let error = CoreServices.UCKeyTranslate(
+                    keyLayout,
+                    UInt16(keyCode),
+                    UInt16(CoreServices.kUCKeyActionDisplay),
+                    0, // No modifiers
+                    UInt32(LMGetKbdType()),
+                    OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit),
+                    &deadKeyState,
+                    maxLength,
+                    &length,
+                    &characters
+                )
+
+                guard error == noErr else {
+                    return nil
+                }
+
+                keyString = String(utf16CodeUnits: characters, count: length)
+            }
+
+            if resultString.isEmpty {
+                resultString += keyString
+            } else {
+                if keyCode.baseModifier == .kVK_Shift {
+                    resultString = keyString + " " + resultString
+                } else {
+                    resultString += " " + keyString
+                }
+            }
+        }
+
+        return resultString
     }
 }
