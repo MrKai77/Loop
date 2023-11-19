@@ -11,16 +11,18 @@ import Carbon.HIToolbox
 
 struct Keycorder: View {
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
+    @State private var selectionKeybind: Set<CGKeyCode>
+
     @Binding private var direction: WindowDirection
 
-    @State private var selectionKeybind: Set<CGKeyCode>
     @State private var eventMonitor: NSEventMonitor?
-    @State private var isHovering: Bool = false
-    @State private var isActive: Bool = false
-
     @State private var shouldShake: Bool = false
     @State private var shouldError: Bool = false
     @State private var errorMessage: String = ""
+
+    @State private var isHovering: Bool = false
+    @State private var isActive: Bool = false
+    @State private var isCurrentlyPressed: Bool = false
 
     init(_ keybind: Binding<Keybind>) {
         self._validCurrentKeybind = keybind.keybind
@@ -35,19 +37,38 @@ struct Keycorder: View {
         Button(action: {
             self.startObservingKeys()
         }, label: {
-            HStack(spacing: 5) {
-                Text((self.selectionKeybind.isEmpty ? "Press a key..." : self.keybindToCharacter(self.selectionKeybind)) ?? "ERROR")
-                    .fontDesign(.monospaced)
-            }
-            .padding(5)
-            .background {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 6)
-                        .foregroundStyle(.background.opacity(self.isActive ? 0.1 : 0.8))
-                    RoundedRectangle(cornerRadius: 6)
-                        .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
+            HStack {
+                if self.selectionKeybind.isEmpty {
+                    Text("Press a key...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(.horizontal, 5)
+                        .background {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .foregroundStyle(.background.opacity(self.isActive ? 0.1 : 0.8))
+                                RoundedRectangle(cornerRadius: 6)
+                                    .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
+                            }
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+                } else if let keys = self.selectionKeybind.humanReadable {
+                    ForEach(keys, id: \.self) { key in
+                        Text(key)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .aspectRatio(1, contentMode: .fill)
+                            .background {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .foregroundStyle(.background.opacity(self.isActive ? 0.1 : 0.8))
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
+                                }
+                            }
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
                 }
             }
+            .fontDesign(.monospaced)
         })
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
@@ -59,6 +80,7 @@ struct Keycorder: View {
             self.isHovering = hovering
         }
         .buttonStyle(.plain)
+        .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
     }
 
     func startObservingKeys() {
@@ -67,6 +89,9 @@ struct Keycorder: View {
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp, .flagsChanged]) { event in
             if event.type == .flagsChanged && event.keyCode.baseModifier == .kVK_Shift {
                 self.selectionKeybind.insert(event.keyCode)
+                withAnimation(.snappy(duration: 0.1)) {
+                    self.isCurrentlyPressed = true
+                }
             }
 
             if event.type == .keyUp {
@@ -75,11 +100,15 @@ struct Keycorder: View {
             }
 
             if event.type == .keyDown {
-                self.selectionKeybind.insert(event.keyCode)
-
                 if event.keyCode == CGKeyCode.kVK_Escape {
                     finishedObservingKeys(wasForced: true)
                 }
+
+                self.selectionKeybind.insert(event.keyCode)
+                withAnimation(.snappy(duration: 0.1)) {
+                    self.isCurrentlyPressed = true
+                }
+
             }
         }
 
@@ -87,7 +116,12 @@ struct Keycorder: View {
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {
+        self.isActive = false
         var willSet = !wasForced
+
+        withAnimation(.snappy(duration: 0.1)) {
+            self.isCurrentlyPressed = false
+        }
 
         for keybind in Defaults[.keybinds] where (
             keybind.keybind == self.selectionKeybind && keybind.direction != self.direction
@@ -107,72 +141,7 @@ struct Keycorder: View {
             self.selectionKeybind = self.validCurrentKeybind
         }
 
-        self.isActive = false
         self.eventMonitor?.stop()
         self.eventMonitor = nil
-    }
-
-    // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
-    func keybindToCharacter(_ keybind: Set<CGKeyCode>) -> String? {
-        guard 
-            let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
-            let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
-        else {
-            return nil
-        }
-
-        let layoutData = unsafeBitCast(
-            layoutDataPointer,
-            to: CFData.self
-        )
-        let keyLayout = unsafeBitCast(
-            CFDataGetBytePtr(layoutData),
-            to: UnsafePointer<CoreServices.UCKeyboardLayout>.self
-        )
-        var deadKeyState: UInt32 = 0
-        let maxLength = 4
-        var length = 0
-        var characters = [UniChar](repeating: 0, count: maxLength)
-
-        var resultString = ""
-
-        for keyCode in keybind {
-            var keyString = ""
-
-            if let character = CGKeyCode.keyToCharacterMapping[keyCode] {
-                keyString = character
-            } else {
-                let error = CoreServices.UCKeyTranslate(
-                    keyLayout,
-                    UInt16(keyCode),
-                    UInt16(CoreServices.kUCKeyActionDisplay),
-                    0, // No modifiers
-                    UInt32(LMGetKbdType()),
-                    OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit),
-                    &deadKeyState,
-                    maxLength,
-                    &length,
-                    &characters
-                )
-
-                guard error == noErr else {
-                    return nil
-                }
-
-                keyString = String(utf16CodeUnits: characters, count: length)
-            }
-
-            if resultString.isEmpty {
-                resultString += keyString
-            } else {
-                if keyCode.baseModifier == .kVK_Shift {
-                    resultString = keyString + " " + resultString
-                } else {
-                    resultString += " " + keyString
-                }
-            }
-        }
-
-        return resultString
     }
 }

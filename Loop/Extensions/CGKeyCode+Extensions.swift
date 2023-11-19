@@ -216,7 +216,7 @@ extension CGKeyCode {
         .kVK_Escape: "⎋",
         .kVK_Help: "?⃝",
         .kVK_Home: "↖",
-        .kVK_Space: "Space", // This matches what macOS uses.
+        .kVK_Space: "␣",
         .kVK_Tab: "⇥",
         .kVK_PageUp: "⇞",
         .kVK_PageDown: "⇟",
@@ -271,4 +271,66 @@ extension CGKeyCode {
         .kVK_Shift: "⇧",
         .kVK_RightShift: "⇧"
     ]
+}
+
+extension Set where Element == CGKeyCode {
+    // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
+    var humanReadable: [String]? {
+        guard
+            let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
+            let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
+        else {
+            return nil
+        }
+
+        let layoutData = unsafeBitCast(
+            layoutDataPointer,
+            to: CFData.self
+        )
+        let keyLayout = unsafeBitCast(
+            CFDataGetBytePtr(layoutData),
+            to: UnsafePointer<CoreServices.UCKeyboardLayout>.self
+        )
+        var deadKeyState: UInt32 = 0
+        let maxLength = 4
+        var length = 0
+        var characters = [UniChar](repeating: 0, count: maxLength)
+
+        var resultString: [String] = []
+
+        for keyCode in self {
+            var keyString: String = ""
+
+            if let character = CGKeyCode.keyToCharacterMapping[keyCode] {
+                keyString = character
+            } else {
+                let error = CoreServices.UCKeyTranslate(
+                    keyLayout,
+                    UInt16(keyCode),
+                    UInt16(CoreServices.kUCKeyActionDisplay),
+                    0, // No modifiers
+                    UInt32(LMGetKbdType()),
+                    OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit),
+                    &deadKeyState,
+                    maxLength,
+                    &length,
+                    &characters
+                )
+
+                guard error == noErr else {
+                    return nil
+                }
+
+                keyString = String(utf16CodeUnits: characters, count: length)
+            }
+
+            if keyCode.baseModifier == .kVK_Shift  {
+                resultString.insert(keyString, at: 0)
+            } else {
+                resultString.append(keyString)
+            }
+        }
+
+        return resultString
+    }
 }

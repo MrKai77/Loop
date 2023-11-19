@@ -23,12 +23,25 @@ struct KeybindCustomizationViewItem: View {
 
                     Spacer()
 
-                    Text("\(Image(systemName: triggerKey.symbol)) \(Image(systemName: "plus"))")
-                        .fontDesign(.monospaced)
+                    Text("\(Image(systemName: triggerKey.symbol))")
                         .foregroundStyle(.secondary)
+                        .fontDesign(.monospaced)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .aspectRatio(1, contentMode: .fill)
+                        .background {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .foregroundStyle(.background.opacity(0.8))
+                                RoundedRectangle(cornerRadius: 6)
+                                    .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
+                            }
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+                        .opacity(0.8)
 
                     Keycorder($keybind)
                 }
+                .padding(5)
             }
             .padding(.leading, -2)
             .padding(.trailing, -5)

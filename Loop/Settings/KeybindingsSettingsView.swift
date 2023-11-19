@@ -23,7 +23,6 @@ struct KeybindingsSettingsView: View {
     @Default(.middleClickTriggersLoop) var middleClickTriggersLoop
 
     @State var suggestAddingTriggerDelay: Bool = false
-    @State var suggestDisablingCapsLock: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -33,23 +32,7 @@ struct KeybindingsSettingsView: View {
                         HStack {
                             Text("Trigger Key")
                             Spacer()
-                            TriggerKeycorder(key: self.$triggerKey) { event in
-                                if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
-                                    self.suggestDisablingCapsLock = true
-                                    return nil
-                                } else {
-                                    self.suggestDisablingCapsLock = false
-                                }
-
-                                for key in TriggerKey.options where key.keycode == event.keyCode {
-                                    return key
-                                }
-                                return nil
-                            }
-                            .popover(isPresented: $suggestDisablingCapsLock, arrowEdge: .bottom, content: {
-                                Text("Your Caps Lock key is on! Disable it to correctly assign a key.")
-                                    .padding(8)
-                            })
+                            TriggerKeycorder(self.$triggerKey)
                         }
 
                         if triggerKey.keycode == .kVK_RightControl {
