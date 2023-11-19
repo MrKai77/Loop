@@ -6,20 +6,25 @@
 //
 
 import SwiftUI
+import Defaults
 import Carbon.HIToolbox
 
 struct Keycorder: View {
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
-
-    @State private var eventMonitor: NSEventMonitor?
-    @State private var shouldShake: Bool = false
-    @State private var isHovering: Bool = false
+    @Binding private var direction: WindowDirection
 
     @State private var selectionKeybind: Set<CGKeyCode>
+    @State private var eventMonitor: NSEventMonitor?
+    @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
 
-    init(key: Binding<Set<CGKeyCode>>) {
-        self._validCurrentKeybind = key
+    @State private var shouldShake: Bool = false
+    @State private var shouldError: Bool = false
+    @State private var errorMessage: String = ""
+
+    init(_ keybind: Binding<Keybind>) {
+        self._validCurrentKeybind = keybind.keybind
+        self._direction = keybind.direction
         self.selectionKeybind = _validCurrentKeybind.wrappedValue
     }
 
@@ -44,6 +49,12 @@ struct Keycorder: View {
                 }
             }
         })
+        .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
+        .animation(Animation.default, value: shouldShake)
+        .popover(isPresented: $shouldError, arrowEdge: .bottom, content: {
+            Text(self.errorMessage)
+                .padding(8)
+        })
         .onHover { hovering in
             self.isHovering = hovering
         }
@@ -53,27 +64,49 @@ struct Keycorder: View {
     func startObservingKeys() {
         self.selectionKeybind = []
         self.isActive = true
-        self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp]) { event in
-            if event.type == .keyUp {
-                if event.keyCode == CGKeyCode.kVK_Escape {
-                    self.selectionKeybind = self.validCurrentKeybind
-                } else {
-                    self.validCurrentKeybind = self.selectionKeybind
-                }
+        self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp, .flagsChanged]) { event in
+            if event.type == .flagsChanged && event.keyCode.baseModifier == .kVK_Shift {
+                self.selectionKeybind.insert(event.keyCode)
+            }
 
+            if event.type == .keyUp {
                 self.finishedObservingKeys()
                 return
             }
 
             if event.type == .keyDown {
                 self.selectionKeybind.insert(event.keyCode)
+
+                if event.keyCode == CGKeyCode.kVK_Escape {
+                    finishedObservingKeys(wasForced: true)
+                }
             }
         }
 
         self.eventMonitor!.start()
     }
 
-    func finishedObservingKeys() {
+    func finishedObservingKeys(wasForced: Bool = false) {
+        var willSet = !wasForced
+
+        for keybind in Defaults[.keybinds] where (
+            keybind.keybind == self.selectionKeybind && keybind.direction != self.direction
+        ) {
+            willSet = false
+            self.shouldShake.toggle()
+            self.shouldError = true
+            self.errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
+            break
+        }
+
+        if willSet {
+            // Set the valid keybind to the current selected one
+            self.validCurrentKeybind = self.selectionKeybind
+        } else {
+            // Set preview keybind back to previous one
+            self.selectionKeybind = self.validCurrentKeybind
+        }
+
         self.isActive = false
         self.eventMonitor?.stop()
         self.eventMonitor = nil
@@ -81,8 +114,9 @@ struct Keycorder: View {
 
     // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
     func keybindToCharacter(_ keybind: Set<CGKeyCode>) -> String? {
-        guard let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
-              let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
+        guard 
+            let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
+            let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
         else {
             return nil
         }

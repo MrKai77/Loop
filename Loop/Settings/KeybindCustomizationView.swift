@@ -10,15 +10,25 @@ import Defaults
 
 struct KeybindCustomizationViewItem: View {
     @Binding var keybind: Keybind
+    @Binding var triggerKey: TriggerKey
 
     var body: some View {
         Section {
-            HStack {
-                directionPicker(selection: $keybind.direction)
+            ZStack {
+                Rectangle()
+                    .foregroundStyle(.white.opacity(0.00001))
 
-                Spacer()
+                HStack {
+                    directionPicker(selection: $keybind.direction)
 
-                Keycorder(key: $keybind.keybind)
+                    Spacer()
+
+                    Text("\(Image(systemName: triggerKey.symbol)) \(Image(systemName: "plus"))")
+                        .fontDesign(.monospaced)
+                        .foregroundStyle(.secondary)
+
+                    Keycorder($keybind)
+                }
             }
             .padding(.leading, -2)
             .padding(.trailing, -5)
