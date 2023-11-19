@@ -102,18 +102,7 @@ struct KeybindingsSettingsView: View {
 
                     Spacer()
 
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image("custom.space.rectangle.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
+                    KeyboardShortcutView(triggerKey: self.triggerKey, instructionKey: "space")
                 }
 
                 HStack {
@@ -129,18 +118,7 @@ struct KeybindingsSettingsView: View {
 
                     Spacer()
 
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image("arrowkeys.up.filled")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
+                    KeyboardShortcutView(triggerKey: self.triggerKey, instructionKey: "arrowkeys.up.filled")
                 }
 
                 HStack {
@@ -153,18 +131,7 @@ struct KeybindingsSettingsView: View {
 
                     Spacer()
 
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image(systemName: "j.square.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
+                    KeyboardShortcutView(triggerKey: self.triggerKey, instructionKey: "J")
                 }
 
                 HStack {
@@ -177,18 +144,7 @@ struct KeybindingsSettingsView: View {
 
                     Spacer()
 
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image("custom.return.rectangle.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
+                    KeyboardShortcutView(triggerKey: self.triggerKey, instructionKey: "return")
                 }
 
                 HStack {
@@ -198,18 +154,7 @@ struct KeybindingsSettingsView: View {
 
                     Spacer()
 
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image(systemName: "z.square.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
+                    KeyboardShortcutView(triggerKey: self.triggerKey, instructionKey: "Z")
                 }
 
                 HStack {
@@ -223,23 +168,51 @@ struct KeybindingsSettingsView: View {
 
                     Spacer()
 
-                    HStack {
-                        Image(self.triggerKey.keySymbol)
-                            .font(Font.system(size: 30, weight: .regular))
-
-                        Image(systemName: "plus")
-                            .font(Font.system(size: 15, weight: .bold))
-
-                        Image(systemName: "arrow.up.and.down.square.fill")
-                            .font(Font.system(size: 30, weight: .regular))
-                            .frame(width: 60)
-                    }
-                    .foregroundStyle(Color.accentColor)
+                    KeyboardShortcutView(triggerKey: self.triggerKey, instructionKey: "digitalcrown.arrow.counterclockwise.fill")
                 }
             }
             .symbolRenderingMode(.hierarchical)
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
+    }
+}
+
+struct KeyboardShortcutView: View {
+    
+    let triggerKey: TriggerKey
+    let instructionKey: String
+    
+    var body: some View {
+        HStack {
+            KeycapView(instructionKey: triggerKey.keySymbol)
+
+            Image(systemName: "plus")
+                .imageScale(.large)
+
+            KeycapView(instructionKey: instructionKey)
+        }
+        .foregroundStyle(.tint)
+    }
+}
+
+struct KeycapView: View {
+    
+    let instructionKey: String
+    
+    var body: some View {
+        Group {
+            if(instructionKey.count > 1) {
+                Image(systemName: instructionKey)
+                    .font(.system(size: 17, weight: .regular))
+            } else {
+                Text(instructionKey)
+                    .font(.system(size: 17, weight: .light, design: .rounded))
+            }
+        }
+        .frame(width: 40, height: 36)
+        .background()
+        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+        .shadow(color: .primary.opacity(0.1), radius: 0, x: 0, y: 3)
     }
 }
