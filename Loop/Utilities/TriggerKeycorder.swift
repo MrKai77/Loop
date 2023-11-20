@@ -28,7 +28,7 @@ struct TriggerKeycorder: View {
             self.startObservingKeys()
         }, label: {
             HStack(spacing: 5) {
-                if let symbol = selectionKey?.symbol {
+                if let symbol = selectionKey?.symbolName {
                     Image(systemName: symbol)
                 }
                 Text(self.selectionKey?.name ?? "Click a modifier key...")

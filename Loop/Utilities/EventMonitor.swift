@@ -40,7 +40,7 @@ class NSEventMonitor: EventMonitor {
         if self.scope == .local || self.scope == .all {
             self.localEventMonitor = NSEvent.addLocalMonitorForEvents(matching: eventTypeMask) { event in
                 self.eventHandler(event)
-                return event
+                return nil
             }
         }
         if self.scope == .global || self.scope == .all {

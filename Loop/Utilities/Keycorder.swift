@@ -102,6 +102,7 @@ struct Keycorder: View {
             if event.type == .keyDown {
                 if event.keyCode == CGKeyCode.kVK_Escape {
                     finishedObservingKeys(wasForced: true)
+                    return
                 }
 
                 self.selectionKeybind.insert(event.keyCode)

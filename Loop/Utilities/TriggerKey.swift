@@ -11,55 +11,47 @@ import CoreGraphics
 
 struct TriggerKey: Codable, Hashable, Defaults.Serializable {
     var name: String
-    var symbol: String
-    var keySymbol: String
+    var symbolName: String
     var keycode: CGKeyCode
     var doubleClickRecommended: Bool = false
 
     static let options: [TriggerKey] = [
         TriggerKey(
             name: "Globe",
-            symbol: "globe",
-            keySymbol: "custom.globe.rectangle.fill",
+            symbolName: "globe",
             keycode: .kVK_Function
         ),
         TriggerKey(
             name: "Left Control",
-            symbol: "control",
-            keySymbol: "custom.control.rectangle.fill",
+            symbolName: "control",
             keycode: .kVK_Control,
             doubleClickRecommended: true
         ),
         TriggerKey(
             name: "Right Control",
-            symbol: "control",
-            keySymbol: "custom.control.rectangle.fill",
+            symbolName: "control",
             keycode: .kVK_RightControl
         ),
         TriggerKey(
             name: "Left Option",
-            symbol: "option",
-            keySymbol: "custom.option.rectangle.fill",
+            symbolName: "option",
             keycode: .kVK_Option,
             doubleClickRecommended: true
         ),
         TriggerKey(
             name: "Right Option",
-            symbol: "option",
-            keySymbol: "custom.option.rectangle.fill",
+            symbolName: "option",
             keycode: .kVK_RightOption
         ),
         TriggerKey(
             name: "Left Command",
-            symbol: "command",
-            keySymbol: "custom.command.rectangle.fill",
+            symbolName: "command",
             keycode: .kVK_Command,
             doubleClickRecommended: true
         ),
         TriggerKey(
             name: "Right Command",
-            symbol: "command",
-            keySymbol: "custom.command.rectangle.fill",
+            symbolName: "command",
             keycode: .kVK_RightCommand
         )
     ]

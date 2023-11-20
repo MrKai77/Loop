@@ -23,7 +23,7 @@ struct KeybindCustomizationViewItem: View {
                 Spacer()
 
                 Group {
-                    Text("\(Image(systemName: triggerKey.symbol))")
+                    Text("\(Image(systemName: triggerKey.symbolName))")
                         .foregroundStyle(.secondary)
                         .fontDesign(.monospaced)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
