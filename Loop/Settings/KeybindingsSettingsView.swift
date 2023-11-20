@@ -9,6 +9,7 @@ import Foundation
 
 import SwiftUI
 import Defaults
+import Settings
 
 struct KeybindingsSettingsView: View {
 
@@ -43,7 +44,7 @@ struct KeybindingsSettingsView: View {
                 .onChange(of: self.triggerKey) { _ in
                     if self.triggerKey.doubleClickRecommended &&
                         !self.doubleClickToTrigger {
-                        self.suggestAddingTriggerDelay.toggle()
+                        self.suggestAddingTriggerDelay = true
                     }
                 }
                 .alert(
@@ -81,6 +82,20 @@ struct KeybindingsSettingsView: View {
             Section("Keybinds") {
                 VStack(spacing: 0) {
                     List {
+                        if self.keybinds.isEmpty {
+                            HStack {
+                                Spacer()
+                                VStack {
+                                    Text("No Keybinds")
+                                        .font(.title3)
+                                    Text("Press + to add a keybind!")
+                                        .font(.caption)
+                                }
+                                Spacer()
+                            }
+                            .foregroundStyle(.secondary)
+                            .padding()
+                        }
                         ForEach(self.$keybinds) { keybind in
                             KeybindCustomizationViewItem(keybind: keybind, triggerKey: self.$triggerKey)
                                 .contextMenu {
@@ -110,7 +125,7 @@ struct KeybindingsSettingsView: View {
 
                                 Spacer()
 
-                                Button("Reset Defaults...") {
+                                Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
                                     keybinds = []
                                     _keybinds.reset()
                                 }
@@ -123,6 +138,6 @@ struct KeybindingsSettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(maxHeight: 680)
+        .frame(minHeight: 500, maxHeight: 680)
     }
 }
