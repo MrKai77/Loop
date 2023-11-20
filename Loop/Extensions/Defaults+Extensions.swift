@@ -41,35 +41,15 @@ extension Defaults.Keys {
 
     static let keybinds = Key<[Keybind]>("keybinds", default: [
         Keybind(.maximize, keycode: [.kVK_Space]),
-        Keybind(.fullscreen, keycode: [.kVK_Space, .kVK_Shift]),
         Keybind(.center, keycode: [.kVK_Return]),
-        Keybind(.initialFrame, keycode: [.kVK_ANSI_I]),
-        Keybind(.lastDirection, keycode: [.kVK_ANSI_Z]),
-        Keybind(.hide, keycode: [.kVK_ANSI_H]),
-        Keybind(.minimize, keycode: [.kVK_ANSI_M]),
-
-        Keybind(.cycleTop, keycode: [.kVK_ANSI_W]),
-        Keybind(.cycleLeft, keycode: [.kVK_ANSI_A]),
-        Keybind(.cycleBottom, keycode: [.kVK_ANSI_S]),
-        Keybind(.cycleRight, keycode: [.kVK_ANSI_D]),
         Keybind(.cycleTop, keycode: [.kVK_UpArrow]),
         Keybind(.cycleBottom, keycode: [.kVK_DownArrow]),
         Keybind(.cycleLeft, keycode: [.kVK_LeftArrow]),
         Keybind(.cycleRight, keycode: [.kVK_RightArrow]),
 
-        Keybind(.topLeftQuarter, keycode: [.kVK_ANSI_W, .kVK_ANSI_A]),
         Keybind(.topLeftQuarter, keycode: [.kVK_UpArrow, .kVK_LeftArrow]),
-        Keybind(.topRightQuarter, keycode: [.kVK_ANSI_W, .kVK_ANSI_D]),
         Keybind(.topRightQuarter, keycode: [.kVK_UpArrow, .kVK_RightArrow]),
-        Keybind(.bottomRightQuarter, keycode: [.kVK_ANSI_S, .kVK_ANSI_D]),
         Keybind(.bottomRightQuarter, keycode: [.kVK_DownArrow, .kVK_RightArrow]),
-        Keybind(.bottomLeftQuarter, keycode: [.kVK_ANSI_S, .kVK_ANSI_A]),
         Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow]),
-
-        Keybind(.leftThird, keycode: [.kVK_ANSI_J]),
-        Keybind(.leftTwoThirds, keycode: [.kVK_ANSI_J, .kVK_ANSI_K]),
-        Keybind(.horizontalCenterThird, keycode: [.kVK_ANSI_K]),
-        Keybind(.rightTwoThirds, keycode: [.kVK_ANSI_K, .kVK_ANSI_L]),
-        Keybind(.rightThird, keycode: [.kVK_ANSI_L])
     ])
 }
