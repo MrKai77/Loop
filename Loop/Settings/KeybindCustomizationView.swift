@@ -13,21 +13,22 @@ struct KeybindCustomizationViewItem: View {
     @Binding var triggerKey: TriggerKey
 
     var body: some View {
-        Section {
-            ZStack {
-                Rectangle()
-                    .foregroundStyle(.white.opacity(0.00001))
+        ZStack {
+            Rectangle()
+                .foregroundStyle(.white.opacity(0.00001))
 
-                HStack {
-                    directionPicker(selection: $keybind.direction)
+            HStack {
+                directionPicker(selection: $keybind.direction)
 
-                    Spacer()
+                Spacer()
 
+                Group {
                     Text("\(Image(systemName: triggerKey.symbol))")
                         .foregroundStyle(.secondary)
                         .fontDesign(.monospaced)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .aspectRatio(1, contentMode: .fill)
+                        .padding(5)
                         .background {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 6)
@@ -35,19 +36,19 @@ struct KeybindCustomizationViewItem: View {
                                 RoundedRectangle(cornerRadius: 6)
                                     .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
                             }
+                            .opacity(0.8)
                         }
                         .fixedSize(horizontal: true, vertical: false)
-                        .opacity(0.8)
+
+                    Image(systemName: "plus")
+                        .foregroundStyle(.secondary)
+                        .fontDesign(.monospaced)
 
                     Keycorder($keybind)
                 }
-                .padding(5)
             }
-            .padding(.leading, -2)
-            .padding(.trailing, -5)
-            .padding(.vertical, -10)
-            .offset(y: 0.5)
         }
+        .padding(5)
     }
 
     @ViewBuilder

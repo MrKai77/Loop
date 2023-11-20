@@ -80,16 +80,24 @@ struct KeybindingsSettingsView: View {
                 }
 
                 Section("Keybinds") {
-                    ForEach(self.$keybinds) { keybind in
-                        KeybindCustomizationViewItem(keybind: keybind, triggerKey: self.$triggerKey)
-                            .contextMenu {
-                                Button {
-                                    self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
+                    List {
+                        ForEach(self.$keybinds) { keybind in
+                            KeybindCustomizationViewItem(keybind: keybind, triggerKey: self.$triggerKey)
+                                .contextMenu {
+                                    Button {
+                                        self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
                                 }
-                            }
+                        }
+                        .onMove { indices, newOffset in
+                            self.keybinds.move(fromOffsets: indices, toOffset: newOffset)
+                        }
                     }
+                    .listStyle(.bordered(alternatesRowBackgrounds: true))
+                    .ignoresSafeArea()
+                    .padding(-10)
                 }
             }
             .formStyle(.grouped)

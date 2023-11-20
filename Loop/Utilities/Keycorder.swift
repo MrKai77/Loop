@@ -39,9 +39,9 @@ struct Keycorder: View {
         }, label: {
             HStack {
                 if self.selectionKeybind.isEmpty {
-                    Text("Press a key...")
+                    Text(self.isActive ? "Press a key..." : "None")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding(.horizontal, 5)
+                        .padding(.horizontal, 8)
                         .background {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 6)
