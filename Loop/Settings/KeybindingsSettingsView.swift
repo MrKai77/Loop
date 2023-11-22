@@ -26,61 +26,61 @@ struct KeybindingsSettingsView: View {
     @State private var suggestAddingTriggerDelay: Bool = false
 
     var body: some View {
-        Form {
-            Section("Trigger Key") {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("Trigger Key")
-                        Spacer()
-                        TriggerKeycorder(self.$triggerKey)
-                    }
-
-                    if triggerKey.keycode == .kVK_RightControl {
-                        Text("Tip: To use caps lock, remap it to control in System Settings!")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                .onChange(of: self.triggerKey) { _ in
-                    if self.triggerKey.doubleClickRecommended &&
-                        !self.doubleClickToTrigger {
-                        self.suggestAddingTriggerDelay = true
-                    }
-                }
-                .alert(
-                    "The \(self.triggerKey.name.lowercased()) key is frequently used in other apps.",
-                    isPresented: self.$suggestAddingTriggerDelay, actions: {
-                        Button("OK") {
-                            self.doubleClickToTrigger = true
+        ZStack {
+            Form {
+                Section("Trigger Key") {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Trigger Key")
+                            Spacer()
+                            TriggerKeycorder(self.$triggerKey)
                         }
-                        Button("Cancel", role: .cancel) {
-                            return
-                        }
-                    }, message: {
-                        Text("Would you like to enable \"Double-click to trigger Loop\"? "
-                             + "You can always change this later.")
-                    }
-                )
 
-                HStack {
-                    Stepper(
-                        "Trigger Delay (seconds)",
-                        value: Binding<Double>(
-                            get: { Double(self.triggerDelay) },
-                            set: { self.triggerDelay = Float($0) }
-                        ),
-                        in: 0...1,
-                        step: 0.1,
-                        format: .number
+                        if triggerKey.keycode == .kVK_RightControl {
+                            Text("Tip: To use caps lock, remap it to control in System Settings!")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .onChange(of: self.triggerKey) { _ in
+                        if self.triggerKey.doubleClickRecommended &&
+                            !self.doubleClickToTrigger {
+                            self.suggestAddingTriggerDelay = true
+                        }
+                    }
+                    .alert(
+                        "The \(self.triggerKey.name.lowercased()) key is frequently used in other apps.",
+                        isPresented: self.$suggestAddingTriggerDelay, actions: {
+                            Button("OK") {
+                                self.doubleClickToTrigger = true
+                            }
+                            Button("Cancel", role: .cancel) {
+                                return
+                            }
+                        }, message: {
+                            Text("Would you like to enable \"Double-click to trigger Loop\"? "
+                                 + "You can always change this later.")
+                        }
                     )
+
+                    HStack {
+                        Stepper(
+                            "Trigger Delay (seconds)",
+                            value: Binding<Double>(
+                                get: { Double(self.triggerDelay) },
+                                set: { self.triggerDelay = Float($0) }
+                            ),
+                            in: 0...1,
+                            step: 0.1,
+                            format: .number
+                        )
+                    }
+
+                    Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
+                    Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
                 }
 
-                Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
-                Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
-            }
-
-            Section("Keybinds") {
-                VStack(spacing: 0) {
+                Section("Keybinds") {
                     List {
                         if self.keybinds.isEmpty {
                             HStack {
@@ -112,32 +112,39 @@ struct KeybindingsSettingsView: View {
                         }
                     }
                     .listStyle(.bordered(alternatesRowBackgrounds: true))
-
-                    Divider()
-                    Rectangle()
-                        .frame(height: 30)
-                        .foregroundStyle(.background)
-                        .overlay {
-                            HStack {
-                                Button("+") {
-                                    self.keybinds.append(Keybind(.noAction, keycode: []))
-                                }
-
-                                Spacer()
-
-                                Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
-                                    keybinds = []
-                                    _keybinds.reset()
-                                }
-                            }
-                            .padding(4)
-                        }
+                    .ignoresSafeArea()
+                    .padding(-10)
                 }
-                .ignoresSafeArea()
-                .padding(-10)
+            }
+            .formStyle(.grouped)
+            .padding(.bottom, 30)
+
+            VStack(spacing: 0) {
+                Spacer()
+                Divider()
+                Rectangle()
+                    .frame(height: 30)
+                    .foregroundStyle(.background)
+                    .overlay {
+                        HStack {
+                            Button("+") {
+                                self.keybinds.append(Keybind(.noAction, keycode: []))
+                            }
+
+                            Spacer()
+
+                            Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
+                                _keybinds.reset()
+                                _triggerKey.reset()
+                                _doubleClickToTrigger.reset()
+                                _triggerDelay.reset()
+                                _middleClickTriggersLoop.reset()
+                            }
+                        }
+                        .padding(4)
+                    }
             }
         }
-        .formStyle(.grouped)
         .frame(minHeight: 500, maxHeight: 680)
     }
 }

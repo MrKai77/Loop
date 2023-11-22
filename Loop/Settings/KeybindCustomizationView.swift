@@ -48,7 +48,7 @@ struct KeybindCustomizationViewItem: View {
                 }
             }
         }
-        .padding(5)
+        .padding(.vertical, 5)
     }
 
     @ViewBuilder
