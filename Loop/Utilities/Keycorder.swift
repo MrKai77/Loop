@@ -107,7 +107,8 @@ struct Keycorder: View {
                 }
             }
 
-            if event.type == .keyUp || (!self.selectionKeybind.isEmpty && event.modifierFlags.rawValue == 256) {
+            if event.type == .keyUp ||
+               (event.type == .flagsChanged &&  !self.selectionKeybind.isEmpty && event.modifierFlags.rawValue == 256) {
                 self.finishedObservingKeys()
                 return
             }
