@@ -153,10 +153,10 @@
 			isa = PBXGroup;
 			children = (
 				A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */,
-				A8E6D2002A416494005751D4 /* TriggerKey.swift */,
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A80900D22AA3F9F20085C63B /* BetaIndicator.swift */,
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
+				A8E6D2002A416494005751D4 /* TriggerKey.swift */,
 				A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */,
 				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
 				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,

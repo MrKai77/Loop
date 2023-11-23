@@ -154,23 +154,18 @@ extension CGKeyCode {
         }
     }
 
-    var isModifier: Bool {
-        return (.kVK_RightCommand ... .kVK_Function).contains(self)
+    var baseModifier: CGKeyCode {
+        switch self {
+        case .kVK_RightShift: .kVK_Shift
+        case .kVK_RightCommand: .kVK_Command
+        case .kVK_RightOption: .kVK_Option
+        case .kVK_RightControl: .kVK_Control
+        default: self
+        }
     }
 
-    var baseModifier: CGKeyCode? {
-        if (.kVK_Command ... .kVK_Control).contains(self) || self == .kVK_Function {
-            return self
-        }
-
-        switch self {
-        case .kVK_RightShift: return .kVK_Shift
-        case .kVK_RightCommand: return .kVK_Command
-        case .kVK_RightOption: return .kVK_Option
-        case .kVK_RightControl: return .kVK_Control
-
-        default: return nil
-        }
+    var isModifier: Bool {
+        return (.kVK_RightCommand ... .kVK_Function).contains(self)
     }
 
     var isPressed: Bool {
@@ -269,8 +264,62 @@ extension CGKeyCode {
         .kVK_ANSI_KeypadPlus: "+\u{20e3}",
 
         .kVK_Shift: "⇧",
-        .kVK_RightShift: "⇧"
+        .kVK_RightShift: "⇧",
+        .kVK_Control: "^",
+        .kVK_RightControl: "^",
+        .kVK_Command: "⌘",
+        .kVK_RightCommand: "⌘",
+        .kVK_Option: "⌥",
+        .kVK_RightOption: "⌥"
     ]
+
+    // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
+    var humanReadable: String? {
+        guard
+            let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
+            let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
+        else {
+            return nil
+        }
+
+        let layoutData = unsafeBitCast(
+            layoutDataPointer,
+            to: CFData.self
+        )
+        let keyLayout = unsafeBitCast(
+            CFDataGetBytePtr(layoutData),
+            to: UnsafePointer<CoreServices.UCKeyboardLayout>.self
+        )
+        var deadKeyState: UInt32 = 0
+        let maxLength = 4
+        var length = 0
+        var characters = [UniChar](repeating: 0, count: maxLength)
+
+        var resultString = ""
+
+        if let character = CGKeyCode.keyToCharacterMapping[self] {
+            return character
+        } else {
+            let error = CoreServices.UCKeyTranslate(
+                keyLayout,
+                UInt16(self),
+                UInt16(CoreServices.kUCKeyActionDisplay),
+                0, // No modifiers
+                UInt32(LMGetKbdType()),
+                OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit),
+                &deadKeyState,
+                maxLength,
+                &length,
+                &characters
+            )
+
+            guard error == noErr else {
+                return nil
+            }
+
+            return String(utf16CodeUnits: characters, count: length)
+        }
+    }
 }
 
 extension Set where Element == CGKeyCode {

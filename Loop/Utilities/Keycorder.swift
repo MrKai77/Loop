@@ -36,7 +36,8 @@ struct Keycorder: View {
     var body: some View {
         Button(action: {
             self.startObservingKeys()
-        }, label: {
+        },
+               label: {
             HStack {
                 if self.selectionKeybind.isEmpty {
                     Text(self.isActive ? "Press a key..." : "None")
@@ -45,9 +46,12 @@ struct Keycorder: View {
                         .background {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 6)
-                                    .foregroundStyle(.background.opacity(self.isActive ? 0.1 : 0.8))
+                                    .foregroundStyle(.background)
                                 RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
+                                    .strokeBorder(
+                                        .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
+                                        lineWidth: 1
+                                    )
                             }
                         }
                         .fixedSize(horizontal: true, vertical: false)
@@ -59,7 +63,7 @@ struct Keycorder: View {
                             .background {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 6)
-                                        .foregroundStyle(.background.opacity(self.isActive ? 0.1 : 0.8))
+                                        .foregroundStyle(.background)
                                     RoundedRectangle(cornerRadius: 6)
                                         .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
                                 }
@@ -69,6 +73,7 @@ struct Keycorder: View {
                 }
             }
             .fontDesign(.monospaced)
+            .contentShape(Rectangle())
         })
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
@@ -88,13 +93,21 @@ struct Keycorder: View {
         self.isActive = true
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp, .flagsChanged]) { event in
             if event.type == .flagsChanged && event.keyCode.baseModifier == .kVK_Shift {
-                self.selectionKeybind.insert(event.keyCode)
-                withAnimation(.snappy(duration: 0.1)) {
-                    self.isCurrentlyPressed = true
+                if Defaults[.triggerKey].keycode.baseModifier != event.keyCode.baseModifier {
+                    self.selectionKeybind.insert(event.keyCode.baseModifier)
+                    withAnimation(.snappy(duration: 0.1)) {
+                        self.isCurrentlyPressed = true
+                    }
+                } else {
+                    self.shouldShake.toggle()
+                    self.shouldError = true
+
+                    // swiftlint:disable:next line_length
+                    self.errorMessage = "\(event.keyCode.baseModifier.humanReadable ?? "That key") is already used as your trigger key."
                 }
             }
 
-            if event.type == .keyUp {
+            if event.type == .keyUp || (!self.selectionKeybind.isEmpty && event.modifierFlags.rawValue == 256) {
                 self.finishedObservingKeys()
                 return
             }
@@ -105,6 +118,7 @@ struct Keycorder: View {
                     return
                 }
 
+                self.shouldError = false
                 self.selectionKeybind.insert(event.keyCode)
                 withAnimation(.snappy(duration: 0.1)) {
                     self.isCurrentlyPressed = true

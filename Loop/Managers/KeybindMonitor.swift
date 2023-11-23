@@ -36,10 +36,11 @@ class KeybindMonitor {
         if pressedKeys.contains(.kVK_Escape) {
             Notification.Name.forceCloseLoop.post()
             KeybindMonitor.shared.resetPressedKeys()
-        } else {
-            if let newDirection = WindowDirection.getDirection(for: pressedKeys) {
-                Notification.Name.directionChanged.post(userInfo: ["direction": newDirection])
-            }
+            return
+        }
+
+        if let newDirection = WindowDirection.getDirection(for: pressedKeys) {
+            Notification.Name.directionChanged.post(userInfo: ["direction": newDirection])
         }
     }
 
