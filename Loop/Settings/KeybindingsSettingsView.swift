@@ -36,32 +36,32 @@ struct KeybindingsSettingsView: View {
                             TriggerKeycorder(self.$triggerKey)
                         }
 
-                        if triggerKey.keycode == .kVK_RightControl {
+                        if triggerKey == [.kVK_RightControl] {
                             Text("Tip: To use caps lock, remap it to control in System Settings!")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
                     }
-                    .onChange(of: self.triggerKey) { _ in
-                        if self.triggerKey.doubleClickRecommended &&
-                            !self.doubleClickToTrigger {
-                            self.suggestAddingTriggerDelay = true
-                        }
-                    }
-                    .alert(
-                        "The \(self.triggerKey.name.lowercased()) key is frequently used in other apps.",
-                        isPresented: self.$suggestAddingTriggerDelay, actions: {
-                            Button("OK") {
-                                self.doubleClickToTrigger = true
-                            }
-                            Button("Cancel", role: .cancel) {
-                                return
-                            }
-                        }, message: {
-                            Text("Would you like to enable \"Double-click to trigger Loop\"? "
-                                 + "You can always change this later.")
-                        }
-                    )
+//                    .onChange(of: self.triggerKey) { _ in
+//                        if self.triggerKey.doubleClickRecommended &&
+//                            !self.doubleClickToTrigger {
+//                            self.suggestAddingTriggerDelay = true
+//                        }
+//                    }
+//                    .alert(
+//                        "The \(self.triggerKey.humanReadable) key is frequently used in other apps.",
+//                        isPresented: self.$suggestAddingTriggerDelay, actions: {
+//                            Button("OK") {
+//                                self.doubleClickToTrigger = true
+//                            }
+//                            Button("Cancel", role: .cancel) {
+//                                return
+//                            }
+//                        }, message: {
+//                            Text("Would you like to enable \"Double-click to trigger Loop\"? "
+//                                 + "You can always change this later.")
+//                        }
+//                    )
 
                     HStack {
                         Stepper(

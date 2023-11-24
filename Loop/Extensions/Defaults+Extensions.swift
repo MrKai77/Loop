@@ -27,7 +27,7 @@ extension Defaults.Keys {
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
 
-    static let triggerKey = Key<TriggerKey>("trigger", default: TriggerKey.options[0])
+    static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let triggerDelay = Key<Float>("triggerDelay", default: 0)
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false)

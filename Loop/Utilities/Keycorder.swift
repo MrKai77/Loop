@@ -36,8 +36,7 @@ struct Keycorder: View {
     var body: some View {
         Button(action: {
             self.startObservingKeys()
-        },
-               label: {
+        }, label: {
             HStack {
                 if self.selectionKeybind.isEmpty {
                     Text(self.isActive ? "Press a key..." : "None")
@@ -93,7 +92,7 @@ struct Keycorder: View {
         self.isActive = true
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp, .flagsChanged]) { event in
             if event.type == .flagsChanged && event.keyCode.baseModifier == .kVK_Shift {
-                if Defaults[.triggerKey].keycode.baseModifier != event.keyCode.baseModifier {
+                if Defaults[.triggerKey].contains(where: { $0.baseModifier != event.keyCode.baseModifier }) {
                     self.selectionKeybind.insert(event.keyCode.baseModifier)
                     withAnimation(.snappy(duration: 0.1)) {
                         self.isCurrentlyPressed = true

@@ -8,6 +8,7 @@
 
 import CoreGraphics
 import Carbon
+import SwiftUI
 
 extension CGKeyCode {
     static let kVK_ANSI_A: CGKeyCode = 0x00
@@ -203,7 +204,7 @@ extension CGKeyCode {
     }
 
     // From https://github.com/sindresorhus/KeyboardShortcuts/ but edited a bit
-    static let keyToCharacterMapping: [CGKeyCode: String] = [
+    static let keyToString: [CGKeyCode: String] = [
         .kVK_Return: "↩",
         .kVK_Delete: "⌫",
         .kVK_ForwardDelete: "⌦",
@@ -262,15 +263,15 @@ extension CGKeyCode {
         .kVK_ANSI_KeypadMinus: "-\u{20e3}",
         .kVK_ANSI_KeypadMultiply: "*\u{20e3}",
         .kVK_ANSI_KeypadPlus: "+\u{20e3}",
+    ]
 
-        .kVK_Shift: "⇧",
-        .kVK_RightShift: "⇧",
-        .kVK_Control: "^",
-        .kVK_RightControl: "^",
-        .kVK_Command: "⌘",
-        .kVK_RightCommand: "⌘",
-        .kVK_Option: "⌥",
-        .kVK_RightOption: "⌥"
+    // Make sure to use baseModifier before using this!
+    static let keyToImage: [CGKeyCode: String] = [
+        .kVK_Function: "globe",
+        .kVK_Shift: "shift",
+        .kVK_Command: "command",
+        .kVK_Control: "control",
+        .kVK_Option: "option"
     ]
 
     // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
@@ -295,9 +296,7 @@ extension CGKeyCode {
         var length = 0
         var characters = [UniChar](repeating: 0, count: maxLength)
 
-        var resultString = ""
-
-        if let character = CGKeyCode.keyToCharacterMapping[self] {
+        if let character = CGKeyCode.keyToString[self] {
             return character
         } else {
             let error = CoreServices.UCKeyTranslate(
@@ -347,10 +346,10 @@ extension Set where Element == CGKeyCode {
 
         var resultString: [String] = []
 
-        for keyCode in self {
+        for keyCode in self.sorted() {
             var keyString: String = ""
 
-            if let character = CGKeyCode.keyToCharacterMapping[keyCode] {
+            if let character = CGKeyCode.keyToString[keyCode] {
                 keyString = character
             } else {
                 let error = CoreServices.UCKeyTranslate(
@@ -381,5 +380,17 @@ extension Set where Element == CGKeyCode {
         }
 
         return resultString
+    }
+
+    var systemImages: [String]? {
+        var result: [String] = []
+        for keyCode in self.sorted() {
+            if let systemName = CGKeyCode.keyToImage[keyCode.baseModifier] {
+                result.append(systemName)
+            } else {
+                return nil
+            }
+        }
+        return result.isEmpty ? nil : result
     }
 }

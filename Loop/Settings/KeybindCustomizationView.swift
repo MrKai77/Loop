@@ -10,7 +10,7 @@ import Defaults
 
 struct KeybindCustomizationViewItem: View {
     @Binding var keybind: Keybind
-    @Binding var triggerKey: TriggerKey
+    @Binding var triggerKey: Set<CGKeyCode>
 
     var body: some View {
         ZStack {
@@ -23,22 +23,26 @@ struct KeybindCustomizationViewItem: View {
                 Spacer()
 
                 Group {
-                    Text("\(Image(systemName: triggerKey.symbolName))")
-                        .foregroundStyle(.secondary)
-                        .fontDesign(.monospaced)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .aspectRatio(1, contentMode: .fill)
-                        .padding(5)
-                        .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .foregroundStyle(.background.opacity(0.8))
-                                RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
-                            }
-                            .opacity(0.8)
+                    if let systemImages = self.triggerKey.systemImages {
+                        ForEach(systemImages, id: \.self) { imageName in
+                            Text("\(Image(systemName: imageName))")
+                                .foregroundStyle(.secondary)
+                                .fontDesign(.monospaced)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .aspectRatio(1, contentMode: .fill)
+                                .padding(5)
+                                .background {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .foregroundStyle(.background.opacity(0.8))
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
+                                    }
+                                    .opacity(0.8)
+                                }
+                                .fixedSize(horizontal: true, vertical: false)
                         }
-                        .fixedSize(horizontal: true, vertical: false)
+                    }
 
                     Image(systemName: "plus")
                         .foregroundStyle(.secondary)

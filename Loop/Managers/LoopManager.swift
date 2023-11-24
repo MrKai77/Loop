@@ -17,6 +17,7 @@ class LoopManager {
     private let previewController = PreviewController()
 
     private var currentResizingDirection: WindowDirection = .noAction
+    private var currentlyPressedModifiers: Set<CGKeyCode> = []
     private var isLoopShown: Bool = false
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
@@ -137,7 +138,13 @@ class LoopManager {
             return
         }
 
-        if event.keyCode == Defaults[.triggerKey].keycode {
+        if event.modifierFlags.rawValue == 256 {
+            self.currentlyPressedModifiers.remove(event.keyCode)
+        } else {
+            self.currentlyPressedModifiers.insert(event.keyCode)
+        }
+
+        if self.currentlyPressedModifiers == Defaults[.triggerKey] {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
@@ -176,6 +183,8 @@ class LoopManager {
     }
 
     private func openLoop() {
+        guard self.isLoopShown == false else { return }
+
         self.currentResizingDirection = .noAction
         self.frontmostWindow = nil
 
@@ -203,6 +212,8 @@ class LoopManager {
         self.keybindMonitor.resetPressedKeys()
         self.keybindMonitor.stop()
         self.scrollEventMonitor?.stop()
+
+        self.currentlyPressedModifiers = []
 
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&

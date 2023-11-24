@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct TriggerKeycorder: View {
-    @Binding private var validCurrentKey: TriggerKey
-    @State private var selectionKey: TriggerKey?
+    @Binding private var validCurrentKey: Set<CGKeyCode>
+    @State private var selectionKey: Set<CGKeyCode>
 
     @State private var eventMonitor: NSEventMonitor?
     @State private var shouldShake: Bool = false
@@ -18,7 +18,7 @@ struct TriggerKeycorder: View {
     @State private var isActive: Bool = false
     @State private var isCurrentlyPressed: Bool = false
 
-    init(_ key: Binding<TriggerKey>) {
+    init(_ key: Binding<Set<CGKeyCode>>) {
         self._validCurrentKey = key
         _selectionKey = State(initialValue: key.wrappedValue)
     }
@@ -28,21 +28,43 @@ struct TriggerKeycorder: View {
             self.startObservingKeys()
         }, label: {
             HStack(spacing: 5) {
-                if let symbol = selectionKey?.symbolName {
-                    Image(systemName: symbol)
+                if self.selectionKey.isEmpty {
+                    Text(self.isActive ? "Set a trigger key..." : "None")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(5)
+                        .padding(.horizontal, 8)
+                        .background {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .foregroundStyle(.background)
+                                RoundedRectangle(cornerRadius: 6)
+                                    .strokeBorder(
+                                        .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
+                                        lineWidth: 1
+                                    )
+                            }
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+                } else if let systemImages = self.selectionKey.systemImages {
+                    ForEach(systemImages, id: \.self) { imageName in
+                        Text("\(Image(systemName: imageName))")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .aspectRatio(1, contentMode: .fill)
+                            .padding(5)
+                            .background {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .foregroundStyle(.background)
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
+                                }
+                            }
+                            .fixedSize(horizontal: true, vertical: false)
+                    }
                 }
-                Text(self.selectionKey?.name ?? "Click a modifier key...")
             }
             .fontDesign(.monospaced)
-            .padding(5)
-            .background {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 6)
-                        .foregroundStyle(.background.opacity(self.isActive ? 0.1 : 0.8))
-                    RoundedRectangle(cornerRadius: 6)
-                        .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
-                }
-            }
+            .contentShape(Rectangle())
         })
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
@@ -58,7 +80,7 @@ struct TriggerKeycorder: View {
     }
 
     func startObservingKeys() {
-        self.selectionKey = nil
+        self.selectionKey = []
         self.isActive = true
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
@@ -68,11 +90,11 @@ struct TriggerKeycorder: View {
 
             if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
                 self.suggestDisablingCapsLock = true
-                self.selectionKey = nil
+                self.selectionKey = []
             } else {
                 self.suggestDisablingCapsLock = false
-                for key in TriggerKey.options where key.keycode == event.keyCode {
-                    self.selectionKey = key
+                if CGKeyCode.keyToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
+                    self.selectionKey.insert(event.keyCode)
                     withAnimation(.snappy(duration: 0.1)) {
                         self.isCurrentlyPressed = true
                     }
@@ -82,13 +104,13 @@ struct TriggerKeycorder: View {
             let keyUpValue = 256
 
             // on keyup
-            if event.modifierFlags.rawValue == keyUpValue && self.selectionKey != nil {
+            if event.modifierFlags.rawValue == keyUpValue && !self.selectionKey.isEmpty {
                 self.finishedObservingKeys()
                 return
             }
 
             // on keydown
-            if event.modifierFlags.rawValue != keyUpValue && self.selectionKey == nil {
+            if event.modifierFlags.rawValue != keyUpValue && self.selectionKey.isEmpty {
                 self.shouldShake.toggle()
             }
         }
@@ -102,7 +124,7 @@ struct TriggerKeycorder: View {
             self.isCurrentlyPressed = false
         }
 
-        if let selectionKey = self.selectionKey, !wasForced {
+        if !wasForced {
             // Set the valid keybind to the current selected one
             self.validCurrentKey = selectionKey
         } else {
