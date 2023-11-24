@@ -173,7 +173,7 @@ struct WindowEngine {
                 width: windowFrame.width,
                 height: windowFrame.height
             )
-        case .lastDirection:
+        case .undo:
             let previousDirection = WindowRecords.getLastDirection(for: window, willResize: true)
             if let previousResizeFrame = self.generateWindowFrame(
                 windowFrame,

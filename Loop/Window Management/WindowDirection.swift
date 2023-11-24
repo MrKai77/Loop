@@ -17,7 +17,7 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
     case noAction = 0
     case maximize = 1
     case fullscreen = 2
-    case lastDirection = 3
+    case undo = 3
     case center = 4
     case initialFrame = 5
     case hide = 6
@@ -75,7 +75,7 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
     }
     static var more: [WindowDirection] {
-        [.initialFrame, .lastDirection]
+        [.initialFrame, .undo]
     }
 
     var cyclable: Bool {
@@ -119,7 +119,7 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
         case .noAction:                 "No Action"
         case .maximize:                 "Maximize"
         case .fullscreen:               "Fullscreen"
-        case .lastDirection:            "Last Direction"
+        case .undo:                     "Undo"
         case .center:                   "Center"
         case .initialFrame:             "Initial Frame"
         case .hide:                     "Hide"
@@ -154,6 +154,14 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
         }
     }
 
+    var moreInformation: String? {
+        var result: String?
+        if self.cyclable {
+            result = "This keybind cycles: press it repeatedly to cycle through 1/2, 1/3, and 2/3 of your screen."
+        }
+        return result
+    }
+
     static func getDirection(for keybind: Set<CGKeyCode>) -> WindowDirection? {
         for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
             return keybinding.direction
@@ -166,7 +174,7 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
         case .maximize:                 Image(systemName: "rectangle.inset.filled")
         case .fullscreen:               Image(systemName: "rectangle.fill")
         case .center:                   Image(systemName: "rectangle.center.inset.filled")
-        case .lastDirection:            Image("custom.backward.fill.rectangle.fill")
+        case .undo:            Image("custom.backward.fill.rectangle.fill")
         case .initialFrame:             Image("custom.backward.end.alt.fill.rectangle.fill")
         case .hide:                     Image("custom.rectangle.slash")
         case .minimize:                 Image("custom.arrow.down.right.and.arrow.up.left.rectangle")

@@ -88,7 +88,7 @@ extension CGKeyCode {
     static let kVK_CapsLock: CGKeyCode = 0x39
     static let kVK_Option: CGKeyCode = 0x3A
     static let kVK_Control: CGKeyCode = 0x3B
-    static let kVK_RightCommand: CGKeyCode = 0x36 // Out of order
+    static let kVK_RightCommand: CGKeyCode = 0x36
     static let kVK_RightShift: CGKeyCode = 0x3C
     static let kVK_RightOption: CGKeyCode = 0x3D
     static let kVK_RightControl: CGKeyCode = 0x3E
@@ -167,6 +167,10 @@ extension CGKeyCode {
 
     var isModifier: Bool {
         return (.kVK_RightCommand ... .kVK_Function).contains(self)
+    }
+
+    var isOnRightSide: Bool {
+        return [.kVK_RightCommand, .kVK_RightControl, .kVK_RightOption, .kVK_RightShift].contains(self)
     }
 
     var isPressed: Bool {
@@ -317,6 +321,14 @@ extension CGKeyCode {
             }
 
             return String(utf16CodeUnits: characters, count: length)
+        }
+    }
+
+    var systemImage: String? {
+        if let systemName = CGKeyCode.keyToImage[self.baseModifier] {
+            return systemName
+        } else {
+            return nil
         }
     }
 }

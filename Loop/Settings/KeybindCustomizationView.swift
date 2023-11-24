@@ -11,6 +11,7 @@ import Defaults
 struct KeybindCustomizationViewItem: View {
     @Binding var keybind: Keybind
     @Binding var triggerKey: Set<CGKeyCode>
+    @State var showingInfo: Bool = false
 
     var body: some View {
         ZStack {
@@ -19,6 +20,20 @@ struct KeybindCustomizationViewItem: View {
 
             HStack {
                 directionPicker(selection: $keybind.direction)
+
+                if let moreInformation = self.keybind.direction.moreInformation {
+                    Button(action: {
+                        self.showingInfo.toggle()
+                    }, label: {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(.secondary)
+                    })
+                    .buttonStyle(.plain)
+                    .popover(isPresented: $showingInfo, arrowEdge: .bottom) {
+                        Text(moreInformation)
+                            .padding(8)
+                    }
+                }
 
                 Spacer()
 
@@ -51,6 +66,12 @@ struct KeybindCustomizationViewItem: View {
                     Keycorder($keybind)
                 }
             }
+
+//                if self.keybind.direction.cyclable {
+//                    Text("This keybind cycles: press it repeatedly to switch between 1/2, 1/3, and 2/3.")
+//                        .foregroundStyle(.secondary)
+//                        .font(.caption)
+//                }
         }
         .padding(.vertical, 5)
     }
