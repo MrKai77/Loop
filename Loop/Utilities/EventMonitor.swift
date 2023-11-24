@@ -13,7 +13,7 @@ protocol EventMonitor {
     func stop()
 }
 
-class NSEventMonitor: EventMonitor {
+class NSEventMonitor: EventMonitor, Identifiable, Equatable {
     private var localEventMonitor: Any?
     private var globalEventMonitor: Any?
 
@@ -64,9 +64,14 @@ class NSEventMonitor: EventMonitor {
 
         self.isEnabled = false
     }
+
+    var id = UUID()
+    static func == (lhs: NSEventMonitor, rhs: NSEventMonitor) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
-class CGEventMonitor: EventMonitor {
+class CGEventMonitor: EventMonitor, Identifiable, Equatable {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
@@ -113,5 +118,10 @@ class CGEventMonitor: EventMonitor {
             CGEvent.tapEnable(tap: eventTap, enable: false)
         }
         self.isEnabled = false
+    }
+
+    var id = UUID()
+    static func == (lhs: CGEventMonitor, rhs: CGEventMonitor) -> Bool {
+        lhs.id == rhs.id
     }
 }

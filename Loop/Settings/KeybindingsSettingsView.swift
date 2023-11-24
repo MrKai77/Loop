@@ -23,6 +23,7 @@ struct KeybindingsSettingsView: View {
     @Default(.triggerDelay) var triggerDelay
     @Default(.middleClickTriggersLoop) var middleClickTriggersLoop
 
+    @StateObject private var keycorderModel = KeycorderModel()
     @State private var suggestAddingTriggerDelay: Bool = false
 
     var body: some View {
@@ -126,5 +127,6 @@ struct KeybindingsSettingsView: View {
             }
         }
         .frame(minHeight: 500, maxHeight: 680)
+        .environmentObject(keycorderModel)
     }
 }

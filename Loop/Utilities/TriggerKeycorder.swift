@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TriggerKeycorder: View {
+    @EnvironmentObject private var keycorderModel: KeycorderModel
+
     @Binding private var validCurrentKey: Set<CGKeyCode>
     @State private var selectionKey: Set<CGKeyCode>
 
@@ -74,6 +76,11 @@ struct TriggerKeycorder: View {
         .onHover { hovering in
             self.isHovering = hovering
         }
+        .onChange(of: keycorderModel.eventMonitor) { _ in
+            if keycorderModel.eventMonitor != self.eventMonitor {
+                self.finishedObservingKeys(wasForced: true)
+            }
+        }
         .buttonStyle(.plain)
         .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
     }
@@ -87,16 +94,18 @@ struct TriggerKeycorder: View {
                 finishedObservingKeys(wasForced: true)
             }
 
-            if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
+            // When caps lock is on, Loop may misread keybinds, so we need  to make sure it's off
+            guard !event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) else {
                 self.suggestDisablingCapsLock = true
                 self.selectionKey = []
-            } else {
-                self.suggestDisablingCapsLock = false
-                if CGKeyCode.keyToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
-                    self.selectionKey.insert(event.keyCode)
-                    withAnimation(.snappy(duration: 0.1)) {
-                        self.isCurrentlyPressed = true
-                    }
+                return
+            }
+            self.suggestDisablingCapsLock = false
+
+            if CGKeyCode.keyToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
+                self.selectionKey.insert(event.keyCode)
+                withAnimation(.snappy(duration: 0.1)) {
+                    self.isCurrentlyPressed = true
                 }
             }
 
@@ -115,6 +124,7 @@ struct TriggerKeycorder: View {
         }
 
         self.eventMonitor!.start()
+        keycorderModel.eventMonitor = eventMonitor
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {

@@ -10,6 +10,8 @@ import Defaults
 import Carbon.HIToolbox
 
 struct Keycorder: View {
+    @EnvironmentObject private var keycorderModel: KeycorderModel
+
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
     @State private var selectionKeybind: Set<CGKeyCode>
 
@@ -88,6 +90,11 @@ struct Keycorder: View {
         .onHover { hovering in
             self.isHovering = hovering
         }
+        .onChange(of: keycorderModel.eventMonitor) { _ in
+            if keycorderModel.eventMonitor != self.eventMonitor {
+                self.finishedObservingKeys(wasForced: true)
+            }
+        }
         .buttonStyle(.plain)
         .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
     }
@@ -138,6 +145,7 @@ struct Keycorder: View {
         }
 
         self.eventMonitor!.start()
+        keycorderModel.eventMonitor = eventMonitor
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {
