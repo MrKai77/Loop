@@ -12,6 +12,8 @@ import Carbon.HIToolbox
 struct Keycorder: View {
     @EnvironmentObject private var keycorderModel: KeycorderModel
 
+    let keyLimit: Int = 5
+
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
     @State private var selectionKeybind: Set<CGKeyCode>
 
@@ -129,16 +131,22 @@ struct Keycorder: View {
                 return
             }
 
-            if event.type == .keyDown {
+            if event.type == .keyDown  && !event.isARepeat {
                 if event.keyCode == CGKeyCode.kVK_Escape {
                     finishedObservingKeys(wasForced: true)
                     return
                 }
 
-                self.shouldError = false
-                self.selectionKeybind.insert(event.keyCode)
-                withAnimation(.snappy(duration: 0.1)) {
-                    self.isCurrentlyPressed = true
+                if self.selectionKeybind.count >= keyLimit {
+                    self.errorMessage = Text("You can only use up to \(keyLimit) keys in a keybind.")
+                    self.shouldShake.toggle()
+                    self.shouldError = true
+                } else {
+                    self.shouldError = false
+                    self.selectionKeybind.insert(event.keyCode)
+                    withAnimation(.snappy(duration: 0.1)) {
+                        self.isCurrentlyPressed = true
+                    }
                 }
 
             }
