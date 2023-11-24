@@ -45,12 +45,10 @@ struct TriggerKeycorder: View {
                             }
                         }
                         .fixedSize(horizontal: true, vertical: false)
-                    //                } else if let systemImages = self.selectionKey.systemImages {
                 } else {
                     ForEach(self.selectionKey.sorted(), id: \.self) { key in
-                        Text("\(key.isOnRightSide ? "Right" : "Left") \(Image(systemName: key.systemImage ?? "dash"))")
+                        Text("\(key.isOnRightSide ? "Right" : "Left") \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                            .aspectRatio(1, contentMode: .fill)
                             .padding(5)
                             .background {
                                 ZStack {

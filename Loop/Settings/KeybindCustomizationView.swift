@@ -38,25 +38,23 @@ struct KeybindCustomizationViewItem: View {
                 Spacer()
 
                 Group {
-                    if let systemImages = self.triggerKey.systemImages {
-                        ForEach(systemImages, id: \.self) { imageName in
-                            Text("\(Image(systemName: imageName))")
-                                .foregroundStyle(.secondary)
-                                .fontDesign(.monospaced)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .aspectRatio(1, contentMode: .fill)
-                                .padding(5)
-                                .background {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .foregroundStyle(.background.opacity(0.8))
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
-                                    }
-                                    .opacity(0.8)
+                    ForEach(self.triggerKey.sorted(), id: \.self) { key in
+                        Text("\(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
+                            .foregroundStyle(.secondary)
+                            .fontDesign(.monospaced)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .aspectRatio(1, contentMode: .fill)
+                            .padding(5)
+                            .background {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .foregroundStyle(.background.opacity(0.8))
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
                                 }
-                                .fixedSize(horizontal: true, vertical: false)
-                        }
+                                .opacity(0.8)
+                            }
+                            .fixedSize(horizontal: true, vertical: false)
                     }
 
                     Image(systemName: "plus")
@@ -66,12 +64,6 @@ struct KeybindCustomizationViewItem: View {
                     Keycorder($keybind)
                 }
             }
-
-//                if self.keybind.direction.cyclable {
-//                    Text("This keybind cycles: press it repeatedly to switch between 1/2, 1/3, and 2/3.")
-//                        .foregroundStyle(.secondary)
-//                        .font(.caption)
-//                }
         }
         .padding(.vertical, 5)
     }

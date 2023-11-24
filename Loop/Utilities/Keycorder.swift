@@ -18,7 +18,7 @@ struct Keycorder: View {
     @State private var eventMonitor: NSEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var shouldError: Bool = false
-    @State private var errorMessage: String = ""
+    @State private var errorMessage: Text = Text("") // We use Text here for String interpolation with images
 
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
@@ -54,21 +54,26 @@ struct Keycorder: View {
                             }
                         }
                         .fixedSize(horizontal: true, vertical: false)
-                } else if let keys = self.selectionKeybind.humanReadable {
-                    ForEach(keys, id: \.self) { key in
-                        Text(key)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .aspectRatio(1, contentMode: .fill)
-                            .background {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .foregroundStyle(.background)
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
-                                }
-                            }
-                            .fixedSize(horizontal: true, vertical: false)
+                } else {
+                    ForEach(self.selectionKeybind.sorted(by: >), id: \.self) { key in
+                        if let systemImage = key.systemImage {
+                            Text("\(Image(systemName: systemImage))")
+                        } else if let humanReadable = key.humanReadable {
+                            Text(humanReadable)
+                        }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .aspectRatio(1, contentMode: .fill)
+                    .padding(5)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 6)
+                                .foregroundStyle(.background)
+                            RoundedRectangle(cornerRadius: 6)
+                                .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
+                        }
+                    }
+                    .fixedSize(horizontal: true, vertical: false)
                 }
             }
             .fontDesign(.monospaced)
@@ -77,7 +82,7 @@ struct Keycorder: View {
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
         .popover(isPresented: $shouldError, arrowEdge: .bottom, content: {
-            Text(self.errorMessage)
+            self.errorMessage
                 .padding(8)
         })
         .onHover { hovering in
@@ -91,18 +96,23 @@ struct Keycorder: View {
         self.selectionKeybind = []
         self.isActive = true
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp, .flagsChanged]) { event in
-            if event.type == .flagsChanged && event.keyCode.baseModifier == .kVK_Shift {
-                if Defaults[.triggerKey].contains(where: { $0.baseModifier != event.keyCode.baseModifier }) {
+            if event.type == .flagsChanged {
+                if !Defaults[.triggerKey].contains(where: { $0.baseModifier == event.keyCode.baseModifier }) {
+                    self.shouldError = false
                     self.selectionKeybind.insert(event.keyCode.baseModifier)
                     withAnimation(.snappy(duration: 0.1)) {
                         self.isCurrentlyPressed = true
                     }
                 } else {
+                    if let systemImage = event.keyCode.baseModifier.systemImage {
+                        // swiftlint:disable:next line_length
+                        self.errorMessage = Text("\(Image(systemName: systemImage)) is already used as your trigger key.")
+                    } else {
+                        self.errorMessage = Text("That key is already used as your trigger key.")
+                    }
+
                     self.shouldShake.toggle()
                     self.shouldError = true
-
-                    // swiftlint:disable:next line_length
-                    self.errorMessage = "\(event.keyCode.baseModifier.humanReadable ?? "That key") is already used as your trigger key."
                 }
             }
 
@@ -142,9 +152,9 @@ struct Keycorder: View {
             keybind.keybind == self.selectionKeybind && keybind.direction != self.direction
         ) {
             willSet = false
+            self.errorMessage = Text("That keybind is already being used by \(keybind.direction.name.lowercased()).")
             self.shouldShake.toggle()
             self.shouldError = true
-            self.errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
             break
         }
 
