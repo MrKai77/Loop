@@ -120,6 +120,7 @@ struct KeybindingsSettingsView: View {
                                 _doubleClickToTrigger.reset()
                                 _triggerDelay.reset()
                                 _middleClickTriggersLoop.reset()
+                                keycorderModel.eventMonitor = nil
                             }
                         }
                         .padding(4)
