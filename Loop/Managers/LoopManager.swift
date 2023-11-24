@@ -139,7 +139,11 @@ class LoopManager {
         }
 
         if event.modifierFlags.rawValue == 256 {
-            self.currentlyPressedModifiers.remove(event.keyCode)
+            if !self.isLoopShown {
+                self.currentlyPressedModifiers = []
+            } else {
+                self.currentlyPressedModifiers.remove(event.keyCode)
+            }
         } else {
             self.currentlyPressedModifiers.insert(event.keyCode)
         }
@@ -148,35 +152,30 @@ class LoopManager {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
-            if event.modifierFlags.rawValue == 256 {
-                self.closeLoop()
-            } else {
-                if useDoubleClickTrigger {
-                    if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                        if useTriggerDelay {
-                            if self.triggerDelayTimer == nil {
-                                self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                                    self.openLoop()
-                                }
+            if useDoubleClickTrigger {
+                if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                    if useTriggerDelay {
+                        if self.triggerDelayTimer == nil {
+                            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                                self.openLoop()
                             }
-                        } else {
-                            self.openLoop()
                         }
+                    } else {
+                        self.openLoop()
                     }
-                } else if useTriggerDelay {
-                    if self.triggerDelayTimer == nil {
-                        self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                            self.openLoop()
-                        }
-                    }
-                } else {
-                    self.openLoop()
                 }
-                self.lastTriggerKeyClick = Date.now
+            } else if useTriggerDelay {
+                if self.triggerDelayTimer == nil {
+                    self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                        self.openLoop()
+                    }
+                }
+            } else {
+                self.openLoop()
             }
+            self.lastTriggerKeyClick = Date.now
         } else {
-            if event.modifierFlags.rawValue == 256 &&
-                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+            if self.isLoopShown {
                 self.closeLoop()
             }
         }
