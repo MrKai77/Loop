@@ -148,7 +148,7 @@ class LoopManager {
             self.currentlyPressedModifiers.insert(event.keyCode)
         }
 
-        if self.currentlyPressedModifiers == Defaults[.triggerKey] {
+        if self.currentlyPressedModifiers.contains(Defaults[.triggerKey]) {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
