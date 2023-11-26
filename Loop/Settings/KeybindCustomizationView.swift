@@ -61,7 +61,7 @@ struct KeybindCustomizationViewItem: View {
                         .foregroundStyle(.secondary)
                         .fontDesign(.monospaced)
 
-                    Keycorder($keybind)
+                    Keycorder($keybind, $triggerKey)
                 }
             }
         }

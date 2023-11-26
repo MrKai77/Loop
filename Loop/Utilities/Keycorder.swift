@@ -12,11 +12,11 @@ import Carbon.HIToolbox
 struct Keycorder: View {
     @EnvironmentObject private var keycorderModel: KeycorderModel
 
-    let keyLimit: Int = 5
+    let keyLimit: Int = 6
 
+    @Binding private var triggerKey: Set<CGKeyCode>
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
     @State private var selectionKeybind: Set<CGKeyCode>
-
     @Binding private var direction: WindowDirection
 
     @State private var eventMonitor: NSEventMonitor?
@@ -28,10 +28,11 @@ struct Keycorder: View {
     @State private var isActive: Bool = false
     @State private var isCurrentlyPressed: Bool = false
 
-    init(_ keybind: Binding<Keybind>) {
+    init(_ keybind: Binding<Keybind>, _ triggerKey: Binding<Set<CGKeyCode>>) {
         self._validCurrentKeybind = keybind.keybind
         self._direction = keybind.direction
-        self.selectionKeybind = _validCurrentKeybind.wrappedValue
+        self._triggerKey = triggerKey
+        self._selectionKeybind = State(initialValue: keybind.wrappedValue.keybind)
     }
 
     let activeAnimation = Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)
@@ -87,6 +88,7 @@ struct Keycorder: View {
         .animation(Animation.default, value: shouldShake)
         .popover(isPresented: $shouldError, arrowEdge: .bottom, content: {
             self.errorMessage
+                .multilineTextAlignment(.center)
                 .padding(8)
         })
         .onHover { hovering in
@@ -137,8 +139,10 @@ struct Keycorder: View {
                     return
                 }
 
-                if self.selectionKeybind.count >= keyLimit {
-                    self.errorMessage = Text("You can only use up to \(keyLimit) keys in a keybind.")
+                if (self.selectionKeybind.count + self.triggerKey.count) >= keyLimit {
+                    self.errorMessage = Text(
+                        "You can only use up to \(keyLimit) keys in a keybind.\n(This includes your trigger key)"
+                    )
                     self.shouldShake.toggle()
                     self.shouldError = true
                 } else {
