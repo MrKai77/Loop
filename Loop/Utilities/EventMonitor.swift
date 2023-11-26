@@ -14,8 +14,8 @@ protocol EventMonitor {
 }
 
 class NSEventMonitor: EventMonitor, Identifiable, Equatable {
-    private var localEventMonitor: Any?
-    private var globalEventMonitor: Any?
+    private weak var localEventMonitor: AnyObject?
+    private weak var globalEventMonitor: AnyObject?
 
     private var scope: NSEventMonitor.Scope
     private var eventTypeMask: NSEvent.EventTypeMask
@@ -28,6 +28,10 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
         case all
     }
 
+    deinit {
+        stop()
+    }
+
     init(scope: Scope, eventMask: NSEvent.EventTypeMask, handler: @escaping (NSEvent) -> Void) {
         self.eventTypeMask = eventMask
         self.eventHandler = handler
@@ -35,34 +39,37 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
     }
 
     public func start() {
-        guard self.isEnabled == false else { return }
-
         if self.scope == .local || self.scope == .all {
-            self.localEventMonitor = NSEvent.addLocalMonitorForEvents(matching: eventTypeMask) { event in
+            self.localEventMonitor = NSEvent.addLocalMonitorForEvents(
+                matching: eventTypeMask
+            ) { event in
                 self.eventHandler(event)
                 return nil
-            }
-        }
-        if self.scope == .global || self.scope == .all {
-            self.globalEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: eventTypeMask, handler: eventHandler)
+            } as AnyObject
+
+            self.isEnabled = true
         }
 
-        self.isEnabled = true
+        if self.scope == .global || self.scope == .all {
+            self.globalEventMonitor = NSEvent.addGlobalMonitorForEvents(
+                matching: eventTypeMask,
+                handler: eventHandler
+            ) as AnyObject
+
+            self.isEnabled = true
+        }
     }
 
     public func stop() {
-        guard self.isEnabled == true else { return }
-
-        if self.localEventMonitor != nil {
-            NSEvent.removeMonitor(self.localEventMonitor!)
-            self.localEventMonitor = nil
-        }
-        if self.globalEventMonitor != nil {
-            NSEvent.removeMonitor(self.globalEventMonitor!)
-            self.globalEventMonitor = nil
+        if let localEventMonitor {
+            NSEvent.removeMonitor(localEventMonitor)
+            self.isEnabled = false
         }
 
-        self.isEnabled = false
+        if let globalEventMonitor {
+            NSEvent.removeMonitor(globalEventMonitor)
+            self.isEnabled = false
+        }
     }
 
     var id = UUID()
@@ -81,7 +88,7 @@ class CGEventMonitor: EventMonitor, Identifiable, Equatable {
         self.eventCallback = callback
 
         self.eventTap = CGEvent.tapCreate(
-            tap: .cghidEventTap,
+            tap: .cgSessionEventTap ,
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: eventMask.rawValue,
@@ -100,6 +107,10 @@ class CGEventMonitor: EventMonitor, Identifiable, Equatable {
         } else {
             print("ERROR: Failed to create event tap (event mask: \(eventMask)")
         }
+    }
+
+    deinit {
+        stop()
     }
 
     private func handleEvent(event: CGEvent) -> Unmanaged<CGEvent>? {
