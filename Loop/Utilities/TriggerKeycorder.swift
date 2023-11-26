@@ -30,6 +30,7 @@ struct TriggerKeycorder: View {
 
     var body: some View {
         Button(action: {
+            guard !self.isActive else { return }
             self.startObservingKeys()
         }, label: {
             HStack(spacing: 5) {
