@@ -10,6 +10,8 @@ import SwiftUI
 struct TriggerKeycorder: View {
     @EnvironmentObject private var keycorderModel: KeycorderModel
 
+    let keyLimit: Int = 5
+
     @Binding private var validCurrentKey: Set<CGKeyCode>
     @State private var selectionKey: Set<CGKeyCode>
 
@@ -19,6 +21,7 @@ struct TriggerKeycorder: View {
     @State private var suggestDisablingCapsLock: Bool = false
     @State private var isActive: Bool = false
     @State private var isCurrentlyPressed: Bool = false
+    @State private var tooManyKeysPopup: Bool = false
 
     init(_ key: Binding<Set<CGKeyCode>>) {
         self._validCurrentKey = key
@@ -71,6 +74,11 @@ struct TriggerKeycorder: View {
         .animation(Animation.default, value: shouldShake)
         .popover(isPresented: $suggestDisablingCapsLock, arrowEdge: .bottom, content: {
             Text("Your Caps Lock key is on! Disable it to correctly assign a key.")
+                .padding(8)
+        })
+        .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom, content: {
+            Text("You can only use up to \(keyLimit) keys in your trigger key.")
+                .multilineTextAlignment(.center)
                 .padding(8)
         })
         .onHover { hovering in
@@ -128,12 +136,20 @@ struct TriggerKeycorder: View {
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {
+        var willSet = !wasForced
+
+        if self.selectionKey.count > self.keyLimit {
+            willSet = false
+            self.shouldShake.toggle()
+            self.tooManyKeysPopup = true
+        }
+
         self.isActive = false
         withAnimation(.snappy(duration: 0.1)) {
             self.isCurrentlyPressed = false
         }
 
-        if !wasForced {
+        if willSet {
             // Set the valid keybind to the current selected one
             self.validCurrentKey = selectionKey
         } else {
