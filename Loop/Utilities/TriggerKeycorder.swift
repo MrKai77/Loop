@@ -90,6 +90,9 @@ struct TriggerKeycorder: View {
                 self.finishedObservingKeys(wasForced: true)
             }
         }
+        .onChange(of: self.validCurrentKey) { _ in
+            self.selectionKey = self.validCurrentKey
+        }
         .buttonStyle(.plain)
         .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
     }

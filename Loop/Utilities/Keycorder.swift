@@ -100,6 +100,9 @@ struct Keycorder: View {
                 self.finishedObservingKeys(wasForced: true)
             }
         }
+        .onChange(of: self.validCurrentKeybind) { _ in
+            self.selectionKeybind = self.validCurrentKeybind
+        }
         .buttonStyle(.plain)
         .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
     }
