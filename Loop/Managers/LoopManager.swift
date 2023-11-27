@@ -138,17 +138,16 @@ class LoopManager {
             return
         }
 
-        if event.modifierFlags.rawValue == 256 {
-            if !self.isLoopShown {
-                self.currentlyPressedModifiers = []
-            } else {
-                self.currentlyPressedModifiers.remove(event.keyCode)
-            }
+        if self.currentlyPressedModifiers.contains(event.keyCode) {
+            self.currentlyPressedModifiers.remove(event.keyCode)
+        } else if event.modifierFlags.rawValue == 256 {
+            self.currentlyPressedModifiers = []
         } else {
             self.currentlyPressedModifiers.insert(event.keyCode)
         }
 
-        if self.currentlyPressedModifiers.contains(Defaults[.triggerKey]) {
+        // Why sort the set? I have no idea. But it works much more reliably when sorted!
+        if self.currentlyPressedModifiers.sorted().contains(Defaults[.triggerKey].sorted()) {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
@@ -211,8 +210,6 @@ class LoopManager {
         self.keybindMonitor.resetPressedKeys()
         self.keybindMonitor.stop()
         self.scrollEventMonitor?.stop()
-
-        self.currentlyPressedModifiers = []
 
         if self.frontmostWindow != nil &&
             self.screenWithMouse != nil &&
