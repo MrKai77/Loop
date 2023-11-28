@@ -8,6 +8,7 @@
 
 import CoreGraphics
 import Carbon
+import SwiftUI
 
 extension CGKeyCode {
     static let kVK_ANSI_A: CGKeyCode = 0x00
@@ -87,7 +88,7 @@ extension CGKeyCode {
     static let kVK_CapsLock: CGKeyCode = 0x39
     static let kVK_Option: CGKeyCode = 0x3A
     static let kVK_Control: CGKeyCode = 0x3B
-    static let kVK_RightCommand: CGKeyCode = 0x36 // Out of order
+    static let kVK_RightCommand: CGKeyCode = 0x36
     static let kVK_RightShift: CGKeyCode = 0x3C
     static let kVK_RightOption: CGKeyCode = 0x3D
     static let kVK_RightControl: CGKeyCode = 0x3E
@@ -154,23 +155,22 @@ extension CGKeyCode {
         }
     }
 
+    var baseModifier: CGKeyCode {
+        switch self {
+        case .kVK_RightShift: .kVK_Shift
+        case .kVK_RightCommand: .kVK_Command
+        case .kVK_RightOption: .kVK_Option
+        case .kVK_RightControl: .kVK_Control
+        default: self
+        }
+    }
+
     var isModifier: Bool {
         return (.kVK_RightCommand ... .kVK_Function).contains(self)
     }
 
-    var baseModifier: CGKeyCode? {
-        if (.kVK_Command ... .kVK_Control).contains(self) || self == .kVK_Function {
-            return self
-        }
-
-        switch self {
-        case .kVK_RightShift: return .kVK_Shift
-        case .kVK_RightCommand: return .kVK_Command
-        case .kVK_RightOption: return .kVK_Option
-        case .kVK_RightControl: return .kVK_Control
-
-        default: return nil
-        }
+    var isOnRightSide: Bool {
+        return [.kVK_RightCommand, .kVK_RightControl, .kVK_RightOption, .kVK_RightShift].contains(self)
     }
 
     var isPressed: Bool {
@@ -202,6 +202,131 @@ extension CGKeyCode {
 
         if result == noErr {
             return String(utf16CodeUnits: chars, count: length).first
+        } else {
+            return nil
+        }
+    }
+
+    // From https://github.com/sindresorhus/KeyboardShortcuts/ but edited a bit
+    static let keyToString: [CGKeyCode: String] = [
+        .kVK_Return: "↩",
+        .kVK_Delete: "⌫",
+        .kVK_ForwardDelete: "⌦",
+        .kVK_End: "↘",
+        .kVK_Escape: "⎋",
+        .kVK_Help: "?⃝",
+        .kVK_Home: "↖",
+        .kVK_Space: "␣",
+        .kVK_Tab: "⇥",
+        .kVK_PageUp: "⇞",
+        .kVK_PageDown: "⇟",
+        .kVK_UpArrow: "↑",
+        .kVK_RightArrow: "→",
+        .kVK_DownArrow: "↓",
+        .kVK_LeftArrow: "←",
+        .kVK_F1: "F1",
+        .kVK_F2: "F2",
+        .kVK_F3: "F3",
+        .kVK_F4: "F4",
+        .kVK_F5: "F5",
+        .kVK_F6: "F6",
+        .kVK_F7: "F7",
+        .kVK_F8: "F8",
+        .kVK_F9: "F9",
+        .kVK_F10: "F10",
+        .kVK_F11: "F11",
+        .kVK_F12: "F12",
+        .kVK_F13: "F13",
+        .kVK_F14: "F14",
+        .kVK_F15: "F15",
+        .kVK_F16: "F16",
+        .kVK_F17: "F17",
+        .kVK_F18: "F18",
+        .kVK_F19: "F19",
+        .kVK_F20: "F20",
+
+        // Representations for numeric keypad keys with   ⃣  Unicode U+20e3 'COMBINING ENCLOSING KEYCAP'
+        .kVK_ANSI_Keypad0: "0\u{20e3}",
+        .kVK_ANSI_Keypad1: "1\u{20e3}",
+        .kVK_ANSI_Keypad2: "2\u{20e3}",
+        .kVK_ANSI_Keypad3: "3\u{20e3}",
+        .kVK_ANSI_Keypad4: "4\u{20e3}",
+        .kVK_ANSI_Keypad5: "5\u{20e3}",
+        .kVK_ANSI_Keypad6: "6\u{20e3}",
+        .kVK_ANSI_Keypad7: "7\u{20e3}",
+        .kVK_ANSI_Keypad8: "8\u{20e3}",
+        .kVK_ANSI_Keypad9: "9\u{20e3}",
+        // There's "⌧“ 'X In A Rectangle Box' (U+2327), "☒" 'Ballot Box with X' (U+2612), "×" 'Multiplication Sign' (U+00d7), "⨯" 'Vector or Cross Product' (U+2a2f), or a plain small x. All combined symbols appear bigger.
+        .kVK_ANSI_KeypadClear: "☒\u{20e3}", // The combined symbol appears bigger than the other combined 'keycaps'
+        // TODO: Respect locale decimal separator ("." or ",")
+        .kVK_ANSI_KeypadDecimal: ".\u{20e3}",
+        .kVK_ANSI_KeypadDivide: "/\u{20e3}",
+        // "⏎" 'Return Symbol' (U+23CE) but "↩" 'Leftwards Arrow with Hook' (U+00d7) seems to be more common on macOS.
+        .kVK_ANSI_KeypadEnter: "↩\u{20e3}", // The combined symbol appears bigger than the other combined 'keycaps'
+        .kVK_ANSI_KeypadEquals: "=\u{20e3}",
+        .kVK_ANSI_KeypadMinus: "-\u{20e3}",
+        .kVK_ANSI_KeypadMultiply: "*\u{20e3}",
+        .kVK_ANSI_KeypadPlus: "+\u{20e3}",
+    ]
+
+    // Make sure to use baseModifier before using this!
+    static let keyToImage: [CGKeyCode: String] = [
+        .kVK_Function: "globe",
+        .kVK_Shift: "shift",
+        .kVK_Command: "command",
+        .kVK_Control: "control",
+        .kVK_Option: "option"
+    ]
+
+    // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
+    var humanReadable: String? {
+        guard
+            let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),
+            let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)
+        else {
+            return nil
+        }
+
+        let layoutData = unsafeBitCast(
+            layoutDataPointer,
+            to: CFData.self
+        )
+        let keyLayout = unsafeBitCast(
+            CFDataGetBytePtr(layoutData),
+            to: UnsafePointer<CoreServices.UCKeyboardLayout>.self
+        )
+        var deadKeyState: UInt32 = 0
+        let maxLength = 4
+        var length = 0
+        var characters = [UniChar](repeating: 0, count: maxLength)
+
+        if let character = CGKeyCode.keyToString[self] {
+            return character
+        } else {
+            let error = CoreServices.UCKeyTranslate(
+                keyLayout,
+                UInt16(self),
+                UInt16(CoreServices.kUCKeyActionDisplay),
+                0, // No modifiers
+                UInt32(LMGetKbdType()),
+                OptionBits(CoreServices.kUCKeyTranslateNoDeadKeysBit),
+                &deadKeyState,
+                maxLength,
+                &length,
+                &characters
+            )
+
+            guard error == noErr else {
+                return nil
+            }
+
+            return String(utf16CodeUnits: characters, count: length)
+        }
+    }
+
+    var systemImage: String? {
+        if let systemName = CGKeyCode.keyToImage[self.baseModifier] {
+            return systemName
         } else {
             return nil
         }

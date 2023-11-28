@@ -15,7 +15,7 @@ struct RadialMenuSettingsView: View {
 
     var body: some View {
         Form {
-            Section("Behavior") {
+            Section("Appearance") {
                 RadialMenuView(
                     frontmostWindow: nil,
                     previewMode: true,
@@ -25,7 +25,7 @@ struct RadialMenuSettingsView: View {
                 )
             }
 
-            Section(content: {
+            Section {
                 Slider(value: $radialMenuCornerRadius,
                        in: 30...50,
                        step: 3,
@@ -42,15 +42,7 @@ struct RadialMenuSettingsView: View {
                 ) {
                     Text("Thickness")
                 }
-            }, footer: {
-                HStack {
-                    Text("Customize Loop's trigger key in the Keybindings tab!")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                }
-                .padding(.leading, 10)
-            })
+            }
         }
         .formStyle(.grouped)
         .scrollDisabled(true)

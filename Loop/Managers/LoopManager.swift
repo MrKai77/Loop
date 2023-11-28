@@ -17,6 +17,7 @@ class LoopManager {
     private let previewController = PreviewController()
 
     private var currentResizingDirection: WindowDirection = .noAction
+    private var currentlyPressedModifiers: Set<CGKeyCode> = []
     private var isLoopShown: Bool = false
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
@@ -87,12 +88,10 @@ class LoopManager {
         if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
             if event.type == .otherMouseDragged && !self.isLoopShown {
                 self.openLoop()
-                return nil
             }
 
             if event.type == .otherMouseUp && self.isLoopShown {
                 self.closeLoop()
-                return nil
             }
         }
         return Unmanaged.passRetained(cgEvent)
@@ -139,45 +138,51 @@ class LoopManager {
             return
         }
 
-        if event.keyCode == Defaults[.triggerKey].keycode {
+        if self.currentlyPressedModifiers.contains(event.keyCode) {
+            self.currentlyPressedModifiers.remove(event.keyCode)
+        } else if event.modifierFlags.rawValue == 256 {
+            self.currentlyPressedModifiers = []
+        } else {
+            self.currentlyPressedModifiers.insert(event.keyCode)
+        }
+
+        // Why sort the set? I have no idea. But it works much more reliably when sorted!
+        if self.currentlyPressedModifiers.sorted().contains(Defaults[.triggerKey].sorted()) {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
-            if event.modifierFlags.rawValue == 256 {
-                self.closeLoop()
-            } else {
-                if useDoubleClickTrigger {
-                    if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                        if useTriggerDelay {
-                            if self.triggerDelayTimer == nil {
-                                self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                                    self.openLoop()
-                                }
+            if useDoubleClickTrigger {
+                if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                    if useTriggerDelay {
+                        if self.triggerDelayTimer == nil {
+                            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                                self.openLoop()
                             }
-                        } else {
-                            self.openLoop()
                         }
+                    } else {
+                        self.openLoop()
                     }
-                } else if useTriggerDelay {
-                    if self.triggerDelayTimer == nil {
-                        self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                            self.openLoop()
-                        }
-                    }
-                } else {
-                    self.openLoop()
                 }
-                self.lastTriggerKeyClick = Date.now
+            } else if useTriggerDelay {
+                if self.triggerDelayTimer == nil {
+                    self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                        self.openLoop()
+                    }
+                }
+            } else {
+                self.openLoop()
             }
+            self.lastTriggerKeyClick = Date.now
         } else {
-            if event.modifierFlags.rawValue == 256 &&
-                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+            if self.isLoopShown {
                 self.closeLoop()
             }
         }
     }
 
     private func openLoop() {
+        guard self.isLoopShown == false else { return }
+
         self.currentResizingDirection = .noAction
         self.frontmostWindow = nil
 

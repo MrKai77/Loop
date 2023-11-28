@@ -43,7 +43,7 @@ struct PreviewView: View {
                         .bottomThird,
                         .bottomTwoThirds,
                         .noAction,
-                        .lastDirection,
+                        .undo,
                         .hide:
                     Rectangle()
                         .frame(height: currentResizeDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
@@ -61,7 +61,7 @@ struct PreviewView: View {
                             .rightThird,
                             .rightTwoThirds,
                             .noAction,
-                            .lastDirection,
+                            .undo,
                             .hide:
                         Rectangle()
                             .frame(width: currentResizeDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
@@ -93,8 +93,8 @@ struct PreviewView: View {
                            height: currentResizeDirection == .noAction ? 0 : nil)
                     .frame(width: currentResizeDirection == .initialFrame ? 0 : nil,
                            height: currentResizeDirection == .initialFrame ? 0 : nil)
-                    .frame(width: currentResizeDirection == .lastDirection ? 0 : nil,
-                           height: currentResizeDirection == .lastDirection ? 0 : nil)
+                    .frame(width: currentResizeDirection == .undo ? 0 : nil,
+                           height: currentResizeDirection == .undo ? 0 : nil)
                     .frame(width: currentResizeDirection == .hide ? 0 : nil,
                            height: currentResizeDirection == .hide ? 0 : nil)
 
@@ -117,7 +117,7 @@ struct PreviewView: View {
                             .leftThird,
                             .leftTwoThirds,
                             .noAction,
-                            .lastDirection,
+                            .undo,
                             .hide:
                         Rectangle()
                             .frame(width: currentResizeDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
@@ -135,7 +135,7 @@ struct PreviewView: View {
                         .topThird,
                         .topTwoThirds,
                         .noAction,
-                        .lastDirection,
+                        .undo,
                         .hide:
                     Rectangle()
                         .frame(height: currentResizeDirection == .topThird ? geo.size.height / 3 * 2 : nil)
@@ -152,7 +152,7 @@ struct PreviewView: View {
             if let direction = obj.userInfo?["direction"] as? WindowDirection, !self.previewMode, !direction.cyclable {
                 self.currentResizeDirection = direction
 
-                if self.currentResizeDirection == .lastDirection && self.window != nil {
+                if self.currentResizeDirection == .undo && self.window != nil {
                     self.currentResizeDirection = WindowRecords.getLastDirection(for: self.window!)
                 }
             }

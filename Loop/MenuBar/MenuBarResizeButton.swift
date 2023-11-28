@@ -15,18 +15,16 @@ struct MenuBarResizeButton: View {
     }
 
     var body: some View {
-        if let name = direction.name {
-            Button {
-                if let frontmostWindow = WindowEngine.frontmostWindow,
-                   let screen = NSScreen.screenWithMouse {
-                    WindowEngine.resize(frontmostWindow, to: direction, screen)
-                }
-            } label: {
-                HStack {
-                    if let image = direction.menuBarImage {
-                        image
-                    }
-                    Text(name)
+        Button {
+            if let frontmostWindow = WindowEngine.frontmostWindow,
+               let screen = NSScreen.screenWithMouse {
+                WindowEngine.resize(frontmostWindow, to: direction, screen)
+            }
+        } label: {
+            HStack {
+                if let image = direction.icon {
+                    image
+                    Text(direction.name)
                 }
             }
         }

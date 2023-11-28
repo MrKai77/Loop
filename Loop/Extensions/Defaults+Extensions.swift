@@ -27,7 +27,7 @@ extension Defaults.Keys {
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
 
-    static let triggerKey = Key<TriggerKey>("trigger", default: TriggerKey.options[0])
+    static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let triggerDelay = Key<Float>("triggerDelay", default: 0)
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false)
@@ -39,94 +39,17 @@ extension Defaults.Keys {
 
     static let preferMinimizeWithScrollDown = Key<Bool>("preferMinimizeWithScrollDown", default: false)
 
-    static let maximizeKeybind = Key<[Set<CGKeyCode>]>(
-        "maximizeKeybind",
-        default: [[.kVK_Space]]
-    )
-    static let fullscreenKeybind = Key<[Set<CGKeyCode>]>(
-        "fullscreenKeybind",
-        default: [[.kVK_Space, .kVK_Shift]]
-    )
-    static let centerKeybind = Key<[Set<CGKeyCode>]>(
-        "centerKeybind",
-        default: [[.kVK_Return]]
-    )
-    static let initialFrameKeybind = Key<[Set<CGKeyCode>]>(
-        "initialFrameKeybind",
-        default: [[.kVK_ANSI_I]]
-    )
-    static let lastDirectionKeybind = Key<[Set<CGKeyCode>]>(
-        "lastDirectionKeybind",
-        default: [[.kVK_ANSI_Z]]
-    )
-    static let hideKeybind = Key<[Set<CGKeyCode>]>(
-        "hideKeybind",
-        default: [[.kVK_ANSI_H]]
-    )
-    static let minimizeKeybind = Key<[Set<CGKeyCode>]>(
-        "minimizeKeybind",
-        default: [[.kVK_ANSI_M]]
-    )
+    static let keybinds = Key<[Keybind]>("keybinds", default: [
+        Keybind(.maximize, keycode: [.kVK_Space]),
+        Keybind(.center, keycode: [.kVK_Return]),
+        Keybind(.cycleTop, keycode: [.kVK_UpArrow]),
+        Keybind(.cycleBottom, keycode: [.kVK_DownArrow]),
+        Keybind(.cycleLeft, keycode: [.kVK_LeftArrow]),
+        Keybind(.cycleRight, keycode: [.kVK_RightArrow]),
 
-    // Cycle Halves
-    static let cycleTopKeybind = Key<[Set<CGKeyCode>]>(
-        "cycleTopKeybind",
-        default: [[.kVK_ANSI_W], [.kVK_UpArrow]]
-    )
-    static let cycleBottomKeybind = Key<[Set<CGKeyCode>]>(
-        "cycleBottomKeybind",
-        default: [[.kVK_ANSI_S], [.kVK_DownArrow]]
-    )
-    static let cycleRightKeybind = Key<[Set<CGKeyCode>]>(
-        "cycleRightKeybind",
-        default: [[.kVK_ANSI_D], [.kVK_RightArrow]]
-    )
-    static let cycleLeftKeybind = Key<[Set<CGKeyCode>]>(
-        "cycleLeftKeybind",
-        default: [[.kVK_ANSI_A], [.kVK_LeftArrow]]
-    )
-
-    // Quarters
-    static let topLeftQuarter = Key<[Set<CGKeyCode>]>(
-        "topLeftQuarter",
-        default: [[.kVK_ANSI_W, .kVK_ANSI_A],
-                  [.kVK_UpArrow, .kVK_LeftArrow]]
-    )
-    static let topRightQuarter = Key<[Set<CGKeyCode>]>(
-        "topRightQuarter",
-        default: [[.kVK_ANSI_W, .kVK_ANSI_D],
-                  [.kVK_UpArrow, .kVK_RightArrow]]
-    )
-    static let bottomRightQuarter = Key<[Set<CGKeyCode>]>(
-        "bottomRightQuarter",
-        default: [[.kVK_ANSI_S, .kVK_ANSI_D],
-                  [.kVK_DownArrow, .kVK_RightArrow]]
-    )
-    static let bottomLeftQuarter = Key<[Set<CGKeyCode>]>(
-        "bottomLeftQuarter",
-        default: [[.kVK_ANSI_S, .kVK_ANSI_A],
-                  [.kVK_DownArrow, .kVK_LeftArrow]]
-    )
-
-    // Thirds
-    static let leftThird = Key<[Set<CGKeyCode>]>(
-        "leftThird",
-        default: [[.kVK_ANSI_J]]
-    )
-    static let leftTwoThirds = Key<[Set<CGKeyCode>]>(
-        "leftTwoThirds",
-        default: [[.kVK_ANSI_J, .kVK_ANSI_K]]
-    )
-    static let horizontalCenterThird = Key<[Set<CGKeyCode>]>(
-        "horizontalCenterThird",
-        default: [[.kVK_ANSI_K]]
-    )
-    static let rightTwoThirds = Key<[Set<CGKeyCode>]>(
-        "rightTwoThirds",
-        default: [[.kVK_ANSI_K, .kVK_ANSI_L]]
-    )
-    static let rightThird = Key<[Set<CGKeyCode>]>(
-        "rightThird",
-        default: [[.kVK_ANSI_L]]
-    )
+        Keybind(.topLeftQuarter, keycode: [.kVK_UpArrow, .kVK_LeftArrow]),
+        Keybind(.topRightQuarter, keycode: [.kVK_UpArrow, .kVK_RightArrow]),
+        Keybind(.bottomRightQuarter, keycode: [.kVK_DownArrow, .kVK_RightArrow]),
+        Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow]),
+    ])
 }
