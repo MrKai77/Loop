@@ -101,7 +101,9 @@ struct Keycorder: View {
             }
         }
         .onChange(of: self.validCurrentKeybind) { _ in
-            self.selectionKeybind = self.validCurrentKeybind
+            if self.selectionKeybind != self.validCurrentKeybind {
+                self.selectionKeybind = self.validCurrentKeybind
+            }
         }
         .buttonStyle(.plain)
         .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
