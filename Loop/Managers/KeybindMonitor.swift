@@ -12,7 +12,7 @@ class KeybindMonitor {
     static let shared = KeybindMonitor()
 
     private var eventMonitor: CGEventMonitor?
-    private var shiftKeyEventMonitor: CGEventMonitor?
+    private var flagsEventMonitor: CGEventMonitor?
     private var pressedKeys = Set<CGKeyCode>()
     private var lastKeyReleaseTime: Date = Date.now
 
@@ -36,14 +36,11 @@ class KeybindMonitor {
         if pressedKeys.contains(.kVK_Escape) {
             Notification.Name.forceCloseLoop.post()
             KeybindMonitor.shared.resetPressedKeys()
-        } else {
-            // Since this is one for loop inside another, we can break from inside by breaking from the outerloop
-            outerLoop: for direction in WindowDirection.allCases {
-                for keybind in direction.keybind where keybind == pressedKeys {
-                    Notification.Name.directionChanged.post(userInfo: ["direction": direction])
-                    break outerLoop
-                }
-            }
+            return
+        }
+
+        if let newDirection = WindowDirection.getDirection(for: pressedKeys) {
+            Notification.Name.directionChanged.post(userInfo: ["direction": newDirection])
         }
     }
 
@@ -54,7 +51,7 @@ class KeybindMonitor {
         }
 
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
-             if (cgEvent.type == .keyDown || cgEvent.type == .keyUp),
+             if cgEvent.type == .keyDown || cgEvent.type == .keyUp,
                let event = NSEvent(cgEvent: cgEvent),
                !event.isARepeat {
 
@@ -70,34 +67,47 @@ class KeybindMonitor {
             return nil
         }
 
-        self.shiftKeyEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
+        self.flagsEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
             if cgEvent.type == .flagsChanged,
                let event = NSEvent(cgEvent: cgEvent),
-               event.keyCode != Defaults[.triggerKey].keycode {
+               !Defaults[.triggerKey].contains(where: { $0.baseModifier == event.keyCode.baseModifier }) {
+                
+                self.checkForModifier(event, .kVK_Shift, .shift)
+                self.checkForModifier(event, .kVK_Command, .command)
+                self.checkForModifier(event, .kVK_Option, .option)
+                self.checkForModifier(event, .kVK_Function, .function)
+                self.checkForModifier(event, .kVK_Control, .control)
 
-                if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.shift) {
-                    KeybindMonitor.shared.pressedKeys.insert(.kVK_Shift)
-                } else {
-                    KeybindMonitor.shared.pressedKeys.remove(.kVK_Shift)
-                }
+                print(KeybindMonitor.shared.pressedKeys)
+
                 self.performKeybind(event: event)
             }
             return Unmanaged.passUnretained(cgEvent)
         }
 
         self.eventMonitor!.start()
-        self.shiftKeyEventMonitor!.start()
+        self.flagsEventMonitor!.start()
     }
 
     func stop() {
         guard self.eventMonitor != nil &&
-              self.shiftKeyEventMonitor != nil else {
+              self.flagsEventMonitor != nil else {
             return
         }
         self.eventMonitor?.stop()
         self.eventMonitor = nil
 
-        self.shiftKeyEventMonitor?.stop()
-        self.shiftKeyEventMonitor = nil
+        self.flagsEventMonitor?.stop()
+        self.flagsEventMonitor = nil
+    }
+
+    private func checkForModifier(_ event: NSEvent, _ key: CGKeyCode, _ modifierFlag: NSEvent.ModifierFlags) {
+        if event.keyCode.baseKey == key {
+            if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(modifierFlag) {
+                KeybindMonitor.shared.pressedKeys.insert(key)
+            } else {
+                KeybindMonitor.shared.pressedKeys.remove(key)
+            }
+        }
     }
 }
