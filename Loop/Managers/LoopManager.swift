@@ -151,17 +151,16 @@ class LoopManager {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
-            if useDoubleClickTrigger {
-                if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                    if useTriggerDelay {
-                        if self.triggerDelayTimer == nil {
-                            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                                self.openLoop()
-                            }
+            if useDoubleClickTrigger &&
+               abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                if useTriggerDelay {
+                    if self.triggerDelayTimer == nil {
+                        self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                            self.openLoop()
                         }
-                    } else {
-                        self.openLoop()
                     }
+                } else {
+                    self.openLoop()
                 }
             } else if useTriggerDelay {
                 if self.triggerDelayTimer == nil {

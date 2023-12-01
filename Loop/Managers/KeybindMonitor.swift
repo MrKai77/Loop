@@ -71,7 +71,7 @@ class KeybindMonitor {
             if cgEvent.type == .flagsChanged,
                let event = NSEvent(cgEvent: cgEvent),
                !Defaults[.triggerKey].contains(where: { $0.baseModifier == event.keyCode.baseModifier }) {
-                
+
                 self.checkForModifier(event, .kVK_Shift, .shift)
                 self.checkForModifier(event, .kVK_Command, .command)
                 self.checkForModifier(event, .kVK_Option, .option)

@@ -50,6 +50,6 @@ extension Defaults.Keys {
         Keybind(.topLeftQuarter, keycode: [.kVK_UpArrow, .kVK_LeftArrow]),
         Keybind(.topRightQuarter, keycode: [.kVK_UpArrow, .kVK_RightArrow]),
         Keybind(.bottomRightQuarter, keycode: [.kVK_DownArrow, .kVK_RightArrow]),
-        Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow]),
+        Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
 }

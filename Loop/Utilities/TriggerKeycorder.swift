@@ -53,6 +53,7 @@ struct TriggerKeycorder: View {
                         .fixedSize(horizontal: true, vertical: false)
                 } else {
                     ForEach(self.selectionKey.sorted(), id: \.self) { key in
+                        // swiftlint:disable:next line_length
                         Text("\(key.isOnRightSide ? "Right" : "Left") \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding(5)

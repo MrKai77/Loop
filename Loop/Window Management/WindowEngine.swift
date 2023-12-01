@@ -23,41 +23,25 @@ struct WindowEngine {
         }
 
         if direction == .fullscreen {
-            if window.isFullscreen {
-                window.setFullscreen(false)
-            } else {
-                window.setFullscreen(true)
-            }
-
+            window.toggleFullscreen()
             WindowRecords.recordDirection(window, direction)
             return
         }
+        window.setFullscreen(false)
 
         if direction == .hide {
-            if window.isHidden {
-                window.setHidden(false)
-            } else {
-                window.setHidden(true)
-            }
+            window.toggleHidden()
+            return
         }
 
         if direction == .minimize {
-            if window.isMinimized {
-                window.setMinimized(false)
-            } else {
-                window.setMinimized(true)
-            }
+            window.toggleMinimized()
+            return
         }
 
-        window.setFullscreen(false)
-
-        let oldWindowFrame = window.frame
-        guard let screenFrame = screen.safeScreenFrame, let currentWindowFrame = WindowEngine.generateWindowFrame(
-            oldWindowFrame,
-            screenFrame,
-            direction,
-            window
-        ) else {
+        guard let screenFrame = screen.safeScreenFrame,
+              let currentWindowFrame = WindowEngine.generateWindowFrame(window.frame, screenFrame, direction, window)
+        else {
             return
         }
         var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
