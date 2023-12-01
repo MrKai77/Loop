@@ -23,9 +23,20 @@ struct MoreSettingsView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Updates")
-                        Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Button(action: {
+                            let pasteboard = NSPasteboard.general
+                            pasteboard.clearContents()
+                            pasteboard.setString(
+                                "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+                                forType: NSPasteboard.PasteboardType.string
+                            )
+                        }, label: {
+                            // swiftlint:disable:next line_length
+                            Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        })
+                        .buttonStyle(.plain)
                     }
 
                     Spacer()

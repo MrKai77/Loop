@@ -65,10 +65,20 @@ struct AboutView: View {
                     .font(.title)
                     .fontWeight(.bold)
 
-                Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                    .font(.caption2)
-                    .textSelection(.enabled)
-                    .foregroundColor(.secondary)
+                Button(action: {
+                    let pasteboard = NSPasteboard.general
+                    pasteboard.clearContents()
+                    pasteboard.setString(
+                        "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+                        forType: NSPasteboard.PasteboardType.string
+                    )
+                }, label: {
+                    // swiftlint:disable:next line_length
+                    Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                })
+                .buttonStyle(.plain)
             }
 
             Spacer()
