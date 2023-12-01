@@ -72,12 +72,10 @@ struct AboutView: View {
                         "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
                         forType: NSPasteboard.PasteboardType.string
                     )
-                },
-                       label: {
+                }, label: {
                     // swiftlint:disable:next line_length
                     Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
                         .font(.caption2)
-                        .textSelection(.enabled)
                         .foregroundColor(.secondary)
                 })
                 .buttonStyle(.plain)
