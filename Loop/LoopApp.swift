@@ -50,9 +50,13 @@ struct LoopApp: App {
                 label: {
                     Text("Settings…")
                 },
-                preAction: {},
+                preAction: {
+                    for window in NSApp.windows where window.toolbar?.items != nil {
+                        window.close()
+                    }
+                },
                 postAction: {
-                    for window in NSApp.windows where window.delegate != nil {
+                    for window in NSApp.windows where window.toolbar?.items != nil {
                         window.orderFrontRegardless()
                         window.center()
                     }
