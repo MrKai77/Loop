@@ -19,12 +19,12 @@
       }
     },
     {
-      "identity" : "settings",
+      "identity" : "settingsaccess",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Settings",
+      "location" : "https://github.com/orchetect/SettingsAccess",
       "state" : {
-        "revision" : "2f4f65eed252198be383aa0d9058bbaf8f740aa5",
-        "version" : "3.1.0"
+        "revision" : "0fd73c8b5892e88acb13adb7f36a4ba9293a0061",
+        "version" : "1.4.0"
       }
     },
     {

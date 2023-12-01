@@ -6,70 +6,11 @@
 //
 
 import SwiftUI
-import Settings
 import Defaults
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let loopManager = LoopManager()
-
-    private let updater = SoftwareUpdater()
-    private lazy var settingsWindowController = SettingsWindowController(
-        panes: [
-            Settings.Pane(
-                identifier: .general,
-                title: "General",
-                toolbarIcon: NSImage(
-                    systemSymbolName: "gear",
-                    accessibilityDescription: nil
-                )!
-            ) {
-                GeneralSettingsView()
-            },
-
-            Settings.Pane(
-                identifier: .radialMenu,
-                title: "Radial Menu",
-                toolbarIcon: NSImage(named: "loop")!
-            ) {
-                RadialMenuSettingsView()
-            },
-
-            Settings.Pane(
-                identifier: .preview,
-                title: "Preview",
-                toolbarIcon: NSImage(
-                    systemSymbolName: "rectangle.portrait.and.arrow.right",
-                    accessibilityDescription: nil
-                )!
-            ) {
-                PreviewSettingsView()
-            },
-
-            Settings.Pane(
-                identifier: .keybindings,
-                title: "Keybindings",
-                toolbarIcon: NSImage(
-                    systemSymbolName: "keyboard",
-                    accessibilityDescription: nil
-                )!
-            ) {
-                KeybindingsSettingsView()
-            },
-
-            Settings.Pane(
-                identifier: .more,
-                title: "More",
-                toolbarIcon: NSImage(
-                    systemSymbolName: "ellipsis.circle",
-                    accessibilityDescription: nil
-                )!
-            ) {
-                MoreSettingsView()
-                    .environmentObject(updater)
-            }
-        ]
-    )
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -87,11 +28,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         NSApp.setActivationPolicy(.accessory)
+        for window in NSApp.windows where window.delegate != nil {
+            window.delegate = nil
+        }
         return false
-    }
-
-    func openSettingsWindow() {
-        self.settingsWindowController.show()
-        self.settingsWindowController.window?.orderFrontRegardless()
     }
 }
