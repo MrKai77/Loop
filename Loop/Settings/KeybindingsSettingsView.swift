@@ -5,11 +5,8 @@
 //  Created by Kai Azim on 2023-10-28.
 //
 
-import Foundation
-
 import SwiftUI
 import Defaults
-import Settings
 
 struct KeybindingsSettingsView: View {
 

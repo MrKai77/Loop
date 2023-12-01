@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MenuBarExtraAccess
+import SettingsAccess
 
 @main
 struct LoopApp: App {
@@ -15,6 +16,10 @@ struct LoopApp: App {
     @State var isMenubarItemPresented: Bool = false
 
     var body: some Scene {
+        Settings {
+            SettingsView()
+        }
+
         MenuBarExtra("Loop", image: "empty") {
             #if DEBUG
             MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
@@ -41,10 +46,18 @@ struct LoopApp: App {
                 ForEach(WindowDirection.verticalThirds) { MenuBarResizeButton($0) }
             }
 
-            Button("Settings") {
-                NSApp.setActivationPolicy(.regular)
-                appDelegate.openSettingsWindow()
-            }
+            SettingsLink(
+                label: {
+                    Text("Settings…")
+                },
+                preAction: {},
+                postAction: {
+                    for window in NSApp.windows where window.delegate != nil {
+                        window.orderFrontRegardless()
+                        window.center()
+                    }
+                }
+            )
             .keyboardShortcut(",", modifiers: .command)
 
             Button("About \(Bundle.main.appName)") {

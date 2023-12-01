@@ -34,12 +34,12 @@ struct AboutView: View {
             license: URL(string: "https://github.com/orchetect/MenuBarExtraAccess/blob/main/LICENSE")!
         ),
         PackageDescription(
-            name: "Settings",
+            name: "SettingsAccess",
             url: URL(
-                string: "https://github.com/sindresorhus/Settings"
+                string: "https://github.com/orchetect/SettingsAccess"
             )!,
             license: URL(
-                string: "https://github.com/sindresorhus/Settings/blob/main/license"
+                string: "https://github.com/orchetect/SettingsAccess/blob/main/LICENSE"
             )!
         ),
         PackageDescription(
