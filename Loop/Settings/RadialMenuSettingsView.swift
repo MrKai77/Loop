@@ -16,13 +16,29 @@ struct RadialMenuSettingsView: View {
     var body: some View {
         Form {
             Section("Appearance") {
-                RadialMenuView(
-                    frontmostWindow: nil,
-                    previewMode: true,
-                    timer: Timer.publish(every: 1,
-                                         on: .main,
-                                         in: .common).autoconnect()
-                )
+                ZStack {
+                    if #available(macOS 14, *) {
+                        ZStack {
+                            VisualEffectView(material: .sidebar, blendingMode: .behindWindow)
+
+                            Rectangle()
+                                .foregroundStyle(.white)
+                                .colorEffect(
+                                    ShaderLibrary.grid(.float(10), .color(.gray.opacity(0.25)))
+                                )
+                        }
+                        .ignoresSafeArea()
+                        .padding(-10)
+                    }
+
+                    RadialMenuView(
+                        frontmostWindow: nil,
+                        previewMode: true,
+                        timer: Timer.publish(every: 1,
+                                             on: .main,
+                                             in: .common).autoconnect()
+                    )
+                }
             }
 
             Section {

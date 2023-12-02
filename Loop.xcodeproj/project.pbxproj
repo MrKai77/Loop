@@ -12,6 +12,7 @@
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
 		A8063A6E2B19599D00EAB3D9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8063A6D2B19599D00EAB3D9 /* SettingsView.swift */; };
 		A8063A712B195C9100EAB3D9 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A8063A702B195C9100EAB3D9 /* SettingsAccess */; };
+		A8063A732B19891900EAB3D9 /* grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = A8063A722B19891900EAB3D9 /* grid.metal */; };
 		A80900D42AA3F9F30085C63B /* BetaIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D22AA3F9F20085C63B /* BetaIndicator.swift */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
@@ -73,6 +74,7 @@
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
 		A8063A6D2B19599D00EAB3D9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A8063A722B19891900EAB3D9 /* grid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = grid.metal; sourceTree = "<group>"; };
 		A80900D22AA3F9F20085C63B /* BetaIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaIndicator.swift; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 			children = (
 				A8063A6D2B19599D00EAB3D9 /* SettingsView.swift */,
 				A882660729809F6F00BCB197 /* GeneralSettingsView.swift */,
+				A8063A722B19891900EAB3D9 /* grid.metal */,
 				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
 				A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */,
 				A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */,
@@ -473,6 +476,7 @@
 				A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */,
 				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,
 				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
+				A8063A732B19891900EAB3D9 /* grid.metal in Sources */,
 				A8063A6E2B19599D00EAB3D9 /* SettingsView.swift in Sources */,
 				A8F0125B2AEDD7660017307F /* Keybind.swift in Sources */,
 				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
