@@ -90,10 +90,10 @@ struct GeneralSettingsView: View {
                     Picker("Selected icon:", selection: $currentIcon) {
                         ForEach(IconManager.returnUnlockedIcons(), id: \.self) { icon in
                             HStack {
-                                Image(nsImage: NSImage(named: icon.name)!)
-                                Text(IconManager.nameWithoutPrefix(name: icon.name))
+                                Image(nsImage: NSImage(named: icon.iconName)!)
+                                Text(icon.name ??  IconManager.nameWithoutPrefix(name: icon.iconName))
                             }
-                            .tag(icon.name)
+                            .tag(icon.iconName)
                         }
                     }
                     Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")

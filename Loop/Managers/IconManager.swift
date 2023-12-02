@@ -11,27 +11,32 @@ import Defaults
 class IconManager {
 
     struct Icon: Hashable {
-        var name: String
+        var name: String?
+        var iconName: String
         var unlockTime: Int
         var unlockMessage: String?
     }
 
     private static let icons: [Icon] = [
-        Icon(name: "AppIcon-Classic", unlockTime: 0),
+        Icon(iconName: "AppIcon-Classic", unlockTime: 0),
         Icon(
-            name: "AppIcon-Holo",
+            iconName: "AppIcon-Holo",
             unlockTime: 25,
             unlockMessage: ("You've already looped 25 times! "
                 + "As a reward, here's new icon: Holo. "
                 + "Continue to loop more to unlock new icons!")
         ),
-        Icon(name: "AppIcon-Rosé Pine", unlockTime: 50),
-        Icon(name: "AppIcon-Meta Loop", unlockTime: 100),
-        Icon(name: "AppIcon-Keycap", unlockTime: 200),
-        Icon(name: "AppIcon-White", unlockTime: 300),
-        Icon(name: "AppIcon-Black", unlockTime: 400),
         Icon(
-            name: "AppIcon-Loop Master",
+            name: "Rosé Pine",
+            iconName: "AppIcon-Rose Pine",
+            unlockTime: 50
+        ),
+        Icon(iconName: "AppIcon-Meta Loop", unlockTime: 100),
+        Icon(iconName: "AppIcon-Keycap", unlockTime: 200),
+        Icon(iconName: "AppIcon-White", unlockTime: 300),
+        Icon(iconName: "AppIcon-Black", unlockTime: 400),
+        Icon(
+            iconName: "AppIcon-Loop Master",
             unlockTime: 1000,
             unlockMessage: ("1000 loops conquered! "
                 + "The universe has witnessed the birth of a Loop Master! "
@@ -53,13 +58,13 @@ class IconManager {
     }
 
     static func setAppIcon(to icon: Icon) {
-        Defaults[.currentIcon] = icon.name
+        Defaults[.currentIcon] = icon.iconName
         self.refreshCurrentAppIcon()
 
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName)"
-        alert.informativeText = "Current icon is now \(nameWithoutPrefix(name: icon.name))!"
-        alert.icon = NSImage(named: icon.name)
+        alert.informativeText = "Current icon is now \(icon.name ??  nameWithoutPrefix(name: icon.iconName))!"
+        alert.icon = NSImage(named: icon.iconName)
         alert.runModal()
     }
 
@@ -74,11 +79,11 @@ class IconManager {
             NSApp.setActivationPolicy(.regular)
 
             let alert = NSAlert()
-            alert.icon = NSImage(named: icon.name)
+            alert.icon = NSImage(named: icon.iconName)
             if let message = icon.unlockMessage {
                 alert.messageText = message
             } else {
-                alert.messageText = "You've unlocked a new icon: \(nameWithoutPrefix(name: icon.name))!"
+                alert.messageText = "You've unlocked a new icon: \(nameWithoutPrefix(name: icon.iconName))!"
             }
             alert.informativeText = "Would you like to set this as \(Bundle.main.appName)'s new icon?"
             alert.alertStyle = .informational
@@ -93,6 +98,6 @@ class IconManager {
     }
 
     static var currentAppIcon: Icon {
-        return icons.first(where: { $0.name == Defaults[.currentIcon] }) ?? icons.first!
+        return icons.first(where: { $0.iconName == Defaults[.currentIcon] }) ?? icons.first!
     }
 }
