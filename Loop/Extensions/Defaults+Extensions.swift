@@ -37,8 +37,6 @@ extension Defaults.Keys {
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
 
-    static let preferMinimizeWithScrollDown = Key<Bool>("preferMinimizeWithScrollDown", default: false)
-
     static let keybinds = Key<[Keybind]>("keybinds", default: [
         Keybind(.maximize, keycode: [.kVK_Space]),
         Keybind(.center, keycode: [.kVK_Return]),

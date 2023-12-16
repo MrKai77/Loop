@@ -32,13 +32,7 @@ class RadialMenuController {
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(
-            rootView: RadialMenuView(
-                frontmostWindow: frontmostWindow,
-                initialMousePosition: CGPoint(x: mouseX,
-                                              y: mouseY)
-            )
-        )
+        panel.contentView = NSHostingView(rootView: RadialMenuView(frontmostWindow: frontmostWindow))
         panel.alphaValue = 0
         panel.setFrame(
             CGRect(

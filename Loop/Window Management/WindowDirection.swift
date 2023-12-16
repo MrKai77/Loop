@@ -396,4 +396,15 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
         default: return .noAction
         }
     }
+
+    // Gets the cyclable direction
+    var parent: WindowDirection {
+        switch self {
+        case .topHalf, .topThird, .topTwoThirds: .cycleTop
+        case .bottomHalf, .bottomThird, .bottomTwoThirds: .cycleBottom
+        case .leftHalf, .leftThird, .leftTwoThirds: .cycleLeft
+        case .rightHalf, .rightThird, .rightTwoThirds: .cycleRight
+        default: self
+        }
+    }
 }
