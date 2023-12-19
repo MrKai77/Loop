@@ -18,7 +18,6 @@ class LoopManager: ObservableObject {
 
     private var currentlyPressedModifiers: Set<CGKeyCode> = []
     private var isLoopActive: Bool = false
-    private var areWindowsOpen: Bool = false
     private var frontmostWindow: Window?
     private var screenWithMouse: NSScreen?
 
@@ -130,7 +129,7 @@ class LoopManager: ObservableObject {
         if newDirection != currentResizeDirection {
             self.currentResizeDirection = newDirection
 
-            if Defaults[.onlyShowWhenDirectionSelected] {
+            if Defaults[.hideUntilDirectionIsChosen] {
                 self.openWindows()
             }
 
@@ -233,7 +232,7 @@ class LoopManager: ObservableObject {
         self.screenWithMouse = NSScreen.screenWithMouse
         self.mouseMovedEventMonitor!.start()
 
-        if !Defaults[.onlyShowWhenDirectionSelected] {
+        if !Defaults[.hideUntilDirectionIsChosen] {
             self.openWindows()
         }
 
@@ -274,22 +273,14 @@ class LoopManager: ObservableObject {
     }
 
     private func openWindows() {
-        guard self.areWindowsOpen == false else { return }
-
         if Defaults[.previewVisibility] == true && self.frontmostWindow != nil {
             self.previewController.open(screen: self.screenWithMouse!, window: frontmostWindow)
         }
         self.radialMenuController.open(position: self.initialMousePosition, frontmostWindow: frontmostWindow)
-
-        self.areWindowsOpen = true
     }
 
     private func closeWindows() {
-        guard self.areWindowsOpen == true else { return }
-
         self.radialMenuController.close()
         self.previewController.close()
-
-        self.areWindowsOpen = false
     }
 }

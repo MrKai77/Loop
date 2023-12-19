@@ -12,6 +12,7 @@ struct RadialMenuSettingsView: View {
 
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
+    @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
 
     @State var currentResizeDirection: WindowDirection = .cycleTop
 
@@ -44,6 +45,10 @@ struct RadialMenuSettingsView: View {
                 ) {
                     Text("Thickness")
                 }
+            }
+
+            Section {
+                Toggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
             }
         }
         .formStyle(.grouped)

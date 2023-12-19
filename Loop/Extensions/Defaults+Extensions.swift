@@ -17,8 +17,6 @@ extension Defaults.Keys {
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
 
-    static let onlyShowWhenDirectionSelected = Key<Bool>("onlyShowWhenDirectionSelected", default: false)
-
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
@@ -28,6 +26,7 @@ extension Defaults.Keys {
 
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
+    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
