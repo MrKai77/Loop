@@ -398,7 +398,7 @@ enum WindowDirection: Int, CaseIterable, Identifiable, Codable {
     }
 
     // Gets the cyclable direction
-    var parent: WindowDirection {
+    var base: WindowDirection {
         switch self {
         case .topHalf, .topThird, .topTwoThirds: .cycleTop
         case .bottomHalf, .bottomThird, .bottomTwoThirds: .cycleBottom

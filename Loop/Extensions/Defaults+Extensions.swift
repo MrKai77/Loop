@@ -17,6 +17,8 @@ extension Defaults.Keys {
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
 
+    static let onlyShowWhenDirectionSelected = Key<Bool>("onlyShowWhenDirectionSelected", default: false)
+
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)

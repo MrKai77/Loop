@@ -12,14 +12,14 @@ class RadialMenuController {
 
     private var loopRadialMenuWindowController: NSWindowController?
 
-    func open(frontmostWindow: Window?) {
+    func open(position: CGPoint, frontmostWindow: Window?) {
         if let windowController = loopRadialMenuWindowController {
             windowController.window?.orderFrontRegardless()
             return
         }
 
-        let mouseX: CGFloat = NSEvent.mouseLocation.x
-        let mouseY: CGFloat = NSEvent.mouseLocation.y
+        let mouseX: CGFloat = position.x
+        let mouseY: CGFloat = position.y
 
         let windowSize: CGFloat = 250
 
