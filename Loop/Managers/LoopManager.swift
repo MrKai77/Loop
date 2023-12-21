@@ -42,7 +42,7 @@ class LoopManager: ObservableObject {
 
         self.mouseMovedEventMonitor = NSEventMonitor(
             scope: .global,
-            eventMask: .mouseMoved,
+            eventMask: [.mouseMoved, .otherMouseDragged],
             handler: mouseMoved(_:)
         )
 
