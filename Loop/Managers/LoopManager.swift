@@ -77,6 +77,8 @@ class LoopManager: ObservableObject {
     }
 
     private func mouseMoved(_ event: NSEvent) {
+        guard self.isLoopActive else { return }
+
         let noActionDistance: CGFloat = 10
 
         let currentMouseLocation = NSEvent.mouseLocation
@@ -119,7 +121,7 @@ class LoopManager: ObservableObject {
     }
 
     private func changeDirection(_ direction: WindowDirection) {
-        guard self.currentResizeDirection != direction else { return }
+        guard self.currentResizeDirection != direction && self.isLoopActive else { return }
 
         var newDirection = direction
         if newDirection.cyclable {
