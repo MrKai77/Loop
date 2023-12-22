@@ -13,7 +13,6 @@ struct KeybindingsSettingsView: View {
     @Default(.keybinds) var keybinds
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
-    @Default(.preferMinimizeWithScrollDown) var preferMinimizeWithScrollDown
 
     @Default(.triggerKey) var triggerKey
     @Default(.doubleClickToTrigger) var doubleClickToTrigger

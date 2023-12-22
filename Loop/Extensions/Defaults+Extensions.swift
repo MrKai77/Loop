@@ -26,6 +26,7 @@ extension Defaults.Keys {
 
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
+    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
@@ -36,8 +37,6 @@ extension Defaults.Keys {
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
-
-    static let preferMinimizeWithScrollDown = Key<Bool>("preferMinimizeWithScrollDown", default: false)
 
     static let keybinds = Key<[Keybind]>("keybinds", default: [
         Keybind(.maximize, keycode: [.kVK_Space]),
