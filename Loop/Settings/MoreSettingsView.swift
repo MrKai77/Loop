@@ -10,9 +10,7 @@ import Sparkle
 import Defaults
 
 struct MoreSettingsView: View {
-
     @EnvironmentObject var updater: SoftwareUpdater
-    @Default(.preferMinimizeWithScrollDown) var preferMinimizeWithScrollDown
 
     var body: some View {
         Form {
@@ -48,10 +46,6 @@ struct MoreSettingsView: View {
                     .foregroundStyle(Color.accentColor)
                 }
             })
-
-            Section("Extra Settings") {
-                Toggle("Prefer scroll down to minimize window", isOn: self.$preferMinimizeWithScrollDown)
-            }
         }
         .formStyle(.grouped)
         .scrollDisabled(true)

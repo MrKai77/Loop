@@ -20,30 +20,6 @@ class KeybindMonitor {
         KeybindMonitor.shared.pressedKeys = []
     }
 
-    private func performKeybind(event: NSEvent) {
-        // If the current key up event is within 100 ms of the last key up event, return.
-        // This is used when the user is pressing 2+ keys so that it doesn't switch back
-        // to the one key direction when they're letting go of the keys.
-        if event.type == .keyUp ||
-            (event.type == .flagsChanged &&
-             !event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.shift)) {
-            if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
-                return
-            }
-            lastKeyReleaseTime = Date.now
-        }
-
-        if pressedKeys.contains(.kVK_Escape) {
-            Notification.Name.forceCloseLoop.post()
-            KeybindMonitor.shared.resetPressedKeys()
-            return
-        }
-
-        if let newDirection = WindowDirection.getDirection(for: pressedKeys) {
-            Notification.Name.directionChanged.post(userInfo: ["direction": newDirection])
-        }
-    }
-
     func start() {
         guard self.eventMonitor == nil,
               PermissionsManager.Accessibility.getStatus() else {
@@ -61,7 +37,7 @@ class KeybindMonitor {
                     KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
                 }
 
-                self.performKeybind(event: event)
+                return self.performKeybind(event: event) ? nil : Unmanaged.passUnretained(cgEvent)
             }
 
             return nil
@@ -76,9 +52,6 @@ class KeybindMonitor {
                 self.checkForModifier(event, .kVK_Command, .command)
                 self.checkForModifier(event, .kVK_Option, .option)
                 self.checkForModifier(event, .kVK_Function, .function)
-                self.checkForModifier(event, .kVK_Control, .control)
-
-                print(KeybindMonitor.shared.pressedKeys)
 
                 self.performKeybind(event: event)
             }
@@ -99,6 +72,36 @@ class KeybindMonitor {
 
         self.flagsEventMonitor?.stop()
         self.flagsEventMonitor = nil
+    }
+
+    @discardableResult
+    private func performKeybind(event: NSEvent) -> Bool {
+        // If the current key up event is within 100 ms of the last key up event, return.
+        // This is used when the user is pressing 2+ keys so that it doesn't switch back
+        // to the one key direction when they're letting go of the keys.
+        if event.type == .keyUp ||
+            (event.type == .flagsChanged &&
+             !event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.shift)) {
+            if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
+                return true
+            }
+            lastKeyReleaseTime = Date.now
+        }
+
+        if pressedKeys.contains(.kVK_Escape) {
+            Notification.Name.forceCloseLoop.post()
+            KeybindMonitor.shared.resetPressedKeys()
+            return true
+        }
+
+        if let newDirection = WindowDirection.getDirection(for: pressedKeys) {
+            Notification.Name.directionChanged.post(userInfo: ["direction": newDirection])
+            return true
+        }
+
+        // If this wasn't a valid keybind, return false, which will
+        // then forward the key event to the frontmost app
+        return false
     }
 
     private func checkForModifier(_ event: NSEvent, _ key: CGKeyCode, _ modifierFlag: NSEvent.ModifierFlags) {
