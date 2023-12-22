@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+@_silgen_name("_AXUIElementGetWindow") @discardableResult
+func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError
+
 class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
@@ -181,7 +184,7 @@ class Window {
         )
         panel.hasShadow = false
         panel.backgroundColor  = NSColor.white.withAlphaComponent(0.00001)
-        panel.level = .floating
+        panel.level = .screenSaver
         panel.ignoresMouseEvents = true
         panel.setFrame(screen.frame, display: false)
         panel.contentView = NSImageView(image: image)
@@ -208,6 +211,3 @@ class Window {
         }
     }
 }
-
-@_silgen_name("_AXUIElementGetWindow") @discardableResult
-func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError
