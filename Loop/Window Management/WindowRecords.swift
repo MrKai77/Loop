@@ -21,15 +21,11 @@ struct WindowRecords {
     /// - Parameter window: The window to check
     /// - Parameter checkMatchingLastFrame: Does the window's last frame need to match the last recorded one?
     /// - Returns: true or false
-    static func hasBeenRecorded(_ window: Window, checkMatchingLastFrame: Bool = true) -> Bool {
-        if checkMatchingLastFrame {
-            return WindowRecords.records.contains(where: { record in
-                return record.cgWindowID == window.cgWindowID &&
-                       record.currentFrame.approximatelyEqual(to: window.frame)
-            })
-        } else {
-            return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
-        }
+    static func hasBeenRecorded(_ window: Window) -> Bool {
+        return WindowRecords.records.contains(where: { record in
+            return record.cgWindowID == window.cgWindowID &&
+                   record.currentFrame.approximatelyEqual(to: window.frame)
+        })
     }
 
     /// The index of the window's record in the records array

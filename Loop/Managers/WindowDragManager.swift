@@ -30,11 +30,8 @@ class WindowDragManager {
                self.initialWindowPosition != window.position {
                 // If window is not at initial position...
 
-                if WindowRecords.hasBeenRecorded(window, checkMatchingLastFrame: false),
-                   let initialFrame = WindowRecords.getInitialFrame(for: window) {
-
-                    window.setSize(initialFrame.size)
-                    WindowRecords.eraseRecords(for: window)
+                if Defaults[.restoreWindowFrameOnDrag] {
+                    self.restoreInitialWindowSize(window)
                 }
 
                 if Defaults[.windowSnapping] {
@@ -73,6 +70,12 @@ class WindowDragManager {
         }
         self.draggingWindow = draggingWindow
         self.initialWindowPosition = draggingWindow.position
+    }
+
+    private func restoreInitialWindowSize(_ window: Window) {
+        guard let initialFrame = WindowRecords.getInitialFrame(for: window) else { return }
+        window.setSize(initialFrame.size)
+        WindowRecords.eraseRecords(for: window)
     }
 
     private func getWindowSnapDirection() {
