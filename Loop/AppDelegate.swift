@@ -11,6 +11,7 @@ import Defaults
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let loopManager = LoopManager()
+    private let windowDragManager = WindowDragManager()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
@@ -20,10 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         IconManager.refreshCurrentAppIcon()
         loopManager.startObservingKeys()
-
-        if Defaults[.windowSnapping] {
-            SnappingManager.shared.addObservers()
-        }
+        windowDragManager.addObservers()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
