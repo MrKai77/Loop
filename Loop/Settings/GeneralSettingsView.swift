@@ -48,13 +48,6 @@ struct GeneralSettingsView: View {
                         BetaIndicator("BETA")
                     }
                 }
-                .onChange(of: windowSnapping) { _ in
-                    if windowSnapping {
-                        SnappingManager.shared.addObservers()
-                    } else {
-                        SnappingManager.shared.removeObservers()
-                    }
-                }
 
                 Toggle(isOn: $animateWindowResizes) {
                     HStack {

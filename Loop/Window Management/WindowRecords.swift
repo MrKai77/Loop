@@ -17,14 +17,19 @@ struct WindowRecords {
         var directionRecords: [WindowDirection]
     }
 
-    /// Has the window has been previously recorded, and does its size match the one in record?
+    /// Has the window has been previously recorded?
     /// - Parameter window: The window to check
+    /// - Parameter checkMatchingLastFrame: Does the window's last frame need to match the last recorded one?
     /// - Returns: true or false
-    static func hasBeenRecorded(_ window: Window) -> Bool {
-        return WindowRecords.records.contains(where: { record in
-            return record.cgWindowID == window.cgWindowID &&
-                   record.currentFrame.approximatelyEqual(to: window.frame)
-        })
+    static func hasBeenRecorded(_ window: Window, checkMatchingLastFrame: Bool = true) -> Bool {
+        if checkMatchingLastFrame {
+            return WindowRecords.records.contains(where: { record in
+                return record.cgWindowID == window.cgWindowID &&
+                       record.currentFrame.approximatelyEqual(to: window.frame)
+            })
+        } else {
+            return WindowRecords.records.contains(where: { $0.cgWindowID == window.cgWindowID })
+        }
     }
 
     /// The index of the window's record in the records array
@@ -52,6 +57,12 @@ struct WindowRecords {
                 directionRecords: [.initialFrame]
             )
         )
+    }
+
+    /// Erase all previous records for a window
+    /// - Parameter window: Window to erase
+    static func eraseRecords(for window: Window) {
+        WindowRecords.records.removeAll(where: { $0.cgWindowID == window.cgWindowID })
     }
 
     /// Record a window's direction in the records array
