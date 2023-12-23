@@ -24,6 +24,7 @@ struct GeneralSettingsView: View {
     @Default(.windowPadding) var windowPadding
     @Default(.windowSnapping) var windowSnapping
     @Default(.animationConfiguration) var animationConfiguration
+    @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
 
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -48,13 +49,6 @@ struct GeneralSettingsView: View {
                         BetaIndicator("BETA")
                     }
                 }
-                .onChange(of: windowSnapping) { _ in
-                    if windowSnapping {
-                        SnappingManager.shared.addObservers()
-                    } else {
-                        SnappingManager.shared.removeObservers()
-                    }
-                }
 
                 Toggle(isOn: $animateWindowResizes) {
                     HStack {
@@ -75,6 +69,8 @@ struct GeneralSettingsView: View {
                        maximumValueLabel: Text("20px")) {
                     Text("Window Padding")
                 }
+
+                Toggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
             }
 
             Section {
