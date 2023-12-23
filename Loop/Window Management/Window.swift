@@ -61,6 +61,12 @@ class Window {
         return self.axWindow.getValue(.title) as? String
     }
 
+    func activate() {
+        if let runningApplication = self.nsRunningApplication {
+            runningApplication.activate()
+        }
+    }
+
     var isFullscreen: Bool {
         let result = self.axWindow.getValue(.fullScreen) as? NSNumber
         return result?.boolValue ?? false

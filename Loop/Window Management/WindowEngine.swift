@@ -17,6 +17,7 @@ struct WindowEngine {
     ///   - screen: Screen the window should be resized on
     static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
         guard direction != .noAction else { return }
+        window.activate()
 
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
@@ -76,21 +77,27 @@ struct WindowEngine {
         }
     }
 
+    static func getTargetWindow() -> Window? {
+        var result = WindowEngine.frontmostWindow
+
+        if Defaults[.resizeWindowUnderCursor],
+            let mouseLocation = NSEvent.mouseLocation.flipY,
+            let window = WindowEngine.windowAtPosition(mouseLocation) {
+            result = window
+        }
+
+        return result
+    }
+
     /// Get the frontmost Window
     /// - Returns: Window?
     static var frontmostWindow: Window? {
-        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
-              let window = Window(pid: app.processIdentifier) else { return nil }
-
-        #if DEBUG
-        print("===== NEW WINDOW =====")
-        print("Frontmost window: \(window.cgWindowID)")
-        print("Process ID: \(window.processID)")
-        print("Last Direction: \(WindowRecords.getLastDirection(for: window))")
-        print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
-        print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
-        #endif
-
+        guard
+            let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
+            let window = Window(pid: app.processIdentifier)
+        else {
+            return nil
+        }
         return window
     }
 
@@ -139,8 +146,8 @@ struct WindowEngine {
         _ direction: WindowDirection,
         _ window: Window
     ) -> CGRect? {
-        let screenWidth = screenFrame.size.width
-        let screenHeight = screenFrame.size.height
+        let screenWidth = screenFrame.width
+        let screenHeight = screenFrame.height
 
         var newWindowFrame: CGRect = CGRect(
             x: screenFrame.origin.x,
@@ -154,8 +161,8 @@ struct WindowEngine {
             newWindowFrame = CGRect(
                 x: screenFrame.midX - windowFrame.width/2,
                 y: screenFrame.midY - windowFrame.height/2,
-                width: windowFrame.width,
-                height: windowFrame.height
+                width: screenWidth,
+                height: screenHeight
             )
         case .undo:
             let previousDirection = WindowRecords.getLastDirection(for: window, willResize: true)
