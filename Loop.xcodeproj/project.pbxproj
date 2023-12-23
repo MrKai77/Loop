@@ -37,7 +37,7 @@
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
 		A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */; };
 		A85FEEBC2AF15CDE00354D79 /* KeybindCustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationView.swift */; };
-		A864F4682AA660CD00579738 /* SnappingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* SnappingManager.swift */; };
+		A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* WindowDragManager.swift */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
@@ -99,7 +99,7 @@
 		A85B560D2AAAD62C00386ACE /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindCustomizationView.swift; sourceTree = "<group>"; };
-		A864F4672AA660CD00579738 /* SnappingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappingManager.swift; sourceTree = "<group>"; };
+		A864F4672AA660CD00579738 /* WindowDragManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragManager.swift; sourceTree = "<group>"; };
 		A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
@@ -180,7 +180,7 @@
 			children = (
 				A848D8A62A8C2F3F00060834 /* LoopManager.swift */,
 				A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */,
-				A864F4672AA660CD00579738 /* SnappingManager.swift */,
+				A864F4672AA660CD00579738 /* WindowDragManager.swift */,
 				A82521ED29E235AC00139654 /* PermissionsManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
 			);
@@ -465,7 +465,7 @@
 				A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */,
 				A8330ACB2A3AC1C000673C8D /* Angle+Extensions.swift in Sources */,
 				A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */,
-				A864F4682AA660CD00579738 /* SnappingManager.swift in Sources */,
+				A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */,
 				A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */,
 				A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */,
 				A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */,
