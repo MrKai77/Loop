@@ -17,7 +17,7 @@ extension Defaults.Keys {
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: true)
-    static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: true)
+    static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
 
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 
