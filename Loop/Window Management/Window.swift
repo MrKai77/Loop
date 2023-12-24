@@ -17,11 +17,13 @@ class Window {
     var processID: pid_t
 
     init?(element: AXUIElement, pid: pid_t? = nil) {
+        var pid = pid
         self.axWindow = element
 
         if pid == nil {
             self.processID = 0
             AXUIElementGetPid(self.axWindow, &processID)
+            pid = self.processID
         } else {
             self.processID = pid!
         }
@@ -62,6 +64,12 @@ class Window {
 
     var title: String? {
         return self.axWindow.getValue(.title) as? String
+    }
+
+    func activate() {
+        if let runningApplication = self.nsRunningApplication {
+            runningApplication.activate()
+        }
     }
 
     var isFullscreen: Bool {

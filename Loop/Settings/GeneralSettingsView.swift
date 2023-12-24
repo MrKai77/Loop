@@ -24,6 +24,8 @@ struct GeneralSettingsView: View {
     @Default(.windowPadding) var windowPadding
     @Default(.windowSnapping) var windowSnapping
     @Default(.animationConfiguration) var animationConfiguration
+    @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
+    @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
 
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -48,13 +50,6 @@ struct GeneralSettingsView: View {
                         BetaIndicator("BETA")
                     }
                 }
-                .onChange(of: windowSnapping) { _ in
-                    if windowSnapping {
-                        SnappingManager.shared.addObservers()
-                    } else {
-                        SnappingManager.shared.removeObservers()
-                    }
-                }
 
                 Toggle(isOn: $animateWindowResizes) {
                     HStack {
@@ -74,6 +69,23 @@ struct GeneralSettingsView: View {
                        minimumValueLabel: Text("0px"),
                        maximumValueLabel: Text("20px")) {
                     Text("Window Padding")
+                }
+
+                Toggle(
+                    "Restore window frame on drag",
+                    isOn: $restoreWindowFrameOnDrag
+                )
+
+                Toggle(isOn: $resizeWindowUnderCursor) {
+                    VStack(alignment: .leading) {
+                        Text("Resize window under cursor")
+                        Text(resizeWindowUnderCursor ?
+                             "Resizes window under cursor, and uses the frontmost window as backup." :
+                             "Resizes frontmost window."
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    }
                 }
             }
 

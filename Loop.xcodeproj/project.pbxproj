@@ -37,7 +37,7 @@
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
 		A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */; };
 		A85FEEBC2AF15CDE00354D79 /* KeybindCustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationView.swift */; };
-		A864F4682AA660CD00579738 /* SnappingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* SnappingManager.swift */; };
+		A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* WindowDragManager.swift */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
@@ -47,6 +47,7 @@
 		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */; };
+		A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
 		A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */; };
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
@@ -99,7 +100,7 @@
 		A85B560D2AAAD62C00386ACE /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindCustomizationView.swift; sourceTree = "<group>"; };
-		A864F4672AA660CD00579738 /* SnappingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappingManager.swift; sourceTree = "<group>"; };
+		A864F4672AA660CD00579738 /* WindowDragManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragManager.swift; sourceTree = "<group>"; };
 		A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
@@ -110,6 +111,7 @@
 		A882660729809F6F00BCB197 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		A883642E298B7288005D6C19 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTransformAnimation.swift; sourceTree = "<group>"; };
+		A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGEvent+Extensions.swift"; sourceTree = "<group>"; };
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
 		A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeycorderModel.swift; sourceTree = "<group>"; };
 		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
@@ -180,7 +182,7 @@
 			children = (
 				A848D8A62A8C2F3F00060834 /* LoopManager.swift */,
 				A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */,
-				A864F4672AA660CD00579738 /* SnappingManager.swift */,
+				A864F4672AA660CD00579738 /* WindowDragManager.swift */,
 				A82521ED29E235AC00139654 /* PermissionsManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
 			);
@@ -194,6 +196,7 @@
 				A8330ACA2A3AC1C000673C8D /* Angle+Extensions.swift */,
 				A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */,
 				A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */,
+				A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */,
 				A8330ACC2A3AC1D100673C8D /* CGGeometry+Extensions.swift */,
 				A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */,
 				A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */,
@@ -465,11 +468,12 @@
 				A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */,
 				A8330ACB2A3AC1C000673C8D /* Angle+Extensions.swift in Sources */,
 				A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */,
-				A864F4682AA660CD00579738 /* SnappingManager.swift in Sources */,
+				A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */,
 				A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */,
 				A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */,
 				A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
+				A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */,
 				A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */,
 				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,
 				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
