@@ -24,8 +24,10 @@ struct MenuBarResizeButton: View {
             HStack {
                 if let image = direction.icon {
                     image
-                    Text(direction.name)
+                } else {
+                    Image(systemName: "exclamationmark.triangle")
                 }
+                Text(direction.name)
             }
         }
     }
