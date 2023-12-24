@@ -78,12 +78,14 @@ struct WindowEngine {
     }
 
     static func getTargetWindow() -> Window? {
-        var result = WindowEngine.frontmostWindow
+        var result: Window?
 
         if Defaults[.resizeWindowUnderCursor],
             let mouseLocation = NSEvent.mouseLocation.flipY,
             let window = WindowEngine.windowAtPosition(mouseLocation) {
             result = window
+        } else {
+           result = WindowEngine.frontmostWindow
         }
 
         return result
@@ -99,6 +101,22 @@ struct WindowEngine {
             return nil
         }
         return window
+    }
+
+    static func windowAtPosition(_ position: CGPoint) -> Window? {
+        if let element = AXUIElement.systemWide.getElementAtPosition(position),
+           let windowElement = element.getValue(.window),
+           // swiftlint:disable:next force_cast
+           let window = Window(element: windowElement as! AXUIElement) {
+            return window
+        }
+
+        let windowList = WindowEngine.windowList
+        if let window = (windowList.first { $0.frame.contains(position) }) {
+            return window
+        }
+
+        return nil
     }
 
     static var windowList: [Window] {
@@ -118,20 +136,6 @@ struct WindowEngine {
         }
 
         return windowList
-    }
-
-    static func windowAtPosition(_ position: CGPoint) -> Window? {
-        if let element = AXUIElement.systemWide.getElementAtPosition(position),
-           let window = Window(element: element) {
-            return window
-        }
-
-        let windowList = WindowEngine.windowList
-        if let window = (windowList.first { $0.frame.contains(position) }) {
-            return window
-        }
-
-        return nil
     }
 
     /// Generate a window frame using the provided WindowDirection
