@@ -149,7 +149,7 @@ struct PreviewView: View {
         .opacity(currentResizeDirection == .hide ? 0 : 1)
         .animation(animationConfiguration.previewWindowAnimation, value: currentResizeDirection)
         .onReceive(.directionChanged) { obj in
-            if let direction = obj.userInfo?["direction"] as? WindowDirection, !self.previewMode, !direction.cyclable {
+            if !self.previewMode, let direction = obj.userInfo?["direction"] as? WindowDirection, !direction.cyclable {
                 self.currentResizeDirection = direction
 
                 if self.currentResizeDirection == .undo && self.window != nil {
