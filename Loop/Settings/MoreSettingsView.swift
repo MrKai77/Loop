@@ -12,6 +12,9 @@ import Defaults
 struct MoreSettingsView: View {
     @EnvironmentObject var updater: SoftwareUpdater
 
+    @Default(.respectStageManager) var respectStageManager
+    @Default(.stageStripSize) var stageStripSize
+
     @Default(.animateWindowResizes) var animateWindowResizes
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -50,6 +53,20 @@ struct MoreSettingsView: View {
                     .foregroundStyle(Color.accentColor)
                 }
             })
+
+            Section("Stage Manager") {
+                Toggle("Respect Stage Manager", isOn: $respectStageManager)
+                Slider(
+                    value: $stageStripSize,
+                    in: 50...200,
+                    step: 15,
+                    minimumValueLabel: Text("50px"),
+                    maximumValueLabel: Text("200px")
+                ) {
+                    Text("Stage Strip Size")
+                }
+                .disabled(!respectStageManager)
+            }
 
             Section(content: {
                 HStack {

@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Defaults
 
-// Return the CGDirectDisplayID
-// Used in to help calculate the size a window needs to be resized to
 extension NSScreen {
+
+    // Return the CGDirectDisplayID
+    // Used in to help calculate the size a window needs to be resized to
     var displayID: CGDirectDisplayID? {
         let key = NSDeviceDescriptionKey("NSScreenNumber")
         return self.deviceDescription[key] as? CGDirectDisplayID
@@ -43,12 +45,12 @@ extension NSScreen {
         safeScreenFrame.origin.y += menubarHeight
         safeScreenFrame.origin.x -= screenFrame.minX - visibleFrame.minX
 
-        if StageManager.enabled && StageManager.shown {
+        if Defaults[.respectStageManager] && StageManager.enabled && StageManager.shown {
             if StageManager.position == .leading {
-                safeScreenFrame.origin.x += 150
+                safeScreenFrame.origin.x += Defaults[.stageStripSize]
             }
 
-            safeScreenFrame.size.width -= 150
+            safeScreenFrame.size.width -= Defaults[.stageStripSize]
         }
 
         return safeScreenFrame
