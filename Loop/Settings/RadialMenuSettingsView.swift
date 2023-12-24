@@ -19,13 +19,19 @@ struct RadialMenuSettingsView: View {
     var body: some View {
         Form {
             Section("Appearance") {
-                RadialMenuView(
-                    frontmostWindow: nil,
-                    previewMode: true,
-                    timer: Timer.publish(every: 1,
-                                         on: .main,
-                                         in: .common).autoconnect()
-                )
+                ZStack {
+                    BlueprintView()
+
+                    RadialMenuView(
+                        frontmostWindow: nil,
+                        previewMode: true,
+                        timer: Timer.publish(
+                            every: 1,
+                            on: .main,
+                            in: .common
+                        ).autoconnect()
+                    )
+                }
             }
 
             Section {

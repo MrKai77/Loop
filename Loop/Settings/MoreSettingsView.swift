@@ -12,6 +12,13 @@ import Defaults
 struct MoreSettingsView: View {
     @EnvironmentObject var updater: SoftwareUpdater
 
+    @Default(.respectStageManager) var respectStageManager
+    @Default(.stageStripSize) var stageStripSize
+
+    @Default(.animateWindowResizes) var animateWindowResizes
+    @State var isAccessibilityAccessGranted = false
+    @State var isScreenRecordingAccessGranted = false
+
     var body: some View {
         Form {
             Section(content: {
@@ -44,6 +51,73 @@ struct MoreSettingsView: View {
                     }
                     .buttonStyle(.link)
                     .foregroundStyle(Color.accentColor)
+                }
+            })
+
+            Section("Stage Manager") {
+                Toggle("Respect Stage Manager", isOn: $respectStageManager)
+                Slider(
+                    value: $stageStripSize,
+                    in: 50...200,
+                    step: 15,
+                    minimumValueLabel: Text("50px"),
+                    maximumValueLabel: Text("200px")
+                ) {
+                    Text("Stage Strip Size")
+                }
+                .disabled(!respectStageManager)
+            }
+
+            Section(content: {
+                HStack {
+                    Text("Accessibility Access")
+                    Spacer()
+                    Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
+                    Circle()
+                        .frame(width: 8, height: 8)
+                        .padding(.trailing, 5)
+                        .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
+                        .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
+                }
+
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Screen Recording Access")
+                        Spacer()
+                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
+                        Circle()
+                            .frame(width: 8, height: 8)
+                            .padding(.trailing, 5)
+                            .foregroundColor(isScreenRecordingAccessGranted ? .green : .red)
+                            .shadow(color: isScreenRecordingAccessGranted ? .green : .red, radius: 8)
+                    }
+                    Text("This is only needed to animate windows being resized.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }, header: {
+                HStack {
+                    Text("Permissions")
+
+                    Spacer()
+
+                    Button("Request Access…", action: {
+                        PermissionsManager.requestAccess()
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+                    })
+                    .buttonStyle(.link)
+                    .foregroundStyle(Color.accentColor)
+                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
+                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
+                    .onAppear {
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+
+                        if !isScreenRecordingAccessGranted {
+                            self.animateWindowResizes = false
+                        }
+                    }
                 }
             })
         }

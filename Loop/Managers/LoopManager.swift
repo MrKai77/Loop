@@ -18,7 +18,7 @@ class LoopManager: ObservableObject {
 
     private var currentlyPressedModifiers: Set<CGKeyCode> = []
     private var isLoopActive: Bool = false
-    private var frontmostWindow: Window?
+    private var targetWindow: Window?
     private var screenWithMouse: NSScreen?
 
     private var flagsChangedEventMonitor: EventMonitor?
@@ -224,12 +224,12 @@ class LoopManager: ObservableObject {
         guard self.isLoopActive == false else { return }
 
         self.currentResizeDirection = .noAction
-        self.frontmostWindow = nil
+        self.targetWindow = nil
 
         // Ensure accessibility access
         guard PermissionsManager.Accessibility.getStatus() else { return }
 
-        self.frontmostWindow = WindowEngine.frontmostWindow
+        self.targetWindow = WindowEngine.getTargetWindow()
         self.initialMousePosition = NSEvent.mouseLocation
         self.screenWithMouse = NSScreen.screenWithMouse
         self.mouseMovedEventMonitor!.start()
@@ -251,13 +251,13 @@ class LoopManager: ObservableObject {
         self.keybindMonitor.stop()
         self.mouseMovedEventMonitor!.stop()
 
-        if self.frontmostWindow != nil &&
+        if self.targetWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
             self.currentResizeDirection != .noAction &&
             self.isLoopActive {
 
-            WindowEngine.resize(self.frontmostWindow!, to: self.currentResizeDirection, self.screenWithMouse!)
+            WindowEngine.resize(self.targetWindow!, to: self.currentResizeDirection, self.screenWithMouse!)
 
             // This rotates the menubar icon
             Notification.Name.didLoop.post()
@@ -266,7 +266,7 @@ class LoopManager: ObservableObject {
             Defaults[.timesLooped] += 1
             IconManager.checkIfUnlockedNewIcon()
         } else {
-            if self.frontmostWindow == nil && isLoopActive {
+            if self.targetWindow == nil && isLoopActive {
                 NSSound.beep()
             }
         }
@@ -275,10 +275,10 @@ class LoopManager: ObservableObject {
     }
 
     private func openWindows() {
-        if Defaults[.previewVisibility] == true && self.frontmostWindow != nil {
-            self.previewController.open(screen: self.screenWithMouse!, window: frontmostWindow)
+        if Defaults[.previewVisibility] == true && self.targetWindow != nil {
+            self.previewController.open(screen: self.screenWithMouse!, window: targetWindow)
         }
-        self.radialMenuController.open(position: self.initialMousePosition, frontmostWindow: frontmostWindow)
+        self.radialMenuController.open(position: self.initialMousePosition, frontmostWindow: targetWindow)
     }
 
     private func closeWindows() {
