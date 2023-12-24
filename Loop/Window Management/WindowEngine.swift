@@ -15,7 +15,7 @@ struct WindowEngine {
     ///   - window: Window to be resized
     ///   - direction: WindowDirection
     ///   - screen: Screen the window should be resized on
-    static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
+    static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen, supressAnimations: Bool = false) {
         guard direction != .noAction else { return }
         window.activate()
 
@@ -48,7 +48,7 @@ struct WindowEngine {
         }
         var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
 
-        var animate =  Defaults[.animateWindowResizes]
+        var animate =  (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {
             if PermissionsManager.ScreenRecording.getStatus() == false {
                 PermissionsManager.ScreenRecording.requestAccess()
