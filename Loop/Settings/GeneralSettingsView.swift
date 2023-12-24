@@ -25,6 +25,7 @@ struct GeneralSettingsView: View {
     @Default(.windowSnapping) var windowSnapping
     @Default(.animationConfiguration) var animationConfiguration
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
+    @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
 
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -70,7 +71,22 @@ struct GeneralSettingsView: View {
                     Text("Window Padding")
                 }
 
-                Toggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
+                Toggle(
+                    "Restore window frame on drag",
+                    isOn: $restoreWindowFrameOnDrag
+                )
+
+                Toggle(isOn: $resizeWindowUnderCursor) {
+                    VStack(alignment: .leading) {
+                        Text("Resize window under cursor")
+                        Text(resizeWindowUnderCursor ?
+                             "Resizes window under cursor, and uses the frontmost window as backup." :
+                             "Resizes frontmost window."
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    }
+                }
             }
 
             Section {
