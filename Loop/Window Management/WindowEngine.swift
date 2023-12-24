@@ -81,10 +81,12 @@ struct WindowEngine {
         var result: Window?
 
         if Defaults[.resizeWindowUnderCursor],
-            let mouseLocation = NSEvent.mouseLocation.flipY,
-            let window = WindowEngine.windowAtPosition(mouseLocation) {
+           let mouseLocation = CGEvent.mouseLocation,
+           let window = WindowEngine.windowAtPosition(mouseLocation) {
             result = window
-        } else {
+        }
+
+        if result == nil {
            result = WindowEngine.frontmostWindow
         }
 
