@@ -137,6 +137,15 @@ class LoopManager: ObservableObject {
 
             DispatchQueue.main.async {
                 Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizeDirection])
+
+                if !Defaults[.previewVisibility] {
+                    WindowEngine.resize(
+                        self.targetWindow!,
+                        to: self.currentResizeDirection,
+                        self.screenWithMouse!,
+                        supressAnimations: true
+                    )
+                }
             }
 
             NSHapticFeedbackManager.defaultPerformer.perform(
@@ -257,7 +266,13 @@ class LoopManager: ObservableObject {
             self.currentResizeDirection != .noAction &&
             self.isLoopActive {
 
-            WindowEngine.resize(self.targetWindow!, to: self.currentResizeDirection, self.screenWithMouse!)
+            if Defaults[.previewVisibility] {
+                WindowEngine.resize(
+                    self.targetWindow!,
+                    to: self.currentResizeDirection,
+                    self.screenWithMouse!
+                )
+            }
 
             // This rotates the menubar icon
             Notification.Name.didLoop.post()

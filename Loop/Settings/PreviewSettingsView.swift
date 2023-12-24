@@ -15,10 +15,28 @@ struct PreviewSettingsView: View {
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
 
+    @Default(.animateWindowResizes) var animateWindowResizes
+
     var body: some View {
         Form {
             Section("Behavior") {
-                Toggle("Show Preview when looping", isOn: $previewVisibility)
+                Toggle(isOn: $previewVisibility) {
+                    VStack(alignment: .leading) {
+                        Text("Show Preview when looping")
+
+                        if !previewVisibility {
+                            VStack(alignment: .leading) {
+                                Text("Adjusts window frame in real-time as you choose a direction.")
+
+                                if self.animateWindowResizes {
+                                    Text("Windows will not animate their resizes.")
+                                }
+                            }
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        }
+                    }
+                }
             }
 
             Section {
