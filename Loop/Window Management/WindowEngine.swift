@@ -167,8 +167,8 @@ struct WindowEngine {
             newWindowFrame = CGRect(
                 x: screenFrame.midX - windowFrame.width/2,
                 y: screenFrame.midY - windowFrame.height/2,
-                width: screenWidth,
-                height: screenHeight
+                width: windowFrame.width,
+                height: windowFrame.height
             )
         case .undo:
             let previousDirection = WindowRecords.getLastDirection(for: window, willResize: true)
