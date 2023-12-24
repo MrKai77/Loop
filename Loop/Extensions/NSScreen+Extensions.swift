@@ -23,9 +23,14 @@ extension NSScreen {
         return screenWithMouse
     }
 
-    var safeScreenFrame: CGRect? {
-        guard let displayID = self.displayID,
-              let visibleFrame = self.visibleFrame.flipY else { return nil }
+    var safeScreenFrame: CGRect {
+        guard
+            let displayID = self.displayID,
+            let visibleFrame = self.visibleFrame.flipY
+        else {
+            return self.frame.flipY!
+        }
+
         let screenFrame = CGDisplayBounds(displayID)
         let menubarHeight = visibleFrame.origin.y
 
@@ -37,6 +42,14 @@ extension NSScreen {
         safeScreenFrame.origin = screenFrame.origin
         safeScreenFrame.origin.y += menubarHeight
         safeScreenFrame.origin.x -= screenFrame.minX - visibleFrame.minX
+
+        if StageManager.enabled && StageManager.shown {
+            if StageManager.position == .leading {
+                safeScreenFrame.origin.x += 150
+            }
+
+            safeScreenFrame.size.width -= 150
+        }
 
         return safeScreenFrame
     }
