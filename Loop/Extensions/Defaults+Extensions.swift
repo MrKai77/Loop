@@ -53,4 +53,7 @@ extension Defaults.Keys {
         Keybind(.bottomRightQuarter, keycode: [.kVK_DownArrow, .kVK_RightArrow]),
         Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
+
+    static let respectStageManager = Key<Bool>("respectStageManager", default: true)
+    static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 }

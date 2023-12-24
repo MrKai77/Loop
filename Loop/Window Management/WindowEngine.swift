@@ -40,8 +40,9 @@ struct WindowEngine {
             return
         }
 
-        guard let screenFrame = screen.safeScreenFrame,
-              let currentWindowFrame = WindowEngine.generateWindowFrame(window.frame, screenFrame, direction, window)
+        let screenFrame = screen.safeScreenFrame
+        guard
+            let currentWindowFrame = WindowEngine.generateWindowFrame(window.frame, screenFrame, direction, window)
         else {
             return
         }
@@ -57,12 +58,14 @@ struct WindowEngine {
 
             // Calculate the window's minimum window size and change the target accordingly
             window.getMinSize(screen: screen) { minSize in
-                if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
-                    targetWindowFrame.origin.x = screen.frame.maxX - minSize.width - Defaults[.windowPadding]
+                let nsScreenFrame = screenFrame.flipY!
+
+                if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
+                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.windowPadding]
                 }
 
-                if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
-                    targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
+                if (targetWindowFrame.minY + minSize.height) > nsScreenFrame.maxY {
+                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.windowPadding]
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
