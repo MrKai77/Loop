@@ -36,6 +36,7 @@ struct PreviewView: View {
             VStack {
                 switch currentResizeDirection {
                 case .center,
+                        .almostMaximize,
                         .bottomHalf,
                         .bottomRightQuarter,
                         .bottomLeftQuarter,
@@ -54,6 +55,7 @@ struct PreviewView: View {
                 HStack {
                     switch currentResizeDirection {
                     case .center,
+                            .almostMaximize,
                             .rightHalf,
                             .topRightQuarter,
                             .bottomRightQuarter,
@@ -103,6 +105,11 @@ struct PreviewView: View {
                            height: currentResizeDirection == .center ?
                                 (window?.size.height ?? 10) - previewPadding + previewBorderThickness / 2 : nil
                     )
+                    .frame(width: currentResizeDirection == .almostMaximize ?
+                                (geo.size.width * (9/10)) - previewPadding + previewBorderThickness / 2 : nil,
+                           height: currentResizeDirection == .almostMaximize ?
+                                (geo.size.height * (9/10)) - previewPadding + previewBorderThickness / 2 : nil
+                    )
                     .frame(height: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
                     .frame(height: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
                     .frame(width: currentResizeDirection == .rightTwoThirds ? geo.size.width / 3 * 2 : nil)
@@ -110,6 +117,7 @@ struct PreviewView: View {
 
                     switch currentResizeDirection {
                     case .center,
+                            .almostMaximize,
                             .leftHalf,
                             .topLeftQuarter,
                             .bottomLeftQuarter,
@@ -128,6 +136,7 @@ struct PreviewView: View {
 
                 switch currentResizeDirection {
                 case .center,
+                        .almostMaximize,
                         .topHalf,
                         .topRightQuarter,
                         .topLeftQuarter,
