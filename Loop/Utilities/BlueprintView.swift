@@ -9,10 +9,23 @@ import SwiftUI
 
 struct BlueprintView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            VisualEffectView(material: .sidebar, blendingMode: .behindWindow)
+
+            if #available(macOS 14, *) {
+                Rectangle()
+                    .foregroundStyle(.white)
+                    .colorEffect(
+                        ShaderLibrary.grid(.float(10), .color(.gray.opacity(0.25)))
+                    )
+            }
+        }
+        .ignoresSafeArea()
+        .padding(-10)
     }
 }
 
 #Preview {
     BlueprintView()
+        .frame(width: 200, height: 200)
 }

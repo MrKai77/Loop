@@ -22,7 +22,11 @@ struct PreviewSettingsView: View {
             }
 
             Section {
-                PreviewView(previewMode: true, window: nil)
+                ZStack {
+                    BlueprintView()
+
+                    PreviewView(previewMode: true, window: nil)
+                }
             }
             .frame(height: 150)
             .opacity(previewVisibility ? 1 : 0.5)
