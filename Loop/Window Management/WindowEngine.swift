@@ -15,38 +15,48 @@ struct WindowEngine {
     ///   - window: Window to be resized
     ///   - direction: WindowDirection
     ///   - screen: Screen the window should be resized on
-    static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen, supressAnimations: Bool = false) {
-        guard direction != .noAction else { return }
+    static func resize(
+        _ window: Window,
+        to keybind: Keybind,
+        _ screen: NSScreen,
+        supressAnimations: Bool = false
+    ) {
+        guard keybind.direction != .noAction else { return }
         window.activate()
 
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
         }
 
-        if direction == .fullscreen {
+        if keybind.direction == .fullscreen {
             window.toggleFullscreen()
-            WindowRecords.recordDirection(window, direction)
+            WindowRecords.record(window, keybind)
             return
         }
         window.setFullscreen(false)
 
-        if direction == .hide {
+        if keybind.direction == .hide {
             window.toggleHidden()
             return
         }
 
-        if direction == .minimize {
+        if keybind.direction == .minimize {
             window.toggleMinimized()
             return
         }
 
         let screenFrame = screen.safeScreenFrame
         guard
-            let currentWindowFrame = WindowEngine.generateWindowFrame(window.frame, screenFrame, direction, window)
+            let currentWindowFrame = WindowEngine.generateWindowFrame(
+                window.frame,
+                screenFrame,
+                keybind,
+                window
+            )
         else {
             return
         }
-        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
+        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, keybind.direction)
 
         var animate =  (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {
@@ -69,13 +79,13 @@ struct WindowEngine {
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
-                    WindowRecords.recordDirection(window, direction)
+                    WindowRecords.record(window, keybind)
                 }
             }
         } else {
             window.setFrame(targetWindowFrame) {
                 WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-                WindowRecords.recordDirection(window, direction)
+                WindowRecords.record(window, keybind)
             }
         }
     }
@@ -152,9 +162,10 @@ struct WindowEngine {
     private static func generateWindowFrame(
         _ windowFrame: CGRect,
         _ screenFrame: CGRect,
-        _ direction: WindowDirection,
+        _ keybind: Keybind,
         _ window: Window
     ) -> CGRect? {
+        let direction = keybind.direction
         let screenWidth = screenFrame.width
         let screenHeight = screenFrame.height
 
@@ -166,10 +177,54 @@ struct WindowEngine {
         )
 
         switch direction {
+        case .custom:
+            guard
+                let measureSystem = keybind.measureSystem,
+                let anchor = keybind.anchor,
+                let width = keybind.width,
+                let height = keybind.height
+            else {
+                return nil
+            }
+
+            switch measureSystem {
+            case .percentage:
+                newWindowFrame.size.width += screenWidth * (width / 100.0)
+                newWindowFrame.size.height += screenHeight * (height / 100.0)
+            case .pixels:
+                newWindowFrame.size.width += width
+                newWindowFrame.size.height += height
+            }
+
+            switch anchor {
+            case .topLeft:
+                break
+            case .top:
+                newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+            case .topRight:
+                newWindowFrame.origin.x = screenFrame.width - newWindowFrame.width
+            case .right:
+                newWindowFrame.origin.x = screenFrame.width - newWindowFrame.width
+                newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+            case .bottomRight:
+                newWindowFrame.origin.x = screenFrame.width - newWindowFrame.width
+                newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+            case .bottom:
+                newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+                newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+            case .bottomLeft:
+                newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+            case .left:
+                newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+            case .center:
+                newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+                newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+            }
+
         case .center:
             newWindowFrame = CGRect(
-                x: screenFrame.midX - windowFrame.width/2,
-                y: screenFrame.midY - windowFrame.height/2,
+                x: screenFrame.midX - windowFrame.width / 2,
+                y: screenFrame.midY - windowFrame.height / 2,
                 width: windowFrame.width,
                 height: windowFrame.height
             )

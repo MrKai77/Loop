@@ -16,6 +16,10 @@ struct Keybind: Codable, Identifiable, Hashable, Defaults.Serializable {
         self.keybind = keycode
     }
 
+    init(_ direction: WindowDirection) {
+        self.init(direction, keycode: [])
+    }
+
     var direction: WindowDirection
     var keybind: Set<CGKeyCode>
 
@@ -25,6 +29,13 @@ struct Keybind: Codable, Identifiable, Hashable, Defaults.Serializable {
     var anchor: CustomKeybindAnchor?
     var width: Double?
     var height: Double?
+
+    static func getKeybind(for keybind: Set<CGKeyCode>) -> Keybind? {
+        for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
+            return keybinding
+        }
+        return nil
+    }
 }
 
 enum CustomKeybindMeasureSystem: Int, Codable, CaseIterable, Identifiable {

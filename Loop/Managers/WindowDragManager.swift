@@ -114,7 +114,8 @@ class WindowDragManager {
         }
 
         DispatchQueue.main.async {
-            WindowEngine.resize(window, to: self.direction, screen)
+            // TODO: WINDOW DRAGGING
+//            WindowEngine.resize(window, to: self.direction, screen)
         }
     }
 }

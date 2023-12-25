@@ -20,7 +20,7 @@ struct CustomKeybindView: View {
                     TextField("Name", text: $keybind.name)
                         .focused($focusedField, equals: "name")
 
-                    Picker("Define using", selection: $keybind.measureSystem) {
+                    Picker("Configure window size using", selection: $keybind.measureSystem) {
                         ForEach(CustomKeybindMeasureSystem.allCases) { system in
                             system.label
                                 .tag(system as CustomKeybindMeasureSystem?)
@@ -31,7 +31,7 @@ struct CustomKeybindView: View {
                         self.keybind.height = 0
                     }
 
-                    Picker("Anchor:", selection: $keybind.anchor) {
+                    Picker("Anchor window to", selection: $keybind.anchor) {
                         ForEach(CustomKeybindAnchor.allCases) { anchor in
                             anchor.label
                                 .tag(anchor as CustomKeybindAnchor?)
@@ -39,7 +39,7 @@ struct CustomKeybindView: View {
                     }
                 }
 
-                Section("Size") {
+                Section("Window Size") {
                     HStack {
                         Stepper(
                             "Width",

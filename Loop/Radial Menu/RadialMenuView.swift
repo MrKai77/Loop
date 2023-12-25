@@ -102,8 +102,8 @@ struct RadialMenuView: View {
             }
         }
         .onReceive(.directionChanged) { obj in
-            if !self.previewMode, let direction = obj.userInfo?["direction"] as? WindowDirection {
-                self.currentResizeDirection = direction.base
+            if !self.previewMode, let keybind = obj.userInfo?["keybind"] as? Keybind {
+                self.currentResizeDirection = keybind.direction.base
             }
         }
     }

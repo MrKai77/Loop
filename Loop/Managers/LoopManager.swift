@@ -28,7 +28,7 @@ class LoopManager: ObservableObject {
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
-    @Published var currentResizeDirection: WindowDirection = .noAction
+    @Published var currentKeybind: Keybind = .init(.noAction)
     private var initialMousePosition: CGPoint = CGPoint()
     private var angleToMouse: Angle = Angle(degrees: 0)
     private var distanceToMouse: CGFloat = 0
@@ -66,8 +66,8 @@ class LoopManager: ObservableObject {
         }
 
         Notification.Name.directionChanged.onRecieve { notification in
-            if let direction = notification.userInfo?["direction"] as? WindowDirection {
-                self.changeDirection(direction)
+            if let keybind = notification.userInfo?["keybind"] as? Keybind {
+                self.changeKeybind(keybind)
             }
         }
 
@@ -115,33 +115,33 @@ class LoopManager: ObservableObject {
             resizeDirection = .maximize
         }
 
-        if resizeDirection != self.currentResizeDirection.base {
-            changeDirection(resizeDirection)
+        if resizeDirection != self.currentKeybind.direction.base {
+            changeKeybind(.init(resizeDirection))
         }
     }
 
-    private func changeDirection(_ direction: WindowDirection) {
-        guard self.currentResizeDirection != direction && self.isLoopActive else { return }
+    private func changeKeybind(_ keybind: Keybind) {
+        guard self.currentKeybind != keybind && self.isLoopActive else { return }
 
-        var newDirection = direction
-        if newDirection.cyclable {
-            newDirection = direction.nextCyclingDirection(from: self.currentResizeDirection)
+        var newKeybind = keybind
+        if newKeybind.direction.cyclable {
+            newKeybind = .init(newKeybind.direction.nextCyclingDirection(from: self.currentKeybind.direction))
         }
 
-        if newDirection != currentResizeDirection {
-            self.currentResizeDirection = newDirection
+        if newKeybind != currentKeybind {
+            self.currentKeybind = newKeybind
 
             if Defaults[.hideUntilDirectionIsChosen] {
                 self.openWindows()
             }
 
             DispatchQueue.main.async {
-                Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizeDirection])
+                Notification.Name.directionChanged.post(userInfo: ["keybind": self.currentKeybind])
 
                 if !Defaults[.previewVisibility] {
                     WindowEngine.resize(
                         self.targetWindow!,
-                        to: self.currentResizeDirection,
+                        to: self.currentKeybind,
                         self.screenWithMouse!,
                         supressAnimations: true
                     )
@@ -233,7 +233,7 @@ class LoopManager: ObservableObject {
     private func openLoop() {
         guard self.isLoopActive == false else { return }
 
-        self.currentResizeDirection = .noAction
+        self.currentKeybind = .init(.noAction)
         self.targetWindow = nil
 
         // Ensure accessibility access
@@ -264,13 +264,13 @@ class LoopManager: ObservableObject {
         if self.targetWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
-            self.currentResizeDirection != .noAction &&
+            self.currentKeybind.direction != .noAction &&
             self.isLoopActive {
 
             if Defaults[.previewVisibility] {
                 WindowEngine.resize(
                     self.targetWindow!,
-                    to: self.currentResizeDirection,
+                    to: self.currentKeybind,
                     self.screenWithMouse!
                 )
             }

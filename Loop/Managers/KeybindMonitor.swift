@@ -94,8 +94,8 @@ class KeybindMonitor {
             return true
         }
 
-        if let newDirection = WindowDirection.getDirection(for: pressedKeys) {
-            Notification.Name.directionChanged.post(userInfo: ["direction": newDirection])
+        if let newKeybind = Keybind.getKeybind(for: pressedKeys) {
+            Notification.Name.directionChanged.post(userInfo: ["keybind": newKeybind])
             return true
         }
 

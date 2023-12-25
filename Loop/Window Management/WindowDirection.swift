@@ -137,13 +137,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         return result
     }
 
-    static func getDirection(for keybind: Set<CGKeyCode>) -> WindowDirection? {
-        for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
-            return keybinding.direction
-        }
-        return nil
-    }
-
     var icon: Image? {
         switch self {
         case .maximize:                 Image(systemName: "rectangle.inset.filled")

@@ -14,7 +14,7 @@ struct WindowRecords {
         var cgWindowID: CGWindowID
         var initialFrame: CGRect
         var currentFrame: CGRect
-        var directionRecords: [WindowDirection]
+        var keybindRecords: [Keybind]
     }
 
     /// Has the window has been previously recorded?
@@ -50,7 +50,7 @@ struct WindowRecords {
                 cgWindowID: window.cgWindowID,
                 initialFrame: frame,
                 currentFrame: frame,
-                directionRecords: [.initialFrame]
+                keybindRecords: [.init(.initialFrame)]
             )
         )
     }
@@ -65,12 +65,12 @@ struct WindowRecords {
     /// - Parameters:
     ///   - window: Window to record
     ///   - direction: Direction to record
-    static func recordDirection(_ window: Window, _ direction: WindowDirection) {
+    static func record(_ window: Window, _ keybind: Keybind) {
         guard let id = WindowRecords.findRecordsID(for: window) else {
             return
         }
 
-        WindowRecords.records[id].directionRecords.insert(direction, at: 0)
+        WindowRecords.records[id].keybindRecords.insert(keybind, at: 0)
         WindowRecords.records[id].currentFrame = window.frame
     }
 
@@ -84,14 +84,14 @@ struct WindowRecords {
         for window: Window,
         willResize: Bool = false,
         offset: Int = 1
-    ) -> WindowDirection {
+    ) -> Keybind {
         guard let id = WindowRecords.findRecordsID(for: window),
-                WindowRecords.records[id].directionRecords.count > offset else {
-            return .noAction
+                WindowRecords.records[id].keybindRecords.count > offset else {
+            return .init(.noAction)
         }
-        let lastDirection = WindowRecords.records[id].directionRecords[offset]
-        if willResize && WindowRecords.records[id].directionRecords.count > offset + 1 {
-            WindowRecords.records[id].directionRecords.removeFirst(offset + 1)
+        let lastDirection = WindowRecords.records[id].keybindRecords[offset]
+        if willResize && WindowRecords.records[id].keybindRecords.count > offset + 1 {
+            WindowRecords.records[id].keybindRecords.removeFirst(offset + 1)
         }
 
         return lastDirection
