@@ -15,31 +15,37 @@ struct CustomKeybindView: View {
 
     var body: some View {
         VStack {
+
             Form {
-                Section("Custom Keybind") {
+                Section {
                     TextField("Name", text: $keybind.name)
                         .focused($focusedField, equals: "name")
+                }
 
-                    Picker("Configure window size using", selection: $keybind.measureSystem) {
+                Section {
+                    AnchorPicker(anchor: self.$keybind.anchor)
+                        .ignoresSafeArea()
+                        .padding(-10)
+                }
+
+                Section("Window Size") {
+                    Picker("Configure using", selection: $keybind.measureSystem) {
                         ForEach(CustomKeybindMeasureSystem.allCases) { system in
                             system.label
                                 .tag(system as CustomKeybindMeasureSystem?)
                         }
                     }
                     .onChange(of: keybind.measureSystem) { _ in
-                        self.keybind.width = 0
-                        self.keybind.height = 0
-                    }
-
-                    Picker("Anchor window to", selection: $keybind.anchor) {
-                        ForEach(CustomKeybindAnchor.allCases) { anchor in
-                            anchor.label
-                                .tag(anchor as CustomKeybindAnchor?)
+                        if keybind.measureSystem == .percentage {
+                            if keybind.width ?? 101 > 100 {
+                                self.keybind.width = 100
+                            }
+                            if keybind.height ?? 101 > 100 {
+                                self.keybind.height = 100
+                            }
                         }
                     }
-                }
 
-                Section("Window Size") {
                     HStack {
                         Stepper(
                             "Width",

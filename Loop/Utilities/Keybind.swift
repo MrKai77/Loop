@@ -49,7 +49,7 @@ enum CustomKeybindMeasureSystem: Int, Codable, CaseIterable, Identifiable {
         case .pixels:
             Text("\(Image(systemName: "rectangle.checkered")) Pixels")
         case .percentage:
-            Text("\(Image(systemName: "percent")) Percentage")
+            Text("\(Image(systemName: "percent")) Percentages")
         }
     }
 
