@@ -335,7 +335,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird:      CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
-        default:                        nil
+        default:                        CGRect(x: 1.0/2.0, y: 1.0/2.0, width: 0.0, height: 0.0)
         }
     }
 

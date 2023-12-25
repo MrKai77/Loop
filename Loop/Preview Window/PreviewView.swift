@@ -10,7 +10,7 @@ import Defaults
 
 struct PreviewView: View {
 
-    @State var currentResizeDirection: WindowDirection = .noAction
+    @State var currentKeybind: Keybind = .init(.noAction)
     private let window: Window?
     private let previewMode: Bool
 
@@ -33,142 +33,51 @@ struct PreviewView: View {
 
     var body: some View {
         GeometryReader { geo in
-            VStack {
-                switch currentResizeDirection {
-                case .center,
-                        .almostMaximize,
-                        .bottomHalf,
-                        .bottomRightQuarter,
-                        .bottomLeftQuarter,
-                        .verticalCenterThird,
-                        .bottomThird,
-                        .bottomTwoThirds,
-                        .noAction,
-                        .undo,
-                        .hide:
-                    Rectangle()
-                        .frame(height: currentResizeDirection == .bottomThird ? geo.size.height / 3 * 2 : nil)
-                default:
-                    EmptyView()
-                }
-
-                HStack {
-                    switch currentResizeDirection {
-                    case .center,
-                            .almostMaximize,
-                            .rightHalf,
-                            .topRightQuarter,
-                            .bottomRightQuarter,
-                            .horizontalCenterThird,
-                            .rightThird,
-                            .rightTwoThirds,
-                            .noAction,
-                            .undo,
-                            .hide:
-                        Rectangle()
-                            .frame(width: currentResizeDirection == .rightThird ? geo.size.width / 3 * 2 : nil)
-                    default:
-                        EmptyView()
-                    }
-
-                    ZStack {
-                        VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                            .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
-                            .shadow(radius: 10)
-                        RoundedRectangle(cornerRadius: previewCornerRadius)
-                            .stroke(
-                                LinearGradient(
-                                    gradient: Gradient(
-                                        colors: [
-                                            Color.getLoopAccent(tone: .normal),
-                                            Color.getLoopAccent(tone: useGradient ? .darker : .normal)
-                                        ]
-                                    ),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: previewBorderThickness
-                            )
-                    }
-                    .padding(windowPadding + previewPadding + previewBorderThickness / 2)
-                    .frame(width: currentResizeDirection == .noAction ? 0 : nil,
-                           height: currentResizeDirection == .noAction ? 0 : nil)
-                    .frame(width: currentResizeDirection == .initialFrame ? 0 : nil,
-                           height: currentResizeDirection == .initialFrame ? 0 : nil)
-                    .frame(width: currentResizeDirection == .undo ? 0 : nil,
-                           height: currentResizeDirection == .undo ? 0 : nil)
-                    .frame(width: currentResizeDirection == .hide ? 0 : nil,
-                           height: currentResizeDirection == .hide ? 0 : nil)
-
-                    .frame(width: currentResizeDirection == .center ?
-                                (window?.size.width ?? 10) - previewPadding + previewBorderThickness / 2 : nil,
-                           height: currentResizeDirection == .center ?
-                                (window?.size.height ?? 10) - previewPadding + previewBorderThickness / 2 : nil
+            ZStack {
+                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                    .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
+                    .shadow(radius: 10)
+                RoundedRectangle(cornerRadius: previewCornerRadius)
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(
+                                colors: [
+                                    Color.getLoopAccent(tone: .normal),
+                                    Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+                                ]
+                            ),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: previewBorderThickness
                     )
-                    .frame(width: currentResizeDirection == .almostMaximize ?
-                                (geo.size.width * (9/10)) - previewPadding + previewBorderThickness / 2 : nil,
-                           height: currentResizeDirection == .almostMaximize ?
-                                (geo.size.height * (9/10)) - previewPadding + previewBorderThickness / 2 : nil
-                    )
-                    .frame(height: currentResizeDirection == .topTwoThirds ? geo.size.height / 3 * 2 : nil)
-                    .frame(height: currentResizeDirection == .bottomTwoThirds ? geo.size.height / 3 * 2 : nil)
-                    .frame(width: currentResizeDirection == .rightTwoThirds ? geo.size.width / 3 * 2 : nil)
-                    .frame(width: currentResizeDirection == .leftTwoThirds ? geo.size.width / 3 * 2 : nil)
-
-                    switch currentResizeDirection {
-                    case .center,
-                            .almostMaximize,
-                            .leftHalf,
-                            .topLeftQuarter,
-                            .bottomLeftQuarter,
-                            .horizontalCenterThird,
-                            .leftThird,
-                            .leftTwoThirds,
-                            .noAction,
-                            .undo,
-                            .hide:
-                        Rectangle()
-                            .frame(width: currentResizeDirection == .leftThird ? geo.size.width / 3 * 2 : nil)
-                    default:
-                        EmptyView()
-                    }
-                }
-
-                switch currentResizeDirection {
-                case .center,
-                        .almostMaximize,
-                        .topHalf,
-                        .topRightQuarter,
-                        .topLeftQuarter,
-                        .verticalCenterThird,
-                        .topThird,
-                        .topTwoThirds,
-                        .noAction,
-                        .undo,
-                        .hide:
-                    Rectangle()
-                        .frame(height: currentResizeDirection == .topThird ? geo.size.height / 3 * 2 : nil)
-                default:
-                    EmptyView()
-                }
             }
+            .padding(windowPadding + previewPadding + previewBorderThickness / 2)
+
+            .frame(
+                width: self.currentKeybind.previewWindowWidth(geo.size.width),
+                height: self.currentKeybind.previewWindowHeight(geo.size.height)
+            )
+
+            .offset(
+                x: self.currentKeybind.previewWindowXOffset(geo.size.width),
+                y: self.currentKeybind.previewWindowYOffset(geo.size.height)
+            )
         }
-        .foregroundColor(.clear)
-        .opacity(currentResizeDirection == .noAction ? 0 : 1)
-        .opacity(currentResizeDirection == .hide ? 0 : 1)
-        .animation(animationConfiguration.previewWindowAnimation, value: currentResizeDirection)
+        .opacity(currentKeybind.direction == .noAction ? 0 : 1)
+        .animation(animationConfiguration.previewWindowAnimation, value: currentKeybind)
         .onReceive(.directionChanged) { obj in
             if !self.previewMode, let keybind = obj.userInfo?["keybind"] as? Keybind, !keybind.direction.cyclable {
-                self.currentResizeDirection = keybind.direction
+                self.currentKeybind = keybind
 
-                if self.currentResizeDirection == .undo && self.window != nil {
-                    self.currentResizeDirection = WindowRecords.getLastDirection(for: self.window!).direction
+                if self.currentKeybind.direction == .undo && self.window != nil {
+                    self.currentKeybind = WindowRecords.getLastDirection(for: self.window!)
                 }
             }
         }
         .onAppear {
             if self.previewMode {
-                self.currentResizeDirection = .maximize
+                self.currentKeybind = .init(.maximize)
             }
         }
     }

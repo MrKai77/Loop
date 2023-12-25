@@ -36,6 +36,102 @@ struct Keybind: Codable, Identifiable, Hashable, Defaults.Serializable {
         }
         return nil
     }
+
+    func previewWindowXOffset(_ parentWidth: CGFloat) -> CGFloat {
+        var xLocation = parentWidth * (self.direction.frameMultiplyValues?.minX ?? 0)
+
+        if self.direction == .custom {
+            switch self.anchor {
+            case .topLeft:
+                xLocation = 0
+            case .top:
+                xLocation = (parentWidth / 2) - (previewWindowWidth(parentWidth) / 2)
+            case .topRight:
+                xLocation = parentWidth - previewWindowWidth(parentWidth)
+            case .right:
+                xLocation = parentWidth - previewWindowWidth(parentWidth)
+            case .bottomRight:
+                xLocation = parentWidth - previewWindowWidth(parentWidth)
+            case .bottom:
+                xLocation = (parentWidth / 2) - (previewWindowWidth(parentWidth) / 2)
+            case .bottomLeft:
+                xLocation = 0
+            case .left:
+                xLocation = 0
+            case .center:
+                xLocation = (parentWidth / 2) - (previewWindowWidth(parentWidth) / 2)
+            default:
+                xLocation = 0
+            }
+        }
+
+        return xLocation
+    }
+
+    func previewWindowYOffset(_ parentHeight: CGFloat) -> CGFloat {
+        var yLocation = parentHeight * (self.direction.frameMultiplyValues?.minY ?? 0)
+
+        if self.direction == .custom {
+            switch self.anchor {
+            case .topLeft:
+                yLocation = 0
+            case .top:
+                yLocation = 0
+            case .topRight:
+                yLocation = 0
+            case .right:
+                yLocation = (parentHeight / 2) - (previewWindowHeight(parentHeight) / 2)
+            case .bottomRight:
+                yLocation = parentHeight - previewWindowHeight(parentHeight)
+            case .bottom:
+                yLocation = parentHeight - previewWindowHeight(parentHeight)
+            case .bottomLeft:
+                yLocation = parentHeight - previewWindowHeight(parentHeight)
+            case .left:
+                yLocation = (parentHeight / 2) - (previewWindowHeight(parentHeight) / 2)
+            case .center:
+                yLocation = (parentHeight / 2) - (previewWindowHeight(parentHeight) / 2)
+            default:
+                yLocation = 0
+            }
+        }
+
+        return yLocation
+    }
+
+    func previewWindowWidth(_ parentWidth: CGFloat) -> CGFloat {
+        var width = parentWidth * (self.direction.frameMultiplyValues?.width ?? 0)
+
+        if self.direction == .custom {
+            switch self.measureSystem {
+            case .pixels:
+                width = self.width ?? 0
+            case .percentage:
+                width =  parentWidth * ((self.width ?? 100) / 100)
+            default:
+                width = 0
+            }
+        }
+
+        return width
+    }
+
+    func previewWindowHeight(_ parentHeight: CGFloat) -> CGFloat {
+        var height = parentHeight * (self.direction.frameMultiplyValues?.height ?? 0)
+
+        if self.direction == .custom {
+            switch self.measureSystem {
+            case .pixels:
+                height = self.height ?? 0
+            case .percentage:
+                height =  parentHeight * ((self.height ?? 100) / 100)
+            default:
+                height = 0
+            }
+        }
+
+        return height
+    }
 }
 
 enum CustomKeybindMeasureSystem: Int, Codable, CaseIterable, Identifiable {
