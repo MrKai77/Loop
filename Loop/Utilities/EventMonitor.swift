@@ -88,7 +88,7 @@ class CGEventMonitor: EventMonitor, Identifiable, Equatable {
         self.eventCallback = callback
 
         self.eventTap = CGEvent.tapCreate(
-            tap: .cgSessionEventTap ,
+            tap: .cgSessionEventTap,
             place: .headInsertEventTap,
             options: .defaultTap,
             eventsOfInterest: eventMask.rawValue,

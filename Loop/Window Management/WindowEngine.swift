@@ -15,54 +15,40 @@ struct WindowEngine {
     ///   - window: Window to be resized
     ///   - direction: WindowDirection
     ///   - screen: Screen the window should be resized on
-    static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
+    static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen, supressAnimations: Bool = false) {
         guard direction != .noAction else { return }
+        window.activate()
 
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
         }
 
         if direction == .fullscreen {
-            if window.isFullscreen {
-                window.setFullscreen(false)
-            } else {
-                window.setFullscreen(true)
-            }
-
+            window.toggleFullscreen()
             WindowRecords.recordDirection(window, direction)
             return
         }
+        window.setFullscreen(false)
 
         if direction == .hide {
-            if window.isHidden {
-                window.setHidden(false)
-            } else {
-                window.setHidden(true)
-            }
+            window.toggleHidden()
+            return
         }
 
         if direction == .minimize {
-            if window.isMinimized {
-                window.setMinimized(false)
-            } else {
-                window.setMinimized(true)
-            }
+            window.toggleMinimized()
+            return
         }
 
-        window.setFullscreen(false)
-
-        let oldWindowFrame = window.frame
-        guard let screenFrame = screen.safeScreenFrame, let currentWindowFrame = WindowEngine.generateWindowFrame(
-            oldWindowFrame,
-            screenFrame,
-            direction,
-            window
-        ) else {
+        let screenFrame = screen.safeScreenFrame
+        guard
+            let currentWindowFrame = WindowEngine.generateWindowFrame(window.frame, screenFrame, direction, window)
+        else {
             return
         }
         var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
 
-        var animate =  Defaults[.animateWindowResizes]
+        var animate =  (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {
             if PermissionsManager.ScreenRecording.getStatus() == false {
                 PermissionsManager.ScreenRecording.requestAccess()
@@ -72,12 +58,14 @@ struct WindowEngine {
 
             // Calculate the window's minimum window size and change the target accordingly
             window.getMinSize(screen: screen) { minSize in
-                if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
-                    targetWindowFrame.origin.x = screen.frame.maxX - minSize.width - Defaults[.windowPadding]
+                let nsScreenFrame = screenFrame.flipY!
+
+                if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
+                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.windowPadding]
                 }
 
-                if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
-                    targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
+                if (targetWindowFrame.minY + minSize.height) > nsScreenFrame.maxY {
+                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.windowPadding]
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
@@ -92,22 +80,48 @@ struct WindowEngine {
         }
     }
 
+    static func getTargetWindow() -> Window? {
+        var result: Window?
+
+        if Defaults[.resizeWindowUnderCursor],
+           let mouseLocation = CGEvent.mouseLocation,
+           let window = WindowEngine.windowAtPosition(mouseLocation) {
+            result = window
+        }
+
+        if result == nil {
+           result = WindowEngine.frontmostWindow
+        }
+
+        return result
+    }
+
     /// Get the frontmost Window
     /// - Returns: Window?
     static var frontmostWindow: Window? {
-        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
-              let window = Window(pid: app.processIdentifier) else { return nil }
-
-        #if DEBUG
-        print("===== NEW WINDOW =====")
-        print("Frontmost window: \(window.cgWindowID)")
-        print("Process ID: \(window.processID)")
-        print("Last Direction: \(WindowRecords.getLastDirection(for: window))")
-        print("kAXWindowRole: \(window.role?.rawValue ?? "N/A")")
-        print("kAXStandardWindowSubrole: \(window.subrole?.rawValue ?? "N/A")")
-        #endif
-
+        guard
+            let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
+            let window = Window(pid: app.processIdentifier)
+        else {
+            return nil
+        }
         return window
+    }
+
+    static func windowAtPosition(_ position: CGPoint) -> Window? {
+        if let element = AXUIElement.systemWide.getElementAtPosition(position),
+           let windowElement = element.getValue(.window),
+           // swiftlint:disable:next force_cast
+           let window = Window(element: windowElement as! AXUIElement) {
+            return window
+        }
+
+        let windowList = WindowEngine.windowList
+        if let window = (windowList.first { $0.frame.contains(position) }) {
+            return window
+        }
+
+        return nil
     }
 
     static var windowList: [Window] {
@@ -129,20 +143,6 @@ struct WindowEngine {
         return windowList
     }
 
-    static func windowAtPosition(_ position: CGPoint) -> Window? {
-        if let element = AXUIElement.systemWide.getElementAtPosition(position),
-           let window = Window(element: element) {
-            return window
-        }
-
-        let windowList = WindowEngine.windowList
-        if let window = (windowList.first { $0.frame.contains(position) }) {
-            return window
-        }
-
-        return nil
-    }
-
     /// Generate a window frame using the provided WindowDirection
     /// - Parameters:
     ///   - windowFrame: The window's current frame. Used when centering a window
@@ -155,8 +155,8 @@ struct WindowEngine {
         _ direction: WindowDirection,
         _ window: Window
     ) -> CGRect? {
-        let screenWidth = screenFrame.size.width
-        let screenHeight = screenFrame.size.height
+        let screenWidth = screenFrame.width
+        let screenHeight = screenFrame.height
 
         var newWindowFrame: CGRect = CGRect(
             x: screenFrame.origin.x,

@@ -8,7 +8,7 @@
 import SwiftUI
 import Defaults
 
-class LoopManager {
+class LoopManager: ObservableObject {
 
     private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
@@ -16,81 +16,152 @@ class LoopManager {
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
-    private var currentResizingDirection: WindowDirection = .noAction
     private var currentlyPressedModifiers: Set<CGKeyCode> = []
-    private var isLoopShown: Bool = false
-    private var frontmostWindow: Window?
+    private var isLoopActive: Bool = false
+    private var targetWindow: Window?
     private var screenWithMouse: NSScreen?
 
     private var flagsChangedEventMonitor: EventMonitor?
+    private var mouseMovedEventMonitor: EventMonitor?
     private var keyDownEventMonitor: EventMonitor?
     private var middleClickMonitor: EventMonitor?
-    private var scrollEventMonitor: EventMonitor?
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
-    func startObservingKeys() {
-        self.flagsChangedEventMonitor = NSEventMonitor(scope: .global, eventMask: .flagsChanged) { event in
-            self.handleLoopKeypress(event)
-        }
-        self.flagsChangedEventMonitor!.start()
+    @Published var currentResizeDirection: WindowDirection = .noAction
+    private var initialMousePosition: CGPoint = CGPoint()
+    private var angleToMouse: Angle = Angle(degrees: 0)
+    private var distanceToMouse: CGFloat = 0
 
-        self.keyDownEventMonitor = NSEventMonitor(scope: .global, eventMask: .keyDown) { _ in
-            if Defaults[.doubleClickToTrigger] &&
-                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                self.lastTriggerKeyClick = Date.distantPast
-            }
-        }
-        self.keyDownEventMonitor!.start()
+    func startObservingKeys() {
+        self.flagsChangedEventMonitor = NSEventMonitor(
+            scope: .global,
+            eventMask: .flagsChanged,
+            handler: handleLoopKeypress(_:)
+        )
+
+        self.mouseMovedEventMonitor = NSEventMonitor(
+            scope: .global,
+            eventMask: [.mouseMoved, .otherMouseDragged],
+            handler: mouseMoved(_:)
+        )
 
         self.middleClickMonitor = CGEventMonitor(
             eventMask: [.otherMouseDragged, .otherMouseUp],
             callback: handleMiddleClick(cgEvent:)
         )
-        self.middleClickMonitor?.start()
 
-        self.scrollEventMonitor = CGEventMonitor(eventMask: [.scrollWheel]) { cgEvent in
-            if cgEvent.type == .scrollWheel, self.isLoopShown, let event = NSEvent(cgEvent: cgEvent) {
-
-                if Defaults[.preferMinimizeWithScrollDown] {
-                    if event.deltaY > 1 && self.currentResizingDirection != .minimize {
-                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.minimize])
-                    }
-
-                    if event.deltaY < -1 && self.currentResizingDirection == .minimize {
-                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.noAction])
-                    }
-                } else {
-                    if event.deltaY > 1 && self.currentResizingDirection != .hide {
-                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.hide])
-                    }
-
-                    if event.deltaY < -1 && self.currentResizingDirection == .hide {
-                        Notification.Name.directionChanged.post(userInfo: ["direction": WindowDirection.noAction])
-                    }
-                }
-
-                return nil
+        self.keyDownEventMonitor = NSEventMonitor(
+            scope: .global,
+            eventMask: .keyDown
+        ) { _ in
+            if Defaults[.doubleClickToTrigger] &&
+                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                self.lastTriggerKeyClick = Date.distantPast
             }
-            return Unmanaged.passRetained(cgEvent)
-        }
-
-        Notification.Name.directionChanged.onRecieve { notification in
-            self.currentWindowDirectionChanged(notification)
         }
 
         Notification.Name.forceCloseLoop.onRecieve { _ in
             self.closeLoop(forceClose: true)
         }
+
+        Notification.Name.directionChanged.onRecieve { notification in
+            if let direction = notification.userInfo?["direction"] as? WindowDirection {
+                self.changeDirection(direction)
+            }
+        }
+
+        self.flagsChangedEventMonitor!.start()
+        self.middleClickMonitor!.start()
+        self.keyDownEventMonitor!.start()
+    }
+
+    private func mouseMoved(_ event: NSEvent) {
+        guard self.isLoopActive else { return }
+
+        let noActionDistance: CGFloat = 10
+
+        let currentMouseLocation = NSEvent.mouseLocation
+        let mouseAngle = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
+        let mouseDistance = initialMousePosition.distanceSquared(to: currentMouseLocation)
+
+        // Return if the mouse didn't move
+        if (mouseAngle == angleToMouse) && (mouseDistance == distanceToMouse) {
+            return
+        }
+
+        // Get angle & distance to mouse
+        self.angleToMouse = mouseAngle
+        self.distanceToMouse = mouseDistance
+
+        var resizeDirection: WindowDirection = .noAction
+
+        // If mouse over 50 points away, select half or quarter positions
+        if distanceToMouse > pow(50 - Defaults[.radialMenuThickness], 2) {
+            switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
+            case 0, 8: resizeDirection = .cycleRight
+            case 1:    resizeDirection = .bottomRightQuarter
+            case 2:    resizeDirection = .cycleBottom
+            case 3:    resizeDirection = .bottomLeftQuarter
+            case 4:    resizeDirection = .cycleLeft
+            case 5:    resizeDirection = .topLeftQuarter
+            case 6:    resizeDirection = .cycleTop
+            case 7:    resizeDirection = .topRightQuarter
+            default:   resizeDirection = .noAction
+            }
+        } else if distanceToMouse < pow(noActionDistance, 2) {
+            resizeDirection = .noAction
+        } else {
+            resizeDirection = .maximize
+        }
+
+        if resizeDirection != self.currentResizeDirection.base {
+            changeDirection(resizeDirection)
+        }
+    }
+
+    private func changeDirection(_ direction: WindowDirection) {
+        guard self.currentResizeDirection != direction && self.isLoopActive else { return }
+
+        var newDirection = direction
+        if newDirection.cyclable {
+            newDirection = direction.nextCyclingDirection(from: self.currentResizeDirection)
+        }
+
+        if newDirection != currentResizeDirection {
+            self.currentResizeDirection = newDirection
+
+            if Defaults[.hideUntilDirectionIsChosen] {
+                self.openWindows()
+            }
+
+            DispatchQueue.main.async {
+                Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizeDirection])
+
+                if !Defaults[.previewVisibility] {
+                    WindowEngine.resize(
+                        self.targetWindow!,
+                        to: self.currentResizeDirection,
+                        self.screenWithMouse!,
+                        supressAnimations: true
+                    )
+                }
+            }
+
+            NSHapticFeedbackManager.defaultPerformer.perform(
+                NSHapticFeedbackManager.FeedbackPattern.alignment,
+                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+            )
+        }
     }
 
     func handleMiddleClick(cgEvent: CGEvent) -> Unmanaged<CGEvent>? {
         if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
-            if event.type == .otherMouseDragged && !self.isLoopShown {
+            if event.type == .otherMouseDragged && !self.isLoopActive {
                 self.openLoop()
             }
 
-            if event.type == .otherMouseUp && self.isLoopShown {
+            if event.type == .otherMouseUp && self.isLoopActive {
                 self.closeLoop()
             }
         }
@@ -112,30 +183,9 @@ class LoopManager {
         self.triggerDelayTimer!.resume()
     }
 
-    private func currentWindowDirectionChanged(_ notification: Notification) {
-        if let newDirection = notification.userInfo?["direction"] as? WindowDirection {
-            if newDirection.cyclable {
-                self.currentResizingDirection = newDirection.nextCyclingDirection(from: self.currentResizingDirection)
-                Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizingDirection])
-                return
-            }
-
-            self.currentResizingDirection = newDirection
-
-            // Haptic feedback on the trackpad
-            if self.isLoopShown {
-                NSHapticFeedbackManager.defaultPerformer.perform(
-                    NSHapticFeedbackManager.FeedbackPattern.alignment,
-                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                )
-            }
-        }
-    }
-
     private func handleLoopKeypress(_ event: NSEvent) {
         if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
             self.closeLoop(forceClose: true)
-            return
         }
 
         if self.currentlyPressedModifiers.contains(event.keyCode) {
@@ -174,60 +224,81 @@ class LoopManager {
             }
             self.lastTriggerKeyClick = Date.now
         } else {
-            if self.isLoopShown {
+            if self.isLoopActive {
                 self.closeLoop()
             }
         }
     }
 
     private func openLoop() {
-        guard self.isLoopShown == false else { return }
+        guard self.isLoopActive == false else { return }
 
-        self.currentResizingDirection = .noAction
-        self.frontmostWindow = nil
+        self.currentResizeDirection = .noAction
+        self.targetWindow = nil
 
-        // Loop will only open if accessibility access has been granted
-        if PermissionsManager.Accessibility.getStatus() {
-            self.frontmostWindow = WindowEngine.frontmostWindow
-            self.screenWithMouse = NSScreen.screenWithMouse
+        // Ensure accessibility access
+        guard PermissionsManager.Accessibility.getStatus() else { return }
 
-            if Defaults[.previewVisibility] == true && self.frontmostWindow != nil {
-                self.previewController.open(screen: self.screenWithMouse!, window: frontmostWindow)
-            }
-            self.radialMenuController.open(frontmostWindow: frontmostWindow)
-            self.keybindMonitor.start()
-            self.scrollEventMonitor?.start()
+        self.targetWindow = WindowEngine.getTargetWindow()
+        self.initialMousePosition = NSEvent.mouseLocation
+        self.screenWithMouse = NSScreen.screenWithMouse
+        self.mouseMovedEventMonitor!.start()
 
-            isLoopShown = true
+        if !Defaults[.hideUntilDirectionIsChosen] {
+            self.openWindows()
         }
+
+        self.keybindMonitor.start()
+
+        isLoopActive = true
     }
 
     private func closeLoop(forceClose: Bool = false) {
         self.cancelTriggerDelayTimer()
-        self.radialMenuController.close()
-        self.previewController.close()
+        self.closeWindows()
 
         self.keybindMonitor.resetPressedKeys()
         self.keybindMonitor.stop()
-        self.scrollEventMonitor?.stop()
+        self.mouseMovedEventMonitor!.stop()
 
-        if self.frontmostWindow != nil &&
+        if self.targetWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
-            self.currentResizingDirection != .noAction &&
-            self.isLoopShown {
+            self.currentResizeDirection != .noAction &&
+            self.isLoopActive {
 
-            isLoopShown = false
+            if Defaults[.previewVisibility] {
+                WindowEngine.resize(
+                    self.targetWindow!,
+                    to: self.currentResizeDirection,
+                    self.screenWithMouse!
+                )
+            }
 
-            WindowEngine.resize(self.frontmostWindow!, to: self.currentResizingDirection, self.screenWithMouse!)
+            // This rotates the menubar icon
             Notification.Name.didLoop.post()
+
+            // Icon stuff
             Defaults[.timesLooped] += 1
             IconManager.checkIfUnlockedNewIcon()
         } else {
-            if self.frontmostWindow == nil && isLoopShown {
+            if self.targetWindow == nil && isLoopActive {
                 NSSound.beep()
             }
-            isLoopShown = false
         }
+
+        isLoopActive = false
+    }
+
+    private func openWindows() {
+        if Defaults[.previewVisibility] == true && self.targetWindow != nil {
+            self.previewController.open(screen: self.screenWithMouse!, window: targetWindow)
+        }
+        self.radialMenuController.open(position: self.initialMousePosition, frontmostWindow: targetWindow)
+    }
+
+    private func closeWindows() {
+        self.radialMenuController.close()
+        self.previewController.close()
     }
 }

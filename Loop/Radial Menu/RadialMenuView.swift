@@ -11,19 +11,15 @@ import Defaults
 
 struct RadialMenuView: View {
 
-    let noActionCursorDistance: CGFloat = 8
     let radialMenuSize: CGFloat = 100
 
     // This will determine whether Loop needs to show a warning (if it's nil)
     let frontmostWindow: Window?
 
-    @State var previewMode = false
-    @State var initialMousePosition: CGPoint = CGPoint()
-    @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
-    @State private var currentResizeDirection: WindowDirection = .noAction
+    @State var currentResizeDirection: WindowDirection = .noAction
 
-    @State var angleToMouse: Angle = Angle(degrees: 0)
-    @State var distanceToMouse: CGFloat = 0
+    @State var previewMode = false
+    @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
 
     // Variables that store the radial menu's shape
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
@@ -101,54 +97,14 @@ struct RadialMenuView: View {
             }
         }
         .onReceive(timer) { _ in
-            if !previewMode {
-                self.refreshCurrentAngle()
-            } else {
+            if previewMode {
                 currentResizeDirection = currentResizeDirection.nextPreviewDirection
             }
         }
         .onReceive(.directionChanged) { obj in
-            if let direction = obj.userInfo?["direction"] as? WindowDirection {
-                self.currentResizeDirection = direction
+            if !self.previewMode, let direction = obj.userInfo?["direction"] as? WindowDirection {
+                self.currentResizeDirection = direction.base
             }
-        }
-    }
-
-    private func refreshCurrentAngle() {
-        let currentMouseLocation = NSEvent.mouseLocation
-        let currentAngleToMouse = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
-        let currentDistanceToMouse = initialMousePosition.distanceSquared(to: currentMouseLocation)
-
-        if (currentAngleToMouse == angleToMouse) && (currentDistanceToMouse == distanceToMouse) {
-            return
-        }
-
-        // Get angle & distance to mouse
-        self.angleToMouse = currentAngleToMouse
-        self.distanceToMouse = currentDistanceToMouse
-
-        // If mouse over 50 points away, select half or quarter positions
-        let previousResizeDirection = currentResizeDirection
-        if distanceToMouse > pow(50 - radialMenuThickness, 2) {
-            switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-            case 0, 8: currentResizeDirection = .cycleRight
-            case 1:    currentResizeDirection = .bottomRightQuarter
-            case 2:    currentResizeDirection = .cycleBottom
-            case 3:    currentResizeDirection = .bottomLeftQuarter
-            case 4:    currentResizeDirection = .cycleLeft
-            case 5:    currentResizeDirection = .topLeftQuarter
-            case 6:    currentResizeDirection = .cycleTop
-            case 7:    currentResizeDirection = .topRightQuarter
-            default:   currentResizeDirection = .noAction
-            }
-        } else if distanceToMouse < pow(noActionCursorDistance, 2) {
-            currentResizeDirection = .noAction
-        } else {
-            currentResizeDirection = .maximize
-        }
-
-        if currentResizeDirection != previousResizeDirection {
-            Notification.Name.directionChanged.post(userInfo: ["direction": currentResizeDirection])
         }
     }
 }

@@ -34,12 +34,12 @@ struct AboutView: View {
             license: URL(string: "https://github.com/orchetect/MenuBarExtraAccess/blob/main/LICENSE")!
         ),
         PackageDescription(
-            name: "Settings",
+            name: "SettingsAccess",
             url: URL(
-                string: "https://github.com/sindresorhus/Settings"
+                string: "https://github.com/orchetect/SettingsAccess"
             )!,
             license: URL(
-                string: "https://github.com/sindresorhus/Settings/blob/main/license"
+                string: "https://github.com/orchetect/SettingsAccess/blob/main/LICENSE"
             )!
         ),
         PackageDescription(
@@ -57,7 +57,7 @@ struct AboutView: View {
         VStack {
             VStack(spacing: 5) {
 
-                Image(nsImage: NSImage(named: IconManager.currentAppIcon.name)!)
+                Image(nsImage: NSImage(named: IconManager.currentAppIcon.iconName)!)
                     .resizable()
                     .frame(width: 120, height: 120)
 
@@ -65,10 +65,20 @@ struct AboutView: View {
                     .font(.title)
                     .fontWeight(.bold)
 
-                Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                    .font(.caption2)
-                    .textSelection(.enabled)
-                    .foregroundColor(.secondary)
+                Button(action: {
+                    let pasteboard = NSPasteboard.general
+                    pasteboard.clearContents()
+                    pasteboard.setString(
+                        "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+                        forType: NSPasteboard.PasteboardType.string
+                    )
+                }, label: {
+                    // swiftlint:disable:next line_length
+                    Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                })
+                .buttonStyle(.plain)
             }
 
             Spacer()

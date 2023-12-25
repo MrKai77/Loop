@@ -14,11 +14,13 @@ class Window {
     var processID: pid_t
 
     init?(element: AXUIElement, pid: pid_t? = nil) {
+        var pid = pid
         self.axWindow = element
 
         if pid == nil {
             self.processID = 0
             AXUIElementGetPid(self.axWindow, &processID)
+            pid = self.processID
         } else {
             self.processID = pid!
         }
@@ -61,6 +63,12 @@ class Window {
         return self.axWindow.getValue(.title) as? String
     }
 
+    func activate() {
+        if let runningApplication = self.nsRunningApplication {
+            runningApplication.activate()
+        }
+    }
+
     var isFullscreen: Bool {
         let result = self.axWindow.getValue(.fullScreen) as? NSNumber
         return result?.boolValue ?? false
@@ -68,6 +76,13 @@ class Window {
     @discardableResult
     func setFullscreen(_ state: Bool) -> Bool {
         return self.axWindow.setValue(.fullScreen, value: state)
+    }
+    @discardableResult
+    func toggleFullscreen() -> Bool {
+        if !self.isFullscreen {
+            return self.setFullscreen(true)
+        }
+        return self.setHidden(false)
     }
 
     var isHidden: Bool {
@@ -83,6 +98,13 @@ class Window {
         }
         return result
     }
+    @discardableResult
+    func toggleHidden() -> Bool {
+        if !self.isHidden {
+            return self.setHidden(true)
+        }
+        return self.setHidden(false)
+    }
 
     var isMinimized: Bool {
         let result = self.axWindow.getValue(.minimized) as? NSNumber
@@ -91,6 +113,13 @@ class Window {
     @discardableResult
     func setMinimized(_ state: Bool) -> Bool {
         return self.axWindow.setValue(.minimized, value: state)
+    }
+    @discardableResult
+    func toggleMinimized() -> Bool {
+        if !self.isMinimized {
+            return self.setMinimized(true)
+        }
+        return self.setMinimized(false)
     }
 
     var position: CGPoint {

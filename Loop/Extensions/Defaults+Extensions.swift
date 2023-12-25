@@ -16,6 +16,8 @@ extension Defaults.Keys {
     static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let windowPadding = Key<CGFloat>("windowPadding", default: 0)
+    static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: true)
+    static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
 
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 
@@ -26,6 +28,7 @@ extension Defaults.Keys {
 
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
+    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
@@ -36,8 +39,6 @@ extension Defaults.Keys {
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
-
-    static let preferMinimizeWithScrollDown = Key<Bool>("preferMinimizeWithScrollDown", default: false)
 
     static let keybinds = Key<[Keybind]>("keybinds", default: [
         Keybind(.maximize, keycode: [.kVK_Space]),
@@ -50,6 +51,9 @@ extension Defaults.Keys {
         Keybind(.topLeftQuarter, keycode: [.kVK_UpArrow, .kVK_LeftArrow]),
         Keybind(.topRightQuarter, keycode: [.kVK_UpArrow, .kVK_RightArrow]),
         Keybind(.bottomRightQuarter, keycode: [.kVK_DownArrow, .kVK_RightArrow]),
-        Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow]),
+        Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
+
+    static let respectStageManager = Key<Bool>("respectStageManager", default: true)
+    static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 }

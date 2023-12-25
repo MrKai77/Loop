@@ -12,17 +12,26 @@ struct RadialMenuSettingsView: View {
 
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
+    @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
+
+    @State var currentResizeDirection: WindowDirection = .cycleTop
 
     var body: some View {
         Form {
             Section("Appearance") {
-                RadialMenuView(
-                    frontmostWindow: nil,
-                    previewMode: true,
-                    timer: Timer.publish(every: 1,
-                                         on: .main,
-                                         in: .common).autoconnect()
-                )
+                ZStack {
+                    BlueprintView()
+
+                    RadialMenuView(
+                        frontmostWindow: nil,
+                        previewMode: true,
+                        timer: Timer.publish(
+                            every: 1,
+                            on: .main,
+                            in: .common
+                        ).autoconnect()
+                    )
+                }
             }
 
             Section {
@@ -42,6 +51,10 @@ struct RadialMenuSettingsView: View {
                 ) {
                     Text("Thickness")
                 }
+            }
+
+            Section {
+                Toggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
             }
         }
         .formStyle(.grouped)

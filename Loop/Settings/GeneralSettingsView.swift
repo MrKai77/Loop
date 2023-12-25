@@ -24,9 +24,8 @@ struct GeneralSettingsView: View {
     @Default(.windowPadding) var windowPadding
     @Default(.windowSnapping) var windowSnapping
     @Default(.animationConfiguration) var animationConfiguration
-
-    @State var isAccessibilityAccessGranted = false
-    @State var isScreenRecordingAccessGranted = false
+    @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
+    @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
 
     var body: some View {
         Form {
@@ -46,13 +45,6 @@ struct GeneralSettingsView: View {
                     HStack {
                         Text("Window Snapping")
                         BetaIndicator("BETA")
-                    }
-                }
-                .onChange(of: windowSnapping) { _ in
-                    if windowSnapping {
-                        SnappingManager.shared.addObservers()
-                    } else {
-                        SnappingManager.shared.removeObservers()
                     }
                 }
 
@@ -75,6 +67,23 @@ struct GeneralSettingsView: View {
                        maximumValueLabel: Text("20px")) {
                     Text("Window Padding")
                 }
+
+                Toggle(
+                    "Restore window frame on drag",
+                    isOn: $restoreWindowFrameOnDrag
+                )
+
+                Toggle(isOn: $resizeWindowUnderCursor) {
+                    VStack(alignment: .leading) {
+                        Text("Resize window under cursor")
+                        Text(resizeWindowUnderCursor ?
+                             "Resizes window under cursor, and uses the frontmost window as backup." :
+                             "Resizes frontmost window."
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    }
+                }
             }
 
             Section {
@@ -90,10 +99,10 @@ struct GeneralSettingsView: View {
                     Picker("Selected icon:", selection: $currentIcon) {
                         ForEach(IconManager.returnUnlockedIcons(), id: \.self) { icon in
                             HStack {
-                                Image(nsImage: NSImage(named: icon.name)!)
-                                Text(IconManager.nameWithoutPrefix(name: icon.name))
+                                Image(nsImage: NSImage(named: icon.iconName)!)
+                                Text(icon.name ??  IconManager.nameWithoutPrefix(name: icon.iconName))
                             }
-                            .tag(icon.name)
+                            .tag(icon.iconName)
                         }
                     }
                     Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
@@ -122,60 +131,6 @@ struct GeneralSettingsView: View {
                         )
                 }
             }
-
-            Section(content: {
-                HStack {
-                    Text("Accessibility Access")
-                    Spacer()
-                    Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
-                    Circle()
-                        .frame(width: 8, height: 8)
-                        .padding(.trailing, 5)
-                        .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
-                        .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
-                }
-
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("Screen Recording Access")
-                        Spacer()
-                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .padding(.trailing, 5)
-                            .foregroundColor(isScreenRecordingAccessGranted ? .green : .red)
-                            .shadow(color: isScreenRecordingAccessGranted ? .green : .red, radius: 8)
-                    }
-                    Text("This is only needed to animate windows being resized.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }, header: {
-                HStack {
-                    Text("Permissions")
-
-                    Spacer()
-
-                    Button("Request Access", action: {
-                        PermissionsManager.requestAccess()
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-                    })
-                    .buttonStyle(.link)
-                    .foregroundStyle(Color.accentColor)
-                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
-                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
-                    .help("Refresh the current accessibility permissions")
-                    .onAppear {
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-
-                        if !isScreenRecordingAccessGranted {
-                            self.animateWindowResizes = false
-                        }
-                    }
-                }
-            })
         }
         .formStyle(.grouped)
         .scrollDisabled(true)

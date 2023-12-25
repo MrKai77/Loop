@@ -10,9 +10,15 @@ import Sparkle
 import Defaults
 
 struct MoreSettingsView: View {
-
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject var updater: SoftwareUpdater
-    @Default(.preferMinimizeWithScrollDown) var preferMinimizeWithScrollDown
+
+    @Default(.respectStageManager) var respectStageManager
+    @Default(.stageStripSize) var stageStripSize
+
+    @Default(.animateWindowResizes) var animateWindowResizes
+    @State var isAccessibilityAccessGranted = false
+    @State var isScreenRecordingAccessGranted = false
 
     var body: some View {
         Form {
@@ -23,9 +29,20 @@ struct MoreSettingsView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 0) {
                         Text("Updates")
-                        Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Button(action: {
+                            let pasteboard = NSPasteboard.general
+                            pasteboard.clearContents()
+                            pasteboard.setString(
+                                "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+                                forType: NSPasteboard.PasteboardType.string
+                            )
+                        }, label: {
+                            // swiftlint:disable:next line_length
+                            Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        })
+                        .buttonStyle(.plain)
                     }
 
                     Spacer()
@@ -38,8 +55,89 @@ struct MoreSettingsView: View {
                 }
             })
 
-            Section("Extra Settings") {
-                Toggle("Prefer scroll down to minimize window", isOn: self.$preferMinimizeWithScrollDown)
+            Section("Stage Manager") {
+                Toggle("Respect Stage Manager", isOn: $respectStageManager)
+                Slider(
+                    value: $stageStripSize,
+                    in: 50...200,
+                    step: 15,
+                    minimumValueLabel: Text("50px"),
+                    maximumValueLabel: Text("200px")
+                ) {
+                    Text("Stage Strip Size")
+                }
+                .disabled(!respectStageManager)
+            }
+
+            Section(content: {
+                HStack {
+                    Text("Accessibility Access")
+                    Spacer()
+                    Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
+                    Circle()
+                        .frame(width: 8, height: 8)
+                        .padding(.trailing, 5)
+                        .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
+                        .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
+                }
+
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Screen Recording Access")
+                        Spacer()
+                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
+                        Circle()
+                            .frame(width: 8, height: 8)
+                            .padding(.trailing, 5)
+                            .foregroundColor(isScreenRecordingAccessGranted ? .green : .red)
+                            .shadow(color: isScreenRecordingAccessGranted ? .green : .red, radius: 8)
+                    }
+                    Text("This is only needed to animate windows being resized.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }, header: {
+                HStack {
+                    Text("Permissions")
+
+                    Spacer()
+
+                    Button("Request Access…", action: {
+                        PermissionsManager.requestAccess()
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+                    })
+                    .buttonStyle(.link)
+                    .foregroundStyle(Color.accentColor)
+                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
+                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
+                    .onAppear {
+                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+
+                        if !isScreenRecordingAccessGranted {
+                            self.animateWindowResizes = false
+                        }
+                    }
+                }
+            })
+
+            Section("Feedback") {
+                HStack {
+                    Text(
+                        "Sending feedback will bring you to our \"New Issue\" page, " +
+                        "where you can select a template to report a bug, request a feature & more!"
+                    )
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                    Button(action: {
+                        openURL(URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!)
+                    }, label: {
+                        Text("Send Feedback")
+                    })
+                    .controlSize(.large)
+                }
             }
         }
         .formStyle(.grouped)
