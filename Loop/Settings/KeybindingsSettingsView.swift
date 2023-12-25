@@ -40,18 +40,16 @@ struct KeybindingsSettingsView: View {
                         }
                     }
 
-                    HStack {
-                        Stepper(
-                            "Trigger Delay (seconds)",
-                            value: Binding<Double>(
-                                get: { Double(self.triggerDelay) },
-                                set: { self.triggerDelay = Float($0) }
-                            ),
-                            in: 0...1,
-                            step: 0.1,
-                            format: .number
-                        )
-                    }
+                    Stepper(
+                        "Trigger Delay (seconds)",
+                        value: Binding<Double>(
+                            get: { Double(self.triggerDelay) },
+                            set: { self.triggerDelay = Float($0) }
+                        ),
+                        in: 0...1,
+                        step: 0.1,
+                        format: .number
+                    )
 
                     Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
                     Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
@@ -104,9 +102,10 @@ struct KeybindingsSettingsView: View {
                     .foregroundStyle(.background)
                     .overlay {
                         HStack {
-                            Button("+") {
-                                self.keybinds.append(Keybind(.noAction, keycode: []))
+                            Menu("+") {
+                                newDirectionMenu()
                             }
+                            .fixedSize()
 
                             Spacer()
 
@@ -125,5 +124,62 @@ struct KeybindingsSettingsView: View {
         }
         .frame(minHeight: 500, maxHeight: 680)
         .environmentObject(keycorderModel)
+    }
+
+    @ViewBuilder
+    func newDirectionMenu() -> some View {
+        Menu("General") {
+            ForEach(WindowDirection.general) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
+        Menu("Cyclable") {
+            ForEach(WindowDirection.cyclable) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
+        Menu("Halves") {
+            ForEach(WindowDirection.halves) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
+        Menu("Quarters") {
+            ForEach(WindowDirection.quarters) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
+        Menu("Horizontal Thirds") {
+            ForEach(WindowDirection.horizontalThirds) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
+        Menu("Vertical Thirds") {
+            ForEach(WindowDirection.verticalThirds) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
+        Menu("More") {
+            ForEach(WindowDirection.more) { direction in
+                newDirectionButton(direction)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func newDirectionButton(_ direction: WindowDirection) -> some View {
+        Button(action: {
+            self.keybinds.append(Keybind(direction, keycode: []))
+        }, label: {
+            HStack {
+                direction.icon
+                Text(direction.name)
+            }
+        })
     }
 }

@@ -11,7 +11,7 @@ import Defaults
 // Enum that stores all possible resizing options
 // swiftlint:disable:next type_body_length
 enum WindowDirection: String, CaseIterable, Identifiable, Codable {
-    var id: Self { return self }
+    var id: Self { self }
 
     // General
     case noAction = "NoAction"
@@ -56,6 +56,8 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case bottomThird = "BottomThird"
     case bottomTwoThirds = "BottomTwoThirds"
 
+    case custom = "Custom"
+
     // These are used in the menubar resize submenu & keybind configuration
     static var general: [WindowDirection] {
         [.fullscreen, .maximize, .almostMaximize, .center, .minimize, .hide]
@@ -76,7 +78,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
     }
     static var more: [WindowDirection] {
-        [.initialFrame, .undo]
+        [.initialFrame, .undo, .custom]
     }
 
     var cyclable: Bool {
@@ -179,6 +181,8 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird:      Image("custom.rectangle.verticalcenterthird.inset.filled")
         case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
         case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
+
+        case .custom:                   Image(systemName: "rectangle.dashed")
         default:                        nil
         }
     }
