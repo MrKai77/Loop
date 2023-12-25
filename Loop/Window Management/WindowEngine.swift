@@ -58,7 +58,7 @@ struct WindowEngine {
         }
         var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, keybind.direction)
 
-        var animate =  (!supressAnimations && Defaults[.animateWindowResizes])
+        var animate = (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {
             if PermissionsManager.ScreenRecording.getStatus() == false {
                 PermissionsManager.ScreenRecording.requestAccess()
@@ -166,9 +166,7 @@ struct WindowEngine {
         _ window: Window
     ) -> CGRect? {
         let direction = keybind.direction
-        let screenWidth = screenFrame.width
-        let screenHeight = screenFrame.height
-
+        
         var newWindowFrame: CGRect = CGRect(
             x: screenFrame.origin.x,
             y: screenFrame.origin.y,
@@ -179,48 +177,11 @@ struct WindowEngine {
         switch direction {
         case .custom:
             guard
-                let measureSystem = keybind.measureSystem,
-                let anchor = keybind.anchor,
-                let width = keybind.width,
-                let height = keybind.height
+                let newFrame = WindowEngine.generateCustomWindowFrame(keybind, screenFrame)
             else {
                 return nil
             }
-
-            switch measureSystem {
-            case .percentage:
-                newWindowFrame.size.width += screenWidth * (width / 100.0)
-                newWindowFrame.size.height += screenHeight * (height / 100.0)
-            case .pixels:
-                newWindowFrame.size.width += width
-                newWindowFrame.size.height += height
-            }
-
-            switch anchor {
-            case .topLeft:
-                break
-            case .top:
-                newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-            case .topRight:
-                newWindowFrame.origin.x = screenFrame.width - newWindowFrame.width
-            case .right:
-                newWindowFrame.origin.x = screenFrame.width - newWindowFrame.width
-                newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-            case .bottomRight:
-                newWindowFrame.origin.x = screenFrame.width - newWindowFrame.width
-                newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-            case .bottom:
-                newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-                newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-            case .bottomLeft:
-                newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-            case .left:
-                newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-            case .center:
-                newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-                newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-            }
-
+            newWindowFrame = newFrame
         case .center:
             newWindowFrame = CGRect(
                 x: screenFrame.midX - windowFrame.width / 2,
@@ -248,10 +209,64 @@ struct WindowEngine {
             }
         default:
             guard let frameMultiplyValues = direction.frameMultiplyValues else { return nil}
-            newWindowFrame.origin.x += screenWidth * frameMultiplyValues.minX
-            newWindowFrame.origin.y += screenHeight * frameMultiplyValues.minY
-            newWindowFrame.size.width += screenWidth * frameMultiplyValues.width
-            newWindowFrame.size.height += screenHeight * frameMultiplyValues.height
+            newWindowFrame.origin.x += screenFrame.width * frameMultiplyValues.minX
+            newWindowFrame.origin.y += screenFrame.height * frameMultiplyValues.minY
+            newWindowFrame.size.width += screenFrame.width * frameMultiplyValues.width
+            newWindowFrame.size.height += screenFrame.height * frameMultiplyValues.height
+        }
+
+        return newWindowFrame
+    }
+
+    private static func generateCustomWindowFrame(_ keybind: Keybind, _ screenFrame: CGRect) -> CGRect? {
+        guard
+            keybind.direction == .custom,
+            let measureSystem = keybind.measureSystem,
+            let anchor = keybind.anchor,
+            let width = keybind.width,
+            let height = keybind.height
+        else {
+            return nil
+        }
+        var newWindowFrame = CGRect(
+            x: screenFrame.origin.x,
+            y: screenFrame.origin.y,
+            width: 0,
+            height: 0
+        )
+
+        switch measureSystem {
+        case .percentage:
+            newWindowFrame.size.width += screenFrame.width * (width / 100.0)
+            newWindowFrame.size.height += screenFrame.height * (height / 100.0)
+        case .pixels:
+            newWindowFrame.size.width += width
+            newWindowFrame.size.height += height
+        }
+
+        switch anchor {
+        case .topLeft:
+            break
+        case .top:
+            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+        case .topRight:
+            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
+        case .right:
+            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
+            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+        case .bottomRight:
+            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
+            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+        case .bottom:
+            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+        case .bottomLeft:
+            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+        case .left:
+            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+        case .center:
+            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
         }
 
         return newWindowFrame

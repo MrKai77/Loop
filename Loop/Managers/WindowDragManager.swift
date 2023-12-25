@@ -97,7 +97,7 @@ class WindowDragManager {
                  NotificationCenter.default.post(
                      name: Notification.Name.directionChanged,
                      object: nil,
-                     userInfo: ["direction": self.direction]
+                     userInfo: ["keybind": Keybind(self.direction)]
                  )
              }
          } else {
@@ -114,8 +114,7 @@ class WindowDragManager {
         }
 
         DispatchQueue.main.async {
-            // TODO: WINDOW DRAGGING
-//            WindowEngine.resize(window, to: self.direction, screen)
+            WindowEngine.resize(window, to: .init(self.direction), screen)
         }
     }
 }
