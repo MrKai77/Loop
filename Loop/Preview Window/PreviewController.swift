@@ -30,7 +30,7 @@ class PreviewController {
         panel.alphaValue = 0
         panel.orderFrontRegardless()
 
-        panel.setFrame(screen.safeScreenFrame.flipY!, display: false)
+        panel.setFrame(screen.stageStripFreeFrame, display: false)
 
         loopPreviewWindowController = .init(window: panel)
 

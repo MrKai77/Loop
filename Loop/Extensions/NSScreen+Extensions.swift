@@ -28,7 +28,7 @@ extension NSScreen {
     var safeScreenFrame: CGRect {
         guard
             let displayID = self.displayID,
-            let visibleFrame = self.visibleFrame.flipY
+            let visibleFrame = self.stageStripFreeFrame.flipY
         else {
             return self.frame.flipY!
         }
@@ -42,17 +42,24 @@ extension NSScreen {
         // By using visibleFrame, coordinates of multiple displays won't
         // work correctly, so we instead use screenFrame's origin.
         safeScreenFrame.origin = screenFrame.origin
+
         safeScreenFrame.origin.y += menubarHeight
         safeScreenFrame.origin.x -= screenFrame.minX - visibleFrame.minX
 
+        return safeScreenFrame
+    }
+
+    var stageStripFreeFrame: NSRect {
+        var frame = self.visibleFrame
+
         if Defaults[.respectStageManager] && StageManager.enabled && StageManager.shown {
             if StageManager.position == .leading {
-                safeScreenFrame.origin.x += Defaults[.stageStripSize]
+                frame.origin.x += Defaults[.stageStripSize]
             }
 
-            safeScreenFrame.size.width -= Defaults[.stageStripSize]
+            frame.size.width -= Defaults[.stageStripSize]
         }
 
-        return safeScreenFrame
+        return frame
     }
 }
