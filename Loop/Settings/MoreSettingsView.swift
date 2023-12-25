@@ -10,6 +10,7 @@ import Sparkle
 import Defaults
 
 struct MoreSettingsView: View {
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject var updater: SoftwareUpdater
 
     @Default(.respectStageManager) var respectStageManager
@@ -120,6 +121,24 @@ struct MoreSettingsView: View {
                     }
                 }
             })
+
+            Section("Feedback") {
+                HStack {
+                    Text(
+                        "Sending feedback will bring you to our \"New Issue\" page, " +
+                        "where you can select a template to report a bug, request a feature & more!"
+                    )
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                    Button(action: {
+                        openURL(URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!)
+                    }, label: {
+                        Text("Send Feedback")
+                    })
+                    .controlSize(.large)
+                }
+            }
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
