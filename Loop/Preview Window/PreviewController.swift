@@ -11,7 +11,7 @@ class PreviewController {
 
     var loopPreviewWindowController: NSWindowController?
 
-    func open(screen: NSScreen, window: Window?) {
+    func open(screen: NSScreen, window: Window? = nil, startingAction: Keybind = .init(.noAction)) {
         if let windowController = loopPreviewWindowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -25,9 +25,10 @@ class PreviewController {
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(rootView: PreviewView(window: window))
+        panel.contentView = NSHostingView(rootView: PreviewView(window: window, startingAction: startingAction))
         panel.collectionBehavior = .canJoinAllSpaces
         panel.alphaValue = 0
+        panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
 
         panel.setFrame(screen.stageStripFreeFrame, display: false)

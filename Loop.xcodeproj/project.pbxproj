@@ -35,6 +35,7 @@
 		A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */; };
 		A84497C92B393595003D4CF3 /* CustomKeybindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84497C82B393595003D4CF3 /* CustomKeybindView.swift */; };
 		A84497CB2B395D8C003D4CF3 /* AnchorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */; };
+		A84497CD2B3A52C7003D4CF3 /* PreviewWindowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */; };
 		A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A848D8A62A8C2F3F00060834 /* LoopManager.swift */; };
 		A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */; };
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
@@ -103,6 +104,7 @@
 		A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowRecords.swift; sourceTree = "<group>"; };
 		A84497C82B393595003D4CF3 /* CustomKeybindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeybindView.swift; sourceTree = "<group>"; };
 		A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorPicker.swift; sourceTree = "<group>"; };
+		A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewWindowButton.swift; sourceTree = "<group>"; };
 		A848D8A62A8C2F3F00060834 /* LoopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopManager.swift; sourceTree = "<group>"; };
 		A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdater.swift; sourceTree = "<group>"; };
 		A85B560D2AAAD62C00386ACE /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */,
 				A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationViewItem.swift */,
 				A84497C82B393595003D4CF3 /* CustomKeybindView.swift */,
+				A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */,
 				A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */,
 			);
 			path = Settings;
@@ -451,6 +454,7 @@
 				A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */,
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
 				A82DDBDE2AEC736300D7F974 /* AnimationConfiguration.swift in Sources */,
+				A84497CD2B3A52C7003D4CF3 /* PreviewWindowButton.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A869C19F2B37D67900AD1A84 /* BlueprintView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,

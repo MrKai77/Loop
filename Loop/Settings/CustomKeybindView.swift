@@ -76,6 +76,14 @@ struct CustomKeybindView: View {
                         Text(keybind.measureSystem?.postscript ?? "")
                     }
                 }
+
+                Section {
+                    HStack {
+                        Text("Preview Size")
+                        Spacer()
+                        PreviewWindowButton(self.$keybind)
+                    }
+                }
             }
             .onTapGesture {
                 focusedField = nil
@@ -90,7 +98,6 @@ struct CustomKeybindView: View {
                     Text("Done")
                 }
                 .controlSize(.large)
-                .keyboardShortcut(.defaultAction)
             }
             .offset(y: -14)
         }

@@ -10,13 +10,14 @@ import Defaults
 
 struct PreviewView: View {
 
-    @State var currentKeybind: Keybind = .init(.noAction)
+    @State var currentKeybind: Keybind
     private let window: Window?
     private let previewMode: Bool
 
-    init(previewMode: Bool = false, window: Window?) {
+    init(previewMode: Bool = false, window: Window?, startingAction: Keybind = .init(.noAction)) {
         self.window = window
         self.previewMode = previewMode
+        self._currentKeybind = State(initialValue: startingAction)
     }
 
     @Default(.useSystemAccentColor) var useSystemAccentColor
