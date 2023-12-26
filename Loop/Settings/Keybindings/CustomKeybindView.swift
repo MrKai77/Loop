@@ -18,7 +18,7 @@ struct CustomKeybindView: View {
 
             Form {
                 Section {
-                    TextField("Name", text: $keybind.customName)
+                    TextField("Name", text: $keybind.customName.bound, prompt: Text("Custom Keybind"))
                         .focused($focusedField, equals: "name")
                 }
 

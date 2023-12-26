@@ -133,7 +133,7 @@ struct KeybindCustomizationViewItem: View {
         }, label: {
             HStack {
                 keybind.direction.icon
-                Text(keybind.direction == .custom ? keybind.customName : keybind.direction.name)
+                Text(keybind.direction == .custom ? keybind.customName ?? "Custom Keybind" : keybind.direction.name)
 
             }
         })

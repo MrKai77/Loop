@@ -109,6 +109,14 @@ struct KeybindingsSettingsView: View {
 
                             Spacer()
 
+                            Button("Import", systemImage: "square.and.arrow.down") {
+                                Keybind.importPrompt()
+                            }
+
+                            Button("Export", systemImage: "square.and.arrow.up") {
+                                Keybind.exportPrompt()
+                            }
+
                             Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
                                 _keybinds.reset()
                                 _triggerKey.reset()
@@ -174,7 +182,7 @@ struct KeybindingsSettingsView: View {
     @ViewBuilder
     func newDirectionButton(_ direction: WindowDirection) -> some View {
         Button(action: {
-            self.keybinds.append(Keybind(direction, keycode: []))
+            self.keybinds.append(Keybind(direction, keybind: []))
         }, label: {
             HStack {
                 direction.icon

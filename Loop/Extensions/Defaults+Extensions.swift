@@ -41,17 +41,17 @@ extension Defaults.Keys {
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
 
     static let keybinds = Key<[Keybind]>("keybinds", default: [
-        Keybind(.maximize, keycode: [.kVK_Space]),
-        Keybind(.center, keycode: [.kVK_Return]),
-        Keybind(.cycleTop, keycode: [.kVK_UpArrow]),
-        Keybind(.cycleBottom, keycode: [.kVK_DownArrow]),
-        Keybind(.cycleLeft, keycode: [.kVK_LeftArrow]),
-        Keybind(.cycleRight, keycode: [.kVK_RightArrow]),
+        Keybind(.maximize, keybind: [.kVK_Space]),
+        Keybind(.center, keybind: [.kVK_Return]),
+        Keybind(.cycleTop, keybind: [.kVK_UpArrow]),
+        Keybind(.cycleBottom, keybind: [.kVK_DownArrow]),
+        Keybind(.cycleLeft, keybind: [.kVK_LeftArrow]),
+        Keybind(.cycleRight, keybind: [.kVK_RightArrow]),
 
-        Keybind(.topLeftQuarter, keycode: [.kVK_UpArrow, .kVK_LeftArrow]),
-        Keybind(.topRightQuarter, keycode: [.kVK_UpArrow, .kVK_RightArrow]),
-        Keybind(.bottomRightQuarter, keycode: [.kVK_DownArrow, .kVK_RightArrow]),
-        Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow])
+        Keybind(.topLeftQuarter, keybind: [.kVK_UpArrow, .kVK_LeftArrow]),
+        Keybind(.topRightQuarter, keybind: [.kVK_UpArrow, .kVK_RightArrow]),
+        Keybind(.bottomRightQuarter, keybind: [.kVK_DownArrow, .kVK_RightArrow]),
+        Keybind(.bottomLeftQuarter, keybind: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
 
     static let respectStageManager = Key<Bool>("respectStageManager", default: true)

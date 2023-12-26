@@ -9,22 +9,36 @@ import SwiftUI
 import Defaults
 
 struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
-    var id = UUID()
+    var id: UUID
 
-    init(_ direction: WindowDirection, keycode: Set<CGKeyCode>) {
+    init(
+        _ direction: WindowDirection,
+        keybind: Set<CGKeyCode>,
+        customName: String? = nil,
+        measureSystem: CustomKeybindMeasureSystem? = nil,
+        anchor: CustomKeybindAnchor? = nil,
+        width: Double? = nil,
+        height: Double? = nil
+    ) {
+        self.id = UUID()
         self.direction = direction
-        self.keybind = keycode
+        self.keybind = keybind
+        self.customName = customName
+        self.measureSystem = measureSystem
+        self.anchor = anchor
+        self.width = width
+        self.height = height
     }
 
     init(_ direction: WindowDirection) {
-        self.init(direction, keycode: [])
+        self.init(direction, keybind: [])
     }
 
     var direction: WindowDirection
     var keybind: Set<CGKeyCode>
 
     // MARK: CUSTOM KEYBINDS
-    var customName: String = "Custom Action"
+    var customName: String?
     var measureSystem: CustomKeybindMeasureSystem?
     var anchor: CustomKeybindAnchor?
     var width: Double?
@@ -36,7 +50,183 @@ struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializabl
         }
         return nil
     }
+}
 
+// MARK: - Import/Export
+extension Keybind {
+    private struct SavedKeybindFormat: Codable {
+        var direction: WindowDirection
+        var keybind: Set<CGKeyCode>
+
+        // Custom keybinds
+        var customName: String?
+        var measureSystem: CustomKeybindMeasureSystem?
+        var anchor: CustomKeybindAnchor?
+        var width: Double?
+        var height: Double?
+
+        func convertToKeybind() -> Keybind {
+            Keybind(
+                direction,
+                keybind: keybind,
+                customName: customName,
+                measureSystem: measureSystem,
+                anchor: anchor,
+                width: width,
+                height: height
+            )
+        }
+    }
+
+    static func exportPrompt() {
+        let keybinds = Defaults[.keybinds]
+
+        if keybinds.isEmpty {
+            let alert = NSAlert()
+            alert.messageText = "No Keybinds Have Been Set"
+            alert.informativeText = "You can't export something that doesn't exist!"
+            alert.beginSheetModal(for: NSApplication.shared.mainWindow!)
+            return
+        }
+
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+        do {
+            let exportKeybinds = keybinds.map {
+                SavedKeybindFormat(
+                    direction: $0.direction,
+                    keybind: $0.keybind,
+                    customName: $0.customName,
+                    measureSystem: $0.measureSystem,
+                    anchor: $0.anchor,
+                    width: $0.width,
+                    height: $0.height
+                )
+            }
+
+            let keybindsData = try encoder.encode(exportKeybinds)
+
+            if let json = String(data: keybindsData, encoding: .utf8) {
+                attemptSave(of: json)
+            }
+        } catch {
+            print("Error encoding keybinds: \(error)")
+        }
+    }
+
+    private static func attemptSave(of keybindsData: String) {
+        let data = keybindsData.data(using: .utf8)
+
+        let savePanel = NSSavePanel()
+        if let downloadsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            savePanel.directoryURL = downloadsUrl
+        }
+
+        savePanel.title = "Export Keybinds"
+        savePanel.nameFieldStringValue = "keybinds"
+        savePanel.allowedContentTypes = [.json]
+
+        savePanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
+            if result == .OK, let destUrl = savePanel.url {
+                do {
+                    try data?.write(to: destUrl)
+                } catch {
+                    // Handle error
+                    print("Error writing to file: \(error)")
+                }
+            }
+        }
+    }
+
+    static func importPrompt() {
+        let openPanel = NSOpenPanel()
+        openPanel.title = "Import Keybinds"
+        openPanel.allowedContentTypes = [.json]
+
+        openPanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
+            if result == .OK, let selectedFileURL = openPanel.url {
+                do {
+                    let jsonString = try String(contentsOf: selectedFileURL)
+                    importKeybinds(from: jsonString)
+                } catch {
+                    // Handle file reading error
+                    print("Error reading file: \(error)")
+                }
+            }
+        }
+    }
+
+    private static func importKeybinds(from jsonString: String) {
+        let decoder = JSONDecoder()
+
+        do {
+            let keybindsData = jsonString.data(using: .utf8)!
+            let importedKeybinds = try decoder.decode([SavedKeybindFormat].self, from: keybindsData)
+
+            if Defaults[.keybinds].isEmpty {
+                for savedKeybind in importedKeybinds {
+                    Defaults[.keybinds].append(savedKeybind.convertToKeybind())
+                }
+            } else {
+                showAlertForImportDecision { decision in
+                    switch decision {
+                    case .merge:
+                        for savedKeybind in importedKeybinds where !Defaults[.keybinds].contains(where: {
+                            $0.keybind == savedKeybind.keybind && $0.customName == savedKeybind.customName
+                        }) {
+                            Defaults[.keybinds].append(savedKeybind.convertToKeybind())
+                        }
+
+                    case .erase:
+                        Defaults[.keybinds] = []
+
+                        for savedKeybind in importedKeybinds {
+                            Defaults[.keybinds].append(savedKeybind.convertToKeybind())
+                        }
+
+                    case .cancel:
+                        break
+                    }
+                }
+            }
+        } catch {
+            // Handle decoding error
+            print("Error decoding keybinds: \(error)")
+        }
+    }
+
+    private static func showAlertForImportDecision(completion: @escaping (ImportDecision) -> Void) {
+        let alert = NSAlert()
+        alert.messageText = "Import Keybinds"
+        alert.informativeText = "Do you want to merge or erase existing keybinds?"
+
+        alert.addButton(withTitle: "Merge")
+        alert.addButton(withTitle: "Erase")
+        alert.addButton(withTitle: "Cancel")
+
+        alert.beginSheetModal(for: NSApplication.shared.mainWindow!) { response in
+            switch response {
+            case .alertFirstButtonReturn:  // Merge
+                completion(.merge)
+            case .alertSecondButtonReturn: // Erase
+                completion(.erase)
+            default: // Cancel or other cases
+                completion(.cancel)
+            }
+        }
+    }
+
+    // Define an enum for the import decision
+    enum ImportDecision {
+        case merge
+        case erase
+        case cancel
+    }
+}
+
+// MARK: - Preview Window
+extension Keybind {
     func previewWindowXOffset(_ parentWidth: CGFloat) -> CGFloat {
         var xLocation = parentWidth * (self.direction.frameMultiplyValues?.minX ?? 0)
 
@@ -134,6 +324,7 @@ struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializabl
     }
 }
 
+// MARK: - Custom Keybinds
 enum CustomKeybindMeasureSystem: Int, Codable, CaseIterable, Identifiable {
     var id: Self { self }
 
