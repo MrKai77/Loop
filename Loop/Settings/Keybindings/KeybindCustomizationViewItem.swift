@@ -27,7 +27,7 @@ struct KeybindCustomizationViewItem: View {
                         Button(action: {
                             self.showingInfo.toggle()
                         }, label: {
-                            Image(systemName: "info.square")
+                            Image(systemName: "info.circle")
                                 .font(.title3)
                                 .foregroundStyle(.secondary)
                         })
@@ -42,7 +42,7 @@ struct KeybindCustomizationViewItem: View {
                         Button(action: {
                             self.isConfiguring.toggle()
                         }, label: {
-                            Image(systemName: "slider.horizontal.2.square")
+                            Image(systemName: "slider.horizontal.3")
                                 .font(.title3)
                                 .foregroundStyle(.secondary)
                         })
@@ -133,7 +133,7 @@ struct KeybindCustomizationViewItem: View {
         }, label: {
             HStack {
                 keybind.direction.icon
-                Text(keybind.direction == .custom ? keybind.name : keybind.direction.name)
+                Text(keybind.direction == .custom ? keybind.customName : keybind.direction.name)
 
             }
         })

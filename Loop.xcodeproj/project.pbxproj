@@ -170,13 +170,9 @@
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A80900D22AA3F9F20085C63B /* BetaIndicator.swift */,
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
-				A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */,
-				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
-				A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */,
 				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,
 				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
 				A8F0125A2AEDD7660017307F /* Keybind.swift */,
-				A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */,
 				A869C19E2B37D67900AD1A84 /* BlueprintView.swift */,
 				A8063A722B19891900EAB3D9 /* grid.metal */,
 			);
@@ -234,6 +230,21 @@
 			path = MenuBar;
 			sourceTree = "<group>";
 		};
+		A84497CE2B3A57E8003D4CF3 /* Keybindings */ = {
+			isa = PBXGroup;
+			children = (
+				A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */,
+				A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationViewItem.swift */,
+				A84497C82B393595003D4CF3 /* CustomKeybindView.swift */,
+				A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */,
+				A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */,
+				A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */,
+				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
+				A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */,
+			);
+			path = Keybindings;
+			sourceTree = "<group>";
+		};
 		A864F4662AA65EC200579738 /* Window Management */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,10 +285,7 @@
 				A882660729809F6F00BCB197 /* GeneralSettingsView.swift */,
 				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
 				A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */,
-				A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */,
-				A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationViewItem.swift */,
-				A84497C82B393595003D4CF3 /* CustomKeybindView.swift */,
-				A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */,
+				A84497CE2B3A57E8003D4CF3 /* Keybindings */,
 				A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */,
 			);
 			path = Settings;

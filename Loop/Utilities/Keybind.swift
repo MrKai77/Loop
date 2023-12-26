@@ -8,7 +8,7 @@
 import SwiftUI
 import Defaults
 
-struct Keybind: Codable, Identifiable, Hashable, Defaults.Serializable {
+struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
     var id = UUID()
 
     init(_ direction: WindowDirection, keycode: Set<CGKeyCode>) {
@@ -24,7 +24,7 @@ struct Keybind: Codable, Identifiable, Hashable, Defaults.Serializable {
     var keybind: Set<CGKeyCode>
 
     // MARK: CUSTOM KEYBINDS
-    var name: String = "Custom Action"
+    var customName: String = "Custom Action"
     var measureSystem: CustomKeybindMeasureSystem?
     var anchor: CustomKeybindAnchor?
     var width: Double?

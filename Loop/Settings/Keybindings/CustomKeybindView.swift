@@ -18,7 +18,7 @@ struct CustomKeybindView: View {
 
             Form {
                 Section {
-                    TextField("Name", text: $keybind.name)
+                    TextField("Name", text: $keybind.customName)
                         .focused($focusedField, equals: "name")
                 }
 
@@ -79,7 +79,7 @@ struct CustomKeybindView: View {
 
                 Section {
                     HStack {
-                        Text("Preview Size")
+                        Text("Preview window size")
                         Spacer()
                         PreviewWindowButton(self.$keybind)
                     }
@@ -102,6 +102,7 @@ struct CustomKeybindView: View {
             .offset(y: -14)
         }
         .frame(width: 400)
+        .fixedSize(horizontal: false, vertical: true)
 
         .onAppear {
             if self.keybind.measureSystem == nil {
