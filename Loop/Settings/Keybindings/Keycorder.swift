@@ -184,7 +184,7 @@ struct Keycorder: View {
             ) {
                 willSet = false
                 if keybind.direction == .custom {
-                    self.errorMessage = Text("That keybind is already being used by \(keybind.customName ?? "another custom keybind").")
+                    self.errorMessage = Text("That keybind is already being used by \(keybind.name ?? "another custom keybind").")
                 } else {
                     self.errorMessage = Text("That keybind is already being used by \(keybind.direction.name.lowercased()).")
                 }

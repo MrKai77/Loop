@@ -14,7 +14,7 @@ struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializabl
     init(
         _ direction: WindowDirection,
         keybind: Set<CGKeyCode>,
-        customName: String? = nil,
+        name: String? = nil,
         measureSystem: CustomKeybindMeasureSystem? = nil,
         anchor: CustomKeybindAnchor? = nil,
         width: Double? = nil,
@@ -23,7 +23,7 @@ struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializabl
         self.id = UUID()
         self.direction = direction
         self.keybind = keybind
-        self.customName = customName
+        self.name = name
         self.measureSystem = measureSystem
         self.anchor = anchor
         self.width = width
@@ -38,7 +38,7 @@ struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializabl
     var keybind: Set<CGKeyCode>
 
     // MARK: CUSTOM KEYBINDS
-    var customName: String?
+    var name: String?
     var measureSystem: CustomKeybindMeasureSystem?
     var anchor: CustomKeybindAnchor?
     var width: Double?
@@ -59,7 +59,7 @@ extension Keybind {
         var keybind: Set<CGKeyCode>
 
         // Custom keybinds
-        var customName: String?
+        var name: String?
         var measureSystem: CustomKeybindMeasureSystem?
         var anchor: CustomKeybindAnchor?
         var width: Double?
@@ -69,7 +69,7 @@ extension Keybind {
             Keybind(
                 direction,
                 keybind: keybind,
-                customName: customName,
+                name: name,
                 measureSystem: measureSystem,
                 anchor: anchor,
                 width: width,
@@ -97,7 +97,7 @@ extension Keybind {
                 SavedKeybindFormat(
                     direction: $0.direction,
                     keybind: $0.keybind,
-                    customName: $0.customName,
+                    name: $0.name,
                     measureSystem: $0.measureSystem,
                     anchor: $0.anchor,
                     width: $0.width,
@@ -173,7 +173,7 @@ extension Keybind {
                     switch decision {
                     case .merge:
                         for savedKeybind in importedKeybinds where !Defaults[.keybinds].contains(where: {
-                            $0.keybind == savedKeybind.keybind && $0.customName == savedKeybind.customName
+                            $0.keybind == savedKeybind.keybind && $0.name == savedKeybind.name
                         }) {
                             Defaults[.keybinds].append(savedKeybind.convertToKeybind())
                         }

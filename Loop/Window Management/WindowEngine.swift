@@ -56,7 +56,7 @@ struct WindowEngine {
         else {
             return
         }
-        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, keybind.direction)
+        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, screenFrame, keybind)
 
         var animate = (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {
@@ -166,7 +166,7 @@ struct WindowEngine {
         _ window: Window
     ) -> CGRect? {
         let direction = keybind.direction
-        
+
         var newWindowFrame: CGRect = CGRect(
             x: screenFrame.origin.x,
             y: screenFrame.origin.y,
@@ -277,16 +277,38 @@ struct WindowEngine {
     ///   - windowFrame: The frame the window WILL be resized to
     ///   - direction: The direction the window WILL be resized to
     /// - Returns: CGRect with padding applied
-    private static func applyPadding(_ windowFrame: CGRect, _ direction: WindowDirection) -> CGRect {
-        var paddingAppliedRect = windowFrame
-        for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
-            if direction.edgesTouchingScreen.contains(side) {
-                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
-            } else {
-                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
-            }
-        }
-        return paddingAppliedRect
+    private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: Keybind) -> CGRect {
+        var paddedFrame = windowFrame
+
+        let topPaddingDivisor: CGFloat = windowFrame.minY.approximatelyEquals(to: screenFrame.minY) ? 1 : 2
+        let bottomPaddingDivisor: CGFloat = windowFrame.maxY.approximatelyEquals(to: screenFrame.maxY) ? 1 : 2
+        let leadingPaddingDivisor: CGFloat = windowFrame.minX.approximatelyEquals(to: screenFrame.minX) ? 1 : 2
+        let trailingPaddingDivisor: CGFloat = windowFrame.maxX.approximatelyEquals(to: screenFrame.maxX) ? 1 : 2
+
+        paddedFrame.inset(.top, amount: Defaults[.windowPadding] / topPaddingDivisor)
+        paddedFrame.inset(.bottom, amount: Defaults[.windowPadding] / bottomPaddingDivisor)
+        paddedFrame.inset(.leading, amount: Defaults[.windowPadding] / leadingPaddingDivisor)
+        paddedFrame.inset(.trailing, amount: Defaults[.windowPadding] / trailingPaddingDivisor)
+
+//        print("Window Frame: \(windowFrame), Screen Frame: \(screenFrame), \(topPaddingDivisor), \(bottomPaddingDivisor), \(leadingPaddingDivisor), \(trailingPaddingDivisor)")
+
+//        for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
+//            if action.direction == .custom {
+//                if let anchor = action.anchor, anchor.edgesTouchingScreen.contains(side) {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
+//                } else {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
+//                }
+//            } else {
+//                if action.direction.edgesTouchingScreen.contains(side) {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
+//                } else {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
+//                }
+//            }
+//        }
+
+        return paddedFrame
     }
 
     /// Will move a window back onto the screen. To be run AFTER a window has been resized.
@@ -329,5 +351,11 @@ extension CGRect {
         case .trailing:
             self.size.width -= amount
         }
+    }
+}
+
+extension CGFloat {
+    func approximatelyEquals(to comparison: CGFloat) -> Bool {
+        return abs(self - comparison) < 5
     }
 }

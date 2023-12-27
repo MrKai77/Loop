@@ -6,7 +6,7 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "d71bfd8ffbf944ef08eacbca5fb96d6f69bf7696"
+        "revision" : "d8a9f5105607c85b544558e7f5b51d6c360ba88b"
       }
     },
     {
@@ -33,7 +33,7 @@
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
         "branch" : "2.x",
-        "revision" : "077d7228ba24fd11cc301147d569db81e842082f"
+        "revision" : "f1daff840f9ed8fd35bb35baed439a6808682bb4"
       }
     }
   ],
