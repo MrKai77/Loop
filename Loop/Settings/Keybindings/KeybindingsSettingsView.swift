@@ -130,7 +130,6 @@ struct KeybindingsSettingsView: View {
                     }
             }
         }
-        .frame(minHeight: 500, maxHeight: 680)
         .environmentObject(keycorderModel)
     }
 
