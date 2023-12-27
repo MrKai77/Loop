@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomKeybindView: View {
-    @Binding var keybind: Keybind
+    @Binding var action: WindowAction
     @Binding var isSheetShown: Bool
 
     @FocusState private var focusedField: String?
@@ -18,30 +18,30 @@ struct CustomKeybindView: View {
 
             Form {
                 Section {
-                    TextField("Name", text: $keybind.name.bound, prompt: Text("Custom Keybind"))
+                    TextField("Name", text: $action.name.bound, prompt: Text("Custom Keybind"))
                         .focused($focusedField, equals: "name")
                 }
 
                 Section {
-                    AnchorPicker(anchor: self.$keybind.anchor)
+                    AnchorPicker(anchor: self.$action.anchor)
                         .ignoresSafeArea()
                         .padding(-10)
                 }
 
                 Section("Window Size") {
-                    Picker("Configure using", selection: $keybind.measureSystem) {
-                        ForEach(CustomKeybindMeasureSystem.allCases) { system in
+                    Picker("Configure using", selection: $action.measureSystem) {
+                        ForEach(CustomWindowActionMeasureSystem.allCases) { system in
                             system.label
-                                .tag(system as CustomKeybindMeasureSystem?)
+                                .tag(system as CustomWindowActionMeasureSystem?)
                         }
                     }
-                    .onChange(of: keybind.measureSystem) { _ in
-                        if keybind.measureSystem == .percentage {
-                            if keybind.width ?? 101 > 100 {
-                                self.keybind.width = 100
+                    .onChange(of: action.measureSystem) { _ in
+                        if action.measureSystem == .percentage {
+                            if action.width ?? 101 > 100 {
+                                self.action.width = 100
                             }
-                            if keybind.height ?? 101 > 100 {
-                                self.keybind.height = 100
+                            if action.height ?? 101 > 100 {
+                                self.action.height = 100
                             }
                         }
                     }
@@ -50,30 +50,30 @@ struct CustomKeybindView: View {
                         Stepper(
                             "Width",
                             value: Binding<Double>(
-                                get: { self.keybind.width ?? 0 },
-                                set: { self.keybind.width = $0 }
+                                get: { self.action.width ?? 0 },
+                                set: { self.action.width = $0 }
                             ),
-                            in: keybind.measureSystem == .percentage ?  0...100 : 0...(.greatestFiniteMagnitude),
-                            step: keybind.measureSystem == .percentage ?  10 : 100,
+                            in: action.measureSystem == .percentage ?  0...100 : 0...(.greatestFiniteMagnitude),
+                            step: action.measureSystem == .percentage ?  10 : 100,
                             format: .number
                         )
                         .focused($focusedField, equals: "width")
-                        Text(keybind.measureSystem?.postscript ?? "")
+                        Text(action.measureSystem?.postscript ?? "")
                     }
 
                     HStack {
                         Stepper(
                             "Height",
                             value: Binding<Double>(
-                                get: { self.keybind.height ?? 0 },
-                                set: { self.keybind.height = $0 }
+                                get: { self.action.height ?? 0 },
+                                set: { self.action.height = $0 }
                             ),
-                            in: keybind.measureSystem == .percentage ?  0...100 : 0...(.greatestFiniteMagnitude),
-                            step: keybind.measureSystem == .percentage ?  10 : 100,
+                            in: action.measureSystem == .percentage ?  0...100 : 0...(.greatestFiniteMagnitude),
+                            step: action.measureSystem == .percentage ?  10 : 100,
                             format: .number
                         )
                         .focused($focusedField, equals: "height")
-                        Text(keybind.measureSystem?.postscript ?? "")
+                        Text(action.measureSystem?.postscript ?? "")
                     }
                 }
 
@@ -81,7 +81,7 @@ struct CustomKeybindView: View {
                     HStack {
                         Text("Preview window size")
                         Spacer()
-                        PreviewWindowButton(self.$keybind)
+                        PreviewWindowButton(self.$action)
                     }
                 }
             }
@@ -105,12 +105,12 @@ struct CustomKeybindView: View {
         .fixedSize(horizontal: false, vertical: true)
 
         .onAppear {
-            if self.keybind.measureSystem == nil {
-                self.keybind.measureSystem = .percentage
+            if self.action.measureSystem == nil {
+                self.action.measureSystem = .percentage
             }
 
-            if self.keybind.anchor == nil {
-                self.keybind.anchor = .center
+            if self.action.anchor == nil {
+                self.action.anchor = .center
             }
         }
     }

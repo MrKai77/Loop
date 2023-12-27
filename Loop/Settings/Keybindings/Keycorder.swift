@@ -28,7 +28,7 @@ struct Keycorder: View {
     @State private var isActive: Bool = false
     @State private var isCurrentlyPressed: Bool = false
 
-    init(_ keybind: Binding<Keybind>, _ triggerKey: Binding<Set<CGKeyCode>>) {
+    init(_ keybind: Binding<WindowAction>, _ triggerKey: Binding<Set<CGKeyCode>>) {
         self._validCurrentKeybind = keybind.keybind
         self._direction = keybind.direction
         self._triggerKey = triggerKey

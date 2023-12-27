@@ -9,9 +9,9 @@ import SwiftUI
 
 struct PreviewWindowButton: NSViewRepresentable {
 
-    @Binding var keybind: Keybind
+    @Binding var keybind: WindowAction
 
-    init(_ keybind: Binding<Keybind>) {
+    init(_ keybind: Binding<WindowAction>) {
         self._keybind = keybind
     }
 

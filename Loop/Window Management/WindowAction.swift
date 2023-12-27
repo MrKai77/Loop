@@ -8,15 +8,15 @@
 import SwiftUI
 import Defaults
 
-struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
+struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
     var id: UUID
 
     init(
         _ direction: WindowDirection,
         keybind: Set<CGKeyCode>,
         name: String? = nil,
-        measureSystem: CustomKeybindMeasureSystem? = nil,
-        anchor: CustomKeybindAnchor? = nil,
+        measureSystem: CustomWindowActionMeasureSystem? = nil,
+        anchor: CustomWindowActionAnchor? = nil,
         width: Double? = nil,
         height: Double? = nil
     ) {
@@ -39,12 +39,12 @@ struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializabl
 
     // MARK: CUSTOM KEYBINDS
     var name: String?
-    var measureSystem: CustomKeybindMeasureSystem?
-    var anchor: CustomKeybindAnchor?
+    var measureSystem: CustomWindowActionMeasureSystem?
+    var anchor: CustomWindowActionAnchor?
     var width: Double?
     var height: Double?
 
-    static func getKeybind(for keybind: Set<CGKeyCode>) -> Keybind? {
+    static func getAction(for keybind: Set<CGKeyCode>) -> WindowAction? {
         for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
             return keybinding
         }
@@ -53,20 +53,20 @@ struct Keybind: Codable, Identifiable, Hashable, Equatable, Defaults.Serializabl
 }
 
 // MARK: - Import/Export
-extension Keybind {
-    private struct SavedKeybindFormat: Codable {
+extension WindowAction {
+    private struct SavedWindowActionFormat: Codable {
         var direction: WindowDirection
         var keybind: Set<CGKeyCode>
 
         // Custom keybinds
         var name: String?
-        var measureSystem: CustomKeybindMeasureSystem?
-        var anchor: CustomKeybindAnchor?
+        var measureSystem: CustomWindowActionMeasureSystem?
+        var anchor: CustomWindowActionAnchor?
         var width: Double?
         var height: Double?
 
-        func convertToKeybind() -> Keybind {
-            Keybind(
+        func convertToWindowAction() -> WindowAction {
+            WindowAction(
                 direction,
                 keybind: keybind,
                 name: name,
@@ -94,7 +94,7 @@ extension Keybind {
 
         do {
             let exportKeybinds = keybinds.map {
-                SavedKeybindFormat(
+                SavedWindowActionFormat(
                     direction: $0.direction,
                     keybind: $0.keybind,
                     name: $0.name,
@@ -162,11 +162,11 @@ extension Keybind {
 
         do {
             let keybindsData = jsonString.data(using: .utf8)!
-            let importedKeybinds = try decoder.decode([SavedKeybindFormat].self, from: keybindsData)
+            let importedKeybinds = try decoder.decode([SavedWindowActionFormat].self, from: keybindsData)
 
             if Defaults[.keybinds].isEmpty {
                 for savedKeybind in importedKeybinds {
-                    Defaults[.keybinds].append(savedKeybind.convertToKeybind())
+                    Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
                 }
             } else {
                 showAlertForImportDecision { decision in
@@ -175,14 +175,14 @@ extension Keybind {
                         for savedKeybind in importedKeybinds where !Defaults[.keybinds].contains(where: {
                             $0.keybind == savedKeybind.keybind && $0.name == savedKeybind.name
                         }) {
-                            Defaults[.keybinds].append(savedKeybind.convertToKeybind())
+                            Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
                         }
 
                     case .erase:
                         Defaults[.keybinds] = []
 
                         for savedKeybind in importedKeybinds {
-                            Defaults[.keybinds].append(savedKeybind.convertToKeybind())
+                            Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
                         }
 
                     case .cancel:
@@ -226,7 +226,7 @@ extension Keybind {
 }
 
 // MARK: - Preview Window
-extension Keybind {
+extension WindowAction {
     func previewWindowXOffset(_ parentWidth: CGFloat) -> CGFloat {
         var xLocation = parentWidth * (self.direction.frameMultiplyValues?.minX ?? 0)
 
@@ -325,7 +325,7 @@ extension Keybind {
 }
 
 // MARK: - Custom Keybinds
-enum CustomKeybindMeasureSystem: Int, Codable, CaseIterable, Identifiable {
+enum CustomWindowActionMeasureSystem: Int, Codable, CaseIterable, Identifiable {
     var id: Self { self }
 
     case pixels = 0
@@ -348,7 +348,7 @@ enum CustomKeybindMeasureSystem: Int, Codable, CaseIterable, Identifiable {
     }
 }
 
-enum CustomKeybindAnchor: Int, Codable, CaseIterable, Identifiable {
+enum CustomWindowActionAnchor: Int, Codable, CaseIterable, Identifiable {
     var id: Self { self }
 
     case topLeft = 0

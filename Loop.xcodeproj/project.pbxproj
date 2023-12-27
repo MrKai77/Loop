@@ -70,7 +70,7 @@
 		A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C49297F98670064D4BA /* RadialMenuController.swift */; };
 		A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4F298045D90064D4BA /* PreviewController.swift */; };
 		A8EF1F09299C87DF00633440 /* IconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EF1F08299C87DF00633440 /* IconManager.swift */; };
-		A8F0125B2AEDD7660017307F /* Keybind.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* Keybind.swift */; };
+		A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* WindowAction.swift */; };
 		A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */; };
 		A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */; };
 		A8F063702985B2220010C33D /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A8F0636F2985B2220010C33D /* Sparkle */; };
@@ -143,7 +143,7 @@
 		A8E59C4F298045D90064D4BA /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
 		A8E6D1FC2A4155DC005751D4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A8EF1F08299C87DF00633440 /* IconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconManager.swift; sourceTree = "<group>"; };
-		A8F0125A2AEDD7660017307F /* Keybind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keybind.swift; sourceTree = "<group>"; };
+		A8F0125A2AEDD7660017307F /* WindowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAction.swift; sourceTree = "<group>"; };
 		A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingsSettingsView.swift; sourceTree = "<group>"; };
 		A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreSettingsView.swift; sourceTree = "<group>"; };
 		A8F063712985B2730010C33D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -174,7 +174,6 @@
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
 				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,
 				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
-				A8F0125A2AEDD7660017307F /* Keybind.swift */,
 				A869C19E2B37D67900AD1A84 /* BlueprintView.swift */,
 				A8063A722B19891900EAB3D9 /* grid.metal */,
 			);
@@ -254,6 +253,7 @@
 				A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */,
 				A87376F52AA288EB001890F4 /* Window.swift */,
 				A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */,
+				A8F0125A2AEDD7660017307F /* WindowAction.swift */,
 				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
 				A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */,
 			);
@@ -514,7 +514,7 @@
 				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
 				A8063A732B19891900EAB3D9 /* grid.metal in Sources */,
 				A8063A6E2B19599D00EAB3D9 /* SettingsView.swift in Sources */,
-				A8F0125B2AEDD7660017307F /* Keybind.swift in Sources */,
+				A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */,
 				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
 				A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */,
 				A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */,

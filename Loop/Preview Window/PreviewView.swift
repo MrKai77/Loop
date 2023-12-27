@@ -10,14 +10,14 @@ import Defaults
 
 struct PreviewView: View {
 
-    @State var currentKeybind: Keybind
+    @State var currentAction: WindowAction
     private let window: Window?
     private let previewMode: Bool
 
-    init(previewMode: Bool = false, window: Window?, startingAction: Keybind = .init(.noAction)) {
+    init(previewMode: Bool = false, window: Window?, startingAction: WindowAction = .init(.noAction)) {
         self.window = window
         self.previewMode = previewMode
-        self._currentKeybind = State(initialValue: startingAction)
+        self._currentAction = State(initialValue: startingAction)
     }
 
     @Default(.useSystemAccentColor) var useSystemAccentColor
@@ -56,29 +56,29 @@ struct PreviewView: View {
             .padding(windowPadding + previewPadding + previewBorderThickness / 2)
 
             .frame(
-                width: self.currentKeybind.previewWindowWidth(geo.size.width),
-                height: self.currentKeybind.previewWindowHeight(geo.size.height)
+                width: self.currentAction.previewWindowWidth(geo.size.width),
+                height: self.currentAction.previewWindowHeight(geo.size.height)
             )
 
             .offset(
-                x: self.currentKeybind.previewWindowXOffset(geo.size.width),
-                y: self.currentKeybind.previewWindowYOffset(geo.size.height)
+                x: self.currentAction.previewWindowXOffset(geo.size.width),
+                y: self.currentAction.previewWindowYOffset(geo.size.height)
             )
         }
-        .opacity(currentKeybind.direction == .noAction ? 0 : 1)
-        .animation(animationConfiguration.previewWindowAnimation, value: currentKeybind)
+        .opacity(currentAction.direction == .noAction ? 0 : 1)
+        .animation(animationConfiguration.previewWindowAnimation, value: currentAction)
         .onReceive(.directionChanged) { obj in
-            if !self.previewMode, let keybind = obj.userInfo?["keybind"] as? Keybind, !keybind.direction.cyclable {
-                self.currentKeybind = keybind
+            if !self.previewMode, let action = obj.userInfo?["action"] as? WindowAction, !action.direction.cyclable {
+                self.currentAction = action
 
-                if self.currentKeybind.direction == .undo && self.window != nil {
-                    self.currentKeybind = WindowRecords.getLastDirection(for: self.window!)
+                if self.currentAction.direction == .undo && self.window != nil {
+                    self.currentAction = WindowRecords.getLastAction(for: self.window!)
                 }
             }
         }
         .onAppear {
             if self.previewMode {
-                self.currentKeybind = .init(.maximize)
+                self.currentAction = .init(.maximize)
             }
         }
     }

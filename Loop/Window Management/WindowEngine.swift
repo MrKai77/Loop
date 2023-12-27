@@ -17,30 +17,30 @@ struct WindowEngine {
     ///   - screen: Screen the window should be resized on
     static func resize(
         _ window: Window,
-        to keybind: Keybind,
+        to action: WindowAction,
         _ screen: NSScreen,
         supressAnimations: Bool = false
     ) {
-        guard keybind.direction != .noAction else { return }
+        guard action.direction != .noAction else { return }
         window.activate()
 
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
         }
 
-        if keybind.direction == .fullscreen {
+        if action.direction == .fullscreen {
             window.toggleFullscreen()
-            WindowRecords.record(window, keybind)
+            WindowRecords.record(window, action)
             return
         }
         window.setFullscreen(false)
 
-        if keybind.direction == .hide {
+        if action.direction == .hide {
             window.toggleHidden()
             return
         }
 
-        if keybind.direction == .minimize {
+        if action.direction == .minimize {
             window.toggleMinimized()
             return
         }
@@ -50,13 +50,13 @@ struct WindowEngine {
             let currentWindowFrame = WindowEngine.generateWindowFrame(
                 window.frame,
                 screenFrame,
-                keybind,
+                action,
                 window
             )
         else {
             return
         }
-        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, screenFrame, keybind)
+        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, screenFrame, action)
 
         var animate = (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {
@@ -79,13 +79,13 @@ struct WindowEngine {
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
-                    WindowRecords.record(window, keybind)
+                    WindowRecords.record(window, action)
                 }
             }
         } else {
             window.setFrame(targetWindowFrame) {
                 WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-                WindowRecords.record(window, keybind)
+                WindowRecords.record(window, action)
             }
         }
     }
@@ -162,10 +162,10 @@ struct WindowEngine {
     private static func generateWindowFrame(
         _ windowFrame: CGRect,
         _ screenFrame: CGRect,
-        _ keybind: Keybind,
+        _ action: WindowAction,
         _ window: Window
     ) -> CGRect? {
-        let direction = keybind.direction
+        let direction = action.direction
 
         var newWindowFrame: CGRect = CGRect(
             x: screenFrame.origin.x,
@@ -177,7 +177,7 @@ struct WindowEngine {
         switch direction {
         case .custom:
             guard
-                let newFrame = WindowEngine.generateCustomWindowFrame(keybind, screenFrame)
+                let newFrame = WindowEngine.generateCustomWindowFrame(action, screenFrame)
             else {
                 return nil
             }
@@ -190,7 +190,7 @@ struct WindowEngine {
                 height: windowFrame.height
             )
         case .undo:
-            let previousDirection = WindowRecords.getLastDirection(for: window, willResize: true)
+            let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
             if let previousResizeFrame = self.generateWindowFrame(
                 windowFrame,
                 screenFrame,
@@ -218,13 +218,13 @@ struct WindowEngine {
         return newWindowFrame
     }
 
-    private static func generateCustomWindowFrame(_ keybind: Keybind, _ screenFrame: CGRect) -> CGRect? {
+    private static func generateCustomWindowFrame(_ action: WindowAction, _ screenFrame: CGRect) -> CGRect? {
         guard
-            keybind.direction == .custom,
-            let measureSystem = keybind.measureSystem,
-            let anchor = keybind.anchor,
-            let width = keybind.width,
-            let height = keybind.height
+            action.direction == .custom,
+            let measureSystem = action.measureSystem,
+            let anchor = action.anchor,
+            let width = action.width,
+            let height = action.height
         else {
             return nil
         }
@@ -277,7 +277,7 @@ struct WindowEngine {
     ///   - windowFrame: The frame the window WILL be resized to
     ///   - direction: The direction the window WILL be resized to
     /// - Returns: CGRect with padding applied
-    private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: Keybind) -> CGRect {
+    private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
         var paddedFrame = windowFrame
 
         let topPaddingDivisor: CGFloat = windowFrame.minY.approximatelyEquals(to: screenFrame.minY) ? 1 : 2

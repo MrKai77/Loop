@@ -10,7 +10,7 @@ import SwiftUI
 struct AnchorPicker: View {
 
     @Namespace private var animation
-    @Binding var anchor: CustomKeybindAnchor?
+    @Binding var anchor: CustomWindowActionAnchor?
 
     var body: some View {
         VStack {
@@ -57,7 +57,7 @@ struct AnchorPicker: View {
     }
 
     @ViewBuilder
-    func selectorCircle(_ anchor: CustomKeybindAnchor) -> some View {
+    func selectorCircle(_ anchor: CustomWindowActionAnchor) -> some View {
         Button {
             self.anchor = anchor
         } label: {

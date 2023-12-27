@@ -9,7 +9,7 @@ import SwiftUI
 import Defaults
 
 struct KeybindCustomizationViewItem: View {
-    @Binding var keybind: Keybind
+    @Binding var keybind: WindowAction
     @Binding var triggerKey: Set<CGKeyCode>
     @State var showingInfo: Bool = false
     @State var isConfiguring: Bool = false
@@ -48,7 +48,7 @@ struct KeybindCustomizationViewItem: View {
                         })
                         .buttonStyle(.plain)
                         .sheet(isPresented: self.$isConfiguring) {
-                            CustomKeybindView(keybind: $keybind, isSheetShown: $isConfiguring)
+                            CustomKeybindView(action: $keybind, isSheetShown: $isConfiguring)
                         }
                     }
 

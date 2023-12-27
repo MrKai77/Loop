@@ -97,7 +97,7 @@ class WindowDragManager {
                  NotificationCenter.default.post(
                      name: Notification.Name.directionChanged,
                      object: nil,
-                     userInfo: ["keybind": Keybind(self.direction)]
+                     userInfo: ["action": WindowAction(self.direction)]
                  )
              }
          } else {
