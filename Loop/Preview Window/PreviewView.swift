@@ -68,7 +68,9 @@ struct PreviewView: View {
         .opacity(currentAction.direction == .noAction ? 0 : 1)
         .animation(animationConfiguration.previewWindowAnimation, value: currentAction)
         .onReceive(.directionChanged) { obj in
-            if !self.previewMode, let action = obj.userInfo?["action"] as? WindowAction, !action.direction.cyclable {
+            if !self.previewMode,
+               let action = obj.userInfo?["action"] as? WindowAction,
+               !action.direction.isPresetCyclable {
                 self.currentAction = action
 
                 if self.currentAction.direction == .undo && self.window != nil {

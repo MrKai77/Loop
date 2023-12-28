@@ -15,7 +15,6 @@ struct CustomKeybindView: View {
 
     var body: some View {
         VStack {
-
             Form {
                 Section {
                     TextField("Name", text: $action.name.bound, prompt: Text("Custom Keybind"))

@@ -57,6 +57,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case bottomTwoThirds = "BottomTwoThirds"
 
     case custom = "Custom"
+    case cycle = "Cycle"
 
     // These are used in the menubar resize submenu & keybind configuration
     static var general: [WindowDirection] {
@@ -78,10 +79,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
     }
     static var more: [WindowDirection] {
-        [.initialFrame, .undo, .custom]
+        [.initialFrame, .undo, .custom, .cycle]
     }
 
-    var cyclable: Bool {
+    var isPresetCyclable: Bool {
         WindowDirection.cyclable.contains(self)
     }
 
@@ -131,7 +132,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var moreInformation: String? {
         var result: String?
-        if self.cyclable {
+        if self.isPresetCyclable {
             result = "This keybind cycles: press it repeatedly to cycle through 1/2, 1/3, and 2/3 of your screen."
         }
         return result
@@ -176,6 +177,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
 
         case .custom:                   Image(systemName: "rectangle.dashed")
+        case .cycle:                    Image("custom.arrow.2.squarepath.rectangle")
         default:                        nil
         }
     }

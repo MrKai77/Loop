@@ -18,7 +18,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         measureSystem: CustomWindowActionMeasureSystem? = nil,
         anchor: CustomWindowActionAnchor? = nil,
         width: Double? = nil,
-        height: Double? = nil
+        height: Double? = nil,
+        cycle: [WindowAction]? = nil
     ) {
         self.id = UUID()
         self.direction = direction
@@ -28,10 +29,15 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         self.anchor = anchor
         self.width = width
         self.height = height
+        self.cycle = cycle
     }
 
     init(_ direction: WindowDirection) {
         self.init(direction, keybind: [])
+    }
+
+    init(_ cycle: [WindowAction]?) {
+        self.init(.cycle, keybind: [], cycle: cycle)
     }
 
     var direction: WindowDirection
@@ -43,6 +49,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     var anchor: CustomWindowActionAnchor?
     var width: Double?
     var height: Double?
+
+    var cycle: [WindowAction]?
 
     static func getAction(for keybind: Set<CGKeyCode>) -> WindowAction? {
         for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
@@ -65,15 +73,18 @@ extension WindowAction {
         var width: Double?
         var height: Double?
 
+        var cycle: [SavedWindowActionFormat]?
+
         func convertToWindowAction() -> WindowAction {
-            WindowAction(
+            return WindowAction(
                 direction,
                 keybind: keybind,
                 name: name,
                 measureSystem: measureSystem,
                 anchor: anchor,
                 width: width,
-                height: height
+                height: height,
+                cycle: cycle?.map { $0.convertToWindowAction() }
             )
         }
     }

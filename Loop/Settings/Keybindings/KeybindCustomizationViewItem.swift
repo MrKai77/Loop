@@ -12,75 +12,83 @@ struct KeybindCustomizationViewItem: View {
     @Binding var keybind: WindowAction
     @Binding var triggerKey: Set<CGKeyCode>
     @State var showingInfo: Bool = false
-    @State var isConfiguring: Bool = false
+    @State var isConfiguringCustomKeybind: Bool = false
+    @State var isConfiguringCyclingKeybind: Bool = false
 
     var body: some View {
-        ZStack {
-            Rectangle()
-                .foregroundStyle(.white.opacity(0.00001))
+        HStack {
+            directionPicker(selection: $keybind.direction)
 
-            VStack {
-                HStack {
-                    directionPicker(selection: $keybind.direction)
-
-                    if let moreInformation = self.keybind.direction.moreInformation {
-                        Button(action: {
-                            self.showingInfo.toggle()
-                        }, label: {
-                            Image(systemName: "info.circle")
-                                .font(.title3)
-                                .foregroundStyle(.secondary)
-                        })
-                        .buttonStyle(.plain)
-                        .popover(isPresented: $showingInfo, arrowEdge: .bottom) {
-                            Text(moreInformation)
-                                .padding(8)
-                        }
-                    }
-
-                    if self.keybind.direction == .custom {
-                        Button(action: {
-                            self.isConfiguring.toggle()
-                        }, label: {
-                            Image(systemName: "slider.horizontal.3")
-                                .font(.title3)
-                                .foregroundStyle(.secondary)
-                        })
-                        .buttonStyle(.plain)
-                        .sheet(isPresented: self.$isConfiguring) {
-                            CustomKeybindView(action: $keybind, isSheetShown: $isConfiguring)
-                        }
-                    }
-
-                    Spacer()
-
-                    Group {
-                        ForEach(self.triggerKey.sorted(), id: \.self) { key in
-                            Text("\(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
-                                .foregroundStyle(.secondary)
-                                .fontDesign(.monospaced)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .aspectRatio(1, contentMode: .fill)
-                                .padding(5)
-                                .background {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .foregroundStyle(.background.opacity(0.8))
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
-                                    }
-                                    .opacity(0.8)
-                                }
-                                .fixedSize(horizontal: true, vertical: false)
-                        }
-
-                        Image(systemName: "plus")
-                            .foregroundStyle(.secondary)
-                            .fontDesign(.monospaced)
-
-                        Keycorder($keybind, $triggerKey)
-                    }
+            if let moreInformation = self.keybind.direction.moreInformation {
+                Button(action: {
+                    self.showingInfo.toggle()
+                }, label: {
+                    Image(systemName: "info.circle")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                })
+                .buttonStyle(.plain)
+                .popover(isPresented: $showingInfo, arrowEdge: .bottom) {
+                    Text(moreInformation)
+                        .padding(8)
                 }
+            }
+
+            if self.keybind.direction == .custom {
+                Button(action: {
+                    self.isConfiguringCustomKeybind.toggle()
+                }, label: {
+                    Image(systemName: "slider.horizontal.3")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                })
+                .buttonStyle(.plain)
+                .sheet(isPresented: self.$isConfiguringCustomKeybind) {
+                    CustomKeybindView(action: $keybind, isSheetShown: $isConfiguringCustomKeybind)
+                }
+            }
+
+            if self.keybind.direction == .cycle {
+                Button(action: {
+                    self.isConfiguringCyclingKeybind.toggle()
+                }, label: {
+                    Image(systemName: "slider.horizontal.3")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                })
+                .buttonStyle(.plain)
+                .sheet(isPresented: self.$isConfiguringCyclingKeybind) {
+                    CustomCyclingKeybindView(action: $keybind, isSheetShown: $isConfiguringCyclingKeybind)
+                }
+            }
+
+            Spacer()
+
+            Group {
+                ForEach(self.triggerKey.sorted(), id: \.self) { key in
+                    Text("\(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
+                        .foregroundStyle(.secondary)
+                        .fontDesign(.monospaced)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .aspectRatio(1, contentMode: .fill)
+                        .padding(5)
+                        .background {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .foregroundStyle(.background.opacity(0.8))
+                                RoundedRectangle(cornerRadius: 6)
+                                    .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
+                            }
+                            .opacity(0.8)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+                }
+
+                Image(systemName: "plus")
+                    .foregroundStyle(.secondary)
+                    .fontDesign(.monospaced)
+
+                Keycorder($keybind, $triggerKey)
             }
         }
         .padding(.vertical, 5)
@@ -133,7 +141,14 @@ struct KeybindCustomizationViewItem: View {
         }, label: {
             HStack {
                 keybind.direction.icon
-                Text(keybind.direction == .custom ? keybind.name ?? "Custom Keybind" : keybind.direction.name)
+
+                if keybind.direction == .custom {
+                    Text(keybind.name ?? "Custom Keybind")
+                } else if keybind.direction == .cycle {
+                    Text(keybind.name ?? "Custom Cycle")
+                } else {
+                    Text(keybind.direction.name)
+                }
 
             }
         })

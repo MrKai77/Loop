@@ -48,6 +48,7 @@
 		A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* StageManager.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
+		A86DAE2A2B3CCF2900B968F0 /* CustomCyclingKeybindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */; };
 		A87376F62AA288EB001890F4 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87376F52AA288EB001890F4 /* Window.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
@@ -119,6 +120,7 @@
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
+		A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCyclingKeybindView.swift; sourceTree = "<group>"; };
 		A87376F52AA288EB001890F4 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
@@ -237,12 +239,9 @@
 			children = (
 				A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */,
 				A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationViewItem.swift */,
-				A84497C82B393595003D4CF3 /* CustomKeybindView.swift */,
-				A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */,
-				A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */,
-				A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */,
-				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
-				A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */,
+				A86DAE262B3CCEF600B968F0 /* Custom Keybinds */,
+				A86DAE282B3CCF1600B968F0 /* Custom Cycling Keybinds */,
+				A86DAE272B3CCF0400B968F0 /* Keybind Recorder */,
 			);
 			path = Keybindings;
 			sourceTree = "<group>";
@@ -258,6 +257,34 @@
 				A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */,
 			);
 			path = "Window Management";
+			sourceTree = "<group>";
+		};
+		A86DAE262B3CCEF600B968F0 /* Custom Keybinds */ = {
+			isa = PBXGroup;
+			children = (
+				A84497C82B393595003D4CF3 /* CustomKeybindView.swift */,
+				A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */,
+				A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */,
+			);
+			path = "Custom Keybinds";
+			sourceTree = "<group>";
+		};
+		A86DAE272B3CCF0400B968F0 /* Keybind Recorder */ = {
+			isa = PBXGroup;
+			children = (
+				A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */,
+				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
+				A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */,
+			);
+			path = "Keybind Recorder";
+			sourceTree = "<group>";
+		};
+		A86DAE282B3CCF1600B968F0 /* Custom Cycling Keybinds */ = {
+			isa = PBXGroup;
+			children = (
+				A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */,
+			);
+			path = "Custom Cycling Keybinds";
 			sourceTree = "<group>";
 		};
 		A88265FA29808DED00BCB197 /* Preview Window */ = {
@@ -504,6 +531,7 @@
 				A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */,
 				A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */,
 				A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */,
+				A86DAE2A2B3CCF2900B968F0 /* CustomCyclingKeybindView.swift in Sources */,
 				A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */,
 				A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
