@@ -21,6 +21,7 @@ struct KeybindingsSettingsView: View {
 
     @StateObject private var keycorderModel = KeycorderModel()
     @State private var suggestAddingTriggerDelay: Bool = false
+    @State private var selection: WindowAction?
 
     var body: some View {
         ZStack {
@@ -55,8 +56,8 @@ struct KeybindingsSettingsView: View {
                     Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
                 }
 
-                Section("Keybinds") {
-                    List {
+                Section {
+                    VStack(spacing: 0) {
                         if self.keybinds.isEmpty {
                             HStack {
                                 Spacer()
@@ -70,65 +71,101 @@ struct KeybindingsSettingsView: View {
                             }
                             .foregroundStyle(.secondary)
                             .padding()
-                        }
-                        ForEach(self.$keybinds) { keybind in
-                            KeybindCustomizationViewItem(keybind: keybind, triggerKey: self.$triggerKey)
-                                .contextMenu {
-                                    Button {
-                                        self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
+                        } else {
+                            List(selection: $selection) {
+                                ForEach(self.$keybinds) { keybind in
+                                    KeybindCustomizationViewItem(keybind: keybind, triggerKey: self.$triggerKey)
+                                        .contextMenu {
+                                            Button {
+                                                self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
+                                            } label: {
+                                                Label("Delete", systemImage: "trash")
+                                            }
+                                        }
+                                        .tag(keybind.wrappedValue)
                                 }
-                                .tag(keybind.wrappedValue)
+                                .onMove { indices, newOffset in
+                                    self.keybinds.move(fromOffsets: indices, toOffset: newOffset)
+                                }
+                            }
+                            .listStyle(.bordered(alternatesRowBackgrounds: true))
                         }
-                        .onMove { indices, newOffset in
-                            self.keybinds.move(fromOffsets: indices, toOffset: newOffset)
-                        }
+
+                        Divider()
+
+                        Rectangle()
+                            .frame(height: 20)
+                            .foregroundStyle(.quinary)
+                            .overlay {
+                                HStack(spacing: 5) {
+                                    Menu(content: {
+                                        newDirectionMenu()
+                                    }, label: {
+                                        Rectangle()
+                                            .foregroundStyle(.white.opacity(0.00001))
+                                            .overlay {
+                                                Image(systemName: "plus")
+                                                    .font(.footnote)
+                                                    .fontWeight(.semibold)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .padding(-5)
+                                    })
+
+                                    Divider()
+
+                                    Button {
+                                        self.keybinds.removeAll(where: {
+                                            $0 == selection
+                                        })
+                                    } label: {
+                                        Rectangle()
+                                            .foregroundStyle(.white.opacity(0.00001))
+                                            .overlay {
+                                                Image(systemName: "minus")
+                                                    .font(.footnote)
+                                                    .fontWeight(.semibold)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .padding(-5)
+                                    }
+                                    .disabled(self.selection == nil)
+
+                                    Spacer()
+                                }
+                                .buttonStyle(.plain)
+                                .padding(5)
+                            }
                     }
-                    .listStyle(.bordered(alternatesRowBackgrounds: true))
                     .ignoresSafeArea()
                     .padding(-10)
+                } header: {
+                    Text("Keybinds")
+                } footer: {
+                    HStack {
+                        Button("Import", systemImage: "square.and.arrow.down") {
+                            WindowAction.importPrompt()
+                        }
+
+                        Button("Export", systemImage: "square.and.arrow.up") {
+                            WindowAction.exportPrompt()
+                        }
+
+                        Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
+                            _keybinds.reset()
+                            _triggerKey.reset()
+                            _doubleClickToTrigger.reset()
+                            _triggerDelay.reset()
+                            _middleClickTriggersLoop.reset()
+                            keycorderModel.eventMonitor = nil
+                        }
+                    }
+                    .padding(.top, 10)
                 }
             }
             .formStyle(.grouped)
-            .padding(.bottom, 30)
-
-            VStack(spacing: 0) {
-                Spacer()
-                Divider()
-                Rectangle()
-                    .frame(height: 30)
-                    .foregroundStyle(.background)
-                    .overlay {
-                        HStack {
-                            Menu("+") {
-                                newDirectionMenu()
-                            }
-                            .fixedSize()
-
-                            Spacer()
-
-                            Button("Import", systemImage: "square.and.arrow.down") {
-                                WindowAction.importPrompt()
-                            }
-
-                            Button("Export", systemImage: "square.and.arrow.up") {
-                                WindowAction.exportPrompt()
-                            }
-
-                            Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
-                                _keybinds.reset()
-                                _triggerKey.reset()
-                                _doubleClickToTrigger.reset()
-                                _triggerDelay.reset()
-                                _middleClickTriggersLoop.reset()
-                                keycorderModel.eventMonitor = nil
-                            }
-                        }
-                        .padding(4)
-                    }
-            }
         }
         .environmentObject(keycorderModel)
     }

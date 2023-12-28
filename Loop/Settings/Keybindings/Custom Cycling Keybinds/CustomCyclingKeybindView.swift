@@ -26,7 +26,20 @@ struct CustomCyclingKeybindView: View {
 
                 Section {
                     VStack(spacing: 0) {
-                        if !self.cycleDirections.isEmpty {
+                        if self.cycleDirections.isEmpty {
+                            HStack {
+                                Spacer()
+                                VStack {
+                                    Text("Nothing to Cycle Through")
+                                        .font(.title3)
+                                    Text("Press + to add a cycle item!")
+                                        .font(.caption)
+                                }
+                                Spacer()
+                            }
+                            .foregroundStyle(.secondary)
+                            .padding()
+                        } else {
                             List(selection: $selection) {
                                 ForEach(self.$cycleDirections) { cycleAction in
                                     CustomCyclingKeybindItemView(action: cycleAction, total: self.$cycleDirections)
@@ -46,23 +59,9 @@ struct CustomCyclingKeybindView: View {
                                 }
                             }
                             .listStyle(.bordered(alternatesRowBackgrounds: true))
-                        } else {
-                            HStack {
-                                Spacer()
-                                VStack {
-                                    Text("No Keybinds")
-                                        .font(.title3)
-                                    Text("Press + to add a keybind!")
-                                        .font(.caption)
-                                }
-                                Spacer()
-                            }
-                            .foregroundStyle(.secondary)
-                            .padding()
                         }
 
                         Divider()
-                            .foregroundStyle(.primary)
 
                         Rectangle()
                             .frame(height: 20)
@@ -72,22 +71,35 @@ struct CustomCyclingKeybindView: View {
                                     Menu(content: {
                                         newDirectionMenu()
                                     }, label: {
-                                        Image(systemName: "plus")
-                                            .foregroundStyle(.secondary)
-                                            .contentShape(Rectangle())
+                                        Rectangle()
+                                            .foregroundStyle(.white.opacity(0.00001))
+                                            .overlay {
+                                                Image(systemName: "plus")
+                                                    .font(.footnote)
+                                                    .fontWeight(.semibold)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .padding(-5)
                                     })
 
                                     Divider()
-                                        .foregroundStyle(.primary)
 
                                     Button {
                                         self.cycleDirections.removeAll(where: {
                                             $0 == selection
                                         })
                                     } label: {
-                                        Image(systemName: "minus")
-                                            .foregroundStyle(.secondary)
-                                            .contentShape(Rectangle())
+                                        Rectangle()
+                                            .foregroundStyle(.white.opacity(0.00001))
+                                            .overlay {
+                                                Image(systemName: "minus")
+                                                    .font(.footnote)
+                                                    .fontWeight(.semibold)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .padding(-5)
                                     }
                                     .disabled(self.selection == nil)
 
