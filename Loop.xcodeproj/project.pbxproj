@@ -49,6 +49,7 @@
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
 		A86DAE2A2B3CCF2900B968F0 /* CustomCyclingKeybindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */; };
+		A86DAE2C2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86DAE2B2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift */; };
 		A87376F62AA288EB001890F4 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87376F52AA288EB001890F4 /* Window.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
@@ -121,6 +122,7 @@
 		A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
 		A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCyclingKeybindView.swift; sourceTree = "<group>"; };
+		A86DAE2B2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCyclingKeybindItemView.swift; sourceTree = "<group>"; };
 		A87376F52AA288EB001890F4 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 			isa = PBXGroup;
 			children = (
 				A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */,
+				A86DAE2B2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift */,
 			);
 			path = "Custom Cycling Keybinds";
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 				A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */,
 				A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */,
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
+				A86DAE2C2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift in Sources */,
 				A82DDBDE2AEC736300D7F974 /* AnimationConfiguration.swift in Sources */,
 				A84497CD2B3A52C7003D4CF3 /* PreviewWindowButton.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,

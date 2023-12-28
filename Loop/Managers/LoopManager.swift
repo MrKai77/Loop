@@ -124,8 +124,21 @@ class LoopManager: ObservableObject {
         guard self.currentAction != action && self.isLoopActive else { return }
 
         var newAction = action
+
         if newAction.direction.isPresetCyclable {
             newAction = .init(newAction.direction.nextCyclingDirection(from: self.currentAction.direction))
+        }
+
+        if newAction.direction == .cycle {
+            if let cycle = action.cycle {
+                var nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
+                if nextIndex >= cycle.count {
+                    nextIndex = 0
+                }
+                newAction = cycle[nextIndex]
+            } else {
+                return
+            }
         }
 
         if newAction != currentAction {
