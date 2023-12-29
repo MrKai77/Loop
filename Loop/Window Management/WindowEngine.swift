@@ -15,39 +15,50 @@ struct WindowEngine {
     ///   - window: Window to be resized
     ///   - direction: WindowDirection
     ///   - screen: Screen the window should be resized on
-    static func resize(_ window: Window, to direction: WindowDirection, _ screen: NSScreen) {
-        guard direction != .noAction else { return }
+    static func resize(
+        _ window: Window,
+        to action: WindowAction,
+        _ screen: NSScreen,
+        supressAnimations: Bool = false
+    ) {
+        guard action.direction != .noAction else { return }
         window.activate()
 
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
         }
 
-        if direction == .fullscreen {
+        if action.direction == .fullscreen {
             window.toggleFullscreen()
-            WindowRecords.recordDirection(window, direction)
+            WindowRecords.record(window, action)
             return
         }
         window.setFullscreen(false)
 
-        if direction == .hide {
+        if action.direction == .hide {
             window.toggleHidden()
             return
         }
 
-        if direction == .minimize {
+        if action.direction == .minimize {
             window.toggleMinimized()
             return
         }
 
-        guard let screenFrame = screen.safeScreenFrame,
-              let currentWindowFrame = WindowEngine.generateWindowFrame(window.frame, screenFrame, direction, window)
+        let screenFrame = screen.safeScreenFrame
+        guard
+            let currentWindowFrame = WindowEngine.generateWindowFrame(
+                window.frame,
+                screenFrame,
+                action,
+                window
+            )
         else {
             return
         }
-        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, direction)
+        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, screenFrame, action)
 
-        var animate =  Defaults[.animateWindowResizes]
+        var animate = (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {
             if PermissionsManager.ScreenRecording.getStatus() == false {
                 PermissionsManager.ScreenRecording.requestAccess()
@@ -57,22 +68,24 @@ struct WindowEngine {
 
             // Calculate the window's minimum window size and change the target accordingly
             window.getMinSize(screen: screen) { minSize in
-                if (targetWindowFrame.minX + minSize.width) > screen.frame.maxX {
-                    targetWindowFrame.origin.x = screen.frame.maxX - minSize.width - Defaults[.windowPadding]
+                let nsScreenFrame = screenFrame.flipY!
+
+                if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
+                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.windowPadding]
                 }
 
-                if (targetWindowFrame.minY + minSize.height) > screen.frame.maxY {
-                    targetWindowFrame.origin.y = screen.frame.maxY - minSize.height - Defaults[.windowPadding]
+                if (targetWindowFrame.minY + minSize.height) > nsScreenFrame.maxY {
+                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.windowPadding]
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
-                    WindowRecords.recordDirection(window, direction)
+                    WindowRecords.record(window, action)
                 }
             }
         } else {
             window.setFrame(targetWindowFrame) {
                 WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-                WindowRecords.recordDirection(window, direction)
+                WindowRecords.record(window, action)
             }
         }
     }
@@ -149,11 +162,10 @@ struct WindowEngine {
     private static func generateWindowFrame(
         _ windowFrame: CGRect,
         _ screenFrame: CGRect,
-        _ direction: WindowDirection,
+        _ action: WindowAction,
         _ window: Window
     ) -> CGRect? {
-        let screenWidth = screenFrame.width
-        let screenHeight = screenFrame.height
+        let direction = action.direction
 
         var newWindowFrame: CGRect = CGRect(
             x: screenFrame.origin.x,
@@ -163,15 +175,22 @@ struct WindowEngine {
         )
 
         switch direction {
+        case .custom:
+            guard
+                let newFrame = WindowEngine.generateCustomWindowFrame(action, screenFrame)
+            else {
+                return nil
+            }
+            newWindowFrame = newFrame
         case .center:
             newWindowFrame = CGRect(
-                x: screenFrame.midX - windowFrame.width/2,
-                y: screenFrame.midY - windowFrame.height/2,
+                x: screenFrame.midX - windowFrame.width / 2,
+                y: screenFrame.midY - windowFrame.height / 2,
                 width: windowFrame.width,
                 height: windowFrame.height
             )
         case .undo:
-            let previousDirection = WindowRecords.getLastDirection(for: window, willResize: true)
+            let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
             if let previousResizeFrame = self.generateWindowFrame(
                 windowFrame,
                 screenFrame,
@@ -190,10 +209,64 @@ struct WindowEngine {
             }
         default:
             guard let frameMultiplyValues = direction.frameMultiplyValues else { return nil}
-            newWindowFrame.origin.x += screenWidth * frameMultiplyValues.minX
-            newWindowFrame.origin.y += screenHeight * frameMultiplyValues.minY
-            newWindowFrame.size.width += screenWidth * frameMultiplyValues.width
-            newWindowFrame.size.height += screenHeight * frameMultiplyValues.height
+            newWindowFrame.origin.x += screenFrame.width * frameMultiplyValues.minX
+            newWindowFrame.origin.y += screenFrame.height * frameMultiplyValues.minY
+            newWindowFrame.size.width += screenFrame.width * frameMultiplyValues.width
+            newWindowFrame.size.height += screenFrame.height * frameMultiplyValues.height
+        }
+
+        return newWindowFrame
+    }
+
+    private static func generateCustomWindowFrame(_ action: WindowAction, _ screenFrame: CGRect) -> CGRect? {
+        guard
+            action.direction == .custom,
+            let measureSystem = action.measureSystem,
+            let anchor = action.anchor,
+            let width = action.width,
+            let height = action.height
+        else {
+            return nil
+        }
+        var newWindowFrame = CGRect(
+            x: screenFrame.origin.x,
+            y: screenFrame.origin.y,
+            width: 0,
+            height: 0
+        )
+
+        switch measureSystem {
+        case .percentage:
+            newWindowFrame.size.width += screenFrame.width * (width / 100.0)
+            newWindowFrame.size.height += screenFrame.height * (height / 100.0)
+        case .pixels:
+            newWindowFrame.size.width += width
+            newWindowFrame.size.height += height
+        }
+
+        switch anchor {
+        case .topLeft:
+            break
+        case .top:
+            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+        case .topRight:
+            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
+        case .right:
+            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
+            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+        case .bottomRight:
+            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
+            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+        case .bottom:
+            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+        case .bottomLeft:
+            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
+        case .left:
+            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+        case .center:
+            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
         }
 
         return newWindowFrame
@@ -204,16 +277,38 @@ struct WindowEngine {
     ///   - windowFrame: The frame the window WILL be resized to
     ///   - direction: The direction the window WILL be resized to
     /// - Returns: CGRect with padding applied
-    private static func applyPadding(_ windowFrame: CGRect, _ direction: WindowDirection) -> CGRect {
-        var paddingAppliedRect = windowFrame
-        for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
-            if direction.edgesTouchingScreen.contains(side) {
-                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
-            } else {
-                paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
-            }
-        }
-        return paddingAppliedRect
+    private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
+        var paddedFrame = windowFrame
+
+        let topPaddingDivisor: CGFloat = windowFrame.minY.approximatelyEquals(to: screenFrame.minY) ? 1 : 2
+        let bottomPaddingDivisor: CGFloat = windowFrame.maxY.approximatelyEquals(to: screenFrame.maxY) ? 1 : 2
+        let leadingPaddingDivisor: CGFloat = windowFrame.minX.approximatelyEquals(to: screenFrame.minX) ? 1 : 2
+        let trailingPaddingDivisor: CGFloat = windowFrame.maxX.approximatelyEquals(to: screenFrame.maxX) ? 1 : 2
+
+        paddedFrame.inset(.top, amount: Defaults[.windowPadding] / topPaddingDivisor)
+        paddedFrame.inset(.bottom, amount: Defaults[.windowPadding] / bottomPaddingDivisor)
+        paddedFrame.inset(.leading, amount: Defaults[.windowPadding] / leadingPaddingDivisor)
+        paddedFrame.inset(.trailing, amount: Defaults[.windowPadding] / trailingPaddingDivisor)
+
+//        print("Window Frame: \(windowFrame), Screen Frame: \(screenFrame), \(topPaddingDivisor), \(bottomPaddingDivisor), \(leadingPaddingDivisor), \(trailingPaddingDivisor)")
+
+//        for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
+//            if action.direction == .custom {
+//                if let anchor = action.anchor, anchor.edgesTouchingScreen.contains(side) {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
+//                } else {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
+//                }
+//            } else {
+//                if action.direction.edgesTouchingScreen.contains(side) {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
+//                } else {
+//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
+//                }
+//            }
+//        }
+
+        return paddedFrame
     }
 
     /// Will move a window back onto the screen. To be run AFTER a window has been resized.
@@ -256,5 +351,11 @@ extension CGRect {
         case .trailing:
             self.size.width -= amount
         }
+    }
+}
+
+extension CGFloat {
+    func approximatelyEquals(to comparison: CGFloat) -> Bool {
+        return abs(self - comparison) < 5
     }
 }

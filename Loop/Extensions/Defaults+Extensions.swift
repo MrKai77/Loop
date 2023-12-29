@@ -11,6 +11,7 @@ import Defaults
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
+    static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
@@ -40,17 +41,20 @@ extension Defaults.Keys {
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
 
-    static let keybinds = Key<[Keybind]>("keybinds", default: [
-        Keybind(.maximize, keycode: [.kVK_Space]),
-        Keybind(.center, keycode: [.kVK_Return]),
-        Keybind(.cycleTop, keycode: [.kVK_UpArrow]),
-        Keybind(.cycleBottom, keycode: [.kVK_DownArrow]),
-        Keybind(.cycleLeft, keycode: [.kVK_LeftArrow]),
-        Keybind(.cycleRight, keycode: [.kVK_RightArrow]),
+    static let keybinds = Key<[WindowAction]>("keybinds", default: [
+        WindowAction(.maximize, keybind: [.kVK_Space]),
+        WindowAction(.center, keybind: [.kVK_Return]),
+        WindowAction(.cycleTop, keybind: [.kVK_UpArrow]),
+        WindowAction(.cycleBottom, keybind: [.kVK_DownArrow]),
+        WindowAction(.cycleLeft, keybind: [.kVK_LeftArrow]),
+        WindowAction(.cycleRight, keybind: [.kVK_RightArrow]),
 
-        Keybind(.topLeftQuarter, keycode: [.kVK_UpArrow, .kVK_LeftArrow]),
-        Keybind(.topRightQuarter, keycode: [.kVK_UpArrow, .kVK_RightArrow]),
-        Keybind(.bottomRightQuarter, keycode: [.kVK_DownArrow, .kVK_RightArrow]),
-        Keybind(.bottomLeftQuarter, keycode: [.kVK_DownArrow, .kVK_LeftArrow])
+        WindowAction(.topLeftQuarter, keybind: [.kVK_UpArrow, .kVK_LeftArrow]),
+        WindowAction(.topRightQuarter, keybind: [.kVK_UpArrow, .kVK_RightArrow]),
+        WindowAction(.bottomRightQuarter, keybind: [.kVK_DownArrow, .kVK_RightArrow]),
+        WindowAction(.bottomLeftQuarter, keybind: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
+
+    static let respectStageManager = Key<Bool>("respectStageManager", default: true)
+    static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 }

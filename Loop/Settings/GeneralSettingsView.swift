@@ -14,6 +14,7 @@ struct GeneralSettingsView: View {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @Default(.launchAtLogin) var launchAtLogin
+    @Default(.hideMenuBarIcon) var hideMenuBarIcon
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
     @Default(.useGradient) var useGradient
@@ -27,9 +28,6 @@ struct GeneralSettingsView: View {
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
 
-    @State var isAccessibilityAccessGranted = false
-    @State var isScreenRecordingAccessGranted = false
-
     var body: some View {
         Form {
             Section("Behavior") {
@@ -41,6 +39,17 @@ struct GeneralSettingsView: View {
                             try? SMAppService().unregister()
                         }
                     }
+
+                VStack(alignment: .leading) {
+                    Toggle("Hide menubar icon", isOn: $hideMenuBarIcon)
+
+                    if hideMenuBarIcon {
+                        Text("Re-open Loop again to see this window.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .textSelection(.enabled)
+                    }
+                }
             }
 
             Section {
@@ -134,60 +143,6 @@ struct GeneralSettingsView: View {
                         )
                 }
             }
-
-            Section(content: {
-                HStack {
-                    Text("Accessibility Access")
-                    Spacer()
-                    Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
-                    Circle()
-                        .frame(width: 8, height: 8)
-                        .padding(.trailing, 5)
-                        .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
-                        .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
-                }
-
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("Screen Recording Access")
-                        Spacer()
-                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .padding(.trailing, 5)
-                            .foregroundColor(isScreenRecordingAccessGranted ? .green : .red)
-                            .shadow(color: isScreenRecordingAccessGranted ? .green : .red, radius: 8)
-                    }
-                    Text("This is only needed to animate windows being resized.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }, header: {
-                HStack {
-                    Text("Permissions")
-
-                    Spacer()
-
-                    Button("Request Access", action: {
-                        PermissionsManager.requestAccess()
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-                    })
-                    .buttonStyle(.link)
-                    .foregroundStyle(Color.accentColor)
-                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
-                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
-                    .help("Refresh the current accessibility permissions")
-                    .onAppear {
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-
-                        if !isScreenRecordingAccessGranted {
-                            self.animateWindowResizes = false
-                        }
-                    }
-                }
-            })
         }
         .formStyle(.grouped)
         .scrollDisabled(true)

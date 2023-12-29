@@ -28,7 +28,7 @@ class LoopManager: ObservableObject {
     private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
-    @Published var currentResizeDirection: WindowDirection = .noAction
+    @Published var currentAction: WindowAction = .init(.noAction)
     private var initialMousePosition: CGPoint = CGPoint()
     private var angleToMouse: Angle = Angle(degrees: 0)
     private var distanceToMouse: CGFloat = 0
@@ -66,8 +66,8 @@ class LoopManager: ObservableObject {
         }
 
         Notification.Name.directionChanged.onRecieve { notification in
-            if let direction = notification.userInfo?["direction"] as? WindowDirection {
-                self.changeDirection(direction)
+            if let action = notification.userInfo?["action"] as? WindowAction {
+                self.changeAction(action)
             }
         }
 
@@ -115,28 +115,50 @@ class LoopManager: ObservableObject {
             resizeDirection = .maximize
         }
 
-        if resizeDirection != self.currentResizeDirection.base {
-            changeDirection(resizeDirection)
+        if resizeDirection != self.currentAction.direction.base {
+            changeAction(.init(resizeDirection))
         }
     }
 
-    private func changeDirection(_ direction: WindowDirection) {
-        guard self.currentResizeDirection != direction && self.isLoopActive else { return }
+    private func changeAction(_ action: WindowAction) {
+        guard self.currentAction != action && self.isLoopActive else { return }
 
-        var newDirection = direction
-        if newDirection.cyclable {
-            newDirection = direction.nextCyclingDirection(from: self.currentResizeDirection)
+        var newAction = action
+
+        if newAction.direction.isPresetCyclable {
+            newAction = .init(newAction.direction.nextCyclingDirection(from: self.currentAction.direction))
         }
 
-        if newDirection != currentResizeDirection {
-            self.currentResizeDirection = newDirection
+        if newAction.direction == .cycle {
+            if let cycle = action.cycle {
+                var nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
+                if nextIndex >= cycle.count {
+                    nextIndex = 0
+                }
+                newAction = cycle[nextIndex]
+            } else {
+                return
+            }
+        }
+
+        if newAction != currentAction {
+            self.currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
                 self.openWindows()
             }
 
             DispatchQueue.main.async {
-                Notification.Name.directionChanged.post(userInfo: ["direction": self.currentResizeDirection])
+                Notification.Name.directionChanged.post(userInfo: ["action": self.currentAction])
+
+                if !Defaults[.previewVisibility] {
+                    WindowEngine.resize(
+                        self.targetWindow!,
+                        to: self.currentAction,
+                        self.screenWithMouse!,
+                        supressAnimations: true
+                    )
+                }
             }
 
             NSHapticFeedbackManager.defaultPerformer.perform(
@@ -192,16 +214,17 @@ class LoopManager: ObservableObject {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
-            if useDoubleClickTrigger &&
-               abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                if useTriggerDelay {
-                    if self.triggerDelayTimer == nil {
-                        self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                            self.openLoop()
+            if useDoubleClickTrigger {
+                if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+                    if useTriggerDelay {
+                        if self.triggerDelayTimer == nil {
+                            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                                self.openLoop()
+                            }
                         }
+                    } else {
+                        self.openLoop()
                     }
-                } else {
-                    self.openLoop()
                 }
             } else if useTriggerDelay {
                 if self.triggerDelayTimer == nil {
@@ -223,7 +246,7 @@ class LoopManager: ObservableObject {
     private func openLoop() {
         guard self.isLoopActive == false else { return }
 
-        self.currentResizeDirection = .noAction
+        self.currentAction = .init(.noAction)
         self.targetWindow = nil
 
         // Ensure accessibility access
@@ -254,10 +277,16 @@ class LoopManager: ObservableObject {
         if self.targetWindow != nil &&
             self.screenWithMouse != nil &&
             forceClose == false &&
-            self.currentResizeDirection != .noAction &&
+            self.currentAction.direction != .noAction &&
             self.isLoopActive {
 
-            WindowEngine.resize(self.targetWindow!, to: self.currentResizeDirection, self.screenWithMouse!)
+            if Defaults[.previewVisibility] {
+                WindowEngine.resize(
+                    self.targetWindow!,
+                    to: self.currentAction,
+                    self.screenWithMouse!
+                )
+            }
 
             // This rotates the menubar icon
             Notification.Name.didLoop.post()

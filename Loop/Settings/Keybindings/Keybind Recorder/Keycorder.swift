@@ -28,7 +28,7 @@ struct Keycorder: View {
     @State private var isActive: Bool = false
     @State private var isCurrentlyPressed: Bool = false
 
-    init(_ keybind: Binding<Keybind>, _ triggerKey: Binding<Set<CGKeyCode>>) {
+    init(_ keybind: Binding<WindowAction>, _ triggerKey: Binding<Set<CGKeyCode>>) {
         self._validCurrentKeybind = keybind.keybind
         self._direction = keybind.direction
         self._triggerKey = triggerKey
@@ -174,14 +174,24 @@ struct Keycorder: View {
             self.isCurrentlyPressed = false
         }
 
-        for keybind in Defaults[.keybinds] where (
-            keybind.keybind == self.selectionKeybind && keybind.direction != self.direction
-        ) {
+        if self.validCurrentKeybind == self.selectionKeybind {
             willSet = false
-            self.errorMessage = Text("That keybind is already being used by \(keybind.direction.name.lowercased()).")
-            self.shouldShake.toggle()
-            self.shouldError = true
-            break
+        }
+
+        if willSet {
+            for keybind in Defaults[.keybinds] where (
+                keybind.keybind == self.selectionKeybind
+            ) {
+                willSet = false
+                if keybind.direction == .custom {
+                    self.errorMessage = Text("That keybind is already being used by \(keybind.name ?? "another custom keybind").")
+                } else {
+                    self.errorMessage = Text("That keybind is already being used by \(keybind.direction.name.lowercased()).")
+                }
+                self.shouldShake.toggle()
+                self.shouldError = true
+                break
+            }
         }
 
         if willSet {

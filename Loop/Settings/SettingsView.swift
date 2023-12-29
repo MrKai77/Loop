@@ -20,6 +20,7 @@ struct SettingsView: View {
                     Image(systemName: "gear")
                     Text("General")
                 }
+                .frame(width: 450)
 
             RadialMenuSettingsView()
                 .tag(2)
@@ -27,6 +28,7 @@ struct SettingsView: View {
                     Image(.loop)
                     Text("Radial Menu")
                 }
+                .frame(width: 450)
 
             PreviewSettingsView()
                 .tag(3)
@@ -34,6 +36,7 @@ struct SettingsView: View {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                     Text("Preview")
                 }
+                .frame(width: 450)
 
             KeybindingsSettingsView()
                 .tag(4)
@@ -41,6 +44,8 @@ struct SettingsView: View {
                     Image(systemName: "keyboard")
                     Text("Keybindings")
                 }
+                .frame(width: 500)
+                .frame(minHeight: 500, maxHeight: 680)
 
             MoreSettingsView()
                 .tag(5)
@@ -49,8 +54,8 @@ struct SettingsView: View {
                     Text("More")
                 }
                 .environmentObject(updater)
+                .frame(width: 450)
         }
-        .frame(width: 450)
-        .fixedSize(horizontal: false, vertical: true)
+        .fixedSize(horizontal: true, vertical: true)
     }
 }

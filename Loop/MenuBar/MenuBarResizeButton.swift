@@ -18,14 +18,16 @@ struct MenuBarResizeButton: View {
         Button {
             if let frontmostWindow = WindowEngine.frontmostWindow,
                let screen = NSScreen.screenWithMouse {
-                WindowEngine.resize(frontmostWindow, to: direction, screen)
+                WindowEngine.resize(frontmostWindow, to: .init(direction), screen)
             }
         } label: {
             HStack {
                 if let image = direction.icon {
                     image
-                    Text(direction.name)
+                } else {
+                    Image(systemName: "exclamationmark.triangle")
                 }
+                Text(direction.name)
             }
         }
     }

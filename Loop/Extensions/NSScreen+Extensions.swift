@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Defaults
 
-// Return the CGDirectDisplayID
-// Used in to help calculate the size a window needs to be resized to
 extension NSScreen {
+
+    // Return the CGDirectDisplayID
+    // Used in to help calculate the size a window needs to be resized to
     var displayID: CGDirectDisplayID? {
         let key = NSDeviceDescriptionKey("NSScreenNumber")
         return self.deviceDescription[key] as? CGDirectDisplayID
@@ -23,9 +25,14 @@ extension NSScreen {
         return screenWithMouse
     }
 
-    var safeScreenFrame: CGRect? {
-        guard let displayID = self.displayID,
-              let visibleFrame = self.visibleFrame.flipY else { return nil }
+    var safeScreenFrame: CGRect {
+        guard
+            let displayID = self.displayID,
+            let visibleFrame = self.stageStripFreeFrame.flipY
+        else {
+            return self.frame.flipY!
+        }
+
         let screenFrame = CGDisplayBounds(displayID)
         let menubarHeight = visibleFrame.origin.y
 
@@ -35,9 +42,24 @@ extension NSScreen {
         // By using visibleFrame, coordinates of multiple displays won't
         // work correctly, so we instead use screenFrame's origin.
         safeScreenFrame.origin = screenFrame.origin
+
         safeScreenFrame.origin.y += menubarHeight
         safeScreenFrame.origin.x -= screenFrame.minX - visibleFrame.minX
 
         return safeScreenFrame
+    }
+
+    var stageStripFreeFrame: NSRect {
+        var frame = self.visibleFrame
+
+        if Defaults[.respectStageManager] && StageManager.enabled && StageManager.shown {
+            if StageManager.position == .leading {
+                frame.origin.x += Defaults[.stageStripSize]
+            }
+
+            frame.size.width -= Defaults[.stageStripSize]
+        }
+
+        return frame
     }
 }
