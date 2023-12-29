@@ -40,55 +40,37 @@ struct PreviewView: View {
     @Default(.stageStripSize) var stageStripSize
 
     var body: some View {
-        HStack(spacing: 0) {
-            if respectStageManager &&
-                StageManager.enabled &&
-                StageManager.shown &&
-                StageManager.position == .leading {
-                Spacer()
-                    .frame(width: stageStripSize)
-            }
-
-            GeometryReader { geo in
-                ZStack {
-                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                        .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
-                        .shadow(radius: 10)
-                    RoundedRectangle(cornerRadius: previewCornerRadius)
-                        .stroke(
-                            LinearGradient(
-                                gradient: Gradient(
-                                    colors: [
-                                        Color.getLoopAccent(tone: .normal),
-                                        Color.getLoopAccent(tone: useGradient ? .darker : .normal)
-                                    ]
-                                ),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
+        GeometryReader { geo in
+            ZStack {
+                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                    .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
+                    .shadow(radius: 10)
+                RoundedRectangle(cornerRadius: previewCornerRadius)
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(
+                                colors: [
+                                    Color.getLoopAccent(tone: .normal),
+                                    Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+                                ]
                             ),
-                            lineWidth: previewBorderThickness
-                        )
-                }
-                .padding(windowPadding + previewPadding + previewBorderThickness / 2)
-
-                .frame(
-                    width: self.currentAction.previewWindowWidth(geo.size.width, window),
-                    height: self.currentAction.previewWindowHeight(geo.size.height, window)
-                )
-
-                .offset(
-                    x: self.currentAction.previewWindowXOffset(geo.size.width, window),
-                    y: self.currentAction.previewWindowYOffset(geo.size.height, window)
-                )
-
-                if respectStageManager &&
-                    StageManager.enabled &&
-                    StageManager.shown &&
-                    StageManager.position == .trailing {
-                    Spacer()
-                        .frame(width: stageStripSize)
-                }
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: previewBorderThickness
+                    )
             }
+            .padding(windowPadding + previewPadding + previewBorderThickness / 2)
+
+            .frame(
+                width: self.currentAction.previewWindowWidth(geo.size.width, window),
+                height: self.currentAction.previewWindowHeight(geo.size.height, window)
+            )
+
+            .offset(
+                x: self.currentAction.previewWindowXOffset(geo.size.width, window),
+                y: self.currentAction.previewWindowYOffset(geo.size.height, window)
+            )
         }
         .opacity(currentAction.direction == .noAction ? 0 : 1)
         .animation(animationConfiguration.previewWindowAnimation, value: currentAction)
