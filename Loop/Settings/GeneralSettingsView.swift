@@ -14,6 +14,7 @@ struct GeneralSettingsView: View {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @Default(.launchAtLogin) var launchAtLogin
+    @Default(.hideMenuBarIcon) var hideMenuBarIcon
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
     @Default(.useGradient) var useGradient
@@ -38,6 +39,17 @@ struct GeneralSettingsView: View {
                             try? SMAppService().unregister()
                         }
                     }
+
+                VStack(alignment: .leading) {
+                    Toggle("Hide menubar icon", isOn: $hideMenuBarIcon)
+
+                    if hideMenuBarIcon {
+                        Text("Re-open Loop again to see this window.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .textSelection(.enabled)
+                    }
+                }
             }
 
             Section {

@@ -11,6 +11,7 @@ import Defaults
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
+    static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
