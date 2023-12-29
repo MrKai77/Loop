@@ -70,7 +70,9 @@ struct PreviewView: View {
         .onReceive(.directionChanged) { obj in
             if !self.previewMode,
                let action = obj.userInfo?["action"] as? WindowAction,
-               !action.direction.isPresetCyclable {
+               !action.direction.isPresetCyclable,
+               action.direction != .cycle {
+
                 self.currentAction = action
 
                 if self.currentAction.direction == .undo && self.window != nil {
