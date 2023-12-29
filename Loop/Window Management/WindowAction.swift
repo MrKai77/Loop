@@ -76,7 +76,7 @@ extension WindowAction {
         var cycle: [SavedWindowActionFormat]?
 
         func convertToWindowAction() -> WindowAction {
-            return WindowAction(
+            WindowAction(
                 direction,
                 keybind: keybind,
                 name: name,
@@ -87,6 +87,19 @@ extension WindowAction {
                 cycle: cycle?.map { $0.convertToWindowAction() }
             )
         }
+    }
+
+    private func convertToSavedWindowActionFormat() -> SavedWindowActionFormat {
+        SavedWindowActionFormat(
+            direction: direction,
+            keybind: keybind,
+            name: name,
+            measureSystem: measureSystem,
+            anchor: anchor,
+            width: width,
+            height: height,
+            cycle: cycle?.map { $0.convertToSavedWindowActionFormat() }
+        )
     }
 
     static func exportPrompt() {
@@ -105,15 +118,7 @@ extension WindowAction {
 
         do {
             let exportKeybinds = keybinds.map {
-                SavedWindowActionFormat(
-                    direction: $0.direction,
-                    keybind: $0.keybind,
-                    name: $0.name,
-                    measureSystem: $0.measureSystem,
-                    anchor: $0.anchor,
-                    width: $0.width,
-                    height: $0.height
-                )
+                $0.convertToSavedWindowActionFormat()
             }
 
             let keybindsData = try encoder.encode(exportKeybinds)
@@ -140,11 +145,12 @@ extension WindowAction {
 
         savePanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
             if result == .OK, let destUrl = savePanel.url {
-                do {
-                    try data?.write(to: destUrl)
-                } catch {
-                    // Handle error
-                    print("Error writing to file: \(error)")
+                DispatchQueue.main.async {
+                    do {
+                        try data?.write(to: destUrl)
+                    } catch {
+                        print("Error writing to file: \(error)")
+                    }
                 }
             }
         }
@@ -157,12 +163,13 @@ extension WindowAction {
 
         openPanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
             if result == .OK, let selectedFileURL = openPanel.url {
-                do {
-                    let jsonString = try String(contentsOf: selectedFileURL)
-                    importKeybinds(from: jsonString)
-                } catch {
-                    // Handle file reading error
-                    print("Error reading file: \(error)")
+                DispatchQueue.main.async {
+                    do {
+                        let jsonString = try String(contentsOf: selectedFileURL)
+                        importKeybinds(from: jsonString)
+                    } catch {
+                        print("Error reading file: \(error)")
+                    }
                 }
             }
         }
@@ -202,8 +209,12 @@ extension WindowAction {
                 }
             }
         } catch {
-            // Handle decoding error
             print("Error decoding keybinds: \(error)")
+
+            let alert = NSAlert()
+            alert.messageText = "Error Reading Keybinds"
+            alert.informativeText = "Make sure the file you selected is in the correct format."
+            alert.beginSheetModal(for: NSApplication.shared.mainWindow!)
         }
     }
 
