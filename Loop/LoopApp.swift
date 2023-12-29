@@ -8,19 +8,21 @@
 import SwiftUI
 import MenuBarExtraAccess
 import SettingsAccess
+import Defaults
 
 @main
 struct LoopApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     let aboutViewController = AboutViewController()
     @State var isMenubarItemPresented: Bool = false
+    @Default(.hideMenuBarIcon) var hideMenuBarIcon
 
     var body: some Scene {
         Settings {
             SettingsView()
         }
 
-        MenuBarExtra("Loop", image: "empty") {
+        MenuBarExtra("Loop", image: "empty", isInserted: Binding.constant(!hideMenuBarIcon)) {
             #if DEBUG
             MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif
@@ -79,7 +81,12 @@ struct LoopApp: App {
         }
         .menuBarExtraStyle(.menu)
         .menuBarExtraAccess(isPresented: $isMenubarItemPresented) { statusItem in
-            guard let button = statusItem.button else { return }
+            guard
+                let button = statusItem.button,
+                button.subviews.count == 0
+            else {
+                return
+            }
 
             let view = NSHostingView(rootView: MenuBarIconView())
             view.frame.size = NSSize(width: 26, height: 22)
