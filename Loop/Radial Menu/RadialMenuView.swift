@@ -16,7 +16,7 @@ struct RadialMenuView: View {
     // This will determine whether Loop needs to show a warning (if it's nil)
     let frontmostWindow: Window?
 
-    @State var currentResizeDirection: WindowDirection = .noAction
+    @State var currentAction: WindowDirection = .noAction
 
     @State var previewMode = false
     @State var timer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
@@ -54,7 +54,7 @@ struct RadialMenuView: View {
                             )
                             .mask {
                                 RadialMenuDirectionSelectorView(
-                                    activeAngle: currentResizeDirection,
+                                    activeAngle: currentAction,
                                     size: self.radialMenuSize
                                 )
                             }
@@ -73,7 +73,7 @@ struct RadialMenuView: View {
                     Group {
                         if frontmostWindow == nil && previewMode == false {
                             Image("custom.macwindow.trianglebadge.exclamationmark")
-                        } else if let image = self.currentResizeDirection.radialMenuImage {
+                        } else if let image = self.currentAction.radialMenuImage {
                             image
                         }
                     }
@@ -89,21 +89,21 @@ struct RadialMenuView: View {
         .shadow(radius: 10)
 
         // Animate window
-        .scaleEffect(currentResizeDirection == .maximize ? 0.85 : 1)
-        .animation(animationConfiguration.radialMenuAnimation, value: currentResizeDirection)
+        .scaleEffect(currentAction == .maximize ? 0.85 : 1)
+        .animation(animationConfiguration.radialMenuAnimation, value: currentAction)
         .onAppear {
             if previewMode {
-                currentResizeDirection = currentResizeDirection.nextPreviewDirection
+                currentAction = currentAction.nextPreviewDirection
             }
         }
         .onReceive(timer) { _ in
             if previewMode {
-                currentResizeDirection = currentResizeDirection.nextPreviewDirection
+                currentAction = currentAction.nextPreviewDirection
             }
         }
         .onReceive(.directionChanged) { obj in
-            if !self.previewMode, let direction = obj.userInfo?["direction"] as? WindowDirection {
-                self.currentResizeDirection = direction.base
+            if !self.previewMode, let keybind = obj.userInfo?["action"] as? WindowAction {
+                self.currentAction = keybind.direction.base
             }
         }
     }

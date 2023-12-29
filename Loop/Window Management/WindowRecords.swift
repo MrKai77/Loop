@@ -14,7 +14,7 @@ struct WindowRecords {
         var cgWindowID: CGWindowID
         var initialFrame: CGRect
         var currentFrame: CGRect
-        var directionRecords: [WindowDirection]
+        var actionRecords: [WindowAction]
     }
 
     /// Has the window has been previously recorded?
@@ -50,7 +50,7 @@ struct WindowRecords {
                 cgWindowID: window.cgWindowID,
                 initialFrame: frame,
                 currentFrame: frame,
-                directionRecords: [.initialFrame]
+                actionRecords: [.init(.initialFrame)]
             )
         )
     }
@@ -61,37 +61,37 @@ struct WindowRecords {
         WindowRecords.records.removeAll(where: { $0.cgWindowID == window.cgWindowID })
     }
 
-    /// Record a window's direction in the records array
+    /// Record a window's action in the records array
     /// - Parameters:
     ///   - window: Window to record
-    ///   - direction: Direction to record
-    static func recordDirection(_ window: Window, _ direction: WindowDirection) {
+    ///   - action: WindowAction to record
+    static func record(_ window: Window, _ action: WindowAction) {
         guard let id = WindowRecords.findRecordsID(for: window) else {
             return
         }
 
-        WindowRecords.records[id].directionRecords.insert(direction, at: 0)
+        WindowRecords.records[id].actionRecords.insert(action, at: 0)
         WindowRecords.records[id].currentFrame = window.frame
     }
 
-    /// What was this window's last direction?
+    /// What was this window's last action?
     /// - Parameters:
     ///   - window: Window to check
     ///   - willResize: Will we resize the window after this function? If so, we will also remove the last direction.
-    ///   - offset: Which "last direction" do we want? 1 means the last one, 2 means the one before the last one etc.
-    /// - Returns: The last direction
-    static func getLastDirection(
+    ///   - offset: Which "last action" do we want? 1 means the last one, 2 means the one before the last one etc.
+    /// - Returns: The window action
+    static func getLastAction(
         for window: Window,
         willResize: Bool = false,
         offset: Int = 1
-    ) -> WindowDirection {
+    ) -> WindowAction {
         guard let id = WindowRecords.findRecordsID(for: window),
-                WindowRecords.records[id].directionRecords.count > offset else {
-            return .noAction
+                WindowRecords.records[id].actionRecords.count > offset else {
+            return .init(.noAction)
         }
-        let lastDirection = WindowRecords.records[id].directionRecords[offset]
-        if willResize && WindowRecords.records[id].directionRecords.count > offset + 1 {
-            WindowRecords.records[id].directionRecords.removeFirst(offset + 1)
+        let lastDirection = WindowRecords.records[id].actionRecords[offset]
+        if willResize && WindowRecords.records[id].actionRecords.count > offset + 1 {
+            WindowRecords.records[id].actionRecords.removeFirst(offset + 1)
         }
 
         return lastDirection

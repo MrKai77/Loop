@@ -11,7 +11,7 @@ import Defaults
 // Enum that stores all possible resizing options
 // swiftlint:disable:next type_body_length
 enum WindowDirection: String, CaseIterable, Identifiable, Codable {
-    var id: Self { return self }
+    var id: Self { self }
 
     // General
     case noAction = "NoAction"
@@ -56,6 +56,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case bottomThird = "BottomThird"
     case bottomTwoThirds = "BottomTwoThirds"
 
+    case custom = "Custom"
+    case cycle = "Cycle"
+
     // These are used in the menubar resize submenu & keybind configuration
     static var general: [WindowDirection] {
         [.fullscreen, .maximize, .almostMaximize, .center, .minimize, .hide]
@@ -76,10 +79,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
     }
     static var more: [WindowDirection] {
-        [.initialFrame, .undo]
+        [.initialFrame, .undo, .custom, .cycle]
     }
 
-    var cyclable: Bool {
+    var isPresetCyclable: Bool {
         WindowDirection.cyclable.contains(self)
     }
 
@@ -129,17 +132,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var moreInformation: String? {
         var result: String?
-        if self.cyclable {
+        if self.isPresetCyclable {
             result = "This keybind cycles: press it repeatedly to cycle through 1/2, 1/3, and 2/3 of your screen."
         }
         return result
-    }
-
-    static func getDirection(for keybind: Set<CGKeyCode>) -> WindowDirection? {
-        for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
-            return keybinding.direction
-        }
-        return nil
     }
 
     var icon: Image? {
@@ -179,6 +175,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird:      Image("custom.rectangle.verticalcenterthird.inset.filled")
         case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
         case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
+
+        case .custom:                   Image(systemName: "rectangle.dashed")
+        case .cycle:                    Image("custom.arrow.2.squarepath.rectangle")
         default:                        nil
         }
     }
@@ -188,31 +187,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .hide:                     Image("custom.rectangle.slash")
         case .minimize:                 Image("custom.arrow.down.right.and.arrow.up.left.rectangle")
         default:                        nil
-        }
-    }
-
-    var edgesTouchingScreen: [Edge] {
-        switch self {
-        case .maximize:                 [.top, .bottom, .leading, .trailing]
-        case .topHalf:                  [.top, .leading, .trailing]
-        case .rightHalf:                [.top, .bottom, .trailing]
-        case .bottomHalf:               [.bottom, .leading, .trailing]
-        case .leftHalf:                 [.top, .bottom, .leading]
-        case .topLeftQuarter:           [.top, .leading]
-        case .topRightQuarter:          [.top, .trailing]
-        case .bottomRightQuarter:       [.bottom, .trailing]
-        case .bottomLeftQuarter:        [.bottom, .leading]
-        case .rightThird:               [.top, .bottom, .trailing]
-        case .rightTwoThirds:           [.top, .bottom, .trailing]
-        case .horizontalCenterThird:    [.top, .bottom]
-        case .leftThird:                [.top, .bottom, .leading]
-        case .leftTwoThirds:            [.top, .bottom, .leading]
-        case .topThird:                 [.top, .leading, .trailing]
-        case .topTwoThirds:             [.top, .leading, .trailing]
-        case .verticalCenterThird:      [.leading, .trailing]
-        case .bottomThird:              [.bottom, .leading, .trailing]
-        case .bottomTwoThirds:          [.bottom, .leading, .trailing]
-        default:                        []
         }
     }
 
@@ -338,7 +312,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird:      CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
-        default:                        nil
+        default:                        CGRect(x: 1.0/2.0, y: 1.0/2.0, width: 0.0, height: 0.0)
         }
     }
 
