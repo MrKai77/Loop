@@ -20,7 +20,9 @@ struct RadialMenuSettingsView: View {
         Form {
             Section("Appearance") {
                 ZStack {
-                    BlueprintView()
+                    VisualEffectView(material: .sidebar, blendingMode: .behindWindow)
+                        .ignoresSafeArea()
+                        .padding(-10)
 
                     RadialMenuView(
                         frontmostWindow: nil,

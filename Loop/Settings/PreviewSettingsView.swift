@@ -41,7 +41,9 @@ struct PreviewSettingsView: View {
 
             Section {
                 ZStack {
-                    BlueprintView()
+                    VisualEffectView(material: .sidebar, blendingMode: .behindWindow)
+                        .ignoresSafeArea()
+                        .padding(-10)
 
                     PreviewView(previewMode: true, window: nil)
                 }
