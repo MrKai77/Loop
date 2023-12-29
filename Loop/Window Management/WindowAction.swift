@@ -249,39 +249,45 @@ extension WindowAction {
 
 // MARK: - Preview Window
 extension WindowAction {
-    func previewWindowXOffset(_ parentWidth: CGFloat) -> CGFloat {
+    func previewWindowXOffset(_ parentWidth: CGFloat, _ window: Window?) -> CGFloat {
         var xLocation = parentWidth * (self.direction.frameMultiplyValues?.minX ?? 0)
+        let previewWidth = previewWindowWidth(parentWidth, window)
 
         if self.direction == .custom {
             switch self.anchor {
             case .topLeft:
                 xLocation = 0
             case .top:
-                xLocation = (parentWidth / 2) - (previewWindowWidth(parentWidth) / 2)
+                xLocation = (parentWidth / 2) - (previewWidth / 2)
             case .topRight:
-                xLocation = parentWidth - previewWindowWidth(parentWidth)
+                xLocation = parentWidth - previewWidth
             case .right:
-                xLocation = parentWidth - previewWindowWidth(parentWidth)
+                xLocation = parentWidth - previewWidth
             case .bottomRight:
-                xLocation = parentWidth - previewWindowWidth(parentWidth)
+                xLocation = parentWidth - previewWidth
             case .bottom:
-                xLocation = (parentWidth / 2) - (previewWindowWidth(parentWidth) / 2)
+                xLocation = (parentWidth / 2) - (previewWidth / 2)
             case .bottomLeft:
                 xLocation = 0
             case .left:
                 xLocation = 0
             case .center:
-                xLocation = (parentWidth / 2) - (previewWindowWidth(parentWidth) / 2)
+                xLocation = (parentWidth / 2) - (previewWidth / 2)
             default:
                 xLocation = 0
             }
+        }
+
+        if self.direction == .center {
+            xLocation = (parentWidth / 2) - (previewWidth / 2)
         }
 
         return xLocation
     }
 
-    func previewWindowYOffset(_ parentHeight: CGFloat) -> CGFloat {
+    func previewWindowYOffset(_ parentHeight: CGFloat, _ window: Window?) -> CGFloat {
         var yLocation = parentHeight * (self.direction.frameMultiplyValues?.minY ?? 0)
+        let previewHeight = previewWindowHeight(parentHeight, window)
 
         if self.direction == .custom {
             switch self.anchor {
@@ -292,26 +298,30 @@ extension WindowAction {
             case .topRight:
                 yLocation = 0
             case .right:
-                yLocation = (parentHeight / 2) - (previewWindowHeight(parentHeight) / 2)
+                yLocation = (parentHeight / 2) - (previewHeight / 2)
             case .bottomRight:
-                yLocation = parentHeight - previewWindowHeight(parentHeight)
+                yLocation = parentHeight - previewHeight
             case .bottom:
-                yLocation = parentHeight - previewWindowHeight(parentHeight)
+                yLocation = parentHeight - previewHeight
             case .bottomLeft:
-                yLocation = parentHeight - previewWindowHeight(parentHeight)
+                yLocation = parentHeight - previewHeight
             case .left:
-                yLocation = (parentHeight / 2) - (previewWindowHeight(parentHeight) / 2)
+                yLocation = (parentHeight / 2) - (previewHeight / 2)
             case .center:
-                yLocation = (parentHeight / 2) - (previewWindowHeight(parentHeight) / 2)
+                yLocation = (parentHeight / 2) - (previewHeight / 2)
             default:
                 yLocation = 0
             }
         }
 
+        if self.direction == .center {
+            yLocation = (parentHeight / 2) - (previewHeight / 2)
+        }
+
         return yLocation
     }
 
-    func previewWindowWidth(_ parentWidth: CGFloat) -> CGFloat {
+    func previewWindowWidth(_ parentWidth: CGFloat, _ window: Window?) -> CGFloat {
         var width = parentWidth * (self.direction.frameMultiplyValues?.width ?? 0)
 
         if self.direction == .custom {
@@ -325,10 +335,14 @@ extension WindowAction {
             }
         }
 
+        if self.direction == .center, let window = window {
+            width = window.frame.width
+        }
+
         return width
     }
 
-    func previewWindowHeight(_ parentHeight: CGFloat) -> CGFloat {
+    func previewWindowHeight(_ parentHeight: CGFloat, _ window: Window?) -> CGFloat {
         var height = parentHeight * (self.direction.frameMultiplyValues?.height ?? 0)
 
         if self.direction == .custom {
@@ -340,6 +354,10 @@ extension WindowAction {
             default:
                 height = 0
             }
+        }
+
+        if self.direction == .center, let window = window {
+            height = window.frame.height
         }
 
         return height

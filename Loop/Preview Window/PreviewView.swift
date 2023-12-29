@@ -14,7 +14,11 @@ struct PreviewView: View {
     private let window: Window?
     private let previewMode: Bool
 
-    init(previewMode: Bool = false, window: Window?, startingAction: WindowAction = .init(.noAction)) {
+    init(
+        previewMode: Bool = false,
+        window: Window?,
+        startingAction: WindowAction = .init(.noAction)
+    ) {
         self.window = window
         self.previewMode = previewMode
         self._currentAction = State(initialValue: startingAction)
@@ -32,38 +36,59 @@ struct PreviewView: View {
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
 
+    @Default(.respectStageManager) var respectStageManager
+    @Default(.stageStripSize) var stageStripSize
+
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                    .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
-                    .shadow(radius: 10)
-                RoundedRectangle(cornerRadius: previewCornerRadius)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(
-                                colors: [
-                                    Color.getLoopAccent(tone: .normal),
-                                    Color.getLoopAccent(tone: useGradient ? .darker : .normal)
-                                ]
-                            ),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: previewBorderThickness
-                    )
+        HStack(spacing: 0) {
+            if respectStageManager &&
+                StageManager.enabled &&
+                StageManager.shown &&
+                StageManager.position == .leading {
+                Spacer()
+                    .frame(width: stageStripSize)
             }
-            .padding(windowPadding + previewPadding + previewBorderThickness / 2)
 
-            .frame(
-                width: self.currentAction.previewWindowWidth(geo.size.width),
-                height: self.currentAction.previewWindowHeight(geo.size.height)
-            )
+            GeometryReader { geo in
+                ZStack {
+                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                        .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
+                        .shadow(radius: 10)
+                    RoundedRectangle(cornerRadius: previewCornerRadius)
+                        .stroke(
+                            LinearGradient(
+                                gradient: Gradient(
+                                    colors: [
+                                        Color.getLoopAccent(tone: .normal),
+                                        Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+                                    ]
+                                ),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: previewBorderThickness
+                        )
+                }
+                .padding(windowPadding + previewPadding + previewBorderThickness / 2)
 
-            .offset(
-                x: self.currentAction.previewWindowXOffset(geo.size.width),
-                y: self.currentAction.previewWindowYOffset(geo.size.height)
-            )
+                .frame(
+                    width: self.currentAction.previewWindowWidth(geo.size.width, window),
+                    height: self.currentAction.previewWindowHeight(geo.size.height, window)
+                )
+
+                .offset(
+                    x: self.currentAction.previewWindowXOffset(geo.size.width, window),
+                    y: self.currentAction.previewWindowYOffset(geo.size.height, window)
+                )
+
+                if respectStageManager &&
+                    StageManager.enabled &&
+                    StageManager.shown &&
+                    StageManager.position == .trailing {
+                    Spacer()
+                        .frame(width: stageStripSize)
+                }
+            }
         }
         .opacity(currentAction.direction == .noAction ? 0 : 1)
         .animation(animationConfiguration.previewWindowAnimation, value: currentAction)

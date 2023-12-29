@@ -25,13 +25,18 @@ class PreviewController {
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(rootView: PreviewView(window: window, startingAction: startingAction))
+        panel.contentView = NSHostingView(
+            rootView: PreviewView(
+                window: window,
+                startingAction: startingAction
+            )
+        )
         panel.collectionBehavior = .canJoinAllSpaces
         panel.alphaValue = 0
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
 
-        panel.setFrame(screen.stageStripFreeFrame, display: false)
+        panel.setFrame(screen.frame, display: false)
 
         loopPreviewWindowController = .init(window: panel)
 
