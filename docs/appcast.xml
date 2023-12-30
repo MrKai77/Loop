@@ -3,6 +3,15 @@
     <channel>
         <title>Loop</title>
         <item>
+            <title>1.0.0-beta.13</title>
+            <pubDate>Fri, 29 Dec 2023 16:39:26 -0700</pubDate>
+            <sparkle:version>595</sparkle:version>
+            <sparkle:shortVersionString>1.0.0-beta.13</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.13/Loop.zip" length="11120595" type="application/octet-stream" sparkle:edSignature="j1t0sS7OM0R5zujr48A4wyZ0wSlEzJgtvBvnH/gBU7NewS8Mhw9qAEvBZMzbq6ZZdzMZ2aMOyz5DtO+NaSrsCQ=="/>
+        </item>
+        <item>
             <title>1.0.0-beta.12</title>
             <pubDate>Tue, 28 Nov 2023 16:53:53 -0700</pubDate>
             <sparkle:version>515</sparkle:version>
@@ -19,15 +28,6 @@
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
             <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.11/Loop.zip" length="12016932" type="application/octet-stream" sparkle:edSignature="cWpo4fMj/5Fnco8cy/ho5Yelz6q3zZFvD9LdOBU5K+NPtWwrPB40Dc5rwtmwBEYzUSp1DYbgoX8mP3ANH3+pCA=="/>
-        </item>
-        <item>
-            <title>1.0.0-beta.10</title>
-            <pubDate>Wed, 20 Sep 2023 19:01:35 -0600</pubDate>
-            <sparkle:version>351</sparkle:version>
-            <sparkle:shortVersionString>1.0.0-beta.10</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.10/Loop.zip" length="6650379" type="application/octet-stream" sparkle:edSignature="Z0tovkRgaHgGMEKbwat/3h2KqV6MJ0WTEZXkKezFMQm0Vm1s6ROXq8Uv6TyDC08W0W4L64MJnM/bbQYfU9P7BQ=="/>
         </item>
     </channel>
 </rss>
