@@ -57,8 +57,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     // Mostly taken from https://github.com/Wouter01/SwiftUI-WindowManagement
     func openSettings() {
-        for window in NSApp.windows where window.toolbar?.items != nil {
-            window.close()
+        // Settings window is already open
+        guard !NSApp.windows.contains(where: { $0.toolbar?.items != nil }) else {
+            NSApp.windows.first(where: { $0.toolbar?.items != nil })?.orderFrontRegardless()
+            return
         }
 
         let eventSource = CGEventSource(stateID: .hidSystemState)
