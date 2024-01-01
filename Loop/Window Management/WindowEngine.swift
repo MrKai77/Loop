@@ -48,10 +48,9 @@ struct WindowEngine {
         let screenFrame = screen.safeScreenFrame
         guard
             let currentWindowFrame = WindowEngine.generateWindowFrame(
-                window.frame,
+                window,
                 screenFrame,
-                action,
-                window
+                action
             )
         else {
             return
@@ -153,18 +152,12 @@ struct WindowEngine {
         return windowList
     }
 
-    /// Generate a window frame using the provided WindowDirection
-    /// - Parameters:
-    ///   - windowFrame: The window's current frame. Used when centering a window
-    ///   - screenFrame: The frame of the screen you want the window to be resized on
-    ///   - direction: WindowDirection
-    /// - Returns: A CGRect of the generated frame. If direction was .noAction, nil is returned.
-    private static func generateWindowFrame(
-        _ windowFrame: CGRect,
+    static func generateWindowFrame(
+        _ window: Window,
         _ screenFrame: CGRect,
-        _ action: WindowAction,
-        _ window: Window
+        _ action: WindowAction
     ) -> CGRect? {
+        let windowFrame = window.frame
         let direction = action.direction
 
         var newWindowFrame: CGRect = CGRect(
@@ -189,14 +182,20 @@ struct WindowEngine {
                 width: windowFrame.width,
                 height: windowFrame.height
             )
+        case .macOSCenter:
+            let halfScreenHeight = screenFrame.height / 2
+            let windowHeightPercent = windowFrame.height / screenFrame.height
+            let yOffset: CGFloat = (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
+
+            newWindowFrame = CGRect(
+                x: screenFrame.midX - windowFrame.width / 2,
+                y: screenFrame.midY - windowFrame.height / 2 + yOffset,
+                width: windowFrame.width,
+                height: windowFrame.height
+            )
         case .undo:
             let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
-            if let previousResizeFrame = self.generateWindowFrame(
-                windowFrame,
-                screenFrame,
-                previousDirection,
-                window
-            ) {
+            if let previousResizeFrame = self.generateWindowFrame(window, screenFrame, previousDirection) {
                 newWindowFrame = previousResizeFrame
             } else {
                 return nil

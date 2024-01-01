@@ -20,6 +20,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case fullscreen = "Fullscreen"
     case undo = "Undo"
     case center = "Center"
+    case macOSCenter = "MacOSCenter"
     case initialFrame = "InitialFrame"
     case hide = "Hide"
     case minimize = "Minimize"
@@ -61,7 +62,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     // These are used in the menubar resize submenu & keybind configuration
     static var general: [WindowDirection] {
-        [.fullscreen, .maximize, .almostMaximize, .center, .minimize, .hide]
+        [.fullscreen, .maximize, .almostMaximize, .center, .macOSCenter, .minimize, .hide]
     }
     static var halves: [WindowDirection] {
         [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
@@ -121,8 +122,16 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var name: String {
         var result = ""
         for (idx, char) in self.rawValue.enumerated() {
-            if idx > 0 && char.isUppercase {
-                result.append(" ")
+            if idx > 0,
+               char.isUppercase,
+               let next = self.rawValue.index(
+                self.rawValue.startIndex,
+                offsetBy: idx + 1,
+                limitedBy: self.rawValue.endIndex
+               ) {
+                if self.rawValue[next].isLowercase {
+                    result.append(" ")
+                }
             }
             result.append(char)
         }
@@ -132,9 +141,21 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var moreInformation: String? {
         var result: String?
+
         if self.isPresetCyclable {
-            result = "This keybind cycles: press it repeatedly to cycle through 1/2, 1/3, and 2/3 of your screen."
+            result = """
+            This keybind cycles: press it repeatedly to cycle through
+            1/2, 1/3, and 2/3 of your screen.
+            """
         }
+
+        if self == .macOSCenter {
+            result = """
+            \(self.name) places windows slightly above the absolute center,
+            which can be found more ergnonomic.
+            """
+        }
+
         return result
     }
 
@@ -144,6 +165,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .almostMaximize:           Image(systemName: "rectangle.center.inset.filled")
         case .fullscreen:               Image(systemName: "rectangle.fill")
         case .center:                   Image("custom.rectangle.center.inset.inset.filled")
+        case .macOSCenter:              Image("custom.rectangle.center.inset.inset.filled")
         case .undo:                     Image("custom.backward.fill.rectangle.fill")
         case .initialFrame:             Image("custom.backward.end.alt.fill.rectangle.fill")
         case .hide:                     Image("custom.rectangle.slash")
