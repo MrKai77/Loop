@@ -183,9 +183,7 @@ struct WindowEngine {
                 height: windowFrame.height
             )
         case .macOSCenter:
-            let halfScreenHeight = screenFrame.height / 2
-            let windowHeightPercent = windowFrame.height / screenFrame.height
-            let yOffset: CGFloat = (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
+            let yOffset = getMacOSCenterYOffset(windowFrame.height, screenHeight: screenFrame.height)
 
             newWindowFrame = CGRect(
                 x: screenFrame.midX - windowFrame.width / 2,
@@ -266,9 +264,19 @@ struct WindowEngine {
         case .center:
             newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
             newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
+        case .macOSCenter:
+            let yOffset = getMacOSCenterYOffset(newWindowFrame.height, screenHeight: screenFrame.height)
+            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
+            newWindowFrame.origin.y = (screenFrame.midY - newWindowFrame.height / 2) + yOffset
         }
 
         return newWindowFrame
+    }
+
+    static func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
+        let halfScreenHeight = screenHeight / 2
+        let windowHeightPercent = windowHeight / screenHeight
+        return (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
     }
 
     /// Apply padding on a CGRect, using the provided WindowDirection

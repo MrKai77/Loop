@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomKeybindView: View {
     @Binding var action: WindowAction
     @Binding var isSheetShown: Bool
+    @State var showingInfo: Bool = false
 
     @FocusState private var focusedField: String?
 
@@ -25,6 +26,36 @@ struct CustomKeybindView: View {
                     AnchorPicker(anchor: self.$action.anchor)
                         .ignoresSafeArea()
                         .padding(-10)
+                }
+
+                if self.action.anchor == .center || self.action.anchor == .macOSCenter {
+                    Section {
+                        Toggle(
+                            isOn: Binding(
+                                get: { self.action.anchor == .macOSCenter },
+                                set: { self.action.anchor = $0 ? .macOSCenter : .center }
+                            )
+                        ) {
+                            HStack {
+                                Text("Use MacOS Center")
+                                if let moreInformation = WindowDirection.macOSCenter.moreInformation {
+                                    Button(action: {
+                                        self.showingInfo.toggle()
+                                    }, label: {
+                                        Image(systemName: "info.circle")
+                                            .font(.title3)
+                                            .foregroundStyle(.secondary)
+                                    })
+                                    .buttonStyle(.plain)
+                                    .popover(isPresented: $showingInfo, arrowEdge: .bottom) {
+                                        Text(moreInformation)
+                                            .multilineTextAlignment(.center)
+                                            .padding(8)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Section("Window Size") {

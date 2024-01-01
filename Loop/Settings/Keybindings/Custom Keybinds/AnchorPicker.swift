@@ -27,7 +27,7 @@ struct AnchorPicker: View {
             HStack {
                 selectorCircle(.left)
                 Spacer()
-                selectorCircle(.center)
+                selectorCircle([.center, .macOSCenter])
                 Spacer()
                 selectorCircle(.right)
             }
@@ -58,8 +58,13 @@ struct AnchorPicker: View {
 
     @ViewBuilder
     func selectorCircle(_ anchor: CustomWindowActionAnchor) -> some View {
+        selectorCircle([anchor])
+    }
+
+    @ViewBuilder
+    func selectorCircle(_ anchor: [CustomWindowActionAnchor]) -> some View {
         Button {
-            self.anchor = anchor
+            self.anchor = anchor.first
         } label: {
             Circle()
                 .foregroundStyle(Color.accentColor)
@@ -69,7 +74,7 @@ struct AnchorPicker: View {
                         .strokeBorder(.white.opacity(0.5), lineWidth: 1)
                 }
                 .overlay {
-                    if self.anchor == anchor {
+                    if anchor.contains(where: { $0 == self.anchor }) {
                         Circle()
                             .foregroundStyle(.white)
                             .frame(width: 6, height: 6)
