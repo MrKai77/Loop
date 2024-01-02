@@ -30,6 +30,7 @@ struct KeybindCustomizationViewItem: View {
                 .buttonStyle(.plain)
                 .popover(isPresented: $showingInfo, arrowEdge: .bottom) {
                     Text(moreInformation)
+                        .multilineTextAlignment(.center)
                         .padding(8)
                 }
             }

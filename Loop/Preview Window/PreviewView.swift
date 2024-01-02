@@ -24,20 +24,12 @@ struct PreviewView: View {
         self._currentAction = State(initialValue: startingAction)
     }
 
-    @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.customAccentColor) var customAccentColor
     @Default(.useGradient) var useGradient
-    @Default(.gradientColor) var gradientColor
-
-    @Default(.previewVisibility) var previewVisibility
     @Default(.previewPadding) var previewPadding
     @Default(.windowPadding) var windowPadding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
-
-    @Default(.respectStageManager) var respectStageManager
-    @Default(.stageStripSize) var stageStripSize
 
     var body: some View {
         GeometryReader { geo in

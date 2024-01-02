@@ -201,13 +201,7 @@ class LoopManager: ObservableObject {
             self.closeLoop(forceClose: true)
         }
 
-        if self.currentlyPressedModifiers.contains(event.keyCode) {
-            self.currentlyPressedModifiers.remove(event.keyCode)
-        } else if event.modifierFlags.rawValue == 256 {
-            self.currentlyPressedModifiers = []
-        } else {
-            self.currentlyPressedModifiers.insert(event.keyCode)
-        }
+        processModifiers(event)
 
         // Why sort the set? I have no idea. But it works much more reliably when sorted!
         if self.currentlyPressedModifiers.sorted().contains(Defaults[.triggerKey].sorted()) {
@@ -240,6 +234,16 @@ class LoopManager: ObservableObject {
             if self.isLoopActive {
                 self.closeLoop()
             }
+        }
+    }
+
+    private func processModifiers(_ event: NSEvent) {
+        if self.currentlyPressedModifiers.contains(event.keyCode) {
+            self.currentlyPressedModifiers.remove(event.keyCode)
+        } else if event.modifierFlags.rawValue == 256 {
+            self.currentlyPressedModifiers = []
+        } else {
+            self.currentlyPressedModifiers.insert(event.keyCode)
         }
     }
 
