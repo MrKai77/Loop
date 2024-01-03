@@ -89,9 +89,10 @@ class WindowDragManager {
             return
         }
 
-        let ignoredFrame = screenFrame.insetBy(dx: 10, dy: 10)  // 10px of snap area on each side
+        self.previewController.setScreen(to: screen)
 
-         if !ignoredFrame.contains(mousePosition) {
+        let ignoredFrame = screenFrame.insetBy(dx: 10, dy: 10)  // 10px of snap area on each side
+        if !ignoredFrame.contains(mousePosition) {
              self.direction = WindowDirection.processSnap(
                  mouseLocation: mousePosition,
                  currentDirection: self.direction,
