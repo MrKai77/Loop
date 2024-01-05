@@ -77,8 +77,30 @@ class WindowDragManager {
     }
 
     private func restoreInitialWindowSize(_ window: Window) {
-        guard let initialFrame = WindowRecords.getInitialFrame(for: window) else { return }
+        let startFrame = window.frame
+
+        guard
+            let initialFrame = WindowRecords.getInitialFrame(for: window)
+        else {
+            return
+        }
+
         window.setSize(initialFrame.size)
+
+        // If the window doesn't contain the cursor, keep the original maxX
+        if let cursorLocation = CGEvent.mouseLocation, !window.frame.contains(cursorLocation) {
+            var newFrame = window.frame
+
+            newFrame.origin.x = startFrame.maxX - newFrame.width
+            window.setFrame(newFrame)
+
+            // If it still doesn't contain the cursor, move the window to be centered with the cursor
+            if !newFrame.contains(cursorLocation) {
+                newFrame.origin.x = cursorLocation.x - (newFrame.width / 2)
+                window.setFrame(newFrame)
+            }
+        }
+
         WindowRecords.eraseRecords(for: window)
     }
 
