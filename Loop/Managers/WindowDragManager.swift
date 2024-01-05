@@ -60,6 +60,8 @@ class WindowDragManager {
 
     private func hasWindowMoved(_ windowFrame: CGRect, _ initialFrame: CGRect) -> Bool {
         !initialFrame.topLeftPoint.approximatelyEqual(to: windowFrame.topLeftPoint) &&
+        !initialFrame.topRightPoint.approximatelyEqual(to: windowFrame.topRightPoint) &&
+        !initialFrame.bottomLeftPoint.approximatelyEqual(to: windowFrame.bottomLeftPoint) &&
         !initialFrame.bottomRightPoint.approximatelyEqual(to: windowFrame.bottomRightPoint)
     }
 

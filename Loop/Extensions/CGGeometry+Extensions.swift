@@ -29,7 +29,7 @@ extension CGPoint {
         return CGPoint(x: self.x, y: screen.frame.maxY - self.y)
     }
 
-    func approximatelyEqual(to point: CGPoint, tolerance: CGFloat = 5) -> Bool {
+    func approximatelyEqual(to point: CGPoint, tolerance: CGFloat = 10) -> Bool {
         abs(x - point.x) < tolerance &&
         abs(y - point.y) < tolerance
     }
@@ -45,13 +45,21 @@ extension CGRect {
             height: self.height)
     }
 
-    func approximatelyEqual(to rect: CGRect, tolerance: CGFloat = 5) -> Bool {
+    func approximatelyEqual(to rect: CGRect, tolerance: CGFloat = 10) -> Bool {
         abs(origin.x - rect.origin.x) < tolerance && abs(origin.y - rect.origin.y) < tolerance &&
         abs(width - rect.width) < tolerance && abs(height - rect.height) < tolerance
     }
 
     var topLeftPoint: CGPoint {
         CGPoint(x: self.minX, y: self.minY)
+    }
+
+    var topRightPoint: CGPoint {
+        CGPoint(x: self.maxX, y: self.minY)
+    }
+
+    var bottomLeftPoint: CGPoint {
+        CGPoint(x: self.minX, y: self.maxY)
     }
 
     var bottomRightPoint: CGPoint {
