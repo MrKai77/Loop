@@ -201,6 +201,7 @@ class LoopManager: ObservableObject {
             self.closeLoop(forceClose: true)
         }
 
+        self.cancelTriggerDelayTimer()
         processModifiers(event)
 
         // Why sort the set? I have no idea. But it works much more reliably when sorted!
