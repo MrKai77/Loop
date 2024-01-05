@@ -16,6 +16,8 @@ class KeybindMonitor {
     private var pressedKeys = Set<CGKeyCode>()
     private var lastKeyReleaseTime: Date = Date.now
 
+    private let ignoreKeyCodes: [CGKeyCode] = [179]
+
     func resetPressedKeys() {
         KeybindMonitor.shared.pressedKeys = []
     }
@@ -28,19 +30,22 @@ class KeybindMonitor {
 
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
              if cgEvent.type == .keyDown || cgEvent.type == .keyUp,
-               let event = NSEvent(cgEvent: cgEvent),
-               !event.isARepeat {
+                let event = NSEvent(cgEvent: cgEvent),
+                !self.ignoreKeyCodes.contains(event.keyCode.baseKey),
+                !event.isARepeat {
 
-                if event.type == .keyUp {
-                    KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
-                } else if event.type == .keyDown {
-                    KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
-                }
+                 if event.type == .keyUp {
+                     KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
+                 } else if event.type == .keyDown {
+                     KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
+                 }
 
-                return self.performKeybind(event: event) ? nil : Unmanaged.passUnretained(cgEvent)
+                 if self.performKeybind(event: event) {
+                     return nil
+                 }
             }
 
-            return nil
+            return Unmanaged.passRetained(cgEvent)
         }
 
         self.flagsEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
@@ -55,7 +60,7 @@ class KeybindMonitor {
 
                 self.performKeybind(event: event)
             }
-            return Unmanaged.passUnretained(cgEvent)
+            return Unmanaged.passRetained(cgEvent)
         }
 
         self.eventMonitor!.start()
