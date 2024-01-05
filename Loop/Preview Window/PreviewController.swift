@@ -9,13 +9,15 @@ import SwiftUI
 
 class PreviewController {
 
-    var loopPreviewWindowController: NSWindowController?
+    private var previewWindowController: NSWindowController?
+    private var screen: NSScreen = NSScreen()
 
     func open(screen: NSScreen, window: Window? = nil, startingAction: WindowAction = .init(.noAction)) {
-        if let windowController = loopPreviewWindowController {
+        if let windowController = previewWindowController {
             windowController.window?.orderFrontRegardless()
             return
         }
+        self.screen = screen
 
         let panel = NSPanel(contentRect: .zero,
                             styleMask: [.borderless, .nonactivatingPanel],
@@ -38,7 +40,7 @@ class PreviewController {
 
         panel.setFrame(screen.stageStripFreeFrame, display: false)
 
-        loopPreviewWindowController = .init(window: panel)
+        previewWindowController = .init(window: panel)
 
         NSAnimationContext.runAnimationGroup({ _ in
             panel.animator().alphaValue = 1
@@ -46,8 +48,8 @@ class PreviewController {
     }
 
     func close() {
-        guard let windowController = loopPreviewWindowController else { return }
-        loopPreviewWindowController = nil
+        guard let windowController = previewWindowController else { return }
+        previewWindowController = nil
 
         windowController.window?.animator().alphaValue = 1
         NSAnimationContext.runAnimationGroup({ _ in
@@ -55,5 +57,18 @@ class PreviewController {
         }, completionHandler: {
             windowController.close()
         })
+    }
+
+    func setScreen(to screen: NSScreen) {
+        guard
+            screen != self.screen,
+            let windowController = previewWindowController,
+            let window = windowController.window
+        else {
+            return
+        }
+        self.screen = screen
+
+        window.setFrame(screen.stageStripFreeFrame, display: false)
     }
 }
