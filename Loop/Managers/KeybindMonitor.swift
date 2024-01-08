@@ -16,7 +16,9 @@ class KeybindMonitor {
     private var pressedKeys = Set<CGKeyCode>()
     private var lastKeyReleaseTime: Date = Date.now
 
-    private let ignoreKeyCodes: [CGKeyCode] = [179]
+    // Currently, special events only contain the globe key, as it can also be used as a emoji key.
+    private let specialEvents: [CGKeyCode] = [179]
+    var canPassthroughSpecialEvents = true  // If mouse has been moved
 
     func resetPressedKeys() {
         KeybindMonitor.shared.pressedKeys = []
@@ -31,17 +33,24 @@ class KeybindMonitor {
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
              if cgEvent.type == .keyDown || cgEvent.type == .keyUp,
                 let event = NSEvent(cgEvent: cgEvent),
-                !self.ignoreKeyCodes.contains(event.keyCode.baseKey),
                 !event.isARepeat {
 
-                 if event.type == .keyUp {
-                     KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
-                 } else if event.type == .keyDown {
-                     KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
-                 }
+                 if !self.specialEvents.contains(event.keyCode.baseKey) {
+                     if event.type == .keyUp {
+                         KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
+                     } else if event.type == .keyDown {
+                         KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
+                     }
 
-                 if self.performKeybind(event: event) {
-                     return nil
+                     if self.performKeybind(event: event) {
+                         return nil
+                     }
+                 } else {
+                     if self.canPassthroughSpecialEvents {
+                         return Unmanaged.passRetained(cgEvent)
+                     } else {
+                         return nil
+                     }
                  }
             }
 
@@ -68,10 +77,14 @@ class KeybindMonitor {
     }
 
     func stop() {
+        self.resetPressedKeys()
+        self.canPassthroughSpecialEvents = true
+
         guard self.eventMonitor != nil &&
               self.flagsEventMonitor != nil else {
             return
         }
+
         self.eventMonitor?.stop()
         self.eventMonitor = nil
 
@@ -95,7 +108,6 @@ class KeybindMonitor {
 
         if pressedKeys.contains(.kVK_Escape) {
             Notification.Name.forceCloseLoop.post()
-            KeybindMonitor.shared.resetPressedKeys()
             return true
         }
 
