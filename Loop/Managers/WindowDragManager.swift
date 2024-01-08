@@ -11,7 +11,7 @@ import Defaults
 class WindowDragManager {
 
     private var draggingWindow: Window?
-    private var initialWindowPosition: CGPoint?
+    private var initialWindowFrame: CGRect?
     private var direction: WindowDirection = .noAction
 
     private let previewController = PreviewController()
@@ -27,8 +27,8 @@ class WindowDragManager {
             }
 
             if let window = self.draggingWindow,
-               self.initialWindowPosition != window.position {
-                // If window is not at initial position...
+               let initialFrame = self.initialWindowFrame,
+               self.hasWindowMoved(window.frame, initialFrame) {
 
                 if Defaults[.restoreWindowFrameOnDrag] {
                     self.restoreInitialWindowSize(window)
@@ -42,8 +42,8 @@ class WindowDragManager {
 
         self.leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
             if let window = self.draggingWindow,
-               self.initialWindowPosition != window.position {
-                // If window is not at initial position...
+               let initialFrame = self.initialWindowFrame,
+               self.hasWindowMoved(window.frame, initialFrame) {
 
                 if Defaults[.windowSnapping] {
                     self.attemptWindowSnap(window)
@@ -58,33 +58,65 @@ class WindowDragManager {
         leftMouseUpMonitor!.start()
     }
 
+    private func hasWindowMoved(_ windowFrame: CGRect, _ initialFrame: CGRect) -> Bool {
+        !initialFrame.topLeftPoint.approximatelyEqual(to: windowFrame.topLeftPoint) &&
+        !initialFrame.topRightPoint.approximatelyEqual(to: windowFrame.topRightPoint) &&
+        !initialFrame.bottomLeftPoint.approximatelyEqual(to: windowFrame.bottomLeftPoint) &&
+        !initialFrame.bottomRightPoint.approximatelyEqual(to: windowFrame.bottomRightPoint)
+    }
+
     private func setCurrentDraggingWindow() {
-        guard let mousePosition = CGEvent.mouseLocation,
-              let draggingWindow = WindowEngine.windowAtPosition(mousePosition) else {
+        guard
+            let mousePosition = CGEvent.mouseLocation,
+            let draggingWindow = WindowEngine.windowAtPosition(mousePosition)
+        else {
             return
         }
         self.draggingWindow = draggingWindow
-        self.initialWindowPosition = draggingWindow.position
+        self.initialWindowFrame = draggingWindow.frame
     }
 
     private func restoreInitialWindowSize(_ window: Window) {
-        guard let initialFrame = WindowRecords.getInitialFrame(for: window) else { return }
+        let startFrame = window.frame
+
+        guard
+            let initialFrame = WindowRecords.getInitialFrame(for: window)
+        else {
+            return
+        }
+
         window.setSize(initialFrame.size)
+
+        // If the window doesn't contain the cursor, keep the original maxX
+        if let cursorLocation = CGEvent.mouseLocation, !window.frame.contains(cursorLocation) {
+            var newFrame = window.frame
+
+            newFrame.origin.x = startFrame.maxX - newFrame.width
+            window.setFrame(newFrame)
+
+            // If it still doesn't contain the cursor, move the window to be centered with the cursor
+            if !newFrame.contains(cursorLocation) {
+                newFrame.origin.x = cursorLocation.x - (newFrame.width / 2)
+                window.setFrame(newFrame)
+            }
+        }
+
         WindowRecords.eraseRecords(for: window)
     }
 
     private func getWindowSnapDirection() {
         guard
-            let mousePosition = CGEvent.mouseLocation,
+            let mousePosition = NSEvent.mouseLocation.flipY,
             let screen = NSScreen.screenWithMouse,
             let screenFrame = screen.visibleFrame.flipY
         else {
             return
         }
 
-         let ignoredFrame = screenFrame.insetBy(dx: 20, dy: 20)  // 10px of snap area on each side
+        self.previewController.setScreen(to: screen)
 
-         if !ignoredFrame.contains(mousePosition) {
+        let ignoredFrame = screenFrame.insetBy(dx: 10, dy: 10)
+        if !ignoredFrame.contains(mousePosition) {
              self.direction = WindowDirection.processSnap(
                  mouseLocation: mousePosition,
                  currentDirection: self.direction,
@@ -93,6 +125,7 @@ class WindowDragManager {
              )
 
              self.previewController.open(screen: screen, window: nil)
+
              DispatchQueue.main.async {
                  NotificationCenter.default.post(
                      name: Notification.Name.directionChanged,
