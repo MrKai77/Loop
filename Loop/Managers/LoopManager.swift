@@ -78,6 +78,7 @@ class LoopManager: ObservableObject {
 
     private func mouseMoved(_ event: NSEvent) {
         guard self.isLoopActive else { return }
+        keybindMonitor.canPassthroughSpecialEvents = false
 
         let noActionDistance: CGFloat = 10
 
@@ -275,7 +276,6 @@ class LoopManager: ObservableObject {
         self.cancelTriggerDelayTimer()
         self.closeWindows()
 
-        self.keybindMonitor.resetPressedKeys()
         self.keybindMonitor.stop()
         self.mouseMovedEventMonitor!.stop()
 
