@@ -190,6 +190,16 @@ class LoopManager: ObservableObject {
                 if action.direction.isPresetCyclable {
                     self.currentAction = newAction
                     self.changeAction(action)
+                } else {
+                    if let screenToResizeOn = self.screenToResizeOn,
+                       !Defaults[.previewVisibility] {
+                        WindowEngine.resize(
+                            self.targetWindow!,
+                            to: self.currentAction,
+                            on: screenToResizeOn,
+                            supressAnimations: true
+                        )
+                    }
                 }
 
                 print("Screen changed: \(newScreen.localizedName)")

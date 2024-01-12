@@ -86,7 +86,10 @@ struct WindowEngine {
             }
         } else {
             window.setFrame(targetWindowFrame) {
-                if !window.frame.approximatelyEqual(to: targetWindowFrame) {
+                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
+
+                // Fixes an issue where window isn't resized correctly on multi-monitor setups
+                if !screenFrame.contains(window.frame) {
                     window.setFrame(targetWindowFrame) {
                         WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
                     }
