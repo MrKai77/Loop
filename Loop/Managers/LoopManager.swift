@@ -247,6 +247,8 @@ class LoopManager: ObservableObject {
         } else {
             self.currentlyPressedModifiers.insert(event.keyCode)
         }
+
+        print("Current modifiers: \(currentlyPressedModifiers)")
     }
 
     private func openLoop() {
@@ -278,6 +280,8 @@ class LoopManager: ObservableObject {
 
         self.keybindMonitor.stop()
         self.mouseMovedEventMonitor!.stop()
+
+        self.currentlyPressedModifiers = []
 
         if self.targetWindow != nil &&
             self.screenWithMouse != nil &&
