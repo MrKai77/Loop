@@ -35,6 +35,12 @@ extension CGPoint {
     }
 }
 
+extension CGSize {
+    var area: CGFloat {
+        self.width * self.height
+    }
+}
+
 extension CGRect {
     var flipY: CGRect? {
         guard let screen = NSScreen.screenWithMouse else { return nil }
