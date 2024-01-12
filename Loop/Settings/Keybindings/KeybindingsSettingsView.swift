@@ -208,6 +208,12 @@ struct KeybindingsSettingsView: View {
             }
         }
 
+        Menu("Screen Switching") {
+            ForEach(WindowDirection.screenSwitching) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
         Menu("More") {
             ForEach(WindowDirection.more) { direction in
                 newDirectionButton(direction)

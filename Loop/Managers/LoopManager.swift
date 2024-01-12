@@ -187,7 +187,7 @@ class LoopManager: ObservableObject {
                     Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
                 }
 
-                if action.direction.isPresetCyclable {
+                if action.direction.isPresetCyclable || action.direction == .cycle {
                     self.currentAction = newAction
                     self.changeAction(action)
                 } else {

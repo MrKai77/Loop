@@ -66,7 +66,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     // These are used in the menubar resize submenu & keybind configuration
     static var general: [WindowDirection] {
-        [.fullscreen, .maximize, .almostMaximize, .center, .macOSCenter, .minimize, .hide, .nextScreen, .previousScreen]
+        [.fullscreen, .maximize, .almostMaximize, .center, .macOSCenter, .minimize, .hide]
     }
     static var halves: [WindowDirection] {
         [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
@@ -156,7 +156,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         if self.isPresetCyclable {
             result = """
             This keybind cycles: press it repeatedly to cycle through
-            1/2, 1/3, and 2/3 of your screen.
+            1/2, 1/3, and 2/3, then move onto the next screen.
             """
         }
 
