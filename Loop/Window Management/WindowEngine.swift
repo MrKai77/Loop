@@ -22,6 +22,7 @@ struct WindowEngine {
         supressAnimations: Bool = false
     ) {
         guard action.direction != .noAction else { return }
+        print("Resizing \(window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>") to \(action.direction) on \(screen.localizedName)")
         window.activate()
 
         if !WindowRecords.hasBeenRecorded(window) {
@@ -46,7 +47,7 @@ struct WindowEngine {
         }
 
         guard
-            let currentWindowFrame = WindowEngine.generateWindowFrame(
+            let newWindowFrame = WindowEngine.generateWindowFrame(
                 window,
                 screen,
                 action
@@ -56,7 +57,9 @@ struct WindowEngine {
         }
 
         let screenFrame = screen.safeScreenFrame
-        var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, screenFrame, action)
+        var targetWindowFrame = WindowEngine.applyPadding(newWindowFrame, screenFrame, action)
+
+        print("Target window frame: \(targetWindowFrame)")
 
         var animate = (!supressAnimations && Defaults[.animateWindowResizes])
         if animate {

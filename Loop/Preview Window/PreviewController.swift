@@ -61,6 +61,12 @@ class PreviewController {
     }
 
     func setScreen(to screen: NSScreen) {
+        guard
+            self.previewWindowController != nil,
+            screen != self.screen
+        else {
+            return
+        }
         self.close()
         self.open(screen: screen)
     }

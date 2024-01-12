@@ -176,9 +176,12 @@ class LoopManager: ObservableObject {
                 }
             }
 
-            if self.screenToResizeOn != newScreen {
-                self.screenToResizeOn = newScreen
-                self.previewController.setScreen(to: newScreen)
+            let oldscreenToResizeOn = self.screenToResizeOn
+
+            self.screenToResizeOn = newScreen
+            self.previewController.setScreen(to: newScreen)
+
+            if oldscreenToResizeOn != newScreen {
 
                 DispatchQueue.main.async {
                     Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])

@@ -57,6 +57,14 @@ extension CGRect {
             height: self.height)
     }
 
+    func flipY(maxY: CGFloat) -> CGRect {
+        return CGRect(
+            x: self.minX,
+            y: maxY - self.maxY,
+            width: self.width,
+            height: self.height)
+    }
+
     mutating func inset(_ side: Edge, amount: CGFloat) {
         switch side {
         case .top:
