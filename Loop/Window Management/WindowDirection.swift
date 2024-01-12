@@ -371,12 +371,16 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             switch from {
             case .leftHalf:             return .leftThird
             case .leftThird:            return .leftTwoThirds
+            case .leftTwoThirds:        return .previousScreen
+            case .previousScreen:       return .rightHalf
             default:                    return .leftHalf
             }
         case .cycleRight:
             switch from {
             case .rightHalf:            return .rightThird
             case .rightThird:           return .rightTwoThirds
+            case .rightTwoThirds:       return .nextScreen
+            case .nextScreen:           return .leftHalf
             default:                    return .rightHalf
             }
         default: return .noAction

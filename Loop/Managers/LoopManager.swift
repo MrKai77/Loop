@@ -137,42 +137,6 @@ class LoopManager: ObservableObject {
 
         var newAction = action
 
-        if newAction.direction.willChangeScreen {
-            var newScreen: NSScreen = currentScreen
-
-            if newAction.direction == .nextScreen,
-               let nextScreen = ScreenManager.nextScreen(from: currentScreen) {
-                newScreen = nextScreen
-            }
-
-            if newAction.direction == .previousScreen,
-               let previousScreen = ScreenManager.previousScreen(from: currentScreen) {
-                newScreen = previousScreen
-            }
-
-            self.screenToResizeOn = newScreen
-            self.previewController.setScreen(to: newScreen)
-
-            if self.currentAction.direction == .noAction {
-
-                if let targetWindow = targetWindow {
-                    self.currentAction = WindowRecords.getLastAction(for: targetWindow, offset: 0)
-                }
-
-                if self.currentAction.direction == .noAction {
-                    self.currentAction.direction = .maximize
-                }
-            }
-
-            DispatchQueue.main.async {
-                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
-            }
-
-            print("Screen changed: \(newScreen.localizedName)")
-
-            return
-        }
-
         if newAction.direction.isPresetCyclable {
             newAction = .init(newAction.direction.nextCyclingDirection(from: self.currentAction.direction))
         }
@@ -187,6 +151,48 @@ class LoopManager: ObservableObject {
             } else {
                 return
             }
+        }
+
+        if newAction.direction.willChangeScreen {
+            var newScreen: NSScreen = currentScreen
+
+            if newAction.direction == .nextScreen,
+               let nextScreen = ScreenManager.nextScreen(from: currentScreen) {
+                newScreen = nextScreen
+            }
+
+            if newAction.direction == .previousScreen,
+               let previousScreen = ScreenManager.previousScreen(from: currentScreen) {
+                newScreen = previousScreen
+            }
+
+            if self.currentAction.direction == .noAction {
+                if let targetWindow = targetWindow {
+                    self.currentAction = WindowRecords.getLastAction(for: targetWindow, offset: 0)
+                }
+
+                if self.currentAction.direction == .noAction {
+                    self.currentAction.direction = .maximize
+                }
+            }
+
+            if self.screenToResizeOn != newScreen {
+                self.screenToResizeOn = newScreen
+                self.previewController.setScreen(to: newScreen)
+
+                DispatchQueue.main.async {
+                    Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
+                }
+
+                if action.direction.isPresetCyclable {
+                    self.currentAction = newAction
+                    self.changeAction(action)
+                }
+
+                print("Screen changed: \(newScreen.localizedName)")
+            }
+
+            return
         }
 
         if newAction != currentAction {

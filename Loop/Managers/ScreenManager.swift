@@ -13,22 +13,20 @@ class ScreenManager {
         return self.screenContaining(window, in: screens)
     }
 
-    static func nextScreen(from screen: NSScreen) -> NSScreen? {
+    static func nextScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
         let screens = self.getScreensInOrder()
-        guard let nextScreen = screens.next(from: screen) else {
-            return nil
+        if let nextScreen = screens.next(from: screen) {
+            return nextScreen
         }
-
-        return nextScreen
+        return canRestartCycle ? screens.first : nil
     }
 
-    static func previousScreen(from screen: NSScreen) -> NSScreen? {
+    static func previousScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
         let screens = self.getScreensInOrder()
-        guard let nextScreen = screens.previous(from: screen) else {
-            return nil
+        if let previousScreen = screens.previous(from: screen) {
+            return previousScreen
         }
-
-        return nextScreen
+        return canRestartCycle ? screens.last : nil
     }
 
     // MARK: PRIVATE
@@ -92,7 +90,7 @@ extension Array where Element: Hashable {
             return self[index + 1]
         }
 
-        return self[0]
+        return nil
     }
 
     func previous(from item: Element) -> Element? {
@@ -104,6 +102,6 @@ extension Array where Element: Hashable {
             return self[index - 1]
         }
 
-        return self[self.count - 1]
+        return nil
     }
 }
