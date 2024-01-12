@@ -26,7 +26,8 @@ class PreviewController {
                             screen: NSApp.keyWindow?.screen)
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
-        panel.level = .screenSaver
+        // This ensures that this is below the radial menu
+        panel.level = NSWindow.Level(NSWindow.Level.screenSaver.rawValue - 1)
         panel.contentView = NSHostingView(
             rootView: PreviewView(
                 window: window,
@@ -60,15 +61,7 @@ class PreviewController {
     }
 
     func setScreen(to screen: NSScreen) {
-        guard
-            screen != self.screen,
-            let windowController = previewWindowController,
-            let window = windowController.window
-        else {
-            return
-        }
-        self.screen = screen
-
-        window.setFrame(screen.stageStripFreeFrame, display: false)
+        self.close()
+        self.open(screen: screen)
     }
 }

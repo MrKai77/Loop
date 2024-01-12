@@ -18,7 +18,7 @@ struct WindowEngine {
     static func resize(
         _ window: Window,
         to action: WindowAction,
-        _ screen: NSScreen,
+        on screen: NSScreen,
         supressAnimations: Bool = false
     ) {
         guard action.direction != .noAction else { return }
@@ -45,16 +45,17 @@ struct WindowEngine {
             return
         }
 
-        let screenFrame = screen.safeScreenFrame
         guard
             let currentWindowFrame = WindowEngine.generateWindowFrame(
                 window,
-                screenFrame,
+                screen,
                 action
             )
         else {
             return
         }
+
+        let screenFrame = screen.safeScreenFrame
         var targetWindowFrame = WindowEngine.applyPadding(currentWindowFrame, screenFrame, action)
 
         var animate = (!supressAnimations && Defaults[.animateWindowResizes])
@@ -154,9 +155,10 @@ struct WindowEngine {
 
     static func generateWindowFrame(
         _ window: Window,
-        _ screenFrame: CGRect,
+        _ screen: NSScreen,
         _ action: WindowAction
     ) -> CGRect? {
+        let screenFrame = screen.safeScreenFrame
         let windowFrame = window.frame
         let direction = action.direction
 
@@ -193,7 +195,7 @@ struct WindowEngine {
             )
         case .undo:
             let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
-            if let previousResizeFrame = self.generateWindowFrame(window, screenFrame, previousDirection) {
+            if let previousResizeFrame = self.generateWindowFrame(window, screen, previousDirection) {
                 newWindowFrame = previousResizeFrame
             } else {
                 return nil
@@ -225,12 +227,7 @@ struct WindowEngine {
         else {
             return nil
         }
-        var newWindowFrame = CGRect(
-            x: screenFrame.origin.x,
-            y: screenFrame.origin.y,
-            width: 0,
-            height: 0
-        )
+        var newWindowFrame: CGRect = .zero
 
         switch measureSystem {
         case .percentage:
@@ -297,24 +294,6 @@ struct WindowEngine {
         paddedFrame.inset(.leading, amount: Defaults[.windowPadding] / leadingPaddingDivisor)
         paddedFrame.inset(.trailing, amount: Defaults[.windowPadding] / trailingPaddingDivisor)
 
-//        print("Window Frame: \(windowFrame), Screen Frame: \(screenFrame), \(topPaddingDivisor), \(bottomPaddingDivisor), \(leadingPaddingDivisor), \(trailingPaddingDivisor)")
-
-//        for side in [Edge.top, Edge.bottom, Edge.leading, Edge.trailing] {
-//            if action.direction == .custom {
-//                if let anchor = action.anchor, anchor.edgesTouchingScreen.contains(side) {
-//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
-//                } else {
-//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
-//                }
-//            } else {
-//                if action.direction.edgesTouchingScreen.contains(side) {
-//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding])
-//                } else {
-//                    paddingAppliedRect.inset(side, amount: Defaults[.windowPadding] / 2)
-//                }
-//            }
-//        }
-
         return paddedFrame
     }
 
@@ -341,28 +320,5 @@ struct WindowEngine {
         }
 
         window.setPosition(fixedWindowFrame.origin)
-    }
-}
-
-extension CGRect {
-    mutating func inset(_ side: Edge, amount: CGFloat) {
-        switch side {
-        case .top:
-            self.origin.y += amount
-            self.size.height -= amount
-        case .leading:
-            self.origin.x += amount
-            self.size.width -= amount
-        case .bottom:
-            self.size.height -= amount
-        case .trailing:
-            self.size.width -= amount
-        }
-    }
-}
-
-extension CGFloat {
-    func approximatelyEquals(to comparison: CGFloat) -> Bool {
-        return abs(self - comparison) < 5
     }
 }

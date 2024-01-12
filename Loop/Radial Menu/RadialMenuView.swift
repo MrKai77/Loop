@@ -101,9 +101,11 @@ struct RadialMenuView: View {
                 currentAction = currentAction.nextPreviewDirection
             }
         }
-        .onReceive(.directionChanged) { obj in
-            if !self.previewMode, let keybind = obj.userInfo?["action"] as? WindowAction {
-                self.currentAction = keybind.direction.base
+        .onReceive(.updateUIDirection) { obj in
+            if !self.previewMode, let action = obj.userInfo?["action"] as? WindowAction {
+                self.currentAction = action.direction.base
+
+                print("New radial menu window action recieved: \(action.direction)")
             }
         }
     }
