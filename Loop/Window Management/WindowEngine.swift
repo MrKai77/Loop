@@ -233,6 +233,7 @@ struct WindowEngine {
             return nil
         }
         var newWindowFrame: CGRect = .zero
+        newWindowFrame.origin = screenFrame.origin
 
         switch measureSystem {
         case .percentage:
