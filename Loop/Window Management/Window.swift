@@ -67,6 +67,7 @@ class Window {
     }
 
     func activate() {
+        self.axWindow.setValue(.main, value: true)
         if let runningApplication = self.nsRunningApplication {
             runningApplication.activate()
         }
@@ -155,11 +156,14 @@ class Window {
         return CGRect(origin: self.position, size: self.size)
     }
 
-    func setFrame(_ rect: CGRect, animate: Bool = false, completionHandler: (() -> Void)? = nil) {
+    func setFrame(_ rect: CGRect, animate: Bool = false, sizeFirst: Bool = false, completionHandler: (() -> Void)? = nil) {
         if animate {
             let animation = WindowTransformAnimation(rect, window: self, completionHandler: completionHandler)
             animation.startInBackground()
         } else {
+            if sizeFirst {
+                self.setSize(rect.size)
+            }
             self.setPosition(rect.origin)
             self.setSize(rect.size)
 

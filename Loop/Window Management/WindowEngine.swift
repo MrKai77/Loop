@@ -22,7 +22,10 @@ struct WindowEngine {
         supressAnimations: Bool = false
     ) {
         guard action.direction != .noAction else { return }
+        let willChangeScreens = ScreenManager.screenContaining(window) != screen
         print("Resizing \(window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>") to \(action.direction) on \(screen.localizedName)")
+        print(willChangeScreens)
+
         window.activate()
 
         if !WindowRecords.hasBeenRecorded(window) {
@@ -85,7 +88,7 @@ struct WindowEngine {
                 }
             }
         } else {
-            window.setFrame(targetWindowFrame) {
+            window.setFrame(targetWindowFrame, sizeFirst: willChangeScreens) {
                 WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
 
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
