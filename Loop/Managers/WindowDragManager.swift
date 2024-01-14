@@ -128,7 +128,7 @@ class WindowDragManager {
 
              DispatchQueue.main.async {
                  NotificationCenter.default.post(
-                     name: Notification.Name.directionChanged,
+                     name: Notification.Name.updateUIDirection,
                      object: nil,
                      userInfo: ["action": WindowAction(self.direction)]
                  )
@@ -147,7 +147,7 @@ class WindowDragManager {
         }
 
         DispatchQueue.main.async {
-            WindowEngine.resize(window, to: .init(self.direction), screen)
+            WindowEngine.resize(window, to: .init(self.direction), on: screen)
         }
     }
 }

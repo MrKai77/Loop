@@ -5,7 +5,13 @@
 //  Created by Kai Azim on 2023-06-14.
 //
 
-import AppKit
+import SwiftUI
+
+extension CGFloat {
+    func approximatelyEquals(to comparison: CGFloat, tolerance: CGFloat = 10) -> Bool {
+        return abs(self - comparison) < tolerance
+    }
+}
 
 extension CGPoint {
     func angle(to comparisonPoint: CGPoint) -> CGFloat {
@@ -35,6 +41,12 @@ extension CGPoint {
     }
 }
 
+extension CGSize {
+    var area: CGFloat {
+        self.width * self.height
+    }
+}
+
 extension CGRect {
     var flipY: CGRect? {
         guard let screen = NSScreen.screenWithMouse else { return nil }
@@ -43,6 +55,29 @@ extension CGRect {
             y: screen.frame.maxY - self.maxY,
             width: self.width,
             height: self.height)
+    }
+
+    func flipY(maxY: CGFloat) -> CGRect {
+        return CGRect(
+            x: self.minX,
+            y: maxY - self.maxY,
+            width: self.width,
+            height: self.height)
+    }
+
+    mutating func inset(_ side: Edge, amount: CGFloat) {
+        switch side {
+        case .top:
+            self.origin.y += amount
+            self.size.height -= amount
+        case .leading:
+            self.origin.x += amount
+            self.size.width -= amount
+        case .bottom:
+            self.size.height -= amount
+        case .trailing:
+            self.size.width -= amount
+        }
     }
 
     func approximatelyEqual(to rect: CGRect, tolerance: CGFloat = 10) -> Bool {

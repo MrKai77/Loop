@@ -112,7 +112,7 @@ class KeybindMonitor {
         }
 
         if let newAction = WindowAction.getAction(for: pressedKeys) {
-            Notification.Name.directionChanged.post(userInfo: ["action": newAction])
+            Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
             return true
         }
 

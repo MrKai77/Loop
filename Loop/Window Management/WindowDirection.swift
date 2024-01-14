@@ -57,6 +57,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case bottomThird = "BottomThird"
     case bottomTwoThirds = "BottomTwoThirds"
 
+    // Screens
+    case nextScreen = "NextScreen"
+    case previousScreen = "PreviousScreen"
+
     case custom = "Custom"
     case cycle = "Cycle"
 
@@ -79,12 +83,19 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var cyclable: [WindowDirection] {
         [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
     }
+    static var screenSwitching: [WindowDirection] {
+        [.nextScreen, .previousScreen]
+    }
     static var more: [WindowDirection] {
         [.initialFrame, .undo, .custom, .cycle]
     }
 
     var isPresetCyclable: Bool {
         WindowDirection.cyclable.contains(self)
+    }
+
+    var willChangeScreen: Bool {
+        WindowDirection.screenSwitching.contains(self)
     }
 
     // Used in the settings window to loop over the possible combinations
@@ -145,7 +156,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         if self.isPresetCyclable {
             result = """
             This keybind cycles: press it repeatedly to cycle through
-            1/2, 1/3, and 2/3 of your screen.
+            1/2, 1/3, and 2/3, then move onto the next screen.
             """
         }
 
@@ -197,6 +208,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird:      Image("custom.rectangle.verticalcenterthird.inset.filled")
         case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
         case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
+
+        case .nextScreen:               Image("custom.arrow.forward.rectangle")
+        case .previousScreen:           Image("custom.arrow.backward.rectangle")
 
         case .custom:                   Image(systemName: "rectangle.dashed")
         case .cycle:                    Image("custom.arrow.2.squarepath.rectangle")
@@ -305,6 +319,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var frameMultiplyValues: CGRect? {
         switch self {
+        case .noAction:                 CGRect(x: 1.0/2.0, y: 1.0/2.0, width: 0.0, height: 0.0)
         case .maximize:                 CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
         case .almostMaximize:           CGRect(x: 0.5/10.0, y: 0.5/10.0, width: 9.0/10.0, height: 9.0/10.0)
         case .fullscreen:               CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
@@ -334,7 +349,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird:      CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
-        default:                        CGRect(x: 1.0/2.0, y: 1.0/2.0, width: 0.0, height: 0.0)
+        default:                        nil
         }
     }
 
@@ -356,12 +371,16 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             switch from {
             case .leftHalf:             return .leftThird
             case .leftThird:            return .leftTwoThirds
+            case .leftTwoThirds:        return .previousScreen
+            case .previousScreen:       return .rightHalf
             default:                    return .leftHalf
             }
         case .cycleRight:
             switch from {
             case .rightHalf:            return .rightThird
             case .rightThird:           return .rightTwoThirds
+            case .rightTwoThirds:       return .nextScreen
+            case .nextScreen:           return .leftHalf
             default:                    return .rightHalf
             }
         default: return .noAction

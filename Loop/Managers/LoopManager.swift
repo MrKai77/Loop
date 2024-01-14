@@ -19,7 +19,7 @@ class LoopManager: ObservableObject {
     private var currentlyPressedModifiers: Set<CGKeyCode> = []
     private var isLoopActive: Bool = false
     private var targetWindow: Window?
-    private var screenWithMouse: NSScreen?
+    private var screenToResizeOn: NSScreen?
 
     private var flagsChangedEventMonitor: EventMonitor?
     private var mouseMovedEventMonitor: EventMonitor?
@@ -65,7 +65,7 @@ class LoopManager: ObservableObject {
             self.closeLoop(forceClose: true)
         }
 
-        Notification.Name.directionChanged.onRecieve { notification in
+        Notification.Name.updateBackendDirection.onRecieve { notification in
             if let action = notification.userInfo?["action"] as? WindowAction {
                 self.changeAction(action)
             }
@@ -122,7 +122,18 @@ class LoopManager: ObservableObject {
     }
 
     private func changeAction(_ action: WindowAction) {
-        guard self.currentAction != action && self.isLoopActive else { return }
+        guard
+            self.currentAction != action,
+            self.isLoopActive,
+            let currentScreen = self.screenToResizeOn
+        else {
+            return
+        }
+
+        NSHapticFeedbackManager.defaultPerformer.perform(
+            NSHapticFeedbackManager.FeedbackPattern.alignment,
+            performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+        )
 
         var newAction = action
 
@@ -142,6 +153,61 @@ class LoopManager: ObservableObject {
             }
         }
 
+        if newAction.direction.willChangeScreen {
+            var newScreen: NSScreen = currentScreen
+
+            if newAction.direction == .nextScreen,
+               let nextScreen = ScreenManager.nextScreen(from: currentScreen) {
+                newScreen = nextScreen
+            }
+
+            if newAction.direction == .previousScreen,
+               let previousScreen = ScreenManager.previousScreen(from: currentScreen) {
+                newScreen = previousScreen
+            }
+
+            if self.currentAction.direction == .noAction {
+                if let targetWindow = targetWindow {
+                    self.currentAction = WindowRecords.getLastAction(for: targetWindow, offset: 0)
+                }
+
+                if self.currentAction.direction == .noAction {
+                    self.currentAction.direction = .maximize
+                }
+            }
+
+            let oldscreenToResizeOn = self.screenToResizeOn
+
+            self.screenToResizeOn = newScreen
+            self.previewController.setScreen(to: newScreen)
+
+            if oldscreenToResizeOn != newScreen {
+
+                DispatchQueue.main.async {
+                    Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
+                }
+
+                if action.direction.isPresetCyclable || action.direction == .cycle {
+                    self.currentAction = newAction
+                    self.changeAction(action)
+                } else {
+                    if let screenToResizeOn = self.screenToResizeOn,
+                       !Defaults[.previewVisibility] {
+                        WindowEngine.resize(
+                            self.targetWindow!,
+                            to: self.currentAction,
+                            on: screenToResizeOn,
+                            supressAnimations: true
+                        )
+                    }
+                }
+
+                print("Screen changed: \(newScreen.localizedName)")
+            }
+
+            return
+        }
+
         if newAction != currentAction {
             self.currentAction = newAction
 
@@ -150,22 +216,20 @@ class LoopManager: ObservableObject {
             }
 
             DispatchQueue.main.async {
-                Notification.Name.directionChanged.post(userInfo: ["action": self.currentAction])
+                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
 
-                if !Defaults[.previewVisibility] {
+                if let screenToResizeOn = self.screenToResizeOn,
+                   !Defaults[.previewVisibility] {
                     WindowEngine.resize(
                         self.targetWindow!,
                         to: self.currentAction,
-                        self.screenWithMouse!,
+                        on: screenToResizeOn,
                         supressAnimations: true
                     )
                 }
             }
 
-            NSHapticFeedbackManager.defaultPerformer.perform(
-                NSHapticFeedbackManager.FeedbackPattern.alignment,
-                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-            )
+            print("Window action changed: \(self.currentAction.direction)")
         }
     }
 
@@ -262,7 +326,7 @@ class LoopManager: ObservableObject {
 
         self.targetWindow = WindowEngine.getTargetWindow()
         self.initialMousePosition = NSEvent.mouseLocation
-        self.screenWithMouse = NSScreen.screenWithMouse
+        self.screenToResizeOn = NSScreen.screenWithMouse
         self.mouseMovedEventMonitor!.start()
 
         if !Defaults[.hideUntilDirectionIsChosen] {
@@ -284,16 +348,18 @@ class LoopManager: ObservableObject {
         self.currentlyPressedModifiers = []
 
         if self.targetWindow != nil &&
-            self.screenWithMouse != nil &&
+            self.screenToResizeOn != nil &&
             forceClose == false &&
             self.currentAction.direction != .noAction &&
             self.isLoopActive {
 
-            if Defaults[.previewVisibility] {
+            if let screenToResizeOn = self.screenToResizeOn,
+               Defaults[.previewVisibility] {
+
                 WindowEngine.resize(
                     self.targetWindow!,
                     to: self.currentAction,
-                    self.screenWithMouse!
+                    on: screenToResizeOn
                 )
             }
 
@@ -314,7 +380,7 @@ class LoopManager: ObservableObject {
 
     private func openWindows() {
         if Defaults[.previewVisibility] == true && self.targetWindow != nil {
-            self.previewController.open(screen: self.screenWithMouse!, window: targetWindow)
+            self.previewController.open(screen: self.screenToResizeOn!, window: targetWindow)
         }
         self.radialMenuController.open(position: self.initialMousePosition, frontmostWindow: targetWindow)
     }

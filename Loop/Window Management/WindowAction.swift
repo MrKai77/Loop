@@ -273,7 +273,7 @@ extension WindowAction {
                 xLocation = 0
             case .center:
                 xLocation = (parentWidth / 2) - (previewWidth / 2)
-            case .macOSCenter :
+            case .macOSCenter:
                 xLocation = (parentWidth / 2) - (previewWidth / 2)
             default:
                 xLocation = 0
