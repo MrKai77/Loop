@@ -24,7 +24,6 @@ struct WindowEngine {
         guard action.direction != .noAction else { return }
         let willChangeScreens = ScreenManager.screenContaining(window) != screen
         print("Resizing \(window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>") to \(action.direction) on \(screen.localizedName)")
-        print(willChangeScreens)
 
         window.activate()
 
@@ -92,10 +91,9 @@ struct WindowEngine {
                 WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
 
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
-                if !screenFrame.contains(window.frame) {
-                    window.setFrame(targetWindowFrame) {
-                        WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-                    }
+                if !window.frame.approximatelyEqual(to: targetWindowFrame) {
+                    print("Backup resizing...")
+                    window.setFrame(targetWindowFrame)
                 }
 
                 WindowRecords.record(window, action)
