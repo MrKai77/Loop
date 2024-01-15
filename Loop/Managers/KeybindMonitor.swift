@@ -35,21 +35,31 @@ class KeybindMonitor {
                 let event = NSEvent(cgEvent: cgEvent),
                 !event.isARepeat {
 
-                 if !self.specialEvents.contains(event.keyCode.baseKey) {
-                     if event.type == .keyUp {
-                         KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
-                     } else if event.type == .keyDown {
-                         KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
-                     }
+                 if event.type == .keyUp {
+                     KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
+                 } else if event.type == .keyDown {
+                     KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
+                 }
 
-                     if self.performKeybind(event: event) {
-                         return nil
-                     }
-                 } else {
+                 // Special events such as the emoji key
+                 if self.specialEvents.contains(event.keyCode.baseKey) {
                      if self.canPassthroughSpecialEvents {
                          return Unmanaged.passRetained(cgEvent)
                      } else {
                          return nil
+                     }
+                 }
+
+                 // If this is a valid event, don't passthrough
+                 if self.performKeybind(event: event) {
+                     return nil
+                 } else {
+                     // If this wasn't, check if it was a system keybind (ex. screenshot), and
+                     // in that case, passthrough and foce-close Loop
+                     if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
+                         Notification.Name.forceCloseLoop.post()
+                         print("Detected system keybind, closing!")
+                         return Unmanaged.passRetained(cgEvent)
                      }
                  }
             }
@@ -101,6 +111,7 @@ class KeybindMonitor {
             (event.type == .flagsChanged &&
              !event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.shift)) {
             if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
+                print("performKeybind: returning true due to key release")
                 return true
             }
             lastKeyReleaseTime = Date.now
@@ -108,16 +119,19 @@ class KeybindMonitor {
 
         if pressedKeys.contains(.kVK_Escape) {
             Notification.Name.forceCloseLoop.post()
+            print("performKeybind: returning true due to force close")
             return true
         }
 
         if let newAction = WindowAction.getAction(for: pressedKeys) {
             Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
+            print("performKeybind: returning true due to valid event: \(newAction.direction)")
             return true
         }
 
         // If this wasn't a valid keybind, return false, which will
         // then forward the key event to the frontmost app
+        print("performKeybind: returning false due to invalid event")
         return false
     }
 

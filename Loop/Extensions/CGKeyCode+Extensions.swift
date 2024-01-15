@@ -259,7 +259,7 @@ extension CGKeyCode {
         // There's "⌧“ 'X In A Rectangle Box' (U+2327), "☒" 'Ballot Box with X' (U+2612), "×" 'Multiplication Sign' (U+00d7), "⨯" 'Vector or Cross Product' (U+2a2f), or a plain small x. All combined symbols appear bigger.
         .kVK_ANSI_KeypadClear: "☒\u{20e3}", // The combined symbol appears bigger than the other combined 'keycaps'
         // TODO: Respect locale decimal separator ("." or ",")
-        .kVK_ANSI_KeypadDecimal: ".\u{20e3}",
+            .kVK_ANSI_KeypadDecimal: ".\u{20e3}",
         .kVK_ANSI_KeypadDivide: "/\u{20e3}",
         // "⏎" 'Return Symbol' (U+23CE) but "↩" 'Leftwards Arrow with Hook' (U+00d7) seems to be more common on macOS.
         .kVK_ANSI_KeypadEnter: "↩\u{20e3}", // The combined symbol appears bigger than the other combined 'keycaps'
@@ -324,11 +324,67 @@ extension CGKeyCode {
         }
     }
 
+    static var systemKeybinds: [Set<CGKeyCode>] {
+        var shortcutsUnmanaged: Unmanaged<CFArray>?
+        guard
+            CopySymbolicHotKeys(&shortcutsUnmanaged) == noErr,
+            let shortcuts = shortcutsUnmanaged?.takeRetainedValue() as? [[String: Any]]
+        else {
+            assertionFailure("Could not get system keyboard shortcuts")
+            return []
+        }
+
+        return shortcuts.compactMap {
+            guard
+                ($0[kHISymbolicHotKeyEnabled] as? Bool) == true,
+                let carbonKeyCode = $0[kHISymbolicHotKeyCode] as? CGKeyCode,
+                let carbonModifiers = $0[kHISymbolicHotKeyModifiers] as? UInt
+            else {
+                return nil
+            }
+
+            let modifiers = NSEvent.ModifierFlags(rawValue: carbonModifiers)
+            var result = modifiers.convertToCGKeyCode()
+            result.insert(carbonKeyCode)
+
+            return result
+        }
+    }
+
     var systemImage: String? {
         if let systemName = CGKeyCode.keyToImage[self.baseModifier] {
             return systemName
         } else {
             return nil
         }
+    }
+}
+
+extension NSEvent.ModifierFlags {
+    func convertToCGKeyCode() -> Set<CGKeyCode> {
+        let deviceIndependent = self.intersection(.deviceIndependentFlagsMask)
+        var result: Set<CGKeyCode> = []
+
+        if deviceIndependent.contains(.command) {
+            result.insert(.kVK_Command)
+        }
+
+        if deviceIndependent.contains(.shift) {
+            result.insert(.kVK_Shift)
+        }
+
+        if deviceIndependent.contains(.option) {
+            result.insert(.kVK_Option)
+        }
+
+        if deviceIndependent.contains(.control) {
+            result.insert(.kVK_Control)
+        }
+
+        if deviceIndependent.contains(.function) {
+            result.insert(.kVK_Function)
+        }
+
+        return result
     }
 }
