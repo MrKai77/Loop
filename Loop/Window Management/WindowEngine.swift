@@ -289,19 +289,40 @@ struct WindowEngine {
     ///   - direction: The direction the window WILL be resized to
     /// - Returns: CGRect with padding applied
     private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
-        var paddedFrame = windowFrame
+        let padding = Defaults[.windowPadding]
+        let halfPadding = Defaults[.windowPadding] / 2
 
-        let topPaddingDivisor: CGFloat = windowFrame.minY.approximatelyEquals(to: screenFrame.minY) ? 1 : 2
-        let bottomPaddingDivisor: CGFloat = windowFrame.maxY.approximatelyEquals(to: screenFrame.maxY) ? 1 : 2
-        let leadingPaddingDivisor: CGFloat = windowFrame.minX.approximatelyEquals(to: screenFrame.minX) ? 1 : 2
-        let trailingPaddingDivisor: CGFloat = windowFrame.maxX.approximatelyEquals(to: screenFrame.maxX) ? 1 : 2
+        let paddedScreenFrame = screenFrame.padding(.all, padding)
+        var paddedWindowFrame = windowFrame.intersection(paddedScreenFrame)
 
-        paddedFrame.inset(.top, amount: Defaults[.windowPadding] / topPaddingDivisor)
-        paddedFrame.inset(.bottom, amount: Defaults[.windowPadding] / bottomPaddingDivisor)
-        paddedFrame.inset(.leading, amount: Defaults[.windowPadding] / leadingPaddingDivisor)
-        paddedFrame.inset(.trailing, amount: Defaults[.windowPadding] / trailingPaddingDivisor)
+        if action.direction == .macOSCenter,
+           windowFrame.height >= paddedScreenFrame.height {
 
-        return paddedFrame
+            paddedWindowFrame.origin.y = paddedScreenFrame.minY
+            paddedWindowFrame.size.height = paddedScreenFrame.height
+        }
+
+        if action.direction == .center || action.direction == .macOSCenter {
+            return paddedWindowFrame
+        }
+
+        if paddedWindowFrame.minX != paddedScreenFrame.minX {
+            paddedWindowFrame = paddedWindowFrame.padding(.leading, halfPadding)
+        }
+
+        if paddedWindowFrame.maxX != paddedScreenFrame.maxX {
+            paddedWindowFrame = paddedWindowFrame.padding(.trailing, halfPadding)
+        }
+
+        if paddedWindowFrame.minY != paddedScreenFrame.minY {
+            paddedWindowFrame = paddedWindowFrame.padding(.top, halfPadding)
+        }
+
+        if paddedWindowFrame.maxY != paddedScreenFrame.maxY {
+            paddedWindowFrame = paddedWindowFrame.padding(.bottom, halfPadding)
+        }
+
+        return paddedWindowFrame
     }
 
     /// Will move a window back onto the screen. To be run AFTER a window has been resized.
