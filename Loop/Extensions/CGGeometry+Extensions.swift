@@ -65,19 +65,28 @@ extension CGRect {
             height: self.height)
     }
 
-    mutating func inset(_ side: Edge, amount: CGFloat) {
-        switch side {
-        case .top:
-            self.origin.y += amount
-            self.size.height -= amount
-        case .leading:
-            self.origin.x += amount
-            self.size.width -= amount
-        case .bottom:
-            self.size.height -= amount
-        case .trailing:
-            self.size.width -= amount
+    func padding(_ sides: Edge.Set, _ amount: CGFloat) -> CGRect {
+        var rect = self
+
+        if sides.contains(.top) {
+            rect.origin.y += amount
+            rect.size.height -= amount
         }
+
+        if sides.contains(.bottom) {
+            rect.size.height -= amount
+        }
+
+        if sides.contains(.leading) {
+            rect.origin.x += amount
+            rect.size.width -= amount
+        }
+
+        if sides.contains(.trailing) {
+            rect.size.width -= amount
+        }
+
+        return rect
     }
 
     func approximatelyEqual(to rect: CGRect, tolerance: CGFloat = 10) -> Bool {

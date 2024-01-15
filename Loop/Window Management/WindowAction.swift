@@ -347,6 +347,7 @@ extension WindowAction {
 
         if self.direction == .center || self.direction == .macOSCenter, let window = window {
             width = window.frame.width
+            width += Defaults[.windowPadding] * 2
         }
 
         return width
@@ -368,6 +369,7 @@ extension WindowAction {
 
         if self.direction == .center || self.direction == .macOSCenter, let window = window {
             height = window.frame.height
+            height += Defaults[.windowPadding] * 2
         }
 
         return height
