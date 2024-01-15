@@ -324,7 +324,10 @@ extension WindowAction {
         }
 
         if self.direction == .macOSCenter {
-            let yOffset = WindowEngine.getMacOSCenterYOffset(previewHeight, screenHeight: parentHeight)
+            let yOffset = WindowEngine.getMacOSCenterYOffset(
+                previewHeight - (Defaults[.windowPadding] * 2),
+                screenHeight: parentHeight
+            )
             yLocation = (parentHeight / 2) - (previewHeight / 2) + yOffset
         }
 
