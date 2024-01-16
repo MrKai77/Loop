@@ -112,7 +112,7 @@ struct GeneralSettingsView: View {
                         ForEach(IconManager.returnUnlockedIcons(), id: \.self) { icon in
                             HStack {
                                 Image(nsImage: NSImage(named: icon.iconName)!)
-                                Text(icon.name ??  IconManager.nameWithoutPrefix(name: icon.iconName))
+                                Text(icon.getName())
                             }
                             .tag(icon.iconName)
                         }

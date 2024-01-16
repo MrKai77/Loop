@@ -7,8 +7,9 @@
 
 import SwiftUI
 import Defaults
+import UserNotifications
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
 
     private let loopManager = LoopManager()
     private let windowDragManager = WindowDragManager()
@@ -26,6 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Check & ask for accessibility access
         PermissionsManager.Accessibility.requestAccess()
+        UNUserNotificationCenter.current().delegate = self
 
         IconManager.refreshCurrentAppIcon()
         loopManager.startObservingKeys()
@@ -77,5 +79,79 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.orderFrontRegardless()
             window.center()
         }
+    }
+
+    // ----------
+    // MARK: - Notifications
+    // ----------
+
+    func userNotificationCenter(
+        _: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        if response.actionIdentifier == "setIconAction",
+           let icon = response.notification.request.content.userInfo["icon"] as? String {
+            IconManager.setAppIcon(to: icon)
+        }
+
+        completionHandler()
+    }
+
+    // Implementation is necessary to show notifications even when the app has focus!
+    func userNotificationCenter(
+        _: UNUserNotificationCenter,
+        willPresent _: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner])
+    }
+
+    static func requestNotificationAuthorization() {
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert]
+        ) { (accepted, _) in
+            if !accepted {
+                print("User Notification access denied.")
+            }
+        }
+    }
+
+    private static func registerNotificationCategories() {
+        let setIconAction = UNNotificationAction(
+            identifier: "setIconAction",
+            title: "Set Current Icon",
+            options: .destructive
+        )
+        let notificationCategory = UNNotificationCategory(
+            identifier: "icon_unlocked",
+            actions: [setIconAction],
+            intentIdentifiers: []
+        )
+        UNUserNotificationCenter.current().setNotificationCategories([notificationCategory])
+    }
+
+    static func sendNotification(_ content: UNMutableNotificationContent) {
+        let uuidString = UUID().uuidString
+        let request = UNNotificationRequest(
+            identifier: uuidString,
+            content: content,
+            trigger: nil
+        )
+
+        requestNotificationAuthorization()
+        registerNotificationCategories()
+
+        UNUserNotificationCenter.current().add(request)
+    }
+
+    static func sendNotification(_ title: String, _ body: String) {
+        let content = UNMutableNotificationContent()
+
+        content.title = title
+        content.body = body
+        content.categoryIdentifier = UUID().uuidString
+
+        AppDelegate.sendNotification(content)
     }
 }

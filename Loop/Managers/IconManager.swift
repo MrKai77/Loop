@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Defaults
+import UserNotifications
 
 class IconManager {
 
@@ -15,6 +16,15 @@ class IconManager {
         var iconName: String
         var unlockTime: Int
         var unlockMessage: String?
+
+        func getName() -> String {
+            if let name = self.name {
+                return name
+            } else {
+                let prefix = "AppIcon-"
+                return iconName.replacingOccurrences(of: prefix, with: "")
+            }
+        }
     }
 
     private static let icons: [Icon] = [
@@ -44,11 +54,6 @@ class IconManager {
         )
     ]
 
-    static func nameWithoutPrefix(name: String) -> String {
-        let prefix = "AppIcon-"
-        return name.replacingOccurrences(of: prefix, with: "")
-    }
-
     static func returnUnlockedIcons() -> [Icon] {
         var returnValue: [Icon] = []
         for icon in icons where icon.unlockTime <= Defaults[.timesLooped] {
@@ -60,12 +65,13 @@ class IconManager {
     static func setAppIcon(to icon: Icon) {
         Defaults[.currentIcon] = icon.iconName
         self.refreshCurrentAppIcon()
+        print("Setting app icon to: \(icon.getName())")
+    }
 
-        let alert = NSAlert()
-        alert.messageText = "\(Bundle.main.appName)"
-        alert.informativeText = "Current icon is now \(icon.name ??  nameWithoutPrefix(name: icon.iconName))!"
-        alert.icon = NSImage(named: icon.iconName)
-        alert.runModal()
+    static func setAppIcon(to iconName: String) {
+        if let targetIcon = icons.first(where: { $0.iconName == iconName }) {
+            setAppIcon(to: targetIcon)
+        }
     }
 
     // This function is run at startup to set the current icon to the user's set icon.
@@ -76,24 +82,25 @@ class IconManager {
 
     static func checkIfUnlockedNewIcon() {
         for icon in icons where icon.unlockTime == Defaults[.timesLooped] {
-            NSApp.setActivationPolicy(.regular)
+            let content = UNMutableNotificationContent()
 
-            let alert = NSAlert()
-            alert.icon = NSImage(named: icon.iconName)
+            content.title = "Loop"
+
             if let message = icon.unlockMessage {
-                alert.messageText = message
+                content.body = message
             } else {
-                alert.messageText = "You've unlocked a new icon: \(nameWithoutPrefix(name: icon.iconName))!"
+                content.body = "You've unlocked a new icon: \(icon.getName())!"
             }
-            alert.informativeText = "Would you like to set this as \(Bundle.main.appName)'s new icon?"
-            alert.alertStyle = .informational
-            alert.addButton(withTitle: "Yes").keyEquivalent = "\r"
-            alert.addButton(withTitle: "No")
 
-            let response = alert.runModal()
-            if response == NSApplication.ModalResponse.alertFirstButtonReturn {
-                setAppIcon(to: icon)
+            if let data = NSImage(named: icon.iconName)?.tiffRepresentation,
+               let attachment = UNNotificationAttachment.create(NSData(data: data)) {
+                content.attachments = [attachment]
+                content.userInfo = ["icon": icon.iconName]
             }
+
+            content.categoryIdentifier = "icon_unlocked"
+
+            AppDelegate.sendNotification(content)
         }
     }
 
