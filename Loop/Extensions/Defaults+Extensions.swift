@@ -13,6 +13,7 @@ extension Defaults.Keys {
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
+    static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
     static let timesLooped = Key<Int>("timesLooped", default: 0)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
