@@ -20,6 +20,7 @@ struct GeneralSettingsView: View {
     @Default(.useGradient) var useGradient
     @Default(.gradientColor) var gradientColor
     @Default(.currentIcon) var currentIcon
+    @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked
     @Default(.timesLooped) var timesLooped
     @Default(.animateWindowResizes) var animateWindowResizes
     @Default(.windowPadding) var windowPadding
@@ -124,6 +125,32 @@ struct GeneralSettingsView: View {
                 }
                 .onChange(of: self.currentIcon) { _ in
                     IconManager.refreshCurrentAppIcon()
+                }
+
+                Toggle(
+                    "Notify when new icons are unlocked",
+                    isOn: Binding(
+                        get: {
+                            self.notificationWhenIconUnlocked
+                        },
+                        set: {
+                            if $0 {
+                                AppDelegate.sendNotification(
+                                    "Loop",
+                                    "You will now be notified when you unlock a new icon."
+                                )
+
+                                self.notificationWhenIconUnlocked = AppDelegate.areNotificationsEnabled()
+                            } else {
+                                self.notificationWhenIconUnlocked = $0
+                            }
+                        }
+                    )
+                )
+                .onAppear {
+                    if self.notificationWhenIconUnlocked {
+                        self.notificationWhenIconUnlocked = AppDelegate.areNotificationsEnabled()
+                    }
                 }
             }
 

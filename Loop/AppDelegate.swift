@@ -29,6 +29,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         PermissionsManager.Accessibility.requestAccess()
         UNUserNotificationCenter.current().delegate = self
 
+        if !AppDelegate.areNotificationsEnabled() {
+            Defaults[.notificationWhenIconUnlocked] = false
+        }
+
         IconManager.refreshCurrentAppIcon()
         loopManager.startObservingKeys()
         windowDragManager.addObservers()
@@ -110,9 +114,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     static func requestNotificationAuthorization() {
         UNUserNotificationCenter.current().requestAuthorization(
             options: [.alert]
-        ) { (accepted, _) in
+        ) { (accepted, error) in
             if !accepted {
                 print("User Notification access denied.")
+            }
+
+            if let error = error {
+                print(error)
             }
         }
     }
@@ -129,6 +137,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             intentIdentifiers: []
         )
         UNUserNotificationCenter.current().setNotificationCategories([notificationCategory])
+    }
+
+    static func areNotificationsEnabled() -> Bool {
+        let group = DispatchGroup()
+        group.enter()
+
+        var notificationsEnabled = false
+
+        UNUserNotificationCenter.current().getNotificationSettings { notificationSettings in
+            notificationsEnabled = notificationSettings.authorizationStatus != UNAuthorizationStatus.denied
+            group.leave()
+        }
+
+        group.wait()
+        return notificationsEnabled
     }
 
     static func sendNotification(_ content: UNMutableNotificationContent) {

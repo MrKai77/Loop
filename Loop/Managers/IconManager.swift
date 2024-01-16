@@ -81,6 +81,8 @@ class IconManager {
     }
 
     static func checkIfUnlockedNewIcon() {
+        guard Defaults[.notificationWhenIconUnlocked] else { return }
+
         for icon in icons where icon.unlockTime == Defaults[.timesLooped] {
             let content = UNMutableNotificationContent()
 
