@@ -29,9 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         PermissionsManager.Accessibility.requestAccess()
         UNUserNotificationCenter.current().delegate = self
 
-        if !AppDelegate.areNotificationsEnabled() {
-            Defaults[.notificationWhenIconUnlocked] = false
-        }
+        AppDelegate.requestNotificationAuthorization()
 
         IconManager.refreshCurrentAppIcon()
         loopManager.startObservingKeys()
