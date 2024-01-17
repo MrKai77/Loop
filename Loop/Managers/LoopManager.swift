@@ -130,11 +130,13 @@ class LoopManager: ObservableObject {
             return
         }
 
-        NSHapticFeedbackManager.defaultPerformer.perform(
-            NSHapticFeedbackManager.FeedbackPattern.alignment,
-            performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-        )
-
+        
+        if Defaults[.enableTrackpadHapticFeedback] {
+            NSHapticFeedbackManager.defaultPerformer.perform(
+                NSHapticFeedbackManager.FeedbackPattern.alignment,
+                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+            )
+        }
         var newAction = action
 
         if newAction.direction.isPresetCyclable {
