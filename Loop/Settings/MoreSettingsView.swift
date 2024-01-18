@@ -15,7 +15,7 @@ struct MoreSettingsView: View {
 
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
-
+    @Default(.enableHapticFeedback) var enableHapticFeedback
     @Default(.animateWindowResizes) var animateWindowResizes
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -37,8 +37,7 @@ struct MoreSettingsView: View {
                                 forType: NSPasteboard.PasteboardType.string
                             )
                         }, label: {
-                            // swiftlint:disable:next line_length
-                            Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
+                            Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         })
@@ -139,8 +138,17 @@ struct MoreSettingsView: View {
                     .controlSize(.large)
                 }
             }
+
+            Section(header: Text("Accessibility")) {
+                Toggle("Enable Haptic Feedback", isOn: $enableHapticFeedback)
+            }
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
     }
 }
+
+
+
+
+

@@ -10,7 +10,7 @@ import Defaults
 
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
-    static let enableTrackpadHapticFeedback = Defaults.Key<Bool>("enableTrackpadHapticFeedback", default: true)
+    static let enableHapticFeedback = Defaults.Key<Bool>("enableTrackpadHapticFeedback", default: true)
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
