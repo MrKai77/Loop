@@ -18,7 +18,7 @@ struct MenuBarResizeButton: View {
         Button {
             if let frontmostWindow = WindowEngine.frontmostWindow,
                let screen = NSScreen.screenWithMouse {
-                WindowEngine.resize(frontmostWindow, to: .init(direction), screen)
+                WindowEngine.resize(frontmostWindow, to: .init(direction), on: screen)
             }
         } label: {
             HStack {

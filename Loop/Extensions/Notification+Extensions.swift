@@ -8,7 +8,9 @@
 import Foundation
 
 extension Notification.Name {
-    static let directionChanged = Notification.Name("directionChanged")
+    static let updateBackendDirection = Notification.Name("updateBackendDirection")
+    static let updateUIDirection = Notification.Name("updateUIDirection")
+
     static let forceCloseLoop = Notification.Name("forceCloseLoop")
     static let didLoop = Notification.Name("didLoop")
 

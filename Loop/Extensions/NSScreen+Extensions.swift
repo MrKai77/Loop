@@ -27,17 +27,18 @@ extension NSScreen {
 
     var safeScreenFrame: CGRect {
         guard
-            let displayID = self.displayID,
-            let visibleFrame = self.stageStripFreeFrame.flipY
+            let displayID = self.displayID
         else {
+            print("ERROR: Failed to get NSScreen.displayID in NSScreen.safeScreenFrame")
             return self.frame.flipY!
         }
 
         let screenFrame = CGDisplayBounds(displayID)
+        let visibleFrame = self.stageStripFreeFrame.flipY(maxY: self.frame.maxY)
         let menubarHeight = visibleFrame.origin.y
 
         // By setting safeScreenFrame to visibleFrame, we won't need to adjust its size.
-        var safeScreenFrame: CGRect = visibleFrame
+        var safeScreenFrame = visibleFrame
 
         // By using visibleFrame, coordinates of multiple displays won't
         // work correctly, so we instead use screenFrame's origin.
