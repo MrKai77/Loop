@@ -29,6 +29,8 @@ struct GeneralSettingsView: View {
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
 
+    @State var userDisabledLoopNotifications: Bool = false
+
     var body: some View {
         Form {
             Section("Behavior") {
@@ -74,10 +76,10 @@ struct GeneralSettingsView: View {
                 }
 
                 Slider(value: $windowPadding,
-                       in: 0...20,
-                       step: 2,
+                       in: 0...50,
+                       step: 5,
                        minimumValueLabel: Text("0px"),
-                       maximumValueLabel: Text("20px")) {
+                       maximumValueLabel: Text("50px")) {
                     Text("Window Padding")
                 }
 
@@ -140,7 +142,12 @@ struct GeneralSettingsView: View {
                                     "You will now be notified when you unlock a new icon."
                                 )
 
-                                self.notificationWhenIconUnlocked = AppDelegate.areNotificationsEnabled()
+                                let areNotificationsEnabled = AppDelegate.areNotificationsEnabled()
+                                self.notificationWhenIconUnlocked = areNotificationsEnabled
+
+                                if !areNotificationsEnabled {
+                                    self.userDisabledLoopNotifications = true
+                                }
                             } else {
                                 self.notificationWhenIconUnlocked = $0
                             }
@@ -152,6 +159,21 @@ struct GeneralSettingsView: View {
                         self.notificationWhenIconUnlocked = AppDelegate.areNotificationsEnabled()
                     }
                 }
+                .popover(isPresented: self.$userDisabledLoopNotifications,
+                         arrowEdge: .bottom,
+                         content: {
+                    VStack(alignment: .center) {
+                        Text("Loop's notification permissions are currently disabled.")
+                        Text("Please turn them on in System Settings.")
+                        Button("Open Notification Settings") {
+                            NSWorkspace.shared.open(
+                                URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension")!
+                            )
+                        }
+                    }
+                    .padding(8)
+
+                })
             }
 
             Section("Accent Color") {
