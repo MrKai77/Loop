@@ -76,10 +76,10 @@ struct GeneralSettingsView: View {
                 }
 
                 Slider(value: $windowPadding,
-                       in: 0...20,
-                       step: 2,
+                       in: 0...50,
+                       step: 5,
                        minimumValueLabel: Text("0px"),
-                       maximumValueLabel: Text("20px")) {
+                       maximumValueLabel: Text("50px")) {
                     Text("Window Padding")
                 }
 
