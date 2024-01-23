@@ -30,6 +30,7 @@ struct GeneralSettingsView: View {
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
 
     @State var userDisabledLoopNotifications: Bool = false
+    @State var iconFooter: String?
 
     var body: some View {
         Form {
@@ -120,13 +121,24 @@ struct GeneralSettingsView: View {
                             .tag(icon.iconName)
                         }
                     }
-                    Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .textSelection(.enabled)
+
+                    VStack(alignment: .leading) {
+                        Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
+
+                        if let iconFooter = iconFooter {
+                            Text(iconFooter)
+                        }
+                    }
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .textSelection(.enabled)
+                }
+                .onAppear {
+                    self.iconFooter = IconManager.currentAppIcon.footer
                 }
                 .onChange(of: self.currentIcon) { _ in
                     IconManager.refreshCurrentAppIcon()
+                    self.iconFooter = IconManager.currentAppIcon.footer
                 }
 
                 Toggle(
