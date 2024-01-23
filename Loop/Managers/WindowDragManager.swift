@@ -59,7 +59,7 @@ class WindowDragManager {
     }
 
     private func setCurrentDraggingWindow() {
-        guard let mousePosition = CGEvent.mouseLocation,
+        guard let mousePosition = NSEvent.mouseLocation.flipY,
               let draggingWindow = WindowEngine.windowAtPosition(mousePosition) else {
             return
         }
@@ -75,7 +75,7 @@ class WindowDragManager {
 
     private func getWindowSnapDirection() {
         guard
-            let mousePosition = CGEvent.mouseLocation,
+            let mousePosition = NSEvent.mouseLocation.flipY,
             let screen = NSScreen.screenWithMouse,
             let screenFrame = screen.visibleFrame.flipY
         else {
