@@ -45,10 +45,27 @@ extension Defaults.Keys {
     static let keybinds = Key<[WindowAction]>("keybinds", default: [
         WindowAction(.maximize, keybind: [.kVK_Space]),
         WindowAction(.center, keybind: [.kVK_Return]),
-        WindowAction(.cycleTop, keybind: [.kVK_UpArrow]),
-        WindowAction(.cycleBottom, keybind: [.kVK_DownArrow]),
-        WindowAction(.cycleLeft, keybind: [.kVK_LeftArrow]),
-        WindowAction(.cycleRight, keybind: [.kVK_RightArrow]),
+
+        WindowAction("Top Cycle", [
+            .init(.topHalf),
+            .init(.topThird),
+            .init(.topTwoThirds)
+        ], [.kVK_UpArrow]),
+        WindowAction("Bottom Cycle", [
+            .init(.bottomHalf),
+            .init(.bottomThird),
+            .init(.bottomTwoThirds)
+        ], [.kVK_DownArrow]),
+        WindowAction("Right Cycle", [
+            .init(.rightHalf),
+            .init(.rightThird),
+            .init(.rightTwoThirds)
+        ], [.kVK_RightArrow]),
+        WindowAction("Left Cycle", [
+            .init(.leftHalf),
+            .init(.leftThird),
+            .init(.leftTwoThirds)
+        ], [.kVK_LeftArrow]),
 
         WindowAction(.topLeftQuarter, keybind: [.kVK_UpArrow, .kVK_LeftArrow]),
         WindowAction(.topRightQuarter, keybind: [.kVK_UpArrow, .kVK_RightArrow]),
