@@ -104,12 +104,6 @@ struct KeybindCustomizationViewItem: View {
                 }
             }
 
-            Picker("Cyclable", selection: $keybind.direction) {
-                ForEach(WindowDirection.cyclable) { direction in
-                    directionPickerItem(direction)
-                }
-            }
-
             Picker("Halves", selection: $keybind.direction) {
                 ForEach(WindowDirection.halves) { direction in
                     directionPickerItem(direction)

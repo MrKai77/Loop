@@ -36,8 +36,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         self.init(direction, keybind: [])
     }
 
-    init(_ cycle: [WindowAction]?) {
-        self.init(.cycle, keybind: [], cycle: cycle)
+    init(_ name: String? = nil, _ cycle: [WindowAction], _ keybind: Set<CGKeyCode> = []) {
+        self.init(.cycle, keybind: keybind, name: name, cycle: cycle)
     }
 
     var direction: WindowDirection
