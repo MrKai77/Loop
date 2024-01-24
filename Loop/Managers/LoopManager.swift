@@ -302,9 +302,7 @@ class LoopManager: ObservableObject {
             }
             self.lastTriggerKeyClick = Date.now
         } else {
-            if self.isLoopActive {
-                self.closeLoop()
-            }
+            self.closeLoop()
         }
     }
 
@@ -339,7 +337,7 @@ class LoopManager: ObservableObject {
         }
 
         self.keybindMonitor.start()
-
+ 
         isLoopActive = true
     }
 
@@ -352,10 +350,10 @@ class LoopManager: ObservableObject {
 
         self.currentlyPressedModifiers = []
 
-        if self.targetWindow != nil &&
-            self.screenToResizeOn != nil &&
-            forceClose == false &&
-            self.currentAction.direction != .noAction &&
+        if self.targetWindow != nil,
+            self.screenToResizeOn != nil,
+            forceClose == false,
+            self.currentAction.direction != .noAction,
             self.isLoopActive {
 
             if let screenToResizeOn = self.screenToResizeOn,
