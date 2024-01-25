@@ -13,7 +13,7 @@ struct RadialMenuSettingsView: View {
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
     @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
-    @Default(.disableMouseInteraction) var disableMouseInteraction
+    @Default(.disableCursorInteraction) var disableCursorInteraction
 
     @State var currentResizeDirection: WindowDirection = .cycleTop
 
@@ -58,7 +58,7 @@ struct RadialMenuSettingsView: View {
 
             Section {
                 Toggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
-                Toggle("Disable mouse interaction", isOn: $disableMouseInteraction)
+                Toggle("Disable cursor interaction", isOn: $disableCursorInteraction)
             }
         }
         .formStyle(.grouped)
