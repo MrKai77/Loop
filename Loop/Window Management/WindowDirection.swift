@@ -235,26 +235,29 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         var newDirection: WindowDirection = .noAction
 
         if mouseLocation.x < ignoredFrame.minX {
-            newDirection = WindowDirection.processLeftSnap(mouseLocation.y, screenFrame.maxY, currentDirection)
+            newDirection = WindowDirection.processLeftSnap(mouseLocation, screenFrame)
         } else if mouseLocation.x > ignoredFrame.maxX {
-            newDirection = WindowDirection.processRightSnap(mouseLocation.y, screenFrame.maxY, currentDirection)
+            newDirection = WindowDirection.processRightSnap(mouseLocation, screenFrame)
         } else if mouseLocation.y < ignoredFrame.minY {
-            newDirection = WindowDirection.processTopSnap(mouseLocation.x, screenFrame.maxX, currentDirection)
+            newDirection = WindowDirection.processTopSnap(mouseLocation, screenFrame)
         } else if mouseLocation.y > ignoredFrame.maxY {
-            newDirection = WindowDirection.processBottomSnap(mouseLocation.x, screenFrame.maxX, currentDirection)
+            newDirection = WindowDirection.processBottomSnap(mouseLocation, screenFrame, currentDirection)
         }
 
         return newDirection
     }
 
     static func processLeftSnap(
-        _ mouseY: CGFloat,
-        _ maxY: CGFloat,
-        _ currentDirection: WindowDirection
+        _ mouseLocation: CGPoint,
+        _ screenFrame: CGRect
     ) -> WindowDirection {
-        if mouseY < maxY * 1/8 {
+        let mouseY = mouseLocation.y
+        let maxY = screenFrame.maxY
+        let height = screenFrame.height
+
+        if mouseY < maxY - (height  * 7/8) {
             return .topLeftQuarter
-        } else if mouseY > maxY * 7/8 {
+        } else if mouseY > maxY - (height  * 1/8) {
             return .bottomLeftQuarter
         } else {
             return .leftHalf
@@ -262,13 +265,16 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     }
 
     static func processRightSnap(
-        _ mouseY: CGFloat,
-        _ maxY: CGFloat,
-        _ currentDirection: WindowDirection
+        _ mouseLocation: CGPoint,
+        _ screenFrame: CGRect
     ) -> WindowDirection {
-        if mouseY < maxY * 1/8 {
+        let mouseY = mouseLocation.y
+        let maxY = screenFrame.maxY
+        let height = screenFrame.height
+
+        if mouseY < maxY - (height  * 7/8) {
             return .topRightQuarter
-        } else if mouseY > maxY * 7/8 {
+        } else if mouseY > maxY - (height  * 1/8) {
             return .bottomRightQuarter
         } else {
             return .rightHalf
@@ -276,42 +282,44 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     }
 
     static func processTopSnap(
-        _ mouseX: CGFloat,
-        _ maxX: CGFloat,
-        _ currentDirection: WindowDirection
+        _ mouseLocation: CGPoint,
+        _ screenFrame: CGRect
     ) -> WindowDirection {
-        var newDirection: WindowDirection = .noAction
+        let mouseX = mouseLocation.x
+        let maxX = screenFrame.maxX
+        let width = screenFrame.width
 
-        if mouseX < maxX * 1/5 {
-            newDirection = .topHalf
-        } else if mouseX < maxX * 4/5 {
-            newDirection = .maximize
-        } else if mouseX < maxX {
-            newDirection = .topHalf
+        if mouseX < maxX - (width * 4/5) || mouseX > maxX - (width * 1/5) {
+            return .topHalf
+        } else {
+            return .maximize
         }
-
-        return newDirection
     }
 
     static func processBottomSnap(
-        _ mouseX: CGFloat,
-        _ maxX: CGFloat,
+        _ mouseLocation: CGPoint,
+        _ screenFrame: CGRect,
         _ currentDirection: WindowDirection
     ) -> WindowDirection {
-        var newDirection: WindowDirection = .noAction
+        var newDirection: WindowDirection
 
-        if mouseX < maxX * 1/3 {
+        let mouseX = mouseLocation.x
+        let maxX = screenFrame.maxX
+        let width = screenFrame.width
+
+        if mouseX < maxX - (width * 2/3) {
             newDirection = .leftThird
-        } else if mouseX < maxX * 2/3 {
+        } else if mouseX > maxX - (width * 1/3) {
+            newDirection = .rightThird
+        } else {
+            // mouse is within 1/3 and 2/3 of the screen's width
+            newDirection = .bottomHalf
+
             if currentDirection == .leftThird || currentDirection == .leftTwoThirds {
                 newDirection = .leftTwoThirds
             } else if currentDirection == .rightThird || currentDirection == .rightTwoThirds {
                 newDirection = .rightTwoThirds
-            } else {
-                newDirection = .bottomHalf
             }
-        } else if mouseX < maxX {
-            newDirection = .rightThird
         }
 
         return newDirection
