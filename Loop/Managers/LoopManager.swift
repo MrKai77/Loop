@@ -327,7 +327,10 @@ class LoopManager: ObservableObject {
         self.targetWindow = WindowEngine.getTargetWindow()
         self.initialMousePosition = NSEvent.mouseLocation
         self.screenToResizeOn = NSScreen.screenWithMouse
-        self.mouseMovedEventMonitor!.start()
+
+        if !Defaults[.disableCursorInteraction] {
+            self.mouseMovedEventMonitor!.start()
+        }
 
         if !Defaults[.hideUntilDirectionIsChosen] {
             self.openWindows()
