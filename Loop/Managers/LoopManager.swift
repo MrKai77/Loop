@@ -261,6 +261,24 @@ class LoopManager: ObservableObject {
         self.triggerDelayTimer!.resume()
     }
 
+    private func handleTriggerDelay() {
+        if self.triggerDelayTimer == nil {
+            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+                self.openLoop()
+            }
+        }
+    }
+
+    private func handleDoubleClickToTrigger(_ useTriggerDelay: Bool) {
+        if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
+            if useTriggerDelay {
+                self.handleTriggerDelay()
+            } else {
+                self.openLoop()
+            }
+        }
+    }
+
     private func handleLoopKeypress(_ event: NSEvent) {
         if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
             self.closeLoop(forceClose: true)
@@ -275,31 +293,16 @@ class LoopManager: ObservableObject {
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
             if useDoubleClickTrigger {
-                if abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                    if useTriggerDelay {
-                        if self.triggerDelayTimer == nil {
-                            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                                self.openLoop()
-                            }
-                        }
-                    } else {
-                        self.openLoop()
-                    }
-                }
+                guard currentlyPressedModifiers.sorted() == Defaults[.triggerKey].sorted() else { return }
+                handleDoubleClickToTrigger(useTriggerDelay)
             } else if useTriggerDelay {
-                if self.triggerDelayTimer == nil {
-                    self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
-                        self.openLoop()
-                    }
-                }
+                self.handleTriggerDelay()
             } else {
                 self.openLoop()
             }
             self.lastTriggerKeyClick = Date.now
         } else {
-            if self.isLoopActive {
-                self.closeLoop()
-            }
+            self.closeLoop()
         }
     }
 
@@ -337,7 +340,7 @@ class LoopManager: ObservableObject {
         }
 
         self.keybindMonitor.start()
-
+ 
         isLoopActive = true
     }
 
@@ -350,10 +353,10 @@ class LoopManager: ObservableObject {
 
         self.currentlyPressedModifiers = []
 
-        if self.targetWindow != nil &&
-            self.screenToResizeOn != nil &&
-            forceClose == false &&
-            self.currentAction.direction != .noAction &&
+        if self.targetWindow != nil,
+            self.screenToResizeOn != nil,
+            forceClose == false,
+            self.currentAction.direction != .noAction,
             self.isLoopActive {
 
             if let screenToResizeOn = self.screenToResizeOn,
