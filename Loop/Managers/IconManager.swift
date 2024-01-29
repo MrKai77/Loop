@@ -16,6 +16,7 @@ class IconManager {
         var iconName: String
         var unlockTime: Int
         var unlockMessage: String?
+        var footer: String?
 
         func getName() -> String {
             if let name = self.name {
@@ -25,6 +26,8 @@ class IconManager {
                 return iconName.replacingOccurrences(of: prefix, with: "")
             }
         }
+
+        static var gregLassaleFooter = "This icon was designed by Greg Lassale (@greglassale on 𝕏)"
     }
 
     private static let icons: [Icon] = [
@@ -43,12 +46,18 @@ class IconManager {
         ),
         Icon(iconName: "AppIcon-Meta Loop", unlockTime: 100),
         Icon(iconName: "AppIcon-Keycap", unlockTime: 200),
-        Icon(iconName: "AppIcon-White", unlockTime: 300),
-        Icon(iconName: "AppIcon-Black", unlockTime: 400),
+        Icon(iconName: "AppIcon-White", unlockTime: 400),
+        Icon(iconName: "AppIcon-Black", unlockTime: 500),
+
+        Icon(iconName: "AppIcon-Simon", unlockTime: 1000, footer: Icon.gregLassaleFooter),
+        Icon(iconName: "AppIcon-Neon", unlockTime: 1500, footer: Icon.gregLassaleFooter),
+        Icon(iconName: "AppIcon-Synthwave Sunset", unlockTime: 2000, footer: Icon.gregLassaleFooter),
+        Icon(iconName: "AppIcon-Black Hole", unlockTime: 2500, footer: Icon.gregLassaleFooter),
+
         Icon(
             iconName: "AppIcon-Loop Master",
-            unlockTime: 1000,
-            unlockMessage: ("1000 loops conquered! "
+            unlockTime: 5000,
+            unlockMessage: ("5000 loops conquered! "
                 + "The universe has witnessed the birth of a Loop Master! "
                 + "Enjoy your well-deserved reward: a brand-new icon!")
         )
