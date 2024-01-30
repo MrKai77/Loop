@@ -396,7 +396,8 @@ class LoopManager: ObservableObject {
             ) { _ in
                 self.radialMenuController.open(
                     position: self.initialMousePosition,
-                    frontmostWindow: self.targetWindow
+                    frontmostWindow: self.targetWindow,
+                    startingAction: self.currentAction
                 )
             }
         } else {

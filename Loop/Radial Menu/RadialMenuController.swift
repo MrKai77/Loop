@@ -12,7 +12,7 @@ class RadialMenuController {
 
     private var loopRadialMenuWindowController: NSWindowController?
 
-    func open(position: CGPoint, frontmostWindow: Window?) {
+    func open(position: CGPoint, frontmostWindow: Window?, startingAction: WindowAction = .init(.noAction)) {
         if let windowController = loopRadialMenuWindowController {
             windowController.window?.orderFrontRegardless()
             return
@@ -32,7 +32,12 @@ class RadialMenuController {
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(rootView: RadialMenuView(frontmostWindow: frontmostWindow))
+        panel.contentView = NSHostingView(
+            rootView: RadialMenuView(
+                window: frontmostWindow,
+                startingAction: startingAction
+            )
+        )
         panel.alphaValue = 0
         panel.setFrame(
             CGRect(

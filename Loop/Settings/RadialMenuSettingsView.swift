@@ -27,13 +27,8 @@ struct RadialMenuSettingsView: View {
                         .padding(-10)
 
                     RadialMenuView(
-                        frontmostWindow: nil,
                         previewMode: true,
-                        timer: Timer.publish(
-                            every: 1,
-                            on: .main,
-                            in: .common
-                        ).autoconnect()
+                        window: nil
                     )
                 }
             }
