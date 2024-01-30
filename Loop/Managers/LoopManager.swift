@@ -300,7 +300,9 @@ class LoopManager: ObservableObject {
             }
             self.lastTriggerKeyClick = Date.now
         } else {
-            self.closeLoop()
+            if self.isLoopActive {
+                self.closeLoop()
+            }
         }
     }
 
