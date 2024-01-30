@@ -68,6 +68,10 @@ struct MoreSettingsView: View {
                 .disabled(!respectStageManager)
             }
 
+            Section("Accessibility") { 
+                Toggle("Enable Haptic Feedback", isOn: $enableHapticFeedback)
+            }
+
             Section(content: {
                 HStack {
                     Text("Accessibility Access")
@@ -138,17 +142,8 @@ struct MoreSettingsView: View {
                     .controlSize(.large)
                 }
             }
-
-            Section(header: Text("Accessibility")) {
-                Toggle("Enable Haptic Feedback", isOn: $enableHapticFeedback)
-            }
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
     }
 }
-
-
-
-
-
