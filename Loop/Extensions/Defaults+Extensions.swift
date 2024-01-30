@@ -32,10 +32,11 @@ extension Defaults.Keys {
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
     static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
+    static let radialMenuDelay = Key<Double>("radialMenuDelay", default: 0)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
-    static let triggerDelay = Key<Float>("triggerDelay", default: 0)
+    static let triggerDelay = Key<Double>("triggerDelay", default: 0)
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false)
 
     static let previewVisibility = Key<Bool>("previewVisibility", default: true)
