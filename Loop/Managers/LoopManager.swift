@@ -131,11 +131,11 @@ class LoopManager: ObservableObject {
         }
         
         if Defaults[.enableHapticFeedback] {
-                NSHapticFeedbackManager.defaultPerformer.perform(
-                    NSHapticFeedbackManager.FeedbackPattern.alignment,
-                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                   )
-               }
+                    NSHapticFeedbackManager.defaultPerformer.perform(
+                        NSHapticFeedbackManager.FeedbackPattern.alignment,
+                        performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+                    )
+                }
         
         var newAction = action
 

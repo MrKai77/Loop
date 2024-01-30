@@ -37,9 +37,12 @@ struct MoreSettingsView: View {
                                 forType: NSPasteboard.PasteboardType.string
                             )
                         }, label: {
-                            Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                            HStack {
+                                Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Image(systemName: "doc.on.clipboard")
+                            }
                         })
                         .buttonStyle(.plain)
                     }
@@ -68,7 +71,7 @@ struct MoreSettingsView: View {
                 .disabled(!respectStageManager)
             }
 
-            Section("Accessibility") { 
+            Section("Accessibility") {
                 Toggle("Enable Haptic Feedback", isOn: $enableHapticFeedback)
             }
 
