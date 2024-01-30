@@ -31,6 +31,7 @@ extension Defaults.Keys {
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
+    static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
