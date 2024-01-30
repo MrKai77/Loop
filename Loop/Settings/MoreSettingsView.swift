@@ -38,10 +38,9 @@ struct MoreSettingsView: View {
                             )
                         }, label: {
                             HStack {
-                                Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+                                Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
-                                Image(systemName: "doc.on.clipboard")
                             }
                         })
                         .buttonStyle(.plain)

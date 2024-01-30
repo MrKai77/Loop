@@ -129,14 +129,14 @@ class LoopManager: ObservableObject {
         else {
             return
         }
-        
+
         if Defaults[.enableHapticFeedback] {
-                    NSHapticFeedbackManager.defaultPerformer.perform(
-                        NSHapticFeedbackManager.FeedbackPattern.alignment,
-                        performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                    )
-                }
-        
+            NSHapticFeedbackManager.defaultPerformer.perform(
+                NSHapticFeedbackManager.FeedbackPattern.alignment,
+                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+            )
+        }
+
         var newAction = action
 
         if newAction.direction.isPresetCyclable {
@@ -342,7 +342,7 @@ class LoopManager: ObservableObject {
         }
 
         self.keybindMonitor.start()
- 
+
         isLoopActive = true
     }
 
