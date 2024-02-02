@@ -26,7 +26,7 @@ struct PreviewView: View {
 
     @Default(.useGradient) var useGradient
     @Default(.previewPadding) var previewPadding
-    @Default(.windowPadding) var windowPadding
+    @Default(.padding) var padding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
@@ -52,7 +52,11 @@ struct PreviewView: View {
                         lineWidth: previewBorderThickness
                     )
             }
-            .padding(windowPadding + previewPadding + previewBorderThickness / 2)
+            .padding(previewPadding + previewBorderThickness / 2)
+            .padding(.top, padding.top)
+            .padding(.bottom, padding.bottom)
+            .padding(.leading, padding.left)
+            .padding(.trailing, padding.right)
 
             .frame(
                 width: self.currentAction.previewWindowWidth(geo.size.width, window),

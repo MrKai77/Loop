@@ -43,17 +43,7 @@ struct AnchorPicker: View {
             }
         }
         .animation(.snappy, value: self.anchor)
-        .aspectRatio(16/10, contentMode: .fit)
         .padding(8)
-        .background {
-            if let screen = NSScreen.screenWithMouse,
-               let url = NSWorkspace.shared.desktopImageURL(for: screen),
-               let image = NSImage(contentsOf: url) {
-                Image(nsImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            }
-        }
     }
 
     @ViewBuilder

@@ -23,9 +23,13 @@ struct CustomKeybindView: View {
                 }
 
                 Section {
-                    AnchorPicker(anchor: self.$action.anchor)
-                        .ignoresSafeArea()
-                        .padding(-10)
+                    ZStack {
+                        WallpaperView().equatable()
+                        AnchorPicker(anchor: self.$action.anchor)
+                    }
+                    .ignoresSafeArea()
+                    .padding(-10)
+                    .aspectRatio(16/10, contentMode: .fit)
                 }
 
                 if self.action.anchor == .center || self.action.anchor == .macOSCenter {
@@ -133,6 +137,7 @@ struct CustomKeybindView: View {
         }
         .frame(width: 400)
         .fixedSize(horizontal: false, vertical: true)
+        .background(.background)
 
         .onAppear {
             if self.action.measureSystem == nil {

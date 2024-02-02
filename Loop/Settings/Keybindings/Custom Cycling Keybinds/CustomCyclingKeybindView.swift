@@ -131,6 +131,7 @@ struct CustomCyclingKeybindView: View {
         }
         .frame(width: 450)
         .fixedSize(horizontal: false, vertical: true)
+        .background(.background)
 
         .onAppear {
             self.cycleDirections = self.action.cycle ?? []

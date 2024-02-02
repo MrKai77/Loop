@@ -75,11 +75,11 @@ struct WindowEngine {
                 let nsScreenFrame = screenFrame.flipY!
 
                 if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
-                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.windowPadding]
+                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.padding].right
                 }
 
                 if (targetWindowFrame.minY + minSize.height) > nsScreenFrame.maxY {
-                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.windowPadding]
+                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.padding].bottom
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
@@ -289,10 +289,15 @@ struct WindowEngine {
     ///   - direction: The direction the window WILL be resized to
     /// - Returns: CGRect with padding applied
     private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
-        let padding = Defaults[.windowPadding]
-        let halfPadding = Defaults[.windowPadding] / 2
+        let padding = Defaults[.padding]
+        let halfPadding = padding.window / 2
 
-        let paddedScreenFrame = screenFrame.padding(.all, padding)
+        var paddedScreenFrame = screenFrame
+        paddedScreenFrame = paddedScreenFrame.padding(.top, padding.top)
+        paddedScreenFrame = paddedScreenFrame.padding(.bottom, padding.bottom)
+        paddedScreenFrame = paddedScreenFrame.padding(.leading, padding.left)
+        paddedScreenFrame = paddedScreenFrame.padding(.trailing, padding.right)
+
         var paddedWindowFrame = windowFrame.intersection(paddedScreenFrame)
 
         if action.direction == .macOSCenter,
@@ -340,11 +345,11 @@ struct WindowEngine {
         var fixedWindowFrame = windowFrame
 
         if fixedWindowFrame.maxX > screenFrame.maxX {
-            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width - Defaults[.windowPadding]
+            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width - Defaults[.padding].right
         }
 
         if fixedWindowFrame.maxY > screenFrame.maxY {
-            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.windowPadding]
+            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.padding].bottom
         }
 
         window.setPosition(fixedWindowFrame.origin)

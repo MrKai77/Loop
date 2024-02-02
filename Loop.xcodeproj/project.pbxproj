@@ -65,6 +65,10 @@
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
 		A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */; };
 		A8D5A7DA2A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D92A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift */; };
+		A8D6D2FF2B6C87F80061B11F /* PaddingConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D2FE2B6C87F80061B11F /* PaddingConfigurationView.swift */; };
+		A8D6D3012B6C894C0061B11F /* PaddingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D3002B6C894C0061B11F /* PaddingModel.swift */; };
+		A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D3022B6C8D750061B11F /* PaddingPreviewView.swift */; };
+		A8D6D3052B6C92F20061B11F /* WallpaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D3042B6C92F20061B11F /* WallpaperView.swift */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
 		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
 		A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */; };
@@ -141,6 +145,10 @@
 		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
 		A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorCircleSegment.swift; sourceTree = "<group>"; };
 		A8D5A7D92A913B4C004EA5BB /* RadialMenuDirectionSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuDirectionSelectorView.swift; sourceTree = "<group>"; };
+		A8D6D2FE2B6C87F80061B11F /* PaddingConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingConfigurationView.swift; sourceTree = "<group>"; };
+		A8D6D3002B6C894C0061B11F /* PaddingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingModel.swift; sourceTree = "<group>"; };
+		A8D6D3022B6C8D750061B11F /* PaddingPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingPreviewView.swift; sourceTree = "<group>"; };
+		A8D6D3042B6C92F20061B11F /* WallpaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperView.swift; sourceTree = "<group>"; };
 		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSettingsView.swift; sourceTree = "<group>"; };
 		A8E1575E298654960005761C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
@@ -184,6 +192,8 @@
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
 				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,
 				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
+				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
+				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
 				A8063A722B19891900EAB3D9 /* grid.metal */,
 			);
 			path = Utilities;
@@ -273,8 +283,8 @@
 			isa = PBXGroup;
 			children = (
 				A84497C82B393595003D4CF3 /* CustomKeybindView.swift */,
-				A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */,
 				A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */,
+				A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */,
 			);
 			path = "Custom Keybinds";
 			sourceTree = "<group>";
@@ -324,6 +334,7 @@
 			children = (
 				A8063A6D2B19599D00EAB3D9 /* SettingsView.swift */,
 				A882660729809F6F00BCB197 /* GeneralSettingsView.swift */,
+				A8D6D3062B6C99C10061B11F /* Padding */,
 				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
 				A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */,
 				A84497CE2B3A57E8003D4CF3 /* Keybindings */,
@@ -347,6 +358,15 @@
 				A8B5E1642B43728200044D30 /* CustomWindowActionMeasureSystem.swift */,
 			);
 			path = "Custom Window Sizes";
+			sourceTree = "<group>";
+		};
+		A8D6D3062B6C99C10061B11F /* Padding */ = {
+			isa = PBXGroup;
+			children = (
+				A8D6D2FE2B6C87F80061B11F /* PaddingConfigurationView.swift */,
+				A8D6D3022B6C8D750061B11F /* PaddingPreviewView.swift */,
+			);
+			path = Padding;
 			sourceTree = "<group>";
 		};
 		A8E59C2C297F5E9A0064D4BA = {
@@ -513,12 +533,14 @@
 				A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */,
 				A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */,
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
+				A8D6D3012B6C894C0061B11F /* PaddingModel.swift in Sources */,
 				A86DAE2C2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift in Sources */,
 				A82DDBDE2AEC736300D7F974 /* AnimationConfiguration.swift in Sources */,
 				A84497CD2B3A52C7003D4CF3 /* PreviewWindowButton.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
 				A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */,
+				A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */,
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
 				A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
@@ -528,6 +550,7 @@
 				A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */,
 				A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */,
 				A80900D42AA3F9F30085C63B /* BetaIndicator.swift in Sources */,
+				A8D6D2FF2B6C87F80061B11F /* PaddingConfigurationView.swift in Sources */,
 				A8E1575F298654960005761C /* AboutView.swift in Sources */,
 				A8DCC98A2981F43F00D41065 /* PreviewSettingsView.swift in Sources */,
 				A87376F62AA288EB001890F4 /* Window.swift in Sources */,
@@ -551,6 +574,7 @@
 				A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */,
 				A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */,
 				A8330ACB2A3AC1C000673C8D /* Angle+Extensions.swift in Sources */,
+				A8D6D3052B6C92F20061B11F /* WallpaperView.swift in Sources */,
 				A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */,
 				A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */,
 				A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */,
