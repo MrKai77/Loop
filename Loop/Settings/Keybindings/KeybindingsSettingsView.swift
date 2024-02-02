@@ -43,11 +43,8 @@ struct KeybindingsSettingsView: View {
 
                     Stepper(
                         "Trigger Delay (seconds)",
-                        value: Binding<Double>(
-                            get: { Double(self.triggerDelay) },
-                            set: { self.triggerDelay = Float($0) }
-                        ),
-                        in: 0...1,
+                        value: self.$triggerDelay,
+                        in: 0...10,
                         step: 0.1,
                         format: .number
                     )

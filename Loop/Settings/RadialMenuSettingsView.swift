@@ -14,6 +14,7 @@ struct RadialMenuSettingsView: View {
     @Default(.radialMenuThickness) var radialMenuThickness
     @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
     @Default(.disableCursorInteraction) var disableCursorInteraction
+    @Default(.radialMenuDelay) var radialMenuDelay
 
     @State var currentResizeDirection: WindowDirection = .cycleTop
 
@@ -26,13 +27,8 @@ struct RadialMenuSettingsView: View {
                         .padding(-10)
 
                     RadialMenuView(
-                        frontmostWindow: nil,
                         previewMode: true,
-                        timer: Timer.publish(
-                            every: 1,
-                            on: .main,
-                            in: .common
-                        ).autoconnect()
+                        window: nil
                     )
                 }
             }
@@ -59,6 +55,16 @@ struct RadialMenuSettingsView: View {
             Section {
                 Toggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
                 Toggle("Disable cursor interaction", isOn: $disableCursorInteraction)
+            }
+
+            Section {
+                Stepper(
+                    "Appearance Delay (seconds)",
+                    value: self.$radialMenuDelay,
+                    in: 0...10,
+                    step: 0.1,
+                    format: .number
+                )
             }
         }
         .formStyle(.grouped)

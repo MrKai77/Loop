@@ -25,13 +25,23 @@ class LoopManager: ObservableObject {
     private var mouseMovedEventMonitor: EventMonitor?
     private var keyDownEventMonitor: EventMonitor?
     private var middleClickMonitor: EventMonitor?
-    private var triggerDelayTimer: DispatchSourceTimer?
     private var lastTriggerKeyClick: Date = Date.now
 
     @Published var currentAction: WindowAction = .init(.noAction)
     private var initialMousePosition: CGPoint = CGPoint()
     private var angleToMouse: Angle = Angle(degrees: 0)
     private var distanceToMouse: CGFloat = 0
+
+    private var triggerDelayTimer: Timer? {
+        willSet {
+            triggerDelayTimer?.invalidate()
+        }
+    }
+    private var radialMenuDelayTimer: Timer? {
+        willSet {
+            radialMenuDelayTimer?.invalidate()
+        }
+    }
 
     func startObservingKeys() {
         self.flagsChangedEventMonitor = NSEventMonitor(
@@ -248,24 +258,12 @@ class LoopManager: ObservableObject {
         return Unmanaged.passRetained(cgEvent)
     }
 
-    private func cancelTriggerDelayTimer() {
-        self.triggerDelayTimer?.cancel()
-        self.triggerDelayTimer = nil
-    }
-
-    private func startTriggerDelayTimer(seconds: Float, handler: @escaping () -> Void) {
-        self.triggerDelayTimer = DispatchSource.makeTimerSource(queue: .main)
-        self.triggerDelayTimer!.schedule(deadline: .now() + .milliseconds(Int(seconds * 1000)))
-        self.triggerDelayTimer!.setEventHandler {
-            handler()
-            self.triggerDelayTimer = nil
-        }
-        self.triggerDelayTimer!.resume()
-    }
-
     private func handleTriggerDelay() {
         if self.triggerDelayTimer == nil {
-            self.startTriggerDelayTimer(seconds: Defaults[.triggerDelay]) {
+            self.triggerDelayTimer = Timer.scheduledTimer(
+                withTimeInterval: Double(Defaults[.triggerDelay]),
+                repeats: false
+            ) { _ in
                 self.openLoop()
             }
         }
@@ -286,7 +284,7 @@ class LoopManager: ObservableObject {
             self.closeLoop(forceClose: true)
         }
 
-        self.cancelTriggerDelayTimer()
+        self.triggerDelayTimer = nil
         processModifiers(event)
 
         // Why sort the set? I have no idea. But it works much more reliably when sorted!
@@ -304,7 +302,9 @@ class LoopManager: ObservableObject {
             }
             self.lastTriggerKeyClick = Date.now
         } else {
-            self.closeLoop()
+            if self.isLoopActive {
+                self.closeLoop()
+            }
         }
     }
 
@@ -347,7 +347,7 @@ class LoopManager: ObservableObject {
     }
 
     private func closeLoop(forceClose: Bool = false) {
-        self.cancelTriggerDelayTimer()
+        self.triggerDelayTimer = nil
         self.closeWindows()
 
         self.keybindMonitor.stop()
@@ -390,10 +390,30 @@ class LoopManager: ObservableObject {
         if Defaults[.previewVisibility] == true && self.targetWindow != nil {
             self.previewController.open(screen: self.screenToResizeOn!, window: targetWindow)
         }
-        self.radialMenuController.open(position: self.initialMousePosition, frontmostWindow: targetWindow)
+
+        let useRadialMenuDelay = Defaults[.radialMenuDelay] > 0.1
+
+        if useRadialMenuDelay {
+            self.radialMenuDelayTimer = Timer.scheduledTimer(
+                withTimeInterval: Defaults[.radialMenuDelay],
+                repeats: false
+            ) { _ in
+                self.radialMenuController.open(
+                    position: self.initialMousePosition,
+                    frontmostWindow: self.targetWindow,
+                    startingAction: self.currentAction
+                )
+            }
+        } else {
+            self.radialMenuController.open(
+                position: self.initialMousePosition,
+                frontmostWindow: self.targetWindow
+            )
+        }
     }
 
     private func closeWindows() {
+        self.radialMenuDelayTimer = nil
         self.radialMenuController.close()
         self.previewController.close()
     }
