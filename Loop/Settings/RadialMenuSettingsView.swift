@@ -61,7 +61,7 @@ struct RadialMenuSettingsView: View {
                 Stepper(
                     "Appearance Delay (seconds)",
                     value: self.$radialMenuDelay,
-                    in: 0...1,
+                    in: 0...10,
                     step: 0.1,
                     format: .number
                 )
