@@ -27,8 +27,8 @@ struct PaddingPreviewView: View {
             }
             .padding(.top, paddingModel.top)
             .padding(.bottom, paddingModel.bottom)
-            .padding(.leading, paddingModel.right)
-            .padding(.trailing, paddingModel.left)
+            .padding(.leading, paddingModel.left)
+            .padding(.trailing, paddingModel.right)
         }
     }
 
