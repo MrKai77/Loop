@@ -10,7 +10,7 @@ import Defaults
 
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
-    static let enableHapticFeedback = Defaults.Key<Bool>("enableHapticFeedback", default: true)
+    static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
@@ -21,6 +21,7 @@ extension Defaults.Keys {
     static let padding = Key<PaddingModel>("padding", default: PaddingModel.defaultConfig)
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: true)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
+    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
 
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 

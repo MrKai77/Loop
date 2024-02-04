@@ -25,7 +25,10 @@ struct WindowEngine {
         let willChangeScreens = ScreenManager.screenContaining(window) != screen
         print("Resizing \(window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>") to \(action.direction) on \(screen.localizedName)")
 
-        window.activate()
+        // Note that this is only really useful when "Resize window under cursor" is enabled
+        if Defaults[.focusWindowOnResize] {
+            window.activate()
+        }
 
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
@@ -88,14 +91,13 @@ struct WindowEngine {
             }
         } else {
             window.setFrame(targetWindowFrame, sizeFirst: willChangeScreens) {
-                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
                 if !window.frame.approximatelyEqual(to: targetWindowFrame) {
                     print("Backup resizing...")
                     window.setFrame(targetWindowFrame)
                 }
 
+                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
                 WindowRecords.record(window, action)
             }
         }
