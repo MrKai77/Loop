@@ -176,13 +176,6 @@ struct WindowEngine {
         newWindowFrame.origin = screenFrame.origin
 
         switch direction {
-        case .custom:
-            guard
-                let newFrame = WindowEngine.generateCustomWindowFrame(action, screenFrame)
-            else {
-                return nil
-            }
-            newWindowFrame = newFrame
         case .center:
             newWindowFrame = CGRect(
                 x: screenFrame.midX - windowFrame.width / 2,
@@ -213,65 +206,11 @@ struct WindowEngine {
                 return nil
             }
         default:
-            guard let frameMultiplyValues = direction.frameMultiplyValues else { return nil}
+            let frameMultiplyValues = action.getFrameMultiplyValues()
             newWindowFrame.origin.x += screenFrame.width * frameMultiplyValues.minX
             newWindowFrame.origin.y += screenFrame.height * frameMultiplyValues.minY
             newWindowFrame.size.width += screenFrame.width * frameMultiplyValues.width
             newWindowFrame.size.height += screenFrame.height * frameMultiplyValues.height
-        }
-
-        return newWindowFrame
-    }
-
-    private static func generateCustomWindowFrame(_ action: WindowAction, _ screenFrame: CGRect) -> CGRect? {
-        guard
-            action.direction == .custom,
-            let measureSystem = action.measureSystem,
-            let anchor = action.anchor,
-            let width = action.width,
-            let height = action.height
-        else {
-            return nil
-        }
-        var newWindowFrame: CGRect = .zero
-        newWindowFrame.origin = screenFrame.origin
-
-        switch measureSystem {
-        case .percentage:
-            newWindowFrame.size.width += screenFrame.width * (width / 100.0)
-            newWindowFrame.size.height += screenFrame.height * (height / 100.0)
-        case .pixels:
-            newWindowFrame.size.width += width
-            newWindowFrame.size.height += height
-        }
-
-        switch anchor {
-        case .topLeft:
-            break
-        case .top:
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-        case .topRight:
-            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
-        case .right:
-            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
-            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-        case .bottomRight:
-            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
-            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-        case .bottom:
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-        case .bottomLeft:
-            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-        case .left:
-            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-        case .center:
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-        case .macOSCenter:
-            let yOffset = getMacOSCenterYOffset(newWindowFrame.height, screenHeight: screenFrame.height)
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-            newWindowFrame.origin.y = (screenFrame.midY - newWindowFrame.height / 2) + yOffset
         }
 
         return newWindowFrame

@@ -31,6 +31,8 @@ struct PreviewView: View {
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
 
+    @State var windowEdgesToPad: Edge.Set = []
+
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -53,10 +55,7 @@ struct PreviewView: View {
                     )
             }
             .padding(previewPadding + previewBorderThickness / 2)
-            .padding(.top, padding.top)
-            .padding(.bottom, padding.bottom)
-            .padding(.leading, padding.left)
-            .padding(.trailing, padding.right)
+            .padding(windowEdgesToPad, padding.window / 2)
 
             .frame(
                 width: self.currentAction.previewWindowWidth(geo.size.width, window),
@@ -68,6 +67,11 @@ struct PreviewView: View {
                 y: self.currentAction.previewWindowYOffset(geo.size.height, window)
             )
         }
+        .padding(.top, padding.top)
+        .padding(.bottom, padding.bottom)
+        .padding(.leading, padding.left)
+        .padding(.trailing, padding.right)
+
         .opacity(currentAction.direction == .noAction ? 0 : 1)
         .animation(animationConfiguration.previewWindowAnimation, value: currentAction)
         .onReceive(.updateUIDirection) { obj in
@@ -90,6 +94,15 @@ struct PreviewView: View {
             if self.previewMode {
                 self.currentAction = .init(.maximize)
             }
+
+            self.windowEdgesToPad = Edge.Set.all.subtracting(
+                self.currentAction.getEdgesTouchingScreen()
+            )
+        }
+        .onChange(of: self.currentAction.getEdgesTouchingScreen()) { _ in
+            self.windowEdgesToPad = Edge.Set.all.subtracting(
+                self.currentAction.getEdgesTouchingScreen()
+            )
         }
     }
 }
