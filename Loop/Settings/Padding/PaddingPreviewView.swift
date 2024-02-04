@@ -17,19 +17,29 @@ struct PaddingPreviewView: View {
 
     var body: some View {
         ZStack {
-            HStack(spacing: paddingModel.window) {
+            HStack(spacing: paddingModel.window / 2) {
                 blurredWindow()
 
-                VStack(spacing: paddingModel.window) {
+                VStack(spacing: paddingModel.window / 2) {
                     blurredWindow()
                     blurredWindow()
                 }
             }
-            .padding(.top, paddingModel.top)
-            .padding(.bottom, paddingModel.bottom)
-            .padding(.leading, paddingModel.left)
-            .padding(.trailing, paddingModel.right)
+            .padding(.top, paddingModel.top / 2)
+            .padding(.bottom, paddingModel.bottom / 2)
+            .padding(.leading, paddingModel.left / 2)
+            .padding(.trailing, paddingModel.right / 2)
         }
+        .animation(
+            .easeOut,
+            value: [
+                paddingModel.window,
+                paddingModel.top,
+                paddingModel.bottom,
+                paddingModel.left,
+                paddingModel.right
+            ]
+        )
     }
 
     @ViewBuilder

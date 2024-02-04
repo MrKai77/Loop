@@ -9,11 +9,21 @@ import SwiftUI
 import Defaults
 
 struct PaddingModel: Codable, Defaults.Serializable {
-    var window: CGFloat
-    var top: CGFloat
-    var bottom: CGFloat
-    var right: CGFloat
-    var left: CGFloat
+    var window: CGFloat {
+        didSet { window = max(window, 0) }
+    }
+    var top: CGFloat {
+        didSet { top = max(top, 0) }
+    }
+    var bottom: CGFloat {
+        didSet { bottom = max(bottom, 0) }
+    }
+    var right: CGFloat {
+        didSet { right = max(right, 0) }
+    }
+    var left: CGFloat {
+        didSet { left = max(left, 0) }
+    }
 
     var configureScreenPadding: Bool
 

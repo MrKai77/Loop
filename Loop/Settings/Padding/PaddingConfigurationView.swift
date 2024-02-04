@@ -68,6 +68,14 @@ struct PaddingConfigurationView: View {
             }
             .formStyle(.grouped)
             .scrollDisabled(true)
+            .onChange(of: paddingModel.configureScreenPadding) { _ in
+                if !paddingModel.configureScreenPadding {
+                    paddingModel.top = paddingModel.window
+                    paddingModel.bottom = paddingModel.window
+                    paddingModel.right = paddingModel.window
+                    paddingModel.left = paddingModel.window
+                }
+            }
 
             HStack {
                 Button {
