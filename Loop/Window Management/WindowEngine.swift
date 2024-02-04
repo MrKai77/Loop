@@ -91,14 +91,13 @@ struct WindowEngine {
             }
         } else {
             window.setFrame(targetWindowFrame, sizeFirst: willChangeScreens) {
-                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
-
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
                 if !window.frame.approximatelyEqual(to: targetWindowFrame) {
                     print("Backup resizing...")
                     window.setFrame(targetWindowFrame)
                 }
 
+                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
                 WindowRecords.record(window, action)
             }
         }
