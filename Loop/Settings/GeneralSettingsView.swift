@@ -23,7 +23,7 @@ struct GeneralSettingsView: View {
     @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked
     @Default(.timesLooped) var timesLooped
     @Default(.animateWindowResizes) var animateWindowResizes
-    @Default(.windowPadding) var windowPadding
+    @Default(.padding) var padding
     @Default(.windowSnapping) var windowSnapping
     @Default(.animationConfiguration) var animationConfiguration
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
@@ -32,6 +32,8 @@ struct GeneralSettingsView: View {
 
     @State var userDisabledLoopNotifications: Bool = false
     @State var iconFooter: String?
+
+    @State var isConfiguringPadding: Bool = false
 
     var body: some View {
         Form {
@@ -77,12 +79,15 @@ struct GeneralSettingsView: View {
                     }
                 }
 
-                Slider(value: $windowPadding,
-                       in: 0...50,
-                       step: 5,
-                       minimumValueLabel: Text("0px"),
-                       maximumValueLabel: Text("50px")) {
-                    Text("Window Padding")
+                HStack {
+                    Text("Padding")
+                    Spacer()
+                    Button("Configure…") {
+                        self.isConfiguringPadding = true
+                    }
+                }
+                .sheet(isPresented: self.$isConfiguringPadding) {
+                    PaddingConfigurationView(isSheetShown: $isConfiguringPadding, paddingModel: $padding)
                 }
 
                 Toggle(

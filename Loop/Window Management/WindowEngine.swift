@@ -78,11 +78,11 @@ struct WindowEngine {
                 let nsScreenFrame = screenFrame.flipY!
 
                 if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
-                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.windowPadding]
+                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.padding].right
                 }
 
                 if (targetWindowFrame.minY + minSize.height) > nsScreenFrame.maxY {
-                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.windowPadding]
+                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.padding].bottom
                 }
 
                 window.setFrame(targetWindowFrame, animate: true) {
@@ -178,13 +178,6 @@ struct WindowEngine {
         newWindowFrame.origin = screenFrame.origin
 
         switch direction {
-        case .custom:
-            guard
-                let newFrame = WindowEngine.generateCustomWindowFrame(action, screenFrame)
-            else {
-                return nil
-            }
-            newWindowFrame = newFrame
         case .center:
             newWindowFrame = CGRect(
                 x: screenFrame.midX - windowFrame.width / 2,
@@ -215,65 +208,11 @@ struct WindowEngine {
                 return nil
             }
         default:
-            guard let frameMultiplyValues = direction.frameMultiplyValues else { return nil}
+            let frameMultiplyValues = action.getFrameMultiplyValues()
             newWindowFrame.origin.x += screenFrame.width * frameMultiplyValues.minX
             newWindowFrame.origin.y += screenFrame.height * frameMultiplyValues.minY
             newWindowFrame.size.width += screenFrame.width * frameMultiplyValues.width
             newWindowFrame.size.height += screenFrame.height * frameMultiplyValues.height
-        }
-
-        return newWindowFrame
-    }
-
-    private static func generateCustomWindowFrame(_ action: WindowAction, _ screenFrame: CGRect) -> CGRect? {
-        guard
-            action.direction == .custom,
-            let measureSystem = action.measureSystem,
-            let anchor = action.anchor,
-            let width = action.width,
-            let height = action.height
-        else {
-            return nil
-        }
-        var newWindowFrame: CGRect = .zero
-        newWindowFrame.origin = screenFrame.origin
-
-        switch measureSystem {
-        case .percentage:
-            newWindowFrame.size.width += screenFrame.width * (width / 100.0)
-            newWindowFrame.size.height += screenFrame.height * (height / 100.0)
-        case .pixels:
-            newWindowFrame.size.width += width
-            newWindowFrame.size.height += height
-        }
-
-        switch anchor {
-        case .topLeft:
-            break
-        case .top:
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-        case .topRight:
-            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
-        case .right:
-            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
-            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-        case .bottomRight:
-            newWindowFrame.origin.x = screenFrame.maxX - newWindowFrame.width
-            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-        case .bottom:
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-        case .bottomLeft:
-            newWindowFrame.origin.y = screenFrame.maxY - newWindowFrame.height
-        case .left:
-            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-        case .center:
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-            newWindowFrame.origin.y = screenFrame.midY - newWindowFrame.height / 2
-        case .macOSCenter:
-            let yOffset = getMacOSCenterYOffset(newWindowFrame.height, screenHeight: screenFrame.height)
-            newWindowFrame.origin.x = screenFrame.midX - newWindowFrame.width / 2
-            newWindowFrame.origin.y = (screenFrame.midY - newWindowFrame.height / 2) + yOffset
         }
 
         return newWindowFrame
@@ -291,10 +230,15 @@ struct WindowEngine {
     ///   - direction: The direction the window WILL be resized to
     /// - Returns: CGRect with padding applied
     private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
-        let padding = Defaults[.windowPadding]
-        let halfPadding = Defaults[.windowPadding] / 2
+        let padding = Defaults[.padding]
+        let halfPadding = padding.window / 2
 
-        let paddedScreenFrame = screenFrame.padding(.all, padding)
+        var paddedScreenFrame = screenFrame
+        paddedScreenFrame = paddedScreenFrame.padding(.top, padding.totalTopPadding)
+        paddedScreenFrame = paddedScreenFrame.padding(.bottom, padding.bottom)
+        paddedScreenFrame = paddedScreenFrame.padding(.leading, padding.left)
+        paddedScreenFrame = paddedScreenFrame.padding(.trailing, padding.right)
+
         var paddedWindowFrame = windowFrame.intersection(paddedScreenFrame)
 
         if action.direction == .macOSCenter,
@@ -342,11 +286,11 @@ struct WindowEngine {
         var fixedWindowFrame = windowFrame
 
         if fixedWindowFrame.maxX > screenFrame.maxX {
-            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width - Defaults[.windowPadding]
+            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width - Defaults[.padding].right
         }
 
         if fixedWindowFrame.maxY > screenFrame.maxY {
-            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.windowPadding]
+            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.padding].bottom
         }
 
         window.setPosition(fixedWindowFrame.origin)

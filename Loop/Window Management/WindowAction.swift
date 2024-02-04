@@ -58,6 +58,92 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
         return nil
     }
+
+    // Returns the window frame within the boundaries of (0, 0) to (1, 1)
+    // Will be on the screen with mouse if needed.
+    func getFrameMultiplyValues() -> CGRect {
+        guard self.direction != .cycle else {
+            return .zero
+        }
+
+        let bounds = CGRect(x: 0, y: 0, width: 1, height: 1)
+        var result = CGRect.zero
+
+        if let frameMultiplyValues = direction.frameMultiplyValues {
+            result.origin.x = bounds.width * frameMultiplyValues.minX
+            result.origin.y = bounds.height * frameMultiplyValues.minY
+            result.size.width = bounds.width * frameMultiplyValues.width
+            result.size.height = bounds.height * frameMultiplyValues.height
+        } else {
+            if direction == .custom, let screenFrame = NSScreen.screenWithMouse?.frame {
+                switch measureSystem {
+                case .percentage:
+                    result.size.width = bounds.width * ((width ?? 0) / 100.0)
+                    result.size.height = bounds.height * ((height ?? 0) / 100.0)
+                case .pixels:
+                    result.size.width += (width ?? 0) / screenFrame.width
+                    result.size.height += (height ?? 0) / screenFrame.height
+                case .none:
+                    break
+                }
+
+                switch anchor {
+                case .topLeft:
+                    break
+                case .top:
+                    result.origin.x = screenFrame.midX - result.width / 2
+                case .topRight:
+                    result.origin.x = screenFrame.maxX - result.width
+                case .right:
+                    result.origin.x = screenFrame.maxX - result.width
+                    result.origin.y = screenFrame.midY - result.height / 2
+                case .bottomRight:
+                    result.origin.x = screenFrame.maxX - result.width
+                    result.origin.y = screenFrame.maxY - result.height
+                case .bottom:
+                    result.origin.x = screenFrame.midX - result.width / 2
+                    result.origin.y = screenFrame.maxY - result.height
+                case .bottomLeft:
+                    result.origin.y = screenFrame.maxY - result.height
+                case .left:
+                    result.origin.y = screenFrame.midY - result.height / 2
+                case .center:
+                    result.origin.x = screenFrame.midX - result.width / 2
+                    result.origin.y = screenFrame.midY - result.height / 2
+                case .macOSCenter:
+                    let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: screenFrame.height)
+                    result.origin.x = screenFrame.midX - result.width / 2
+                    result.origin.y = (screenFrame.midY - result.height / 2) + yOffset
+                case .none:
+                    break
+                }
+            }
+        }
+        return result
+    }
+
+    func getEdgesTouchingScreen() -> Edge.Set {
+        guard let frameMultiplyValues = direction.frameMultiplyValues else {
+            return []
+        }
+
+        var result: Edge.Set = []
+
+        if frameMultiplyValues.minX == 0 {
+            result.insert(.leading)
+        }
+        if frameMultiplyValues.maxX == 1 {
+            result.insert(.trailing)
+        }
+        if frameMultiplyValues.minY == 0 {
+            result.insert(.top)
+        }
+        if frameMultiplyValues.maxY == 1 {
+            result.insert(.bottom)
+        }
+
+        return result
+    }
 }
 
 // MARK: - Import/Export
@@ -325,7 +411,7 @@ extension WindowAction {
 
         if self.direction == .macOSCenter {
             let yOffset = WindowEngine.getMacOSCenterYOffset(
-                previewHeight - (Defaults[.windowPadding] * 2),
+                previewHeight - (Defaults[.padding].window * 2),
                 screenHeight: parentHeight
             )
             yLocation = (parentHeight / 2) - (previewHeight / 2) + yOffset
@@ -350,7 +436,7 @@ extension WindowAction {
 
         if self.direction == .center || self.direction == .macOSCenter, let window = window {
             width = window.frame.width
-            width += Defaults[.windowPadding] * 2
+            width += Defaults[.padding].window * 2
         }
 
         return width
@@ -372,7 +458,7 @@ extension WindowAction {
 
         if self.direction == .center || self.direction == .macOSCenter, let window = window {
             height = window.frame.height
-            height += Defaults[.windowPadding] * 2
+            height += Defaults[.padding].window * 2
         }
 
         return height
