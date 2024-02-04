@@ -140,7 +140,7 @@ class LoopManager: ObservableObject {
             return
         }
 
-        if Defaults[.enableHapticFeedback] {
+        if Defaults[.hapticFeedback] {
             NSHapticFeedbackManager.defaultPerformer.perform(
                 NSHapticFeedbackManager.FeedbackPattern.alignment,
                 performanceTime: NSHapticFeedbackManager.PerformanceTime.now

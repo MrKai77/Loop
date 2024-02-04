@@ -15,7 +15,7 @@ struct MoreSettingsView: View {
 
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
-    @Default(.enableHapticFeedback) var enableHapticFeedback
+    @Default(.hapticFeedback) var hapticFeedback
     @Default(.animateWindowResizes) var animateWindowResizes
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -71,7 +71,7 @@ struct MoreSettingsView: View {
             }
 
             Section("Accessibility") {
-                Toggle("Enable Haptic Feedback", isOn: $enableHapticFeedback)
+                Toggle("Haptic Feedback", isOn: $hapticFeedback)
             }
 
             Section(content: {

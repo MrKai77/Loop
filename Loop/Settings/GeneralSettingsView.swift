@@ -28,6 +28,7 @@ struct GeneralSettingsView: View {
     @Default(.animationConfiguration) var animationConfiguration
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
+    @Default(.focusWindowOnResize) var focusWindowOnResize
 
     @State var userDisabledLoopNotifications: Bool = false
     @State var iconFooter: String?
@@ -99,6 +100,10 @@ struct GeneralSettingsView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     }
+                }
+
+                if resizeWindowUnderCursor {
+                    Toggle("Focus window on resize", isOn: $focusWindowOnResize)
                 }
             }
 
