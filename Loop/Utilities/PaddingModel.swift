@@ -27,7 +27,7 @@ struct PaddingModel: Codable, Defaults.Serializable {
 
     var configureScreenPadding: Bool
 
-    static var defaultConfig = PaddingModel(
+    static var zero = PaddingModel(
         window: 0,
         top: 0,
         bottom: 0,

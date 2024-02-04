@@ -19,9 +19,12 @@ struct WallpaperView: View, Equatable {
            let url = NSWorkspace.shared.desktopImageURL(for: screen),
            let image = NSImage(contentsOf: url) {
 
-            Image(nsImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+            GeometryReader { geo in
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: geo.size.width, height: geo.size.height)
+            }
         }
     }
 }
