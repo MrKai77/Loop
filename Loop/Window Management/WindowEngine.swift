@@ -234,7 +234,7 @@ struct WindowEngine {
         let halfPadding = padding.window / 2
 
         var paddedScreenFrame = screenFrame
-        paddedScreenFrame = paddedScreenFrame.padding(.top, padding.top)
+        paddedScreenFrame = paddedScreenFrame.padding(.top, padding.totalTopPadding)
         paddedScreenFrame = paddedScreenFrame.padding(.bottom, padding.bottom)
         paddedScreenFrame = paddedScreenFrame.padding(.leading, padding.left)
         paddedScreenFrame = paddedScreenFrame.padding(.trailing, padding.right)

@@ -40,6 +40,11 @@ struct PaddingConfigurationView: View {
                 if paddingModel.configureScreenPadding {
                     Section {
                         paddingAdjuster("Window Gaps", value: $paddingModel.window.toDoubleBinding())
+                        paddingAdjuster(
+                            "External Bar",
+                            value: $paddingModel.externalBar.toDoubleBinding(),
+                            description: "Use this if you are using a custom menubar."
+                        )
                     }
 
                     Section("Screen Padding") {
@@ -93,11 +98,19 @@ struct PaddingConfigurationView: View {
     }
 
     @ViewBuilder
-    func paddingAdjuster(_ title: String, value: Binding<Double>) -> some View {
-        if self.useSteppers {
-            paddingStepper(title, value: value)
-        } else {
-            paddingSlider(title, value: value)
+    func paddingAdjuster(_ title: String, value: Binding<Double>, description: String? = nil) -> some View {
+        VStack(alignment: .leading) {
+            if self.useSteppers {
+                paddingStepper(title, value: value)
+            } else {
+                paddingSlider(title, value: value)
+            }
+
+            if let description = description {
+                Text(description)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 

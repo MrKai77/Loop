@@ -12,6 +12,9 @@ struct PaddingModel: Codable, Defaults.Serializable {
     var window: CGFloat {
         didSet { window = max(window, 0) }
     }
+    var externalBar: CGFloat {
+        didSet { externalBar = max(externalBar, 0) }
+    }
     var top: CGFloat {
         didSet { top = max(top, 0) }
     }
@@ -27,8 +30,13 @@ struct PaddingModel: Codable, Defaults.Serializable {
 
     var configureScreenPadding: Bool
 
+    var totalTopPadding: CGFloat {
+        self.top + externalBar
+    }
+
     static var zero = PaddingModel(
         window: 0,
+        externalBar: 0,
         top: 0,
         bottom: 0,
         right: 0,

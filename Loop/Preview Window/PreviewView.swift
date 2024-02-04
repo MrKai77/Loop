@@ -67,7 +67,7 @@ struct PreviewView: View {
                 y: self.currentAction.previewWindowYOffset(geo.size.height, window)
             )
         }
-        .padding(.top, padding.top)
+        .padding(.top, padding.totalTopPadding)
         .padding(.bottom, padding.bottom)
         .padding(.leading, padding.left)
         .padding(.trailing, padding.right)
