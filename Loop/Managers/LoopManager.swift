@@ -131,6 +131,15 @@ class LoopManager: ObservableObject {
         }
     }
 
+    private func performHapticFeedback() {
+        if Defaults[.hapticFeedback] {
+            NSHapticFeedbackManager.defaultPerformer.perform(
+                NSHapticFeedbackManager.FeedbackPattern.alignment,
+                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+            )
+        }
+    }
+    
     private func changeAction(_ action: WindowAction) {
         guard
             self.currentAction != action,
@@ -138,13 +147,6 @@ class LoopManager: ObservableObject {
             let currentScreen = self.screenToResizeOn
         else {
             return
-        }
-
-        if Defaults[.hapticFeedback] {
-            NSHapticFeedbackManager.defaultPerformer.perform(
-                NSHapticFeedbackManager.FeedbackPattern.alignment,
-                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-            )
         }
 
         var newAction = action
@@ -201,6 +203,7 @@ class LoopManager: ObservableObject {
             } else {
                 if let screenToResizeOn = self.screenToResizeOn,
                    !Defaults[.previewVisibility] {
+                    performHapticFeedback()
                     WindowEngine.resize(
                         self.targetWindow!,
                         to: self.currentAction,
@@ -214,6 +217,8 @@ class LoopManager: ObservableObject {
 
             return
         }
+
+        performHapticFeedback()
 
         if newAction != currentAction {
             self.currentAction = newAction
