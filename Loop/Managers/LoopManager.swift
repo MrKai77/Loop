@@ -188,34 +188,29 @@ class LoopManager: ObservableObject {
                 }
             }
 
-            let oldscreenToResizeOn = self.screenToResizeOn
-
             self.screenToResizeOn = newScreen
             self.previewController.setScreen(to: newScreen)
 
-            if oldscreenToResizeOn != newScreen {
-
-                DispatchQueue.main.async {
-                    Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
-                }
-
-                if action.direction.isPresetCyclable || action.direction == .cycle {
-                    self.currentAction = newAction
-                    self.changeAction(action)
-                } else {
-                    if let screenToResizeOn = self.screenToResizeOn,
-                       !Defaults[.previewVisibility] {
-                        WindowEngine.resize(
-                            self.targetWindow!,
-                            to: self.currentAction,
-                            on: screenToResizeOn,
-                            supressAnimations: true
-                        )
-                    }
-                }
-
-                print("Screen changed: \(newScreen.localizedName)")
+            DispatchQueue.main.async {
+                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
             }
+
+            if action.direction.isPresetCyclable || action.direction == .cycle {
+                self.currentAction = newAction
+                self.changeAction(action)
+            } else {
+                if let screenToResizeOn = self.screenToResizeOn,
+                   !Defaults[.previewVisibility] {
+                    WindowEngine.resize(
+                        self.targetWindow!,
+                        to: self.currentAction,
+                        on: screenToResizeOn,
+                        supressAnimations: true
+                    )
+                }
+            }
+
+            print("Screen changed: \(newScreen.localizedName)")
 
             return
         }
