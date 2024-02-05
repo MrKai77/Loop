@@ -10,14 +10,12 @@ import SwiftUI
 struct PaddingConfigurationView: View {
     @Binding var isSheetShown: Bool
     @Binding var paddingModel: PaddingModel
-    @State var useSteppers: Bool = false
 
     var body: some View {
         VStack {
             Form {
                 Section("Padding") {
                     Toggle("Custom Screen Padding", isOn: $paddingModel.configureScreenPadding)
-                    Toggle("Use Custom Values", isOn: $useSteppers)
                 }
 
                 Section(content: {
@@ -100,10 +98,14 @@ struct PaddingConfigurationView: View {
     @ViewBuilder
     func paddingAdjuster(_ title: String, value: Binding<Double>, description: String? = nil) -> some View {
         VStack(alignment: .leading) {
-            if self.useSteppers {
-                paddingStepper(title, value: value)
-            } else {
-                paddingSlider(title, value: value)
+            HStack {
+                Stepper(
+                    title,
+                    value: value,
+                    in: 0...100,
+                    format: .number
+                )
+                Text("px")
             }
 
             if let description = description {
@@ -111,32 +113,6 @@ struct PaddingConfigurationView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-        }
-    }
-
-    @ViewBuilder
-    func paddingSlider(_ title: String, value: Binding<Double>) -> some View {
-        Slider(
-            value: value,
-            in: 0...50,
-            step: 5,
-            minimumValueLabel: Text("0px"),
-            maximumValueLabel: Text("50px")
-        ) {
-            Text(title)
-        }
-    }
-
-    @ViewBuilder
-    func paddingStepper(_ title: String, value: Binding<Double>) -> some View {
-        HStack {
-            Stepper(
-                title,
-                value: value,
-                in: 0...100,
-                format: .number
-            )
-            Text("px")
         }
     }
 }
