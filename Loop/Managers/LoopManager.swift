@@ -131,6 +131,15 @@ class LoopManager: ObservableObject {
         }
     }
 
+    private func performHapticFeedback() {
+        if Defaults[.hapticFeedback] {
+            NSHapticFeedbackManager.defaultPerformer.perform(
+                NSHapticFeedbackManager.FeedbackPattern.alignment,
+                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+            )
+        }
+    }
+    
     private func changeAction(_ action: WindowAction) {
         guard
             self.currentAction != action,
@@ -138,13 +147,6 @@ class LoopManager: ObservableObject {
             let currentScreen = self.screenToResizeOn
         else {
             return
-        }
-
-        if Defaults[.hapticFeedback] {
-            NSHapticFeedbackManager.defaultPerformer.perform(
-                NSHapticFeedbackManager.FeedbackPattern.alignment,
-                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-            )
         }
 
         var newAction = action
@@ -188,37 +190,36 @@ class LoopManager: ObservableObject {
                 }
             }
 
-            let oldscreenToResizeOn = self.screenToResizeOn
-
             self.screenToResizeOn = newScreen
             self.previewController.setScreen(to: newScreen)
 
-            if oldscreenToResizeOn != newScreen {
-
-                DispatchQueue.main.async {
-                    Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
-                }
-
-                if action.direction.isPresetCyclable || action.direction == .cycle {
-                    self.currentAction = newAction
-                    self.changeAction(action)
-                } else {
-                    if let screenToResizeOn = self.screenToResizeOn,
-                       !Defaults[.previewVisibility] {
-                        WindowEngine.resize(
-                            self.targetWindow!,
-                            to: self.currentAction,
-                            on: screenToResizeOn,
-                            supressAnimations: true
-                        )
-                    }
-                }
-
-                print("Screen changed: \(newScreen.localizedName)")
+            // This is only needed because if preview window is moved onto a new screen, it needs to receive a window action
+            DispatchQueue.main.async {
+                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
             }
+
+            if action.direction.isPresetCyclable || action.direction == .cycle {
+                self.currentAction = newAction
+                self.changeAction(action)
+            } else {
+                if let screenToResizeOn = self.screenToResizeOn,
+                   !Defaults[.previewVisibility] {
+                    performHapticFeedback()
+                    WindowEngine.resize(
+                        self.targetWindow!,
+                        to: self.currentAction,
+                        on: screenToResizeOn,
+                        supressAnimations: true
+                    )
+                }
+            }
+
+            print("Screen changed: \(newScreen.localizedName)")
 
             return
         }
+
+        performHapticFeedback()
 
         if newAction != currentAction {
             self.currentAction = newAction
