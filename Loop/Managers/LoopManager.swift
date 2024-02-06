@@ -193,6 +193,7 @@ class LoopManager: ObservableObject {
             self.screenToResizeOn = newScreen
             self.previewController.setScreen(to: newScreen)
 
+            // This is only needed because if preview window is moved onto a new screen, it needs to receive a window action
             DispatchQueue.main.async {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
             }
