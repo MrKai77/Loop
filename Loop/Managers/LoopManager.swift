@@ -8,6 +8,7 @@
 import SwiftUI
 import Defaults
 
+// swiftlint:disable:next type_body_length
 class LoopManager: ObservableObject {
 
     private let accessibilityAccessManager = PermissionsManager()
@@ -28,9 +29,15 @@ class LoopManager: ObservableObject {
     private var lastTriggerKeyClick: Date = Date.now
 
     @Published var currentAction: WindowAction = .init(.noAction)
-    private var initialMousePosition: CGPoint = CGPoint()
+    private var initialMousePosition: CGPoint = .zero
     private var angleToMouse: Angle = Angle(degrees: 0)
     private var distanceToMouse: CGFloat = 0
+
+    // Gestures
+    private var gestureMonitor: EventMonitor?
+    private var gestureInitialPosition: NSPoint = .zero
+    private var gestureMagnification: CGFloat = .zero
+
 
     private var triggerDelayTimer: Timer? {
         willSet {
@@ -71,6 +78,35 @@ class LoopManager: ObservableObject {
             }
         }
 
+        self.gestureMonitor = CGEventMonitor(eventMask: [.gesture, .magnify]) { cgEvent in
+            if let event = NSEvent(cgEvent: cgEvent) {
+
+                if event.type == .magnify {
+//                    print(event.magnification)
+                    self.gestureMagnification += event.magnification
+                    print(self.gestureMagnification)
+                }
+
+                let touches = event.allTouches()
+
+                if touches.count == 2 {
+                    if !self.isLoopActive {
+                        self.openLoop()
+                        self.gestureInitialPosition = touches.getAverageLocation()
+                    } else {
+                        self.trackpadGestureMoved(touches.getAverageLocation(), self.gestureMagnification)
+                        return nil
+                    }
+                }
+
+                if event.phase == .ended {
+                    self.closeLoop()
+                }
+            }
+
+            return Unmanaged.passRetained(cgEvent)
+        }
+
         Notification.Name.forceCloseLoop.onRecieve { _ in
             self.closeLoop(forceClose: true)
         }
@@ -84,17 +120,44 @@ class LoopManager: ObservableObject {
         self.flagsChangedEventMonitor!.start()
         self.middleClickMonitor!.start()
         self.keyDownEventMonitor!.start()
+        self.gestureMonitor!.start()
+    }
+
+    private func trackpadGestureMoved(_ averagePoint: NSPoint, _ magnification: CGFloat) {
+        guard self.isLoopActive else { return }
+        keybindMonitor.canPassthroughSpecialEvents = false
+
+        let mouseAngle = Angle(radians: gestureInitialPosition.angle(to: averagePoint))
+        let mouseDistance = initialMousePosition.distanceSquared(to: averagePoint)
+
+        // Return if the mouse didn't move
+        if (mouseAngle == angleToMouse) && (mouseDistance == distanceToMouse) {
+            return
+        }
+
+        if magnification > 0.1 {
+            if self.currentAction.direction != .maximize {
+                changeAction(.init(.maximize))
+            }
+        } else {
+            guard mouseDistance - distanceToMouse > 0.001 else {
+                return
+            }
+
+            // Get angle & distance to mouse
+            self.angleToMouse = mouseAngle
+            self.distanceToMouse = mouseDistance
+            setDirectionFromCoordinates(angle: mouseAngle, distance: mouseDistance)
+        }
     }
 
     private func mouseMoved(_ event: NSEvent) {
         guard self.isLoopActive else { return }
         keybindMonitor.canPassthroughSpecialEvents = false
 
-        let noActionDistance: CGFloat = 10
-
-        let currentMouseLocation = NSEvent.mouseLocation
-        let mouseAngle = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
-        let mouseDistance = initialMousePosition.distanceSquared(to: currentMouseLocation)
+        let currentPosition = NSEvent.mouseLocation
+        let mouseAngle = Angle(radians: initialMousePosition.angle(to: currentPosition))
+        let mouseDistance = initialMousePosition.distanceSquared(to: currentPosition)
 
         // Return if the mouse didn't move
         if (mouseAngle == angleToMouse) && (mouseDistance == distanceToMouse) {
@@ -105,11 +168,15 @@ class LoopManager: ObservableObject {
         self.angleToMouse = mouseAngle
         self.distanceToMouse = mouseDistance
 
+        setDirectionFromCoordinates(angle: mouseAngle, distance: mouseDistance)
+    }
+
+    private func setDirectionFromCoordinates(angle: Angle, distance: CGFloat, noActionDistance: CGFloat = 10) {
         var resizeDirection: WindowDirection = .noAction
 
         // If mouse over 50 points away, select half or quarter positions
-        if distanceToMouse > pow(50 - Defaults[.radialMenuThickness], 2) {
-            switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
+        if distance > pow(50 - Defaults[.radialMenuThickness], 2) {
+            switch Int((angle.normalized().degrees + 22.5) / 45) {
             case 0, 8: resizeDirection = .cycleRight
             case 1:    resizeDirection = .bottomRightQuarter
             case 2:    resizeDirection = .cycleBottom
@@ -120,7 +187,7 @@ class LoopManager: ObservableObject {
             case 7:    resizeDirection = .topRightQuarter
             default:   resizeDirection = .noAction
             }
-        } else if distanceToMouse < pow(noActionDistance, 2) {
+        } else if distance < pow(noActionDistance, 2) {
             resizeDirection = .noAction
         } else {
             resizeDirection = .maximize
@@ -355,6 +422,7 @@ class LoopManager: ObservableObject {
         self.mouseMovedEventMonitor!.stop()
 
         self.currentlyPressedModifiers = []
+        self.gestureMagnification = 0
 
         if self.targetWindow != nil,
             self.screenToResizeOn != nil,
@@ -417,5 +485,23 @@ class LoopManager: ObservableObject {
         self.radialMenuDelayTimer = nil
         self.radialMenuController.close()
         self.previewController.close()
+    }
+}
+
+extension Set where Element: NSTouch {
+    func getAverageLocation() -> NSPoint {
+        var xTotal: CGFloat = 0
+        var yTotal: CGFloat = 0
+        let count: CGFloat = CGFloat(self.count)
+
+        for touch in self {
+            xTotal += touch.normalizedPosition.x
+            yTotal += touch.normalizedPosition.y
+        }
+
+        xTotal /= count
+        yTotal /= count
+
+        return .init(x: xTotal, y: yTotal)
     }
 }
