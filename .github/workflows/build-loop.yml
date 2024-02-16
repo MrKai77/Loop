@@ -1,9 +1,13 @@
 name: Build Loop
 
-on: [ workflow_dispatch ]
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
 
 jobs:
-  build_with_signing:
+  build:
     name: Build Loop
     runs-on: macos-14
 
