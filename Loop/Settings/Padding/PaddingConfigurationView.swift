@@ -37,20 +37,21 @@ struct PaddingConfigurationView: View {
 
                 if paddingModel.configureScreenPadding {
                     Section {
-                        CrispValueAdjuster("Window Gaps", value: $paddingModel.window, postfix: "px")
+                        CrispValueAdjuster("Window Gaps", value: $paddingModel.window, sliderRange: 0...100, postfix: "px")
                         CrispValueAdjuster(
                             "External Bar",
                             description: "Use this if you are using a custom menubar.",
                             value: $paddingModel.externalBar,
+                            sliderRange: 0...100,
                             postfix: "px"
                         )
                     }
 
                     Section("Screen Padding") {
-                        CrispValueAdjuster("Top", value: $paddingModel.top, postfix: "px")
-                        CrispValueAdjuster("Bottom", value: $paddingModel.bottom, postfix: "px")
-                        CrispValueAdjuster("Right", value: $paddingModel.right, postfix: "px")
-                        CrispValueAdjuster("Left", value: $paddingModel.left, postfix: "px")
+                        CrispValueAdjuster("Top", value: $paddingModel.top, sliderRange: 0...100, postfix: "px")
+                        CrispValueAdjuster("Bottom", value: $paddingModel.bottom, sliderRange: 0...100, postfix: "px")
+                        CrispValueAdjuster("Right", value: $paddingModel.right, sliderRange: 0...100, postfix: "px")
+                        CrispValueAdjuster("Left", value: $paddingModel.left, sliderRange: 0...100, postfix: "px")
                     }
                 } else {
                     CrispValueAdjuster(
@@ -67,6 +68,7 @@ struct PaddingConfigurationView: View {
                                 paddingModel.left = $0
                             }
                         ),
+                        sliderRange: 0...100,
                         postfix: "px"
                     )
                 }

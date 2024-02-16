@@ -13,73 +13,80 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
     let title: String
     let description: String?
     @Binding var value: V
+    let sliderRange: ClosedRange<V>
     let postfix: String?
 
     @State var isPopoverShown: Bool = false
 
-    init(_ title: String, description: String? = nil, value: Binding<V>, postfix: String? = nil) {
+    init(
+        _ title: String,
+        description: String? = nil,
+        value: Binding<V>,
+        sliderRange: ClosedRange<V>,
+        postfix: String? = nil
+    ) {
         self.title = title
         self.description = description
         self._value = value
+        self.sliderRange = sliderRange
         self.postfix = postfix
     }
 
     let stepperWidth: CGFloat = 150
-    let stepperRange: ClosedRange<V> = 0...100
 
     var popoverXOffset: CGFloat {
-        4 + ((stepperWidth - 8) * (CGFloat(value.clamped(to: stepperRange)) / CGFloat(stepperRange.upperBound)))
+        4 + ((stepperWidth - 8) * (CGFloat(value.clamped(to: sliderRange)) / CGFloat(sliderRange.upperBound)))
     }
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
+        VStack(alignment: .leading) {
+            HStack {
                 Text(title)
 
-                if let description = description {
-                    Text(description)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
+                Spacer()
 
-            Spacer()
+                HStack {
+                    stepperMinText
 
-            HStack {
-                stepperMinText
-
-                Slider(
-                    value: $value,
-                    in: stepperRange,
-                    step: V.Stride(stepperRange.upperBound / 10),
-                    label: { EmptyView() },
-                    onEditingChanged: { self.isPopoverShown = !$0 }
-                )
-                .labelsHidden()
-                .frame(width: stepperWidth)
-                .popover(
-                    isPresented: $isPopoverShown,
-                    attachmentAnchor: .rect(
-                        .rect(
-                            CGRect(
-                                // This compensates for the small spacing within the slider
-                                x: popoverXOffset,
-                                y: 15,
-                                width: 0,
-                                height: 0
+                    Slider(
+                        value: $value,
+                        in: sliderRange,
+                        step: V.Stride(sliderRange.upperBound / 10),
+                        label: { EmptyView() },
+                        onEditingChanged: { self.isPopoverShown = !$0 }
+                    )
+                    .labelsHidden()
+                    .frame(width: stepperWidth)
+                    .popover(
+                        isPresented: $isPopoverShown,
+                        attachmentAnchor: .rect(
+                            .rect(
+                                CGRect(
+                                    // This compensates for the small spacing within the slider
+                                    x: popoverXOffset,
+                                    y: 15,
+                                    width: 0,
+                                    height: 0
+                                )
                             )
-                        )
-                    ),
-                    arrowEdge: .bottom
-                ) {
-                    stepperView
-                        .padding(10)
-                        .fixedSize()
-                }
+                        ),
+                        arrowEdge: .bottom
+                    ) {
+                        stepperView
+                            .padding(10)
+                            .fixedSize()
+                    }
 
-                stepperMaxText
+                    stepperMaxText
+                }
+                .fixedSize()
             }
-            .fixedSize()
+
+            if let description = description {
+                Text(description)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 
@@ -123,7 +130,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
 
     @ViewBuilder
     var stepperMinText: some View {
-        Text("\(stepperRange.lowerBound.formatted())\(postfix == nil ? "" : " \(postfix!)")")
+        Text("\(sliderRange.lowerBound.formatted())\(postfix == nil ? "" : " \(postfix!)")")
             .font(.caption2)
             .foregroundStyle(.secondary)
             .padding(.trailing, -4)
@@ -131,7 +138,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
 
     @ViewBuilder
     var stepperMaxText: some View {
-        Text("\(stepperRange.upperBound.formatted())\(postfix == nil ? "" : " \(postfix!)")")
+        Text("\(sliderRange.upperBound.formatted())\(postfix == nil ? "" : " \(postfix!)")")
             .font(.caption2)
             .foregroundStyle(.secondary)
             .padding(.leading, -4)
