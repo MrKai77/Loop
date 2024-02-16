@@ -34,22 +34,22 @@ struct RadialMenuSettingsView: View {
             }
 
             Section {
-                Slider(value: $radialMenuCornerRadius,
-                       in: 30...50,
-                       step: 3,
-                       minimumValueLabel: Text("30px"),
-                       maximumValueLabel: Text("50px")) {
-                    Text("Corner Radius")
-                }
-                Slider(
+                CrispValueAdjuster(
+                    "Corner Radius",
+                    value: $radialMenuCornerRadius,
+                    sliderRange: 30...50,
+                    postscript: "px",
+                    lowerClamp: true,
+                    upperClamp: true
+                )
+                CrispValueAdjuster(
+                    "Thickness",
                     value: $radialMenuThickness,
-                    in: 10...34,
-                    step: 4,
-                    minimumValueLabel: Text("10px"),
-                    maximumValueLabel: Text("35px")
-                ) {
-                    Text("Thickness")
-                }
+                    sliderRange: 10...35,
+                    postscript: "px",
+                    lowerClamp: true,
+                    upperClamp: true
+                )
             }
 
             Section {
@@ -58,12 +58,12 @@ struct RadialMenuSettingsView: View {
             }
 
             Section {
-                Stepper(
-                    "Appearance Delay (seconds)",
-                    value: self.$radialMenuDelay,
-                    in: 0...10,
-                    step: 0.1,
-                    format: .number
+                CrispValueAdjuster(
+                    "Appearance Delay",
+                    value: $radialMenuDelay,
+                    sliderRange: 0...10,
+                    postscript: "sec",
+                    lowerClamp: true
                 )
             }
         }

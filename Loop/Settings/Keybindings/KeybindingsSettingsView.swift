@@ -41,12 +41,13 @@ struct KeybindingsSettingsView: View {
                         }
                     }
 
-                    Stepper(
-                        "Trigger Delay (seconds)",
-                        value: self.$triggerDelay,
-                        in: 0...10,
+                    CrispValueAdjuster(
+                        "Trigger Delay",
+                        value: $triggerDelay,
+                        sliderRange: 0...10,
+                        postscript: "sec",
                         step: 0.1,
-                        format: .number
+                        lowerClamp: true
                     )
 
                     Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
