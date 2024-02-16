@@ -40,7 +40,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
         self.upperClamp = upperClamp
 
         self.formatter = NumberFormatter()
-        self.formatter.maximumFractionDigits = 5
+        self.formatter.maximumFractionDigits = 10
 
         if let step = step {
             self.step = V.Stride(step)
@@ -155,7 +155,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                         )
                 }
             }
-            .frame(minWidth: 20, maxWidth: 200)
+            .frame(minWidth: 20, maxWidth: 500)
             .overlay {
                 HStack {
                     Spacer()
