@@ -14,7 +14,8 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
     let description: String?
     @Binding var value: V
     let sliderRange: ClosedRange<V>
-    let postfix: String?
+    let postscript: String?
+    var step: V.Stride
     let upperClamp: Bool
     let lowerClamp: Bool
 
@@ -25,7 +26,8 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
         description: String? = nil,
         value: Binding<V>,
         sliderRange: ClosedRange<V>,
-        postfix: String? = nil,
+        postscript: String? = nil,
+        step: V? = nil,
         lowerClamp: Bool = false,
         upperClamp: Bool = false
     ) {
@@ -33,12 +35,23 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
         self.description = description
         self._value = value
         self.sliderRange = sliderRange
-        self.postfix = postfix
+        self.postscript = postscript
         self.lowerClamp = lowerClamp
         self.upperClamp = upperClamp
+
+        self.formatter = NumberFormatter()
+        self.formatter.maximumFractionDigits = 2
+
+        if let step = step {
+            self.step = V.Stride(step)
+        } else {
+            self.step = 0   // Initialize first
+            self.step = totalRange / 10
+        }
     }
 
     let stepperWidth: CGFloat = 150
+    let formatter: NumberFormatter
 
     var totalRange: V.Stride {
         V.Stride(sliderRange.upperBound) - V.Stride(sliderRange.lowerBound)
@@ -125,7 +138,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                         }
                     }
                 ),
-                formatter: NumberFormatter()
+                formatter: formatter
             )
             .labelsHidden()
             .textFieldStyle(.plain)
@@ -165,7 +178,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                                 }
                             }
                         ),
-                        step: self.totalRange / 10
+                        step: step
                     )
                     .labelsHidden()
                 }
@@ -174,7 +187,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
             .fixedSize()
             .padding(.vertical, -10)
 
-            if let postfix = postfix {
+            if let postfix = postscript {
                 Text(postfix)
             }
         }
@@ -182,7 +195,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
 
     @ViewBuilder
     var stepperMinText: some View {
-        Text("\(sliderRange.lowerBound.formatted())\(postfix == nil ? "" : " \(postfix!)")")
+        Text("\(sliderRange.lowerBound.formatted())\(postscript == nil ? "" : " \(postscript!)")")
             .font(.caption2)
             .foregroundStyle(.secondary)
             .padding(.trailing, -4)
@@ -190,7 +203,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
 
     @ViewBuilder
     var stepperMaxText: some View {
-        Text("\(sliderRange.upperBound.formatted())\(postfix == nil ? "" : " \(postfix!)")")
+        Text("\(sliderRange.upperBound.formatted())\(postscript == nil ? "" : " \(postscript!)")")
             .font(.caption2)
             .foregroundStyle(.secondary)
             .padding(.leading, -4)

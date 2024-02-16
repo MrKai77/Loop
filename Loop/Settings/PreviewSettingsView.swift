@@ -56,21 +56,21 @@ struct PreviewSettingsView: View {
                     "Padding",
                     value: $previewPadding,
                     sliderRange: 0...20,
-                    postfix: "px",
+                    postscript: "px",
                     lowerClamp: true
                 )
                 CrispValueAdjuster(
                     "Corner Radius",
                     value: $previewCornerRadius,
                     sliderRange: 0...20,
-                    postfix: "px",
+                    postscript: "px",
                     lowerClamp: true
                 )
                 CrispValueAdjuster(
                     "Border Thickness",
                     value: $previewBorderThickness,
                     sliderRange: 0...10,
-                    postfix: "px",
+                    postscript: "px",
                     lowerClamp: true
                 )
             }

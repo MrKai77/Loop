@@ -38,7 +38,7 @@ struct RadialMenuSettingsView: View {
                     "Corner Radius",
                     value: $radialMenuCornerRadius,
                     sliderRange: 30...50,
-                    postfix: "px",
+                    postscript: "px",
                     lowerClamp: true,
                     upperClamp: true
                 )
@@ -46,7 +46,7 @@ struct RadialMenuSettingsView: View {
                     "Thickness",
                     value: $radialMenuThickness,
                     sliderRange: 10...35,
-                    postfix: "px",
+                    postscript: "px",
                     lowerClamp: true,
                     upperClamp: true
                 )
@@ -62,7 +62,7 @@ struct RadialMenuSettingsView: View {
                     "Appearance Delay",
                     value: $radialMenuDelay,
                     sliderRange: 0...10,
-                    postfix: "sec",
+                    postscript: "sec",
                     lowerClamp: true
                 )
             }

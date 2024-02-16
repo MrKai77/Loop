@@ -80,35 +80,31 @@ struct CustomKeybindView: View {
                         }
                     }
 
-                    HStack {
-                        Stepper(
-                            "Width",
-                            value: Binding<Double>(
-                                get: { self.action.width ?? 0 },
-                                set: { self.action.width = $0 }
-                            ),
-                            in: action.measureSystem == .percentage ?  0...100 : 0...(.greatestFiniteMagnitude),
-                            step: action.measureSystem == .percentage ?  10 : 100,
-                            format: .number
-                        )
-                        .focused($focusedField, equals: "width")
-                        Text(action.measureSystem?.postscript ?? "")
-                    }
+                    CrispValueAdjuster(
+                        "Width",
+                        value: Binding<Double>( // Width is an optional
+                            get: { self.action.width ?? 0 },
+                            set: { self.action.width = $0 }
+                        ),
+                        sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
+                            Double(NSScreen.main?.frame.width ?? 1000)
+                        ),
+                        postscript: action.measureSystem?.postscript ?? "",
+                        lowerClamp: true
+                    )
 
-                    HStack {
-                        Stepper(
-                            "Height",
-                            value: Binding<Double>(
-                                get: { self.action.height ?? 0 },
-                                set: { self.action.height = $0 }
-                            ),
-                            in: action.measureSystem == .percentage ?  0...100 : 0...(.greatestFiniteMagnitude),
-                            step: action.measureSystem == .percentage ?  10 : 100,
-                            format: .number
-                        )
-                        .focused($focusedField, equals: "height")
-                        Text(action.measureSystem?.postscript ?? "")
-                    }
+                    CrispValueAdjuster(
+                        "Height",
+                        value: Binding<Double>( // Height is an optional
+                            get: { self.action.height ?? 0 },
+                            set: { self.action.height = $0 }
+                        ),
+                        sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
+                            Double(NSScreen.main?.frame.height ?? 1000)
+                        ),
+                        postscript: action.measureSystem?.postscript ?? "",
+                        lowerClamp: true
+                    )
                 }
 
                 Section {

@@ -41,7 +41,7 @@ struct PaddingConfigurationView: View {
                             "Window Gaps",
                             value: $paddingModel.window,
                             sliderRange: 0...100,
-                            postfix: "px",
+                            postscript: "px",
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
@@ -49,7 +49,7 @@ struct PaddingConfigurationView: View {
                             description: "Use this if you are using a custom menubar.",
                             value: $paddingModel.externalBar,
                             sliderRange: 0...100,
-                            postfix: "px",
+                            postscript: "px",
                             lowerClamp: true
                         )
                     }
@@ -59,28 +59,28 @@ struct PaddingConfigurationView: View {
                             "Top",
                             value: $paddingModel.top,
                             sliderRange: 0...100,
-                            postfix: "px",
+                            postscript: "px",
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
                             "Bottom",
                             value: $paddingModel.bottom,
                             sliderRange: 0...100,
-                            postfix: "px",
+                            postscript: "px",
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
                             "Right",
                             value: $paddingModel.right,
                             sliderRange: 0...100,
-                            postfix: "px",
+                            postscript: "px",
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
                             "Left",
                             value: $paddingModel.left,
                             sliderRange: 0...100,
-                            postfix: "px",
+                            postscript: "px",
                             lowerClamp: true
                         )
                     }
@@ -100,7 +100,7 @@ struct PaddingConfigurationView: View {
                             }
                         ),
                         sliderRange: 0...100,
-                        postfix: "px",
+                        postscript: "px",
                         lowerClamp: true
                     )
                 }
