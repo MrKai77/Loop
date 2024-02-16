@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4
     
       - name: Switch Xcode version
         run: |
@@ -57,15 +57,19 @@ jobs:
             "./Build/Loop.dmg" \
             "./Build/Loop.xcarchive/Products/Applications/"
 
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: Loop.dmg
+          path: Build/Loop.dmg
+
       - name: Make ZIP
         run: |
           cp -R ./Build/Loop.xcarchive/Products/Applications/ ./Build/
           ditto -c -k --sequesterRsrc --keepParent ./Build/Loop.app ./Build/Loop.zip
  
-      - name: Upload build
-        uses: actions/upload-artifact@v3.1.2
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
         with:
-          name: Loop Build
-          path: |
-            Build/Loop.zip
-            Build/Loop.dmg
+          name: Loop.zip
+          path: Build/Loop.zip
