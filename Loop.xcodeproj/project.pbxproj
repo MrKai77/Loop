@@ -17,6 +17,7 @@
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
 		A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */; };
+		A82436062B7EE55C0052FBFB /* CrispValueAdjuster.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */; };
 		A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521EB29E234EB00139654 /* AboutViewController.swift */; };
 		A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* PermissionsManager.swift */; };
 		A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */; };
@@ -95,6 +96,7 @@
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
 		A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarResizeButton.swift; sourceTree = "<group>"; };
+		A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrispValueAdjuster.swift; sourceTree = "<group>"; };
 		A82521EB29E234EB00139654 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A82521ED29E235AC00139654 /* PermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsManager.swift; sourceTree = "<group>"; };
 		A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
 				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
 				A8063A722B19891900EAB3D9 /* grid.metal */,
+				A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
 				A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */,
 				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
+				A82436062B7EE55C0052FBFB /* CrispValueAdjuster.swift in Sources */,
 				A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */,
 				A8330ACD2A3AC1D100673C8D /* CGGeometry+Extensions.swift in Sources */,
 				A8330AC72A3AC19500673C8D /* NSScreen+Extensions.swift in Sources */,
