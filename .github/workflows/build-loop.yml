@@ -22,7 +22,8 @@ jobs:
 
       - name: Build Loop.app
         run: |
-         	set -o pipefail && xcodebuild archive \
+         	set -o pipefail
+          xcodebuild archive \
             -project ./Loop.xcodeproj \
             -destination "generic/platform=macOS" \
             -scheme "Loop" \
