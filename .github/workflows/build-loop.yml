@@ -14,7 +14,7 @@ permissions:
 jobs:
   build_with_signing:
     name: Build Loop
-    runs-on: macos-13
+    runs-on: macos-14
 
     steps:
       - name: Checkout repository
@@ -22,7 +22,7 @@ jobs:
     
       - name: Switch Xcode version
         run: |
-          sudo xcode-select -s "/Applications/Xcode_15.0.app"
+          sudo xcode-select -s "/Applications/Xcode_15.2.app"
           /usr/bin/xcodebuild -version
 
       - name: Install dependencies
@@ -31,8 +31,42 @@ jobs:
 
       - name: Build Loop.app
         run: |
-          make debug
+         	set -o pipefail && xcodebuild archive \
+            -project ./Loop.xcodeproj \
+            -destination "generic/platform=macOS" \
+            -scheme "Loop" \
+            -configuration Debug \
+            -archivePath "./Build/Loop.xcarchive" \
+            -xcconfig "./Loop/Config.xcconfig" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY= \
+            CODE_SIGN_ENTITLEMENTS= \
+            GCC_OPTIMIZATION_LEVEL=s \
+            SWIFT_OPTIMIZATION_LEVEL=-O \
+            GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
+            DEBUG_INFORMATION_FORMAT=dwarf-with-dsym | xcbeautify
 
+      - name: Make DMG
+        run: |
+          create-dmg \
+            --volname "Loop" \
+            --background "./assets/graphics/dmg-background.png" \
+            --window-pos 200 120 \
+            --window-size 660 400 \
+            --icon-size 160 \
+            --icon "Loop.app" 180 170 \
+            --hide-extension "Loop.app" \
+            --app-drop-link 480 170 \
+            --no-internet-enable \
+            "./Build/Loop.dmg" \
+            "./Build/Loop.xcarchive/Products/Applications/"
+
+      - name: Make ZIP
+        run: |
+          cp -R ./Build/Loop.xcarchive/Products/Applications/ ./Build/
+          ditto -c -k --sequesterRsrc --keepParent ./Build/Loop.app ./Build/Loop.zip
+ 
       - name: Upload build
         uses: actions/upload-artifact@v3.1.2
         with:
