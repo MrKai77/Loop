@@ -41,7 +41,7 @@ struct PaddingConfigurationView: View {
                         CrispValueAdjuster(
                             "External Bar",
                             description: "Use this if you are using a custom menubar.",
-                            value: $paddingModel.window,
+                            value: $paddingModel.externalBar,
                             postfix: "px"
                         )
                     }
@@ -66,7 +66,8 @@ struct PaddingConfigurationView: View {
                                 paddingModel.right = $0
                                 paddingModel.left = $0
                             }
-                        )
+                        ),
+                        postfix: "px"
                     )
                 }
             }
