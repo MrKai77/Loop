@@ -40,7 +40,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
         self.upperClamp = upperClamp
 
         self.formatter = NumberFormatter()
-        self.formatter.maximumFractionDigits = 2
+        self.formatter.maximumFractionDigits = 5
 
         if let step = step {
             self.step = V.Stride(step)
