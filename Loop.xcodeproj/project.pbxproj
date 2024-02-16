@@ -188,6 +188,7 @@
 		A80900D12AA3F9F20085C63B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */,
 				A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */,
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A80900D22AA3F9F20085C63B /* BetaIndicator.swift */,
@@ -197,7 +198,6 @@
 				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
 				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
 				A8063A722B19891900EAB3D9 /* grid.metal */,
-				A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";

@@ -37,7 +37,12 @@ struct PaddingConfigurationView: View {
 
                 if paddingModel.configureScreenPadding {
                     Section {
-                        CrispValueAdjuster("Window Gaps", value: $paddingModel.window, sliderRange: 0...100, postfix: "px")
+                        CrispValueAdjuster(
+                            "Window Gaps",
+                            value: $paddingModel.window,
+                            sliderRange: 0...100,
+                            postfix: "px"
+                        )
                         CrispValueAdjuster(
                             "External Bar",
                             description: "Use this if you are using a custom menubar.",
@@ -78,6 +83,7 @@ struct PaddingConfigurationView: View {
             .onChange(of: paddingModel.configureScreenPadding) { _ in
                 if !paddingModel.configureScreenPadding {
                     paddingModel.top = paddingModel.window
+                    paddingModel.externalBar = 0
                     paddingModel.bottom = paddingModel.window
                     paddingModel.right = paddingModel.window
                     paddingModel.left = paddingModel.window
