@@ -1,15 +1,6 @@
 name: Build Loop
 
-on:
-  workflow_dispatch: 
-  push:
-    branches:
-      - develop
-    paths:
-      - Loop/**
-
-permissions:
-  contents: write
+on: [ workflow_dispatch ]
 
 jobs:
   build_with_signing:
