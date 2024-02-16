@@ -52,33 +52,27 @@ struct PreviewSettingsView: View {
             .opacity(previewVisibility ? 1 : 0.5)
 
             Section {
-                Slider(
+                CrispValueAdjuster(
+                    "Padding",
                     value: $previewPadding,
-                    in: 0...20,
-                    step: 2,
-                    minimumValueLabel: Text("0px"),
-                    maximumValueLabel: Text("20px")
-                ) {
-                    Text("Padding")
-                }
-                Slider(
+                    sliderRange: 0...20,
+                    postfix: "px",
+                    lowerClamp: true
+                )
+                CrispValueAdjuster(
+                    "Corner Radius",
                     value: $previewCornerRadius,
-                    in: 0...20,
-                    step: 2,
-                    minimumValueLabel: Text("0px"),
-                    maximumValueLabel: Text("20px")
-                ) {
-                    Text("Corner Radius")
-                }
-                Slider(
+                    sliderRange: 0...20,
+                    postfix: "px",
+                    lowerClamp: true
+                )
+                CrispValueAdjuster(
+                    "Border Thickness",
                     value: $previewBorderThickness,
-                    in: 0...10,
-                    step: 1,
-                    minimumValueLabel: Text("0px"),
-                    maximumValueLabel: Text("10px")
-                ) {
-                    Text("Border Thickness")
-                }
+                    sliderRange: 0...10,
+                    postfix: "px",
+                    lowerClamp: true
+                )
             }
             .disabled(!previewVisibility)
             .foregroundColor(!previewVisibility ? .secondary : nil)
