@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: CHANGE NAME
 struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
 
     let title: String
