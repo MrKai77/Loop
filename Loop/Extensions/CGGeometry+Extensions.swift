@@ -34,6 +34,11 @@ extension CGPoint {
         guard let screen = NSScreen.screenWithMouse else { return nil }
         return CGPoint(x: self.x, y: screen.frame.maxY - self.y)
     }
+
+    func approximatelyEqual(to point: CGPoint, tolerance: CGFloat = 10) -> Bool {
+        abs(x - point.x) < tolerance &&
+        abs(y - point.y) < tolerance
+    }
 }
 
 extension CGSize {
@@ -89,5 +94,35 @@ extension CGRect {
                 abs(origin.y - rect.origin.y) < tolerance &&
                 abs(width - rect.width) < tolerance &&
                 abs(height - rect.height) < tolerance
+    }
+
+    func pushBottomRightPointInside(_ rect2: CGRect) -> CGRect {
+        var result = self
+
+        if result.maxX > rect2.maxX {
+            result.origin.x = rect2.maxX - result.width
+        }
+
+        if result.maxY > rect2.maxY {
+            result.origin.y = rect2.maxY - result.height
+        }
+
+        return result
+    }
+
+    var topLeftPoint: CGPoint {
+        CGPoint(x: self.minX, y: self.minY)
+    }
+
+    var topRightPoint: CGPoint {
+        CGPoint(x: self.maxX, y: self.minY)
+    }
+
+    var bottomLeftPoint: CGPoint {
+        CGPoint(x: self.minX, y: self.maxY)
+    }
+
+    var bottomRightPoint: CGPoint {
+        CGPoint(x: self.maxX, y: self.maxY)
     }
 }
