@@ -37,22 +37,55 @@ struct PaddingConfigurationView: View {
 
                 if paddingModel.configureScreenPadding {
                     Section {
-                        paddingAdjuster("Window Gaps", value: $paddingModel.window.toDoubleBinding())
-                        paddingAdjuster(
+                        CrispValueAdjuster(
+                            "Window Gaps",
+                            value: $paddingModel.window,
+                            sliderRange: 0...100,
+                            postscript: "px",
+                            lowerClamp: true
+                        )
+                        CrispValueAdjuster(
                             "External Bar",
-                            value: $paddingModel.externalBar.toDoubleBinding(),
-                            description: "Use this if you are using a custom menubar."
+                            description: "Use this if you are using a custom menubar.",
+                            value: $paddingModel.externalBar,
+                            sliderRange: 0...100,
+                            postscript: "px",
+                            lowerClamp: true
                         )
                     }
 
                     Section("Screen Padding") {
-                        paddingAdjuster("Top", value: $paddingModel.top.toDoubleBinding())
-                        paddingAdjuster("Bottom", value: $paddingModel.bottom.toDoubleBinding())
-                        paddingAdjuster("Right", value: $paddingModel.right.toDoubleBinding())
-                        paddingAdjuster("Left", value: $paddingModel.left.toDoubleBinding())
+                        CrispValueAdjuster(
+                            "Top",
+                            value: $paddingModel.top,
+                            sliderRange: 0...100,
+                            postscript: "px",
+                            lowerClamp: true
+                        )
+                        CrispValueAdjuster(
+                            "Bottom",
+                            value: $paddingModel.bottom,
+                            sliderRange: 0...100,
+                            postscript: "px",
+                            lowerClamp: true
+                        )
+                        CrispValueAdjuster(
+                            "Right",
+                            value: $paddingModel.right,
+                            sliderRange: 0...100,
+                            postscript: "px",
+                            lowerClamp: true
+                        )
+                        CrispValueAdjuster(
+                            "Left",
+                            value: $paddingModel.left,
+                            sliderRange: 0...100,
+                            postscript: "px",
+                            lowerClamp: true
+                        )
                     }
                 } else {
-                    paddingAdjuster(
+                    CrispValueAdjuster(
                         "Padding",
                         value: Binding(
                             get: {
@@ -65,7 +98,10 @@ struct PaddingConfigurationView: View {
                                 paddingModel.right = $0
                                 paddingModel.left = $0
                             }
-                        )
+                        ),
+                        sliderRange: 0...100,
+                        postscript: "px",
+                        lowerClamp: true
                     )
                 }
             }
@@ -74,6 +110,7 @@ struct PaddingConfigurationView: View {
             .onChange(of: paddingModel.configureScreenPadding) { _ in
                 if !paddingModel.configureScreenPadding {
                     paddingModel.top = paddingModel.window
+                    paddingModel.externalBar = 0
                     paddingModel.bottom = paddingModel.window
                     paddingModel.right = paddingModel.window
                     paddingModel.left = paddingModel.window
@@ -93,36 +130,5 @@ struct PaddingConfigurationView: View {
         .frame(width: 400)
         .fixedSize(horizontal: false, vertical: true)
         .background(.background)
-    }
-
-    @ViewBuilder
-    func paddingAdjuster(_ title: String, value: Binding<Double>, description: String? = nil) -> some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Stepper(
-                    title,
-                    value: value,
-                    in: 0...100,
-                    format: .number
-                )
-                Text("px")
-            }
-
-            if let description = description {
-                Text(description)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-    }
-}
-
-extension Binding where Value == CGFloat {
-    fileprivate func toDoubleBinding() -> Binding<Double> {
-        Binding<Double>(get: {
-            Double(self.wrappedValue)
-        }, set: {
-            self.wrappedValue = CGFloat($0)
-        })
     }
 }

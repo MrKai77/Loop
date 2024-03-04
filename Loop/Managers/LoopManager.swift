@@ -355,8 +355,7 @@ class LoopManager: ObservableObject {
         self.triggerDelayTimer = nil
         processModifiers(event)
 
-        // Why sort the set? I have no idea. But it works much more reliably when sorted!
-        if self.currentlyPressedModifiers.sorted().contains(Defaults[.triggerKey].sorted()) {
+        if Defaults[.triggerKey].isSubset(of: self.currentlyPressedModifiers) {
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
@@ -384,8 +383,6 @@ class LoopManager: ObservableObject {
         } else {
             self.currentlyPressedModifiers.insert(event.keyCode)
         }
-
-        print("Current modifiers: \(currentlyPressedModifiers)")
     }
 
     private func openLoop() {

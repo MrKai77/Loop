@@ -16,19 +16,22 @@ struct PaddingPreviewView: View {
     }
 
     var body: some View {
-        ZStack {
-            HStack(spacing: paddingModel.window / 2) {
-                blurredWindow()
+        GeometryReader { geo in
+            ZStack {
+                HStack(spacing: paddingModel.window / 2) {
+                    blurredWindow()
 
-                VStack(spacing: paddingModel.window / 2) {
-                    blurredWindow()
-                    blurredWindow()
+                    VStack(spacing: paddingModel.window / 2) {
+                        blurredWindow()
+                        blurredWindow()
+                    }
                 }
+                .padding(.top, paddingModel.totalTopPadding / 2)
+                .padding(.bottom, paddingModel.bottom / 2)
+                .padding(.leading, paddingModel.left / 2)
+                .padding(.trailing, paddingModel.right / 2)
             }
-            .padding(.top, paddingModel.totalTopPadding / 2)
-            .padding(.bottom, paddingModel.bottom / 2)
-            .padding(.leading, paddingModel.left / 2)
-            .padding(.trailing, paddingModel.right / 2)
+            .frame(width: geo.size.width, height: geo.size.height)
         }
     }
 

@@ -58,15 +58,13 @@ struct MoreSettingsView: View {
 
             Section("Stage Manager") {
                 Toggle("Respect Stage Manager", isOn: $respectStageManager)
-                Slider(
+
+                CrispValueAdjuster(
+                    "Stage Strip Size",
                     value: $stageStripSize,
-                    in: 50...200,
-                    step: 15,
-                    minimumValueLabel: Text("50px"),
-                    maximumValueLabel: Text("200px")
-                ) {
-                    Text("Stage Strip Size")
-                }
+                    sliderRange: 50...200,
+                    postscript: "px"
+                )
                 .disabled(!respectStageManager)
             }
 

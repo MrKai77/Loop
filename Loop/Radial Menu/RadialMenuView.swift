@@ -35,8 +35,6 @@ struct RadialMenuView: View {
         } else {
             self._timer = State(initialValue: Timer.publish(every: -1, on: .main, in: .common).autoconnect())
         }
-
-        print(self.currentAction)
     }
 
     var body: some View {
