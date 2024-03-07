@@ -121,6 +121,8 @@ class WindowDragManager {
         self.previewController.setScreen(to: screen)
         let ignoredFrame = screenFrame.insetBy(dx: 20, dy: 20)  // 10px of snap area on each side
 
+        let oldDirection = self.direction
+
         if !ignoredFrame.contains(mousePosition) {
             self.direction = WindowDirection.processSnap(
                 mouseLocation: mousePosition,
@@ -142,6 +144,15 @@ class WindowDragManager {
         } else {
             self.direction = .noAction
             self.previewController.close()
+        }
+
+        if self.direction != oldDirection {
+            if Defaults[.hapticFeedback] {
+                NSHapticFeedbackManager.defaultPerformer.perform(
+                    NSHapticFeedbackManager.FeedbackPattern.alignment,
+                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+                )
+            }
         }
     }
 
