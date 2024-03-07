@@ -212,6 +212,12 @@ struct KeybindingsSettingsView: View {
             }
         }
 
+        Menu("Size Adjustment") {
+            ForEach(WindowDirection.sizeAdjustment) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
         Menu("More") {
             ForEach(WindowDirection.more) { direction in
                 newDirectionButton(direction)

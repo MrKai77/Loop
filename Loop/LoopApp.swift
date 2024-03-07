@@ -32,6 +32,10 @@ struct LoopApp: App {
                 ForEach(WindowDirection.general) { MenuBarResizeButton($0) }
                 Divider()
 
+                MenuBarHeaderText("Size")
+                ForEach(WindowDirection.sizeAdjustment) { MenuBarResizeButton($0) }
+                Divider()
+
                 MenuBarHeaderText("Halves")
                 ForEach(WindowDirection.halves) { MenuBarResizeButton($0) }
                 Divider()
