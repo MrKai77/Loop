@@ -165,6 +165,7 @@ class WindowDragManager {
 
         DispatchQueue.main.async {
             WindowEngine.resize(window, to: .init(self.direction), on: screen)
+            self.direction = .noAction
         }
     }
 }
