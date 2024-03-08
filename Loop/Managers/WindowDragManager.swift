@@ -121,6 +121,8 @@ class WindowDragManager {
         self.previewController.setScreen(to: screen)
         let ignoredFrame = screenFrame.insetBy(dx: 20, dy: 20)  // 10px of snap area on each side
 
+        let oldDirection = self.direction
+
         if !ignoredFrame.contains(mousePosition) {
             self.direction = WindowDirection.processSnap(
                 mouseLocation: mousePosition,
@@ -143,6 +145,15 @@ class WindowDragManager {
             self.direction = .noAction
             self.previewController.close()
         }
+
+        if self.direction != oldDirection {
+            if Defaults[.hapticFeedback] {
+                NSHapticFeedbackManager.defaultPerformer.perform(
+                    NSHapticFeedbackManager.FeedbackPattern.alignment,
+                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
+                )
+            }
+        }
     }
 
     private func attemptWindowSnap(_ window: Window) {
@@ -154,6 +165,7 @@ class WindowDragManager {
 
         DispatchQueue.main.async {
             WindowEngine.resize(window, to: .init(self.direction), on: screen)
+            self.direction = .noAction
         }
     }
 }
