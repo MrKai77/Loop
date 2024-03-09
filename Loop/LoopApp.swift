@@ -27,6 +27,19 @@ struct LoopApp: App {
             MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif
 
+            Button {
+                if let url = URL(string: "https://github.com/sponsors/MrKai77") {
+                    NSWorkspace.shared.open(url)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "heart")
+                    Text("Donate…")
+                }
+            }
+
+            Divider()
+
             Menu("Resize…") {
                 MenuBarHeaderText("General")
                 ForEach(WindowDirection.general) { MenuBarResizeButton($0) }
