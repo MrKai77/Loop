@@ -40,6 +40,16 @@ class Window {
 
         if self.role != .window,
            self.subrole != .standardWindow {
+            print("This is an invalid window")
+            return nil
+        }
+
+        // Check if this is a widget
+        // swiftlint:disable:next force_cast
+        let parent: AXUIElement = self.axWindow.getValue(.parent) as! AXUIElement
+        if let title = parent.getValue(.title) as? String,
+           title == "Notification Center" {
+            print("This is an invalid window (is a widget)")
             return nil
         }
     }
