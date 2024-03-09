@@ -177,36 +177,6 @@ extension CGKeyCode {
         CGEventSource.keyState(.combinedSessionState, key: self)
     }
 
-//    var keyCodeToString: Character? {
-//        let source = TISCopyCurrentKeyboardInputSource().takeRetainedValue()
-//        let layoutDataPointer = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData)!.assumingMemoryBound(to: UCKeyboardLayout.self)
-//        let layoutData = unsafeBitCast(layoutDataPointer, to: CFData.self)
-//        let keyLayout = unsafeBitCast(CFDataGetBytePtr(layoutData), to: UnsafePointer<CoreServices.UCKeyboardLayout>.self)
-//
-//        var deadKeyState: UInt32 = 0
-//        var chars: [UniChar] = [0, 0, 0, 0]
-//        var length = 0
-//
-//        let result = UCKeyTranslate(
-//            keyLayout,
-//            UInt16(self),
-//            UInt16(kUCKeyActionDown),
-//            0,
-//            UInt32(LMGetKbdType()),
-//            OptionBits(kUCKeyTranslateNoDeadKeysBit),
-//            &deadKeyState,
-//            4,
-//            &length,
-//            &chars
-//        )
-//
-//        if result == noErr {
-//            return String(utf16CodeUnits: chars, count: length).first
-//        } else {
-//            return nil
-//        }
-//    }
-
     // From https://github.com/sindresorhus/KeyboardShortcuts/ but edited a bit
     static let keyToString: [CGKeyCode: String] = [
         .kVK_Return: "↩",
