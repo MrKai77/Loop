@@ -45,9 +45,7 @@ class Window {
         }
 
         // Check if this is a widget
-        // swiftlint:disable:next force_cast
-        let parent: AXUIElement = self.axWindow.getValue(.parent) as! AXUIElement
-        if let title = parent.getValue(.title) as? String,
+        if let title = nsRunningApplication?.localizedName,
            title == "Notification Center" {
             print("This is an invalid window (is a widget)")
             return nil
