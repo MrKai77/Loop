@@ -40,6 +40,14 @@ class Window {
 
         if self.role != .window,
            self.subrole != .standardWindow {
+            print("This is an invalid window")
+            return nil
+        }
+
+        // Check if this is a widget
+        if let title = nsRunningApplication?.localizedName,
+           title == "Notification Center" {
+            print("This is an invalid window (is a widget)")
             return nil
         }
     }
