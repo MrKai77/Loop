@@ -66,6 +66,8 @@ extension AXUIElement {
 
 extension NSAccessibility.Attribute {
     static let fullScreen: NSAccessibility.Attribute = NSAccessibility.Attribute(rawValue: "AXFullScreen")
+    static let enhancedUserInterface = NSAccessibility.Attribute(rawValue: "AXEnhancedUserInterface")
+    static let windowIds = NSAccessibility.Attribute(rawValue: "AXWindowsIDs")
 }
 
 extension AXValue {
@@ -74,9 +76,4 @@ extension AXValue {
             AXValueCreate(type, ptr)
         }
     }
-}
-
-extension NSAccessibility.Attribute {
-    static let enhancedUserInterface = NSAccessibility.Attribute(rawValue: "AXEnhancedUserInterface")
-    static let windowIds = NSAccessibility.Attribute(rawValue: "AXWindowsIDs")
 }
