@@ -14,19 +14,12 @@ class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
     let nsRunningApplication: NSRunningApplication?
-    var processID: pid_t
 
-    init?(element: AXUIElement, pid: pid_t? = nil) {
-        var pid = pid
+    init?(element: AXUIElement) {
         self.axWindow = element
 
-        if pid == nil {
-            self.processID = 0
-            AXUIElementGetPid(self.axWindow, &processID)
-            pid = self.processID
-        } else {
-            self.processID = pid!
-        }
+        var pid = pid_t(0)
+        _ = AXUIElementGetPid(self.axWindow, &pid)
 
         self.nsRunningApplication = NSWorkspace.shared.runningApplications.first(where: {
             $0.processIdentifier == pid
@@ -56,8 +49,15 @@ class Window {
         let element = AXUIElementCreateApplication(pid)
         guard let window = element.getValue(.focusedWindow) else { return nil }
         // swiftlint:disable force_cast
-        self.init(element: window as! AXUIElement, pid: pid)
+        self.init(element: window as! AXUIElement)
         // swiftlint:enable force_cast
+    }
+
+    func getPid() -> pid_t? {
+        var pid = pid_t(0)
+        let result = AXUIElementGetPid(self.axWindow, &pid)
+        guard result == .success else { return nil }
+        return pid
     }
 
     var role: NSAccessibility.Role? {
@@ -72,6 +72,24 @@ class Window {
 
     var title: String? {
         return self.axWindow.getValue(.title) as? String
+    }
+
+    var enhancedUserInterface: Bool? {
+        get {
+            guard let pid = self.getPid() else { return nil }
+            let appWindow = AXUIElementCreateApplication(pid)
+            return appWindow.getValue(.enhancedUserInterface) as? Bool
+        }
+        set {
+            guard
+                let newValue = newValue,
+                let pid = self.getPid()
+            else {
+                return
+            }
+            let appWindow = AXUIElementCreateApplication(pid)
+            appWindow.setValue(.enhancedUserInterface, value: newValue)
+        }
     }
 
     func activate() {
@@ -164,7 +182,20 @@ class Window {
         return CGRect(origin: self.position, size: self.size)
     }
 
-    func setFrame(_ rect: CGRect, animate: Bool = false, sizeFirst: Bool = false, completionHandler: (() -> Void)? = nil) {
+    func setFrame(
+        _ rect: CGRect,
+        animate: Bool = false,
+        sizeFirst: Bool = false,
+        completionHandler: (() -> Void)? = nil
+    ) {
+        let enhancedUI = self.enhancedUserInterface ?? false
+
+        if enhancedUI {
+            let appName = nsRunningApplication?.localizedName
+            print("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.")
+            self.enhancedUserInterface = false
+        }
+
         if animate {
             let animation = WindowTransformAnimation(rect, window: self, completionHandler: completionHandler)
             animation.startInBackground()
@@ -178,6 +209,10 @@ class Window {
             if let completionHandler = completionHandler {
                 completionHandler()
             }
+        }
+
+        if enhancedUI {
+            self.enhancedUserInterface = true
         }
     }
 

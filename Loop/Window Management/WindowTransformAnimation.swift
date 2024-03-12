@@ -45,7 +45,8 @@ class WindowTransformAnimation: NSAnimation {
                 height: oldFrame.size.height + value * (targetFrame.size.height - oldFrame.size.height)
             )
 
-            window.setFrame(newFrame)
+            window.setPosition(newFrame.origin)
+            window.setSize(newFrame.size)
 
             if let completionHandler = completionHandler, currentProgress == 1 {
                 completionHandler()
