@@ -328,6 +328,8 @@ class LoopManager: ObservableObject {
         guard PermissionsManager.Accessibility.getStatus() else { return }
 
         self.targetWindow = WindowEngine.getTargetWindow()
+        guard self.targetWindow != nil else { return }
+        
         self.initialMousePosition = NSEvent.mouseLocation
         self.screenToResizeOn = NSScreen.screenWithMouse
 

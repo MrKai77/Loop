@@ -11,7 +11,8 @@ import Sparkle
 struct SettingsView: View {
     @State var currentSettingsTab = 1
     private let updater = SoftwareUpdater()
-
+    private var appListManager = AppListManager()
+    
     var body: some View {
         TabView(selection: $currentSettingsTab) {
             GeneralSettingsView()
@@ -47,8 +48,18 @@ struct SettingsView: View {
                 .frame(width: 500)
                 .frame(minHeight: 500, maxHeight: 680)
 
-            MoreSettingsView()
+            BlackListSettingsView()
                 .tag(5)
+                .tabItem {
+                    Image(systemName: "xmark.rectangle")
+                    Text("Black list")
+                }
+                .environmentObject(appListManager)
+                .frame(width: 500)
+                .frame(minHeight: 500, maxHeight: 680)
+
+            MoreSettingsView()
+                .tag(6)
                 .tabItem {
                     Image(systemName: "ellipsis.circle")
                     Text("More")
