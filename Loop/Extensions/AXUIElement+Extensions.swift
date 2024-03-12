@@ -75,3 +75,8 @@ extension AXValue {
         }
     }
 }
+
+extension NSAccessibility.Attribute {
+    static let enhancedUserInterface = NSAccessibility.Attribute(rawValue: "AXEnhancedUserInterface")
+    static let windowIds = NSAccessibility.Attribute(rawValue: "AXWindowsIDs")
+}
