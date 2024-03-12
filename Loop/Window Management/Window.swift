@@ -197,15 +197,7 @@ class Window {
         }
 
         if animate {
-            let animation = WindowTransformAnimation(rect, window: self) {
-                if let completionHandler = completionHandler {
-                    completionHandler()
-                }
-
-                if enhancedUI {
-                    self.enhancedUserInterface = true
-                }
-            }
+            let animation = WindowTransformAnimation(rect, window: self, completionHandler: completionHandler)
             animation.startInBackground()
         } else {
             if sizeFirst {
@@ -217,10 +209,10 @@ class Window {
             if let completionHandler = completionHandler {
                 completionHandler()
             }
+        }
 
-            if enhancedUI {
-                self.enhancedUserInterface = true
-            }
+        if enhancedUI {
+            self.enhancedUserInterface = true
         }
     }
 
