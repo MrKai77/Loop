@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		116CE7302B9F21520014C19D /* BlackListSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CE72F2B9F21520014C19D /* BlackListSettingsView.swift */; };
+		116CE7302B9F21520014C19D /* ExcludeListSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */; };
 		116CE7322B9F24D80014C19D /* AppListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CE7312B9F24D80014C19D /* AppListManager.swift */; };
 		116CE7352B9F31580014C19D /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 116CE7342B9F31580014C19D /* Algorithms */; };
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; };
@@ -90,7 +90,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		116CE72F2B9F21520014C19D /* BlackListSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackListSettingsView.swift; sourceTree = "<group>"; };
+		116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcludeListSettingsView.swift; sourceTree = "<group>"; };
 		116CE7312B9F24D80014C19D /* AppListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppListManager.swift; sourceTree = "<group>"; };
 		A80397D32A932993006D2796 /* MenuBarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -348,7 +348,7 @@
 				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
 				A8DCC9892981F43F00D41065 /* PreviewSettingsView.swift */,
 				A84497CE2B3A57E8003D4CF3 /* Keybindings */,
-				116CE72F2B9F21520014C19D /* BlackListSettingsView.swift */,
+				116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */,
 				A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */,
 			);
 			path = Settings;
@@ -608,7 +608,7 @@
 				A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */,
 				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
 				A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */,
-				116CE7302B9F21520014C19D /* BlackListSettingsView.swift in Sources */,
+				116CE7302B9F21520014C19D /* ExcludeListSettingsView.swift in Sources */,
 				A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

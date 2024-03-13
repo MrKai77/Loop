@@ -22,8 +22,8 @@ extension Defaults.Keys {
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: true)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
-    static let applicationBlackList = Key<[String]>("applicationBlackList", default: [])
-    
+    static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
+
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)

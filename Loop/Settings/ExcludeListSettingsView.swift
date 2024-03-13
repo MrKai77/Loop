@@ -1,5 +1,5 @@
 //
-//  BlackListSettingsView.swift
+//  ExcludeListSettingsView.swift
 //  Loop
 //
 //  Created by Dirk Mika on 11.03.24.
@@ -8,24 +8,23 @@
 import SwiftUI
 import Defaults
 
-
-struct BlackListSettingsView: View {
+struct ExcludeListSettingsView: View {
     @EnvironmentObject var appListManager: AppListManager
 
-    @Default(.applicationBlackList) var blackList
-    
+    @Default(.applicationExcludeList) var excludeList
+
     @State private var selection: String?
-    
+
     var body: some View {
         ZStack {
             Form {
                 Section {
                     VStack(spacing: 0) {
-                        if self.blackList.isEmpty {
+                        if self.excludeList.isEmpty {
                             HStack {
                                 Spacer()
                                 VStack {
-                                    Text("No blacklisted applications")
+                                    Text("No excluded applications")
                                         .font(.title3)
                                     Text("Press + to add an application!")
                                         .font(.caption)
@@ -36,15 +35,15 @@ struct BlackListSettingsView: View {
                             .padding()
                         } else {
                             List(selection: $selection) {
-                                ForEach(blackList, id:\.self) { entry in
-                                    Text(appListManager.installedApps.first(where: { $0.bundleID == entry } )?.displayName ?? entry)
+                                ForEach(excludeList, id: \.self) { entry in
+                                    Text(appListManager.installedApps.first(where: { $0.bundleID == entry })?.displayName ?? entry)
                                 }
                             }
                             .listStyle(.bordered(alternatesRowBackgrounds: true))
                         }
-                        
+
                         Divider()
-                        
+
                         Rectangle()
                             .frame(height: 20)
                             .foregroundStyle(.quinary)
@@ -64,11 +63,11 @@ struct BlackListSettingsView: View {
                                             .aspectRatio(1, contentMode: .fit)
                                             .padding(-5)
                                     })
-                                    
+
                                     Divider()
-                                    
+
                                     Button {
-                                        self.blackList.removeAll(where: {
+                                        self.excludeList.removeAll(where: {
                                             $0 == selection
                                         })
                                     } label: {
@@ -84,7 +83,7 @@ struct BlackListSettingsView: View {
                                             .padding(-5)
                                     }
                                     .disabled(self.selection == nil)
-                                    
+
                                     Spacer()
                                 }
                                 .buttonStyle(.plain)
@@ -94,28 +93,31 @@ struct BlackListSettingsView: View {
                     .ignoresSafeArea()
                     .padding(-10)
                 } header: {
-                    Text("Blacklisted applications")
-                } footer: {
-                    Text("Applications on this blacklist are ignored when looping.")
+                    VStack(alignment: .leading) {
+                        Text("Excluded applications")
+                        Text("Applications on the exclude list are ignored when looping.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
             .formStyle(.grouped)
         }
     }
-    
+
     @ViewBuilder
     func installedAppsMenu() -> some View {
         let apps = appListManager.installedApps
-            .filter( { !self.blackList.contains($0.bundleID) } )
-            .grouped(by: { $0.installationFolder } )
-        let installationFolders = apps.keys.sorted(by: { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending } )
-        
-        ForEach(installationFolders, id:\.self) { folder in
+            .filter({ !self.excludeList.contains($0.bundleID) })
+            .grouped(by: { $0.installationFolder })
+        let installationFolders = apps.keys.sorted(by: { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending })
+
+        ForEach(installationFolders, id: \.self) { folder in
             Section(folder) {
-                let appsInFolder = apps[folder]!.sorted(by: { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending } )
+                let appsInFolder = apps[folder]!.sorted(by: { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending })
                 ForEach(appsInFolder) { app in
                     Button(action: {
-                        self.blackList.append(app.bundleID)
+                        self.excludeList.append(app.bundleID)
                     }, label: {
                         Text(app.displayName)
                     })
@@ -126,5 +128,6 @@ struct BlackListSettingsView: View {
 }
 
 #Preview {
-    BlackListSettingsView()
+    ExcludeListSettingsView()
+        .environmentObject(AppListManager())
 }

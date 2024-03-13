@@ -48,7 +48,7 @@ struct SettingsView: View {
                 .frame(width: 500)
                 .frame(minHeight: 500, maxHeight: 680)
 
-            BlackListSettingsView()
+            ExcludeListSettingsView()
                 .tag(5)
                 .tabItem {
                     Image(systemName: "xmark.rectangle")
