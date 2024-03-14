@@ -65,7 +65,8 @@ struct WindowEngine {
 
         print("Target window frame: \(targetWindowFrame)")
 
-        var animate = (!supressAnimations && Defaults[.animateWindowResizes])
+        let enhancedUI = window.enhancedUserInterface ?? false
+        var animate = (!supressAnimations && Defaults[.animateWindowResizes] && !enhancedUI)
         if animate {
             if PermissionsManager.ScreenRecording.getStatus() == false {
                 PermissionsManager.ScreenRecording.requestAccess()
