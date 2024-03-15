@@ -35,25 +35,34 @@ class AppListManager: ObservableObject {
         if let appFolder = FileManager.default.urls(for: .applicationDirectory, in: .localDomainMask).first {
             qry.searchScopes = [appFolder]
         }
-        NotificationCenter.default.addObserver(forName: .NSMetadataQueryDidFinishGathering, 
-                                               object: nil,
-                                               queue: nil,
-                                               using: queryDidFinishGathering)
+
+        NotificationCenter.default.addObserver(
+            forName: .NSMetadataQueryDidFinishGathering,
+            object: nil,
+            queue: nil,
+            using: queryDidFinishGathering
+        )
         qry.start()
     }
 
     private func queryDidFinishGathering(notification: Notification) {
         if let items  = qry.results as? [NSMetadataItem] {
             self.installedApps = items.compactMap({ item in
-                guard let bundleId = item.value(forAttribute: NSMetadataItemCFBundleIdentifierKey) as? String,
-                      let displayName = item.value(forAttribute: NSMetadataItemDisplayNameKey) as? String,
-                      let path = item.value(forAttribute: NSMetadataItemPathKey) as? String,
-                      let installationFolder = URL(string: path)?.deletingLastPathComponent().absoluteString.removingPercentEncoding
+                guard
+                    let bundleId = item.value(forAttribute: NSMetadataItemCFBundleIdentifierKey) as? String,
+                    let displayName = item.value(forAttribute: NSMetadataItemDisplayNameKey) as? String,
+                    let path = item.value(forAttribute: NSMetadataItemPathKey) as? String,
+                    let installationFolder = URL(string: path)?.deletingLastPathComponent().absoluteString.removingPercentEncoding
                 else {
                     return nil
                 }
                 let icon = NSWorkspace.shared.icon(forFile: path)
-                return App(bundleID: bundleId, icon: icon, displayName: displayName, installationFolder: installationFolder)
+                return App(
+                    bundleID: bundleId,
+                    icon: icon,
+                    displayName: displayName,
+                    installationFolder: installationFolder
+                )
             })
         }
     }

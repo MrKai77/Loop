@@ -24,7 +24,7 @@ struct ExcludeListSettingsView: View {
                             HStack {
                                 Spacer()
                                 VStack {
-                                    Text("No excluded applications")
+                                    Text("No Excluded Applications")
                                         .font(.title3)
                                     Text("Press + to add an application!")
                                         .font(.caption)
@@ -103,7 +103,7 @@ struct ExcludeListSettingsView: View {
                     .padding(-10)
                 } header: {
                     VStack(alignment: .leading) {
-                        Text("Excluded applications")
+                        Text("Excluded Applications")
                         Text("Applications in the exclude list are ignored by Loop.")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -119,11 +119,15 @@ struct ExcludeListSettingsView: View {
         let apps = appListManager.installedApps
             .filter({ !self.excludeList.contains($0.bundleID) })
             .grouped(by: { $0.installationFolder })
-        let installationFolders = apps.keys.sorted(by: { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending })
+        let installationFolders = apps.keys.sorted(by: {
+            $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
+        })
 
         ForEach(installationFolders, id: \.self) { folder in
             Section(folder) {
-                let appsInFolder = apps[folder]!.sorted(by: { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending })
+                let appsInFolder = apps[folder]!.sorted(by: {
+                    $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending
+                })
                 ForEach(appsInFolder) { app in
                     Button(action: {
                         self.excludeList.append(app.bundleID)
