@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Defaults
 
 @_silgen_name("_AXUIElementGetWindow") @discardableResult
 func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError
@@ -97,6 +98,14 @@ class Window {
         if let runningApplication = self.nsRunningApplication {
             runningApplication.activate()
         }
+    }
+
+    var isAppExcluded: Bool {
+        if let nsRunningApplication,
+           let bundleId = nsRunningApplication.bundleIdentifier {
+            return Defaults[.applicationExcludeList].contains(bundleId)
+        }
+        return false
     }
 
     var isFullscreen: Bool {
