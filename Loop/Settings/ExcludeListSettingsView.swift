@@ -36,7 +36,16 @@ struct ExcludeListSettingsView: View {
                         } else {
                             List(selection: $selection) {
                                 ForEach(excludeList, id: \.self) { entry in
-                                    Text(appListManager.installedApps.first(where: { $0.bundleID == entry })?.displayName ?? entry)
+                                    if let app = appListManager.installedApps.first(where: { $0.bundleID == entry }) {
+                                        Label {
+                                            Text(app.displayName)
+                                                .padding(.leading, 8)
+                                        } icon: {
+                                            Image(nsImage: app.icon)
+                                        }
+                                    } else {
+                                        Text(entry)
+                                    }
                                 }
                             }
                             .listStyle(.bordered(alternatesRowBackgrounds: true))
@@ -95,7 +104,7 @@ struct ExcludeListSettingsView: View {
                 } header: {
                     VStack(alignment: .leading) {
                         Text("Excluded applications")
-                        Text("Applications on the exclude list are ignored when looping.")
+                        Text("Applications in the exclude list are ignored by Loop.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -119,7 +128,11 @@ struct ExcludeListSettingsView: View {
                     Button(action: {
                         self.excludeList.append(app.bundleID)
                     }, label: {
-                        Text(app.displayName)
+                        Label {
+                            Text(app.displayName)
+                        } icon: {
+                            Image(nsImage: app.icon)
+                        }
                     })
                 }
             }

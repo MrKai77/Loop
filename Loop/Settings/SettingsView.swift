@@ -12,7 +12,7 @@ struct SettingsView: View {
     @State var currentSettingsTab = 1
     private let updater = SoftwareUpdater()
     private var appListManager = AppListManager()
-    
+
     var body: some View {
         TabView(selection: $currentSettingsTab) {
             GeneralSettingsView()
@@ -51,12 +51,12 @@ struct SettingsView: View {
             ExcludeListSettingsView()
                 .tag(5)
                 .tabItem {
-                    Image(systemName: "xmark.rectangle")
-                    Text("Black list")
+                    Image(systemName: "xmark.app")
+                    Text("Excluded Apps")
                 }
                 .environmentObject(appListManager)
                 .frame(width: 500)
-                .frame(minHeight: 500, maxHeight: 680)
+                .frame(maxHeight: 680)
 
             MoreSettingsView()
                 .tag(6)

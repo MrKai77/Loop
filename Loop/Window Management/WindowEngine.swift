@@ -124,7 +124,6 @@ struct WindowEngine {
     static var frontmostWindow: Window? {
         guard
             let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
-            !Defaults[.applicationExcludeList].contains(app.bundleIdentifier ?? ""),
             let window = Window(pid: app.processIdentifier)
         else {
             return nil

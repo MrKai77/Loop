@@ -13,6 +13,7 @@ class AppListManager: ObservableObject {
     struct App: Identifiable {
         var id: String { bundleID }
         var bundleID: String
+        var icon: NSImage
         var displayName: String
         var installationFolder: String
     }
@@ -51,7 +52,8 @@ class AppListManager: ObservableObject {
                 else {
                     return nil
                 }
-                return App(bundleID: bundleId, displayName: displayName, installationFolder: installationFolder)
+                let icon = NSWorkspace.shared.icon(forFile: path)
+                return App(bundleID: bundleId, icon: icon, displayName: displayName, installationFolder: installationFolder)
             })
         }
     }

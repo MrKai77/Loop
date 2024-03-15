@@ -139,7 +139,7 @@ class LoopManager: ObservableObject {
             )
         }
     }
-    
+
     private func changeAction(_ action: WindowAction) {
         guard
             self.currentAction != action,
@@ -329,7 +329,8 @@ class LoopManager: ObservableObject {
 
         self.targetWindow = WindowEngine.getTargetWindow()
         guard self.targetWindow != nil else { return }
-        
+        guard self.targetWindow!.isAppExcluded != true else { return }
+
         self.initialMousePosition = NSEvent.mouseLocation
         self.screenToResizeOn = NSScreen.screenWithMouse
 
