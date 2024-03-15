@@ -55,6 +55,7 @@
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
 		A86DAE2A2B3CCF2900B968F0 /* CustomCyclingKeybindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */; };
 		A86DAE2C2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86DAE2B2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift */; };
+		A86DDA022BA4F6E900C0DFF7 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A86DDA012BA4F6E900C0DFF7 /* Sparkle */; };
 		A87376F62AA288EB001890F4 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87376F52AA288EB001890F4 /* Window.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
@@ -87,7 +88,6 @@
 		A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* WindowAction.swift */; };
 		A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */; };
 		A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */; };
-		A8F063702985B2220010C33D /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A8F0636F2985B2220010C33D /* Sparkle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -184,8 +184,8 @@
 				A84F9E292BA4F20C00CF3E09 /* Algorithms in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
+				A86DDA022BA4F6E900C0DFF7 /* Sparkle in Frameworks */,
 				A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */,
-				A8F063702985B2220010C33D /* Sparkle in Frameworks */,
 				A8063A712B195C9100EAB3D9 /* SettingsAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -453,10 +453,10 @@
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
-				A8F0636F2985B2220010C33D /* Sparkle */,
 				A80397D12A93287C006D2796 /* MenuBarExtraAccess */,
 				A8063A702B195C9100EAB3D9 /* SettingsAccess */,
 				A84F9E282BA4F20C00CF3E09 /* Algorithms */,
+				A86DDA012BA4F6E900C0DFF7 /* Sparkle */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -897,15 +897,15 @@
 			package = 116CE7332B9F31580014C19D /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
 		};
+		A86DDA012BA4F6E900C0DFF7 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A8F0636E2985B2220010C33D /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
-		};
-		A8F0636F2985B2220010C33D /* Sparkle */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A8F0636E2985B2220010C33D /* XCRemoteSwiftPackageReference "Sparkle" */;
-			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
