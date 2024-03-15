@@ -17,7 +17,7 @@ jobs:
     
       - name: Switch Xcode version
         run: |
-          sudo xcode-select -s "/Applications/Xcode_15.2.app"
+          sudo xcode-select -s "/Applications/Xcode_15.3.app"
           /usr/bin/xcodebuild -version
 
       - name: Install dependencies
