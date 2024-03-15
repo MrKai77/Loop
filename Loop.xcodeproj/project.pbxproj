@@ -10,6 +10,7 @@
 		116CE7302B9F21520014C19D /* ExcludeListSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */; };
 		116CE7322B9F24D80014C19D /* AppListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CE7312B9F24D80014C19D /* AppListManager.swift */; };
 		116CE7352B9F31580014C19D /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 116CE7342B9F31580014C19D /* Algorithms */; };
+		117C89682BA4CD6F00A32CE7 /* NSImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C89672BA4CD6F00A32CE7 /* NSImage+Extensions.swift */; };
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; };
 		A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397D32A932993006D2796 /* MenuBarIconView.swift */; };
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
@@ -92,6 +93,7 @@
 /* Begin PBXFileReference section */
 		116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcludeListSettingsView.swift; sourceTree = "<group>"; };
 		116CE7312B9F24D80014C19D /* AppListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppListManager.swift; sourceTree = "<group>"; };
+		117C89672BA4CD6F00A32CE7 /* NSImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Extensions.swift"; sourceTree = "<group>"; };
 		A80397D32A932993006D2796 /* MenuBarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
@@ -235,8 +237,8 @@
 		A8330AD52A3AC29C00673C8D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */,
 				A8330ACA2A3AC1C000673C8D /* Angle+Extensions.swift */,
+				A83667C72A3D7D910001D630 /* AXUIElement+Extensions.swift */,
 				A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */,
 				A8330AD02A3AC25100673C8D /* CaseIterable+Extensions.swift */,
 				A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */,
@@ -245,10 +247,11 @@
 				A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */,
 				A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */,
 				A8330AC42A3AC15900673C8D /* Notification+Extensions.swift */,
+				117C89672BA4CD6F00A32CE7 /* NSImage+Extensions.swift */,
 				A8330AC62A3AC19500673C8D /* NSScreen+Extensions.swift */,
 				A84497D12B3B88A6003D4CF3 /* Optional+Extensions.swift */,
-				A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */,
 				A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */,
+				A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -467,7 +470,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					A8E59C34297F5E9A0064D4BA = {
 						CreatedOnToolsVersion = 14.2;
@@ -580,6 +583,7 @@
 				A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */,
 				A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */,
 				A8330AD42A3AC27600673C8D /* WindowDirection.swift in Sources */,
+				117C89682BA4CD6F00A32CE7 /* NSImage+Extensions.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A84497C92B393595003D4CF3 /* CustomKeybindView.swift in Sources */,
 				A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */,

@@ -128,11 +128,9 @@ struct ExcludeListSettingsView: View {
                     Button(action: {
                         self.excludeList.append(app.bundleID)
                     }, label: {
-                        Label {
-                            Text(app.displayName)
-                        } icon: {
-                            Image(nsImage: app.icon)
-                        }
+                        // Resizing the image with SwiftUI did not work.  Therefore we change the size of the NSImage.
+                        Image(nsImage: app.icon.resized(to: NSSize(width: 16.0, height: 16.0)))
+                        Text(app.displayName)
                     })
                 }
             }
