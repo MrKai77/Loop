@@ -13,7 +13,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     private let loopManager = LoopManager()
     private let windowDragManager = WindowDragManager()
-    private var canOpenSettings = false
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -35,14 +34,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         loopManager.startObservingKeys()
         windowDragManager.addObservers()
 
-        if self.launchedAsLoginItem {
-            // Ensures Loop's settings window isn't opened upon login
-            // (cause MANY system processes are already currently initializing at this point)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.canOpenSettings = true
-            }
-        } else {
-            self.canOpenSettings = true
+        if !self.launchedAsLoginItem {
+            self.openSettings()
         }
     }
 
@@ -54,9 +47,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         return false
     }
 
-    func applicationWillBecomeActive(_ notification: Notification) {
-        guard canOpenSettings else { return }
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         self.openSettings()
+        return true
     }
 
     // Mostly taken from https://github.com/Wouter01/SwiftUI-WindowManagement
