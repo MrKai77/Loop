@@ -18,7 +18,6 @@ struct TriggerKeycorder: View {
     @State private var eventMonitor: NSEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var isHovering: Bool = false
-    @State private var suggestDisablingCapsLock: Bool = false
     @State private var isActive: Bool = false
     @State private var isCurrentlyPressed: Bool = false
     @State private var tooManyKeysPopup: Bool = false
@@ -74,10 +73,6 @@ struct TriggerKeycorder: View {
         })
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
-        .popover(isPresented: $suggestDisablingCapsLock, arrowEdge: .bottom, content: {
-            Text("Your Caps Lock key is on! Disable it to correctly assign a key.")
-                .padding(8)
-        })
         .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom, content: {
             Text("You can only use up to \(keyLimit) keys in your trigger key.")
                 .multilineTextAlignment(.center)
@@ -109,14 +104,6 @@ struct TriggerKeycorder: View {
                 finishedObservingKeys(wasForced: true)
             }
 
-            // When caps lock is on, Loop may misread keybinds, so we need  to make sure it's off
-            guard !event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) else {
-                self.suggestDisablingCapsLock = true
-                self.selectionKey = []
-                return
-            }
-            self.suggestDisablingCapsLock = false
-
             if CGKeyCode.keyToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
                 self.selectionKey.insert(event.keyCode)
                 withAnimation(.snappy(duration: 0.1)) {
@@ -124,16 +111,12 @@ struct TriggerKeycorder: View {
                 }
             }
 
-            let keyUpValue = 256
-
-            // on keyup
-            if event.modifierFlags.rawValue == keyUpValue && !self.selectionKey.isEmpty {
+            if event.modifierFlags.wasKeyUp && !self.selectionKey.isEmpty {
                 self.finishedObservingKeys()
                 return
             }
 
-            // on keydown
-            if event.modifierFlags.rawValue != keyUpValue && self.selectionKey.isEmpty {
+            if !event.modifierFlags.wasKeyUp && self.selectionKey.isEmpty {
                 self.shouldShake.toggle()
             }
         }
