@@ -25,6 +25,7 @@ struct WallpaperView: View, Equatable {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: geo.size.width, height: geo.size.height)
             }
+            .allowsHitTesting(false)
         }
     }
 }
