@@ -111,6 +111,17 @@ struct TriggerKeycorder: View {
                 }
             }
 
+            // Backup system in case keys are pressed at the exact same time
+            let flags = event.modifierFlags.convertToCGKeyCode()
+            if flags.count > 1 && !self.selectionKey.contains(flags) {
+                for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
+                    self.selectionKey.insert(key)
+                    withAnimation(.snappy(duration: 0.1)) {
+                        self.isCurrentlyPressed = true
+                    }
+                }
+            }
+
             if event.modifierFlags.wasKeyUp && !self.selectionKey.isEmpty {
                 self.finishedObservingKeys()
                 return

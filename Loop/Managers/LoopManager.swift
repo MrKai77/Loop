@@ -313,6 +313,14 @@ class LoopManager: ObservableObject {
         } else {
             self.currentlyPressedModifiers.insert(event.keyCode)
         }
+
+        // Backup system in case keys are pressed at the exact same time
+        let flags = event.modifierFlags.convertToCGKeyCode()
+        if flags.count > 1 && !self.currentlyPressedModifiers.contains(flags) {
+            for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
+                self.currentlyPressedModifiers.insert(key)
+            }
+        }
     }
 
     private func openLoop() {
