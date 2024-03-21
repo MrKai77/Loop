@@ -282,10 +282,6 @@ class LoopManager: ObservableObject {
     }
 
     private func handleLoopKeypress(_ event: NSEvent) {
-        if event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.capsLock) {
-            self.closeLoop(forceClose: true)
-        }
-
         self.triggerDelayTimer = nil
         processModifiers(event)
 
@@ -312,7 +308,7 @@ class LoopManager: ObservableObject {
     private func processModifiers(_ event: NSEvent) {
         if self.currentlyPressedModifiers.contains(event.keyCode) {
             self.currentlyPressedModifiers.remove(event.keyCode)
-        } else if event.modifierFlags.rawValue == 256 {
+        } else if event.modifierFlags.wasKeyUp {
             self.currentlyPressedModifiers = []
         } else {
             self.currentlyPressedModifiers.insert(event.keyCode)
