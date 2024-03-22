@@ -172,29 +172,12 @@ struct WindowEngine {
         _ screenFrame: CGRect,
         _ action: WindowAction
     ) -> CGRect? {
-        let windowFrame = window.frame
         let direction = action.direction
 
         var newWindowFrame: CGRect = .zero
         newWindowFrame.origin = screenFrame.origin
 
         switch direction {
-        case .center:
-            newWindowFrame = CGRect(
-                x: screenFrame.midX - windowFrame.width / 2,
-                y: screenFrame.midY - windowFrame.height / 2,
-                width: windowFrame.width,
-                height: windowFrame.height
-            )
-        case .macOSCenter:
-            let yOffset = getMacOSCenterYOffset(windowFrame.height, screenHeight: screenFrame.height)
-
-            newWindowFrame = CGRect(
-                x: screenFrame.midX - windowFrame.width / 2,
-                y: screenFrame.midY - windowFrame.height / 2 + yOffset,
-                width: windowFrame.width,
-                height: windowFrame.height
-            )
         case .undo:
             let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
             if let previousResizeFrame = self.generateWindowFrame(window, screenFrame, previousDirection) {
@@ -209,7 +192,7 @@ struct WindowEngine {
                 return nil
             }
         default:
-            let frameMultiplyValues = action.getFrameMultiplyValues()
+            let frameMultiplyValues = action.getFrameMultiplyValues(window: window)
             newWindowFrame.origin.x += screenFrame.width * frameMultiplyValues.minX
             newWindowFrame.origin.y += screenFrame.height * frameMultiplyValues.minY
             newWindowFrame.size.width += screenFrame.width * frameMultiplyValues.width

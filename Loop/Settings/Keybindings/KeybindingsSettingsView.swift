@@ -176,12 +176,6 @@ struct KeybindingsSettingsView: View {
             }
         }
 
-        Menu("Cyclable") {
-            ForEach(WindowDirection.cyclable) { direction in
-                newDirectionButton(direction)
-            }
-        }
-
         Menu("Halves") {
             ForEach(WindowDirection.halves) { direction in
                 newDirectionButton(direction)
@@ -208,6 +202,12 @@ struct KeybindingsSettingsView: View {
 
         Menu("Screen Switching") {
             ForEach(WindowDirection.screenSwitching) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
+        Menu("Positioning") {
+            ForEach(WindowDirection.positioning) { direction in
                 newDirectionButton(direction)
             }
         }

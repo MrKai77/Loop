@@ -61,7 +61,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     // Returns the window frame within the boundaries of (0, 0) to (1, 1)
     // Will be on the screen with mouse if needed.
-    func getFrameMultiplyValues() -> CGRect {
+    func getFrameMultiplyValues(window: Window) -> CGRect {
         guard self.direction != .cycle else {
             return .zero
         }
@@ -74,14 +74,48 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.origin.y = bounds.height * frameMultiplyValues.minY
             result.size.width = bounds.width * frameMultiplyValues.width
             result.size.height = bounds.height * frameMultiplyValues.height
-        } else {
-            guard direction == .custom else { return result }
+        } else if direction.isPositioning {
+            guard let screenFrame = NSScreen.screenWithMouse?.visibleFrame else { return result }
+            let windowSize = window.size
+            result.size.width = windowSize.width / screenFrame.width
+            result.size.height = windowSize.height / screenFrame.height
 
+            switch direction {
+            case .macOSCenter:
+                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
+                result.origin.x = bounds.midX - result.width / 2
+                result.origin.y = (bounds.midY - result.height / 2) + yOffset
+            case .center:
+                result.origin.x = bounds.midX - result.width / 2
+                result.origin.y = bounds.midY - result.height / 2
+            case .top:
+                result.origin.x = bounds.midX - result.width / 2
+            case .topRight:
+                result.origin.x = bounds.maxX - result.width
+            case .right:
+                result.origin.x = bounds.maxX - result.width
+                result.origin.y = bounds.midY - result.height / 2
+            case .bottomRight:
+                result.origin.x = bounds.maxX - result.width
+                result.origin.y = bounds.maxY - result.height
+            case .bottom:
+                result.origin.x = bounds.midX - result.width / 2
+                result.origin.y = bounds.maxY - result.height
+            case .bottomLeft:
+                result.origin.y = bounds.maxY - result.height
+            case .left:
+                result.origin.y = bounds.midY - result.height / 2
+            case .topLeft:
+                break
+            default:
+                break
+            }
+        } else if direction == .custom {
             switch measureSystem {
             case .pixels:
                 guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
-                result.size.width += (width ?? screenFrame.width) / screenFrame.width
-                result.size.height += (height ?? screenFrame.height) / screenFrame.height
+                result.size.width = (width ?? screenFrame.width) / screenFrame.width
+                result.size.height = (height ?? screenFrame.height) / screenFrame.height
             case .percentage:
                 result.size.width = bounds.width * ((width ?? 0) / 100.0)
                 result.size.height = bounds.height * ((height ?? 0) / 100.0)
@@ -331,137 +365,5 @@ extension WindowAction {
         case merge
         case erase
         case cancel
-    }
-}
-
-// MARK: - Preview Window
-extension WindowAction {
-    func previewWindowXOffset(_ parentWidth: CGFloat, _ window: Window?) -> CGFloat {
-        var xLocation = parentWidth * (self.direction.frameMultiplyValues?.minX ?? 0)
-        let previewWidth = previewWindowWidth(parentWidth, window)
-
-        if self.direction == .custom {
-            switch self.anchor {
-            case .topLeft:
-                xLocation = 0
-            case .top:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            case .topRight:
-                xLocation = parentWidth - previewWidth
-            case .right:
-                xLocation = parentWidth - previewWidth
-            case .bottomRight:
-                xLocation = parentWidth - previewWidth
-            case .bottom:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            case .bottomLeft:
-                xLocation = 0
-            case .left:
-                xLocation = 0
-            case .center:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            case .macOSCenter:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            default:
-                xLocation = 0
-            }
-        }
-
-        if self.direction == .center || self.direction == .macOSCenter {
-            xLocation = (parentWidth / 2) - (previewWidth / 2)
-        }
-
-        return xLocation
-    }
-
-    func previewWindowYOffset(_ parentHeight: CGFloat, _ window: Window?) -> CGFloat {
-        var yLocation = parentHeight * (self.direction.frameMultiplyValues?.minY ?? 0)
-        let previewHeight = previewWindowHeight(parentHeight, window)
-
-        if self.direction == .custom {
-            switch self.anchor {
-            case .topLeft:
-                yLocation = 0
-            case .top:
-                yLocation = 0
-            case .topRight:
-                yLocation = 0
-            case .right:
-                yLocation = (parentHeight / 2) - (previewHeight / 2)
-            case .bottomRight:
-                yLocation = parentHeight - previewHeight
-            case .bottom:
-                yLocation = parentHeight - previewHeight
-            case .bottomLeft:
-                yLocation = parentHeight - previewHeight
-            case .left:
-                yLocation = (parentHeight / 2) - (previewHeight / 2)
-            case .center:
-                yLocation = (parentHeight / 2) - (previewHeight / 2)
-            case .macOSCenter:
-                let yOffset = WindowEngine.getMacOSCenterYOffset(previewHeight, screenHeight: parentHeight)
-                yLocation = (parentHeight / 2) - (previewHeight / 2) + yOffset
-            default:
-                yLocation = 0
-            }
-        }
-
-        if self.direction == .center {
-            yLocation = (parentHeight / 2) - (previewHeight / 2)
-        }
-
-        if self.direction == .macOSCenter {
-            let yOffset = WindowEngine.getMacOSCenterYOffset(
-                previewHeight - (Defaults[.padding].window * 2),
-                screenHeight: parentHeight
-            )
-            yLocation = (parentHeight / 2) - (previewHeight / 2) + yOffset
-        }
-
-        return yLocation
-    }
-
-    func previewWindowWidth(_ parentWidth: CGFloat, _ window: Window?) -> CGFloat {
-        var width = parentWidth * (self.direction.frameMultiplyValues?.width ?? 0)
-
-        if self.direction == .custom {
-            switch self.measureSystem {
-            case .pixels:
-                width = self.width ?? 0
-            case .percentage:
-                width =  parentWidth * ((self.width ?? 100) / 100)
-            default:
-                width = 0
-            }
-        }
-
-        if self.direction == .center || self.direction == .macOSCenter, let window = window {
-            width = window.frame.width
-            width += Defaults[.padding].window * 2
-        }
-
-        return width
-    }
-
-    func previewWindowHeight(_ parentHeight: CGFloat, _ window: Window?) -> CGFloat {
-        var height = parentHeight * (self.direction.frameMultiplyValues?.height ?? 0)
-
-        if self.direction == .custom {
-            switch self.measureSystem {
-            case .pixels:
-                height = self.height ?? 0
-            case .percentage:
-                height =  parentHeight * ((self.height ?? 100) / 100)
-            default:
-                height = 0
-            }
-        }
-
-        if self.direction == .center || self.direction == .macOSCenter, let window = window {
-            height = window.frame.height
-            height += Defaults[.padding].window * 2
-        }
-
-        return height
     }
 }

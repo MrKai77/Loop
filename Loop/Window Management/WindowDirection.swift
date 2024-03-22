@@ -19,11 +19,22 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case almostMaximize = "AlmostMaximize"
     case fullscreen = "Fullscreen"
     case undo = "Undo"
-    case center = "Center"
-    case macOSCenter = "MacOSCenter"
     case initialFrame = "InitialFrame"
     case hide = "Hide"
     case minimize = "Minimize"
+
+    // Window translation (size won't be altered)
+    case macOSCenter = "MacOSCenter"
+    case center = "Center"
+
+    case top = "Top"
+    case topRight = "TopRight"
+    case right = "Right"
+    case bottomRight = "BottomRight"
+    case bottom = "Bottom"
+    case bottomLeft = "BottomLeft"
+    case left = "Left"
+    case topLeft = "TopLeft"
 
     // To cycle through directions
     case cycleTop = "CycleTop"
@@ -86,12 +97,19 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var screenSwitching: [WindowDirection] {
         [.nextScreen, .previousScreen]
     }
+    static var positioning: [WindowDirection] {
+        [.center, .macOSCenter, .top, .topRight, .right, .bottomRight, .bottom, .bottomLeft, .left, .topLeft]
+    }
     static var more: [WindowDirection] {
         [.initialFrame, .undo, .custom, .cycle]
     }
 
     var isPresetCyclable: Bool {
         WindowDirection.cyclable.contains(self)
+    }
+
+    var isPositioning: Bool {
+        WindowDirection.positioning.contains(self)
     }
 
     var willChangeScreen: Bool {
@@ -175,12 +193,22 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .maximize:                 Image(systemName: "rectangle.inset.filled")
         case .almostMaximize:           Image(systemName: "rectangle.center.inset.filled")
         case .fullscreen:               Image(systemName: "rectangle.fill")
-        case .center:                   Image("custom.rectangle.center.inset.inset.filled")
-        case .macOSCenter:              Image("custom.rectangle.center.inset.inset.filled")
-        case .undo:                     Image("custom.backward.fill.rectangle.fill")
-        case .initialFrame:             Image("custom.backward.end.alt.fill.rectangle.fill")
+        case .undo:                     Image("custom.arrow.uturn.backward.rectangle")
+        case .initialFrame:             Image("custom.backward.end.alt.fill.2.rectangle")
         case .hide:                     Image("custom.rectangle.slash")
         case .minimize:                 Image("custom.arrow.down.right.and.arrow.up.left.rectangle")
+
+        case .center:                   Image("custom.rectangle.center.inset.inset.filled")
+        case .macOSCenter:              Image("custom.rectangle.center.inset.inset.filled")
+
+        case .top:                      Image("custom.arrow.up.rectangle")
+        case .topRight:                 Image("custom.arrow.up.right.rectangle")
+        case .right:                    Image("custom.arrow.right.rectangle")
+        case .bottomRight:              Image("custom.arrow.down.right.rectangle")
+        case .bottom:                   Image("custom.arrow.down.rectangle")
+        case .bottomLeft:               Image("custom.arrow.down.left.rectangle")
+        case .left:                     Image("custom.arrow.left.rectangle")
+        case .topLeft:                  Image("custom.arrow.up.left.rectangle")
 
         case .cycleTop:                 Image(systemName: "rectangle.tophalf.inset.filled")
         case .cycleBottom:              Image(systemName: "rectangle.bottomhalf.inset.filled")
@@ -209,8 +237,8 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .bottomThird:              Image(systemName: "rectangle.bottomthird.inset.filled")
         case .bottomTwoThirds:          Image("custom.rectangle.bottomtwothirds.inset.filled")
 
-        case .nextScreen:               Image("custom.arrow.forward.rectangle")
-        case .previousScreen:           Image("custom.arrow.backward.rectangle")
+        case .nextScreen:               Image("custom.forward.rectangle")
+        case .previousScreen:           Image("custom.backward.rectangle")
 
         case .custom:                   Image(systemName: "rectangle.dashed")
         case .cycle:                    Image("custom.arrow.2.squarepath.rectangle")
