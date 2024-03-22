@@ -33,6 +33,8 @@ class WindowDragManager {
 
                 if Defaults[.restoreWindowFrameOnDrag] {
                     self.restoreInitialWindowSize(window)
+                } else {
+                    WindowRecords.eraseRecords(for: window)
                 }
 
                 if Defaults[.windowSnapping] {

@@ -19,7 +19,6 @@ struct WindowRecords {
 
     /// Has the window has been previously recorded?
     /// - Parameter window: The window to check
-    /// - Parameter checkMatchingLastFrame: Does the window's last frame need to match the last recorded one?
     /// - Returns: true or false
     static func hasBeenRecorded(_ window: Window) -> Bool {
         return WindowRecords.records.contains(where: { record in

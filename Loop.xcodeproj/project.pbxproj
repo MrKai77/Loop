@@ -60,6 +60,7 @@
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
 		A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87DDD142B50A6A400A32C76 /* ScreenManager.swift */; };
+		A87F78942BAE28050087B1DE /* CustomWindowActionSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87F78932BAE28050087B1DE /* CustomWindowActionSize.swift */; };
 		A882660829809F6F00BCB197 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A882660729809F6F00BCB197 /* GeneralSettingsView.swift */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */; };
@@ -144,6 +145,7 @@
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		A87DDD142B50A6A400A32C76 /* ScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenManager.swift; sourceTree = "<group>"; };
+		A87F78932BAE28050087B1DE /* CustomWindowActionSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionSize.swift; sourceTree = "<group>"; };
 		A882660729809F6F00BCB197 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		A883642E298B7288005D6C19 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTransformAnimation.swift; sourceTree = "<group>"; };
@@ -371,6 +373,7 @@
 		A8B5E1612B43725B00044D30 /* Custom Window Sizes */ = {
 			isa = PBXGroup;
 			children = (
+				A87F78932BAE28050087B1DE /* CustomWindowActionSize.swift */,
 				A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */,
 				A8B5E1642B43728200044D30 /* CustomWindowActionMeasureSystem.swift */,
 			);
@@ -554,6 +557,7 @@
 				116CE7322B9F24D80014C19D /* AppListManager.swift in Sources */,
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
 				A8D6D3012B6C894C0061B11F /* PaddingModel.swift in Sources */,
+				A87F78942BAE28050087B1DE /* CustomWindowActionSize.swift in Sources */,
 				A86DAE2C2B3E31F800B968F0 /* CustomCyclingKeybindItemView.swift in Sources */,
 				A82DDBDE2AEC736300D7F974 /* AnimationConfiguration.swift in Sources */,
 				A84497CD2B3A52C7003D4CF3 /* PreviewWindowButton.swift in Sources */,

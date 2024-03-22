@@ -63,62 +63,57 @@ struct CustomKeybindView: View {
                 }
 
                 Section("Window Size") {
-                    Picker("Configure using", selection: $action.measureSystem) {
-                        ForEach(CustomWindowActionMeasureSystem.allCases) { system in
+                    Picker("Mode", selection: $action.sizeMode) {
+                        ForEach(CustomWindowActionSize.allCases) { system in
                             system.label
-                                .tag(system as CustomWindowActionMeasureSystem?)
-                                .if(self.action.preserveSize ?? false) { view in
-                                    view.foregroundStyle(.secondary)
+                                .tag(system as CustomWindowActionSize?)
+                        }
+                    }
+
+                    if let sizeMode = action.sizeMode, sizeMode == .custom {
+                        Picker("Configure using", selection: $action.measureSystem) {
+                            ForEach(CustomWindowActionMeasureSystem.allCases) { system in
+                                system.label
+                                    .tag(system as CustomWindowActionMeasureSystem?)
+                            }
+                        }
+                        .onChange(of: action.measureSystem) { _ in
+                            if action.measureSystem == .percentage {
+                                if action.width ?? 101 > 100 {
+                                    self.action.width = 100
                                 }
-                        }
-                    }
-                    .onChange(of: action.measureSystem) { _ in
-                        if action.measureSystem == .percentage {
-                            if action.width ?? 101 > 100 {
-                                self.action.width = 100
-                            }
-                            if action.height ?? 101 > 100 {
-                                self.action.height = 100
+                                if action.height ?? 101 > 100 {
+                                    self.action.height = 100
+                                }
                             }
                         }
-                    }
-                    .disabled(self.action.preserveSize ?? false)
 
-                    CrispValueAdjuster(
-                        "Width",
-                        value: Binding<Double>(
-                            get: { self.action.width ?? 0 },
-                            set: { self.action.width = $0 }
-                        ),
-                        sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
-                            Double(NSScreen.main?.frame.width ?? 1000)
-                        ),
-                        postscript: action.measureSystem?.postscript ?? "",
-                        lowerClamp: true
-                    )
-                    .disabled(self.action.preserveSize ?? false)
-
-                    CrispValueAdjuster(
-                        "Height",
-                        value: Binding<Double>(
-                            get: { self.action.height ?? 0 },
-                            set: { self.action.height = $0 }
-                        ),
-                        sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
-                            Double(NSScreen.main?.frame.height ?? 1000)
-                        ),
-                        postscript: action.measureSystem?.postscript ?? "",
-                        lowerClamp: true
-                    )
-                    .disabled(self.action.preserveSize ?? false)
-
-                    Toggle(
-                        "Preserve window size",
-                        isOn: Binding(
-                            get: { self.action.preserveSize ?? false },
-                            set: { self.action.preserveSize = $0 }
+                        CrispValueAdjuster(
+                            "Width",
+                            value: Binding<Double>(
+                                get: { self.action.width ?? 0 },
+                                set: { self.action.width = $0 }
+                            ),
+                            sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
+                                Double(NSScreen.main?.frame.width ?? 1000)
+                            ),
+                            postscript: action.measureSystem?.postscript ?? "",
+                            lowerClamp: true
                         )
-                    )
+
+                        CrispValueAdjuster(
+                            "Height",
+                            value: Binding<Double>(
+                                get: { self.action.height ?? 0 },
+                                set: { self.action.height = $0 }
+                            ),
+                            sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
+                                Double(NSScreen.main?.frame.height ?? 1000)
+                            ),
+                            postscript: action.measureSystem?.postscript ?? "",
+                            lowerClamp: true
+                        )
+                    }
                 }
 
                 Section {
@@ -126,7 +121,12 @@ struct CustomKeybindView: View {
                         Text("Preview window size")
                         Spacer()
                         PreviewWindowButton(self.$action)
-                            .disabled(self.action.preserveSize ?? false)
+                            .disabled({
+                                if let sizeMode = action.sizeMode {
+                                    return sizeMode != .custom
+                                }
+                                return false
+                            }())
                     }
                 }
             }
@@ -151,6 +151,10 @@ struct CustomKeybindView: View {
         .background(.background)
 
         .onAppear {
+            if self.action.sizeMode == nil {
+                self.action.sizeMode = .custom
+            }
+
             if self.action.measureSystem == nil {
                 self.action.measureSystem = .percentage
             }

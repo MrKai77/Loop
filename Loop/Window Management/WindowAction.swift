@@ -49,7 +49,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     var anchor: CustomWindowActionAnchor?
     var width: Double?
     var height: Double?
-    var preserveSize: Bool?
+    var sizeMode: CustomWindowActionSize?
 
     var cycle: [WindowAction]?
 
@@ -76,11 +76,21 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.width = bounds.width * frameMultiplyValues.width
             result.size.height = bounds.height * frameMultiplyValues.height
         } else if direction == .custom {
-            if let preserveSize, preserveSize {
+            if let sizeMode, sizeMode == .preserveSize {
                 guard let screenFrame = NSScreen.screenWithMouse?.visibleFrame else { return result }
                 let windowSize = window.size
                 result.size.width = windowSize.width / screenFrame.width
                 result.size.height = windowSize.height / screenFrame.height
+            } else if let sizeMode, sizeMode == .initialSize {
+                guard
+                    let screenFrame = NSScreen.screenWithMouse?.visibleFrame,
+                    let initialFrame = WindowRecords.getInitialFrame(for: window)
+                else {
+                    return result
+                }
+
+                result.size.width = initialFrame.size.width / screenFrame.width
+                result.size.height = initialFrame.size.height / screenFrame.height
             } else {
                 switch measureSystem {
                 case .pixels:
