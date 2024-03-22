@@ -122,35 +122,52 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 }
             }
 
-            switch anchor {
-            case .topLeft:
-                break
-            case .top:
-                result.origin.x = bounds.midX - result.width / 2
-            case .topRight:
-                result.origin.x = bounds.maxX - result.width
-            case .right:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.midY - result.height / 2
-            case .bottomRight:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.maxY - result.height
-            case .bottom:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.maxY - result.height
-            case .bottomLeft:
-                result.origin.y = bounds.maxY - result.height
-            case .left:
-                result.origin.y = bounds.midY - result.height / 2
-            case .center:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.midY - result.height / 2
-            case .macOSCenter:
-                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = (bounds.midY - result.height / 2) + yOffset
-            case .none:
-                break
+            if let positionMode, positionMode == .coordinates {
+                switch unit {
+                case .pixels:
+                    guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
+                    result.origin.x = (xPoint ?? screenFrame.width) / screenFrame.width
+                    result.origin.y = (yPoint ?? screenFrame.height) / screenFrame.height
+                case .percentage:
+                    result.origin.x = bounds.width * ((xPoint ?? 0) / 100.0)
+                    result.origin.y = bounds.height * ((yPoint ?? 0) / 100.0)
+                case .none:
+                    break
+                }
+
+                // "Crops" the result to be within the screen's bounds
+                result = bounds.intersection(result)
+            } else {
+                switch anchor {
+                case .topLeft:
+                    break
+                case .top:
+                    result.origin.x = bounds.midX - result.width / 2
+                case .topRight:
+                    result.origin.x = bounds.maxX - result.width
+                case .right:
+                    result.origin.x = bounds.maxX - result.width
+                    result.origin.y = bounds.midY - result.height / 2
+                case .bottomRight:
+                    result.origin.x = bounds.maxX - result.width
+                    result.origin.y = bounds.maxY - result.height
+                case .bottom:
+                    result.origin.x = bounds.midX - result.width / 2
+                    result.origin.y = bounds.maxY - result.height
+                case .bottomLeft:
+                    result.origin.y = bounds.maxY - result.height
+                case .left:
+                    result.origin.y = bounds.midY - result.height / 2
+                case .center:
+                    result.origin.x = bounds.midX - result.width / 2
+                    result.origin.y = bounds.midY - result.height / 2
+                case .macOSCenter:
+                    let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
+                    result.origin.x = bounds.midX - result.width / 2
+                    result.origin.y = (bounds.midY - result.height / 2) + yOffset
+                case .none:
+                    break
+                }
             }
         }
         return result

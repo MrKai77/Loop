@@ -35,6 +35,13 @@ struct CustomKeybindView: View {
                             if action.height ?? 101 > 100 {
                                 self.action.height = 100
                             }
+
+                            if action.xPoint ?? 101 > 100 {
+                                self.action.xPoint = 100
+                            }
+                            if action.yPoint ?? 101 > 100 {
+                                self.action.xPoint = 100
+                            }
                         }
                     }
                 }
