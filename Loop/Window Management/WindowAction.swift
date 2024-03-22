@@ -88,6 +88,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             case .center:
                 result.origin.x = bounds.midX - result.width / 2
                 result.origin.y = bounds.midY - result.height / 2
+            case .topLeft:
+                break
             case .top:
                 result.origin.x = bounds.midX - result.width / 2
             case .topRight:
@@ -105,8 +107,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 result.origin.y = bounds.maxY - result.height
             case .left:
                 result.origin.y = bounds.midY - result.height / 2
-            case .topLeft:
-                break
             default:
                 break
             }
