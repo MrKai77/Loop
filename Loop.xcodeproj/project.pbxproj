@@ -18,6 +18,7 @@
 		A8063A732B19891900EAB3D9 /* grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = A8063A722B19891900EAB3D9 /* grid.metal */; };
 		A80900D42AA3F9F30085C63B /* BetaIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D22AA3F9F20085C63B /* BetaIndicator.swift */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
+		A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */; };
 		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
 		A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */; };
 		A82436062B7EE55C0052FBFB /* CrispValueAdjuster.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */; };
@@ -104,6 +105,7 @@
 		A8063A722B19891900EAB3D9 /* grid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = grid.metal; sourceTree = "<group>"; };
 		A80900D22AA3F9F20085C63B /* BetaIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaIndicator.swift; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Port.swift"; sourceTree = "<group>"; };
 		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
 		A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarResizeButton.swift; sourceTree = "<group>"; };
 		A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrispValueAdjuster.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				A87376F52AA288EB001890F4 /* Window.swift */,
 				A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */,
 				A8F0125A2AEDD7660017307F /* WindowAction.swift */,
+				A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */,
 				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
 				A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */,
 				A8B5E1612B43725B00044D30 /* Custom Window Sizes */,
@@ -566,6 +569,7 @@
 				A84497CD2B3A52C7003D4CF3 /* PreviewWindowButton.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
+				A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */,
 				A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */,
 				A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */,
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
