@@ -62,7 +62,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     // Returns the window frame within the boundaries of (0, 0) to (1, 1)
     // Will be on the screen with mouse if needed.
-    func getFrameMultiplyValues(window: Window) -> CGRect {
+    func getFrameMultiplyValues(window: Window?) -> CGRect {
         guard self.direction != .cycle else {
             return .zero
         }
@@ -77,13 +77,19 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.height = bounds.height * frameMultiplyValues.height
         } else if direction == .custom {
             if let sizeMode, sizeMode == .preserveSize {
-                guard let screenFrame = NSScreen.screenWithMouse?.visibleFrame else { return result }
+                guard
+                    let screenFrame = NSScreen.screenWithMouse?.visibleFrame,
+                    let window = window
+                else {
+                    return result
+                }
                 let windowSize = window.size
                 result.size.width = windowSize.width / screenFrame.width
                 result.size.height = windowSize.height / screenFrame.height
             } else if let sizeMode, sizeMode == .initialSize {
                 guard
                     let screenFrame = NSScreen.screenWithMouse?.visibleFrame,
+                    let window = window,
                     let initialFrame = WindowRecords.getInitialFrame(for: window)
                 else {
                     return result

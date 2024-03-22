@@ -57,19 +57,15 @@ struct PreviewView: View {
             .padding(previewPadding + previewBorderThickness / 2)
             .padding(windowEdgesToPad, padding.window / 2)
 
-            .if(window != nil) { view in
-                view.frame(
-                    width: self.currentAction.getFrameMultiplyValues(window: self.window!).width * geo.size.width,
-                    height: self.currentAction.getFrameMultiplyValues(window: self.window!).height * geo.size.height
-                )
-            }
+            .frame(
+                width: self.currentAction.getFrameMultiplyValues(window: self.window).width * geo.size.width,
+                height: self.currentAction.getFrameMultiplyValues(window: self.window).height * geo.size.height
+            )
 
-            .if(window != nil) { view in
-                view.offset(
-                    x: self.currentAction.getFrameMultiplyValues(window: self.window!).minX * geo.size.width,
-                    y: self.currentAction.getFrameMultiplyValues(window: self.window!).minY * geo.size.height
-                )
-            }
+            .offset(
+                x: self.currentAction.getFrameMultiplyValues(window: self.window).minX * geo.size.width,
+                y: self.currentAction.getFrameMultiplyValues(window: self.window).minY * geo.size.height
+            )
         }
         .padding(.top, padding.totalTopPadding)
         .padding(.bottom, padding.bottom)
