@@ -58,8 +58,20 @@ struct CustomKeybindView: View {
                         CrispValueAdjuster(
                             "X",
                             value: Binding<Double>(
-                                get: { self.action.xPoint ?? 0 },
-                                set: { self.action.xPoint = $0 }
+                                get: {
+                                    self.action.xPoint ?? 0
+                                },
+                                set: {
+                                    self.action.xPoint = $0
+
+                                    if let width = action.width,
+                                       let sizeMode = action.sizeMode,
+                                       sizeMode == .custom,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.width = min(width, 100 - $0)
+                                    }
+                                }
                             ),
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.width ?? 1000)
@@ -71,8 +83,20 @@ struct CustomKeybindView: View {
                         CrispValueAdjuster(
                             "Y",
                             value: Binding<Double>(
-                                get: { self.action.yPoint ?? 0 },
-                                set: { self.action.yPoint = $0 }
+                                get: {
+                                    self.action.yPoint ?? 0
+                                },
+                                set: {
+                                    self.action.yPoint = $0
+
+                                    if let height = action.height,
+                                       let sizeMode = action.sizeMode,
+                                       sizeMode == .custom,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.height = min(height, 100 - $0)
+                                    }
+                                }
                             ),
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.height ?? 1000)
@@ -145,8 +169,20 @@ struct CustomKeybindView: View {
                         CrispValueAdjuster(
                             "Width",
                             value: Binding<Double>(
-                                get: { self.action.width ?? 0 },
-                                set: { self.action.width = $0 }
+                                get: {
+                                    self.action.width ?? 0
+                                },
+                                set: {
+                                    self.action.width = $0
+
+                                    if let xPoint = action.xPoint,
+                                       let positionMode = action.positionMode,
+                                       positionMode == .coordinates,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.xPoint = min(xPoint, 100 - $0)
+                                    }
+                                }
                             ),
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.width ?? 1000)
@@ -158,8 +194,20 @@ struct CustomKeybindView: View {
                         CrispValueAdjuster(
                             "Height",
                             value: Binding<Double>(
-                                get: { self.action.height ?? 0 },
-                                set: { self.action.height = $0 }
+                                get: {
+                                    self.action.height ?? 0
+                                },
+                                set: {
+                                    self.action.height = $0
+
+                                    if let yPoint = action.yPoint,
+                                       let positionMode = action.positionMode,
+                                       positionMode == .coordinates,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.yPoint = min(yPoint, 100 - $0)
+                                    }
+                                }
                             ),
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.height ?? 1000)
