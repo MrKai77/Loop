@@ -15,7 +15,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         _ direction: WindowDirection,
         keybind: Set<CGKeyCode>,
         name: String? = nil,
-        measureSystem: CustomWindowActionUnit? = nil,
+        unit: CustomWindowActionUnit? = nil,
         anchor: CustomWindowActionAnchor? = nil,
         width: Double? = nil,
         height: Double? = nil,
@@ -29,7 +29,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         self.direction = direction
         self.keybind = keybind
         self.name = name
-        self.unit = measureSystem
+        self.unit = unit
         self.anchor = anchor
         self.width = width
         self.height = height
@@ -203,24 +203,32 @@ extension WindowAction {
         var direction: WindowDirection
         var keybind: Set<CGKeyCode>
 
-        // Custom keybinds
+        // MARK: CUSTOM KEYBINDS
         var name: String?
-        var measureSystem: CustomWindowActionUnit?
+        var unit: CustomWindowActionUnit?
         var anchor: CustomWindowActionAnchor?
+        var sizeMode: CustomWindowActionSizeMode?
         var width: Double?
         var height: Double?
+        var positionMode: CustomWindowActionPositionMode?
+        var xPoint: Double?
+        var yPoint: Double?
 
         var cycle: [SavedWindowActionFormat]?
 
         func convertToWindowAction() -> WindowAction {
-            WindowAction(
+            return WindowAction(
                 direction,
                 keybind: keybind,
                 name: name,
-                measureSystem: measureSystem,
+                unit: unit,
                 anchor: anchor,
                 width: width,
                 height: height,
+                xPoint: xPoint,
+                yPoint: yPoint,
+                positionMode: positionMode,
+                sizeMode: sizeMode,
                 cycle: cycle?.map { $0.convertToWindowAction() }
             )
         }
@@ -231,10 +239,14 @@ extension WindowAction {
             direction: direction,
             keybind: keybind,
             name: name,
-            measureSystem: unit,
+            unit: unit,
             anchor: anchor,
+            sizeMode: sizeMode,
             width: width,
             height: height,
+            positionMode: positionMode,
+            xPoint: xPoint,
+            yPoint: yPoint,
             cycle: cycle?.map { $0.convertToSavedWindowActionFormat() }
         )
     }

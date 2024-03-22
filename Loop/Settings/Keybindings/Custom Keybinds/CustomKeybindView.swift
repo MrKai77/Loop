@@ -46,7 +46,7 @@ struct CustomKeybindView: View {
                     }
                 }
 
-                Section("Window Position") {
+                Section {
                     Picker("Position Mode", selection: $action.positionMode) {
                         ForEach(CustomWindowActionPositionMode.allCases) { system in
                             system.label
@@ -80,6 +80,14 @@ struct CustomKeybindView: View {
                             postscript: action.unit?.postscript ?? "",
                             lowerClamp: true
                         )
+                    }
+                } header: {
+                    Text("Window Position")
+                } footer: {
+                    if let positionMode = action.positionMode, positionMode == .coordinates {
+                        Text("This point determines the upper-left edge of the window.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
 

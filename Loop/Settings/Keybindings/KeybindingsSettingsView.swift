@@ -221,7 +221,7 @@ struct KeybindingsSettingsView: View {
                     WindowAction(
                         .custom,
                         keybind: [],
-                        measureSystem: .percentage,
+                        unit: .percentage,
                         anchor: .center,
                         positionMode: .generic,
                         sizeMode: .custom
