@@ -21,7 +21,7 @@ struct CustomKeybindView: View {
                     TextField("Name", text: $action.name.bound, prompt: Text("Custom Keybind"))
                         .focused($focusedField, equals: "name")
 
-                    Picker("Measuring Unit", selection: $action.unit) {
+                    Picker("Measurement Unit", selection: $action.unit) {
                         ForEach(CustomWindowActionUnit.allCases) { system in
                             system.label
                                 .tag(system as CustomWindowActionUnit?)
@@ -75,7 +75,7 @@ struct CustomKeybindView: View {
                                 set: { self.action.yPoint = $0 }
                             ),
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
-                                Double(NSScreen.main?.frame.width ?? 1000)
+                                Double(NSScreen.main?.frame.height ?? 1000)
                             ),
                             postscript: action.unit?.postscript ?? "",
                             lowerClamp: true
