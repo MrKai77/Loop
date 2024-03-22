@@ -67,6 +67,9 @@ struct CustomKeybindView: View {
                         ForEach(CustomWindowActionMeasureSystem.allCases) { system in
                             system.label
                                 .tag(system as CustomWindowActionMeasureSystem?)
+                                .if(self.action.preserveSize ?? false) { view in
+                                    view.foregroundStyle(.secondary)
+                                }
                         }
                     }
                     .onChange(of: action.measureSystem) { _ in
@@ -79,10 +82,11 @@ struct CustomKeybindView: View {
                             }
                         }
                     }
+                    .disabled(self.action.preserveSize ?? false)
 
                     CrispValueAdjuster(
                         "Width",
-                        value: Binding<Double>( // Width is an optional
+                        value: Binding<Double>(
                             get: { self.action.width ?? 0 },
                             set: { self.action.width = $0 }
                         ),
@@ -92,10 +96,11 @@ struct CustomKeybindView: View {
                         postscript: action.measureSystem?.postscript ?? "",
                         lowerClamp: true
                     )
+                    .disabled(self.action.preserveSize ?? false)
 
                     CrispValueAdjuster(
                         "Height",
-                        value: Binding<Double>( // Height is an optional
+                        value: Binding<Double>(
                             get: { self.action.height ?? 0 },
                             set: { self.action.height = $0 }
                         ),
@@ -105,6 +110,15 @@ struct CustomKeybindView: View {
                         postscript: action.measureSystem?.postscript ?? "",
                         lowerClamp: true
                     )
+                    .disabled(self.action.preserveSize ?? false)
+
+                    Toggle(
+                        "Preserve window size",
+                        isOn: Binding(
+                            get: { self.action.preserveSize ?? false },
+                            set: { self.action.preserveSize = $0 }
+                        )
+                    )
                 }
 
                 Section {
@@ -112,6 +126,7 @@ struct CustomKeybindView: View {
                         Text("Preview window size")
                         Spacer()
                         PreviewWindowButton(self.$action)
+                            .disabled(self.action.preserveSize ?? false)
                     }
                 }
             }

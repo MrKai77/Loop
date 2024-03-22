@@ -206,12 +206,6 @@ struct KeybindingsSettingsView: View {
             }
         }
 
-        Menu("Positioning") {
-            ForEach(WindowDirection.positioning) { direction in
-                newDirectionButton(direction)
-            }
-        }
-
         Menu("More") {
             ForEach(WindowDirection.more) { direction in
                 newDirectionButton(direction)

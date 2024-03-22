@@ -49,6 +49,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     var anchor: CustomWindowActionAnchor?
     var width: Double?
     var height: Double?
+    var preserveSize: Bool?
 
     var cycle: [WindowAction]?
 
@@ -74,53 +75,24 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.origin.y = bounds.height * frameMultiplyValues.minY
             result.size.width = bounds.width * frameMultiplyValues.width
             result.size.height = bounds.height * frameMultiplyValues.height
-        } else if direction.isPositioning {
-            guard let screenFrame = NSScreen.screenWithMouse?.visibleFrame else { return result }
-            let windowSize = window.size
-            result.size.width = windowSize.width / screenFrame.width
-            result.size.height = windowSize.height / screenFrame.height
-
-            switch direction {
-            case .macOSCenter:
-                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = (bounds.midY - result.height / 2) + yOffset
-            case .center:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.midY - result.height / 2
-            case .topLeft:
-                break
-            case .top:
-                result.origin.x = bounds.midX - result.width / 2
-            case .topRight:
-                result.origin.x = bounds.maxX - result.width
-            case .right:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.midY - result.height / 2
-            case .bottomRight:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.maxY - result.height
-            case .bottom:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.maxY - result.height
-            case .bottomLeft:
-                result.origin.y = bounds.maxY - result.height
-            case .left:
-                result.origin.y = bounds.midY - result.height / 2
-            default:
-                break
-            }
         } else if direction == .custom {
-            switch measureSystem {
-            case .pixels:
-                guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
-                result.size.width = (width ?? screenFrame.width) / screenFrame.width
-                result.size.height = (height ?? screenFrame.height) / screenFrame.height
-            case .percentage:
-                result.size.width = bounds.width * ((width ?? 0) / 100.0)
-                result.size.height = bounds.height * ((height ?? 0) / 100.0)
-            case .none:
-                break
+            if let preserveSize, preserveSize {
+                guard let screenFrame = NSScreen.screenWithMouse?.visibleFrame else { return result }
+                let windowSize = window.size
+                result.size.width = windowSize.width / screenFrame.width
+                result.size.height = windowSize.height / screenFrame.height
+            } else {
+                switch measureSystem {
+                case .pixels:
+                    guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
+                    result.size.width = (width ?? screenFrame.width) / screenFrame.width
+                    result.size.height = (height ?? screenFrame.height) / screenFrame.height
+                case .percentage:
+                    result.size.width = bounds.width * ((width ?? 0) / 100.0)
+                    result.size.height = bounds.height * ((height ?? 0) / 100.0)
+                case .none:
+                    break
+                }
             }
 
             switch anchor {
