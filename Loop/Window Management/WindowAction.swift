@@ -15,20 +15,28 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         _ direction: WindowDirection,
         keybind: Set<CGKeyCode>,
         name: String? = nil,
-        measureSystem: CustomWindowActionMeasureSystem? = nil,
+        measureSystem: CustomWindowActionUnit? = nil,
         anchor: CustomWindowActionAnchor? = nil,
         width: Double? = nil,
         height: Double? = nil,
+        xPoint: Double? = nil,
+        yPoint: Double? = nil,
+        positionMode: CustomWindowActionPositionMode? = nil,
+        sizeMode: CustomWindowActionSizeMode? = nil,
         cycle: [WindowAction]? = nil
     ) {
         self.id = UUID()
         self.direction = direction
         self.keybind = keybind
         self.name = name
-        self.measureSystem = measureSystem
+        self.unit = measureSystem
         self.anchor = anchor
         self.width = width
         self.height = height
+        self.positionMode = positionMode
+        self.xPoint = xPoint
+        self.yPoint = yPoint
+        self.sizeMode = sizeMode
         self.cycle = cycle
     }
 
@@ -45,11 +53,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     // MARK: CUSTOM KEYBINDS
     var name: String?
-    var measureSystem: CustomWindowActionMeasureSystem?
+    var unit: CustomWindowActionUnit?
     var anchor: CustomWindowActionAnchor?
+    var sizeMode: CustomWindowActionSizeMode?
     var width: Double?
     var height: Double?
-    var sizeMode: CustomWindowActionSize?
+    var positionMode: CustomWindowActionPositionMode?
+    var xPoint: Double?
+    var yPoint: Double?
 
     var cycle: [WindowAction]?
 
@@ -98,7 +109,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 result.size.width = initialFrame.size.width / screenFrame.width
                 result.size.height = initialFrame.size.height / screenFrame.height
             } else {
-                switch measureSystem {
+                switch unit {
                 case .pixels:
                     guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
                     result.size.width = (width ?? screenFrame.width) / screenFrame.width
@@ -177,7 +188,7 @@ extension WindowAction {
 
         // Custom keybinds
         var name: String?
-        var measureSystem: CustomWindowActionMeasureSystem?
+        var measureSystem: CustomWindowActionUnit?
         var anchor: CustomWindowActionAnchor?
         var width: Double?
         var height: Double?
@@ -203,7 +214,7 @@ extension WindowAction {
             direction: direction,
             keybind: keybind,
             name: name,
-            measureSystem: measureSystem,
+            measureSystem: unit,
             anchor: anchor,
             width: width,
             height: height,

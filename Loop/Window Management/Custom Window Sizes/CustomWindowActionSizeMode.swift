@@ -1,5 +1,5 @@
 //
-//  CustomWindowActionSize.swift
+//  CustomWindowActionSizeMode.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-03-22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum CustomWindowActionSize: Int, Codable, CaseIterable, Identifiable {
+enum CustomWindowActionSizeMode: Int, Codable, CaseIterable, Identifiable {
     var id: Self { self }
 
     case custom = 0

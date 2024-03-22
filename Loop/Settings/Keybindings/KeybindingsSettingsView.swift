@@ -216,7 +216,20 @@ struct KeybindingsSettingsView: View {
     @ViewBuilder
     func newDirectionButton(_ direction: WindowDirection) -> some View {
         Button(action: {
-            self.keybinds.append(WindowAction(direction, keybind: []))
+            if direction == .custom {
+                self.keybinds.append(
+                    WindowAction(
+                        .custom,
+                        keybind: [],
+                        measureSystem: .percentage,
+                        anchor: .center,
+                        positionMode: .generic,
+                        sizeMode: .custom
+                    )
+                )
+            } else {
+                self.keybinds.append(WindowAction(direction, keybind: []))
+            }
         }, label: {
             HStack {
                 direction.icon
