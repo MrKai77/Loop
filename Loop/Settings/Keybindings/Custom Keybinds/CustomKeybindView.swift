@@ -251,5 +251,23 @@ struct CustomKeybindView: View {
         .frame(width: 400)
         .fixedSize(horizontal: false, vertical: true)
         .background(.background)
+
+        .onAppear {
+            if self.action.unit == nil {
+                self.action.unit = .percentage
+            }
+
+            if self.action.sizeMode == nil {
+                self.action.sizeMode = .custom
+            }
+
+            if self.action.positionMode == nil {
+                self.action.positionMode = .generic
+            }
+
+            if self.action.anchor == nil {
+                self.action.anchor = .center
+            }
+        }
     }
 }
