@@ -112,28 +112,34 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.width = bounds.width * frameMultiplyValues.width
             result.size.height = bounds.height * frameMultiplyValues.height
 
-//        } else if direction == .center,
-//                  let window = window,
-//                  let screenFrame = NSScreen.screenWithMouse?.visibleFrame {
-//            let windowSize = window.size
-//            result = CGRect(
-//                x: ((screenFrame.midX - windowSize.width / 2) / screenFrame.width) * bounds.width,
-//                y: ((screenFrame.midY - windowSize.height / 2) / screenFrame.height) * bounds.height,
-//                width: (windowSize.width / screenFrame.width) * bounds.width,
-//                height: (windowSize.height / screenFrame.height) * bounds.height
-//            )
-//
-//        } else if direction == .macOSCenter,
-//                  let window = window,
-//                  let screenFrame = NSScreen.screenWithMouse?.visibleFrame {
-//            let windowSize = window.size
-//            let yOffset = WindowEngine.getMacOSCenterYOffset(windowSize.height, screenHeight: screenFrame.height)
-//            result = CGRect(
-//                x: ((screenFrame.midX - windowSize.width / 2) / screenFrame.width) * bounds.width,
-//                y: (((screenFrame.midY - windowSize.height / 2) + yOffset) / screenFrame.height) * bounds.height,
-//                width: (windowSize.width / screenFrame.width) * bounds.width,
-//                height: (windowSize.height / screenFrame.height) * bounds.height
-//            )
+        } else if direction == .center,
+                  let window = window {
+
+            let windowSize = window.size
+            result = CGRect(
+                origin: CGPoint(
+                    x: bounds.midX - (windowSize.width / 2),
+                    y: bounds.midY - (windowSize.height / 2)
+                ),
+                size: windowSize
+            )
+
+        } else if direction == .macOSCenter,
+                  let window = window {
+
+            let windowSize = window.size
+            let yOffset = WindowEngine.getMacOSCenterYOffset(
+                windowSize.height,
+                screenHeight: bounds.height
+            )
+
+            result = CGRect(
+                origin: CGPoint(
+                    x: bounds.midX - (windowSize.width / 2),
+                    y: bounds.midY - (windowSize.height / 2) + yOffset
+                ),
+                size: windowSize
+            )
 
 //        } else if direction == .custom {
 //            result = calculateCustomFrame(window, bounds)
