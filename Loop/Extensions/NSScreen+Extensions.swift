@@ -63,4 +63,25 @@ extension NSScreen {
 
         return frame
     }
+
+    var stageStripFreeFrameRelativeToScreen: CGRect {
+        let stageStripFreeFrame = self.stageStripFreeFrame.flipY(maxY: self.frame.maxY)
+        let menubarHeight = stageStripFreeFrame.origin.y
+
+        var result = stageStripFreeFrame
+        result.origin = CGPoint(x: .zero, y: menubarHeight)
+
+        return result
+    }
+
+    var displayBounds: CGRect {
+        guard
+            let displayID = self.displayID
+        else {
+            print("ERROR: Failed to get NSScreen.displayID in NSScreen.displayBounds")
+            return self.frame.flipY!
+        }
+
+        return CGDisplayBounds(displayID)
+    }
 }

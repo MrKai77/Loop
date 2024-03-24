@@ -39,7 +39,7 @@ class PreviewController {
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
 
-        panel.setFrame(screen.stageStripFreeFrame, display: false)
+        panel.setFrame(screen.frame, display: false)
 
         previewWindowController = .init(window: panel)
 

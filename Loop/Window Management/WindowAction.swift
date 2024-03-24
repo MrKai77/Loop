@@ -71,137 +71,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return nil
     }
 
-    // Returns the window frame within the boundaries of (0, 0) to (1, 1)
-    // Will be on the screen with mouse if needed.
-    func getFrameMultiplyValues(window: Window?) -> CGRect {
-        guard self.direction != .cycle else { return .zero }
-
-        let bounds = CGRect(x: 0, y: 0, width: 1, height: 1)
-        var result = CGRect.zero
-
-        if let frameMultiplyValues = direction.frameMultiplyValues {
-            result.origin.x = bounds.width * frameMultiplyValues.minX
-            result.origin.y = bounds.height * frameMultiplyValues.minY
-            result.size.width = bounds.width * frameMultiplyValues.width
-            result.size.height = bounds.height * frameMultiplyValues.height
-
-        } else if direction == .center,
-                  let window = window,
-                  let screenFrame = NSScreen.screenWithMouse?.visibleFrame {
-            let windowSize = window.size
-            result = CGRect(
-                x: (screenFrame.midX - windowSize.width / 2) / screenFrame.width,
-                y: (screenFrame.midY - windowSize.height / 2) / screenFrame.height,
-                width: windowSize.width / screenFrame.width,
-                height: windowSize.height / screenFrame.height
-            )
-
-        } else if direction == .macOSCenter,
-                  let window = window,
-                  let screenFrame = NSScreen.screenWithMouse?.visibleFrame {
-            let windowSize = window.size
-            let yOffset = WindowEngine.getMacOSCenterYOffset(windowSize.height, screenHeight: screenFrame.height)
-            result = CGRect(
-                x: (screenFrame.midX - windowSize.width / 2) / screenFrame.width,
-                y: ((screenFrame.midY - windowSize.height / 2) + yOffset) / screenFrame.height,
-                width: windowSize.width / screenFrame.width,
-                height: windowSize.height / screenFrame.height
-            )
-
-        } else if direction == .custom {
-            result = calculateCustomFrame(window, bounds)
-        }
-
-        return result
-    }
-
-    private func calculateCustomFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
-        var result: CGRect = .zero
-
-        if let sizeMode, sizeMode == .preserveSize {
-            guard
-                let screenFrame = NSScreen.screenWithMouse?.visibleFrame,
-                let window = window
-            else {
-                return result
-            }
-            let windowSize = window.size
-            result.size.width = windowSize.width / screenFrame.width
-            result.size.height = windowSize.height / screenFrame.height
-
-        } else if let sizeMode, sizeMode == .initialSize {
-            guard
-                let screenFrame = NSScreen.screenWithMouse?.visibleFrame,
-                let window = window,
-                let initialFrame = WindowRecords.getInitialFrame(for: window)
-            else {
-                return result
-            }
-
-            result.size.width = initialFrame.size.width / screenFrame.width
-            result.size.height = initialFrame.size.height / screenFrame.height
-
-        } else {    // sizeMode would be custom
-            switch unit {
-            case .pixels:
-                guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
-                result.size.width = (width ?? screenFrame.width) / screenFrame.width
-                result.size.height = (height ?? screenFrame.height) / screenFrame.height
-            default:
-                result.size.width = bounds.width * ((width ?? 0) / 100.0)
-                result.size.height = bounds.height * ((height ?? 0) / 100.0)
-            }
-        }
-
-        if let positionMode, positionMode == .coordinates {
-            switch unit {
-            case .pixels:
-                guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
-                result.origin.x = (xPoint ?? screenFrame.width) / screenFrame.width
-                result.origin.y = (yPoint ?? screenFrame.height) / screenFrame.height
-            default:
-                result.origin.x = bounds.width * ((xPoint ?? 0) / 100.0)
-                result.origin.y = bounds.height * ((yPoint ?? 0) / 100.0)
-            }
-
-            // "Crops" the result to be within the screen's bounds
-            result = bounds.intersection(result)
-        } else {
-            switch anchor {
-            case .topLeft:
-                break
-            case .top:
-                result.origin.x = bounds.midX - result.width / 2
-            case .topRight:
-                result.origin.x = bounds.maxX - result.width
-            case .right:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.midY - result.height / 2
-            case .bottomRight:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.maxY - result.height
-            case .bottom:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.maxY - result.height
-            case .bottomLeft:
-                result.origin.y = bounds.maxY - result.height
-            case .left:
-                result.origin.y = bounds.midY - result.height / 2
-            case .center:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.midY - result.height / 2
-            case .macOSCenter:
-                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = (bounds.midY - result.height / 2) + yOffset
-            case .none:
-                break
-            }
-        }
-
-        return result
-    }
-
     func getEdgesTouchingScreen() -> Edge.Set {
         guard let frameMultiplyValues = direction.frameMultiplyValues else {
             return []
@@ -224,4 +93,141 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         return result
     }
+
+    func getFrame(window: Window?) -> CGRect {
+        guard
+            self.direction != .cycle,
+            let screen = NSScreen.screenWithMouse
+        else {
+            return .zero
+        }
+        let bounds = screen.stageStripFreeFrameRelativeToScreen
+
+        print("BOUDNS: \(bounds)")
+        var result = CGRect(origin: bounds.origin, size: .zero)
+
+        if let frameMultiplyValues = direction.frameMultiplyValues {
+            result.origin.x += bounds.width * frameMultiplyValues.minX
+            result.origin.y += bounds.height * frameMultiplyValues.minY
+            result.size.width = bounds.width * frameMultiplyValues.width
+            result.size.height = bounds.height * frameMultiplyValues.height
+
+//        } else if direction == .center,
+//                  let window = window,
+//                  let screenFrame = NSScreen.screenWithMouse?.visibleFrame {
+//            let windowSize = window.size
+//            result = CGRect(
+//                x: ((screenFrame.midX - windowSize.width / 2) / screenFrame.width) * bounds.width,
+//                y: ((screenFrame.midY - windowSize.height / 2) / screenFrame.height) * bounds.height,
+//                width: (windowSize.width / screenFrame.width) * bounds.width,
+//                height: (windowSize.height / screenFrame.height) * bounds.height
+//            )
+//
+//        } else if direction == .macOSCenter,
+//                  let window = window,
+//                  let screenFrame = NSScreen.screenWithMouse?.visibleFrame {
+//            let windowSize = window.size
+//            let yOffset = WindowEngine.getMacOSCenterYOffset(windowSize.height, screenHeight: screenFrame.height)
+//            result = CGRect(
+//                x: ((screenFrame.midX - windowSize.width / 2) / screenFrame.width) * bounds.width,
+//                y: (((screenFrame.midY - windowSize.height / 2) + yOffset) / screenFrame.height) * bounds.height,
+//                width: (windowSize.width / screenFrame.width) * bounds.width,
+//                height: (windowSize.height / screenFrame.height) * bounds.height
+//            )
+
+//        } else if direction == .custom {
+//            result = calculateCustomFrame(window, bounds)
+        }
+
+        print(result)
+
+        return result
+    }
+
+//    private func calculateCustomFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
+//        var result: CGRect = .zero
+//
+//        if let sizeMode, sizeMode == .preserveSize {
+//            guard
+//                let screenFrame = NSScreen.screenWithMouse?.visibleFrame,
+//                let window = window
+//            else {
+//                return result
+//            }
+//            let windowSize = window.size
+//            result.size.width = (windowSize.width / screenFrame.width) * bounds.width
+//            result.size.height = (windowSize.height / screenFrame.height) * bounds.height
+//
+//        } else if let sizeMode, sizeMode == .initialSize {
+//            guard
+//                let screenFrame = NSScreen.screenWithMouse?.visibleFrame,
+//                let window = window,
+//                let initialFrame = WindowRecords.getInitialFrame(for: window)
+//            else {
+//                return result
+//            }
+//
+//            result.size.width = (initialFrame.size.width / screenFrame.width) * bounds.width
+//            result.size.height = (initialFrame.size.height / screenFrame.height) * bounds.height
+//
+//        } else {    // sizeMode would be custom
+//            switch unit {
+//            case .pixels:
+//                guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
+//                result.size.width = ((width ?? screenFrame.width) / screenFrame.width) * bounds.width
+//                result.size.height = ((height ?? screenFrame.height) / screenFrame.height) * bounds.height
+//            default:
+//                result.size.width = bounds.width * ((width ?? 0) / 100.0)
+//                result.size.height = bounds.height * ((height ?? 0) / 100.0)
+//            }
+//        }
+//
+//        if let positionMode, positionMode == .coordinates {
+//            switch unit {
+//            case .pixels:
+//                guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
+//                result.origin.x = ((xPoint ?? screenFrame.width) / screenFrame.width) * bounds.width
+//                result.origin.y = ((yPoint ?? screenFrame.height) / screenFrame.height) * bounds.height
+//            default:
+//                result.origin.x = bounds.width * ((xPoint ?? 0) / 100.0)
+//                result.origin.y = bounds.height * ((yPoint ?? 0) / 100.0)
+//            }
+//
+//            // "Crops" the result to be within the screen's bounds
+//            result = bounds.intersection(result)
+//        } else {
+//            switch anchor {
+//            case .topLeft:
+//                break
+//            case .top:
+//                result.origin.x = bounds.midX - result.width / 2
+//            case .topRight:
+//                result.origin.x = bounds.maxX - result.width
+//            case .right:
+//                result.origin.x = bounds.maxX - result.width
+//                result.origin.y = bounds.midY - result.height / 2
+//            case .bottomRight:
+//                result.origin.x = bounds.maxX - result.width
+//                result.origin.y = bounds.maxY - result.height
+//            case .bottom:
+//                result.origin.x = bounds.midX - result.width / 2
+//                result.origin.y = bounds.maxY - result.height
+//            case .bottomLeft:
+//                result.origin.y = bounds.maxY - result.height
+//            case .left:
+//                result.origin.y = bounds.midY - result.height / 2
+//            case .center:
+//                result.origin.x = bounds.midX - result.width / 2
+//                result.origin.y = bounds.midY - result.height / 2
+//            case .macOSCenter:
+//                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
+//                result.origin.x = bounds.midX - result.width / 2
+//                result.origin.y = (bounds.midY - result.height / 2) + yOffset
+//            case .none:
+//                break
+//            }
+//        }
+//
+//        return result
+//    }
 }

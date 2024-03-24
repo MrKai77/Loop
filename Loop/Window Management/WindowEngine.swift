@@ -51,17 +51,11 @@ struct WindowEngine {
             return
         }
 
-        let screenFrame = screen.safeScreenFrame
-        guard
-            let newWindowFrame = WindowEngine.generateWindowFrame(
-                window,
-                screenFrame,
-                action
-            )
-        else {
-            return
-        }
-        var targetWindowFrame = WindowEngine.applyPadding(newWindowFrame, screenFrame, action)
+        let screenOrigin = screen.displayBounds.origin
+        let newWindowFrame = action.getFrame(window: window)
+        var targetWindowFrame = newWindowFrame
+        targetWindowFrame.origin.x += screenOrigin.x
+        targetWindowFrame.origin.y += screenOrigin.y
 
         print("Target window frame: \(targetWindowFrame)")
 
@@ -76,7 +70,7 @@ struct WindowEngine {
 
             // Calculate the window's minimum window size and change the target accordingly
             window.getMinSize(screen: screen) { minSize in
-                let nsScreenFrame = screenFrame.flipY!
+                let nsScreenFrame = screen.safeScreenFrame.flipY!
 
                 if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
                     targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.padding].right
@@ -98,7 +92,7 @@ struct WindowEngine {
                     window.setFrame(targetWindowFrame)
                 }
 
-                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
+                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
                 WindowRecords.record(window, action)
             }
         }
@@ -167,40 +161,40 @@ struct WindowEngine {
         return windowList
     }
 
-    static func generateWindowFrame(
-        _ window: Window,
-        _ screenFrame: CGRect,
-        _ action: WindowAction
-    ) -> CGRect? {
-        let direction = action.direction
-
-        var newWindowFrame: CGRect = .zero
-        newWindowFrame.origin = screenFrame.origin
-
-        switch direction {
-        case .undo:
-            let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
-            if let previousResizeFrame = self.generateWindowFrame(window, screenFrame, previousDirection) {
-                newWindowFrame = previousResizeFrame
-            } else {
-                return nil
-            }
-        case .initialFrame:
-            if let initalFrame = WindowRecords.getInitialFrame(for: window) {
-                newWindowFrame = initalFrame
-            } else {
-                return nil
-            }
-        default:
-            let frameMultiplyValues = action.getFrameMultiplyValues(window: window)
-            newWindowFrame.origin.x += screenFrame.width * frameMultiplyValues.minX
-            newWindowFrame.origin.y += screenFrame.height * frameMultiplyValues.minY
-            newWindowFrame.size.width += screenFrame.width * frameMultiplyValues.width
-            newWindowFrame.size.height += screenFrame.height * frameMultiplyValues.height
-        }
-
-        return newWindowFrame
-    }
+//    static func generateWindowFrame(
+//        _ window: Window,
+////        _ screenFrame: CGRect,
+//        _ action: WindowAction
+//    ) -> CGRect? {
+//        let direction = action.direction
+//
+//        var newWindowFrame: CGRect = .zero
+//        newWindowFrame.origin = screenFrame.origin
+//
+////        switch direction {
+////        case .undo:
+////            let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
+////            if let previousResizeFrame = self.generateWindowFrame(window, screenFrame, previousDirection) {
+////                newWindowFrame = previousResizeFrame
+////            } else {
+////                return nil
+////            }
+////        case .initialFrame:
+////            if let initalFrame = WindowRecords.getInitialFrame(for: window) {
+////                newWindowFrame = initalFrame
+////            } else {
+////                return nil
+////            }
+////        default:
+//            let newFrame = action.getFrame(window: window)
+////            newWindowFrame.origin.x = newFrame.minX
+////            newWindowFrame.origin.y = newFrame.minY
+////            newWindowFrame.size.width = newFrame.width
+////            newWindowFrame.size.height = newFrame.height
+////        }
+//
+//        return newWindowFrame
+//    }
 
     static func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
         let halfScreenHeight = screenHeight / 2

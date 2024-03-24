@@ -34,7 +34,7 @@ struct PreviewView: View {
     @State var windowEdgesToPad: Edge.Set = []
 
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { _ in
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                     .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
@@ -58,51 +58,51 @@ struct PreviewView: View {
             .padding(windowEdgesToPad, padding.window / 2)
 
             .frame(
-                width: self.currentAction.getFrameMultiplyValues(window: self.window).width * geo.size.width,
-                height: self.currentAction.getFrameMultiplyValues(window: self.window).height * geo.size.height
+                width: self.currentAction.getFrame(window: self.window).width,
+                height: self.currentAction.getFrame(window: self.window).height
             )
-
             .offset(
-                x: self.currentAction.getFrameMultiplyValues(window: self.window).minX * geo.size.width,
-                y: self.currentAction.getFrameMultiplyValues(window: self.window).minY * geo.size.height
+                x: self.currentAction.getFrame(window: self.window).minX,
+                y: self.currentAction.getFrame(window: self.window).minY
             )
-        }
-        .padding(.top, padding.totalTopPadding)
-        .padding(.bottom, padding.bottom)
-        .padding(.leading, padding.left)
-        .padding(.trailing, padding.right)
 
-        .opacity(currentAction.direction == .noAction ? 0 : 1)
-        .animation(animationConfiguration.previewWindowAnimation, value: currentAction)
-        .onReceive(.updateUIDirection) { obj in
-            if !self.previewMode,
-               let action = obj.userInfo?["action"] as? WindowAction,
-               !action.direction.isPresetCyclable,
-               !action.direction.willChangeScreen,
-               action.direction != .cycle {
+            .padding(.top, padding.totalTopPadding)
+            .padding(.bottom, padding.bottom)
+            .padding(.leading, padding.left)
+            .padding(.trailing, padding.right)
 
-                self.currentAction = action
+            .opacity(currentAction.direction == .noAction ? 0 : 1)
+            .animation(animationConfiguration.previewWindowAnimation, value: currentAction)
+            .onReceive(.updateUIDirection) { obj in
+                if !self.previewMode,
+                   let action = obj.userInfo?["action"] as? WindowAction,
+                   !action.direction.isPresetCyclable,
+                   !action.direction.willChangeScreen,
+                   action.direction != .cycle {
 
-                if self.currentAction.direction == .undo && self.window != nil {
-                    self.currentAction = WindowRecords.getLastAction(for: self.window!)
+                    self.currentAction = action
+
+                    if self.currentAction.direction == .undo && self.window != nil {
+                        self.currentAction = WindowRecords.getLastAction(for: self.window!)
+                    }
+
+                    print("New preview window action recieved: \(action.direction)")
+                }
+            }
+            .onAppear {
+                if self.previewMode {
+                    self.currentAction = .init(.maximize)
                 }
 
-                print("New preview window action recieved: \(action.direction)")
+                self.windowEdgesToPad = Edge.Set.all.subtracting(
+                    self.currentAction.getEdgesTouchingScreen()
+                )
             }
-        }
-        .onAppear {
-            if self.previewMode {
-                self.currentAction = .init(.maximize)
+            .onChange(of: self.currentAction.getEdgesTouchingScreen()) { _ in
+                self.windowEdgesToPad = Edge.Set.all.subtracting(
+                    self.currentAction.getEdgesTouchingScreen()
+                )
             }
-
-            self.windowEdgesToPad = Edge.Set.all.subtracting(
-                self.currentAction.getEdgesTouchingScreen()
-            )
-        }
-        .onChange(of: self.currentAction.getEdgesTouchingScreen()) { _ in
-            self.windowEdgesToPad = Edge.Set.all.subtracting(
-                self.currentAction.getEdgesTouchingScreen()
-            )
         }
     }
 }
