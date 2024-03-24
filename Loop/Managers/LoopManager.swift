@@ -182,7 +182,7 @@ class LoopManager: ObservableObject {
 
             if self.currentAction.direction == .noAction {
                 if let targetWindow = targetWindow {
-                    self.currentAction = WindowRecords.getLastAction(for: targetWindow, offset: 0)
+                    self.currentAction = WindowRecords.getLastAction(for: targetWindow, offset: 0) ?? .init(.noAction)
                 }
 
                 if self.currentAction.direction == .noAction {

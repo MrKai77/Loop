@@ -161,41 +161,6 @@ struct WindowEngine {
         return windowList
     }
 
-//    static func generateWindowFrame(
-//        _ window: Window,
-////        _ screenFrame: CGRect,
-//        _ action: WindowAction
-//    ) -> CGRect? {
-//        let direction = action.direction
-//
-//        var newWindowFrame: CGRect = .zero
-//        newWindowFrame.origin = screenFrame.origin
-//
-////        switch direction {
-////        case .undo:
-////            let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
-////            if let previousResizeFrame = self.generateWindowFrame(window, screenFrame, previousDirection) {
-////                newWindowFrame = previousResizeFrame
-////            } else {
-////                return nil
-////            }
-////        case .initialFrame:
-////            if let initalFrame = WindowRecords.getInitialFrame(for: window) {
-////                newWindowFrame = initalFrame
-////            } else {
-////                return nil
-////            }
-////        default:
-//            let newFrame = action.getFrame(window: window)
-////            newWindowFrame.origin.x = newFrame.minX
-////            newWindowFrame.origin.y = newFrame.minY
-////            newWindowFrame.size.width = newFrame.width
-////            newWindowFrame.size.height = newFrame.height
-////        }
-//
-//        return newWindowFrame
-//    }
-
     static func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
         let halfScreenHeight = screenHeight / 2
         let windowHeightPercent = windowHeight / screenHeight

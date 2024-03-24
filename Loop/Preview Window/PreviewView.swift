@@ -57,14 +57,17 @@ struct PreviewView: View {
             .padding(previewPadding + previewBorderThickness / 2)
             .padding(windowEdgesToPad, padding.window / 2)
 
-            .frame(
-                width: self.currentAction.getFrame(window: self.window).width,
-                height: self.currentAction.getFrame(window: self.window).height
-            )
-            .offset(
-                x: self.currentAction.getFrame(window: self.window).minX,
-                y: self.currentAction.getFrame(window: self.window).minY
-            )
+            .if(!self.previewMode) { view in
+                view
+                    .frame(
+                        width: self.currentAction.getFrame(window: self.window).width,
+                        height: self.currentAction.getFrame(window: self.window).height
+                    )
+                    .offset(
+                        x: self.currentAction.getFrame(window: self.window).minX,
+                        y: self.currentAction.getFrame(window: self.window).minY
+                    )
+            }
 
             .padding(.top, padding.totalTopPadding)
             .padding(.bottom, padding.bottom)
@@ -82,8 +85,8 @@ struct PreviewView: View {
 
                     self.currentAction = action
 
-                    if self.currentAction.direction == .undo && self.window != nil {
-                        self.currentAction = WindowRecords.getLastAction(for: self.window!)
+                    if self.currentAction.direction == .undo, let window = window {
+                        self.currentAction = WindowRecords.getLastAction(for: window) ?? .init(.noAction)
                     }
 
                     print("New preview window action recieved: \(action.direction)")
