@@ -79,7 +79,7 @@ class PreviewController {
         }
 
         self.close()
-        self.open(screen: newScreen)
+        self.open(screen: newScreen, window: self.window)
 
         print("Changed preview window's screen")
     }
@@ -100,7 +100,6 @@ class PreviewController {
 ////        }
 
         let targetWindowFrame = action.getFrame(window: self.window, bounds: screen.safeScreenFrame).toAppKit()
-        print("targetWindowFrame: \(targetWindowFrame)")
 
         NSAnimationContext.runAnimationGroup { context in
             context.timingFunction = CAMediaTimingFunction(controlPoints: 0.25, 0, 0.25, 1)

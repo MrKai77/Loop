@@ -132,8 +132,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 size: windowSize
             )
         } else if direction == .undo, let window = window {
-            if let previousAction = WindowRecords.getLastAction(for: window, willResize: true) {
-                result = previousAction.getFrame(window: window)
+            if let previousAction = WindowRecords.getLastAction(for: window/*, willResize: true*/) {
+                result = previousAction.getFrame(window: window, bounds: bounds)
             }
 
         } else if direction == .initialFrame, let window = window {
@@ -142,17 +142,19 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
+        result = self.applyPadding(result, bounds, self)
+
         return result
     }
 
     private func calculateCustomFrame(_ window: Window, _ bounds: CGRect) -> CGRect {
-        var result = CGRect(origin: bounds.origin, size: window.size)
+        var result = CGRect(origin: bounds.origin, size: .zero)
 
         // SIZE
         if let sizeMode, sizeMode == .preserveSize {
             result.size = window.size
 
-        if let sizeMode, sizeMode == .initialSize {
+        } else if let sizeMode, sizeMode == .initialSize {
             if let initialFrame = WindowRecords.getInitialFrame(for: window) {
                 result.size = initialFrame.size
             }
