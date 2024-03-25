@@ -94,14 +94,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
-    func getFrame(window: Window?) -> CGRect {
-        guard
-            self.direction != .cycle,
-            let screen = NSScreen.screenWithMouse
-        else {
-            return .zero
-        }
-        let bounds = screen.stageStripFreeFrameRelativeToScreen
+    func getFrame(window: Window?, bounds: CGRect) -> CGRect {
+        guard self.direction != .cycle else { return .zero }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         if let frameMultiplyValues = direction.frameMultiplyValues {
@@ -152,14 +146,17 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 
     private func calculateCustomFrame(_ window: Window, _ bounds: CGRect) -> CGRect {
-        var result = CGRect(origin: bounds.origin, size: .zero)
+        var result = CGRect(origin: bounds.origin, size: window.size)
 
         // SIZE
-        result.size = window.size // Preserve size by default
+        if let sizeMode, sizeMode == .preserveSize {
+            result.size = window.size
+
         if let sizeMode, sizeMode == .initialSize {
             if let initialFrame = WindowRecords.getInitialFrame(for: window) {
                 result.size = initialFrame.size
             }
+
         } else {    // sizeMode would be custom
             switch unit {
             case .pixels:
@@ -224,5 +221,52 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         return result
+    }
+
+    /// Apply padding on a CGRect, using the provided WindowDirection
+    /// - Parameters:
+    ///   - windowFrame: The frame the window WILL be resized to
+    ///   - direction: The direction the window WILL be resized to
+    /// - Returns: CGRect with padding applied
+    private func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
+        let padding = Defaults[.padding]
+        let halfPadding = padding.window / 2
+
+        var bounds = screenFrame
+        bounds = bounds.padding(.top, padding.totalTopPadding)
+        bounds = bounds.padding(.bottom, padding.bottom)
+        bounds = bounds.padding(.leading, padding.left)
+        bounds = bounds.padding(.trailing, padding.right)
+
+        var paddedWindowFrame = windowFrame.intersection(bounds)
+
+        if action.direction == .macOSCenter,
+           windowFrame.height >= bounds.height {
+
+            paddedWindowFrame.origin.y = bounds.minY
+            paddedWindowFrame.size.height = bounds.height
+        }
+
+        if action.direction == .center || action.direction == .macOSCenter {
+            return paddedWindowFrame
+        }
+
+        if paddedWindowFrame.minX != bounds.minX {
+            paddedWindowFrame = paddedWindowFrame.padding(.leading, halfPadding)
+        }
+
+        if paddedWindowFrame.maxX != bounds.maxX {
+            paddedWindowFrame = paddedWindowFrame.padding(.trailing, halfPadding)
+        }
+
+        if paddedWindowFrame.minY != bounds.minY {
+            paddedWindowFrame = paddedWindowFrame.padding(.top, halfPadding)
+        }
+
+        if paddedWindowFrame.maxY != bounds.maxY {
+            paddedWindowFrame = paddedWindowFrame.padding(.bottom, halfPadding)
+        }
+
+        return paddedWindowFrame
     }
 }

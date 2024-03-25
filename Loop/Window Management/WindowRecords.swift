@@ -81,10 +81,9 @@ struct WindowRecords {
     /// - Returns: The window action
     static func getLastAction(
         for window: Window,
-        willResize: Bool = false,
         offset: Int = 1
     ) -> WindowAction? {
-        guard 
+        guard
             let id = WindowRecords.findRecordsID(for: window),
             WindowRecords.records[id].actionRecords.count > offset
         else {
@@ -93,9 +92,9 @@ struct WindowRecords {
 
         let lastDirection = WindowRecords.records[id].actionRecords[offset]
 
-        if willResize && WindowRecords.records[id].actionRecords.count > offset + 1 {
-            WindowRecords.records[id].actionRecords.removeFirst(offset + 1)
-        }
+//        if willResize && WindowRecords.records[id].actionRecords.count > offset + 1 {
+//            WindowRecords.records[id].actionRecords.removeFirst(offset + 1)
+//        }
 
         return lastDirection
     }

@@ -23,13 +23,13 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
         }
     }
 
-    var previewWindowAnimation: Animation? {
-        switch self {
-        case .smooth:   .interpolatingSpring(duration: 0.3, bounce: 0.15, initialVelocity: 1/2)
-        case .fast:     .interpolatingSpring(duration: 0.2, bounce: 0.1, initialVelocity: 1/2)
-        case .instant:  nil
-        }
-    }
+//    var previewWindowAnimation: Animation? {
+//        switch self {
+//        case .smooth:   .interpolatingSpring(duration: 0.3, bounce: 0.15, initialVelocity: 1/2)
+//        case .fast:     .interpolatingSpring(duration: 0.2, bounce: 0.1, initialVelocity: 1/2)
+//        case .instant:  nil
+//        }
+//    }
 
     var radialMenuAnimation: Animation {
         switch self {
