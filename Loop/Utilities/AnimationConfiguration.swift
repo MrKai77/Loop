@@ -25,7 +25,7 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
 
     var previewTimingFunction: CAMediaTimingFunction {
         switch self {
-        case .smooth:   CAMediaTimingFunction(controlPoints: 0, 0.52, 0.43, 1)
+        case .smooth:   CAMediaTimingFunction(controlPoints: 0, 0.26, 0.45, 1)
         case .fast:     CAMediaTimingFunction(controlPoints: 0.22, 1, 0.47, 1)
         case .instant:  CAMediaTimingFunction(controlPoints: 0.16, 1, 0.3, 1)
         }
