@@ -29,7 +29,7 @@ class PreviewController {
         }
 
         let panel = NSPanel(
-            contentRect: NSRect(origin: screen.stageStripFreeFrame.center, size: .zero),
+            contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: true,
@@ -38,7 +38,7 @@ class PreviewController {
         panel.hasShadow = false
         panel.alphaValue = 0
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
-
+        panel.setFrame(NSRect(origin: screen.stageStripFreeFrame.center, size: .zero), display: true)
         // This ensures that this is below the radial menu
         panel.level = NSWindow.Level(NSWindow.Level.screenSaver.rawValue - 1)
         panel.contentView = NSHostingView(rootView: PreviewView())

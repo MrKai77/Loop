@@ -106,7 +106,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.width = bounds.width * frameMultiplyValues.width
             result.size.height = bounds.height * frameMultiplyValues.height
 
-        } else if direction == .custom, let window = window {
+        } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
 
         } else if direction == .center, let window = window {
@@ -156,14 +156,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
-    private func calculateCustomFrame(_ window: Window, _ bounds: CGRect) -> CGRect {
+    private func calculateCustomFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         // SIZE
-        if let sizeMode, sizeMode == .preserveSize {
+        if let sizeMode, sizeMode == .preserveSize, let window = window {
             result.size = window.size
 
-        } else if let sizeMode, sizeMode == .initialSize {
+        } else if let sizeMode, sizeMode == .initialSize, let window = window {
             if let initialFrame = WindowRecords.getInitialFrame(for: window) {
                 result.size = initialFrame.size
             }
