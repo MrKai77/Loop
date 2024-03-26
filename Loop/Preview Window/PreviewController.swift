@@ -36,6 +36,7 @@ class PreviewController {
             screen: NSApp.keyWindow?.screen
         )
         panel.hasShadow = false
+        panel.alphaValue = 0
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
 
         // This ensures that this is below the radial menu
@@ -45,10 +46,6 @@ class PreviewController {
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
         previewWindowController = .init(window: panel)
-
-        NSAnimationContext.runAnimationGroup({ _ in
-            panel.animator().alphaValue = 1
-        })
 
         self.screen = screen
         self.window = window
@@ -94,16 +91,14 @@ class PreviewController {
         else {
             return
         }
-//
-////        if self.currentAction.direction == .undo, let window = window {
-////            self.currentAction = WindowRecords.getLastAction(for: window) ?? .init(.noAction)
-////        }
 
         let targetWindowFrame = action.getFrame(window: self.window, bounds: screen.safeScreenFrame).toAppKit()
+        let shouldBeTransparent = targetWindowFrame.size.area == 0
 
         NSAnimationContext.runAnimationGroup { context in
             context.timingFunction = CAMediaTimingFunction(controlPoints: 0.25, 0, 0.25, 1)
             windowController.window?.animator().setFrame(targetWindowFrame, display: true)
+            windowController.window?.animator().alphaValue = shouldBeTransparent ? 0 : 1
         }
 
         print("New preview window action recieved: \(action.direction)")

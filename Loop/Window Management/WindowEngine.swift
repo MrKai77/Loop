@@ -53,6 +53,10 @@ struct WindowEngine {
 
         var targetWindowFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
 
+        if action.direction == .undo {
+            WindowRecords.removeLastAction(for: window)
+        }
+
         print("Target window frame: \(targetWindowFrame)")
 
         let enhancedUI = window.enhancedUserInterface ?? false

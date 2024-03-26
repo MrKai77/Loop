@@ -95,7 +95,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 
     func getFrame(window: Window?, bounds: CGRect) -> CGRect {
-        guard self.direction != .cycle else { return .zero }
+        guard self.direction != .cycle, self.direction != .noAction else {
+            return NSRect(origin: bounds.center, size: .zero)
+        }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         if let frameMultiplyValues = direction.frameMultiplyValues {
@@ -132,17 +134,24 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 size: windowSize
             )
         } else if direction == .undo, let window = window {
-            if let previousAction = WindowRecords.getLastAction(for: window/*, willResize: true*/) {
+            if let previousAction = WindowRecords.getLastAction(for: window) {
+                print("Last action was \(previousAction.direction) (name: \(previousAction.name ?? "nil"))")
                 result = previousAction.getFrame(window: window, bounds: bounds)
+            } else {
+                print("Didn't find frame to undo; using current frame")
+                result = window.frame
             }
 
         } else if direction == .initialFrame, let window = window {
             if let initialFrame = WindowRecords.getInitialFrame(for: window) {
                 result = initialFrame
+            } else {
+                print("Didn't find initial frame; using current frame")
+                result = window.frame
             }
         }
 
-        result = self.applyPadding(result, bounds, self)
+        result = self.applyPadding(result, bounds)
 
         return result
     }
@@ -230,7 +239,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     ///   - windowFrame: The frame the window WILL be resized to
     ///   - direction: The direction the window WILL be resized to
     /// - Returns: CGRect with padding applied
-    private func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
+    private func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect) -> CGRect {
         let padding = Defaults[.padding]
         let halfPadding = padding.window / 2
 
@@ -242,14 +251,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         var paddedWindowFrame = windowFrame.intersection(bounds)
 
-        if action.direction == .macOSCenter,
+        if direction == .macOSCenter,
            windowFrame.height >= bounds.height {
 
             paddedWindowFrame.origin.y = bounds.minY
             paddedWindowFrame.size.height = bounds.height
         }
 
-        if action.direction == .center || action.direction == .macOSCenter {
+        if direction == .center || direction == .macOSCenter {
             return paddedWindowFrame
         }
 

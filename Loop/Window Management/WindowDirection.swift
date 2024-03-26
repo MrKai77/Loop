@@ -327,7 +327,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var frameMultiplyValues: CGRect? {
         switch self {
-        case .noAction:                 CGRect(x: 1.0/2.0, y: 1.0/2.0, width: 0.0, height: 0.0)
         case .maximize:                 CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
         case .almostMaximize:           CGRect(x: 0.5/10.0, y: 0.5/10.0, width: 9.0/10.0, height: 9.0/10.0)
         case .fullscreen:               CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
