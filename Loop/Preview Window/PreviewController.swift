@@ -92,7 +92,11 @@ class PreviewController {
             return
         }
 
-        let targetWindowFrame = action.getFrame(window: self.window, bounds: screen.safeScreenFrame).toAppKit()
+        let targetWindowFrame = action.getFrame(
+            window: self.window,
+            bounds: screen.safeScreenFrame
+        ).flipY(maxY: NSScreen.screens[0].frame.maxY)
+
         let shouldBeTransparent = targetWindowFrame.size.area == 0
 
         NSAnimationContext.runAnimationGroup { context in
