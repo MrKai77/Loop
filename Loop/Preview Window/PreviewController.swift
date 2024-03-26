@@ -100,7 +100,7 @@ class PreviewController {
         let shouldBeTransparent = targetWindowFrame.size.area == 0
 
         NSAnimationContext.runAnimationGroup { context in
-            context.timingFunction = CAMediaTimingFunction(controlPoints: 0.25, 0, 0.25, 1)
+            context.timingFunction = Defaults[.animationConfiguration].previewTimingFunction
             windowController.window?.animator().setFrame(targetWindowFrame, display: true)
             windowController.window?.animator().alphaValue = shouldBeTransparent ? 0 : 1
         }
