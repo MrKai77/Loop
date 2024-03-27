@@ -25,12 +25,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case macOSCenter = "MacOSCenter"
     case center = "Center"
 
-    // To cycle through directions
-    case cycleTop = "CycleTop"
-    case cycleBottom = "CycleBottom"
-    case cycleRight = "CycleRight"
-    case cycleLeft = "CycleLeft"
-
     // Halves
     case topHalf = "TopHalf"
     case rightHalf = "RightHalf"
@@ -80,18 +74,11 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var verticalThirds: [WindowDirection] {
         [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
     }
-    static var cyclable: [WindowDirection] {
-        [.cycleTop, .cycleBottom, .cycleLeft, .cycleRight]
-    }
     static var screenSwitching: [WindowDirection] {
         [.nextScreen, .previousScreen]
     }
     static var more: [WindowDirection] {
         [.initialFrame, .undo, .custom, .cycle]
-    }
-
-    var isPresetCyclable: Bool {
-        WindowDirection.cyclable.contains(self)
     }
 
     var willChangeScreen: Bool {
@@ -101,14 +88,14 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
         switch self {
-        case .noAction:             .cycleTop
-        case .cycleTop:             .topRightQuarter
-        case .topRightQuarter:      .cycleRight
-        case .cycleRight:           .bottomRightQuarter
-        case .bottomRightQuarter:   .cycleBottom
-        case .cycleBottom:          .bottomLeftQuarter
-        case .bottomLeftQuarter:    .cycleLeft
-        case .cycleLeft:            .topLeftQuarter
+        case .noAction:             .topHalf
+        case .topHalf:              .topRightQuarter
+        case .topRightQuarter:      .rightHalf
+        case .rightHalf:            .bottomRightQuarter
+        case .bottomRightQuarter:   .bottomHalf
+        case .bottomHalf:           .bottomLeftQuarter
+        case .bottomLeftQuarter:    .leftHalf
+        case .leftHalf:             .topLeftQuarter
         case .topLeftQuarter:       .maximize
         case .maximize:             .noAction
         default:                    .noAction
@@ -117,13 +104,13 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var radialMenuAngle: Double? {
         switch self {
-        case .cycleTop:             0
+        case .topHalf:              0
         case .topRightQuarter:      45
-        case .cycleRight:           90
+        case .rightHalf:            90
         case .bottomRightQuarter:   135
-        case .cycleBottom:          180
+        case .bottomHalf:           180
         case .bottomLeftQuarter:    225
-        case .cycleLeft:            270
+        case .leftHalf:             270
         case .topLeftQuarter:       315
         case .maximize:             0
         default:                    nil
@@ -153,13 +140,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var moreInformation: String? {
         var result: String?
 
-        if self.isPresetCyclable {
-            result = """
-            This keybind cycles: press it repeatedly to cycle through
-            1/2, 1/3, and 2/3, then move onto the next screen.
-            """
-        }
-
         if self == .macOSCenter {
             result = """
             \(self.name) places windows slightly above the absolute center,
@@ -181,11 +161,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .minimize:                 Image("custom.arrow.down.right.and.arrow.up.left.rectangle")
         case .center:                   Image("custom.rectangle.center.inset.inset.filled")
         case .macOSCenter:              Image("custom.rectangle.center.inset.inset.filled")
-
-        case .cycleTop:                 Image(systemName: "rectangle.tophalf.inset.filled")
-        case .cycleBottom:              Image(systemName: "rectangle.bottomhalf.inset.filled")
-        case .cycleRight:               Image(systemName: "rectangle.righthalf.inset.filled")
-        case .cycleLeft:                Image(systemName: "rectangle.lefthalf.inset.filled")
 
         case .topHalf:                  Image(systemName: "rectangle.tophalf.inset.filled")
         case .rightHalf:                Image(systemName: "rectangle.righthalf.inset.filled")
@@ -357,51 +332,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .bottomThird:              CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
         case .bottomTwoThirds:          CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
         default:                        nil
-        }
-    }
-
-    func nextCyclingDirection(from: WindowDirection) -> WindowDirection {
-        switch self {
-        case .cycleTop:
-            switch from {
-            case .topHalf:              return .topThird
-            case .topThird:             return .topTwoThirds
-            default:                    return .topHalf
-            }
-        case .cycleBottom:
-            switch from {
-            case .bottomHalf:           return .bottomThird
-            case .bottomThird:          return .bottomTwoThirds
-            default:                    return .bottomHalf
-            }
-        case .cycleLeft:
-            switch from {
-            case .leftHalf:             return .leftThird
-            case .leftThird:            return .leftTwoThirds
-            case .leftTwoThirds:        return .previousScreen
-            case .previousScreen:       return .rightHalf
-            default:                    return .leftHalf
-            }
-        case .cycleRight:
-            switch from {
-            case .rightHalf:            return .rightThird
-            case .rightThird:           return .rightTwoThirds
-            case .rightTwoThirds:       return .nextScreen
-            case .nextScreen:           return .leftHalf
-            default:                    return .rightHalf
-            }
-        default: return .noAction
-        }
-    }
-
-    // Gets the cyclable direction
-    var base: WindowDirection {
-        switch self {
-        case .topHalf, .topThird, .topTwoThirds: .cycleTop
-        case .bottomHalf, .bottomThird, .bottomTwoThirds: .cycleBottom
-        case .leftHalf, .leftThird, .leftTwoThirds: .cycleLeft
-        case .rightHalf, .rightThird, .rightTwoThirds: .cycleRight
-        default: self
         }
     }
 }

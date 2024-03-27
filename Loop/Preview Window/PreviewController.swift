@@ -85,7 +85,6 @@ class PreviewController {
         guard
             let windowController = previewWindowController,
             let screen = self.screen,
-            !action.direction.isPresetCyclable,
             !action.direction.willChangeScreen,
             action.direction != .cycle
         else {

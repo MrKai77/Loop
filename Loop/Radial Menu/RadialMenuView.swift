@@ -28,7 +28,7 @@ struct RadialMenuView: View {
     init(previewMode: Bool = false, window: Window?, startingAction: WindowAction = .init(.noAction)) {
         self.window = window
         self.previewMode = previewMode
-        self._currentAction = State(initialValue: .init(startingAction.direction.base))
+        self._currentAction = State(initialValue: .init(startingAction.direction))
 
         if previewMode {
             self._timer = State(initialValue: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
@@ -113,7 +113,7 @@ struct RadialMenuView: View {
         }
         .onReceive(.updateUIDirection) { obj in
             if !self.previewMode, let action = obj.userInfo?["action"] as? WindowAction {
-                self.currentAction = .init(action.direction.base)
+                self.currentAction = .init(action.direction)
 
                 print("New radial menu window action recieved: \(action.direction)")
             }
