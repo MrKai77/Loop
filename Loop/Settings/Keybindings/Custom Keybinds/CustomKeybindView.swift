@@ -20,41 +20,136 @@ struct CustomKeybindView: View {
                 Section {
                     TextField("Name", text: $action.name.bound, prompt: Text("Custom Keybind"))
                         .focused($focusedField, equals: "name")
+
+                    Picker("Measurement Unit", selection: $action.unit) {
+                        ForEach(CustomWindowActionUnit.allCases) { system in
+                            system.label
+                                .tag(system as CustomWindowActionUnit?)
+                        }
+                    }
+                    .onChange(of: action.unit) { _ in
+                        if action.unit == .percentage {
+                            if action.width ?? 101 > 100 {
+                                self.action.width = 100
+                            }
+                            if action.height ?? 101 > 100 {
+                                self.action.height = 100
+                            }
+
+                            if action.xPoint ?? 101 > 100 {
+                                self.action.xPoint = 100
+                            }
+                            if action.yPoint ?? 101 > 100 {
+                                self.action.xPoint = 100
+                            }
+                        }
+                    }
                 }
 
                 Section {
-                    ZStack {
-                        WallpaperView().equatable()
-                        AnchorPicker(anchor: self.$action.anchor)
+                    Picker("Position Mode", selection: $action.positionMode) {
+                        ForEach(CustomWindowActionPositionMode.allCases) { system in
+                            system.label
+                                .tag(system as CustomWindowActionPositionMode?)
+                        }
                     }
-                    .ignoresSafeArea()
-                    .padding(-10)
-                    .aspectRatio(16/10, contentMode: .fit)
+
+                    if let positionMode = action.positionMode, positionMode == .coordinates {
+                        CrispValueAdjuster(
+                            "X",
+                            value: Binding<Double>(
+                                get: {
+                                    self.action.xPoint ?? 0
+                                },
+                                set: {
+                                    self.action.xPoint = $0
+
+                                    if let width = action.width,
+                                       let sizeMode = action.sizeMode,
+                                       sizeMode == .custom,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.width = min(width, 100 - $0)
+                                    }
+                                }
+                            ),
+                            sliderRange: action.unit == .percentage ?  0...100 : 0...(
+                                Double(NSScreen.main?.frame.width ?? 1000)
+                            ),
+                            postscript: action.unit?.postscript ?? "",
+                            lowerClamp: true
+                        )
+
+                        CrispValueAdjuster(
+                            "Y",
+                            value: Binding<Double>(
+                                get: {
+                                    self.action.yPoint ?? 0
+                                },
+                                set: {
+                                    self.action.yPoint = $0
+
+                                    if let height = action.height,
+                                       let sizeMode = action.sizeMode,
+                                       sizeMode == .custom,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.height = min(height, 100 - $0)
+                                    }
+                                }
+                            ),
+                            sliderRange: action.unit == .percentage ?  0...100 : 0...(
+                                Double(NSScreen.main?.frame.height ?? 1000)
+                            ),
+                            postscript: action.unit?.postscript ?? "",
+                            lowerClamp: true
+                        )
+                    }
+                } header: {
+                    Text("Window Position")
+                } footer: {
+                    if let positionMode = action.positionMode, positionMode == .coordinates {
+                        Text("This point determines the upper-left edge of the window.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
-                if self.action.anchor == .center || self.action.anchor == .macOSCenter {
+                if let positionMode = action.positionMode, positionMode == .generic {
                     Section {
-                        Toggle(
-                            isOn: Binding(
-                                get: { self.action.anchor == .macOSCenter },
-                                set: { self.action.anchor = $0 ? .macOSCenter : .center }
-                            )
-                        ) {
-                            HStack {
-                                Text("Use MacOS Center")
-                                if let moreInformation = WindowDirection.macOSCenter.moreInformation {
-                                    Button(action: {
-                                        self.showingInfo.toggle()
-                                    }, label: {
-                                        Image(systemName: "info.circle")
-                                            .font(.title3)
-                                            .foregroundStyle(.secondary)
-                                    })
-                                    .buttonStyle(.plain)
-                                    .popover(isPresented: $showingInfo, arrowEdge: .bottom) {
-                                        Text(moreInformation)
-                                            .multilineTextAlignment(.center)
-                                            .padding(8)
+                        ZStack {
+                            WallpaperView().equatable()
+                            AnchorPicker(anchor: self.$action.anchor)
+                        }
+                        .ignoresSafeArea()
+                        .padding(-10)
+                        .aspectRatio(16/10, contentMode: .fit)
+                    }
+
+                    if self.action.anchor == .center || self.action.anchor == .macOSCenter {
+                        Section {
+                            Toggle(
+                                isOn: Binding(
+                                    get: { self.action.anchor == .macOSCenter },
+                                    set: { self.action.anchor = $0 ? .macOSCenter : .center }
+                                )
+                            ) {
+                                HStack {
+                                    Text("Use MacOS Center")
+                                    if let moreInformation = WindowDirection.macOSCenter.moreInformation {
+                                        Button(action: {
+                                            self.showingInfo.toggle()
+                                        }, label: {
+                                            Image(systemName: "info.circle")
+                                                .font(.title3)
+                                                .foregroundStyle(.secondary)
+                                        })
+                                        .buttonStyle(.plain)
+                                        .popover(isPresented: $showingInfo, arrowEdge: .bottom) {
+                                            Text(moreInformation)
+                                                .multilineTextAlignment(.center)
+                                                .padding(8)
+                                        }
                                     }
                                 }
                             }
@@ -63,48 +158,64 @@ struct CustomKeybindView: View {
                 }
 
                 Section("Window Size") {
-                    Picker("Configure using", selection: $action.measureSystem) {
-                        ForEach(CustomWindowActionMeasureSystem.allCases) { system in
+                    Picker("Sizing Mode", selection: $action.sizeMode) {
+                        ForEach(CustomWindowActionSizeMode.allCases) { system in
                             system.label
-                                .tag(system as CustomWindowActionMeasureSystem?)
-                        }
-                    }
-                    .onChange(of: action.measureSystem) { _ in
-                        if action.measureSystem == .percentage {
-                            if action.width ?? 101 > 100 {
-                                self.action.width = 100
-                            }
-                            if action.height ?? 101 > 100 {
-                                self.action.height = 100
-                            }
+                                .tag(system as CustomWindowActionSizeMode?)
                         }
                     }
 
-                    CrispValueAdjuster(
-                        "Width",
-                        value: Binding<Double>( // Width is an optional
-                            get: { self.action.width ?? 0 },
-                            set: { self.action.width = $0 }
-                        ),
-                        sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
-                            Double(NSScreen.main?.frame.width ?? 1000)
-                        ),
-                        postscript: action.measureSystem?.postscript ?? "",
-                        lowerClamp: true
-                    )
+                    if let sizeMode = action.sizeMode, sizeMode == .custom {
+                        CrispValueAdjuster(
+                            "Width",
+                            value: Binding<Double>(
+                                get: {
+                                    self.action.width ?? 0
+                                },
+                                set: {
+                                    self.action.width = $0
 
-                    CrispValueAdjuster(
-                        "Height",
-                        value: Binding<Double>( // Height is an optional
-                            get: { self.action.height ?? 0 },
-                            set: { self.action.height = $0 }
-                        ),
-                        sliderRange: action.measureSystem == .percentage ?  0...100 : 0...(
-                            Double(NSScreen.main?.frame.height ?? 1000)
-                        ),
-                        postscript: action.measureSystem?.postscript ?? "",
-                        lowerClamp: true
-                    )
+                                    if let xPoint = action.xPoint,
+                                       let positionMode = action.positionMode,
+                                       positionMode == .coordinates,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.xPoint = min(xPoint, 100 - $0)
+                                    }
+                                }
+                            ),
+                            sliderRange: action.unit == .percentage ?  0...100 : 0...(
+                                Double(NSScreen.main?.frame.width ?? 1000)
+                            ),
+                            postscript: action.unit?.postscript ?? "",
+                            lowerClamp: true
+                        )
+
+                        CrispValueAdjuster(
+                            "Height",
+                            value: Binding<Double>(
+                                get: {
+                                    self.action.height ?? 0
+                                },
+                                set: {
+                                    self.action.height = $0
+
+                                    if let yPoint = action.yPoint,
+                                       let positionMode = action.positionMode,
+                                       positionMode == .coordinates,
+                                       let unit = action.unit,
+                                       unit == .percentage {
+                                        action.yPoint = min(yPoint, 100 - $0)
+                                    }
+                                }
+                            ),
+                            sliderRange: action.unit == .percentage ?  0...100 : 0...(
+                                Double(NSScreen.main?.frame.height ?? 1000)
+                            ),
+                            postscript: action.unit?.postscript ?? "",
+                            lowerClamp: true
+                        )
+                    }
                 }
 
                 Section {
@@ -112,6 +223,12 @@ struct CustomKeybindView: View {
                         Text("Preview window size")
                         Spacer()
                         PreviewWindowButton(self.$action)
+                            .disabled({
+                                if let sizeMode = action.sizeMode {
+                                    return sizeMode != .custom
+                                }
+                                return false
+                            }())
                     }
                 }
             }
@@ -136,8 +253,16 @@ struct CustomKeybindView: View {
         .background(.background)
 
         .onAppear {
-            if self.action.measureSystem == nil {
-                self.action.measureSystem = .percentage
+            if self.action.unit == nil {
+                self.action.unit = .percentage
+            }
+
+            if self.action.sizeMode == nil {
+                self.action.sizeMode = .custom
+            }
+
+            if self.action.positionMode == nil {
+                self.action.positionMode = .generic
             }
 
             if self.action.anchor == nil {

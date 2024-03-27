@@ -125,4 +125,8 @@ extension CGRect {
     var bottomRightPoint: CGPoint {
         CGPoint(x: self.maxX, y: self.maxY)
     }
+
+    var center: CGPoint {
+        CGPoint(x: self.midX, y: self.midY)
+    }
 }

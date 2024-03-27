@@ -23,11 +23,11 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
         }
     }
 
-    var previewWindowAnimation: Animation? {
+    var previewTimingFunction: CAMediaTimingFunction {
         switch self {
-        case .smooth:   .interpolatingSpring(duration: 0.3, bounce: 0.15, initialVelocity: 1/2)
-        case .fast:     .interpolatingSpring(duration: 0.2, bounce: 0.1, initialVelocity: 1/2)
-        case .instant:  nil
+        case .smooth:   CAMediaTimingFunction(controlPoints: 0, 0.26, 0.45, 1)
+        case .fast:     CAMediaTimingFunction(controlPoints: 0.22, 1, 0.47, 1)
+        case .instant:  CAMediaTimingFunction(controlPoints: 0.16, 1, 0.3, 1)
         }
     }
 

@@ -1,5 +1,5 @@
 //
-//  CustomWindowActionMeasureSystem.swift
+//  CustomWindowActionUnit.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-01-01.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum CustomWindowActionMeasureSystem: Int, Codable, CaseIterable, Identifiable {
+enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
     var id: Self { self }
 
     case pixels = 0

@@ -90,13 +90,13 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                                 CGRect(
                                     // This compensates for the small spacing within the slider
                                     x: popoverXOffset,
-                                    y: 15,
+                                    y: 0,
                                     width: 0,
                                     height: 0
                                 )
                             )
                         ),
-                        arrowEdge: .bottom
+                        arrowEdge: .top
                     ) {
                         stepperView
                             .padding(10)

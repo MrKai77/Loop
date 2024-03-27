@@ -45,7 +45,7 @@ struct PreviewSettingsView: View {
                         .ignoresSafeArea()
                         .padding(-10)
 
-                    PreviewView(previewMode: true, window: nil)
+                    PreviewView(previewMode: true)
                 }
             }
             .frame(height: 150)

@@ -10,18 +10,15 @@ import Defaults
 
 struct PreviewView: View {
 
-    @State var currentAction: WindowAction
-    private let window: Window?
-    private let previewMode: Bool
+    let previewMode: Bool
+    @State private var scale: CGFloat = 1
 
-    init(
-        previewMode: Bool = false,
-        window: Window?,
-        startingAction: WindowAction = .init(.noAction)
-    ) {
-        self.window = window
+    init(previewMode: Bool = false) {
         self.previewMode = previewMode
-        self._currentAction = State(initialValue: startingAction)
+
+        if previewMode {
+            self._scale = State(initialValue: 0)
+        }
     }
 
     @Default(.useGradient) var useGradient
@@ -31,14 +28,12 @@ struct PreviewView: View {
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
 
-    @State var windowEdgesToPad: Edge.Set = []
-
     var body: some View {
-        GeometryReader { geo in
+        GeometryReader { _ in
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                     .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
-                    .shadow(radius: 10)
+//                    .shadow(radius: 10)
                 RoundedRectangle(cornerRadius: previewCornerRadius)
                     .stroke(
                         LinearGradient(
@@ -55,54 +50,21 @@ struct PreviewView: View {
                     )
             }
             .padding(previewPadding + previewBorderThickness / 2)
-            .padding(windowEdgesToPad, padding.window / 2)
 
-            .frame(
-                width: self.currentAction.previewWindowWidth(geo.size.width, window),
-                height: self.currentAction.previewWindowHeight(geo.size.height, window)
-            )
-
-            .offset(
-                x: self.currentAction.previewWindowXOffset(geo.size.width, window),
-                y: self.currentAction.previewWindowYOffset(geo.size.height, window)
-            )
-        }
-        .padding(.top, padding.totalTopPadding)
-        .padding(.bottom, padding.bottom)
-        .padding(.leading, padding.left)
-        .padding(.trailing, padding.right)
-
-        .opacity(currentAction.direction == .noAction ? 0 : 1)
-        .animation(animationConfiguration.previewWindowAnimation, value: currentAction)
-        .onReceive(.updateUIDirection) { obj in
-            if !self.previewMode,
-               let action = obj.userInfo?["action"] as? WindowAction,
-               !action.direction.isPresetCyclable,
-               !action.direction.willChangeScreen,
-               action.direction != .cycle {
-
-                self.currentAction = action
-
-                if self.currentAction.direction == .undo && self.window != nil {
-                    self.currentAction = WindowRecords.getLastAction(for: self.window!)
+            .scaleEffect(CGSize(width: scale, height: scale))
+            .onAppear {
+                if previewMode {
+                    withAnimation(
+                        .interpolatingSpring(
+                            duration: 0.2,
+                            bounce: 0.1,
+                            initialVelocity: 1/2
+                        )
+                    ) {
+                        self.scale = 1
+                    }
                 }
-
-                print("New preview window action recieved: \(action.direction)")
             }
-        }
-        .onAppear {
-            if self.previewMode {
-                self.currentAction = .init(.maximize)
-            }
-
-            self.windowEdgesToPad = Edge.Set.all.subtracting(
-                self.currentAction.getEdgesTouchingScreen()
-            )
-        }
-        .onChange(of: self.currentAction.getEdgesTouchingScreen()) { _ in
-            self.windowEdgesToPad = Edge.Set.all.subtracting(
-                self.currentAction.getEdgesTouchingScreen()
-            )
         }
     }
 }

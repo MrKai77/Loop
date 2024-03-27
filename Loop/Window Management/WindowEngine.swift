@@ -51,17 +51,11 @@ struct WindowEngine {
             return
         }
 
-        let screenFrame = screen.safeScreenFrame
-        guard
-            let newWindowFrame = WindowEngine.generateWindowFrame(
-                window,
-                screenFrame,
-                action
-            )
-        else {
-            return
+        var targetWindowFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
+
+        if action.direction == .undo {
+            WindowRecords.removeLastAction(for: window)
         }
-        var targetWindowFrame = WindowEngine.applyPadding(newWindowFrame, screenFrame, action)
 
         print("Target window frame: \(targetWindowFrame)")
 
@@ -76,7 +70,7 @@ struct WindowEngine {
 
             // Calculate the window's minimum window size and change the target accordingly
             window.getMinSize(screen: screen) { minSize in
-                let nsScreenFrame = screenFrame.flipY!
+                let nsScreenFrame = screen.safeScreenFrame.flipY!
 
                 if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
                     targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.padding].right
@@ -98,7 +92,7 @@ struct WindowEngine {
                     window.setFrame(targetWindowFrame)
                 }
 
-                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screenFrame)
+                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
                 WindowRecords.record(window, action)
             }
         }
@@ -167,109 +161,10 @@ struct WindowEngine {
         return windowList
     }
 
-    static func generateWindowFrame(
-        _ window: Window,
-        _ screenFrame: CGRect,
-        _ action: WindowAction
-    ) -> CGRect? {
-        let windowFrame = window.frame
-        let direction = action.direction
-
-        var newWindowFrame: CGRect = .zero
-        newWindowFrame.origin = screenFrame.origin
-
-        switch direction {
-        case .center:
-            newWindowFrame = CGRect(
-                x: screenFrame.midX - windowFrame.width / 2,
-                y: screenFrame.midY - windowFrame.height / 2,
-                width: windowFrame.width,
-                height: windowFrame.height
-            )
-        case .macOSCenter:
-            let yOffset = getMacOSCenterYOffset(windowFrame.height, screenHeight: screenFrame.height)
-
-            newWindowFrame = CGRect(
-                x: screenFrame.midX - windowFrame.width / 2,
-                y: screenFrame.midY - windowFrame.height / 2 + yOffset,
-                width: windowFrame.width,
-                height: windowFrame.height
-            )
-        case .undo:
-            let previousDirection = WindowRecords.getLastAction(for: window, willResize: true)
-            if let previousResizeFrame = self.generateWindowFrame(window, screenFrame, previousDirection) {
-                newWindowFrame = previousResizeFrame
-            } else {
-                return nil
-            }
-        case .initialFrame:
-            if let initalFrame = WindowRecords.getInitialFrame(for: window) {
-                newWindowFrame = initalFrame
-            } else {
-                return nil
-            }
-        default:
-            let frameMultiplyValues = action.getFrameMultiplyValues()
-            newWindowFrame.origin.x += screenFrame.width * frameMultiplyValues.minX
-            newWindowFrame.origin.y += screenFrame.height * frameMultiplyValues.minY
-            newWindowFrame.size.width += screenFrame.width * frameMultiplyValues.width
-            newWindowFrame.size.height += screenFrame.height * frameMultiplyValues.height
-        }
-
-        return newWindowFrame
-    }
-
     static func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
         let halfScreenHeight = screenHeight / 2
         let windowHeightPercent = windowHeight / screenHeight
         return (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
-    }
-
-    /// Apply padding on a CGRect, using the provided WindowDirection
-    /// - Parameters:
-    ///   - windowFrame: The frame the window WILL be resized to
-    ///   - direction: The direction the window WILL be resized to
-    /// - Returns: CGRect with padding applied
-    private static func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect, _ action: WindowAction) -> CGRect {
-        let padding = Defaults[.padding]
-        let halfPadding = padding.window / 2
-
-        var paddedScreenFrame = screenFrame
-        paddedScreenFrame = paddedScreenFrame.padding(.top, padding.totalTopPadding)
-        paddedScreenFrame = paddedScreenFrame.padding(.bottom, padding.bottom)
-        paddedScreenFrame = paddedScreenFrame.padding(.leading, padding.left)
-        paddedScreenFrame = paddedScreenFrame.padding(.trailing, padding.right)
-
-        var paddedWindowFrame = windowFrame.intersection(paddedScreenFrame)
-
-        if action.direction == .macOSCenter,
-           windowFrame.height >= paddedScreenFrame.height {
-
-            paddedWindowFrame.origin.y = paddedScreenFrame.minY
-            paddedWindowFrame.size.height = paddedScreenFrame.height
-        }
-
-        if action.direction == .center || action.direction == .macOSCenter {
-            return paddedWindowFrame
-        }
-
-        if paddedWindowFrame.minX != paddedScreenFrame.minX {
-            paddedWindowFrame = paddedWindowFrame.padding(.leading, halfPadding)
-        }
-
-        if paddedWindowFrame.maxX != paddedScreenFrame.maxX {
-            paddedWindowFrame = paddedWindowFrame.padding(.trailing, halfPadding)
-        }
-
-        if paddedWindowFrame.minY != paddedScreenFrame.minY {
-            paddedWindowFrame = paddedWindowFrame.padding(.top, halfPadding)
-        }
-
-        if paddedWindowFrame.maxY != paddedScreenFrame.maxY {
-            paddedWindowFrame = paddedWindowFrame.padding(.bottom, halfPadding)
-        }
-
-        return paddedWindowFrame
     }
 
     /// Will move a window back onto the screen. To be run AFTER a window has been resized.

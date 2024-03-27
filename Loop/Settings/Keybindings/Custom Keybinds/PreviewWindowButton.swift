@@ -71,7 +71,7 @@ struct PreviewWindowButton: NSViewRepresentable {
             if NSApp.currentEvent?.type == .leftMouseUp {
                 self.previewController.close()
             } else {
-                guard let screen = NSScreen.screenWithMouse else { return }
+                guard let screen = NSScreen.main else { return }
                 self.previewController.open(screen: screen, startingAction: self.parent.keybind)
             }
         }

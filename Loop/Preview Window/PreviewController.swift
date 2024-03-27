@@ -6,46 +6,53 @@
 //
 
 import SwiftUI
+import Defaults
 
 class PreviewController {
 
     private var previewWindowController: NSWindowController?
-    private var screen: NSScreen = NSScreen()
+    private var screen: NSScreen?
+    private var window: Window?
 
-    func open(screen: NSScreen, window: Window? = nil, startingAction: WindowAction = .init(.noAction)) {
+    init() {
+        Notification.Name.updateUIDirection.onRecieve { obj in
+            if let action = obj.userInfo?["action"] as? WindowAction {
+                self.setAction(to: action)
+            }
+        }
+    }
+
+    func open(screen: NSScreen, window: Window? = nil, startingAction: WindowAction? = nil) {
         if let windowController = previewWindowController {
             windowController.window?.orderFrontRegardless()
             return
         }
-        self.screen = screen
 
-        let panel = NSPanel(contentRect: .zero,
-                            styleMask: [.borderless, .nonactivatingPanel],
-                            backing: .buffered,
-                            defer: true,
-                            screen: NSApp.keyWindow?.screen)
+        let panel = NSPanel(
+            contentRect: .zero,
+            styleMask: [.borderless, .nonactivatingPanel],
+            backing: .buffered,
+            defer: true,
+            screen: NSApp.keyWindow?.screen
+        )
         panel.hasShadow = false
+        panel.alphaValue = 0
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
+        panel.setFrame(NSRect(origin: screen.stageStripFreeFrame.center, size: .zero), display: true)
         // This ensures that this is below the radial menu
         panel.level = NSWindow.Level(NSWindow.Level.screenSaver.rawValue - 1)
-        panel.contentView = NSHostingView(
-            rootView: PreviewView(
-                window: window,
-                startingAction: startingAction
-            )
-        )
+        panel.contentView = NSHostingView(rootView: PreviewView())
         panel.collectionBehavior = .canJoinAllSpaces
-        panel.alphaValue = 0
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
-
-        panel.setFrame(screen.stageStripFreeFrame, display: false)
-
         previewWindowController = .init(window: panel)
 
-        NSAnimationContext.runAnimationGroup({ _ in
-            panel.animator().alphaValue = 1
-        })
+        self.screen = screen
+        self.window = window
+
+        if let action = startingAction {
+            self.setAction(to: action)
+        }
     }
 
     func close() {
@@ -60,14 +67,44 @@ class PreviewController {
         })
     }
 
-    func setScreen(to screen: NSScreen) {
+    func setScreen(to newScreen: NSScreen) {
         guard
-            self.previewWindowController != nil,
-            screen != self.screen
+            self.previewWindowController != nil,    // Ensures that the preview window is open
+            self.screen != newScreen
         else {
             return
         }
+
         self.close()
-        self.open(screen: screen)
+        self.open(screen: newScreen, window: self.window)
+
+        print("Changed preview window's screen")
+    }
+
+    func setAction(to action: WindowAction) {
+        guard
+            let windowController = previewWindowController,
+            let screen = self.screen,
+            !action.direction.isPresetCyclable,
+            !action.direction.willChangeScreen,
+            action.direction != .cycle
+        else {
+            return
+        }
+
+        let targetWindowFrame = action.getFrame(
+            window: self.window,
+            bounds: screen.safeScreenFrame
+        ).flipY(maxY: NSScreen.screens[0].frame.maxY)
+
+        let shouldBeTransparent = targetWindowFrame.size.area == 0
+
+        NSAnimationContext.runAnimationGroup { context in
+            context.timingFunction = Defaults[.animationConfiguration].previewTimingFunction
+            windowController.window?.animator().setFrame(targetWindowFrame, display: true)
+            windowController.window?.animator().alphaValue = shouldBeTransparent ? 0 : 1
+        }
+
+        print("New preview window action recieved: \(action.direction)")
     }
 }

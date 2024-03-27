@@ -41,7 +41,7 @@ class Window {
         // Check if this is a widget
         if let title = nsRunningApplication?.localizedName,
            title == "Notification Center" {
-            print("This is an invalid window (is a widget)")
+            print("This window is a part of Notification Center")
             return nil
         }
     }

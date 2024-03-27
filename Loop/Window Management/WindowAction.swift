@@ -15,20 +15,28 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         _ direction: WindowDirection,
         keybind: Set<CGKeyCode>,
         name: String? = nil,
-        measureSystem: CustomWindowActionMeasureSystem? = nil,
+        unit: CustomWindowActionUnit? = nil,
         anchor: CustomWindowActionAnchor? = nil,
         width: Double? = nil,
         height: Double? = nil,
+        xPoint: Double? = nil,
+        yPoint: Double? = nil,
+        positionMode: CustomWindowActionPositionMode? = nil,
+        sizeMode: CustomWindowActionSizeMode? = nil,
         cycle: [WindowAction]? = nil
     ) {
         self.id = UUID()
         self.direction = direction
         self.keybind = keybind
         self.name = name
-        self.measureSystem = measureSystem
+        self.unit = unit
         self.anchor = anchor
         self.width = width
         self.height = height
+        self.positionMode = positionMode
+        self.xPoint = xPoint
+        self.yPoint = yPoint
+        self.sizeMode = sizeMode
         self.cycle = cycle
     }
 
@@ -45,10 +53,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     // MARK: CUSTOM KEYBINDS
     var name: String?
-    var measureSystem: CustomWindowActionMeasureSystem?
+    var unit: CustomWindowActionUnit?
     var anchor: CustomWindowActionAnchor?
+    var sizeMode: CustomWindowActionSizeMode?
     var width: Double?
     var height: Double?
+    var positionMode: CustomWindowActionPositionMode?
+    var xPoint: Double?
+    var yPoint: Double?
 
     var cycle: [WindowAction]?
 
@@ -57,70 +69,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             return keybinding
         }
         return nil
-    }
-
-    // Returns the window frame within the boundaries of (0, 0) to (1, 1)
-    // Will be on the screen with mouse if needed.
-    func getFrameMultiplyValues() -> CGRect {
-        guard self.direction != .cycle else {
-            return .zero
-        }
-
-        let bounds = CGRect(x: 0, y: 0, width: 1, height: 1)
-        var result = CGRect.zero
-
-        if let frameMultiplyValues = direction.frameMultiplyValues {
-            result.origin.x = bounds.width * frameMultiplyValues.minX
-            result.origin.y = bounds.height * frameMultiplyValues.minY
-            result.size.width = bounds.width * frameMultiplyValues.width
-            result.size.height = bounds.height * frameMultiplyValues.height
-        } else {
-            guard direction == .custom else { return result }
-
-            switch measureSystem {
-            case .pixels:
-                guard let screenFrame = NSScreen.screenWithMouse?.frame else { return result }
-                result.size.width += (width ?? screenFrame.width) / screenFrame.width
-                result.size.height += (height ?? screenFrame.height) / screenFrame.height
-            case .percentage:
-                result.size.width = bounds.width * ((width ?? 0) / 100.0)
-                result.size.height = bounds.height * ((height ?? 0) / 100.0)
-            case .none:
-                break
-            }
-
-            switch anchor {
-            case .topLeft:
-                break
-            case .top:
-                result.origin.x = bounds.midX - result.width / 2
-            case .topRight:
-                result.origin.x = bounds.maxX - result.width
-            case .right:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.midY - result.height / 2
-            case .bottomRight:
-                result.origin.x = bounds.maxX - result.width
-                result.origin.y = bounds.maxY - result.height
-            case .bottom:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.maxY - result.height
-            case .bottomLeft:
-                result.origin.y = bounds.maxY - result.height
-            case .left:
-                result.origin.y = bounds.midY - result.height / 2
-            case .center:
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = bounds.midY - result.height / 2
-            case .macOSCenter:
-                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
-                result.origin.x = bounds.midX - result.width / 2
-                result.origin.y = (bounds.midY - result.height / 2) + yOffset
-            case .none:
-                break
-            }
-        }
-        return result
     }
 
     func getEdgesTouchingScreen() -> Edge.Set {
@@ -145,323 +93,191 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         return result
     }
-}
 
-// MARK: - Import/Export
-extension WindowAction {
-    private struct SavedWindowActionFormat: Codable {
-        var direction: WindowDirection
-        var keybind: Set<CGKeyCode>
+    func getFrame(window: Window?, bounds: CGRect) -> CGRect {
+        guard self.direction != .cycle, self.direction != .noAction else {
+            return NSRect(origin: bounds.center, size: .zero)
+        }
+        var result = CGRect(origin: bounds.origin, size: .zero)
 
-        // Custom keybinds
-        var name: String?
-        var measureSystem: CustomWindowActionMeasureSystem?
-        var anchor: CustomWindowActionAnchor?
-        var width: Double?
-        var height: Double?
+        if let frameMultiplyValues = direction.frameMultiplyValues {
+            result.origin.x += bounds.width * frameMultiplyValues.minX
+            result.origin.y += bounds.height * frameMultiplyValues.minY
+            result.size.width = bounds.width * frameMultiplyValues.width
+            result.size.height = bounds.height * frameMultiplyValues.height
 
-        var cycle: [SavedWindowActionFormat]?
+        } else if direction == .custom {
+            result = calculateCustomFrame(window, bounds)
 
-        func convertToWindowAction() -> WindowAction {
-            WindowAction(
-                direction,
-                keybind: keybind,
-                name: name,
-                measureSystem: measureSystem,
-                anchor: anchor,
-                width: width,
-                height: height,
-                cycle: cycle?.map { $0.convertToWindowAction() }
+        } else if direction == .center, let window = window {
+            let windowSize = window.size
+            result = CGRect(
+                origin: CGPoint(
+                    x: bounds.midX - (windowSize.width / 2),
+                    y: bounds.midY - (windowSize.height / 2)
+                ),
+                size: windowSize
             )
-        }
-    }
 
-    private func convertToSavedWindowActionFormat() -> SavedWindowActionFormat {
-        SavedWindowActionFormat(
-            direction: direction,
-            keybind: keybind,
-            name: name,
-            measureSystem: measureSystem,
-            anchor: anchor,
-            width: width,
-            height: height,
-            cycle: cycle?.map { $0.convertToSavedWindowActionFormat() }
-        )
-    }
-
-    static func exportPrompt() {
-        let keybinds = Defaults[.keybinds]
-
-        if keybinds.isEmpty {
-            let alert = NSAlert()
-            alert.messageText = "No Keybinds Have Been Set"
-            alert.informativeText = "You can't export something that doesn't exist!"
-            alert.beginSheetModal(for: NSApplication.shared.mainWindow!)
-            return
-        }
-
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-
-        do {
-            let exportKeybinds = keybinds.map {
-                $0.convertToSavedWindowActionFormat()
-            }
-
-            let keybindsData = try encoder.encode(exportKeybinds)
-
-            if let json = String(data: keybindsData, encoding: .utf8) {
-                attemptSave(of: json)
-            }
-        } catch {
-            print("Error encoding keybinds: \(error)")
-        }
-    }
-
-    private static func attemptSave(of keybindsData: String) {
-        let data = keybindsData.data(using: .utf8)
-
-        let savePanel = NSSavePanel()
-        if let downloadsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            savePanel.directoryURL = downloadsUrl
-        }
-
-        savePanel.title = "Export Keybinds"
-        savePanel.nameFieldStringValue = "keybinds"
-        savePanel.allowedContentTypes = [.json]
-
-        savePanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
-            if result == .OK, let destUrl = savePanel.url {
-                DispatchQueue.main.async {
-                    do {
-                        try data?.write(to: destUrl)
-                    } catch {
-                        print("Error writing to file: \(error)")
-                    }
-                }
-            }
-        }
-    }
-
-    static func importPrompt() {
-        let openPanel = NSOpenPanel()
-        openPanel.title = "Import Keybinds"
-        openPanel.allowedContentTypes = [.json]
-
-        openPanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
-            if result == .OK, let selectedFileURL = openPanel.url {
-                DispatchQueue.main.async {
-                    do {
-                        let jsonString = try String(contentsOf: selectedFileURL)
-                        importKeybinds(from: jsonString)
-                    } catch {
-                        print("Error reading file: \(error)")
-                    }
-                }
-            }
-        }
-    }
-
-    private static func importKeybinds(from jsonString: String) {
-        let decoder = JSONDecoder()
-
-        do {
-            let keybindsData = jsonString.data(using: .utf8)!
-            let importedKeybinds = try decoder.decode([SavedWindowActionFormat].self, from: keybindsData)
-
-            if Defaults[.keybinds].isEmpty {
-                for savedKeybind in importedKeybinds {
-                    Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
-                }
-            } else {
-                showAlertForImportDecision { decision in
-                    switch decision {
-                    case .merge:
-                        for savedKeybind in importedKeybinds where !Defaults[.keybinds].contains(where: {
-                            $0.keybind == savedKeybind.keybind && $0.name == savedKeybind.name
-                        }) {
-                            Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
-                        }
-
-                    case .erase:
-                        Defaults[.keybinds] = []
-
-                        for savedKeybind in importedKeybinds {
-                            Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
-                        }
-
-                    case .cancel:
-                        break
-                    }
-                }
-            }
-        } catch {
-            print("Error decoding keybinds: \(error)")
-
-            let alert = NSAlert()
-            alert.messageText = "Error Reading Keybinds"
-            alert.informativeText = "Make sure the file you selected is in the correct format."
-            alert.beginSheetModal(for: NSApplication.shared.mainWindow!)
-        }
-    }
-
-    private static func showAlertForImportDecision(completion: @escaping (ImportDecision) -> Void) {
-        let alert = NSAlert()
-        alert.messageText = "Import Keybinds"
-        alert.informativeText = "Do you want to merge or erase existing keybinds?"
-
-        alert.addButton(withTitle: "Merge")
-        alert.addButton(withTitle: "Erase")
-        alert.addButton(withTitle: "Cancel")
-
-        alert.beginSheetModal(for: NSApplication.shared.mainWindow!) { response in
-            switch response {
-            case .alertFirstButtonReturn:  // Merge
-                completion(.merge)
-            case .alertSecondButtonReturn: // Erase
-                completion(.erase)
-            default: // Cancel or other cases
-                completion(.cancel)
-            }
-        }
-    }
-
-    // Define an enum for the import decision
-    enum ImportDecision {
-        case merge
-        case erase
-        case cancel
-    }
-}
-
-// MARK: - Preview Window
-extension WindowAction {
-    func previewWindowXOffset(_ parentWidth: CGFloat, _ window: Window?) -> CGFloat {
-        var xLocation = parentWidth * (self.direction.frameMultiplyValues?.minX ?? 0)
-        let previewWidth = previewWindowWidth(parentWidth, window)
-
-        if self.direction == .custom {
-            switch self.anchor {
-            case .topLeft:
-                xLocation = 0
-            case .top:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            case .topRight:
-                xLocation = parentWidth - previewWidth
-            case .right:
-                xLocation = parentWidth - previewWidth
-            case .bottomRight:
-                xLocation = parentWidth - previewWidth
-            case .bottom:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            case .bottomLeft:
-                xLocation = 0
-            case .left:
-                xLocation = 0
-            case .center:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            case .macOSCenter:
-                xLocation = (parentWidth / 2) - (previewWidth / 2)
-            default:
-                xLocation = 0
-            }
-        }
-
-        if self.direction == .center || self.direction == .macOSCenter {
-            xLocation = (parentWidth / 2) - (previewWidth / 2)
-        }
-
-        return xLocation
-    }
-
-    func previewWindowYOffset(_ parentHeight: CGFloat, _ window: Window?) -> CGFloat {
-        var yLocation = parentHeight * (self.direction.frameMultiplyValues?.minY ?? 0)
-        let previewHeight = previewWindowHeight(parentHeight, window)
-
-        if self.direction == .custom {
-            switch self.anchor {
-            case .topLeft:
-                yLocation = 0
-            case .top:
-                yLocation = 0
-            case .topRight:
-                yLocation = 0
-            case .right:
-                yLocation = (parentHeight / 2) - (previewHeight / 2)
-            case .bottomRight:
-                yLocation = parentHeight - previewHeight
-            case .bottom:
-                yLocation = parentHeight - previewHeight
-            case .bottomLeft:
-                yLocation = parentHeight - previewHeight
-            case .left:
-                yLocation = (parentHeight / 2) - (previewHeight / 2)
-            case .center:
-                yLocation = (parentHeight / 2) - (previewHeight / 2)
-            case .macOSCenter:
-                let yOffset = WindowEngine.getMacOSCenterYOffset(previewHeight, screenHeight: parentHeight)
-                yLocation = (parentHeight / 2) - (previewHeight / 2) + yOffset
-            default:
-                yLocation = 0
-            }
-        }
-
-        if self.direction == .center {
-            yLocation = (parentHeight / 2) - (previewHeight / 2)
-        }
-
-        if self.direction == .macOSCenter {
+        } else if direction == .macOSCenter, let window = window {
+            let windowSize = window.size
             let yOffset = WindowEngine.getMacOSCenterYOffset(
-                previewHeight - (Defaults[.padding].window * 2),
-                screenHeight: parentHeight
+                windowSize.height,
+                screenHeight: bounds.height
             )
-            yLocation = (parentHeight / 2) - (previewHeight / 2) + yOffset
-        }
 
-        return yLocation
-    }
+            result = CGRect(
+                origin: CGPoint(
+                    x: bounds.midX - (windowSize.width / 2),
+                    y: bounds.midY - (windowSize.height / 2) + yOffset
+                ),
+                size: windowSize
+            )
+        } else if direction == .undo, let window = window {
+            if let previousAction = WindowRecords.getLastAction(for: window) {
+                print("Last action was \(previousAction.direction) (name: \(previousAction.name ?? "nil"))")
+                result = previousAction.getFrame(window: window, bounds: bounds)
+            } else {
+                print("Didn't find frame to undo; using current frame")
+                result = window.frame
+            }
 
-    func previewWindowWidth(_ parentWidth: CGFloat, _ window: Window?) -> CGFloat {
-        var width = parentWidth * (self.direction.frameMultiplyValues?.width ?? 0)
-
-        if self.direction == .custom {
-            switch self.measureSystem {
-            case .pixels:
-                width = self.width ?? 0
-            case .percentage:
-                width =  parentWidth * ((self.width ?? 100) / 100)
-            default:
-                width = 0
+        } else if direction == .initialFrame, let window = window {
+            if let initialFrame = WindowRecords.getInitialFrame(for: window) {
+                result = initialFrame
+            } else {
+                print("Didn't find initial frame; using current frame")
+                result = window.frame
             }
         }
 
-        if self.direction == .center || self.direction == .macOSCenter, let window = window {
-            width = window.frame.width
-            width += Defaults[.padding].window * 2
-        }
+        result = self.applyPadding(result, bounds)
 
-        return width
+        return result
     }
 
-    func previewWindowHeight(_ parentHeight: CGFloat, _ window: Window?) -> CGFloat {
-        var height = parentHeight * (self.direction.frameMultiplyValues?.height ?? 0)
+    private func calculateCustomFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
+        var result = CGRect(origin: bounds.origin, size: .zero)
 
-        if self.direction == .custom {
-            switch self.measureSystem {
+        // SIZE
+        if let sizeMode, sizeMode == .preserveSize, let window = window {
+            result.size = window.size
+
+        } else if let sizeMode, sizeMode == .initialSize, let window = window {
+            if let initialFrame = WindowRecords.getInitialFrame(for: window) {
+                result.size = initialFrame.size
+            }
+
+        } else {    // sizeMode would be custom
+            switch unit {
             case .pixels:
-                height = self.height ?? 0
-            case .percentage:
-                height =  parentHeight * ((self.height ?? 100) / 100)
+                result.size.width = width ?? result.size.width
+                result.size.height = height ?? result.size.height
             default:
-                height = 0
+                if let width = width {
+                    result.size.width = bounds.width * (width / 100.0)
+                }
+
+                if let height = height {
+                    result.size.height = bounds.height * (height / 100.0)
+                }
             }
         }
 
-        if self.direction == .center || self.direction == .macOSCenter, let window = window {
-            height = window.frame.height
-            height += Defaults[.padding].window * 2
+        // POSITION
+        if let positionMode, positionMode == .coordinates {
+            switch unit {
+            case .pixels:
+                // Note that bounds are ignored deliberately here
+                result.origin.x += xPoint ?? .zero
+                result.origin.y += yPoint ?? .zero
+            default:
+                if let xPoint = xPoint {
+                    result.origin.x += bounds.width * (xPoint / 100.0)
+                }
+
+                if let yPoint = yPoint {
+                    result.origin.y += bounds.width * (yPoint / 100.0)
+                }
+            }
+        } else {    // positionMode would be generic
+            switch anchor {
+            case .top:
+                result.origin.x = bounds.midX - result.width / 2
+            case .topRight:
+                result.origin.x = bounds.maxX - result.width
+            case .right:
+                result.origin.x = bounds.maxX - result.width
+                result.origin.y = bounds.midY - result.height / 2
+            case .bottomRight:
+                result.origin.x = bounds.maxX - result.width
+                result.origin.y = bounds.maxY - result.height
+            case .bottom:
+                result.origin.x = bounds.midX - result.width / 2
+                result.origin.y = bounds.maxY - result.height
+            case .bottomLeft:
+                result.origin.y = bounds.maxY - result.height
+            case .left:
+                result.origin.y = bounds.midY - result.height / 2
+            case .center:
+                result.origin.x = bounds.midX - result.width / 2
+                result.origin.y = bounds.midY - result.height / 2
+            case .macOSCenter:
+                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
+                result.origin.x = bounds.midX - result.width / 2
+                result.origin.y = (bounds.midY - result.height / 2) + yOffset
+            default:
+                break
+            }
         }
 
-        return height
+        return result
+    }
+
+    /// Apply padding on a CGRect, using the provided WindowDirection
+    /// - Parameters:
+    ///   - windowFrame: The frame the window WILL be resized to
+    ///   - direction: The direction the window WILL be resized to
+    /// - Returns: CGRect with padding applied
+    private func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect) -> CGRect {
+        let padding = Defaults[.padding]
+        let halfPadding = padding.window / 2
+
+        var bounds = screenFrame
+        bounds = bounds.padding(.top, padding.totalTopPadding)
+        bounds = bounds.padding(.bottom, padding.bottom)
+        bounds = bounds.padding(.leading, padding.left)
+        bounds = bounds.padding(.trailing, padding.right)
+
+        var paddedWindowFrame = windowFrame.intersection(bounds)
+
+        if direction == .macOSCenter,
+           windowFrame.height >= bounds.height {
+
+            paddedWindowFrame.origin.y = bounds.minY
+            paddedWindowFrame.size.height = bounds.height
+        }
+
+        if direction == .center || direction == .macOSCenter {
+            return paddedWindowFrame
+        }
+
+        if paddedWindowFrame.minX != bounds.minX {
+            paddedWindowFrame = paddedWindowFrame.padding(.leading, halfPadding)
+        }
+
+        if paddedWindowFrame.maxX != bounds.maxX {
+            paddedWindowFrame = paddedWindowFrame.padding(.trailing, halfPadding)
+        }
+
+        if paddedWindowFrame.minY != bounds.minY {
+            paddedWindowFrame = paddedWindowFrame.padding(.top, halfPadding)
+        }
+
+        if paddedWindowFrame.maxY != bounds.maxY {
+            paddedWindowFrame = paddedWindowFrame.padding(.bottom, halfPadding)
+        }
+
+        return paddedWindowFrame
     }
 }

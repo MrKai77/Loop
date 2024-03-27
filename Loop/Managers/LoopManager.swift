@@ -156,19 +156,19 @@ class LoopManager: ObservableObject {
         }
 
         if newAction.direction == .cycle {
-            if let cycle = action.cycle {
-                var nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
-                if nextIndex >= cycle.count {
-                    nextIndex = 0
-                }
-                newAction = cycle[nextIndex]
-            } else {
+            guard let cycle = action.cycle else {
                 return
             }
+
+            var nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
+            if nextIndex >= cycle.count {
+                nextIndex = 0
+            }
+            newAction = cycle[nextIndex]
         }
 
         if newAction.direction.willChangeScreen {
-            var newScreen: NSScreen = currentScreen
+            var newScreen = currentScreen
 
             if newAction.direction == .nextScreen,
                let nextScreen = ScreenManager.nextScreen(from: currentScreen) {
@@ -182,7 +182,7 @@ class LoopManager: ObservableObject {
 
             if self.currentAction.direction == .noAction {
                 if let targetWindow = targetWindow {
-                    self.currentAction = WindowRecords.getLastAction(for: targetWindow, offset: 0)
+                    self.currentAction = WindowRecords.getLastAction(for: targetWindow) ?? .init(.noAction)
                 }
 
                 if self.currentAction.direction == .noAction {

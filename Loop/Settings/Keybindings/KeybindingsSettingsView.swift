@@ -176,12 +176,6 @@ struct KeybindingsSettingsView: View {
             }
         }
 
-        Menu("Cyclable") {
-            ForEach(WindowDirection.cyclable) { direction in
-                newDirectionButton(direction)
-            }
-        }
-
         Menu("Halves") {
             ForEach(WindowDirection.halves) { direction in
                 newDirectionButton(direction)
@@ -222,7 +216,20 @@ struct KeybindingsSettingsView: View {
     @ViewBuilder
     func newDirectionButton(_ direction: WindowDirection) -> some View {
         Button(action: {
-            self.keybinds.append(WindowAction(direction, keybind: []))
+            if direction == .custom {
+                self.keybinds.append(
+                    WindowAction(
+                        .custom,
+                        keybind: [],
+                        unit: .percentage,
+                        anchor: .center,
+                        positionMode: .generic,
+                        sizeMode: .custom
+                    )
+                )
+            } else {
+                self.keybinds.append(WindowAction(direction, keybind: []))
+            }
         }, label: {
             HStack {
                 direction.icon

@@ -63,4 +63,15 @@ extension NSScreen {
 
         return frame
     }
+
+    var displayBounds: CGRect {
+        guard
+            let displayID = self.displayID
+        else {
+            print("ERROR: Failed to get NSScreen.displayID in NSScreen.displayBounds")
+            return self.frame.flipY!
+        }
+
+        return CGDisplayBounds(displayID)
+    }
 }
