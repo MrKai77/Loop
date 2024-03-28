@@ -103,14 +103,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         let frame = CGRect(origin: .zero, size: .init(width: 1, height: 1))
-        let targetWindowFrame = getFrame(window: window, bounds: frame)
+        let targetWindowFrame = getFrame(window: window, bounds: frame, toScale: false)
         let angle = frame.center.angle(to: targetWindowFrame.center)
         let result: Angle = .radians(angle) * -1
 
         return result.normalized()
     }
 
-    func getFrame(window: Window?, bounds: CGRect) -> CGRect {
+    func getFrame(window: Window?, bounds: CGRect, toScale: Bool = true) -> CGRect {
         guard self.direction != .cycle, self.direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
@@ -122,8 +122,24 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.width = bounds.width * frameMultiplyValues.width
             result.size.height = bounds.height * frameMultiplyValues.height
 
-        } else if direction == .keepFrame, let window = window {
-            result = window.frame
+        } else if direction.willAdjustSize {
+
+            var frameToResizeFrom = LoopManager.lastTargetFrame
+            if !Defaults[.previewVisibility], let window = window {
+                frameToResizeFrom = window.frame
+            }
+
+            result = frameToResizeFrom.inset(
+                by: Defaults[.sizeAdjustmentStep] * (direction == .larger ? -1 : 1),
+                minSize: .init(
+                    width: Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 400,
+                    height: Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 400
+                )
+            )
+
+            if result.size.approximatelyEqual(to: LoopManager.lastTargetFrame.size) {
+                result = LoopManager.lastTargetFrame
+            }
 
         } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
@@ -170,22 +186,12 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
-        result = result.inset(
-            by: LoopManager.sizeAdjustmentOffset,
-            minSize: .init(
-                width: Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 400,
-                height: Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 400
-            )
-        )
-
         result = self.applyPadding(result, bounds)
 
-        if direction == .keepFrame,
-           result.size == LoopManager.lastTargetFrame.size {
-            result = LoopManager.lastTargetFrame
+        if toScale {
+            LoopManager.lastTargetFrame =  result
         }
 
-        LoopManager.lastTargetFrame = result
         return result
     }
 

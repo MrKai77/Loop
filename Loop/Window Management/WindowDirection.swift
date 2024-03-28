@@ -14,7 +14,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var id: Self { self }
 
     case noAction = "NoAction"
-    case keepFrame = "KeepSize" // Only used in size adjustment
 
     // General
     case maximize = "Maximize"
