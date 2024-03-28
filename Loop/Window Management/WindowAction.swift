@@ -94,6 +94,22 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
+    func radialMenuAngle(window: Window?) -> Angle? {
+        guard
+            direction.frameMultiplyValues != nil,
+            direction.hasRadialMenuAngle
+        else {
+            return nil
+        }
+
+        let frame = CGRect(origin: .zero, size: .init(width: 1, height: 1))
+        let targetWindowFrame = getFrame(window: window, bounds: frame)
+        let angle = frame.center.angle(to: targetWindowFrame.center)
+        let result: Angle = .radians(angle) * -1
+
+        return result.normalized()
+    }
+
     func getFrame(window: Window?, bounds: CGRect) -> CGRect {
         guard self.direction != .cycle, self.direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)

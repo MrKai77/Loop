@@ -16,8 +16,6 @@ struct RadialMenuSettingsView: View {
     @Default(.disableCursorInteraction) var disableCursorInteraction
     @Default(.radialMenuDelay) var radialMenuDelay
 
-    @State var currentResizeDirection: WindowDirection = .cycleTop
-
     var body: some View {
         Form {
             Section("Appearance") {

@@ -32,9 +32,12 @@ struct PreviewView: View {
         GeometryReader { _ in
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                    .mask(RoundedRectangle(cornerRadius: previewCornerRadius).foregroundColor(.white))
-//                    .shadow(radius: 10)
-                RoundedRectangle(cornerRadius: previewCornerRadius)
+                    .mask {
+                        RoundedRectangle(cornerRadius: previewCornerRadius, style: .continuous)
+                            .foregroundColor(.white)
+                    }
+
+                RoundedRectangle(cornerRadius: previewCornerRadius, style: .continuous)
                     .stroke(
                         LinearGradient(
                             gradient: Gradient(
