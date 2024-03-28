@@ -8,21 +8,27 @@
 import SwiftUI
 
 struct DirectionSelectorSquareSegment: View {
-    let isActive: Bool
-    let radialMenuSize: CGFloat
 
-    init(_ resizePosition: WindowDirection, _ activeResizePosition: WindowDirection, _ radialMenuSize: CGFloat) {
-        if resizePosition == activeResizePosition {
-            isActive = true
-        } else {
-            isActive = false
-        }
-        self.radialMenuSize = radialMenuSize
-    }
+    var angle: Double = .zero
+    let radialMenuCornerRadius: CGFloat
+    let radialMenuThickness: CGFloat
 
     var body: some View {
-        Rectangle()
-            .foregroundColor(isActive ? Color.black : Color.clear)
-            .frame(width: radialMenuSize/3, height: radialMenuSize/3)
+        ZStack {
+            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+                .trim(
+                    from: (Angle(degrees: self.angle - 22.5).normalized().degrees / 360.0),
+                    to: (Angle(degrees: self.angle + 22.5).normalized().degrees / 360.0)
+                )
+                .stroke(.white, lineWidth: radialMenuThickness * 2)
+
+            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+                .trim(
+                    from: (Angle(degrees: self.angle - 180 - 22.5).normalized().degrees / 360.0),
+                    to: (Angle(degrees: self.angle - 180 + 22.5).normalized().degrees / 360.0)
+                )
+                .stroke(.white, lineWidth: radialMenuThickness * 2)
+                .rotationEffect(.degrees(180))
+        }
     }
 }

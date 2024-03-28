@@ -74,10 +74,21 @@ struct RadialMenuView: View {
                                                 Color.white
                                             }
 
-                                            DirectionSelectorCircleSegment(
-                                                radialMenuSize: self.radialMenuSize,
-                                                angle: self.angle
-                                            )
+                                            ZStack {
+                                                if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
+                                                    DirectionSelectorCircleSegment(
+                                                        angle: self.angle,
+                                                        radialMenuSize: self.radialMenuSize
+                                                    )
+                                                } else {
+                                                    DirectionSelectorSquareSegment(
+                                                        angle: self.angle,
+                                                        radialMenuCornerRadius: self.radialMenuCornerRadius,
+                                                        radialMenuThickness: self.radialMenuThickness
+                                                    )
+                                                }
+                                            }
+                                            .compositingGroup()
                                             .opacity(
                                                 !self.currentAction.direction.hasRadialMenuAngle ||
                                                 self.currentAction.direction == .custom ?
@@ -86,6 +97,22 @@ struct RadialMenuView: View {
                                         }
                                     }
                             }
+
+                        if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
+                            Circle()
+                                .stroke(.quinary, lineWidth: 2)
+
+                            Circle()
+                                .stroke(.quinary, lineWidth: 2)
+                                .padding(self.radialMenuThickness)
+                        } else {
+                            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+                                .stroke(.quinary, lineWidth: 2)
+
+                            RoundedRectangle(cornerRadius: radialMenuCornerRadius - self.radialMenuThickness, style: .continuous)
+                                .stroke(.quinary, lineWidth: 2)
+                                .padding(self.radialMenuThickness)
+                        }
                     }
                     // Mask the whole ZStack with the shape the user defines
                     .mask {
@@ -144,9 +171,6 @@ struct RadialMenuView: View {
 
                 let previousActionHadAngle = self.previousAction?.direction.hasRadialMenuAngle ?? false
                 let animate: Bool = abs(closestAngle.degrees) < 179 && previousActionHadAngle
-
-                print(animate
-                )
 
                 let defaultAnimation = AnimationConfiguration.fast.radialMenuAngle
                 let noAnimation = Animation.linear(duration: 0)

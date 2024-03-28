@@ -9,8 +9,8 @@ import SwiftUI
 
 struct DirectionSelectorCircleSegment: Shape {
 
-    let radialMenuSize: CGFloat
     var angle: Double = .zero
+    let radialMenuSize: CGFloat
 
     var animatableData: Double {
         get { self.angle }
