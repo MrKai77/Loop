@@ -31,11 +31,11 @@ extension Defaults.Keys {
     static let useGradient = Key<Bool>("useGradient", default: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
 
+    static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
     static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
-    static let radialMenuDelay = Key<Double>("radialMenuDelay", default: 0)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)

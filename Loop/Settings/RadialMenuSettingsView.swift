@@ -10,15 +10,19 @@ import Defaults
 
 struct RadialMenuSettingsView: View {
 
+    @Default(.radialMenuVisibility) var radialMenuVisibility
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
     @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
     @Default(.disableCursorInteraction) var disableCursorInteraction
-    @Default(.radialMenuDelay) var radialMenuDelay
 
     var body: some View {
         Form {
             Section("Appearance") {
+                Toggle("Show Radial Menu when looping", isOn: $radialMenuVisibility)
+            }
+
+            Section {
                 ZStack {
                     VisualEffectView(material: .sidebar, blendingMode: .behindWindow)
                         .ignoresSafeArea()
@@ -30,6 +34,7 @@ struct RadialMenuSettingsView: View {
                     )
                 }
             }
+            .opacity(radialMenuVisibility ? 1 : 0.5)
 
             Section {
                 CrispValueAdjuster(
@@ -49,21 +54,15 @@ struct RadialMenuSettingsView: View {
                     upperClamp: true
                 )
             }
+            .disabled(!radialMenuVisibility)
+            .foregroundColor(!radialMenuVisibility ? .secondary : nil)
 
             Section {
                 Toggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
                 Toggle("Disable cursor interaction", isOn: $disableCursorInteraction)
             }
-
-            Section {
-                CrispValueAdjuster(
-                    "Appearance Delay",
-                    value: $radialMenuDelay,
-                    sliderRange: 0...10,
-                    postscript: "sec",
-                    lowerClamp: true
-                )
-            }
+            .disabled(!radialMenuVisibility)
+            .foregroundColor(!radialMenuVisibility ? .secondary : nil)
         }
         .formStyle(.grouped)
         .scrollDisabled(true)
