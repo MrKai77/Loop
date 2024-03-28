@@ -31,4 +31,12 @@ struct PaddingModel: Codable, Defaults.Serializable {
         left: 0,
         configureScreenPadding: false
     )
+
+    var totalVerticalPadding: CGFloat {
+        self.totalTopPadding + self.bottom
+    }
+
+    var totalHorizontalPadding: CGFloat {
+        self.right + self.left
+    }
 }

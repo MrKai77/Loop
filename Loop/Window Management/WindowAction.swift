@@ -170,7 +170,13 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
-        result = result.inset(by: LoopManager.sizeAdjustmentOffset, minSize: .init(width: 100, height: 100))
+        result = result.inset(
+            by: LoopManager.sizeAdjustmentOffset,
+            minSize: .init(
+                width: Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 50,
+                height: Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 50
+            )
+        )
         result = self.applyPadding(result, bounds)
 
         return result
