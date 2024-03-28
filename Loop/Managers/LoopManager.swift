@@ -37,11 +37,6 @@ class LoopManager: ObservableObject {
             triggerDelayTimer?.invalidate()
         }
     }
-    private var radialMenuDelayTimer: Timer? {
-        willSet {
-            radialMenuDelayTimer?.invalidate()
-        }
-    }
 
     func startObservingKeys() {
         self.flagsChangedEventMonitor = NSEventMonitor(
@@ -395,24 +390,11 @@ class LoopManager: ObservableObject {
     }
 
     private func openWindows() {
-        if Defaults[.previewVisibility] == true && self.targetWindow != nil {
+        if Defaults[.previewVisibility] && self.targetWindow != nil {
             self.previewController.open(screen: self.screenToResizeOn!, window: targetWindow)
         }
 
-        let useRadialMenuDelay = Defaults[.radialMenuDelay] > 0.1
-
-        if useRadialMenuDelay {
-            self.radialMenuDelayTimer = Timer.scheduledTimer(
-                withTimeInterval: Defaults[.radialMenuDelay],
-                repeats: false
-            ) { _ in
-                self.radialMenuController.open(
-                    position: self.initialMousePosition,
-                    frontmostWindow: self.targetWindow,
-                    startingAction: self.currentAction
-                )
-            }
-        } else {
+        if Defaults[.radialMenuVisibility] {
             self.radialMenuController.open(
                 position: self.initialMousePosition,
                 frontmostWindow: self.targetWindow
@@ -421,7 +403,6 @@ class LoopManager: ObservableObject {
     }
 
     private func closeWindows() {
-        self.radialMenuDelayTimer = nil
         self.radialMenuController.close()
         self.previewController.close()
     }
