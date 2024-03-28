@@ -55,6 +55,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case nextScreen = "NextScreen"
     case previousScreen = "PreviousScreen"
 
+    // Size
+    case larger = "Larger"
+    case smaller = "Smaller"
+
     case custom = "Custom"
     case cycle = "Cycle"
 
@@ -76,6 +80,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     }
     static var screenSwitching: [WindowDirection] {
         [.nextScreen, .previousScreen]
+    }
+    static var sizeAdjustment: [WindowDirection] {
+        [.larger, .smaller]
     }
     static var more: [WindowDirection] {
         [.initialFrame, .undo, .custom, .cycle]
@@ -129,7 +136,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             .hide,
             .initialFrame,
             .undo,
-            .cycle
+            .cycle,
+            .larger,
+            .smaller
         ]
 
         return !noAngleActions.contains(self)
@@ -216,6 +225,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
         case .nextScreen:               Image("custom.forward.rectangle")
         case .previousScreen:           Image("custom.backward.rectangle")
+
+        case .larger:                   Image(systemName: "plus.rectangle")
+        case .smaller:                  Image(systemName: "minus.rectangle")
 
         case .custom:                   Image(systemName: "rectangle.dashed")
         case .cycle:                    Image("custom.arrow.2.squarepath.rectangle")
