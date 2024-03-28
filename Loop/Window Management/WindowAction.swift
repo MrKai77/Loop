@@ -173,12 +173,19 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         result = result.inset(
             by: LoopManager.sizeAdjustmentOffset,
             minSize: .init(
-                width: Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 50,
-                height: Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 50
+                width: Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 400,
+                height: Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 400
             )
         )
+
         result = self.applyPadding(result, bounds)
 
+        if direction == .keepFrame,
+           result.size == LoopManager.lastTargetFrame.size {
+            result = LoopManager.lastTargetFrame
+        }
+
+        LoopManager.lastTargetFrame = result
         return result
     }
 

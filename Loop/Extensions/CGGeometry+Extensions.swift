@@ -45,6 +45,10 @@ extension CGSize {
     var area: CGFloat {
         self.width * self.height
     }
+
+    func approximatelyEqual(to size: CGSize, tolerance: CGFloat = 10) -> Bool {
+        return abs(width - size.width) < tolerance && abs(height - size.height) < tolerance
+    }
 }
 
 extension CGRect {

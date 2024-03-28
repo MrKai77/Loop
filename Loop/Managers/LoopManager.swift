@@ -11,6 +11,7 @@ import Defaults
 class LoopManager: ObservableObject {
 
     static var sizeAdjustmentOffset: CGFloat = 0
+    static var lastTargetFrame: CGRect = .zero
 
     private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
@@ -137,6 +138,35 @@ class LoopManager: ObservableObject {
         }
     }
 
+    private func processSizeAdjustment(_ newAction: WindowAction) {
+        if self.currentAction.direction == .noAction ||
+            (!Defaults[.previewVisibility] && self.currentAction.direction != .keepFrame) {
+
+            self.changeAction(.init(.keepFrame))
+        }
+
+        if newAction.direction == .larger {
+            LoopManager.sizeAdjustmentOffset -= Defaults[.sizeAdjustmentStep]
+
+        } else if newAction.direction == .smaller {
+            LoopManager.sizeAdjustmentOffset += Defaults[.sizeAdjustmentStep]
+        }
+
+        Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
+
+        if let screenToResizeOn = self.screenToResizeOn,
+           !Defaults[.previewVisibility] {
+
+            WindowEngine.resize(
+                self.targetWindow!,
+                to: self.currentAction,
+                on: screenToResizeOn,
+                supressAnimations: true
+            )
+            LoopManager.sizeAdjustmentOffset = 0
+        }
+    }
+
     private func changeAction(_ action: WindowAction) {
         guard
             self.currentAction != action,
@@ -149,18 +179,7 @@ class LoopManager: ObservableObject {
         var newAction = action
 
         if newAction.direction.willAdjustSize {
-            if self.currentAction.direction == .noAction {
-                self.changeAction(.init(.keepFrame))
-            }
-
-            if newAction.direction == .larger {
-                LoopManager.sizeAdjustmentOffset -= Defaults[.sizeAdjustmentStep]
-
-            } else if newAction.direction == .smaller {
-                LoopManager.sizeAdjustmentOffset += Defaults[.sizeAdjustmentStep]
-            }
-
-            Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
+            processSizeAdjustment(newAction)
             return
         }
 
@@ -196,14 +215,8 @@ class LoopManager: ObservableObject {
                 newScreen = previousScreen
             }
 
-            if self.currentAction.direction == .noAction {
-                if let targetWindow = targetWindow {
-                    self.currentAction = WindowRecords.getLastAction(for: targetWindow) ?? .init(.noAction)
-                }
-
-                if self.currentAction.direction == .noAction {
-                    self.currentAction.direction = .maximize
-                }
+            if self.currentAction.direction == .noAction || self.currentAction.direction == .keepFrame {
+                self.currentAction = .init(.center)
             }
 
             self.screenToResizeOn = newScreen
@@ -406,6 +419,7 @@ class LoopManager: ObservableObject {
 
         isLoopActive = false
         LoopManager.sizeAdjustmentOffset = 0
+        LoopManager.lastTargetFrame = .zero
     }
 
     private func openWindows() {
