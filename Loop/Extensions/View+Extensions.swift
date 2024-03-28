@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    // Make it easier to recieve notifications SwiftUI views
+    // Make it easier to receive notifications SwiftUI views
     func onReceive(
         _ name: Notification.Name,
         center: NotificationCenter = .default,
