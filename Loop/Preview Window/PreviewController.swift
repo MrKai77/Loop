@@ -15,7 +15,7 @@ class PreviewController {
     private var window: Window?
 
     init() {
-        Notification.Name.updateUIDirection.onRecieve { obj in
+        Notification.Name.updateUIDirection.onReceive { obj in
             if let action = obj.userInfo?["action"] as? WindowAction {
                 self.setAction(to: action)
             }
@@ -105,6 +105,6 @@ class PreviewController {
             windowController.window?.animator().alphaValue = shouldBeTransparent ? 0 : 1
         }
 
-        print("New preview window action recieved: \(action.direction)")
+        print("New preview window action received: \(action.direction)")
     }
 }
