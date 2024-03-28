@@ -5,7 +5,7 @@
 //  Created by Kai Azim on 2023-09-07.
 //
 
-import Cocoa
+import AppKit
 
 protocol EventMonitor {
     var isEnabled: Bool { get }
