@@ -71,11 +71,11 @@ class LoopManager: ObservableObject {
             }
         }
 
-        Notification.Name.forceCloseLoop.onRecieve { _ in
+        Notification.Name.forceCloseLoop.onReceive { _ in
             self.closeLoop(forceClose: true)
         }
 
-        Notification.Name.updateBackendDirection.onRecieve { notification in
+        Notification.Name.updateBackendDirection.onReceive { notification in
             if let action = notification.userInfo?["action"] as? WindowAction {
                 self.changeAction(action)
             }

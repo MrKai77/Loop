@@ -162,7 +162,7 @@ struct RadialMenuView: View {
                 self.previousAction = self.currentAction
                 self.currentAction = .init(action.direction)
 
-                print("New radial menu window action recieved: \(action.direction)")
+                print("New radial menu window action received: \(action.direction)")
             }
         }
         .onChange(of: self.currentAction) { _ in

@@ -15,7 +15,7 @@ extension Notification.Name {
     static let didLoop = Notification.Name("didLoop")
 
     @discardableResult
-    func onRecieve(object: Any? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+    func onReceive(object: Any? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
         return NotificationCenter.default.addObserver(
             forName: self,
             object: object,
