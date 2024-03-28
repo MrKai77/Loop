@@ -115,7 +115,7 @@ struct RadialMenuView: View {
             if !self.previewMode, let action = obj.userInfo?["action"] as? WindowAction {
                 self.currentAction = .init(action.direction.base)
 
-                print("New radial menu window action recieved: \(action.direction)")
+                print("New radial menu window action received: \(action.direction)")
             }
         }
     }

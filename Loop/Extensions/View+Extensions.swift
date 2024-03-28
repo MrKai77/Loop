@@ -8,14 +8,14 @@
 import SwiftUI
 
 extension View {
-    // Make it easier to recieve notifications SwiftUI views
+    // Make it easier to receive notifications SwiftUI views
     func onReceive(
         _ name: Notification.Name,
         center: NotificationCenter = .default,
         object: AnyObject? = nil,
         perform action: @escaping (Notification) -> Void
     ) -> some View {
-        onReceive(
+        self.onReceive(
             center.publisher(for: name, object: object),
             perform: action
         )
