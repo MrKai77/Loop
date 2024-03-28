@@ -7,40 +7,34 @@
 
 import SwiftUI
 
-struct DirectionSelectorCircleSegment: View {
-    var startingAngle: Double = 0
-    let isActive: Bool
-    let radialMenuSize: CGFloat
+struct DirectionSelectorCircleSegment: Shape {
 
-    init(_ resizePosition: WindowDirection, _ activeResizePosition: WindowDirection, _ radialMenuSize: CGFloat) {
-        if let angle = resizePosition.radialMenuAngle {
-            self.startingAngle = angle - 90 - 22.5
-        }
-        if resizePosition == activeResizePosition {
-            isActive = true
-        } else {
-            isActive = false
-        }
-        self.radialMenuSize = radialMenuSize
+    let radialMenuSize: CGFloat
+    var angle: Double = .zero
+
+    var animatableData: Double {
+        get { self.angle }
+        set { self.angle = newValue }
     }
 
-    var body: some View {
-        Path { path in
-            path.move(to:
-                        CGPoint(
-                            x: radialMenuSize/2,
-                            y: radialMenuSize/2
-                        )
-            )
-            path.addArc(
-                center: CGPoint(x: radialMenuSize/2,
-                                y: radialMenuSize/2),
-                radius: radialMenuSize,
-                startAngle: .degrees(startingAngle),
-                endAngle: .degrees(startingAngle+45),
-                clockwise: false
-            )
-        }
-        .foregroundColor(isActive ? Color.black : Color.clear)
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        path.move(to:
+                    CGPoint(
+                        x: radialMenuSize/2,
+                        y: radialMenuSize/2
+                    )
+        )
+        path.addArc(
+            center: CGPoint(x: radialMenuSize/2,
+                            y: radialMenuSize/2),
+            radius: radialMenuSize,
+            startAngle: .degrees(angle - 22.5),
+            endAngle: .degrees(angle + 22.5),
+            clockwise: false
+        )
+
+        return path
     }
 }

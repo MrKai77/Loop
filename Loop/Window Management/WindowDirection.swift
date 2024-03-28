@@ -88,7 +88,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // Used in the settings window to loop over the possible combinations
     var nextPreviewDirection: WindowDirection {
         switch self {
-        case .noAction:             .topHalf
         case .topHalf:              .topRightQuarter
         case .topRightQuarter:      .rightHalf
         case .rightHalf:            .bottomRightQuarter
@@ -97,8 +96,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .bottomLeftQuarter:    .leftHalf
         case .leftHalf:             .topLeftQuarter
         case .topLeftQuarter:       .maximize
-        case .maximize:             .noAction
-        default:                    .noAction
+        default:                    .topHalf
         }
     }
 
@@ -115,6 +113,38 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .maximize:             0
         default:                    nil
         }
+    }
+
+    var hasRadialMenuAngle: Bool {
+        let noAngleActions: [WindowDirection] = [
+            .noAction,
+            .maximize,
+            .center,
+            .macOSCenter,
+            .almostMaximize,
+            .nextScreen,
+            .previousScreen,
+            .fullscreen,
+            .minimize,
+            .hide,
+            .initialFrame,
+            .undo,
+            .cycle
+        ]
+
+        return !noAngleActions.contains(self)
+    }
+
+    var shouldFillRadialMenu: Bool {
+        let fillActions: [WindowDirection] = [
+            .maximize,
+            .center,
+            .macOSCenter,
+            .almostMaximize,
+            .fullscreen
+        ]
+
+        return fillActions.contains(self)
     }
 
     var name: String {

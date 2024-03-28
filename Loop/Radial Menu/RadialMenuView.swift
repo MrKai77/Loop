@@ -14,6 +14,8 @@ struct RadialMenuView: View {
     let radialMenuSize: CGFloat = 100
 
     @State var currentAction: WindowAction
+    @State var previousAction: WindowAction?
+
     private let window: Window?
     private let previewMode: Bool
 
@@ -36,6 +38,8 @@ struct RadialMenuView: View {
             self._timer = State(initialValue: Timer.publish(every: -1, on: .main, in: .common).autoconnect())
         }
     }
+
+    @State var angle: Double = .zero
 
     var body: some View {
         VStack {
@@ -63,10 +67,24 @@ struct RadialMenuView: View {
                                 )
                             )
                             .mask {
-                                RadialMenuDirectionSelectorView(
-                                    activeAngle: currentAction.direction,
-                                    size: self.radialMenuSize
-                                )
+                                Color.clear
+                                    .overlay {
+                                        ZStack {
+                                            if self.currentAction.direction.shouldFillRadialMenu {
+                                                Color.white
+                                            }
+
+                                            DirectionSelectorCircleSegment(
+                                                radialMenuSize: self.radialMenuSize,
+                                                angle: self.angle
+                                            )
+                                            .opacity(
+                                                !self.currentAction.direction.hasRadialMenuAngle ||
+                                                self.currentAction.direction == .custom ?
+                                                0 : 1
+                                            )
+                                        }
+                                    }
                             }
                     }
                     // Mask the whole ZStack with the shape the user defines
@@ -100,7 +118,7 @@ struct RadialMenuView: View {
 
         // Animate window
         .scaleEffect(currentAction.direction == .maximize ? 0.85 : 1)
-        .animation(animationConfiguration.radialMenuAnimation, value: currentAction)
+        .animation(animationConfiguration.radialMenuSize, value: currentAction)
         .onAppear {
             if previewMode {
                 currentAction.direction = currentAction.direction.nextPreviewDirection
@@ -108,14 +126,34 @@ struct RadialMenuView: View {
         }
         .onReceive(timer) { _ in
             if previewMode {
+                previousAction = currentAction
                 currentAction.direction = currentAction.direction.nextPreviewDirection
             }
         }
         .onReceive(.updateUIDirection) { obj in
             if !self.previewMode, let action = obj.userInfo?["action"] as? WindowAction {
+                self.previousAction = self.currentAction
                 self.currentAction = .init(action.direction)
 
                 print("New radial menu window action recieved: \(action.direction)")
+            }
+        }
+        .onChange(of: self.currentAction) { _ in
+            if let target = self.currentAction.radialMenuAngle(window: window) {
+                let closestAngle: Angle = .degrees(self.angle).angleDifference(to: target)
+
+                let previousActionHadAngle = self.previousAction?.direction.hasRadialMenuAngle ?? false
+                let animate: Bool = abs(closestAngle.degrees) < 179 && previousActionHadAngle
+
+                print(animate
+                )
+
+                let defaultAnimation = AnimationConfiguration.fast.radialMenuAngle
+                let noAnimation = Animation.linear(duration: 0)
+
+                withAnimation(animate ? defaultAnimation : noAnimation) {
+                    self.angle += closestAngle.degrees
+                }
             }
         }
     }
