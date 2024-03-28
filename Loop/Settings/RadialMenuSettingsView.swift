@@ -39,7 +39,15 @@ struct RadialMenuSettingsView: View {
             Section {
                 CrispValueAdjuster(
                     "Corner Radius",
-                    value: $radialMenuCornerRadius,
+                    value: Binding(
+                        get: {
+                            radialMenuCornerRadius
+                        },
+                        set: {
+                            radialMenuCornerRadius = $0
+                            radialMenuThickness = min(radialMenuThickness, radialMenuCornerRadius - 1)
+                        }
+                    ),
                     sliderRange: 30...50,
                     postscript: "px",
                     lowerClamp: true,
@@ -47,7 +55,15 @@ struct RadialMenuSettingsView: View {
                 )
                 CrispValueAdjuster(
                     "Thickness",
-                    value: $radialMenuThickness,
+                    value: Binding(
+                        get: {
+                            radialMenuThickness
+                        },
+                        set: {
+                            radialMenuThickness = $0
+                            radialMenuCornerRadius = max(radialMenuThickness + 1, radialMenuCornerRadius)
+                        }
+                    ),
                     sliderRange: 10...35,
                     postscript: "px",
                     lowerClamp: true,
