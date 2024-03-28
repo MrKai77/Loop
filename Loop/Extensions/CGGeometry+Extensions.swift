@@ -129,4 +129,21 @@ extension CGRect {
     var center: CGPoint {
         CGPoint(x: self.midX, y: self.midY)
     }
+
+    func inset(by amount: CGFloat, minSize: CGSize) -> CGRect {
+        // Respect minimum width and height
+        let insettedWidth = max(minSize.width, self.width - 2 * amount)
+        let insettedHeight = max(minSize.height, self.height - 2 * amount)
+
+        // Calculate the new inset rectangle
+        let newX = self.midX - insettedWidth / 2
+        let newY = self.midY - insettedHeight / 2
+
+        return CGRect(
+            x: newX,
+            y: newY,
+            width: insettedWidth,
+            height: insettedHeight
+        )
+    }
 }

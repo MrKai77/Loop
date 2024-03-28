@@ -13,8 +13,10 @@ import Defaults
 enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var id: Self { self }
 
-    // General
     case noAction = "NoAction"
+    case keepFrame = "KeepSize" // Only used in size adjustment
+
+    // General
     case maximize = "Maximize"
     case almostMaximize = "AlmostMaximize"
     case fullscreen = "Fullscreen"
@@ -90,6 +92,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var willChangeScreen: Bool {
         WindowDirection.screenSwitching.contains(self)
+    }
+
+    var willAdjustSize: Bool {
+        WindowDirection.sizeAdjustment.contains(self)
     }
 
     // Used in the settings window to loop over the possible combinations

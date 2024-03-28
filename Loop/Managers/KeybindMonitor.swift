@@ -32,8 +32,7 @@ class KeybindMonitor {
 
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
              if cgEvent.type == .keyDown || cgEvent.type == .keyUp,
-                let event = NSEvent(cgEvent: cgEvent),
-                !event.isARepeat {
+                let event = NSEvent(cgEvent: cgEvent) {
 
                  if event.type == .keyUp {
                      KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
@@ -124,8 +123,11 @@ class KeybindMonitor {
         }
 
         if let newAction = WindowAction.getAction(for: pressedKeys) {
-            Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
-            print("performKeybind: returning true due to valid event: \(newAction.direction)")
+            if !event.isARepeat || newAction.direction.willAdjustSize {
+                Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
+                print("performKeybind: returning true due to valid event: \(newAction.direction)")
+            }
+
             return true
         }
 

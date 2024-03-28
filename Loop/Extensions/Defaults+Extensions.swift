@@ -22,8 +22,6 @@ extension Defaults.Keys {
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: true)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
-    static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
-
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
@@ -78,6 +76,10 @@ extension Defaults.Keys {
         WindowAction(.bottomLeftQuarter, keybind: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
 
+    static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
+
     static let respectStageManager = Key<Bool>("respectStageManager", default: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
+
+    static let sizeAdjustmentStep = Key<CGFloat>("sizeAdjustmentStep", default: 15)
 }

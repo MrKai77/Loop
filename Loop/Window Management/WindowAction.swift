@@ -122,6 +122,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.width = bounds.width * frameMultiplyValues.width
             result.size.height = bounds.height * frameMultiplyValues.height
 
+        } else if direction == .keepFrame, let window = window {
+            result = window.frame
+
         } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
 
@@ -167,6 +170,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
+        result = result.inset(by: LoopManager.sizeAdjustmentOffset, minSize: .init(width: 100, height: 100))
         result = self.applyPadding(result, bounds)
 
         return result

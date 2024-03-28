@@ -10,6 +10,8 @@ import Defaults
 
 class LoopManager: ObservableObject {
 
+    static var sizeAdjustmentOffset: CGFloat = 0
+
     private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
 
@@ -145,6 +147,22 @@ class LoopManager: ObservableObject {
         }
 
         var newAction = action
+
+        if newAction.direction.willAdjustSize {
+            if self.currentAction.direction == .noAction {
+                self.changeAction(.init(.keepFrame))
+            }
+
+            if newAction.direction == .larger {
+                LoopManager.sizeAdjustmentOffset -= Defaults[.sizeAdjustmentStep]
+
+            } else if newAction.direction == .smaller {
+                LoopManager.sizeAdjustmentOffset += Defaults[.sizeAdjustmentStep]
+            }
+
+            Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
+            return
+        }
 
         if newAction.direction == .cycle {
             guard let cycle = action.cycle else {
@@ -387,6 +405,7 @@ class LoopManager: ObservableObject {
         }
 
         isLoopActive = false
+        LoopManager.sizeAdjustmentOffset = 0
     }
 
     private func openWindows() {
