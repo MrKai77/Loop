@@ -9,14 +9,14 @@ import SwiftUI
 import Sparkle
 
 struct SettingsView: View {
-    @State var currentSettingsTab = 1
+    @State var currentSettingsTab = SettingsTab.general
     private let updater = SoftwareUpdater()
     private var appListManager = AppListManager()
 
     var body: some View {
         TabView(selection: $currentSettingsTab) {
             GeneralSettingsView()
-                .tag(1)
+                .tag(SettingsTab.general)
                 .tabItem {
                     Image(systemName: "gear")
                     Text("General")
@@ -24,7 +24,7 @@ struct SettingsView: View {
                 .frame(width: 450)
 
             RadialMenuSettingsView()
-                .tag(2)
+                .tag(SettingsTab.radialMenu)
                 .tabItem {
                     Image(.loop)
                     Text("Radial Menu")
@@ -32,7 +32,7 @@ struct SettingsView: View {
                 .frame(width: 450)
 
             PreviewSettingsView()
-                .tag(3)
+                .tag(SettingsTab.preview)
                 .tabItem {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                     Text("Preview")
@@ -40,7 +40,7 @@ struct SettingsView: View {
                 .frame(width: 450)
 
             KeybindingsSettingsView()
-                .tag(4)
+                .tag(SettingsTab.keybindings)
                 .tabItem {
                     Image(systemName: "keyboard")
                     Text("Keybindings")
@@ -49,7 +49,7 @@ struct SettingsView: View {
                 .frame(minHeight: 500, maxHeight: 680)
 
             ExcludeListSettingsView()
-                .tag(5)
+                .tag(SettingsTab.excludedApps)
                 .tabItem {
                     Image(systemName: "xmark.app")
                     Text("Excluded Apps")
@@ -59,7 +59,7 @@ struct SettingsView: View {
                 .frame(maxHeight: 680)
 
             MoreSettingsView()
-                .tag(6)
+                .tag(SettingsTab.more)
                 .tabItem {
                     Image(systemName: "ellipsis.circle")
                     Text("More")
@@ -68,5 +68,14 @@ struct SettingsView: View {
                 .frame(width: 450)
         }
         .fixedSize(horizontal: true, vertical: true)
+    }
+
+    enum SettingsTab: Int {
+        case general
+        case radialMenu
+        case preview
+        case keybindings
+        case excludedApps
+        case more
     }
 }
