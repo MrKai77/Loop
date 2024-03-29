@@ -142,7 +142,10 @@ class LoopManager: ObservableObject {
 
     private func changeAction(_ action: WindowAction) {
         guard
-            self.currentAction != action || action.direction.willAdjustSize,
+            self.currentAction != action ||
+                action.direction.willAdjustSize ||
+                action.direction.willShrink ||
+                action.direction.willGrow,
             self.isLoopActive,
             let currentScreen = self.screenToResizeOn
         else {
@@ -219,7 +222,11 @@ class LoopManager: ObservableObject {
 
         performHapticFeedback()
 
-        if newAction != currentAction || newAction.direction.willAdjustSize {
+        if newAction != currentAction ||
+            newAction.direction.willAdjustSize ||
+            newAction.direction.willShrink ||
+            newAction.direction.willGrow {
+
             self.currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {

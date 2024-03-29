@@ -135,6 +135,24 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 result = processSizeAdjustment(frameToResizeFrom, bounds)
             }
 
+        } else if direction.willShrink || direction.willGrow {
+            var frameToResizeFrom = LoopManager.lastTargetFrame
+            if !Defaults[.previewVisibility], let window = window {
+                frameToResizeFrom = window.frame
+            }
+
+            result = frameToResizeFrom
+            if LoopManager.canAdjustSize {
+                switch direction {
+                case .shrinkTop, .growTop:          LoopManager.sidesToAdjust = .top
+                case .shrinkBottom, .growBottom:    LoopManager.sidesToAdjust = .bottom
+                case .shrinkLeft, .growLeft:        LoopManager.sidesToAdjust = .leading
+                default:                            LoopManager.sidesToAdjust = .trailing
+                }
+
+                result = processSizeAdjustment(frameToResizeFrom, bounds)
+            }
+
         } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
 
@@ -269,7 +287,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     private func processSizeAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
         var result = frameToResizeFrom
         let totalBounds: Edge.Set = [.top, .bottom, .leading, .trailing]
-        let step = Defaults[.sizeIncrement] * (direction == .larger ? -1 : 1)
+        let step = Defaults[.sizeIncrement] * ((direction == .larger || direction.willGrow) ? -1 : 1)
         let minWidth = Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 100
         let minHeight = Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 100
 
@@ -326,7 +344,13 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         let halfPadding = padding.window / 2
         var paddedWindowFrame = windowFrame.intersection(bounds)
 
-        guard !direction.willAdjustSize else { return paddedWindowFrame }
+        guard
+            !direction.willAdjustSize,
+            !direction.willShrink,
+            !direction.willGrow
+        else {
+            return paddedWindowFrame
+        }
 
         if direction == .macOSCenter,
            windowFrame.height >= bounds.height {

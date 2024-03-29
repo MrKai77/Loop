@@ -60,6 +60,18 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case larger = "Larger"
     case smaller = "Smaller"
 
+    // Shrink
+    case shrinkTop = "ShrinkTop"
+    case shrinkBottom = "ShrinkBottom"
+    case shrinkRight = "ShrinkRight"
+    case shrinkLeft = "ShrinkLeft"
+
+    // Grow
+    case growTop = "GrowTop"
+    case growBottom = "GrowBottom"
+    case growRight = "GrowRight"
+    case growLeft = "GrowLeft"
+
     case custom = "Custom"
     case cycle = "Cycle"
 
@@ -85,6 +97,12 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var sizeAdjustment: [WindowDirection] {
         [.larger, .smaller]
     }
+    static var shrink: [WindowDirection] {
+        [.shrinkTop, .shrinkBottom, .shrinkRight, .shrinkLeft]
+    }
+    static var grow: [WindowDirection] {
+        [.growTop, .growBottom, .growRight, .growLeft]
+    }
     static var more: [WindowDirection] {
         [.initialFrame, .undo, .custom, .cycle]
     }
@@ -95,6 +113,14 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var willAdjustSize: Bool {
         WindowDirection.sizeAdjustment.contains(self)
+    }
+
+    var willShrink: Bool {
+        WindowDirection.shrink.contains(self)
+    }
+
+    var willGrow: Bool {
+        WindowDirection.grow.contains(self)
     }
 
     // Used in the settings window to loop over the possible combinations
@@ -134,19 +160,22 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             .center,
             .macOSCenter,
             .almostMaximize,
-            .nextScreen,
-            .previousScreen,
             .fullscreen,
             .minimize,
             .hide,
             .initialFrame,
             .undo,
-            .cycle,
-            .larger,
-            .smaller
+            .cycle
         ]
 
-        return !noAngleActions.contains(self)
+        if noAngleActions.contains(self) ||
+           self.willChangeScreen ||
+           self.willAdjustSize ||
+           self.willShrink ||
+           self.willGrow {
+            return false
+        }
+        return true
     }
 
     var shouldFillRadialMenu: Bool {
@@ -233,6 +262,16 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
         case .larger:                   Image(systemName: "plus.rectangle")
         case .smaller:                  Image(systemName: "minus.rectangle")
+
+        case .shrinkTop:                Image("custom.arrow.down.shrink.rectangle")
+        case .shrinkBottom:             Image("custom.arrow.up.shrink.rectangle")
+        case .shrinkRight:              Image("custom.arrow.left.shrink.rectangle")
+        case .shrinkLeft:               Image("custom.arrow.right.shrink.rectangle")
+
+        case .growTop:                  Image("custom.arrow.up.grow.rectangle")
+        case .growBottom:               Image("custom.arrow.down.grow.rectangle")
+        case .growRight:                Image("custom.arrow.right.grow.rectangle")
+        case .growLeft:                 Image("custom.arrow.left.grow.rectangle")
 
         case .custom:                   Image(systemName: "rectangle.dashed")
         case .cycle:                    Image("custom.arrow.2.squarepath.rectangle")
