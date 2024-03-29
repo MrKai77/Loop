@@ -34,7 +34,7 @@
       "location" : "https://github.com/sparkle-project/Sparkle",
       "state" : {
         "branch" : "2.x",
-        "revision" : "0a4caaf7a81eea2cece651ef4b17331fa0634dff"
+        "revision" : "0183bf2b3f8000bb222b631631c3164da55a0b0f"
       }
     },
     {
@@ -56,5 +56,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
