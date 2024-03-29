@@ -150,4 +150,26 @@ extension CGRect {
             height: insettedHeight
         )
     }
+
+    func getEdgesTouchingBounds(_ rect2: CGRect) -> Edge.Set {
+        var result: Edge.Set = []
+
+        if self.minX.approximatelyEquals(to: rect2.minX) {
+            result.insert(.leading)
+        }
+
+        if self.minY.approximatelyEquals(to: rect2.minY) {
+            result.insert(.top)
+        }
+
+        if self.maxX.approximatelyEquals(to: rect2.maxX) {
+            result.insert(.trailing)
+        }
+
+        if self.maxY.approximatelyEquals(to: rect2.maxY) {
+            result.insert(.bottom)
+        }
+
+        return result
+    }
 }

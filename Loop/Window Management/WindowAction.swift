@@ -114,6 +114,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         guard self.direction != .cycle, self.direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
+        var bounds = bounds
+        if toScale { bounds = getPaddedBounds(bounds) }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         if let frameMultiplyValues = direction.frameMultiplyValues {
@@ -123,22 +125,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.height = bounds.height * frameMultiplyValues.height
 
         } else if direction.willAdjustSize {
-
             var frameToResizeFrom = LoopManager.lastTargetFrame
             if !Defaults[.previewVisibility], let window = window {
                 frameToResizeFrom = window.frame
             }
 
-            result = frameToResizeFrom.inset(
-                by: Defaults[.sizeAdjustmentStep] * (direction == .larger ? -1 : 1),
-                minSize: .init(
-                    width: Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 400,
-                    height: Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 400
-                )
-            )
-
-            if result.size.approximatelyEqual(to: LoopManager.lastTargetFrame.size) {
-                result = LoopManager.lastTargetFrame
+            result = frameToResizeFrom
+            if LoopManager.canAdjustSize {
+                result = processSizeAdjustment(frameToResizeFrom, bounds)
             }
 
         } else if direction == .custom {
@@ -186,9 +180,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
-        result = self.applyPadding(result, bounds)
-
         if toScale {
+            result = self.applyPadding(result, bounds)
             LoopManager.lastTargetFrame =  result
         }
 
@@ -273,22 +266,64 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
-    /// Apply padding on a CGRect, using the provided WindowDirection
-    /// - Parameters:
-    ///   - windowFrame: The frame the window WILL be resized to
-    ///   - direction: The direction the window WILL be resized to
-    /// - Returns: CGRect with padding applied
-    private func applyPadding(_ windowFrame: CGRect, _ screenFrame: CGRect) -> CGRect {
-        let padding = Defaults[.padding]
-        let halfPadding = padding.window / 2
+    private func processSizeAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
+        var result = frameToResizeFrom
 
-        var bounds = screenFrame
+        let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
+        let totalBounds: Edge.Set = [.top, .bottom, .leading, .trailing]
+        let edgesToInset = totalBounds.subtracting(edgesTouchingBounds)
+        let step = Defaults[.sizeAdjustmentStep] * (direction == .larger ? -1 : 1)
+
+        let minWidth = Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 100
+        let minHeight = Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 100
+
+        if edgesToInset.isEmpty || edgesToInset.contains(totalBounds) {
+            result = result.inset(
+                by: step,
+                minSize: .init(
+                    width: minWidth,
+                    height: minHeight
+                )
+            )
+        } else {
+            result = result.padding(edgesToInset, step)
+
+            if result.width < minWidth {
+                result.size.width = minWidth
+                result.origin.x = frameToResizeFrom.midX - minWidth / 2
+            }
+
+            if result.height < minHeight {
+                result.size.height = minHeight
+                result.origin.y = frameToResizeFrom.midY - minHeight / 2
+            }
+        }
+
+        if result.size.approximatelyEqual(to: LoopManager.lastTargetFrame.size) {
+            result = LoopManager.lastTargetFrame
+        }
+
+        return result
+    }
+
+    private func getPaddedBounds(_ bounds: CGRect) -> CGRect {
+        let padding = Defaults[.padding]
+
+        var bounds = bounds
         bounds = bounds.padding(.top, padding.totalTopPadding)
         bounds = bounds.padding(.bottom, padding.bottom)
         bounds = bounds.padding(.leading, padding.left)
         bounds = bounds.padding(.trailing, padding.right)
 
+        return bounds
+    }
+
+    private func applyPadding(_ windowFrame: CGRect, _ bounds: CGRect) -> CGRect {
+        let padding = Defaults[.padding]
+        let halfPadding = padding.window / 2
         var paddedWindowFrame = windowFrame.intersection(bounds)
+
+        guard !direction.willAdjustSize else { return paddedWindowFrame }
 
         if direction == .macOSCenter,
            windowFrame.height >= bounds.height {

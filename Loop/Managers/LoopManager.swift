@@ -11,6 +11,7 @@ import Defaults
 class LoopManager: ObservableObject {
 
     static var lastTargetFrame: CGRect = .zero
+    static var canAdjustSize: Bool = true
 
     private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
@@ -366,6 +367,7 @@ class LoopManager: ObservableObject {
             if let screenToResizeOn = self.screenToResizeOn,
                Defaults[.previewVisibility] {
 
+                LoopManager.canAdjustSize = false
                 WindowEngine.resize(
                     self.targetWindow!,
                     to: self.currentAction,
@@ -387,6 +389,7 @@ class LoopManager: ObservableObject {
 
         isLoopActive = false
         LoopManager.lastTargetFrame = .zero
+        LoopManager.canAdjustSize = true
     }
 
     private func openWindows() {
