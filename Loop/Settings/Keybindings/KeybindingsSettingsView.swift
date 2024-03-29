@@ -21,7 +21,7 @@ struct KeybindingsSettingsView: View {
 
     @StateObject private var keycorderModel = KeycorderModel()
     @State private var suggestAddingTriggerDelay: Bool = false
-    @State private var selection: WindowAction?
+    @State private var selection = Set<WindowAction>()
 
     var body: some View {
         ZStack {
@@ -75,15 +75,26 @@ struct KeybindingsSettingsView: View {
                                     KeybindCustomizationViewItem(keybind: keybind, triggerKey: self.$triggerKey)
                                         .contextMenu {
                                             Button {
-                                                self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
+                                                if self.selection.isEmpty {
+                                                    self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
+                                                } else {
+                                                    for item in selection {
+                                                        self.keybinds.removeAll(where: { $0 == item })
+                                                    }
+                                                    self.selection.removeAll()
+                                                }
                                             } label: {
                                                 Label("Delete", systemImage: "trash")
                                             }
                                         }
                                         .tag(keybind.wrappedValue)
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
                                 .onMove { indices, newOffset in
                                     self.keybinds.move(fromOffsets: indices, toOffset: newOffset)
+                                }
+                                .onDelete { offset in
+                                    self.keybinds.remove(atOffsets: offset)
                                 }
                             }
                             .listStyle(.bordered(alternatesRowBackgrounds: true))
@@ -114,9 +125,10 @@ struct KeybindingsSettingsView: View {
                                     Divider()
 
                                     Button {
-                                        self.keybinds.removeAll(where: {
-                                            $0 == selection
-                                        })
+                                        for item in selection {
+                                            self.keybinds.removeAll(where: { $0 == item })
+                                        }
+                                        self.selection.removeAll()
                                     } label: {
                                         Rectangle()
                                             .foregroundStyle(.white.opacity(0.00001))
@@ -129,7 +141,7 @@ struct KeybindingsSettingsView: View {
                                             .aspectRatio(1, contentMode: .fit)
                                             .padding(-5)
                                     }
-                                    .disabled(self.selection == nil)
+                                    .disabled(self.selection.isEmpty)
 
                                     Spacer()
                                 }
