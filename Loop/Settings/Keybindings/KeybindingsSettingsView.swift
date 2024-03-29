@@ -206,6 +206,24 @@ struct KeybindingsSettingsView: View {
             }
         }
 
+        Menu("Grow/Shrink") {
+            ForEach(WindowDirection.sizeAdjustment) { direction in
+                newDirectionButton(direction)
+            }
+
+            Divider()
+
+            ForEach(WindowDirection.shrink) { direction in
+                newDirectionButton(direction)
+            }
+
+            Divider()
+
+            ForEach(WindowDirection.grow) { direction in
+                newDirectionButton(direction)
+            }
+        }
+
         Menu("More") {
             ForEach(WindowDirection.more) { direction in
                 newDirectionButton(direction)

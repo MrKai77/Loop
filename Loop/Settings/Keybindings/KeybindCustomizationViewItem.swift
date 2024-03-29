@@ -128,6 +128,30 @@ struct KeybindCustomizationViewItem: View {
                 }
             }
 
+            Picker("Screen Switching", selection: $keybind.direction) {
+                ForEach(WindowDirection.screenSwitching) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Grow/Shrink", selection: $keybind.direction) {
+                ForEach(WindowDirection.sizeAdjustment) { direction in
+                    directionPickerItem(direction)
+                }
+
+                Divider()
+
+                ForEach(WindowDirection.shrink) { direction in
+                    directionPickerItem(direction)
+                }
+
+                Divider()
+
+                ForEach(WindowDirection.grow) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
             Picker("More", selection: $keybind.direction) {
                 ForEach(WindowDirection.more) { direction in
                     directionPickerItem(direction)

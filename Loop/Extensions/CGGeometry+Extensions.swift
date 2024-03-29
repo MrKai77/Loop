@@ -45,6 +45,10 @@ extension CGSize {
     var area: CGFloat {
         self.width * self.height
     }
+
+    func approximatelyEqual(to size: CGSize, tolerance: CGFloat = 10) -> Bool {
+        return abs(width - size.width) < tolerance && abs(height - size.height) < tolerance
+    }
 }
 
 extension CGRect {
@@ -128,5 +132,44 @@ extension CGRect {
 
     var center: CGPoint {
         CGPoint(x: self.midX, y: self.midY)
+    }
+
+    func inset(by amount: CGFloat, minSize: CGSize) -> CGRect {
+        // Respect minimum width and height
+        let insettedWidth = max(minSize.width, self.width - 2 * amount)
+        let insettedHeight = max(minSize.height, self.height - 2 * amount)
+
+        // Calculate the new inset rectangle
+        let newX = self.midX - insettedWidth / 2
+        let newY = self.midY - insettedHeight / 2
+
+        return CGRect(
+            x: newX,
+            y: newY,
+            width: insettedWidth,
+            height: insettedHeight
+        )
+    }
+
+    func getEdgesTouchingBounds(_ rect2: CGRect) -> Edge.Set {
+        var result: Edge.Set = []
+
+        if self.minX.approximatelyEquals(to: rect2.minX) {
+            result.insert(.leading)
+        }
+
+        if self.minY.approximatelyEquals(to: rect2.minY) {
+            result.insert(.top)
+        }
+
+        if self.maxX.approximatelyEquals(to: rect2.maxX) {
+            result.insert(.trailing)
+        }
+
+        if self.maxY.approximatelyEquals(to: rect2.maxY) {
+            result.insert(.bottom)
+        }
+
+        return result
     }
 }

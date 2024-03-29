@@ -10,6 +10,11 @@ import Defaults
 
 class LoopManager: ObservableObject {
 
+    // Size Adjustment
+    static var sidesToAdjust: Edge.Set?
+    static var lastTargetFrame: CGRect = .zero
+    static var canAdjustSize: Bool = true
+
     private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
 
@@ -137,7 +142,7 @@ class LoopManager: ObservableObject {
 
     private func changeAction(_ action: WindowAction) {
         guard
-            self.currentAction != action,
+            self.currentAction != action || action.willManipulateCurrentWindowSize,
             self.isLoopActive,
             let currentScreen = self.screenToResizeOn
         else {
@@ -179,13 +184,7 @@ class LoopManager: ObservableObject {
             }
 
             if self.currentAction.direction == .noAction {
-                if let targetWindow = targetWindow {
-                    self.currentAction = WindowRecords.getLastAction(for: targetWindow) ?? .init(.noAction)
-                }
-
-                if self.currentAction.direction == .noAction {
-                    self.currentAction.direction = .maximize
-                }
+                self.currentAction = .init(.center)
             }
 
             self.screenToResizeOn = newScreen
@@ -220,13 +219,13 @@ class LoopManager: ObservableObject {
 
         performHapticFeedback()
 
-        if newAction != currentAction {
+        if newAction != currentAction || newAction.willManipulateCurrentWindowSize {
+
             self.currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
                 self.openWindows()
             }
-
             DispatchQueue.main.async {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
 
@@ -347,6 +346,10 @@ class LoopManager: ObservableObject {
         self.keybindMonitor.start()
 
         isLoopActive = true
+
+        if let window = self.targetWindow {
+            LoopManager.lastTargetFrame = window.frame
+        }
     }
 
     private func closeLoop(forceClose: Bool = false) {
@@ -367,6 +370,7 @@ class LoopManager: ObservableObject {
             if let screenToResizeOn = self.screenToResizeOn,
                Defaults[.previewVisibility] {
 
+                LoopManager.canAdjustSize = false
                 WindowEngine.resize(
                     self.targetWindow!,
                     to: self.currentAction,
@@ -387,6 +391,9 @@ class LoopManager: ObservableObject {
         }
 
         isLoopActive = false
+        LoopManager.sidesToAdjust = nil
+        LoopManager.lastTargetFrame = .zero
+        LoopManager.canAdjustSize = true
     }
 
     private func openWindows() {
