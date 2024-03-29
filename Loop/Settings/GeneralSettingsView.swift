@@ -22,7 +22,6 @@ struct GeneralSettingsView: View {
     @Default(.currentIcon) var currentIcon
     @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked
     @Default(.timesLooped) var timesLooped
-    @Default(.animateWindowResizes) var animateWindowResizes
     @Default(.padding) var padding
     @Default(.windowSnapping) var windowSnapping
     @Default(.animationConfiguration) var animationConfiguration
@@ -51,7 +50,7 @@ struct GeneralSettingsView: View {
                     Toggle("Hide menubar icon", isOn: $hideMenuBarIcon)
 
                     if hideMenuBarIcon {
-                        Text("Re-open Loop again to see this window.")
+                        Text("Re-open Loop to see this window.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .textSelection(.enabled)
@@ -60,27 +59,10 @@ struct GeneralSettingsView: View {
             }
 
             Section {
-                Toggle(isOn: $windowSnapping) {
-                    HStack {
-                        Text("Window Snapping")
-                        BetaIndicator("BETA")
-                    }
-                }
-
-                Toggle(isOn: $animateWindowResizes) {
-                    HStack {
-                        Text("Animate windows being resized")
-                        BetaIndicator("BETA")
-                    }
-                }
-                .onChange(of: animateWindowResizes) { _ in
-                    if animateWindowResizes == true {
-                        PermissionsManager.ScreenRecording.requestAccess()
-                    }
-                }
+                Toggle("Window Snapping", isOn: $windowSnapping)
 
                 HStack {
-                    Text("Padding")
+                    Text("Window Padding")
                     Spacer()
                     Button("Configure…") {
                         self.isConfiguringPadding = true
@@ -133,7 +115,7 @@ struct GeneralSettingsView: View {
                     }
 
                     VStack(alignment: .leading) {
-                        Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
+                        Text("Loop more to unlock new icons! (You've looped \(timesLooped) times!)")
 
                         if let iconFooter = iconFooter {
                             Text(iconFooter)

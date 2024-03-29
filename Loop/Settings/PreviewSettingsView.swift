@@ -56,21 +56,24 @@ struct PreviewSettingsView: View {
                     value: $previewPadding,
                     sliderRange: 0...20,
                     postscript: "px",
-                    lowerClamp: true
+                    lowerClamp: true,
+                    upperClamp: true
                 )
                 CrispValueAdjuster(
                     "Corner Radius",
                     value: $previewCornerRadius,
                     sliderRange: 0...20,
                     postscript: "px",
-                    lowerClamp: true
+                    lowerClamp: true,
+                    upperClamp: true
                 )
                 CrispValueAdjuster(
                     "Border Thickness",
                     value: $previewBorderThickness,
                     sliderRange: 0...10,
                     postscript: "px",
-                    lowerClamp: true
+                    lowerClamp: true,
+                    upperClamp: true
                 )
             }
             .disabled(!previewVisibility)

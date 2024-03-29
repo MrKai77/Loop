@@ -13,13 +13,16 @@ struct RadialMenuSettingsView: View {
     @Default(.radialMenuVisibility) var radialMenuVisibility
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
-    @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
     @Default(.disableCursorInteraction) var disableCursorInteraction
 
     var body: some View {
         Form {
             Section("Appearance") {
                 Toggle("Show Radial Menu when looping", isOn: $radialMenuVisibility)
+
+                Toggle("Disable cursor interaction", isOn: $disableCursorInteraction)
+                    .disabled(!radialMenuVisibility)
+                    .foregroundColor(!radialMenuVisibility ? .secondary : nil)
             }
 
             Section {
@@ -69,13 +72,6 @@ struct RadialMenuSettingsView: View {
                     lowerClamp: true,
                     upperClamp: true
                 )
-            }
-            .disabled(!radialMenuVisibility)
-            .foregroundColor(!radialMenuVisibility ? .secondary : nil)
-
-            Section {
-                Toggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
-                Toggle("Disable cursor interaction", isOn: $disableCursorInteraction)
             }
             .disabled(!radialMenuVisibility)
             .foregroundColor(!radialMenuVisibility ? .secondary : nil)

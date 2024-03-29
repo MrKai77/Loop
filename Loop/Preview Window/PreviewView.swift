@@ -38,6 +38,9 @@ struct PreviewView: View {
                     }
 
                 RoundedRectangle(cornerRadius: previewCornerRadius, style: .continuous)
+                    .strokeBorder(.quinary, lineWidth: 1)
+
+                RoundedRectangle(cornerRadius: previewCornerRadius, style: .continuous)
                     .stroke(
                         LinearGradient(
                             gradient: Gradient(

@@ -19,7 +19,7 @@ extension Defaults.Keys {
     static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let padding = Key<PaddingModel>("padding", default: .zero)
-    static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: true)
+    static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)

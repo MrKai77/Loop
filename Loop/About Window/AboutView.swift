@@ -50,6 +50,13 @@ struct AboutView: View {
             license: URL(
                 string: "https://github.com/sparkle-project/Sparkle/blob/2.x/LICENSE"
             )!
+        ),
+        PackageDescription(
+            name: "Swift Algorithms",
+            url: URL(
+                string: "https://github.com/apple/swift-algorithms"
+            )!,
+            license: URL(string: "https://github.com/apple/swift-algorithms/blob/main/LICENSE.txt")!
         )
     ]
 

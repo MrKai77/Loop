@@ -12,8 +12,7 @@ struct ExcludeListSettingsView: View {
     @EnvironmentObject var appListManager: AppListManager
 
     @Default(.applicationExcludeList) var excludeList
-
-    @State private var selection: String?
+    @State private var selection = Set<String>()
 
     var body: some View {
         ZStack {
@@ -35,17 +34,40 @@ struct ExcludeListSettingsView: View {
                             .padding()
                         } else {
                             List(selection: $selection) {
-                                ForEach(excludeList, id: \.self) { entry in
-                                    if let app = appListManager.installedApps.first(where: { $0.bundleID == entry }) {
-                                        Label {
-                                            Text(app.displayName)
-                                                .padding(.leading, 8)
-                                        } icon: {
-                                            Image(nsImage: app.icon)
+                                ForEach(self.$excludeList, id: \.self) { entry in
+                                    Group {
+                                        if let app = appListManager.installedApps.first(where: {
+                                            $0.bundleID == entry.wrappedValue
+                                        }) {
+                                            HStack {
+                                                Image(nsImage: app.icon)
+                                                Text(app.displayName)
+                                                    .padding(.leading, 2)
+                                            }
+                                        } else {
+                                            Text(entry.wrappedValue)
                                         }
-                                    } else {
-                                        Text(entry)
                                     }
+                                    .padding(.vertical, 5)
+                                    .contextMenu {
+                                        Button("Delete") {
+                                            if self.selection.isEmpty {
+                                                self.excludeList.removeAll(where: { $0 == entry.wrappedValue })
+                                            } else {
+                                                for item in selection {
+                                                    self.excludeList.removeAll(where: { $0 == item })
+                                                }
+                                                self.selection.removeAll()
+                                            }
+                                        }
+                                    }
+                                    .tag(entry.wrappedValue)
+                                }
+                                .onMove { indices, newOffset in
+                                    self.excludeList.move(fromOffsets: indices, toOffset: newOffset)
+                                }
+                                .onDelete { offset in
+                                    self.excludeList.remove(atOffsets: offset)
                                 }
                             }
                             .listStyle(.bordered(alternatesRowBackgrounds: true))
@@ -76,9 +98,10 @@ struct ExcludeListSettingsView: View {
                                     Divider()
 
                                     Button {
-                                        self.excludeList.removeAll(where: {
-                                            $0 == selection
-                                        })
+                                        for item in selection {
+                                            self.excludeList.removeAll(where: { $0 == item })
+                                        }
+                                        self.selection.removeAll()
                                     } label: {
                                         Rectangle()
                                             .foregroundStyle(.white.opacity(0.00001))
@@ -91,7 +114,7 @@ struct ExcludeListSettingsView: View {
                                             .aspectRatio(1, contentMode: .fit)
                                             .padding(-5)
                                     }
-                                    .disabled(self.selection == nil)
+                                    .disabled(self.selection.isEmpty)
 
                                     Spacer()
                                 }
@@ -140,9 +163,4 @@ struct ExcludeListSettingsView: View {
             }
         }
     }
-}
-
-#Preview {
-    ExcludeListSettingsView()
-        .environmentObject(AppListManager())
 }

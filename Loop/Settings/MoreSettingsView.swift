@@ -16,6 +16,7 @@ struct MoreSettingsView: View {
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
     @Default(.hapticFeedback) var hapticFeedback
+    @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
     @Default(.sizeIncrement) var sizeIncrement
     @Default(.animateWindowResizes) var animateWindowResizes
     @State var isAccessibilityAccessGranted = false
@@ -64,12 +65,27 @@ struct MoreSettingsView: View {
                     "Stage Strip Size",
                     value: $stageStripSize,
                     sliderRange: 50...200,
-                    postscript: "px"
+                    postscript: "px",
+                    lowerClamp: true
                 )
                 .disabled(!respectStageManager)
             }
 
-            Section("Accessibility") {
+            Section("Advanced") {
+                Toggle(isOn: $animateWindowResizes) {
+                    HStack {
+                        Text("Animate windows being resized")
+                        UnstableIndicator("ALPHA", color: .orange)
+                    }
+                }
+                .onChange(of: animateWindowResizes) { _ in
+                    if animateWindowResizes == true {
+                        PermissionsManager.ScreenRecording.requestAccess()
+                    }
+                }
+
+                Toggle("Hide Loop until direction is chosen", isOn: $hideUntilDirectionIsChosen)
+
                 Toggle("Haptic Feedback", isOn: $hapticFeedback)
 
                 CrispValueAdjuster(
@@ -79,8 +95,7 @@ struct MoreSettingsView: View {
                     sliderRange: 5...50,
                     postscript: "px",
                     step: 4.5,
-                    lowerClamp: true,
-                    upperClamp: false
+                    lowerClamp: true
                 )
             }
 
@@ -140,11 +155,13 @@ struct MoreSettingsView: View {
             Section("Feedback") {
                 HStack {
                     Text(
-                        "Sending feedback will bring you to our \"New Issue\" page, " +
-                        "where you can select a template to report a bug, request a feature & more!"
+                        "Sending feedback will bring you to our \"New Issue\" GitHub page, " +
+                        "where you can report a bug, request a feature & more!"
                     )
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                    Spacer()
 
                     Button(action: {
                         openURL(URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!)
