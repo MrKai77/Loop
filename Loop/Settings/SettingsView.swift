@@ -55,7 +55,7 @@ struct SettingsView: View {
                     Text("Excluded Apps")
                 }
                 .environmentObject(appListManager)
-                .frame(width: 500)
+                .frame(width: 450)
                 .frame(maxHeight: 680)
 
             MoreSettingsView()
