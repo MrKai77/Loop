@@ -74,7 +74,7 @@ struct KeybindingsSettingsView: View {
                                 ForEach(self.$keybinds) { keybind in
                                     KeybindCustomizationViewItem(keybind: keybind, triggerKey: self.$triggerKey)
                                         .contextMenu {
-                                            Button {
+                                            Button("Delete") {
                                                 if self.selection.isEmpty {
                                                     self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
                                                 } else {
@@ -83,8 +83,6 @@ struct KeybindingsSettingsView: View {
                                                     }
                                                     self.selection.removeAll()
                                                 }
-                                            } label: {
-                                                Label("Delete", systemImage: "trash")
                                             }
                                         }
                                         .tag(keybind.wrappedValue)
