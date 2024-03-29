@@ -315,7 +315,9 @@ class LoopManager: ObservableObject {
         let flags = event.modifierFlags.convertToCGKeyCode()
         if flags.count > 1 && !self.currentlyPressedModifiers.contains(flags) {
             for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
-                self.currentlyPressedModifiers.insert(key)
+                if !self.currentlyPressedModifiers.map({ $0.baseModifier }).contains(key) {
+                    self.currentlyPressedModifiers.insert(key)
+                }
             }
         }
     }

@@ -115,9 +115,11 @@ struct TriggerKeycorder: View {
             let flags = event.modifierFlags.convertToCGKeyCode()
             if flags.count > 1 && !self.selectionKey.contains(flags) {
                 for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
-                    self.selectionKey.insert(key)
-                    withAnimation(.snappy(duration: 0.1)) {
-                        self.isCurrentlyPressed = true
+                    if !self.selectionKey.map({ $0.baseModifier }).contains(key) {
+                        self.selectionKey.insert(key)
+                        withAnimation(.snappy(duration: 0.1)) {
+                            self.isCurrentlyPressed = true
+                        }
                     }
                 }
             }
