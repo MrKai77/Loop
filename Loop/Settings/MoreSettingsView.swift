@@ -16,6 +16,7 @@ struct MoreSettingsView: View {
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
     @Default(.hapticFeedback) var hapticFeedback
+    @Default(.sizeIncrement) var sizeIncrement
     @Default(.animateWindowResizes) var animateWindowResizes
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
@@ -70,6 +71,17 @@ struct MoreSettingsView: View {
 
             Section("Accessibility") {
                 Toggle("Haptic Feedback", isOn: $hapticFeedback)
+
+                CrispValueAdjuster(
+                    "Size Increment",
+                    description: "Used in size adjustment window actions",
+                    value: $sizeIncrement,
+                    sliderRange: 5...50,
+                    postscript: "px",
+                    step: 4.5,
+                    lowerClamp: true,
+                    upperClamp: false
+                )
             }
 
             Section(content: {

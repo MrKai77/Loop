@@ -81,5 +81,5 @@ extension Defaults.Keys {
     static let respectStageManager = Key<Bool>("respectStageManager", default: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 
-    static let sizeAdjustmentStep = Key<CGFloat>("sizeAdjustmentStep", default: 15)
+    static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
 }

@@ -10,6 +10,8 @@ import Defaults
 
 class LoopManager: ObservableObject {
 
+    // Size Adjustment
+    static var sidesToAdjust: Edge.Set?
     static var lastTargetFrame: CGRect = .zero
     static var canAdjustSize: Bool = true
 
@@ -388,6 +390,7 @@ class LoopManager: ObservableObject {
         }
 
         isLoopActive = false
+        LoopManager.sidesToAdjust = nil
         LoopManager.lastTargetFrame = .zero
         LoopManager.canAdjustSize = true
     }

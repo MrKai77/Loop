@@ -268,38 +268,41 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     private func processSizeAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
         var result = frameToResizeFrom
-
-        let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
         let totalBounds: Edge.Set = [.top, .bottom, .leading, .trailing]
-        let edgesToInset = totalBounds.subtracting(edgesTouchingBounds)
-        let step = Defaults[.sizeAdjustmentStep] * (direction == .larger ? -1 : 1)
-
+        let step = Defaults[.sizeIncrement] * (direction == .larger ? -1 : 1)
         let minWidth = Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 100
         let minHeight = Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 100
 
-        if edgesToInset.isEmpty || edgesToInset.contains(totalBounds) {
-            result = result.inset(
-                by: step,
-                minSize: .init(
-                    width: minWidth,
-                    height: minHeight
+        if LoopManager.sidesToAdjust == nil {
+            let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
+            LoopManager.sidesToAdjust = totalBounds.subtracting(edgesTouchingBounds)
+        }
+
+        if let edgesToInset = LoopManager.sidesToAdjust {
+            if edgesToInset.isEmpty || edgesToInset.contains(totalBounds) {
+                result = result.inset(
+                    by: step,
+                    minSize: .init(
+                        width: minWidth,
+                        height: minHeight
+                    )
                 )
-            )
-        } else {
-            result = result.padding(edgesToInset, step)
+            } else {
+                result = result.padding(edgesToInset, step)
 
-            if result.width < minWidth {
-                result.size.width = minWidth
-                result.origin.x = frameToResizeFrom.midX - minWidth / 2
-            }
+                if result.width < minWidth {
+                    result.size.width = minWidth
+                    result.origin.x = frameToResizeFrom.midX - minWidth / 2
+                }
 
-            if result.height < minHeight {
-                result.size.height = minHeight
-                result.origin.y = frameToResizeFrom.midY - minHeight / 2
+                if result.height < minHeight {
+                    result.size.height = minHeight
+                    result.origin.y = frameToResizeFrom.midY - minHeight / 2
+                }
             }
         }
 
-        if result.size.approximatelyEqual(to: LoopManager.lastTargetFrame.size) {
+        if result.size.approximatelyEqual(to: LoopManager.lastTargetFrame.size, tolerance: 2) {
             result = LoopManager.lastTargetFrame
         }
 
