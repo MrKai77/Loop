@@ -63,10 +63,14 @@ class WindowDragManager {
     }
 
     private func setCurrentDraggingWindow() {
-        guard let mousePosition = NSEvent.mouseLocation.flipY,
-              let draggingWindow = WindowEngine.windowAtPosition(mousePosition) else {
+        guard
+            let mousePosition = NSEvent.mouseLocation.flipY,
+            let draggingWindow = WindowEngine.windowAtPosition(mousePosition),
+            !draggingWindow.isAppExcluded
+        else {
             return
         }
+
         self.draggingWindow = draggingWindow
         self.initialWindowFrame = draggingWindow.frame
     }
