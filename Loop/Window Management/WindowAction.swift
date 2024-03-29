@@ -64,6 +64,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     var cycle: [WindowAction]?
 
+    var willManipulateCurrentWindowSize: Bool {
+        direction.willAdjustSize || direction.willShrink || direction.willGrow
+    }
+
     static func getAction(for keybind: Set<CGKeyCode>) -> WindowAction? {
         for keybinding in Defaults[.keybinds] where keybinding.keybind == keybind {
             return keybinding
@@ -117,6 +121,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         var bounds = bounds
         if toScale { bounds = getPaddedBounds(bounds) }
         var result = CGRect(origin: bounds.origin, size: .zero)
+
+        if willManipulateCurrentWindowSize {
+            LoopManager.sidesToAdjust = nil
+        }
 
         if let frameMultiplyValues = direction.frameMultiplyValues {
             result.origin.x += bounds.width * frameMultiplyValues.minX
@@ -345,9 +353,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         var paddedWindowFrame = windowFrame.intersection(bounds)
 
         guard
-            !direction.willAdjustSize,
-            !direction.willShrink,
-            !direction.willGrow
+            !willManipulateCurrentWindowSize
         else {
             return paddedWindowFrame
         }
