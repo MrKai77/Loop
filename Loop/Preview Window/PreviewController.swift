@@ -35,7 +35,6 @@ class PreviewController {
             defer: true,
             screen: NSApp.keyWindow?.screen
         )
-        panel.hasShadow = false
         panel.alphaValue = 0
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
         panel.setFrame(NSRect(origin: screen.stageStripFreeFrame.center, size: .zero), display: true)
