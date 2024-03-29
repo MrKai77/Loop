@@ -16,6 +16,7 @@ struct MoreSettingsView: View {
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
     @Default(.hapticFeedback) var hapticFeedback
+    @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
     @Default(.sizeIncrement) var sizeIncrement
     @Default(.animateWindowResizes) var animateWindowResizes
     @State var isAccessibilityAccessGranted = false
@@ -69,7 +70,21 @@ struct MoreSettingsView: View {
                 .disabled(!respectStageManager)
             }
 
-            Section("Accessibility") {
+            Section("Advanced") {
+                Toggle(isOn: $animateWindowResizes) {
+                    HStack {
+                        Text("Animate windows being resized")
+                        UnstableIndicator("ALPHA", color: .orange)
+                    }
+                }
+                .onChange(of: animateWindowResizes) { _ in
+                    if animateWindowResizes == true {
+                        PermissionsManager.ScreenRecording.requestAccess()
+                    }
+                }
+
+                Toggle("Hide Loop until direction is chosen", isOn: $hideUntilDirectionIsChosen)
+
                 Toggle("Haptic Feedback", isOn: $hapticFeedback)
 
                 CrispValueAdjuster(
