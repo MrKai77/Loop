@@ -44,7 +44,7 @@ struct KeybindingsSettingsView: View {
                     CrispValueAdjuster(
                         "Trigger Delay",
                         value: $triggerDelay,
-                        sliderRange: 0...10,
+                        sliderRange: 0...1,
                         postscript: "sec",
                         step: 0.1,
                         lowerClamp: true

@@ -65,7 +65,8 @@ struct MoreSettingsView: View {
                     "Stage Strip Size",
                     value: $stageStripSize,
                     sliderRange: 50...200,
-                    postscript: "px"
+                    postscript: "px",
+                    lowerClamp: true
                 )
                 .disabled(!respectStageManager)
             }
@@ -94,8 +95,7 @@ struct MoreSettingsView: View {
                     sliderRange: 5...50,
                     postscript: "px",
                     step: 4.5,
-                    lowerClamp: true,
-                    upperClamp: false
+                    lowerClamp: true
                 )
             }
 
