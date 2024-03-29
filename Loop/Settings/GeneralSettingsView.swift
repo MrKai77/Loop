@@ -51,7 +51,7 @@ struct GeneralSettingsView: View {
                     Toggle("Hide menubar icon", isOn: $hideMenuBarIcon)
 
                     if hideMenuBarIcon {
-                        Text("Re-open Loop again to see this window.")
+                        Text("Re-open Loop to see this window.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .textSelection(.enabled)
@@ -133,7 +133,7 @@ struct GeneralSettingsView: View {
                     }
 
                     VStack(alignment: .leading) {
-                        Text("Loop more to unlock more icons! (You've looped \(timesLooped) times!)")
+                        Text("Loop more to unlock new icons! (You've looped \(timesLooped) times!)")
 
                         if let iconFooter = iconFooter {
                             Text(iconFooter)

@@ -140,11 +140,13 @@ struct MoreSettingsView: View {
             Section("Feedback") {
                 HStack {
                     Text(
-                        "Sending feedback will bring you to our \"New Issue\" page, " +
-                        "where you can select a template to report a bug, request a feature & more!"
+                        "Sending feedback will bring you to our \"New Issue\" GitHub page, " +
+                        "where you can report a bug, request a feature & more!"
                     )
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                    Spacer()
 
                     Button(action: {
                         openURL(URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!)
