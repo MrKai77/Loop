@@ -122,7 +122,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         if toScale { bounds = getPaddedBounds(bounds) }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
-        if willManipulateCurrentWindowSize {
+        if !willManipulateCurrentWindowSize {
             LoopManager.sidesToAdjust = nil
         }
 
