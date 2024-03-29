@@ -14,12 +14,11 @@ struct PreviewSettingsView: View {
     @Default(.previewPadding) var previewPadding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
-
     @Default(.animateWindowResizes) var animateWindowResizes
 
     var body: some View {
         Form {
-            Section("Behavior") {
+            Section("Appearance") {
                 Toggle(isOn: $previewVisibility) {
                     VStack(alignment: .leading) {
                         Text("Show Preview when looping")

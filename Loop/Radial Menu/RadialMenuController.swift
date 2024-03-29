@@ -28,6 +28,7 @@ class RadialMenuController {
                             backing: .buffered,
                             defer: true,
                             screen: NSApp.keyWindow?.screen)
+
         panel.collectionBehavior = .canJoinAllSpaces
         panel.hasShadow = false
         panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)

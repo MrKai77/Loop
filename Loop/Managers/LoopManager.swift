@@ -37,11 +37,6 @@ class LoopManager: ObservableObject {
             triggerDelayTimer?.invalidate()
         }
     }
-    private var radialMenuDelayTimer: Timer? {
-        willSet {
-            radialMenuDelayTimer?.invalidate()
-        }
-    }
 
     func startObservingKeys() {
         self.flagsChangedEventMonitor = NSEventMonitor(
@@ -71,11 +66,11 @@ class LoopManager: ObservableObject {
             }
         }
 
-        Notification.Name.forceCloseLoop.onRecieve { _ in
+        Notification.Name.forceCloseLoop.onReceive { _ in
             self.closeLoop(forceClose: true)
         }
 
-        Notification.Name.updateBackendDirection.onRecieve { notification in
+        Notification.Name.updateBackendDirection.onReceive { notification in
             if let action = notification.userInfo?["action"] as? WindowAction {
                 self.changeAction(action)
             }
@@ -110,13 +105,13 @@ class LoopManager: ObservableObject {
         // If mouse over 50 points away, select half or quarter positions
         if distanceToMouse > pow(50 - Defaults[.radialMenuThickness], 2) {
             switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-            case 0, 8: resizeDirection = .cycleRight
+            case 0, 8: resizeDirection = .rightHalf
             case 1:    resizeDirection = .bottomRightQuarter
-            case 2:    resizeDirection = .cycleBottom
+            case 2:    resizeDirection = .bottomHalf
             case 3:    resizeDirection = .bottomLeftQuarter
-            case 4:    resizeDirection = .cycleLeft
+            case 4:    resizeDirection = .leftHalf
             case 5:    resizeDirection = .topLeftQuarter
-            case 6:    resizeDirection = .cycleTop
+            case 6:    resizeDirection = .topHalf
             case 7:    resizeDirection = .topRightQuarter
             default:   resizeDirection = .noAction
             }
@@ -126,7 +121,7 @@ class LoopManager: ObservableObject {
             resizeDirection = .maximize
         }
 
-        if resizeDirection != self.currentAction.direction.base {
+        if resizeDirection != self.currentAction.direction {
             changeAction(.init(resizeDirection))
         }
     }
@@ -151,16 +146,19 @@ class LoopManager: ObservableObject {
 
         var newAction = action
 
-        if newAction.direction.isPresetCyclable {
-            newAction = .init(newAction.direction.nextCyclingDirection(from: self.currentAction.direction))
-        }
-
         if newAction.direction == .cycle {
             guard let cycle = action.cycle else {
                 return
             }
 
             var nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
+
+            if self.currentAction.direction != .custom {
+                nextIndex = (cycle.firstIndex(where: {
+                    $0.direction == self.currentAction.direction
+                }) ?? -1) + 1
+            }
+
             if nextIndex >= cycle.count {
                 nextIndex = 0
             }
@@ -199,7 +197,7 @@ class LoopManager: ObservableObject {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
             }
 
-            if action.direction.isPresetCyclable || action.direction == .cycle {
+            if action.direction == .cycle {
                 self.currentAction = newAction
                 self.changeAction(action)
             } else {
@@ -392,24 +390,11 @@ class LoopManager: ObservableObject {
     }
 
     private func openWindows() {
-        if Defaults[.previewVisibility] == true && self.targetWindow != nil {
+        if Defaults[.previewVisibility] && self.targetWindow != nil {
             self.previewController.open(screen: self.screenToResizeOn!, window: targetWindow)
         }
 
-        let useRadialMenuDelay = Defaults[.radialMenuDelay] > 0.1
-
-        if useRadialMenuDelay {
-            self.radialMenuDelayTimer = Timer.scheduledTimer(
-                withTimeInterval: Defaults[.radialMenuDelay],
-                repeats: false
-            ) { _ in
-                self.radialMenuController.open(
-                    position: self.initialMousePosition,
-                    frontmostWindow: self.targetWindow,
-                    startingAction: self.currentAction
-                )
-            }
-        } else {
+        if Defaults[.radialMenuVisibility] {
             self.radialMenuController.open(
                 position: self.initialMousePosition,
                 frontmostWindow: self.targetWindow
@@ -418,7 +403,6 @@ class LoopManager: ObservableObject {
     }
 
     private func closeWindows() {
-        self.radialMenuDelayTimer = nil
         self.radialMenuController.close()
         self.previewController.close()
     }
