@@ -124,7 +124,7 @@ class IconManager {
         for icon in icons where icon.unlockTime == Defaults[.timesLooped] {
             let content = UNMutableNotificationContent()
 
-            content.title = String(localized: "Loop")
+            content.title = Bundle.main.appName
 
             if let message = icon.unlockMessage {
                 content.body = message

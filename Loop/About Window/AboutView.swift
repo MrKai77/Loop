@@ -68,7 +68,7 @@ struct AboutView: View {
                     .resizable()
                     .frame(width: 120, height: 120)
 
-                Text("Loop")
+                Text("\(Bundle.main.appName)")
                     .font(.title)
                     .fontWeight(.bold)
 

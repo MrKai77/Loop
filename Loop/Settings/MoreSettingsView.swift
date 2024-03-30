@@ -84,7 +84,7 @@ struct MoreSettingsView: View {
                     }
                 }
 
-                Toggle("Hide Loop until direction is chosen", isOn: $hideUntilDirectionIsChosen)
+                Toggle("Hide \(Bundle.main.appName) until direction is chosen", isOn: $hideUntilDirectionIsChosen)
 
                 Toggle("Haptic Feedback", isOn: $hapticFeedback)
 

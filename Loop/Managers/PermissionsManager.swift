@@ -29,7 +29,7 @@ class PermissionsManager {
                 return true
             }
             let alert = NSAlert()
-            alert.messageText = String(localized: "Loop Needs Accessibility Permissions")
+            alert.messageText = String(localized: "\(Bundle.main.appName) Needs Accessibility Permissions")
             alert.informativeText = String(
                 localized: "Please grant access to be able to resize windows.",
                 comment: "Used when granting Accessibility access to Loop"
@@ -54,12 +54,12 @@ class PermissionsManager {
             }
 
             let alert = NSAlert()
-            alert.messageText = String(localized: "Loop Needs Screen Recording Permissions")
+            alert.messageText = String(localized: "\(Bundle.main.appName) Needs Screen Recording Permissions")
             alert.informativeText = String(
                 localized: "Screen recording permissions are required to animate windows being resized.",
                 comment: "Used when granting Screen Recording permissions to Loop"
             )
-            alert.informativeText += String(localized: "Loop may need to be relaunched to reflect these changes.")
+            alert.informativeText += String(localized: "\(Bundle.main.appName) may need to be relaunched to reflect these changes.")
             alert.runModal()
 
             CGRequestScreenCaptureAccess()

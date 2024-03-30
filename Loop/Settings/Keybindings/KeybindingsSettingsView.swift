@@ -50,8 +50,8 @@ struct KeybindingsSettingsView: View {
                         lowerClamp: true
                     )
 
-                    Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
-                    Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
+                    Toggle("Double-click trigger key to trigger \(Bundle.main.appName)", isOn: $doubleClickToTrigger)
+                    Toggle("Middle-click to trigger \(Bundle.main.appName)", isOn: $middleClickTriggersLoop)
                 }
 
                 Section {

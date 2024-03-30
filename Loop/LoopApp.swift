@@ -22,7 +22,7 @@ struct LoopApp: App {
             SettingsView()
         }
 
-        MenuBarExtra("Loop", image: "empty", isInserted: Binding.constant(!hideMenuBarIcon)) {
+        MenuBarExtra("\(Bundle.main.appName)", image: "empty", isInserted: Binding.constant(!hideMenuBarIcon)) {
             #if DEBUG
             MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif
@@ -79,7 +79,7 @@ struct LoopApp: App {
             )
             .keyboardShortcut(",", modifiers: .command)
 
-            Button("About Loop") {
+            Button("About \(Bundle.main.appName)") {
                 NSApp.setActivationPolicy(.regular)
                 aboutViewController.open()
             }

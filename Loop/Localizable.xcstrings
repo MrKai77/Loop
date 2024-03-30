@@ -23,6 +23,15 @@
     "%@ is already used as your trigger key." : {
 
     },
+    "%@ may need to be relaunched to reflect these changes." : {
+
+    },
+    "%@ Needs Accessibility Permissions" : {
+
+    },
+    "%@ Needs Screen Recording Permissions" : {
+
+    },
     "%@%@" : {
       "localizations" : {
         "en" : {
@@ -39,7 +48,7 @@
     "5000 loops conquered! The universe has witnessed the birth of a Loop Master! Enjoy your well-deserved reward: a brand-new icon!" : {
 
     },
-    "About Loop" : {
+    "About %@" : {
       "comment" : "The title for Loop's about window"
     },
     "Accent Color" : {
@@ -185,7 +194,7 @@
     "Done" : {
 
     },
-    "Double-click trigger key to trigger Loop" : {
+    "Double-click trigger key to trigger %@" : {
 
     },
     "Erase" : {
@@ -257,7 +266,7 @@
     "Hide" : {
       "comment" : "A preset window action"
     },
-    "Hide Loop until direction is chosen" : {
+    "Hide %@ until direction is chosen" : {
 
     },
     "Hide menubar icon" : {
@@ -314,22 +323,10 @@
     "Left Two Thirds" : {
       "comment" : "A preset window action"
     },
-    "Loop" : {
-
-    },
     "Loop Master" : {
       "comment" : "App icon name"
     },
-    "Loop may need to be relaunched to reflect these changes." : {
-
-    },
     "Loop more to unlock new icons! (You've looped %lld times!)" : {
-
-    },
-    "Loop Needs Accessibility Permissions" : {
-
-    },
-    "Loop Needs Screen Recording Permissions" : {
 
     },
     "Loop's icon" : {
@@ -353,7 +350,7 @@
     "Meta Loop" : {
       "comment" : "App icon name"
     },
-    "Middle-click to trigger Loop" : {
+    "Middle-click to trigger %@" : {
 
     },
     "Minimize" : {
@@ -455,7 +452,7 @@
     "Radial Menu" : {
       "comment" : "Title in settings window"
     },
-    "Re-open Loop to see this window." : {
+    "Re-open %@ to see this window." : {
 
     },
     "Request Access…" : {
