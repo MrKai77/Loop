@@ -19,7 +19,7 @@ struct WindowEngine {
         _ window: Window,
         to action: WindowAction,
         on screen: NSScreen,
-        supressAnimations: Bool = false
+        suppressAnimations: Bool = false
     ) {
         guard action.direction != .noAction else { return }
         let willChangeScreens = ScreenManager.screenContaining(window) != screen
@@ -60,7 +60,7 @@ struct WindowEngine {
         print("Target window frame: \(targetWindowFrame)")
 
         let enhancedUI = window.enhancedUserInterface ?? false
-        var animate = (!supressAnimations && Defaults[.animateWindowResizes] && !enhancedUI)
+        var animate = (!suppressAnimations && Defaults[.animateWindowResizes] && !enhancedUI)
         if animate {
             if PermissionsManager.ScreenRecording.getStatus() == false {
                 PermissionsManager.ScreenRecording.requestAccess()
