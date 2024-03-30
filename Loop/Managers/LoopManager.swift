@@ -207,7 +207,7 @@ class LoopManager: ObservableObject {
                         self.targetWindow!,
                         to: self.currentAction,
                         on: screenToResizeOn,
-                        supressAnimations: true
+                        suppressAnimations: true
                     )
                 }
             }
@@ -235,7 +235,7 @@ class LoopManager: ObservableObject {
                         self.targetWindow!,
                         to: self.currentAction,
                         on: screenToResizeOn,
-                        supressAnimations: true
+                        suppressAnimations: true
                     )
                 }
             }
