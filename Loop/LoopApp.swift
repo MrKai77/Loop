@@ -79,7 +79,7 @@ struct LoopApp: App {
             )
             .keyboardShortcut(",", modifiers: .command)
 
-            Button("About \(Bundle.main.appName)") {
+            Button("About Loop") {
                 NSApp.setActivationPolicy(.regular)
                 aboutViewController.open()
             }

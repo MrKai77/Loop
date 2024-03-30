@@ -68,7 +68,7 @@ struct AboutView: View {
                     .resizable()
                     .frame(width: 120, height: 120)
 
-                Text("\(Bundle.main.appName)")
+                Text("Loop")
                     .font(.title)
                     .fontWeight(.bold)
 
@@ -98,7 +98,7 @@ struct AboutView: View {
             Button {
                 openURL(URL(string: "https://github.com/MrKai77/Loop")!)
             } label: {
-                Text("Github")
+                Text("GitHub")
                     .foregroundColor(.primary)
                     .frame(maxWidth: .infinity)
             }
@@ -124,14 +124,12 @@ struct AboutView: View {
                             }, label: {
                                 Image(systemName: "safari")
                             })
-                            .help("link")
 
                             Button(action: {
                                 openURL(packages[idx].license)
                             }, label: {
                                 Image(systemName: "scroll")
                             })
-                            .help("license")
                         }
                         .frame(width: 180)
                         .buttonStyle(.link)

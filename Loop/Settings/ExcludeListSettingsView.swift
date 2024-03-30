@@ -25,7 +25,7 @@ struct ExcludeListSettingsView: View {
                                 VStack {
                                     Text("No Excluded Applications")
                                         .font(.title3)
-                                    Text("Press + to add an application!")
+                                    Text("Press + to add an application")
                                         .font(.caption)
                                 }
                                 Spacer()
@@ -126,7 +126,7 @@ struct ExcludeListSettingsView: View {
                     .padding(-10)
                 } header: {
                     VStack(alignment: .leading) {
-                        Text("Excluded Applications")
+                        Text("Excluded Applications", comment: "Title (header) of tab in settings window")
                         Text("Applications in the exclude list are ignored by Loop.")
                             .font(.caption)
                             .foregroundColor(.secondary)

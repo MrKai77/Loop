@@ -45,6 +45,7 @@
 		A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A848D8A62A8C2F3F00060834 /* LoopManager.swift */; };
 		A84F9E292BA4F20C00CF3E09 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = A84F9E282BA4F20C00CF3E09 /* Algorithms */; };
 		A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */; };
+		A851061C2BB8940800F9571D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A851061B2BB8940800F9571D /* Localizable.xcstrings */; };
 		A859799B2B55FE94009FB067 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */; };
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
 		A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */; };
@@ -131,6 +132,7 @@
 		A84497D12B3B88A6003D4CF3 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
 		A848D8A62A8C2F3F00060834 /* LoopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopManager.swift; sourceTree = "<group>"; };
 		A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdater.swift; sourceTree = "<group>"; };
+		A851061B2BB8940800F9571D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
 		A85B560D2AAAD62C00386ACE /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -429,6 +431,7 @@
 				A8330AD52A3AC29C00673C8D /* Extensions */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
 				A8F063712985B2730010C33D /* Info.plist */,
+				A851061B2BB8940800F9571D /* Localizable.xcstrings */,
 				A8E59C41297F5E9B0064D4BA /* Loop.entitlements */,
 				A8E59C3E297F5E9B0064D4BA /* Preview Content */,
 			);
@@ -518,6 +521,7 @@
 			files = (
 				A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */,
 				A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */,
+				A851061C2BB8940800F9571D /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

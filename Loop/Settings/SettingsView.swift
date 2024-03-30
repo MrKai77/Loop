@@ -19,7 +19,7 @@ struct SettingsView: View {
                 .tag(SettingsTab.general)
                 .tabItem {
                     Image(systemName: "gear")
-                    Text("General")
+                    Text("General", comment: "Title in settings window")
                 }
                 .frame(width: 450)
 
@@ -27,7 +27,7 @@ struct SettingsView: View {
                 .tag(SettingsTab.radialMenu)
                 .tabItem {
                     Image(.loop)
-                    Text("Radial Menu")
+                    Text("Radial Menu", comment: "Title in settings window")
                 }
                 .frame(width: 450)
 
@@ -35,15 +35,15 @@ struct SettingsView: View {
                 .tag(SettingsTab.preview)
                 .tabItem {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
-                    Text("Preview")
+                    Text("Preview", comment: "Title in settings window")
                 }
                 .frame(width: 450)
 
             KeybindingsSettingsView()
-                .tag(SettingsTab.keybindings)
+                .tag(SettingsTab.keybinds)
                 .tabItem {
                     Image(systemName: "keyboard")
-                    Text("Keybindings")
+                    Text("Keybinds", comment: "Title in settings window")
                 }
                 .frame(width: 500)
                 .frame(minHeight: 500, maxHeight: 680)
@@ -52,7 +52,7 @@ struct SettingsView: View {
                 .tag(SettingsTab.excludedApps)
                 .tabItem {
                     Image(systemName: "xmark.app")
-                    Text("Excluded Apps")
+                    Text("Excluded Apps", comment: "Title in settings window")
                 }
                 .environmentObject(appListManager)
                 .frame(width: 450)
@@ -62,7 +62,7 @@ struct SettingsView: View {
                 .tag(SettingsTab.more)
                 .tabItem {
                     Image(systemName: "ellipsis.circle")
-                    Text("More")
+                    Text("More", comment: "Title in settings window")
                 }
                 .environmentObject(updater)
                 .frame(width: 450)
@@ -74,7 +74,7 @@ struct SettingsView: View {
         case general
         case radialMenu
         case preview
-        case keybindings
+        case keybinds
         case excludedApps
         case more
     }

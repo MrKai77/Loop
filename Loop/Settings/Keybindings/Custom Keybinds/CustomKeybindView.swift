@@ -23,7 +23,7 @@ struct CustomKeybindView: View {
 
                     Picker("Measurement Unit", selection: $action.unit) {
                         ForEach(CustomWindowActionUnit.allCases) { system in
-                            system.label
+                            Text("\(system.icon) \(system.name)")
                                 .tag(system as CustomWindowActionUnit?)
                         }
                     }
@@ -49,14 +49,17 @@ struct CustomKeybindView: View {
                 Section {
                     Picker("Position Mode", selection: $action.positionMode) {
                         ForEach(CustomWindowActionPositionMode.allCases) { system in
-                            system.label
+                            Text("\(system.icon) \(system.name)")
                                 .tag(system as CustomWindowActionPositionMode?)
                         }
                     }
 
                     if let positionMode = action.positionMode, positionMode == .coordinates {
                         CrispValueAdjuster(
-                            "X",
+                            LocalizedStringResource(
+                                "X",
+                                comment: "The horizontal axis. Usually doesn't change between languages"
+                            ),
                             value: Binding<Double>(
                                 get: {
                                     self.action.xPoint ?? 0
@@ -81,7 +84,10 @@ struct CustomKeybindView: View {
                         )
 
                         CrispValueAdjuster(
-                            "Y",
+                            LocalizedStringResource(
+                                "Y",
+                                comment: "The vertical axis. Usually doesn't change between languages"
+                            ),
                             value: Binding<Double>(
                                 get: {
                                     self.action.yPoint ?? 0
@@ -160,7 +166,7 @@ struct CustomKeybindView: View {
                 Section("Window Size") {
                     Picker("Sizing Mode", selection: $action.sizeMode) {
                         ForEach(CustomWindowActionSizeMode.allCases) { system in
-                            system.label
+                            Text("\(system.icon) \(system.name)")
                                 .tag(system as CustomWindowActionSizeMode?)
                         }
                     }

@@ -157,14 +157,25 @@ struct KeybindCustomizationViewItem: View {
                     directionPickerItem(direction)
                 }
             }
-        }, label: {
+        },
+             label: {
             HStack {
                 keybind.direction.icon
 
                 if keybind.direction == .custom {
-                    Text(keybind.name ?? "Custom Keybind")
+                    Text(
+                        keybind.name ?? String(
+                            localized: "Custom Keybind",
+                            comment: "Default name for a custom keybind"
+                        )
+                    )
                 } else if keybind.direction == .cycle {
-                    Text(keybind.name ?? "Custom Cycle")
+                    Text(
+                        keybind.name ?? String(
+                            localized: "Custom Cycle",
+                            comment: "Default name for a cycling keybind"
+                        )
+                    )
                 } else {
                     Text(keybind.direction.name)
                 }

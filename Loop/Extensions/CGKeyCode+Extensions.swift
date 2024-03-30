@@ -328,6 +328,18 @@ extension CGKeyCode {
             return nil
         }
     }
+
+    var triggerkeyLabel: Text {
+        let sideText: String
+
+        if self.isOnRightSide {
+            sideText = String(localized: "Right", comment: "Prefix for a modifier key on the right side of the keyboard")
+        } else {
+            sideText = String(localized: "Left", comment: "Prefix for a modifier key on the left side of the keyboard")
+        }
+
+        return Text(sideText + "  \(Image(systemName: self.systemImage ?? "exclamationmark.circle.fill"))")
+    }
 }
 
 extension NSEvent.ModifierFlags {

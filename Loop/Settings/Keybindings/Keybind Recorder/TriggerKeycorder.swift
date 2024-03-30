@@ -34,26 +34,30 @@ struct TriggerKeycorder: View {
         }, label: {
             HStack(spacing: 5) {
                 if self.selectionKey.isEmpty {
-                    Text(self.isActive ? "Set a trigger key..." : "None")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding(5)
-                        .padding(.horizontal, 8)
-                        .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .foregroundStyle(.background)
-                                RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(
-                                        .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
-                                        lineWidth: 1
-                                    )
-                            }
+                    Text(
+                        self.isActive ? "Set a trigger key..." : String(
+                            localized: "None",
+                            comment: "Text on a keybind doesn't have any keys assigned to it"
+                        )
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(5)
+                    .padding(.horizontal, 8)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 6)
+                                .foregroundStyle(.background)
+                            RoundedRectangle(cornerRadius: 6)
+                                .strokeBorder(
+                                    .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
+                                    lineWidth: 1
+                                )
                         }
-                        .fixedSize(horizontal: true, vertical: false)
+                    }
+                    .fixedSize(horizontal: true, vertical: false)
                 } else {
                     ForEach(self.selectionKey.sorted(), id: \.self) { key in
-                        // swiftlint:disable:next line_length
-                        Text("\(key.isOnRightSide ? "Right" : "Left") \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
+                        key.triggerkeyLabel
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding(5)
                             .background {

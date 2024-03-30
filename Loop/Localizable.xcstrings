@@ -1,0 +1,529 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ is already used as your trigger key." : {
+
+    },
+    "%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
+    "5000 loops conquered! The universe has witnessed the birth of a Loop Master! Enjoy your well-deserved reward: a brand-new icon!" : {
+
+    },
+    "About Loop" : {
+      "comment" : "The title for Loop's about window"
+    },
+    "Accent Color" : {
+      "comment" : "Title in settings window"
+    },
+    "Accessibility Access" : {
+
+    },
+    "Acknowledgements" : {
+
+    },
+    "Adjusts window frame in real-time as you choose a direction." : {
+
+    },
+    "Advanced" : {
+
+    },
+    "Animate windows being resized" : {
+
+    },
+    "Animation Speed" : {
+
+    },
+    "Appearance" : {
+
+    },
+    "Applications in the exclude list are ignored by Loop." : {
+
+    },
+    "Automatically check for updates" : {
+
+    },
+    "Behavior" : {
+      "comment" : "Title in settings window"
+    },
+    "Black" : {
+      "comment" : "App icon name"
+    },
+    "Black Hole" : {
+      "comment" : "App icon name"
+    },
+    "Border Thickness" : {
+
+    },
+    "Bottom" : {
+
+    },
+    "Check for Updates…" : {
+
+    },
+    "Classic" : {
+      "comment" : "App icon name"
+    },
+    "Configure…" : {
+
+    },
+    "Coordinates" : {
+      "comment" : "An option when configuring a custom keybind's position mode"
+    },
+    "Corner Radius" : {
+
+    },
+    "Current version: %@ (%@) %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Current version: %1$@ (%2$@) %3$@"
+          }
+        }
+      }
+    },
+    "Custom" : {
+      "comment" : "An option when configuring a custom keybind's sizing mode"
+    },
+    "Custom Accent Color" : {
+
+    },
+    "Custom Cycle" : {
+      "comment" : "Default name for a cycling keybind"
+    },
+    "Custom Gradient color" : {
+
+    },
+    "Custom Keybind" : {
+      "comment" : "Default name for a custom keybind"
+    },
+    "Custom Screen Padding" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Disable cursor interaction" : {
+
+    },
+    "Donate…" : {
+
+    },
+    "Done" : {
+
+    },
+    "Double-click trigger key to trigger Loop" : {
+
+    },
+    "Excluded Applications" : {
+      "comment" : "Title (header) of tab in settings window"
+    },
+    "Excluded Apps" : {
+      "comment" : "Title in settings window"
+    },
+    "Export" : {
+
+    },
+    "External Bar" : {
+
+    },
+    "Feedback" : {
+
+    },
+    "Focus window on resize" : {
+
+    },
+    "General" : {
+      "comment" : "Title in settings window"
+    },
+    "Generic" : {
+      "comment" : "An option when configuring a custom keybind's position mode"
+    },
+    "GitHub" : {
+
+    },
+    "Granted" : {
+
+    },
+    "Grow/Shrink" : {
+
+    },
+    "Halves" : {
+
+    },
+    "Haptic Feedback" : {
+
+    },
+    "Height" : {
+
+    },
+    "Hide Loop until direction is chosen" : {
+
+    },
+    "Hide menubar icon" : {
+
+    },
+    "Holo" : {
+      "comment" : "App icon name"
+    },
+    "Horizontal Thirds" : {
+
+    },
+    "Import" : {
+
+    },
+    "Include development versions" : {
+
+    },
+    "Initial Size" : {
+      "comment" : "An option when configuring a custom keybind's sizing mode"
+    },
+    "Keybinds" : {
+      "comment" : "Title in settings window"
+    },
+    "Keycap" : {
+      "comment" : "App icon name"
+    },
+    "Launch at login" : {
+
+    },
+    "Left" : {
+      "comment" : "Prefix for a modifier key on the left side of the keyboard"
+    },
+    "Loop" : {
+
+    },
+    "Loop Master" : {
+      "comment" : "App icon name"
+    },
+    "Loop may need to be relaunched to reflect these changes." : {
+
+    },
+    "Loop more to unlock new icons! (You've looped %lld times!)" : {
+
+    },
+    "Loop Needs Accessibility Permissions" : {
+
+    },
+    "Loop Needs Screen Recording Permissions" : {
+
+    },
+    "Loop's icon" : {
+      "comment" : "Title in settings window"
+    },
+    "Loop's notification permissions are currently disabled." : {
+
+    },
+    "Measurement Unit" : {
+
+    },
+    "Meta Loop" : {
+      "comment" : "App icon name"
+    },
+    "Middle-click to trigger Loop" : {
+
+    },
+    "MIT License" : {
+
+    },
+    "More" : {
+      "comment" : "Title in settings window"
+    },
+    "Name" : {
+
+    },
+    "Neon" : {
+      "comment" : "App icon name"
+    },
+    "No Excluded Applications" : {
+
+    },
+    "No Keybinds" : {
+
+    },
+    "None" : {
+      "comment" : "Text on a keybind doesn't have any keys assigned to it"
+    },
+    "Not Granted" : {
+
+    },
+    "Nothing to Cycle Through" : {
+
+    },
+    "Notify me when new icons are unlocked" : {
+
+    },
+    "Open Notification Settings" : {
+
+    },
+    "Padding" : {
+
+    },
+    "Percentages" : {
+      "comment" : "An option when configuring a custom keybind's unit"
+    },
+    "Permissions" : {
+
+    },
+    "Pixels" : {
+      "comment" : "An option when configuring a custom keybind's unit"
+    },
+    "Please grant access to be able to resize windows." : {
+      "comment" : "Used when granting Accessibility access to Loop"
+    },
+    "Please turn them on in System Settings." : {
+
+    },
+    "Position Mode" : {
+
+    },
+    "Preserve Size" : {
+      "comment" : "An option when configuring a custom keybind's sizing mode"
+    },
+    "Press + to add a cycle item" : {
+
+    },
+    "Press + to add a keybind" : {
+
+    },
+    "Press + to add an application" : {
+
+    },
+    "Preview" : {
+      "comment" : "Title in settings window"
+    },
+    "Preview window size" : {
+
+    },
+    "Quarters" : {
+
+    },
+    "Quit" : {
+
+    },
+    "Radial Menu" : {
+      "comment" : "Title in settings window"
+    },
+    "Re-open Loop to see this window." : {
+
+    },
+    "Request Access…" : {
+
+    },
+    "Resize window under cursor" : {
+
+    },
+    "Resize…" : {
+
+    },
+    "Resizes frontmost window." : {
+      "comment" : "Description of a toggle button"
+    },
+    "Resizes window under cursor, and uses the frontmost window as backup." : {
+      "comment" : "Description of a toggle button"
+    },
+    "Respect Stage Manager" : {
+
+    },
+    "Restore Defaults" : {
+
+    },
+    "Restore window frame on drag" : {
+
+    },
+    "Right" : {
+      "comment" : "Prefix for a modifier key on the right side of the keyboard"
+    },
+    "Rosé Pine" : {
+      "comment" : "App icon name"
+    },
+    "Screen Padding" : {
+
+    },
+    "Screen Recording Access" : {
+
+    },
+    "Screen recording permissions are required to animate windows being resized." : {
+      "comment" : "Used when granting Screen Recording permissions to Loop"
+    },
+    "Screen Switching" : {
+
+    },
+    "Selected icon:" : {
+
+    },
+    "Send Feedback" : {
+
+    },
+    "Settings…" : {
+
+    },
+    "Show" : {
+      "comment" : "Used on button to preview custom window actions"
+    },
+    "Show Preview when looping" : {
+
+    },
+    "Show Radial Menu when looping" : {
+
+    },
+    "Simon" : {
+      "comment" : "App icon name"
+    },
+    "Size Increment" : {
+
+    },
+    "Sizing Mode" : {
+
+    },
+    "Stage Manager" : {
+
+    },
+    "Stage Strip Size" : {
+
+    },
+    "Synthwave Sunset" : {
+      "comment" : "App icon name"
+    },
+    "That key is already used as your trigger key." : {
+
+    },
+    "That keybind is already being used by %@." : {
+
+    },
+    "The elegant, mouse-oriented window manager" : {
+
+    },
+    "Thickness" : {
+
+    },
+    "This icon was designed by Greg Lassale (@greglassale on 𝕏)" : {
+
+    },
+    "This is only needed to animate windows being resized." : {
+
+    },
+    "This point determines the upper-left edge of the window." : {
+
+    },
+    "This preview is not to scale." : {
+
+    },
+    "Tip: To use caps lock, remap it to control in System Settings!" : {
+
+    },
+    "Top" : {
+
+    },
+    "Trigger Delay" : {
+
+    },
+    "Trigger Key" : {
+
+    },
+    "Updates" : {
+
+    },
+    "Use Gradient" : {
+
+    },
+    "Use MacOS Center" : {
+
+    },
+    "Use System Accent Color" : {
+
+    },
+    "Use this if you are using a custom menubar." : {
+
+    },
+    "Used in size adjustment window actions" : {
+
+    },
+    "Version %@ (%@) %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version %1$@ (%2$@) %3$@"
+          }
+        }
+      }
+    },
+    "Vertical Thirds" : {
+
+    },
+    "White" : {
+      "comment" : "App icon name"
+    },
+    "Width" : {
+
+    },
+    "Window Gaps" : {
+
+    },
+    "Window Padding" : {
+
+    },
+    "Window Position" : {
+
+    },
+    "Window Size" : {
+
+    },
+    "Window Snapping" : {
+
+    },
+    "Windows will not animate their resizes." : {
+
+    },
+    "X" : {
+      "comment" : "The horizontal axis. Usually doesn't change between languages"
+    },
+    "Y" : {
+      "comment" : "The vertical axis. Usually doesn't change between languages"
+    },
+    "You can only use up to %lld keys in a keybind.\n(This includes your trigger key)" : {
+
+    },
+    "You can only use up to %lld keys in your trigger key." : {
+
+    },
+    "You will now be notified when you unlock a new icon." : {
+
+    },
+    "You've already looped 25 times! As a reward, here's new icon: %@. Continue to loop more to unlock new icons!" : {
+
+    },
+    "You've unlocked a new icon: %@!" : {
+
+    }
+  },
+  "version" : "1.0"
+}

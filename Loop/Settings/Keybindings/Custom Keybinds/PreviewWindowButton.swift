@@ -18,7 +18,10 @@ struct PreviewWindowButton: NSViewRepresentable {
     func makeNSView(context: NSViewRepresentableContext<Self>) -> NSButton {
 
         let button = NSButton(
-            title: "Show",
+            title: String(
+                localized: "Show",
+                comment: "Used on button to preview custom window actions"
+            ),
             target: context.coordinator,
             action: #selector(Coordinator.buttonClicked)
         )

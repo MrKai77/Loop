@@ -45,21 +45,26 @@ struct Keycorder: View {
         }, label: {
             HStack {
                 if self.selectionKeybind.isEmpty {
-                    Text(self.isActive ? "Press a key..." : "None")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding(.horizontal, 8)
-                        .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .foregroundStyle(.background)
-                                RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(
-                                        .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
-                                        lineWidth: 1
-                                    )
-                            }
+                    Text(
+                        self.isActive ? "Press a key..." : String(
+                            localized: "None",
+                            comment: "Text on a keybind doesn't have any keys assigned to it"
+                        )
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.horizontal, 8)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 6)
+                                .foregroundStyle(.background)
+                            RoundedRectangle(cornerRadius: 6)
+                                .strokeBorder(
+                                    .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
+                                    lineWidth: 1
+                                )
                         }
-                        .fixedSize(horizontal: true, vertical: false)
+                    }
+                    .fixedSize(horizontal: true, vertical: false)
                 } else {
                     ForEach(self.selectionKeybind.sorted(by: >), id: \.self) { key in
                         if let systemImage = key.systemImage {

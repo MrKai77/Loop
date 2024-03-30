@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct MenuBarHeaderText: View {
-    public var label: String
-    init(_ label: String) {
+    var label: LocalizedStringResource
+
+    init(_ label: LocalizedStringResource) {
         self.label = label
     }
 

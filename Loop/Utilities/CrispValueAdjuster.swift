@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, V.Stride: BinaryFloatingPoint {
 
-    let title: String
-    let description: String?
+    let title: LocalizedStringResource
+    let description: LocalizedStringResource?
     @Binding var value: V
     let sliderRange: ClosedRange<V>
     let postscript: String?
@@ -21,8 +21,8 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
     @State var isPopoverShown: Bool = false
 
     init(
-        _ title: String,
-        description: String? = nil,
+        _ title: LocalizedStringResource,
+        description: LocalizedStringResource? = nil,
         value: Binding<V>,
         sliderRange: ClosedRange<V>,
         postscript: String? = nil,

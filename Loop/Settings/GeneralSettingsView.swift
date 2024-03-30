@@ -36,7 +36,7 @@ struct GeneralSettingsView: View {
 
     var body: some View {
         Form {
-            Section("Behavior") {
+            Section(String(localized: "Behavior", comment: "Title in settings window")) {
                 Toggle("Launch at login", isOn: $launchAtLogin)
                     .onChange(of: launchAtLogin) { _ in
                         if launchAtLogin {
@@ -81,8 +81,14 @@ struct GeneralSettingsView: View {
                     VStack(alignment: .leading) {
                         Text("Resize window under cursor")
                         Text(resizeWindowUnderCursor ?
-                             "Resizes window under cursor, and uses the frontmost window as backup." :
-                             "Resizes frontmost window."
+                            String(
+                                localized: "Resizes window under cursor, and uses the frontmost window as backup.",
+                                comment: "Description of a toggle button"
+                            ) :
+                            String(
+                                localized: "Resizes frontmost window.",
+                                comment: "Description of a toggle button"
+                            )
                         )
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -102,13 +108,13 @@ struct GeneralSettingsView: View {
                 }
             }
 
-            Section("Loop's icon") {
+            Section(String(localized: "Loop's icon")) {
                 VStack(alignment: .leading) {
                     Picker("Selected icon:", selection: $currentIcon) {
                         ForEach(IconManager.returnUnlockedIcons(), id: \.self) { icon in
                             HStack {
                                 Image(nsImage: NSImage(named: icon.iconName)!)
-                                Text(icon.getName())
+                                Text(icon.name)
                             }
                             .tag(icon.iconName)
                         }
@@ -134,7 +140,7 @@ struct GeneralSettingsView: View {
                 }
 
                 Toggle(
-                    "Notify when new icons are unlocked",
+                    "Notify me when new icons are unlocked",
                     isOn: Binding(
                         get: {
                             self.notificationWhenIconUnlocked
@@ -142,8 +148,8 @@ struct GeneralSettingsView: View {
                         set: {
                             if $0 {
                                 AppDelegate.sendNotification(
-                                    "Loop",
-                                    "You will now be notified when you unlock a new icon."
+                                    String(localized: "Loop"),
+                                    String(localized: "You will now be notified when you unlock a new icon.")
                                 )
 
                                 let areNotificationsEnabled = AppDelegate.areNotificationsEnabled()
@@ -180,7 +186,7 @@ struct GeneralSettingsView: View {
                 })
             }
 
-            Section("Accent Color") {
+            Section(String(localized: "Accent Color", comment: "Title in settings window")) {
                 Toggle("Use System Accent Color", isOn: $useSystemAccentColor)
 
                 if !useSystemAccentColor {

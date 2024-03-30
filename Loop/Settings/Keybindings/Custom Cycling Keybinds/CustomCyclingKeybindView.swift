@@ -32,7 +32,7 @@ struct CustomCyclingKeybindView: View {
                                 VStack {
                                     Text("Nothing to Cycle Through")
                                         .font(.title3)
-                                    Text("Press + to add a cycle item!")
+                                    Text("Press + to add a cycle item")
                                         .font(.caption)
                                 }
                                 Spacer()
@@ -44,12 +44,10 @@ struct CustomCyclingKeybindView: View {
                                 ForEach(self.$cycleDirections) { cycleAction in
                                     CustomCyclingKeybindItemView(action: cycleAction, total: self.$cycleDirections)
                                         .contextMenu {
-                                            Button {
+                                            Button("Delete") {
                                                 self.cycleDirections.removeAll(where: {
                                                     $0 == cycleAction.wrappedValue
                                                 })
-                                            } label: {
-                                                Label("Delete", systemImage: "trash")
                                             }
                                         }
                                         .tag(cycleAction.wrappedValue)

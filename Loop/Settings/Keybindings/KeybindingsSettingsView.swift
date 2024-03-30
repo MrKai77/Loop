@@ -62,7 +62,7 @@ struct KeybindingsSettingsView: View {
                                 VStack {
                                     Text("No Keybinds")
                                         .font(.title3)
-                                    Text("Press + to add a keybind!")
+                                    Text("Press + to add a keybind")
                                         .font(.caption)
                                 }
                                 Spacer()

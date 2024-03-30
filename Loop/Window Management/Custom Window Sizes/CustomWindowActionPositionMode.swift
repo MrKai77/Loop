@@ -13,12 +13,21 @@ enum CustomWindowActionPositionMode: Int, Codable, CaseIterable, Identifiable {
     case generic = 0
     case coordinates = 1
 
-    var label: Text {
+    var name: String {
         switch self {
         case .generic:
-            Text("\(Image(systemName: "rectangle.dashed")) Generic")
+            String(localized: "Generic", comment: "An option when configuring a custom keybind's position mode")
         case .coordinates:
-            Text("\(Image("custom.scope.rectangle")) Coordinates")
+            String(localized: "Coordinates", comment: "An option when configuring a custom keybind's position mode")
+        }
+    }
+
+    var icon: Image {
+        switch self {
+        case .generic:
+            Image(systemName: "rectangle.dashed")
+        case .coordinates:
+            Image("custom.scope.rectangle")
         }
     }
 }

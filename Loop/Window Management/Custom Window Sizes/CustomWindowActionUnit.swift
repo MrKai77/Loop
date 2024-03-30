@@ -13,12 +13,21 @@ enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
     case pixels = 0
     case percentage = 1
 
-    var label: Text {
+    var name: String {
         switch self {
         case .pixels:
-            Text("\(Image(systemName: "rectangle.checkered")) Pixels")
+            String(localized: "Pixels", comment: "An option when configuring a custom keybind's unit")
         case .percentage:
-            Text("\(Image(systemName: "percent")) Percentages")
+            String(localized: "Percentages", comment: "An option when configuring a custom keybind's unit")
+        }
+    }
+
+    var icon: Image {
+        switch self {
+        case .pixels:
+            Image(systemName: "rectangle.checkered")
+        case .percentage:
+            Image(systemName: "percent")
         }
     }
 
