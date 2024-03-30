@@ -54,6 +54,9 @@
     "Advanced" : {
 
     },
+    "Almost Maximize" : {
+      "comment" : "A preset window action"
+    },
     "Animate windows being resized" : {
 
     },
@@ -84,6 +87,24 @@
     "Bottom" : {
 
     },
+    "Bottom Half" : {
+      "comment" : "A preset window action"
+    },
+    "Bottom Left Quarter" : {
+      "comment" : "A preset window action"
+    },
+    "Bottom Right Quarter" : {
+      "comment" : "A preset window action"
+    },
+    "Bottom Third" : {
+      "comment" : "A preset window action"
+    },
+    "Bottom Two Thirds" : {
+      "comment" : "A preset window action"
+    },
+    "Center" : {
+      "comment" : "A preset window action"
+    },
     "Check for Updates…" : {
 
     },
@@ -110,7 +131,7 @@
       }
     },
     "Custom" : {
-      "comment" : "An option when configuring a custom keybind's sizing mode"
+      "comment" : "A window action\nAn option when configuring a custom keybind's sizing mode"
     },
     "Custom Accent Color" : {
 
@@ -127,8 +148,21 @@
     "Custom Screen Padding" : {
 
     },
+    "Cycle" : {
+      "comment" : "A window action"
+    },
     "Delete" : {
 
+    },
+    "DEV BUILD: %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "DEV BUILD: %1$@ (%2$@)"
+          }
+        }
+      }
     },
     "Disable cursor interaction" : {
 
@@ -160,6 +194,9 @@
     "Focus window on resize" : {
 
     },
+    "Fullscreen" : {
+      "comment" : "A preset window action"
+    },
     "General" : {
       "comment" : "Title in settings window"
     },
@@ -171,6 +208,18 @@
     },
     "Granted" : {
 
+    },
+    "Grow Bottom" : {
+      "comment" : "A preset window action"
+    },
+    "Grow Left" : {
+      "comment" : "A preset window action"
+    },
+    "Grow Right" : {
+      "comment" : "A preset window action"
+    },
+    "Grow Top" : {
+      "comment" : "A preset window action"
     },
     "Grow/Shrink" : {
 
@@ -184,6 +233,9 @@
     "Height" : {
 
     },
+    "Hide" : {
+      "comment" : "A preset window action"
+    },
     "Hide Loop until direction is chosen" : {
 
     },
@@ -192,6 +244,9 @@
     },
     "Holo" : {
       "comment" : "App icon name"
+    },
+    "Horizontal Center Third" : {
+      "comment" : "A preset window action"
     },
     "Horizontal Thirds" : {
 
@@ -202,6 +257,9 @@
     "Include development versions" : {
 
     },
+    "Initial Frame" : {
+      "comment" : "A preset window action"
+    },
     "Initial Size" : {
       "comment" : "An option when configuring a custom keybind's sizing mode"
     },
@@ -211,11 +269,23 @@
     "Keycap" : {
       "comment" : "App icon name"
     },
+    "Larger" : {
+      "comment" : "A preset window action"
+    },
     "Launch at login" : {
 
     },
     "Left" : {
       "comment" : "Prefix for a modifier key on the left side of the keyboard"
+    },
+    "Left Half" : {
+      "comment" : "A preset window action"
+    },
+    "Left Third" : {
+      "comment" : "A preset window action"
+    },
+    "Left Two Thirds" : {
+      "comment" : "A preset window action"
     },
     "Loop" : {
 
@@ -241,6 +311,12 @@
     "Loop's notification permissions are currently disabled." : {
 
     },
+    "MacOS Center" : {
+      "comment" : "A preset window action"
+    },
+    "Maximize" : {
+      "comment" : "A preset window action"
+    },
     "Measurement Unit" : {
 
     },
@@ -249,6 +325,9 @@
     },
     "Middle-click to trigger Loop" : {
 
+    },
+    "Minimize" : {
+      "comment" : "A preset window action"
     },
     "MIT License" : {
 
@@ -261,6 +340,12 @@
     },
     "Neon" : {
       "comment" : "App icon name"
+    },
+    "Next Screen" : {
+      "comment" : "A preset window action"
+    },
+    "No Action" : {
+      "comment" : "When an action hasn't been assigned to a keybind"
     },
     "No Excluded Applications" : {
 
@@ -322,6 +407,9 @@
     "Preview window size" : {
 
     },
+    "Previous Screen" : {
+      "comment" : "A preset window action"
+    },
     "Quarters" : {
 
     },
@@ -361,6 +449,15 @@
     "Right" : {
       "comment" : "Prefix for a modifier key on the right side of the keyboard"
     },
+    "Right Half" : {
+      "comment" : "A preset window action"
+    },
+    "Right Third" : {
+      "comment" : "A preset window action"
+    },
+    "Right Two Thirds" : {
+      "comment" : "A preset window action"
+    },
     "Rosé Pine" : {
       "comment" : "App icon name"
     },
@@ -394,6 +491,18 @@
     "Show Radial Menu when looping" : {
 
     },
+    "Shrink Bottom" : {
+      "comment" : "A preset window action"
+    },
+    "Shrink Left" : {
+      "comment" : "A preset window action"
+    },
+    "Shrink Right" : {
+      "comment" : "A preset window action"
+    },
+    "Shrink Top" : {
+      "comment" : "A preset window action"
+    },
     "Simon" : {
       "comment" : "App icon name"
     },
@@ -402,6 +511,9 @@
     },
     "Sizing Mode" : {
 
+    },
+    "Smaller" : {
+      "comment" : "A preset window action"
     },
     "Stage Manager" : {
 
@@ -442,11 +554,29 @@
     "Top" : {
 
     },
+    "Top Half" : {
+      "comment" : "A preset window action"
+    },
+    "Top Left Quarter" : {
+      "comment" : "A preset window action"
+    },
+    "Top Right Quarter" : {
+      "comment" : "A preset window action"
+    },
+    "Top Third" : {
+      "comment" : "A preset window action"
+    },
+    "Top Two Thirds" : {
+      "comment" : "A preset window action"
+    },
     "Trigger Delay" : {
 
     },
     "Trigger Key" : {
 
+    },
+    "Undo" : {
+      "comment" : "A preset window action"
     },
     "Updates" : {
 
@@ -475,6 +605,9 @@
           }
         }
       }
+    },
+    "Vertical Center Third" : {
+      "comment" : "A preset window action"
     },
     "Vertical Thirds" : {
 

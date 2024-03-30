@@ -190,26 +190,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         return fillActions.contains(self)
     }
 
-    var name: String {
-        var result = ""
-        for (idx, char) in self.rawValue.enumerated() {
-            if idx > 0,
-               char.isUppercase,
-               let next = self.rawValue.index(
-                self.rawValue.startIndex,
-                offsetBy: idx + 1,
-                limitedBy: self.rawValue.endIndex
-               ) {
-                if self.rawValue[next].isLowercase {
-                    result.append(" ")
-                }
-            }
-            result.append(char)
-        }
-
-        return result
-    }
-
     var moreInformation: String? {
         var result: String?
 
@@ -420,4 +400,53 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         default:                        nil
         }
     }
+
+    // swiftlint:disable line_length
+    var name: String {
+        switch self {
+        case .noAction:                 String(localized: "No Action", comment: "When an action hasn't been assigned to a keybind")
+        case .maximize:                 String(localized: "Maximize", comment: "A preset window action")
+        case .almostMaximize:           String(localized: "Almost Maximize", comment: "A preset window action")
+        case .fullscreen:               String(localized: "Fullscreen", comment: "A preset window action")
+        case .undo:                     String(localized: "Undo", comment: "A preset window action")
+        case .initialFrame:             String(localized: "Initial Frame", comment: "A preset window action")
+        case .hide:                     String(localized: "Hide", comment: "A preset window action")
+        case .minimize:                 String(localized: "Minimize", comment: "A preset window action")
+        case .macOSCenter:              String(localized: "MacOS Center", comment: "A preset window action")
+        case .center:                   String(localized: "Center", comment: "A preset window action")
+        case .topHalf:                  String(localized: "Top Half", comment: "A preset window action")
+        case .rightHalf:                String(localized: "Right Half", comment: "A preset window action")
+        case .bottomHalf:               String(localized: "Bottom Half", comment: "A preset window action")
+        case .leftHalf:                 String(localized: "Left Half", comment: "A preset window action")
+        case .topLeftQuarter:           String(localized: "Top Left Quarter", comment: "A preset window action")
+        case .topRightQuarter:          String(localized: "Top Right Quarter", comment: "A preset window action")
+        case .bottomRightQuarter:       String(localized: "Bottom Right Quarter", comment: "A preset window action")
+        case .bottomLeftQuarter:        String(localized: "Bottom Left Quarter", comment: "A preset window action")
+        case .rightThird:               String(localized: "Right Third", comment: "A preset window action")
+        case .rightTwoThirds:           String(localized: "Right Two Thirds", comment: "A preset window action")
+        case .horizontalCenterThird:    String(localized: "Horizontal Center Third", comment: "A preset window action")
+        case .leftThird:                String(localized: "Left Third", comment: "A preset window action")
+        case .leftTwoThirds:            String(localized: "Left Two Thirds", comment: "A preset window action")
+        case .topThird:                 String(localized: "Top Third", comment: "A preset window action")
+        case .topTwoThirds:             String(localized: "Top Two Thirds", comment: "A preset window action")
+        case .verticalCenterThird:      String(localized: "Vertical Center Third", comment: "A preset window action")
+        case .bottomThird:              String(localized: "Bottom Third", comment: "A preset window action")
+        case .bottomTwoThirds:          String(localized: "Bottom Two Thirds", comment: "A preset window action")
+        case .nextScreen:               String(localized: "Next Screen", comment: "A preset window action")
+        case .previousScreen:           String(localized: "Previous Screen", comment: "A preset window action")
+        case .larger:                   String(localized: "Larger", comment: "A preset window action")
+        case .smaller:                  String(localized: "Smaller", comment: "A preset window action")
+        case .shrinkTop:                String(localized: "Shrink Top", comment: "A preset window action")
+        case .shrinkBottom:             String(localized: "Shrink Bottom", comment: "A preset window action")
+        case .shrinkRight:              String(localized: "Shrink Right", comment: "A preset window action")
+        case .shrinkLeft:               String(localized: "Shrink Left", comment: "A preset window action")
+        case .growTop:                  String(localized: "Grow Top", comment: "A preset window action")
+        case .growBottom:               String(localized: "Grow Bottom", comment: "A preset window action")
+        case .growRight:                String(localized: "Grow Right", comment: "A preset window action")
+        case .growLeft:                 String(localized: "Grow Left", comment: "A preset window action")
+        case .custom:                   String(localized: "Custom", comment: "A window action")
+        case .cycle:                    String(localized: "Cycle", comment: "A window action")
+        }
+    }
+    // swiftlint:enable line_length
 }

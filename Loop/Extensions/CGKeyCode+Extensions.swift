@@ -338,7 +338,7 @@ extension CGKeyCode {
             sideText = String(localized: "Left", comment: "Prefix for a modifier key on the left side of the keyboard")
         }
 
-        return Text(sideText + "  \(Image(systemName: self.systemImage ?? "exclamationmark.circle.fill"))")
+        return Text("\(sideText) \(Image(systemName: self.systemImage ?? "exclamationmark.circle.fill"))")
     }
 }
 
