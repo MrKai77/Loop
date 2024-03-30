@@ -97,10 +97,15 @@ class PreviewController {
 
         let shouldBeTransparent = targetWindowFrame.size.area == 0
 
-        NSAnimationContext.runAnimationGroup { context in
-            context.timingFunction = Defaults[.animationConfiguration].previewTimingFunction
-            windowController.window?.animator().setFrame(targetWindowFrame, display: true)
-            windowController.window?.animator().alphaValue = shouldBeTransparent ? 0 : 1
+        if let animation = Defaults[.animationConfiguration].previewTimingFunction {
+            NSAnimationContext.runAnimationGroup { context in
+                context.timingFunction = animation
+                windowController.window?.animator().setFrame(targetWindowFrame, display: true)
+                windowController.window?.animator().alphaValue = shouldBeTransparent ? 0 : 1
+            }
+        } else {
+            windowController.window?.setFrame(targetWindowFrame, display: true)
+            windowController.window?.alphaValue = shouldBeTransparent ? 0 : 1
         }
 
         print("New preview window action received: \(action.direction)")
