@@ -45,7 +45,7 @@ struct KeybindingsSettingsView: View {
                         "Trigger Delay",
                         value: $triggerDelay,
                         sliderRange: 0...1,
-                        postscript: "sec",
+                        postscript: String(localized: "sec", comment: "The short form of 'Seconds'"),
                         step: 0.1,
                         lowerClamp: true
                     )

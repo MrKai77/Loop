@@ -55,7 +55,7 @@ struct PreviewSettingsView: View {
                     "Padding",
                     value: $previewPadding,
                     sliderRange: 0...20,
-                    postscript: "px",
+                    postscript: String(localized: "px", comment: "The short form of 'pixels'"),
                     lowerClamp: true,
                     upperClamp: true
                 )
@@ -63,7 +63,7 @@ struct PreviewSettingsView: View {
                     "Corner Radius",
                     value: $previewCornerRadius,
                     sliderRange: 0...20,
-                    postscript: "px",
+                    postscript: String(localized: "px", comment: "The short form of 'pixels'"),
                     lowerClamp: true,
                     upperClamp: true
                 )
@@ -71,7 +71,7 @@ struct PreviewSettingsView: View {
                     "Border Thickness",
                     value: $previewBorderThickness,
                     sliderRange: 0...10,
-                    postscript: "px",
+                    postscript: String(localized: "px", comment: "The short form of 'pixels'"),
                     lowerClamp: true,
                     upperClamp: true
                 )

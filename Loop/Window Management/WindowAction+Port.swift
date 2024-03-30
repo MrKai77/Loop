@@ -66,8 +66,14 @@ extension WindowAction {
 
         if keybinds.isEmpty {
             let alert = NSAlert()
-            alert.messageText = "No Keybinds Have Been Set"
-            alert.informativeText = "You can't export something that doesn't exist!"
+            alert.messageText = String(
+                localized: "No Keybinds Have Been Set",
+                comment: "Displayed when the user is trying to export their (non-existent) keybinds"
+            )
+            alert.informativeText = String(
+                localized: "You can't export something that doesn't exist!",
+                comment: "Displayed as a caption when the user is trying to export their (non-existent) keybinds"
+            )
             alert.beginSheetModal(for: NSApplication.shared.mainWindow!)
             return
         }
@@ -98,7 +104,7 @@ extension WindowAction {
             savePanel.directoryURL = downloadsUrl
         }
 
-        savePanel.title = "Export Keybinds"
+        savePanel.title = String(localized: "Export Keybinds")
         savePanel.nameFieldStringValue = "keybinds"
         savePanel.allowedContentTypes = [.json]
 
@@ -117,7 +123,7 @@ extension WindowAction {
 
     static func importPrompt() {
         let openPanel = NSOpenPanel()
-        openPanel.title = "Import Keybinds"
+        openPanel.title = String(localized: "Import Keybinds")
         openPanel.allowedContentTypes = [.json]
 
         openPanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
@@ -179,12 +185,15 @@ extension WindowAction {
 
     private static func showAlertForImportDecision(completion: @escaping (ImportDecision) -> Void) {
         let alert = NSAlert()
-        alert.messageText = "Import Keybinds"
-        alert.informativeText = "Do you want to merge or erase existing keybinds?"
+        alert.messageText = String(localized: "Import Keybinds")
+        alert.informativeText = String(
+            localized: "Do you want to merge or erase existing keybinds?",
+            comment: "Displayed when the user is importing keybinds"
+        )
 
-        alert.addButton(withTitle: "Merge")
-        alert.addButton(withTitle: "Erase")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: String(localized: "Merge"))
+        alert.addButton(withTitle: String(localized: "Erase"))
+        alert.addButton(withTitle: String(localized: "Cancel"))
 
         alert.beginSheetModal(for: NSApplication.shared.mainWindow!) { response in
             switch response {

@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct UnstableIndicator: View {
-    let text: String
+    let text: LocalizedStringKey
     let color: Color
 
-    init(_ text: String, color: Color) {
+    init(_ text: LocalizedStringKey, color: Color) {
         self.text = text
         self.color = color
     }

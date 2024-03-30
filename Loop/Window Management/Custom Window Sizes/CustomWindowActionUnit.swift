@@ -33,8 +33,8 @@ enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
 
     var postscript: String {
         switch self {
-        case .pixels: "px"
-        case .percentage: "%"
+        case .pixels: String(localized: "px", comment: "The short form of 'pixels'")
+        case .percentage: String(localized: "%", comment: "The short form of 'percentage'")
         }
     }
 }

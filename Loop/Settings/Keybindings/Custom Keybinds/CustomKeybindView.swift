@@ -79,7 +79,7 @@ struct CustomKeybindView: View {
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.width ?? 1000)
                             ),
-                            postscript: action.unit?.postscript ?? "",
+                            postscript: action.unit?.postscript,
                             lowerClamp: true
                         )
 
@@ -107,7 +107,7 @@ struct CustomKeybindView: View {
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.height ?? 1000)
                             ),
-                            postscript: action.unit?.postscript ?? "",
+                            postscript: action.unit?.postscript,
                             lowerClamp: true
                         )
                     }
@@ -193,7 +193,7 @@ struct CustomKeybindView: View {
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.width ?? 1000)
                             ),
-                            postscript: action.unit?.postscript ?? "",
+                            postscript: action.unit?.postscript,
                             lowerClamp: true
                         )
 
@@ -218,7 +218,7 @@ struct CustomKeybindView: View {
                             sliderRange: action.unit == .percentage ?  0...100 : 0...(
                                 Double(NSScreen.main?.frame.height ?? 1000)
                             ),
-                            postscript: action.unit?.postscript ?? "",
+                            postscript: action.unit?.postscript,
                             lowerClamp: true
                         )
                     }

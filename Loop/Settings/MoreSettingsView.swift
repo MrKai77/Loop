@@ -103,7 +103,11 @@ struct MoreSettingsView: View {
                 HStack {
                     Text("Accessibility Access")
                     Spacer()
-                    Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
+                    if isAccessibilityAccessGranted {
+                        Text("Granted", comment: "When access to accessibility access is granted")
+                    } else {
+                        Text("Not Granted", comment: "When access to accessibility access not granted")
+                    }
                     Circle()
                         .frame(width: 8, height: 8)
                         .padding(.trailing, 5)
@@ -115,7 +119,11 @@ struct MoreSettingsView: View {
                     HStack {
                         Text("Screen Recording Access")
                         Spacer()
-                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
+                        if isScreenRecordingAccessGranted {
+                            Text("Granted", comment: "When access to screen recording permissions are available")
+                        } else {
+                            Text("Not Granted", comment: "When access to screen recording permissions aren't available")
+                        }
                         Circle()
                             .frame(width: 8, height: 8)
                             .padding(.trailing, 5)

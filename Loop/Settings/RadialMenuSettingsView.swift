@@ -52,7 +52,7 @@ struct RadialMenuSettingsView: View {
                         }
                     ),
                     sliderRange: 30...50,
-                    postscript: "px",
+                    postscript: String(localized: "px", comment: "The short form of 'pixels'"),
                     lowerClamp: true,
                     upperClamp: true
                 )
@@ -68,7 +68,7 @@ struct RadialMenuSettingsView: View {
                         }
                     ),
                     sliderRange: 10...35,
-                    postscript: "px",
+                    postscript: String(localized: "px", comment: "The short form of 'pixels'"),
                     lowerClamp: true,
                     upperClamp: true
                 )

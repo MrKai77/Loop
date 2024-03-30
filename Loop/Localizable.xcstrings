@@ -4,6 +4,9 @@
     "" : {
 
     },
+    "%" : {
+      "comment" : "The short form of 'percentage'"
+    },
     "%@" : {
 
     },
@@ -57,6 +60,9 @@
     "Almost Maximize" : {
       "comment" : "A preset window action"
     },
+    "ALPHA" : {
+
+    },
     "Animate windows being resized" : {
 
     },
@@ -101,6 +107,9 @@
     },
     "Bottom Two Thirds" : {
       "comment" : "A preset window action"
+    },
+    "Cancel" : {
+
     },
     "Center" : {
       "comment" : "A preset window action"
@@ -167,6 +176,9 @@
     "Disable cursor interaction" : {
 
     },
+    "Do you want to merge or erase existing keybinds?" : {
+      "comment" : "Displayed when the user is importing keybinds"
+    },
     "Donate…" : {
 
     },
@@ -174,6 +186,9 @@
 
     },
     "Double-click trigger key to trigger Loop" : {
+
+    },
+    "Erase" : {
 
     },
     "Excluded Applications" : {
@@ -185,8 +200,14 @@
     "Export" : {
 
     },
+    "Export Keybinds" : {
+
+    },
     "External Bar" : {
 
+    },
+    "Fast" : {
+      "comment" : "An animation configuration"
     },
     "Feedback" : {
 
@@ -207,7 +228,7 @@
 
     },
     "Granted" : {
-
+      "comment" : "When access to accessibility access is granted"
     },
     "Grow Bottom" : {
       "comment" : "A preset window action"
@@ -254,6 +275,9 @@
     "Import" : {
 
     },
+    "Import Keybinds" : {
+
+    },
     "Include development versions" : {
 
     },
@@ -262,6 +286,9 @@
     },
     "Initial Size" : {
       "comment" : "An option when configuring a custom keybind's sizing mode"
+    },
+    "Instant" : {
+      "comment" : "An animation configuration"
     },
     "Keybinds" : {
       "comment" : "Title in settings window"
@@ -320,6 +347,9 @@
     "Measurement Unit" : {
 
     },
+    "Merge" : {
+
+    },
     "Meta Loop" : {
       "comment" : "App icon name"
     },
@@ -353,11 +383,14 @@
     "No Keybinds" : {
 
     },
+    "No Keybinds Have Been Set" : {
+      "comment" : "Displayed when the user is trying to export their (non-existent) keybinds"
+    },
     "None" : {
       "comment" : "Text on a keybind doesn't have any keys assigned to it"
     },
     "Not Granted" : {
-
+      "comment" : "When access to accessibility access not granted"
     },
     "Nothing to Cycle Through" : {
 
@@ -409,6 +442,9 @@
     },
     "Previous Screen" : {
       "comment" : "A preset window action"
+    },
+    "px" : {
+      "comment" : "The short form of 'pixels'"
     },
     "Quarters" : {
 
@@ -473,6 +509,9 @@
     "Screen Switching" : {
 
     },
+    "sec" : {
+      "comment" : "The short form of 'Seconds'"
+    },
     "Selected icon:" : {
 
     },
@@ -514,6 +553,9 @@
     },
     "Smaller" : {
       "comment" : "A preset window action"
+    },
+    "Smooth" : {
+      "comment" : "An animation configuration"
     },
     "Stage Manager" : {
 
@@ -647,6 +689,9 @@
     },
     "You can only use up to %lld keys in your trigger key." : {
 
+    },
+    "You can't export something that doesn't exist!" : {
+      "comment" : "Displayed as a caption when the user is trying to export their (non-existent) keybinds"
     },
     "You will now be notified when you unlock a new icon." : {
 
