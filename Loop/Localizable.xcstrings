@@ -262,7 +262,14 @@
       }
     },
     "App Icon" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用图标"
+          }
+        }
+      }
     },
     "Appearance" : {
       "localizations" : {
@@ -1433,6 +1440,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Set Current Icon"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置为当前图标"
           }
         }
       }
