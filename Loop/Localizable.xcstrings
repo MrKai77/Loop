@@ -1,0 +1,421 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ Coordinates" : {
+
+    },
+    "%@ Custom" : {
+
+    },
+    "%@ Generic" : {
+
+    },
+    "%@ Initial Size" : {
+
+    },
+    "%@ is already used as your trigger key." : {
+
+    },
+    "%@ Percentages" : {
+
+    },
+    "%@ Pixels" : {
+
+    },
+    "%@ Preserve Size" : {
+
+    },
+    "%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
+
+    },
+    "About %@" : {
+
+    },
+    "Accent Color" : {
+
+    },
+    "Accessibility Access" : {
+
+    },
+    "Acknowledgements" : {
+
+    },
+    "Adjusts window frame in real-time as you choose a direction." : {
+
+    },
+    "Advanced" : {
+
+    },
+    "Animate windows being resized" : {
+
+    },
+    "Animation Speed" : {
+
+    },
+    "Appearance" : {
+
+    },
+    "Applications in the exclude list are ignored by Loop." : {
+
+    },
+    "Automatically check for updates" : {
+
+    },
+    "Behavior" : {
+
+    },
+    "Check for Updates…" : {
+
+    },
+    "Configure…" : {
+
+    },
+    "Current version: %@ (%@) %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Current version: %1$@ (%2$@) %3$@"
+          }
+        }
+      }
+    },
+    "Custom Accent Color" : {
+
+    },
+    "Custom Cycle" : {
+
+    },
+    "Custom Gradient color" : {
+
+    },
+    "Custom Keybind" : {
+
+    },
+    "Custom Screen Padding" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Disable cursor interaction" : {
+
+    },
+    "Donate…" : {
+
+    },
+    "Done" : {
+
+    },
+    "Double-click trigger key to trigger Loop" : {
+
+    },
+    "Excluded Applications" : {
+
+    },
+    "Excluded Apps" : {
+
+    },
+    "Export" : {
+
+    },
+    "Feedback" : {
+
+    },
+    "Focus window on resize" : {
+
+    },
+    "General" : {
+
+    },
+    "Github" : {
+
+    },
+    "Granted" : {
+
+    },
+    "Grow/Shrink" : {
+
+    },
+    "Halves" : {
+
+    },
+    "Haptic Feedback" : {
+
+    },
+    "Hide Loop until direction is chosen" : {
+
+    },
+    "Hide menubar icon" : {
+
+    },
+    "Horizontal Thirds" : {
+
+    },
+    "Import" : {
+
+    },
+    "Include development versions" : {
+
+    },
+    "Keybindings" : {
+
+    },
+    "Keybinds" : {
+
+    },
+    "Launch at login" : {
+
+    },
+    "license" : {
+
+    },
+    "link" : {
+
+    },
+    "Loop" : {
+
+    },
+    "Loop more to unlock new icons! (You've looped %lld times!)" : {
+
+    },
+    "Loop's icon" : {
+
+    },
+    "Loop's notification permissions are currently disabled." : {
+
+    },
+    "Measurement Unit" : {
+
+    },
+    "Middle-click to trigger Loop" : {
+
+    },
+    "MIT License" : {
+
+    },
+    "More" : {
+
+    },
+    "Name" : {
+
+    },
+    "No Excluded Applications" : {
+
+    },
+    "No Keybinds" : {
+
+    },
+    "None" : {
+
+    },
+    "Not Granted" : {
+
+    },
+    "Nothing to Cycle Through" : {
+
+    },
+    "Notify when new icons are unlocked" : {
+
+    },
+    "Open Notification Settings" : {
+
+    },
+    "Padding" : {
+
+    },
+    "Permissions" : {
+
+    },
+    "Please turn them on in System Settings." : {
+
+    },
+    "Position Mode" : {
+
+    },
+    "Press + to add a cycle item!" : {
+
+    },
+    "Press + to add a keybind!" : {
+
+    },
+    "Press + to add an application!" : {
+
+    },
+    "Press a key..." : {
+
+    },
+    "Preview" : {
+
+    },
+    "Preview window size" : {
+
+    },
+    "Quarters" : {
+
+    },
+    "Quit" : {
+
+    },
+    "Radial Menu" : {
+
+    },
+    "Re-open Loop to see this window." : {
+
+    },
+    "Request Access…" : {
+
+    },
+    "Resize window under cursor" : {
+
+    },
+    "Resize…" : {
+
+    },
+    "Resizes frontmost window." : {
+
+    },
+    "Resizes window under cursor, and uses the frontmost window as backup." : {
+
+    },
+    "Respect Stage Manager" : {
+
+    },
+    "Restore Defaults" : {
+
+    },
+    "Restore window frame on drag" : {
+
+    },
+    "Screen Padding" : {
+
+    },
+    "Screen Recording Access" : {
+
+    },
+    "Screen Switching" : {
+
+    },
+    "Selected icon:" : {
+
+    },
+    "Send Feedback" : {
+
+    },
+    "Set a trigger key..." : {
+
+    },
+    "Settings…" : {
+
+    },
+    "Show Preview when looping" : {
+
+    },
+    "Show Radial Menu when looping" : {
+
+    },
+    "Sizing Mode" : {
+
+    },
+    "Stage Manager" : {
+
+    },
+    "That key is already used as your trigger key." : {
+
+    },
+    "That keybind is already being used by %@." : {
+
+    },
+    "The elegant, mouse-oriented window manager" : {
+
+    },
+    "This is only needed to animate windows being resized." : {
+
+    },
+    "This point determines the upper-left edge of the window." : {
+
+    },
+    "This preview is not to scale." : {
+
+    },
+    "Tip: To use caps lock, remap it to control in System Settings!" : {
+
+    },
+    "Trigger Key" : {
+
+    },
+    "Updates" : {
+
+    },
+    "Use Gradient" : {
+
+    },
+    "Use MacOS Center" : {
+
+    },
+    "Use System Accent Color" : {
+
+    },
+    "Version %@ (%@) %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version %1$@ (%2$@) %3$@"
+          }
+        }
+      }
+    },
+    "Vertical Thirds" : {
+
+    },
+    "Window Padding" : {
+
+    },
+    "Window Position" : {
+
+    },
+    "Window Size" : {
+
+    },
+    "Window Snapping" : {
+
+    },
+    "Windows will not animate their resizes." : {
+
+    },
+    "You can only use up to %lld keys in a keybind.\n(This includes your trigger key)" : {
+
+    },
+    "You can only use up to %lld keys in your trigger key." : {
+
+    }
+  },
+  "version" : "1.0"
+}
