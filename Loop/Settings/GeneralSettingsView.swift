@@ -141,10 +141,13 @@ struct GeneralSettingsView: View {
                         },
                         set: {
                             if $0 {
-                                AppDelegate.sendNotification(
-                                    Bundle.main.appName,
-                                    .init(localized: .init("Default notification content", defaultValue: "You will now be notified when you unlock a new icon."))
+                                let notficationBody: String = .init(
+                                    localized: .init(
+                                        "Default notification content",
+                                        defaultValue: "You will now be notified when you unlock a new icon."
+                                    )
                                 )
+                                AppDelegate.sendNotification(Bundle.main.appName, notficationBody)
 
                                 let areNotificationsEnabled = AppDelegate.areNotificationsEnabled()
                                 self.notificationWhenIconUnlocked = areNotificationsEnabled

@@ -39,8 +39,11 @@ struct MoreSettingsView: View {
                                 forType: NSPasteboard.PasteboardType.string
                             )
                         }, label: {
+                            let versionText = String(
+                                localized: "Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                            )
                             HStack {
-                                Text("Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
+                                Text("\(versionText) \(Image(systemName: "doc.on.clipboard"))")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -90,7 +93,12 @@ struct MoreSettingsView: View {
 
                 CrispValueAdjuster(
                     .init(localized: .init("Crisp Value Adjuster: Size Increment", defaultValue: "Size increment")),
-                    description: .init(localized: .init("Crisp Value Adjuster: Size Increment Description", defaultValue: "Used in size adjustment window actions")),
+                    description: .init(
+                        localized: .init(
+                            "Crisp Value Adjuster: Size Increment Description",
+                            defaultValue: "Used in size adjustment window actions"
+                        )
+                    ),
                     value: $sizeIncrement,
                     sliderRange: 5...50,
                     postscript: .init(localized: .init("px", defaultValue: "px")),
@@ -103,7 +111,11 @@ struct MoreSettingsView: View {
                 HStack {
                     Text("Accessibility access")
                     Spacer()
-                    Text(isAccessibilityAccessGranted ? .init(localized: .init("Granted", defaultValue: "Granted")) : .init(localized: .init("Not granted", defaultValue: "Not granted")))
+                    Text(
+                        isAccessibilityAccessGranted
+                        ? .init(localized: .init("Granted", defaultValue: "Granted"))
+                        : .init(localized: .init("Not granted", defaultValue: "Not granted"))
+                    )
                     Circle()
                         .frame(width: 8, height: 8)
                         .padding(.trailing, 5)
@@ -115,7 +127,11 @@ struct MoreSettingsView: View {
                     HStack {
                         Text("Screen recording access")
                         Spacer()
-                        Text(isAccessibilityAccessGranted ? .init(localized: .init("Granted", defaultValue: "Granted")) : .init(localized: .init("Not granted", defaultValue: "Not granted")))
+                        Text(
+                            isAccessibilityAccessGranted
+                            ? .init(localized: .init("Granted", defaultValue: "Granted"))
+                            : .init(localized: .init("Not granted", defaultValue: "Not granted"))
+                        )
                         Circle()
                             .frame(width: 8, height: 8)
                             .padding(.trailing, 5)

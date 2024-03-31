@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A6DC3EB2BB869DE002AB05F /* WindowDirection+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6DC3EA2BB869DE002AB05F /* WindowDirection+Image.swift */; };
+		0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */; };
 		116CE7302B9F21520014C19D /* ExcludeListSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */; };
 		116CE7322B9F24D80014C19D /* AppListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CE7312B9F24D80014C19D /* AppListManager.swift */; };
 		117C89682BA4CD6F00A32CE7 /* NSImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117C89672BA4CD6F00A32CE7 /* NSImage+Extensions.swift */; };
@@ -95,6 +97,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A6DC3EA2BB869DE002AB05F /* WindowDirection+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+Image.swift"; sourceTree = "<group>"; };
+		0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+LocalizedString.swift"; sourceTree = "<group>"; };
 		116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcludeListSettingsView.swift; sourceTree = "<group>"; };
 		116CE7312B9F24D80014C19D /* AppListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppListManager.swift; sourceTree = "<group>"; };
 		117C89672BA4CD6F00A32CE7 /* NSImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+Extensions.swift"; sourceTree = "<group>"; };
@@ -296,6 +300,8 @@
 				A8F0125A2AEDD7660017307F /* WindowAction.swift */,
 				A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */,
 				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
+				0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */,
+				0A6DC3EA2BB869DE002AB05F /* WindowDirection+Image.swift */,
 				A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */,
 				A8B5E1612B43725B00044D30 /* Custom Window Sizes */,
 			);
@@ -617,8 +623,10 @@
 				A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */,
 				A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
+				0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */,
 				A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */,
 				A8E8903C2BA7AAFE006C5074 /* NSEvent+Extensions.swift in Sources */,
+				0A6DC3EB2BB869DE002AB05F /* WindowDirection+Image.swift in Sources */,
 				A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */,
 				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,
 				A84497CB2B395D8C003D4CF3 /* AnchorPicker.swift in Sources */,

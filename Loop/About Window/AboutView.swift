@@ -80,8 +80,10 @@ struct AboutView: View {
                         forType: NSPasteboard.PasteboardType.string
                     )
                 }, label: {
-                    // swiftlint:disable:next line_length
-                    Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild)) \(Image(systemName: "doc.on.clipboard"))")
+                    let versionText = String(
+                        localized: "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                    )
+                    Text("\(versionText) \(Image(systemName: "doc.on.clipboard"))")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 })

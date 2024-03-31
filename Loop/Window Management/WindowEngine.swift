@@ -23,7 +23,9 @@ struct WindowEngine {
     ) {
         guard action.direction != .noAction else { return }
         let willChangeScreens = ScreenManager.screenContaining(window) != screen
-        print("Resizing \(window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>") to \(action.direction) on \(screen.localizedName)")
+
+        let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
+        print("Resizing \(windowTitle) to \(action.direction) on \(screen.localizedName)")
 
         // Note that this is only really useful when "Resize window under cursor" is enabled
         if Defaults[.focusWindowOnResize] {

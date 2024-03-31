@@ -82,7 +82,11 @@ struct CustomCyclingKeybindItemView: View {
         }, label: {
             HStack {
                 self.action.direction.icon
-                Text(action.direction == .custom ? action.name ?? .init(localized: .init("Custom keybind", defaultValue: "Custom keybind")) : action.direction.name)
+                Text(
+                    action.direction == .custom
+                    ? action.name ?? .init(localized: .init("Custom keybind", defaultValue: "Custom keybind"))
+                    : action.direction.name
+                )
             }
         })
         .fixedSize()
