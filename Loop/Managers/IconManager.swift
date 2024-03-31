@@ -31,7 +31,11 @@ class IconManager {
     }
 
     private static let icons: [Icon] = [
-        Icon(iconName: "AppIcon-Classic", unlockTime: 0),
+        Icon(
+            name: .init(localized: .init("Icon Name: Classic", defaultValue: "Classic")),
+            iconName: "AppIcon-Classic",
+            unlockTime: 0
+        ),
         Icon(
             name: .init(localized: .init("Icon Name: Holo", defaultValue: "Holo")),
             iconName: "AppIcon-Holo",

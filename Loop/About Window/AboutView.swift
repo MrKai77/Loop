@@ -98,7 +98,7 @@ struct AboutView: View {
             Button {
                 openURL(URL(string: "https://github.com/MrKai77/Loop")!)
             } label: {
-                Text("Github")
+                Text("GitHub")
                     .foregroundColor(.primary)
                     .frame(maxWidth: .infinity)
             }

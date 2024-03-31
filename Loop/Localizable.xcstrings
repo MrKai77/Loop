@@ -18,34 +18,104 @@
       }
     },
     "%@ Coordinates" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@坐标"
+          }
+        }
+      }
     },
     "%@ Custom" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@自定义"
+          }
+        }
+      }
     },
     "%@ Generic" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@通用"
+          }
+        }
+      }
     },
     "%@ Initial Size" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@初始尺寸"
+          }
+        }
+      }
     },
     "%@ is already used as your trigger key." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@已经被用触发键。"
+          }
+        }
+      }
     },
     "%@ Percentages" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@百分比"
+          }
+        }
+      }
     },
     "%@ Pixels" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@像素"
+          }
+        }
+      }
     },
     "%@ Preserve Size" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@保持尺寸"
+          }
+        }
+      }
     },
     "%@'s icon" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@的图标"
+          }
+        }
+      }
     },
     "%@'s notification permissions are currently disabled." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@的通知权限目前已被禁用。"
+          }
+        }
+      }
     },
     "%@%@" : {
       "localizations" : {
@@ -68,14 +138,34 @@
             "state" : "new",
             "value" : "About %@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于%@"
+          }
         }
       }
     },
     "About %@" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于%@"
+          }
+        }
+      }
     },
     "Accent color" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "强调色"
+          }
+        }
+      }
     },
     "Accessibility access" : {
 
@@ -397,11 +487,22 @@
     "General" : {
 
     },
-    "Github" : {
+    "GitHub" : {
 
     },
     "Granted" : {
 
+    },
+    "Greg Lassale Footer" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This icon was designed by Greg Lassale (@greglassale on 𝕏)"
+          }
+        }
+      }
     },
     "Grow/Shrink" : {
 
@@ -420,6 +521,171 @@
     },
     "Horizontal Thirds" : {
 
+    },
+    "Icon Name: Black" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Black"
+          }
+        }
+      }
+    },
+    "Icon Name: Black Hole" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Black Hole"
+          }
+        }
+      }
+    },
+    "Icon Name: Classic" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Classic"
+          }
+        }
+      }
+    },
+    "Icon Name: Holo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Holo"
+          }
+        }
+      }
+    },
+    "Icon Name: Keycap" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keycap"
+          }
+        }
+      }
+    },
+    "Icon Name: Loop Master" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Loop Master"
+          }
+        }
+      }
+    },
+    "Icon Name: Meta Loop" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Meta Loop"
+          }
+        }
+      }
+    },
+    "Icon Name: Neon" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Neon"
+          }
+        }
+      }
+    },
+    "Icon Name: Rosé Pine" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Rosé Pine"
+          }
+        }
+      }
+    },
+    "Icon Name: Simon" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Simon"
+          }
+        }
+      }
+    },
+    "Icon Name: Synthwave Sunset" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Synthwave Sunset"
+          }
+        }
+      }
+    },
+    "Icon Name: White" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "White"
+          }
+        }
+      }
+    },
+    "Icon Unlock Message" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You've unlocked a new icon: %@!"
+          }
+        }
+      }
+    },
+    "Icon Unlock Message: Holo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You've already looped 25 times! As a reward, here's new icon: Holo. Continue to loop more to unlock new icons!"
+          }
+        }
+      }
+    },
+    "Icon Unlock Message: Loop Master" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "5000 loops conquered! The universe has witnessed the birth of a Loop Master! Enjoy your well-deserved reward: a brand-new icon!"
+          }
+        }
+      }
     },
     "Import" : {
 
@@ -661,6 +927,479 @@
     },
     "Vertical Thirds" : {
 
+    },
+    "Window Direction/macOS Center: More Information" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%@ places windows slightly above the absolute center, which can be found more ergnonomic."
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Almost Maximize" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Almost Maximize"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Half"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Left Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Left Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Right Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Right Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom THird" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom THird"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Center" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Center"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Custom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Custom"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Cycle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cycle"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Fullscreen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fullscreen"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Bottom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Bottom"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Top" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Top"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Hide" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Horizontal Center Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Horizontal Center Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Intiial Frame" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Intiial Frame"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Larger" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Larger"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Left Hald" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Hald"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Left Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Left Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: macOS Center" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "macOS Center"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Maximize" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Maximize"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Minimize" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Minimize"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Next Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Next Screen"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: No Action" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Action"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Previous Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Previous Screen"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Right Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Half"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Right Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Right Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Bottom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Bottom"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Top" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Top"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Smaller" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Smaller"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Half"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Left Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Left Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Right Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Right Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Undo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Undo"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Vertical Center Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Vertical Center Third"
+          }
+        }
+      }
     },
     "Window padding" : {
 
