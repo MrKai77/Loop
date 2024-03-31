@@ -27,7 +27,12 @@ class IconManager {
             }
         }
 
-        static var gregLassaleFooter = String(localized: .init("Greg Lassale Footer", defaultValue: "This icon was designed by Greg Lassale (@greglassale on 𝕏)"))
+        static var gregLassaleFooter = String(
+            localized: .init(
+                "Greg Lassale Footer",
+                defaultValue: "This icon was designed by Greg Lassale (@greglassale on 𝕏)"
+            )
+        )
     }
 
     private static let icons: [Icon] = [
@@ -40,9 +45,14 @@ class IconManager {
             name: .init(localized: .init("Icon Name: Holo", defaultValue: "Holo")),
             iconName: "AppIcon-Holo",
             unlockTime: 25,
-            unlockMessage: .init(localized: .init("Icon Unlock Message: Holo", defaultValue: """
+            unlockMessage: .init(
+                localized: .init(
+                    "Icon Unlock Message: Holo",
+                    defaultValue: """
 You've already looped 25 times! As a reward, here's new icon: \(.init(localized: .init("Icon Name: Holo", defaultValue: "Holo"))). Continue to loop more to unlock new icons!
-"""))
+"""
+                )
+            )
         ),
         Icon(
             name: .init(localized: .init("Icon Name: Rosé Pine", defaultValue: "Rosé Pine")),
@@ -97,9 +107,14 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
             name: .init(localized: .init("Icon Name: Loop Master", defaultValue: "Loop Master")),
             iconName: "AppIcon-Loop Master",
             unlockTime: 5000,
-            unlockMessage: .init(localized: .init("Icon Unlock Message: Loop Master", defaultValue: """
+            unlockMessage: .init(
+                localized: .init(
+                    "Icon Unlock Message: Loop Master",
+                    defaultValue: """
 5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!
-"""))
+"""
+                )
+            )
         )
     ]
 
@@ -140,7 +155,12 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
             if let message = icon.unlockMessage {
                 content.body = message
             } else {
-                content.body = .init(localized: .init("Icon Unlock Message", defaultValue: "You've unlocked a new icon: \(icon.getName())!"))
+                content.body = .init(
+                    localized: .init(
+                        "Icon Unlock Message",
+                        defaultValue: "You've unlocked a new icon: \(icon.getName())!"
+                    )
+                )
             }
 
             if let data = NSImage(named: icon.iconName)?.tiffRepresentation,

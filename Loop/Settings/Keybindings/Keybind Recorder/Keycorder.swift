@@ -45,7 +45,11 @@ struct Keycorder: View {
         }, label: {
             HStack {
                 if self.selectionKeybind.isEmpty {
-                    Text(self.isActive ? .init(localized: .init("Press a key…", defaultValue: "Press a key…")) : .init(localized: .init("None", defaultValue: "None")))
+                    Text(
+                        self.isActive
+                        ? .init(localized: .init("Press a key…", defaultValue: "Press a key…"))
+                        : .init(localized: .init("None", defaultValue: "None"))
+                    )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .padding(.horizontal, 8)
                         .background {
@@ -190,7 +194,9 @@ struct Keycorder: View {
                         self.errorMessage = Text("That keybind is already being used by another custom keybind.")
                     }
                 } else {
-                    self.errorMessage = Text("That keybind is already being used by \(keybind.direction.name.lowercased()).")
+                    self.errorMessage = Text(
+                        "That keybind is already being used by \(keybind.direction.name.lowercased())."
+                    )
                 }
                 self.shouldShake.toggle()
                 self.shouldError = true

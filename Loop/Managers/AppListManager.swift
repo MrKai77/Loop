@@ -52,7 +52,7 @@ class AppListManager: ObservableObject {
                     let bundleId = item.value(forAttribute: NSMetadataItemCFBundleIdentifierKey) as? String,
                     let displayName = item.value(forAttribute: NSMetadataItemDisplayNameKey) as? String,
                     let path = item.value(forAttribute: NSMetadataItemPathKey) as? String,
-                    let installationFolder = URL(string: path)?.deletingLastPathComponent().absoluteString.removingPercentEncoding
+                    let installationFolder = URL(string: path)?.deletingLastPathComponent().path(percentEncoded: false)
                 else {
                     return nil
                 }

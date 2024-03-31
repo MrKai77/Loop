@@ -109,9 +109,12 @@ struct RadialMenuView: View {
                             RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
                                 .stroke(.quinary, lineWidth: 2)
 
-                            RoundedRectangle(cornerRadius: radialMenuCornerRadius - self.radialMenuThickness, style: .continuous)
-                                .stroke(.quinary, lineWidth: 2)
-                                .padding(self.radialMenuThickness)
+                            RoundedRectangle(
+                                cornerRadius: radialMenuCornerRadius - self.radialMenuThickness,
+                                style: .continuous
+                            )
+                            .stroke(.quinary, lineWidth: 2)
+                            .padding(self.radialMenuThickness)
                         }
                     }
                     // Mask the whole ZStack with the shape the user defines

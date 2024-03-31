@@ -46,7 +46,12 @@ struct PaddingConfigurationView: View {
                         )
                         CrispValueAdjuster(
                             .init(localized: .init("Crisp Value Adjuster: External Bar", defaultValue: "External bar")),
-                            description: .init(localized: .init("Crisp Value Adjuster: External Bar Description", defaultValue: "Use this if you are using a custom menubar.")),
+                            description: .init(
+                                localized: .init(
+                                    "Crisp Value Adjuster: External Bar Description",
+                                    defaultValue: "Use this if you are using a custom menubar."
+                                )
+                            ),
                             value: $paddingModel.externalBar,
                             sliderRange: 0...100,
                             postscript: .init(localized: .init("px", defaultValue: "px")),

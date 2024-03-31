@@ -95,68 +95,63 @@ struct KeybindCustomizationViewItem: View {
         .padding(.vertical, 5)
     }
 
-    @ViewBuilder
-    func directionPicker(selection: Binding<WindowDirection>) -> some View {
-        Menu(content: {
+    var directionPickerList: some View {
+        Group {
             Picker("General", selection: $keybind.direction) {
                 ForEach(WindowDirection.general) { direction in
                     directionPickerItem(direction)
                 }
             }
-
             Picker("Halves", selection: $keybind.direction) {
                 ForEach(WindowDirection.halves) { direction in
                     directionPickerItem(direction)
                 }
             }
-
             Picker("Quarters", selection: $keybind.direction) {
                 ForEach(WindowDirection.quarters) { direction in
                     directionPickerItem(direction)
                 }
             }
-
             Picker("Horizontal Thirds", selection: $keybind.direction) {
                 ForEach(WindowDirection.horizontalThirds) { direction in
                     directionPickerItem(direction)
                 }
             }
-
             Picker("Vertical Thirds", selection: $keybind.direction) {
                 ForEach(WindowDirection.verticalThirds) { direction in
                     directionPickerItem(direction)
                 }
             }
-
             Picker("Screen Switching", selection: $keybind.direction) {
                 ForEach(WindowDirection.screenSwitching) { direction in
                     directionPickerItem(direction)
                 }
             }
-
             Picker("Grow/Shrink", selection: $keybind.direction) {
                 ForEach(WindowDirection.sizeAdjustment) { direction in
                     directionPickerItem(direction)
                 }
-
                 Divider()
-
                 ForEach(WindowDirection.shrink) { direction in
                     directionPickerItem(direction)
                 }
-
                 Divider()
-
                 ForEach(WindowDirection.grow) { direction in
                     directionPickerItem(direction)
                 }
             }
-
             Picker("More", selection: $keybind.direction) {
                 ForEach(WindowDirection.more) { direction in
                     directionPickerItem(direction)
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    func directionPicker(selection: Binding<WindowDirection>) -> some View {
+        Menu(content: {
+            directionPickerList
         }, label: {
             HStack {
                 keybind.direction.icon
