@@ -177,6 +177,40 @@
         }
       }
     },
+    "Accessibility Request: Content" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please grant access to be able to resize windows."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "辅助功能权限将被用于调整窗口大小。"
+          }
+        }
+      }
+    },
+    "Accessibility Request: Title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%@ Needs Accessibility Permissions"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@需要辅助功能权限"
+          }
+        }
+      }
+    },
     "Acknowledgements" : {
       "localizations" : {
         "zh-Hans" : {
@@ -273,6 +307,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "行为"
+          }
+        }
+      }
+    },
+    "Bottom Cycle" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底部循环"
           }
         }
       }
@@ -644,6 +688,16 @@
         }
       }
     },
+    "Custom Cycle" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义循环"
+          }
+        }
+      }
+    },
     "Custom gradient color" : {
       "localizations" : {
         "zh-Hans" : {
@@ -655,6 +709,16 @@
       }
     },
     "Custom keybind" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义快捷键"
+          }
+        }
+      }
+    },
+    "Custom Keybind" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1062,6 +1126,12 @@
             "state" : "new",
             "value" : "Simon"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "西蒙"
+          }
         }
       }
     },
@@ -1216,6 +1286,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "左侧"
+          }
+        }
+      }
+    },
+    "Left Cycle" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左侧循环"
           }
         }
       }
@@ -1613,6 +1693,16 @@
         }
       }
     },
+    "Right Cycle" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右侧循环"
+          }
+        }
+      }
+    },
     "Screen Padding" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1629,6 +1719,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "屏幕录制权限"
+          }
+        }
+      }
+    },
+    "Screen Recording Request: Content" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Screen recording permissions are required to animate windows being resized. %@ may need to be relaunched to reflect these changes."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕录制权限将被用于显示窗口动画。%@可能需要重新启动以获得完整访问权限。"
+          }
+        }
+      }
+    },
+    "Screen Recording Request: Title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%@ Needs Screen Recording Permissions"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@需要屏幕录制权限"
           }
         }
       }
@@ -1839,6 +1963,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "提示：如果需要使用大写锁定键，请在系统设置中将其映射为Control键！"
+          }
+        }
+      }
+    },
+    "Top Cycle" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顶部循环"
           }
         }
       }
