@@ -41,6 +41,12 @@
     "%@ Preserve Size" : {
 
     },
+    "%@'s icon" : {
+
+    },
+    "%@'s notification permissions are currently disabled." : {
+
+    },
     "%@%@" : {
       "localizations" : {
         "en" : {
@@ -54,13 +60,24 @@
     "%lld" : {
 
     },
+    "About" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "About %@"
+          }
+        }
+      }
+    },
     "About %@" : {
 
     },
-    "Accent Color" : {
+    "Accent color" : {
 
     },
-    "Accessibility Access" : {
+    "Accessibility access" : {
 
     },
     "Acknowledgements" : {
@@ -72,10 +89,13 @@
     "Advanced" : {
 
     },
+    "ALPHA" : {
+
+    },
     "Animate windows being resized" : {
 
     },
-    "Animation Speed" : {
+    "Animation speed" : {
 
     },
     "Appearance" : {
@@ -96,6 +116,215 @@
     "Configure…" : {
 
     },
+    "Crisp Value Adjuster: Border Thickness" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Border thickness"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Bottom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Corner Radius" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Corner radius"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: External Bar" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "External bar"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: External Bar Description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Use this if you are using a custom menubar."
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Height" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Height"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Padding" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Padding"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Size Increment" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Size increment"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Size Increment Description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Used in size adjustment window actions"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: State Strip Size" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "State strip size"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Thickness" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Thickness"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Top" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Trigger Delay" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Trigger delay"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Width" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Width"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Window Gaps" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Window gaps"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: X" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "X"
+          }
+        }
+      }
+    },
+    "Crisp Value Adjuster: Y" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Y"
+          }
+        }
+      }
+    },
     "Current version: %@ (%@) %@" : {
       "localizations" : {
         "en" : {
@@ -106,20 +335,31 @@
         }
       }
     },
-    "Custom Accent Color" : {
+    "Custom accent color" : {
 
     },
-    "Custom Cycle" : {
+    "Custom cycle" : {
 
     },
-    "Custom Gradient color" : {
+    "Custom gradient color" : {
 
     },
-    "Custom Keybind" : {
+    "Custom keybind" : {
 
     },
-    "Custom Screen Padding" : {
+    "Custom screen padding" : {
 
+    },
+    "Default notification content" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You will now be notified when you unlock a new icon."
+          }
+        }
+      }
     },
     "Delete" : {
 
@@ -133,16 +373,19 @@
     "Done" : {
 
     },
-    "Double-click trigger key to trigger Loop" : {
+    "Double-click trigger key to trigger %@" : {
 
     },
-    "Excluded Applications" : {
+    "Excluded applications" : {
 
     },
     "Excluded Apps" : {
 
     },
     "Export" : {
+
+    },
+    "Fast" : {
 
     },
     "Feedback" : {
@@ -166,7 +409,7 @@
     "Halves" : {
 
     },
-    "Haptic Feedback" : {
+    "Haptic feedback" : {
 
     },
     "Hide Loop until direction is chosen" : {
@@ -184,6 +427,9 @@
     "Include development versions" : {
 
     },
+    "Instant" : {
+
+    },
     "Keybindings" : {
 
     },
@@ -191,6 +437,9 @@
 
     },
     "Launch at login" : {
+
+    },
+    "Left" : {
 
     },
     "license" : {
@@ -205,16 +454,10 @@
     "Loop more to unlock new icons! (You've looped %lld times!)" : {
 
     },
-    "Loop's icon" : {
+    "Measurement unit" : {
 
     },
-    "Loop's notification permissions are currently disabled." : {
-
-    },
-    "Measurement Unit" : {
-
-    },
-    "Middle-click to trigger Loop" : {
+    "Middle-click to trigger %@" : {
 
     },
     "MIT License" : {
@@ -229,22 +472,22 @@
     "No Excluded Applications" : {
 
     },
-    "No Keybinds" : {
+    "No keybinds" : {
 
     },
     "None" : {
 
     },
-    "Not Granted" : {
+    "Not granted" : {
 
     },
-    "Nothing to Cycle Through" : {
+    "Nothing to cycle through" : {
 
     },
     "Notify when new icons are unlocked" : {
 
     },
-    "Open Notification Settings" : {
+    "Open notification settings" : {
 
     },
     "Padding" : {
@@ -256,7 +499,7 @@
     "Please turn them on in System Settings." : {
 
     },
-    "Position Mode" : {
+    "Position mode" : {
 
     },
     "Press + to add a cycle item!" : {
@@ -268,13 +511,16 @@
     "Press + to add an application!" : {
 
     },
-    "Press a key..." : {
+    "Press a key…" : {
 
     },
     "Preview" : {
 
     },
     "Preview window size" : {
+
+    },
+    "px" : {
 
     },
     "Quarters" : {
@@ -304,22 +550,28 @@
     "Resizes window under cursor, and uses the frontmost window as backup." : {
 
     },
-    "Respect Stage Manager" : {
+    "Respect stage manager" : {
 
     },
-    "Restore Defaults" : {
+    "Restore defaults" : {
 
     },
     "Restore window frame on drag" : {
 
     },
+    "Right" : {
+
+    },
     "Screen Padding" : {
 
     },
-    "Screen Recording Access" : {
+    "Screen recording access" : {
 
     },
     "Screen Switching" : {
+
+    },
+    "sec" : {
 
     },
     "Selected icon:" : {
@@ -328,10 +580,16 @@
     "Send Feedback" : {
 
     },
-    "Set a trigger key..." : {
+    "Sending feedback will bring you to our \"New Issue\" GitHub page, where you can report a bug, request a feature & more!" : {
+
+    },
+    "Set a trigger key…" : {
 
     },
     "Settings…" : {
+
+    },
+    "Show" : {
 
     },
     "Show Preview when looping" : {
@@ -340,16 +598,22 @@
     "Show Radial Menu when looping" : {
 
     },
-    "Sizing Mode" : {
+    "Sizing mode" : {
 
     },
-    "Stage Manager" : {
+    "Smooth" : {
+
+    },
+    "Stage manager" : {
 
     },
     "That key is already used as your trigger key." : {
 
     },
     "That keybind is already being used by %@." : {
+
+    },
+    "That keybind is already being used by another custom keybind." : {
 
     },
     "The elegant, mouse-oriented window manager" : {
@@ -364,7 +628,10 @@
     "This preview is not to scale." : {
 
     },
-    "Tip: To use caps lock, remap it to control in System Settings!" : {
+    "Tip: To use Caps Lock, remap it to control in System Settings!" : {
+
+    },
+    "Trigger key" : {
 
     },
     "Trigger Key" : {
@@ -373,13 +640,13 @@
     "Updates" : {
 
     },
-    "Use Gradient" : {
+    "Use gradient" : {
 
     },
-    "Use MacOS Center" : {
+    "Use macOS Center" : {
 
     },
-    "Use System Accent Color" : {
+    "Use system accent color" : {
 
     },
     "Version %@ (%@) %@" : {
@@ -395,16 +662,16 @@
     "Vertical Thirds" : {
 
     },
-    "Window Padding" : {
+    "Window padding" : {
 
     },
-    "Window Position" : {
+    "Window position" : {
 
     },
-    "Window Size" : {
+    "Window size" : {
 
     },
-    "Window Snapping" : {
+    "Window snapping" : {
 
     },
     "Windows will not animate their resizes." : {

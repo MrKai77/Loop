@@ -18,10 +18,10 @@ struct CustomKeybindView: View {
         VStack {
             Form {
                 Section {
-                    TextField("Name", text: $action.name.bound, prompt: Text("Custom Keybind"))
+                    TextField("Name", text: $action.name.bound, prompt: Text("Custom keybind"))
                         .focused($focusedField, equals: "name")
 
-                    Picker("Measurement Unit", selection: $action.unit) {
+                    Picker("Measurement unit", selection: $action.unit) {
                         ForEach(CustomWindowActionUnit.allCases) { system in
                             system.label
                                 .tag(system as CustomWindowActionUnit?)
@@ -47,7 +47,7 @@ struct CustomKeybindView: View {
                 }
 
                 Section {
-                    Picker("Position Mode", selection: $action.positionMode) {
+                    Picker("Position mode", selection: $action.positionMode) {
                         ForEach(CustomWindowActionPositionMode.allCases) { system in
                             system.label
                                 .tag(system as CustomWindowActionPositionMode?)
@@ -56,7 +56,7 @@ struct CustomKeybindView: View {
 
                     if let positionMode = action.positionMode, positionMode == .coordinates {
                         CrispValueAdjuster(
-                            "X",
+                            .init(localized: .init("Crisp Value Adjuster: X", defaultValue: "X")),
                             value: Binding<Double>(
                                 get: {
                                     self.action.xPoint ?? 0
@@ -81,7 +81,7 @@ struct CustomKeybindView: View {
                         )
 
                         CrispValueAdjuster(
-                            "Y",
+                            .init(localized: .init("Crisp Value Adjuster: Y", defaultValue: "Y")),
                             value: Binding<Double>(
                                 get: {
                                     self.action.yPoint ?? 0
@@ -106,7 +106,7 @@ struct CustomKeybindView: View {
                         )
                     }
                 } header: {
-                    Text("Window Position")
+                    Text("Window position")
                 } footer: {
                     if let positionMode = action.positionMode, positionMode == .coordinates {
                         Text("This point determines the upper-left edge of the window.")
@@ -135,7 +135,7 @@ struct CustomKeybindView: View {
                                 )
                             ) {
                                 HStack {
-                                    Text("Use MacOS Center")
+                                    Text("Use macOS Center")
                                     if let moreInformation = WindowDirection.macOSCenter.moreInformation {
                                         Button(action: {
                                             self.showingInfo.toggle()
@@ -157,8 +157,8 @@ struct CustomKeybindView: View {
                     }
                 }
 
-                Section("Window Size") {
-                    Picker("Sizing Mode", selection: $action.sizeMode) {
+                Section("Window size") {
+                    Picker("Sizing mode", selection: $action.sizeMode) {
                         ForEach(CustomWindowActionSizeMode.allCases) { system in
                             system.label
                                 .tag(system as CustomWindowActionSizeMode?)
@@ -167,7 +167,7 @@ struct CustomKeybindView: View {
 
                     if let sizeMode = action.sizeMode, sizeMode == .custom {
                         CrispValueAdjuster(
-                            "Width",
+                            .init(localized: .init("Crisp Value Adjuster: Width", defaultValue: "Width")),
                             value: Binding<Double>(
                                 get: {
                                     self.action.width ?? 0
@@ -192,7 +192,7 @@ struct CustomKeybindView: View {
                         )
 
                         CrispValueAdjuster(
-                            "Height",
+                            .init(localized: .init("Crisp Value Adjuster: Height", defaultValue: "Height")),
                             value: Binding<Double>(
                                 get: {
                                     self.action.height ?? 0

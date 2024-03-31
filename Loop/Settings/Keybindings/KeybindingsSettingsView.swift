@@ -29,29 +29,29 @@ struct KeybindingsSettingsView: View {
                 Section("Trigger Key") {
                     VStack(alignment: .leading) {
                         HStack {
-                            Text("Trigger Key")
+                            Text("Trigger key")
                             Spacer()
                             TriggerKeycorder(self.$triggerKey)
                         }
 
                         if triggerKey == [.kVK_RightControl] {
-                            Text("Tip: To use caps lock, remap it to control in System Settings!")
+                            Text("Tip: To use Caps Lock, remap it to control in System Settings!")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
                     }
 
                     CrispValueAdjuster(
-                        "Trigger Delay",
+                        .init(localized: .init("Crisp Value Adjuster: Trigger Delay", defaultValue: "Trigger delay")),
                         value: $triggerDelay,
                         sliderRange: 0...1,
-                        postscript: "sec",
+                        postscript: .init(localized: .init("sec", defaultValue: "sec")),
                         step: 0.1,
                         lowerClamp: true
                     )
 
-                    Toggle("Double-click trigger key to trigger Loop", isOn: $doubleClickToTrigger)
-                    Toggle("Middle-click to trigger Loop", isOn: $middleClickTriggersLoop)
+                    Toggle("Double-click trigger key to trigger \(Bundle.main.appName)", isOn: $doubleClickToTrigger)
+                    Toggle("Middle-click to trigger \(Bundle.main.appName)", isOn: $middleClickTriggersLoop)
                 }
 
                 Section {
@@ -60,7 +60,7 @@ struct KeybindingsSettingsView: View {
                             HStack {
                                 Spacer()
                                 VStack {
-                                    Text("No Keybinds")
+                                    Text("No keybinds")
                                         .font(.title3)
                                     Text("Press + to add a keybind!")
                                         .font(.caption)
@@ -161,7 +161,7 @@ struct KeybindingsSettingsView: View {
                             WindowAction.exportPrompt()
                         }
 
-                        Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
+                        Button("Restore defaults", systemImage: "arrow.counterclockwise") {
                             _keybinds.reset()
                             _triggerKey.reset()
                             _doubleClickToTrigger.reset()

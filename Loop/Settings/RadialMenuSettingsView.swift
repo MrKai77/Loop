@@ -41,7 +41,7 @@ struct RadialMenuSettingsView: View {
 
             Section {
                 CrispValueAdjuster(
-                    "Corner Radius",
+                    .init(localized: .init("Crisp Value Adjuster: Corner Radius", defaultValue: "Corner radius")),
                     value: Binding(
                         get: {
                             radialMenuCornerRadius
@@ -52,12 +52,12 @@ struct RadialMenuSettingsView: View {
                         }
                     ),
                     sliderRange: 30...50,
-                    postscript: "px",
+                    postscript: .init(localized: .init("px", defaultValue: "px")),
                     lowerClamp: true,
                     upperClamp: true
                 )
                 CrispValueAdjuster(
-                    "Thickness",
+                    .init(localized: .init("Crisp Value Adjuster: Thickness", defaultValue: "Thickness")),
                     value: Binding(
                         get: {
                             radialMenuThickness
@@ -68,7 +68,7 @@ struct RadialMenuSettingsView: View {
                         }
                     ),
                     sliderRange: 10...35,
-                    postscript: "px",
+                    postscript: .init(localized: .init("px", defaultValue: "px")),
                     lowerClamp: true,
                     upperClamp: true
                 )

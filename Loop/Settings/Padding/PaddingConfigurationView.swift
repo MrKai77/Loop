@@ -15,7 +15,7 @@ struct PaddingConfigurationView: View {
         VStack {
             Form {
                 Section("Padding") {
-                    Toggle("Custom Screen Padding", isOn: $paddingModel.configureScreenPadding)
+                    Toggle("Custom screen padding", isOn: $paddingModel.configureScreenPadding)
                 }
 
                 Section(content: {
@@ -38,55 +38,55 @@ struct PaddingConfigurationView: View {
                 if paddingModel.configureScreenPadding {
                     Section {
                         CrispValueAdjuster(
-                            "Window Gaps",
+                            .init(localized: .init("Crisp Value Adjuster: Window Gaps", defaultValue: "Window gaps")),
                             value: $paddingModel.window,
                             sliderRange: 0...100,
-                            postscript: "px",
+                            postscript: .init(localized: .init("px", defaultValue: "px")),
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
-                            "External Bar",
-                            description: "Use this if you are using a custom menubar.",
+                            .init(localized: .init("Crisp Value Adjuster: External Bar", defaultValue: "External bar")),
+                            description: .init(localized: .init("Crisp Value Adjuster: External Bar Description", defaultValue: "Use this if you are using a custom menubar.")),
                             value: $paddingModel.externalBar,
                             sliderRange: 0...100,
-                            postscript: "px",
+                            postscript: .init(localized: .init("px", defaultValue: "px")),
                             lowerClamp: true
                         )
                     }
 
                     Section("Screen Padding") {
                         CrispValueAdjuster(
-                            "Top",
+                            .init(localized: .init("Crisp Value Adjuster: Top", defaultValue: "Top")),
                             value: $paddingModel.top,
                             sliderRange: 0...100,
-                            postscript: "px",
+                            postscript: .init(localized: .init("px", defaultValue: "px")),
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
-                            "Bottom",
+                            .init(localized: .init("Crisp Value Adjuster: Bottom", defaultValue: "Bottom")),
                             value: $paddingModel.bottom,
                             sliderRange: 0...100,
-                            postscript: "px",
+                            postscript: .init(localized: .init("px", defaultValue: "px")),
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
-                            "Right",
+                            .init(localized: .init("Crisp Value Adjuster: Right", defaultValue: "Right")),
                             value: $paddingModel.right,
                             sliderRange: 0...100,
-                            postscript: "px",
+                            postscript: .init(localized: .init("px", defaultValue: "px")),
                             lowerClamp: true
                         )
                         CrispValueAdjuster(
-                            "Left",
+                            .init(localized: .init("Crisp Value Adjuster: Left", defaultValue: "Left")),
                             value: $paddingModel.left,
                             sliderRange: 0...100,
-                            postscript: "px",
+                            postscript: .init(localized: .init("px", defaultValue: "px")),
                             lowerClamp: true
                         )
                     }
                 } else {
                     CrispValueAdjuster(
-                        "Padding",
+                        .init(localized: .init("Crisp Value Adjuster: Padding", defaultValue: "Padding")),
                         value: Binding(
                             get: {
                                 paddingModel.window
@@ -100,7 +100,7 @@ struct PaddingConfigurationView: View {
                             }
                         ),
                         sliderRange: 0...100,
-                        postscript: "px",
+                        postscript: .init(localized: .init("px", defaultValue: "px")),
                         lowerClamp: true
                     )
                 }

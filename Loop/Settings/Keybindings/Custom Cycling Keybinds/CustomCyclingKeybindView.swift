@@ -20,7 +20,7 @@ struct CustomCyclingKeybindView: View {
         VStack {
             Form {
                 Section {
-                    TextField("Name", text: $action.name.bound, prompt: Text("Custom Cycle"))
+                    TextField("Name", text: $action.name.bound, prompt: Text("Custom cycle"))
                         .focused($focusedField, equals: "name")
                 }
 
@@ -30,7 +30,7 @@ struct CustomCyclingKeybindView: View {
                             HStack {
                                 Spacer()
                                 VStack {
-                                    Text("Nothing to Cycle Through")
+                                    Text("Nothing to cycle through")
                                         .font(.title3)
                                     Text("Press + to add a cycle item!")
                                         .font(.caption)

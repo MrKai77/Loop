@@ -17,9 +17,9 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
 
     var name: String {
         switch self {
-        case .smooth:   "Smooth"
-        case .fast:     "Fast"
-        case .instant:  "Instant"
+        case .smooth:   .init(localized: .init("Smooth", defaultValue: "Smooth"))
+        case .fast:     .init(localized: .init("Fast", defaultValue: "Fast"))
+        case .instant:  .init(localized: .init("Instant", defaultValue: "Instant"))
         }
     }
 

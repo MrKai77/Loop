@@ -34,7 +34,7 @@ struct TriggerKeycorder: View {
         }, label: {
             HStack(spacing: 5) {
                 if self.selectionKey.isEmpty {
-                    Text(self.isActive ? "Set a trigger key..." : "None")
+                    Text(self.isActive ? "Set a trigger key…" : "None")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .padding(5)
                         .padding(.horizontal, 8)
@@ -53,7 +53,7 @@ struct TriggerKeycorder: View {
                 } else {
                     ForEach(self.selectionKey.sorted(), id: \.self) { key in
                         // swiftlint:disable:next line_length
-                        Text("\(key.isOnRightSide ? "Right" : "Left") \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
+                        Text("\(key.isOnRightSide ? String(localized: .init("Right", defaultValue: "Right")) : String(localized: .init("Left", defaultValue: "Left"))) \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding(5)
                             .background {
