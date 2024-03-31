@@ -97,16 +97,6 @@
         }
       }
     },
-    "%@'s icon" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@的图标"
-          }
-        }
-      }
-    },
     "%@'s notification permissions are currently disabled." : {
       "localizations" : {
         "zh-Hans" : {
@@ -157,7 +147,7 @@
         }
       }
     },
-    "Accent color" : {
+    "Accent Color" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -256,7 +246,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在调整窗口大小时显示动画。"
+            "value" : "在调整窗口大小时显示动画"
           }
         }
       }
@@ -270,6 +260,9 @@
           }
         }
       }
+    },
+    "App Icon" : {
+
     },
     "Appearance" : {
       "localizations" : {
@@ -528,13 +521,13 @@
         }
       }
     },
-    "Crisp Value Adjuster: State Strip Size" : {
+    "Crisp Value Adjuster: Stage Strip Size" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "State strip size"
+            "value" : "Stage strip size"
           }
         },
         "zh-Hans" : {
@@ -800,12 +793,12 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "连按两次触发键以触发%@。"
+            "value" : "连按两次触发键以触发%@"
           }
         }
       }
     },
-    "Excluded applications" : {
+    "Excluded Applications" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1653,7 +1646,7 @@
         }
       }
     },
-    "Respect stage manager" : {
+    "Respect Stage Manager" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2069,7 +2062,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%@ places windows slightly above the absolute center, which can be found more ergnonomic."
+            "value" : "%@ places windows slightly above the absolute center, which can be found more ergonomic."
           }
         },
         "zh-Hans" : {
@@ -2148,13 +2141,13 @@
         }
       }
     },
-    "Window Direction/Name: Bottom THird" : {
+    "Window Direction/Name: Bottom Third" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Bottom THird"
+            "value" : "Bottom Third"
           }
         },
         "zh-Hans" : {
@@ -2352,13 +2345,13 @@
         }
       }
     },
-    "Window Direction/Name: Intiial Frame" : {
+    "Window Direction/Name: Initial Frame" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Intiial Frame"
+            "value" : "Initial Frame"
           }
         },
         "zh-Hans" : {
@@ -2386,13 +2379,13 @@
         }
       }
     },
-    "Window Direction/Name: Left Hald" : {
+    "Window Direction/Name: Left Half" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Left Hald"
+            "value" : "Left Half"
           }
         },
         "zh-Hans" : {

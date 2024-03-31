@@ -102,7 +102,7 @@ struct GeneralSettingsView: View {
                 }
             }
 
-            Section("\(Bundle.main.appName)'s icon") {
+            Section("App Icon") {
                 VStack(alignment: .leading) {
                     Picker("Selected icon:", selection: $currentIcon) {
                         ForEach(IconManager.returnUnlockedIcons(), id: \.self) { icon in
@@ -180,7 +180,7 @@ struct GeneralSettingsView: View {
                 })
             }
 
-            Section("Accent color") {
+            Section("Accent Color") {
                 Toggle("Use system accent color", isOn: $useSystemAccentColor)
 
                 if !useSystemAccentColor {

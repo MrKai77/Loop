@@ -23,7 +23,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case initialFrame = "InitialFrame"
     case hide = "Hide"
     case minimize = "Minimize"
-    case macOSCenter = "macOSCenter"
+    case macOSCenter = "MacOSCenter"
     case center = "Center"
 
     // Halves
@@ -217,7 +217,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
         if self == .macOSCenter {
             result = .init(localized: .init("Window Direction/More Information: macOS Center", defaultValue: """
-\(self.name) places windows slightly above the absolute center, which can be found more ergnonomic.
+\(self.name) places windows slightly above the absolute center, which can be found more ergonomic.
 """))
         }
 
@@ -293,7 +293,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .undo:
                 .init(localized: .init("Window Direction/Name: Undo", defaultValue: "Undo"))
         case .initialFrame:
-                .init(localized: .init("Window Direction/Name: Intiial Frame", defaultValue: "Intiial Frame"))
+                .init(localized: .init("Window Direction/Name: Initial Frame", defaultValue: "Initial Frame"))
         case .hide:
                 .init(localized: .init("Window Direction/Name: Hide", defaultValue: "Hide"))
         case .minimize:
@@ -309,7 +309,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .bottomHalf:
                 .init(localized: .init("Window Direction/Name: Bottom Half", defaultValue: "Bottom Half"))
         case .leftHalf:
-                .init(localized: .init("Window Direction/Name: Left Hald", defaultValue: "Left Hald"))
+                .init(localized: .init("Window Direction/Name: Left Half", defaultValue: "Left Half"))
         case .topLeftQuarter:
                 .init(localized: .init("Window Direction/Name: Top Left Quarter", defaultValue: "Top Left Quarter"))
         case .topRightQuarter:
@@ -335,7 +335,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird:
                 .init(localized: .init("Window Direction/Name: Vertical Center Third", defaultValue: "Vertical Center Third"))
         case .bottomThird:
-                .init(localized: .init("Window Direction/Name: Bottom THird", defaultValue: "Bottom THird"))
+                .init(localized: .init("Window Direction/Name: Bottom Third", defaultValue: "Bottom Third"))
         case .bottomTwoThirds:
                 .init(localized: .init("Window Direction/Name: Bottom Two Thirds", defaultValue: "Bottom Two Thirds"))
         case .nextScreen:

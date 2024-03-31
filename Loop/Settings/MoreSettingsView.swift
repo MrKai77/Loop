@@ -59,10 +59,10 @@ struct MoreSettingsView: View {
             })
 
             Section("Stage Manager") {
-                Toggle("Respect stage manager", isOn: $respectStageManager)
+                Toggle("Respect Stage Manager", isOn: $respectStageManager)
 
                 CrispValueAdjuster(
-                    .init(localized: .init("Crisp Value Adjuster: State Strip Size", defaultValue: "State strip size")),
+                    .init(localized: .init("Crisp Value Adjuster: Stage Strip Size", defaultValue: "Stage strip size")),
                     value: $stageStripSize,
                     sliderRange: 50...200,
                     postscript: .init(localized: .init("px", defaultValue: "px")),
