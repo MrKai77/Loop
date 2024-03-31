@@ -62,10 +62,10 @@ struct MoreSettingsView: View {
                 Toggle("Respect Stage Manager", isOn: $respectStageManager)
 
                 CrispValueAdjuster(
-                    "Stage Strip Size",
+                    .init(localized: .init("Crisp Value Adjuster: Stage Strip Size", defaultValue: "Stage strip size")),
                     value: $stageStripSize,
                     sliderRange: 50...200,
-                    postscript: "px",
+                    postscript: .init(localized: .init("px", defaultValue: "px")),
                     lowerClamp: true
                 )
                 .disabled(!respectStageManager)
@@ -75,7 +75,7 @@ struct MoreSettingsView: View {
                 Toggle(isOn: $animateWindowResizes) {
                     HStack {
                         Text("Animate windows being resized")
-                        UnstableIndicator("ALPHA", color: .orange)
+                        UnstableIndicator(.init(localized: .init("ALPHA", defaultValue: "ALPHA")), color: .orange)
                     }
                 }
                 .onChange(of: animateWindowResizes) { _ in
@@ -84,16 +84,16 @@ struct MoreSettingsView: View {
                     }
                 }
 
-                Toggle("Hide Loop until direction is chosen", isOn: $hideUntilDirectionIsChosen)
+                Toggle("Hide menu until direction is chosen", isOn: $hideUntilDirectionIsChosen)
 
-                Toggle("Haptic Feedback", isOn: $hapticFeedback)
+                Toggle("Haptic feedback", isOn: $hapticFeedback)
 
                 CrispValueAdjuster(
-                    "Size Increment",
-                    description: "Used in size adjustment window actions",
+                    .init(localized: .init("Crisp Value Adjuster: Size Increment", defaultValue: "Size increment")),
+                    description: .init(localized: .init("Crisp Value Adjuster: Size Increment Description", defaultValue: "Used in size adjustment window actions")),
                     value: $sizeIncrement,
                     sliderRange: 5...50,
-                    postscript: "px",
+                    postscript: .init(localized: .init("px", defaultValue: "px")),
                     step: 4.5,
                     lowerClamp: true
                 )
@@ -101,9 +101,9 @@ struct MoreSettingsView: View {
 
             Section(content: {
                 HStack {
-                    Text("Accessibility Access")
+                    Text("Accessibility access")
                     Spacer()
-                    Text(isAccessibilityAccessGranted ? "Granted" : "Not Granted")
+                    Text(isAccessibilityAccessGranted ? .init(localized: .init("Granted", defaultValue: "Granted")) : .init(localized: .init("Not granted", defaultValue: "Not granted")))
                     Circle()
                         .frame(width: 8, height: 8)
                         .padding(.trailing, 5)
@@ -113,9 +113,9 @@ struct MoreSettingsView: View {
 
                 VStack(alignment: .leading) {
                     HStack {
-                        Text("Screen Recording Access")
+                        Text("Screen recording access")
                         Spacer()
-                        Text(isScreenRecordingAccessGranted ? "Granted" : "Not Granted")
+                        Text(isAccessibilityAccessGranted ? .init(localized: .init("Granted", defaultValue: "Granted")) : .init(localized: .init("Not granted", defaultValue: "Not granted")))
                         Circle()
                             .frame(width: 8, height: 8)
                             .padding(.trailing, 5)
@@ -154,10 +154,9 @@ struct MoreSettingsView: View {
 
             Section("Feedback") {
                 HStack {
-                    Text(
-                        "Sending feedback will bring you to our \"New Issue\" GitHub page, " +
-                        "where you can report a bug, request a feature & more!"
-                    )
+                    Text("""
+Sending feedback will bring you to our \"New Issue\" GitHub page, where you can report a bug, request a feature & more!
+""")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 

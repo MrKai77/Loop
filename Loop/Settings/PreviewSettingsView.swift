@@ -21,7 +21,7 @@ struct PreviewSettingsView: View {
             Section("Appearance") {
                 Toggle(isOn: $previewVisibility) {
                     VStack(alignment: .leading) {
-                        Text("Show Preview when looping")
+                        Text("Show preview when looping")
 
                         if !previewVisibility {
                             VStack(alignment: .leading) {
@@ -52,26 +52,26 @@ struct PreviewSettingsView: View {
 
             Section {
                 CrispValueAdjuster(
-                    "Padding",
+                    .init(localized: .init("Crisp Value Adjuster: Padding", defaultValue: "Padding")),
                     value: $previewPadding,
                     sliderRange: 0...20,
-                    postscript: "px",
+                    postscript: .init(localized: .init("px", defaultValue: "px")),
                     lowerClamp: true,
                     upperClamp: true
                 )
                 CrispValueAdjuster(
-                    "Corner Radius",
+                    .init(localized: .init("Crisp Value Adjuster: Corner Radius", defaultValue: "Corner radius")),
                     value: $previewCornerRadius,
                     sliderRange: 0...20,
-                    postscript: "px",
+                    postscript: .init(localized: .init("px", defaultValue: "px")),
                     lowerClamp: true,
                     upperClamp: true
                 )
                 CrispValueAdjuster(
-                    "Border Thickness",
+                    .init(localized: .init("Crisp Value Adjuster: Border Thickness", defaultValue: "Border thickness")),
                     value: $previewBorderThickness,
                     sliderRange: 0...10,
-                    postscript: "px",
+                    postscript: .init(localized: .init("px", defaultValue: "px")),
                     lowerClamp: true,
                     upperClamp: true
                 )

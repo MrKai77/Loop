@@ -120,7 +120,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
     var stepperView: some View {
         HStack {
             TextField(
-                "",
+                .init(""),
                 value: Binding(
                     get: {
                         self.value
@@ -160,7 +160,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                     Spacer()
 
                     Stepper(
-                        "",
+                        .init(""),
                         value: Binding(
                             get: {
                                 self.value

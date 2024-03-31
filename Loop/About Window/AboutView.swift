@@ -90,7 +90,7 @@ struct AboutView: View {
 
             Spacer()
 
-            Text("The elegant, mouse-oriented window manager")
+            Text("The elegant, mouse-oriented window manager.")
                 .multilineTextAlignment(.center)
 
             Spacer()
@@ -98,7 +98,7 @@ struct AboutView: View {
             Button {
                 openURL(URL(string: "https://github.com/MrKai77/Loop")!)
             } label: {
-                Text("Github")
+                Text("GitHub")
                     .foregroundColor(.primary)
                     .frame(maxWidth: .infinity)
             }
@@ -124,14 +124,14 @@ struct AboutView: View {
                             }, label: {
                                 Image(systemName: "safari")
                             })
-                            .help("link")
+                            .help("Link")
 
                             Button(action: {
                                 openURL(packages[idx].license)
                             }, label: {
                                 Image(systemName: "scroll")
                             })
-                            .help("license")
+                            .help("License")
                         }
                         .frame(width: 180)
                         .buttonStyle(.link)

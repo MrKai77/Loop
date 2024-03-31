@@ -29,8 +29,8 @@ class PermissionsManager {
                 return true
             }
             let alert = NSAlert()
-            alert.messageText = "\(Bundle.main.appName) Needs Accessibility Permissions"
-            alert.informativeText = "Please grant access to be able to resize windows."
+            alert.messageText = .init(localized: .init("Accessibility Request: Title", defaultValue: "\(Bundle.main.appName) Needs Accessibility Permissions"))
+            alert.informativeText = .init(localized: .init("Accessibility Request: Content", defaultValue: "Please grant access to be able to resize windows."))
             alert.runModal()
 
             let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]
@@ -51,9 +51,10 @@ class PermissionsManager {
             }
 
             let alert = NSAlert()
-            alert.messageText = "\(Bundle.main.appName) Needs Screen Recording Permissions"
-            alert.informativeText = "Screen recording permissions are required to animate windows being resized. "
-                                  + "\(Bundle.main.appName) may need to be relaunched to reflect these changes."
+            alert.messageText = .init(localized: .init("Screen Recording Request: Title", defaultValue: "\(Bundle.main.appName) Needs Screen Recording Permissions"))
+            alert.informativeText = .init(localized: .init("Screen Recording Request: Content", defaultValue: """
+Screen recording permissions are required to animate windows being resized. \(Bundle.main.appName) may need to be relaunched to reflect these changes.
+"""))
             alert.runModal()
 
             CGRequestScreenCaptureAccess()

@@ -127,7 +127,7 @@ struct ExcludeListSettingsView: View {
                 } header: {
                     VStack(alignment: .leading) {
                         Text("Excluded Applications")
-                        Text("Applications in the exclude list are ignored by Loop.")
+                        Text("Applications in the exclude list are ignored by \(Bundle.main.appName).")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

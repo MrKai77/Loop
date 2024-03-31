@@ -50,7 +50,7 @@ struct GeneralSettingsView: View {
                     Toggle("Hide menubar icon", isOn: $hideMenuBarIcon)
 
                     if hideMenuBarIcon {
-                        Text("Re-open Loop to see this window.")
+                        Text("Re-open \(Bundle.main.appName) to see this window.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .textSelection(.enabled)
@@ -59,10 +59,10 @@ struct GeneralSettingsView: View {
             }
 
             Section {
-                Toggle("Window Snapping", isOn: $windowSnapping)
+                Toggle("Window snapping", isOn: $windowSnapping)
 
                 HStack {
-                    Text("Window Padding")
+                    Text("Window padding")
                     Spacer()
                     Button("Configure…") {
                         self.isConfiguringPadding = true
@@ -95,14 +95,14 @@ struct GeneralSettingsView: View {
             }
 
             Section {
-                Picker("Animation Speed", selection: $animationConfiguration) {
+                Picker("Animation speed", selection: $animationConfiguration) {
                     ForEach(AnimationConfiguration.allCases) { configuration in
                         Text(configuration.name)
                     }
                 }
             }
 
-            Section("Loop's icon") {
+            Section("App Icon") {
                 VStack(alignment: .leading) {
                     Picker("Selected icon:", selection: $currentIcon) {
                         ForEach(IconManager.returnUnlockedIcons(), id: \.self) { icon in
@@ -142,8 +142,8 @@ struct GeneralSettingsView: View {
                         set: {
                             if $0 {
                                 AppDelegate.sendNotification(
-                                    "Loop",
-                                    "You will now be notified when you unlock a new icon."
+                                    Bundle.main.appName,
+                                    .init(localized: .init("Default notification content", defaultValue: "You will now be notified when you unlock a new icon."))
                                 )
 
                                 let areNotificationsEnabled = AppDelegate.areNotificationsEnabled()
@@ -167,9 +167,9 @@ struct GeneralSettingsView: View {
                          arrowEdge: .bottom,
                          content: {
                     VStack(alignment: .center) {
-                        Text("Loop's notification permissions are currently disabled.")
+                        Text("\(Bundle.main.appName)'s notification permissions are currently disabled.")
                         Text("Please turn them on in System Settings.")
-                        Button("Open Notification Settings") {
+                        Button("Open notification settings") {
                             NSWorkspace.shared.open(
                                 URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension")!
                             )
@@ -181,16 +181,16 @@ struct GeneralSettingsView: View {
             }
 
             Section("Accent Color") {
-                Toggle("Use System Accent Color", isOn: $useSystemAccentColor)
+                Toggle("Use system accent color", isOn: $useSystemAccentColor)
 
                 if !useSystemAccentColor {
-                    ColorPicker("Custom Accent Color", selection: $customAccentColor, supportsOpacity: false)
+                    ColorPicker("Custom accent color", selection: $customAccentColor, supportsOpacity: false)
                 }
 
-                Toggle("Use Gradient", isOn: $useGradient)
+                Toggle("Use gradient", isOn: $useGradient)
 
                 if !useSystemAccentColor && useGradient {
-                    ColorPicker("Custom Gradient color", selection: $gradientColor, supportsOpacity: false)
+                    ColorPicker("Custom gradient color", selection: $gradientColor, supportsOpacity: false)
                         .foregroundColor(
                             useGradient ? (useSystemAccentColor ? .secondary : nil) : .secondary
                         )

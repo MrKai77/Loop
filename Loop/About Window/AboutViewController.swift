@@ -14,7 +14,7 @@ class AboutViewController {
         if aboutWindowController == nil {
             let window = NSWindow()
             window.styleMask = [.closable, .titled, .fullSizeContentView]
-            window.title = "About \(Bundle.main.appName)"
+            window.title = .init(localized: .init("About", defaultValue: "About \(Bundle.main.appName)"))
             window.contentView = NSHostingView(rootView: AboutView())
             window.titlebarAppearsTransparent = true
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true

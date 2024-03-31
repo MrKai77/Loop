@@ -162,9 +162,9 @@ struct KeybindCustomizationViewItem: View {
                 keybind.direction.icon
 
                 if keybind.direction == .custom {
-                    Text(keybind.name ?? "Custom Keybind")
+                    Text(keybind.name ?? .init(localized: .init("Custom Keybind", defaultValue: "Custom Keybind")))
                 } else if keybind.direction == .cycle {
-                    Text(keybind.name ?? "Custom Cycle")
+                    Text(keybind.name ?? .init(localized: .init("Custom Cycle", defaultValue: "Custom Cycle")))
                 } else {
                     Text(keybind.direction.name)
                 }

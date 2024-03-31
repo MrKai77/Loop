@@ -49,22 +49,22 @@ extension Defaults.Keys {
         WindowAction(.maximize, keybind: [.kVK_Space]),
         WindowAction(.center, keybind: [.kVK_Return]),
 
-        WindowAction("Top Cycle", [
+        WindowAction(.init(localized: .init("Top Cycle", defaultValue: "Top Cycle")), [
             .init(.topHalf),
             .init(.topThird),
             .init(.topTwoThirds)
         ], [.kVK_UpArrow]),
-        WindowAction("Bottom Cycle", [
+        WindowAction(.init(localized: .init("Bottom Cycle", defaultValue: "Bottom Cycle")), [
             .init(.bottomHalf),
             .init(.bottomThird),
             .init(.bottomTwoThirds)
         ], [.kVK_DownArrow]),
-        WindowAction("Right Cycle", [
+        WindowAction(.init(localized: .init("Right Cycle", defaultValue: "Right Cycle")), [
             .init(.rightHalf),
             .init(.rightThird),
             .init(.rightTwoThirds)
         ], [.kVK_RightArrow]),
-        WindowAction("Left Cycle", [
+        WindowAction(.init(localized: .init("Left Cycle", defaultValue: "Left Cycle")), [
             .init(.leftHalf),
             .init(.leftThird),
             .init(.leftTwoThirds)
