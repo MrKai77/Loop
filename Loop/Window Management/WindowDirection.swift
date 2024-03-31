@@ -190,28 +190,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         return fillActions.contains(self)
     }
 
-    /*
-    var name: String {
-        var result = ""
-        for (idx, char) in self.rawValue.enumerated() {
-            if idx > 0,
-               char.isUppercase,
-               let next = self.rawValue.index(
-                self.rawValue.startIndex,
-                offsetBy: idx + 1,
-                limitedBy: self.rawValue.endIndex
-               ) {
-                if self.rawValue[next].isLowercase {
-                    result.append(" ")
-                }
-            }
-            result.append(char)
-        }
-
-        return result
-    }
-     */
-
     static func processSnap(
         mouseLocation: CGPoint,
         currentDirection: WindowDirection,
