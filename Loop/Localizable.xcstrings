@@ -236,7 +236,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不稳定"
+            "value" : "早期测试功能"
           }
         }
       }
@@ -1422,6 +1422,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有循环项"
+          }
+        }
+      }
+    },
+    "Notification/Set Icon: Action" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set Current Icon"
           }
         }
       }

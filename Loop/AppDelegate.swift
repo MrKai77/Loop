@@ -119,7 +119,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     private static func registerNotificationCategories() {
         let setIconAction = UNNotificationAction(
             identifier: "setIconAction",
-            title: "Set Current Icon",
+            title: .init(localized: .init("Notification/Set Icon: Action", defaultValue: "Set Current Icon")),
             options: .destructive
         )
         let notificationCategory = UNNotificationCategory(
