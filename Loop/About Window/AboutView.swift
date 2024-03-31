@@ -80,7 +80,9 @@ struct AboutView: View {
                         forType: NSPasteboard.PasteboardType.string
                     )
                 }, label: {
-                    let versionText = "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                    let versionText = String(
+                        localized: "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                    )
                     Text("\(versionText) \(Image(systemName: "doc.on.clipboard"))")
                         .font(.caption2)
                         .foregroundColor(.secondary)

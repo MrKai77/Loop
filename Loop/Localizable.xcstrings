@@ -652,18 +652,18 @@
         }
       }
     },
-    "Current version: %@ (%@) %@" : {
+    "Current version: %@ (%@)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Current version: %1$@ (%2$@) %3$@"
+            "value" : "Current version: %1$@ (%2$@)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当前版本：%1$@（%2$@）%3$@"
+            "value" : "当前版本：%1$@（%2$@）"
           }
         }
       }
@@ -2054,18 +2054,18 @@
         }
       }
     },
-    "Version %@ (%@) %@" : {
+    "Version %@ (%@)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Version %1$@ (%2$@) %3$@"
+            "value" : "Version %1$@ (%2$@)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "版本%1$@（%2$@）%3$@"
+            "value" : "版本%1$@（%2$@）"
           }
         }
       }

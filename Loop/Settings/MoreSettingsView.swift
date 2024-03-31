@@ -39,7 +39,9 @@ struct MoreSettingsView: View {
                                 forType: NSPasteboard.PasteboardType.string
                             )
                         }, label: {
-                            let versionText = "Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                            let versionText = String(
+                                localized: "Current version: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                            )
                             HStack {
                                 Text("\(versionText) \(Image(systemName: "doc.on.clipboard"))")
                                     .font(.caption)

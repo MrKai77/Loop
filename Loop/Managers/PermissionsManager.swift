@@ -71,8 +71,8 @@ class PermissionsManager {
                 localized: .init(
                     "Screen Recording Request: Content",
                     defaultValue: """
-                    Screen recording permissions are required to animate windows being resized. \(Bundle.main.appName) may need to be relaunched to reflect these changes.
-                    """
+Screen recording permissions are required to animate windows being resized. \(Bundle.main.appName) may need to be relaunched to reflect these changes.
+"""
                 )
             )
             alert.runModal()
