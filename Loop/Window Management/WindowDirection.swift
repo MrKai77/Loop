@@ -216,7 +216,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         var result: String?
 
         if self == .macOSCenter {
-            result = .init(localized: .init("Window Direction/macOS Center: More Information", defaultValue: """
+            result = .init(localized: .init("Window Direction/More Information: macOS Center", defaultValue: """
 \(self.name) places windows slightly above the absolute center, which can be found more ergnonomic.
 """))
         }

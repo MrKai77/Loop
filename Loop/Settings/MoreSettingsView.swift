@@ -58,7 +58,7 @@ struct MoreSettingsView: View {
                 }
             })
 
-            Section("Stage manager") {
+            Section("Stage Manager") {
                 Toggle("Respect stage manager", isOn: $respectStageManager)
 
                 CrispValueAdjuster(
@@ -84,7 +84,7 @@ struct MoreSettingsView: View {
                     }
                 }
 
-                Toggle("Hide Loop until direction is chosen", isOn: $hideUntilDirectionIsChosen)
+                Toggle("Hide menu until direction is chosen", isOn: $hideUntilDirectionIsChosen)
 
                 Toggle("Haptic feedback", isOn: $hapticFeedback)
 

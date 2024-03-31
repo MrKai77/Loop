@@ -147,7 +147,7 @@ struct Keycorder: View {
 
                 if (self.selectionKeybind.count + self.triggerKey.count) >= keyLimit {
                     self.errorMessage = Text(
-                        "You can only use up to \(keyLimit) keys in a keybind.\n(This includes your trigger key)"
+                        "You can only use up to \(keyLimit) keys in a keybind, including the trigger key."
                     )
                     self.shouldShake.toggle()
                     self.shouldError = true

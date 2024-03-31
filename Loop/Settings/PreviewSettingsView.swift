@@ -21,7 +21,7 @@ struct PreviewSettingsView: View {
             Section("Appearance") {
                 Toggle(isOn: $previewVisibility) {
                     VStack(alignment: .leading) {
-                        Text("Show Preview when looping")
+                        Text("Show preview when looping")
 
                         if !previewVisibility {
                             VStack(alignment: .leading) {

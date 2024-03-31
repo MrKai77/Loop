@@ -18,7 +18,7 @@ struct RadialMenuSettingsView: View {
     var body: some View {
         Form {
             Section("Appearance") {
-                Toggle("Show Radial Menu when looping", isOn: $radialMenuVisibility)
+                Toggle("Show radial menu when looping", isOn: $radialMenuVisibility)
 
                 Toggle("Disable cursor interaction", isOn: $disableCursorInteraction)
                     .disabled(!radialMenuVisibility)

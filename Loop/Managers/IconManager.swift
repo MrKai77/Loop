@@ -41,7 +41,7 @@ class IconManager {
             iconName: "AppIcon-Holo",
             unlockTime: 25,
             unlockMessage: .init(localized: .init("Icon Unlock Message: Holo", defaultValue: """
-You've already looped 25 times! As a reward, here's new icon: Holo. Continue to loop more to unlock new icons!
+You've already looped 25 times! As a reward, here's new icon: \(.init(localized: .init("Icon Name: Holo", defaultValue: "Holo"))). Continue to loop more to unlock new icons!
 """))
         ),
         Icon(
@@ -98,7 +98,7 @@ You've already looped 25 times! As a reward, here's new icon: Holo. Continue to 
             iconName: "AppIcon-Loop Master",
             unlockTime: 5000,
             unlockMessage: .init(localized: .init("Icon Unlock Message: Loop Master", defaultValue: """
-5000 loops conquered! The universe has witnessed the birth of a Loop Master! Enjoy your well-deserved reward: a brand-new icon!
+5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!
 """))
         )
     ]

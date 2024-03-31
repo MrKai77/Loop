@@ -50,7 +50,7 @@ struct GeneralSettingsView: View {
                     Toggle("Hide menubar icon", isOn: $hideMenuBarIcon)
 
                     if hideMenuBarIcon {
-                        Text("Re-open Loop to see this window.")
+                        Text("Re-open \(Bundle.main.appName) to see this window.")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .textSelection(.enabled)

@@ -161,7 +161,7 @@ struct KeybindingsSettingsView: View {
                             WindowAction.exportPrompt()
                         }
 
-                        Button("Restore defaults", systemImage: "arrow.counterclockwise") {
+                        Button("Restore Defaults", systemImage: "arrow.counterclockwise") {
                             _keybinds.reset()
                             _triggerKey.reset()
                             _doubleClickToTrigger.reset()
