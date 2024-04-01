@@ -7,6 +7,7 @@
 
 import Foundation
 import Sparkle
+import Defaults
 
 class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
     private var updater: SPUUpdater?
@@ -20,12 +21,6 @@ class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
     }
 
     @Published var lastUpdateCheckDate: Date?
-
-    @Published var includeDevelopmentVersions = false {
-        didSet {
-            UserDefaults.standard.setValue(includeDevelopmentVersions, forKey: "includeDevelopmentVersions")
-        }
-    }
 
     private var feedURLTask: Task<(), Never>?
 
@@ -53,8 +48,6 @@ class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
                 self.lastUpdateCheckDate = updater.lastUpdateCheckDate
             }
         )
-
-        includeDevelopmentVersions = UserDefaults.standard.bool(forKey: "includePrereleaseVersions")
     }
 
     deinit {
@@ -62,10 +55,7 @@ class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
     }
 
     func allowedChannels(for updater: SPUUpdater) -> Set<String> {
-        if includeDevelopmentVersions {
-            return ["development"]
-        }
-        return []
+        Defaults[.includeDevelopmentVersions] ? ["development"] : []
     }
 
     func checkForUpdates() {

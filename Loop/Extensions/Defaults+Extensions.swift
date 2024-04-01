@@ -82,4 +82,6 @@ extension Defaults.Keys {
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
+
+    static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false)
 }

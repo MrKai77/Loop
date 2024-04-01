@@ -19,6 +19,7 @@ struct MoreSettingsView: View {
     @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
     @Default(.sizeIncrement) var sizeIncrement
     @Default(.animateWindowResizes) var animateWindowResizes
+    @Default(.includeDevelopmentVersions) var includeDevelopmentVersions
     @State var isAccessibilityAccessGranted = false
     @State var isScreenRecordingAccessGranted = false
 
@@ -26,7 +27,7 @@ struct MoreSettingsView: View {
         Form {
             Section(content: {
                 Toggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
-                Toggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
+                Toggle("Include development versions", isOn: $includeDevelopmentVersions)
             }, header: {
                 HStack {
                     VStack(alignment: .leading, spacing: 0) {
