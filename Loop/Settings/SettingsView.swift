@@ -10,7 +10,7 @@ import Sparkle
 
 struct SettingsView: View {
     @State var currentSettingsTab = SettingsTab.general
-    private let updater = SoftwareUpdater()
+    @StateObject private var updater = SoftwareUpdater()
     private var appListManager = AppListManager()
 
     var body: some View {
