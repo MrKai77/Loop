@@ -27,7 +27,7 @@ struct CustomCyclingKeybindItemView: View {
                 })
                 .buttonStyle(.plain)
                 .sheet(isPresented: self.$isConfiguringCustomKeybind) {
-                    CustomKeybindView(action: $action, isSheetShown: $isConfiguringCustomKeybind)
+                    CustomKeybindView(action: $action)
                 }
             }
             Spacer()

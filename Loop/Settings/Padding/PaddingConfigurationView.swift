@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PaddingConfigurationView: View {
-    @Binding var isSheetShown: Bool
+    @Environment(\.dismiss) private var dismiss
     @Binding var paddingModel: PaddingModel
 
     var body: some View {
@@ -124,7 +124,7 @@ struct PaddingConfigurationView: View {
 
             HStack {
                 Button {
-                    isSheetShown = false
+                    dismiss()
                 } label: {
                     Text("Done")
                 }

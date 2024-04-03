@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct CustomCyclingKeybindView: View {
+    @Environment(\.dismiss) private var dismiss
+
     @Binding var action: WindowAction
-    @Binding var isSheetShown: Bool
 
     @FocusState private var focusedField: String?
 
@@ -121,7 +122,7 @@ struct CustomCyclingKeybindView: View {
 
             HStack {
                 Button {
-                    isSheetShown = false
+                    dismiss()
                 } label: {
                     Text("Done")
                 }

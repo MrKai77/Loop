@@ -69,7 +69,7 @@ struct GeneralSettingsView: View {
                     }
                 }
                 .sheet(isPresented: self.$isConfiguringPadding) {
-                    PaddingConfigurationView(isSheetShown: $isConfiguringPadding, paddingModel: $padding)
+                    PaddingConfigurationView(paddingModel: $padding)
                 }
 
                 Toggle(

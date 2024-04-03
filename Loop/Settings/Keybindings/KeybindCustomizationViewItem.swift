@@ -45,7 +45,7 @@ struct KeybindCustomizationViewItem: View {
                 })
                 .buttonStyle(.plain)
                 .sheet(isPresented: self.$isConfiguringCustomKeybind) {
-                    CustomKeybindView(action: $keybind, isSheetShown: $isConfiguringCustomKeybind)
+                    CustomKeybindView(action: $keybind)
                 }
             }
 
@@ -59,7 +59,7 @@ struct KeybindCustomizationViewItem: View {
                 })
                 .buttonStyle(.plain)
                 .sheet(isPresented: self.$isConfiguringCyclingKeybind) {
-                    CustomCyclingKeybindView(action: $keybind, isSheetShown: $isConfiguringCyclingKeybind)
+                    CustomCyclingKeybindView(action: $keybind)
                 }
             }
 
