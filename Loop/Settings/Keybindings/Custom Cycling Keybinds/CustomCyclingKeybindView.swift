@@ -45,9 +45,9 @@ struct CustomCyclingKeybindView: View {
                                     CustomCyclingKeybindItemView(action: cycleAction, total: self.$cycleDirections)
                                         .contextMenu {
                                             Button {
-                                                self.cycleDirections.removeAll(where: {
+                                                self.cycleDirections.removeAll {
                                                     $0 == cycleAction.wrappedValue
-                                                })
+                                                }
                                             } label: {
                                                 Label("Delete", systemImage: "trash")
                                             }
@@ -86,9 +86,9 @@ struct CustomCyclingKeybindView: View {
                                     Divider()
 
                                     Button {
-                                        self.cycleDirections.removeAll(where: {
+                                        self.cycleDirections.removeAll {
                                             $0 == selection
-                                        })
+                                        }
                                     } label: {
                                         Rectangle()
                                             .foregroundStyle(.white.opacity(0.00001))

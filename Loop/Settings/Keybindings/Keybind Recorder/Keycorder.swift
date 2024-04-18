@@ -39,31 +39,31 @@ struct Keycorder: View {
     let noAnimation = Animation.linear(duration: 0)
 
     var body: some View {
-        Button(action: {
+        Button {
             guard !self.isActive else { return }
             self.startObservingKeys()
-        }, label: {
-            HStack {
+        } label: {
+            HStack(spacing: 5) {
                 if self.selectionKeybind.isEmpty {
                     Text(
                         self.isActive
                         ? .init(localized: .init("Press a key…", defaultValue: "Press a key…"))
                         : .init(localized: .init("None", defaultValue: "None"))
                     )
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding(.horizontal, 8)
-                        .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .foregroundStyle(.background)
-                                RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(
-                                        .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
-                                        lineWidth: 1
-                                    )
-                            }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.horizontal, 8)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 6)
+                                .foregroundStyle(.background)
+                            RoundedRectangle(cornerRadius: 6)
+                                .strokeBorder(
+                                    .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
+                                    lineWidth: 1
+                                )
                         }
-                        .fixedSize(horizontal: true, vertical: false)
+                    }
+                    .fixedSize(horizontal: true, vertical: false)
                 } else {
                     ForEach(self.selectionKeybind.sorted(by: >), id: \.self) { key in
                         if let systemImage = key.systemImage {
@@ -88,14 +88,14 @@ struct Keycorder: View {
             }
             .fontDesign(.monospaced)
             .contentShape(Rectangle())
-        })
+        }
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
-        .popover(isPresented: $shouldError, arrowEdge: .bottom, content: {
+        .popover(isPresented: $shouldError, arrowEdge: .bottom) {
             self.errorMessage
                 .multilineTextAlignment(.center)
                 .padding(8)
-        })
+        }
         .onHover { hovering in
             self.isHovering = hovering
         }

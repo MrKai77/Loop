@@ -152,10 +152,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result = frameToResizeFrom
             if LoopManager.canAdjustSize {
                 switch direction {
-                case .shrinkTop, .growTop:          LoopManager.sidesToAdjust = .top
-                case .shrinkBottom, .growBottom:    LoopManager.sidesToAdjust = .bottom
-                case .shrinkLeft, .growLeft:        LoopManager.sidesToAdjust = .leading
-                default:                            LoopManager.sidesToAdjust = .trailing
+                case .shrinkTop, .growTop:
+                    LoopManager.sidesToAdjust = .top
+                case .shrinkBottom, .growBottom:
+                    LoopManager.sidesToAdjust = .bottom
+                case .shrinkLeft, .growLeft:
+                    LoopManager.sidesToAdjust = .leading
+                default:
+                    LoopManager.sidesToAdjust = .trailing
                 }
 
                 result = processSizeAdjustment(frameToResizeFrom, bounds)
@@ -360,7 +364,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         if direction == .macOSCenter,
            windowFrame.height >= bounds.height {
-
             paddedWindowFrame.origin.y = bounds.minY
             paddedWindowFrame.size.height = bounds.height
         }

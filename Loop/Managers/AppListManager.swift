@@ -9,7 +9,6 @@ import SwiftUI
 import Algorithms
 
 class AppListManager: ObservableObject {
-
     struct App: Identifiable {
         var id: String { bundleID }
         var bundleID: String
@@ -47,7 +46,7 @@ class AppListManager: ObservableObject {
 
     private func queryDidFinishGathering(notification: Notification) {
         if let items  = qry.results as? [NSMetadataItem] {
-            self.installedApps = items.compactMap({ item in
+            self.installedApps = items.compactMap { item in
                 guard
                     let bundleId = item.value(forAttribute: NSMetadataItemCFBundleIdentifierKey) as? String,
                     let displayName = item.value(forAttribute: NSMetadataItemDisplayNameKey) as? String,
@@ -63,7 +62,7 @@ class AppListManager: ObservableObject {
                     displayName: displayName,
                     installationFolder: installationFolder
                 )
-            })
+            }
         }
     }
 }

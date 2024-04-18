@@ -22,9 +22,9 @@ class Window {
         var pid = pid_t(0)
         _ = AXUIElementGetPid(self.axWindow, &pid)
 
-        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first(where: {
+        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first {
             $0.processIdentifier == pid
-        })
+        }
 
         // Set self's CGWindowID
         var windowId = CGWindowID(0)
@@ -256,7 +256,6 @@ class Window {
 
         var minSize: CGSize = .zero
         DispatchQueue.main.async {
-
             // Force-resize the window to 0x0
             let startingSize = self.size
             self.setSize(CGSize(width: 0, height: 0))

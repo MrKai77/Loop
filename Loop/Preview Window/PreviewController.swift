@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 class PreviewController {
-
     private var previewWindowController: NSWindowController?
     private var screen: NSScreen?
     private var window: Window?
@@ -91,9 +90,10 @@ class PreviewController {
         }
 
         let targetWindowFrame = action.getFrame(
-            window: self.window,
-            bounds: screen.safeScreenFrame
-        ).flipY(maxY: NSScreen.screens[0].frame.maxY)
+                window: self.window,
+                bounds: screen.safeScreenFrame
+            )
+            .flipY(maxY: NSScreen.screens[0].frame.maxY)
 
         let shouldBeTransparent = targetWindowFrame.size.area == 0
 

@@ -9,7 +9,6 @@ import Cocoa
 import Defaults
 
 class WindowDragManager {
-
     private var draggingWindow: Window?
     private var initialWindowFrame: CGRect?
     private var direction: WindowDirection = .noAction

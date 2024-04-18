@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 class LoopManager: ObservableObject {
-
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?
     static var lastTargetFrame: CGRect = .zero
@@ -110,15 +109,24 @@ class LoopManager: ObservableObject {
         // If mouse over 50 points away, select half or quarter positions
         if distanceToMouse > pow(50 - Defaults[.radialMenuThickness], 2) {
             switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-            case 0, 8: resizeDirection = .rightHalf
-            case 1:    resizeDirection = .bottomRightQuarter
-            case 2:    resizeDirection = .bottomHalf
-            case 3:    resizeDirection = .bottomLeftQuarter
-            case 4:    resizeDirection = .leftHalf
-            case 5:    resizeDirection = .topLeftQuarter
-            case 6:    resizeDirection = .topHalf
-            case 7:    resizeDirection = .topRightQuarter
-            default:   resizeDirection = .noAction
+            case 0, 8:
+                resizeDirection = .rightHalf
+            case 1:
+                resizeDirection = .bottomRightQuarter
+            case 2:
+                resizeDirection = .bottomHalf
+            case 3:
+                resizeDirection = .bottomLeftQuarter
+            case 4:
+                resizeDirection = .leftHalf
+            case 5:
+                resizeDirection = .topLeftQuarter
+            case 6:
+                resizeDirection = .topHalf
+            case 7:
+                resizeDirection = .topRightQuarter
+            default:
+                resizeDirection = .noAction
             }
         } else if distanceToMouse < pow(noActionDistance, 2) {
             resizeDirection = .noAction
@@ -159,9 +167,9 @@ class LoopManager: ObservableObject {
             var nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
 
             if self.currentAction.direction != .custom {
-                nextIndex = (cycle.firstIndex(where: {
+                nextIndex = (cycle.firstIndex {
                     $0.direction == self.currentAction.direction
-                }) ?? -1) + 1
+                } ?? -1) + 1
             }
 
             if nextIndex >= cycle.count {
@@ -220,7 +228,6 @@ class LoopManager: ObservableObject {
         performHapticFeedback()
 
         if newAction != currentAction || newAction.willManipulateCurrentWindowSize {
-
             self.currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
@@ -368,10 +375,8 @@ class LoopManager: ObservableObject {
             forceClose == false,
             self.currentAction.direction != .noAction,
             self.isLoopActive {
-
             if let screenToResizeOn = self.screenToResizeOn,
                Defaults[.previewVisibility] {
-
                 LoopManager.canAdjustSize = false
                 WindowEngine.resize(
                     self.targetWindow!,

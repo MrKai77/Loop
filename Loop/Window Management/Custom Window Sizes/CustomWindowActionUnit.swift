@@ -24,8 +24,10 @@ enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
 
     var postscript: String {
         switch self {
-        case .pixels: "px"
-        case .percentage: "%"
+        case .pixels:
+            "px"
+        case .percentage:
+            "%"
         }
     }
 }

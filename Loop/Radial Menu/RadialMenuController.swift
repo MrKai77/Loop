@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 class RadialMenuController {
-
     private var loopRadialMenuWindowController: NSWindowController?
 
     func open(position: CGPoint, frontmostWindow: Window?, startingAction: WindowAction = .init(.noAction)) {
@@ -23,11 +22,13 @@ class RadialMenuController {
 
         let windowSize: CGFloat = 250
 
-        let panel = NSPanel(contentRect: .zero,
-                            styleMask: [.borderless, .nonactivatingPanel],
-                            backing: .buffered,
-                            defer: true,
-                            screen: NSApp.keyWindow?.screen)
+        let panel = NSPanel(
+            contentRect: .zero,
+            styleMask: [.borderless, .nonactivatingPanel],
+            backing: .buffered,
+            defer: true,
+            screen: NSApp.keyWindow?.screen
+        )
 
         panel.collectionBehavior = .canJoinAllSpaces
         panel.hasShadow = false
@@ -53,10 +54,10 @@ class RadialMenuController {
 
         loopRadialMenuWindowController = .init(window: panel)
 
-        NSAnimationContext.runAnimationGroup({ context in
+        NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.15
             panel.animator().alphaValue = 1
-        })
+        }
     }
 
     func close() {

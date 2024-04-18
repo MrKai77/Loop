@@ -34,20 +34,18 @@ class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
 
         automaticallyChecksForUpdatesObservation = updater?.observe(
             \.automaticallyChecksForUpdates,
-            options: [.initial, .new, .old],
-            changeHandler: { [unowned self] updater, change in
-                guard change.newValue != change.oldValue else { return }
-                self.automaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
-            }
-        )
+            options: [.initial, .new, .old]
+        ) { [weak self] updater, change in
+            guard change.newValue != change.oldValue else { return }
+            self?.automaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
+        }
 
         lastUpdateCheckDateObservation = updater?.observe(
             \.lastUpdateCheckDate,
-            options: [.initial, .new, .old],
-            changeHandler: { [unowned self] updater, _ in
-                self.lastUpdateCheckDate = updater.lastUpdateCheckDate
-            }
-        )
+            options: [.initial, .new, .old]
+        ) { [weak self] updater, _ in
+            self?.lastUpdateCheckDate = updater.lastUpdateCheckDate
+        }
     }
 
     deinit {

@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 struct PreviewSettingsView: View {
-
     @Default(.previewVisibility) var previewVisibility
     @Default(.previewPadding) var previewPadding
     @Default(.previewCornerRadius) var previewCornerRadius

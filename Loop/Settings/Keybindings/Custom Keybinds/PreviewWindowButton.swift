@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PreviewWindowButton: NSViewRepresentable {
-
     @Binding var keybind: WindowAction
 
     init(_ keybind: Binding<WindowAction>) {
@@ -16,7 +15,6 @@ struct PreviewWindowButton: NSViewRepresentable {
     }
 
     func makeNSView(context: NSViewRepresentableContext<Self>) -> NSButton {
-
         let button = NSButton(
             title: .init(localized: .init("Show", defaultValue: "Show")),
             target: context.coordinator,

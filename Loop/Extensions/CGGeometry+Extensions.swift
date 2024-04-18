@@ -58,7 +58,8 @@ extension CGRect {
             x: self.minX,
             y: screen.frame.maxY - self.maxY,
             width: self.width,
-            height: self.height)
+            height: self.height
+        )
     }
 
     func flipY(maxY: CGFloat) -> CGRect {
@@ -66,7 +67,8 @@ extension CGRect {
             x: self.minX,
             y: maxY - self.maxY,
             width: self.width,
-            height: self.height)
+            height: self.height
+        )
     }
 
     func padding(_ sides: Edge.Set, _ amount: CGFloat) -> CGRect {

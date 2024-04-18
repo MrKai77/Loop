@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 struct WindowEngine {
-
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized

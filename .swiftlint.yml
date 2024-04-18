@@ -1,3 +1,15 @@
+opt_in_rules:
+  - modifier_order
+  - multiline_function_chains
+  - multiline_arguments_brackets
+  - superfluous_else
+  - switch_case_on_newline
+  - trailing_closure
+  - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace_opening_braces
+
 excluded:
   - Loop/Extensions/CGKeyCode+Extensions.swift
 

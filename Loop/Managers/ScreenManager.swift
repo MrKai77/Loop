@@ -49,8 +49,12 @@ class ScreenManager {
 
     private static func getScreensInOrder() -> [NSScreen] {
         NSScreen.screens
-            .sorted(by: { $0.frame.origin.y < $1.frame.origin.y })
-            .sorted(by: { $0.frame.origin.x < $1.frame.origin.x })
+            .sorted {
+                $0.frame.origin.y < $1.frame.origin.y
+            }
+            .sorted {
+                $0.frame.origin.x < $1.frame.origin.x
+            }
     }
 
     private static func findScreen(with window: Window, _ screens: [NSScreen]) -> NSScreen? {
