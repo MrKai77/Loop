@@ -10,6 +10,9 @@ on:
 jobs:
   SwiftLint:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/realm/swiftlint:latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
