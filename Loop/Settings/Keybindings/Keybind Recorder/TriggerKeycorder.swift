@@ -28,10 +28,10 @@ struct TriggerKeycorder: View {
     }
 
     var body: some View {
-        Button(action: {
+        Button {
             guard !self.isActive else { return }
             self.startObservingKeys()
-        }, label: {
+        } label: {
             HStack(spacing: 5) {
                 if self.selectionKey.isEmpty {
                     Text(self.isActive ? "Set a trigger key…" : "None")
@@ -70,14 +70,14 @@ struct TriggerKeycorder: View {
             }
             .fontDesign(.monospaced)
             .contentShape(Rectangle())
-        })
+        }
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
-        .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom, content: {
+        .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
             Text("You can only use up to \(keyLimit) keys in your trigger key.")
                 .multilineTextAlignment(.center)
                 .padding(8)
-        })
+        }
         .onHover { hovering in
             self.isHovering = hovering
         }

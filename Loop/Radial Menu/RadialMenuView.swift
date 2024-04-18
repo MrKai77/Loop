@@ -10,7 +10,6 @@ import Combine
 import Defaults
 
 struct RadialMenuView: View {
-
     let radialMenuSize: CGFloat = 100
 
     @State var currentAction: WindowAction

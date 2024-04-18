@@ -149,11 +149,11 @@ struct MoreSettingsView: View {
 
                     Spacer()
 
-                    Button("Request Access…", action: {
+                    Button("Request Access…") {
                         PermissionsManager.requestAccess()
                         self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
                         self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-                    })
+                    }
                     .buttonStyle(.link)
                     .foregroundStyle(Color.accentColor)
                     .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)

@@ -10,7 +10,6 @@ import Defaults
 import UserNotifications
 
 class IconManager {
-
     struct Icon: Hashable {
         var name: String?
         var iconName: String
@@ -21,10 +20,10 @@ class IconManager {
         func getName() -> String {
             if let name = self.name {
                 return name
-            } else {
-                let prefix = "AppIcon-"
-                return iconName.replacingOccurrences(of: prefix, with: "")
             }
+
+            let prefix = "AppIcon-"
+            return iconName.replacingOccurrences(of: prefix, with: "")
         }
 
         static var gregLassaleFooter = String(
@@ -176,6 +175,8 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
     }
 
     static var currentAppIcon: Icon {
-        return icons.first(where: { $0.iconName == Defaults[.currentIcon] }) ?? icons.first!
+        return icons.first {
+            $0.iconName == Defaults[.currentIcon]
+        } ?? icons.first!
     }
 }

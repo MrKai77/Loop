@@ -33,7 +33,6 @@ class KeybindMonitor {
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
              if cgEvent.type == .keyDown || cgEvent.type == .keyUp,
                 let event = NSEvent(cgEvent: cgEvent) {
-
                  if event.type == .keyUp {
                      KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
                  } else if event.type == .keyDown {
@@ -44,22 +43,21 @@ class KeybindMonitor {
                  if self.specialEvents.contains(event.keyCode.baseKey) {
                      if self.canPassthroughSpecialEvents {
                          return Unmanaged.passRetained(cgEvent)
-                     } else {
-                         return nil
                      }
+                     return nil
                  }
 
                  // If this is a valid event, don't passthrough
                  if self.performKeybind(event: event) {
                      return nil
-                 } else {
-                     // If this wasn't, check if it was a system keybind (ex. screenshot), and
-                     // in that case, passthrough and foce-close Loop
-                     if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
-                         Notification.Name.forceCloseLoop.post()
-                         print("Detected system keybind, closing!")
-                         return Unmanaged.passRetained(cgEvent)
-                     }
+                 }
+
+                 // If this wasn't, check if it was a system keybind (ex. screenshot), and
+                 // in that case, passthrough and foce-close Loop
+                 if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
+                     Notification.Name.forceCloseLoop.post()
+                     print("Detected system keybind, closing!")
+                     return Unmanaged.passRetained(cgEvent)
                  }
             }
 
@@ -70,7 +68,6 @@ class KeybindMonitor {
             if cgEvent.type == .flagsChanged,
                let event = NSEvent(cgEvent: cgEvent),
                !Defaults[.triggerKey].contains(where: { $0.baseModifier == event.keyCode.baseModifier }) {
-
                 self.checkForModifier(event, .kVK_Shift, .shift)
                 self.checkForModifier(event, .kVK_Command, .command)
                 self.checkForModifier(event, .kVK_Option, .option)
@@ -124,7 +121,6 @@ class KeybindMonitor {
 
         if let newAction = WindowAction.getAction(for: pressedKeys) {
             if !event.isARepeat || newAction.willManipulateCurrentWindowSize {
-
                 Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
                 print("performKeybind: returning true due to valid event: \(newAction.direction)")
             }

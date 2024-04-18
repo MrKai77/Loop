@@ -52,10 +52,14 @@ struct ExcludeListSettingsView: View {
                                     .contextMenu {
                                         Button("Delete") {
                                             if self.selection.isEmpty {
-                                                self.excludeList.removeAll(where: { $0 == entry.wrappedValue })
+                                                self.excludeList.removeAll {
+                                                    $0 == entry.wrappedValue
+                                                }
                                             } else {
                                                 for item in selection {
-                                                    self.excludeList.removeAll(where: { $0 == item })
+                                                    self.excludeList.removeAll {
+                                                        $0 == item
+                                                    }
                                                 }
                                                 self.selection.removeAll()
                                             }
@@ -99,7 +103,9 @@ struct ExcludeListSettingsView: View {
 
                                     Button {
                                         for item in selection {
-                                            self.excludeList.removeAll(where: { $0 == item })
+                                            self.excludeList.removeAll {
+                                                $0 == item
+                                            }
                                         }
                                         self.selection.removeAll()
                                     } label: {
@@ -140,17 +146,21 @@ struct ExcludeListSettingsView: View {
     @ViewBuilder
     func installedAppsMenu() -> some View {
         let apps = appListManager.installedApps
-            .filter({ !self.excludeList.contains($0.bundleID) })
-            .grouped(by: { $0.installationFolder })
-        let installationFolders = apps.keys.sorted(by: {
+            .filter {
+                !self.excludeList.contains($0.bundleID)
+            }
+            .grouped {
+                $0.installationFolder
+            }
+        let installationFolders = apps.keys.sorted {
             $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
-        })
+        }
 
         ForEach(installationFolders, id: \.self) { folder in
             Section(folder) {
-                let appsInFolder = apps[folder]!.sorted(by: {
+                let appsInFolder = apps[folder]!.sorted {
                     $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending
-                })
+                }
                 ForEach(appsInFolder) { app in
                     Button(action: {
                         self.excludeList.append(app.bundleID)

@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 struct KeybindingsSettingsView: View {
-
     @Default(.keybinds) var keybinds
     @Default(.useSystemAccentColor) var useSystemAccentColor
     @Default(.customAccentColor) var customAccentColor
@@ -76,10 +75,14 @@ struct KeybindingsSettingsView: View {
                                         .contextMenu {
                                             Button("Delete") {
                                                 if self.selection.isEmpty {
-                                                    self.keybinds.removeAll(where: { $0 == keybind.wrappedValue })
+                                                    self.keybinds.removeAll {
+                                                        $0 == keybind.wrappedValue
+                                                    }
                                                 } else {
                                                     for item in selection {
-                                                        self.keybinds.removeAll(where: { $0 == item })
+                                                        self.keybinds.removeAll {
+                                                            $0 == item
+                                                        }
                                                     }
                                                     self.selection.removeAll()
                                                 }
@@ -124,7 +127,9 @@ struct KeybindingsSettingsView: View {
 
                                     Button {
                                         for item in selection {
-                                            self.keybinds.removeAll(where: { $0 == item })
+                                            self.keybinds.removeAll {
+                                                $0 == item
+                                            }
                                         }
                                         self.selection.removeAll()
                                     } label: {

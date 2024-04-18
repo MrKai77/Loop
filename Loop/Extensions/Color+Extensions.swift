@@ -18,15 +18,13 @@ extension Color {
         case .normal:
             if Defaults[.useSystemAccentColor] {
                 return Color.accentColor
-            } else {
-                return Defaults[.customAccentColor]
             }
+            return Defaults[.customAccentColor]
         case .darker:
             if Defaults[.useSystemAccentColor] {
                 return Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!)
-            } else {
-                return Defaults[.gradientColor]
             }
+            return Defaults[.gradientColor]
         }
     }
 }

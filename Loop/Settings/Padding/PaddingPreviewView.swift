@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PaddingPreviewView: View {
-
     @Binding var paddingModel: PaddingModel
 
     init(_ paddingModel: Binding<PaddingModel>) {

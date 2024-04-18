@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 struct RadialMenuSettingsView: View {
-
     @Default(.radialMenuVisibility) var radialMenuVisibility
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness

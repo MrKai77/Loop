@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 extension NSScreen {
-
     // Return the CGDirectDisplayID
     // Used in to help calculate the size a window needs to be resized to
     var displayID: CGDirectDisplayID? {

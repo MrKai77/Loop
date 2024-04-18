@@ -10,7 +10,6 @@ import Defaults
 import ServiceManagement
 
 struct GeneralSettingsView: View {
-
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     @Default(.launchAtLogin) var launchAtLogin
@@ -80,9 +79,10 @@ struct GeneralSettingsView: View {
                 Toggle(isOn: $resizeWindowUnderCursor) {
                     VStack(alignment: .leading) {
                         Text("Resize window under cursor")
-                        Text(resizeWindowUnderCursor ?
-                             "Resizes window under cursor, and uses the frontmost window as backup." :
-                             "Resizes frontmost window."
+                        Text(
+                            resizeWindowUnderCursor ?
+                            "Resizes window under cursor, and uses the frontmost window as backup." :
+                            "Resizes frontmost window."
                         )
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -166,9 +166,10 @@ struct GeneralSettingsView: View {
                         self.notificationWhenIconUnlocked = AppDelegate.areNotificationsEnabled()
                     }
                 }
-                .popover(isPresented: self.$userDisabledLoopNotifications,
-                         arrowEdge: .bottom,
-                         content: {
+                .popover(
+                    isPresented: self.$userDisabledLoopNotifications,
+                    arrowEdge: .bottom
+                ) {
                     VStack(alignment: .center) {
                         Text("\(Bundle.main.appName)'s notification permissions are currently disabled.")
                         Text("Please turn them on in System Settings.")
@@ -179,8 +180,7 @@ struct GeneralSettingsView: View {
                         }
                     }
                     .padding(8)
-
-                })
+                }
             }
 
             Section("Accent Color") {

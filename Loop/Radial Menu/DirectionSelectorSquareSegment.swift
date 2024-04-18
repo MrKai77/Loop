@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct DirectionSelectorSquareSegment: View {
-
     var angle: Double = .zero
     let radialMenuCornerRadius: CGFloat
     let radialMenuThickness: CGFloat

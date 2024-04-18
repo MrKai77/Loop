@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AnchorPicker: View {
-
     @Namespace private var animation
     @Binding var anchor: CustomWindowActionAnchor?
 

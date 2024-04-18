@@ -18,7 +18,6 @@ struct WallpaperView: View, Equatable {
         if let screen = NSScreen.screenWithMouse,
            let url = NSWorkspace.shared.desktopImageURL(for: screen),
            let image = NSImage(contentsOf: url) {
-
             GeometryReader { geo in
                 Image(nsImage: image)
                     .resizable()

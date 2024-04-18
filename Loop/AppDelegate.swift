@@ -10,7 +10,6 @@ import Defaults
 import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
-
     private let loopManager = LoopManager()
     private let windowDragManager = WindowDragManager()
 
@@ -56,12 +55,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     func openSettings() {
         // Settings window is already open
         guard !NSApp.windows.contains(where: { $0.toolbar?.items != nil }) else {
-            NSApp.windows.first(where: { $0.toolbar?.items != nil })?.orderFrontRegardless()
+            NSApp.windows.first { $0.toolbar?.items != nil }?.orderFrontRegardless()
+
             return
         }
 
         let eventSource = CGEventSource(stateID: .hidSystemState)
-        let keyCommand = CGEvent(keyboardEventSource: eventSource, virtualKey: 0x2B, keyDown: true)
+        let keyCommand = CGEvent(keyboardEventSource: eventSource, virtualKey: CGKeyCode.kVK_ANSI_Comma, keyDown: true)
         guard let keyCommand else { return }
 
         keyCommand.flags = .maskCommand
@@ -105,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     static func requestNotificationAuthorization() {
         UNUserNotificationCenter.current().requestAuthorization(
             options: [.alert]
-        ) { (accepted, error) in
+        ) { accepted, error in
             if !accepted {
                 print("User Notification access denied.")
             }

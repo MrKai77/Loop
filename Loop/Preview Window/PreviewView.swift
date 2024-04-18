@@ -9,7 +9,6 @@ import SwiftUI
 import Defaults
 
 struct PreviewView: View {
-
     let previewMode: Bool
     @State private var scale: CGFloat = 1
 

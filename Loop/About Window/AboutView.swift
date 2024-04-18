@@ -63,7 +63,6 @@ struct AboutView: View {
     var body: some View {
         VStack {
             VStack(spacing: 5) {
-
                 Image(nsImage: NSImage(named: IconManager.currentAppIcon.iconName)!)
                     .resizable()
                     .frame(width: 120, height: 120)
