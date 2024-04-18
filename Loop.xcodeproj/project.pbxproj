@@ -135,6 +135,7 @@
 		A84497CA2B395D8C003D4CF3 /* AnchorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorPicker.swift; sourceTree = "<group>"; };
 		A84497CC2B3A52C7003D4CF3 /* PreviewWindowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewWindowButton.swift; sourceTree = "<group>"; };
 		A84497D12B3B88A6003D4CF3 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
+		A848130C2BD1A8D100B02E93 /* .github */ = {isa = PBXFileReference; lastKnownFileType = folder; path = .github; sourceTree = "<group>"; };
 		A848D8A62A8C2F3F00060834 /* LoopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopManager.swift; sourceTree = "<group>"; };
 		A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdater.swift; sourceTree = "<group>"; };
 		A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
@@ -403,6 +404,7 @@
 		A8E59C2C297F5E9A0064D4BA = {
 			isa = PBXGroup;
 			children = (
+				A848130C2BD1A8D100B02E93 /* .github */,
 				A8291D6D2A4513D200C5CB69 /* .swiftlint.yml */,
 				A8E6D1FC2A4155DC005751D4 /* .gitignore */,
 				A86AFD7529888B29008F4892 /* README.md */,
