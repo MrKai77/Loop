@@ -58,7 +58,7 @@ struct GeneralSettingsView: View {
             }
 
             Section {
-                Toggle("Window snapping", isOn: $windowSnapping)
+//                Toggle("Window snapping", isOn: $windowSnapping)
 
                 HStack {
                     Text("Window padding")
@@ -68,7 +68,7 @@ struct GeneralSettingsView: View {
                     }
                 }
                 .sheet(isPresented: self.$isConfiguringPadding) {
-                    PaddingConfigurationView(isSheetShown: $isConfiguringPadding, paddingModel: $padding)
+//                    PaddingConfigurationView(isSheetShown: $isConfiguringPadding, paddingModel: $padding)
                 }
 
                 Toggle(

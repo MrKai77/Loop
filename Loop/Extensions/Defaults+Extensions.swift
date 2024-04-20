@@ -24,32 +24,42 @@ extension Defaults.Keys {
 
     // Radial Menu
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true)
+    static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
-    static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
 
-    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
-    static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
+    // Preview
+    static let previewVisibility = Key<Bool>("previewVisibility", default: true)
+    static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
+    static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
+    static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
+
+    // Behavior
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
-    static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
-    static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
-    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
-    static let padding = Key<PaddingModel>("padding", default: .zero)
-    static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false)
+    static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .fast)
+
+    static let windowSnapping = Key<Bool>("windowSnapping", default: false)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
+    static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false)
+    static let enablePadding = Key<Bool>("enablePadding", default: false)
+    static let padding = Key<PaddingModel>("padding", default: .zero)
+
+    static let respectStageManager = Key<Bool>("respectStageManager", default: true)
+    static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
+
+    
+    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
+    static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
+    static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
+    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
+
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
-    static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let triggerDelay = Key<Double>("triggerDelay", default: 0)
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false)
-
-    static let previewVisibility = Key<Bool>("previewVisibility", default: true)
-    static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10)
-    static let previewPadding = Key<CGFloat>("previewPadding", default: 10)
-    static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5)
 
     static let keybinds = Key<[WindowAction]>("keybinds", default: [
         WindowAction(.maximize, keybind: [.kVK_Space]),
@@ -83,9 +93,6 @@ extension Defaults.Keys {
     ])
 
     static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
-
-    static let respectStageManager = Key<Bool>("respectStageManager", default: true)
-    static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
 

@@ -8,7 +8,7 @@
 import SwiftUI
 import Defaults
 
-struct PaddingModel: Codable, Defaults.Serializable {
+struct PaddingModel: Codable, Defaults.Serializable, Hashable {
     var window: CGFloat
     var externalBar: CGFloat
     var top: CGFloat

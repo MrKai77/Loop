@@ -10,29 +10,10 @@ import Luminare
 import Defaults
 
 struct RadialMenuConfigurationView: View {
-    @State var radialMenuVisibility = Defaults[.radialMenuVisibility] {
-        didSet {
-            Defaults[.radialMenuVisibility] = radialMenuVisibility
-        }
-    }
-
-    @State var disableCursorInteraction = Defaults[.disableCursorInteraction] {
-        didSet {
-            Defaults[.disableCursorInteraction] = disableCursorInteraction
-        }
-    }
-
-    @State var radialMenuCornerRadius = Defaults[.radialMenuCornerRadius] {
-        didSet {
-            Defaults[.radialMenuCornerRadius] = radialMenuCornerRadius
-        }
-    }
-
-    @State var radialMenuThickness = Defaults[.radialMenuThickness] {
-        didSet {
-            Defaults[.radialMenuThickness] = radialMenuThickness
-        }
-    }
+    @Default(.radialMenuVisibility) var radialMenuVisibility
+    @Default(.disableCursorInteraction) var disableCursorInteraction
+    @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
+    @Default(.radialMenuThickness) var radialMenuThickness
 
     var body: some View {
         LuminareSection {
@@ -52,7 +33,8 @@ struct RadialMenuConfigurationView: View {
                 ),
                 sliderRange: 30...50,
                 suffix: "px",
-                decimalPlaces: 0
+                lowerClamp: true,
+                upperClamp: true
             )
 
             LuminareValueAdjuster(
@@ -68,7 +50,8 @@ struct RadialMenuConfigurationView: View {
                 ),
                 sliderRange: 10...35,
                 suffix: "px",
-                decimalPlaces: 0
+                lowerClamp: true,
+                upperClamp: true
             )
         }
     }

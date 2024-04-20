@@ -16,10 +16,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             .init("Theming", [
                 .init("Icon", Image(systemName: "sparkle"), IconConfigurationView()),
                 .init("Accent Color", Image(systemName: "paintbrush.pointed"), AccentColorConfigurationView()),
-                .init("Radial Menu", Image("loop"), RadialMenuConfigurationView())
+                .init("Radial Menu", Image("loop"), RadialMenuConfigurationView()),
+                .init("Preview", Image(systemName: "rectangle.lefthalf.inset.filled"), PreviewConfigurationView())
+            ]),
+            .init("Settings", [
+                .init("Behavior", Image(systemName: "gear"), BehaviorConfigurationView())
             ])
         ],
-        tint: .brown
+        tint: .mint
     )
 
     private let loopManager = LoopManager()
@@ -33,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(.accessory)
+//        NSApp.setActivationPolicy(.accessory)
 
         // Check & ask for accessibility access
         PermissionsManager.Accessibility.requestAccess()
@@ -51,7 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        NSApp.setActivationPolicy(.accessory)
+//        NSApp.setActivationPolicy(.accessory)
         for window in NSApp.windows where window.delegate != nil {
             window.delegate = nil
         }

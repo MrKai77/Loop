@@ -10,34 +10,33 @@ import Luminare
 import Defaults
 
 struct AccentColorConfigurationView: View {
-//    @Default(.useSystemAccentColor) var useSystemAccentColor
-//    @Default(.customAccentColor) var customAccentColor
-//    @Default(.useGradient) var useGradient
-//    @Default(.gradientColor) var gradientColor
+    @Default(.useSystemAccentColor) var useSystemAccentColor
+    @Default(.useGradient) var useGradient
+    @Default(.customAccentColor) var customAccentColor
+    @Default(.gradientColor) var gradientColor
 
-    @State var useSystemAccentColor = Defaults[.useSystemAccentColor] {
-        didSet {
-            Defaults[.useSystemAccentColor] = useSystemAccentColor
-        }
-    }
+    @State var showColorSection = false
 
-    @State var useGradient = Defaults[.useGradient] {
-        didSet {
-            Defaults[.useGradient] = useGradient
-        }
-    }
-
-    @State var customAccentColor = Defaults[.customAccentColor] {
-        didSet {
-            Defaults[.customAccentColor] = customAccentColor
-        }
+    init() {
+        self.showColorSection = !useSystemAccentColor || (useGradient && !useSystemAccentColor)
     }
 
     var body: some View {
         LuminareSection {
             LuminarePicker(
                 elements: [true, false],
-                selection: $useSystemAccentColor,
+                selection: Binding(
+                    get: {
+                        useSystemAccentColor
+                    },
+                   set: { newValue in
+                       useSystemAccentColor = newValue
+
+                       withAnimation(.smooth(duration: 0.3)) {
+                           self.showColorSection = !useSystemAccentColor || (useGradient && !useSystemAccentColor)
+                       }
+                   }
+                ),
                 columns: 2,
                 roundBottom: false
             ) { item in
@@ -65,7 +64,7 @@ struct AccentColorConfigurationView: View {
             LuminareToggle("Gradient", isOn: $useGradient)
         }
 
-        if !useSystemAccentColor || (useGradient && !useSystemAccentColor) {
+        if showColorSection {
             LuminareSection("Color") {
                 if !useSystemAccentColor {
                     Text("TODO: CUSTOM ACCENT COLOR")

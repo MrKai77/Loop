@@ -331,6 +331,9 @@
         }
       }
     },
+    "Configure padding..." : {
+
+    },
     "Configure…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -359,7 +362,7 @@
       }
     },
     "Crisp Value Adjuster: Bottom" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -393,7 +396,7 @@
       }
     },
     "Crisp Value Adjuster: External Bar" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -444,7 +447,7 @@
       }
     },
     "Crisp Value Adjuster: Left" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -478,7 +481,7 @@
       }
     },
     "Crisp Value Adjuster: Right" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -563,7 +566,7 @@
       }
     },
     "Crisp Value Adjuster: Top" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -614,7 +617,7 @@
       }
     },
     "Crisp Value Adjuster: Window Gaps" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -732,6 +735,7 @@
       }
     },
     "Custom screen padding" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1477,6 +1481,7 @@
       }
     },
     "Padding" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1727,6 +1732,7 @@
       }
     },
     "Screen Padding" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1840,6 +1846,9 @@
         }
       }
     },
+    "Settings" : {
+
+    },
     "Settings…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1879,6 +1888,9 @@
           }
         }
       }
+    },
+    "Simple" : {
+
     },
     "Sizing mode" : {
       "localizations" : {
@@ -1980,6 +1992,7 @@
       }
     },
     "This preview is not to scale." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2863,6 +2876,7 @@
       }
     },
     "Window snapping" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
