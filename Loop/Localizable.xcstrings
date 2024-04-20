@@ -1904,6 +1904,9 @@
         }
       }
     },
+    "Suggest new icon" : {
+
+    },
     "That key is already used as your trigger key." : {
       "localizations" : {
         "zh-Hans" : {

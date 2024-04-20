@@ -10,12 +10,16 @@ import Defaults
 
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
+
+    // ICON
+    static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
+    static let timesLooped = Key<Int>("timesLooped", default: 0)
+    static let showDockIcon = Key<Bool>("showDockIcon", default: false)
+
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
-    static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
-    static let timesLooped = Key<Int>("timesLooped", default: 0)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false) // BETA
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let padding = Key<PaddingModel>("padding", default: .zero)

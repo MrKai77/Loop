@@ -7,15 +7,20 @@
 
 import SwiftUI
 import Defaults
+import Luminare
 import UserNotifications
 
 class IconManager {
-    struct Icon: Hashable {
+    struct Icon: Hashable, LuminarePickerData {
         var name: String?
         var iconName: String
         var unlockTime: Int
         var unlockMessage: String?
         var footer: String?
+
+        var selectable: Bool {
+            IconManager.returnUnlockedIcons().contains(self)
+        }
 
         func getName() -> String {
             if let name = self.name {
@@ -34,7 +39,7 @@ class IconManager {
         )
     }
 
-    private static let icons: [Icon] = [
+    static let icons: [Icon] = [
         Icon(
             name: .init(localized: .init("Icon Name: Classic", defaultValue: "Classic")),
             iconName: "AppIcon-Classic",
@@ -119,7 +124,7 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
 
     static func returnUnlockedIcons() -> [Icon] {
         var returnValue: [Icon] = []
-        for icon in icons where icon.unlockTime <= Defaults[.timesLooped] {
+        for icon in icons where icon.unlockTime <= /*Defaults[.timesLooped]*/ 541 {
             returnValue.append(icon)
         }
         return returnValue.reversed()

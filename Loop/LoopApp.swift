@@ -7,7 +7,6 @@
 
 import SwiftUI
 import MenuBarExtraAccess
-import SettingsAccess
 import Defaults
 
 @main
@@ -61,22 +60,9 @@ struct LoopApp: App {
                 ForEach(WindowDirection.verticalThirds) { MenuBarResizeButton($0) }
             }
 
-            SettingsLink(
-                label: {
-                    Text("Settings…")
-                },
-                preAction: {
-                    for window in NSApp.windows where window.toolbar?.items != nil {
-                        window.close()
-                    }
-                },
-                postAction: {
-                    for window in NSApp.windows where window.toolbar?.items != nil {
-                        window.orderFrontRegardless()
-                        window.center()
-                    }
-                }
-            )
+            Button("Settings…") {
+                appDelegate.openSettings()
+            }
             .keyboardShortcut(",", modifiers: .command)
 
             Button("About \(Bundle.main.appName)") {
