@@ -38,13 +38,11 @@ extension Defaults.Keys {
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .fast)
-
     static let windowSnapping = Key<Bool>("windowSnapping", default: false)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false)
     static let enablePadding = Key<Bool>("enablePadding", default: false)
     static let padding = Key<PaddingModel>("padding", default: .zero)
-
     static let respectStageManager = Key<Bool>("respectStageManager", default: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 

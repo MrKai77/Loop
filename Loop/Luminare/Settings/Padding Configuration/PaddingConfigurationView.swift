@@ -10,6 +10,8 @@ import Luminare
 import Defaults
 
 struct PaddingConfigurationView: View {
+    @Environment(\.dismissModal) var dismissModal
+
     @State var paddingModel = Defaults[.padding]
 
     var body: some View {
@@ -128,5 +130,10 @@ struct PaddingConfigurationView: View {
                 )
             }
         }
+
+        Button("Save & Close") {
+            dismissModal()
+        }
+        .buttonStyle(LuminareCompactButtonStyle())
     }
 }

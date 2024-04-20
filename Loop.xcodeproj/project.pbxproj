@@ -257,8 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				A82B1AF52BD35C8500E2F3F9 /* BehaviorConfigurationView.swift */,
-				A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */,
-				A8D6D3022B6C8D750061B11F /* PaddingPreviewView.swift */,
+				A8A1C51F2BD481AB00515A14 /* Padding Configuration */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -418,6 +417,15 @@
 				A82B1AF42BD35C6400E2F3F9 /* Settings */,
 			);
 			path = Luminare;
+			sourceTree = "<group>";
+		};
+		A8A1C51F2BD481AB00515A14 /* Padding Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */,
+				A8D6D3022B6C8D750061B11F /* PaddingPreviewView.swift */,
+			);
+			path = "Padding Configuration";
 			sourceTree = "<group>";
 		};
 		A8B5E1612B43725B00044D30 /* Custom Window Sizes */ = {
