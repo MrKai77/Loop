@@ -668,6 +668,9 @@
         }
       }
     },
+    "Custom" : {
+
+    },
     "Custom accent color" : {
       "localizations" : {
         "zh-Hans" : {
@@ -964,6 +967,9 @@
           }
         }
       }
+    },
+    "Icon" : {
+
     },
     "Icon Name: Black" : {
       "extractionState" : "extracted_with_value",
@@ -1907,6 +1913,9 @@
     "Suggest new icon" : {
 
     },
+    "System" : {
+
+    },
     "That key is already used as your trigger key." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1947,6 +1956,9 @@
         }
       }
     },
+    "Theming" : {
+
+    },
     "This is only needed to animate windows being resized." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1986,6 +1998,12 @@
           }
         }
       }
+    },
+    "TODO: CUSTOM ACCENT COLOR" : {
+
+    },
+    "TODO: CUSTOM GRADIENT COLOR (?)" : {
+
     },
     "Top Cycle" : {
       "localizations" : {

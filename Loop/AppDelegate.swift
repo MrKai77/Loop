@@ -13,9 +13,11 @@ import UserNotifications
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
     private let luminare = LuminareSettingsWindow(
         [
-            .init([
-                .init("Icon", Image(systemName: "sparkle"), IconView())
-            ]),
+            .init("Theming", [
+                .init("Icon", Image(systemName: "sparkle"), IconConfigurationView()),
+                .init("Accent Color", Image(systemName: "paintbrush.pointed"), AccentColorConfigurationView()),
+                .init("Radial Menu", Image("loop"), RadialMenuConfigurationView())
+            ])
         ],
         tint: .brown
     )

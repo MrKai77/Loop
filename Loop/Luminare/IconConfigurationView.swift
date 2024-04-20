@@ -1,5 +1,5 @@
 //
-//  IconView.swift
+//  IconConfigurationView.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-04-19.
@@ -9,7 +9,7 @@ import SwiftUI
 import Luminare
 import Defaults
 
-struct IconView: View {
+struct IconConfigurationView: View {
     @Default(.currentIcon) var currentIcon
     @Default(.showDockIcon) var showDockIcon
     @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked

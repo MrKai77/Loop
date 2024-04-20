@@ -28,6 +28,8 @@
 		A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* PermissionsManager.swift */; };
 		A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */; };
 		A827409A2AB0208500B9BDC5 /* TriggerKeycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */; };
+		A82B1AEE2BD352A100E2F3F9 /* AccentColorConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82B1AED2BD352A100E2F3F9 /* AccentColorConfigurationView.swift */; };
+		A82B1AF02BD357FC00E2F3F9 /* RadialMenuConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82B1AEF2BD357FC00E2F3F9 /* RadialMenuConfigurationView.swift */; };
 		A82DDBDE2AEC736300D7F974 /* AnimationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */; };
 		A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */; };
 		A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */; };
@@ -71,7 +73,7 @@
 		A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */; };
 		A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */; };
 		A89307312BAE6D0100566AEE /* CustomWindowActionUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */; };
-		A893D3642BD3299000063510 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A893D3632BD3299000063510 /* IconView.swift */; };
+		A893D3642BD3299000063510 /* IconConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A893D3632BD3299000063510 /* IconConfigurationView.swift */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
 		A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */; };
 		A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */; };
@@ -120,6 +122,8 @@
 		A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerKeycorder.swift; sourceTree = "<group>"; };
 		A8291D6D2A4513D200C5CB69 /* .swiftlint.yml */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; tabWidth = 2; };
+		A82B1AED2BD352A100E2F3F9 /* AccentColorConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorConfigurationView.swift; sourceTree = "<group>"; };
+		A82B1AEF2BD357FC00E2F3F9 /* RadialMenuConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuConfigurationView.swift; sourceTree = "<group>"; };
 		A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConfiguration.swift; sourceTree = "<group>"; };
 		A8330ABC2A3AC0CA00673C8D /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		A8330AC02A3AC13100673C8D /* Defaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extensions.swift"; sourceTree = "<group>"; };
@@ -162,7 +166,7 @@
 		A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTransformAnimation.swift; sourceTree = "<group>"; };
 		A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGEvent+Extensions.swift"; sourceTree = "<group>"; };
 		A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomWindowActionUnit.swift; sourceTree = "<group>"; };
-		A893D3632BD3299000063510 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
+		A893D3632BD3299000063510 /* IconConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconConfigurationView.swift; sourceTree = "<group>"; };
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
 		A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionAnchor.swift; sourceTree = "<group>"; };
 		A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeycorderModel.swift; sourceTree = "<group>"; };
@@ -386,7 +390,9 @@
 		A893D3622BD3298700063510 /* Luminare */ = {
 			isa = PBXGroup;
 			children = (
-				A893D3632BD3299000063510 /* IconView.swift */,
+				A893D3632BD3299000063510 /* IconConfigurationView.swift */,
+				A82B1AED2BD352A100E2F3F9 /* AccentColorConfigurationView.swift */,
+				A82B1AEF2BD357FC00E2F3F9 /* RadialMenuConfigurationView.swift */,
 			);
 			path = Luminare;
 			sourceTree = "<group>";
@@ -579,6 +585,7 @@
 				A84497D22B3B88A6003D4CF3 /* Optional+Extensions.swift in Sources */,
 				A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */,
 				A8330AD12A3AC25100673C8D /* CaseIterable+Extensions.swift in Sources */,
+				A82B1AF02BD357FC00E2F3F9 /* RadialMenuConfigurationView.swift in Sources */,
 				A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */,
 				A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */,
 				116CE7322B9F24D80014C19D /* AppListManager.swift in Sources */,
@@ -614,6 +621,7 @@
 				A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */,
 				A827409A2AB0208500B9BDC5 /* TriggerKeycorder.swift in Sources */,
 				A85FEEBC2AF15CDE00354D79 /* KeybindCustomizationViewItem.swift in Sources */,
+				A82B1AEE2BD352A100E2F3F9 /* AccentColorConfigurationView.swift in Sources */,
 				A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */,
 				A89307312BAE6D0100566AEE /* CustomWindowActionUnit.swift in Sources */,
 				A83667C82A3D7D910001D630 /* AXUIElement+Extensions.swift in Sources */,
@@ -652,7 +660,7 @@
 				A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */,
 				116CE7302B9F21520014C19D /* ExcludeListSettingsView.swift in Sources */,
 				A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */,
-				A893D3642BD3299000063510 /* IconView.swift in Sources */,
+				A893D3642BD3299000063510 /* IconConfigurationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

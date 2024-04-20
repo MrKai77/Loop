@@ -11,11 +11,24 @@ import Defaults
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
 
-    // ICON
+    // Icon
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
     static let showDockIcon = Key<Bool>("showDockIcon", default: false)
 
+    // Accent Color
+    static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
+    static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white))
+    static let useGradient = Key<Bool>("useGradient", default: true)
+    static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
+
+    // Radial Menu
+    static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true)
+    static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
+    static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
+    static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
+
+    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false)
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
@@ -27,17 +40,6 @@ extension Defaults.Keys {
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .smooth)
-
-    static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
-    static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white))
-    static let useGradient = Key<Bool>("useGradient", default: true)
-    static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
-
-    static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true)
-    static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50)
-    static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22)
-    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
-    static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
 
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
