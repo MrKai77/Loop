@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Luminare
 
 struct TriggerKeycorder: View {
     @EnvironmentObject private var keycorderModel: KeycorderModel
@@ -32,45 +33,27 @@ struct TriggerKeycorder: View {
             guard !self.isActive else { return }
             self.startObservingKeys()
         } label: {
-            HStack(spacing: 5) {
-                if self.selectionKey.isEmpty {
-                    Text(self.isActive ? "Set a trigger key…" : "None")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .padding(5)
-                        .padding(.horizontal, 8)
-                        .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .foregroundStyle(.background)
-                                RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(
-                                        .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
-                                        lineWidth: 1
-                                    )
-                            }
-                        }
-                        .fixedSize(horizontal: true, vertical: false)
-                } else {
+            if self.selectionKey.isEmpty {
+                Text(self.isActive ? "Set a trigger key…" : "None")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .fixedSize(horizontal: true, vertical: false)
+            } else {
+                HStack(spacing: 12) {
                     ForEach(self.selectionKey.sorted(), id: \.self) { key in
                         // swiftlint:disable:next line_length
                         Text("\(key.isOnRightSide ? String(localized: .init("Right", defaultValue: "Right")) : String(localized: .init("Left", defaultValue: "Left"))) \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .padding(5)
-                            .background {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .foregroundStyle(.background)
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
-                                }
-                            }
                             .fixedSize(horizontal: true, vertical: false)
+
+                        if key != self.selectionKey.sorted().last {
+                            Divider()
+                                .padding(1)
+                        }
                     }
                 }
             }
-            .fontDesign(.monospaced)
-            .contentShape(Rectangle())
         }
+
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
         .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
@@ -91,13 +74,15 @@ struct TriggerKeycorder: View {
                 self.selectionKey = self.validCurrentKey
             }
         }
-        .buttonStyle(.plain)
-        .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
+
+        .fixedSize()
+        .buttonStyle(LuminareCompactButtonStyle())
     }
 
     func startObservingKeys() {
         self.selectionKey = []
         self.isActive = true
+
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
             if event.type == .keyDown && event.keyCode == CGKeyCode.kVK_Escape {

@@ -20,7 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
                 .init("Preview", Image(systemName: "rectangle.lefthalf.inset.filled"), PreviewConfigurationView())
             ]),
             .init("Settings", [
-                .init("Behavior", Image(systemName: "gear"), BehaviorConfigurationView())
+                .init("Behavior", Image(systemName: "gear"), BehaviorConfigurationView()),
+                .init("Keybindings", Image(systemName: "command"), KeybindingsConfigurationView())
             ])
         ],
         tint: .mint

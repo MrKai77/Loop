@@ -46,19 +46,11 @@ extension Defaults.Keys {
     static let respectStageManager = Key<Bool>("respectStageManager", default: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 
-    
-    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
-    static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
-    static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
-    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
-
-    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
-
+    // Keybindings
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function])
-    static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let triggerDelay = Key<Double>("triggerDelay", default: 0)
+    static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false)
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false)
-
     static let keybinds = Key<[WindowAction]>("keybinds", default: [
         WindowAction(.maximize, keybind: [.kVK_Space]),
         WindowAction(.center, keybind: [.kVK_Return]),
@@ -90,9 +82,14 @@ extension Defaults.Keys {
         WindowAction(.bottomLeftQuarter, keybind: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
 
+
+    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
+    static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
+    static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
+    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
+    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
+
     static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
-
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
-
     static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false)
 }
