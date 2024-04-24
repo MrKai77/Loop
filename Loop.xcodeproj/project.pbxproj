@@ -77,7 +77,7 @@
 		A89307312BAE6D0100566AEE /* CustomWindowActionUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */; };
 		A893D3642BD3299000063510 /* IconConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A893D3632BD3299000063510 /* IconConfigurationView.swift */; };
 		A8A1C51E2BD3705A00515A14 /* PaddingConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */; };
-		A8A1C5212BD4863B00515A14 /* KeybindingsConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */; };
+		A8A1C5212BD4863B00515A14 /* KeybindindsConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C5202BD4863B00515A14 /* KeybindindsConfigurationView.swift */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
 		A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */; };
 		A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */; };
@@ -173,7 +173,7 @@
 		A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomWindowActionUnit.swift; sourceTree = "<group>"; };
 		A893D3632BD3299000063510 /* IconConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconConfigurationView.swift; sourceTree = "<group>"; };
 		A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingConfigurationView.swift; sourceTree = "<group>"; };
-		A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingsConfigurationView.swift; sourceTree = "<group>"; };
+		A8A1C5202BD4863B00515A14 /* KeybindindsConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindindsConfigurationView.swift; sourceTree = "<group>"; };
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
 		A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionAnchor.swift; sourceTree = "<group>"; };
 		A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeycorderModel.swift; sourceTree = "<group>"; };
@@ -432,7 +432,7 @@
 		A8A1C5222BD4863F00515A14 /* Keybindings */ = {
 			isa = PBXGroup;
 			children = (
-				A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */,
+				A8A1C5202BD4863B00515A14 /* KeybindindsConfigurationView.swift */,
 				A86DAE272B3CCF0400B968F0 /* Keybind Recorder */,
 			);
 			path = Keybindings;
@@ -688,7 +688,7 @@
 				A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
 				0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */,
-				A8A1C5212BD4863B00515A14 /* KeybindingsConfigurationView.swift in Sources */,
+				A8A1C5212BD4863B00515A14 /* KeybindindsConfigurationView.swift in Sources */,
 				A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */,
 				A8E8903C2BA7AAFE006C5074 /* NSEvent+Extensions.swift in Sources */,
 				0A6DC3EB2BB869DE002AB05F /* WindowDirection+Image.swift in Sources */,
