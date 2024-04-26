@@ -22,6 +22,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             .init("Settings", [
                 .init("Behavior", Image(systemName: "gear"), BehaviorConfigurationView()),
                 .init("Keybindings", Image(systemName: "command"), KeybindingsConfigurationView())
+            ]),
+            .init("Loop", [
+                .init("Advanced", Image(systemName: "face.smiling.inverse"), AdvancedConfigurationView()),
+                .init("Permissions", Image(systemName: "checklist"), PermissionsConfigurationView())
             ])
         ],
         tint: .mint
@@ -41,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 //        NSApp.setActivationPolicy(.accessory)
 
         // Check & ask for accessibility access
-        PermissionsManager.Accessibility.requestAccess()
+        PermissionsManager.accessibility.requestAccess()
         UNUserNotificationCenter.current().delegate = self
 
         AppDelegate.requestNotificationAuthorization()

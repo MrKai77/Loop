@@ -15,6 +15,7 @@ extension Defaults.Keys {
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)
     static let showDockIcon = Key<Bool>("showDockIcon", default: false)
+    static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
 
     // Accent Color
     static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true)
@@ -82,13 +83,13 @@ extension Defaults.Keys {
         WindowAction(.bottomLeftQuarter, keybind: [.kVK_DownArrow, .kVK_LeftArrow])
     ])
 
-
+    // Advanced
+    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
-    static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true)
-    static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false) // BETA
-    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
 
+
+    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
     static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false)

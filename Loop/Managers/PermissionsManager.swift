@@ -9,13 +9,13 @@ import SwiftUI
 import Defaults
 
 class PermissionsManager {
-    static func requestAccess() {
-        PermissionsManager.Accessibility.requestAccess()
-        PermissionsManager.ScreenRecording.requestAccess()
-    }
+    static let accessibility = PermissionsManager.Accessibility()
+    static let screenCapture = PermissionsManager.ScreenCapture()
+}
 
+extension PermissionsManager {
     class Accessibility {
-        static func getStatus() -> Bool {
+        func getStatus() -> Bool {
             // Get current state for accessibility access
             let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: false]
             let status = AXIsProcessTrustedWithOptions(options)
@@ -24,10 +24,11 @@ class PermissionsManager {
         }
 
         @discardableResult
-        static func requestAccess() -> Bool {
-            if PermissionsManager.Accessibility.getStatus() {
+        func requestAccess() -> Bool {
+            if PermissionsManager.accessibility.getStatus() {
                 return true
             }
+
             let alert = NSAlert()
             alert.messageText = .init(
                 localized: .init(
@@ -49,15 +50,19 @@ class PermissionsManager {
             return status
         }
     }
+}
 
-    class ScreenRecording {
-        static func getStatus() -> Bool {
+
+extension PermissionsManager {
+    class ScreenCapture {
+        func getStatus() -> Bool {
             return CGPreflightScreenCaptureAccess()
         }
 
-        static func requestAccess() {
-            if PermissionsManager.ScreenRecording.getStatus() {
-                return
+        @discardableResult
+        func requestAccess() -> Bool {
+            if PermissionsManager.screenCapture.getStatus() {
+                return true
             }
 
             let alert = NSAlert()
@@ -78,6 +83,8 @@ Screen recording permissions are required to animate windows being resized. \(Bu
             alert.runModal()
 
             CGRequestScreenCaptureAccess()
+
+            return getStatus()
         }
     }
 }

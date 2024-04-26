@@ -63,6 +63,9 @@ struct KeybindingsConfigurationView: View {
         .onChange(of: self.keybinds) { _ in
             Defaults[.keybinds] = self.keybinds
         }
+        .onAppear {
+            self.keybinds = Defaults[.keybinds]
+        }
     }
 }
 

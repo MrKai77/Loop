@@ -167,6 +167,9 @@
         }
       }
     },
+    "Accessibility Access" : {
+
+    },
     "Accessibility Request: Content" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -1636,6 +1639,7 @@
       }
     },
     "Request Access…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1644,6 +1648,12 @@
           }
         }
       }
+    },
+    "Request…" : {
+
+    },
+    "Reset" : {
+
     },
     "Resize window under cursor" : {
       "localizations" : {
@@ -1736,6 +1746,9 @@
       }
     },
     "Save & Close" : {
+
+    },
+    "Screen Capture Access" : {
 
     },
     "Screen Padding" : {

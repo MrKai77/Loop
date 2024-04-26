@@ -336,7 +336,7 @@ class LoopManager: ObservableObject {
         self.targetWindow = nil
 
         // Ensure accessibility access
-        guard PermissionsManager.Accessibility.getStatus() else { return }
+        guard PermissionsManager.accessibility.getStatus() else { return }
 
         self.targetWindow = WindowEngine.getTargetWindow()
         guard self.targetWindow?.isAppExcluded != true else { return }

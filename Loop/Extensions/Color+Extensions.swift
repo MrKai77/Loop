@@ -27,4 +27,8 @@ extension Color {
             return Defaults[.gradientColor]
         }
     }
+
+    var pastelized: Color {
+        return Color(nsColor: NSColor(self).blended(withFraction: 0.5, of: .white) ?? .white)
+    }
 }

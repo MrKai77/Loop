@@ -84,7 +84,7 @@ struct MoreSettingsView: View {
                 }
                 .onChange(of: animateWindowResizes) { _ in
                     if animateWindowResizes == true {
-                        PermissionsManager.ScreenRecording.requestAccess()
+                        PermissionsManager.screenCapture.requestAccess()
                     }
                 }
 
@@ -149,23 +149,23 @@ struct MoreSettingsView: View {
 
                     Spacer()
 
-                    Button("Request Access…") {
-                        PermissionsManager.requestAccess()
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-                    }
-                    .buttonStyle(.link)
-                    .foregroundStyle(Color.accentColor)
-                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
-                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
-                    .onAppear {
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-
-                        if !isScreenRecordingAccessGranted {
-                            self.animateWindowResizes = false
-                        }
-                    }
+//                    Button("Request Access…") {
+////                        PermissionsManager..requestAccess()
+//                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+//                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+//                    }
+//                    .buttonStyle(.link)
+//                    .foregroundStyle(Color.accentColor)
+//                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
+//                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
+//                    .onAppear {
+//                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
+//                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+//
+//                        if !isScreenRecordingAccessGranted {
+//                            self.animateWindowResizes = false
+//                        }
+//                    }
                 }
             })
 

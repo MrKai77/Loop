@@ -52,6 +52,8 @@
 		A84F9E292BA4F20C00CF3E09 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = A84F9E282BA4F20C00CF3E09 /* Algorithms */; };
 		A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */; };
 		A8579EEA2BD32C15002B7E27 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8579EE92BD32C15002B7E27 /* Luminare */; };
+		A858914B2BDC5D3F00C10FB1 /* AdvancedConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A858914A2BDC5D3F00C10FB1 /* AdvancedConfigurationView.swift */; };
+		A858914D2BDC5F7400C10FB1 /* PermissionsConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A858914C2BDC5F7400C10FB1 /* PermissionsConfigurationView.swift */; };
 		A859799B2B55FE94009FB067 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */; };
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
 		A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */; };
@@ -148,6 +150,8 @@
 		A848130C2BD1A8D100B02E93 /* .github */ = {isa = PBXFileReference; lastKnownFileType = folder; path = .github; sourceTree = "<group>"; };
 		A848D8A62A8C2F3F00060834 /* LoopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopManager.swift; sourceTree = "<group>"; };
 		A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdater.swift; sourceTree = "<group>"; };
+		A858914A2BDC5D3F00C10FB1 /* AdvancedConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedConfigurationView.swift; sourceTree = "<group>"; };
+		A858914C2BDC5F7400C10FB1 /* PermissionsConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsConfigurationView.swift; sourceTree = "<group>"; };
 		A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
 		A85B560D2AAAD62C00386ACE /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -323,6 +327,15 @@
 			path = Keybindings;
 			sourceTree = "<group>";
 		};
+		A85891492BDC5D1600C10FB1 /* Loop */ = {
+			isa = PBXGroup;
+			children = (
+				A858914A2BDC5D3F00C10FB1 /* AdvancedConfigurationView.swift */,
+				A858914C2BDC5F7400C10FB1 /* PermissionsConfigurationView.swift */,
+			);
+			path = Loop;
+			sourceTree = "<group>";
+		};
 		A864F4662AA65EC200579738 /* Window Management */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +429,7 @@
 			children = (
 				A82B1AF32BD35C5900E2F3F9 /* Theming */,
 				A82B1AF42BD35C6400E2F3F9 /* Settings */,
+				A85891492BDC5D1600C10FB1 /* Loop */,
 			);
 			path = Luminare;
 			sourceTree = "<group>";
@@ -637,6 +651,7 @@
 				A82DDBDE2AEC736300D7F974 /* AnimationConfiguration.swift in Sources */,
 				A84497CD2B3A52C7003D4CF3 /* PreviewWindowButton.swift in Sources */,
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
+				A858914D2BDC5F7400C10FB1 /* PermissionsConfigurationView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
 				A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */,
 				A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */,
@@ -663,6 +678,7 @@
 				A8330AC52A3AC15900673C8D /* Notification+Extensions.swift in Sources */,
 				A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */,
 				A827409A2AB0208500B9BDC5 /* TriggerKeycorder.swift in Sources */,
+				A858914B2BDC5D3F00C10FB1 /* AdvancedConfigurationView.swift in Sources */,
 				A85FEEBC2AF15CDE00354D79 /* KeybindCustomizationViewItem.swift in Sources */,
 				A82B1AEE2BD352A100E2F3F9 /* AccentColorConfigurationView.swift in Sources */,
 				A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */,
