@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Luminare
 import Defaults
 import Carbon.HIToolbox
 
@@ -14,7 +15,8 @@ struct Keycorder: View {
 
     let keyLimit: Int = 6
 
-    @Binding private var triggerKey: Set<CGKeyCode>
+    @Default(.triggerKey) var triggerKey
+
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
     @State private var selectionKeybind: Set<CGKeyCode>
     @Binding private var direction: WindowDirection
@@ -28,10 +30,9 @@ struct Keycorder: View {
     @State private var isActive: Bool = false
     @State private var isCurrentlyPressed: Bool = false
 
-    init(_ keybind: Binding<WindowAction>, _ triggerKey: Binding<Set<CGKeyCode>>) {
+    init(_ keybind: Binding<WindowAction>) {
         self._validCurrentKeybind = keybind.keybind
         self._direction = keybind.direction
-        self._triggerKey = triggerKey
         self._selectionKeybind = State(initialValue: keybind.wrappedValue.keybind)
     }
 
@@ -43,51 +44,27 @@ struct Keycorder: View {
             guard !self.isActive else { return }
             self.startObservingKeys()
         } label: {
-            HStack(spacing: 5) {
-                if self.selectionKeybind.isEmpty {
-                    Text(
-                        self.isActive
-                        ? .init(localized: .init("Press a key…", defaultValue: "Press a key…"))
-                        : .init(localized: .init("None", defaultValue: "None"))
-                    )
+            if self.selectionKeybind.isEmpty {
+                Text("\(Image(systemName: "ellipsis"))")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.horizontal, 8)
-                    .background {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 6)
-                                .foregroundStyle(.background)
-                            RoundedRectangle(cornerRadius: 6)
-                                .strokeBorder(
-                                    .tertiary.opacity((self.isHovering || self.isActive) ? 1 : 0.5),
-                                    lineWidth: 1
-                                )
-                        }
-                    }
                     .fixedSize(horizontal: true, vertical: false)
-                } else {
-                    ForEach(self.selectionKeybind.sorted(by: >), id: \.self) { key in
+                    .frame(width: 27, height: 27)
+                    .font(.callout)
+                    .modifier(LuminareBordered())
+            } else {
+                HStack(spacing: 5) {
+                    ForEach(self.selectionKeybind.sorted(), id: \.self) { key in
                         if let systemImage = key.systemImage {
                             Text("\(Image(systemName: systemImage))")
                         } else if let humanReadable = key.humanReadable {
                             Text(humanReadable)
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .aspectRatio(1, contentMode: .fill)
-                    .padding(5)
-                    .background {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 6)
-                                .foregroundStyle(.background)
-                            RoundedRectangle(cornerRadius: 6)
-                                .strokeBorder(.tertiary.opacity(self.isHovering ? 1 : 0.5), lineWidth: 1)
-                        }
-                    }
-                    .fixedSize(horizontal: true, vertical: false)
+                    .frame(width: 27, height: 27)
+                    .font(.callout)
+                    .modifier(LuminareBordered(highlight: $isHovering))
                 }
             }
-            .fontDesign(.monospaced)
-            .contentShape(Rectangle())
         }
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
@@ -109,8 +86,7 @@ struct Keycorder: View {
                 self.selectionKeybind = self.validCurrentKeybind
             }
         }
-        .buttonStyle(.plain)
-        .scaleEffect(self.isCurrentlyPressed ? 0.9 : 1)
+        .buttonStyle(PlainButtonStyle())
     }
 
     func startObservingKeys() {

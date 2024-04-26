@@ -483,9 +483,9 @@
 			isa = PBXGroup;
 			children = (
 				A80521312A84878200BF7E22 /* Config.xcconfig */,
+				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */,
 				A893D3622BD3298700063510 /* Luminare */,
-				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A83EEEB02AD46BAC00F3EA2D /* MenuBar */,
 				A864F4662AA65EC200579738 /* Window Management */,
 				A8330ABB2A3AC05200673C8D /* Managers */,

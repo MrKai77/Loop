@@ -56,12 +56,8 @@ struct KeybindingsConfigurationView: View {
             selection: $selectedKeybinds,
             addAction: { self.keybinds.insert(.init(.noAction), at: 0) },
             content: { keybind in
-                //                HStack {
-                //                    if let name = keybind.direction.name! {
-                //                Text(keybind.id.uuidString)
-                //                    }
                 KeybindingItemView(keybind)
-                //                }
+                    .environmentObject(keycorderModel)
             }
         )
         .onChange(of: self.keybinds) { _ in
@@ -71,6 +67,7 @@ struct KeybindingsConfigurationView: View {
 }
 
 struct KeybindingItemView: View {
+    @Default(.triggerKey) var triggerKey
     @Binding var keybind: WindowAction
 
     init(_ keybind: Binding<WindowAction>) {
@@ -84,9 +81,25 @@ struct KeybindingItemView: View {
                 .fixedSize()
 
             Spacer()
+
+            HStack(spacing: 6) {
+                HStack {
+                    ForEach(triggerKey.sorted().compactMap { $0.systemImage }, id: \.self) { image in
+                        Text("\(Image(systemName: image))")
+                    }
+                }
+                .font(.callout)
+                .padding(6)
+                .frame(height: 27)
+                .modifier(LuminareBordered())
+
+                Image(systemName: "plus")
+
+                Keycorder($keybind)
+            }
         }
         .padding(.leading, 12)
-        .formStyle(.grouped)
+        .padding(.trailing, 8)
     }
 }
 
@@ -150,19 +163,11 @@ struct WindowDirectionPicker: View, Equatable {
             }
         } label: {
             label()
+                .padding(.vertical, 5) // Increase hitbox size
+                .contentShape(.rect)
+                .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox
         }
-        .menuStyle(.borderlessButton)
-
-        // Removes arrow at trailing end. Hacky, but works for now :3
-        .mask {
-            HStack(spacing: 0) {
-                Color.white
-
-                Rectangle()
-                    .frame(width: 15)
-                    .foregroundStyle(isHovering ? .white : .clear)
-            }
-        }
+        .buttonStyle(PlainButtonStyle())    // Override Luminare button styling
     }
 
     func directionPickerItem(_ direction: WindowDirection) -> some View {
@@ -174,7 +179,7 @@ struct WindowDirectionPicker: View, Equatable {
     }
 
     func label() -> some View {
-        HStack {
+        HStack(spacing: 5) {
             keybind.direction.icon
 
             if keybind.direction == .custom {
@@ -183,6 +188,11 @@ struct WindowDirectionPicker: View, Equatable {
                 Text(keybind.name ?? .init(localized: .init("Custom Cycle", defaultValue: "Custom Cycle")))
             } else {
                 Text(keybind.direction.name)
+            }
+
+            if isHovering {
+                Image(systemName: "chevron.down")
+                    .font(.caption)
             }
         }
     }

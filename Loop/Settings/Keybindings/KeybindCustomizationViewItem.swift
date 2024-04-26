@@ -66,30 +66,30 @@ struct KeybindCustomizationViewItem: View {
             Spacer()
 
             Group {
-                ForEach(self.triggerKey.sorted(), id: \.self) { key in
-                    Text("\(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
-                        .foregroundStyle(.secondary)
-                        .fontDesign(.monospaced)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .aspectRatio(1, contentMode: .fill)
-                        .padding(5)
-                        .background {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 6)
-                                    .foregroundStyle(.background.opacity(0.8))
-                                RoundedRectangle(cornerRadius: 6)
-                                    .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
-                            }
-                            .opacity(0.8)
-                        }
-                        .fixedSize(horizontal: true, vertical: false)
-                }
+//                ForEach(self.triggerKey.sorted(), id: \.self) { key in
+//                    Text("\(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
+//                        .foregroundStyle(.secondary)
+//                        .fontDesign(.monospaced)
+//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                        .aspectRatio(1, contentMode: .fill)
+//                        .padding(5)
+//                        .background {
+//                            ZStack {
+//                                RoundedRectangle(cornerRadius: 6)
+//                                    .foregroundStyle(.background.opacity(0.8))
+//                                RoundedRectangle(cornerRadius: 6)
+//                                    .strokeBorder(.tertiary.opacity(0.5), lineWidth: 1)
+//                            }
+//                            .opacity(0.8)
+//                        }
+//                        .fixedSize(horizontal: true, vertical: false)
+//                }
 
-                Image(systemName: "plus")
-                    .foregroundStyle(.secondary)
-                    .fontDesign(.monospaced)
-
-                Keycorder($keybind, $triggerKey)
+//                Image(systemName: "plus")
+//                    .foregroundStyle(.secondary)
+//                    .fontDesign(.monospaced)
+//
+//                Keycorder($keybind, $triggerKey)
             }
         }
         .padding(.vertical, 5)

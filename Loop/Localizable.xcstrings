@@ -1555,6 +1555,7 @@
       }
     },
     "Press a key…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
