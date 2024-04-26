@@ -41,6 +41,7 @@ extension Defaults.Keys {
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .fast)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
+    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false)
     static let enablePadding = Key<Bool>("enablePadding", default: false)
     static let padding = Key<PaddingModel>("padding", default: .zero)
@@ -88,8 +89,6 @@ extension Defaults.Keys {
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
 
-
-    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
     static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false)

@@ -14,11 +14,16 @@ struct BehaviorConfigurationView: View {
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
     @Default(.animationConfiguration) var animationConfiguration
     @Default(.windowSnapping) var windowSnapping
-    @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
+    @Default(.focusWindowOnResize) var focusWindowOnResize
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
-    @Default(.enablePadding) var enablePadding
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
+
+    // Fixes animation for  @Default(.resizeWindowUnderCursor)
+    @State private var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor]
+
+    // Fixes animation for @Default(.enablePadding)
+    @State private var enablePadding = Defaults[.enablePadding]
 
     var body: some View {
         LuminareSection("General") {
@@ -35,10 +40,25 @@ struct BehaviorConfigurationView: View {
 
         LuminareSection("Window") {
             LuminareToggle("Window snapping", isOn: $windowSnapping)
-            LuminareToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)
+
+            LuminareToggle(
+                "Resize window under cursor",
+                isOn: $resizeWindowUnderCursor.animation(.smooth(duration: 0.3))
+            )
+            .onChange(of: resizeWindowUnderCursor) { _ in
+                Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
+            }
+
+            if resizeWindowUnderCursor {
+                LuminareToggle("Focus window on resize", isOn: $focusWindowOnResize)
+            }
+
             LuminareToggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
 
-            LuminareToggle("Include padding", isOn: $enablePadding)
+            LuminareToggle("Include padding", isOn: $enablePadding.animation(.smooth(duration: 0.3)))
+                .onChange(of: enablePadding) { _ in
+                    Defaults[.enablePadding] = enablePadding
+                }
 
             if enablePadding {
                 Button("Configure padding...") {
