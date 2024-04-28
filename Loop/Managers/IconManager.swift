@@ -124,7 +124,7 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
 
     static func returnUnlockedIcons() -> [Icon] {
         var returnValue: [Icon] = []
-        for icon in icons where icon.unlockTime <= /*Defaults[.timesLooped]*/ 541 {
+        for icon in icons where icon.unlockTime <= Defaults[.timesLooped]/* 541*/ {
             returnValue.append(icon)
         }
         return returnValue.reversed()

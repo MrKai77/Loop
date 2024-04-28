@@ -16,7 +16,7 @@ struct PreviewWindowButton: NSViewRepresentable {
 
     func makeNSView(context: NSViewRepresentableContext<Self>) -> NSButton {
         let button = NSButton(
-            title: .init(localized: .init("Show", defaultValue: "Show")),
+            title: .init(localized: .init("Preview", defaultValue: "Preview")),
             target: context.coordinator,
             action: #selector(Coordinator.buttonClicked)
         )

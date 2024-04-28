@@ -45,7 +45,7 @@ struct Keycorder: View {
             self.startObservingKeys()
         } label: {
             if self.selectionKeybind.isEmpty {
-                Text("\(Image(systemName: "ellipsis"))")
+                Text(self.isActive ? "\(Image(systemName: "ellipsis"))" : "\(Image(systemName: "exclamationmark.triangle"))")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .fixedSize(horizontal: true, vertical: false)
                     .frame(width: 27, height: 27)

@@ -167,9 +167,6 @@
         }
       }
     },
-    "Accessibility Access" : {
-
-    },
     "Accessibility Request: Content" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -327,6 +324,9 @@
     "Change" : {
 
     },
+    "Check for updates…" : {
+
+    },
     "Check for Updates…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -336,6 +336,9 @@
           }
         }
       }
+    },
+    "Click on 'Send Feedback' to go to our GitHub page, where you can report bugs, suggest new features, or provide other valuable input." : {
+
     },
     "Configure padding..." : {
 
@@ -1748,7 +1751,7 @@
     "Save & Close" : {
 
     },
-    "Screen Capture Access" : {
+    "Screen capture access" : {
 
     },
     "Screen Padding" : {
@@ -1880,6 +1883,7 @@
       }
     },
     "Show" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

@@ -10,9 +10,8 @@ import Luminare
 import Defaults
 
 struct PaddingConfigurationView: View {
-    @Environment(\.dismissModal) var dismissModal
-
     @State var paddingModel = Defaults[.padding]
+    @Binding var isPresented: Bool
 
     var body: some View {
         ScreenView {
@@ -132,7 +131,7 @@ struct PaddingConfigurationView: View {
         }
 
         Button("Save & Close") {
-            dismissModal()
+            isPresented = false
         }
         .buttonStyle(LuminareCompactButtonStyle())
     }

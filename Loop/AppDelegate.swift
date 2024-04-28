@@ -25,7 +25,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             ]),
             .init("Loop", [
                 .init("Advanced", Image(systemName: "face.smiling.inverse"), AdvancedConfigurationView()),
-                .init("Permissions", Image(systemName: "checklist"), PermissionsConfigurationView())
+                .init("Permissions", Image(systemName: "checklist"), PermissionsConfigurationView()),
+                .init("About", Image(systemName: "ellipsis"), AboutConfigurationView())
             ])
         ],
         tint: .mint

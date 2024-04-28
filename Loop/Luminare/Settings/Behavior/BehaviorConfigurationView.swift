@@ -25,6 +25,8 @@ struct BehaviorConfigurationView: View {
     // Fixes animation for @Default(.enablePadding)
     @State private var enablePadding = Defaults[.enablePadding]
 
+    @State var isPaddingConfigurationViewPresented = false
+
     var body: some View {
         LuminareSection("General") {
             LuminareToggle("Launch at login", isOn: $launchAtLogin)
@@ -62,8 +64,10 @@ struct BehaviorConfigurationView: View {
 
             if enablePadding {
                 Button("Configure padding...") {
-                    let modal = LuminareModalWindow(PaddingConfigurationView())
-                    modal.show()
+                    isPaddingConfigurationViewPresented = true
+                }
+                .luminareModal(isPresented: $isPaddingConfigurationViewPresented) {
+                    PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
                 }
             }
         }

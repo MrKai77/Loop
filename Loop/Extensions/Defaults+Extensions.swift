@@ -89,7 +89,9 @@ extension Defaults.Keys {
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
 
+    // About
+    static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false)
+
     static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
-    static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false)
 }

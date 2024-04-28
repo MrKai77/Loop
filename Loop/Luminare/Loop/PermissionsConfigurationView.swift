@@ -25,7 +25,7 @@ struct PermissionsConfigurationView: View {
                         .foregroundStyle(.green.pastelized)
                 }
 
-                Text("Accessibility Access")
+                Text("Accessibility access")
 
                 Spacer()
 
@@ -51,7 +51,7 @@ struct PermissionsConfigurationView: View {
                         .foregroundStyle(.green.pastelized)
                 }
 
-                Text("Screen Capture Access")
+                Text("Screen capture access")
 
                 Spacer()
 

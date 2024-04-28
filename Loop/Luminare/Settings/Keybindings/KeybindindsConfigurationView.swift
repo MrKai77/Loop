@@ -61,17 +61,22 @@ struct KeybindingsConfigurationView: View {
             }
         )
         .onChange(of: self.keybinds) { _ in
-            Defaults[.keybinds] = self.keybinds
+            Defaults[.keybinds] = keybinds
         }
         .onAppear {
-            self.keybinds = Defaults[.keybinds]
+            keybinds = Defaults[.keybinds]
         }
     }
 }
 
 struct KeybindingItemView: View {
+    @Environment(\.hoveringOverLuminareListItem) var isHovering
+
     @Default(.triggerKey) var triggerKey
     @Binding var keybind: WindowAction
+
+    @State var isConfiguringCustomKeybind: Bool = false
+    @State var isConfiguringCustomCycle: Bool = false
 
     init(_ keybind: Binding<WindowAction>) {
         self._keybind = keybind
@@ -82,6 +87,27 @@ struct KeybindingItemView: View {
             WindowDirectionPicker(keybind: $keybind)
                 .equatable()
                 .fixedSize()
+
+            if keybind.direction == .custom || self.keybind.direction == .cycle {
+                Button(action: {
+                    if keybind.direction == .custom {
+                        isConfiguringCustomKeybind = true
+                    } else {
+                        isConfiguringCustomCycle = true
+                    }
+                }, label: {
+                    Image(systemName: "pencil")
+                        .font(.title3)
+                        .foregroundStyle(isHovering ? .primary : .secondary)
+                })
+                .buttonStyle(.plain)
+                .luminareModal(isPresented: $isConfiguringCustomKeybind) {
+                    CustomKeybindConfigurationView(action: $keybind, isPresented: $isConfiguringCustomKeybind)
+                }
+//                .sheet(isPresented: self.$isConfiguringCustomKeybind) {
+//                    CustomKeybindView(action: $keybind, isSheetShown: $isConfiguringCustomKeybind)
+//                }
+            }
 
             Spacer()
 
@@ -114,6 +140,12 @@ struct WindowDirectionPicker: View, Equatable {
         Menu {
             // This increases performance!
             if isHovering {
+                Picker("General", selection: $keybind.direction) {
+                    ForEach(WindowDirection.general) { direction in
+                        directionPickerItem(direction)
+                    }
+                }
+
                 Picker("Halves", selection: $keybind.direction) {
                     ForEach(WindowDirection.halves) { direction in
                         directionPickerItem(direction)

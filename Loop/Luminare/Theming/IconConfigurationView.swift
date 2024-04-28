@@ -24,7 +24,9 @@ struct IconConfigurationView: View {
                     },
                     set: { newValue in
                         currentIcon = newValue.iconName
-                        IconManager.refreshCurrentAppIcon()
+                        DispatchQueue.main.async {
+                            IconManager.refreshCurrentAppIcon()
+                        }
                     }
                 ),
                 roundBottom: false

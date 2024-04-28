@@ -22,7 +22,7 @@ enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
         }
     }
 
-    var postscript: String {
+    var suffix: String {
         switch self {
         case .pixels:
             "px"
