@@ -84,17 +84,28 @@ struct KeybindingItemView: View {
 
     var body: some View {
         HStack {
+//            if keybind.direction == .cycle {
+//                Button(action: {
+//                    withAnimation(.smooth(duration: 0.3)) {
+//                        isConfiguringCustomCycle.toggle()
+//                    }
+//                }, label: {
+//                    Image(systemName: "chevron.right")
+//                        .font(.caption2)
+//                        .foregroundStyle(isHovering ? .primary : .secondary)
+//                        .rotationEffect(.degrees(isConfiguringCustomCycle ? 90 : 0))
+//                        .contentShape(.rect)
+//                })
+//                .buttonStyle(.plain)
+//            }
+
             WindowDirectionPicker(keybind: $keybind)
                 .equatable()
                 .fixedSize()
 
-            if keybind.direction == .custom || self.keybind.direction == .cycle {
+            if keybind.direction == .custom {
                 Button(action: {
-                    if keybind.direction == .custom {
-                        isConfiguringCustomKeybind = true
-                    } else {
-                        isConfiguringCustomCycle = true
-                    }
+                    isConfiguringCustomKeybind = true
                 }, label: {
                     Image(systemName: "pencil")
                         .font(.title3)
@@ -104,9 +115,6 @@ struct KeybindingItemView: View {
                 .luminareModal(isPresented: $isConfiguringCustomKeybind) {
                     CustomKeybindConfigurationView(action: $keybind, isPresented: $isConfiguringCustomKeybind)
                 }
-//                .sheet(isPresented: self.$isConfiguringCustomKeybind) {
-//                    CustomKeybindView(action: $keybind, isSheetShown: $isConfiguringCustomKeybind)
-//                }
             }
 
             Spacer()
@@ -225,10 +233,10 @@ struct WindowDirectionPicker: View, Equatable {
                 Text(keybind.direction.name)
             }
 
-            if isHovering {
-                Image(systemName: "chevron.down")
-                    .font(.caption)
-            }
+//            if isHovering {
+//                Image(systemName: "chevron.down")
+//                    .font(.caption)
+//            }
         }
     }
 

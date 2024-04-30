@@ -99,8 +99,10 @@ struct CustomKeybindConfigurationView: View {
                     get: {
                         action.unit == .pixels
                     },
-                    set: {
-                        action.unit = $0 ? .pixels : .percentage
+                    set: { newValue in
+                        withAnimation(.smooth(duration: 0.3)) {
+                            action.unit = newValue ? .pixels : .percentage
+                        }
                     }
                 )
             )
