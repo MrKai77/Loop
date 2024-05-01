@@ -101,7 +101,9 @@ li {
 }
 
 .nf,
-.bf {
+.bf,
+.in,
+.nm {
     font-size: 20px;
     font-weight: 400;
 }

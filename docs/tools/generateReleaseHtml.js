@@ -51,9 +51,29 @@ function enhanceMarkdown(body) {
 }
 
 function generateHtml(releaseData) {
-  const versionHtml = `<h1><a class="releases" href="${releaseData.html_url}">${releaseData.tag_name}</a></h1>`;
-  const notesHtml = marked.parse(enhanceMarkdown(releaseData.body));
-  return beautify.html(versionHtml + notesHtml, { indent_size: 2, space_in_empty_paren: true });
+  let notesHtml = marked.parse(enhanceMarkdown(releaseData.body));
+
+  // Dynamically assign classes to <h2> tags and wrap sections in <article> tags
+  notesHtml = notesHtml.replace(/<h2>(.*?)<\/h2>/g, (match, content) => {
+    let className = '';
+    if (content.includes('Important News')) className = 'in';
+    else if (content.includes('New Features')) className = 'nf';
+    else if (content.includes('Bug Fixes')) className = 'bf';
+    else if (content.includes('Notable Mentions')) className = 'nm';
+
+    return `</article><article><h2 class="${className}">${content}</h2>`;
+  });
+
+  // Remove the first closing </article> tag and ensure the last <article> is closed
+  notesHtml = `<article>${notesHtml.substring(10)}</article>`;
+
+  // Version HTML placed directly above the main content section
+  const versionHtml = `<h1 class="releases"><a class="releases" href="${releaseData.html_url}">${releaseData.tag_name}</a></h1>`;
+
+  // Wrap the modified notesHtml in a main <section>, starting right after the versionHtml
+  notesHtml = `${versionHtml}<section>${notesHtml}</section>`;
+
+  return beautify.html(notesHtml, { indent_size: 2, space_in_empty_paren: true });
 }
 
 async function displayReleaseAsHtml() {
