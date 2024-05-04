@@ -340,6 +340,9 @@
     "Click on 'Send Feedback' to go to our GitHub page, where you can report bugs, suggest new features, or provide other valuable input." : {
 
     },
+    "Close" : {
+
+    },
     "Configure padding..." : {
 
     },
@@ -1747,9 +1750,6 @@
           }
         }
       }
-    },
-    "Save & Close" : {
-
     },
     "Screen capture access" : {
 

@@ -64,6 +64,20 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     var cycle: [WindowAction]?
 
+    func getName() -> String {
+        var result = ""
+
+        if direction == .custom {
+            result = name ?? .init(localized: .init("Custom Keybind", defaultValue: "Custom Keybind"))
+        } else if direction == .cycle {
+            result = name ?? .init(localized: .init("Custom Cycle", defaultValue: "Custom Cycle"))
+        } else {
+            result = direction.name
+        }
+
+        return result
+    }
+
     var willManipulateCurrentWindowSize: Bool {
         direction.willAdjustSize || direction.willShrink || direction.willGrow
     }

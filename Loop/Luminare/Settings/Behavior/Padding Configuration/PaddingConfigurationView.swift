@@ -130,7 +130,7 @@ struct PaddingConfigurationView: View {
             }
         }
 
-        Button("Save & Close") {
+        Button("Close") {
             isPresented = false
         }
         .buttonStyle(LuminareCompactButtonStyle())

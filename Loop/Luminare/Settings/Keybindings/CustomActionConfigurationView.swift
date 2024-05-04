@@ -1,5 +1,5 @@
 //
-//  CustomKeybindConfigurationView.swift
+//  CustomActionConfigurationView.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-04-27.
@@ -9,7 +9,7 @@ import SwiftUI
 import Luminare
 import Defaults
 
-struct CustomKeybindConfigurationView: View {
+struct CustomActionConfigurationView: View {
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
 
@@ -45,16 +45,41 @@ struct CustomKeybindConfigurationView: View {
     ]
 
     let previewController = PreviewController()
+    let screenSize: CGSize
 
     init(action: Binding<WindowAction>, isPresented: Binding<Bool>) {
         self._windowAction = action
         self._isPresented = isPresented
         self._action = State(initialValue: action.wrappedValue)
+
+        screenSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
     }
 
     var body: some View {
         ScreenView {
-//            PaddingPreviewView($paddingModel)
+            GeometryReader { geo in
+                let frame = action.getFrame(
+                    window: nil,
+                    bounds: .init(origin: .zero, size: geo.size),
+                    toScale: false
+                )
+
+                ZStack {
+                    if action.sizeMode == .custom {
+                        blurredWindow()
+                            .frame(
+                                width: frame.width,
+                                height: frame.height
+                            )
+                            .offset(
+                                x: frame.origin.x,
+                                y: frame.origin.y
+                            )
+                    }
+                }
+                .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
+                .animation(.smooth(duration: 0.3), value: frame)
+            }
         }
         .onChange(of: self.action) { _ in
             windowAction = action
@@ -130,7 +155,7 @@ struct CustomKeybindConfigurationView: View {
                     perform: { }
                 )
 
-            Button("Save & Close") {
+            Button("Close") {
                 isPresented = false
             }
         }
@@ -257,5 +282,15 @@ struct CustomKeybindConfigurationView: View {
                 )
             }
         }
+    }
+
+    @ViewBuilder
+    func blurredWindow() -> some View {
+        VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
+            .overlay {
+                RoundedRectangle(cornerRadius: 5)
+                    .strokeBorder(.white.opacity(0.1), lineWidth: 2)
+            }
+            .clipShape(.rect(cornerRadius: 5))
     }
 }
