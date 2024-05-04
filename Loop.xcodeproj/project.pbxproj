@@ -80,7 +80,7 @@
 		A89307312BAE6D0100566AEE /* CustomWindowActionUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */; };
 		A893D3642BD3299000063510 /* IconConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A893D3632BD3299000063510 /* IconConfigurationView.swift */; };
 		A8A1C51E2BD3705A00515A14 /* PaddingConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */; };
-		A8A1C5212BD4863B00515A14 /* KeybindindsConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C5202BD4863B00515A14 /* KeybindindsConfigurationView.swift */; };
+		A8A1C5212BD4863B00515A14 /* KeybindingsConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
 		A8A583B82BE5A117005F4CB2 /* CycleActionConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */; };
 		A8A583BA2BE5A8D8005F4CB2 /* KeybindingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B92BE5A8D8005F4CB2 /* KeybindingItemView.swift */; };
@@ -183,7 +183,7 @@
 		A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomWindowActionUnit.swift; sourceTree = "<group>"; };
 		A893D3632BD3299000063510 /* IconConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconConfigurationView.swift; sourceTree = "<group>"; };
 		A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingConfigurationView.swift; sourceTree = "<group>"; };
-		A8A1C5202BD4863B00515A14 /* KeybindindsConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindindsConfigurationView.swift; sourceTree = "<group>"; };
+		A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingsConfigurationView.swift; sourceTree = "<group>"; };
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
 		A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleActionConfigurationView.swift; sourceTree = "<group>"; };
 		A8A583B92BE5A8D8005F4CB2 /* KeybindingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingItemView.swift; sourceTree = "<group>"; };
@@ -455,7 +455,7 @@
 		A8A1C5222BD4863F00515A14 /* Keybindings */ = {
 			isa = PBXGroup;
 			children = (
-				A8A1C5202BD4863B00515A14 /* KeybindindsConfigurationView.swift */,
+				A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */,
 				A8A583B92BE5A8D8005F4CB2 /* KeybindingItemView.swift */,
 				A88E27AC2BDDE5300042CF04 /* CustomActionConfigurationView.swift */,
 				A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */,
@@ -721,7 +721,7 @@
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
 				0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */,
 				A8A583B82BE5A117005F4CB2 /* CycleActionConfigurationView.swift in Sources */,
-				A8A1C5212BD4863B00515A14 /* KeybindindsConfigurationView.swift in Sources */,
+				A8A1C5212BD4863B00515A14 /* KeybindingsConfigurationView.swift in Sources */,
 				A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */,
 				A8E8903C2BA7AAFE006C5074 /* NSEvent+Extensions.swift in Sources */,
 				0A6DC3EB2BB869DE002AB05F /* WindowDirection+Image.swift in Sources */,
