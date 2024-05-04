@@ -86,7 +86,7 @@
 		A8A583BA2BE5A8D8005F4CB2 /* KeybindingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B92BE5A8D8005F4CB2 /* KeybindingItemView.swift */; };
 		A8AF33462BE07B3A00F60B6E /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8AF33452BE07B3A00F60B6E /* Luminare */; };
 		A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */; };
-		A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */; };
+		A8BE09DB2B113FD700DBB242 /* KeybindsConfigurationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BE09DA2B113FD700DBB242 /* KeybindsConfigurationData.swift */; };
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
 		A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */; };
 		A8D6D3012B6C894C0061B11F /* PaddingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D3002B6C894C0061B11F /* PaddingModel.swift */; };
@@ -188,7 +188,7 @@
 		A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleActionConfigurationView.swift; sourceTree = "<group>"; };
 		A8A583B92BE5A8D8005F4CB2 /* KeybindingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingItemView.swift; sourceTree = "<group>"; };
 		A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionAnchor.swift; sourceTree = "<group>"; };
-		A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeycorderModel.swift; sourceTree = "<group>"; };
+		A8BE09DA2B113FD700DBB242 /* KeybindsConfigurationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindsConfigurationData.swift; sourceTree = "<group>"; };
 		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
 		A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorCircleSegment.swift; sourceTree = "<group>"; };
 		A8D6D3002B6C894C0061B11F /* PaddingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingModel.swift; sourceTree = "<group>"; };
@@ -377,7 +377,6 @@
 			children = (
 				A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */,
 				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
-				A8BE09DA2B113FD700DBB242 /* KeycorderModel.swift */,
 			);
 			path = "Keybind Recorder";
 			sourceTree = "<group>";
@@ -456,6 +455,7 @@
 			isa = PBXGroup;
 			children = (
 				A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */,
+				A8BE09DA2B113FD700DBB242 /* KeybindsConfigurationData.swift */,
 				A8A583B92BE5A8D8005F4CB2 /* KeybindingItemView.swift */,
 				A88E27AC2BDDE5300042CF04 /* CustomActionConfigurationView.swift */,
 				A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */,
@@ -656,7 +656,7 @@
 				A82B1AF02BD357FC00E2F3F9 /* RadialMenuConfigurationView.swift in Sources */,
 				A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */,
 				A8A583BA2BE5A8D8005F4CB2 /* KeybindingItemView.swift in Sources */,
-				A8BE09DB2B113FD700DBB242 /* KeycorderModel.swift in Sources */,
+				A8BE09DB2B113FD700DBB242 /* KeybindsConfigurationData.swift in Sources */,
 				116CE7322B9F24D80014C19D /* AppListManager.swift in Sources */,
 				A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */,
 				A8D6D3012B6C894C0061B11F /* PaddingModel.swift in Sources */,

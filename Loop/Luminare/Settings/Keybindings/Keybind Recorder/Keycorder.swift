@@ -11,7 +11,7 @@ import Defaults
 import Carbon.HIToolbox
 
 struct Keycorder: View {
-    @EnvironmentObject private var keycorderModel: KeycorderModel
+    @EnvironmentObject private var data: KeybindsConfigurationData
 
     let keyLimit: Int = 6
 
@@ -76,8 +76,8 @@ struct Keycorder: View {
         .onHover { hovering in
             self.isHovering = hovering
         }
-        .onChange(of: keycorderModel.eventMonitor) { _ in
-            if keycorderModel.eventMonitor != self.eventMonitor {
+        .onChange(of: data.eventMonitor) { _ in
+            if data.eventMonitor != self.eventMonitor {
                 self.finishedObservingKeys(wasForced: true)
             }
         }
@@ -87,6 +87,9 @@ struct Keycorder: View {
             }
         }
         .buttonStyle(PlainButtonStyle())
+
+        // Don't allow the button to be pressed if more than one keybind is selected in the list
+        .allowsHitTesting(data.selectedKeybinds.count <= 1)
     }
 
     func startObservingKeys() {
@@ -143,7 +146,7 @@ struct Keycorder: View {
         }
 
         self.eventMonitor!.start()
-        keycorderModel.eventMonitor = eventMonitor
+        data.eventMonitor = eventMonitor
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {

@@ -18,7 +18,7 @@ struct KeybindingsSettingsView: View {
     @Default(.triggerDelay) var triggerDelay
     @Default(.middleClickTriggersLoop) var middleClickTriggersLoop
 
-    @StateObject private var keycorderModel = KeycorderModel()
+//    @StateObject private var keycorderModel = KeybindsConfigurationData()
     @State private var suggestAddingTriggerDelay: Bool = false
     @State private var selection = Set<WindowAction>()
 
@@ -172,7 +172,7 @@ struct KeybindingsSettingsView: View {
                             _doubleClickToTrigger.reset()
                             _triggerDelay.reset()
                             _middleClickTriggersLoop.reset()
-                            keycorderModel.eventMonitor = nil
+//                            keycorderModel.eventMonitor = nil
                         }
                     }
                     .padding(.top, 10)
@@ -180,7 +180,7 @@ struct KeybindingsSettingsView: View {
             }
             .formStyle(.grouped)
         }
-        .environmentObject(keycorderModel)
+//        .environmentObject(keycorderModel)
     }
 
     @ViewBuilder

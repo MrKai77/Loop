@@ -9,7 +9,7 @@ import SwiftUI
 import Luminare
 
 struct TriggerKeycorder: View {
-    @EnvironmentObject private var keycorderModel: KeycorderModel
+    @EnvironmentObject private var data: KeybindsConfigurationData
 
     let keyLimit: Int = 5
 
@@ -53,7 +53,6 @@ struct TriggerKeycorder: View {
                 }
             }
         }
-
         .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
         .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
@@ -64,8 +63,8 @@ struct TriggerKeycorder: View {
         .onHover { hovering in
             self.isHovering = hovering
         }
-        .onChange(of: keycorderModel.eventMonitor) { _ in
-            if keycorderModel.eventMonitor != self.eventMonitor {
+        .onChange(of: data.eventMonitor) { _ in
+            if data.eventMonitor != self.eventMonitor {
                 self.finishedObservingKeys(wasForced: true)
             }
         }
@@ -120,7 +119,7 @@ struct TriggerKeycorder: View {
         }
 
         self.eventMonitor!.start()
-        keycorderModel.eventMonitor = eventMonitor
+        data.eventMonitor = eventMonitor
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {

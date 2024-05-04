@@ -15,7 +15,7 @@ struct KeybindingsConfigurationView: View {
     @Default(.doubleClickToTrigger) var doubleClickToTrigger
     @Default(.middleClickTriggersLoop) var middleClickTriggersLoop
 
-    @StateObject private var keycorderModel = KeycorderModel()
+    @StateObject private var data = KeybindsConfigurationData()
 
     @State var keybinds = Defaults[.keybinds]
     @State private var selectedKeybinds = Set<WindowAction>()
@@ -24,7 +24,7 @@ struct KeybindingsConfigurationView: View {
         LuminareSection("Trigger Key", noBorder: true) {
             HStack {
                 TriggerKeycorder($triggerKey)
-                    .environmentObject(keycorderModel)
+                    .environmentObject(data)
 
                 Spacer()
 
@@ -57,10 +57,13 @@ struct KeybindingsConfigurationView: View {
             addAction: { self.keybinds.insert(.init(.noAction), at: 0) },
             content: { keybind in
                 KeybindingItemView(keybind)
-                    .environmentObject(keycorderModel)
+                    .environmentObject(data)
             }
         )
-        .onChange(of: self.keybinds) { _ in
+        .onChange(of: selectedKeybinds) { _ in
+            data.selectedKeybinds = selectedKeybinds
+        }
+        .onChange(of: keybinds) { _ in
             Defaults[.keybinds] = keybinds
         }
         .onAppear {
