@@ -26,7 +26,7 @@ struct RadialMenuView: View {
     @Default(.useGradient) var useGradient
     @Default(.animationConfiguration) var animationConfiguration
 
-    init(previewMode: Bool = false, window: Window?, startingAction: WindowAction = .init(.noAction)) {
+    init(previewMode: Bool = false, window: Window? = nil, startingAction: WindowAction = .init(.noAction)) {
         self.window = window
         self.previewMode = previewMode
         self._currentAction = State(initialValue: .init(startingAction.direction))

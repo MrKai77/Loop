@@ -10,27 +10,68 @@ import Defaults
 import Luminare
 import UserNotifications
 
+struct SettingsPreviewView: View {
+    @State var selectedTab: SettingsTab
+
+    var body: some View {
+        if selectedTab == AppDelegate.iconConfiguration {
+            RadialMenuView(previewMode: true, window: nil)
+        } else {
+            Text("Hello World")
+        }
+    }
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
-    private let luminare = LuminareSettingsWindow(
+    // swiftlint:disable line_length
+    static let iconConfiguration = SettingsTab("Icon", Image(systemName: "sparkle"), IconConfigurationView())
+    static let accentColorConfiguration = SettingsTab("Accent Color", Image(systemName: "paintbrush.pointed"), AccentColorConfigurationView())
+    static let radialMenuConfiguration = SettingsTab("Radial Menu", Image("loop"), RadialMenuConfigurationView())
+    static let previewConfiguration = SettingsTab("Preview", Image(systemName: "rectangle.lefthalf.inset.filled"), PreviewConfigurationView())
+
+    static let behaviorConfiguration = SettingsTab("Behavior", Image(systemName: "gear"), BehaviorConfigurationView())
+    static let keybindingsConfiguration = SettingsTab("Keybindings", Image(systemName: "command"), KeybindingsConfigurationView())
+
+    static let advancedConfiguration = SettingsTab("Advanced", Image(systemName: "face.smiling.inverse"), AdvancedConfigurationView())
+    static let permissionsConfiguration = SettingsTab("Permissions", Image(systemName: "checklist"), PermissionsConfigurationView())
+    static let aboutConfiguration = SettingsTab("About", Image(systemName: "ellipsis"), AboutConfigurationView())
+    // swiftlint:enable line_length
+
+    static var currentPreview: SettingsTab = radialMenuConfiguration // can only be radialMenuConfiguration or preview previewConfiguration
+
+    private static var luminare = LuminareSettingsWindow(
         [
             .init("Theming", [
-                .init("Icon", Image(systemName: "sparkle"), IconConfigurationView()),
-                .init("Accent Color", Image(systemName: "paintbrush.pointed"), AccentColorConfigurationView()),
-                .init("Radial Menu", Image("loop"), RadialMenuConfigurationView()),
-                .init("Preview", Image(systemName: "rectangle.lefthalf.inset.filled"), PreviewConfigurationView())
+                iconConfiguration,
+                accentColorConfiguration,
+                radialMenuConfiguration,
+                previewConfiguration
             ]),
             .init("Settings", [
-                .init("Behavior", Image(systemName: "gear"), BehaviorConfigurationView()),
-                .init("Keybindings", Image(systemName: "command"), KeybindingsConfigurationView())
+                behaviorConfiguration,
+                keybindingsConfiguration
             ]),
             .init("Loop", [
-                .init("Advanced", Image(systemName: "face.smiling.inverse"), AdvancedConfigurationView()),
-                .init("Permissions", Image(systemName: "checklist"), PermissionsConfigurationView()),
-                .init("About", Image(systemName: "ellipsis"), AboutConfigurationView())
+                advancedConfiguration,
+                permissionsConfiguration,
+                aboutConfiguration
             ])
         ],
-        tint: .mint
+        tint: .mint,
+        didTabChange: processTabChange
     )
+
+    private static func processTabChange(_ tab: SettingsTab) {
+        if tab == radialMenuConfiguration, currentPreview != radialMenuConfiguration {
+            currentPreview = radialMenuConfiguration
+            luminare.setPreviewView(RadialMenuView(previewMode: true))
+        }
+
+        if tab == previewConfiguration, currentPreview != previewConfiguration {
+            currentPreview = previewConfiguration
+            luminare.setPreviewView(PreviewView(previewMode: true))
+        }
+    }
 
     private let loopManager = LoopManager()
     private let windowDragManager = WindowDragManager()
@@ -75,7 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     // Mostly taken from https://github.com/Wouter01/SwiftUI-WindowManagement
     func openSettings() {
-        luminare.show()
+        AppDelegate.luminare.show()
     }
 
     // ----------
