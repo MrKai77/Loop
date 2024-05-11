@@ -28,7 +28,6 @@ struct Keycorder: View {
 
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
-    @State private var isCurrentlyPressed: Bool = false
 
     init(_ keybind: Binding<WindowAction>) {
         self._validCurrentKeybind = keybind.keybind
@@ -100,9 +99,6 @@ struct Keycorder: View {
                 if !Defaults[.triggerKey].contains(where: { $0.baseModifier == event.keyCode.baseModifier }) {
                     self.shouldError = false
                     self.selectionKeybind.insert(event.keyCode.baseModifier)
-                    withAnimation(.snappy(duration: 0.1)) {
-                        self.isCurrentlyPressed = true
-                    }
                 } else {
                     if let systemImage = event.keyCode.baseModifier.systemImage {
                         // swiftlint:disable:next line_length
@@ -137,11 +133,7 @@ struct Keycorder: View {
                 } else {
                     self.shouldError = false
                     self.selectionKeybind.insert(event.keyCode)
-                    withAnimation(.snappy(duration: 0.1)) {
-                        self.isCurrentlyPressed = true
-                    }
                 }
-
             }
         }
 
@@ -152,10 +144,6 @@ struct Keycorder: View {
     func finishedObservingKeys(wasForced: Bool = false) {
         self.isActive = false
         var willSet = !wasForced
-
-        withAnimation(.snappy(duration: 0.1)) {
-            self.isCurrentlyPressed = false
-        }
 
         if self.validCurrentKeybind == self.selectionKeybind {
             willSet = false

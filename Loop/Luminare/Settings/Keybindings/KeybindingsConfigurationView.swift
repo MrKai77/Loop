@@ -22,18 +22,8 @@ struct KeybindingsConfigurationView: View {
 
     var body: some View {
         LuminareSection("Trigger Key", noBorder: true) {
-            HStack {
-                TriggerKeycorder($triggerKey)
-                    .environmentObject(data)
-
-                Spacer()
-
-                Button("Change") {
-                    print("change trigger key")
-                }
-                .buttonStyle(LuminareCompactButtonStyle())
-                .fixedSize()
-            }
+            TriggerKeycorder($triggerKey)
+                .environmentObject(data)
         }
 
         LuminareSection("Settings") {

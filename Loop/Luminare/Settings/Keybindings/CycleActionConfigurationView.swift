@@ -60,8 +60,10 @@ struct CycleActionConfigurationView: View {
 //                self.action.cycle!.insert(.init(.noAction), at: 0)
             },
             content: { item in
-                let action = item.wrappedValue
-                Text(action.getName())
+//                let action = item.wrappedValue
+//                Text(action.getName())
+                KeybindingItemView(item)
+                    .environmentObject(KeybindsConfigurationData())
             }
         )
 //        .onChange(of: self.keybinds) { _ in

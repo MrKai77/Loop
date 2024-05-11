@@ -20,7 +20,6 @@ struct TriggerKeycorder: View {
     @State private var shouldShake: Bool = false
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
-    @State private var isCurrentlyPressed: Bool = false
     @State private var tooManyKeysPopup: Bool = false
 
     init(_ key: Binding<Set<CGKeyCode>>) {
@@ -29,53 +28,64 @@ struct TriggerKeycorder: View {
     }
 
     var body: some View {
-        Button {
-            guard !self.isActive else { return }
-            self.startObservingKeys()
-        } label: {
-            if self.selectionKey.isEmpty {
-                Text(self.isActive ? "Set a trigger key…" : "None")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .fixedSize(horizontal: true, vertical: false)
-            } else {
-                HStack(spacing: 12) {
-                    ForEach(self.selectionKey.sorted(), id: \.self) { key in
-                        // swiftlint:disable:next line_length
-                        Text("\(key.isOnRightSide ? String(localized: .init("Right", defaultValue: "Right")) : String(localized: .init("Left", defaultValue: "Left"))) \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .fixedSize(horizontal: true, vertical: false)
+        HStack {
+            Button {
+                guard !self.isActive else { return }
+                self.startObservingKeys()
+            } label: {
+                if self.selectionKey.isEmpty {
+                    Text(self.isActive ? "Set a trigger key…" : "None")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .fixedSize(horizontal: true, vertical: false)
+                } else {
+                    HStack(spacing: 12) {
+                        ForEach(self.selectionKey.sorted(), id: \.self) { key in
+                            // swiftlint:disable:next line_length
+                            Text("\(key.isOnRightSide ? String(localized: .init("Right", defaultValue: "Right")) : String(localized: .init("Left", defaultValue: "Left"))) \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .fixedSize(horizontal: true, vertical: false)
 
-                        if key != self.selectionKey.sorted().last {
-                            Divider()
-                                .padding(1)
+                            if key != self.selectionKey.sorted().last {
+                                Divider()
+                                    .padding(1)
+                            }
                         }
                     }
                 }
             }
-        }
-        .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
-        .animation(Animation.default, value: shouldShake)
-        .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
-            Text("You can only use up to \(keyLimit) keys in your trigger key.")
-                .multilineTextAlignment(.center)
-                .padding(8)
-        }
-        .onHover { hovering in
-            self.isHovering = hovering
-        }
-        .onChange(of: data.eventMonitor) { _ in
-            if data.eventMonitor != self.eventMonitor {
-                self.finishedObservingKeys(wasForced: true)
+            .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
+            .animation(Animation.default, value: shouldShake)
+            .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
+                Text("You can only use up to \(keyLimit) keys in your trigger key.")
+                    .multilineTextAlignment(.center)
+                    .padding(8)
             }
-        }
-        .onChange(of: self.validCurrentKey) { _ in
-            if self.selectionKey != self.validCurrentKey {
-                self.selectionKey = self.validCurrentKey
+            .onHover { hovering in
+                self.isHovering = hovering
             }
-        }
+            .onChange(of: data.eventMonitor) { _ in
+                if data.eventMonitor != self.eventMonitor {
+                    self.finishedObservingKeys(wasForced: true)
+                }
+            }
+            .onChange(of: self.validCurrentKey) { _ in
+                if self.selectionKey != self.validCurrentKey {
+                    self.selectionKey = self.validCurrentKey
+                }
+            }
 
-        .fixedSize()
-        .buttonStyle(LuminareCompactButtonStyle())
+            .fixedSize()
+            .buttonStyle(LuminareCompactButtonStyle())
+
+            Spacer()
+
+            Button("Change") {
+                guard !self.isActive else { return }
+                self.startObservingKeys()
+            }
+            .buttonStyle(LuminareCompactButtonStyle())
+            .fixedSize()
+        }
     }
 
     func startObservingKeys() {
@@ -90,9 +100,6 @@ struct TriggerKeycorder: View {
 
             if CGKeyCode.keyToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
                 self.selectionKey.insert(event.keyCode)
-                withAnimation(.snappy(duration: 0.1)) {
-                    self.isCurrentlyPressed = true
-                }
             }
 
             // Backup system in case keys are pressed at the exact same time
@@ -101,9 +108,6 @@ struct TriggerKeycorder: View {
                 for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
                     if !self.selectionKey.map({ $0.baseModifier }).contains(key) {
                         self.selectionKey.insert(key)
-                        withAnimation(.snappy(duration: 0.1)) {
-                            self.isCurrentlyPressed = true
-                        }
                     }
                 }
             }
@@ -132,9 +136,6 @@ struct TriggerKeycorder: View {
         }
 
         self.isActive = false
-        withAnimation(.snappy(duration: 0.1)) {
-            self.isCurrentlyPressed = false
-        }
 
         if willSet {
             // Set the valid keybind to the current selected one
