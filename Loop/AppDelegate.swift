@@ -10,18 +10,6 @@ import Defaults
 import Luminare
 import UserNotifications
 
-struct SettingsPreviewView: View {
-    @State var selectedTab: SettingsTab
-
-    var body: some View {
-        if selectedTab == AppDelegate.iconConfiguration {
-            RadialMenuView(previewMode: true, window: nil)
-        } else {
-            Text("Hello World")
-        }
-    }
-}
-
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
     // swiftlint:disable line_length
     static let iconConfiguration = SettingsTab("Icon", Image(systemName: "sparkle"), IconConfigurationView())
@@ -37,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     static let aboutConfiguration = SettingsTab("About", Image(systemName: "ellipsis"), AboutConfigurationView())
     // swiftlint:enable line_length
 
-    static var currentPreview: SettingsTab = radialMenuConfiguration // can only be radialMenuConfiguration or preview previewConfiguration
+    static var currentPreview: SettingsTab? // can only be radialMenuConfiguration or preview previewConfiguration
 
     private static var luminare = LuminareSettingsWindow(
         [
@@ -117,6 +105,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     // Mostly taken from https://github.com/Wouter01/SwiftUI-WindowManagement
     func openSettings() {
         AppDelegate.luminare.show()
+
+        if AppDelegate.currentPreview == nil {
+            AppDelegate.processTabChange(AppDelegate.radialMenuConfiguration)
+        }
     }
 
     // ----------
