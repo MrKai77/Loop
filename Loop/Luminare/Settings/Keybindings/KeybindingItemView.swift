@@ -18,13 +18,16 @@ struct KeybindingItemView: View {
     @State var isConfiguringCustom: Bool = false
     @State var isConfiguringCycle: Bool = false
 
-    init(_ keybind: Binding<WindowAction>) {
+    let cycleIndex: Int?
+
+    init(_ keybind: Binding<WindowAction>, cycleIndex: Int? = nil) {
         self._keybind = keybind
+        self.cycleIndex = cycleIndex
     }
 
     var body: some View {
         HStack {
-            WindowDirectionPicker(keybind: $keybind)
+            WindowDirectionPicker($keybind, isCycle: cycleIndex != nil)
                 .equatable()
                 .fixedSize()
 
@@ -42,7 +45,6 @@ struct KeybindingItemView: View {
                 }
             }
 
-            // TODO: FINISH
             if keybind.direction == .cycle {
                 Button(action: {
                     isConfiguringCycle = true
@@ -59,20 +61,26 @@ struct KeybindingItemView: View {
 
             Spacer()
 
-            HStack(spacing: 6) {
-                HStack {
-                    ForEach(triggerKey.sorted().compactMap { $0.systemImage }, id: \.self) { image in
-                        Text("\(Image(systemName: image))")
+            if let cycleIndex = cycleIndex {
+                Text("\(cycleIndex)")
+                    .frame(width: 27, height: 27)
+                    .modifier(LuminareBordered())
+            } else {
+                HStack(spacing: 6) {
+                    HStack {
+                        ForEach(triggerKey.sorted().compactMap { $0.systemImage }, id: \.self) { image in
+                            Text("\(Image(systemName: image))")
+                        }
                     }
+                    .font(.callout)
+                    .padding(6)
+                    .frame(height: 27)
+                    .modifier(LuminareBordered())
+
+                    Image(systemName: "plus")
+
+                    Keycorder($keybind)
                 }
-                .font(.callout)
-                .padding(6)
-                .frame(height: 27)
-                .modifier(LuminareBordered())
-
-                Image(systemName: "plus")
-
-                Keycorder($keybind)
             }
         }
         .padding(.leading, 12)
@@ -83,6 +91,12 @@ struct KeybindingItemView: View {
 struct WindowDirectionPicker: View, Equatable {
     @Environment(\.hoveringOverLuminareListItem) var isHovering
     @Binding var keybind: WindowAction
+    let isCycle: Bool
+
+    init(_ keybind: Binding<WindowAction>, isCycle: Bool = false) {
+        self._keybind = keybind
+        self.isCycle = isCycle
+    }
 
     var body: some View {
         Menu {
@@ -124,23 +138,27 @@ struct WindowDirectionPicker: View, Equatable {
                     }
                 }
 
-                Picker("Grow/Shrink", selection: $keybind.direction) {
-                    ForEach(WindowDirection.sizeAdjustment) { direction in
-                        directionPickerItem(direction)
-                    }
-                    Divider()
-                    ForEach(WindowDirection.shrink) { direction in
-                        directionPickerItem(direction)
-                    }
-                    Divider()
-                    ForEach(WindowDirection.grow) { direction in
-                        directionPickerItem(direction)
+                if !isCycle {
+                    Picker("Grow/Shrink", selection: $keybind.direction) {
+                        ForEach(WindowDirection.sizeAdjustment) { direction in
+                            directionPickerItem(direction)
+                        }
+                        Divider()
+                        ForEach(WindowDirection.shrink) { direction in
+                            directionPickerItem(direction)
+                        }
+                        Divider()
+                        ForEach(WindowDirection.grow) { direction in
+                            directionPickerItem(direction)
+                        }
                     }
                 }
 
                 Picker("More", selection: $keybind.direction) {
                     ForEach(WindowDirection.more) { direction in
-                        directionPickerItem(direction)
+                        if isCycle && direction != .cycle {
+                            directionPickerItem(direction)
+                        }
                     }
                 }
             }
@@ -166,10 +184,10 @@ struct WindowDirectionPicker: View, Equatable {
             keybind.direction.icon
             Text(keybind.getName())
 
-//            if isHovering {
-//                Image(systemName: "chevron.down")
-//                    .font(.caption)
-//            }
+            if isHovering {
+                Image(systemName: "chevron.down")
+                    .font(.caption)
+            }
         }
     }
 

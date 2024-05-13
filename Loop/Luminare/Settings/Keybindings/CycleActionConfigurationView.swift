@@ -53,25 +53,23 @@ struct CycleActionConfigurationView: View {
             ),
             selection: $selectedKeybinds,
             addAction: {
-//                guard self.action.cycle != nil else {
-//                    return
-//                }
-//
-//                self.action.cycle!.insert(.init(.noAction), at: 0)
+                if action.cycle == nil {
+                    action.cycle = []
+                }
+
+                self.action.cycle?.insert(.init(.noAction), at: 0)
             },
             content: { item in
-//                let action = item.wrappedValue
-//                Text(action.getName())
-                KeybindingItemView(item)
-                    .environmentObject(KeybindsConfigurationData())
+                KeybindingItemView(
+                    item,
+                    cycleIndex: action.cycle?.firstIndex(of: item.wrappedValue)
+                )
+                .environmentObject(KeybindsConfigurationData())
             }
         )
-//        .onChange(of: self.keybinds) { _ in
-//            Defaults[.keybinds] = keybinds
-//        }
-//        .onAppear {
-//            keybinds = Defaults[.keybinds]
-//        }
+        .onChange(of: action) { _ in
+            windowAction = action
+        }
 
         Button("Close") {
             isPresented = false

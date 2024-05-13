@@ -44,7 +44,7 @@ struct KeybindingsConfigurationView: View {
             "Keybinds",
             items: $keybinds,
             selection: $selectedKeybinds,
-            addAction: { self.keybinds.insert(.init(.noAction), at: 0) },
+            addAction: { keybinds.insert(.init(.noAction), at: 0) },
             content: { keybind in
                 KeybindingItemView(keybind)
                     .environmentObject(data)

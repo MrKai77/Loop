@@ -455,8 +455,8 @@
 			isa = PBXGroup;
 			children = (
 				A8A1C5202BD4863B00515A14 /* KeybindingsConfigurationView.swift */,
-				A8BE09DA2B113FD700DBB242 /* KeybindsConfigurationData.swift */,
 				A8A583B92BE5A8D8005F4CB2 /* KeybindingItemView.swift */,
+				A8BE09DA2B113FD700DBB242 /* KeybindsConfigurationData.swift */,
 				A88E27AC2BDDE5300042CF04 /* CustomActionConfigurationView.swift */,
 				A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */,
 				A86DAE272B3CCF0400B968F0 /* Keybind Recorder */,
