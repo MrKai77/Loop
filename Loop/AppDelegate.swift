@@ -45,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
                 aboutConfiguration
             ])
         ],
-        tint: .mint,
+        tint: { Color.getLoopAccent(tone: .normal) },
         didTabChange: processTabChange
     )
 

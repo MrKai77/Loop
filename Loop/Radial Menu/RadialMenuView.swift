@@ -23,8 +23,12 @@ struct RadialMenuView: View {
     // Variables that store the radial menu's shape
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
     @Default(.radialMenuThickness) var radialMenuThickness
-    @Default(.useGradient) var useGradient
     @Default(.animationConfiguration) var animationConfiguration
+
+    @Default(.useSystemAccentColor) var useSystemAccentColor
+    @Default(.customAccentColor) var customAccentColor
+    @Default(.useGradient) var useGradient
+    @Default(.gradientColor) var gradientColor
 
     init(previewMode: Bool = false, window: Window? = nil, startingAction: WindowAction = .init(.noAction)) {
         self.window = window
@@ -39,6 +43,9 @@ struct RadialMenuView: View {
     }
 
     @State var angle: Double = .zero
+
+    @State var primaryColor: Color = Color.getLoopAccent(tone: .normal)
+    @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
     var body: some View {
         VStack {
@@ -57,8 +64,8 @@ struct RadialMenuView: View {
                                 LinearGradient(
                                     gradient: Gradient(
                                         colors: [
-                                            Color.getLoopAccent(tone: .normal),
-                                            Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+                                            primaryColor,
+                                            secondaryColor
                                         ]
                                     ),
                                     startPoint: .topLeading,
@@ -181,6 +188,19 @@ struct RadialMenuView: View {
                     self.angle += closestAngle.degrees
                 }
             }
+        }
+        .onChange(of: [customAccentColor, gradientColor]) { _ in
+            recomputeColors()
+        }
+        .onChange(of: [useSystemAccentColor, useGradient]) { _ in
+            recomputeColors()
+        }
+    }
+
+    func recomputeColors() {
+        withAnimation(.smooth(duration: 0.3)) {
+            primaryColor = Color.getLoopAccent(tone: .normal)
+            secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }
     }
 }

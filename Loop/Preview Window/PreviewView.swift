@@ -20,12 +20,19 @@ struct PreviewView: View {
         }
     }
 
-    @Default(.useGradient) var useGradient
     @Default(.previewPadding) var previewPadding
     @Default(.padding) var padding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
+
+    @Default(.useSystemAccentColor) var useSystemAccentColor
+    @Default(.customAccentColor) var customAccentColor
+    @Default(.useGradient) var useGradient
+    @Default(.gradientColor) var gradientColor
+
+    @State var primaryColor: Color = Color.getLoopAccent(tone: .normal)
+    @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
     var body: some View {
         GeometryReader { _ in
@@ -44,8 +51,8 @@ struct PreviewView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    Color.getLoopAccent(tone: .normal),
-                                    Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+                                    primaryColor,
+                                    secondaryColor
                                 ]
                             ),
                             startPoint: .topLeading,
@@ -70,6 +77,19 @@ struct PreviewView: View {
                     }
                 }
             }
+        }
+        .onChange(of: [customAccentColor, gradientColor]) { _ in
+            recomputeColors()
+        }
+        .onChange(of: [useSystemAccentColor, useGradient]) { _ in
+            recomputeColors()
+        }
+    }
+
+    func recomputeColors() {
+        withAnimation(.smooth(duration: 0.3)) {
+            primaryColor = Color.getLoopAccent(tone: .normal)
+            secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }
     }
 }

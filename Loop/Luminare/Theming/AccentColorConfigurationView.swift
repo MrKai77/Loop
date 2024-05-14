@@ -16,10 +16,7 @@ struct AccentColorConfigurationView: View {
     @Default(.gradientColor) var gradientColor
 
     @State var showColorSection = false
-
-    init() {
-        self.showColorSection = !useSystemAccentColor || (useGradient && !useSystemAccentColor)
-    }
+    @State var showGradientSection = false
 
     var body: some View {
         LuminareSection {
@@ -61,17 +58,38 @@ struct AccentColorConfigurationView: View {
                 .frame(height: 90)
             }
 
-            LuminareToggle("Gradient", isOn: $useGradient)
+            LuminareToggle(
+                "Gradient",
+                isOn: Binding(
+                    get: {
+                        useGradient
+                    },
+                    set: { newValue in
+                        useGradient = newValue
+
+                        withAnimation(.smooth(duration: 0.3)) {
+                            showGradientSection = newValue
+                        }
+                    }
+                )
+            )
+        }
+        .onAppear {
+            self.showColorSection = !useSystemAccentColor || (useGradient && !useSystemAccentColor)
         }
 
-        if showColorSection {
-            LuminareSection("Color") {
-                if !useSystemAccentColor {
-                    Text("TODO: CUSTOM ACCENT COLOR")
+        VStack {
+            if showColorSection {
+                HStack {
+                    Text("Color")
+                    Spacer()
                 }
+                .foregroundStyle(.secondary)
 
-                if useGradient && !useSystemAccentColor {
-                    Text("TODO: CUSTOM GRADIENT COLOR (?)")
+                LuminareColorPicker(color: $customAccentColor)
+
+                if showGradientSection {
+                    LuminareColorPicker(color: $gradientColor)
                 }
             }
         }

@@ -343,6 +343,9 @@
     "Close" : {
 
     },
+    "Color" : {
+
+    },
     "Configure padding..." : {
 
     },
@@ -2035,12 +2038,6 @@
           }
         }
       }
-    },
-    "TODO: CUSTOM ACCENT COLOR" : {
-
-    },
-    "TODO: CUSTOM GRADIENT COLOR (?)" : {
-
     },
     "Top Cycle" : {
       "localizations" : {
