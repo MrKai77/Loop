@@ -194,8 +194,7 @@ class Window {
     func setFrame(
         _ rect: CGRect,
         animate: Bool = false,
-        sizeFirst: Bool = false,
-        completionHandler: (() -> Void)? = nil
+        sizeFirst: Bool = false
     ) {
         let enhancedUI = self.enhancedUserInterface ?? false
 
@@ -206,7 +205,7 @@ class Window {
         }
 
         if animate {
-            let animation = WindowTransformAnimation(rect, window: self, completionHandler: completionHandler)
+            let animation = WindowTransformAnimation(rect, window: self)
             animation.startInBackground()
         } else {
             if sizeFirst {
@@ -214,10 +213,6 @@ class Window {
             }
             self.setPosition(rect.origin)
             self.setSize(rect.size)
-
-            if let completionHandler = completionHandler {
-                completionHandler()
-            }
         }
 
         if enhancedUI {

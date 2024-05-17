@@ -76,7 +76,7 @@ struct WindowRecords {
         WindowRecords.records[id].actionRecords.insert(action, at: 0)
     }
 
-    /// What was this window's last action?
+    /// This window's last action
     /// - Parameters:
     ///   - window: Window to check
     /// - Returns: The window action
@@ -88,6 +88,20 @@ struct WindowRecords {
             return nil
         }
         return WindowRecords.records[id].actionRecords[1]
+    }
+
+    /// This window's current recorded action
+    /// - Parameters:
+    ///   - window: Window to check
+    /// - Returns: The window action
+    static func getCurrentAction(for window: Window) -> WindowAction? {
+        guard
+            let id = WindowRecords.findRecordsID(for: window),
+            WindowRecords.records[id].actionRecords.count > 1
+        else {
+            return nil
+        }
+        return WindowRecords.records[id].actionRecords[0]
     }
 
     static func removeLastAction(for window: Window) {

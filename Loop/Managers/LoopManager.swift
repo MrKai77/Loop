@@ -148,6 +148,34 @@ class LoopManager: ObservableObject {
         }
     }
 
+    private func getNextCycleAction(_ action: WindowAction) -> WindowAction {
+        guard let cycle = action.cycle else {
+            return action
+        }
+
+        var nextIndex = 0
+
+        if !cycle.contains(currentAction),
+           let window = targetWindow,
+           let latestRecord = WindowRecords.getCurrentAction(for: window) {
+            // We "preserve" the cycle index based on the last record
+            nextIndex = (cycle.firstIndex(of: latestRecord) ?? -1) + 1
+
+        } else if currentAction.direction == .custom {
+            // We need to check if *all* the characteristics of the action are the same
+            nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
+        } else {
+            // Only check the direction, since the rest of the info is insignificant
+            nextIndex = (cycle.firstIndex { $0.direction == self.currentAction.direction } ?? -1) + 1
+        }
+
+        if nextIndex >= cycle.count {
+            nextIndex = 0
+        }
+
+        return cycle[nextIndex]
+    }
+
     private func changeAction(_ action: WindowAction) {
         guard
             self.currentAction != action || action.willManipulateCurrentWindowSize,
@@ -160,22 +188,7 @@ class LoopManager: ObservableObject {
         var newAction = action
 
         if newAction.direction == .cycle {
-            guard let cycle = action.cycle else {
-                return
-            }
-
-            var nextIndex = (cycle.firstIndex(of: self.currentAction) ?? -1) + 1
-
-            if self.currentAction.direction != .custom {
-                nextIndex = (cycle.firstIndex {
-                    $0.direction == self.currentAction.direction
-                } ?? -1) + 1
-            }
-
-            if nextIndex >= cycle.count {
-                nextIndex = 0
-            }
-            newAction = cycle[nextIndex]
+            newAction = getNextCycleAction(action)
         }
 
         if newAction.direction.willChangeScreen {
