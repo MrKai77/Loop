@@ -118,13 +118,13 @@ class WindowDragManager {
         guard
             let mousePosition = NSEvent.mouseLocation.flipY,
             let screen = NSScreen.screenWithMouse,
-            let screenFrame = screen.visibleFrame.flipY
+            let screenFrame = screen.frame.flipY
         else {
             return
         }
 
         self.previewController.setScreen(to: screen)
-        let ignoredFrame = screenFrame.insetBy(dx: 20, dy: 20)  // 10px of snap area on each side
+        let ignoredFrame = screenFrame.insetBy(dx: 2, dy: 2)
 
         let oldDirection = self.direction
 
