@@ -342,7 +342,7 @@ class LoopManager: ObservableObject {
         guard self.targetWindow?.isAppExcluded != true else { return }
 
         self.initialMousePosition = NSEvent.mouseLocation
-        self.screenToResizeOn = NSScreen.screenWithMouse
+        self.screenToResizeOn = NSScreen.main
 
         if !Defaults[.disableCursorInteraction] {
             self.mouseMovedEventMonitor!.start()

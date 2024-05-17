@@ -15,7 +15,7 @@ struct WallpaperView: View, Equatable {
     }
 
     var body: some View {
-        if let screen = NSScreen.screenWithMouse,
+        if let screen = NSScreen.main,
            let url = NSWorkspace.shared.desktopImageURL(for: screen),
            let image = NSImage(contentsOf: url) {
             GeometryReader { geo in

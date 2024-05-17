@@ -31,7 +31,7 @@ extension CGPoint {
     }
 
     var flipY: CGPoint? {
-        guard let screen = NSScreen.screenWithMouse else { return nil }
+        guard let screen = NSScreen.main else { return nil }
         return CGPoint(x: self.x, y: screen.frame.maxY - self.y)
     }
 
@@ -53,7 +53,7 @@ extension CGSize {
 
 extension CGRect {
     var flipY: CGRect? {
-        guard let screen = NSScreen.screenWithMouse else { return nil }
+        guard let screen = NSScreen.main else { return nil }
         return CGRect(
             x: self.minX,
             y: screen.frame.maxY - self.maxY,

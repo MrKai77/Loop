@@ -17,7 +17,7 @@ struct MenuBarResizeButton: View {
     var body: some View {
         Button {
             if let frontmostWindow = WindowEngine.frontmostWindow,
-               let screen = NSScreen.screenWithMouse {
+               let screen = NSScreen.main {
                 WindowEngine.resize(frontmostWindow, to: .init(direction), on: screen)
             }
         } label: {
