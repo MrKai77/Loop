@@ -62,6 +62,9 @@ struct WindowEngine {
 
         let enhancedUI = window.enhancedUserInterface ?? false
         var animate = (!suppressAnimations && Defaults[.animateWindowResizes] && !enhancedUI)
+
+        WindowRecords.record(window, action)
+
         if animate {
             if PermissionsManager.ScreenRecording.getStatus() == false {
                 PermissionsManager.ScreenRecording.requestAccess()
@@ -81,21 +84,18 @@ struct WindowEngine {
                     targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.padding].bottom
                 }
 
-                window.setFrame(targetWindowFrame, animate: true) {
-                    WindowRecords.record(window, action)
-                }
+                window.setFrame(targetWindowFrame, animate: true)
             }
         } else {
-            window.setFrame(targetWindowFrame, sizeFirst: willChangeScreens) {
+            window.setFrame(targetWindowFrame, sizeFirst: willChangeScreens)
+            
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
-                if !window.frame.approximatelyEqual(to: targetWindowFrame) {
-                    print("Backup resizing...")
-                    window.setFrame(targetWindowFrame)
-                }
-
-                WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
-                WindowRecords.record(window, action)
+            if !window.frame.approximatelyEqual(to: targetWindowFrame) {
+                print("Backup resizing...")
+                window.setFrame(targetWindowFrame)
             }
+
+            WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
         }
     }
 
