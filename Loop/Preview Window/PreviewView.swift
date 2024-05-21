@@ -39,14 +39,14 @@ struct PreviewView: View {
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                     .mask {
-                        RoundedRectangle(cornerRadius: previewCornerRadius, style: .continuous)
+                        RoundedRectangle(cornerRadius: previewCornerRadius)
                             .foregroundColor(.white)
                     }
 
-                RoundedRectangle(cornerRadius: previewCornerRadius, style: .continuous)
+                RoundedRectangle(cornerRadius: previewCornerRadius)
                     .strokeBorder(.quinary, lineWidth: 1)
 
-                RoundedRectangle(cornerRadius: previewCornerRadius, style: .continuous)
+                RoundedRectangle(cornerRadius: previewCornerRadius)
                     .stroke(
                         LinearGradient(
                             gradient: Gradient(

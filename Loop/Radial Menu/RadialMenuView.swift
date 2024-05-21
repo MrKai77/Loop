@@ -112,13 +112,10 @@ struct RadialMenuView: View {
                                 .stroke(.quinary, lineWidth: 2)
                                 .padding(self.radialMenuThickness)
                         } else {
-                            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+                            RoundedRectangle(cornerRadius: radialMenuCornerRadius)
                                 .stroke(.quinary, lineWidth: 2)
 
-                            RoundedRectangle(
-                                cornerRadius: radialMenuCornerRadius - self.radialMenuThickness,
-                                style: .continuous
-                            )
+                            RoundedRectangle(cornerRadius: radialMenuCornerRadius - self.radialMenuThickness)
                             .stroke(.quinary, lineWidth: 2)
                             .padding(self.radialMenuThickness)
                         }
@@ -129,7 +126,7 @@ struct RadialMenuView: View {
                             Circle()
                                 .strokeBorder(.black, lineWidth: radialMenuThickness)
                         } else {
-                            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+                            RoundedRectangle(cornerRadius: radialMenuCornerRadius)
                                 .strokeBorder(.black, lineWidth: radialMenuThickness)
                         }
                     }
