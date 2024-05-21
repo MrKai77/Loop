@@ -225,8 +225,11 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         if toScale {
-            result = self.applyPadding(result, bounds)
-            LoopManager.lastTargetFrame =  result
+            if direction != .undo && direction != .initialFrame {
+                result = self.applyPadding(result, bounds)
+            }
+
+            LoopManager.lastTargetFrame = result
         }
 
         return result

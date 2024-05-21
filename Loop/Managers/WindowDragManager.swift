@@ -19,7 +19,7 @@ class WindowDragManager {
     private var leftMouseUpMonitor: EventMonitor?
 
     func addObservers() {
-        self.leftMouseDraggedMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseDragged) { _ in
+        self.leftMouseDraggedMonitor = CGEventMonitor(eventMask: .leftMouseDragged) { cgEvent in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
@@ -28,7 +28,6 @@ class WindowDragManager {
             if let window = self.draggingWindow,
                let initialFrame = self.initialWindowFrame,
                self.hasWindowMoved(window.frame, initialFrame) {
-                // If window is not at initial position...
 
                 if Defaults[.restoreWindowFrameOnDrag] {
                     self.restoreInitialWindowSize(window)
@@ -37,16 +36,23 @@ class WindowDragManager {
                 }
 
                 if Defaults[.windowSnapping] {
+                    if let frame = NSScreen.main?.frame {
+                        if NSEvent.mouseLocation.y == frame.maxY {
+                            cgEvent.location.y -= 1
+                        }
+                    }
+
                     self.getWindowSnapDirection()
                 }
             }
+
+            return Unmanaged.passRetained(cgEvent)
         }
 
         self.leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
             if let window = self.draggingWindow,
                let initialFrame = self.initialWindowFrame,
                self.hasWindowMoved(window.frame, initialFrame) {
-                // If window is not at initial position...
 
                 if Defaults[.windowSnapping] {
                     self.attemptWindowSnap(window)
@@ -118,13 +124,13 @@ class WindowDragManager {
         guard
             let mousePosition = NSEvent.mouseLocation.flipY,
             let screen = NSScreen.screenWithMouse,
-            let screenFrame = screen.visibleFrame.flipY
+            let screenFrame = screen.frame.flipY
         else {
             return
         }
 
         self.previewController.setScreen(to: screen)
-        let ignoredFrame = screenFrame.insetBy(dx: 20, dy: 20)  // 10px of snap area on each side
+        let ignoredFrame = screenFrame.insetBy(dx: 2, dy: 2)
 
         let oldDirection = self.direction
 
