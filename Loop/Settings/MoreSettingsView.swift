@@ -21,7 +21,6 @@ struct MoreSettingsView: View {
     @Default(.animateWindowResizes) var animateWindowResizes
     @Default(.includeDevelopmentVersions) var includeDevelopmentVersions
     @State var isAccessibilityAccessGranted = false
-    @State var isScreenRecordingAccessGranted = false
 
     var body: some View {
         Form {
@@ -82,11 +81,6 @@ struct MoreSettingsView: View {
                         UnstableIndicator(.init(localized: .init("ALPHA", defaultValue: "ALPHA")), color: .orange)
                     }
                 }
-                .onChange(of: animateWindowResizes) { _ in
-                    if animateWindowResizes == true {
-                        PermissionsManager.ScreenRecording.requestAccess()
-                    }
-                }
 
                 Toggle("Hide menu until direction is chosen", isOn: $hideUntilDirectionIsChosen)
 
@@ -123,26 +117,6 @@ struct MoreSettingsView: View {
                         .foregroundColor(isAccessibilityAccessGranted ? .green : .red)
                         .shadow(color: isAccessibilityAccessGranted ? .green : .red, radius: 8)
                 }
-
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("Screen recording access")
-                        Spacer()
-                        Text(
-                            isAccessibilityAccessGranted
-                            ? .init(localized: .init("Granted", defaultValue: "Granted"))
-                            : .init(localized: .init("Not granted", defaultValue: "Not granted"))
-                        )
-                        Circle()
-                            .frame(width: 8, height: 8)
-                            .padding(.trailing, 5)
-                            .foregroundColor(isScreenRecordingAccessGranted ? .green : .red)
-                            .shadow(color: isScreenRecordingAccessGranted ? .green : .red, radius: 8)
-                    }
-                    Text("This is only needed to animate windows being resized.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
             }, header: {
                 HStack {
                     Text("Permissions")
@@ -150,21 +124,15 @@ struct MoreSettingsView: View {
                     Spacer()
 
                     Button("Request Access…") {
-                        PermissionsManager.requestAccess()
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
+                        AccessibilityManager.requestAccess()
+                        self.isAccessibilityAccessGranted = AccessibilityManager.getStatus()
                     }
                     .buttonStyle(.link)
                     .foregroundStyle(Color.accentColor)
-                    .disabled(isAccessibilityAccessGranted && isScreenRecordingAccessGranted)
-                    .opacity(isAccessibilityAccessGranted ? isScreenRecordingAccessGranted ? 0.6 : 1 : 1)
+                    .disabled(isAccessibilityAccessGranted)
+                    .opacity(isAccessibilityAccessGranted ? 0.6 : 1)
                     .onAppear {
-                        self.isAccessibilityAccessGranted = PermissionsManager.Accessibility.getStatus()
-                        self.isScreenRecordingAccessGranted = PermissionsManager.ScreenRecording.getStatus()
-
-                        if !isScreenRecordingAccessGranted {
-                            self.animateWindowResizes = false
-                        }
+                        self.isAccessibilityAccessGranted = AccessibilityManager.getStatus()
                     }
                 }
             })

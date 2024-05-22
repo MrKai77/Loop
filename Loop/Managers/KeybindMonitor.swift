@@ -26,7 +26,7 @@ class KeybindMonitor {
 
     func start() {
         guard self.eventMonitor == nil,
-              PermissionsManager.Accessibility.getStatus() else {
+              AccessibilityManager.getStatus() else {
             return
         }
 

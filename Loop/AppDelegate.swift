@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         NSApp.setActivationPolicy(.accessory)
 
         // Check & ask for accessibility access
-        PermissionsManager.Accessibility.requestAccess()
+        AccessibilityManager.requestAccess()
         UNUserNotificationCenter.current().delegate = self
 
         AppDelegate.requestNotificationAuthorization()

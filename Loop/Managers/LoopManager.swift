@@ -15,7 +15,6 @@ class LoopManager: ObservableObject {
     static var lastTargetFrame: CGRect = .zero
     static var canAdjustSize: Bool = true
 
-    private let accessibilityAccessManager = PermissionsManager()
     private let keybindMonitor = KeybindMonitor.shared
 
     private let radialMenuController = RadialMenuController()
@@ -368,7 +367,7 @@ class LoopManager: ObservableObject {
         self.targetWindow = nil
 
         // Ensure accessibility access
-        guard PermissionsManager.Accessibility.getStatus() else { return }
+        guard AccessibilityManager.getStatus() else { return }
 
         self.targetWindow = WindowEngine.getTargetWindow()
         guard self.targetWindow?.isAppExcluded != true else { return }
