@@ -194,7 +194,9 @@ class Window {
     func setFrame(
         _ rect: CGRect,
         animate: Bool = false,
-        sizeFirst: Bool = false
+        sizeFirst: Bool = false,
+        bounds: CGRect = .zero, // Only does something when window animations are on
+        completionHandler: @escaping (() -> Void) = {}
     ) {
         let enhancedUI = self.enhancedUserInterface ?? false
 
@@ -205,7 +207,12 @@ class Window {
         }
 
         if animate {
-            let animation = WindowTransformAnimation(rect, window: self)
+            let animation = WindowTransformAnimation(
+                rect,
+                window: self,
+                bounds: bounds,
+                completionHandler: completionHandler
+            )
             animation.startInBackground()
         } else {
             if sizeFirst {
@@ -213,59 +220,12 @@ class Window {
             }
             self.setPosition(rect.origin)
             self.setSize(rect.size)
+
+            completionHandler()
         }
 
         if enhancedUI {
             self.enhancedUserInterface = true
-        }
-    }
-
-    /// MacOS doesn't provide us a way to find the minimum size of a window from the accessibility API.
-    /// So we deliberately force-resize the window to 0x0 and see how small it goes, take note of the frame,
-    /// then we restore the original window size. However, this does have one big consequence. The user
-    /// can see a single frame when the window is being resized to 0x0, then restored. So to counteract this,
-    /// we take a screenshot of the screen, overlay it, and get the minimum size then close the overlay window.
-    /// - Parameters:
-    ///   - screen: The screen the window is on
-    ///   - completion: What to do with the minimum size
-    func getMinSize(screen: NSScreen, completion: @escaping (CGSize) -> Void) {
-        // Take screenshot of screen
-        guard let displayID = screen.displayID else { return }
-        let imageRef = CGDisplayCreateImage(displayID)
-        let image = NSImage(cgImage: imageRef!, size: .zero)
-
-        // Initialize the overlay NSPanel
-        let panel = NSPanel(
-            contentRect: .zero,
-            styleMask: [.borderless, .nonactivatingPanel],
-            backing: .buffered,
-            defer: false
-        )
-        panel.hasShadow = false
-        panel.backgroundColor  = NSColor.white.withAlphaComponent(0.00001)
-        panel.level = .screenSaver
-        panel.ignoresMouseEvents = true
-        panel.setFrame(screen.frame, display: false)
-        panel.contentView = NSImageView(image: image)
-        panel.orderFrontRegardless()
-
-        var minSize: CGSize = .zero
-        DispatchQueue.main.async {
-            // Force-resize the window to 0x0
-            let startingSize = self.size
-            self.setSize(CGSize(width: 0, height: 0))
-
-            // Take note of the minimum size
-            minSize = self.size
-
-            // Restore original window size
-            self.setSize(startingSize)
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
-                // Close window, then activate completion handler
-                panel.close()
-                completion(minSize)
-            }
         }
     }
 }
