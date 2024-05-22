@@ -17,9 +17,6 @@ class WindowTransformAnimation: NSAnimation {
 
     private var lastWindowFrame: CGRect = .zero
 
-    private var didHitMinWidth = false
-    private var didHitMinHeight = false
-
     init(_ newRect: CGRect, window: Window, bounds: CGRect, completionHandler: @escaping () -> Void) {
         self.targetFrame = newRect
         self.originalFrame = window.frame
@@ -54,32 +51,17 @@ class WindowTransformAnimation: NSAnimation {
                 height: originalFrame.size.height + value * (targetFrame.size.height - originalFrame.size.height)
             )
 
-            if didHitMinWidth,
-               newFrame.minX + lastWindowFrame.width > bounds.maxX {
+            // Keep the window inside the bounds
+            if newFrame.maxX + (lastWindowFrame.width - newFrame.width) > bounds.maxX {
                 newFrame.origin.x = bounds.maxX - lastWindowFrame.width
             }
-
-            if didHitMinHeight,
-               newFrame.minY + lastWindowFrame.height > bounds.maxY {
+            if newFrame.maxY + (lastWindowFrame.height - newFrame.height) > bounds.maxY {
                 newFrame.origin.y = bounds.maxY - lastWindowFrame.height
             }
 
             window.setPosition(newFrame.origin)
             window.setSize(newFrame.size)
-
-            let currentFrame = window.frame
-
-            if !didHitMinWidth,
-               currentFrame.width.approximatelyEquals(to: lastWindowFrame.width, tolerance: 2) {
-                didHitMinWidth = true
-            }
-
-            if !didHitMinHeight,
-               currentFrame.height.approximatelyEquals(to: lastWindowFrame.height, tolerance: 2) {
-                didHitMinHeight = true
-            }
-
-            lastWindowFrame = currentFrame
+            lastWindowFrame = window.frame
 
             if currentProgress >= 1.0 {
                 completionHandler()
