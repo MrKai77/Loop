@@ -17,6 +17,10 @@ class WindowTransformAnimation: NSAnimation {
 
     private var lastWindowFrame: CGRect = .zero
 
+    // Using ids for each ongoing animation, we can cancel as a new window animation is started for that specific window
+    private var id: UUID = UUID()
+    static var currentAnimations: [CGWindowID: UUID] = [:]
+
     init(_ newRect: CGRect, window: Window, bounds: CGRect, completionHandler: @escaping () -> Void) {
         self.targetFrame = newRect
         self.originalFrame = window.frame
@@ -27,6 +31,8 @@ class WindowTransformAnimation: NSAnimation {
         self.frameRate = 60.0
         self.animationBlockingMode = .nonblocking
         self.lastWindowFrame = originalFrame
+
+        WindowTransformAnimation.currentAnimations[window.cgWindowID] = self.id
     }
 
     required init?(coder: NSCoder) {
@@ -42,6 +48,11 @@ class WindowTransformAnimation: NSAnimation {
 
     override public var currentProgress: NSAnimation.Progress {
         didSet {
+            guard WindowTransformAnimation.currentAnimations.contains(where: { $0.value == self.id }) else {
+                stop()
+                return
+            }
+
             let value = CGFloat(1.0 - pow(1.0 - self.currentValue, 3))
 
             var newFrame = CGRect(
@@ -64,6 +75,7 @@ class WindowTransformAnimation: NSAnimation {
             lastWindowFrame = window.frame
 
             if currentProgress >= 1.0 {
+                WindowTransformAnimation.currentAnimations[window.cgWindowID] = nil
                 completionHandler()
             }
         }

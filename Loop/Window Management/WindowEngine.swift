@@ -17,8 +17,7 @@ struct WindowEngine {
     static func resize(
         _ window: Window,
         to action: WindowAction,
-        on screen: NSScreen,
-        suppressAnimations: Bool = false
+        on screen: NSScreen
     ) {
         guard action.direction != .noAction else { return }
         let willChangeScreens = ScreenManager.screenContaining(window) != screen
@@ -61,7 +60,7 @@ struct WindowEngine {
         print("Target window frame: \(targetWindowFrame)")
 
         let enhancedUI = window.enhancedUserInterface ?? false
-        let animate = (!suppressAnimations && Defaults[.animateWindowResizes] && !enhancedUI)
+        let animate = Defaults[.animateWindowResizes] && !enhancedUI
 
         window.setFrame(
             targetWindowFrame,

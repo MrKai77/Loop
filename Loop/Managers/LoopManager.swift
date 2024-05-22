@@ -227,8 +227,7 @@ class LoopManager: ObservableObject {
                     WindowEngine.resize(
                         self.targetWindow!,
                         to: self.currentAction,
-                        on: screenToResizeOn,
-                        suppressAnimations: true
+                        on: screenToResizeOn
                     )
                 }
             }
@@ -254,8 +253,7 @@ class LoopManager: ObservableObject {
                     WindowEngine.resize(
                         self.targetWindow!,
                         to: self.currentAction,
-                        on: screenToResizeOn,
-                        suppressAnimations: true
+                        on: screenToResizeOn
                     )
                 }
             }
