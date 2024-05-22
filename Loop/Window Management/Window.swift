@@ -194,7 +194,7 @@ class Window {
     func setFrame(
         _ rect: CGRect,
         animate: Bool = false,
-        sizeFirst: Bool = false,
+        sizeFirst: Bool = false, // Only does something when window animations are off
         bounds: CGRect = .zero, // Only does something when window animations are on
         completionHandler: @escaping (() -> Void) = {}
     ) {

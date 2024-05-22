@@ -70,7 +70,7 @@ struct WindowEngine {
         ) {
             // If animations are disabled, check if the window needs extra resizing
             if !animate {
-                // Fixes an issue where window isn't resized correctly on multi-monitor setups (only happens when )
+                // Fixes an issue where window isn't resized correctly on multi-monitor setups
                 if !window.frame.approximatelyEqual(to: targetWindowFrame) {
                     print("Backup resizing...")
                     window.setFrame(targetWindowFrame)
