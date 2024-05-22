@@ -8,6 +8,7 @@
 import SwiftUI
 import Defaults
 
+// swiftlint:disable:next type_body_length
 class LoopManager: ObservableObject {
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?
@@ -306,10 +307,14 @@ class LoopManager: ObservableObject {
 
         let triggerKey = Defaults[.triggerKey]
         let wasKeyDown = (event.type == .keyDown || currentlyPressedModifiers.count > previousModifiers.count)
+        let keybindIsValid = (
+            Defaults[.triggerKey].contains(event.keyCode) ||
+            Defaults[.keybinds].contains {
+                $0.keybind.contains(event.keyCode)
+            }
+        )
 
-        if wasKeyDown,
-           triggerKey.isSubset(of: currentlyPressedModifiers) {
-
+        if wasKeyDown, keybindIsValid, triggerKey.isSubset(of: currentlyPressedModifiers) {
             guard
                 !isLoopActive,
                 currentlyPressedModifiers.count <= triggerKey.count
@@ -351,10 +356,6 @@ class LoopManager: ObservableObject {
             for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
                 if !self.currentlyPressedModifiers.map({ $0.baseModifier }).contains(key) {
                     self.currentlyPressedModifiers.insert(key)
-
-//                    if key.isOnRightSide {
-//                        print("\(key) is on right side")
-//                    }
                 }
             }
         }
@@ -398,8 +399,6 @@ class LoopManager: ObservableObject {
 
         self.keybindMonitor.stop()
         self.mouseMovedEventMonitor!.stop()
-
-        self.currentlyPressedModifiers = []
 
         if self.targetWindow != nil,
             self.screenToResizeOn != nil,
