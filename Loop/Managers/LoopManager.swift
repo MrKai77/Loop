@@ -299,10 +299,24 @@ class LoopManager: ObservableObject {
     }
 
     private func handleLoopKeypress(_ event: NSEvent) {
-        self.triggerDelayTimer = nil
+        triggerDelayTimer = nil
+
+        let previousModifiers = currentlyPressedModifiers
         processModifiers(event)
 
-        if Defaults[.triggerKey].isSubset(of: self.currentlyPressedModifiers) {
+        let triggerKey = Defaults[.triggerKey]
+        let wasKeyDown = (event.type == .keyDown || currentlyPressedModifiers.count > previousModifiers.count)
+
+        if wasKeyDown,
+           triggerKey.isSubset(of: currentlyPressedModifiers) {
+
+            guard
+                !isLoopActive,
+                currentlyPressedModifiers.count <= triggerKey.count
+            else {
+                return
+            }
+
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
@@ -310,14 +324,14 @@ class LoopManager: ObservableObject {
                 guard currentlyPressedModifiers.sorted() == Defaults[.triggerKey].sorted() else { return }
                 handleDoubleClickToTrigger(useTriggerDelay)
             } else if useTriggerDelay {
-                self.handleTriggerDelay()
+                handleTriggerDelay()
             } else {
-                self.openLoop()
+                openLoop()
             }
             self.lastTriggerKeyClick = Date.now
         } else {
-            if self.isLoopActive {
-                self.closeLoop()
+            if isLoopActive {
+                closeLoop()
             }
         }
     }
@@ -337,6 +351,10 @@ class LoopManager: ObservableObject {
             for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
                 if !self.currentlyPressedModifiers.map({ $0.baseModifier }).contains(key) {
                     self.currentlyPressedModifiers.insert(key)
+
+//                    if key.isOnRightSide {
+//                        print("\(key) is on right side")
+//                    }
                 }
             }
         }
