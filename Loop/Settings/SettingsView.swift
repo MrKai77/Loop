@@ -23,14 +23,6 @@ struct SettingsView: View {
                 }
                 .frame(width: 450)
 
-            RadialMenuSettingsView()
-                .tag(SettingsTab.radialMenu)
-                .tabItem {
-                    Image(.loop)
-                    Text("Radial Menu")
-                }
-                .frame(width: 450)
-
             KeybindingsSettingsView()
                 .tag(SettingsTab.keybindings)
                 .tabItem {
@@ -49,15 +41,6 @@ struct SettingsView: View {
                 .environmentObject(appListManager)
                 .frame(width: 450)
                 .frame(maxHeight: 680)
-
-            MoreSettingsView()
-                .tag(SettingsTab.more)
-                .tabItem {
-                    Image(systemName: "ellipsis.circle")
-                    Text("More")
-                }
-                .environmentObject(updater)
-                .frame(width: 450)
         }
         .fixedSize(horizontal: true, vertical: true)
     }

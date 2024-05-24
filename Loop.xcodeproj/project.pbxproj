@@ -90,7 +90,6 @@
 		A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D3022B6C8D750061B11F /* PaddingPreviewView.swift */; };
 		A8D6D3052B6C92F20061B11F /* WallpaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D3042B6C92F20061B11F /* WallpaperView.swift */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; };
-		A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */; };
 		A8E1575F298654960005761C /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E1575E298654960005761C /* AboutView.swift */; };
 		A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C38297F5E9A0064D4BA /* LoopApp.swift */; };
 		A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */; };
@@ -101,7 +100,6 @@
 		A8EF1F09299C87DF00633440 /* IconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EF1F08299C87DF00633440 /* IconManager.swift */; };
 		A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* WindowAction.swift */; };
 		A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */; };
-		A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,7 +185,6 @@
 		A8D6D3002B6C894C0061B11F /* PaddingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingModel.swift; sourceTree = "<group>"; };
 		A8D6D3022B6C8D750061B11F /* PaddingPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingPreviewView.swift; sourceTree = "<group>"; };
 		A8D6D3042B6C92F20061B11F /* WallpaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperView.swift; sourceTree = "<group>"; };
-		A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuSettingsView.swift; sourceTree = "<group>"; };
 		A8E1575E298654960005761C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E59C38297F5E9A0064D4BA /* LoopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopApp.swift; sourceTree = "<group>"; };
@@ -201,7 +198,6 @@
 		A8EF1F08299C87DF00633440 /* IconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconManager.swift; sourceTree = "<group>"; };
 		A8F0125A2AEDD7660017307F /* WindowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAction.swift; sourceTree = "<group>"; };
 		A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingsSettingsView.swift; sourceTree = "<group>"; };
-		A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreSettingsView.swift; sourceTree = "<group>"; };
 		A8F063712985B2730010C33D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -404,10 +400,8 @@
 			children = (
 				A8063A6D2B19599D00EAB3D9 /* SettingsView.swift */,
 				A882660729809F6F00BCB197 /* GeneralSettingsView.swift */,
-				A8DCC9872981B9E100D41065 /* RadialMenuSettingsView.swift */,
 				A84497CE2B3A57E8003D4CF3 /* Keybindings */,
 				116CE72F2B9F21520014C19D /* ExcludeListSettingsView.swift */,
-				A8F0636C2985AF1F0010C33D /* MoreSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -660,9 +654,7 @@
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
 				A82B1AF62BD35C8500E2F3F9 /* BehaviorConfigurationView.swift in Sources */,
 				A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */,
-				A8DCC9882981B9E100D41065 /* RadialMenuSettingsView.swift in Sources */,
 				A82436062B7EE55C0052FBFB /* CrispValueAdjuster.swift in Sources */,
-				A8F0636D2985AF1F0010C33D /* MoreSettingsView.swift in Sources */,
 				A8330ACD2A3AC1D100673C8D /* CGGeometry+Extensions.swift in Sources */,
 				A82B1AF22BD35A3800E2F3F9 /* PreviewConfigurationView.swift in Sources */,
 				A8330AC72A3AC19500673C8D /* NSScreen+Extensions.swift in Sources */,
