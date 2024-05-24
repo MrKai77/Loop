@@ -17,8 +17,7 @@ struct WindowEngine {
     static func resize(
         _ window: Window,
         to action: WindowAction,
-        on screen: NSScreen,
-        suppressAnimations: Bool = false
+        on screen: NSScreen
     ) {
         guard action.direction != .noAction else { return }
         let willChangeScreens = ScreenManager.screenContaining(window) != screen
@@ -52,7 +51,7 @@ struct WindowEngine {
             return
         }
 
-        var targetWindowFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
+        let targetWindowFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
 
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)
@@ -61,42 +60,27 @@ struct WindowEngine {
         print("Target window frame: \(targetWindowFrame)")
 
         let enhancedUI = window.enhancedUserInterface ?? false
-        var animate = (!suppressAnimations && Defaults[.animateWindowResizes] && !enhancedUI)
+        let animate = Defaults[.animateWindowResizes] && !enhancedUI
 
-        WindowRecords.record(window, action)
-
-        if animate {
-            if PermissionsManager.ScreenRecording.getStatus() == false {
-                PermissionsManager.ScreenRecording.requestAccess()
-                animate = false
-                return
-            }
-
-            // Calculate the window's minimum window size and change the target accordingly
-            window.getMinSize(screen: screen) { minSize in
-                let nsScreenFrame = screen.safeScreenFrame.flipY!
-
-                if (targetWindowFrame.minX + minSize.width) > nsScreenFrame.maxX {
-                    targetWindowFrame.origin.x = nsScreenFrame.maxX - minSize.width - Defaults[.padding].right
-                }
-
-                if (targetWindowFrame.minY + minSize.height) > nsScreenFrame.maxY {
-                    targetWindowFrame.origin.y = nsScreenFrame.maxY - minSize.height - Defaults[.padding].bottom
-                }
-
-                window.setFrame(targetWindowFrame, animate: true)
-            }
-        } else {
-            window.setFrame(targetWindowFrame, sizeFirst: willChangeScreens)
-            
+        window.setFrame(
+            targetWindowFrame,
+            animate: animate,
+            sizeFirst: willChangeScreens,
+            bounds: screen.safeScreenFrame
+        ) {
+            // If animations are disabled, check if the window needs extra resizing
+            if !animate {
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
-            if !window.frame.approximatelyEqual(to: targetWindowFrame) {
-                print("Backup resizing...")
-                window.setFrame(targetWindowFrame)
+                if !window.frame.approximatelyEqual(to: targetWindowFrame) {
+                    print("Backup resizing...")
+                    window.setFrame(targetWindowFrame)
+                }
             }
 
             WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
         }
+
+        WindowRecords.record(window, action)
     }
 
     static func getTargetWindow() -> Window? {
