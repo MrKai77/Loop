@@ -63,7 +63,7 @@ struct WindowEngine {
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
 
         if window.nsRunningApplication == NSRunningApplication.current,
-           let window = AppDelegate.luminare.windowController?.window {
+           let window = NSApp.keyWindow {
             var newFrame = targetFrame
             newFrame.size = window.frame.size
 
