@@ -1648,7 +1648,6 @@
       }
     },
     "Request Access…" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1754,9 +1753,6 @@
         }
       }
     },
-    "Screen capture access" : {
-
-    },
     "Screen Padding" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1769,6 +1765,7 @@
       }
     },
     "Screen recording access" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1779,7 +1776,7 @@
       }
     },
     "Screen Recording Request: Content" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1796,7 +1793,7 @@
       }
     },
     "Screen Recording Request: Title" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1999,6 +1996,7 @@
 
     },
     "This is only needed to animate windows being resized." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

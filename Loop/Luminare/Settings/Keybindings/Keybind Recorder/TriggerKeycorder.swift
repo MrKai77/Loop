@@ -104,7 +104,7 @@ struct TriggerKeycorder: View {
 
             // Backup system in case keys are pressed at the exact same time
             let flags = event.modifierFlags.convertToCGKeyCode()
-            if flags.count > 1 && !self.selectionKey.contains(flags) {
+            if flags.count != selectionKey.count {
                 for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
                     if !self.selectionKey.map({ $0.baseModifier }).contains(key) {
                         self.selectionKey.insert(key)

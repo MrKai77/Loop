@@ -29,7 +29,7 @@ extension NSScreen {
             let displayID = self.displayID
         else {
             print("ERROR: Failed to get NSScreen.displayID in NSScreen.safeScreenFrame")
-            return self.frame.flipY!
+            return self.frame.flipY(screen: self)
         }
 
         let screenFrame = CGDisplayBounds(displayID)
@@ -68,7 +68,7 @@ extension NSScreen {
             let displayID = self.displayID
         else {
             print("ERROR: Failed to get NSScreen.displayID in NSScreen.displayBounds")
-            return self.frame.flipY!
+            return self.frame.flipY(screen: self)
         }
 
         return CGDisplayBounds(displayID)

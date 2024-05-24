@@ -30,9 +30,12 @@ extension CGPoint {
             * (from.y - comparisonPoint.y)
     }
 
-    var flipY: CGPoint? {
-        guard let screen = NSScreen.main else { return nil }
-        return CGPoint(x: self.x, y: screen.frame.maxY - self.y)
+    func flipY(maxY: CGFloat) -> CGPoint {
+        CGPoint(x: self.x, y: maxY - self.y)
+    }
+
+    func flipY(screen: NSScreen) -> CGPoint {
+        return flipY(maxY: screen.frame.maxY)
     }
 
     func approximatelyEqual(to point: CGPoint, tolerance: CGFloat = 10) -> Bool {
@@ -52,18 +55,12 @@ extension CGSize {
 }
 
 extension CGRect {
-    var flipY: CGRect? {
-        guard let screen = NSScreen.main else { return nil }
-        return CGRect(
-            x: self.minX,
-            y: screen.frame.maxY - self.maxY,
-            width: self.width,
-            height: self.height
-        )
+    func flipY(screen: NSScreen) -> CGRect {
+        return flipY(maxY: screen.frame.maxY)
     }
 
     func flipY(maxY: CGFloat) -> CGRect {
-        return CGRect(
+        CGRect(
             x: self.minX,
             y: maxY - self.maxY,
             width: self.width,

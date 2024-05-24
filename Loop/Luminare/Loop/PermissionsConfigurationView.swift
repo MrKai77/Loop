@@ -13,7 +13,6 @@ struct PermissionsConfigurationView: View {
     @Default(.animateWindowResizes) var animateWindowResizes
 
     @State var isAccessibilityAccessGranted = false
-    @State var isScreenCaptureAccessGranted = false
 
     let elementHeight: CGFloat = 34
 
@@ -31,7 +30,7 @@ struct PermissionsConfigurationView: View {
 
                 Button {
                     withAnimation(.smooth) {
-                        isAccessibilityAccessGranted = PermissionsManager.accessibility.requestAccess()
+                        isAccessibilityAccessGranted = AccessibilityManager.requestAccess()
                     }
                 } label: {
                     Text("Request…")
@@ -44,40 +43,9 @@ struct PermissionsConfigurationView: View {
             .padding(.leading, 12)
             .padding(.trailing, 2)
             .frame(height: elementHeight)
-
-            HStack {
-                if isScreenCaptureAccessGranted {
-                    Image(systemName: "checkmark.seal.fill")
-                        .foregroundStyle(.green.pastelized)
-                }
-
-                Text("Screen capture access")
-
-                Spacer()
-
-                Button {
-                    withAnimation(.smooth) {
-                        isScreenCaptureAccessGranted = PermissionsManager.screenCapture.requestAccess()
-                    }
-                } label: {
-                    Text("Request…")
-                        .frame(height: 30)
-                        .padding(.horizontal, 8)
-                }
-                .disabled(isScreenCaptureAccessGranted)
-                .buttonStyle(LuminareCompactButtonStyle(extraCompact: true))
-            }
-            .padding(.leading, 12)
-            .padding(.trailing, 2)
-            .frame(height: elementHeight)
         }
         .onAppear {
-            isAccessibilityAccessGranted = PermissionsManager.accessibility.getStatus()
-            isScreenCaptureAccessGranted = PermissionsManager.screenCapture.getStatus()
-
-            if !isScreenCaptureAccessGranted {
-                self.animateWindowResizes = false
-            }
+            isAccessibilityAccessGranted = AccessibilityManager.getStatus()
         }
     }
 }

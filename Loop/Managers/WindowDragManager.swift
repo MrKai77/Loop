@@ -46,7 +46,7 @@ class WindowDragManager {
                 }
             }
 
-            return Unmanaged.passRetained(cgEvent)
+            return Unmanaged.passUnretained(cgEvent)
         }
 
         self.leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
@@ -68,8 +68,13 @@ class WindowDragManager {
     }
 
     private func setCurrentDraggingWindow() {
+        guard let screen = NSScreen.screenWithMouse else {
+            return
+        }
+
+        let mousePosition = NSEvent.mouseLocation.flipY(screen: screen)
+
         guard
-            let mousePosition = NSEvent.mouseLocation.flipY,
             let draggingWindow = WindowEngine.windowAtPosition(mousePosition),
             !draggingWindow.isAppExcluded
         else {
@@ -121,13 +126,11 @@ class WindowDragManager {
     }
 
     private func getWindowSnapDirection() {
-        guard
-            let mousePosition = NSEvent.mouseLocation.flipY,
-            let screen = NSScreen.screenWithMouse,
-            let screenFrame = screen.frame.flipY
-        else {
+        guard let screen = NSScreen.screenWithMouse else {
             return
         }
+        let mousePosition = NSEvent.mouseLocation.flipY(maxY: screen.frame.maxY)
+        let screenFrame = screen.frame.flipY(maxY: screen.frame.maxY)
 
         self.previewController.setScreen(to: screen)
         let ignoredFrame = screenFrame.insetBy(dx: 2, dy: 2)
