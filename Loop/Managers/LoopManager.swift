@@ -272,7 +272,7 @@ class LoopManager: ObservableObject {
                 closeLoop()
             }
         }
-        return Unmanaged.passRetained(cgEvent)
+        return Unmanaged.passUnretained(cgEvent)
     }
 
     private func handleTriggerDelay() {
@@ -304,18 +304,9 @@ class LoopManager: ObservableObject {
 
         let triggerKey = Defaults[.triggerKey]
         let wasKeyDown = (event.type == .keyDown || currentlyPressedModifiers.count > previousModifiers.count)
-        let keybindIsValid = (
-            Defaults[.triggerKey].contains(event.keyCode) ||
-            Defaults[.keybinds].contains {
-                $0.keybind.contains(event.keyCode)
-            }
-        )
 
-        if wasKeyDown, keybindIsValid, triggerKey.isSubset(of: currentlyPressedModifiers) {
-            guard
-                !isLoopActive,
-                currentlyPressedModifiers.count <= triggerKey.count
-            else {
+        if wasKeyDown, triggerKey.isSubset(of: currentlyPressedModifiers) {
+            guard !isLoopActive else {
                 return
             }
 

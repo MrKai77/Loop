@@ -31,37 +31,41 @@ class KeybindMonitor {
         }
 
         self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
-             if cgEvent.type == .keyDown || cgEvent.type == .keyUp,
-                let event = NSEvent(cgEvent: cgEvent) {
-                 if event.type == .keyUp {
-                     KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
-                 } else if event.type == .keyDown {
-                     KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
-                 }
-
-                 // Special events such as the emoji key
-                 if self.specialEvents.contains(event.keyCode.baseKey) {
-                     if self.canPassthroughSpecialEvents {
-                         return Unmanaged.passRetained(cgEvent)
-                     }
-                     return nil
-                 }
-
-                 // If this is a valid event, don't passthrough
-                 if self.performKeybind(event: event) {
-                     return nil
-                 }
-
-                 // If this wasn't, check if it was a system keybind (ex. screenshot), and
-                 // in that case, passthrough and foce-close Loop
-                 if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
-                     Notification.Name.forceCloseLoop.post()
-                     print("Detected system keybind, closing!")
-                     return Unmanaged.passRetained(cgEvent)
-                 }
+            guard
+                cgEvent.type == .keyDown || cgEvent.type == .keyUp,
+                let event = NSEvent(cgEvent: cgEvent)
+            else {
+                return Unmanaged.passUnretained(cgEvent)
             }
 
-            return Unmanaged.passRetained(cgEvent)
+            if event.type == .keyUp {
+                KeybindMonitor.shared.pressedKeys.remove(event.keyCode.baseKey)
+            } else if event.type == .keyDown {
+                KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
+            }
+
+             // Special events such as the emoji key
+             if self.specialEvents.contains(event.keyCode.baseKey) {
+                 if self.canPassthroughSpecialEvents {
+                     return Unmanaged.passUnretained(cgEvent)
+                 }
+                 return nil
+             }
+
+            // If this is a valid event, don't passthrough
+            if self.performKeybind(event: event) {
+                return nil
+            }
+
+             // If this wasn't, check if it was a system keybind (ex. screenshot), and
+             // in that case, passthrough and foce-close Loop
+             if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
+                 Notification.Name.forceCloseLoop.post()
+                 print("Detected system keybind, closing!")
+                 return Unmanaged.passUnretained(cgEvent)
+             }
+
+            return Unmanaged.passUnretained(cgEvent)
         }
 
         self.flagsEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
@@ -75,7 +79,7 @@ class KeybindMonitor {
 
                 self.performKeybind(event: event)
             }
-            return Unmanaged.passRetained(cgEvent)
+            return Unmanaged.passUnretained(cgEvent)
         }
 
         self.eventMonitor!.start()
@@ -86,11 +90,6 @@ class KeybindMonitor {
         self.resetPressedKeys()
         self.canPassthroughSpecialEvents = true
 
-        guard self.eventMonitor != nil &&
-              self.flagsEventMonitor != nil else {
-            return
-        }
-
         self.eventMonitor?.stop()
         self.eventMonitor = nil
 
@@ -100,17 +99,16 @@ class KeybindMonitor {
 
     @discardableResult
     private func performKeybind(event: NSEvent) -> Bool {
-        // If the current key up event is within 100 ms of the last key up event, return.
-        // This is used when the user is pressing 2+ keys so that it doesn't switch back
-        // to the one key direction when they're letting go of the keys.
-        if event.type == .keyUp ||
-            (event.type == .flagsChanged &&
-             !event.modifierFlags.intersection(.deviceIndependentFlagsMask).contains(.shift)) {
-            if (abs(lastKeyReleaseTime.timeIntervalSinceNow)) > 0.1 {
+        if event.type == .keyUp {
+            // If the current key up event is within 100 ms of the last key up event, return.
+            // This is used when the user is pressing 2+ keys so that it doesn't switch back
+            // to the one key direction when they're letting go of the keys.
+            if abs(lastKeyReleaseTime.timeIntervalSinceNow) < 0.1 {
                 print("performKeybind: returning true due to key release")
                 return true
             }
             lastKeyReleaseTime = Date.now
+            return false
         }
 
         if pressedKeys.contains(.kVK_Escape) {
