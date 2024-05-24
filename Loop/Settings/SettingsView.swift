@@ -23,15 +23,6 @@ struct SettingsView: View {
                 }
                 .frame(width: 450)
 
-            KeybindingsSettingsView()
-                .tag(SettingsTab.keybindings)
-                .tabItem {
-                    Image(systemName: "keyboard")
-                    Text("Keybindings")
-                }
-                .frame(width: 500)
-                .frame(minHeight: 500, maxHeight: 680)
-
             ExcludeListSettingsView()
                 .tag(SettingsTab.excludedApps)
                 .tabItem {

@@ -1310,6 +1310,7 @@
       }
     },
     "Keybinds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1569,7 +1570,11 @@
         }
       }
     },
+    "Press + to add a cycle item" : {
+
+    },
     "Press + to add a cycle item!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1579,7 +1584,11 @@
         }
       }
     },
+    "Press + to add a keybind" : {
+
+    },
     "Press + to add a keybind!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

@@ -17,10 +17,6 @@ struct LoopApp: App {
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
 
     var body: some Scene {
-        Settings {
-            SettingsView()
-        }
-
         MenuBarExtra("Loop", image: "empty", isInserted: Binding.constant(!hideMenuBarIcon)) {
             #if DEBUG
             MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")

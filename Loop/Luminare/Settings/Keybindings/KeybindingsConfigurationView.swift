@@ -49,6 +49,20 @@ struct KeybindingsConfigurationView: View {
             content: { keybind in
                 KeybindingItemView(keybind)
                     .environmentObject(data)
+            },
+            emptyView: {
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text("No keybinds")
+                            .font(.title3)
+                        Text("Press + to add a keybind")
+                            .font(.caption)
+                    }
+                    Spacer()
+                }
+                .foregroundStyle(.secondary)
+                .padding()
             }
         )
         .onChange(of: selectedKeybinds) { _ in

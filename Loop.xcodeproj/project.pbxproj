@@ -61,7 +61,6 @@
 		A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* StageManager.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
-		A86DAE2A2B3CCF2900B968F0 /* CustomCyclingKeybindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */; };
 		A86DDA022BA4F6E900C0DFF7 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A86DDA012BA4F6E900C0DFF7 /* Sparkle */; };
 		A87376F62AA288EB001890F4 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87376F52AA288EB001890F4 /* Window.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
@@ -99,7 +98,6 @@
 		A8E8903C2BA7AAFE006C5074 /* NSEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E8903B2BA7AAFE006C5074 /* NSEvent+Extensions.swift */; };
 		A8EF1F09299C87DF00633440 /* IconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EF1F08299C87DF00633440 /* IconManager.swift */; };
 		A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* WindowAction.swift */; };
-		A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -159,7 +157,6 @@
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
-		A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCyclingKeybindView.swift; sourceTree = "<group>"; };
 		A87376F52AA288EB001890F4 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
@@ -197,7 +194,6 @@
 		A8E8903B2BA7AAFE006C5074 /* NSEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSEvent+Extensions.swift"; sourceTree = "<group>"; };
 		A8EF1F08299C87DF00633440 /* IconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconManager.swift; sourceTree = "<group>"; };
 		A8F0125A2AEDD7660017307F /* WindowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAction.swift; sourceTree = "<group>"; };
-		A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingsSettingsView.swift; sourceTree = "<group>"; };
 		A8F063712985B2730010C33D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -315,10 +311,8 @@
 		A84497CE2B3A57E8003D4CF3 /* Keybindings */ = {
 			isa = PBXGroup;
 			children = (
-				A8F0125C2AEDFEC70017307F /* KeybindingsSettingsView.swift */,
 				A85FEEBB2AF15CDE00354D79 /* KeybindCustomizationViewItem.swift */,
 				A86DAE262B3CCEF600B968F0 /* Custom Keybinds */,
-				A86DAE282B3CCF1600B968F0 /* Custom Cycling Keybinds */,
 			);
 			path = Keybindings;
 			sourceTree = "<group>";
@@ -365,14 +359,6 @@
 				A8055EC12AFEDE0B00459D13 /* Keycorder.swift */,
 			);
 			path = "Keybind Recorder";
-			sourceTree = "<group>";
-		};
-		A86DAE282B3CCF1600B968F0 /* Custom Cycling Keybinds */ = {
-			isa = PBXGroup;
-			children = (
-				A86DAE292B3CCF2900B968F0 /* CustomCyclingKeybindView.swift */,
-			);
-			path = "Custom Cycling Keybinds";
 			sourceTree = "<group>";
 		};
 		A88265FA29808DED00BCB197 /* Preview Window */ = {
@@ -689,10 +675,8 @@
 				A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */,
 				A8330ACB2A3AC1C000673C8D /* Angle+Extensions.swift in Sources */,
 				A8D6D3052B6C92F20061B11F /* WallpaperView.swift in Sources */,
-				A8F0125D2AEDFEC70017307F /* KeybindingsSettingsView.swift in Sources */,
 				A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */,
 				A8504D2D2A85832F00C2EFDA /* SoftwareUpdater.swift in Sources */,
-				A86DAE2A2B3CCF2900B968F0 /* CustomCyclingKeybindView.swift in Sources */,
 				A8330ACF2A3AC1E900673C8D /* View+Extensions.swift in Sources */,
 				A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,

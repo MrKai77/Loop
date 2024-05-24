@@ -65,6 +65,20 @@ struct CycleActionConfigurationView: View {
                     cycleIndex: action.cycle?.firstIndex(of: item.wrappedValue)
                 )
                 .environmentObject(KeybindsConfigurationData())
+            },
+            emptyView: {
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text("Nothing to cycle through")
+                            .font(.title3)
+                        Text("Press + to add a cycle item")
+                            .font(.caption)
+                    }
+                    Spacer()
+                }
+                .foregroundStyle(.secondary)
+                .padding()
             }
         )
         .onChange(of: action) { _ in

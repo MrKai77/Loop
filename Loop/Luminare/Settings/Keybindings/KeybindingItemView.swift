@@ -100,66 +100,64 @@ struct WindowDirectionPicker: View, Equatable {
 
     var body: some View {
         Menu {
-            // This increases performance!
-            if isHovering {
-                Picker("General", selection: $keybind.direction) {
-                    ForEach(WindowDirection.general) { direction in
+            Picker("General", selection: $keybind.direction) {
+                ForEach(WindowDirection.general) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Halves", selection: $keybind.direction) {
+                ForEach(WindowDirection.halves) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Quarters", selection: $keybind.direction) {
+                ForEach(WindowDirection.quarters) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Horizontal Thirds", selection: $keybind.direction) {
+                ForEach(WindowDirection.horizontalThirds) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Vertical Thirds", selection: $keybind.direction) {
+                ForEach(WindowDirection.verticalThirds) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            Picker("Screen Switching", selection: $keybind.direction) {
+                ForEach(WindowDirection.screenSwitching) { direction in
+                    directionPickerItem(direction)
+                }
+            }
+
+            if !isCycle {
+                Picker("Grow/Shrink", selection: $keybind.direction) {
+                    ForEach(WindowDirection.sizeAdjustment) { direction in
+                        directionPickerItem(direction)
+                    }
+                    Divider()
+                    ForEach(WindowDirection.shrink) { direction in
+                        directionPickerItem(direction)
+                    }
+                    Divider()
+                    ForEach(WindowDirection.grow) { direction in
                         directionPickerItem(direction)
                     }
                 }
+            }
 
-                Picker("Halves", selection: $keybind.direction) {
-                    ForEach(WindowDirection.halves) { direction in
-                        directionPickerItem(direction)
-                    }
-                }
-
-                Picker("Quarters", selection: $keybind.direction) {
-                    ForEach(WindowDirection.quarters) { direction in
-                        directionPickerItem(direction)
-                    }
-                }
-
-                Picker("Horizontal Thirds", selection: $keybind.direction) {
-                    ForEach(WindowDirection.horizontalThirds) { direction in
-                        directionPickerItem(direction)
-                    }
-                }
-
-                Picker("Vertical Thirds", selection: $keybind.direction) {
-                    ForEach(WindowDirection.verticalThirds) { direction in
-                        directionPickerItem(direction)
-                    }
-                }
-
-                Picker("Screen Switching", selection: $keybind.direction) {
-                    ForEach(WindowDirection.screenSwitching) { direction in
-                        directionPickerItem(direction)
-                    }
-                }
-
-                if !isCycle {
-                    Picker("Grow/Shrink", selection: $keybind.direction) {
-                        ForEach(WindowDirection.sizeAdjustment) { direction in
-                            directionPickerItem(direction)
-                        }
-                        Divider()
-                        ForEach(WindowDirection.shrink) { direction in
-                            directionPickerItem(direction)
-                        }
-                        Divider()
-                        ForEach(WindowDirection.grow) { direction in
-                            directionPickerItem(direction)
-                        }
-                    }
-                }
-
-                Picker("More", selection: $keybind.direction) {
-                    ForEach(WindowDirection.more) { direction in
-                        if isCycle && direction != .cycle {
-                            directionPickerItem(direction)
-                        }
-                    }
+            Picker("More", selection: $keybind.direction) {
+                ForEach(WindowDirection.more) { direction in
+                    // TODO: Fix
+//                        if isCycle && direction != .cycle {
+                    directionPickerItem(direction)
+//                        }
                 }
             }
         } label: {
