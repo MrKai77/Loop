@@ -27,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     static var currentPreview: SettingsTab? // can only be radialMenuConfiguration or preview previewConfiguration
 
-    private static var luminare = LuminareSettingsWindow(
+    static var luminare = LuminareSettingsWindow(
         [
             .init("Theming", [
                 iconConfiguration,

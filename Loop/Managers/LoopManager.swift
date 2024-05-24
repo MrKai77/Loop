@@ -44,13 +44,13 @@ class LoopManager: ObservableObject {
 
     func startObservingKeys() {
         flagsChangedEventMonitor = NSEventMonitor(
-            scope: .global,
+            scope: .all,
             eventMask: .flagsChanged,
             handler: handleLoopKeypress(_:)
         )
 
         mouseMovedEventMonitor = NSEventMonitor(
-            scope: .global,
+            scope: .all,
             eventMask: [.mouseMoved, .otherMouseDragged],
             handler: mouseMoved(_:)
         )
@@ -61,7 +61,7 @@ class LoopManager: ObservableObject {
         )
 
         keyDownEventMonitor = NSEventMonitor(
-            scope: .global,
+            scope: .all,
             eventMask: .keyDown
         ) { _ in
             if Defaults[.doubleClickToTrigger] &&

@@ -51,19 +51,40 @@ struct WindowEngine {
             return
         }
 
-        let targetWindowFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
+        let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
 
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)
         }
 
-        print("Target window frame: \(targetWindowFrame)")
+        print("Target window frame: \(targetFrame)")
 
         let enhancedUI = window.enhancedUserInterface ?? false
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
 
+        if window.nsRunningApplication == NSRunningApplication.current,
+           let window = AppDelegate.luminare.windowController?.window {
+            var newFrame = targetFrame
+            newFrame.size = window.frame.size
+
+            if newFrame.maxX > screen.safeScreenFrame.maxX {
+                newFrame.origin.x = screen.safeScreenFrame.maxX - newFrame.width - Defaults[.padding].right
+            }
+
+            if newFrame.maxY > screen.safeScreenFrame.maxY {
+                newFrame.origin.y = screen.safeScreenFrame.maxY - newFrame.height - Defaults[.padding].bottom
+            }
+
+            NSAnimationContext.runAnimationGroup { context -> Void in
+                context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
+                window.animator().setFrame(newFrame.flipY(screen: .main!), display: false)
+            }
+
+            return
+        }
+
         window.setFrame(
-            targetWindowFrame,
+            targetFrame,
             animate: animate,
             sizeFirst: willChangeScreens,
             bounds: screen.safeScreenFrame
@@ -71,9 +92,9 @@ struct WindowEngine {
             // If animations are disabled, check if the window needs extra resizing
             if !animate {
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
-                if !window.frame.approximatelyEqual(to: targetWindowFrame) {
+                if !window.frame.approximatelyEqual(to: targetFrame) {
                     print("Backup resizing...")
-                    window.setFrame(targetWindowFrame)
+                    window.setFrame(targetFrame)
                 }
             }
 
