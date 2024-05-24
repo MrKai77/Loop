@@ -303,10 +303,15 @@ class LoopManager: ObservableObject {
         processModifiers(event)
 
         let triggerKey = Defaults[.triggerKey]
-        let wasKeyDown = (event.type == .keyDown || currentlyPressedModifiers.count > previousModifiers.count)
+        let wasKeyDown = event.type == .keyDown || currentlyPressedModifiers.count > previousModifiers.count
 
         if wasKeyDown, triggerKey.isSubset(of: currentlyPressedModifiers) {
-            guard !isLoopActive else {
+            guard
+                !isLoopActive,
+
+                // This makes sure that the amount of keys being pressed is not more than the actual trigger key
+                currentlyPressedModifiers.count <= triggerKey.count
+            else {
                 return
             }
 
@@ -323,9 +328,7 @@ class LoopManager: ObservableObject {
             }
             lastTriggerKeyClick = .now
         } else {
-            if isLoopActive {
-                closeLoop()
-            }
+            closeLoop()
         }
     }
 
@@ -382,6 +385,8 @@ class LoopManager: ObservableObject {
     }
 
     private func closeLoop(forceClose: Bool = false) {
+        guard isLoopActive == true else { return }
+
         triggerDelayTimer = nil
         closeWindows()
 
