@@ -38,7 +38,7 @@ struct RadialMenuConfigurationView: View {
             )
 
             LuminareValueAdjuster(
-                "Corner radius",
+                "Thickness",
                 value: Binding(
                     get: {
                         radialMenuThickness

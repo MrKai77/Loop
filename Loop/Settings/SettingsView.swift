@@ -31,14 +31,6 @@ struct SettingsView: View {
                 }
                 .frame(width: 450)
 
-            PreviewSettingsView()
-                .tag(SettingsTab.preview)
-                .tabItem {
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                    Text("Preview")
-                }
-                .frame(width: 450)
-
             KeybindingsSettingsView()
                 .tag(SettingsTab.keybindings)
                 .tabItem {

@@ -31,9 +31,22 @@ struct AboutConfigurationView: View {
                     Text("Loop")
                         .fontWeight(.medium)
 
-                    Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Button {
+                        let pasteboard = NSPasteboard.general
+                        pasteboard.clearContents()
+                        pasteboard.setString(
+                            "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+                            forType: NSPasteboard.PasteboardType.string
+                        )
+                    } label: {
+                        let versionText = String(
+                            localized: "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                        )
+                        Text("\(versionText) \(Image(systemName: "doc.on.clipboard"))")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
 
                 Spacer()

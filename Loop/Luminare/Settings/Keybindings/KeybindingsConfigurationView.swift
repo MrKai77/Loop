@@ -22,6 +22,7 @@ struct KeybindingsConfigurationView: View {
 
     var body: some View {
         LuminareSection("Trigger Key", noBorder: true) {
+            // TODO: Make long trigger keys fit in bounds
             TriggerKeycorder($triggerKey)
                 .environmentObject(data)
         }

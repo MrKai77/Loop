@@ -8,6 +8,7 @@
 import SwiftUI
 import Luminare
 import Defaults
+import ServiceManagement
 
 struct BehaviorConfigurationView: View {
     @Default(.launchAtLogin) var launchAtLogin
@@ -30,7 +31,16 @@ struct BehaviorConfigurationView: View {
     var body: some View {
         LuminareSection("General") {
             LuminareToggle("Launch at login", isOn: $launchAtLogin)
+                .onChange(of: launchAtLogin) { _ in
+                    if launchAtLogin {
+                        try? SMAppService().register()
+                    } else {
+                        try? SMAppService().unregister()
+                    }
+                }
+
             LuminareToggle("Hide menu bar icon", isOn: $hideMenuBarIcon)
+
             LuminareSliderPicker(
                 "Animation speed",
                 AnimationConfiguration.allCases.reversed(),
@@ -73,6 +83,7 @@ struct BehaviorConfigurationView: View {
         }
 
         LuminareSection("Stage Manager") {
+            // TODO: Animate
             LuminareToggle("Respect Stage Manager", isOn: $respectStageManager)
 
             if respectStageManager {

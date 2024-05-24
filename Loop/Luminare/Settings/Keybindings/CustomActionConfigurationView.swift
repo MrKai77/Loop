@@ -126,6 +126,14 @@ struct CustomActionConfigurationView: View {
                     },
                     set: { newValue in
                         withAnimation(.smooth(duration: 0.3)) {
+                            if action.unit == .percentage {
+                                action.width = min(action.width ?? 100, 100)
+                                action.height = min(action.height ?? 100, 100)
+
+                                action.xPoint = min(action.xPoint ?? 100, 100)
+                                action.yPoint = min(action.yPoint ?? 100, 100)
+                            }
+
                             action.unit = newValue ? .pixels : .percentage
                         }
                     }
@@ -256,9 +264,19 @@ struct CustomActionConfigurationView: View {
                         },
                         set: {
                             action.width = $0
+
+                            if let xPoint = action.xPoint,
+                               let positionMode = action.positionMode,
+                               positionMode == .coordinates,
+                               let unit = action.unit,
+                               unit == .percentage {
+                                action.xPoint = min(xPoint, 100 - $0)
+                            }
                         }
                     ),
-                    sliderRange: 0...100,
+                    sliderRange: action.unit == .percentage ?
+                        0...100 :
+                        0...(Double(screenSize.width)),
                     suffix: action.unit?.suffix ?? "",
                     lowerClamp: true
                 )
@@ -274,9 +292,19 @@ struct CustomActionConfigurationView: View {
                         },
                         set: {
                             action.height = $0
+
+                            if let yPoint = action.yPoint,
+                               let positionMode = action.positionMode,
+                               positionMode == .coordinates,
+                               let unit = action.unit,
+                               unit == .percentage {
+                                action.yPoint = min(yPoint, 100 - $0)
+                            }
                         }
                     ),
-                    sliderRange: 0...100,
+                    sliderRange: action.unit == .percentage ?
+                        0...100 :
+                        0...(Double(screenSize.width)),
                     suffix: action.unit?.suffix ?? "",
                     lowerClamp: true
                 )

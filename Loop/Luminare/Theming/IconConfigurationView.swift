@@ -52,14 +52,14 @@ struct IconConfigurationView: View {
             }
 
             Button("Suggest new icon") {
-                print("TODO: SUGGEST NEW ICON")
+                fatalError("TODO: SUGGEST NEW ICON")
             }
         }
 
         LuminareSection("Options") {
             LuminareToggle("Show in dock", isOn: $showDockIcon)
             LuminareToggle(
-                "Notify when unlocking new icons ",
+                "Notify when unlocking new icons",
                 isOn: Binding(
                     get: {
                         self.notificationWhenIconUnlocked
@@ -77,15 +77,36 @@ struct IconConfigurationView: View {
                             let areNotificationsEnabled = AppDelegate.areNotificationsEnabled()
                             self.notificationWhenIconUnlocked = areNotificationsEnabled
 
-    //                        if !areNotificationsEnabled {
-    //                            self.userDisabledLoopNotifications = true
-    //                        }
+                            if !areNotificationsEnabled {
+                                userDisabledNotificationsAlert()
+                            }
                         } else {
                             self.notificationWhenIconUnlocked = $0
                         }
                     }
                 )
             )
+        }
+    }
+
+    func userDisabledNotificationsAlert() {
+        guard
+            let window = AppDelegate.luminare.windowController?.window
+        else {
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = "\(Bundle.main.appName)'s notification permissions are currently disabled."
+        alert.informativeText = "Please turn them on in System Settings."
+        alert.addButton(withTitle: "Open Settings")
+        alert.alertStyle = .warning
+
+        alert.beginSheetModal(for: window) { modalResponse in
+            if modalResponse == .alertFirstButtonReturn {
+                NSWorkspace.shared.open(
+                    URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension")!
+                )
+            }
         }
     }
 }

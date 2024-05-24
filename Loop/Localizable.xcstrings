@@ -98,6 +98,7 @@
       }
     },
     "%@'s notification permissions are currently disabled." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -212,6 +213,7 @@
       }
     },
     "Adjusts window frame in real-time as you choose a direction." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -232,6 +234,7 @@
       }
     },
     "ALPHA" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -242,6 +245,7 @@
       }
     },
     "Animate windows being resized" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -252,6 +256,7 @@
       }
     },
     "Animation speed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -292,6 +297,7 @@
       }
     },
     "Automatically check for updates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -350,6 +356,7 @@
 
     },
     "Configure…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -360,7 +367,7 @@
       }
     },
     "Crisp Value Adjuster: Border Thickness" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -394,7 +401,7 @@
       }
     },
     "Crisp Value Adjuster: Corner Radius" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -445,7 +452,7 @@
       }
     },
     "Crisp Value Adjuster: Height" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -479,7 +486,7 @@
       }
     },
     "Crisp Value Adjuster: Padding" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -547,7 +554,7 @@
       }
     },
     "Crisp Value Adjuster: Stage Strip Size" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -564,7 +571,7 @@
       }
     },
     "Crisp Value Adjuster: Thickness" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -598,7 +605,7 @@
       }
     },
     "Crisp Value Adjuster: Trigger Delay" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -615,7 +622,7 @@
       }
     },
     "Crisp Value Adjuster: Width" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -690,6 +697,7 @@
 
     },
     "Custom accent color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -700,6 +708,7 @@
       }
     },
     "Custom cycle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -720,6 +729,7 @@
       }
     },
     "Custom gradient color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -808,6 +818,7 @@
       }
     },
     "Done" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -818,6 +829,7 @@
       }
     },
     "Double-click trigger key to trigger %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -868,6 +880,7 @@
       }
     },
     "Feedback" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -878,6 +891,7 @@
       }
     },
     "Focus window on resize" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -901,6 +915,7 @@
 
     },
     "Granted" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -948,6 +963,7 @@
       }
     },
     "Haptic feedback" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -958,6 +974,7 @@
       }
     },
     "Hide menu until direction is chosen" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -968,6 +985,7 @@
       }
     },
     "Hide menubar icon" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1256,6 +1274,7 @@
       }
     },
     "Include development versions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1296,6 +1315,7 @@
       }
     },
     "Launch at login" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1359,6 +1379,7 @@
       }
     },
     "Measurement unit" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1369,6 +1390,7 @@
       }
     },
     "Middle-click to trigger %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1399,6 +1421,7 @@
       }
     },
     "Name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1439,6 +1462,7 @@
       }
     },
     "Not granted" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1476,6 +1500,7 @@
       }
     },
     "Notify when new icons are unlocked" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1486,6 +1511,7 @@
       }
     },
     "Open notification settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1517,6 +1543,7 @@
       }
     },
     "Please turn them on in System Settings." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1527,6 +1554,7 @@
       }
     },
     "Position mode" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1588,6 +1616,7 @@
       }
     },
     "Preview window size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1638,6 +1667,7 @@
       }
     },
     "Re-open %@ to see this window." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1648,6 +1678,7 @@
       }
     },
     "Request Access…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1664,6 +1695,7 @@
 
     },
     "Resize window under cursor" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1684,6 +1716,7 @@
       }
     },
     "Resizes frontmost window." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1694,6 +1727,7 @@
       }
     },
     "Resizes window under cursor, and uses the frontmost window as backup." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1704,6 +1738,7 @@
       }
     },
     "Respect Stage Manager" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1714,6 +1749,7 @@
       }
     },
     "Restore Defaults" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1724,6 +1760,7 @@
       }
     },
     "Restore window frame on drag" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1820,6 +1857,7 @@
       }
     },
     "sec" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1830,6 +1868,7 @@
       }
     },
     "Selected icon:" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1850,6 +1889,7 @@
       }
     },
     "Sending feedback will bring you to our \"New Issue\" GitHub page, where you can report a bug, request a feature & more!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1894,6 +1934,7 @@
       }
     },
     "Show preview when looping" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1904,6 +1945,7 @@
       }
     },
     "Show radial menu when looping" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1917,6 +1959,7 @@
 
     },
     "Sizing mode" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1937,6 +1980,7 @@
       }
     },
     "Stage Manager" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2028,6 +2072,7 @@
       }
     },
     "Tip: To use Caps Lock, remap it to control in System Settings!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2048,6 +2093,7 @@
       }
     },
     "Trigger key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2058,6 +2104,7 @@
       }
     },
     "Trigger Key" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2078,6 +2125,7 @@
       }
     },
     "Use gradient" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2088,6 +2136,7 @@
       }
     },
     "Use macOS Center" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2098,6 +2147,7 @@
       }
     },
     "Use system accent color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2865,6 +2915,7 @@
       }
     },
     "Window padding" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2885,6 +2936,7 @@
       }
     },
     "Window size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2906,6 +2958,7 @@
       }
     },
     "Windows will not animate their resizes." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
