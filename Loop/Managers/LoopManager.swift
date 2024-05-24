@@ -27,7 +27,6 @@ class LoopManager: ObservableObject {
 
     private var flagsChangedEventMonitor: EventMonitor?
     private var mouseMovedEventMonitor: EventMonitor?
-    private var keyDownEventMonitor: EventMonitor?
     private var middleClickMonitor: EventMonitor?
     private var lastTriggerKeyClick: Date = .now
 
@@ -60,16 +59,6 @@ class LoopManager: ObservableObject {
             callback: handleMiddleClick(cgEvent:)
         )
 
-        keyDownEventMonitor = NSEventMonitor(
-            scope: .all,
-            eventMask: .keyDown
-        ) { _ in
-            if Defaults[.doubleClickToTrigger] &&
-                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                self.lastTriggerKeyClick = Date.distantPast
-            }
-        }
-
         Notification.Name.forceCloseLoop.onReceive { _ in
             self.closeLoop(forceClose: true)
         }
@@ -82,7 +71,6 @@ class LoopManager: ObservableObject {
 
         flagsChangedEventMonitor!.start()
         middleClickMonitor!.start()
-        keyDownEventMonitor!.start()
     }
 
     private func mouseMoved(_ event: NSEvent) {

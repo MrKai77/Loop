@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Luminare
+import Defaults
 
 struct TriggerKeycorder: View {
     @EnvironmentObject private var data: KeybindsConfigurationData
@@ -21,6 +22,7 @@ struct TriggerKeycorder: View {
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
     @State private var tooManyKeysPopup: Bool = false
+    @State private var originalTriggerDelay: Double = Defaults[.triggerDelay]
 
     init(_ key: Binding<Set<CGKeyCode>>) {
         self._validCurrentKey = key
@@ -89,6 +91,10 @@ struct TriggerKeycorder: View {
     }
 
     func startObservingKeys() {
+        // Hacky workaround so that the radial menu isn't triggered when setting trigger key
+        originalTriggerDelay = Defaults[.triggerDelay]
+        Defaults[.triggerDelay] = 100
+
         self.selectionKey = []
         self.isActive = true
 
@@ -147,5 +153,7 @@ struct TriggerKeycorder: View {
 
         self.eventMonitor?.stop()
         self.eventMonitor = nil
+
+        Defaults[.triggerDelay] = originalTriggerDelay
     }
 }
