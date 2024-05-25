@@ -81,9 +81,6 @@ struct CustomActionConfigurationView: View {
                 .animation(.smooth(duration: 0.25), value: frame)
             }
         }
-        .onChange(of: self.action) { _ in
-            windowAction = action
-        }
 
         LuminareSection {
             LuminareTextField(
@@ -167,6 +164,7 @@ struct CustomActionConfigurationView: View {
                 )
 
             Button("Close") {
+                windowAction = action
                 isPresented = false
             }
         }
@@ -242,14 +240,6 @@ struct CustomActionConfigurationView: View {
                         },
                         set: {
                             action.xPoint = $0
-
-                            if let width = action.width,
-                               let sizeMode = action.sizeMode,
-                               sizeMode == .custom,
-                               let unit = action.unit,
-                               unit == .percentage {
-                                action.width = min(width, 100 - $0)
-                            }
                         }
                     ),
                     sliderRange: action.unit == .percentage ?
@@ -270,14 +260,6 @@ struct CustomActionConfigurationView: View {
                         },
                         set: {
                             action.yPoint = $0
-
-                            if let height = action.height,
-                               let sizeMode = action.sizeMode,
-                               sizeMode == .custom,
-                               let unit = action.unit,
-                               unit == .percentage {
-                                action.height = min(height, 100 - $0)
-                            }
                         }
                     ),
                     sliderRange: action.unit == .percentage ?
@@ -329,14 +311,6 @@ struct CustomActionConfigurationView: View {
                         },
                         set: {
                             action.width = $0
-
-                            if let xPoint = action.xPoint,
-                               let positionMode = action.positionMode,
-                               positionMode == .coordinates,
-                               let unit = action.unit,
-                               unit == .percentage {
-                                action.xPoint = min(xPoint, 100 - $0)
-                            }
                         }
                     ),
                     sliderRange: action.unit == .percentage ?
@@ -357,14 +331,6 @@ struct CustomActionConfigurationView: View {
                         },
                         set: {
                             action.height = $0
-
-                            if let yPoint = action.yPoint,
-                               let positionMode = action.positionMode,
-                               positionMode == .coordinates,
-                               let unit = action.unit,
-                               unit == .percentage {
-                                action.yPoint = min(yPoint, 100 - $0)
-                            }
                         }
                     ),
                     sliderRange: action.unit == .percentage ?
