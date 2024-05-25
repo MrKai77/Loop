@@ -45,7 +45,9 @@ struct KeybindingsConfigurationView: View {
             "Keybinds",
             items: $keybinds,
             selection: $selectedKeybinds,
-            addAction: { keybinds.insert(.init(.noAction), at: 0) },
+            addAction: {
+                keybinds.insert(.init(.noAction), at: 0)
+            },
             content: { keybind in
                 KeybindingItemView(keybind)
                     .environmentObject(data)
@@ -56,7 +58,7 @@ struct KeybindingsConfigurationView: View {
                     VStack {
                         Text("No keybinds")
                             .font(.title3)
-                        Text("Press + to add a keybind")
+                        Text("Press \"Add\" to add a keybind")
                             .font(.caption)
                     }
                     Spacer()
@@ -64,7 +66,7 @@ struct KeybindingsConfigurationView: View {
                 .foregroundStyle(.secondary)
                 .padding()
             },
-            id: \.self
+            id: \.id
         )
         .onChange(of: selectedKeybinds) { _ in
             data.selectedKeybinds = selectedKeybinds

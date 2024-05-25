@@ -30,7 +30,7 @@ struct ExcludedAppsConfigurationView: View {
                     VStack {
                         Text("No excluded applications")
                             .font(.title3)
-                        Text("Press + to add an application")
+                        Text("Press \"Add\" to add an application")
                             .font(.caption)
                     }
                     Spacer()

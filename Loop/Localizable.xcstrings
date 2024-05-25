@@ -1555,7 +1555,13 @@
         }
       }
     },
-    "Press + to add a cycle item" : {
+    "Press \"Add\" to add a cycle item" : {
+
+    },
+    "Press \"Add\" to add a keybind" : {
+
+    },
+    "Press \"Add\" to add an application" : {
 
     },
     "Press + to add a cycle item!" : {
@@ -1569,9 +1575,6 @@
         }
       }
     },
-    "Press + to add a keybind" : {
-
-    },
     "Press + to add a keybind!" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1582,9 +1585,6 @@
           }
         }
       }
-    },
-    "Press + to add an application" : {
-
     },
     "Press + to add an application!" : {
       "extractionState" : "stale",

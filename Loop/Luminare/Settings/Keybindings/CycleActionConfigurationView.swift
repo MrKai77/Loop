@@ -72,7 +72,7 @@ struct CycleActionConfigurationView: View {
                     VStack {
                         Text("Nothing to cycle through")
                             .font(.title3)
-                        Text("Press + to add a cycle item")
+                        Text("Press \"Add\" to add a cycle item")
                             .font(.caption)
                     }
                     Spacer()
@@ -80,7 +80,7 @@ struct CycleActionConfigurationView: View {
                 .foregroundStyle(.secondary)
                 .padding()
             },
-            id: \.self
+            id: \.id
         )
         .onChange(of: action) { _ in
             windowAction = action
