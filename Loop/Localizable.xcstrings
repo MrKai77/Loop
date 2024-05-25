@@ -658,28 +658,6 @@
         }
       }
     },
-    "Crisp Value Adjuster: X" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "X"
-          }
-        }
-      }
-    },
-    "Crisp Value Adjuster: Y" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Y"
-          }
-        }
-      }
-    },
     "Current version: %@ (%@)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2076,6 +2054,7 @@
       }
     },
     "This point determines the upper-left edge of the window." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2210,7 +2189,7 @@
       }
     },
     "Window Direction/More Information: macOS Center" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2952,6 +2931,7 @@
       }
     },
     "Window position" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

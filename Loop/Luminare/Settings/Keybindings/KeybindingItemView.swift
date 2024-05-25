@@ -100,44 +100,44 @@ struct WindowDirectionPicker: View, Equatable {
 
     var body: some View {
         Menu {
-            Picker("General", selection: $keybind.direction) {
+            Menu("General") {
                 ForEach(WindowDirection.general) { direction in
                     directionPickerItem(direction)
                 }
             }
 
-            Picker("Halves", selection: $keybind.direction) {
+            Menu("Halves") {
                 ForEach(WindowDirection.halves) { direction in
                     directionPickerItem(direction)
                 }
             }
 
-            Picker("Quarters", selection: $keybind.direction) {
+            Menu("Quarters") {
                 ForEach(WindowDirection.quarters) { direction in
                     directionPickerItem(direction)
                 }
             }
 
-            Picker("Horizontal Thirds", selection: $keybind.direction) {
+            Menu("Horizontal Thirds") {
                 ForEach(WindowDirection.horizontalThirds) { direction in
                     directionPickerItem(direction)
                 }
             }
 
-            Picker("Vertical Thirds", selection: $keybind.direction) {
+            Menu("Vertical Thirds") {
                 ForEach(WindowDirection.verticalThirds) { direction in
                     directionPickerItem(direction)
                 }
             }
 
-            Picker("Screen Switching", selection: $keybind.direction) {
+            Menu("Screen Switching") {
                 ForEach(WindowDirection.screenSwitching) { direction in
                     directionPickerItem(direction)
                 }
             }
 
             if !isCycle {
-                Picker("Grow/Shrink", selection: $keybind.direction) {
+                Menu("Grow/Shrink") {
                     ForEach(WindowDirection.sizeAdjustment) { direction in
                         directionPickerItem(direction)
                     }
@@ -152,12 +152,15 @@ struct WindowDirectionPicker: View, Equatable {
                 }
             }
 
-            Picker("More", selection: $keybind.direction) {
+            Menu("More") {
                 ForEach(WindowDirection.more) { direction in
-                    // TODO: Fix
-//                        if isCycle && direction != .cycle {
-                    directionPickerItem(direction)
-//                        }
+                    if isCycle {
+                        if direction != .cycle {
+                            directionPickerItem(direction)
+                        }
+                    } else {
+                        directionPickerItem(direction)
+                    }
                 }
             }
         } label: {
@@ -170,11 +173,14 @@ struct WindowDirectionPicker: View, Equatable {
     }
 
     func directionPickerItem(_ direction: WindowDirection) -> some View {
-        HStack {
-            direction.icon
-            Text(direction.name)
-        }
-        .tag(direction)
+        Button(action: {
+            keybind.direction = direction
+        }, label: {
+            HStack {
+                direction.icon
+                Text(direction.name)
+            }
+        })
     }
 
     func label() -> some View {

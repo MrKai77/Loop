@@ -8,18 +8,6 @@
 import Foundation
 
 extension WindowDirection {
-    var moreInformation: String? {
-        var result: String?
-
-        if self == .macOSCenter {
-            result = .init(localized: .init("Window Direction/More Information: macOS Center", defaultValue: """
-\(self.name) places windows slightly above the absolute center, which can be found more ergonomic.
-"""))
-        }
-
-        return result
-    }
-
     var name: String {
         switch self {
         case .noAction:
