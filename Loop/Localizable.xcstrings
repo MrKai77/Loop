@@ -288,6 +288,7 @@
       }
     },
     "Applications in the exclude list are ignored by %@." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -792,6 +793,7 @@
       }
     },
     "Delete" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -845,6 +847,7 @@
       }
     },
     "Excluded Applications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1437,7 +1440,11 @@
         }
       }
     },
+    "No excluded applications" : {
+
+    },
     "No Excluded Applications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1598,7 +1605,11 @@
         }
       }
     },
+    "Press + to add an application" : {
+
+    },
     "Press + to add an application!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

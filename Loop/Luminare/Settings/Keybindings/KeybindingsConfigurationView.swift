@@ -63,7 +63,8 @@ struct KeybindingsConfigurationView: View {
                 }
                 .foregroundStyle(.secondary)
                 .padding()
-            }
+            },
+            id: \.self
         )
         .onChange(of: selectedKeybinds) { _ in
             data.selectedKeybinds = selectedKeybinds

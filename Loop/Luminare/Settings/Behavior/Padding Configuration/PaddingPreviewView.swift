@@ -32,7 +32,7 @@ struct PaddingPreviewView: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }
-        .animation(.smooth(duration: 0.3), value: paddingModel)
+        .animation(.smooth(duration: 0.25), value: paddingModel)
     }
 
     @ViewBuilder

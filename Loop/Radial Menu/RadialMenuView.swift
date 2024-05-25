@@ -195,7 +195,7 @@ struct RadialMenuView: View {
     }
 
     func recomputeColors() {
-        withAnimation(.smooth(duration: 0.3)) {
+        withAnimation(.smooth(duration: 0.25)) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }

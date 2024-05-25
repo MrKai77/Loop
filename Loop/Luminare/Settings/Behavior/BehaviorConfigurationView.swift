@@ -55,7 +55,7 @@ struct BehaviorConfigurationView: View {
 
             LuminareToggle(
                 "Resize window under cursor",
-                isOn: $resizeWindowUnderCursor.animation(.smooth(duration: 0.3))
+                isOn: $resizeWindowUnderCursor.animation(.smooth(duration: 0.25))
             )
             .onChange(of: resizeWindowUnderCursor) { _ in
                 Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
@@ -67,7 +67,7 @@ struct BehaviorConfigurationView: View {
 
             LuminareToggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
 
-            LuminareToggle("Include padding", isOn: $enablePadding.animation(.smooth(duration: 0.3)))
+            LuminareToggle("Include padding", isOn: $enablePadding.animation(.smooth(duration: 0.25)))
                 .onChange(of: enablePadding) { _ in
                     Defaults[.enablePadding] = enablePadding
                 }

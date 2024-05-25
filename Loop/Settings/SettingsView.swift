@@ -11,7 +11,6 @@ import Sparkle
 struct SettingsView: View {
     @State var currentSettingsTab = SettingsTab.general
     @StateObject private var updater = SoftwareUpdater()
-    private var appListManager = AppListManager()
 
     var body: some View {
         TabView(selection: $currentSettingsTab) {
@@ -22,16 +21,6 @@ struct SettingsView: View {
                     Text("General")
                 }
                 .frame(width: 450)
-
-            ExcludeListSettingsView()
-                .tag(SettingsTab.excludedApps)
-                .tabItem {
-                    Image(systemName: "xmark.app")
-                    Text("Excluded Apps")
-                }
-                .environmentObject(appListManager)
-                .frame(width: 450)
-                .frame(maxHeight: 680)
         }
         .fixedSize(horizontal: true, vertical: true)
     }

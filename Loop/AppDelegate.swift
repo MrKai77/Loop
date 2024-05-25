@@ -22,6 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
     static let advancedConfiguration = SettingsTab("Advanced", Image(systemName: "face.smiling.inverse"), AdvancedConfigurationView())
     static let permissionsConfiguration = SettingsTab("Permissions", Image(systemName: "checklist"), PermissionsConfigurationView())
+    static let excludedAppsConfiguration = SettingsTab("Excluded Apps", Image(systemName: "lock.app.dashed"), ExcludedAppsConfigurationView())
     static let aboutConfiguration = SettingsTab("About", Image(systemName: "ellipsis"), AboutConfigurationView())
     // swiftlint:enable line_length
 
@@ -42,6 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             .init("Loop", [
                 advancedConfiguration,
                 permissionsConfiguration,
+                excludedAppsConfiguration,
                 aboutConfiguration
             ])
         ],

@@ -79,7 +79,8 @@ struct CycleActionConfigurationView: View {
                 }
                 .foregroundStyle(.secondary)
                 .padding()
-            }
+            },
+            id: \.self
         )
         .onChange(of: action) { _ in
             windowAction = action

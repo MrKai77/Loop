@@ -31,7 +31,7 @@ struct PaddingConfigurationView: View {
                         paddingModel.configureScreenPadding
                     },
                     set: { newValue in
-                        withAnimation(.smooth(duration: 0.3)) {
+                        withAnimation(.smooth(duration: 0.25)) {
                             paddingModel.configureScreenPadding = newValue
 
                             if !paddingModel.configureScreenPadding {

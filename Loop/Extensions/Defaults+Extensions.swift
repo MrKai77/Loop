@@ -92,6 +92,6 @@ extension Defaults.Keys {
     // About
     static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false)
 
-    static let applicationExcludeList = Key<[String]>("applicationExcludeList", default: [])
+    static let excludedApps = Key<[URL]>("excludedApps", default: [])
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
 }

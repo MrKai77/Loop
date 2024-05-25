@@ -29,7 +29,7 @@ struct AccentColorConfigurationView: View {
                    set: { newValue in
                        useSystemAccentColor = newValue
 
-                       withAnimation(.smooth(duration: 0.3)) {
+                       withAnimation(.smooth(duration: 0.25)) {
                            self.showColorSection = !useSystemAccentColor || (useGradient && !useSystemAccentColor)
                        }
                    }
@@ -67,7 +67,7 @@ struct AccentColorConfigurationView: View {
                     set: { newValue in
                         useGradient = newValue
 
-                        withAnimation(.smooth(duration: 0.3)) {
+                        withAnimation(.smooth(duration: 0.25)) {
                             showGradientSection = newValue
                         }
                     }

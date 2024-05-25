@@ -102,8 +102,8 @@ class Window {
 
     var isAppExcluded: Bool {
         if let nsRunningApplication,
-           let bundleId = nsRunningApplication.bundleIdentifier {
-            return Defaults[.applicationExcludeList].contains(bundleId)
+           let path = nsRunningApplication.bundleURL {
+            return Defaults[.excludedApps].contains(path)
         }
         return false
     }

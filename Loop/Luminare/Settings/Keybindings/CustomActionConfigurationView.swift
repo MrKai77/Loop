@@ -78,7 +78,7 @@ struct CustomActionConfigurationView: View {
                     }
                 }
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                .animation(.smooth(duration: 0.3), value: frame)
+                .animation(.smooth(duration: 0.25), value: frame)
             }
         }
         .onChange(of: self.action) { _ in
@@ -107,7 +107,7 @@ struct CustomActionConfigurationView: View {
                         currentTab
                     },
                     set: { newValue in
-                        withAnimation(.smooth(duration: 0.3)) {
+                        withAnimation(.smooth(duration: 0.25)) {
                             currentTab = newValue
                         }
                     }
@@ -128,7 +128,7 @@ struct CustomActionConfigurationView: View {
                         return action.unit == .pixels
                     },
                     set: { newValue in
-                        withAnimation(.smooth(duration: 0.3)) {
+                        withAnimation(.smooth(duration: 0.25)) {
                             if action.unit == .percentage {
                                 action.width = min(action.width ?? 100, 100)
                                 action.height = min(action.height ?? 100, 100)
@@ -183,7 +183,7 @@ struct CustomActionConfigurationView: View {
                         action.positionMode == .coordinates
                     },
                     set: { newValue in
-                        withAnimation(.smooth(duration: 0.3)) {
+                        withAnimation(.smooth(duration: 0.25)) {
                             action.positionMode = newValue ? .coordinates : .generic
                         }
                     }
@@ -206,7 +206,7 @@ struct CustomActionConfigurationView: View {
                             return action.anchor ?? .center
                         },
                         set: { newValue in
-                            withAnimation(.smooth(duration: 0.3)) {
+                            withAnimation(.smooth(duration: 0.25)) {
                                 action.anchor = newValue
                             }
                         }
@@ -302,7 +302,7 @@ struct CustomActionConfigurationView: View {
                         return action.sizeMode ?? .custom
                     },
                     set: { newValue in
-                        withAnimation(.smooth(duration: 0.3)) {
+                        withAnimation(.smooth(duration: 0.25)) {
                             action.sizeMode = newValue
                         }
                     }
