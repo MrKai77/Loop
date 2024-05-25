@@ -122,7 +122,10 @@ struct CustomActionConfigurationView: View {
                 "Use pixels",
                 isOn: Binding(
                     get: {
-                        action.unit == .pixels
+                        if action.unit == nil {
+                            action.unit = .percentage
+                        }
+                        return action.unit == .pixels
                     },
                     set: { newValue in
                         withAnimation(.smooth(duration: 0.3)) {
@@ -170,6 +173,7 @@ struct CustomActionConfigurationView: View {
         .buttonStyle(LuminareCompactButtonStyle())
     }
 
+    // swiftlint:disable:next function_body_length
     @ViewBuilder func positionConfiguration() -> some View {
         LuminareSection {
             LuminareToggle(
@@ -178,48 +182,109 @@ struct CustomActionConfigurationView: View {
                     get: {
                         action.positionMode == .coordinates
                     },
-                    set: {
-                        action.positionMode = $0 ? .coordinates : .generic
+                    set: { newValue in
+                        withAnimation(.smooth(duration: 0.3)) {
+                            action.positionMode = newValue ? .coordinates : .generic
+                        }
                     }
                 )
             )
 
-            LuminarePicker(
-                elements: anchors,
-                selection: Binding(
-                    get: {
-                        if action.anchor == nil {
-                            action.anchor = .center
-                        }
-
-                        if action.anchor == .macOSCenter {
-                            return .center
-                        }
-
-                        return action.anchor ?? .center
-                    },
-                    set: { newValue in
-                        withAnimation(.smooth(duration: 0.3)) {
-                            action.anchor = newValue
-                        }
-                    }
-                ),
-                columns: 3
-            ) { anchor in
-                anchor.image
-            }
-
-            if action.anchor == .center || action.anchor == .macOSCenter {
-                LuminareToggle(
-                    "Use macOS center",
-                    isOn: Binding(
+            if action.positionMode ?? .generic == .generic {
+                LuminarePicker(
+                    elements: anchors,
+                    selection: Binding(
                         get: {
-                            action.anchor == .macOSCenter
+                            if action.anchor == nil {
+                                action.anchor = .center
+                            }
+
+                            if action.anchor == .macOSCenter {
+                                return .center
+                            }
+
+                            return action.anchor ?? .center
+                        },
+                        set: { newValue in
+                            withAnimation(.smooth(duration: 0.3)) {
+                                action.anchor = newValue
+                            }
+                        }
+                    ),
+                    columns: 3,
+                    roundTop: false
+                ) { anchor in
+                    anchor.image
+                }
+
+                if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
+                    LuminareToggle(
+                        "Use macOS center",
+                        isOn: Binding(
+                            get: {
+                                action.anchor == .macOSCenter
+                            },
+                            set: {
+                                action.anchor = $0 ? .macOSCenter : .center
+                            }
+                        )
+                    )
+                }
+            } else {
+                LuminareValueAdjuster(
+                    "X",
+                    value: Binding(
+                        get: {
+                            if action.xPoint == nil {
+                                action.xPoint = 0
+                            }
+                            return action.xPoint ?? 0
                         },
                         set: {
-                            action.anchor = $0 ? .macOSCenter : .center
+                            action.xPoint = $0
+
+                            if let width = action.width,
+                               let sizeMode = action.sizeMode,
+                               sizeMode == .custom,
+                               let unit = action.unit,
+                               unit == .percentage {
+                                action.width = min(width, 100 - $0)
+                            }
                         }
-                    )
+                    ),
+                    sliderRange: action.unit == .percentage ?
+                        0...100 :
+                        0...(Double(screenSize.width)),
+                    suffix: action.unit?.suffix ?? "",
+                    lowerClamp: true
+                )
+
+                LuminareValueAdjuster(
+                    "Y",
+                    value: Binding(
+                        get: {
+                            if action.yPoint == nil {
+                                action.yPoint = 0
+                            }
+                            return action.yPoint ?? 0
+                        },
+                        set: {
+                            action.yPoint = $0
+
+                            if let height = action.height,
+                               let sizeMode = action.sizeMode,
+                               sizeMode == .custom,
+                               let unit = action.unit,
+                               unit == .percentage {
+                                action.height = min(height, 100 - $0)
+                            }
+                        }
+                    ),
+                    sliderRange: action.unit == .percentage ?
+                        0...100 :
+                        0...(Double(screenSize.height)),
+                    suffix: action.unit?.suffix ?? "",
+                    lowerClamp: true
                 )
             }
         }
@@ -252,7 +317,7 @@ struct CustomActionConfigurationView: View {
                 .padding(.vertical, 15)
             }
 
-            if action.sizeMode == .custom {
+            if action.sizeMode ?? .custom == .custom {
                 LuminareValueAdjuster(
                     "Width",
                     value: Binding(
