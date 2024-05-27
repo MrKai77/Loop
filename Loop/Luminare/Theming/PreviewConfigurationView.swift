@@ -29,7 +29,7 @@ struct PreviewConfigurationView: View {
             )
 
             LuminareValueAdjuster(
-                "Corner Radius",
+                "Corner radius",
                 value: $previewCornerRadius,
                 sliderRange: 0...20,
                 suffix: "px",
@@ -38,7 +38,7 @@ struct PreviewConfigurationView: View {
             )
 
             LuminareValueAdjuster(
-                "Border Thickness",
+                "Border thickness",
                 value: $previewBorderThickness,
                 sliderRange: 0...10,
                 suffix: "px",

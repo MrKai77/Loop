@@ -22,7 +22,7 @@ enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
         }
     }
 
-    var suffix: String {
+    var suffix: LocalizedStringKey {
         switch self {
         case .pixels:
             "px"

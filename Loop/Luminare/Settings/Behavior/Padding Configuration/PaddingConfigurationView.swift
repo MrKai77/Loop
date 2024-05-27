@@ -74,7 +74,7 @@ struct PaddingConfigurationView: View {
                     "Top",
                     value: $paddingModel.top,
                     sliderRange: 0...100,
-                    suffix: .init(localized: .init("px", defaultValue: "px")),
+                    suffix: "px",
                     lowerClamp: true,
                     controlSize: .compact
                 )
@@ -82,7 +82,7 @@ struct PaddingConfigurationView: View {
                     "Bottom",
                     value: $paddingModel.bottom,
                     sliderRange: 0...100,
-                    suffix: .init(localized: .init("px", defaultValue: "px")),
+                    suffix: "px",
                     lowerClamp: true,
                     controlSize: .compact
                 )
@@ -90,7 +90,7 @@ struct PaddingConfigurationView: View {
                     "Right",
                     value: $paddingModel.right,
                     sliderRange: 0...100,
-                    suffix: .init(localized: .init("px", defaultValue: "px")),
+                    suffix: "px",
                     lowerClamp: true,
                     controlSize: .compact
                 )
@@ -98,7 +98,7 @@ struct PaddingConfigurationView: View {
                     "Left",
                     value: $paddingModel.left,
                     sliderRange: 0...100,
-                    suffix: .init(localized: .init("px", defaultValue: "px")),
+                    suffix: "px",
                     lowerClamp: true,
                     controlSize: .compact
                 )
@@ -111,20 +111,20 @@ struct PaddingConfigurationView: View {
                     "Window gaps",
                     value: $paddingModel.window,
                     sliderRange: 0...100,
-                    suffix: .init(localized: .init("px", defaultValue: "px")),
+                    suffix: "px",
                     lowerClamp: true
                 )
                 LuminareValueAdjuster(
                     "External bar",
-                    description: .init(
-                        localized: .init(
-                            "Crisp Value Adjuster: External Bar Description",
-                            defaultValue: "Use this if you are using a custom menubar."
-                        )
-                    ),
+//                    description: .init(
+//                        localized: .init(
+//                            "Crisp Value Adjuster: External Bar Description",
+//                            defaultValue: "Use this if you are using a custom menubar."
+//                        )
+//                    ),
                     value: $paddingModel.externalBar,
                     sliderRange: 0...100,
-                    suffix: .init(localized: .init("px", defaultValue: "px")),
+                    suffix: "px",
                     lowerClamp: true
                 )
             }

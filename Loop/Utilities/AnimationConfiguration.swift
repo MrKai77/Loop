@@ -15,14 +15,14 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
     case fast = 1
     case instant = 2
 
-    var name: String {
+    var name: LocalizedStringKey {
         switch self {
         case .smooth:
-            .init(localized: .init("Smooth", defaultValue: "Smooth"))
+            "Smooth"
         case .fast:
-            .init(localized: .init("Fast", defaultValue: "Fast"))
+            "Fast"
         case .instant:
-            .init(localized: .init("Instant", defaultValue: "Instant"))
+            "Instant"
         }
     }
 

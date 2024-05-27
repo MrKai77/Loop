@@ -4,6 +4,9 @@
     "" : {
 
     },
+    "%" : {
+
+    },
     "%@" : {
 
     },
@@ -244,6 +247,9 @@
         }
       }
     },
+    "Animate window resize" : {
+
+    },
     "Animate windows being resized" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -256,7 +262,6 @@
       }
     },
     "Animation speed" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -299,7 +304,6 @@
       }
     },
     "Automatically check for updates" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -318,6 +322,12 @@
           }
         }
       }
+    },
+    "Border thickness" : {
+
+    },
+    "Bottom" : {
+
     },
     "Bottom Cycle" : {
       "localizations" : {
@@ -368,6 +378,9 @@
           }
         }
       }
+    },
+    "Corner radius" : {
+
     },
     "Crisp Value Adjuster: Border Thickness" : {
       "extractionState" : "stale",
@@ -438,7 +451,7 @@
       }
     },
     "Crisp Value Adjuster: External Bar Description" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -753,6 +766,9 @@
         }
       }
     },
+    "Cycle Keybind" : {
+
+    },
     "Default notification content" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -782,7 +798,6 @@
       }
     },
     "Disable cursor interaction" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -791,6 +806,9 @@
           }
         }
       }
+    },
+    "Disable radial menu cursor interaction" : {
+
     },
     "Donate…" : {
       "localizations" : {
@@ -812,6 +830,9 @@
           }
         }
       }
+    },
+    "Double-click to trigger" : {
+
     },
     "Double-click trigger key to trigger %@" : {
       "extractionState" : "stale",
@@ -855,6 +876,9 @@
         }
       }
     },
+    "External bar" : {
+
+    },
     "Fast" : {
       "localizations" : {
         "zh-Hans" : {
@@ -877,7 +901,6 @@
       }
     },
     "Focus window on resize" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -898,6 +921,9 @@
       }
     },
     "GitHub" : {
+
+    },
+    "Gradient" : {
 
     },
     "Granted" : {
@@ -949,7 +975,6 @@
       }
     },
     "Haptic feedback" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -958,6 +983,12 @@
           }
         }
       }
+    },
+    "Height" : {
+
+    },
+    "Hide menu bar icon" : {
+
     },
     "Hide menu until direction is chosen" : {
       "extractionState" : "stale",
@@ -980,6 +1011,9 @@
           }
         }
       }
+    },
+    "Hide until direction is chosen" : {
+
     },
     "Horizontal Thirds" : {
       "localizations" : {
@@ -1260,7 +1294,6 @@
       }
     },
     "Include development versions" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1269,6 +1302,9 @@
           }
         }
       }
+    },
+    "Include padding" : {
+
     },
     "Instant" : {
       "localizations" : {
@@ -1291,7 +1327,6 @@
       }
     },
     "Keybinds" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1302,7 +1337,6 @@
       }
     },
     "Launch at login" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1375,6 +1409,9 @@
           }
         }
       }
+    },
+    "Middle-click to trigger" : {
+
     },
     "Middle-click to trigger %@" : {
       "extractionState" : "stale",
@@ -1501,6 +1538,9 @@
         }
       }
     },
+    "Notify when unlocking new icons" : {
+
+    },
     "Open notification settings" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1512,8 +1552,10 @@
         }
       }
     },
+    "Options" : {
+
+    },
     "Padding" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1524,7 +1566,6 @@
       }
     },
     "Permissions" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1660,6 +1701,9 @@
         }
       }
     },
+    "Radial menu" : {
+
+    },
     "Radial Menu" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1699,7 +1743,6 @@
 
     },
     "Resize window under cursor" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1742,7 +1785,6 @@
       }
     },
     "Respect Stage Manager" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1764,7 +1806,6 @@
       }
     },
     "Restore window frame on drag" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1871,6 +1912,17 @@
         }
       }
     },
+    "Seconds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "s"
+          }
+        }
+      }
+    },
     "Selected icon:" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1937,8 +1989,10 @@
         }
       }
     },
+    "Show in dock" : {
+
+    },
     "Show preview when looping" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1960,6 +2014,9 @@
       }
     },
     "Simple" : {
+
+    },
+    "Size increment" : {
 
     },
     "Sizing mode" : {
@@ -1984,7 +2041,6 @@
       }
     },
     "Stage Manager" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1993,6 +2049,9 @@
           }
         }
       }
+    },
+    "Stage strip size" : {
+
     },
     "Suggest new icon" : {
 
@@ -2043,6 +2102,9 @@
     "Theming" : {
 
     },
+    "Thickness" : {
+
+    },
     "This is only needed to animate windows being resized." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2087,6 +2149,9 @@
         }
       }
     },
+    "Top" : {
+
+    },
     "Top Cycle" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2096,6 +2161,9 @@
           }
         }
       }
+    },
+    "Trigger delay" : {
+
     },
     "Trigger key" : {
       "extractionState" : "stale",
@@ -2109,7 +2177,6 @@
       }
     },
     "Trigger Key" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2130,6 +2197,9 @@
         }
       }
     },
+    "Use coordinates" : {
+
+    },
     "Use gradient" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2141,6 +2211,9 @@
         }
       }
     },
+    "Use macOS center" : {
+
+    },
     "Use macOS Center" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2151,6 +2224,9 @@
           }
         }
       }
+    },
+    "Use pixels" : {
+
     },
     "Use system accent color" : {
       "extractionState" : "stale",
@@ -2188,6 +2264,12 @@
           }
         }
       }
+    },
+    "Width" : {
+
+    },
+    "Window" : {
+
     },
     "Window Direction/More Information: macOS Center" : {
       "extractionState" : "stale",
@@ -2920,6 +3002,9 @@
         }
       }
     },
+    "Window gaps" : {
+
+    },
     "Window padding" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2954,7 +3039,6 @@
       }
     },
     "Window snapping" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2974,6 +3058,12 @@
           }
         }
       }
+    },
+    "X" : {
+
+    },
+    "Y" : {
+
     },
     "You can only use up to %lld keys in a keybind, including the trigger key." : {
       "localizations" : {
