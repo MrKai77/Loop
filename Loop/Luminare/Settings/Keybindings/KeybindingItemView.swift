@@ -27,37 +27,40 @@ struct KeybindingItemView: View {
 
     var body: some View {
         HStack {
-            WindowDirectionPicker($keybind, isCycle: cycleIndex != nil)
-                .equatable()
-                .fixedSize()
+            label()
 
-            if keybind.direction == .custom {
-                Button(action: {
-                    isConfiguringCustom = true
-                }, label: {
-                    Image(systemName: "pencil")
-                        .font(.title3)
-                        .foregroundStyle(isHovering ? .primary : .secondary)
-                })
-                .buttonStyle(.plain)
-                .luminareModal(isPresented: $isConfiguringCustom) {
-                    CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+            HStack {
+                if keybind.direction == .custom {
+                    Button(action: {
+                        isConfiguringCustom = true
+                    }, label: {
+                        Image(systemName: "slider.horizontal.3")
+                    })
+                    .buttonStyle(.plain)
+                    .luminareModal(isPresented: $isConfiguringCustom) {
+                        CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+                    }
+                }
+
+                if keybind.direction == .cycle {
+                    Button(action: {
+                        isConfiguringCycle = true
+                    }, label: {
+                        Image(systemName: "arrow.2.squarepath")
+                    })
+                    .buttonStyle(.plain)
+                    .luminareModal(isPresented: $isConfiguringCycle) {
+                        CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
+                    }
+                }
+
+                if isHovering {
+                    WindowDirectionPicker($keybind, isCycle: cycleIndex != nil)
+                        .equatable()
                 }
             }
-
-            if keybind.direction == .cycle {
-                Button(action: {
-                    isConfiguringCycle = true
-                }, label: {
-                    Image(systemName: "arrow.2.squarepath")
-                        .font(.title3)
-                        .foregroundStyle(isHovering ? .primary : .secondary)
-                })
-                .buttonStyle(.plain)
-                .luminareModal(isPresented: $isConfiguringCycle) {
-                    CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
-                }
-            }
+            .font(.title3)
+            .foregroundStyle(isHovering ? .primary : .secondary)
 
             Spacer()
 
@@ -85,6 +88,14 @@ struct KeybindingItemView: View {
         }
         .padding(.leading, 12)
         .padding(.trailing, 8)
+    }
+
+    func label() -> some View {
+        HStack(spacing: 5) {
+            keybind.direction.icon
+            Text(keybind.getName())
+                .lineLimit(1)
+        }
     }
 }
 
@@ -164,7 +175,7 @@ struct WindowDirectionPicker: View, Equatable {
                 }
             }
         } label: {
-            label()
+            Image(systemName: "pencil")
                 .padding(.vertical, 5) // Increase hitbox size
                 .contentShape(.rect)
                 .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox
@@ -181,18 +192,6 @@ struct WindowDirectionPicker: View, Equatable {
                 Text(direction.name)
             }
         })
-    }
-
-    func label() -> some View {
-        HStack(spacing: 5) {
-            keybind.direction.icon
-            Text(keybind.getName())
-
-            if isHovering {
-                Image(systemName: "chevron.down")
-                    .font(.caption)
-            }
-        }
     }
 
     static func == (lhs: WindowDirectionPicker, rhs: WindowDirectionPicker) -> Bool {
