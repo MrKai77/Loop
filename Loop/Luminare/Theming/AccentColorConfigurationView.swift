@@ -75,7 +75,8 @@ struct AccentColorConfigurationView: View {
             )
         }
         .onAppear {
-            self.showColorSection = !useSystemAccentColor || (useGradient && !useSystemAccentColor)
+            showColorSection = !useSystemAccentColor || (useGradient && !useSystemAccentColor)
+            showGradientSection = useGradient
         }
 
         VStack {
