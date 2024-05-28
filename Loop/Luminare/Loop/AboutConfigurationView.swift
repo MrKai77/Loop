@@ -21,26 +21,32 @@ struct AboutConfigurationView: View {
         .init(
             "Kai",
             "Development",
-            .init(string: "https://github.com/mrkai77")!,
+            url: .init(string: "https://github.com/mrkai77")!,
             avatar: .init(string: "https://github.com/mrkai77.png?size=200")!
         ),
         .init(
             "Jace",
             "Design",
-            .init(string: "https://x.com/jacethings")!,
+            url: .init(string: "https://x.com/jacethings")!,
             avatar: .init(string: "https://github.com/soft-bred.png?size=200")!
         ),
         .init(
             "Kami",
             "Development support",
-            .init(string: "https://github.com/senpaihunters")!,
+            url: .init(string: "https://github.com/senpaihunters")!,
             avatar: .init(string: "https://github.com/senpaihunters.png?size=200")!
         ),
         .init(
             "Greg Lassale",
             "Icon contributor",
-            .init(string: "https://x.com/greglassale")!,
+            url: .init(string: "https://x.com/greglassale")!,
             avatar: .init(string: "https://pbs.twimg.com/profile_images/1746348765127094272/eNO2LxOQ_200x200.jpg")!
+        ),
+        .init(
+            "Contributors on GitHub",
+            "Some features, ideas, and bug fixes",
+            url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
+            avatar: .init(string: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png?size=200")!
         )
     ]
 
@@ -48,11 +54,11 @@ struct AboutConfigurationView: View {
         var id: String { name }
 
         let name: String
-        let description: LocalizedStringKey
+        let description: LocalizedStringKey?
         let url: URL
         let avatar: URL
 
-        init(_ name: String, _ description: LocalizedStringKey, _ url: URL, avatar: URL) {
+        init(_ name: String, _ description: LocalizedStringKey? = nil, url: URL, avatar: URL) {
             self.name = name
             self.description = description
             self.avatar = avatar
@@ -124,15 +130,15 @@ struct AboutConfigurationView: View {
             }
         }
 
-        Button {
-            openURL(URL(string: "https://github.com/MrKai77/Loop/graphs/contributors")!)
-        } label: {
-            Text("…and all the awesome open source contributors on GitHub!", comment: "End of credits in about tab")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .padding(.bottom, 4)
-        .buttonStyle(PlainButtonStyle())
+//        Button {
+//            openURL(URL(string: "https://github.com/MrKai77/Loop/graphs/contributors")!)
+//        } label: {
+//            Text("…and all the awesome open source contributors on GitHub!", comment: "End of credits in about tab")
+//                .font(.caption)
+//                .foregroundStyle(.secondary)
+//        }
+//        .padding(.bottom, 4)
+//        .buttonStyle(PlainButtonStyle())
     }
 
     @ViewBuilder
@@ -160,9 +166,12 @@ struct AboutConfigurationView: View {
 
                 VStack(alignment: .leading) {
                     Text(credit.name)
-                    Text(credit.description)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+
+                    if let description = credit.description {
+                        Text(description)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Spacer()

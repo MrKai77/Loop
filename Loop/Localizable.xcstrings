@@ -4,9 +4,6 @@
     "" : {
 
     },
-    "…and all the awesome open source contributors on GitHub!" : {
-      "comment" : "End of credits in about tab"
-    },
     "%" : {
 
     },
@@ -2057,6 +2054,9 @@
           }
         }
       }
+    },
+    "Some features, ideas, and bug fixes" : {
+
     },
     "Stage Manager" : {
       "localizations" : {
