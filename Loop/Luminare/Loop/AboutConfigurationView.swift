@@ -131,6 +131,7 @@ struct AboutConfigurationView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+        .padding(.bottom, 4)
         .buttonStyle(PlainButtonStyle())
     }
 
