@@ -4,6 +4,9 @@
     "" : {
 
     },
+    "…and all the awesome open source contributors on GitHub!" : {
+      "comment" : "End of credits in about tab"
+    },
     "%" : {
 
     },
@@ -380,6 +383,9 @@
       }
     },
     "Corner radius" : {
+
+    },
+    "Credits" : {
 
     },
     "Crisp Value Adjuster: Border Thickness" : {
@@ -797,6 +803,15 @@
         }
       }
     },
+    "Design" : {
+
+    },
+    "Development" : {
+
+    },
+    "Development support" : {
+
+    },
     "Disable cursor interaction" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1026,6 +1041,9 @@
       }
     },
     "Icon" : {
+
+    },
+    "Icon contributor" : {
 
     },
     "Icon Name: Black" : {
