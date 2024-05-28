@@ -33,12 +33,13 @@ struct RadialMenuView: View {
     init(previewMode: Bool = false, window: Window? = nil, startingAction: WindowAction = .init(.noAction)) {
         self.window = window
         self.previewMode = previewMode
-        self._currentAction = State(initialValue: .init(startingAction.direction))
 
         if previewMode {
             self._timer = State(initialValue: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
+            self._currentAction = State(initialValue: .init(.topHalf))
         } else {
             self._timer = State(initialValue: Timer.publish(every: -1, on: .main, in: .common).autoconnect())
+            self._currentAction = State(initialValue: .init(startingAction.direction))
         }
     }
 
@@ -48,114 +49,104 @@ struct RadialMenuView: View {
     @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
     var body: some View {
-        VStack {
-            Spacer()
-            HStack {
-                Spacer()
+        ZStack {
+            ZStack {
+                // NSVisualEffect on background
+                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
 
-                ZStack {
-                    ZStack {
-                        // NSVisualEffect on background
-                        VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                // This rectangle with a gradient is masked with the current direction radial menu view
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(
+                                colors: [
+                                    primaryColor,
+                                    secondaryColor
+                                ]
+                            ),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .mask {
+                        Color.clear
+                            .overlay {
+                                ZStack {
+                                    if self.currentAction.direction.shouldFillRadialMenu {
+                                        Color.white
+                                    }
 
-                        // This rectangle with a gradient is masked with the current direction radial menu view
-                        Rectangle()
-                            .fill(
-                                LinearGradient(
-                                    gradient: Gradient(
-                                        colors: [
-                                            primaryColor,
-                                            secondaryColor
-                                        ]
-                                    ),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .mask {
-                                Color.clear
-                                    .overlay {
-                                        ZStack {
-                                            if self.currentAction.direction.shouldFillRadialMenu {
-                                                Color.white
-                                            }
-
-                                            ZStack {
-                                                if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
-                                                    DirectionSelectorCircleSegment(
-                                                        angle: self.angle,
-                                                        radialMenuSize: self.radialMenuSize
-                                                    )
-                                                } else {
-                                                    DirectionSelectorSquareSegment(
-                                                        angle: self.angle,
-                                                        radialMenuCornerRadius: self.radialMenuCornerRadius,
-                                                        radialMenuThickness: self.radialMenuThickness
-                                                    )
-                                                }
-                                            }
-                                            .compositingGroup()
-                                            .opacity(
-                                                !self.currentAction.direction.hasRadialMenuAngle ||
-                                                self.currentAction.direction == .custom ?
-                                                0 : 1
+                                    ZStack {
+                                        if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
+                                            DirectionSelectorCircleSegment(
+                                                angle: self.angle,
+                                                radialMenuSize: self.radialMenuSize
+                                            )
+                                        } else {
+                                            DirectionSelectorSquareSegment(
+                                                angle: self.angle,
+                                                radialMenuCornerRadius: self.radialMenuCornerRadius,
+                                                radialMenuThickness: self.radialMenuThickness
                                             )
                                         }
                                     }
+                                    .compositingGroup()
+                                    .opacity(
+                                        !self.currentAction.direction.hasRadialMenuAngle ||
+                                        self.currentAction.direction == .custom ?
+                                        0 : 1
+                                    )
+                                }
                             }
-
-                        if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
-                            Circle()
-                                .stroke(.quinary, lineWidth: 2)
-
-                            Circle()
-                                .stroke(.quinary, lineWidth: 2)
-                                .padding(self.radialMenuThickness)
-                        } else {
-                            RoundedRectangle(cornerRadius: radialMenuCornerRadius)
-                                .stroke(.quinary, lineWidth: 2)
-
-                            RoundedRectangle(cornerRadius: radialMenuCornerRadius - self.radialMenuThickness)
-                            .stroke(.quinary, lineWidth: 2)
-                            .padding(self.radialMenuThickness)
-                        }
-                    }
-                    // Mask the whole ZStack with the shape the user defines
-                    .mask {
-                        if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
-                            Circle()
-                                .strokeBorder(.black, lineWidth: radialMenuThickness)
-                        } else {
-                            RoundedRectangle(cornerRadius: radialMenuCornerRadius)
-                                .strokeBorder(.black, lineWidth: radialMenuThickness)
-                        }
                     }
 
-                    Group {
-                        if window == nil && previewMode == false {
-                            Image("custom.macwindow.trianglebadge.exclamationmark")
-                        } else if let image = self.currentAction.direction.radialMenuImage {
-                            image
-                        }
-                    }
-                    .foregroundStyle(Color.getLoopAccent(tone: .normal))
-                    .font(Font.system(size: 20, weight: .bold))
+                if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
+                    Circle()
+                        .stroke(.quinary, lineWidth: 2)
+
+                    Circle()
+                        .stroke(.quinary, lineWidth: 2)
+                        .padding(self.radialMenuThickness)
+                } else {
+                    RoundedRectangle(cornerRadius: radialMenuCornerRadius)
+                        .stroke(.quinary, lineWidth: 2)
+
+                    RoundedRectangle(cornerRadius: radialMenuCornerRadius - self.radialMenuThickness)
+                    .stroke(.quinary, lineWidth: 2)
+                    .padding(self.radialMenuThickness)
                 }
-                .frame(width: radialMenuSize, height: radialMenuSize)
-
-                Spacer()
             }
-            Spacer()
+            // Mask the whole ZStack with the shape the user defines
+            .mask {
+                if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
+                    Circle()
+                        .strokeBorder(.black, lineWidth: radialMenuThickness)
+                } else {
+                    RoundedRectangle(cornerRadius: radialMenuCornerRadius)
+                        .strokeBorder(.black, lineWidth: radialMenuThickness)
+                }
+            }
+
+            Group {
+                if window == nil && previewMode == false {
+                    Image("custom.macwindow.trianglebadge.exclamationmark")
+                } else if let image = self.currentAction.direction.radialMenuImage {
+                    image
+                }
+            }
+            .foregroundStyle(Color.getLoopAccent(tone: .normal))
+            .font(Font.system(size: 20, weight: .bold))
         }
+        .frame(width: radialMenuSize, height: radialMenuSize)
         .shadow(radius: 10)
+        .padding(20)
+        .fixedSize()
 
         // Animate window
         .scaleEffect(currentAction.direction == .maximize ? 0.85 : 1)
         .animation(animationConfiguration.radialMenuSize, value: currentAction)
         .onAppear {
-            if previewMode {
-                currentAction.direction = currentAction.direction.nextPreviewDirection
-            }
+            recomputeAngle()
         }
         .onReceive(timer) { _ in
             if previewMode {
@@ -172,19 +163,7 @@ struct RadialMenuView: View {
             }
         }
         .onChange(of: self.currentAction) { _ in
-            if let target = self.currentAction.radialMenuAngle(window: window) {
-                let closestAngle: Angle = .degrees(self.angle).angleDifference(to: target)
-
-                let previousActionHadAngle = self.previousAction?.direction.hasRadialMenuAngle ?? false
-                let animate: Bool = abs(closestAngle.degrees) < 179 && previousActionHadAngle
-
-                let defaultAnimation = AnimationConfiguration.fast.radialMenuAngle
-                let noAnimation = Animation.linear(duration: 0)
-
-                withAnimation(animate ? defaultAnimation : noAnimation) {
-                    self.angle += closestAngle.degrees
-                }
-            }
+            recomputeAngle()
         }
         .onChange(of: [customAccentColor, gradientColor]) { _ in
             recomputeColors()
@@ -198,6 +177,22 @@ struct RadialMenuView: View {
         withAnimation(.smooth(duration: 0.25)) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
+        }
+    }
+
+    func recomputeAngle() {
+        if let target = self.currentAction.radialMenuAngle(window: window) {
+            let closestAngle: Angle = .degrees(self.angle).angleDifference(to: target)
+
+            let previousActionHadAngle = self.previousAction?.direction.hasRadialMenuAngle ?? false
+            let animate: Bool = abs(closestAngle.degrees) < 179 && previousActionHadAngle
+
+            let defaultAnimation = AnimationConfiguration.fast.radialMenuAngle
+            let noAnimation = Animation.linear(duration: 0)
+
+            withAnimation(animate ? defaultAnimation : noAnimation) {
+                self.angle += closestAngle.degrees
+            }
         }
     }
 }

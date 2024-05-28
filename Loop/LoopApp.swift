@@ -57,7 +57,7 @@ struct LoopApp: App {
             }
 
             Button("Settings…") {
-                appDelegate.openSettings()
+                AppDelegate.openSettings()
             }
             .keyboardShortcut(",", modifiers: .command)
 

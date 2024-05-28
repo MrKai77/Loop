@@ -19,8 +19,7 @@ class RadialMenuController {
 
         let mouseX: CGFloat = position.x
         let mouseY: CGFloat = position.y
-
-        let windowSize: CGFloat = 250
+        let windowSize: CGFloat = 100 + 40
 
         let panel = NSPanel(
             contentRect: .zero,
@@ -32,7 +31,7 @@ class RadialMenuController {
 
         panel.collectionBehavior = .canJoinAllSpaces
         panel.hasShadow = false
-        panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
+        panel.backgroundColor = .clear
         panel.level = .screenSaver
         panel.contentView = NSHostingView(
             rootView: RadialMenuView(
@@ -41,14 +40,11 @@ class RadialMenuController {
             )
         )
         panel.alphaValue = 0
-        panel.setFrame(
-            CGRect(
+        panel.setFrameOrigin(
+            NSPoint(
                 x: mouseX-windowSize/2,
-                y: mouseY-windowSize/2,
-                width: windowSize,
-                height: windowSize
-            ),
-            display: false
+                y: mouseY-windowSize/2
+            )
         )
         panel.orderFrontRegardless()
 

@@ -25,8 +25,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     static let aboutConfiguration = SettingsTab("About", Image(systemName: "ellipsis"), AboutConfigurationView())
     // swiftlint:enable line_length
 
-    static var currentPreview: SettingsTab? // can only be radialMenuConfiguration or preview previewConfiguration
-
     static var luminare = LuminareSettingsWindow(
         [
             .init("Theming", [
@@ -49,15 +47,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         didTabChange: processTabChange
     )
 
-    private static func processTabChange(_ tab: SettingsTab) {
-        if tab == radialMenuConfiguration, currentPreview != radialMenuConfiguration {
-            currentPreview = radialMenuConfiguration
-            luminare.setPreviewView(RadialMenuView(previewMode: true))
-        }
+    private static func processTabChange(_ tab: SettingsTab? = nil) {
+        let activePreviews = luminare.previewViews
 
-        if tab == previewConfiguration, currentPreview != previewConfiguration {
-            currentPreview = previewConfiguration
-            luminare.setPreviewView(PreviewView(previewMode: true))
+        if tab == radialMenuConfiguration || tab == nil {
+            if !activePreviews.contains("RadialMenu") {
+                luminare.addPreview(content: RadialMenuView(previewMode: true), identifier: "RadialMenu")
+            }
+            return
+        }
+        if tab == previewConfiguration {
+            luminare.removePreview(identifier: "RadialMenu")
+            return
         }
     }
 
@@ -85,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         windowDragManager.addObservers()
 
         if !self.launchedAsLoginItem {
-            self.openSettings()
+            AppDelegate.openSettings()
         }
     }
 
@@ -98,17 +99,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        self.openSettings()
+        AppDelegate.openSettings()
         return true
     }
 
     // Mostly taken from https://github.com/Wouter01/SwiftUI-WindowManagement
-    func openSettings() {
-        AppDelegate.luminare.show()
-
-        if AppDelegate.currentPreview == nil {
-            AppDelegate.processTabChange(AppDelegate.radialMenuConfiguration)
-        }
+    static func openSettings() {
+        luminare.show()
+        processTabChange()
     }
 
     // ----------
