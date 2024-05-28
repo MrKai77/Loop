@@ -22,6 +22,7 @@
 		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
 		A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */; };
 		A81B98182BDC854F005FD78C /* AboutConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81B98172BDC854F005FD78C /* AboutConfigurationView.swift */; };
+		A81D8D082C059A0E00188E12 /* LuminarePreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D8D072C059A0E00188E12 /* LuminarePreviewController.swift */; };
 		A82436062B7EE55C0052FBFB /* CrispValueAdjuster.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */; };
 		A82521EC29E234EB00139654 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521EB29E234EB00139654 /* AboutViewController.swift */; };
 		A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* PermissionsManager.swift */; };
@@ -111,6 +112,7 @@
 		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
 		A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarResizeButton.swift; sourceTree = "<group>"; };
 		A81B98172BDC854F005FD78C /* AboutConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutConfigurationView.swift; sourceTree = "<group>"; };
+		A81D8D072C059A0E00188E12 /* LuminarePreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuminarePreviewController.swift; sourceTree = "<group>"; };
 		A82436052B7EE55C0052FBFB /* CrispValueAdjuster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrispValueAdjuster.swift; sourceTree = "<group>"; };
 		A82521EB29E234EB00139654 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A82521ED29E235AC00139654 /* PermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsManager.swift; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				A8E59C4F298045D90064D4BA /* PreviewController.swift */,
+				A81D8D072C059A0E00188E12 /* LuminarePreviewController.swift */,
 				A8789F6829805B340040512E /* PreviewView.swift */,
 			);
 			path = "Preview Window";
@@ -657,6 +660,7 @@
 				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
 				A8063A732B19891900EAB3D9 /* grid.metal in Sources */,
 				A8063A6E2B19599D00EAB3D9 /* SettingsView.swift in Sources */,
+				A81D8D082C059A0E00188E12 /* LuminarePreviewController.swift in Sources */,
 				A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */,
 				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
 				A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */,

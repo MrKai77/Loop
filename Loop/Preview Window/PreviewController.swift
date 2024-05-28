@@ -53,38 +53,6 @@ class PreviewController {
         }
     }
 
-    func openPreview() {
-        if let windowController = controller {
-            windowController.window?.orderFrontRegardless()
-            return
-        }
-
-        let bounds = AppDelegate.luminare.previewBounds
-
-        let panel = NSPanel(
-            contentRect: .zero,
-            styleMask: [.borderless, .nonactivatingPanel],
-            backing: .buffered,
-            defer: true,
-            screen: NSApp.keyWindow?.screen
-        )
-
-        panel.backgroundColor = .clear
-        panel.contentView = NSHostingView(rootView: PreviewView(previewMode: true))
-        panel.alphaValue = 0
-        panel.identifier = .init("Preview")
-        panel.setFrame(bounds ?? .zero, display: false)
-        panel.orderFrontRegardless()
-
-        controller = .init(window: panel)
-        AppDelegate.luminare.windowController?.window?.addChildWindow(panel, ordered: .above)
-
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.15
-            panel.animator().alphaValue = 1
-        }
-    }
-
     func close() {
         guard let windowController = controller else { return }
         controller = nil

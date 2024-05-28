@@ -48,22 +48,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     )
 
     private static func processTabChange(_ tab: SettingsTab? = nil) {
-        let activePreviews = luminare.previewViews
-
-        if tab == radialMenuConfiguration || tab == nil {
-            luminare.removePreview(identifier: "Preview")
-
-            if !activePreviews.contains("RadialMenu") {
+        DispatchQueue.main.async {
+            if tab == nil { // First time
+                let luminarePreviewController = LuminarePreviewController()
+                luminarePreviewController.openPreview() // This calls the luminare instance from itself
+                
                 luminare.addPreview(content: RadialMenuView(previewMode: true), identifier: "RadialMenu")
-            }
-            return
-        }
-        if tab == previewConfiguration {
-            luminare.removePreview(identifier: "RadialMenu")
 
-            let previewController = PreviewController()
-            previewController.openPreview() // This calls the luminare instance from itself
-            return
+                luminare.showPreview(identifier: "Preview")
+                luminare.showPreview(identifier: "RadialMenu")
+                return
+            }
+
+            if tab == radialMenuConfiguration {
+                luminare.hidePreview(identifier: "Preview")
+                luminare.showPreview(identifier: "RadialMenu")
+                return
+            }
+            if tab == previewConfiguration {
+                luminare.showPreview(identifier: "Preview")
+                luminare.hidePreview(identifier: "RadialMenu")
+                return
+            }
+            if tab == accentColorConfiguration || tab == behaviorConfiguration {
+                luminare.showPreview(identifier: "Preview")
+                luminare.showPreview(identifier: "RadialMenu")
+                return
+            }
         }
     }
 
