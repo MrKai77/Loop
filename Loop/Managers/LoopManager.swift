@@ -41,12 +41,16 @@ class LoopManager: ObservableObject {
         }
     }
 
-    func startObservingKeys() {
-        flagsChangedEventMonitor = NSEventMonitor(
-            scope: .all,
-            eventMask: .flagsChanged,
-            handler: handleLoopKeypress(_:)
-        )
+    func start() {
+        Notification.Name.forceCloseLoop.onReceive { _ in
+            self.closeLoop(forceClose: true)
+        }
+
+        Notification.Name.updateBackendDirection.onReceive { notification in
+            if let action = notification.userInfo?["action"] as? WindowAction {
+                self.changeAction(action)
+            }
+        }
 
         mouseMovedEventMonitor = NSEventMonitor(
             scope: .all,
@@ -59,18 +63,21 @@ class LoopManager: ObservableObject {
             callback: handleMiddleClick(cgEvent:)
         )
 
-        Notification.Name.forceCloseLoop.onReceive { _ in
-            self.closeLoop(forceClose: true)
-        }
+        setFlagsObservers(scope: .all)
+        middleClickMonitor?.start()
+    }
 
-        Notification.Name.updateBackendDirection.onReceive { notification in
-            if let action = notification.userInfo?["action"] as? WindowAction {
-                self.changeAction(action)
-            }
-        }
+    // This is called when setting the trigger key, so that there aren't conflicting event monitors
+    func setFlagsObservers(scope: NSEventMonitor.Scope = .all) {
+        flagsChangedEventMonitor?.stop()
+
+        flagsChangedEventMonitor = NSEventMonitor(
+            scope: scope,
+            eventMask: .flagsChanged,
+            handler: handleLoopKeypress(_:)
+        )
 
         flagsChangedEventMonitor?.start()
-        middleClickMonitor?.start()
     }
 
     private func mouseMoved(_ event: NSEvent) {
@@ -356,7 +363,7 @@ class LoopManager: ObservableObject {
         screenToResizeOn = NSScreen.main
 
         if !Defaults[.disableCursorInteraction] {
-            mouseMovedEventMonitor!.start()
+            mouseMovedEventMonitor?.start()
         }
 
         if !Defaults[.hideUntilDirectionIsChosen] {
@@ -379,7 +386,7 @@ class LoopManager: ObservableObject {
         closeWindows()
 
         keybindMonitor.stop()
-        mouseMovedEventMonitor!.stop()
+        mouseMovedEventMonitor?.stop()
 
         currentlyPressedModifiers = []
 

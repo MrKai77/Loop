@@ -22,7 +22,6 @@ struct TriggerKeycorder: View {
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
     @State private var tooManyKeysPopup: Bool = false
-    @State private var originalTriggerDelay: Double = Defaults[.triggerDelay]
 
     init(_ key: Binding<Set<CGKeyCode>>) {
         self._validCurrentKey = key
@@ -91,12 +90,11 @@ struct TriggerKeycorder: View {
     }
 
     func startObservingKeys() {
-        // Hacky workaround so that the radial menu isn't triggered when setting trigger key
-        originalTriggerDelay = Defaults[.triggerDelay]
-        Defaults[.triggerDelay] = 100
-
         self.selectionKey = []
         self.isActive = true
+
+        // So that if doesn't interfere with the key detection here
+        AppDelegate.loopManager.setFlagsObservers(scope: .global)
 
         self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
@@ -153,7 +151,6 @@ struct TriggerKeycorder: View {
 
         self.eventMonitor?.stop()
         self.eventMonitor = nil
-
-        Defaults[.triggerDelay] = originalTriggerDelay
+        AppDelegate.loopManager.setFlagsObservers(scope: .all)
     }
 }

@@ -10,8 +10,8 @@ import Defaults
 import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
-    private let loopManager = LoopManager()
-    private let windowDragManager = WindowDragManager()
+    static let loopManager = LoopManager()
+    static let windowDragManager = WindowDragManager()
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -30,8 +30,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         AppDelegate.requestNotificationAuthorization()
 
         IconManager.refreshCurrentAppIcon()
-        loopManager.startObservingKeys()
-        windowDragManager.addObservers()
+        AppDelegate.loopManager.start()
+        AppDelegate.windowDragManager.addObservers()
 
         if !self.launchedAsLoginItem {
             LuminareManager.open()
