@@ -91,7 +91,7 @@ struct IconConfigurationView: View {
 
     func userDisabledNotificationsAlert() {
         guard
-            let window = AppDelegate.luminare.windowController?.window
+            let window = LuminareManager.window
         else {
             return
         }

@@ -50,7 +50,7 @@ struct ExcludedAppsConfigurationView: View {
 
     func showAppChooser() {
         DispatchQueue.main.async {
-            guard let window = AppDelegate.luminare.windowController?.window else { return }
+            guard let window = LuminareManager.window else { return }
             let panel = NSOpenPanel()
             panel.worksWhenModal = true
             panel.allowsMultipleSelection = true

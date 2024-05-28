@@ -57,7 +57,7 @@ struct LoopApp: App {
             }
 
             Button("Settings…") {
-                AppDelegate.openSettings()
+                LuminareManager.open()
             }
             .keyboardShortcut(",", modifiers: .command)
 
