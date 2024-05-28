@@ -1,14 +1,19 @@
 //
-//  PreviewView.swift
+//  LuminarePreviewView.swift
 //  Loop
 //
-//  Created by Kai Azim on 2023-01-24.
+//  Created by Kai Azim on 2024-05-28.
 //
 
 import SwiftUI
 import Defaults
 
-struct PreviewView: View {
+struct LuminarePreviewView: View {
+    @State var action: WindowAction = .init(.topHalf)
+    @State var actionRect: CGRect = .zero
+    @State private var scale: CGFloat = 1
+    @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
     @Default(.previewPadding) var previewPadding
     @Default(.padding) var padding
     @Default(.previewCornerRadius) var previewCornerRadius
@@ -24,7 +29,7 @@ struct PreviewView: View {
     @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
     var body: some View {
-        GeometryReader { _ in
+        GeometryReader { geo in
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                     .mask {
@@ -51,6 +56,43 @@ struct PreviewView: View {
                     )
             }
             .padding(previewPadding + previewBorderThickness / 2)
+            .frame(width: actionRect.width, height: actionRect.height)
+            .offset(x: actionRect.minX, y: actionRect.minY)
+
+            .scaleEffect(CGSize(width: scale, height: scale))
+            .onAppear {
+                actionRect = action.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
+
+                withAnimation(
+                    .interpolatingSpring(
+                        duration: 0.2,
+                        bounce: 0.1,
+                        initialVelocity: 1/2
+                    )
+                ) {
+                    self.scale = 1
+                }
+            }
+            .onReceive(timer) { _ in
+                action.direction = action.direction.nextPreviewDirection
+
+                withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
+                    actionRect = action.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
+                }
+            }
+        }
+        .onChange(of: [customAccentColor, gradientColor]) { _ in
+            recomputeColors()
+        }
+        .onChange(of: [useSystemAccentColor, useGradient]) { _ in
+            recomputeColors()
+        }
+    }
+
+    func recomputeColors() {
+        withAnimation(.smooth(duration: 0.25)) {
+            primaryColor = Color.getLoopAccent(tone: .normal)
+            secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }
     }
 }

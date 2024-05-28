@@ -50,10 +50,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     private static func processTabChange(_ tab: SettingsTab? = nil) {
         DispatchQueue.main.async {
             if tab == nil { // First time
-                let luminarePreviewController = LuminarePreviewController()
-                luminarePreviewController.openPreview() // This calls the luminare instance from itself
-                
-                luminare.addPreview(content: RadialMenuView(previewMode: true), identifier: "RadialMenu")
+                luminare.addPreview(
+                    content: LuminarePreviewView(),
+                    identifier: "Preview",
+                    fullSize: true
+                )
+                luminare.addPreview(
+                    content: RadialMenuView(previewMode: true),
+                    identifier: "RadialMenu"
+                )
 
                 luminare.showPreview(identifier: "Preview")
                 luminare.showPreview(identifier: "RadialMenu")

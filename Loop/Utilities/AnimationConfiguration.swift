@@ -37,6 +37,17 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
         }
     }
 
+    var previewTimingFunctionSwiftUI: Animation? {
+        switch self {
+        case .smooth:
+            Animation.timingCurve(0, 0.26, 0.45, 1)
+        case .fast:
+            Animation.timingCurve(0.22, 1, 0.47, 1)
+        case .instant:
+            nil
+        }
+    }
+
     var radialMenuSize: Animation {
         switch self {
         case .smooth:

@@ -69,8 +69,8 @@ class LoopManager: ObservableObject {
             }
         }
 
-        flagsChangedEventMonitor!.start()
-        middleClickMonitor!.start()
+        flagsChangedEventMonitor?.start()
+        middleClickMonitor?.start()
     }
 
     private func mouseMoved(_ event: NSEvent) {
