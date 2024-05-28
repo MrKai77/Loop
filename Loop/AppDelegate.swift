@@ -51,6 +51,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         let activePreviews = luminare.previewViews
 
         if tab == radialMenuConfiguration || tab == nil {
+            luminare.removePreview(identifier: "Preview")
+
             if !activePreviews.contains("RadialMenu") {
                 luminare.addPreview(content: RadialMenuView(previewMode: true), identifier: "RadialMenu")
             }
@@ -58,6 +60,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         }
         if tab == previewConfiguration {
             luminare.removePreview(identifier: "RadialMenu")
+
+            let previewController = PreviewController()
+            previewController.openPreview() // This calls the luminare instance from itself
             return
         }
     }

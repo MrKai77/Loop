@@ -9,10 +9,10 @@ import SwiftUI
 import Defaults
 
 class RadialMenuController {
-    private var loopRadialMenuWindowController: NSWindowController?
+    private var controller: NSWindowController?
 
     func open(position: CGPoint, frontmostWindow: Window?, startingAction: WindowAction = .init(.noAction)) {
-        if let windowController = loopRadialMenuWindowController {
+        if let windowController = controller {
             windowController.window?.orderFrontRegardless()
             return
         }
@@ -48,7 +48,7 @@ class RadialMenuController {
         )
         panel.orderFrontRegardless()
 
-        loopRadialMenuWindowController = .init(window: panel)
+        controller = .init(window: panel)
 
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.15
@@ -57,8 +57,8 @@ class RadialMenuController {
     }
 
     func close() {
-        guard let windowController = loopRadialMenuWindowController else { return }
-        loopRadialMenuWindowController = nil
+        guard let windowController = controller else { return }
+        controller = nil
 
         windowController.window?.animator().alphaValue = 1
         NSAnimationContext.runAnimationGroup({ context in

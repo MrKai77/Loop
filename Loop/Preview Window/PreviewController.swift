@@ -9,7 +9,7 @@ import SwiftUI
 import Defaults
 
 class PreviewController {
-    private var previewWindowController: NSWindowController?
+    var controller: NSWindowController?
     private var screen: NSScreen?
     private var window: Window?
 
@@ -22,7 +22,7 @@ class PreviewController {
     }
 
     func open(screen: NSScreen, window: Window? = nil, startingAction: WindowAction? = nil) {
-        if let windowController = previewWindowController {
+        if let windowController = controller {
             windowController.window?.orderFrontRegardless()
             return
         }
@@ -35,7 +35,7 @@ class PreviewController {
             screen: NSApp.keyWindow?.screen
         )
         panel.alphaValue = 0
-        panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
+        panel.backgroundColor = .clear
         panel.setFrame(NSRect(origin: screen.stageStripFreeFrame.center, size: .zero), display: true)
         // This ensures that this is below the radial menu
         panel.level = NSWindow.Level(NSWindow.Level.screenSaver.rawValue - 1)
@@ -43,7 +43,7 @@ class PreviewController {
         panel.collectionBehavior = .canJoinAllSpaces
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
-        previewWindowController = .init(window: panel)
+        controller = .init(window: panel)
 
         self.screen = screen
         self.window = window
@@ -53,9 +53,41 @@ class PreviewController {
         }
     }
 
+    func openPreview() {
+        if let windowController = controller {
+            windowController.window?.orderFrontRegardless()
+            return
+        }
+
+        let bounds = AppDelegate.luminare.previewBounds
+
+        let panel = NSPanel(
+            contentRect: .zero,
+            styleMask: [.borderless, .nonactivatingPanel],
+            backing: .buffered,
+            defer: true,
+            screen: NSApp.keyWindow?.screen
+        )
+
+        panel.backgroundColor = .clear
+        panel.contentView = NSHostingView(rootView: PreviewView(previewMode: true))
+        panel.alphaValue = 0
+        panel.identifier = .init("Preview")
+        panel.setFrame(bounds ?? .zero, display: false)
+        panel.orderFrontRegardless()
+
+        controller = .init(window: panel)
+        AppDelegate.luminare.windowController?.window?.addChildWindow(panel, ordered: .above)
+
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.15
+            panel.animator().alphaValue = 1
+        }
+    }
+
     func close() {
-        guard let windowController = previewWindowController else { return }
-        previewWindowController = nil
+        guard let windowController = controller else { return }
+        controller = nil
 
         windowController.window?.animator().alphaValue = 1
         NSAnimationContext.runAnimationGroup({ _ in
@@ -67,7 +99,7 @@ class PreviewController {
 
     func setScreen(to newScreen: NSScreen) {
         guard
-            self.previewWindowController != nil,    // Ensures that the preview window is open
+            self.controller != nil,    // Ensures that the preview window is open
             self.screen != newScreen
         else {
             return
@@ -81,7 +113,7 @@ class PreviewController {
 
     func setAction(to action: WindowAction) {
         guard
-            let windowController = previewWindowController,
+            let windowController = controller,
             let screen = self.screen,
             !action.direction.willChangeScreen,
             action.direction != .cycle
