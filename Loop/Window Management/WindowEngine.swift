@@ -77,7 +77,7 @@ struct WindowEngine {
 
             NSAnimationContext.runAnimationGroup { context -> Void in
                 context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
-                window.animator().setFrame(newFrame.flipY(screen: .main!), display: false)
+                window.animator().setFrame(newFrame.flipY(screen: .screens[0]), display: false)
             }
 
             return
