@@ -27,6 +27,7 @@ struct LuminarePreviewView: View {
 
     @State var primaryColor: Color = Color.getLoopAccent(tone: .normal)
     @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
+    @State var isActive: Bool = true
 
     var body: some View {
         GeometryReader { geo in
@@ -45,8 +46,8 @@ struct LuminarePreviewView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    primaryColor,
-                                    secondaryColor
+                                    isActive ? primaryColor : .systemGray,
+                                    isActive ? secondaryColor : .systemGray
                                 ]
                             ),
                             startPoint: .topLeading,
@@ -74,6 +75,8 @@ struct LuminarePreviewView: View {
                 }
             }
             .onReceive(timer) { _ in
+                guard isActive else { return }
+
                 action.direction = action.direction.nextPreviewDirection
 
                 withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
@@ -86,6 +89,11 @@ struct LuminarePreviewView: View {
         }
         .onChange(of: [useSystemAccentColor, useGradient]) { _ in
             recomputeColors()
+        }
+        .onReceive(.activeStateChanged) { notif in
+            if let active = notif.object as? Bool {
+                self.isActive = active
+            }
         }
     }
 

@@ -31,4 +31,8 @@ extension Color {
     var pastelized: Color {
         return Color(nsColor: NSColor(self).blended(withFraction: 0.5, of: .white) ?? .white)
     }
+
+    static var systemGray: Color {
+        return Color(nsColor: NSColor.systemGray.blended(withFraction: 0.2, of: .black)!)
+    }
 }

@@ -47,6 +47,7 @@ struct RadialMenuView: View {
 
     @State var primaryColor: Color = Color.getLoopAccent(tone: .normal)
     @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
+    @State var isActive: Bool = true
 
     var body: some View {
         ZStack {
@@ -60,8 +61,8 @@ struct RadialMenuView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    primaryColor,
-                                    secondaryColor
+                                    !previewMode || isActive ? primaryColor : .systemGray,
+                                    !previewMode || isActive ? secondaryColor : .systemGray
                                 ]
                             ),
                             startPoint: .topLeading,
@@ -150,6 +151,7 @@ struct RadialMenuView: View {
         }
         .onReceive(timer) { _ in
             if previewMode {
+                guard isActive else { return }
                 previousAction = currentAction
                 currentAction.direction = currentAction.direction.nextPreviewDirection
             }
@@ -170,6 +172,11 @@ struct RadialMenuView: View {
         }
         .onChange(of: [useSystemAccentColor, useGradient]) { _ in
             recomputeColors()
+        }
+        .onReceive(.activeStateChanged) { notif in
+            if let active = notif.object as? Bool {
+                self.isActive = active
+            }
         }
     }
 

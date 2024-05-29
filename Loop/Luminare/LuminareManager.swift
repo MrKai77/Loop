@@ -45,7 +45,9 @@ class LuminareManager {
                 aboutConfiguration
             ])
         ],
-        tint: { Color.getLoopAccent(tone: .normal) },
+        tint: {
+            AppDelegate.isActive ? Color.getLoopAccent(tone: .normal) : Color.systemGray
+        },
         didTabChange: processTabChange
     )
 

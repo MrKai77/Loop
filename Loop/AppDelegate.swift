@@ -12,6 +12,7 @@ import UserNotifications
 class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDelegate {
     static let loopManager = LoopManager()
     static let windowDragManager = WindowDragManager()
+    static var isActive: Bool = false
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -49,6 +50,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         return true
     }
 
+    func applicationWillBecomeActive(_ notification: Notification) {
+        Notification.Name.activeStateChanged.post(object: true)
+        AppDelegate.isActive = true
+    }
+
+    func applicationWillResignActive(_ notification: Notification) {
+        Notification.Name.activeStateChanged.post(object: false)
+        AppDelegate.isActive = false
+    }
     // ----------
     // MARK: - Notifications
     // ----------
