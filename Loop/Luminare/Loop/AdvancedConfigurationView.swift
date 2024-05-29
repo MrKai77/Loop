@@ -57,7 +57,7 @@ struct AdvancedConfigurationView: View {
             HStack {
                 if isAccessibilityAccessGranted {
                     Image(systemName: "checkmark.seal.fill")
-                        .foregroundStyle(.green.pastelized)
+                        .foregroundStyle(Color.getLoopAccent(tone: .normal))
                 }
 
                 Text("Accessibility access")
