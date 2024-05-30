@@ -61,6 +61,7 @@ struct WindowEngine {
 
         let enhancedUI = window.enhancedUserInterface ?? false
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
+        WindowRecords.record(window, action)
 
         if window.nsRunningApplication == NSRunningApplication.current,
            let window = NSApp.keyWindow {
@@ -100,8 +101,6 @@ struct WindowEngine {
 
             WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
         }
-
-        WindowRecords.record(window, action)
     }
 
     static func getTargetWindow() -> Window? {
