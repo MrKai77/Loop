@@ -33,8 +33,7 @@ extension NSScreen {
         }
 
         let screenFrame = CGDisplayBounds(displayID)
-        let visibleFrame = self.stageStripFreeFrame.flipY(maxY: self.frame.maxY)
-        let menubarHeight = visibleFrame.origin.y
+        let visibleFrame = stageStripFreeFrame.flipY(screen: self)
 
         // By setting safeScreenFrame to visibleFrame, we won't need to adjust its size.
         var safeScreenFrame = visibleFrame
@@ -72,5 +71,9 @@ extension NSScreen {
         }
 
         return CGDisplayBounds(displayID)
+    }
+
+    var menubarHeight: CGFloat {
+        frame.maxY - visibleFrame.maxY
     }
 }

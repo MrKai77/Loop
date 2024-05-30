@@ -133,7 +133,15 @@ class WindowDragManager {
         let screenFrame = screen.frame.flipY(maxY: screen.frame.maxY)
 
         self.previewController.setScreen(to: screen)
-        let ignoredFrame = screenFrame.insetBy(dx: 2, dy: 2)
+
+        let insetAmount: CGFloat = 2
+        let menubarHeight = screen.menubarHeight
+        var ignoredFrame = screenFrame
+
+        ignoredFrame.origin.x += insetAmount
+        ignoredFrame.size.width -= insetAmount * 2
+        ignoredFrame.origin.y += menubarHeight
+        ignoredFrame.size.height -= insetAmount + menubarHeight
 
         let oldDirection = self.direction
 
