@@ -8,6 +8,7 @@
 import SwiftUI
 import Luminare
 import Defaults
+import Combine
 
 struct AdvancedConfigurationView: View {
     @Default(.animateWindowResizes) var animateWindowResizes
@@ -18,6 +19,9 @@ struct AdvancedConfigurationView: View {
 
     @State var isAccessibilityAccessGranted = false
     let elementHeight: CGFloat = 34
+
+    @State var accessibilityChecker: Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var accessibilityChecks: Int = 0
 
     var body: some View {
         LuminareSection("General") {
@@ -65,9 +69,9 @@ struct AdvancedConfigurationView: View {
                 Spacer()
 
                 Button {
-                    withAnimation(.smooth) {
-                        isAccessibilityAccessGranted = AccessibilityManager.requestAccess()
-                    }
+                    accessibilityChecker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+                    accessibilityChecks = 0
+                    AccessibilityManager.requestAccess()
                 } label: {
                     Text("Request…")
                         .frame(height: 30)
@@ -82,6 +86,20 @@ struct AdvancedConfigurationView: View {
         }
         .onAppear {
             isAccessibilityAccessGranted = AccessibilityManager.getStatus()
+        }
+        .onReceive(accessibilityChecker) { _ in
+            accessibilityChecks += 1
+            let isGranted = AccessibilityManager.getStatus()
+
+            if isAccessibilityAccessGranted != isGranted  {
+                withAnimation(.smooth) {
+                    isAccessibilityAccessGranted = isGranted
+                }
+            }
+
+            if isGranted || accessibilityChecks > 60 {
+                accessibilityChecker.upstream.connect().cancel()
+            }
         }
     }
 }
