@@ -134,14 +134,14 @@ class WindowDragManager {
 
         self.previewController.setScreen(to: screen)
 
-        let insetAmount: CGFloat = 2
-        let menubarHeight = screen.menubarHeight
+        let insets: CGFloat = 2
+        let topInset = screen.menubarHeight / 2
         var ignoredFrame = screenFrame
 
-        ignoredFrame.origin.x += insetAmount
-        ignoredFrame.size.width -= insetAmount * 2
-        ignoredFrame.origin.y += menubarHeight
-        ignoredFrame.size.height -= insetAmount + menubarHeight
+        ignoredFrame.origin.x += insets
+        ignoredFrame.size.width -= insets * 2
+        ignoredFrame.origin.y += topInset
+        ignoredFrame.size.height -= insets + topInset
 
         let oldDirection = self.direction
 
