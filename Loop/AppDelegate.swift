@@ -22,8 +22,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-//        NSApp.setActivationPolicy(.accessory)
-
         // Check & ask for accessibility access
         AccessibilityManager.requestAccess()
         UNUserNotificationCenter.current().delegate = self
@@ -36,11 +34,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
 
         if !self.launchedAsLoginItem {
             LuminareManager.open()
+        } else {
+            // Dock icon is usually handled by LuminareManager, but in this case, it is manually set
+            if !Defaults[.showDockIcon] {
+                NSApp.setActivationPolicy(.accessory)
+            }
         }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-//        NSApp.setActivationPolicy(.accessory)
         LuminareManager.fullyClose()
         return false
     }
