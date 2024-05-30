@@ -68,39 +68,36 @@ struct AboutConfigurationView: View {
 
     var body: some View {
         LuminareSection {
-            HStack {
-                if let image = NSImage(named: currentIcon) {
-                    Image(nsImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 60)
-                }
+            Button {
+                let pasteboard = NSPasteboard.general
+                pasteboard.clearContents()
+                pasteboard.setString(
+                    "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+                    forType: NSPasteboard.PasteboardType.string
+                )
+            } label: {
+                HStack {
+                    if let image = NSImage(named: currentIcon) {
+                        Image(nsImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 60)
+                    }
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Loop")
-                        .fontWeight(.medium)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Loop")
+                            .fontWeight(.medium)
 
-                    Button {
-                        let pasteboard = NSPasteboard.general
-                        pasteboard.clearContents()
-                        pasteboard.setString(
-                            "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
-                            forType: NSPasteboard.PasteboardType.string
-                        )
-                    } label: {
-                        let versionText = String(
-                            localized: "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
-                        )
-                        Text("\(versionText) \(Image(systemName: "doc.on.clipboard"))")
+                        Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-                    .buttonStyle(PlainButtonStyle())
-                }
 
-                Spacer()
+                    Spacer()
+                }
+                .padding(4)
             }
-            .padding(4)
+            .buttonStyle(LuminareCosmeticButtonStyle(Image(systemName: "clipboard")))
         }
 
         LuminareSection {
@@ -129,16 +126,6 @@ struct AboutConfigurationView: View {
                 creditsView(credit)
             }
         }
-
-//        Button {
-//            openURL(URL(string: "https://github.com/MrKai77/Loop/graphs/contributors")!)
-//        } label: {
-//            Text("…and all the awesome open source contributors on GitHub!", comment: "End of credits in about tab")
-//                .font(.caption)
-//                .foregroundStyle(.secondary)
-//        }
-//        .padding(.bottom, 4)
-//        .buttonStyle(PlainButtonStyle())
     }
 
     @ViewBuilder
@@ -146,7 +133,7 @@ struct AboutConfigurationView: View {
         Button {
             openURL(credit.url)
         } label: {
-            HStack(spacing: 8) {
+            HStack(spacing: 12) {
                 AsyncImage(url: credit.avatar) { image in
                     image
                         .resizable()
@@ -176,8 +163,8 @@ struct AboutConfigurationView: View {
 
                 Spacer()
             }
-            .padding(8)
+            .padding(12)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(LuminareCosmeticButtonStyle(Image(systemName: "arrow.up.forward.square")))
     }
 }
