@@ -39,6 +39,7 @@ struct KeybindingItemView: View {
                     .buttonStyle(.plain)
                     .luminareModal(isPresented: $isConfiguringCustom) {
                         CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+                            .frame(width: 400)
                     }
                 }
 
@@ -51,6 +52,7 @@ struct KeybindingItemView: View {
                     .buttonStyle(.plain)
                     .luminareModal(isPresented: $isConfiguringCycle) {
                         CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
+                            .frame(width: 400)
                     }
                 }
 

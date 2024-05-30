@@ -72,21 +72,23 @@ class LuminareManager {
     }
 
     static func open() {
-        luminare.initializeWindow()
+        if luminare.windowController == nil {
+            luminare.initializeWindow()
 
-        DispatchQueue.main.async {
-            luminare.addPreview(
-                content: LuminarePreviewView(),
-                identifier: "Preview",
-                fullSize: true
-            )
-            luminare.addPreview(
-                content: RadialMenuView(previewMode: true),
-                identifier: "RadialMenu"
-            )
+            DispatchQueue.main.async {
+                luminare.addPreview(
+                    content: LuminarePreviewView(),
+                    identifier: "Preview",
+                    fullSize: true
+                )
+                luminare.addPreview(
+                    content: RadialMenuView(previewMode: true),
+                    identifier: "RadialMenu"
+                )
 
-            luminare.showPreview(identifier: "Preview")
-            luminare.showPreview(identifier: "RadialMenu")
+                luminare.showPreview(identifier: "Preview")
+                luminare.showPreview(identifier: "RadialMenu")
+            }
         }
 
         luminare.show()

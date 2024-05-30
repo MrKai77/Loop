@@ -78,6 +78,7 @@ struct BehaviorConfigurationView: View {
                 }
                 .luminareModal(isPresented: $isPaddingConfigurationViewPresented) {
                     PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
+                        .frame(width: 400)
                 }
             }
         }
