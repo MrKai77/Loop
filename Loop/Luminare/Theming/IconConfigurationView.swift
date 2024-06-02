@@ -10,6 +10,10 @@ import Luminare
 import Defaults
 
 struct IconConfigurationView: View {
+    @Environment(\.openURL) var openURL
+
+    let suggestNewIconLink = URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!
+
     @Default(.currentIcon) var currentIcon
     @Default(.showDockIcon) var showDockIcon
     @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked
@@ -52,7 +56,7 @@ struct IconConfigurationView: View {
             }
 
             Button("Suggest new icon") {
-                fatalError("TODO: SUGGEST NEW ICON")
+                openURL(suggestNewIconLink)
             }
         }
 
