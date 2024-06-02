@@ -88,8 +88,7 @@ struct KeybindingItemView: View {
                 }
             }
         }
-        .padding(.leading, 12)
-        .padding(.trailing, 8)
+        .padding(.horizontal, 12)
     }
 
     func label() -> some View {
