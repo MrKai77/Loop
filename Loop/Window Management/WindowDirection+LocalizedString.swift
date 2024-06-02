@@ -6,8 +6,19 @@
 //
 
 import Foundation
+import Luminare
 
 extension WindowDirection {
+    var infoView: LuminareInfoView? {
+        var result: LuminareInfoView?
+
+        if self == .macOSCenter {
+            result = .init("\(name) places windows slightly above the absolute center,\nwhich can be found more ergonomic.")
+        }
+
+        return result
+    }
+
     var name: String {
         switch self {
         case .noAction:
@@ -27,7 +38,7 @@ extension WindowDirection {
         case .minimize:
                 .init(localized: .init("Window Direction/Name: Minimize", defaultValue: "Minimize"))
         case .macOSCenter:
-                .init(localized: .init("Window Direction/Name: macOS Center", defaultValue: "macOS Center"))
+                .init(localized: .init("Window Direction/Name: MacOS Center", defaultValue: "MacOS Center"))
         case .center:
                 .init(localized: .init("Window Direction/Name: Center", defaultValue: "Center"))
         case .topHalf:

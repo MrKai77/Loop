@@ -25,7 +25,11 @@ struct AdvancedConfigurationView: View {
 
     var body: some View {
         LuminareSection("General") {
-            LuminareToggle("Animate window resize", isOn: $animateWindowResizes)
+            LuminareToggle(
+                "Animate window resize",
+                info: .init("This feature is still under development.", .orange),
+                isOn: $animateWindowResizes
+            )
             LuminareToggle("Disable radial menu cursor interaction", isOn: $disableCursorInteraction)
             LuminareToggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
             LuminareToggle("Haptic feedback", isOn: $hapticFeedback)

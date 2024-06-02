@@ -90,6 +90,9 @@
         }
       }
     },
+    "%@ places windows slightly above the absolute center,\nwhich can be found more ergonomic." : {
+
+    },
     "%@ Preserve Size" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2123,6 +2126,9 @@
     "Thickness" : {
 
     },
+    "This feature is still under development." : {
+
+    },
     "This is only needed to animate windows being resized." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2256,6 +2262,9 @@
           }
         }
       }
+    },
+    "Use this if you are using a custom menubar." : {
+
     },
     "Version %@ (%@)" : {
       "localizations" : {

@@ -116,12 +116,7 @@ struct PaddingConfigurationView: View {
                 )
                 LuminareValueAdjuster(
                     "External bar",
-//                    description: .init(
-//                        localized: .init(
-//                            "Crisp Value Adjuster: External Bar Description",
-//                            defaultValue: "Use this if you are using a custom menubar."
-//                        )
-//                    ),
+                    info: .init("Use this if you are using a custom menubar."),
                     value: $paddingModel.externalBar,
                     sliderRange: 0...100,
                     suffix: "px",

@@ -92,11 +92,18 @@ struct KeybindingItemView: View {
     }
 
     func label() -> some View {
-        HStack(spacing: 5) {
-            keybind.direction.icon
-            Text(keybind.getName())
-                .lineLimit(1)
+        HStack(spacing: 0) {
+            HStack(spacing: 5) {
+                keybind.direction.icon
+                Text(keybind.getName())
+                    .lineLimit(1)
+            }
+
+            if let info = keybind.direction.infoView {
+                info
+            }
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
