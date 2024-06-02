@@ -1,0 +1,24 @@
+name: Suggest New Icon
+description: Add your icon to Loop.
+title: "🍱 Add [icon names]"
+labels: ["feature"]
+body:
+  - type: textarea
+    attributes:
+      label: Icons
+      description: Drag your icons here.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Comments
+      description: Describe the significance of your icons. (what does it represent?)
+    validations:
+      required: true
+
+ - type: markdown
+    attributes:
+      value: |
+        Please keep in mind that not all icons may be approved, as they do take up quite a bit of space in the app itself :)
+        Thank you for taking the time to make icons for Loop!
