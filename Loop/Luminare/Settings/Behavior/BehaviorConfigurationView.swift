@@ -17,14 +17,14 @@ struct BehaviorConfigurationView: View {
     @Default(.windowSnapping) var windowSnapping
     @Default(.focusWindowOnResize) var focusWindowOnResize
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
-    @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
 
     // Fixes animation for  @Default(.resizeWindowUnderCursor)
     @State private var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor]
 
-    // Fixes animation for @Default(.enablePadding)
+    // Fixes animations
     @State private var enablePadding = Defaults[.enablePadding]
+    @State private var respectStageManager = Defaults[.respectStageManager]
 
     @State var isPaddingConfigurationViewPresented = false
 
@@ -84,8 +84,10 @@ struct BehaviorConfigurationView: View {
         }
 
         LuminareSection("Stage Manager") {
-            // TODO: Animate
-            LuminareToggle("Respect Stage Manager", isOn: $respectStageManager)
+            LuminareToggle("Respect Stage Manager", isOn: $respectStageManager.animation(.smooth(duration: 0.25)))
+                .onChange(of: respectStageManager) { _ in
+                    Defaults[.respectStageManager] = respectStageManager
+                }
 
             if respectStageManager {
                 LuminareValueAdjuster(
