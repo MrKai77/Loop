@@ -17,7 +17,7 @@ body:
     validations:
       required: true
 
- - type: markdown
+  - type: markdown
     attributes:
       value: |
         Please keep in mind that not all icons may be approved, as they do take up quite a bit of space in the app itself :)
