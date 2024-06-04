@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-08-15.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 // swiftlint:disable:next type_body_length
 class LoopManager: ObservableObject {
@@ -31,8 +31,8 @@ class LoopManager: ObservableObject {
     private var lastTriggerKeyClick: Date = .now
 
     @Published var currentAction: WindowAction = .init(.noAction)
-    private var initialMousePosition: CGPoint = CGPoint()
-    private var angleToMouse: Angle = Angle(degrees: 0)
+    private var initialMousePosition: CGPoint = .init()
+    private var angleToMouse: Angle = .init(degrees: 0)
     private var distanceToMouse: CGFloat = 0
 
     private var triggerDelayTimer: Timer? {
@@ -80,7 +80,7 @@ class LoopManager: ObservableObject {
         flagsChangedEventMonitor?.start()
     }
 
-    private func mouseMoved(_ event: NSEvent) {
+    private func mouseMoved(_: NSEvent) {
         guard isLoopActive else { return }
         keybindMonitor.canPassthroughSpecialEvents = false
 
@@ -91,7 +91,7 @@ class LoopManager: ObservableObject {
         let mouseDistance = initialMousePosition.distanceSquared(to: currentMouseLocation)
 
         // Return if the mouse didn't move
-        if (mouseAngle == angleToMouse) && (mouseDistance == distanceToMouse) {
+        if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
             return
         }
 
@@ -222,7 +222,7 @@ class LoopManager: ObservableObject {
                 currentAction = newAction
                 changeAction(action, triggeredFromScreenChange: true)
             } else {
-                if let screenToResizeOn = screenToResizeOn,
+                if let screenToResizeOn,
                    !Defaults[.previewVisibility] {
                     performHapticFeedback()
                     WindowEngine.resize(
@@ -265,11 +265,11 @@ class LoopManager: ObservableObject {
 
     func handleMiddleClick(cgEvent: CGEvent) -> Unmanaged<CGEvent>? {
         if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
-            if event.type == .otherMouseDragged && !isLoopActive {
+            if event.type == .otherMouseDragged, !isLoopActive {
                 openLoop()
             }
 
-            if event.type == .otherMouseUp && isLoopActive {
+            if event.type == .otherMouseUp, isLoopActive {
                 closeLoop()
             }
         }
@@ -346,7 +346,7 @@ class LoopManager: ObservableObject {
         let flags = event.modifierFlags.convertToCGKeyCode()
         if flags.count != currentlyPressedModifiers.count {
             for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
-                if !currentlyPressedModifiers.map({ $0.baseModifier }).contains(key) {
+                if !currentlyPressedModifiers.map(\.baseModifier).contains(key) {
                     currentlyPressedModifiers.insert(key)
                 }
             }
@@ -397,11 +397,11 @@ class LoopManager: ObservableObject {
         currentlyPressedModifiers = []
 
         if targetWindow != nil,
-            screenToResizeOn != nil,
-            forceClose == false,
-            currentAction.direction != .noAction,
-            isLoopActive {
-            if let screenToResizeOn = screenToResizeOn,
+           screenToResizeOn != nil,
+           forceClose == false,
+           currentAction.direction != .noAction,
+           isLoopActive {
+            if let screenToResizeOn,
                Defaults[.previewVisibility] {
                 LoopManager.canAdjustSize = false
                 WindowEngine.resize(
@@ -418,7 +418,7 @@ class LoopManager: ObservableObject {
             Defaults[.timesLooped] += 1
             IconManager.checkIfUnlockedNewIcon()
         } else {
-            if targetWindow == nil && isLoopActive {
+            if targetWindow == nil, isLoopActive {
                 NSSound.beep()
             }
         }
@@ -430,7 +430,7 @@ class LoopManager: ObservableObject {
     }
 
     private func openWindows() {
-        if Defaults[.previewVisibility] && targetWindow != nil {
+        if Defaults[.previewVisibility], targetWindow != nil {
             previewController.open(screen: screenToResizeOn!, window: targetWindow)
         }
 

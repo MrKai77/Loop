@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-01-24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct PreviewView: View {
     @Default(.previewPadding) var previewPadding
@@ -20,8 +20,8 @@ struct PreviewView: View {
     @Default(.useGradient) var useGradient
     @Default(.gradientColor) var gradientColor
 
-    @State var primaryColor: Color = Color.getLoopAccent(tone: .normal)
-    @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
+    @State var primaryColor: Color = .getLoopAccent(tone: .normal)
+    @State var secondaryColor: Color = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
     var body: some View {
         GeometryReader { _ in

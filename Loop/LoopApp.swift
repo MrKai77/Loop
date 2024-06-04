@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2023-01-23.
 //
 
-import SwiftUI
-import MenuBarExtraAccess
 import Defaults
+import MenuBarExtraAccess
+import SwiftUI
 
 @main
 struct LoopApp: App {
@@ -19,7 +19,7 @@ struct LoopApp: App {
     var body: some Scene {
         MenuBarExtra("Loop", image: "empty", isInserted: Binding.constant(!hideMenuBarIcon)) {
             #if DEBUG
-            MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+                MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif
 
             Button {
@@ -78,7 +78,7 @@ struct LoopApp: App {
         .menuBarExtraAccess(isPresented: $isMenubarItemPresented) { statusItem in
             guard
                 let button = statusItem.button,
-                button.subviews.count == 0
+                button.subviews.isEmpty
             else {
                 return
             }

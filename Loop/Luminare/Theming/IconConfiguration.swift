@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-04-19.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 class IconConfigurationModel: ObservableObject {
     let suggestNewIconLink = URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!

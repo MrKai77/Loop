@@ -14,11 +14,11 @@ struct MenuBarIconView: View {
         // problem with only Loop's symbol symbol, but the circle.circle SF symbol also is slightly
         // off center. Will need to investigate that later.
         Image(.menubarIcon)
-            .rotationEffect(Angle.degrees(self.rotationAngle))
+            .rotationEffect(Angle.degrees(rotationAngle))
             .onReceive(.didLoop) { _ in
-                self.rotationAngle = 0
+                rotationAngle = 0
                 withAnimation(.interpolatingSpring(stiffness: 100, damping: 15)) {
-                    self.rotationAngle += 360
+                    rotationAngle += 360
                 }
             }
     }

@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2023-01-24.
 //
 
-import SwiftUI
 import Combine
 import Defaults
+import SwiftUI
 
 struct RadialMenuView: View {
     let radialMenuSize: CGFloat = 100
@@ -45,8 +45,8 @@ struct RadialMenuView: View {
 
     @State var angle: Double = .zero
 
-    @State var primaryColor: Color = Color.getLoopAccent(tone: .normal)
-    @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
+    @State var primaryColor: Color = .getLoopAccent(tone: .normal)
+    @State var secondaryColor: Color = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
     @State var isActive: Bool = true
 
     var body: some View {
@@ -73,29 +73,29 @@ struct RadialMenuView: View {
                         Color.clear
                             .overlay {
                                 ZStack {
-                                    if self.currentAction.direction.shouldFillRadialMenu {
+                                    if currentAction.direction.shouldFillRadialMenu {
                                         Color.white
                                     }
 
                                     ZStack {
                                         if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
                                             DirectionSelectorCircleSegment(
-                                                angle: self.angle,
-                                                radialMenuSize: self.radialMenuSize
+                                                angle: angle,
+                                                radialMenuSize: radialMenuSize
                                             )
                                         } else {
                                             DirectionSelectorSquareSegment(
-                                                angle: self.angle,
-                                                radialMenuCornerRadius: self.radialMenuCornerRadius,
-                                                radialMenuThickness: self.radialMenuThickness
+                                                angle: angle,
+                                                radialMenuCornerRadius: radialMenuCornerRadius,
+                                                radialMenuThickness: radialMenuThickness
                                             )
                                         }
                                     }
                                     .compositingGroup()
                                     .opacity(
-                                        !self.currentAction.direction.hasRadialMenuAngle ||
-                                        self.currentAction.direction == .custom ?
-                                        0 : 1
+                                        !currentAction.direction.hasRadialMenuAngle ||
+                                            currentAction.direction == .custom ?
+                                            0 : 1
                                     )
                                 }
                             }
@@ -107,14 +107,14 @@ struct RadialMenuView: View {
 
                     Circle()
                         .stroke(.quinary, lineWidth: 2)
-                        .padding(self.radialMenuThickness)
+                        .padding(radialMenuThickness)
                 } else {
                     RoundedRectangle(cornerRadius: radialMenuCornerRadius)
                         .stroke(.quinary, lineWidth: 2)
 
-                    RoundedRectangle(cornerRadius: radialMenuCornerRadius - self.radialMenuThickness)
-                    .stroke(.quinary, lineWidth: 2)
-                    .padding(self.radialMenuThickness)
+                    RoundedRectangle(cornerRadius: radialMenuCornerRadius - radialMenuThickness)
+                        .stroke(.quinary, lineWidth: 2)
+                        .padding(radialMenuThickness)
                 }
             }
             // Mask the whole ZStack with the shape the user defines
@@ -129,9 +129,9 @@ struct RadialMenuView: View {
             }
 
             Group {
-                if window == nil && previewMode == false {
+                if window == nil, previewMode == false {
                     Image("custom.macwindow.trianglebadge.exclamationmark")
-                } else if let image = self.currentAction.direction.radialMenuImage {
+                } else if let image = currentAction.direction.radialMenuImage {
                     image
                 }
             }
@@ -157,14 +157,14 @@ struct RadialMenuView: View {
             }
         }
         .onReceive(.updateUIDirection) { obj in
-            if !self.previewMode, let action = obj.userInfo?["action"] as? WindowAction {
-                self.previousAction = self.currentAction
-                self.currentAction = .init(action.direction)
+            if !previewMode, let action = obj.userInfo?["action"] as? WindowAction {
+                previousAction = currentAction
+                currentAction = .init(action.direction)
 
                 print("New radial menu window action received: \(action.direction)")
             }
         }
-        .onChange(of: self.currentAction) { _ in
+        .onChange(of: currentAction) { _ in
             recomputeAngle()
         }
         .onChange(of: [customAccentColor, gradientColor]) { _ in
@@ -175,7 +175,7 @@ struct RadialMenuView: View {
         }
         .onReceive(.activeStateChanged) { notif in
             if let active = notif.object as? Bool {
-                self.isActive = active
+                isActive = active
             }
         }
     }
@@ -188,17 +188,17 @@ struct RadialMenuView: View {
     }
 
     func recomputeAngle() {
-        if let target = self.currentAction.radialMenuAngle(window: window) {
-            let closestAngle: Angle = .degrees(self.angle).angleDifference(to: target)
+        if let target = currentAction.radialMenuAngle(window: window) {
+            let closestAngle: Angle = .degrees(angle).angleDifference(to: target)
 
-            let previousActionHadAngle = self.previousAction?.direction.hasRadialMenuAngle ?? false
+            let previousActionHadAngle = previousAction?.direction.hasRadialMenuAngle ?? false
             let animate: Bool = abs(closestAngle.degrees) < 179 && previousActionHadAngle
 
             let defaultAnimation = AnimationConfiguration.fast.radialMenuAngle
             let noAnimation = Animation.linear(duration: 0)
 
             withAnimation(animate ? defaultAnimation : noAnimation) {
-                self.angle += closestAngle.degrees
+                angle += closestAngle.degrees
             }
         }
     }

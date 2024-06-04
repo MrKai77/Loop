@@ -5,11 +5,11 @@
 //  Created by Kai Azim on 2023-10-27.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifiable {
-    var id: Self { return self }
+    var id: Self { self }
 
     case smooth = 0
     case fast = 1

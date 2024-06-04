@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-04-19.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 class PreviewConfigurationModel: ObservableObject {
     @Published var previewVisibility = Defaults[.previewVisibility] {
@@ -15,16 +15,19 @@ class PreviewConfigurationModel: ObservableObject {
             Defaults[.previewVisibility] = previewVisibility
         }
     }
+
     @Published var previewPadding = Defaults[.previewPadding] {
         didSet {
             Defaults[.previewPadding] = previewPadding
         }
     }
+
     @Published var previewCornerRadius = Defaults[.previewCornerRadius] {
         didSet {
             Defaults[.previewCornerRadius] = previewCornerRadius
         }
     }
+
     @Published var previewBorderThickness = Defaults[.previewBorderThickness] {
         didSet {
             Defaults[.previewBorderThickness] = previewBorderThickness

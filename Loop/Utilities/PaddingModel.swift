@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2024-02-01.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct PaddingModel: Codable, Defaults.Serializable, Hashable {
     var window: CGFloat
@@ -19,7 +19,7 @@ struct PaddingModel: Codable, Defaults.Serializable, Hashable {
     var configureScreenPadding: Bool
 
     var totalTopPadding: CGFloat {
-        self.top + externalBar
+        top + externalBar
     }
 
     static var zero = PaddingModel(
@@ -33,10 +33,10 @@ struct PaddingModel: Codable, Defaults.Serializable, Hashable {
     )
 
     var totalVerticalPadding: CGFloat {
-        self.totalTopPadding + self.bottom
+        totalTopPadding + bottom
     }
 
     var totalHorizontalPadding: CGFloat {
-        self.right + self.left
+        right + left
     }
 }

@@ -106,7 +106,7 @@ struct AboutView: View {
             .controlSize(.large)
 
             Button {
-                self.isShowingAcknowledgements = true
+                isShowingAcknowledgements = true
             } label: {
                 Text("Acknowledgements")
                     .foregroundColor(.primary)
@@ -115,7 +115,7 @@ struct AboutView: View {
             .controlSize(.large)
             .popover(isPresented: $isShowingAcknowledgements) {
                 VStack {
-                    ForEach(0..<packages.count, id: \.self) { idx in
+                    ForEach(0 ..< packages.count, id: \.self) { idx in
                         HStack {
                             Text(packages[idx].name)
                             Spacer()

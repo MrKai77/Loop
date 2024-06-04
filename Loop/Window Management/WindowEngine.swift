@@ -5,10 +5,10 @@
 //  Created by Kai Azim on 2023-06-16.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
-struct WindowEngine {
+enum WindowEngine {
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized
@@ -76,7 +76,7 @@ struct WindowEngine {
                 newFrame.origin.y = screen.safeScreenFrame.maxY - newFrame.height - Defaults[.padding].bottom
             }
 
-            NSAnimationContext.runAnimationGroup { context -> Void in
+            NSAnimationContext.runAnimationGroup { context in
                 context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
                 window.animator().setFrame(newFrame.flipY(screen: .screens[0]), display: false)
             }
@@ -113,7 +113,7 @@ struct WindowEngine {
         }
 
         if result == nil {
-           result = WindowEngine.frontmostWindow
+            result = WindowEngine.frontmostWindow
         }
 
         return result
@@ -179,7 +179,7 @@ struct WindowEngine {
     private static func handleSizeConstrainedWindow(window: Window, screenFrame: CGRect) {
         let windowFrame = window.frame
         // If the window is fully shown on the screen
-        if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
+        if windowFrame.maxX <= screenFrame.maxX, windowFrame.maxY <= screenFrame.maxY {
             return
         }
 

@@ -17,7 +17,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
     let upperClamp: Bool
     let lowerClamp: Bool
 
-    @State var isPopoverShown: Bool = false
+    @State var isPopoverShown = false
 
     init(
         _ title: String,
@@ -38,12 +38,12 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
         self.upperClamp = upperClamp
 
         self.formatter = NumberFormatter()
-        self.formatter.maximumFractionDigits = 10
+        formatter.maximumFractionDigits = 10
 
-        if let step = step {
+        if let step {
             self.step = V.Stride(step)
         } else {
-            self.step = 0   // Initialize first
+            self.step = 0 // Initialize first
             self.step = totalRange / 10
         }
     }
@@ -78,7 +78,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                         in: sliderRange,
                         step: totalRange / 10,
                         label: { EmptyView() },
-                        onEditingChanged: { self.isPopoverShown = !$0 }
+                        onEditingChanged: { isPopoverShown = !$0 }
                     )
                     .labelsHidden()
                     .frame(width: stepperWidth)
@@ -107,7 +107,7 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                 .fixedSize()
             }
 
-            if let description = description {
+            if let description {
                 Text(description)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -122,17 +122,17 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                 .init(""),
                 value: Binding(
                     get: {
-                        self.value
+                        value
                     },
                     set: {
-                        if lowerClamp && upperClamp {
-                            self.value = $0.clamped(to: sliderRange)
+                        if lowerClamp, upperClamp {
+                            value = $0.clamped(to: sliderRange)
                         } else if lowerClamp {
-                            self.value = max(self.sliderRange.lowerBound, $0)
+                            value = max(sliderRange.lowerBound, $0)
                         } else if upperClamp {
-                            self.value = min(self.sliderRange.upperBound, $0)
+                            value = min(sliderRange.upperBound, $0)
                         } else {
-                            self.value = $0
+                            value = $0
                         }
                     }
                 ),
@@ -162,17 +162,17 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
                         .init(""),
                         value: Binding(
                             get: {
-                                self.value
+                                value
                             },
                             set: {
-                                if lowerClamp && upperClamp {
-                                    self.value = $0.clamped(to: sliderRange)
+                                if lowerClamp, upperClamp {
+                                    value = $0.clamped(to: sliderRange)
                                 } else if lowerClamp {
-                                    self.value = max(self.sliderRange.lowerBound, $0)
+                                    value = max(sliderRange.lowerBound, $0)
                                 } else if upperClamp {
-                                    self.value = min(self.sliderRange.upperBound, $0)
+                                    value = min(sliderRange.upperBound, $0)
                                 } else {
-                                    self.value = $0
+                                    value = $0
                                 }
                             }
                         ),
@@ -208,8 +208,8 @@ struct CrispValueAdjuster<V>: View where V: Strideable, V: BinaryFloatingPoint, 
     }
 }
 
-extension Comparable {
-    fileprivate func clamped(to limits: ClosedRange<Self>) -> Self {
-        return min(max(self, limits.lowerBound), limits.upperBound)
+private extension Comparable {
+    func clamped(to limits: ClosedRange<Self>) -> Self {
+        min(max(self, limits.lowerBound), limits.upperBound)
     }
 }

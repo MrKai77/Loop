@@ -14,23 +14,23 @@ class KeybindMonitor {
     private var eventMonitor: CGEventMonitor?
     private var flagsEventMonitor: CGEventMonitor?
     private var pressedKeys = Set<CGKeyCode>()
-    private var lastKeyReleaseTime: Date = Date.now
+    private var lastKeyReleaseTime: Date = .now
 
     // Currently, special events only contain the globe key, as it can also be used as a emoji key.
     private let specialEvents: [CGKeyCode] = [179]
-    var canPassthroughSpecialEvents = true  // If mouse has been moved
+    var canPassthroughSpecialEvents = true // If mouse has been moved
 
     func resetPressedKeys() {
         KeybindMonitor.shared.pressedKeys = []
     }
 
     func start() {
-        guard self.eventMonitor == nil,
+        guard eventMonitor == nil,
               AccessibilityManager.getStatus() else {
             return
         }
 
-        self.eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
+        eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
             guard
                 cgEvent.type == .keyDown || cgEvent.type == .keyUp,
                 let event = NSEvent(cgEvent: cgEvent)
@@ -44,31 +44,31 @@ class KeybindMonitor {
                 KeybindMonitor.shared.pressedKeys.insert(event.keyCode.baseKey)
             }
 
-             // Special events such as the emoji key
-             if self.specialEvents.contains(event.keyCode.baseKey) {
-                 if self.canPassthroughSpecialEvents {
-                     return Unmanaged.passUnretained(cgEvent)
-                 }
-                 return nil
-             }
+            // Special events such as the emoji key
+            if self.specialEvents.contains(event.keyCode.baseKey) {
+                if self.canPassthroughSpecialEvents {
+                    return Unmanaged.passUnretained(cgEvent)
+                }
+                return nil
+            }
 
             // If this is a valid event, don't passthrough
             if self.performKeybind(event: event) {
                 return nil
             }
 
-             // If this wasn't, check if it was a system keybind (ex. screenshot), and
-             // in that case, passthrough and foce-close Loop
-             if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
-                 Notification.Name.forceCloseLoop.post()
-                 print("Detected system keybind, closing!")
-                 return Unmanaged.passUnretained(cgEvent)
-             }
+            // If this wasn't, check if it was a system keybind (ex. screenshot), and
+            // in that case, passthrough and foce-close Loop
+            if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
+                Notification.Name.forceCloseLoop.post()
+                print("Detected system keybind, closing!")
+                return Unmanaged.passUnretained(cgEvent)
+            }
 
             return Unmanaged.passUnretained(cgEvent)
         }
 
-        self.flagsEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
+        flagsEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
             if cgEvent.type == .flagsChanged,
                let event = NSEvent(cgEvent: cgEvent),
                !Defaults[.triggerKey].contains(where: { $0.baseModifier == event.keyCode.baseModifier }) {
@@ -82,19 +82,19 @@ class KeybindMonitor {
             return Unmanaged.passUnretained(cgEvent)
         }
 
-        self.eventMonitor!.start()
-        self.flagsEventMonitor!.start()
+        eventMonitor!.start()
+        flagsEventMonitor!.start()
     }
 
     func stop() {
-        self.resetPressedKeys()
-        self.canPassthroughSpecialEvents = true
+        resetPressedKeys()
+        canPassthroughSpecialEvents = true
 
-        self.eventMonitor?.stop()
-        self.eventMonitor = nil
+        eventMonitor?.stop()
+        eventMonitor = nil
 
-        self.flagsEventMonitor?.stop()
-        self.flagsEventMonitor = nil
+        flagsEventMonitor?.stop()
+        flagsEventMonitor = nil
     }
 
     @discardableResult

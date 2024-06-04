@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2023-09-11.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 struct TriggerKeycorder: View {
     @EnvironmentObject private var model: KeybindingsConfigurationModel
@@ -31,22 +31,22 @@ struct TriggerKeycorder: View {
     var body: some View {
         HStack {
             Button {
-                guard !self.isActive else { return }
-                self.startObservingKeys()
+                guard !isActive else { return }
+                startObservingKeys()
             } label: {
-                if self.selectionKey.isEmpty {
-                    Text(self.isActive ? "Set a trigger key…" : "None")
+                if selectionKey.isEmpty {
+                    Text(isActive ? "Set a trigger key…" : "None")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .fixedSize(horizontal: true, vertical: false)
                 } else {
                     HStack(spacing: 12) {
-                        ForEach(self.selectionKey.sorted(), id: \.self) { key in
+                        ForEach(selectionKey.sorted(), id: \.self) { key in
                             // swiftlint:disable:next line_length
                             Text("\(key.isOnRightSide ? String(localized: .init("Right", defaultValue: "Right")) : String(localized: .init("Left", defaultValue: "Left"))) \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .fixedSize(horizontal: true, vertical: false)
 
-                            if key != self.selectionKey.sorted().last {
+                            if key != selectionKey.sorted().last {
                                 Divider()
                                     .padding(1)
                             }
@@ -54,7 +54,7 @@ struct TriggerKeycorder: View {
                     }
                 }
             }
-            .modifier(ShakeEffect(shakes: self.shouldShake ? 2 : 0))
+            .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))
             .animation(Animation.default, value: shouldShake)
             .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
                 Text("You can only use up to \(keyLimit) keys in your trigger key.")
@@ -62,16 +62,16 @@ struct TriggerKeycorder: View {
                     .padding(8)
             }
             .onHover { hovering in
-                self.isHovering = hovering
+                isHovering = hovering
             }
             .onChange(of: model.currentEventMonitor) { _ in
-                if model.currentEventMonitor != self.eventMonitor {
-                    self.finishedObservingKeys(wasForced: true)
+                if model.currentEventMonitor != eventMonitor {
+                    finishedObservingKeys(wasForced: true)
                 }
             }
-            .onChange(of: self.validCurrentKey) { _ in
-                if self.selectionKey != self.validCurrentKey {
-                    self.selectionKey = self.validCurrentKey
+            .onChange(of: validCurrentKey) { _ in
+                if selectionKey != validCurrentKey {
+                    selectionKey = validCurrentKey
                 }
             }
 
@@ -81,8 +81,8 @@ struct TriggerKeycorder: View {
             Spacer()
 
             Button("Change") {
-                guard !self.isActive else { return }
-                self.startObservingKeys()
+                guard !isActive else { return }
+                startObservingKeys()
             }
             .buttonStyle(LuminareCompactButtonStyle())
             .fixedSize()
@@ -90,67 +90,67 @@ struct TriggerKeycorder: View {
     }
 
     func startObservingKeys() {
-        self.selectionKey = []
-        self.isActive = true
+        selectionKey = []
+        isActive = true
 
         // So that if doesn't interfere with the key detection here
         AppDelegate.loopManager.setFlagsObservers(scope: .global)
 
-        self.eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
+        eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
-            if event.type == .keyDown && event.keyCode == CGKeyCode.kVK_Escape {
+            if event.type == .keyDown, event.keyCode == CGKeyCode.kVK_Escape {
                 finishedObservingKeys(wasForced: true)
             }
 
             if CGKeyCode.keyToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
-                self.selectionKey.insert(event.keyCode)
+                selectionKey.insert(event.keyCode)
             }
 
             // Backup system in case keys are pressed at the exact same time
             let flags = event.modifierFlags.convertToCGKeyCode()
             if flags.count != selectionKey.count {
                 for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
-                    if !self.selectionKey.map({ $0.baseModifier }).contains(key) {
+                    if !self.selectionKey.map(\.baseModifier).contains(key) {
                         self.selectionKey.insert(key)
                     }
                 }
             }
 
-            if event.modifierFlags.wasKeyUp && !self.selectionKey.isEmpty {
-                self.finishedObservingKeys()
+            if event.modifierFlags.wasKeyUp, !selectionKey.isEmpty {
+                finishedObservingKeys()
                 return
             }
 
-            if !event.modifierFlags.wasKeyUp && self.selectionKey.isEmpty {
-                self.shouldShake.toggle()
+            if !event.modifierFlags.wasKeyUp, selectionKey.isEmpty {
+                shouldShake.toggle()
             }
         }
 
-        self.eventMonitor!.start()
+        eventMonitor!.start()
         model.currentEventMonitor = eventMonitor
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {
         var willSet = !wasForced
 
-        if self.selectionKey.count > self.keyLimit {
+        if selectionKey.count > keyLimit {
             willSet = false
-            self.shouldShake.toggle()
-            self.tooManyKeysPopup = true
+            shouldShake.toggle()
+            tooManyKeysPopup = true
         }
 
-        self.isActive = false
+        isActive = false
 
         if willSet {
             // Set the valid keybind to the current selected one
-            self.validCurrentKey = selectionKey
+            validCurrentKey = selectionKey
         } else {
             // Set preview keybind back to previous one
-            self.selectionKey = self.validCurrentKey
+            selectionKey = validCurrentKey
         }
 
-        self.eventMonitor?.stop()
-        self.eventMonitor = nil
+        eventMonitor?.stop()
+        eventMonitor = nil
         AppDelegate.loopManager.setFlagsObservers(scope: .all)
     }
 }

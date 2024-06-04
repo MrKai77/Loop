@@ -12,7 +12,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(
         _: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
-        withCompletionHandler completionHandler: @escaping () -> Void
+        withCompletionHandler completionHandler: @escaping () -> ()
     ) {
         if response.actionIdentifier == "setIconAction",
            let icon = response.notification.request.content.userInfo["icon"] as? String {
@@ -26,7 +26,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(
         _: UNUserNotificationCenter,
         willPresent _: UNNotification,
-        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> ()
     ) {
         completionHandler([.banner])
     }
@@ -39,7 +39,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 print("User Notification access denied.")
             }
 
-            if let error = error {
+            if let error {
                 print(error)
             }
         }

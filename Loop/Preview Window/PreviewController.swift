@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-01-24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 class PreviewController {
     var controller: NSWindowController?
@@ -49,7 +49,7 @@ class PreviewController {
         self.window = window
 
         if let action = startingAction {
-            self.setAction(to: action)
+            setAction(to: action)
         }
     }
 
@@ -67,14 +67,14 @@ class PreviewController {
 
     func setScreen(to newScreen: NSScreen) {
         guard
-            self.controller != nil,    // Ensures that the preview window is open
-            self.screen != newScreen
+            controller != nil, // Ensures that the preview window is open
+            screen != newScreen
         else {
             return
         }
 
-        self.close()
-        self.open(screen: newScreen, window: self.window)
+        close()
+        open(screen: newScreen, window: window)
 
         print("Changed preview window's screen")
     }
@@ -82,7 +82,7 @@ class PreviewController {
     func setAction(to action: WindowAction) {
         guard
             let windowController = controller,
-            let screen = self.screen,
+            let screen,
             !action.direction.willChangeScreen,
             action.direction != .cycle
         else {
@@ -90,7 +90,7 @@ class PreviewController {
         }
 
         let targetWindowFrame = action.getFrame(
-            window: self.window,
+            window: window,
             bounds: screen.safeScreenFrame
         )
         .flipY(maxY: NSScreen.screens[0].frame.maxY)

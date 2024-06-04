@@ -5,10 +5,10 @@
 //  Created by Kai Azim on 2024-04-26.
 //
 
-import SwiftUI
-import Luminare
-import Defaults
 import Combine
+import Defaults
+import Luminare
+import SwiftUI
 
 class AdvancedConfigurationModel: ObservableObject {
     @Published var animateWindowResizes = Defaults[.animateWindowResizes] {
@@ -16,21 +16,25 @@ class AdvancedConfigurationModel: ObservableObject {
             Defaults[.animateWindowResizes] = animateWindowResizes
         }
     }
+
     @Published var hideUntilDirectionIsChosen = Defaults[.hideUntilDirectionIsChosen] {
         didSet {
             Defaults[.hideUntilDirectionIsChosen] = hideUntilDirectionIsChosen
         }
     }
+
     @Published var disableCursorInteraction = Defaults[.disableCursorInteraction] {
         didSet {
             Defaults[.disableCursorInteraction] = disableCursorInteraction
         }
     }
+
     @Published var hapticFeedback = Defaults[.hapticFeedback] {
         didSet {
             Defaults[.hapticFeedback] = hapticFeedback
         }
     }
+
     @Published var sizeIncrement = Defaults[.sizeIncrement] {
         didSet {
             Defaults[.sizeIncrement] = sizeIncrement
@@ -79,7 +83,7 @@ struct AdvancedConfigurationView: View {
             LuminareToggle("Haptic feedback", isOn: $model.hapticFeedback)
 
             LuminareValueAdjuster(
-                "Size increment",   // Description: Used in size adjustment window actions
+                "Size increment", // Description: Used in size adjustment window actions
                 value: $model.sizeIncrement,
                 sliderRange: 5...50,
                 suffix: "px",

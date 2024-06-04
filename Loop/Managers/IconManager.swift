@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2023-02-14.
 //
 
-import SwiftUI
 import Defaults
 import Luminare
+import SwiftUI
 import UserNotifications
 
 class IconManager {
@@ -23,7 +23,7 @@ class IconManager {
         }
 
         func getName() -> String {
-            if let name = self.name {
+            if let name {
                 return name
             }
 
@@ -53,8 +53,8 @@ class IconManager {
                 localized: .init(
                     "Icon Unlock Message: Holo",
                     defaultValue: """
-You've already looped 25 times! As a reward, here's new icon: \(.init(localized: .init("Icon Name: Holo", defaultValue: "Holo"))). Continue to loop more to unlock new icons!
-"""
+                    You've already looped 25 times! As a reward, here's new icon: \(.init(localized: .init("Icon Name: Holo", defaultValue: "Holo"))). Continue to loop more to unlock new icons!
+                    """
                 )
             )
         ),
@@ -115,8 +115,8 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
                 localized: .init(
                     "Icon Unlock Message: Loop Master",
                     defaultValue: """
-5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!
-"""
+                    5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!
+                    """
                 )
             )
         )
@@ -124,7 +124,7 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
 
     static func returnUnlockedIcons() -> [Icon] {
         var returnValue: [Icon] = []
-        for icon in icons where icon.unlockTime <= Defaults[.timesLooped]/* 541*/ {
+        for icon in icons where icon.unlockTime <= Defaults[.timesLooped] /* 541*/ {
             returnValue.append(icon)
         }
         return returnValue.reversed()
@@ -132,7 +132,7 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
 
     static func setAppIcon(to icon: Icon) {
         Defaults[.currentIcon] = icon.iconName
-        self.refreshCurrentAppIcon()
+        refreshCurrentAppIcon()
         print("Setting app icon to: \(icon.getName())")
     }
 
@@ -180,7 +180,7 @@ You've already looped 25 times! As a reward, here's new icon: \(.init(localized:
     }
 
     static var currentAppIcon: Icon {
-        return icons.first {
+        icons.first {
             $0.iconName == Defaults[.currentIcon]
         } ?? icons.first!
     }

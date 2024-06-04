@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-05-03.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 struct KeybindingItemView: View {
     @Environment(\.hoveringOverLuminareListItem) var isHovering
@@ -66,14 +66,14 @@ struct KeybindingItemView: View {
 
             Spacer()
 
-            if let cycleIndex = cycleIndex {
+            if let cycleIndex {
                 Text("\(cycleIndex)")
                     .frame(width: 27, height: 27)
                     .modifier(LuminareBordered())
             } else {
                 HStack(spacing: 6) {
                     HStack {
-                        ForEach(triggerKey.sorted().compactMap { $0.systemImage }, id: \.self) { image in
+                        ForEach(triggerKey.sorted().compactMap(\.systemImage), id: \.self) { image in
                             Text("\(Image(systemName: image))")
                         }
                     }
@@ -188,7 +188,7 @@ struct WindowDirectionPicker: View, Equatable {
                 .contentShape(.rect)
                 .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox
         }
-        .buttonStyle(PlainButtonStyle())    // Override Luminare button styling
+        .buttonStyle(PlainButtonStyle()) // Override Luminare button styling
     }
 
     func directionPickerItem(_ direction: WindowDirection) -> some View {

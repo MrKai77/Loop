@@ -19,7 +19,7 @@ class WindowDragManager {
     private var leftMouseUpMonitor: EventMonitor?
 
     func addObservers() {
-        self.leftMouseDraggedMonitor = CGEventMonitor(eventMask: .leftMouseDragged) { cgEvent in
+        leftMouseDraggedMonitor = CGEventMonitor(eventMask: .leftMouseDragged) { cgEvent in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
@@ -28,7 +28,6 @@ class WindowDragManager {
             if let window = self.draggingWindow,
                let initialFrame = self.initialWindowFrame,
                self.hasWindowMoved(window.frame, initialFrame) {
-
                 if Defaults[.restoreWindowFrameOnDrag] {
                     self.restoreInitialWindowSize(window)
                 } else {
@@ -49,11 +48,10 @@ class WindowDragManager {
             return Unmanaged.passUnretained(cgEvent)
         }
 
-        self.leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
+        leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
             if let window = self.draggingWindow,
                let initialFrame = self.initialWindowFrame,
                self.hasWindowMoved(window.frame, initialFrame) {
-
                 if Defaults[.windowSnapping] {
                     self.attemptWindowSnap(window)
                 }
@@ -82,14 +80,14 @@ class WindowDragManager {
         }
 
         self.draggingWindow = draggingWindow
-        self.initialWindowFrame = draggingWindow.frame
+        initialWindowFrame = draggingWindow.frame
     }
 
     private func hasWindowMoved(_ windowFrame: CGRect, _ initialFrame: CGRect) -> Bool {
         !initialFrame.topLeftPoint.approximatelyEqual(to: windowFrame.topLeftPoint) &&
-        !initialFrame.topRightPoint.approximatelyEqual(to: windowFrame.topRightPoint) &&
-        !initialFrame.bottomLeftPoint.approximatelyEqual(to: windowFrame.bottomLeftPoint) &&
-        !initialFrame.bottomRightPoint.approximatelyEqual(to: windowFrame.bottomRightPoint)
+            !initialFrame.topRightPoint.approximatelyEqual(to: windowFrame.topRightPoint) &&
+            !initialFrame.bottomLeftPoint.approximatelyEqual(to: windowFrame.bottomLeftPoint) &&
+            !initialFrame.bottomRightPoint.approximatelyEqual(to: windowFrame.bottomRightPoint)
     }
 
     private func restoreInitialWindowSize(_ window: Window) {
@@ -132,7 +130,7 @@ class WindowDragManager {
         let mousePosition = NSEvent.mouseLocation.flipY(maxY: screen.frame.maxY)
         let screenFrame = screen.frame.flipY(maxY: screen.frame.maxY)
 
-        self.previewController.setScreen(to: screen)
+        previewController.setScreen(to: screen)
 
         let insets: CGFloat = 2
         let topInset = screen.menubarHeight / 2
@@ -143,19 +141,19 @@ class WindowDragManager {
         ignoredFrame.origin.y += topInset
         ignoredFrame.size.height -= insets + topInset
 
-        let oldDirection = self.direction
+        let oldDirection = direction
 
         if !ignoredFrame.contains(mousePosition) {
-            self.direction = WindowDirection.processSnap(
+            direction = WindowDirection.processSnap(
                 mouseLocation: mousePosition,
-                currentDirection: self.direction,
+                currentDirection: direction,
                 screenFrame: screenFrame,
                 ignoredFrame: ignoredFrame
             )
 
             print("Window snapping direction changed: \(direction)")
 
-            self.previewController.open(screen: screen, window: nil)
+            previewController.open(screen: screen, window: nil)
 
             DispatchQueue.main.async {
                 NotificationCenter.default.post(
@@ -165,11 +163,11 @@ class WindowDragManager {
                 )
             }
         } else {
-            self.direction = .noAction
-            self.previewController.close()
+            direction = .noAction
+            previewController.close()
         }
 
-        if self.direction != oldDirection {
+        if direction != oldDirection {
             if Defaults[.hapticFeedback] {
                 NSHapticFeedbackManager.defaultPerformer.perform(
                     NSHapticFeedbackManager.FeedbackPattern.alignment,

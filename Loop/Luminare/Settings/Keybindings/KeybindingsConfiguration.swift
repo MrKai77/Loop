@@ -5,31 +5,35 @@
 //  Created by Kai Azim on 2024-04-20.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
-class  KeybindingsConfigurationModel: ObservableObject {
+class KeybindingsConfigurationModel: ObservableObject {
     @Published var triggerKey = Defaults[.triggerKey] {
         didSet {
             Defaults[.triggerKey] = triggerKey
         }
     }
+
     @Published var triggerDelay = Defaults[.triggerDelay] {
         didSet {
             Defaults[.triggerDelay] = triggerDelay
         }
     }
+
     @Published var doubleClickToTrigger = Defaults[.doubleClickToTrigger] {
         didSet {
             Defaults[.doubleClickToTrigger] = doubleClickToTrigger
         }
     }
+
     @Published var middleClickTriggersLoop = Defaults[.middleClickTriggersLoop] {
         didSet {
             Defaults[.middleClickTriggersLoop] = middleClickTriggersLoop
         }
     }
+
     @Published var keybinds = Defaults[.keybinds] {
         didSet {
             Defaults[.keybinds] = keybinds

@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-04-19.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 struct PaddingConfigurationView: View {
     @State var paddingModel = Defaults[.padding]
@@ -40,9 +40,9 @@ struct PaddingConfigurationView: View {
             }
             .buttonStyle(LuminareCompactButtonStyle())
         }
-        .onChange(of: self.paddingModel) { _ in
+        .onChange(of: paddingModel) { _ in
             // This fixes some weird animations.
-            Defaults[.padding] = self.paddingModel
+            Defaults[.padding] = paddingModel
         }
     }
 

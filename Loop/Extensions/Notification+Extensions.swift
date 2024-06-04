@@ -16,8 +16,8 @@ extension Notification.Name {
     static let activeStateChanged = Notification.Name("activeStateChanged")
 
     @discardableResult
-    func onReceive(object: Any? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return NotificationCenter.default.addObserver(
+    func onReceive(object: Any? = nil, using: @escaping (Notification) -> ()) -> NSObjectProtocol {
+        NotificationCenter.default.addObserver(
             forName: self,
             object: object,
             queue: .main,

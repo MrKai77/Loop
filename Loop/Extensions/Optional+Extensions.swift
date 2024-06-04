@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension Optional where Wrapped == String {
-    public var bound: String {
+public extension String? {
+    var bound: String {
         get {
-            return self ?? ""
+            self ?? ""
         }
         set {
             self = newValue.isEmpty ? nil : newValue

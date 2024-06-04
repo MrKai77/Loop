@@ -5,10 +5,10 @@
 //  Created by Kai Azim on 2024-04-19.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
 import ServiceManagement
+import SwiftUI
 
 class BehaviorConfigurationModel: ObservableObject {
     @Published var launchAtLogin = Defaults[.launchAtLogin] {
@@ -22,46 +22,55 @@ class BehaviorConfigurationModel: ObservableObject {
             }
         }
     }
+
     @Published var hideMenuBarIcon = Defaults[.hideMenuBarIcon] {
         didSet {
             Defaults[.hideMenuBarIcon] = hideMenuBarIcon
         }
     }
+
     @Published var animationConfiguration = Defaults[.animationConfiguration] {
         didSet {
             Defaults[.animationConfiguration] = animationConfiguration
         }
     }
+
     @Published var windowSnapping = Defaults[.windowSnapping] {
         didSet {
             Defaults[.windowSnapping] = windowSnapping
         }
     }
+
     @Published var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor] {
         didSet {
             Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
         }
     }
+
     @Published var focusWindowOnResize = Defaults[.focusWindowOnResize] {
         didSet {
             Defaults[.focusWindowOnResize] = focusWindowOnResize
         }
     }
+
     @Published var restoreWindowFrameOnDrag = Defaults[.restoreWindowFrameOnDrag] {
         didSet {
             Defaults[.restoreWindowFrameOnDrag] = restoreWindowFrameOnDrag
         }
     }
+
     @Published var enablePadding = Defaults[.enablePadding] {
         didSet {
             Defaults[.enablePadding] = enablePadding
         }
     }
+
     @Published var respectStageManager = Defaults[.respectStageManager] {
         didSet {
             Defaults[.respectStageManager] = respectStageManager
         }
     }
+
     @Published var stageStripSize = Defaults[.stageStripSize] {
         didSet {
             Defaults[.stageStripSize] = stageStripSize

@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2024-05-28.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct LuminarePreviewView: View {
     @State var action: WindowAction = .init(.topHalf)
@@ -25,8 +25,8 @@ struct LuminarePreviewView: View {
     @Default(.useGradient) var useGradient
     @Default(.gradientColor) var gradientColor
 
-    @State var primaryColor: Color = Color.getLoopAccent(tone: .normal)
-    @State var secondaryColor: Color = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
+    @State var primaryColor: Color = .getLoopAccent(tone: .normal)
+    @State var secondaryColor: Color = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
     @State var isActive: Bool = true
 
     var body: some View {
@@ -59,7 +59,6 @@ struct LuminarePreviewView: View {
             .padding(previewPadding + previewBorderThickness / 2)
             .frame(width: actionRect.width, height: actionRect.height)
             .offset(x: actionRect.minX, y: actionRect.minY)
-
             .scaleEffect(CGSize(width: scale, height: scale))
             .onAppear {
                 actionRect = action.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
@@ -68,10 +67,10 @@ struct LuminarePreviewView: View {
                     .interpolatingSpring(
                         duration: 0.2,
                         bounce: 0.1,
-                        initialVelocity: 1/2
+                        initialVelocity: 1 / 2
                     )
                 ) {
-                    self.scale = 1
+                    scale = 1
                 }
             }
             .onReceive(timer) { _ in
@@ -92,7 +91,7 @@ struct LuminarePreviewView: View {
         }
         .onReceive(.activeStateChanged) { notif in
             if let active = notif.object as? Bool {
-                self.isActive = active
+                isActive = active
             }
         }
     }

@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-05-03.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 struct CycleActionConfigurationView: View {
     @Binding var windowAction: WindowAction
@@ -56,7 +56,7 @@ struct CycleActionConfigurationView: View {
                     action.cycle = []
                 }
 
-                self.action.cycle?.insert(.init(.noAction), at: 0)
+                action.cycle?.insert(.init(.noAction), at: 0)
             },
             content: { item in
                 KeybindingItemView(

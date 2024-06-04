@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-04-19.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 class RadialMenuConfigurationModel: ObservableObject {
     @Published var radialMenuVisibility = Defaults[.radialMenuVisibility] {
@@ -15,11 +15,13 @@ class RadialMenuConfigurationModel: ObservableObject {
             Defaults[.radialMenuVisibility] = radialMenuVisibility
         }
     }
+
     @Published var disableCursorInteraction = Defaults[.disableCursorInteraction] {
         didSet {
             Defaults[.disableCursorInteraction] = disableCursorInteraction
         }
     }
+
     @Published var radialMenuCornerRadius = Defaults[.radialMenuCornerRadius] {
         didSet {
             Defaults[.radialMenuCornerRadius] = radialMenuCornerRadius
@@ -29,6 +31,7 @@ class RadialMenuConfigurationModel: ObservableObject {
             }
         }
     }
+
     @Published var radialMenuThickness = Defaults[.radialMenuThickness] {
         didSet {
             Defaults[.radialMenuThickness] = radialMenuThickness

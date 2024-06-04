@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-06-14.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 // Enum that stores all possible resizing options
 // swiftlint:disable:next type_body_length
@@ -79,30 +79,39 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var general: [WindowDirection] {
         [.fullscreen, .maximize, .almostMaximize, .center, .macOSCenter, .minimize, .hide]
     }
+
     static var halves: [WindowDirection] {
         [.topHalf, .bottomHalf, .leftHalf, .rightHalf]
     }
+
     static var quarters: [WindowDirection] {
         [.topLeftQuarter, .topRightQuarter, .bottomLeftQuarter, .bottomRightQuarter]
     }
+
     static var horizontalThirds: [WindowDirection] {
         [.rightThird, .rightTwoThirds, .horizontalCenterThird, .leftTwoThirds, .leftThird]
     }
+
     static var verticalThirds: [WindowDirection] {
         [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird]
     }
+
     static var screenSwitching: [WindowDirection] {
         [.nextScreen, .previousScreen]
     }
+
     static var sizeAdjustment: [WindowDirection] {
         [.larger, .smaller]
     }
+
     static var shrink: [WindowDirection] {
         [.shrinkTop, .shrinkBottom, .shrinkRight, .shrinkLeft]
     }
+
     static var grow: [WindowDirection] {
         [.growTop, .growBottom, .growRight, .growLeft]
     }
+
     static var more: [WindowDirection] {
         [.initialFrame, .undo, .custom, .cycle]
     }
@@ -188,10 +197,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         ]
 
         if noAngleActions.contains(self) ||
-           self.willChangeScreen ||
-           self.willAdjustSize ||
-           self.willShrink ||
-           self.willGrow {
+            willChangeScreen ||
+            willAdjustSize ||
+            willShrink ||
+            willGrow {
             return false
         }
         return true
@@ -238,10 +247,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         let maxY = screenFrame.maxY
         let height = screenFrame.height
 
-        if mouseY < maxY - (height  * 7/8) {
+        if mouseY < maxY - (height * 7 / 8) {
             return .topLeftQuarter
         }
-        if mouseY > maxY - (height  * 1/8) {
+        if mouseY > maxY - (height * 1 / 8) {
             return .bottomLeftQuarter
         }
         return .leftHalf
@@ -255,10 +264,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         let maxY = screenFrame.maxY
         let height = screenFrame.height
 
-        if mouseY < maxY - (height  * 7/8) {
+        if mouseY < maxY - (height * 7 / 8) {
             return .topRightQuarter
         }
-        if mouseY > maxY - (height  * 1/8) {
+        if mouseY > maxY - (height * 1 / 8) {
             return .bottomRightQuarter
         }
         return .rightHalf
@@ -272,7 +281,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         let maxX = screenFrame.maxX
         let width = screenFrame.width
 
-        if mouseX < maxX - (width * 4/5) || mouseX > maxX - (width * 1/5) {
+        if mouseX < maxX - (width * 4 / 5) || mouseX > maxX - (width * 1 / 5) {
             return .topHalf
         }
         return .maximize
@@ -289,9 +298,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         let maxX = screenFrame.maxX
         let width = screenFrame.width
 
-        if mouseX < maxX - (width * 2/3) {
+        if mouseX < maxX - (width * 2 / 3) {
             newDirection = .leftThird
-        } else if mouseX > maxX - (width * 1/3) {
+        } else if mouseX > maxX - (width * 1 / 3) {
             newDirection = .rightThird
         } else {
             // mouse is within 1/3 and 2/3 of the screen's width
@@ -312,53 +321,53 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .maximize:
             CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
         case .almostMaximize:
-            CGRect(x: 0.5/10.0, y: 0.5/10.0, width: 9.0/10.0, height: 9.0/10.0)
+            CGRect(x: 0.5 / 10.0, y: 0.5 / 10.0, width: 9.0 / 10.0, height: 9.0 / 10.0)
         case .fullscreen:
             CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
 
         // Halves
         case .topHalf:
-            CGRect(x: 0, y: 0, width: 1.0, height: 1.0/2.0)
+            CGRect(x: 0, y: 0, width: 1.0, height: 1.0 / 2.0)
         case .rightHalf:
-            CGRect(x: 1.0/2.0, y: 0, width: 1.0/2.0, height: 1.0)
+            CGRect(x: 1.0 / 2.0, y: 0, width: 1.0 / 2.0, height: 1.0)
         case .bottomHalf:
-            CGRect(x: 0, y: 1.0/2.0, width: 1.0, height: 1.0/2.0)
+            CGRect(x: 0, y: 1.0 / 2.0, width: 1.0, height: 1.0 / 2.0)
         case .leftHalf:
-            CGRect(x: 0, y: 0, width: 1.0/2.0, height: 1.0)
+            CGRect(x: 0, y: 0, width: 1.0 / 2.0, height: 1.0)
 
         // Quarters
         case .topLeftQuarter:
-            CGRect(x: 0, y: 0, width: 1.0/2.0, height: 1.0/2.0)
+            CGRect(x: 0, y: 0, width: 1.0 / 2.0, height: 1.0 / 2.0)
         case .topRightQuarter:
-            CGRect(x: 1.0/2.0, y: 0, width: 1.0/2.0, height: 1.0/2.0)
+            CGRect(x: 1.0 / 2.0, y: 0, width: 1.0 / 2.0, height: 1.0 / 2.0)
         case .bottomRightQuarter:
-            CGRect(x: 1.0/2.0, y: 1.0/2.0, width: 1.0/2.0, height: 1.0/2.0)
+            CGRect(x: 1.0 / 2.0, y: 1.0 / 2.0, width: 1.0 / 2.0, height: 1.0 / 2.0)
         case .bottomLeftQuarter:
-            CGRect(x: 0, y: 1.0/2.0, width: 1.0/2.0, height: 1.0/2.0)
+            CGRect(x: 0, y: 1.0 / 2.0, width: 1.0 / 2.0, height: 1.0 / 2.0)
 
         // Thirds (Horizontal)
         case .rightThird:
-            CGRect(x: 2.0/3.0, y: 0, width: 1.0/3.0, height: 1.0)
+            CGRect(x: 2.0 / 3.0, y: 0, width: 1.0 / 3.0, height: 1.0)
         case .rightTwoThirds:
-            CGRect(x: 1.0/3.0, y: 0, width: 2.0/3.0, height: 1.0)
+            CGRect(x: 1.0 / 3.0, y: 0, width: 2.0 / 3.0, height: 1.0)
         case .horizontalCenterThird:
-            CGRect(x: 1.0/3.0, y: 0, width: 1.0/3.0, height: 1.0)
+            CGRect(x: 1.0 / 3.0, y: 0, width: 1.0 / 3.0, height: 1.0)
         case .leftThird:
-            CGRect(x: 0, y: 0, width: 1.0/3.0, height: 1.0)
+            CGRect(x: 0, y: 0, width: 1.0 / 3.0, height: 1.0)
         case .leftTwoThirds:
-            CGRect(x: 0, y: 0, width: 2.0/3.0, height: 1.0)
+            CGRect(x: 0, y: 0, width: 2.0 / 3.0, height: 1.0)
 
         // Thirds (Vertical)
         case .topThird:
-            CGRect(x: 0, y: 0, width: 1.0, height: 1.0/3.0)
+            CGRect(x: 0, y: 0, width: 1.0, height: 1.0 / 3.0)
         case .topTwoThirds:
-            CGRect(x: 0, y: 0, width: 1.0, height: 2.0/3.0)
+            CGRect(x: 0, y: 0, width: 1.0, height: 2.0 / 3.0)
         case .verticalCenterThird:
-            CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 1.0/3.0)
+            CGRect(x: 0, y: 1.0 / 3.0, width: 1.0, height: 1.0 / 3.0)
         case .bottomThird:
-            CGRect(x: 0, y: 2.0/3.0, width: 1.0, height: 1.0/3.0)
+            CGRect(x: 0, y: 2.0 / 3.0, width: 1.0, height: 1.0 / 3.0)
         case .bottomTwoThirds:
-            CGRect(x: 0, y: 1.0/3.0, width: 1.0, height: 2.0/3.0)
+            CGRect(x: 0, y: 1.0 / 3.0, width: 1.0, height: 2.0 / 3.0)
         default:
             nil
         }

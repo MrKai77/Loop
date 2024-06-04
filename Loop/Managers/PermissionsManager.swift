@@ -1,12 +1,12 @@
 //
-//  AccessibilityAccessManager.swift
+//  PermissionsManager.swift
 //  Loop
 //
 //  Created by Kai Azim on 2023-04-08.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 class AccessibilityManager {
     static func getStatus() -> Bool {

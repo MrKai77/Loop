@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-04-26.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 class AboutConfigurationModel: ObservableObject {
     let currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here

@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2024-03-22.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 extension WindowAction {
     private struct SavedWindowActionFormat: Codable {
@@ -14,6 +14,7 @@ extension WindowAction {
         var keybind: Set<CGKeyCode>
 
         // MARK: CUSTOM KEYBINDS
+
         var name: String?
         var unit: CustomWindowActionUnit?
         var anchor: CustomWindowActionAnchor?
@@ -27,7 +28,7 @@ extension WindowAction {
         var cycle: [SavedWindowActionFormat]?
 
         func convertToWindowAction() -> WindowAction {
-            return WindowAction(
+            WindowAction(
                 direction,
                 keybind: keybind,
                 name: name,
@@ -177,7 +178,7 @@ extension WindowAction {
         }
     }
 
-    private static func showAlertForImportDecision(completion: @escaping (ImportDecision) -> Void) {
+    private static func showAlertForImportDecision(completion: @escaping (ImportDecision) -> ()) {
         let alert = NSAlert()
         alert.messageText = "Import Keybinds"
         alert.informativeText = "Do you want to merge or erase existing keybinds?"
@@ -188,7 +189,7 @@ extension WindowAction {
 
         alert.beginSheetModal(for: NSApplication.shared.mainWindow!) { response in
             switch response {
-            case .alertFirstButtonReturn:  // Merge
+            case .alertFirstButtonReturn: // Merge
                 completion(.merge)
             case .alertSecondButtonReturn: // Erase
                 completion(.erase)

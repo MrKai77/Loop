@@ -22,7 +22,7 @@ enum CustomWindowActionSizeMode: Int, Codable, CaseIterable, Identifiable {
         case .preserveSize:
             Text("\(Image(systemName: "lock.rectangle")) Preserve Size")
         case .initialSize:
-            Text("\( Image("custom.backward.end.alt.fill.2.rectangle")) Initial Size")
+            Text("\(Image("custom.backward.end.alt.fill.2.rectangle")) Initial Size")
         }
     }
 

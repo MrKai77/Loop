@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-11-30.
 //
 
-import SwiftUI
 import Sparkle
+import SwiftUI
 
 struct SettingsView: View {
     @State var currentSettingsTab = SettingsTab.general

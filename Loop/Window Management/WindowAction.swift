@@ -1,12 +1,12 @@
 //
-//  Keybind.swift
+//  WindowAction.swift
 //  Loop
 //
 //  Created by Kai Azim on 2023-10-28.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
     var id: UUID
@@ -52,6 +52,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     var keybind: Set<CGKeyCode>
 
     // MARK: CUSTOM KEYBINDS
+
     var name: String?
     var unit: CustomWindowActionUnit?
     var anchor: CustomWindowActionAnchor?
@@ -129,7 +130,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 
     func getFrame(window: Window?, bounds: CGRect, toScale: Bool = true) -> CGRect {
-        guard self.direction != .cycle, self.direction != .noAction else {
+        guard direction != .cycle, direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
         var bounds = bounds
@@ -148,7 +149,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         } else if direction.willAdjustSize {
             var frameToResizeFrom = LoopManager.lastTargetFrame
-            if !Defaults[.previewVisibility], let window = window {
+            if !Defaults[.previewVisibility], let window {
                 frameToResizeFrom = window.frame
             }
 
@@ -159,7 +160,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         } else if direction.willShrink || direction.willGrow {
             var frameToResizeFrom = LoopManager.lastTargetFrame
-            if !Defaults[.previewVisibility], let window = window {
+            if !Defaults[.previewVisibility], let window {
                 frameToResizeFrom = window.frame
             }
 
@@ -182,7 +183,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
 
-        } else if direction == .center, let window = window {
+        } else if direction == .center, let window {
             let windowSize = window.size
             result = CGRect(
                 origin: CGPoint(
@@ -192,7 +193,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 size: windowSize
             )
 
-        } else if direction == .macOSCenter, let window = window {
+        } else if direction == .macOSCenter, let window {
             let windowSize = window.size
             let yOffset = WindowEngine.getMacOSCenterYOffset(
                 windowSize.height,
@@ -206,7 +207,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 ),
                 size: windowSize
             )
-        } else if direction == .undo, let window = window {
+        } else if direction == .undo, let window {
             if let previousAction = WindowRecords.getLastAction(for: window) {
                 print("Last action was \(previousAction.direction) (name: \(previousAction.name ?? "nil"))")
                 result = previousAction.getFrame(window: window, bounds: bounds)
@@ -215,7 +216,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 result = window.frame
             }
 
-        } else if direction == .initialFrame, let window = window {
+        } else if direction == .initialFrame, let window {
             if let initialFrame = WindowRecords.getInitialFrame(for: window) {
                 result = initialFrame
             } else {
@@ -225,8 +226,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         if toScale {
-            if direction != .undo && direction != .initialFrame {
-                result = self.applyPadding(result, bounds)
+            if direction != .undo, direction != .initialFrame {
+                result = applyPadding(result, bounds)
             }
 
             LoopManager.lastTargetFrame = result
@@ -239,25 +240,25 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         // SIZE
-        if let sizeMode, sizeMode == .preserveSize, let window = window {
+        if let sizeMode, sizeMode == .preserveSize, let window {
             result.size = window.size
 
-        } else if let sizeMode, sizeMode == .initialSize, let window = window {
+        } else if let sizeMode, sizeMode == .initialSize, let window {
             if let initialFrame = WindowRecords.getInitialFrame(for: window) {
                 result.size = initialFrame.size
             }
 
-        } else {    // sizeMode would be custom
+        } else { // sizeMode would be custom
             switch unit {
             case .pixels:
                 result.size.width = width ?? result.size.width
                 result.size.height = height ?? result.size.height
             default:
-                if let width = width {
+                if let width {
                     result.size.width = bounds.width * (width / 100.0)
                 }
 
-                if let height = height {
+                if let height {
                     result.size.height = bounds.height * (height / 100.0)
                 }
             }
@@ -271,15 +272,15 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 result.origin.x += xPoint ?? .zero
                 result.origin.y += yPoint ?? .zero
             default:
-                if let xPoint = xPoint {
+                if let xPoint {
                     result.origin.x += bounds.width * (xPoint / 100.0)
                 }
 
-                if let yPoint = yPoint {
+                if let yPoint {
                     result.origin.y += bounds.width * (yPoint / 100.0)
                 }
             }
-        } else {    // positionMode would be generic
+        } else { // positionMode would be generic
             switch anchor {
             case .top:
                 result.origin.x = bounds.midX - result.width / 2

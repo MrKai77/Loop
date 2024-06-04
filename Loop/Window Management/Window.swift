@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-09-01.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 @_silgen_name("_AXUIElementGetWindow") @discardableResult
 func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError
@@ -72,7 +72,7 @@ class Window {
     }
 
     var title: String? {
-        return self.axWindow.getValue(.title) as? String
+        self.axWindow.getValue(.title) as? String
     }
 
     var enhancedUserInterface: Bool? {
@@ -83,7 +83,7 @@ class Window {
         }
         set {
             guard
-                let newValue = newValue,
+                let newValue,
                 let pid = self.getPid()
             else {
                 return
@@ -112,10 +112,12 @@ class Window {
         let result = self.axWindow.getValue(.fullScreen) as? NSNumber
         return result?.boolValue ?? false
     }
+
     @discardableResult
     func setFullscreen(_ state: Bool) -> Bool {
-        return self.axWindow.setValue(.fullScreen, value: state)
+        self.axWindow.setValue(.fullScreen, value: state)
     }
+
     @discardableResult
     func toggleFullscreen() -> Bool {
         if !self.isFullscreen {
@@ -125,8 +127,9 @@ class Window {
     }
 
     var isHidden: Bool {
-        return self.nsRunningApplication?.isHidden ?? false
+        self.nsRunningApplication?.isHidden ?? false
     }
+
     @discardableResult
     func setHidden(_ state: Bool) -> Bool {
         var result = false
@@ -137,6 +140,7 @@ class Window {
         }
         return result
     }
+
     @discardableResult
     func toggleHidden() -> Bool {
         if !self.isHidden {
@@ -149,10 +153,12 @@ class Window {
         let result = self.axWindow.getValue(.minimized) as? NSNumber
         return result?.boolValue ?? false
     }
+
     @discardableResult
     func setMinimized(_ state: Bool) -> Bool {
-        return self.axWindow.setValue(.minimized, value: state)
+        self.axWindow.setValue(.minimized, value: state)
     }
+
     @discardableResult
     func toggleMinimized() -> Bool {
         if !self.isMinimized {
@@ -165,30 +171,32 @@ class Window {
         var point: CGPoint = .zero
         guard let value = self.axWindow.getValue(.position) else { return point }
         // swiftlint:disable force_cast
-        AXValueGetValue(value as! AXValue, .cgPoint, &point)    // Convert to CGPoint
+        AXValueGetValue(value as! AXValue, .cgPoint, &point) // Convert to CGPoint
         // swiftlint:enable force_cast
         return point
     }
+
     @discardableResult
     func setPosition(_ position: CGPoint) -> Bool {
-        return self.axWindow.setValue(.position, value: position)
+        self.axWindow.setValue(.position, value: position)
     }
 
     var size: CGSize {
         var size: CGSize = .zero
         guard let value = self.axWindow.getValue(.size) else { return size }
         // swiftlint:disable force_cast
-        AXValueGetValue(value as! AXValue, .cgSize, &size)      // Convert to CGSize
+        AXValueGetValue(value as! AXValue, .cgSize, &size) // Convert to CGSize
         // swiftlint:enable force_cast
         return size
     }
+
     @discardableResult
     func setSize(_ size: CGSize) -> Bool {
-        return self.axWindow.setValue(.size, value: size)
+        self.axWindow.setValue(.size, value: size)
     }
 
     var frame: CGRect {
-        return CGRect(origin: self.position, size: self.size)
+        CGRect(origin: self.position, size: self.size)
     }
 
     func setFrame(
@@ -196,7 +204,7 @@ class Window {
         animate: Bool = false,
         sizeFirst: Bool = false, // Only does something when window animations are off
         bounds: CGRect = .zero, // Only does something when window animations are on
-        completionHandler: @escaping (() -> Void) = {}
+        completionHandler: @escaping (() -> ()) = {}
     ) {
         let enhancedUI = self.enhancedUserInterface ?? false
 

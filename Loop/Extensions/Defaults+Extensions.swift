@@ -5,12 +5,11 @@
 //  Created by Kai Azim on 2023-06-14.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 // Add variables for default values (which are stored even then the app is closed)
 extension Defaults.Keys {
-
     // Icon
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic")
     static let timesLooped = Key<Int>("timesLooped", default: 0)

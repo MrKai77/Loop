@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-04-27.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 struct CustomActionConfigurationView: View {
     @Binding var windowAction: WindowAction
@@ -52,7 +52,7 @@ struct CustomActionConfigurationView: View {
         self._isPresented = isPresented
         self._action = State(initialValue: action.wrappedValue)
 
-        screenSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
+        self.screenSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
     }
 
     var body: some View {
@@ -148,19 +148,19 @@ struct CustomActionConfigurationView: View {
         }
 
         HStack(spacing: 8) {
-            Button("Preview") { }
+            Button("Preview") {}
                 .onLongPressGesture(
                     minimumDuration: 100.0,
                     maximumDistance: .infinity,
                     pressing: { pressing in
                         if pressing {
                             guard let screen = NSScreen.main else { return }
-                            previewController.open(screen: screen, startingAction: self.action)
+                            previewController.open(screen: screen, startingAction: action)
                         } else {
                             previewController.close()
                         }
                     },
-                    perform: { }
+                    perform: {}
                 )
 
             Button("Close") {
@@ -244,7 +244,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     sliderRange: action.unit == .percentage ?
                         0...100 :
-                        0...(Double(screenSize.width)),
+                        0...Double(screenSize.width),
                     suffix: action.unit?.suffix ?? "",
                     lowerClamp: true
                 )
@@ -264,7 +264,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     sliderRange: action.unit == .percentage ?
                         0...100 :
-                        0...(Double(screenSize.height)),
+                        0...Double(screenSize.height),
                     suffix: action.unit?.suffix ?? "",
                     lowerClamp: true
                 )
@@ -315,7 +315,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     sliderRange: action.unit == .percentage ?
                         0...100 :
-                        0...(Double(screenSize.width)),
+                        0...Double(screenSize.width),
                     suffix: action.unit?.suffix ?? "",
                     lowerClamp: true
                 )
@@ -335,7 +335,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     sliderRange: action.unit == .percentage ?
                         0...100 :
-                        0...(Double(screenSize.width)),
+                        0...Double(screenSize.width),
                     suffix: action.unit?.suffix ?? "",
                     lowerClamp: true
                 )

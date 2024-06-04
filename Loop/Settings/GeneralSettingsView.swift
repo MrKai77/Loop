@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2023-01-24.
 //
 
-import SwiftUI
 import Defaults
 import ServiceManagement
+import SwiftUI
 
 struct GeneralSettingsView: View {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -40,7 +40,7 @@ struct GeneralSettingsView: View {
                     VStack(alignment: .leading) {
                         Text("Loop more to unlock new icons! (You've looped \(timesLooped) times!)")
 
-                        if let iconFooter = iconFooter {
+                        if let iconFooter {
                             Text(iconFooter)
                         }
                     }
@@ -49,11 +49,11 @@ struct GeneralSettingsView: View {
                     .textSelection(.enabled)
                 }
                 .onAppear {
-                    self.iconFooter = IconManager.currentAppIcon.footer
+                    iconFooter = IconManager.currentAppIcon.footer
                 }
-                .onChange(of: self.currentIcon) { _ in
+                .onChange(of: currentIcon) { _ in
                     IconManager.refreshCurrentAppIcon()
-                    self.iconFooter = IconManager.currentAppIcon.footer
+                    iconFooter = IconManager.currentAppIcon.footer
                 }
             }
         }

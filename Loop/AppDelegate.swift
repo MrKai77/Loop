@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-10-05.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             event.paramDescriptor(forKeyword: keyAEPropData)?.enumCodeValue == keyAELaunchedAsLogInItem
     }
 
-    func applicationDidFinishLaunching(_ notification: Notification) {
+    func applicationDidFinishLaunching(_: Notification) {
         // Check & ask for accessibility access
         AccessibilityManager.requestAccess()
         UNUserNotificationCenter.current().delegate = self
@@ -32,7 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.loopManager.start()
         AppDelegate.windowDragManager.addObservers()
 
-        if !self.launchedAsLoginItem {
+        if !launchedAsLoginItem {
             LuminareManager.open()
         } else {
             // Dock icon is usually handled by LuminareManager, but in this case, it is manually set
@@ -42,22 +42,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+    func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
         LuminareManager.fullyClose()
         return false
     }
 
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+    func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
         LuminareManager.open()
         return true
     }
 
-    func applicationWillBecomeActive(_ notification: Notification) {
+    func applicationWillBecomeActive(_: Notification) {
         Notification.Name.activeStateChanged.post(object: true)
         AppDelegate.isActive = true
     }
 
-    func applicationWillResignActive(_ notification: Notification) {
+    func applicationWillResignActive(_: Notification) {
         Notification.Name.activeStateChanged.post(object: false)
         AppDelegate.isActive = false
     }

@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-01-23.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 class RadialMenuController {
     private var controller: NSWindowController?
@@ -42,8 +42,8 @@ class RadialMenuController {
         panel.alphaValue = 0
         panel.setFrameOrigin(
             NSPoint(
-                x: mouseX-windowSize/2,
-                y: mouseY-windowSize/2
+                x: mouseX - windowSize / 2,
+                y: mouseY - windowSize / 2
             )
         )
         panel.orderFrontRegardless()

@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-05-25.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 class ExcludedAppsConfigurationModel: ObservableObject {
     @Published var excludedApps = Defaults[.excludedApps] {

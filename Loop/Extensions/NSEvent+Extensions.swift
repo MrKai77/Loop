@@ -9,6 +9,6 @@ import SwiftUI
 
 extension NSEvent.ModifierFlags {
     var wasKeyUp: Bool {
-        self.rawValue == 256 || self.rawValue == 65792
+        rawValue == 256 || rawValue == 65792
     }
 }

@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-04-19.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 class AccentColorConfigurationModel: ObservableObject {
     @Published var useSystemAccentColor = Defaults[.useSystemAccentColor] {
@@ -15,16 +15,19 @@ class AccentColorConfigurationModel: ObservableObject {
             Defaults[.useSystemAccentColor] = useSystemAccentColor
         }
     }
+
     @Published var useGradient = Defaults[.useGradient] {
         didSet {
             Defaults[.useGradient] = useGradient
         }
     }
+
     @Published var customAccentColor = Defaults[.customAccentColor] {
         didSet {
             Defaults[.customAccentColor] = customAccentColor
         }
     }
+
     @Published var gradientColor = Defaults[.gradientColor] {
         didSet {
             Defaults[.gradientColor] = gradientColor

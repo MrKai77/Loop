@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2024-05-28.
 //
 
-import SwiftUI
 import Defaults
 import Luminare
+import SwiftUI
 
 class LuminareManager {
     static var window: NSWindow? {
