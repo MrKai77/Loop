@@ -10,7 +10,7 @@ import Luminare
 import Defaults
 
 class AboutConfigurationModel: ObservableObject {
-    @Published var currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here
+    let currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here
     @Published var includeDevelopmentVersions = Defaults[.includeDevelopmentVersions] {
         didSet {
             Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
@@ -49,6 +49,15 @@ class AboutConfigurationModel: ObservableObject {
             avatar: .init(string: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png?size=200")!
         )
     ]
+
+    func copyVersionToClipboard() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(
+            "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+            forType: NSPasteboard.PasteboardType.string
+        )
+    }
 }
 
 struct CreditItem: Identifiable {
@@ -75,12 +84,7 @@ struct AboutConfigurationView: View {
     var body: some View {
         LuminareSection {
             Button {
-                let pasteboard = NSPasteboard.general
-                pasteboard.clearContents()
-                pasteboard.setString(
-                    "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
-                    forType: NSPasteboard.PasteboardType.string
-                )
+                model.copyVersionToClipboard()
             } label: {
                 HStack {
                     if let image = NSImage(named: model.currentIcon) {
