@@ -78,6 +78,7 @@
 		A8A583B82BE5A117005F4CB2 /* CycleActionConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */; };
 		A8A583BA2BE5A8D8005F4CB2 /* KeybindingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B92BE5A8D8005F4CB2 /* KeybindingItem.swift */; };
 		A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */; };
+		A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */; };
 		A8C83C6B2C0D1D560024A7A1 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8C83C6A2C0D1D560024A7A1 /* Luminare */; };
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
 		A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */; };
@@ -170,6 +171,7 @@
 		A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleActionConfigurationView.swift; sourceTree = "<group>"; };
 		A8A583B92BE5A8D8005F4CB2 /* KeybindingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingItem.swift; sourceTree = "<group>"; };
 		A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionAnchor.swift; sourceTree = "<group>"; };
+		A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UNNotifications.swift"; sourceTree = "<group>"; };
 		A8C83C672C0D1CDE0024A7A1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Luminare/Package.swift; sourceTree = "<group>"; };
 		A8C83C682C0D1CEA0024A7A1 /* Luminare */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Luminare; path = ../Luminare; sourceTree = "<group>"; };
 		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				A80521312A84878200BF7E22 /* Config.xcconfig */,
 				A8E59C38297F5E9A0064D4BA /* LoopApp.swift */,
 				A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */,
+				A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */,
 				A893D3622BD3298700063510 /* Luminare */,
 				A83EEEB02AD46BAC00F3EA2D /* MenuBar */,
 				A864F4662AA65EC200579738 /* Window Management */,
@@ -665,6 +668,7 @@
 				A8063A732B19891900EAB3D9 /* grid.metal in Sources */,
 				A8063A6E2B19599D00EAB3D9 /* SettingsView.swift in Sources */,
 				A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */,
+				A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */,
 				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
 				A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */,
 				A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */,

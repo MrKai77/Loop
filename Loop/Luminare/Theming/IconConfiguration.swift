@@ -42,9 +42,9 @@ class IconConfigurationModel: ObservableObject {
                 AppDelegate.sendNotification(Bundle.main.appName, notficationBody)
 
                 let areNotificationsEnabled = AppDelegate.areNotificationsEnabled()
-                self.notificationWhenIconUnlocked = areNotificationsEnabled
 
                 if !areNotificationsEnabled {
+                    notificationWhenIconUnlocked = false
                     userDisabledNotificationsAlert()
                 }
             }
