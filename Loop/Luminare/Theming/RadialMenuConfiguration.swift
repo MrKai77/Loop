@@ -23,13 +23,19 @@ class RadialMenuConfigurationModel: ObservableObject {
     @Published var radialMenuCornerRadius = Defaults[.radialMenuCornerRadius] {
         didSet {
             Defaults[.radialMenuCornerRadius] = radialMenuCornerRadius
-            radialMenuThickness = min(radialMenuThickness, radialMenuCornerRadius - 1)
+
+            if radialMenuCornerRadius - 1 < radialMenuThickness {
+                radialMenuThickness = radialMenuCornerRadius - 1
+            }
         }
     }
     @Published var radialMenuThickness = Defaults[.radialMenuThickness] {
         didSet {
             Defaults[.radialMenuThickness] = radialMenuThickness
-            radialMenuCornerRadius = max(radialMenuThickness + 1, radialMenuCornerRadius)
+
+            if radialMenuThickness + 1 > radialMenuCornerRadius {
+                radialMenuCornerRadius = radialMenuThickness + 1
+            }
         }
     }
 }
