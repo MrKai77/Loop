@@ -1,5 +1,5 @@
 {
-  "originHash" : "edd6ef3e5317a6e5635c6eeb9315c76bdeb248b580aac0f37f16faaee11f88c3",
+  "originHash" : "2909a75de254013d7383d477e98afe26e2f79491fcc0b2342bc6453727433192",
   "pins" : [
     {
       "identity" : "defaults",
@@ -8,15 +8,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "38925e3cfacf3fb89a81a35b1cd44fd5a5b7e0fa"
-      }
-    },
-    {
-      "identity" : "luminare",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MrKai77/Luminare",
-      "state" : {
-        "branch" : "main",
-        "revision" : "973736d113da926cd4c748e15e233c71e81b1d0a"
       }
     },
     {

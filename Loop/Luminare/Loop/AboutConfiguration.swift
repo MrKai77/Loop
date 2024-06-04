@@ -1,5 +1,5 @@
 //
-//  AboutConfigurationView.swift
+//  AboutConfiguration.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-04-26.
@@ -9,13 +9,13 @@ import SwiftUI
 import Luminare
 import Defaults
 
-struct AboutConfigurationView: View {
-    @Environment(\.openURL) private var openURL
-
-    @Default(.currentIcon) var currentIcon
-    @Default(.includeDevelopmentVersions) var includeDevelopmentVersions
-
-    @StateObject private var updater = SoftwareUpdater()
+class AboutConfigurationModel: ObservableObject {
+    @Published var currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here
+    @Published var includeDevelopmentVersions = Defaults[.includeDevelopmentVersions] {
+        didSet {
+            Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
+        }
+    }
 
     let credits: [CreditItem] = [
         .init(
@@ -49,22 +49,28 @@ struct AboutConfigurationView: View {
             avatar: .init(string: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png?size=200")!
         )
     ]
+}
 
-    struct CreditItem: Identifiable {
-        var id: String { name }
+struct CreditItem: Identifiable {
+    var id: String { name }
 
-        let name: String
-        let description: LocalizedStringKey?
-        let url: URL
-        let avatar: URL
+    let name: String
+    let description: LocalizedStringKey?
+    let url: URL
+    let avatar: URL
 
-        init(_ name: String, _ description: LocalizedStringKey? = nil, url: URL, avatar: URL) {
-            self.name = name
-            self.description = description
-            self.avatar = avatar
-            self.url = url
-        }
+    init(_ name: String, _ description: LocalizedStringKey? = nil, url: URL, avatar: URL) {
+        self.name = name
+        self.description = description
+        self.avatar = avatar
+        self.url = url
     }
+}
+
+struct AboutConfigurationView: View {
+    @Environment(\.openURL) private var openURL
+    @StateObject private var model = AboutConfigurationModel()
+    @StateObject var updater = SoftwareUpdater()
 
     var body: some View {
         LuminareSection {
@@ -77,7 +83,7 @@ struct AboutConfigurationView: View {
                 )
             } label: {
                 HStack {
-                    if let image = NSImage(named: currentIcon) {
+                    if let image = NSImage(named: model.currentIcon) {
                         Image(nsImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -106,7 +112,7 @@ struct AboutConfigurationView: View {
             }
 
             LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
-            LuminareToggle("Include development versions", isOn: $includeDevelopmentVersions)
+            LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
         }
 
         LuminareSection {
@@ -122,7 +128,7 @@ struct AboutConfigurationView: View {
         }
 
         LuminareSection("Credits") {
-            ForEach(credits) { credit in
+            ForEach(model.credits) { credit in
                 creditsView(credit)
             }
         }

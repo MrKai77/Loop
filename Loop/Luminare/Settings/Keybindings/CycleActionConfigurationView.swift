@@ -4,7 +4,6 @@
 //
 //  Created by Kai Azim on 2024-05-03.
 //
-// Still very WIP, don't use :)
 
 import SwiftUI
 import Luminare
@@ -64,7 +63,7 @@ struct CycleActionConfigurationView: View {
                     item,
                     cycleIndex: action.cycle?.firstIndex(of: item.wrappedValue)
                 )
-                .environmentObject(KeybindsConfigurationData())
+                .environmentObject(KeybindingsConfigurationModel())
             },
             emptyView: {
                 HStack {

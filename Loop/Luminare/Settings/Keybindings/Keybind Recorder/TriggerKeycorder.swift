@@ -10,7 +10,7 @@ import Luminare
 import Defaults
 
 struct TriggerKeycorder: View {
-    @EnvironmentObject private var data: KeybindsConfigurationData
+    @EnvironmentObject private var model: KeybindingsConfigurationModel
 
     let keyLimit: Int = 5
 
@@ -64,8 +64,8 @@ struct TriggerKeycorder: View {
             .onHover { hovering in
                 self.isHovering = hovering
             }
-            .onChange(of: data.eventMonitor) { _ in
-                if data.eventMonitor != self.eventMonitor {
+            .onChange(of: model.currentEventMonitor) { _ in
+                if model.currentEventMonitor != self.eventMonitor {
                     self.finishedObservingKeys(wasForced: true)
                 }
             }
@@ -127,7 +127,7 @@ struct TriggerKeycorder: View {
         }
 
         self.eventMonitor!.start()
-        data.eventMonitor = eventMonitor
+        model.currentEventMonitor = eventMonitor
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {

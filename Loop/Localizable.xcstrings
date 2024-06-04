@@ -2673,7 +2673,7 @@
       }
     },
     "Window Direction/Name: macOS Center" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2685,6 +2685,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOS居中"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: MacOS Center" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "MacOS Center"
           }
         }
       }

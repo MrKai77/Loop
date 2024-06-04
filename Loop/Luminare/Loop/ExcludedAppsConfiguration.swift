@@ -1,5 +1,5 @@
 //
-//  ExcludedAppsConfigurationView.swift
+//  ExcludedAppsConfiguration.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-05-25.
@@ -9,16 +9,49 @@ import SwiftUI
 import Luminare
 import Defaults
 
+class ExcludedAppsConfigurationModel: ObservableObject {
+    @Published var excludedApps = Defaults[.excludedApps] {
+        didSet {
+            Defaults[.excludedApps] = excludedApps
+        }
+    }
+
+    @Published var selectedApps = Set<URL>()
+
+    func showAppChooser() {
+        DispatchQueue.main.async {
+            guard let window = LuminareManager.window else { return }
+            let panel = NSOpenPanel()
+            panel.worksWhenModal = true
+            panel.allowsMultipleSelection = true
+            panel.canChooseDirectories = false
+            panel.canChooseFiles = true
+            panel.allowedContentTypes = [.application]
+            panel.allowsOtherFileTypes = false
+            panel.resolvesAliases = true
+            panel.directoryURL = FileManager.default.urls(for: .applicationDirectory, in: .localDomainMask).first
+            panel.beginSheetModal(for: window) { result in
+                if result == .OK {
+                    let appsToAdd = panel.urls.compactMap { self.excludedApps.contains($0) ? nil : $0 }
+
+                    withAnimation(.smooth(duration: 0.25)) {
+                        self.excludedApps.append(contentsOf: appsToAdd)
+                    }
+                }
+            }
+        }
+    }
+}
+
 struct ExcludedAppsConfigurationView: View {
-    @State var excludedApps = Defaults[.excludedApps]
-    @State private var selectedApps = Set<URL>()
+    @StateObject private var model = ExcludedAppsConfigurationModel()
 
     var body: some View {
         LuminareList(
-            items: $excludedApps,
-            selection: $selectedApps,
+            items: $model.excludedApps,
+            selection: $model.selectedApps,
             addAction: {
-                showAppChooser()
+                model.showAppChooser()
             },
             content: { url in
                 AppView(url: url)
@@ -40,36 +73,6 @@ struct ExcludedAppsConfigurationView: View {
             },
             id: \.self
         )
-        .onChange(of: excludedApps) { _ in
-            Defaults[.excludedApps] = excludedApps
-        }
-        .onAppear {
-            excludedApps = Defaults[.excludedApps]
-        }
-    }
-
-    func showAppChooser() {
-        DispatchQueue.main.async {
-            guard let window = LuminareManager.window else { return }
-            let panel = NSOpenPanel()
-            panel.worksWhenModal = true
-            panel.allowsMultipleSelection = true
-            panel.canChooseDirectories = false
-            panel.canChooseFiles = true
-            panel.allowedContentTypes = [.application]
-            panel.allowsOtherFileTypes = false
-            panel.resolvesAliases = true
-            panel.directoryURL = FileManager.default.urls(for: .applicationDirectory, in: .localDomainMask).first
-            panel.beginSheetModal(for: window) { result in
-                if result == .OK {
-                    let appsToAdd = panel.urls.compactMap { excludedApps.contains($0) ? nil : $0 }
-
-                    withAnimation(.smooth(duration: 0.25)) {
-                        excludedApps.append(contentsOf: appsToAdd)
-                    }
-                }
-            }
-        }
     }
 }
 

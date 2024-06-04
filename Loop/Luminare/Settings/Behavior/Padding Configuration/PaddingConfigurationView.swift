@@ -14,120 +14,139 @@ struct PaddingConfigurationView: View {
     @Binding var isPresented: Bool
 
     var body: some View {
-        ScreenView {
-            PaddingPreviewView($paddingModel)
-        }
+        Group {
+            ScreenView {
+                PaddingPreviewView($paddingModel)
+            }
 
+            LuminareSection {
+                paddingMode()
+
+                if !paddingModel.configureScreenPadding {
+                    nonScreenPaddingConfiguration()
+                } else {
+                    screenSidesPaddingConfiguration()
+                }
+
+                if paddingModel.configureScreenPadding {
+                    screenInsetsPaddingConfiguration()
+                }
+
+                Button("Close") {
+                    isPresented = false
+                }
+                .buttonStyle(LuminareCompactButtonStyle())
+            }
+        }
         .onChange(of: self.paddingModel) { _ in
             // This fixes some weird animations.
             Defaults[.padding] = self.paddingModel
         }
+    }
 
-        LuminareSection {
-            LuminarePicker(
-                elements: [false, true],
-                selection: Binding(
-                    get: {
-                        paddingModel.configureScreenPadding
-                    },
-                    set: { newValue in
-                        withAnimation(.smooth(duration: 0.25)) {
-                            paddingModel.configureScreenPadding = newValue
+    func paddingMode() -> some View {
+        LuminarePicker(
+            elements: [false, true],
+            selection: Binding(
+                get: {
+                    paddingModel.configureScreenPadding
+                },
+                set: { newValue in
+                    withAnimation(.smooth(duration: 0.25)) {
+                        paddingModel.configureScreenPadding = newValue
 
-                            if !paddingModel.configureScreenPadding {
-                                paddingModel.window = 0
-                                paddingModel.top = 0
-                                paddingModel.bottom = 0
-                                paddingModel.right = 0
-                                paddingModel.left = 0
-                            }
+                        if !paddingModel.configureScreenPadding {
+                            paddingModel.window = 0
+                            paddingModel.top = 0
+                            paddingModel.bottom = 0
+                            paddingModel.right = 0
+                            paddingModel.left = 0
                         }
                     }
-                ),
-                columns: 2,
-                roundBottom: false
-            ) { item in
-                Text(item ? "Custom" : "Simple")
-            }
-
-            if !paddingModel.configureScreenPadding {
-                LuminareValueAdjuster(
-                    "Padding",
-                    value: Binding(
-                        get: {
-                            paddingModel.window
-                        },
-                        set: {
-                            paddingModel.window = $0
-                            paddingModel.top = $0
-                            paddingModel.bottom = $0
-                            paddingModel.right = $0
-                            paddingModel.left = $0
-                        }
-                    ),
-                    sliderRange: 0...100,
-                    suffix: "px",
-                    lowerClamp: true
-                )
-            } else {
-                LuminareValueAdjuster(
-                    "Top",
-                    value: $paddingModel.top,
-                    sliderRange: 0...100,
-                    suffix: "px",
-                    lowerClamp: true,
-                    controlSize: .compact
-                )
-                LuminareValueAdjuster(
-                    "Bottom",
-                    value: $paddingModel.bottom,
-                    sliderRange: 0...100,
-                    suffix: "px",
-                    lowerClamp: true,
-                    controlSize: .compact
-                )
-                LuminareValueAdjuster(
-                    "Right",
-                    value: $paddingModel.right,
-                    sliderRange: 0...100,
-                    suffix: "px",
-                    lowerClamp: true,
-                    controlSize: .compact
-                )
-                LuminareValueAdjuster(
-                    "Left",
-                    value: $paddingModel.left,
-                    sliderRange: 0...100,
-                    suffix: "px",
-                    lowerClamp: true,
-                    controlSize: .compact
-                )
-            }
+                }
+            ),
+            columns: 2,
+            roundBottom: false
+        ) { item in
+            Text(item ? "Custom" : "Simple")
         }
+    }
 
-        if paddingModel.configureScreenPadding {
-            LuminareSection {
-                LuminareValueAdjuster(
-                    "Window gaps",
-                    value: $paddingModel.window,
-                    sliderRange: 0...100,
-                    suffix: "px",
-                    lowerClamp: true
-                )
-                LuminareValueAdjuster(
-                    "External bar",
-                    info: .init("Use this if you are using a custom menubar."),
-                    value: $paddingModel.externalBar,
-                    sliderRange: 0...100,
-                    suffix: "px",
-                    lowerClamp: true
-                )
-            }
-        }
+    func nonScreenPaddingConfiguration() -> some View {
+        LuminareValueAdjuster(
+            "Padding",
+            value: Binding(
+                get: {
+                    paddingModel.window
+                },
+                set: {
+                    paddingModel.window = $0
+                    paddingModel.top = $0
+                    paddingModel.bottom = $0
+                    paddingModel.right = $0
+                    paddingModel.left = $0
+                }
+            ),
+            sliderRange: 0...100,
+            suffix: "px",
+            lowerClamp: true
+        )
+    }
 
-        Button("Close") {
-            isPresented = false
+    func screenSidesPaddingConfiguration() -> some View {
+        Group {
+            LuminareValueAdjuster(
+                "Top",
+                value: $paddingModel.top,
+                sliderRange: 0...100,
+                suffix: "px",
+                lowerClamp: true,
+                controlSize: .compact
+            )
+            LuminareValueAdjuster(
+                "Bottom",
+                value: $paddingModel.bottom,
+                sliderRange: 0...100,
+                suffix: "px",
+                lowerClamp: true,
+                controlSize: .compact
+            )
+            LuminareValueAdjuster(
+                "Right",
+                value: $paddingModel.right,
+                sliderRange: 0...100,
+                suffix: "px",
+                lowerClamp: true,
+                controlSize: .compact
+            )
+            LuminareValueAdjuster(
+                "Left",
+                value: $paddingModel.left,
+                sliderRange: 0...100,
+                suffix: "px",
+                lowerClamp: true,
+                controlSize: .compact
+            )
         }
-        .buttonStyle(LuminareCompactButtonStyle())
+    }
+
+    func screenInsetsPaddingConfiguration() -> some View {
+        LuminareSection {
+            LuminareValueAdjuster(
+                "Window gaps",
+                value: $paddingModel.window,
+                sliderRange: 0...100,
+                suffix: "px",
+                lowerClamp: true
+            )
+            LuminareValueAdjuster(
+                "External bar",
+                info: .init("Use this if you are using a custom menubar."),
+                value: $paddingModel.externalBar,
+                sliderRange: 0...100,
+                suffix: "px",
+                lowerClamp: true
+            )
+        }
     }
 }

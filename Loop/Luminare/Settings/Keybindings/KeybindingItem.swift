@@ -1,5 +1,5 @@
 //
-//  KeybindingItemView.swift
+//  KeybindingItem.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-05-03.

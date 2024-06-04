@@ -8,31 +8,31 @@
 import SwiftUI
 
 struct PaddingPreviewView: View {
-    @Binding var paddingModel: PaddingModel
+    @Binding var model: PaddingModel
 
     init(_ paddingModel: Binding<PaddingModel>) {
-        self._paddingModel = paddingModel
+        self._model = paddingModel
     }
 
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                HStack(spacing: paddingModel.window / 2) {
+                HStack(spacing: model.window / 2) {
                     blurredWindow()
 
-                    VStack(spacing: paddingModel.window / 2) {
+                    VStack(spacing: model.window / 2) {
                         blurredWindow()
                         blurredWindow()
                     }
                 }
-                .padding(.top, paddingModel.totalTopPadding / 2)
-                .padding(.bottom, paddingModel.bottom / 2)
-                .padding(.leading, paddingModel.left / 2)
-                .padding(.trailing, paddingModel.right / 2)
+                .padding(.top, model.totalTopPadding / 2)
+                .padding(.bottom, model.bottom / 2)
+                .padding(.leading, model.left / 2)
+                .padding(.trailing, model.right / 2)
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }
-        .animation(.smooth(duration: 0.25), value: paddingModel)
+        .animation(.smooth(duration: 0.25), value: model)
     }
 
     @ViewBuilder
