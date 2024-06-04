@@ -156,31 +156,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         }
     }
 
-    var radialMenuAngle: Double? {
-        switch self {
-        case .topHalf:
-            0
-        case .topRightQuarter:
-            45
-        case .rightHalf:
-            90
-        case .bottomRightQuarter:
-            135
-        case .bottomHalf:
-            180
-        case .bottomLeftQuarter:
-            225
-        case .leftHalf:
-            270
-        case .topLeftQuarter:
-            315
-        case .maximize:
-            0
-        default:
-            nil
-        }
-    }
-
     var hasRadialMenuAngle: Bool {
         let noAngleActions: [WindowDirection] = [
             .noAction,

@@ -35,9 +35,6 @@ struct Keycorder: View {
         self._selectionKeybind = State(initialValue: keybind.wrappedValue.keybind)
     }
 
-    let activeAnimation = Animation.easeInOut(duration: 0.5).repeatForever(autoreverses: true)
-    let noAnimation = Animation.linear(duration: 0)
-
     var body: some View {
         Button {
             guard !isActive else { return }

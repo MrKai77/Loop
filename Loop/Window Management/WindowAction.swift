@@ -90,29 +90,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return nil
     }
 
-    func getEdgesTouchingScreen() -> Edge.Set {
-        guard let frameMultiplyValues = direction.frameMultiplyValues else {
-            return []
-        }
-
-        var result: Edge.Set = []
-
-        if frameMultiplyValues.minX == 0 {
-            result.insert(.leading)
-        }
-        if frameMultiplyValues.maxX == 1 {
-            result.insert(.trailing)
-        }
-        if frameMultiplyValues.minY == 0 {
-            result.insert(.top)
-        }
-        if frameMultiplyValues.maxY == 1 {
-            result.insert(.bottom)
-        }
-
-        return result
-    }
-
     func radialMenuAngle(window: Window?) -> Angle? {
         guard
             direction.frameMultiplyValues != nil,

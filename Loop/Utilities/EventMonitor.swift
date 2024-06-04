@@ -38,7 +38,7 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
         self.scope = scope
     }
 
-    public func start() {
+    func start() {
         if scope == .local || scope == .all {
             localEventMonitor = NSEvent.addLocalMonitorForEvents(
                 matching: eventTypeMask
@@ -60,7 +60,7 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
         }
     }
 
-    public func stop() {
+    func stop() {
         if let localEventMonitor {
             NSEvent.removeMonitor(localEventMonitor)
             isEnabled = false

@@ -108,7 +108,6 @@ struct KeybindingItemView: View {
 }
 
 struct WindowDirectionPicker: View, Equatable {
-    @Environment(\.hoveringOverLuminareListItem) var isHovering
     @Binding var keybind: WindowAction
     let isCycle: Bool
 
