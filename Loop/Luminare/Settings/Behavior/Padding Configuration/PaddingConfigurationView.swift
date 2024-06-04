@@ -27,16 +27,18 @@ struct PaddingConfigurationView: View {
                 } else {
                     screenSidesPaddingConfiguration()
                 }
+            }
 
-                if paddingModel.configureScreenPadding {
+            if paddingModel.configureScreenPadding {
+                LuminareSection {
                     screenInsetsPaddingConfiguration()
                 }
-
-                Button("Close") {
-                    isPresented = false
-                }
-                .buttonStyle(LuminareCompactButtonStyle())
             }
+
+            Button("Close") {
+                isPresented = false
+            }
+            .buttonStyle(LuminareCompactButtonStyle())
         }
         .onChange(of: self.paddingModel) { _ in
             // This fixes some weird animations.
@@ -131,7 +133,7 @@ struct PaddingConfigurationView: View {
     }
 
     func screenInsetsPaddingConfiguration() -> some View {
-        LuminareSection {
+        Group {
             LuminareValueAdjuster(
                 "Window gaps",
                 value: $paddingModel.window,
