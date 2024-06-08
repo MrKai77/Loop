@@ -13,6 +13,11 @@ class PreviewConfigurationModel: ObservableObject {
     @Published var previewVisibility = Defaults[.previewVisibility] {
         didSet {
             Defaults[.previewVisibility] = previewVisibility
+
+            // We can't move the cursor with the window if the window is going to be moving everywhere
+            if !previewVisibility {
+                Defaults[.moveCursorWithWindow] = false
+            }
         }
     }
 

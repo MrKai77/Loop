@@ -339,6 +339,9 @@
         }
       }
     },
+    "Cannot be enabled when the preview is disabled." : {
+
+    },
     "Change" : {
 
     },
@@ -1483,6 +1486,9 @@
           }
         }
       }
+    },
+    "Move cursor with window" : {
+
     },
     "Name" : {
       "extractionState" : "stale",

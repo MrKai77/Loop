@@ -101,6 +101,10 @@ enum WindowEngine {
 
             WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
         }
+
+        if Defaults[.moveCursorWithWindow] {
+            CGWarpMouseCursorPosition(targetFrame.center)
+        }
     }
 
     static func getTargetWindow() -> Window? {
