@@ -950,7 +950,7 @@
       }
     },
     "Greg Lassale Footer" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1094,6 +1094,17 @@
         }
       }
     },
+    "Icon Name: Developer" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Developer"
+          }
+        }
+      }
+    },
     "Icon Name: Holo" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -1209,6 +1220,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "西蒙"
+          }
+        }
+      }
+    },
+    "Icon Name: Summer" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Summer"
           }
         }
       }

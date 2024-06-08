@@ -43,6 +43,12 @@ class AboutConfigurationModel: ObservableObject {
             avatar: .init(string: "https://pbs.twimg.com/profile_images/1746348765127094272/eNO2LxOQ_200x200.jpg")!
         ),
         .init(
+            "JSDev",
+            "Icon contributor",
+            url: .init(string: "https://github.com/N-coder82")!,
+            avatar: .init(string: "https://github.com/n-coder82.png?size=200")!
+        ),
+        .init(
             "Contributors on GitHub",
             "Some features, ideas, and bug fixes",
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
