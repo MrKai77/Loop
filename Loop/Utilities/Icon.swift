@@ -1,12 +1,12 @@
 //
-//  IconManager+Icons.swift
+//  Icon.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-06-07.
 //
 
-import SwiftUI
 import Luminare
+import SwiftUI
 
 struct Icon: Hashable, LuminarePickerData {
     var name: String
@@ -19,42 +19,43 @@ struct Icon: Hashable, LuminarePickerData {
     }
 
     #if DEBUG
-    static let all: [Icon] = [
-        .developer,
-        .classic,
-        .holo,
-        .rosePine,
-        .metaLoop,
-        .keycap,
-        .white,
-        .black,
-        .simon,
-        .neon,
-        .synthwaveSunset,
-        .blackHole,
-        .summer,
-        .master
-    ]
+        static let all: [Icon] = [
+            .developer,
+            .classic,
+            .holo,
+            .rosePine,
+            .metaLoop,
+            .keycap,
+            .white,
+            .black,
+            .simon,
+            .neon,
+            .synthwaveSunset,
+            .blackHole,
+            .summer,
+            .master
+        ]
     #else
-    static let all: [Icon] = [
-        .classic,
-        .holo,
-        .rosePine,
-        .metaLoop,
-        .keycap,
-        .white,
-        .black,
-        .simon,
-        .neon,
-        .synthwaveSunset,
-        .blackHole,
-        .summer,
-        .master
-    ]
+        static let all: [Icon] = [
+            .classic,
+            .holo,
+            .rosePine,
+            .metaLoop,
+            .keycap,
+            .white,
+            .black,
+            .simon,
+            .neon,
+            .synthwaveSunset,
+            .blackHole,
+            .summer,
+            .master
+        ]
     #endif
 }
 
 // MARK: - Kai Azim
+
 extension Icon {
     static let classic = Icon(
         name: .init(localized: .init("Icon Name: Classic", defaultValue: "Classic")),
@@ -94,7 +95,7 @@ extension Icon {
         iconName: "AppIcon-White",
         unlockTime: 400
     )
-    static let black =  Icon(
+    static let black = Icon(
         name: .init(localized: .init("Icon Name: Black", defaultValue: "Black")),
         iconName: "AppIcon-Black",
         unlockTime: 500
@@ -113,6 +114,7 @@ extension Icon {
 }
 
 // MARK: - Greg Lassale
+
 extension Icon {
     static let simon = Icon(
         name: .init(localized: .init("Icon Name: Simon", defaultValue: "Simon")),
@@ -137,6 +139,7 @@ extension Icon {
 }
 
 // MARK: - JSDev
+
 extension Icon {
     static let developer = Icon(
         name: .init(localized: .init("Icon Name: Developer", defaultValue: "Developer")),
