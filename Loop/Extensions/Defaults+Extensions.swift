@@ -39,11 +39,12 @@ extension Defaults.Keys {
     static let hideMenuBarIcon = Key<Bool>("hideMenuBarIcon", default: false)
     static let animationConfiguration = Key<AnimationConfiguration>("animationConfiguration", default: .fast)
     static let windowSnapping = Key<Bool>("windowSnapping", default: false)
-    static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
-    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false)
     static let enablePadding = Key<Bool>("enablePadding", default: false)
     static let padding = Key<PaddingModel>("padding", default: .zero)
+    static let useScreenWithCursor = Key<Bool>("useScreenWithCursor", default: true)
+    static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
+    static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let respectStageManager = Key<Bool>("respectStageManager", default: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150)
 
@@ -55,7 +56,6 @@ extension Defaults.Keys {
     static let keybinds = Key<[WindowAction]>("keybinds", default: [
         WindowAction(.maximize, keybind: [.kVK_Space]),
         WindowAction(.center, keybind: [.kVK_Return]),
-
         WindowAction(.init(localized: .init("Top Cycle", defaultValue: "Top Cycle")), [
             .init(.topHalf),
             .init(.topThird),

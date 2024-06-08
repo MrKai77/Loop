@@ -223,10 +223,11 @@ class LoopManager: ObservableObject {
                 changeAction(action, triggeredFromScreenChange: true)
             } else {
                 if let screenToResizeOn,
+                   let window = targetWindow,
                    !Defaults[.previewVisibility] {
                     performHapticFeedback()
                     WindowEngine.resize(
-                        targetWindow!,
+                        window,
                         to: currentAction,
                         on: screenToResizeOn
                     )
@@ -250,9 +251,10 @@ class LoopManager: ObservableObject {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
 
                 if let screenToResizeOn = self.screenToResizeOn,
+                   let window = self.targetWindow,
                    !Defaults[.previewVisibility] {
                     WindowEngine.resize(
-                        self.targetWindow!,
+                        window,
                         to: self.currentAction,
                         on: screenToResizeOn
                     )
@@ -366,7 +368,7 @@ class LoopManager: ObservableObject {
         guard targetWindow?.isAppExcluded != true else { return }
 
         initialMousePosition = NSEvent.mouseLocation
-        screenToResizeOn = NSScreen.main
+        screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
 
         if !Defaults[.disableCursorInteraction] {
             mouseMovedEventMonitor?.start()

@@ -41,18 +41,6 @@ class BehaviorConfigurationModel: ObservableObject {
         }
     }
 
-    @Published var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor] {
-        didSet {
-            Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
-        }
-    }
-
-    @Published var focusWindowOnResize = Defaults[.focusWindowOnResize] {
-        didSet {
-            Defaults[.focusWindowOnResize] = focusWindowOnResize
-        }
-    }
-
     @Published var restoreWindowFrameOnDrag = Defaults[.restoreWindowFrameOnDrag] {
         didSet {
             Defaults[.restoreWindowFrameOnDrag] = restoreWindowFrameOnDrag
@@ -62,6 +50,24 @@ class BehaviorConfigurationModel: ObservableObject {
     @Published var enablePadding = Defaults[.enablePadding] {
         didSet {
             Defaults[.enablePadding] = enablePadding
+        }
+    }
+
+    @Published var useScreenWithCursor = Defaults[.useScreenWithCursor] {
+        didSet {
+            Defaults[.useScreenWithCursor] = useScreenWithCursor
+        }
+    }
+
+    @Published var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor] {
+        didSet {
+            Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
+        }
+    }
+
+    @Published var focusWindowOnResize = Defaults[.focusWindowOnResize] {
+        didSet {
+            Defaults[.focusWindowOnResize] = focusWindowOnResize
         }
     }
 
@@ -98,12 +104,6 @@ struct BehaviorConfigurationView: View {
 
         LuminareSection("Window") {
             LuminareToggle("Window snapping", isOn: $model.windowSnapping)
-            LuminareToggle("Resize window under cursor", isOn: $model.resizeWindowUnderCursor.animation(.smooth(duration: 0.25)))
-
-            if model.resizeWindowUnderCursor {
-                LuminareToggle("Focus window on resize", isOn: $model.focusWindowOnResize)
-            }
-
             LuminareToggle("Restore window frame on drag", isOn: $model.restoreWindowFrameOnDrag)
             LuminareToggle("Include padding", isOn: $model.enablePadding.animation(.smooth(duration: 0.25)))
 
@@ -115,6 +115,15 @@ struct BehaviorConfigurationView: View {
                     PaddingConfigurationView(isPresented: $model.isPaddingConfigurationViewPresented)
                         .frame(width: 400)
                 }
+            }
+        }
+
+        LuminareSection("Cursor") {
+            LuminareToggle("Use screen with cursor", isOn: $model.useScreenWithCursor)
+            LuminareToggle("Resize window under cursor", isOn: $model.resizeWindowUnderCursor.animation(.smooth(duration: 0.25)))
+
+            if model.resizeWindowUnderCursor {
+                LuminareToggle("Focus window on resize", isOn: $model.focusWindowOnResize)
             }
         }
 

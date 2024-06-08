@@ -691,6 +691,9 @@
         }
       }
     },
+    "Cursor" : {
+
+    },
     "Custom" : {
 
     },
@@ -2269,6 +2272,9 @@
       }
     },
     "Use pixels" : {
+
+    },
+    "Use screen with cursor" : {
 
     },
     "Use system accent color" : {
