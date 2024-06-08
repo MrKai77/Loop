@@ -29,7 +29,6 @@ struct GeneralSettingsView: View {
     @Default(.focusWindowOnResize) var focusWindowOnResize
 
     @State var userDisabledLoopNotifications: Bool = false
-    @State var iconFooter: String?
 
     @State var isConfiguringPadding: Bool = false
 
@@ -37,23 +36,10 @@ struct GeneralSettingsView: View {
         Form {
             Section("App Icon") {
                 VStack(alignment: .leading) {
-                    VStack(alignment: .leading) {
-                        Text("Loop more to unlock new icons! (You've looped \(timesLooped) times!)")
-
-                        if let iconFooter {
-                            Text(iconFooter)
-                        }
-                    }
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .textSelection(.enabled)
-                }
-                .onAppear {
-                    iconFooter = IconManager.currentAppIcon.footer
-                }
-                .onChange(of: currentIcon) { _ in
-                    IconManager.refreshCurrentAppIcon()
-                    iconFooter = IconManager.currentAppIcon.footer
+                    Text("Loop more to unlock new icons! (You've looped \(timesLooped) times!)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .textSelection(.enabled)
                 }
             }
         }

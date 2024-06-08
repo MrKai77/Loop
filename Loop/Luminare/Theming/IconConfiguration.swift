@@ -80,7 +80,7 @@ struct IconConfigurationView: View {
     var body: some View {
         LuminareSection(showDividers: false) {
             LuminarePicker(
-                elements: IconManager.icons,
+                elements: Icon.all,
                 selection: Binding(
                     get: {
                         IconManager.currentAppIcon

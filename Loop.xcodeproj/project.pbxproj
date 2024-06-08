@@ -74,6 +74,7 @@
 		A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */; };
 		A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */; };
 		A8C83C6B2C0D1D560024A7A1 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8C83C6A2C0D1D560024A7A1 /* Luminare */; };
+		A8D4327B2C13ED3C007BE4F2 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D4327A2C13ED3C007BE4F2 /* Icon.swift */; };
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
 		A8D5A7D82A913862004EA5BB /* DirectionSelectorCircleSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */; };
 		A8D6D3012B6C894C0061B11F /* PaddingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D6D3002B6C894C0061B11F /* PaddingModel.swift */; };
@@ -161,6 +162,7 @@
 		A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UNNotifications.swift"; sourceTree = "<group>"; };
 		A8C83C672C0D1CDE0024A7A1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Luminare/Package.swift; sourceTree = "<group>"; };
 		A8C83C682C0D1CEA0024A7A1 /* Luminare */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Luminare; path = ../Luminare; sourceTree = "<group>"; };
+		A8D4327A2C13ED3C007BE4F2 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
 		A8D5A7D72A913862004EA5BB /* DirectionSelectorCircleSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorCircleSegment.swift; sourceTree = "<group>"; };
 		A8D6D3002B6C894C0061B11F /* PaddingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingModel.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		A80900D12AA3F9F20085C63B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A8D4327A2C13ED3C007BE4F2 /* Icon.swift */,
 				A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */,
 				A8504D2C2A85832F00C2EFDA /* SoftwareUpdater.swift */,
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
@@ -564,6 +567,7 @@
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
 				A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */,
+				A8D4327B2C13ED3C007BE4F2 /* Icon.swift in Sources */,
 				A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */,
 				A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */,
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
@@ -756,7 +760,7 @@
 		A8E59C45297F5E9B0064D4BA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Classic";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Developer";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Loop/Loop.entitlements;
