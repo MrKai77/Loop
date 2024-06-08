@@ -93,7 +93,7 @@ class LuminareManager {
         }
 
         luminare.show()
-
+        AppDelegate.isActive = true
         NSApp.setActivationPolicy(.regular)
     }
 
