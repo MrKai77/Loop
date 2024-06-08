@@ -43,6 +43,7 @@ extension Defaults.Keys {
     static let enablePadding = Key<Bool>("enablePadding", default: false)
     static let padding = Key<PaddingModel>("padding", default: .zero)
     static let useScreenWithCursor = Key<Bool>("useScreenWithCursor", default: true)
+    static let moveCursorWithWindow = Key<Bool>("moveCursorWithWindow", default: false)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true)
     static let respectStageManager = Key<Bool>("respectStageManager", default: true)

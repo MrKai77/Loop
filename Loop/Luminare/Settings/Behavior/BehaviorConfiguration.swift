@@ -59,6 +59,12 @@ class BehaviorConfigurationModel: ObservableObject {
         }
     }
 
+    @Published var moveCursorWithWindow = Defaults[.moveCursorWithWindow] {
+        didSet {
+            Defaults[.moveCursorWithWindow] = moveCursorWithWindow
+        }
+    }
+
     @Published var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor] {
         didSet {
             Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
@@ -84,6 +90,8 @@ class BehaviorConfigurationModel: ObservableObject {
     }
 
     @Published var isPaddingConfigurationViewPresented = false
+
+    let previewVisibility = Defaults[.previewVisibility]
 }
 
 struct BehaviorConfigurationView: View {
@@ -120,6 +128,12 @@ struct BehaviorConfigurationView: View {
 
         LuminareSection("Cursor") {
             LuminareToggle("Use screen with cursor", isOn: $model.useScreenWithCursor)
+            LuminareToggle(
+                "Move cursor with window",
+                info: model.previewVisibility ? nil : .init("Cannot be enabled when the preview is disabled."),
+                isOn: $model.moveCursorWithWindow,
+                disabled: !model.previewVisibility
+            )
             LuminareToggle("Resize window under cursor", isOn: $model.resizeWindowUnderCursor.animation(.smooth(duration: 0.25)))
 
             if model.resizeWindowUnderCursor {
