@@ -28,6 +28,14 @@ struct KeybindingItemView: View {
     var body: some View {
         HStack {
             label()
+                .onChange(of: keybind) { _ in
+                    if keybind.direction == .custom {
+                        isConfiguringCustom = true
+                    }
+                    if keybind.direction == .cycle {
+                        isConfiguringCycle = true
+                    }
+                }
 
             HStack {
                 if keybind.direction == .custom {
