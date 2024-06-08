@@ -94,6 +94,7 @@ struct LuminarePreviewView: View {
                 isActive = active
             }
         }
+        .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 10, topTrailingRadius: 10))
     }
 
     func recomputeColors() {
