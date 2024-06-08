@@ -35,7 +35,7 @@ class WindowDragManager {
                 }
 
                 if Defaults[.windowSnapping] {
-                    if let frame = NSScreen.screenWithMouse?.frame {
+                    if let frame = NSScreen.main?.frame {
                         if NSEvent.mouseLocation.y == frame.maxY {
                             cgEvent.location.y -= 1
                         }
