@@ -94,6 +94,7 @@ struct KeybindingItemView: View {
 
                     Keycorder($keybind)
                 }
+                .fixedSize()
             }
         }
         .padding(.horizontal, 12)
