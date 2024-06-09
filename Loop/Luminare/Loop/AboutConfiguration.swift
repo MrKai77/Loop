@@ -113,7 +113,7 @@ struct AboutConfigurationView: View {
                 }
                 .padding(4)
             }
-            .buttonStyle(LuminareCosmeticButtonStyle(Image(systemName: "clipboard")))
+            .buttonStyle(LuminareCosmeticButtonStyle(Image(._12PxClipboard)))
         }
 
         LuminareSection {
