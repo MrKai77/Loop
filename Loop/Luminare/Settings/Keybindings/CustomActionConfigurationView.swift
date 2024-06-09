@@ -31,9 +31,9 @@ struct CustomActionConfigurationView: View {
         var image: Image {
             switch self {
             case .position:
-                Image(systemName: "scope")
+                Image(._18PxTableRows3Cols3)
             case .size:
-                Image(systemName: "square.resize")
+                Image(._18PxSize)
             }
         }
     }
@@ -112,7 +112,11 @@ struct CustomActionConfigurationView: View {
                 columns: 2,
                 roundBottom: false
             ) { tab in
-                Text("\(tab.image) \(tab.name)")
+                HStack(spacing: 6) {
+                    tab.image
+                    Text(tab.name)
+                }
+                .fixedSize()
             }
 
             LuminareToggle(
@@ -292,7 +296,7 @@ struct CustomActionConfigurationView: View {
                 columns: 3,
                 roundBottom: action.sizeMode != .custom
             ) { mode in
-                VStack(spacing: 5) {
+                VStack(spacing: 4) {
                     mode.image
                     Text(mode.name)
                 }

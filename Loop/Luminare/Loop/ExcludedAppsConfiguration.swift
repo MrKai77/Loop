@@ -113,7 +113,7 @@ struct AppView: View, Equatable {
             Button {
                 NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: app.path)])
             } label: {
-                Image(systemName: "arrow.up.right.square")
+                Image(._18PxFinder)
                     .foregroundStyle(.secondary)
             }
             .buttonStyle(PlainButtonStyle())

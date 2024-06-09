@@ -53,7 +53,7 @@ struct AccentColorConfigurationView: View {
                     if item {
                         Image(systemName: "apple.logo")
                     } else {
-                        Image(systemName: "paintbrush.pointed")
+                        Image(._18PxColorPalette)
                     }
 
                     Spacer()

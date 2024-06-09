@@ -112,7 +112,7 @@ struct AdvancedConfigurationView: View {
         LuminareSection("Permissions") {
             HStack {
                 if model.isAccessibilityAccessGranted {
-                    Image(systemName: "checkmark.seal.fill")
+                    Image(._18PxBadgeCheck2)
                         .foregroundStyle(Color.getLoopAccent(tone: .normal))
                 }
 

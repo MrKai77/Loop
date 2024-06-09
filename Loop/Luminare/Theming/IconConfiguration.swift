@@ -101,8 +101,7 @@ struct IconConfigurationView: View {
                         VStack(alignment: .center) {
                             Spacer()
 
-                            Image(systemName: "lock")
-                                .font(.title3)
+                            Image(._18PxLock)
 
                             Spacer()
                         }

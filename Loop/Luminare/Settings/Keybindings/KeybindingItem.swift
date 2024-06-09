@@ -42,7 +42,7 @@ struct KeybindingItemView: View {
                     Button(action: {
                         isConfiguringCustom = true
                     }, label: {
-                        Image(systemName: "slider.horizontal.3")
+                        Image(._18PxRuler)
                     })
                     .buttonStyle(.plain)
                     .luminareModal(isPresented: $isConfiguringCustom) {
@@ -55,7 +55,7 @@ struct KeybindingItemView: View {
                     Button(action: {
                         isConfiguringCycle = true
                     }, label: {
-                        Image(systemName: "arrow.2.squarepath")
+                        Image(._18PxRepeat4)
                     })
                     .buttonStyle(.plain)
                     .luminareModal(isPresented: $isConfiguringCycle) {
@@ -191,7 +191,7 @@ struct WindowDirectionPicker: View, Equatable {
                 }
             }
         } label: {
-            Image(systemName: "pencil")
+            Image(._18PxPen2)
                 .padding(.vertical, 5) // Increase hitbox size
                 .contentShape(.rect)
                 .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox

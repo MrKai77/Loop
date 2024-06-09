@@ -15,17 +15,17 @@ class LuminareManager {
     }
 
     // swiftlint:disable line_length
-    static let iconConfiguration = SettingsTab("Icon", Image(systemName: "sparkle"), IconConfigurationView())
-    static let accentColorConfiguration = SettingsTab("Accent Color", Image(systemName: "paintbrush.pointed"), AccentColorConfigurationView())
+    static let iconConfiguration = SettingsTab("Icon", Image(._18PxSquareSparkle), IconConfigurationView())
+    static let accentColorConfiguration = SettingsTab("Accent Color", Image(._18PxPaintbrush), AccentColorConfigurationView())
     static let radialMenuConfiguration = SettingsTab("Radial Menu", Image("loop"), RadialMenuConfigurationView())
-    static let previewConfiguration = SettingsTab("Preview", Image(systemName: "rectangle.lefthalf.inset.filled"), PreviewConfigurationView())
+    static let previewConfiguration = SettingsTab("Preview", Image(._18PxSidebarRight2), PreviewConfigurationView())
 
-    static let behaviorConfiguration = SettingsTab("Behavior", Image(systemName: "gear"), BehaviorConfigurationView())
-    static let keybindingsConfiguration = SettingsTab("Keybindings", Image(systemName: "command"), KeybindingsConfigurationView())
+    static let behaviorConfiguration = SettingsTab("Behavior", Image(._18PxGear), BehaviorConfigurationView())
+    static let keybindingsConfiguration = SettingsTab("Keybindings", Image(._18PxCommand), KeybindingsConfigurationView())
 
-    static let advancedConfiguration = SettingsTab("Advanced", Image(systemName: "face.smiling.inverse"), AdvancedConfigurationView())
-    static let excludedAppsConfiguration = SettingsTab("Excluded Apps", Image(systemName: "lock.app.dashed"), ExcludedAppsConfigurationView())
-    static let aboutConfiguration = SettingsTab("About", Image(systemName: "ellipsis"), AboutConfigurationView())
+    static let advancedConfiguration = SettingsTab("Advanced", Image(._18PxFaceNerdSmile), AdvancedConfigurationView())
+    static let excludedAppsConfiguration = SettingsTab("Excluded Apps", Image(._18PxWindowLock), ExcludedAppsConfigurationView())
+    static let aboutConfiguration = SettingsTab("About", Image(._18PxMsgSmile2), AboutConfigurationView())
     // swiftlint:enable line_length
 
     static var luminare = LuminareSettingsWindow(

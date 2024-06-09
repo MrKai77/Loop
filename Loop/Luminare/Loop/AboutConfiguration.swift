@@ -181,6 +181,6 @@ struct AboutConfigurationView: View {
             }
             .padding(12)
         }
-        .buttonStyle(LuminareCosmeticButtonStyle(Image(systemName: "arrow.up.forward.square")))
+        .buttonStyle(LuminareCosmeticButtonStyle(Image(._12PxShareUpRight)))
     }
 }

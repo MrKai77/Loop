@@ -70,7 +70,16 @@ struct PaddingConfigurationView: View {
             columns: 2,
             roundBottom: false
         ) { item in
-            Text(item ? "Custom" : "Simple")
+            HStack(spacing: 6) {
+                if item {
+                    Image(._18PxShapeSquare)
+                    Text("Custom")
+                } else {
+                    Image(._18PxSliders)
+                    Text("Simple")
+                }
+            }
+            .fixedSize()
         }
     }
 
