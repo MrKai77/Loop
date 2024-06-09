@@ -22,11 +22,11 @@ struct MenuBarResizeButton: View {
             }
         } label: {
             HStack {
-                if let image = direction.icon {
-                    image
-                } else {
-                    Image(systemName: "exclamationmark.triangle")
-                }
+//                if let image = direction.icon {
+//                    image
+//                } else {
+//                    Image(systemName: "exclamationmark.triangle")
+//                }
                 Text(direction.name)
             }
         }

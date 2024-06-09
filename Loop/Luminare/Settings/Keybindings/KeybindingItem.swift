@@ -102,8 +102,9 @@ struct KeybindingItemView: View {
 
     func label() -> some View {
         HStack(spacing: 0) {
-            HStack(spacing: 5) {
-                keybind.direction.icon
+            HStack(spacing: 8) {
+                keybind.iconView()
+
                 Text(keybind.getName())
                     .lineLimit(1)
             }
@@ -204,7 +205,7 @@ struct WindowDirectionPicker: View, Equatable {
             keybind.direction = direction
         }, label: {
             HStack {
-                direction.icon
+//                keybind.icon
                 Text(direction.name)
             }
         })

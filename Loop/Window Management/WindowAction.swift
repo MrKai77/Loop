@@ -99,19 +99,19 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         let frame = CGRect(origin: .zero, size: .init(width: 1, height: 1))
-        let targetWindowFrame = getFrame(window: window, bounds: frame, toScale: false)
+        let targetWindowFrame = getFrame(window: window, bounds: frame, applyPadding: false)
         let angle = frame.center.angle(to: targetWindowFrame.center)
         let result: Angle = .radians(angle) * -1
 
         return result.normalized()
     }
 
-    func getFrame(window: Window?, bounds: CGRect, toScale: Bool = true) -> CGRect {
+    func getFrame(window: Window?, bounds: CGRect, applyPadding: Bool = true) -> CGRect {
         guard direction != .cycle, direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
         var bounds = bounds
-        if toScale { bounds = getPaddedBounds(bounds) }
+        if applyPadding { bounds = getPaddedBounds(bounds) }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         if !willManipulateCurrentWindowSize {
@@ -160,8 +160,15 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
 
-        } else if direction == .center, let window {
-            let windowSize = window.size
+        } else if direction == .center {
+            let windowSize: CGSize
+
+            if let window {
+                windowSize = window.size
+            } else {
+                windowSize = .init(width: bounds.width / 2, height: bounds.height / 2)
+            }
+
             result = CGRect(
                 origin: CGPoint(
                     x: bounds.midX - (windowSize.width / 2),
@@ -170,8 +177,15 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                 size: windowSize
             )
 
-        } else if direction == .macOSCenter, let window {
-            let windowSize = window.size
+        } else if direction == .macOSCenter {
+            let windowSize: CGSize
+
+            if let window {
+                windowSize = window.size
+            } else {
+                windowSize = .init(width: bounds.width / 2, height: bounds.height / 2)
+            }
+
             let yOffset = WindowEngine.getMacOSCenterYOffset(
                 windowSize.height,
                 screenHeight: bounds.height
@@ -202,9 +216,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
-        if toScale {
+        if applyPadding {
             if direction != .undo, direction != .initialFrame {
-                result = applyPadding(result, bounds)
+                result = self.applyPadding(result, bounds)
             }
 
             LoopManager.lastTargetFrame = result
