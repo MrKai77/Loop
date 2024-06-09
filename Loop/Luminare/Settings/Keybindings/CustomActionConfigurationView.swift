@@ -61,7 +61,7 @@ struct CustomActionConfigurationView: View {
                 let frame = action.getFrame(
                     window: nil,
                     bounds: .init(origin: .zero, size: geo.size),
-                    applyPadding: false
+                    isPreview: true
                 )
 
                 ZStack {

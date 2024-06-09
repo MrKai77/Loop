@@ -99,19 +99,19 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         let frame = CGRect(origin: .zero, size: .init(width: 1, height: 1))
-        let targetWindowFrame = getFrame(window: window, bounds: frame, applyPadding: false)
+        let targetWindowFrame = getFrame(window: window, bounds: frame, isPreview: true)
         let angle = frame.center.angle(to: targetWindowFrame.center)
         let result: Angle = .radians(angle) * -1
 
         return result.normalized()
     }
 
-    func getFrame(window: Window?, bounds: CGRect, applyPadding: Bool = true) -> CGRect {
+    func getFrame(window: Window?, bounds: CGRect, isPreview: Bool = false) -> CGRect {
         guard direction != .cycle, direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
         var bounds = bounds
-        if applyPadding { bounds = getPaddedBounds(bounds) }
+        if !isPreview { bounds = getPaddedBounds(bounds) }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         if !willManipulateCurrentWindowSize {
@@ -216,9 +216,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
-        if applyPadding {
+        if !isPreview {
             if direction != .undo, direction != .initialFrame {
-                result = self.applyPadding(result, bounds)
+                result = applyPadding(result, bounds)
             }
 
             LoopManager.lastTargetFrame = result
@@ -242,8 +242,14 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         } else { // sizeMode would be custom
             switch unit {
             case .pixels:
-                result.size.width = width ?? result.size.width
-                result.size.height = height ?? result.size.height
+                if window == nil {
+                    let mainScreen = NSScreen.main ?? NSScreen.screens[0]
+                    result.size.width = (CGFloat(width ?? .zero) / mainScreen.frame.width) * bounds.width
+                    result.size.height = (CGFloat(height ?? .zero) / mainScreen.frame.height) * bounds.height
+                } else {
+                    result.size.width = width ?? .zero
+                    result.size.height = height ?? .zero
+                }
             default:
                 if let width {
                     result.size.width = bounds.width * (width / 100.0)
@@ -259,9 +265,15 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         if let positionMode, positionMode == .coordinates {
             switch unit {
             case .pixels:
-                // Note that bounds are ignored deliberately here
-                result.origin.x += xPoint ?? .zero
-                result.origin.y += yPoint ?? .zero
+                if window == nil {
+                    let mainScreen = NSScreen.main ?? NSScreen.screens[0]
+                    result.origin.x = (CGFloat(xPoint ?? .zero) / mainScreen.frame.width) * bounds.width
+                    result.origin.y = (CGFloat(yPoint ?? .zero) / mainScreen.frame.height) * bounds.height
+                } else {
+                    // Note that bounds are ignored deliberately here
+                    result.origin.x += xPoint ?? .zero
+                    result.origin.y += yPoint ?? .zero
+                }
             default:
                 if let xPoint {
                     result.origin.x += bounds.width * (xPoint / 100.0)
