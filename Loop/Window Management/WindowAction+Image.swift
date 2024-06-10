@@ -70,49 +70,49 @@ struct IconView: View {
     let outerCornerRadius: CGFloat = 3
 
     var body: some View {
-        ZStack {
-            if let icon = action.icon {
-                icon
-                    .font(.system(size: 8))
-                    .fontWeight(.bold)
-                    .frame(width: size.width, height: size.height)
-            } else {
-                ZStack {
-                    RoundedRectangle(cornerRadius: outerCornerRadius - inset)
-                        .frame(
-                            width: frame.width,
-                            height: frame.height
-                        )
-                        .offset(
-                            x: frame.origin.x,
-                            y: frame.origin.y
-                        )
-                }
-                .frame(width: size.width, height: size.height, alignment: .topLeading)
-                .onAppear {
-                    refreshFrame()
-                }
-                .onChange(of: action) { _ in
-                    withAnimation(.easeOut(duration: 0.1)) {
+        if action.direction == .cycle, let first = action.cycle?.first {
+            IconView(action: .constant(first))
+        } else {
+            ZStack {
+                if let icon = action.icon {
+                    icon
+                        .font(.system(size: 8))
+                        .fontWeight(.bold)
+                        .frame(width: size.width, height: size.height)
+                } else {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: outerCornerRadius - inset)
+                            .frame(
+                                width: frame.width,
+                                height: frame.height
+                            )
+                            .offset(
+                                x: frame.origin.x,
+                                y: frame.origin.y
+                            )
+                    }
+                    .frame(width: size.width, height: size.height, alignment: .topLeading)
+                    .onAppear {
                         refreshFrame()
+                    }
+                    .onChange(of: action) { _ in
+                        withAnimation(.easeOut(duration: 0.1)) {
+                            refreshFrame()
+                        }
                     }
                 }
             }
+            .clipShape(.rect(cornerRadius: outerCornerRadius - inset))
+            .background {
+                RoundedRectangle(cornerRadius: outerCornerRadius)
+                    .stroke(lineWidth: 1.5)
+                    .padding(-inset)
+            }
+            .padding(.horizontal, 4)
         }
-        .clipShape(.rect(cornerRadius: outerCornerRadius - inset))
-        .background {
-            RoundedRectangle(cornerRadius: outerCornerRadius)
-                .stroke(lineWidth: 1.5)
-                .padding(-inset)
-        }
-        .padding(.horizontal, 4)
     }
 
     func refreshFrame() {
-        if action.direction == .cycle, let first = action.cycle?.first {
-            frame = first.getFrame(window: nil, bounds: .init(origin: .zero, size: size), isPreview: true)
-        } else {
-            frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), isPreview: true)
-        }
+        frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), isPreview: true)
     }
 }
