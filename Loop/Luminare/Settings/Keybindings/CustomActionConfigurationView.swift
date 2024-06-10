@@ -178,7 +178,6 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    // swiftlint:disable:next function_body_length
     @ViewBuilder func positionConfiguration() -> some View {
         LuminareSection {
             LuminareToggle(

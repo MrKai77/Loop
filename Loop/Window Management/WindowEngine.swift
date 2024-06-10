@@ -138,7 +138,6 @@ enum WindowEngine {
     static func windowAtPosition(_ position: CGPoint) -> Window? {
         if let element = AXUIElement.systemWide.getElementAtPosition(position),
            let windowElement = element.getValue(.window),
-           // swiftlint:disable:next force_cast
            let window = Window(element: windowElement as! AXUIElement) {
             return window
         }

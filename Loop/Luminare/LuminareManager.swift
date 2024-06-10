@@ -14,7 +14,6 @@ class LuminareManager {
         LuminareManager.luminare.windowController?.window
     }
 
-    // swiftlint:disable line_length
     static let iconConfiguration = SettingsTab("Icon", Image(._18PxSquareSparkle), IconConfigurationView())
     static let accentColorConfiguration = SettingsTab("Accent Color", Image(._18PxPaintbrush), AccentColorConfigurationView())
     static let radialMenuConfiguration = SettingsTab("Radial Menu", Image("loop"), RadialMenuConfigurationView())
@@ -26,7 +25,6 @@ class LuminareManager {
     static let advancedConfiguration = SettingsTab("Advanced", Image(._18PxFaceNerdSmile), AdvancedConfigurationView())
     static let excludedAppsConfiguration = SettingsTab("Excluded Apps", Image(._18PxWindowLock), ExcludedAppsConfigurationView())
     static let aboutConfiguration = SettingsTab("About", Image(._18PxMsgSmile2), AboutConfigurationView())
-    // swiftlint:enable line_length
 
     static var luminare = LuminareSettingsWindow(
         [

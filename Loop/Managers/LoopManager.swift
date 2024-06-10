@@ -8,7 +8,6 @@
 import Defaults
 import SwiftUI
 
-// swiftlint:disable:next type_body_length
 class LoopManager: ObservableObject {
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?

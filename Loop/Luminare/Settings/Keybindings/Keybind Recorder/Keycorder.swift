@@ -98,7 +98,6 @@ struct Keycorder: View {
                     selectionKeybind.insert(event.keyCode.baseModifier)
                 } else {
                     if let systemImage = event.keyCode.baseModifier.systemImage {
-                        // swiftlint:disable:next line_length
                         errorMessage = Text("\(Image(systemName: systemImage)) is already used as your trigger key.")
                     } else {
                         errorMessage = Text("That key is already used as your trigger key.")

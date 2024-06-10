@@ -49,9 +49,7 @@ class Window {
     convenience init?(pid: pid_t) {
         let element = AXUIElementCreateApplication(pid)
         guard let window = element.getValue(.focusedWindow) else { return nil }
-        // swiftlint:disable force_cast
         self.init(element: window as! AXUIElement)
-        // swiftlint:enable force_cast
     }
 
     func getPid() -> pid_t? {
@@ -170,9 +168,7 @@ class Window {
     var position: CGPoint {
         var point: CGPoint = .zero
         guard let value = self.axWindow.getValue(.position) else { return point }
-        // swiftlint:disable force_cast
         AXValueGetValue(value as! AXValue, .cgPoint, &point) // Convert to CGPoint
-        // swiftlint:enable force_cast
         return point
     }
 
@@ -184,9 +180,7 @@ class Window {
     var size: CGSize {
         var size: CGSize = .zero
         guard let value = self.axWindow.getValue(.size) else { return size }
-        // swiftlint:disable force_cast
         AXValueGetValue(value as! AXValue, .cgSize, &size) // Convert to CGSize
-        // swiftlint:enable force_cast
         return size
     }
 

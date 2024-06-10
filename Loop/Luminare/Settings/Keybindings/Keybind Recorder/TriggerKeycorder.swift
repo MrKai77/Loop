@@ -41,7 +41,6 @@ struct TriggerKeycorder: View {
                 } else {
                     HStack(spacing: 12) {
                         ForEach(selectionKey.sorted(), id: \.self) { key in
-                            // swiftlint:disable:next line_length
                             Text("\(key.isOnRightSide ? String(localized: .init("Right", defaultValue: "Right")) : String(localized: .init("Left", defaultValue: "Left"))) \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .fixedSize(horizontal: true, vertical: false)
