@@ -23,41 +23,16 @@ enum CustomWindowActionAnchor: Int, Codable, CaseIterable, Identifiable {
 
     var iconAction: WindowAction {
         switch self {
-        case .topLeft:      .init(.topLeftQuarter)
-        case .top:          .init(.topHalf)
-        case .topRight:     .init(.topRightQuarter)
-        case .right:        .init(.rightHalf)
-        case .bottomRight:  .init(.bottomRightQuarter)
-        case .bottom:       .init(.bottomHalf)
-        case .bottomLeft:   .init(.bottomLeftQuarter)
-        case .left:         .init(.leftHalf)
-        case .center:       .init(.center)
-        case .macOSCenter:  .init(.macOSCenter)
+        case .topLeft: .init(.topLeftQuarter)
+        case .top: .init(.topHalf)
+        case .topRight: .init(.topRightQuarter)
+        case .right: .init(.rightHalf)
+        case .bottomRight: .init(.bottomRightQuarter)
+        case .bottom: .init(.bottomHalf)
+        case .bottomLeft: .init(.bottomLeftQuarter)
+        case .left: .init(.leftHalf)
+        case .center: .init(.center)
+        case .macOSCenter: .init(.macOSCenter)
         }
     }
-
-//    var image: IconView {
-//        switch self {
-//        case .topLeft:
-//            IconView(action: .constant(.init(.topLeftQuarter)))
-//        case .top:
-//            IconView(action: .constant(.init(.topHalf)))
-//        case .topRight:
-//            IconView(action: .constant(.init(.topRightQuarter)))
-//        case .right:
-//            IconView(action: .constant(.init(.rightHalf)))
-//        case .bottomRight:
-//            IconView(action: .constant(.init(.bottomRightQuarter)))
-//        case .bottom:
-////            Image(systemName: "rectangle.bottomhalf.inset.filled")
-//        case .bottomLeft:
-////            Image(systemName: "rectangle.inset.bottomleft.filled")
-//        case .left:
-////            Image(systemName: "rectangle.lefthalf.inset.filled")
-//        case .center:
-////            Image("custom.rectangle.center.inset.inset.filled")
-//        case ..macOSCenter:
-//
-//        }
-//    }
 }
