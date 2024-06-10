@@ -105,6 +105,7 @@ struct IconView: View {
                 .stroke(lineWidth: 1.5)
                 .padding(-inset)
         }
+        .padding(.horizontal, 4)
     }
 
     func refreshFrame() {

@@ -218,7 +218,7 @@ struct CustomActionConfigurationView: View {
                     columns: 3,
                     roundTop: false
                 ) { anchor in
-                    anchor.image
+                    IconView(action: .constant(anchor.iconAction))
                 }
 
                 if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
