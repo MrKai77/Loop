@@ -161,12 +161,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result = calculateCustomFrame(window, bounds)
 
         } else if direction == .center {
-            let windowSize: CGSize
-
-            if let window {
-                windowSize = window.size
+            let windowSize: CGSize = if let window {
+                window.size
             } else {
-                windowSize = .init(width: bounds.width / 2, height: bounds.height / 2)
+                .init(width: bounds.width / 2, height: bounds.height / 2)
             }
 
             result = CGRect(
@@ -178,12 +176,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             )
 
         } else if direction == .macOSCenter {
-            let windowSize: CGSize
-
-            if let window {
-                windowSize = window.size
+            let windowSize: CGSize = if let window {
+                window.size
             } else {
-                windowSize = .init(width: bounds.width / 2, height: bounds.height / 2)
+                .init(width: bounds.width / 2, height: bounds.height / 2)
             }
 
             let yOffset = WindowEngine.getMacOSCenterYOffset(

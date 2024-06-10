@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A6DC3EB2BB869DE002AB05F /* WindowDirection+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6DC3EA2BB869DE002AB05F /* WindowDirection+Image.swift */; };
+		0A6DC3EB2BB869DE002AB05F /* WindowAction+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6DC3EA2BB869DE002AB05F /* WindowAction+Image.swift */; };
 		0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */; };
 		284A37192BB8F16800FC9465 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 284A37182BB8F16800FC9465 /* Localizable.xcstrings */; };
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; };
@@ -93,7 +93,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A6DC3EA2BB869DE002AB05F /* WindowDirection+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+Image.swift"; sourceTree = "<group>"; };
+		0A6DC3EA2BB869DE002AB05F /* WindowAction+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Image.swift"; sourceTree = "<group>"; };
 		0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+LocalizedString.swift"; sourceTree = "<group>"; };
 		284A37182BB8F16800FC9465 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A80397D32A932993006D2796 /* MenuBarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconView.swift; sourceTree = "<group>"; };
@@ -308,7 +308,7 @@
 				A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */,
 				A8330AD32A3AC27600673C8D /* WindowDirection.swift */,
 				0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */,
-				0A6DC3EA2BB869DE002AB05F /* WindowDirection+Image.swift */,
+				0A6DC3EA2BB869DE002AB05F /* WindowAction+Image.swift */,
 				A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */,
 				A8B5E1612B43725B00044D30 /* Custom Window Sizes */,
 			);
@@ -616,7 +616,7 @@
 				A8A1C5212BD4863B00515A14 /* KeybindingsConfiguration.swift in Sources */,
 				A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */,
 				A8E8903C2BA7AAFE006C5074 /* NSEvent+Extensions.swift in Sources */,
-				0A6DC3EB2BB869DE002AB05F /* WindowDirection+Image.swift in Sources */,
+				0A6DC3EB2BB869DE002AB05F /* WindowAction+Image.swift in Sources */,
 				A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */,
 				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,
 				A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */,

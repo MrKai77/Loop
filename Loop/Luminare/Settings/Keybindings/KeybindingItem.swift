@@ -103,7 +103,7 @@ struct KeybindingItemView: View {
     func label() -> some View {
         HStack(spacing: 0) {
             HStack(spacing: 8) {
-                keybind.iconView()
+                IconView(action: $keybind)
 
                 Text(keybind.getName())
                     .lineLimit(1)

@@ -168,11 +168,13 @@ struct CustomActionConfigurationView: View {
                 )
 
             Button("Close") {
-                windowAction = action
                 isPresented = false
             }
         }
         .buttonStyle(LuminareCompactButtonStyle())
+        .onChange(of: action) { _ in
+            windowAction = action
+        }
     }
 
     // swiftlint:disable:next function_body_length
