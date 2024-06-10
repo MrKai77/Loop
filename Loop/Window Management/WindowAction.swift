@@ -69,9 +69,17 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         var result = ""
 
         if direction == .custom {
-            result = name ?? .init(localized: .init("Custom Keybind", defaultValue: "Custom Keybind"))
+            result = if let name, !name.isEmpty {
+                name
+            } else {
+                .init(localized: .init("Custom Keybind", defaultValue: "Custom Keybind"))
+            }
         } else if direction == .cycle {
-            result = name ?? .init(localized: .init("Custom Cycle", defaultValue: "Custom Cycle"))
+            result = if let name, !name.isEmpty {
+                name
+            } else {
+                .init(localized: .init("Custom Cycle", defaultValue: "Custom Cycle"))
+            }
         } else {
             result = direction.name
         }
