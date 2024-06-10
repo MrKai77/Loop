@@ -166,6 +166,7 @@ struct CustomActionConfigurationView: View {
                     },
                     perform: {}
                 )
+                .disabled(action.sizeMode != .custom)
 
             Button("Close") {
                 isPresented = false
@@ -199,10 +200,7 @@ struct CustomActionConfigurationView: View {
                     elements: anchors,
                     selection: Binding(
                         get: {
-                            if action.anchor == nil {
-                                action.anchor = .center
-                            }
-
+                            // since center/macOS center use the same icon on the picker
                             if action.anchor == .macOSCenter {
                                 return .center
                             }
@@ -239,10 +237,7 @@ struct CustomActionConfigurationView: View {
                     "X",
                     value: Binding(
                         get: {
-                            if action.xPoint == nil {
-                                action.xPoint = 0
-                            }
-                            return action.xPoint ?? 0
+                            action.xPoint ?? 0
                         },
                         set: {
                             action.xPoint = $0
@@ -259,10 +254,7 @@ struct CustomActionConfigurationView: View {
                     "Y",
                     value: Binding(
                         get: {
-                            if action.yPoint == nil {
-                                action.yPoint = 0
-                            }
-                            return action.yPoint ?? 0
+                            action.yPoint ?? 0
                         },
                         set: {
                             action.yPoint = $0
@@ -284,10 +276,7 @@ struct CustomActionConfigurationView: View {
                 elements: CustomWindowActionSizeMode.allCases,
                 selection: Binding(
                     get: {
-                        if action.sizeMode == nil {
-                            action.sizeMode = .custom
-                        }
-                        return action.sizeMode ?? .custom
+                        action.sizeMode ?? .custom
                     },
                     set: { newValue in
                         withAnimation(.smooth(duration: 0.25)) {
@@ -310,10 +299,7 @@ struct CustomActionConfigurationView: View {
                     "Width",
                     value: Binding(
                         get: {
-                            if action.width == nil {
-                                action.width = 100
-                            }
-                            return action.width ?? 100
+                            action.width ?? 100
                         },
                         set: {
                             action.width = $0
@@ -330,10 +316,7 @@ struct CustomActionConfigurationView: View {
                     "Height",
                     value: Binding(
                         get: {
-                            if action.height == nil {
-                                action.height = 100
-                            }
-                            return action.height ?? 100
+                            action.height ?? 100
                         },
                         set: {
                             action.height = $0

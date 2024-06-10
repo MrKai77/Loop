@@ -203,9 +203,19 @@ struct WindowDirectionPicker: View, Equatable {
     func directionPickerItem(_ direction: WindowDirection) -> some View {
         Button(action: {
             keybind.direction = direction
+
+            if direction == .custom {
+                keybind.unit = .percentage
+                keybind.anchor = .center
+                keybind.sizeMode = .custom
+                keybind.width = 80
+                keybind.height = 80
+                keybind.positionMode = .generic
+                keybind.xPoint = 10
+                keybind.yPoint = 10
+            }
         }, label: {
             HStack {
-//                keybind.icon
                 Text(direction.name)
             }
         })
