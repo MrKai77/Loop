@@ -20,4 +20,19 @@ enum CustomWindowActionAnchor: Int, Codable, CaseIterable, Identifiable {
     case left = 7
     case center = 8
     case macOSCenter = 9
+
+    var iconAction: WindowAction {
+        switch self {
+        case .topLeft: .init(.topLeftQuarter)
+        case .top: .init(.topHalf)
+        case .topRight: .init(.topRightQuarter)
+        case .right: .init(.rightHalf)
+        case .bottomRight: .init(.bottomRightQuarter)
+        case .bottom: .init(.bottomHalf)
+        case .bottomLeft: .init(.bottomLeftQuarter)
+        case .left: .init(.leftHalf)
+        case .center: .init(.center)
+        case .macOSCenter: .init(.macOSCenter)
+        }
+    }
 }

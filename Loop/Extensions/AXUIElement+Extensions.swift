@@ -27,19 +27,19 @@ extension AXUIElement {
 
     @discardableResult
     func setValue(_ attribute: NSAccessibility.Attribute, value: Bool) -> Bool {
-        return setValue(attribute, value: value as CFBoolean)
+        setValue(attribute, value: value as CFBoolean)
     }
 
     @discardableResult
     func setValue(_ attribute: NSAccessibility.Attribute, value: CGPoint) -> Bool {
         guard let axValue = AXValue.from(value: value, type: .cgPoint) else { return false }
-        return self.setValue(attribute, value: axValue)
+        return setValue(attribute, value: axValue)
     }
 
     @discardableResult
     func setValue(_ attribute: NSAccessibility.Attribute, value: CGSize) -> Bool {
         guard let axValue = AXValue.from(value: value, type: .cgSize) else { return false }
-        return self.setValue(attribute, value: axValue)
+        return setValue(attribute, value: axValue)
     }
 
     func performAction(_ action: String) {
@@ -65,14 +65,14 @@ extension AXUIElement {
 }
 
 extension NSAccessibility.Attribute {
-    static let fullScreen: NSAccessibility.Attribute = NSAccessibility.Attribute(rawValue: "AXFullScreen")
+    static let fullScreen: NSAccessibility.Attribute = .init(rawValue: "AXFullScreen")
     static let enhancedUserInterface = NSAccessibility.Attribute(rawValue: "AXEnhancedUserInterface")
     static let windowIds = NSAccessibility.Attribute(rawValue: "AXWindowsIDs")
 }
 
 extension AXValue {
     static func from(value: Any, type: AXValueType) -> AXValue? {
-        return withUnsafePointer(to: value) { ptr in
+        withUnsafePointer(to: value) { ptr in
             AXValueCreate(type, ptr)
         }
     }

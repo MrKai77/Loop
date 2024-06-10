@@ -14,14 +14,25 @@ enum CustomWindowActionSizeMode: Int, Codable, CaseIterable, Identifiable {
     case preserveSize = 1
     case initialSize = 2
 
-    var label: Text {
+    var name: String {
         switch self {
         case .custom:
-            Text("\(Image(systemName: "rectangle.dashed")) Custom")
+            "Custom"
         case .preserveSize:
-            Text("\(Image(systemName: "lock.rectangle")) Preserve Size")
+            "Preserve Size"
         case .initialSize:
-            Text("\( Image("custom.backward.end.alt.fill.2.rectangle")) Initial Size")
+            "Initial Size"
+        }
+    }
+
+    var image: Image {
+        switch self {
+        case .custom:
+            Image(._18PxRulerPen)
+        case .preserveSize:
+            Image(._18PxTableLock)
+        case .initialSize:
+            Image(._18PxReturnKey)
         }
     }
 }

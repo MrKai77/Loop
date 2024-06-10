@@ -12,13 +12,4 @@ enum CustomWindowActionPositionMode: Int, Codable, CaseIterable, Identifiable {
 
     case generic = 0
     case coordinates = 1
-
-    var label: Text {
-        switch self {
-        case .generic:
-            Text("\(Image(systemName: "rectangle.dashed")) Generic")
-        case .coordinates:
-            Text("\(Image("custom.scope.rectangle")) Coordinates")
-        }
-    }
 }

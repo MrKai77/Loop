@@ -5,11 +5,11 @@
 //  Created by Kai Azim on 2023-01-24.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 class PreviewController {
-    private var previewWindowController: NSWindowController?
+    var controller: NSWindowController?
     private var screen: NSScreen?
     private var window: Window?
 
@@ -22,7 +22,7 @@ class PreviewController {
     }
 
     func open(screen: NSScreen, window: Window? = nil, startingAction: WindowAction? = nil) {
-        if let windowController = previewWindowController {
+        if let windowController = controller {
             windowController.window?.orderFrontRegardless()
             return
         }
@@ -35,7 +35,7 @@ class PreviewController {
             screen: NSApp.keyWindow?.screen
         )
         panel.alphaValue = 0
-        panel.backgroundColor = NSColor.white.withAlphaComponent(0.00001)
+        panel.backgroundColor = .clear
         panel.setFrame(NSRect(origin: screen.stageStripFreeFrame.center, size: .zero), display: true)
         // This ensures that this is below the radial menu
         panel.level = NSWindow.Level(NSWindow.Level.screenSaver.rawValue - 1)
@@ -43,19 +43,19 @@ class PreviewController {
         panel.collectionBehavior = .canJoinAllSpaces
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
-        previewWindowController = .init(window: panel)
+        controller = .init(window: panel)
 
         self.screen = screen
         self.window = window
 
         if let action = startingAction {
-            self.setAction(to: action)
+            setAction(to: action)
         }
     }
 
     func close() {
-        guard let windowController = previewWindowController else { return }
-        previewWindowController = nil
+        guard let windowController = controller else { return }
+        controller = nil
 
         windowController.window?.animator().alphaValue = 1
         NSAnimationContext.runAnimationGroup({ _ in
@@ -67,22 +67,22 @@ class PreviewController {
 
     func setScreen(to newScreen: NSScreen) {
         guard
-            self.previewWindowController != nil,    // Ensures that the preview window is open
-            self.screen != newScreen
+            controller != nil, // Ensures that the preview window is open
+            screen != newScreen
         else {
             return
         }
 
-        self.close()
-        self.open(screen: newScreen, window: self.window)
+        close()
+        open(screen: newScreen, window: window)
 
         print("Changed preview window's screen")
     }
 
     func setAction(to action: WindowAction) {
         guard
-            let windowController = previewWindowController,
-            let screen = self.screen,
+            let windowController = controller,
+            let screen,
             !action.direction.willChangeScreen,
             action.direction != .cycle
         else {
@@ -90,10 +90,10 @@ class PreviewController {
         }
 
         let targetWindowFrame = action.getFrame(
-                window: self.window,
-                bounds: screen.safeScreenFrame
-            )
-            .flipY(maxY: NSScreen.screens[0].frame.maxY)
+            window: window,
+            bounds: screen.safeScreenFrame
+        )
+        .flipY(maxY: NSScreen.screens[0].frame.maxY)
 
         let shouldBeTransparent = targetWindowFrame.size.area == 0
 

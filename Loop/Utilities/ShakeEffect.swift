@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ShakeEffect: GeometryEffect {
-    func effectValue(size: CGSize) -> ProjectionTransform {
-        return ProjectionTransform(
+    func effectValue(size _: CGSize) -> ProjectionTransform {
+        ProjectionTransform(
             CGAffineTransform(
                 translationX: 3 * sin(position * 3 * .pi),
                 y: 0
@@ -18,7 +18,7 @@ struct ShakeEffect: GeometryEffect {
     }
 
     init(shakes: Int) {
-        position = CGFloat(shakes)
+        self.position = CGFloat(shakes)
     }
 
     var position: CGFloat

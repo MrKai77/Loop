@@ -10,7 +10,7 @@ import SwiftUI
 // By making this equatable, we won't refresh the view everytime something else changes
 // Make sure to apply .equatable()
 struct WallpaperView: View, Equatable {
-    static func == (lhs: WallpaperView, rhs: WallpaperView) -> Bool {
+    static func == (_: WallpaperView, _: WallpaperView) -> Bool {
         true
     }
 

@@ -20,6 +20,6 @@ class StageManager {
     }
 
     static var position: Edge {
-        dockDefaults?.string(forKey: "orientation") == "left" ? .trailing: .leading
+        dockDefaults?.string(forKey: "orientation") == "left" ? .trailing : .leading
     }
 }

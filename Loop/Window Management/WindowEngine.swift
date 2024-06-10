@@ -5,10 +5,10 @@
 //  Created by Kai Azim on 2023-06-16.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
-struct WindowEngine {
+enum WindowEngine {
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized
@@ -51,19 +51,41 @@ struct WindowEngine {
             return
         }
 
-        let targetWindowFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
+        let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
 
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)
         }
 
-        print("Target window frame: \(targetWindowFrame)")
+        print("Target window frame: \(targetFrame)")
 
         let enhancedUI = window.enhancedUserInterface ?? false
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
+        WindowRecords.record(window, action)
+
+        if window.nsRunningApplication == NSRunningApplication.current,
+           let window = NSApp.keyWindow {
+            var newFrame = targetFrame
+            newFrame.size = window.frame.size
+
+            if newFrame.maxX > screen.safeScreenFrame.maxX {
+                newFrame.origin.x = screen.safeScreenFrame.maxX - newFrame.width - Defaults[.padding].right
+            }
+
+            if newFrame.maxY > screen.safeScreenFrame.maxY {
+                newFrame.origin.y = screen.safeScreenFrame.maxY - newFrame.height - Defaults[.padding].bottom
+            }
+
+            NSAnimationContext.runAnimationGroup { context in
+                context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
+                window.animator().setFrame(newFrame.flipY(screen: .screens[0]), display: false)
+            }
+
+            return
+        }
 
         window.setFrame(
-            targetWindowFrame,
+            targetFrame,
             animate: animate,
             sizeFirst: willChangeScreens,
             bounds: screen.safeScreenFrame
@@ -71,16 +93,18 @@ struct WindowEngine {
             // If animations are disabled, check if the window needs extra resizing
             if !animate {
                 // Fixes an issue where window isn't resized correctly on multi-monitor setups
-                if !window.frame.approximatelyEqual(to: targetWindowFrame) {
+                if !window.frame.approximatelyEqual(to: targetFrame) {
                     print("Backup resizing...")
-                    window.setFrame(targetWindowFrame)
+                    window.setFrame(targetFrame)
                 }
             }
 
             WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
         }
 
-        WindowRecords.record(window, action)
+        if Defaults[.moveCursorWithWindow] {
+            CGWarpMouseCursorPosition(targetFrame.center)
+        }
     }
 
     static func getTargetWindow() -> Window? {
@@ -93,7 +117,7 @@ struct WindowEngine {
         }
 
         if result == nil {
-           result = WindowEngine.frontmostWindow
+            result = WindowEngine.frontmostWindow
         }
 
         return result
@@ -114,7 +138,6 @@ struct WindowEngine {
     static func windowAtPosition(_ position: CGPoint) -> Window? {
         if let element = AXUIElement.systemWide.getElementAtPosition(position),
            let windowElement = element.getValue(.window),
-           // swiftlint:disable:next force_cast
            let window = Window(element: windowElement as! AXUIElement) {
             return window
         }
@@ -159,7 +182,7 @@ struct WindowEngine {
     private static func handleSizeConstrainedWindow(window: Window, screenFrame: CGRect) {
         let windowFrame = window.frame
         // If the window is fully shown on the screen
-        if (windowFrame.maxX <= screenFrame.maxX) && (windowFrame.maxY <= screenFrame.maxY) {
+        if windowFrame.maxX <= screenFrame.maxX, windowFrame.maxY <= screenFrame.maxY {
             return
         }
 

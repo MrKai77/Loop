@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WindowRecords {
+enum WindowRecords {
     private static var records: [WindowRecords.Record] = []
 
     struct Record {
@@ -20,7 +20,7 @@ struct WindowRecords {
     /// - Parameter window: The window to check
     /// - Returns: true or false
     static func hasBeenRecorded(_ window: Window) -> Bool {
-        return WindowRecords.records.contains { record in
+        WindowRecords.records.contains { record in
             record.cgWindowID == window.cgWindowID
         }
     }
@@ -67,7 +67,7 @@ struct WindowRecords {
     ///   - action: WindowAction to record
     static func record(_ window: Window, _ action: WindowAction) {
         guard
-            action.direction != .undo,  // There is no point in recording undos
+            action.direction != .undo, // There is no point in recording undos
             let id = WindowRecords.findRecordsID(for: window)
         else {
             return

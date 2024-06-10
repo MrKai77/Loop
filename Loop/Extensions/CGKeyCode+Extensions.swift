@@ -6,8 +6,8 @@
 //
 // From https://gist.github.com/chrispaynter/07c9b16219c3d58f57a6e2b0249db4bf (but edited a lot)
 
-import CoreGraphics
 import Carbon
+import CoreGraphics
 import SwiftUI
 
 extension CGKeyCode {
@@ -166,11 +166,11 @@ extension CGKeyCode {
     }
 
     var isModifier: Bool {
-        return (.kVK_RightCommand ... .kVK_Function).contains(self)
+        (.kVK_RightCommand ... .kVK_Function).contains(self)
     }
 
     var isOnRightSide: Bool {
-        return [.kVK_RightCommand, .kVK_RightControl, .kVK_RightOption, .kVK_RightShift].contains(self)
+        [.kVK_RightCommand, .kVK_RightControl, .kVK_RightOption, .kVK_RightShift].contains(self)
     }
 
     var isPressed: Bool {
@@ -229,14 +229,14 @@ extension CGKeyCode {
         // There's "⌧“ 'X In A Rectangle Box' (U+2327), "☒" 'Ballot Box with X' (U+2612), "×" 'Multiplication Sign' (U+00d7), "⨯" 'Vector or Cross Product' (U+2a2f), or a plain small x. All combined symbols appear bigger.
         .kVK_ANSI_KeypadClear: "☒\u{20e3}", // The combined symbol appears bigger than the other combined 'keycaps'
         // TODO: Respect locale decimal separator ("." or ",")
-            .kVK_ANSI_KeypadDecimal: ".\u{20e3}",
+        .kVK_ANSI_KeypadDecimal: ".\u{20e3}",
         .kVK_ANSI_KeypadDivide: "/\u{20e3}",
         // "⏎" 'Return Symbol' (U+23CE) but "↩" 'Leftwards Arrow with Hook' (U+00d7) seems to be more common on macOS.
         .kVK_ANSI_KeypadEnter: "↩\u{20e3}", // The combined symbol appears bigger than the other combined 'keycaps'
         .kVK_ANSI_KeypadEquals: "=\u{20e3}",
         .kVK_ANSI_KeypadMinus: "-\u{20e3}",
         .kVK_ANSI_KeypadMultiply: "*\u{20e3}",
-        .kVK_ANSI_KeypadPlus: "+\u{20e3}",
+        .kVK_ANSI_KeypadPlus: "+\u{20e3}"
     ]
 
     // Make sure to use baseModifier before using this!
@@ -322,17 +322,17 @@ extension CGKeyCode {
     }
 
     var systemImage: String? {
-        if let systemName = CGKeyCode.keyToImage[self.baseModifier] {
-            return systemName
+        if let systemName = CGKeyCode.keyToImage[baseModifier] {
+            systemName
         } else {
-            return nil
+            nil
         }
     }
 }
 
 extension NSEvent.ModifierFlags {
     func convertToCGKeyCode() -> Set<CGKeyCode> {
-        let deviceIndependent = self.intersection(.deviceIndependentFlagsMask)
+        let deviceIndependent = intersection(.deviceIndependentFlagsMask)
         var result: Set<CGKeyCode> = []
 
         if deviceIndependent.contains(.command) {

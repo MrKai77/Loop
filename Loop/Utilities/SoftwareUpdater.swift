@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2023-08-10.
 //
 
+import Defaults
 import Foundation
 import Sparkle
-import Defaults
 
 class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
     private var updater: SPUUpdater?
@@ -26,13 +26,13 @@ class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
 
     override init() {
         super.init()
-        updater = SPUStandardUpdaterController(
+        self.updater = SPUStandardUpdaterController(
             startingUpdater: true,
             updaterDelegate: self,
             userDriverDelegate: nil
         ).updater
 
-        automaticallyChecksForUpdatesObservation = updater?.observe(
+        self.automaticallyChecksForUpdatesObservation = updater?.observe(
             \.automaticallyChecksForUpdates,
             options: [.initial, .new, .old]
         ) { [weak self] updater, change in
@@ -40,7 +40,7 @@ class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
             self?.automaticallyChecksForUpdates = updater.automaticallyChecksForUpdates
         }
 
-        lastUpdateCheckDateObservation = updater?.observe(
+        self.lastUpdateCheckDateObservation = updater?.observe(
             \.lastUpdateCheckDate,
             options: [.initial, .new, .old]
         ) { [weak self] updater, _ in
@@ -52,7 +52,7 @@ class SoftwareUpdater: NSObject, ObservableObject, SPUUpdaterDelegate {
         feedURLTask?.cancel()
     }
 
-    func allowedChannels(for updater: SPUUpdater) -> Set<String> {
+    func allowedChannels(for _: SPUUpdater) -> Set<String> {
         Defaults[.includeDevelopmentVersions] ? ["development"] : []
     }
 

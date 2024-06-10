@@ -5,10 +5,9 @@
 //  Created by Kai Azim on 2023-01-23.
 //
 
-import SwiftUI
-import MenuBarExtraAccess
-import SettingsAccess
 import Defaults
+import MenuBarExtraAccess
+import SwiftUI
 
 @main
 struct LoopApp: App {
@@ -18,13 +17,9 @@ struct LoopApp: App {
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
 
     var body: some Scene {
-        Settings {
-            SettingsView()
-        }
-
         MenuBarExtra("Loop", image: "empty", isInserted: Binding.constant(!hideMenuBarIcon)) {
             #if DEBUG
-            MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
+                MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
             #endif
 
             Button {
@@ -61,22 +56,9 @@ struct LoopApp: App {
                 ForEach(WindowDirection.verticalThirds) { MenuBarResizeButton($0) }
             }
 
-            SettingsLink(
-                label: {
-                    Text("Settings…")
-                },
-                preAction: {
-                    for window in NSApp.windows where window.toolbar?.items != nil {
-                        window.close()
-                    }
-                },
-                postAction: {
-                    for window in NSApp.windows where window.toolbar?.items != nil {
-                        window.orderFrontRegardless()
-                        window.center()
-                    }
-                }
-            )
+            Button("Settings…") {
+                LuminareManager.open()
+            }
             .keyboardShortcut(",", modifiers: .command)
 
             Button("About \(Bundle.main.appName)") {
@@ -96,7 +78,7 @@ struct LoopApp: App {
         .menuBarExtraAccess(isPresented: $isMenubarItemPresented) { statusItem in
             guard
                 let button = statusItem.button,
-                button.subviews.count == 0
+                button.subviews.isEmpty
             else {
                 return
             }

@@ -13,15 +13,15 @@ class WindowTransformAnimation: NSAnimation {
     private let originalFrame: CGRect
     private let window: Window
     private let bounds: CGRect
-    private let completionHandler: () -> Void
+    private let completionHandler: () -> ()
 
     private var lastWindowFrame: CGRect = .zero
 
     // Using ids for each ongoing animation, we can cancel as a new window animation is started for that specific window
-    private var id: UUID = UUID()
+    private var id: UUID = .init()
     static var currentAnimations: [CGWindowID: UUID] = [:]
 
-    init(_ newRect: CGRect, window: Window, bounds: CGRect, completionHandler: @escaping () -> Void) {
+    init(_ newRect: CGRect, window: Window, bounds: CGRect, completionHandler: @escaping () -> ()) {
         self.targetFrame = newRect
         self.originalFrame = window.frame
         self.window = window
@@ -32,16 +32,17 @@ class WindowTransformAnimation: NSAnimation {
         self.animationBlockingMode = .nonblocking
         self.lastWindowFrame = originalFrame
 
-        WindowTransformAnimation.currentAnimations[window.cgWindowID] = self.id
+        WindowTransformAnimation.currentAnimations[window.cgWindowID] = id
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     func startInBackground() {
         DispatchQueue.global().async { [self] in
-            self.start()
+            start()
             RunLoop.current.run()
         }
     }
@@ -53,7 +54,7 @@ class WindowTransformAnimation: NSAnimation {
                 return
             }
 
-            let value = CGFloat(1.0 - pow(1.0 - self.currentValue, 3))
+            let value = CGFloat(1.0 - pow(1.0 - currentValue, 3))
 
             var newFrame = CGRect(
                 x: originalFrame.origin.x + value * (targetFrame.origin.x - originalFrame.origin.x),

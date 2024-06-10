@@ -5,15 +5,15 @@
 //  Created by Kai Azim on 2023-06-14.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 extension NSScreen {
     // Return the CGDirectDisplayID
     // Used in to help calculate the size a window needs to be resized to
     var displayID: CGDirectDisplayID? {
         let key = NSDeviceDescriptionKey("NSScreenNumber")
-        return self.deviceDescription[key] as? CGDirectDisplayID
+        return deviceDescription[key] as? CGDirectDisplayID
     }
 
     static var screenWithMouse: NSScreen? {
@@ -26,15 +26,14 @@ extension NSScreen {
 
     var safeScreenFrame: CGRect {
         guard
-            let displayID = self.displayID
+            let displayID
         else {
             print("ERROR: Failed to get NSScreen.displayID in NSScreen.safeScreenFrame")
-            return self.frame.flipY(screen: self)
+            return frame.flipY(screen: self)
         }
 
         let screenFrame = CGDisplayBounds(displayID)
-        let visibleFrame = self.stageStripFreeFrame.flipY(maxY: self.frame.maxY)
-        let menubarHeight = visibleFrame.origin.y
+        let visibleFrame = stageStripFreeFrame.flipY(screen: self)
 
         // By setting safeScreenFrame to visibleFrame, we won't need to adjust its size.
         var safeScreenFrame = visibleFrame
@@ -50,9 +49,9 @@ extension NSScreen {
     }
 
     var stageStripFreeFrame: NSRect {
-        var frame = self.visibleFrame
+        var frame = visibleFrame
 
-        if Defaults[.respectStageManager] && StageManager.enabled && StageManager.shown {
+        if Defaults[.respectStageManager], StageManager.enabled, StageManager.shown {
             if StageManager.position == .leading {
                 frame.origin.x += Defaults[.stageStripSize]
             }
@@ -65,12 +64,16 @@ extension NSScreen {
 
     var displayBounds: CGRect {
         guard
-            let displayID = self.displayID
+            let displayID
         else {
             print("ERROR: Failed to get NSScreen.displayID in NSScreen.displayBounds")
-            return self.frame.flipY(screen: self)
+            return frame.flipY(screen: self)
         }
 
         return CGDisplayBounds(displayID)
+    }
+
+    var menubarHeight: CGFloat {
+        frame.maxY - visibleFrame.maxY
     }
 }

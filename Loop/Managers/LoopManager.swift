@@ -5,10 +5,9 @@
 //  Created by Kai Azim on 2023-08-15.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
-// swiftlint:disable:next type_body_length
 class LoopManager: ObservableObject {
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?
@@ -27,13 +26,12 @@ class LoopManager: ObservableObject {
 
     private var flagsChangedEventMonitor: EventMonitor?
     private var mouseMovedEventMonitor: EventMonitor?
-    private var keyDownEventMonitor: EventMonitor?
     private var middleClickMonitor: EventMonitor?
     private var lastTriggerKeyClick: Date = .now
 
     @Published var currentAction: WindowAction = .init(.noAction)
-    private var initialMousePosition: CGPoint = CGPoint()
-    private var angleToMouse: Angle = Angle(degrees: 0)
+    private var initialMousePosition: CGPoint = .init()
+    private var angleToMouse: Angle = .init(degrees: 0)
     private var distanceToMouse: CGFloat = 0
 
     private var triggerDelayTimer: Timer? {
@@ -42,34 +40,7 @@ class LoopManager: ObservableObject {
         }
     }
 
-    func startObservingKeys() {
-        flagsChangedEventMonitor = NSEventMonitor(
-            scope: .global,
-            eventMask: .flagsChanged,
-            handler: handleLoopKeypress(_:)
-        )
-
-        mouseMovedEventMonitor = NSEventMonitor(
-            scope: .global,
-            eventMask: [.mouseMoved, .otherMouseDragged],
-            handler: mouseMoved(_:)
-        )
-
-        middleClickMonitor = CGEventMonitor(
-            eventMask: [.otherMouseDragged, .otherMouseUp],
-            callback: handleMiddleClick(cgEvent:)
-        )
-
-        keyDownEventMonitor = NSEventMonitor(
-            scope: .global,
-            eventMask: .keyDown
-        ) { _ in
-            if Defaults[.doubleClickToTrigger] &&
-                abs(self.lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-                self.lastTriggerKeyClick = Date.distantPast
-            }
-        }
-
+    func start() {
         Notification.Name.forceCloseLoop.onReceive { _ in
             self.closeLoop(forceClose: true)
         }
@@ -80,12 +51,35 @@ class LoopManager: ObservableObject {
             }
         }
 
-        flagsChangedEventMonitor!.start()
-        middleClickMonitor!.start()
-        keyDownEventMonitor!.start()
+        mouseMovedEventMonitor = NSEventMonitor(
+            scope: .all,
+            eventMask: [.mouseMoved, .otherMouseDragged],
+            handler: mouseMoved(_:)
+        )
+
+        middleClickMonitor = CGEventMonitor(
+            eventMask: [.otherMouseDragged, .otherMouseUp],
+            callback: handleMiddleClick(cgEvent:)
+        )
+
+        setFlagsObservers(scope: .all)
+        middleClickMonitor?.start()
     }
 
-    private func mouseMoved(_ event: NSEvent) {
+    // This is called when setting the trigger key, so that there aren't conflicting event monitors
+    func setFlagsObservers(scope: NSEventMonitor.Scope = .all) {
+        flagsChangedEventMonitor?.stop()
+
+        flagsChangedEventMonitor = NSEventMonitor(
+            scope: scope,
+            eventMask: .flagsChanged,
+            handler: handleLoopKeypress(_:)
+        )
+
+        flagsChangedEventMonitor?.start()
+    }
+
+    private func mouseMoved(_: NSEvent) {
         guard isLoopActive else { return }
         keybindMonitor.canPassthroughSpecialEvents = false
 
@@ -96,7 +90,7 @@ class LoopManager: ObservableObject {
         let mouseDistance = initialMousePosition.distanceSquared(to: currentMouseLocation)
 
         // Return if the mouse didn't move
-        if (mouseAngle == angleToMouse) && (mouseDistance == distanceToMouse) {
+        if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
             return
         }
 
@@ -149,34 +143,34 @@ class LoopManager: ObservableObject {
     }
 
     private func getNextCycleAction(_ action: WindowAction) -> WindowAction {
-        guard let cycle = action.cycle else {
+        guard let currentCycle = action.cycle else {
             return action
         }
 
         var nextIndex = 0
 
-        if !cycle.contains(currentAction),
+        if !currentCycle.contains(currentAction),
            let window = targetWindow,
            let latestRecord = WindowRecords.getCurrentAction(for: window) {
             // We "preserve" the cycle index based on the last record
-            nextIndex = (cycle.firstIndex(of: latestRecord) ?? -1) + 1
+            nextIndex = (currentCycle.firstIndex(of: latestRecord) ?? -1) + 1
 
         } else if currentAction.direction == .custom {
             // We need to check if *all* the characteristics of the action are the same
-            nextIndex = (cycle.firstIndex(of: currentAction) ?? -1) + 1
+            nextIndex = (currentCycle.firstIndex(of: currentAction) ?? -1) + 1
         } else {
             // Only check the direction, since the rest of the info is insignificant
-            nextIndex = (cycle.firstIndex { $0.direction == currentAction.direction } ?? -1) + 1
+            nextIndex = (currentCycle.firstIndex { $0.direction == currentAction.direction } ?? -1) + 1
         }
 
-        if nextIndex >= cycle.count {
+        if nextIndex >= currentCycle.count {
             nextIndex = 0
         }
 
-        return cycle[nextIndex]
+        return currentCycle[nextIndex]
     }
 
-    private func changeAction(_ action: WindowAction) {
+    private func changeAction(_ action: WindowAction, triggeredFromScreenChange: Bool = false) {
         guard
             currentAction != action || action.willManipulateCurrentWindowSize,
             isLoopActive,
@@ -189,6 +183,12 @@ class LoopManager: ObservableObject {
 
         if newAction.direction == .cycle {
             newAction = getNextCycleAction(action)
+
+            // Prevents an endless loop of cycling screens
+            if triggeredFromScreenChange, newAction.direction.willChangeScreen {
+                performHapticFeedback()
+                return
+            }
         }
 
         if newAction.direction.willChangeScreen {
@@ -219,13 +219,14 @@ class LoopManager: ObservableObject {
 
             if action.direction == .cycle {
                 currentAction = newAction
-                changeAction(action)
+                changeAction(action, triggeredFromScreenChange: true)
             } else {
-                if let screenToResizeOn = screenToResizeOn,
+                if let screenToResizeOn,
+                   let window = targetWindow,
                    !Defaults[.previewVisibility] {
                     performHapticFeedback()
                     WindowEngine.resize(
-                        targetWindow!,
+                        window,
                         to: currentAction,
                         on: screenToResizeOn
                     )
@@ -249,9 +250,10 @@ class LoopManager: ObservableObject {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
 
                 if let screenToResizeOn = self.screenToResizeOn,
+                   let window = self.targetWindow,
                    !Defaults[.previewVisibility] {
                     WindowEngine.resize(
-                        self.targetWindow!,
+                        window,
                         to: self.currentAction,
                         on: screenToResizeOn
                     )
@@ -264,11 +266,11 @@ class LoopManager: ObservableObject {
 
     func handleMiddleClick(cgEvent: CGEvent) -> Unmanaged<CGEvent>? {
         if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
-            if event.type == .otherMouseDragged && !isLoopActive {
+            if event.type == .otherMouseDragged, !isLoopActive {
                 openLoop()
             }
 
-            if event.type == .otherMouseUp && isLoopActive {
+            if event.type == .otherMouseUp, isLoopActive {
                 closeLoop()
             }
         }
@@ -345,7 +347,7 @@ class LoopManager: ObservableObject {
         let flags = event.modifierFlags.convertToCGKeyCode()
         if flags.count != currentlyPressedModifiers.count {
             for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
-                if !currentlyPressedModifiers.map({ $0.baseModifier }).contains(key) {
+                if !currentlyPressedModifiers.map(\.baseModifier).contains(key) {
                     currentlyPressedModifiers.insert(key)
                 }
             }
@@ -365,10 +367,10 @@ class LoopManager: ObservableObject {
         guard targetWindow?.isAppExcluded != true else { return }
 
         initialMousePosition = NSEvent.mouseLocation
-        screenToResizeOn = NSScreen.main
+        screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
 
         if !Defaults[.disableCursorInteraction] {
-            mouseMovedEventMonitor!.start()
+            mouseMovedEventMonitor?.start()
         }
 
         if !Defaults[.hideUntilDirectionIsChosen] {
@@ -391,16 +393,16 @@ class LoopManager: ObservableObject {
         closeWindows()
 
         keybindMonitor.stop()
-        mouseMovedEventMonitor!.stop()
+        mouseMovedEventMonitor?.stop()
 
         currentlyPressedModifiers = []
 
         if targetWindow != nil,
-            screenToResizeOn != nil,
-            forceClose == false,
-            currentAction.direction != .noAction,
-            isLoopActive {
-            if let screenToResizeOn = screenToResizeOn,
+           screenToResizeOn != nil,
+           forceClose == false,
+           currentAction.direction != .noAction,
+           isLoopActive {
+            if let screenToResizeOn,
                Defaults[.previewVisibility] {
                 LoopManager.canAdjustSize = false
                 WindowEngine.resize(
@@ -417,7 +419,7 @@ class LoopManager: ObservableObject {
             Defaults[.timesLooped] += 1
             IconManager.checkIfUnlockedNewIcon()
         } else {
-            if targetWindow == nil && isLoopActive {
+            if targetWindow == nil, isLoopActive {
                 NSSound.beep()
             }
         }
@@ -429,7 +431,7 @@ class LoopManager: ObservableObject {
     }
 
     private func openWindows() {
-        if Defaults[.previewVisibility] && targetWindow != nil {
+        if Defaults[.previewVisibility], targetWindow != nil {
             previewController.open(screen: screenToResizeOn!, window: targetWindow)
         }
 

@@ -1,5 +1,5 @@
 //
-//  AboutViewManager.swift
+//  AboutViewController.swift
 //  Loop
 //
 //  Created by Kai Azim on 2023-04-08.

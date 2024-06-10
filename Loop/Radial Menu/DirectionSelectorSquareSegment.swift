@@ -14,17 +14,17 @@ struct DirectionSelectorSquareSegment: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+            RoundedRectangle(cornerRadius: radialMenuCornerRadius)
                 .trim(
-                    from: (Angle(degrees: self.angle - 22.5).normalized().degrees / 360.0),
-                    to: (Angle(degrees: self.angle + 22.5).normalized().degrees / 360.0)
+                    from: Angle(degrees: angle - 22.5).normalized().degrees / 360.0,
+                    to: Angle(degrees: angle + 22.5).normalized().degrees / 360.0
                 )
                 .stroke(.white, lineWidth: radialMenuThickness * 2)
 
-            RoundedRectangle(cornerRadius: radialMenuCornerRadius, style: .continuous)
+            RoundedRectangle(cornerRadius: radialMenuCornerRadius)
                 .trim(
-                    from: (Angle(degrees: self.angle - 180 - 22.5).normalized().degrees / 360.0),
-                    to: (Angle(degrees: self.angle - 180 + 22.5).normalized().degrees / 360.0)
+                    from: Angle(degrees: angle - 180 - 22.5).normalized().degrees / 360.0,
+                    to: Angle(degrees: angle - 180 + 22.5).normalized().degrees / 360.0
                 )
                 .stroke(.white, lineWidth: radialMenuThickness * 2)
                 .rotationEffect(.degrees(180))
