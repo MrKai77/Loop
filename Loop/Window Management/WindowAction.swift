@@ -133,10 +133,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result.size.height = bounds.height * frameMultiplyValues.height
 
         } else if direction.willAdjustSize {
-            var frameToResizeFrom = LoopManager.lastTargetFrame
-            if !Defaults[.previewVisibility], let window {
-                frameToResizeFrom = window.frame
-            }
+            let frameToResizeFrom = LoopManager.lastTargetFrame
 
             result = frameToResizeFrom
             if LoopManager.canAdjustSize {
@@ -144,10 +141,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
 
         } else if direction.willShrink || direction.willGrow {
-            var frameToResizeFrom = LoopManager.lastTargetFrame
-            if !Defaults[.previewVisibility], let window {
-                frameToResizeFrom = window.frame
-            }
+            let frameToResizeFrom = LoopManager.lastTargetFrame
 
             result = frameToResizeFrom
             if LoopManager.canAdjustSize {

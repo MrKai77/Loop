@@ -64,16 +64,18 @@ class WindowTransformAnimation: NSAnimation {
             )
 
             // Keep the window inside the bounds
-            let xDiff = lastWindowFrame.width - newFrame.width
-            if newFrame.maxX + xDiff > lastWindowFrame.maxX || currentValue >= 0.5,
-               newFrame.maxX + xDiff > bounds.maxX {
-                newFrame.origin.x = bounds.maxX - lastWindowFrame.width
-            }
+            if bounds != .zero {
+                let xDiff = lastWindowFrame.width - newFrame.width
+                if newFrame.maxX + xDiff > lastWindowFrame.maxX || currentValue >= 0.5,
+                   newFrame.maxX + xDiff > bounds.maxX {
+                    newFrame.origin.x = bounds.maxX - lastWindowFrame.width
+                }
 
-            let yDiff = lastWindowFrame.height - newFrame.height
-            if newFrame.maxY + yDiff > lastWindowFrame.maxY || currentValue >= 0.5,
-               newFrame.maxY + yDiff > bounds.maxY {
-                newFrame.origin.y = bounds.maxY - lastWindowFrame.height
+                let yDiff = lastWindowFrame.height - newFrame.height
+                if newFrame.maxY + yDiff > lastWindowFrame.maxY || currentValue >= 0.5,
+                   newFrame.maxY + yDiff > bounds.maxY {
+                    newFrame.origin.y = bounds.maxY - lastWindowFrame.height
+                }
             }
 
             window.setPosition(newFrame.origin)
