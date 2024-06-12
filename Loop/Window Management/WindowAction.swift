@@ -87,8 +87,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
-    var willManipulateCurrentWindowSize: Bool {
-        direction.willAdjustSize || direction.willShrink || direction.willGrow
+    var willManipulateExistingWindowFrame: Bool {
+        direction.willAdjustSize || direction.willShrink || direction.willGrow || direction.willMove
     }
 
     static func getAction(for keybind: Set<CGKeyCode>) -> WindowAction? {
@@ -122,7 +122,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         if !isPreview { bounds = getPaddedBounds(bounds) }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
-        if !willManipulateCurrentWindowSize {
+        if !willManipulateExistingWindowFrame {
             LoopManager.sidesToAdjust = nil
         }
 
@@ -137,10 +137,11 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
             result = frameToResizeFrom
             if LoopManager.canAdjustSize {
-                result = processSizeAdjustment(frameToResizeFrom, bounds)
+                result = calculateSizeAdjustment(frameToResizeFrom, bounds)
             }
 
         } else if direction.willShrink || direction.willGrow {
+            // This allows for control over each side
             let frameToResizeFrom = LoopManager.lastTargetFrame
 
             result = frameToResizeFrom
@@ -156,8 +157,12 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
                     LoopManager.sidesToAdjust = .trailing
                 }
 
-                result = processSizeAdjustment(frameToResizeFrom, bounds)
+                result = calculateSizeAdjustment(frameToResizeFrom, bounds)
             }
+
+        } else if direction.willMove {
+            let frameToResizeFrom = LoopManager.lastTargetFrame
+            result = calculatePointAdjustment(frameToResizeFrom, bounds)
 
         } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
@@ -215,7 +220,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         if !isPreview {
-            if direction != .undo, direction != .initialFrame {
+            if direction != .undo, direction != .initialFrame, !direction.willMove {
                 result = applyPadding(result, bounds)
             }
 
@@ -315,7 +320,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
-    private func processSizeAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
+    private func calculateSizeAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
         var result = frameToResizeFrom
         let totalBounds: Edge.Set = [.top, .bottom, .leading, .trailing]
         let step = Defaults[.sizeIncrement] * ((direction == .larger || direction.willGrow) ? -1 : 1)
@@ -358,6 +363,22 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
+    private func calculatePointAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
+        var result = frameToResizeFrom
+
+        if direction == .moveUp {
+            result.origin.y -= Defaults[.sizeIncrement]
+        } else if direction == .moveDown {
+            result.origin.y += Defaults[.sizeIncrement]
+        } else if direction == .moveRight {
+            result.origin.x += Defaults[.sizeIncrement]
+        } else if direction == .moveLeft {
+            result.origin.x -= Defaults[.sizeIncrement]
+        }
+
+        return result
+    }
+
     private func getPaddedBounds(_ bounds: CGRect) -> CGRect {
         let padding = Defaults[.padding]
 
@@ -376,7 +397,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         var paddedWindowFrame = windowFrame.intersection(bounds)
 
         guard
-            !willManipulateCurrentWindowSize
+            !willManipulateExistingWindowFrame
         else {
             return paddedWindowFrame
         }

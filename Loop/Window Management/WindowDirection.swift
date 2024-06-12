@@ -71,6 +71,12 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case growRight = "GrowRight"
     case growLeft = "GrowLeft"
 
+    // Move
+    case moveUp = "MoveUp"
+    case moveDown = "MoveDown"
+    case moveRight = "MoveRight"
+    case moveLeft = "MoveLeft"
+
     case custom = "Custom"
     case cycle = "Cycle"
 
@@ -111,6 +117,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         [.growTop, .growBottom, .growRight, .growLeft]
     }
 
+    static var move: [WindowDirection] {
+        [.moveUp, .moveDown, .moveRight, .moveLeft]
+    }
+
     static var more: [WindowDirection] {
         [.initialFrame, .undo, .custom, .cycle]
     }
@@ -129,6 +139,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var willGrow: Bool {
         WindowDirection.grow.contains(self)
+    }
+
+    var willMove: Bool {
+        WindowDirection.move.contains(self)
     }
 
     // Used in the settings window to loop over the possible combinations
@@ -174,7 +188,8 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             willChangeScreen ||
             willAdjustSize ||
             willShrink ||
-            willGrow {
+            willGrow ||
+            willMove {
             return false
         }
         return true

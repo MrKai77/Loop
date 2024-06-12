@@ -54,30 +54,15 @@ extension WindowDirection {
         case .topRightQuarter:
             .init(localized: .init("Window Direction/Name: Top Right Quarter", defaultValue: "Top Right Quarter"))
         case .bottomRightQuarter:
-            .init(
-                localized: .init(
-                    "Window Direction/Name: Bottom Right Quarter",
-                    defaultValue: "Bottom Right Quarter"
-                )
-            )
+            .init(localized: .init("Window Direction/Name: Bottom Right Quarter", defaultValue: "Bottom Right Quarter"))
         case .bottomLeftQuarter:
-            .init(
-                localized: .init(
-                    "Window Direction/Name: Bottom Left Quarter",
-                    defaultValue: "Bottom Left Quarter"
-                )
-            )
+            .init(localized: .init("Window Direction/Name: Bottom Left Quarter", defaultValue: "Bottom Left Quarter"))
         case .rightThird:
             .init(localized: .init("Window Direction/Name: Right Third", defaultValue: "Right Third"))
         case .rightTwoThirds:
             .init(localized: .init("Window Direction/Name: Right Two Thirds", defaultValue: "Right Two Thirds"))
         case .horizontalCenterThird:
-            .init(
-                localized: .init(
-                    "Window Direction/Name: Horizontal Center Third",
-                    defaultValue: "Horizontal Center Third"
-                )
-            )
+            .init(localized: .init("Window Direction/Name: Horizontal Center Third", defaultValue: "Horizontal Center Third"))
         case .leftThird:
             .init(localized: .init("Window Direction/Name: Left Third", defaultValue: "Left Third"))
         case .leftTwoThirds:
@@ -87,12 +72,7 @@ extension WindowDirection {
         case .topTwoThirds:
             .init(localized: .init("Window Direction/Name: Top Two Thirds", defaultValue: "Top Two Thirds"))
         case .verticalCenterThird:
-            .init(
-                localized: .init(
-                    "Window Direction/Name: Vertical Center Third",
-                    defaultValue: "Vertical Center Third"
-                )
-            )
+            .init(localized: .init("Window Direction/Name: Vertical Center Third", defaultValue: "Vertical Center Third"))
         case .bottomThird:
             .init(localized: .init("Window Direction/Name: Bottom Third", defaultValue: "Bottom Third"))
         case .bottomTwoThirds:
@@ -121,6 +101,14 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Grow Right", defaultValue: "Grow Right"))
         case .growLeft:
             .init(localized: .init("Window Direction/Name: Grow Left", defaultValue: "Grow Left"))
+        case .moveUp:
+            .init(localized: .init("Window Direction/Name: Move Up", defaultValue: "Move Up"))
+        case .moveDown:
+            .init(localized: .init("Window Direction/Name: Move Down", defaultValue: "Move Down"))
+        case .moveRight:
+            .init(localized: .init("Window Direction/Name: Move Right", defaultValue: "Move Right"))
+        case .moveLeft:
+            .init(localized: .init("Window Direction/Name: Move Left", defaultValue: "Move Left"))
         case .custom:
             .init(localized: .init("Window Direction/Name: Custom", defaultValue: "Custom"))
         case .cycle:
