@@ -973,6 +973,7 @@
       }
     },
     "Grow/Shrink" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2765,6 +2766,50 @@
         }
       }
     },
+    "Window Direction/Name: Move Down" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Down"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Move Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Move Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Move Up" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Up"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Next Screen" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -3072,6 +3117,9 @@
       }
     },
     "Window gaps" : {
+
+    },
+    "Window Manipulation" : {
 
     },
     "Window padding" : {

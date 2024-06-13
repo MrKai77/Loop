@@ -165,7 +165,7 @@ struct WindowDirectionPicker: View, Equatable {
             }
 
             if !isCycle {
-                Menu("Grow/Shrink") {
+                Menu("Window Manipulation") {
                     ForEach(WindowDirection.sizeAdjustment) { direction in
                         directionPickerItem(direction)
                     }
@@ -175,6 +175,10 @@ struct WindowDirectionPicker: View, Equatable {
                     }
                     Divider()
                     ForEach(WindowDirection.grow) { direction in
+                        directionPickerItem(direction)
+                    }
+                    Divider()
+                    ForEach(WindowDirection.move) { direction in
                         directionPickerItem(direction)
                     }
                 }

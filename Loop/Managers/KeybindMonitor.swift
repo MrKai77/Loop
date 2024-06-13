@@ -118,7 +118,7 @@ class KeybindMonitor {
         }
 
         if let newAction = WindowAction.getAction(for: pressedKeys) {
-            if !event.isARepeat || newAction.willManipulateCurrentWindowSize {
+            if !event.isARepeat || newAction.willManipulateExistingWindowFrame {
                 Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
                 print("performKeybind: returning true due to valid event: \(newAction.direction)")
             }

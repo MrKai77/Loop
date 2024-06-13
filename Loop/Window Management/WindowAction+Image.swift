@@ -28,22 +28,14 @@ extension WindowAction {
             Image(systemName: "arrow.up.left.and.arrow.down.right")
         case .smaller:
             Image(systemName: "arrow.down.right.and.arrow.up.left")
-        case .shrinkTop:
+        case .shrinkTop, .growBottom, .moveDown:
             Image(systemName: "arrow.down")
-        case .shrinkBottom:
+        case .shrinkBottom, .growTop, .moveUp:
             Image(systemName: "arrow.up")
-        case .shrinkRight:
+        case .shrinkRight, .growLeft, .moveLeft:
             Image(systemName: "arrow.left")
-        case .shrinkLeft:
+        case .shrinkLeft, .growRight, .moveRight:
             Image(systemName: "arrow.right")
-        case .growTop:
-            Image(systemName: "arrow.up")
-        case .growBottom:
-            Image(systemName: "arrow.down")
-        case .growRight:
-            Image(systemName: "arrow.right")
-        case .growLeft:
-            Image(systemName: "arrow.left")
         default:
             nil
         }
@@ -113,6 +105,6 @@ struct IconView: View {
     }
 
     func refreshFrame() {
-        frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), isPreview: true)
+        frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), disablePadding: true)
     }
 }

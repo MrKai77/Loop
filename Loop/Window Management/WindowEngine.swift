@@ -84,11 +84,13 @@ enum WindowEngine {
             return
         }
 
+        let bounds = action.direction.willMove ? .zero : screen.safeScreenFrame
+
         window.setFrame(
             targetFrame,
             animate: animate,
             sizeFirst: willChangeScreens,
-            bounds: screen.safeScreenFrame
+            bounds: bounds
         ) {
             // If animations are disabled, check if the window needs extra resizing
             if !animate {
@@ -99,7 +101,7 @@ enum WindowEngine {
                 }
             }
 
-            WindowEngine.handleSizeConstrainedWindow(window: window, screenFrame: screen.safeScreenFrame)
+            WindowEngine.handleSizeConstrainedWindow(window: window, bounds: bounds)
         }
 
         if Defaults[.moveCursorWithWindow] {
@@ -179,22 +181,26 @@ enum WindowEngine {
     /// - Parameters:
     ///   - window: Window
     ///   - screenFrame: The screen's frame
-    private static func handleSizeConstrainedWindow(window: Window, screenFrame: CGRect) {
+    private static func handleSizeConstrainedWindow(window: Window, bounds: CGRect) {
+        guard bounds != .zero else {
+            return
+        }
+
         let windowFrame = window.frame
         // If the window is fully shown on the screen
-        if windowFrame.maxX <= screenFrame.maxX, windowFrame.maxY <= screenFrame.maxY {
+        if windowFrame.maxX <= bounds.maxX, windowFrame.maxY <= bounds.maxY {
             return
         }
 
         // If not, then Loop will auto re-adjust the window size to be fully shown on the screen
         var fixedWindowFrame = windowFrame
 
-        if fixedWindowFrame.maxX > screenFrame.maxX {
-            fixedWindowFrame.origin.x = screenFrame.maxX - fixedWindowFrame.width - Defaults[.padding].right
+        if fixedWindowFrame.maxX > bounds.maxX {
+            fixedWindowFrame.origin.x = bounds.maxX - fixedWindowFrame.width - Defaults[.padding].right
         }
 
-        if fixedWindowFrame.maxY > screenFrame.maxY {
-            fixedWindowFrame.origin.y = screenFrame.maxY - fixedWindowFrame.height - Defaults[.padding].bottom
+        if fixedWindowFrame.maxY > bounds.maxY {
+            fixedWindowFrame.origin.y = bounds.maxY - fixedWindowFrame.height - Defaults[.padding].bottom
         }
 
         window.setPosition(fixedWindowFrame.origin)
