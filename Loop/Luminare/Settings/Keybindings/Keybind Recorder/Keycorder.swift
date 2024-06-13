@@ -82,6 +82,11 @@ struct Keycorder: View {
                 selectionKeybind = validCurrentKeybind
             }
         }
+        .onReceive(.activeStateChanged) { notif in
+            if let active = notif.object as? Bool, active == false {
+                finishedObservingKeys(wasForced: true)
+            }
+        }
         .buttonStyle(PlainButtonStyle())
 
         // Don't allow the button to be pressed if more than one keybind is selected in the list

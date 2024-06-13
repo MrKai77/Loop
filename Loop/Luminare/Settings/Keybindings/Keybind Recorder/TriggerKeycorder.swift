@@ -73,6 +73,11 @@ struct TriggerKeycorder: View {
                     selectionKey = validCurrentKey
                 }
             }
+            .onReceive(.activeStateChanged) { notif in
+                if let active = notif.object as? Bool, active == false {
+                    finishedObservingKeys(wasForced: true)
+                }
+            }
 
             .fixedSize()
             .buttonStyle(LuminareCompactButtonStyle())
