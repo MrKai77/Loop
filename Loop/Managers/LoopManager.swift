@@ -62,21 +62,28 @@ class LoopManager: ObservableObject {
             callback: handleMiddleClick(cgEvent:)
         )
 
-        setFlagsObservers(scope: .all)
+        setTriggerObserver(enabled: true)
         middleClickMonitor?.start()
     }
 
     // This is called when setting the trigger key, so that there aren't conflicting event monitors
-    func setFlagsObservers(scope: NSEventMonitor.Scope = .all) {
+    func setTriggerObserver(enabled: Bool) {
         flagsChangedEventMonitor?.stop()
 
-        flagsChangedEventMonitor = NSEventMonitor(
-            scope: scope,
-            eventMask: .flagsChanged,
-            handler: handleLoopKeypress(_:)
-        )
+        if enabled {
+            flagsChangedEventMonitor = CGEventMonitor(
+                eventMask: .flagsChanged,
+                callback: { cgEvent in
+                    if cgEvent.type == .flagsChanged, let event = NSEvent(cgEvent: cgEvent) {
+                        self.handleLoopKeypress(event)
+                    }
 
-        flagsChangedEventMonitor?.start()
+                    return Unmanaged.passUnretained(cgEvent)
+                }
+            )
+
+            flagsChangedEventMonitor?.start()
+        }
     }
 
     private func mouseMoved(_: NSEvent) {

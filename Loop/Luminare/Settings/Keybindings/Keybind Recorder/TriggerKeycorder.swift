@@ -93,7 +93,7 @@ struct TriggerKeycorder: View {
         isActive = true
 
         // So that if doesn't interfere with the key detection here
-        AppDelegate.loopManager.setFlagsObservers(scope: .global)
+        AppDelegate.loopManager.setTriggerObserver(enabled: false)
 
         eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
@@ -150,6 +150,6 @@ struct TriggerKeycorder: View {
 
         eventMonitor?.stop()
         eventMonitor = nil
-        AppDelegate.loopManager.setFlagsObservers(scope: .all)
+        AppDelegate.loopManager.setTriggerObserver(enabled: true)
     }
 }
