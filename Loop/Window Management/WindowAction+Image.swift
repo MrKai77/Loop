@@ -113,6 +113,6 @@ struct IconView: View {
     }
 
     func refreshFrame() {
-        frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), isPreview: true)
+        frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), disablePadding: true)
     }
 }

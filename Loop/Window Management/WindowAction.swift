@@ -107,19 +107,19 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         let frame = CGRect(origin: .zero, size: .init(width: 1, height: 1))
-        let targetWindowFrame = getFrame(window: window, bounds: frame, isPreview: true)
+        let targetWindowFrame = getFrame(window: window, bounds: frame, disablePadding: true)
         let angle = frame.center.angle(to: targetWindowFrame.center)
         let result: Angle = .radians(angle) * -1
 
         return result.normalized()
     }
 
-    func getFrame(window: Window?, bounds: CGRect, isPreview: Bool = false) -> CGRect {
+    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false) -> CGRect {
         guard direction != .cycle, direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
         var bounds = bounds
-        if !isPreview { bounds = getPaddedBounds(bounds) }
+        if !disablePadding { bounds = getPaddedBounds(bounds) }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         if !willManipulateExistingWindowFrame {
@@ -162,7 +162,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         } else if direction.willMove {
             let frameToResizeFrom = LoopManager.lastTargetFrame
-            result = calculatePointAdjustment(frameToResizeFrom, bounds)
+            result = calculatePointAdjustment(frameToResizeFrom)
 
         } else if direction == .custom {
             result = calculateCustomFrame(window, bounds)
@@ -219,8 +219,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             }
         }
 
-        if !isPreview {
-            if direction != .undo, direction != .initialFrame, !direction.willMove {
+        if !disablePadding {
+            if direction != .undo, direction != .initialFrame {
                 result = applyPadding(result, bounds)
             }
 
@@ -363,7 +363,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result
     }
 
-    private func calculatePointAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
+    private func calculatePointAdjustment(_ frameToResizeFrom: CGRect) -> CGRect {
         var result = frameToResizeFrom
 
         if direction == .moveUp {
@@ -392,15 +392,13 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 
     private func applyPadding(_ windowFrame: CGRect, _ bounds: CGRect) -> CGRect {
+        guard !willManipulateExistingWindowFrame else {
+            return windowFrame
+        }
+
         let padding = Defaults[.padding]
         let halfPadding = padding.window / 2
         var paddedWindowFrame = windowFrame.intersection(bounds)
-
-        guard
-            !willManipulateExistingWindowFrame
-        else {
-            return paddedWindowFrame
-        }
 
         if direction == .macOSCenter,
            windowFrame.height >= bounds.height {
