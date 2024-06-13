@@ -165,7 +165,7 @@ struct WindowDirectionPicker: View, Equatable {
             }
 
             if !isCycle {
-                Menu("Repeatable") {
+                Menu("Window Manipulation") {
                     ForEach(WindowDirection.sizeAdjustment) { direction in
                         directionPickerItem(direction)
                     }

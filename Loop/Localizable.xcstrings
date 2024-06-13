@@ -1772,9 +1772,6 @@
         }
       }
     },
-    "Repeatable" : {
-
-    },
     "Request Access…" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3120,6 +3117,9 @@
       }
     },
     "Window gaps" : {
+
+    },
+    "Window Manipulation" : {
 
     },
     "Window padding" : {

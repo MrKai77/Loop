@@ -44,6 +44,14 @@ extension WindowAction {
             Image(systemName: "arrow.right")
         case .growLeft:
             Image(systemName: "arrow.left")
+        case .moveUp:
+            Image(systemName: "arrow.up")
+        case .moveDown:
+            Image(systemName: "arrow.down")
+        case .moveRight:
+            Image(systemName: "arrow.right")
+        case .moveLeft:
+            Image(systemName: "arrow.left")
         default:
             nil
         }
