@@ -392,13 +392,17 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 
     private func applyPadding(_ windowFrame: CGRect, _ bounds: CGRect) -> CGRect {
-        guard !willManipulateExistingWindowFrame else {
+        guard !direction.willMove else {
             return windowFrame
         }
 
         let padding = Defaults[.padding]
         let halfPadding = padding.window / 2
         var paddedWindowFrame = windowFrame.intersection(bounds)
+
+        guard !willManipulateExistingWindowFrame else {
+            return paddedWindowFrame
+        }
 
         if direction == .macOSCenter,
            windowFrame.height >= bounds.height {
