@@ -10,7 +10,7 @@ import Luminare
 import SwiftUI
 
 struct KeybindingItemView: View {
-    @Environment(\.hoveringOverLuminareListItem) var isHovering
+    @Environment(\.hoveringOverLuminareItem) var isHovering
 
     @Default(.triggerKey) var triggerKey
     @Binding var keybind: WindowAction

@@ -3201,6 +3201,9 @@
           }
         }
       }
+    },
+    "You've looped %lld times!" : {
+
     }
   },
   "version" : "1.0"
