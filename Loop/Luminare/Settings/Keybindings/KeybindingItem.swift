@@ -107,6 +107,8 @@ struct KeybindingItemView: View {
 
                 Text(keybind.getName())
                     .lineLimit(1)
+                    .contentTransition(.numericText())
+                    .animation(.smooth(duration: 0.25), value: keybind)
             }
 
             if let info = keybind.direction.infoView {
