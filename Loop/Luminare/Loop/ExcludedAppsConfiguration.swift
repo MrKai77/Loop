@@ -114,9 +114,10 @@ struct AppView: View, Equatable {
                 NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: app.path)])
             } label: {
                 Image(._18PxFinder)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.tertiary)
             }
             .buttonStyle(PlainButtonStyle())
+            .padding(4)
         }
         .padding(.horizontal, 12)
     }
