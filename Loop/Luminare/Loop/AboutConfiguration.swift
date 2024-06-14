@@ -11,6 +11,9 @@ import SwiftUI
 
 class AboutConfigurationModel: ObservableObject {
     let currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here
+
+    @Published var isHoveringOverVersionCopier = false
+
     @Published var includeDevelopmentVersions = Defaults[.includeDevelopmentVersions] {
         didSet {
             Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
@@ -86,6 +89,7 @@ struct AboutConfigurationView: View {
     @Environment(\.openURL) private var openURL
     @StateObject private var model = AboutConfigurationModel()
     @StateObject var updater = SoftwareUpdater()
+    @Default(.timesLooped) var timesLooped
 
     var body: some View {
         LuminareSection {
@@ -104,9 +108,15 @@ struct AboutConfigurationView: View {
                         Text("Loop")
                             .fontWeight(.medium)
 
-                        Text("Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                        Text(model.isHoveringOverVersionCopier ? 
+                            "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))" :
+                            "You've looped \(timesLooped) times!"
+                        )
+                        .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
+                        .animation(.smooth(duration: 0.25), value: model.isHoveringOverVersionCopier)
+                        .animation(.smooth(duration: 0.25), value: timesLooped)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     }
 
                     Spacer()
@@ -114,6 +124,9 @@ struct AboutConfigurationView: View {
                 .padding(4)
             }
             .buttonStyle(LuminareCosmeticButtonStyle(Image(._12PxClipboard)))
+            .onHover {
+                model.isHoveringOverVersionCopier = $0
+            }
         }
 
         LuminareSection {
