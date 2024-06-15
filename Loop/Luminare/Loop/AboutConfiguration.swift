@@ -108,7 +108,7 @@ struct AboutConfigurationView: View {
                         Text("Loop")
                             .fontWeight(.medium)
 
-                        Text(model.isHoveringOverVersionCopier ? 
+                        Text(model.isHoveringOverVersionCopier ?
                             "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))" :
                             "You've looped \(timesLooped) times!"
                         )

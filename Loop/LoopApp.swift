@@ -12,7 +12,6 @@ import SwiftUI
 @main
 struct LoopApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    let aboutViewController = AboutViewController()
     @State var isMenubarItemPresented: Bool = false
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
 
@@ -60,12 +59,6 @@ struct LoopApp: App {
                 LuminareManager.open()
             }
             .keyboardShortcut(",", modifiers: .command)
-
-            Button("About \(Bundle.main.appName)") {
-                NSApp.setActivationPolicy(.regular)
-                aboutViewController.open()
-            }
-            .keyboardShortcut("i", modifiers: .command)
 
             Divider()
 

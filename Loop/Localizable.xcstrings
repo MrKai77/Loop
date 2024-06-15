@@ -125,23 +125,17 @@
 
     },
     "About" : {
-      "extractionState" : "extracted_with_value",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "About %@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "关于%@"
           }
         }
       }
     },
     "About %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -206,6 +200,7 @@
       }
     },
     "Acknowledgements" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -272,6 +267,7 @@
       }
     },
     "App Icon" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -938,9 +934,6 @@
         }
       }
     },
-    "GitHub" : {
-
-    },
     "Gradient" : {
 
     },
@@ -1411,6 +1404,7 @@
       }
     },
     "License" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1421,6 +1415,7 @@
       }
     },
     "Link" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1434,6 +1429,7 @@
 
     },
     "Loop more to unlock new icons! (You've looped %lld times!)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1469,6 +1465,7 @@
       }
     },
     "MIT License" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -2140,6 +2137,7 @@
       }
     },
     "The elegant, mouse-oriented window manager." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
