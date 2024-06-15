@@ -25,37 +25,37 @@ class AboutConfigurationModel: ObservableObject {
             "Kai",
             "Development",
             url: .init(string: "https://github.com/mrkai77")!,
-            avatar: .init(string: "https://github.com/mrkai77.png?size=200")!
+            avatar: Image(.kai)
         ),
         .init(
             "Jace",
             "Design",
             url: .init(string: "https://x.com/jacethings")!,
-            avatar: .init(string: "https://github.com/soft-bred.png?size=200")!
+            avatar: Image(.jace)
         ),
         .init(
             "Kami",
             "Development support",
             url: .init(string: "https://github.com/senpaihunters")!,
-            avatar: .init(string: "https://github.com/senpaihunters.png?size=200")!
+            avatar: Image(.kami)
         ),
         .init(
             "Greg Lassale",
             "Icon contributor",
             url: .init(string: "https://x.com/greglassale")!,
-            avatar: .init(string: "https://pbs.twimg.com/profile_images/1746348765127094272/eNO2LxOQ_200x200.jpg")!
+            avatar: Image(.greglassale)
         ),
         .init(
             "JSDev",
             "Icon contributor",
             url: .init(string: "https://github.com/N-coder82")!,
-            avatar: .init(string: "https://github.com/n-coder82.png?size=200")!
+            avatar: Image(.jsdev)
         ),
         .init(
             "Contributors on GitHub",
             "Some features, ideas, and bug fixes",
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
-            avatar: .init(string: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png?size=200")!
+            avatar: Image(.github)
         )
     ]
 
@@ -75,9 +75,9 @@ struct CreditItem: Identifiable {
     let name: String
     let description: LocalizedStringKey?
     let url: URL
-    let avatar: URL
+    let avatar: Image
 
-    init(_ name: String, _ description: LocalizedStringKey? = nil, url: URL, avatar: URL) {
+    init(_ name: String, _ description: LocalizedStringKey? = nil, url: URL, avatar: Image) {
         self.name = name
         self.description = description
         self.avatar = avatar
@@ -163,22 +163,15 @@ struct AboutConfigurationView: View {
             openURL(credit.url)
         } label: {
             HStack(spacing: 12) {
-                AsyncImage(url: credit.avatar) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    Image(systemName: "person.crop.circle")
-                        .resizable()
-                        .foregroundStyle(.tertiary)
-                        .aspectRatio(contentMode: .fit)
-                }
-                .frame(height: 40)
-                .overlay {
-                    Circle()
-                        .strokeBorder(.white.opacity(0.1), lineWidth: 1)
-                }
-                .clipShape(.circle)
+                credit.avatar
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 40)
+                    .overlay {
+                        Circle()
+                            .strokeBorder(.white.opacity(0.1), lineWidth: 1)
+                    }
+                    .clipShape(.circle)
 
                 VStack(alignment: .leading) {
                     Text(credit.name)
