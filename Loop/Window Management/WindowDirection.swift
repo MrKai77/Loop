@@ -215,7 +215,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             CGRect(x: 0.5 / 10.0, y: 0.5 / 10.0, width: 9.0 / 10.0, height: 9.0 / 10.0)
         case .fullscreen:
             CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
-
         // Halves
         case .topHalf:
             CGRect(x: 0, y: 0, width: 1.0, height: 1.0 / 2.0)
@@ -225,7 +224,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             CGRect(x: 0, y: 1.0 / 2.0, width: 1.0, height: 1.0 / 2.0)
         case .leftHalf:
             CGRect(x: 0, y: 0, width: 1.0 / 2.0, height: 1.0)
-
         // Quarters
         case .topLeftQuarter:
             CGRect(x: 0, y: 0, width: 1.0 / 2.0, height: 1.0 / 2.0)
@@ -235,7 +233,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             CGRect(x: 1.0 / 2.0, y: 1.0 / 2.0, width: 1.0 / 2.0, height: 1.0 / 2.0)
         case .bottomLeftQuarter:
             CGRect(x: 0, y: 1.0 / 2.0, width: 1.0 / 2.0, height: 1.0 / 2.0)
-
         // Thirds (Horizontal)
         case .rightThird:
             CGRect(x: 2.0 / 3.0, y: 0, width: 1.0 / 3.0, height: 1.0)
@@ -247,7 +244,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
             CGRect(x: 0, y: 0, width: 1.0 / 3.0, height: 1.0)
         case .leftTwoThirds:
             CGRect(x: 0, y: 0, width: 2.0 / 3.0, height: 1.0)
-
         // Thirds (Vertical)
         case .topThird:
             CGRect(x: 0, y: 0, width: 1.0, height: 1.0 / 3.0)
