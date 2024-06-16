@@ -9,12 +9,8 @@ import Luminare
 import SwiftUI
 
 struct UpdateView: View {
-    @EnvironmentObject var updater: Updater
+    @ObservedObject var updater = AppDelegate.updater
     @State var isInstalling: Bool = false
-
-    var appState: AppState {
-        updater.appState
-    }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -39,15 +35,15 @@ struct UpdateView: View {
                                     isInstalling.toggle()
                                 }
                                 Task {
-                                    await AppDelegate.updater.downloadUpdate()
+                                    await AppDelegate.updater.installUpdate()
                                 }
-                            } else if appState.progressBar.1 == 1.0 {
+                            } else if updater.progressBar.1 == 1.0 {
                                 AppDelegate.updater.dismissWindow()
                                 AppDelegate.relaunch()
                             }
                         },
                         label: {
-                            if appState.progressBar.1 < 1.0 {
+                            if updater.progressBar.1 < 1.0 {
                                 Text(isInstalling ? "Downloading & installing..." : "Install")
                             } else {
                                 Text("Restart to complete")
@@ -62,11 +58,11 @@ struct UpdateView: View {
                                 Rectangle()
                                     .foregroundStyle(.tertiary)
                                     .clipShape(.rect(cornerRadius: 4))
-                                    .frame(width: CGFloat(appState.progressBar.1) * geo.size.width)
-                                    .animation(.easeIn(duration: 1), value: appState.progressBar.1)
+                                    .frame(width: CGFloat(updater.progressBar.1) * geo.size.width)
+                                    .animation(.easeIn(duration: 1), value: updater.progressBar.1)
                             }
                             .allowsHitTesting(false)
-                            .opacity(appState.progressBar.1 < 1.0 ? 1 : 0)
+                            .opacity(updater.progressBar.1 < 1.0 ? 1 : 0)
                         }
                     }
                 }
@@ -96,9 +92,9 @@ struct UpdateView: View {
 
     func versionChangeView() -> some View {
         HStack {
-            Text(Bundle.main.appVersion)
+            Text(Bundle.main.appVersion ?? "Unknown")
             Image(systemName: "arrow.right")
-            Text(appState.releases.first?.tagName ?? "Unknown")
+            Text(updater.availableReleases.first?.tagName ?? "Unknown")
         }
         .font(.title3)
         .blendMode(.overlay)
@@ -107,7 +103,7 @@ struct UpdateView: View {
     func changelogView() -> some View {
         ScrollView {
             VStack(alignment: .leading) {
-                let splitLines = appState.changelogText  // Use dynamic content from AppState
+                let splitLines = updater.changelogText  // Use dynamic content from AppState
                     .replacingOccurrences(of: "\r", with: "")
                     .components(separatedBy: "\n")
 
@@ -117,8 +113,7 @@ struct UpdateView: View {
                             Divider()
                         }
 
-                        let line =
-                        line
+                        let line = line
                             .replacingOccurrences(of: "#", with: "")
                             .trimmingCharacters(in: .whitespaces)
 
@@ -126,8 +121,7 @@ struct UpdateView: View {
                             .font(.headline)
                             .padding(.bottom, 2)
                     } else if line.hasPrefix("-") {
-                        let line =
-                        line
+                        let line = line
                             .replacingOccurrences(of: "-", with: "•")
                             .trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -156,41 +150,3 @@ struct UpdateView: View {
         }
     }
 }
-
-// If we can make this look better, much appreciated.
-// EDIT: Removed for now since I might have an idea...
-//struct NoUpdateView: View {
-//    @EnvironmentObject var appState: AppState
-//
-//    var body: some View {
-//        VStack {
-//            Spacer(minLength: 20)
-//
-//            Image(nsImage: NSApp.applicationIconImage)
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: 80, height: 80)
-//                .padding(.top, 20)
-//
-//            Text("You're up-to-date!")
-//                .font(.headline)
-//                .padding(.vertical, 8)
-//
-//            Text("Current Version: \(Bundle.main.appVersion)")
-//                .font(.subheadline)
-//                .padding(.bottom, 20)
-//
-//            Button("Dismiss") {
-//                AppDelegate.updater.dismissWindow()
-//            }
-//            .buttonStyle(LuminareButtonStyle())
-//            .padding(.bottom, 20)
-//
-//            Spacer(minLength: 20)
-//        }
-//        .frame(width: 170, height: 200)  // Update the sizing here
-//        /// This may not conform nicely... but... we'll see.
-//        /// It's due to window sizing in the NewWindow.
-//        .padding()
-//    }
-//}

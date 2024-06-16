@@ -342,7 +342,7 @@
     "Change" : {
 
     },
-    "Check for Updates" : {
+    "Check for updates…" : {
 
     },
     "Check for Updates…" : {
@@ -2310,6 +2310,7 @@
 
     },
     "Version %@ (%@)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3193,6 +3194,9 @@
     "Y" : {
 
     },
+    "You are up to date :)" : {
+
+    },
     "You can only use up to %lld keys in a keybind, including the trigger key." : {
       "localizations" : {
         "zh-Hans" : {
@@ -3212,9 +3216,6 @@
           }
         }
       }
-    },
-    "You've looped %lld times!" : {
-
     }
   },
   "version" : "1.0"

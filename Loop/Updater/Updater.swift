@@ -10,7 +10,16 @@ import Luminare
 import SwiftUI
 
 class Updater: ObservableObject {
-    @Published var appState: AppState = .init()
+    @Published var availableReleases = [Release]()
+    @Published var progressBar: (String, Double) = ("Ready", 0.0)
+    @Published var changelogText: String = ""
+    @Published var updateState: UpdateAvailability = .notChecked
+
+    enum UpdateAvailability {
+        case notChecked
+        case available
+        case unavailable
+    }
 
     private var updateWindow: NSWindow?
     private var updateCheckCancellable: AnyCancellable?
@@ -20,108 +29,96 @@ class Updater: ObservableObject {
             .autoconnect()
             .sink { _ in
                 Task {
-                    await self.pullFromGitHub(manual: false)
+                    await self.fetchLatestInfo()
+                    self.showUpdateWindow()
                 }
             }
     }
 
     func dismissWindow() {
         DispatchQueue.main.async {
-            self.appState.updateAvailable = false
+            self.updateState = .notChecked
             self.updateWindow?.close()
         }
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
-    func pullFromGitHub(manual: Bool = false, releaseOnly: Bool = false) async {
+    // Make sure to run checkForUpdate() after this if needed.
+    func fetchLatestInfo() async {
         guard let url = URL(string: "https://api.github.com/repos/MrKai77/Loop/releases/latest") else { return }
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-
             let response = try JSONDecoder().decode(Release.self, from: data)
 
-            appState.releases = [response]
-            appState.changelogText = response.modifiedBody
+            availableReleases = [response]
+            changelogText = response.modifiedBody
 
-            // If not releaseOnly, proceed to check for an update.
-            if !releaseOnly {
-                checkForUpdate(manual: manual)
+            if let latestRelease = availableReleases.first {
+                let currentVersion = Bundle.main.appVersion
+
+                if currentVersion == nil || latestRelease.tagName.compare(currentVersion ?? "0.0.0", options: .numeric) == .orderedDescending {
+                    updateState = .available
+                } else {
+                    updateState = .unavailable
+                }
             }
-
         } catch {
             NSLog("Error: \(error.localizedDescription)")
         }
     }
 
     // Checks if the fetched release is newer than the current version and updates the app state.
-    private func checkForUpdate(manual: Bool) {
-        guard let latestRelease = appState.releases.first else {
-            if manual {
-                DispatchQueue.main.async {
-                    // TODO: edit view for when no updates are available
-                    self.updateWindow = LuminareTrafficLightedWindow {
-                        UpdateView()
-                            .environmentObject(self)
-                    }
-                }
-            }
-            return
-        }
-
-        let currentVersion = Bundle.main.appVersion
-        let updateIsNeeded = latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending
-
-        DispatchQueue.main.async {
-            self.appState.updateAvailable = updateIsNeeded
-
-            if updateIsNeeded || manual {
-                self.updateWindow = LuminareTrafficLightedWindow {
-                    UpdateView()
-                        .environmentObject(self)
-                }
-            }
+    func showUpdateWindow() {
+        if updateState == .available {
+            updateWindow = LuminareTrafficLightedWindow { UpdateView() }
         }
     }
 
     // Downloads the update from GitHub and prepares it for installation.
-    func downloadUpdate() async {
+    func installUpdate() async {
         guard
-            let latestRelease = appState.releases.first,
-            let asset = latestRelease.assets.first,
-            let url = URL(string: asset.browserDownloadURL)
+            let latestRelease = availableReleases.first,
+            let asset = latestRelease.assets.first
         else {
             DispatchQueue.main.async {
-                self.appState.progressBar = ("", 0)
+                self.progressBar = ("", 0)
             }
             return
         }
 
-        let fileManager = FileManager.default
-        let destinationURL = fileManager.temporaryDirectory.appendingPathComponent(asset.name)
+        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(asset.name)
 
         DispatchQueue.main.async {
-            self.appState.progressBar = ("", 0.1)
+            self.progressBar = ("", 0.1)
         }
 
-        if !fileManager.fileExists(atPath: destinationURL.path) {
-            do {
-                let (fileURL, _) = try await URLSession.shared.download(from: url)
-
-                try fileManager.moveItem(at: fileURL, to: destinationURL)
-
-                DispatchQueue.main.async {
-                    self.appState.progressBar = ("", 0.5)
-                    self.unzipAndReplace(downloadedFileURL: destinationURL.path)
-                }
-            } catch {
-                NSLog("Error: \(error.localizedDescription)")
-            }
+        if !FileManager.default.fileExists(atPath: destinationURL.path) {
+            await downloadUpdate(asset, to: destinationURL)
         }
 
         DispatchQueue.main.async {
-            self.appState.progressBar = ("", 1.0)
+            self.progressBar = ("", 1.0)
             self.unzipAndReplace(downloadedFileURL: destinationURL.path)
+        }
+    }
+
+    private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {
+        guard let url = URL(string: asset.browserDownloadURL) else {
+            return
+        }
+
+        do {
+            let (fileURL, _) = try await URLSession.shared.download(from: url)
+
+            try FileManager.default.moveItem(at: fileURL, to: destinationURL)
+
+            DispatchQueue.main.async {
+                self.progressBar = ("", 0.5)
+                self.unzipAndReplace(downloadedFileURL: destinationURL.path)
+            }
+        } catch {
+            NSLog("Error: \(error.localizedDescription)")
         }
     }
 
@@ -133,12 +130,12 @@ class Updater: ObservableObject {
         do {
             // Unzip the downloaded file and replace the existing app.
             DispatchQueue.main.async {
-                self.appState.progressBar = ("", 0.5)
+                self.progressBar = ("", 0.5)
             }
             try fileManager.removeItem(at: appBundle)
 
             DispatchQueue.main.async {
-                self.appState.progressBar = ("", 0.6)
+                self.progressBar = ("", 0.6)
             }
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
@@ -149,10 +146,10 @@ class Updater: ObservableObject {
             process.waitUntilExit()
 
             DispatchQueue.main.async {
-                self.appState.progressBar = ("", 0.8)
+                self.progressBar = ("", 0.8)
                 try? fileManager.removeItem(atPath: fileURL) // Clean up the zip file after extraction.
-                self.appState.progressBar = ("", 1.0)
-                self.appState.updateAvailable = false // Update the state to reflect that the update has been applied.
+                self.progressBar = ("", 1.0)
+                self.updateState = .unavailable // Update the state to reflect that the update has been applied.
             }
         } catch {
             DispatchQueue.main.async {
@@ -192,13 +189,4 @@ struct Release: Codable {
             case browserDownloadURL = "browser_download_url" // Maps JSON key "browser_download_url" to the property `browserDownloadURL`.
         }
     }
-}
-
-struct AppState {
-    var releases = [Release]()
-    var progressBar: (String, Double) = ("Ready", 0.0)
-    var currentReleaseInfo: String = ""
-    var changelogText: String = ""
-    var remindLater: Bool = false
-    var updateAvailable: Bool = false
 }

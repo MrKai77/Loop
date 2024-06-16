@@ -89,6 +89,7 @@ struct CreditItem: Identifiable {
 struct AboutConfigurationView: View {
     @Environment(\.openURL) private var openURL
     @StateObject private var model = AboutConfigurationModel()
+    @ObservedObject private var updater = AppDelegate.updater
     @Default(.timesLooped) var timesLooped
 
     var body: some View {
@@ -131,10 +132,18 @@ struct AboutConfigurationView: View {
         }
 
         LuminareSection {
-            Button("Check for Updates") {
+            Button {
                 Task {
-                    await AppDelegate.updater.pullFromGitHub(manual: true)
+                    await updater.fetchLatestInfo()
+
+                    if updater.updateState == .available {
+                        updater.showUpdateWindow()
+                    }
                 }
+            } label: {
+                Text(updater.updateState == .unavailable ? "You are up to date :)" : "Check for updates…")
+                    .contentTransition(.numericText())
+                    .animation(.smooth(duration: 0.25), value: updater.updateState)
             }
 
             // I do not have the code for you to automatically check, it is hardcoded though...
