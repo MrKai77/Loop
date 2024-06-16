@@ -66,18 +66,20 @@ struct UpdateView: View {
                             .foregroundStyle(.quinary)
                             .overlay {
                                 GeometryReader { geo in
-                                    Rectangle()
+                                    Capsule()
                                         .foregroundStyle(tintColor())
-                                        .clipShape(.rect(cornerRadius: 4))
-                                        .frame(width: CGFloat(updater.progressBar.1) * geo.size.width)
-                                        .animation(.easeIn(duration: 1), value: updater.progressBar.1)
-                                        .shadow(color: tintColor(), radius: 2)
+                                        .frame(width: CGFloat(updater.progressBar) * geo.size.width)
+                                        .animation(.smooth(duration: 0.8), value: updater.progressBar)
+                                        .shadow(color: tintColor().opacity(0.1), radius: 12)
+                                        .shadow(color: tintColor().opacity(0.4), radius: 6)
+                                        .shadow(color: tintColor(), radius: 1)
                                 }
                             }
                             .overlay {
                                 Capsule()
                                     .strokeBorder(.quaternary, lineWidth: 1)
                             }
+                            .padding(.horizontal, 4)
                     } else {
                         Text(readyToRestart ? "Restart to complete" : "Install")
                     }
@@ -133,7 +135,7 @@ struct UpdateView: View {
         ZStack {
             if colorScheme == .dark {
                 HStack {
-                    Text(Bundle.main.appVersion ?? "Unknown")
+                    Text(Bundle.main.appVersion)
                     Image(systemName: "arrow.right")
                     Text(updater.availableReleases.first?.tagName ?? "Unknown")
                 }
@@ -141,7 +143,7 @@ struct UpdateView: View {
                 .blendMode(.overlay)
             } else {
                 HStack {
-                    Text(Bundle.main.appVersion ?? "Unknown")
+                    Text(Bundle.main.appVersion)
                     Image(systemName: "arrow.right")
                     Text(updater.availableReleases.first?.tagName ?? "Unknown")
                 }
@@ -149,7 +151,7 @@ struct UpdateView: View {
                 .blendMode(.overlay)
 
                 HStack {
-                    Text(Bundle.main.appVersion ?? "Unknown")
+                    Text(Bundle.main.appVersion)
                     Image(systemName: "arrow.right")
                     Text(updater.availableReleases.first?.tagName ?? "Unknown")
                 }
@@ -160,7 +162,7 @@ struct UpdateView: View {
 
     func changelogView() -> some View {
         ScrollView {
-            VStack {
+            LazyVStack {
                 ForEach(updater.changelog, id: \.title) { item in
                     ChangelogSectionView(item: item)
                 }
@@ -183,7 +185,7 @@ struct ChangelogSectionView: View {
                 }
             } label: {
                 HStack {
-                    Image(systemName: "chevron.right")
+                    Image(._12PxChevronRight)
                         .bold()
                         .rotationEffect(isExpanded ? .degrees(90) : .zero)
 
@@ -193,7 +195,7 @@ struct ChangelogSectionView: View {
 
                     Spacer()
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, 8)
                 .frame(height: 34)
                 .contentShape(.rect)
             }

@@ -21,6 +21,8 @@ class AboutConfigurationModel: ObservableObject {
         }
     }
 
+    @Published var updateButtonTitle: LocalizedStringKey = "Check for updates…"
+
     let credits: [CreditItem] = [
         .init(
             "Kai",
@@ -58,6 +60,20 @@ class AboutConfigurationModel: ObservableObject {
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
             avatar: Image(.github)
         ),
+    ]
+
+    let upToDateText: [LocalizedStringKey] = [
+        "You're up to date :)",
+        "No updates yet!",
+        "You've already got the best Loop!",
+        "Check back next time!",
+        "This is not the update you're looking for!",
+        "Stay sharp, more intel coming soon!",
+        "May the Force be with you... next time!",
+        "The Force is strong with this version!",
+        "You’ve leveled up to max!",
+        "You've got the precious, no updates needed!",
+        "No new intel, Commander."
     ]
 
     func copyVersionToClipboard() {
@@ -138,12 +154,21 @@ struct AboutConfigurationView: View {
 
                     if updater.updateState == .available {
                         updater.showUpdateWindow()
+                    } else {
+                        model.updateButtonTitle = model.upToDateText.randomElement()!
+
+                        let currentTitle = model.updateButtonTitle
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            if model.updateButtonTitle == currentTitle {
+                                model.updateButtonTitle = "Check for updates…"
+                            }
+                        }
                     }
                 }
             } label: {
-                Text(updater.updateState == .unavailable ? "You are up to date :)" : "Check for updates…")
+                Text(model.updateButtonTitle)
                     .contentTransition(.numericText())
-                    .animation(.smooth(duration: 0.25), value: updater.updateState)
+                    .animation(.smooth(duration: 0.25), value: model.updateButtonTitle)
             }
 
             // I do not have the code for you to automatically check, it is hardcoded though...

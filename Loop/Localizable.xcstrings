@@ -342,6 +342,9 @@
     "Change" : {
 
     },
+    "Check back next time!" : {
+
+    },
     "Check for updates…" : {
 
     },
@@ -1443,6 +1446,9 @@
         }
       }
     },
+    "May the Force be with you... next time!" : {
+
+    },
     "Measurement unit" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1526,6 +1532,12 @@
           }
         }
       }
+    },
+    "No new intel, Commander." : {
+
+    },
+    "No updates yet!" : {
+
     },
     "None" : {
       "localizations" : {
@@ -2110,6 +2122,9 @@
     "Stage strip size" : {
 
     },
+    "Stay sharp, more intel coming soon!" : {
+
+    },
     "Suggest new icon" : {
 
     },
@@ -2157,6 +2172,9 @@
         }
       }
     },
+    "The Force is strong with this version!" : {
+
+    },
     "Theming" : {
 
     },
@@ -2164,6 +2182,9 @@
 
     },
     "This feature is still under development." : {
+
+    },
+    "This is not the update you're looking for!" : {
 
     },
     "This is only needed to animate windows being resized." : {
@@ -2307,7 +2328,6 @@
 
     },
     "Version %@ (%@)" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3191,9 +3211,6 @@
     "Y" : {
 
     },
-    "You are up to date :)" : {
-
-    },
     "You can only use up to %lld keys in a keybind, including the trigger key." : {
       "localizations" : {
         "zh-Hans" : {
@@ -3213,6 +3230,21 @@
           }
         }
       }
+    },
+    "You're up to date :)" : {
+
+    },
+    "You've already got the best Loop!" : {
+
+    },
+    "You've got the precious, no updates needed!" : {
+
+    },
+    "You’ve leveled up to max!" : {
+
+    },
+    "You've looped %lld times!" : {
+
     }
   },
   "version" : "1.0"

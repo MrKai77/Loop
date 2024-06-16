@@ -11,7 +11,7 @@ import SwiftUI
 
 class Updater: ObservableObject {
     @Published var availableReleases = [Release]()
-    @Published var progressBar: (String, Double) = ("Ready", 0.0)
+    @Published var progressBar: Double = 0
     @Published var updateState: UpdateAvailability = .notChecked
 
     @Published var changelog: [(title: String, body: [String])] = .init()
@@ -53,14 +53,13 @@ class Updater: ObservableObject {
             let response = try JSONDecoder().decode(Release.self, from: data)
 
             availableReleases = [response]
-            processChangelog(response.body)
-            dump(changelog)
 
             if let latestRelease = availableReleases.first {
                 let currentVersion = Bundle.main.appVersion
 
-                if currentVersion == nil || latestRelease.tagName.compare(currentVersion ?? "0.0.0", options: .numeric) == .orderedDescending {
+                if currentVersion.isEmpty || latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending {
                     updateState = .available
+                    processChangelog(response.body)
                 } else {
                     updateState = .unavailable
                 }
@@ -123,7 +122,7 @@ class Updater: ObservableObject {
             let asset = latestRelease.assets.first
         else {
             DispatchQueue.main.async {
-                self.progressBar = ("", 0)
+                self.progressBar = 0
             }
             return
         }
@@ -131,17 +130,14 @@ class Updater: ObservableObject {
         let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(asset.name)
 
         DispatchQueue.main.async {
-            self.progressBar = ("", 0.1)
+            self.progressBar = 0.2
         }
 
         if !FileManager.default.fileExists(atPath: destinationURL.path) {
             await downloadUpdate(asset, to: destinationURL)
         }
 
-        DispatchQueue.main.async {
-            self.progressBar = ("", 1.0)
-            self.unzipAndReplace(downloadedFileURL: destinationURL.path)
-        }
+        self.unzipAndReplace(downloadedFileURL: destinationURL.path)
     }
 
     private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {
@@ -155,7 +151,7 @@ class Updater: ObservableObject {
             try FileManager.default.moveItem(at: fileURL, to: destinationURL)
 
             DispatchQueue.main.async {
-                self.progressBar = ("", 0.5)
+                self.progressBar = 0.2
                 self.unzipAndReplace(downloadedFileURL: destinationURL.path)
             }
         } catch {
@@ -171,12 +167,12 @@ class Updater: ObservableObject {
         do {
             // Unzip the downloaded file and replace the existing app.
             DispatchQueue.main.async {
-                self.progressBar = ("", 0.5)
+                self.progressBar = 0.4
             }
             try fileManager.removeItem(at: appBundle)
 
             DispatchQueue.main.async {
-                self.progressBar = ("", 0.6)
+                self.progressBar = 0.6
             }
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
@@ -187,9 +183,9 @@ class Updater: ObservableObject {
             process.waitUntilExit()
 
             DispatchQueue.main.async {
-                self.progressBar = ("", 0.8)
+                self.progressBar = 0.8
                 try? fileManager.removeItem(atPath: fileURL) // Clean up the zip file after extraction.
-                self.progressBar = ("", 1.0)
+                self.progressBar = 1.0
                 self.updateState = .unavailable // Update the state to reflect that the update has been applied.
             }
         } catch {
