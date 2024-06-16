@@ -57,7 +57,7 @@ class Updater: ObservableObject {
             if let latestRelease = availableReleases.first {
                 let currentVersion = Bundle.main.appVersion
 
-                if currentVersion.isEmpty || latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending {
+                if latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending {
                     updateState = .available
                     processChangelog(response.body)
                 } else {
@@ -137,7 +137,7 @@ class Updater: ObservableObject {
             await downloadUpdate(asset, to: destinationURL)
         }
 
-        self.unzipAndReplace(downloadedFileURL: destinationURL.path)
+        unzipAndReplace(downloadedFileURL: destinationURL.path)
     }
 
     private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {

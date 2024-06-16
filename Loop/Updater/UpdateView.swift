@@ -106,7 +106,7 @@ struct UpdateView: View {
                 TheLoopTimes()
                     .fill(
                         .shadow(.inner(color: .black.opacity(0.1), radius: 3))
-                        .shadow(.inner(color: .black.opacity(0.3), radius: 5, y: 3))
+                            .shadow(.inner(color: .black.opacity(0.3), radius: 5, y: 3))
                     )
                     .foregroundStyle(.primary.opacity(0.7))
                     .blendMode(.overlay)
@@ -118,7 +118,7 @@ struct UpdateView: View {
                 TheLoopTimes()
                     .fill(
                         .shadow(.inner(color: .black.opacity(0.1), radius: 3))
-                        .shadow(.inner(color: .black.opacity(0.3), radius: 5, y: 3))
+                            .shadow(.inner(color: .black.opacity(0.3), radius: 5, y: 3))
                     )
                     .blendMode(.overlay)
             }

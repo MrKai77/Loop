@@ -11,7 +11,7 @@ import Luminare
 import SwiftUI
 
 class AboutConfigurationModel: ObservableObject {
-    let currentIcon = Defaults[.currentIcon]  // no need for didSet since it won't change here
+    let currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here
 
     @Published var isHoveringOverVersionCopier = false
 
@@ -59,7 +59,7 @@ class AboutConfigurationModel: ObservableObject {
             "Some features, ideas, and bug fixes",
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
             avatar: Image(.github)
-        ),
+        )
     ]
 
     let upToDateText: [LocalizedStringKey] = [
@@ -127,8 +127,8 @@ struct AboutConfigurationView: View {
 
                         Text(
                             model.isHoveringOverVersionCopier
-                            ? "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
-                            : "You've looped \(timesLooped) times!"
+                                ? "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                                : "You've looped \(timesLooped) times!"
                         )
                         .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
                         .animation(.smooth(duration: 0.25), value: model.isHoveringOverVersionCopier)
