@@ -9,7 +9,7 @@ import Luminare
 import SwiftUI
 
 struct UpdateView: View {
-    @EnvironmentObject var appState: AppState
+    let appState: AppState
     @State var isInstalling: Bool = false
 
     var body: some View {
@@ -37,7 +37,7 @@ struct UpdateView: View {
                                 AppDelegate.updater.downloadUpdate(appState: appState)
                             } else if appState.progressBar.1 == 1.0 {
                                 // The update is complete, and we should restart the app
-                                Updater.updateWindow?.close()
+                                AppDelegate.updater.updateWindow?.close()
                                 AppDelegate.relaunch()
                             }
                         },
@@ -153,38 +153,39 @@ struct UpdateView: View {
 }
 
 // If we can make this look better, much appreciated.
-struct NoUpdateView: View {
-    @EnvironmentObject var appState: AppState
-
-    var body: some View {
-        VStack {
-            Spacer(minLength: 20)
-
-            Image(nsImage: NSApp.applicationIconImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 80, height: 80)
-                .padding(.top, 20)
-
-            Text("You're up-to-date!")
-                .font(.headline)
-                .padding(.vertical, 8)
-
-            Text("Current Version: \(Bundle.main.appVersion)")
-                .font(.subheadline)
-                .padding(.bottom, 20)
-
-            Button("Dismiss") {
-                Updater.updateWindow?.close()
-            }
-            .buttonStyle(LuminareButtonStyle())
-            .padding(.bottom, 20)
-
-            Spacer(minLength: 20)
-        }
-        .frame(width: 170, height: 200)  // Update the sizing here
-        /// This may not conform nicely... but... we'll see.
-        /// It's due to window sizing in the NewWindow.
-        .padding()
-    }
-}
+// EDIT: Removed for now since I might have an idea...
+//struct NoUpdateView: View {
+//    @EnvironmentObject var appState: AppState
+//
+//    var body: some View {
+//        VStack {
+//            Spacer(minLength: 20)
+//
+//            Image(nsImage: NSApp.applicationIconImage)
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: 80, height: 80)
+//                .padding(.top, 20)
+//
+//            Text("You're up-to-date!")
+//                .font(.headline)
+//                .padding(.vertical, 8)
+//
+//            Text("Current Version: \(Bundle.main.appVersion)")
+//                .font(.subheadline)
+//                .padding(.bottom, 20)
+//
+//            Button("Dismiss") {
+//                Updater.updateWindow?.close()
+//            }
+//            .buttonStyle(LuminareButtonStyle())
+//            .padding(.bottom, 20)
+//
+//            Spacer(minLength: 20)
+//        }
+//        .frame(width: 170, height: 200)  // Update the sizing here
+//        /// This may not conform nicely... but... we'll see.
+//        /// It's due to window sizing in the NewWindow.
+//        .padding()
+//    }
+//}

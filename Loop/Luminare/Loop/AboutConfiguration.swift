@@ -5,25 +5,10 @@
 //  Created by Kai Azim on 2024-04-26.
 //
 
-import AppKit
 import Combine
 import Defaults
 import Luminare
 import SwiftUI
-
-class AppState: ObservableObject {
-    @Published var releases = [Release]()
-    @Published var progressBar: (String, Double) = ("Ready", 0.0)
-    @Published var currentReleaseInfo: String = ""
-    @Published var changelogText: String = ""
-    @Published var remindLater: Bool = false
-    @Published var updateAvailable: Bool = false
-}
-
-enum NewWindow: Int {
-    case update
-    case no_update
-}
 
 class AboutConfigurationModel: ObservableObject {
     let currentIcon = Defaults[.currentIcon]  // no need for didSet since it won't change here
@@ -105,31 +90,6 @@ struct AboutConfigurationView: View {
     @Environment(\.openURL) private var openURL
     @StateObject private var model = AboutConfigurationModel()
     @Default(.timesLooped) var timesLooped
-    @StateObject private var appState = AppState()
-    @State private var updateCheckCancellable: AnyCancellable?
-
-
-    /// you can customise this if you wish
-    private func setUpAutoUpdateCheck() {
-        updateCheckCancellable?.cancel()  // Cancel any existing timer
-        updateCheckCancellable = Timer.publish(every: 21600, on: .main, in: .common)
-            .autoconnect()
-            .sink { _ in
-                AppDelegate.updater.pullFromGitHub(appState: appState, manual: false)
-            }
-    }
-
-    private func handleUpdateAvailableChange(isUpdateAvailable: Bool) {
-//        if isUpdateAvailable {
-            Updater.updateWindow = LuminareTrafficLightedWindow {
-                UpdateView()
-                    .environmentObject(appState)
-            }
-//            NewWin.show(appState: appState, width: 500, height: 440, newWin: .update)
-//        } else {
-//            // Consider handling the 'no update' case or remove this block if not needed.
-//        }
-    }
 
     var body: some View {
         LuminareSection {
@@ -172,26 +132,16 @@ struct AboutConfigurationView: View {
 
         LuminareSection {
             Button("Check for Updates") {
-                AppDelegate.updater.checkForUpdate(appState: appState, manual: true)
+                AppDelegate.updater.checkForUpdate(manual: true)
             }
 
             // I do not have the code for you to automatically check, it is hardcoded though...
             // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
             LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
         }
-
-        /// May want to move this somewhere nicer
         .onAppear {
-            AppDelegate.updater.pullFromGitHub(appState: appState, manual: false)
-            setUpAutoUpdateCheck()
+            AppDelegate.updater.pullFromGitHub(manual: false)
         }
-        .onDisappear {
-            updateCheckCancellable?.cancel()
-        }
-        .onChange(of: appState.updateAvailable) { newValue in
-            handleUpdateAvailableChange(isUpdateAvailable: newValue)
-        }
-        /// end
 
         LuminareSection {
             VStack(alignment: .leading, spacing: 12) {

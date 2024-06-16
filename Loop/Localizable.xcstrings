@@ -674,9 +674,6 @@
         }
       }
     },
-    "Current Version: %@" : {
-
-    },
     "Current version: %@ (%@)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -826,9 +823,6 @@
       }
     },
     "Disable radial menu cursor interaction" : {
-
-    },
-    "Dismiss" : {
 
     },
     "Donate…" : {
@@ -3218,9 +3212,6 @@
           }
         }
       }
-    },
-    "You're up-to-date!" : {
-
     },
     "You've looped %lld times!" : {
 
