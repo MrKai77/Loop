@@ -1344,7 +1344,7 @@
     "Include padding" : {
 
     },
-    "Install Update" : {
+    "Install" : {
 
     },
     "Instant" : {
@@ -1844,6 +1844,9 @@
           }
         }
       }
+    },
+    "Restart to complete" : {
+
     },
     "Restore Defaults" : {
       "extractionState" : "stale",

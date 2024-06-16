@@ -9,8 +9,11 @@ import Luminare
 import SwiftUI
 
 struct UpdateView: View {
+    @Environment(\.tintColor) var tintColor
+
     @ObservedObject var updater = AppDelegate.updater
     @State var isInstalling: Bool = false
+    @State var readyToRestart: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -38,13 +41,51 @@ struct UpdateView: View {
                     AppDelegate.updater.dismissWindow()
                 }
 
-                Button("Install Update") {
-                    AppDelegate.updater.dismissWindow()
+                Button {
+                    if readyToRestart {
+                        AppDelegate.relaunch()
+                    }
+
+                    withAnimation(.smooth(duration: 0.25)) {
+                        isInstalling = true
+                    }
+                    Task {
+                        await AppDelegate.updater.installUpdate()
+
+                        withAnimation(.smooth(duration: 0.25).delay(1)) {
+                            isInstalling = false
+                            readyToRestart = true
+                        }
+                    }
+                } label: {
+                    if isInstalling {
+                        Capsule()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 5)
+                            .foregroundStyle(.quinary)
+                            .overlay {
+                                GeometryReader { geo in
+                                    Rectangle()
+                                        .foregroundStyle(tintColor())
+                                        .clipShape(.rect(cornerRadius: 4))
+                                        .frame(width: CGFloat(updater.progressBar.1) * geo.size.width)
+                                        .animation(.easeIn(duration: 1), value: updater.progressBar.1)
+                                        .shadow(color: tintColor(), radius: 2)
+                                }
+                            }
+                            .overlay {
+                                Capsule()
+                                    .strokeBorder(.quaternary, lineWidth: 1)
+                            }
+                    } else {
+                        Text(readyToRestart ? "Restart to complete" : "Install")
+                    }
                 }
+                .allowsHitTesting(!isInstalling)
             }
             .buttonStyle(LuminareCompactButtonStyle())
             .padding(12)
-            .background(VisualEffectView(material: .fullScreenUI, blendingMode: .behindWindow))
+            .background(VisualEffectView(material: .menu, blendingMode: .behindWindow))
             .overlay {
                 VStack {
                     Divider()
@@ -52,53 +93,6 @@ struct UpdateView: View {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
-
-//                HStack(spacing: 2) {
-//                    Button("Remind me later") {
-//                        AppDelegate.updater.dismissWindow()
-//                    }
-//                    .buttonStyle(LuminareButtonStyle())
-//
-//                    Button(
-//                        action: {
-//                            if !isInstalling {
-//                                withAnimation {
-//                                    isInstalling.toggle()
-//                                }
-//                                Task {
-//                                    await AppDelegate.updater.installUpdate()
-//                                }
-//                            } else if updater.progressBar.1 == 1.0 {
-//                                AppDelegate.updater.dismissWindow()
-//                                AppDelegate.relaunch()
-//                            }
-//                        },
-//                        label: {
-//                            if updater.progressBar.1 < 1.0 {
-//                                Text(isInstalling ? "Downloading & installing..." : "Install")
-//                            } else {
-//                                Text("Restart to complete")
-//                            }
-//                        }
-//                    )
-//
-//                    .buttonStyle(LuminareButtonStyle())
-//                    .overlay {
-//                        if isInstalling {
-//                            GeometryReader { geo in
-//                                Rectangle()
-//                                    .foregroundStyle(.tertiary)
-//                                    .clipShape(.rect(cornerRadius: 4))
-//                                    .frame(width: CGFloat(updater.progressBar.1) * geo.size.width)
-//                                    .animation(.easeIn(duration: 1), value: updater.progressBar.1)
-//                            }
-//                            .allowsHitTesting(false)
-//                            .opacity(updater.progressBar.1 < 1.0 ? 1 : 0)
-//                        }
-//                    }
-//                }
-//                .frame(height: 42)
-//            }
         }
         .frame(width: 570, height: 480)
     }
