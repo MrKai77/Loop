@@ -132,15 +132,14 @@ struct AboutConfigurationView: View {
 
         LuminareSection {
             Button("Check for Updates") {
-                AppDelegate.updater.checkForUpdate(manual: true)
+                Task {
+                    await AppDelegate.updater.pullFromGitHub(manual: true)
+                }
             }
 
             // I do not have the code for you to automatically check, it is hardcoded though...
             // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
             LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
-        }
-        .task {
-            await AppDelegate.updater.pullFromGitHub(manual: false)
         }
 
         LuminareSection {

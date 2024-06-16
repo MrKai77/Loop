@@ -25,6 +25,13 @@ class Updater: ObservableObject {
             }
     }
 
+    func dismissWindow() {
+        DispatchQueue.main.async {
+            self.appState.updateAvailable = false
+            self.updateWindow?.close()
+        }
+    }
+
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func pullFromGitHub(manual: Bool = false, releaseOnly: Bool = false) async {
         guard let url = URL(string: "https://api.github.com/repos/MrKai77/Loop/releases/latest") else { return }
@@ -47,15 +54,8 @@ class Updater: ObservableObject {
         }
     }
 
-    func dismissWindow() {
-        DispatchQueue.main.async {
-            self.appState.updateAvailable = false
-            self.updateWindow?.close()
-        }
-    }
-
     // Checks if the fetched release is newer than the current version and updates the app state.
-    func checkForUpdate(manual: Bool) {
+    private func checkForUpdate(manual: Bool) {
         guard let latestRelease = appState.releases.first else {
             if manual {
                 DispatchQueue.main.async {
@@ -125,7 +125,7 @@ class Updater: ObservableObject {
         }
     }
 
-    func unzipAndReplace(downloadedFileURL fileURL: String) {
+    private func unzipAndReplace(downloadedFileURL fileURL: String) {
         let appDirectory = Bundle.main.bundleURL.deletingLastPathComponent()
         let appBundle = Bundle.main.bundleURL
         let fileManager = FileManager.default
