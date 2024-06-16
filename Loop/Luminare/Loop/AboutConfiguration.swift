@@ -139,8 +139,8 @@ struct AboutConfigurationView: View {
             // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
             LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
         }
-        .onAppear {
-            AppDelegate.updater.pullFromGitHub(manual: false)
+        .task {
+            await AppDelegate.updater.pullFromGitHub(manual: false)
         }
 
         LuminareSection {

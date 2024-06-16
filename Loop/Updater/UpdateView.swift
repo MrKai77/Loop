@@ -9,8 +9,12 @@ import Luminare
 import SwiftUI
 
 struct UpdateView: View {
-    let appState: AppState
+    @EnvironmentObject var updater: Updater
     @State var isInstalling: Bool = false
+
+    var appState: AppState {
+        updater.appState
+    }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -24,7 +28,7 @@ struct UpdateView: View {
 
                 HStack(spacing: 2) {
                     Button("Remind me later") {
-                        AppDelegate.updater.dismissUpdateWindow(appState: appState)
+                        AppDelegate.updater.dismissWindow()
                     }
                     .buttonStyle(LuminareButtonStyle())
 
@@ -34,10 +38,9 @@ struct UpdateView: View {
                                 withAnimation {
                                     isInstalling.toggle()
                                 }
-                                AppDelegate.updater.downloadUpdate(appState: appState)
+                                AppDelegate.updater.downloadUpdate()
                             } else if appState.progressBar.1 == 1.0 {
-                                // The update is complete, and we should restart the app
-                                AppDelegate.updater.updateWindow?.close()
+                                AppDelegate.updater.dismissWindow()
                                 AppDelegate.relaunch()
                             }
                         },
@@ -176,7 +179,7 @@ struct UpdateView: View {
 //                .padding(.bottom, 20)
 //
 //            Button("Dismiss") {
-//                Updater.updateWindow?.close()
+//                AppDelegate.updater.dismissWindow()
 //            }
 //            .buttonStyle(LuminareButtonStyle())
 //            .padding(.bottom, 20)

@@ -9,55 +9,45 @@ import Combine
 import Luminare
 import SwiftUI
 
-class Updater {
-    var updateWindow: NSWindow?
+class Updater: ObservableObject {
+    @Published var appState: AppState = .init()
 
+    private var updateWindow: NSWindow?
     private var updateCheckCancellable: AnyCancellable?
-    private var appState: AppState = .init()
 
     init() {
         self.updateCheckCancellable = Timer.publish(every: 21600, on: .main, in: .common)
             .autoconnect()
             .sink { _ in
-                AppDelegate.updater.pullFromGitHub(manual: false)
+                Task {
+                    await self.pullFromGitHub(manual: false)
+                }
             }
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
-    func pullFromGitHub(manual: Bool = false, releaseOnly: Bool = false) {
+    func pullFromGitHub(manual: Bool = false, releaseOnly: Bool = false) async {
         guard let url = URL(string: "https://api.github.com/repos/MrKai77/Loop/releases/latest") else { return }
 
-        // Asynchronous network call to fetch release data.
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let data else {
-                DispatchQueue.main.async {
-                    NSLog("Fetch failed: \(error?.localizedDescription ?? "Unknown error")")
-                }
-                return
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            let response = try JSONDecoder().decode(Release.self, from: data)
+
+            appState.releases = [response]
+            appState.changelogText = response.modifiedBody
+
+            // If not releaseOnly, proceed to check for an update.
+            if !releaseOnly {
+                checkForUpdate(manual: manual)
             }
 
-            do {
-                let decodedResponse = try JSONDecoder().decode(Release.self, from: data)
-
-                DispatchQueue.main.async {
-                    self?.appState.releases = [decodedResponse]
-                    self?.appState.changelogText = decodedResponse.modifiedBody
-
-                    // If not releaseOnly, proceed to check for an update.
-                    if !releaseOnly {
-                        self?.checkForUpdate(manual: manual)
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    NSLog("JSON decoding error: \(error.localizedDescription)")
-                }
-            }
+        } catch {
+            NSLog("Error: \(error.localizedDescription)")
         }
-        .resume()
     }
 
-    func dismissUpdateWindow(appState: AppState) {
+    func dismissWindow() {
         DispatchQueue.main.async {
             self.appState.updateAvailable = false
             self.updateWindow?.close()
@@ -71,7 +61,8 @@ class Updater {
                 DispatchQueue.main.async {
                     // TODO: edit view for when no updates are available
                     self.updateWindow = LuminareTrafficLightedWindow {
-                        UpdateView(appState: self.appState)
+                        UpdateView()
+                            .environmentObject(self)
                     }
                 }
             }
@@ -86,17 +77,19 @@ class Updater {
 
             if updateIsNeeded || manual {
                 self.updateWindow = LuminareTrafficLightedWindow {
-                    UpdateView(appState: self.appState)
+                    UpdateView()
+                        .environmentObject(self)
                 }
             }
         }
     }
 
     // Downloads the update from GitHub and prepares it for installation.
-    func downloadUpdate(appState: AppState) {
-        guard let latestRelease = appState.releases.first,
-              let asset = latestRelease.assets.first,
-              let url = URL(string: asset.browserDownloadURL)
+    func downloadUpdate() {
+        guard
+            let latestRelease = appState.releases.first,
+            let asset = latestRelease.assets.first,
+            let url = URL(string: asset.browserDownloadURL)
         else {
             DispatchQueue.main.async {
                 self.appState.progressBar = ("", 0)
@@ -111,7 +104,7 @@ class Updater {
         if fileManager.fileExists(atPath: destinationURL.path) {
             DispatchQueue.main.async {
                 self.appState.progressBar = ("", 1.0)
-                self.unzipAndReplace(downloadedFileURL: destinationURL.path, appState: appState)
+                self.unzipAndReplace(downloadedFileURL: destinationURL.path)
             }
             return
         }
@@ -139,7 +132,7 @@ class Updater {
                 try fileManager.moveItem(at: localURL, to: destinationURL)
                 DispatchQueue.main.async {
                     self?.appState.progressBar = ("", 0.5)
-                    self?.unzipAndReplace(downloadedFileURL: destinationURL.path, appState: appState)
+                    self?.unzipAndReplace(downloadedFileURL: destinationURL.path)
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -149,8 +142,7 @@ class Updater {
         }.resume()
     }
 
-    // Unzips the downloaded update and replaces the current app with the new version.
-    func unzipAndReplace(downloadedFileURL fileURL: String, appState: AppState) {
+    func unzipAndReplace(downloadedFileURL fileURL: String) {
         let appDirectory = Bundle.main.bundleURL.deletingLastPathComponent()
         let appBundle = Bundle.main.bundleURL
         let fileManager = FileManager.default
