@@ -38,7 +38,9 @@ struct UpdateView: View {
                                 withAnimation {
                                     isInstalling.toggle()
                                 }
-                                AppDelegate.updater.downloadUpdate()
+                                Task {
+                                    await AppDelegate.updater.downloadUpdate()
+                                }
                             } else if appState.progressBar.1 == 1.0 {
                                 AppDelegate.updater.dismissWindow()
                                 AppDelegate.relaunch()

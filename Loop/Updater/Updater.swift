@@ -85,7 +85,7 @@ class Updater: ObservableObject {
     }
 
     // Downloads the update from GitHub and prepares it for installation.
-    func downloadUpdate() {
+    func downloadUpdate() async {
         guard
             let latestRelease = appState.releases.first,
             let asset = latestRelease.assets.first,
@@ -100,46 +100,29 @@ class Updater: ObservableObject {
         let fileManager = FileManager.default
         let destinationURL = fileManager.temporaryDirectory.appendingPathComponent(asset.name)
 
-        // If the update file already exists, proceed to unzip and replace the app.
-        if fileManager.fileExists(atPath: destinationURL.path) {
-            DispatchQueue.main.async {
-                self.appState.progressBar = ("", 1.0)
-                self.unzipAndReplace(downloadedFileURL: destinationURL.path)
-            }
-            return
-        }
-
-        // Start the download and update the progress bar.
         DispatchQueue.main.async {
             self.appState.progressBar = ("", 0.1)
         }
 
-        // Download task for the update file.
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
-        URLSession.shared.downloadTask(with: request) { [weak self] localURL, _, error in
-            guard let localURL else {
-                DispatchQueue.main.async {
-                    NSLog("Download error: \(error?.localizedDescription ?? "Unknown error")")
-                }
-                return
-            }
-
+        if !fileManager.fileExists(atPath: destinationURL.path) {
             do {
-                // Move the downloaded file to the temporary directory.
-                if fileManager.fileExists(atPath: destinationURL.path) {
-                    try fileManager.removeItem(at: destinationURL)
-                }
-                try fileManager.moveItem(at: localURL, to: destinationURL)
+                let (fileURL, _) = try await URLSession.shared.download(from: url)
+
+                try fileManager.moveItem(at: fileURL, to: destinationURL)
+
                 DispatchQueue.main.async {
-                    self?.appState.progressBar = ("", 0.5)
-                    self?.unzipAndReplace(downloadedFileURL: destinationURL.path)
+                    self.appState.progressBar = ("", 0.5)
+                    self.unzipAndReplace(downloadedFileURL: destinationURL.path)
                 }
             } catch {
-                DispatchQueue.main.async {
-                    NSLog("File operation error: \(error.localizedDescription)")
-                }
+                NSLog("Error: \(error.localizedDescription)")
             }
-        }.resume()
+        }
+
+        DispatchQueue.main.async {
+            self.appState.progressBar = ("", 1.0)
+            self.unzipAndReplace(downloadedFileURL: destinationURL.path)
+        }
     }
 
     func unzipAndReplace(downloadedFileURL fileURL: String) {
