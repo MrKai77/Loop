@@ -10,6 +10,7 @@ import SwiftUI
 
 struct UpdateView: View {
     @Environment(\.tintColor) var tintColor
+    @Environment(\.colorScheme) var colorScheme
 
     @ObservedObject var updater = AppDelegate.updater
     @State var isInstalling: Bool = false
@@ -99,16 +100,29 @@ struct UpdateView: View {
 
     func theLoopTimesView() -> some View {
         ZStack {
-            TheLoopTimes()
-                .fill(
-                    .shadow(.inner(color: .black.opacity(0.1), radius: 3))
-                    .shadow(.inner(color: .black.opacity(0.3), radius: 5, y: 3))
-                )
-                .foregroundStyle(.white.opacity(0.7))
-                .blendMode(.overlay)
+            if colorScheme == .dark {
+                TheLoopTimes()
+                    .fill(
+                        .shadow(.inner(color: .black.opacity(0.1), radius: 3))
+                        .shadow(.inner(color: .black.opacity(0.3), radius: 5, y: 3))
+                    )
+                    .foregroundStyle(.primary.opacity(0.7))
+                    .blendMode(.overlay)
+            } else {
+                TheLoopTimes()
+                    .foregroundStyle(.primary.opacity(0.7))
+                    .blendMode(.overlay)
+
+                TheLoopTimes()
+                    .fill(
+                        .shadow(.inner(color: .black.opacity(0.1), radius: 3))
+                        .shadow(.inner(color: .black.opacity(0.3), radius: 5, y: 3))
+                    )
+                    .blendMode(.overlay)
+            }
 
             TheLoopTimes()
-                .stroke(.white.opacity(0.1), lineWidth: 1)
+                .stroke(.primary.opacity(0.1), lineWidth: 1)
                 .blendMode(.luminosity)
         }
         .aspectRatio(883.88 / 135.53, contentMode: .fit)
@@ -116,13 +130,32 @@ struct UpdateView: View {
     }
 
     func versionChangeView() -> some View {
-        HStack {
-            Text(Bundle.main.appVersion ?? "Unknown")
-            Image(systemName: "arrow.right")
-            Text(updater.availableReleases.first?.tagName ?? "Unknown")
+        ZStack {
+            if colorScheme == .dark {
+                HStack {
+                    Text(Bundle.main.appVersion ?? "Unknown")
+                    Image(systemName: "arrow.right")
+                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
+                }
+                .foregroundStyle(.primary.opacity(0.7))
+                .blendMode(.overlay)
+            } else {
+                HStack {
+                    Text(Bundle.main.appVersion ?? "Unknown")
+                    Image(systemName: "arrow.right")
+                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
+                }
+                .foregroundStyle(.primary.opacity(0.7))
+                .blendMode(.overlay)
+
+                HStack {
+                    Text(Bundle.main.appVersion ?? "Unknown")
+                    Image(systemName: "arrow.right")
+                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
+                }
+                .blendMode(.overlay)
+            }
         }
-        .font(.title3)
-        .blendMode(.overlay)
     }
 
     func changelogView() -> some View {
