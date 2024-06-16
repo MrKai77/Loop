@@ -11,7 +11,6 @@
 		0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */; };
 		284A37192BB8F16800FC9465 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 284A37182BB8F16800FC9465 /* Localizable.xcstrings */; };
 		4C6B93DE2C1DCE9800AFF832 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 4C6B93DD2C1DCE9800AFF832 /* Luminare */; };
-		4C6B93E52C1DCF6E00AFF832 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93DF2C1DCF6E00AFF832 /* Extensions.swift */; };
 		4C6B93E62C1DCF6E00AFF832 /* NewWin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E02C1DCF6E00AFF832 /* NewWin.swift */; };
 		4C6B93E72C1DCF6E00AFF832 /* TheTimesLooped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E12C1DCF6E00AFF832 /* TheTimesLooped.swift */; };
 		4C6B93E82C1DCF6E00AFF832 /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E22C1DCF6E00AFF832 /* Updater.swift */; };
@@ -97,7 +96,6 @@
 		0A6DC3EA2BB869DE002AB05F /* WindowAction+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Image.swift"; sourceTree = "<group>"; };
 		0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+LocalizedString.swift"; sourceTree = "<group>"; };
 		284A37182BB8F16800FC9465 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		4C6B93DF2C1DCF6E00AFF832 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4C6B93E02C1DCF6E00AFF832 /* NewWin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewWin.swift; sourceTree = "<group>"; };
 		4C6B93E12C1DCF6E00AFF832 /* TheTimesLooped.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheTimesLooped.swift; sourceTree = "<group>"; };
 		4C6B93E22C1DCF6E00AFF832 /* Updater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
@@ -202,7 +200,6 @@
 		4C6B93E42C1DCF6E00AFF832 /* Updater */ = {
 			isa = PBXGroup;
 			children = (
-				4C6B93DF2C1DCF6E00AFF832 /* Extensions.swift */,
 				4C6B93E02C1DCF6E00AFF832 /* NewWin.swift */,
 				4C6B93E12C1DCF6E00AFF832 /* TheTimesLooped.swift */,
 				4C6B93E22C1DCF6E00AFF832 /* Updater.swift */,
@@ -607,7 +604,6 @@
 				A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */,
 				A8E8903C2BA7AAFE006C5074 /* NSEvent+Extensions.swift in Sources */,
 				0A6DC3EB2BB869DE002AB05F /* WindowAction+Image.swift in Sources */,
-				4C6B93E52C1DCF6E00AFF832 /* Extensions.swift in Sources */,
 				A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */,
 				A85DDBDA2C1693D4008C103D /* WindowDirection+Snapping.swift in Sources */,
 				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,

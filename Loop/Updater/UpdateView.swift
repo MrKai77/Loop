@@ -24,7 +24,7 @@ struct UpdateView: View {
 
                 HStack(spacing: 2) {
                     Button("Remind me later") {
-                        Updater.shared.dismissUpdateWindow(appState: appState)
+                        AppDelegate.updater.dismissUpdateWindow(appState: appState)
                     }
                     .buttonStyle(LuminareButtonStyle())
 
@@ -34,11 +34,11 @@ struct UpdateView: View {
                                 withAnimation {
                                     isInstalling.toggle()
                                 }
-                                Updater.shared.downloadUpdate(appState: appState)
+                                AppDelegate.updater.downloadUpdate(appState: appState)
                             } else if appState.progressBar.1 == 1.0 {
                                 // The update is complete, and we should restart the app
                                 Updater.updateWindow?.close()
-                                relaunchApp()
+                                AppDelegate.relaunch()
                             }
                         },
                         label: {

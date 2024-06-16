@@ -15,7 +15,7 @@ struct Release: Codable {
     let id: Int
     let tagName: String
     let body: String
-    let assets: [Asset]
+    let assets: [Release.Asset]
 
     enum CodingKeys: String, CodingKey {
         case id, body, assets
@@ -24,18 +24,19 @@ struct Release: Codable {
 
     // Provides a modified version of the release notes body for display purposes.
     var modifiedBody: String {
-        body.replacingOccurrences(of: "- [x]", with: ">").replacingOccurrences(of: "###", with: "")
+        body
+            .replacingOccurrences(of: "- [x]", with: ">")
+            .replacingOccurrences(of: "###", with: "")
     }
-}
 
-// Asset model to parse the assets array in the GitHub API response.
-struct Asset: Codable {
-    let name: String
-    let browserDownloadURL: String
+    struct Asset: Codable {
+        let name: String
+        let browserDownloadURL: String
 
-    enum CodingKeys: String, CodingKey {
-        case name
-        case browserDownloadURL = "browser_download_url" // Maps JSON key "browser_download_url" to the property `browserDownloadURL`.
+        enum CodingKeys: String, CodingKey {
+            case name
+            case browserDownloadURL = "browser_download_url" // Maps JSON key "browser_download_url" to the property `browserDownloadURL`.
+        }
     }
 }
 
@@ -44,44 +45,44 @@ struct Asset: Codable {
 // Updater class provides functionality to check for and apply updates.
 class Updater {
     static var updateWindow: NSWindow?
-    static let shared = Updater() // Singleton instance of Updater.
-    private init() {} // Private initializer to enforce singleton usage.
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func pullFromGitHub(appState: AppState, manual: Bool = false, releaseOnly: Bool = false) {
-        // GitHub API URL for the latest release of the repository.
-        let urlString = "https://api.github.com/repos/MrKai77/Loop/releases/latest"
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: "https://api.github.com/repos/MrKai77/Loop/releases/latest") else { return }
 
         // Asynchronous network call to fetch release data.
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
             guard let data else {
-                self?.updateUI {
-                    printOS("Fetch failed: \(error?.localizedDescription ?? "Unknown error")")
+                DispatchQueue.main.async {
+                    NSLog("Fetch failed: \(error?.localizedDescription ?? "Unknown error")")
                 }
                 return
             }
-
+            
             do {
-                // Decoding the JSON response into the Release model.
                 let decodedResponse = try JSONDecoder().decode(Release.self, from: data)
-                self?.updateUI {
+
+                DispatchQueue.main.async {
                     appState.releases = [decodedResponse]
                     appState.changelogText = decodedResponse.modifiedBody
+
                     // If not releaseOnly, proceed to check for an update.
                     if !releaseOnly {
                         self?.checkForUpdate(appState: appState, manual: manual)
                     }
                 }
             } catch {
-                self?.updateUI { printOS("JSON decoding error: \(error.localizedDescription)") }
+                DispatchQueue.main.async {
+                    NSLog("JSON decoding error: \(error.localizedDescription)")
+                }
             }
-        }.resume()
+        }
+        .resume()
     }
 
     // Dismisses the update window and updates the app state.
     func dismissUpdateWindow(appState: AppState) {
-        updateUI {
+        DispatchQueue.main.async {
             appState.updateAvailable = false
             Updater.updateWindow?.close()
         }
@@ -91,28 +92,25 @@ class Updater {
     func checkForUpdate(appState: AppState, manual: Bool) {
         guard let latestRelease = appState.releases.first else {
             if manual {
-                updateUI {
+                DispatchQueue.main.async {
+                    // TODO: edit view for when no updates are available
                     Updater.updateWindow = LuminareTrafficLightedWindow {
                         UpdateView()
                             .environmentObject(appState)
                     }
-//                    updateWindow = LuminareTrafficLightedWindow(
-//                    NewWin.show(appState: appState, width: 500, height: 300, newWin: .no_update)
                 }
             }
             return
         }
+
         let currentVersion = Bundle.main.appVersion
+        let updateIsNeeded = latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending
 
-        // Compares the latest release tag with the current version to determine if an update is needed.
-        let updateIsNeeded =
-            latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending
-
-        updateUI {
+        DispatchQueue.main.async {
             appState.updateAvailable = updateIsNeeded
+
             // If manual check and no update is needed, show the no update window.
             if manual, !updateIsNeeded {
-//                NewWin.show(appState: appState, width: 400, height: 200, newWin: .no_update)
                 Updater.updateWindow = LuminareTrafficLightedWindow {
                     UpdateView()
                         .environmentObject(appState)
@@ -127,7 +125,9 @@ class Updater {
               let asset = latestRelease.assets.first,
               let url = URL(string: asset.browserDownloadURL)
         else {
-            updateUI { appState.progressBar = ("", 0) }
+            DispatchQueue.main.async {
+                appState.progressBar = ("", 0)
+            }
             return
         }
 
@@ -136,7 +136,7 @@ class Updater {
 
         // If the update file already exists, proceed to unzip and replace the app.
         if fileManager.fileExists(atPath: destinationURL.path) {
-            updateUI {
+            DispatchQueue.main.async {
                 appState.progressBar = ("", 1.0)
                 self.unzipAndReplace(downloadedFileURL: destinationURL.path, appState: appState)
             }
@@ -144,14 +144,16 @@ class Updater {
         }
 
         // Start the download and update the progress bar.
-        updateUI { appState.progressBar = ("", 0.1) }
+        DispatchQueue.main.async {
+            appState.progressBar = ("", 0.1)
+        }
 
         // Download task for the update file.
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         URLSession.shared.downloadTask(with: request) { [weak self] localURL, _, error in
             guard let localURL else {
-                self?.updateUI {
-                    printOS("Download error: \(error?.localizedDescription ?? "Unknown error")")
+                DispatchQueue.main.async {
+                    NSLog("Download error: \(error?.localizedDescription ?? "Unknown error")")
                 }
                 return
             }
@@ -162,12 +164,14 @@ class Updater {
                     try fileManager.removeItem(at: destinationURL)
                 }
                 try fileManager.moveItem(at: localURL, to: destinationURL)
-                self?.updateUI {
+                DispatchQueue.main.async {
                     appState.progressBar = ("", 0.5)
                     self?.unzipAndReplace(downloadedFileURL: destinationURL.path, appState: appState)
                 }
             } catch {
-                self?.updateUI { printOS("File operation error: \(error.localizedDescription)") }
+                DispatchQueue.main.async {
+                    NSLog("File operation error: \(error.localizedDescription)")
+                }
             }
         }.resume()
     }
@@ -180,10 +184,14 @@ class Updater {
 
         do {
             // Unzip the downloaded file and replace the existing app.
-            updateUI { appState.progressBar = ("", 0.5) }
+            DispatchQueue.main.async {
+                appState.progressBar = ("", 0.5)
+            }
             try fileManager.removeItem(at: appBundle)
 
-            updateUI { appState.progressBar = ("", 0.6) }
+            DispatchQueue.main.async {
+                appState.progressBar = ("", 0.6)
+            }
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
             process.arguments = ["-xk", fileURL, appDirectory.path]
@@ -192,19 +200,16 @@ class Updater {
             try process.run()
             process.waitUntilExit()
 
-            updateUI {
+            DispatchQueue.main.async {
                 appState.progressBar = ("", 0.8)
                 try? fileManager.removeItem(atPath: fileURL) // Clean up the zip file after extraction.
                 appState.progressBar = ("", 1.0)
                 appState.updateAvailable = false // Update the state to reflect that the update has been applied.
             }
         } catch {
-            updateUI { printOS("Error updating the app: \(error)") }
+            DispatchQueue.main.async {
+                NSLog("Error updating the app: \(error)")
+            }
         }
-    }
-
-    // Updates the UI on the main thread.
-    private func updateUI(_ action: @escaping () -> ()) {
-        DispatchQueue.main.async(execute: action)
     }
 }

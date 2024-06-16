@@ -115,7 +115,7 @@ struct AboutConfigurationView: View {
         updateCheckCancellable = Timer.publish(every: 21600, on: .main, in: .common)
             .autoconnect()
             .sink { _ in
-                Updater.shared.pullFromGitHub(appState: appState, manual: false)
+                AppDelegate.updater.pullFromGitHub(appState: appState, manual: false)
             }
     }
 
@@ -172,7 +172,7 @@ struct AboutConfigurationView: View {
 
         LuminareSection {
             Button("Check for Updates") {
-                Updater.shared.checkForUpdate(appState: appState, manual: true)
+                AppDelegate.updater.checkForUpdate(appState: appState, manual: true)
             }
 
             // I do not have the code for you to automatically check, it is hardcoded though...
@@ -182,7 +182,7 @@ struct AboutConfigurationView: View {
 
         /// May want to move this somewhere nicer
         .onAppear {
-            Updater.shared.pullFromGitHub(appState: appState, manual: false)
+            AppDelegate.updater.pullFromGitHub(appState: appState, manual: false)
             setUpAutoUpdateCheck()
         }
         .onDisappear {
