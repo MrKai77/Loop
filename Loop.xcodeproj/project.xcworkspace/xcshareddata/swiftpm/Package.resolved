@@ -1,5 +1,5 @@
 {
-  "originHash" : "c455e625308edd2c92a7026204c191ce39495daeab87d401ff9a8d1e640efef4",
+  "originHash" : "b9fdecd7398c3745a20923fcfba00e4142c0596ea2ae1f3fc8bc9a77b8ff1cfd",
   "pins" : [
     {
       "identity" : "defaults",
@@ -11,21 +11,21 @@
       }
     },
     {
+      "identity" : "luminare",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MrKai77/Luminare",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d599b633f79a5c5ea61d25c71bb90ed67daf8d42"
+      }
+    },
+    {
       "identity" : "menubarextraaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/MenuBarExtraAccess",
       "state" : {
         "revision" : "f5896b47e15e114975897354c7e1082c51a2bffd",
         "version" : "1.0.5"
-      }
-    },
-    {
-      "identity" : "sparkle",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sparkle-project/Sparkle",
-      "state" : {
-        "branch" : "2.x",
-        "revision" : "e9989a8ae7d09c946d07d325d71414024bd1e2dd"
       }
     }
   ],

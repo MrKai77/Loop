@@ -300,6 +300,7 @@
       }
     },
     "Automatically check for updates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -341,7 +342,7 @@
     "Change" : {
 
     },
-    "Check for updates…" : {
+    "Check for Updates" : {
 
     },
     "Check for Updates…" : {
@@ -673,6 +674,9 @@
         }
       }
     },
+    "Current Version: %@" : {
+
+    },
     "Current version: %@ (%@)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -824,6 +828,9 @@
     "Disable radial menu cursor interaction" : {
 
     },
+    "Dismiss" : {
+
+    },
     "Donate…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -858,6 +865,9 @@
           }
         }
       }
+    },
+    "Downloading & installing..." : {
+
     },
     "Excluded Applications" : {
       "extractionState" : "stale",
@@ -1343,6 +1353,9 @@
     "Include padding" : {
 
     },
+    "Install" : {
+
+    },
     "Instant" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1769,6 +1782,9 @@
         }
       }
     },
+    "Remind me later" : {
+
+    },
     "Request Access…" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1837,6 +1853,9 @@
           }
         }
       }
+    },
+    "Restart to complete" : {
+
     },
     "Restore Defaults" : {
       "extractionState" : "stale",
@@ -3199,6 +3218,9 @@
           }
         }
       }
+    },
+    "You're up-to-date!" : {
+
     },
     "You've looped %lld times!" : {
 
