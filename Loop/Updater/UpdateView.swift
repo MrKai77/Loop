@@ -75,10 +75,6 @@ struct UpdateView: View {
                                         .shadow(color: tintColor(), radius: 1)
                                 }
                             }
-                            .overlay {
-                                Capsule()
-                                    .strokeBorder(.quaternary, lineWidth: 1)
-                            }
                             .padding(.horizontal, 4)
                     } else {
                         Text(readyToRestart ? "Restart to complete" : "Install")
