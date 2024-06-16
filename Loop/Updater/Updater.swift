@@ -12,8 +12,9 @@ import SwiftUI
 class Updater: ObservableObject {
     @Published var availableReleases = [Release]()
     @Published var progressBar: (String, Double) = ("Ready", 0.0)
-    @Published var changelogText: String = ""
     @Published var updateState: UpdateAvailability = .notChecked
+
+    @Published var changelog: [(title: String, body: [String])] = .init()
 
     enum UpdateAvailability {
         case notChecked
@@ -21,7 +22,7 @@ class Updater: ObservableObject {
         case unavailable
     }
 
-    private var updateWindow: NSWindow?
+    private var windowController: NSWindowController?
     private var updateCheckCancellable: AnyCancellable?
 
     init() {
@@ -38,7 +39,7 @@ class Updater: ObservableObject {
     func dismissWindow() {
         DispatchQueue.main.async {
             self.updateState = .notChecked
-            self.updateWindow?.close()
+            self.windowController?.close()
         }
     }
 
@@ -52,7 +53,8 @@ class Updater: ObservableObject {
             let response = try JSONDecoder().decode(Release.self, from: data)
 
             availableReleases = [response]
-            changelogText = response.modifiedBody
+            processChangelog(response.body)
+            dump(changelog)
 
             if let latestRelease = availableReleases.first {
                 let currentVersion = Bundle.main.appVersion
@@ -68,10 +70,49 @@ class Updater: ObservableObject {
         }
     }
 
+    func processChangelog(_ body: String) {
+        changelog = .init()
+
+        let lines = body
+            .replacingOccurrences(of: "\r", with: "")
+            .split(separator: "\n")
+
+        var currentSection: String?
+
+        for line in lines {
+            if line.starts(with: "#") {
+                currentSection = line
+                    .replacingOccurrences(of: "#", with: "")
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+
+                if changelog.first(where: { $0.title == currentSection }) == nil {
+                    changelog.append((title: currentSection!, body: []))
+                }
+
+            } else {
+                guard line.hasPrefix("- ") else { continue }
+
+                // Format list items
+                let line = line
+                    .replacingOccurrences(of: "- ", with: "") // Remove bullet point
+                    .replacingOccurrences(of: #"#\d+ "#, with: "", options: .regularExpression) // Remove issue number
+                    .replacingOccurrences(of: #"\(@.*\)"#, with: "", options: .regularExpression) // Remove author
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+
+                if let index = changelog.firstIndex(where: { $0.title == currentSection }) {
+                    changelog[index].body.append(line)
+                }
+            }
+        }
+    }
+
     // Checks if the fetched release is newer than the current version and updates the app state.
     func showUpdateWindow() {
         if updateState == .available {
-            updateWindow = LuminareTrafficLightedWindow { UpdateView() }
+            if windowController?.window == nil {
+                windowController = .init(window: LuminareTrafficLightedWindow { UpdateView() })
+            }
+            windowController?.window?.orderFrontRegardless()
         }
     }
 
@@ -171,13 +212,6 @@ struct Release: Codable {
     enum CodingKeys: String, CodingKey {
         case id, body, assets
         case tagName = "tag_name" // Maps JSON key "tag_name" to the property `tagName`.
-    }
-
-    // Provides a modified version of the release notes body for display purposes.
-    var modifiedBody: String {
-        body
-            .replacingOccurrences(of: "- [x]", with: ">")
-            .replacingOccurrences(of: "###", with: "")
     }
 
     struct Asset: Codable {

@@ -860,9 +860,6 @@
         }
       }
     },
-    "Downloading & installing..." : {
-
-    },
     "Excluded Applications" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1347,7 +1344,7 @@
     "Include padding" : {
 
     },
-    "Install" : {
+    "Install Update" : {
 
     },
     "Instant" : {
@@ -1847,9 +1844,6 @@
           }
         }
       }
-    },
-    "Restart to complete" : {
-
     },
     "Restore Defaults" : {
       "extractionState" : "stale",
