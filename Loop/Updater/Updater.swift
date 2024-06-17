@@ -112,6 +112,7 @@ class Updater: ObservableObject {
                 windowController = .init(window: LuminareTrafficLightedWindow { UpdateView() })
             }
             windowController?.window?.makeKeyAndOrderFront(self)
+            windowController?.window?.orderFrontRegardless()
         }
     }
 
