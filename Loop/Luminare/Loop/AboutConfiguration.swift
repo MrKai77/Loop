@@ -71,7 +71,7 @@ class AboutConfigurationModel: ObservableObject {
         "Stay sharp, more intel coming soon!",
         "May the Force be with you... next time!",
         "The Force is strong with this version!",
-        "You’ve leveled up to max!",
+        "You’ve leveled up to the max!",
         "You've got the precious, no updates needed!",
         "No new intel, Commander."
     ]

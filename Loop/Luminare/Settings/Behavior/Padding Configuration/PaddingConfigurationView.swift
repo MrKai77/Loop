@@ -13,6 +13,8 @@ struct PaddingConfigurationView: View {
     @State var paddingModel = Defaults[.padding]
     @Binding var isPresented: Bool
 
+    let range: ClosedRange<CGFloat> = 0...200
+
     var body: some View {
         Group {
             ScreenView {
@@ -98,9 +100,10 @@ struct PaddingConfigurationView: View {
                     paddingModel.left = $0
                 }
             ),
-            sliderRange: 0...100,
+            sliderRange: range,
             suffix: "px",
-            lowerClamp: true
+            lowerClamp: true,
+            upperClamp: true
         )
     }
 
@@ -109,33 +112,37 @@ struct PaddingConfigurationView: View {
             LuminareValueAdjuster(
                 "Top",
                 value: $paddingModel.top,
-                sliderRange: 0...100,
+                sliderRange: range,
                 suffix: "px",
                 lowerClamp: true,
+                upperClamp: true,
                 controlSize: .compact
             )
             LuminareValueAdjuster(
                 "Bottom",
                 value: $paddingModel.bottom,
-                sliderRange: 0...100,
+                sliderRange: range,
                 suffix: "px",
                 lowerClamp: true,
+                upperClamp: true,
                 controlSize: .compact
             )
             LuminareValueAdjuster(
                 "Right",
                 value: $paddingModel.right,
-                sliderRange: 0...100,
+                sliderRange: range,
                 suffix: "px",
                 lowerClamp: true,
+                upperClamp: true,
                 controlSize: .compact
             )
             LuminareValueAdjuster(
                 "Left",
                 value: $paddingModel.left,
-                sliderRange: 0...100,
+                sliderRange: range,
                 suffix: "px",
                 lowerClamp: true,
+                upperClamp: true,
                 controlSize: .compact
             )
         }
