@@ -5,6 +5,7 @@
 //  Created by Kai Azim on 2024-04-26.
 //
 
+import Combine
 import Defaults
 import Luminare
 import SwiftUI
@@ -19,6 +20,8 @@ class AboutConfigurationModel: ObservableObject {
             Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
         }
     }
+
+    @Published var updateButtonTitle: LocalizedStringKey = "Check for updates…"
 
     let credits: [CreditItem] = [
         .init(
@@ -59,6 +62,20 @@ class AboutConfigurationModel: ObservableObject {
         )
     ]
 
+    let upToDateText: [LocalizedStringKey] = [
+        "You're up to date :)",
+        "No updates yet!",
+        "You've already got the best Loop!",
+        "Check back next time!",
+        "This is not the update you're looking for!",
+        "Stay sharp, more intel coming soon!",
+        "May the Force be with you... next time!",
+        "The Force is strong with this version!",
+        "You’ve leveled up to max!",
+        "You've got the precious, no updates needed!",
+        "No new intel, Commander."
+    ]
+
     func copyVersionToClipboard() {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
@@ -88,7 +105,7 @@ struct CreditItem: Identifiable {
 struct AboutConfigurationView: View {
     @Environment(\.openURL) private var openURL
     @StateObject private var model = AboutConfigurationModel()
-    @StateObject var updater = SoftwareUpdater()
+    @ObservedObject private var updater = AppDelegate.updater
     @Default(.timesLooped) var timesLooped
 
     var body: some View {
@@ -108,9 +125,10 @@ struct AboutConfigurationView: View {
                         Text("Loop")
                             .fontWeight(.medium)
 
-                        Text(model.isHoveringOverVersionCopier ?
-                            "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))" :
-                            "You've looped \(timesLooped) times!"
+                        Text(
+                            model.isHoveringOverVersionCopier
+                                ? "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                                : "You've looped \(timesLooped) times!"
                         )
                         .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
                         .animation(.smooth(duration: 0.25), value: model.isHoveringOverVersionCopier)
@@ -130,17 +148,39 @@ struct AboutConfigurationView: View {
         }
 
         LuminareSection {
-            Button("Check for updates…") {
-                updater.checkForUpdates()
+            Button {
+                Task {
+                    await updater.fetchLatestInfo()
+
+                    if updater.updateState == .available {
+                        updater.showUpdateWindow()
+                    } else {
+                        model.updateButtonTitle = model.upToDateText.randomElement()!
+
+                        let currentTitle = model.updateButtonTitle
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            if model.updateButtonTitle == currentTitle {
+                                model.updateButtonTitle = "Check for updates…"
+                            }
+                        }
+                    }
+                }
+            } label: {
+                Text(model.updateButtonTitle)
+                    .contentTransition(.numericText())
+                    .animation(.smooth(duration: 0.25), value: model.updateButtonTitle)
             }
 
-            LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
+            // I do not have the code for you to automatically check, it is hardcoded though...
+            // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
             LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
         }
 
         LuminareSection {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Click on 'Send Feedback' to go to our GitHub page, where you can report bugs, suggest new features, or provide other valuable input.")
+                Text(
+                    "Click on 'Send Feedback' to go to our GitHub page, where you can report bugs, suggest new features, or provide other valuable input."
+                )
 
                 Button("Send Feedback") {
                     openURL(URL(string: "https://github.com/MrKai77/Loop")!)
