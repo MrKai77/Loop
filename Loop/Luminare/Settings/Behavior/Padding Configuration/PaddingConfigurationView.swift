@@ -60,11 +60,19 @@ struct PaddingConfigurationView: View {
                         paddingModel.configureScreenPadding = newValue
 
                         if !paddingModel.configureScreenPadding {
-                            paddingModel.window = 0
-                            paddingModel.top = 0
-                            paddingModel.bottom = 0
-                            paddingModel.right = 0
-                            paddingModel.left = 0
+                            if paddingModel.allEqual {
+                                let window = paddingModel.window
+                                paddingModel.top = window
+                                paddingModel.bottom = window
+                                paddingModel.right = window
+                                paddingModel.left = window
+                            } else {
+                                paddingModel.window = 0
+                                paddingModel.top = 0
+                                paddingModel.bottom = 0
+                                paddingModel.right = 0
+                                paddingModel.left = 0
+                            }
                         }
                     }
                 }

@@ -39,4 +39,8 @@ struct PaddingModel: Codable, Defaults.Serializable, Hashable {
     var totalHorizontalPadding: CGFloat {
         right + left
     }
+
+    var allEqual: Bool {
+        window == top && window == bottom && window == right && window == left
+    }
 }
