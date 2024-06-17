@@ -177,17 +177,20 @@ struct AboutConfigurationView: View {
         }
 
         LuminareSection {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(
-                    "Click on 'Send Feedback' to go to our GitHub page, where you can report bugs, suggest new features, or provide other valuable input."
-                )
+            Text(
+                "Share feedback on our GitHub page, where you can let us know about any bugs, suggest features, or provide other valuable input. We also accept donations if you feel that Loop has improved your workflow :)"
+            )
+            .padding(8)
 
+            HStack(spacing: 2) {
                 Button("Send Feedback") {
                     openURL(URL(string: "https://github.com/MrKai77/Loop")!)
                 }
-                .buttonStyle(LuminareCompactButtonStyle())
+
+                Button("Donate") {
+                    openURL(URL(string: "https://github.com/sponsors/MrKai77")!)
+                }
             }
-            .padding(8)
         }
 
         LuminareSection("Credits") {
