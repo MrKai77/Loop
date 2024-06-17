@@ -53,31 +53,39 @@ struct UpdateView: View {
                     Task {
                         await AppDelegate.updater.installUpdate()
 
-                        withAnimation(.smooth(duration: 0.25).delay(1)) {
-                            isInstalling = false
-                            readyToRestart = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            withAnimation(.smooth(duration: 0.1)) {
+                                isInstalling = false
+                            }
+                            withAnimation(.smooth(duration: 0.25)) {
+                                readyToRestart = true
+                            }
                         }
                     }
                 } label: {
-                    if isInstalling {
-                        Capsule()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 5)
-                            .foregroundStyle(.quinary)
-                            .overlay {
-                                GeometryReader { geo in
-                                    Capsule()
-                                        .foregroundStyle(tintColor())
-                                        .frame(width: CGFloat(updater.progressBar) * geo.size.width)
-                                        .animation(.smooth(duration: 0.8), value: updater.progressBar)
-                                        .shadow(color: tintColor().opacity(0.1), radius: 12)
-                                        .shadow(color: tintColor().opacity(0.4), radius: 6)
-                                        .shadow(color: tintColor(), radius: 1)
+                    ZStack {
+                        if isInstalling {
+                            Capsule()
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 5)
+                                .foregroundStyle(.quinary)
+                                .overlay {
+                                    GeometryReader { geo in
+                                        Capsule()
+                                            .foregroundStyle(tintColor())
+                                            .frame(width: CGFloat(updater.progressBar) * geo.size.width)
+                                            .animation(.smooth(duration: 0.8), value: updater.progressBar)
+                                            .shadow(color: tintColor().opacity(0.1), radius: 12)
+                                            .shadow(color: tintColor().opacity(0.4), radius: 6)
+                                            .shadow(color: tintColor(), radius: 1)
+                                    }
                                 }
-                            }
-                            .padding(.horizontal, 4)
-                    } else {
-                        Text(readyToRestart ? "Restart to complete" : "Install")
+                                .padding(.horizontal, 4)
+                        }
+
+                        Text(isInstalling ? "               " : readyToRestart ? "Restart to complete" : "Install")
+                            .contentTransition(.numericText())
+                            .opacity(isInstalling ? 0 : 1)
                     }
                 }
                 .allowsHitTesting(!isInstalling)
