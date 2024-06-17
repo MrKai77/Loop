@@ -3,6 +3,61 @@
     <channel>
         <title>Loop</title>
         <item>
+            <title>1.0.0</title>
+            <pubDate>Mon, 17 Jun 2024 16:50:12 -0600</pubDate>
+            <sparkle:version>1030</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+                <h3 id="1-0-0">1.0.0</h3>
+
+                <h4 id="important-news">📰 Important News</h4>
+                <ul>
+                <li>💸 Reminder to support me & Loop by <a href="https://github.com/sponsors/MrKai77">sponsoring the project</a>
+                <li>💄 Can't donate? The next best way to support the project is to make some <b>app icons</b> for Loop!</li>
+                <li>🌐 <b>Localization:</b> I will start requesting localizations for the next update so please let me know if you are interested in localizing Loop :)</li>
+                </ul>
+
+                <h4 id="new-features">✨ New Features</h4>
+                <ul>
+                <li>✨ #361 Completely new translucent settings window</li>
+                <li>✨ #303 Set up localization infrastructure</li>
+                <li>✨ #344 New website for release notes</li>
+                <li>✨ #251 Ability to ignore mouse screen</li>
+                <li>✨ #235 Save cycle keybind index</li>
+                <li>✨ #317 Make window snapping less sensitive</li>
+                <li>✨ #212 Don't activate Mission Control when window snapping</li>
+                <li>✨ #298 Ability to animate window resizes when preview is disabled</li>
+                <li>✨ #298 Window animations no longer require screen recording access</li>
+                <li>✨ #378 Add summer/developer app icons</li>
+                <li>✨ #379 Ability to ignore screen with mouse</li>
+                <li>✨ #380 Reduce useless cycle/custom action creation click</li>
+                <li>✨ #384 Ability to move cursor with window</li>
+                <li>✨ #389 Improve window animations when window snapping</li>
+                <li>✨ #390 Ability to translate window location</li>
+                </ul>
+
+                <h4 id="bug-fixes">🐞 Bug Fixes</h4>
+                <ul>
+                <li>🐞 #299 Instant animation is not instant</li>
+                <li>🐞 #347 Fix window being cropped to screen when restoring initial frames</li>
+                <li>🐞 #95 Windows will now properly resize to bottom with window animations</li>
+                <li>🐞 #350 Make window snapping work properly on secondary screens</li>
+                <li>🐞 #314 Reduce Hyperkey conflicts</li>
+                <li>🐞 #381 Make sure settings window buttons are themed properly</li>
+                </ul>
+
+                <h4 id="notable-mentions">🥳 Notable Mentions</h4>
+                <ul>
+                <li>🐞 #296 Fix typo</li>
+                <li>🎨 #304 Reduce SwiftLint warnings</li>
+                <li>🎨 #370 Use SwiftFormat rather than SwiftLint</li>
+                <li>✨ #387 Add Luminare as git submodule</li>
+                </ul>
+            ]]></description>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0/Loop.zip" length="15898172" type="application/octet-stream" sparkle:edSignature="Bw/Tll7fqTFxpf2HMq5STnjybHN+pG0+2vF8Z9DSF7ltiNjwjqciMBmZywaq5MkJmmfUmdekDBe4MF86dBMdDQ=="/>
+        </item>
+        <item>
             <title>1.0.0-beta.15</title>
             <pubDate>Fri, 29 Mar 2024 15:20:21 -0600</pubDate>
             <sparkle:version>817</sparkle:version>
@@ -21,14 +76,163 @@
             <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/old.html</sparkle:releaseNotesLink>
             <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.14/Loop.zip" length="14271122" type="application/octet-stream" sparkle:edSignature="DY6ssBp2zCVSJ8xuNz0aqx8Em/raLnHR9yZOx1XXbSinBTtx2BI5I2dLoM/2ipFvtaJsn7IVngVt8FYR4MDbAg=="/>
         </item>
+    </channel>
+</rss><?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Loop</title>
         <item>
-            <title>1.0.0-beta.13</title>
-            <pubDate>Fri, 29 Dec 2023 16:39:26 -0700</pubDate>
-            <sparkle:version>595</sparkle:version>
-            <sparkle:shortVersionString>1.0.0-beta.13</sparkle:shortVersionString>
+            <title>1.0.0</title>
+            <pubDate>Mon, 17 Jun 2024 16:50:12 -0600</pubDate>
+            <sparkle:version>1030</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+                <h3 id="1-0-0">1.0.0</h3>
+
+                <h4 id="important-news">📰 Important News</h4>
+                <ul>
+                <li>💸 Reminder to support me & Loop by <a href="https://github.com/sponsors/MrKai77">sponsoring the project</a>
+                <li>💄 Can't donate? The next best way to support the project is to make some <b>app icons</b> for Loop!</li>
+                <li>🌐 <b>Localization:</b> I will start requesting localizations for the next update so please let me know if you are interested in localizing Loop :)</li>
+                </ul>
+
+                <h4 id="new-features">✨ New Features</h4>
+                <ul>
+                <li>✨ #361 Completely new translucent settings window</li>
+                <li>✨ #303 Set up localization infrastructure</li>
+                <li>✨ #344 New website for release notes</li>
+                <li>✨ #251 Ability to ignore mouse screen</li>
+                <li>✨ #235 Save cycle keybind index</li>
+                <li>✨ #317 Make window snapping less sensitive</li>
+                <li>✨ #212 Don't activate Mission Control when window snapping</li>
+                <li>✨ #298 Ability to animate window resizes when preview is disabled</li>
+                <li>✨ #298 Window animations no longer require screen recording access</li>
+                <li>✨ #378 Add summer/developer app icons</li>
+                <li>✨ #379 Ability to ignore screen with mouse</li>
+                <li>✨ #380 Reduce useless cycle/custom action creation click</li>
+                <li>✨ #384 Ability to move cursor with window</li>
+                <li>✨ #389 Improve window animations when window snapping</li>
+                <li>✨ #390 Ability to translate window location</li>
+                </ul>
+
+                <h4 id="bug-fixes">🐞 Bug Fixes</h4>
+                <ul>
+                <li>🐞 #299 Instant animation is not instant</li>
+                <li>🐞 #347 Fix window being cropped to screen when restoring initial frames</li>
+                <li>🐞 #95 Windows will now properly resize to bottom with window animations</li>
+                <li>🐞 #350 Make window snapping work properly on secondary screens</li>
+                <li>🐞 #314 Reduce Hyperkey conflicts</li>
+                <li>🐞 #381 Make sure settings window buttons are themed properly</li>
+                </ul>
+
+                <h4 id="notable-mentions">🥳 Notable Mentions</h4>
+                <ul>
+                <li>🐞 #296 Fix typo</li>
+                <li>🎨 #304 Reduce SwiftLint warnings</li>
+                <li>🎨 #370 Use SwiftFormat rather than SwiftLint</li>
+                <li>✨ #387 Add Luminare as git submodule</li>
+                </ul>
+            ]]></description>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0/Loop.zip" length="15898172" type="application/octet-stream" sparkle:edSignature="Bw/Tll7fqTFxpf2HMq5STnjybHN+pG0+2vF8Z9DSF7ltiNjwjqciMBmZywaq5MkJmmfUmdekDBe4MF86dBMdDQ=="/>
+        </item>
+        <item>
+            <title>1.0.0-beta.15</title>
+            <pubDate>Fri, 29 Mar 2024 15:20:21 -0600</pubDate>
+            <sparkle:version>817</sparkle:version>
+            <sparkle:shortVersionString>1.0.0-beta.15</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
+            <sparkle:fullReleaseNotesLink>https://github.com/MrKai77/Loop/releases/tag/1.0.0-beta.15</sparkle:fullReleaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.15/Loop.zip" length="14951250" type="application/octet-stream" sparkle:edSignature="27RnT0J+RH2QJbcklSUxVq/g+aYosdxjZoxqOI+SwfUwW+Lpuxa7n3sqp4o+tZeB69oF/F6OgZCCT3xD9yFnCw=="/>
+        </item>
+        <item>
+            <title>1.0.0-beta.14</title>
+            <pubDate>Tue, 23 Jan 2024 13:39:54 -0700</pubDate>
+            <sparkle:version>644</sparkle:version>
+            <sparkle:shortVersionString>1.0.0-beta.14</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/old.html</sparkle:releaseNotesLink>
-            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.13/Loop.zip" length="11120595" type="application/octet-stream" sparkle:edSignature="j1t0sS7OM0R5zujr48A4wyZ0wSlEzJgtvBvnH/gBU7NewS8Mhw9qAEvBZMzbq6ZZdzMZ2aMOyz5DtO+NaSrsCQ=="/>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.14/Loop.zip" length="14271122" type="application/octet-stream" sparkle:edSignature="DY6ssBp2zCVSJ8xuNz0aqx8Em/raLnHR9yZOx1XXbSinBTtx2BI5I2dLoM/2ipFvtaJsn7IVngVt8FYR4MDbAg=="/>
+        </item>
+    </channel>
+</rss><?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Loop</title>
+        <item>
+            <title>1.0.0</title>
+            <pubDate>Mon, 17 Jun 2024 16:50:12 -0600</pubDate>
+            <sparkle:version>1030</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+                <h3 id="1-0-0">1.0.0</h3>
+
+                <h4 id="important-news">📰 Important News</h4>
+                <ul>
+                <li>💸 Reminder to support me & Loop by <a href="https://github.com/sponsors/MrKai77">sponsoring the project</a>
+                <li>💄 Can't donate? The next best way to support the project is to make some <b>app icons</b> for Loop!</li>
+                <li>🌐 <b>Localization:</b> I will start requesting localizations for the next update so please let me know if you are interested in localizing Loop :)</li>
+                </ul>
+
+                <h4 id="new-features">✨ New Features</h4>
+                <ul>
+                <li>✨ #361 Completely new translucent settings window</li>
+                <li>✨ #303 Set up localization infrastructure</li>
+                <li>✨ #344 New website for release notes</li>
+                <li>✨ #251 Ability to ignore mouse screen</li>
+                <li>✨ #235 Save cycle keybind index</li>
+                <li>✨ #317 Make window snapping less sensitive</li>
+                <li>✨ #212 Don't activate Mission Control when window snapping</li>
+                <li>✨ #298 Ability to animate window resizes when preview is disabled</li>
+                <li>✨ #298 Window animations no longer require screen recording access</li>
+                <li>✨ #378 Add summer/developer app icons</li>
+                <li>✨ #379 Ability to ignore screen with mouse</li>
+                <li>✨ #380 Reduce useless cycle/custom action creation click</li>
+                <li>✨ #384 Ability to move cursor with window</li>
+                <li>✨ #389 Improve window animations when window snapping</li>
+                <li>✨ #390 Ability to translate window location</li>
+                </ul>
+
+                <h4 id="bug-fixes">🐞 Bug Fixes</h4>
+                <ul>
+                <li>🐞 #299 Instant animation is not instant</li>
+                <li>🐞 #347 Fix window being cropped to screen when restoring initial frames</li>
+                <li>🐞 #95 Windows will now properly resize to bottom with window animations</li>
+                <li>🐞 #350 Make window snapping work properly on secondary screens</li>
+                <li>🐞 #314 Reduce Hyperkey conflicts</li>
+                <li>🐞 #381 Make sure settings window buttons are themed properly</li>
+                </ul>
+
+                <h4 id="notable-mentions">🥳 Notable Mentions</h4>
+                <ul>
+                <li>🐞 #296 Fix typo</li>
+                <li>🎨 #304 Reduce SwiftLint warnings</li>
+                <li>🎨 #370 Use SwiftFormat rather than SwiftLint</li>
+                <li>✨ #387 Add Luminare as git submodule</li>
+                </ul>
+            ]]></description>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0/Loop.zip" length="15898172" type="application/octet-stream" sparkle:edSignature="Bw/Tll7fqTFxpf2HMq5STnjybHN+pG0+2vF8Z9DSF7ltiNjwjqciMBmZywaq5MkJmmfUmdekDBe4MF86dBMdDQ=="/>
+        </item>
+        <item>
+            <title>1.0.0-beta.15</title>
+            <pubDate>Fri, 29 Mar 2024 15:20:21 -0600</pubDate>
+            <sparkle:version>817</sparkle:version>
+            <sparkle:shortVersionString>1.0.0-beta.15</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/</sparkle:releaseNotesLink>
+            <sparkle:fullReleaseNotesLink>https://github.com/MrKai77/Loop/releases/tag/1.0.0-beta.15</sparkle:fullReleaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.15/Loop.zip" length="14951250" type="application/octet-stream" sparkle:edSignature="27RnT0J+RH2QJbcklSUxVq/g+aYosdxjZoxqOI+SwfUwW+Lpuxa7n3sqp4o+tZeB69oF/F6OgZCCT3xD9yFnCw=="/>
+        </item>
+        <item>
+            <title>1.0.0-beta.14</title>
+            <pubDate>Tue, 23 Jan 2024 13:39:54 -0700</pubDate>
+            <sparkle:version>644</sparkle:version>
+            <sparkle:shortVersionString>1.0.0-beta.14</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://mrkai77.github.io/Loop/old.html</sparkle:releaseNotesLink>
+            <enclosure url="https://github.com/MrKai77/Loop/releases/download/1.0.0-beta.14/Loop.zip" length="14271122" type="application/octet-stream" sparkle:edSignature="DY6ssBp2zCVSJ8xuNz0aqx8Em/raLnHR9yZOx1XXbSinBTtx2BI5I2dLoM/2ipFvtaJsn7IVngVt8FYR4MDbAg=="/>
         </item>
     </channel>
 </rss>
