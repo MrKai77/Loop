@@ -221,6 +221,7 @@ struct CustomActionConfigurationView: View {
                 if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
                     LuminareToggle(
                         "Use macOS center",
+                        info: WindowDirection.macOSCenter.infoView,
                         isOn: Binding(
                             get: {
                                 action.anchor == .macOSCenter
