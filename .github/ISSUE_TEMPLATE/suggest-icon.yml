@@ -1,7 +1,7 @@
 name: Suggest New Icon
 description: Add your icon to Loop.
 title: "🍱 Add [icon names]"
-labels: ["feature"]
+labels: ["Feature"]
 body:
   - type: textarea
     attributes:

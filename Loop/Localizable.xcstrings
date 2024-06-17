@@ -1335,6 +1335,7 @@
       }
     },
     "Include development versions" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
