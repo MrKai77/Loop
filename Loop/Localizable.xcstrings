@@ -1,0 +1,1224 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "               " : {
+
+    },
+    "%" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ is already used as your trigger key." : {
+
+    },
+    "%@ places windows slightly above the absolute center,\nwhich can be found more ergonomic." : {
+
+    },
+    "%lld" : {
+
+    },
+    "About" : {
+
+    },
+    "Accent Color" : {
+
+    },
+    "Accessibility access" : {
+
+    },
+    "Accessibility Request: Content" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please grant access to be able to resize windows."
+          }
+        }
+      }
+    },
+    "Accessibility Request: Title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%@ Needs Accessibility Permissions"
+          }
+        }
+      }
+    },
+    "Advanced" : {
+
+    },
+    "Animate window resize" : {
+
+    },
+    "Animation speed" : {
+
+    },
+    "Behavior" : {
+
+    },
+    "Border thickness" : {
+
+    },
+    "Bottom" : {
+
+    },
+    "Bottom Cycle" : {
+
+    },
+    "Cannot be enabled when the preview is disabled." : {
+
+    },
+    "Change" : {
+
+    },
+    "Check back next time!" : {
+
+    },
+    "Check for updates…" : {
+
+    },
+    "Close" : {
+
+    },
+    "Color" : {
+
+    },
+    "Configure padding..." : {
+
+    },
+    "Corner radius" : {
+
+    },
+    "Credits" : {
+
+    },
+    "Cursor" : {
+
+    },
+    "Custom" : {
+
+    },
+    "Custom Cycle" : {
+
+    },
+    "Custom Keybind" : {
+
+    },
+    "Customize this keybind's action." : {
+
+    },
+    "Customize this keybind's custom frame." : {
+
+    },
+    "Customize what this keybind cycles through." : {
+
+    },
+    "Cycle Keybind" : {
+
+    },
+    "Default notification content" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You will now be notified when you unlock a new icon."
+          }
+        }
+      }
+    },
+    "Design" : {
+
+    },
+    "Development" : {
+
+    },
+    "Development support" : {
+
+    },
+    "Disable cursor interaction" : {
+
+    },
+    "Donate" : {
+
+    },
+    "Donate…" : {
+
+    },
+    "Double-click to trigger" : {
+
+    },
+    "Excluded Apps" : {
+
+    },
+    "Export" : {
+
+    },
+    "External bar" : {
+
+    },
+    "Fast" : {
+
+    },
+    "Focus window on resize" : {
+
+    },
+    "General" : {
+
+    },
+    "Gradient" : {
+
+    },
+    "Halves" : {
+
+    },
+    "Haptic feedback" : {
+
+    },
+    "Height" : {
+
+    },
+    "Hide menu bar icon" : {
+
+    },
+    "Hide until direction is chosen" : {
+
+    },
+    "Horizontal Thirds" : {
+
+    },
+    "Icon" : {
+
+    },
+    "Icon contributor" : {
+
+    },
+    "Icon Name: Black" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Black"
+          }
+        }
+      }
+    },
+    "Icon Name: Black Hole" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Black Hole"
+          }
+        }
+      }
+    },
+    "Icon Name: Classic" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Classic"
+          }
+        }
+      }
+    },
+    "Icon Name: Developer" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Developer"
+          }
+        }
+      }
+    },
+    "Icon Name: Holo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Holo"
+          }
+        }
+      }
+    },
+    "Icon Name: Keycap" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keycap"
+          }
+        }
+      }
+    },
+    "Icon Name: Loop Master" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Loop Master"
+          }
+        }
+      }
+    },
+    "Icon Name: Meta Loop" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Meta Loop"
+          }
+        }
+      }
+    },
+    "Icon Name: Neon" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Neon"
+          }
+        }
+      }
+    },
+    "Icon Name: Rosé Pine" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Rosé Pine"
+          }
+        }
+      }
+    },
+    "Icon Name: Simon" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Simon"
+          }
+        }
+      }
+    },
+    "Icon Name: Summer" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Summer"
+          }
+        }
+      }
+    },
+    "Icon Name: Synthwave Sunset" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Synthwave Sunset"
+          }
+        }
+      }
+    },
+    "Icon Name: White" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "White"
+          }
+        }
+      }
+    },
+    "Icon Unlock Message" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You've unlocked a new icon: %@!"
+          }
+        }
+      }
+    },
+    "Icon Unlock Message: Holo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You've already looped 25 times! As a reward, here's new icon: %@. Continue to loop more to unlock new icons!"
+          }
+        }
+      }
+    },
+    "Icon Unlock Message: Loop Master" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!"
+          }
+        }
+      }
+    },
+    "Import" : {
+
+    },
+    "Include development versions" : {
+
+    },
+    "Include padding" : {
+
+    },
+    "Install" : {
+
+    },
+    "Instant" : {
+
+    },
+    "Keybindings" : {
+
+    },
+    "Keybinds" : {
+
+    },
+    "Launch at login" : {
+
+    },
+    "Left" : {
+
+    },
+    "Left Cycle" : {
+
+    },
+    "Loop" : {
+
+    },
+    "May the Force be with you... next time!" : {
+
+    },
+    "Middle-click to trigger" : {
+
+    },
+    "More" : {
+
+    },
+    "Move cursor with window" : {
+
+    },
+    "No excluded applications" : {
+
+    },
+    "No keybinds" : {
+
+    },
+    "No new intel, Commander." : {
+
+    },
+    "No updates yet!" : {
+
+    },
+    "None" : {
+
+    },
+    "Nothing to cycle through" : {
+
+    },
+    "Notification/Set Icon: Action" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set Current Icon"
+          }
+        }
+      }
+    },
+    "Notify when unlocking new icons" : {
+
+    },
+    "Options" : {
+
+    },
+    "Padding" : {
+
+    },
+    "Permissions" : {
+
+    },
+    "Press \"Add\" to add a cycle item" : {
+
+    },
+    "Press \"Add\" to add a keybind" : {
+
+    },
+    "Press \"Add\" to add an application" : {
+
+    },
+    "Preview" : {
+
+    },
+    "px" : {
+
+    },
+    "Quarters" : {
+
+    },
+    "Quit" : {
+
+    },
+    "Radial menu" : {
+
+    },
+    "Radial Menu" : {
+
+    },
+    "Remind me later" : {
+
+    },
+    "Request…" : {
+
+    },
+    "Reset" : {
+
+    },
+    "Resize window under cursor" : {
+
+    },
+    "Resize…" : {
+
+    },
+    "Respect Stage Manager" : {
+
+    },
+    "Restart to complete" : {
+
+    },
+    "Restore window frame on drag" : {
+
+    },
+    "Right" : {
+
+    },
+    "Right Cycle" : {
+
+    },
+    "Screen Switching" : {
+
+    },
+    "Seconds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "s"
+          }
+        }
+      }
+    },
+    "Send Feedback" : {
+
+    },
+    "Set a trigger key…" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Settings…" : {
+
+    },
+    "Share feedback on our GitHub page, where you can let us know about any bugs, suggest features, or provide other valuable input. We also accept donations if you feel that Loop has improved your workflow :)" : {
+
+    },
+    "Show in dock" : {
+
+    },
+    "Show preview when looping" : {
+
+    },
+    "Simple" : {
+
+    },
+    "Size increment" : {
+
+    },
+    "Smooth" : {
+
+    },
+    "Some features, ideas, and bug fixes" : {
+
+    },
+    "Stage Manager" : {
+
+    },
+    "Stage strip size" : {
+
+    },
+    "Stay sharp, more intel coming soon!" : {
+
+    },
+    "Suggest new icon" : {
+
+    },
+    "System" : {
+
+    },
+    "That key is already used as your trigger key." : {
+
+    },
+    "That keybind is already being used by %@." : {
+
+    },
+    "That keybind is already being used by another custom keybind." : {
+
+    },
+    "The Force is strong with this version!" : {
+
+    },
+    "Theming" : {
+
+    },
+    "Thickness" : {
+
+    },
+    "This feature is still under development." : {
+
+    },
+    "This is not the update you're looking for!" : {
+
+    },
+    "Top" : {
+
+    },
+    "Top Cycle" : {
+
+    },
+    "Trigger delay" : {
+
+    },
+    "Trigger Key" : {
+
+    },
+    "Use coordinates" : {
+
+    },
+    "Use macOS center" : {
+
+    },
+    "Use pixels" : {
+
+    },
+    "Use screen with cursor" : {
+
+    },
+    "Use this if you are using a custom menubar." : {
+
+    },
+    "Version %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "Vertical Thirds" : {
+
+    },
+    "Width" : {
+
+    },
+    "Window" : {
+
+    },
+    "Window Direction/Name: Almost Maximize" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Almost Maximize"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Half"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Left Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Left Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Right Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Right Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Bottom Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Center" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Center"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Custom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Custom"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Cycle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cycle"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Fullscreen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fullscreen"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Bottom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Bottom"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Grow Top" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Grow Top"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Hide" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Hide"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Horizontal Center Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Horizontal Center Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Initial Frame" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Initial Frame"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Larger" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Larger"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Left Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Half"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Left Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Left Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: MacOS Center" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "MacOS Center"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Maximize" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Maximize"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Minimize" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Minimize"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Move Down" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Down"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Move Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Move Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Move Up" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move Up"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Next Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Next Screen"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: No Action" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Action"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Previous Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Previous Screen"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Right Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Half"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Right Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Right Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Bottom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Bottom"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Shrink Top" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shrink Top"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Smaller" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Smaller"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Half"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Left Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Left Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Right Quarter" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Right Quarter"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Third"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Two Thirds" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Two Thirds"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Undo" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Undo"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Vertical Center Third" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Vertical Center Third"
+          }
+        }
+      }
+    },
+    "Window gaps" : {
+
+    },
+    "Window Manipulation" : {
+
+    },
+    "Window snapping" : {
+
+    },
+    "Window snapping will still use the preview." : {
+
+    },
+    "X" : {
+
+    },
+    "Y" : {
+
+    },
+    "You can only use up to %lld keys in a keybind, including the trigger key." : {
+
+    },
+    "You can only use up to %lld keys in your trigger key." : {
+
+    },
+    "You're up to date :)" : {
+
+    },
+    "You've already got the best Loop!" : {
+
+    },
+    "You've got the precious, no updates needed!" : {
+
+    },
+    "You’ve leveled up to the max!" : {
+
+    },
+    "You've looped %lld times!" : {
+
+    }
+  },
+  "version" : "1.0"
+}

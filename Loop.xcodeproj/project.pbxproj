@@ -87,6 +87,7 @@
 		A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E59C3F297F5E9B0064D4BA /* Preview Assets.xcassets */; };
 		A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C49297F98670064D4BA /* RadialMenuController.swift */; };
 		A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E59C4F298045D90064D4BA /* PreviewController.swift */; };
+		A8E5FE8D2C23811D006E6CE4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A8E5FE8C2C23811D006E6CE4 /* Localizable.xcstrings */; };
 		A8E8903C2BA7AAFE006C5074 /* NSEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E8903B2BA7AAFE006C5074 /* NSEvent+Extensions.swift */; };
 		A8EF1F09299C87DF00633440 /* IconManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8EF1F08299C87DF00633440 /* IconManager.swift */; };
 		A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* WindowAction.swift */; };
@@ -173,6 +174,7 @@
 		A8E59C41297F5E9B0064D4BA /* Loop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Loop.entitlements; sourceTree = "<group>"; };
 		A8E59C49297F98670064D4BA /* RadialMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuController.swift; sourceTree = "<group>"; };
 		A8E59C4F298045D90064D4BA /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
+		A8E5FE8C2C23811D006E6CE4 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A8E6D1FC2A4155DC005751D4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A8E8903B2BA7AAFE006C5074 /* NSEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSEvent+Extensions.swift"; sourceTree = "<group>"; };
 		A8EF1F08299C87DF00633440 /* IconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconManager.swift; sourceTree = "<group>"; };
@@ -443,6 +445,7 @@
 				A8330AD52A3AC29C00673C8D /* Extensions */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
 				A8F063712985B2730010C33D /* Info.plist */,
+				A8E5FE8C2C23811D006E6CE4 /* Localizable.xcstrings */,
 				A8E59C41297F5E9B0064D4BA /* Loop.entitlements */,
 				A8E59C3E297F5E9B0064D4BA /* Preview Content */,
 			);
@@ -506,6 +509,13 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
+				"zh-HK",
+				it,
+				"pt-BR",
+				de,
+				es,
+				ru,
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
@@ -529,6 +539,7 @@
 			files = (
 				A8E59C40297F5E9B0064D4BA /* Preview Assets.xcassets in Resources */,
 				A8E59C3D297F5E9B0064D4BA /* Assets.xcassets in Resources */,
+				A8E5FE8D2C23811D006E6CE4 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
