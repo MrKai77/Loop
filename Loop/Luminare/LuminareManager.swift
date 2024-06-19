@@ -50,11 +50,15 @@ class LuminareManager {
         didTabChange: processTabChange
     )
 
-    private static func processTabChange(_ tab: SettingsTab? = nil) {
+    static func processTabChange(_ tab: SettingsTab) {
         DispatchQueue.main.async {
             if tab == radialMenuConfiguration {
                 luminare.hidePreview(identifier: "Preview")
-                luminare.showPreview(identifier: "RadialMenu")
+                if Defaults[.radialMenuVisibility] {
+                    luminare.showPreview(identifier: "RadialMenu")
+                } else {
+                    luminare.hidePreview(identifier: "RadialMenu")
+                }
                 return
             }
             if tab == previewConfiguration {
@@ -64,7 +68,11 @@ class LuminareManager {
             }
             if tab == accentColorConfiguration || tab == behaviorConfiguration {
                 luminare.showPreview(identifier: "Preview")
-                luminare.showPreview(identifier: "RadialMenu")
+                if Defaults[.radialMenuVisibility] {
+                    luminare.showPreview(identifier: "RadialMenu")
+                } else {
+                    luminare.hidePreview(identifier: "RadialMenu")
+                }
                 return
             }
         }
