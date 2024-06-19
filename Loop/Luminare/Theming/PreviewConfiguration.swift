@@ -45,7 +45,11 @@ struct PreviewConfigurationView: View {
 
     var body: some View {
         LuminareSection {
-            LuminareToggle("Show preview when looping", isOn: $model.previewVisibility)
+            LuminareToggle(
+                "Show preview when looping",
+                info: model.previewVisibility ? nil : .init("Window snapping will still use the preview."),
+                isOn: $model.previewVisibility
+            )
 
             LuminareValueAdjuster(
                 "Padding",
