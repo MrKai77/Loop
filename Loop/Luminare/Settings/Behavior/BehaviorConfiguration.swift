@@ -113,7 +113,7 @@ struct BehaviorConfigurationView: View {
         LuminareSection("Window") {
             LuminareToggle("Window snapping", isOn: $model.windowSnapping)
             LuminareToggle("Restore window frame on drag", isOn: $model.restoreWindowFrameOnDrag)
-            LuminareToggle("Include padding", isOn: $model.enablePadding.animation(.smooth(duration: 0.25)))
+            LuminareToggle("Include padding", isOn: $model.enablePadding)
 
             if model.enablePadding {
                 Button("Configure padding...") {
@@ -134,7 +134,7 @@ struct BehaviorConfigurationView: View {
                 isOn: $model.moveCursorWithWindow,
                 disabled: !model.previewVisibility
             )
-            LuminareToggle("Resize window under cursor", isOn: $model.resizeWindowUnderCursor.animation(.smooth(duration: 0.25)))
+            LuminareToggle("Resize window under cursor", isOn: $model.resizeWindowUnderCursor)
 
             if model.resizeWindowUnderCursor {
                 LuminareToggle("Focus window on resize", isOn: $model.focusWindowOnResize)
@@ -142,7 +142,7 @@ struct BehaviorConfigurationView: View {
         }
 
         LuminareSection("Stage Manager") {
-            LuminareToggle("Respect Stage Manager", isOn: $model.respectStageManager.animation(.smooth(duration: 0.25)))
+            LuminareToggle("Respect Stage Manager", isOn: $model.respectStageManager)
 
             if model.respectStageManager {
                 LuminareValueAdjuster(
