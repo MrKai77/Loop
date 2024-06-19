@@ -68,6 +68,7 @@ class AdvancedConfigurationModel: ObservableObject {
 }
 
 struct AdvancedConfigurationView: View {
+    @Environment(\.tintColor) var tintColor
     @StateObject private var model = AdvancedConfigurationModel()
     let elementHeight: CGFloat = 34
 
@@ -113,7 +114,7 @@ struct AdvancedConfigurationView: View {
             HStack {
                 if model.isAccessibilityAccessGranted {
                     Image(._18PxBadgeCheck2)
-                        .foregroundStyle(Color.getLoopAccent(tone: .normal))
+                        .foregroundStyle(tintColor())
                 }
 
                 Text("Accessibility access")
