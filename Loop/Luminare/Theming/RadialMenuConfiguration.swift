@@ -16,12 +16,6 @@ class RadialMenuConfigurationModel: ObservableObject {
         }
     }
 
-    @Published var disableCursorInteraction = Defaults[.disableCursorInteraction] {
-        didSet {
-            Defaults[.disableCursorInteraction] = disableCursorInteraction
-        }
-    }
-
     @Published var radialMenuCornerRadius = Defaults[.radialMenuCornerRadius] {
         didSet {
             Defaults[.radialMenuCornerRadius] = radialMenuCornerRadius
@@ -49,7 +43,6 @@ struct RadialMenuConfigurationView: View {
     var body: some View {
         LuminareSection {
             LuminareToggle("Radial menu", isOn: $model.radialMenuVisibility)
-            LuminareToggle("Disable cursor interaction", isOn: $model.disableCursorInteraction)
 
             LuminareValueAdjuster(
                 "Corner radius",

@@ -78,7 +78,7 @@ struct AdvancedConfigurationView: View {
                 info: .init("This feature is still under development.", .orange),
                 isOn: $model.animateWindowResizes
             )
-            LuminareToggle("Disable radial menu cursor interaction", isOn: $model.disableCursorInteraction)
+            LuminareToggle("Disable cursor interaction", isOn: $model.disableCursorInteraction)
             LuminareToggle("Hide until direction is chosen", isOn: $model.hideUntilDirectionIsChosen)
             LuminareToggle("Haptic feedback", isOn: $model.hapticFeedback)
 
