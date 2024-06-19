@@ -49,6 +49,7 @@ struct KeybindingItemView: View {
                         CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
                             .frame(width: 400)
                     }
+                    .help("Customize this keybind's custom frame.")
                 }
 
                 if keybind.direction == .cycle {
@@ -62,11 +63,13 @@ struct KeybindingItemView: View {
                         CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
                             .frame(width: 400)
                     }
+                    .help("Customize what this keybind cycles through.")
                 }
 
                 if isHovering {
                     WindowDirectionPicker($keybind, isCycle: cycleIndex != nil)
                         .equatable()
+                        .help("Customize this keybind's action.")
                 }
             }
             .font(.title3)
