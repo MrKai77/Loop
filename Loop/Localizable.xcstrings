@@ -63,6 +63,9 @@
         }
       }
     },
+    "Add" : {
+
+    },
     "Advanced" : {
 
     },
@@ -73,6 +76,9 @@
 
     },
     "Behavior" : {
+
+    },
+    "Blue" : {
 
     },
     "Border thickness" : {
@@ -186,6 +192,9 @@
 
     },
     "Gradient" : {
+
+    },
+    "Green" : {
 
     },
     "Halves" : {
@@ -402,9 +411,6 @@
     "Import" : {
 
     },
-    "Include development versions" : {
-
-    },
     "Include padding" : {
 
     },
@@ -512,7 +518,13 @@
     "Radial Menu" : {
 
     },
+    "Red" : {
+
+    },
     "Remind me later" : {
+
+    },
+    "Remove" : {
 
     },
     "Request…" : {

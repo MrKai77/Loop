@@ -5,7 +5,7 @@
 //  Created by Kai Azim on 2023-09-04.
 //
 
-import Cocoa
+import SwiftUI
 import Defaults
 
 class WindowDragManager {
@@ -19,7 +19,7 @@ class WindowDragManager {
     private var leftMouseUpMonitor: EventMonitor?
 
     func addObservers() {
-        leftMouseDraggedMonitor = CGEventMonitor(eventMask: .leftMouseDragged) { cgEvent in
+        leftMouseDraggedMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseDragged) { event in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
@@ -35,17 +35,17 @@ class WindowDragManager {
                 }
 
                 if Defaults[.windowSnapping] {
-                    if let frame = NSScreen.main?.frame {
-                        if NSEvent.mouseLocation.y == frame.maxY {
-                            cgEvent.location.y -= 1
+                    if let frame = NSScreen.main?.displayBounds,
+                       let mouseLocation = CGEvent.mouseLocation {
+                        if mouseLocation.y == frame.minY {
+                            let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
+                            CGWarpMouseCursorPosition(newOrigin)
                         }
                     }
 
                     self.getWindowSnapDirection()
                 }
             }
-
-            return Unmanaged.passUnretained(cgEvent)
         }
 
         leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
