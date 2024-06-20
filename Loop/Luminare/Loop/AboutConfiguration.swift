@@ -173,7 +173,7 @@ struct AboutConfigurationView: View {
 
             // I do not have the code for you to automatically check, it is hardcoded though...
 //            LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
-//            LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
+            LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
         }
 
         LuminareSection {

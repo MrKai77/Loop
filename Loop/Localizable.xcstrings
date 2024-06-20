@@ -1399,6 +1399,16 @@
         }
       }
     },
+    "Include development versions" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包含开发版本"
+          }
+        }
+      }
+    },
     "Include padding" : {
       "localizations" : {
         "it" : {
