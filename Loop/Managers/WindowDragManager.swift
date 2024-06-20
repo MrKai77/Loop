@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-09-04.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 class WindowDragManager {
     private var draggingWindow: Window?
@@ -19,7 +19,7 @@ class WindowDragManager {
     private var leftMouseUpMonitor: EventMonitor?
 
     func addObservers() {
-        leftMouseDraggedMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseDragged) { event in
+        leftMouseDraggedMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseDragged) { _ in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
