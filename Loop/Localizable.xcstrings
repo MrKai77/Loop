@@ -204,7 +204,14 @@
       }
     },
     "Add" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加"
+          }
+        }
+      }
     },
     "Advanced" : {
       "localizations" : {
@@ -271,7 +278,14 @@
       }
     },
     "Blue" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "蓝色"
+          }
+        }
+      }
     },
     "Border thickness" : {
       "localizations" : {
@@ -841,7 +855,14 @@
       }
     },
     "Green" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "绿色"
+          }
+        }
+      }
     },
     "Halves" : {
       "localizations" : {
@@ -1914,7 +1935,14 @@
       }
     },
     "Red" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "红色"
+          }
+        }
+      }
     },
     "Remind me later" : {
       "localizations" : {
@@ -1933,7 +1961,14 @@
       }
     },
     "Remove" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
+          }
+        }
+      }
     },
     "Request…" : {
       "localizations" : {
