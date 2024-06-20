@@ -14,12 +14,24 @@
             "state" : "translated",
             "value" : "%"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
         }
       }
     },
     "%@" : {
       "localizations" : {
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@"
@@ -40,6 +52,12 @@
             "state" : "translated",
             "value" : "%1$@ %2$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
         }
       }
     },
@@ -49,6 +67,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ è già in uso come tasto di attivazione."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@已经被用作触发键。"
           }
         }
       }
@@ -60,12 +84,24 @@
             "state" : "translated",
             "value" : "%@ posiziona la finestra leggermente al di sopra del centro assoluto, risultando più ergonomica per alcuni."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@将窗口放置在屏幕中心稍稍靠上的位置，使其更人性化。"
+          }
         }
       }
     },
     "%lld" : {
       "localizations" : {
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -80,6 +116,12 @@
             "state" : "translated",
             "value" : "Informazioni"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于"
+          }
         }
       }
     },
@@ -90,6 +132,12 @@
             "state" : "translated",
             "value" : "Colore dettagli"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "强调色"
+          }
         }
       }
     },
@@ -99,6 +147,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Accessibilità"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "辅助功能"
           }
         }
       }
@@ -117,6 +171,12 @@
             "state" : "translated",
             "value" : "Per favore consenti l'accesso per poter ridimensionare le finestre."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请给予权限以允许调整窗口大小。"
+          }
         }
       }
     },
@@ -134,6 +194,12 @@
             "state" : "translated",
             "value" : "%@ ha bisogno del permesso di accessibilità"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@需要辅助功能权限"
+          }
         }
       }
     },
@@ -147,6 +213,12 @@
             "state" : "translated",
             "value" : "Avanzate"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高级"
+          }
         }
       }
     },
@@ -156,6 +228,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Animazione ridimensionamento finestre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口大小调整动画"
           }
         }
       }
@@ -167,6 +245,12 @@
             "state" : "translated",
             "value" : "Velocità animazione"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "动画速度"
+          }
         }
       }
     },
@@ -176,6 +260,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comportamento"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "行为"
           }
         }
       }
@@ -190,6 +280,12 @@
             "state" : "translated",
             "value" : "Spessore del bordo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "边框宽度"
+          }
         }
       }
     },
@@ -199,6 +295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Inferiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底部"
           }
         }
       }
@@ -210,6 +312,12 @@
             "state" : "translated",
             "value" : "Ciclico inferiore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底部循环"
+          }
         }
       }
     },
@@ -219,6 +327,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Non può essere abilitato quando l’anteprima è disabilitata."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法在预览被禁用时启用。"
           }
         }
       }
@@ -230,6 +344,12 @@
             "state" : "translated",
             "value" : "Cambia"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改"
+          }
         }
       }
     },
@@ -239,6 +359,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Controlla la prossima volta!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下次再来查看！"
           }
         }
       }
@@ -250,6 +376,12 @@
             "state" : "translated",
             "value" : "Ricerca aggiornamenti..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查更新…"
+          }
         }
       }
     },
@@ -259,6 +391,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chiudi"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
           }
         }
       }
@@ -270,6 +408,12 @@
             "state" : "translated",
             "value" : "Colore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "颜色"
+          }
         }
       }
     },
@@ -279,6 +423,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configura spaziatura…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调整边距…"
           }
         }
       }
@@ -290,6 +440,12 @@
             "state" : "translated",
             "value" : "Raggio degli angoli"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圆角半径"
+          }
         }
       }
     },
@@ -299,6 +455,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Crediti"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "致谢"
           }
         }
       }
@@ -310,6 +472,12 @@
             "state" : "translated",
             "value" : "Cursore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鼠标"
+          }
         }
       }
     },
@@ -319,6 +487,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizzata"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义"
           }
         }
       }
@@ -330,6 +504,12 @@
             "state" : "translated",
             "value" : "Ciclico personalizzato"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义循环"
+          }
         }
       }
     },
@@ -339,6 +519,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scorciatoia personalizzata"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义快捷键"
           }
         }
       }
@@ -350,6 +536,12 @@
             "state" : "translated",
             "value" : "Personalizza l’azione di questa scorciatoia."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义此快捷键触发的操作。"
+          }
         }
       }
     },
@@ -359,6 +551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizza la finestra di questa scorciatoia."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义此快捷键的自定义边框。"
           }
         }
       }
@@ -370,6 +568,12 @@
             "state" : "translated",
             "value" : "Personalizza il ciclo questa scorciatoia."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义此快捷键的循环内容。"
+          }
         }
       }
     },
@@ -379,6 +583,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cicla scorciatoie"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "循环快捷键"
           }
         }
       }
@@ -397,6 +607,12 @@
             "state" : "translated",
             "value" : "Verrà inviata una notifica ogni volta che si sblocca una nuova icona."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你将会在解锁新图标时收到通知。"
+          }
         }
       }
     },
@@ -406,6 +622,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Design"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设计"
           }
         }
       }
@@ -417,6 +639,12 @@
             "state" : "translated",
             "value" : "Sviluppo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发"
+          }
         }
       }
     },
@@ -426,6 +654,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Supporto sviluppo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发支持"
           }
         }
       }
@@ -437,6 +671,12 @@
             "state" : "translated",
             "value" : "Disabilita interazione con cursore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "禁用光标交互"
+          }
         }
       }
     },
@@ -446,6 +686,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dona"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "捐赠"
           }
         }
       }
@@ -457,6 +703,12 @@
             "state" : "translated",
             "value" : "Dona…"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "捐赠…"
+          }
         }
       }
     },
@@ -466,6 +718,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attiva con doppio clic"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双击以触发"
           }
         }
       }
@@ -477,6 +735,12 @@
             "state" : "translated",
             "value" : "Esclusioni"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "排除的应用"
+          }
         }
       }
     },
@@ -486,6 +750,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esporta"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出"
           }
         }
       }
@@ -497,6 +767,12 @@
             "state" : "translated",
             "value" : "Barra dei menu"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全局菜单栏"
+          }
         }
       }
     },
@@ -506,6 +782,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Veloce"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快速"
           }
         }
       }
@@ -517,6 +799,12 @@
             "state" : "translated",
             "value" : "Porta in primo piano durante il ridimensionamento"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在更改窗口大小时给予焦点"
+          }
         }
       }
     },
@@ -527,6 +815,12 @@
             "state" : "translated",
             "value" : "Generali"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通用"
+          }
         }
       }
     },
@@ -536,6 +830,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sfumatura"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "渐变"
           }
         }
       }
@@ -550,6 +850,12 @@
             "state" : "translated",
             "value" : "Metà"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "二等分"
+          }
         }
       }
     },
@@ -559,6 +865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Feedback aptico"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "震感反馈"
           }
         }
       }
@@ -570,6 +882,12 @@
             "state" : "translated",
             "value" : "Altezza"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高度"
+          }
         }
       }
     },
@@ -579,6 +897,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nascondi dalla barra dei menu"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏菜单栏图标"
           }
         }
       }
@@ -590,6 +914,12 @@
             "state" : "translated",
             "value" : "Nascondi il menu finché non si seleziona una direzione"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅在选择方向后显示"
+          }
         }
       }
     },
@@ -599,6 +929,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzi orizzontali"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "水平三等分"
           }
         }
       }
@@ -610,6 +946,12 @@
             "state" : "translated",
             "value" : "Icona"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "图标"
+          }
         }
       }
     },
@@ -619,6 +961,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contributore icone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "图标贡献者"
           }
         }
       }
@@ -637,6 +985,12 @@
             "state" : "translated",
             "value" : "Nera"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "纯黑"
+          }
         }
       }
     },
@@ -653,6 +1007,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Buco nero"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "黑洞"
           }
         }
       }
@@ -671,6 +1031,12 @@
             "state" : "translated",
             "value" : "Classica"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "经典"
+          }
         }
       }
     },
@@ -687,6 +1053,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sviluppatore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开发者"
           }
         }
       }
@@ -705,6 +1077,12 @@
             "state" : "translated",
             "value" : "Olografica"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全息"
+          }
         }
       }
     },
@@ -721,6 +1099,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tasto"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "键帽"
           }
         }
       }
@@ -739,6 +1123,12 @@
             "state" : "translated",
             "value" : "Maestro di Loop"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop大师"
+          }
         }
       }
     },
@@ -755,6 +1145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loop meta"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "元之环"
           }
         }
       }
@@ -773,6 +1169,12 @@
             "state" : "translated",
             "value" : "Neon"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "霓虹"
+          }
         }
       }
     },
@@ -790,6 +1192,12 @@
             "state" : "translated",
             "value" : "Pino rosé"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosé Pine"
+          }
         }
       }
     },
@@ -803,6 +1211,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simon"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simon"
@@ -824,6 +1238,12 @@
             "state" : "translated",
             "value" : "Estate"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "烈夏"
+          }
         }
       }
     },
@@ -840,6 +1260,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tramonto synthwave"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合成波日落"
           }
         }
       }
@@ -858,6 +1284,12 @@
             "state" : "translated",
             "value" : "Bianca"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "纯白"
+          }
         }
       }
     },
@@ -874,6 +1306,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai sbloccato una nuova icona: %@!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你解锁了一个新图标：%@！"
           }
         }
       }
@@ -892,6 +1330,12 @@
             "state" : "translated",
             "value" : "Hai già utilizzato Loop 25 volte! Come ricompensa, ecco una nuova icona: %@. Continua ad usare Loop per sbloccarne altre!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你已经使用Loop环绕你的窗口25次了！作为奖励，你解锁了一个新图标：%@。继续环绕以解锁更多图标！"
+          }
         }
       }
     },
@@ -909,6 +1353,12 @@
             "state" : "translated",
             "value" : "5000 loop conquistati! L'universo ha assistito alla nascita di un maestro di Loop! Goditi il tuo meritato premio: una nuova icona!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5000次环绕达成！这个宇宙见证了又一位Loop大师的诞生。享受你应得的奖励吧：一个全新设计的纪念图标！"
+          }
         }
       }
     },
@@ -918,6 +1368,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importa"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入"
           }
         }
       }
@@ -929,6 +1385,12 @@
             "state" : "translated",
             "value" : "Includi spaziatura"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包含边距"
+          }
         }
       }
     },
@@ -938,6 +1400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Installa"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下载"
           }
         }
       }
@@ -949,6 +1417,12 @@
             "state" : "translated",
             "value" : "Istantanea"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "即刻"
+          }
         }
       }
     },
@@ -958,6 +1432,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scorciatoie"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快捷键"
           }
         }
       }
@@ -969,6 +1449,12 @@
             "state" : "translated",
             "value" : "Scorciatoie"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "快捷键"
+          }
         }
       }
     },
@@ -978,6 +1464,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apri al login"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "随macOS启动"
           }
         }
       }
@@ -989,6 +1481,12 @@
             "state" : "translated",
             "value" : "Sinistro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左侧"
+          }
         }
       }
     },
@@ -999,12 +1497,24 @@
             "state" : "translated",
             "value" : "Ciclico sinistro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左侧循环"
+          }
         }
       }
     },
     "Loop" : {
       "localizations" : {
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loop"
@@ -1019,6 +1529,12 @@
             "state" : "translated",
             "value" : "Che la Forza sia con te… la prossima volta!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "愿原力与你同在…下次一定！"
+          }
         }
       }
     },
@@ -1028,6 +1544,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attiva con clic centrale"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中键单击以触发"
           }
         }
       }
@@ -1039,6 +1561,12 @@
             "state" : "translated",
             "value" : "Altro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多"
+          }
         }
       }
     },
@@ -1048,6 +1576,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta il cursore con la finestra"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "随窗口移动光标"
           }
         }
       }
@@ -1059,6 +1593,12 @@
             "state" : "translated",
             "value" : "Nessuna applicazione esclusa"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无排除的应用"
+          }
         }
       }
     },
@@ -1068,6 +1608,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nessuna scorciatoia"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无快捷键"
           }
         }
       }
@@ -1079,6 +1625,12 @@
             "state" : "translated",
             "value" : "Nessuna novità, Comandante."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有新的情报，指挥官。"
+          }
         }
       }
     },
@@ -1088,6 +1640,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Niente di nuovo!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂无更新！"
           }
         }
       }
@@ -1099,6 +1657,12 @@
             "state" : "translated",
             "value" : "Nessuno"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无"
+          }
         }
       }
     },
@@ -1108,6 +1672,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Niente da ciclare"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有内容可供循环"
           }
         }
       }
@@ -1126,6 +1696,12 @@
             "state" : "translated",
             "value" : "Icona selezionata"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置为当前图标"
+          }
         }
       }
     },
@@ -1135,6 +1711,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invia una notifica quando si sbloccano nuove icone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在解锁新图标时发送通知"
           }
         }
       }
@@ -1146,6 +1728,12 @@
             "state" : "translated",
             "value" : "Opzioni"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选项"
+          }
         }
       }
     },
@@ -1155,6 +1743,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spaziatura"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "边距"
           }
         }
       }
@@ -1166,6 +1760,12 @@
             "state" : "translated",
             "value" : "Permessi"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "权限"
+          }
         }
       }
     },
@@ -1175,6 +1775,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Premi “Aggiungi” per aggiungere un elemento da ciclare"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点按“添加”以添加循环内容"
           }
         }
       }
@@ -1186,6 +1792,12 @@
             "state" : "translated",
             "value" : "Premi “Aggiungi” per aggiungere una scorciatoia"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点按“添加”以添加快捷键"
+          }
         }
       }
     },
@@ -1195,6 +1807,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Premi “Aggiungi” per aggiungere un'applicazione"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点按“添加”以添加应用"
           }
         }
       }
@@ -1206,6 +1824,12 @@
             "state" : "translated",
             "value" : "Anteprima"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "预览"
+          }
         }
       }
     },
@@ -1215,6 +1839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "px"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "像素"
           }
         }
       }
@@ -1226,6 +1856,12 @@
             "state" : "translated",
             "value" : "Quarti"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "四等分"
+          }
         }
       }
     },
@@ -1235,6 +1871,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esci"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出"
           }
         }
       }
@@ -1246,6 +1888,12 @@
             "state" : "translated",
             "value" : "Menu radiale"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "环形菜单"
+          }
         }
       }
     },
@@ -1255,6 +1903,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu radiale"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "环形菜单"
           }
         }
       }
@@ -1269,6 +1923,12 @@
             "state" : "translated",
             "value" : "Ricordamelo dopo"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "稍后提醒"
+          }
         }
       }
     },
@@ -1282,6 +1942,12 @@
             "state" : "translated",
             "value" : "Richiedi…"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请求…"
+          }
         }
       }
     },
@@ -1291,6 +1957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rirpristina"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重置"
           }
         }
       }
@@ -1302,6 +1974,12 @@
             "state" : "translated",
             "value" : "Ridimensiona finestra sotto il cursore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调整光标下的窗口大小"
+          }
         }
       }
     },
@@ -1311,6 +1989,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ridimensiona..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调整大小…"
           }
         }
       }
@@ -1322,6 +2006,12 @@
             "state" : "translated",
             "value" : "Rispetta Stage Manager"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "避开台前调度区域"
+          }
         }
       }
     },
@@ -1331,6 +2021,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riavvia per completare"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重启以完成"
           }
         }
       }
@@ -1342,6 +2038,12 @@
             "state" : "translated",
             "value" : "Ridimensiona la finestra durante lo spostamento"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拖拽时恢复窗口大小"
+          }
         }
       }
     },
@@ -1351,6 +2053,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Destro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右侧"
           }
         }
       }
@@ -1362,6 +2070,12 @@
             "state" : "translated",
             "value" : "Ciclico destro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右侧循环"
+          }
         }
       }
     },
@@ -1371,6 +2085,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cambio schermate"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕切换"
           }
         }
       }
@@ -1389,6 +2109,12 @@
             "state" : "translated",
             "value" : "s"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "秒"
+          }
         }
       }
     },
@@ -1398,6 +2124,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invia feedback"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发送反馈"
           }
         }
       }
@@ -1409,6 +2141,12 @@
             "state" : "translated",
             "value" : "Imposta tasti di attivazione..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置触发键…"
+          }
         }
       }
     },
@@ -1418,6 +2156,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impostazioni"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
           }
         }
       }
@@ -1429,6 +2173,12 @@
             "state" : "translated",
             "value" : "Impostazioni…"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置…"
+          }
         }
       }
     },
@@ -1438,6 +2188,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Condividi i tuoi feedback nella nostra pagina GitHub, dove puoi riportare bug, suggerire nuove funzioni, o fornirci altri input preziosi. Accettiamo anche donazioni se ritieni che Loop abbia migliorato il tuo workflow :)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在我们的GitHub页面上分享你的反馈！无论你发现了漏洞还是想建议新功能，都请畅所欲言。如果你感觉Loop对你的工作流有很大帮助，我们很乐意接受捐赠 :)"
           }
         }
       }
@@ -1449,6 +2205,12 @@
             "state" : "translated",
             "value" : "Mostra nel dock"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在程序坞中显示"
+          }
         }
       }
     },
@@ -1458,6 +2220,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostra anteprima durante l'utilizzo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在环绕窗口时显示预览"
           }
         }
       }
@@ -1469,6 +2237,12 @@
             "state" : "translated",
             "value" : "Semplice"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简单"
+          }
         }
       }
     },
@@ -1478,6 +2252,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incremento dimensione"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尺寸增加"
           }
         }
       }
@@ -1489,6 +2269,12 @@
             "state" : "translated",
             "value" : "Fluida"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顺滑"
+          }
         }
       }
     },
@@ -1498,6 +2284,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Funzioni, idee, e correzione di bug"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一些新功能、想法和漏洞修复"
           }
         }
       }
@@ -1509,6 +2301,12 @@
             "state" : "translated",
             "value" : "Stage Manager"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "台前调度"
+          }
         }
       }
     },
@@ -1518,6 +2316,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dimensione del menu"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "台前调度区域宽度"
           }
         }
       }
@@ -1529,6 +2333,12 @@
             "state" : "translated",
             "value" : "Resta all’erta, presto buone nuove!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保持敏锐，更多情报即将到来！"
+          }
         }
       }
     },
@@ -1538,6 +2348,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Proponi nuova icona"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "建议一个新图标"
           }
         }
       }
@@ -1549,6 +2365,12 @@
             "state" : "translated",
             "value" : "Sistema"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统"
+          }
         }
       }
     },
@@ -1558,6 +2380,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questo tasto è già in uso nei tasti di attivazione."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此按键已被用作触发键。"
           }
         }
       }
@@ -1569,6 +2397,12 @@
             "state" : "translated",
             "value" : "Questa combinazione è già in uso da %@."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此按键已被%@占用。"
+          }
         }
       }
     },
@@ -1578,6 +2412,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questa combinazione è già in uso da un'altra scorciatoia personalizzata."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此按键已被另一个快捷键占用。"
           }
         }
       }
@@ -1589,6 +2429,12 @@
             "state" : "translated",
             "value" : "La Forza è potente in questa versione!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此版本的原力很强大。"
+          }
         }
       }
     },
@@ -1598,6 +2444,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tematizzazione"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主题"
           }
         }
       }
@@ -1609,6 +2461,12 @@
             "state" : "translated",
             "value" : "Spessore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "厚度"
+          }
         }
       }
     },
@@ -1618,6 +2476,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questa funzione è ancora in fase di sviluppo."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此功能仍在开发中。"
           }
         }
       }
@@ -1629,6 +2493,12 @@
             "state" : "translated",
             "value" : "Questo non è l’aggiornamento che stavi aspettando!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这不是你正在寻找的更新！"
+          }
         }
       }
     },
@@ -1638,6 +2508,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Superiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顶部"
           }
         }
       }
@@ -1649,6 +2525,12 @@
             "state" : "translated",
             "value" : "Ciclico superiore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顶部循环"
+          }
         }
       }
     },
@@ -1658,6 +2540,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ritardo attivazione"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "触发延迟"
           }
         }
       }
@@ -1669,6 +2557,12 @@
             "state" : "translated",
             "value" : "Tasti di attivazione"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "触发键"
+          }
         }
       }
     },
@@ -1678,6 +2572,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usa coordinate"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用坐标"
           }
         }
       }
@@ -1689,6 +2589,12 @@
             "state" : "translated",
             "value" : "Usa centro macOS"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用macOS屏幕中心"
+          }
         }
       }
     },
@@ -1698,6 +2604,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usa pixel"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用像素"
           }
         }
       }
@@ -1709,6 +2621,12 @@
             "state" : "translated",
             "value" : "Usa schermo con cursore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用包含光标的屏幕"
+          }
         }
       }
     },
@@ -1718,6 +2636,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Per l'utilizzo con barra dei menu personalizzata."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果你正在使用自定义菜单栏，请选择此选项。"
           }
         }
       }
@@ -1735,6 +2659,12 @@
             "state" : "translated",
             "value" : "Versione %1$@ (%2$@)"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@版本（%2$@）"
+          }
         }
       }
     },
@@ -1744,6 +2674,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzi verticale"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "垂直三等分"
           }
         }
       }
@@ -1755,6 +2691,12 @@
             "state" : "translated",
             "value" : "Larghezza"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "宽度"
+          }
         }
       }
     },
@@ -1764,6 +2706,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finestra"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口"
           }
         }
       }
@@ -1782,6 +2730,12 @@
             "state" : "translated",
             "value" : "Quasi massimizza"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "几乎最大化"
+          }
         }
       }
     },
@@ -1798,6 +2752,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà inferiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下半屏"
           }
         }
       }
@@ -1816,6 +2776,12 @@
             "state" : "translated",
             "value" : "Quarto inferiore sinistro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左下角四分之一屏"
+          }
         }
       }
     },
@@ -1832,6 +2798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quarto inferiore destro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右下角四分之一屏"
           }
         }
       }
@@ -1850,6 +2822,12 @@
             "state" : "translated",
             "value" : "Terzo inferiore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下三分之一屏"
+          }
         }
       }
     },
@@ -1866,6 +2844,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi inferiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下三分之二屏"
           }
         }
       }
@@ -1884,6 +2868,12 @@
             "state" : "translated",
             "value" : "Centra"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕中心"
+          }
         }
       }
     },
@@ -1900,6 +2890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizzata"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义"
           }
         }
       }
@@ -1918,6 +2914,12 @@
             "state" : "translated",
             "value" : "Ciclico"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "循环"
+          }
         }
       }
     },
@@ -1934,6 +2936,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schermo intero"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全屏"
           }
         }
       }
@@ -1952,6 +2960,12 @@
             "state" : "translated",
             "value" : "Ingrandisci inferiore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拉伸底部"
+          }
         }
       }
     },
@@ -1968,6 +2982,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci sinistro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拉伸左侧"
           }
         }
       }
@@ -1986,6 +3006,12 @@
             "state" : "translated",
             "value" : "Ingrandisci destro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拉伸右侧"
+          }
         }
       }
     },
@@ -2002,6 +3028,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci superiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拉伸顶部"
           }
         }
       }
@@ -2020,6 +3052,12 @@
             "state" : "translated",
             "value" : "Nascondi"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏"
+          }
         }
       }
     },
@@ -2036,6 +3074,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzo orizzontale centrale"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "垂直居中三分之一"
           }
         }
       }
@@ -2054,6 +3098,12 @@
             "state" : "translated",
             "value" : "Ripristina"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初始大小"
+          }
         }
       }
     },
@@ -2070,6 +3120,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更大一点"
           }
         }
       }
@@ -2088,6 +3144,12 @@
             "state" : "translated",
             "value" : "Metà sinistra"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左半屏"
+          }
         }
       }
     },
@@ -2104,6 +3166,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzo sinistro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左三分之一屏"
           }
         }
       }
@@ -2122,6 +3190,12 @@
             "state" : "translated",
             "value" : "Due terzi sinistri"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左三分之二屏"
+          }
         }
       }
     },
@@ -2138,6 +3212,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Centra (macOS)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS屏幕中心"
           }
         }
       }
@@ -2156,6 +3236,12 @@
             "state" : "translated",
             "value" : "Massimizza"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大化"
+          }
         }
       }
     },
@@ -2172,6 +3258,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimizza"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最小化"
           }
         }
       }
@@ -2190,6 +3282,12 @@
             "state" : "translated",
             "value" : "Sposta sotto"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "向下移动"
+          }
         }
       }
     },
@@ -2206,6 +3304,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta a sinistra"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "向左移动"
           }
         }
       }
@@ -2224,6 +3328,12 @@
             "state" : "translated",
             "value" : "Sposta a destra"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "向右移动"
+          }
         }
       }
     },
@@ -2240,6 +3350,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta sopra"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "向上移动"
           }
         }
       }
@@ -2258,6 +3374,12 @@
             "state" : "translated",
             "value" : "Schermata successiva"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一个屏幕"
+          }
         }
       }
     },
@@ -2274,6 +3396,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nessuna azione"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无操作"
           }
         }
       }
@@ -2292,6 +3420,12 @@
             "state" : "translated",
             "value" : "Schermata precedente"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一个屏幕"
+          }
         }
       }
     },
@@ -2308,6 +3442,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà destra"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右半屏"
           }
         }
       }
@@ -2326,6 +3466,12 @@
             "state" : "translated",
             "value" : "Terzo destro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右三分之一屏"
+          }
         }
       }
     },
@@ -2342,6 +3488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi destri"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右三分之二屏"
           }
         }
       }
@@ -2360,6 +3512,12 @@
             "state" : "translated",
             "value" : "Riduci inferiore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "压缩底部"
+          }
         }
       }
     },
@@ -2376,6 +3534,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riduci sinistro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "压缩左侧"
           }
         }
       }
@@ -2394,6 +3558,12 @@
             "state" : "translated",
             "value" : "Riduci destro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "压缩右侧"
+          }
         }
       }
     },
@@ -2410,6 +3580,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riduci superiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "压缩顶部"
           }
         }
       }
@@ -2428,6 +3604,12 @@
             "state" : "translated",
             "value" : "Riduci"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更小一点"
+          }
         }
       }
     },
@@ -2444,6 +3626,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà superiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上半屏"
           }
         }
       }
@@ -2462,6 +3650,12 @@
             "state" : "translated",
             "value" : "Quarto superiore sinistro"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左上角四分之一屏"
+          }
         }
       }
     },
@@ -2478,6 +3672,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quarto superiore destro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右上角四分之一屏"
           }
         }
       }
@@ -2496,6 +3696,12 @@
             "state" : "translated",
             "value" : "Terzo superiore"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上三分之一屏"
+          }
         }
       }
     },
@@ -2512,6 +3718,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi superiore"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上三分之二屏"
           }
         }
       }
@@ -2530,6 +3742,12 @@
             "state" : "translated",
             "value" : "Annulla"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撤销"
+          }
         }
       }
     },
@@ -2547,6 +3765,12 @@
             "state" : "translated",
             "value" : "Terzo verticale centrale"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "垂直居中三分之一屏"
+          }
         }
       }
     },
@@ -2556,6 +3780,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spaziatura finestra"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口间距"
           }
         }
       }
@@ -2567,6 +3797,12 @@
             "state" : "translated",
             "value" : "Manipolazione finestra"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口操作"
+          }
         }
       }
     },
@@ -2576,6 +3812,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aggancio finestra"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口贴靠"
           }
         }
       }
@@ -2587,12 +3829,24 @@
             "state" : "translated",
             "value" : "Durante lo spostamento si potrà ancora vedere l’anteprima."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口贴靠将仍然使用预览。"
+          }
         }
       }
     },
     "X" : {
       "localizations" : {
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X"
+          }
+        },
+        "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "X"
@@ -2607,6 +3861,12 @@
             "state" : "translated",
             "value" : "Y"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
         }
       }
     },
@@ -2616,6 +3876,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Puoi usare un massimo di %lld tasti nelle scorciatoie, compresi i tasti di attivazione."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在一个快捷键中，你最多只能使用%lld个按键（包括触发键）。"
           }
         }
       }
@@ -2627,6 +3893,12 @@
             "state" : "translated",
             "value" : "Puoi usare un massimo di %lld tasti come tasti di attivazione."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你最多只能使用%lld个按键作为触发键。"
+          }
         }
       }
     },
@@ -2636,6 +3908,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tutto aggiornato :)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你正在使用最新版本！"
           }
         }
       }
@@ -2647,6 +3925,12 @@
             "state" : "translated",
             "value" : "Hai già il miglior Loop possibile!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你已经获得了最棒的Loop！"
+          }
         }
       }
     },
@@ -2656,6 +3940,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai il meglio, nessun aggiornamento necessario!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你已经得到了你的至宝，无需更新！"
           }
         }
       }
@@ -2667,6 +3957,12 @@
             "state" : "translated",
             "value" : "Hai livellato fino al massimo!"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你已经升到满级了！"
+          }
         }
       }
     },
@@ -2676,6 +3972,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai usato Loop %lld volte!"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你已经环绕了%lld次！"
           }
         }
       }
