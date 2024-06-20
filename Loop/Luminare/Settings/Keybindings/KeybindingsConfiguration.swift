@@ -94,7 +94,9 @@ struct KeybindingsConfigurationView: View {
                 .foregroundStyle(.secondary)
                 .padding()
             },
-            id: \.id
+            id: \.id,
+            addText: "Add",
+            removeText: "Remove"
         )
     }
 }

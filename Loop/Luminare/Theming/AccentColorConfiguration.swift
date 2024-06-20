@@ -78,10 +78,10 @@ struct AccentColorConfigurationView: View {
                 }
                 .foregroundStyle(.secondary)
 
-                LuminareColorPicker(color: $model.customAccentColor)
+                LuminareColorPicker(color: $model.customAccentColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
 
                 if model.useGradient {
-                    LuminareColorPicker(color: $model.gradientColor)
+                    LuminareColorPicker(color: $model.gradientColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
                 }
             }
         }

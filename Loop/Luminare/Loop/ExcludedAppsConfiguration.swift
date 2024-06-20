@@ -71,7 +71,9 @@ struct ExcludedAppsConfigurationView: View {
                 .foregroundStyle(.secondary)
                 .padding()
             },
-            id: \.self
+            id: \.self,
+            addText: "Add",
+            removeText: "Remove"
         )
     }
 }
