@@ -114,6 +114,17 @@ extension AXUIElement {
             return value
         }
     }
+
+    func getPID() -> pid_t? {
+        var pid: pid_t = 0
+        let result = AXUIElementGetPid(self, &pid)
+
+        guard result == .success else {
+            return nil
+        }
+
+        return pid
+    }
 }
 
 extension NSAccessibility.Attribute {

@@ -19,9 +19,7 @@ class Window {
     init?(element: AXUIElement) {
         self.axWindow = element
 
-        var pid = pid_t(0)
-        _ = AXUIElementGetPid(self.axWindow, &pid)
-
+        let pid = axWindow.getPID()
         self.nsRunningApplication = NSWorkspace.shared.runningApplications.first {
             $0.processIdentifier == pid
         }
@@ -54,13 +52,6 @@ class Window {
         self.init(element: window)
     }
 
-    func getPid() -> pid_t? {
-        var pid = pid_t(0)
-        let result = AXUIElementGetPid(self.axWindow, &pid)
-        guard result == .success else { return nil }
-        return pid
-    }
-
     var role: NSAccessibility.Role? {
         guard let value: String = self.axWindow.getValue(.role) else {
             return nil
@@ -81,14 +72,14 @@ class Window {
 
     var enhancedUserInterface: Bool? {
         get {
-            guard let pid = self.getPid() else { return nil }
+            guard let pid = axWindow.getPID() else { return nil }
             let appWindow = AXUIElementCreateApplication(pid)
             return appWindow.getValue(.enhancedUserInterface)
         }
         set {
-            guard
+            guard 
                 let newValue,
-                let pid = self.getPid()
+                let pid = axWindow.getPID()
             else {
                 return
             }
