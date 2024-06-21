@@ -196,11 +196,13 @@ enum WindowEngine {
         var fixedWindowFrame = windowFrame
 
         if fixedWindowFrame.maxX > bounds.maxX {
-            fixedWindowFrame.origin.x = bounds.maxX - fixedWindowFrame.width - Defaults[.padding].right
+            let rightPadding = Defaults[.enablePadding] ? Defaults[.padding].right : 0
+            fixedWindowFrame.origin.x = bounds.maxX - fixedWindowFrame.width - rightPadding
         }
 
         if fixedWindowFrame.maxY > bounds.maxY {
-            fixedWindowFrame.origin.y = bounds.maxY - fixedWindowFrame.height - Defaults[.padding].bottom
+            let bottomPadding = Defaults[.enablePadding] ? Defaults[.padding].bottom : 0
+            fixedWindowFrame.origin.y = bounds.maxY - fixedWindowFrame.height - bottomPadding
         }
 
         window.setPosition(fixedWindowFrame.origin)
