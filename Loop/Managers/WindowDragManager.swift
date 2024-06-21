@@ -72,15 +72,19 @@ class WindowDragManager {
 
         let mousePosition = NSEvent.mouseLocation.flipY(screen: screen)
 
-        guard
-            let draggingWindow = WindowEngine.windowAtPosition(mousePosition),
-            !draggingWindow.isAppExcluded
-        else {
-            return
-        }
+        do {
+            guard
+                let draggingWindow = try WindowEngine.windowAtPosition(mousePosition),
+                !draggingWindow.isAppExcluded
+            else {
+                return
+            }
 
-        self.draggingWindow = draggingWindow
-        initialWindowFrame = draggingWindow.frame
+            self.draggingWindow = draggingWindow
+            initialWindowFrame = draggingWindow.frame
+        } catch {
+            print("Failed to get window at position: \(error.localizedDescription)")
+        }
     }
 
     private func hasWindowMoved(_ windowFrame: CGRect, _ initialFrame: CGRect) -> Bool {
@@ -103,7 +107,7 @@ class WindowDragManager {
             newWindowFrame = newWindowFrame.pushBottomRightPointInside(screen.frame)
             window.setFrame(newWindowFrame)
         } else {
-            window.setSize(initialFrame.size)
+            window.size = initialFrame.size
         }
 
         // If the window doesn't contain the cursor, keep the original maxX

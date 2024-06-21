@@ -15,10 +15,14 @@ class BehaviorConfigurationModel: ObservableObject {
         didSet {
             Defaults[.launchAtLogin] = launchAtLogin
 
-            if launchAtLogin {
-                try? SMAppService().register()
-            } else {
-                try? SMAppService().unregister()
+            do {
+                if launchAtLogin {
+                    try SMAppService().register()
+                } else {
+                    try SMAppService().unregister()
+                }
+            } catch {
+                print("Failed to \(launchAtLogin ? "register" : "unregister") login item: \(error.localizedDescription)")
             }
         }
     }

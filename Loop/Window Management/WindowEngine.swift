@@ -39,7 +39,7 @@ enum WindowEngine {
             WindowRecords.record(window, action)
             return
         }
-        window.setFullscreen(false)
+        window.fullscreen = false
 
         if action.direction == .hide {
             window.toggleHidden()
@@ -59,7 +59,7 @@ enum WindowEngine {
 
         print("Target window frame: \(targetFrame)")
 
-        let enhancedUI = window.enhancedUserInterface ?? false
+        let enhancedUI = window.enhancedUserInterface
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
         WindowRecords.record(window, action)
 
@@ -112,14 +112,23 @@ enum WindowEngine {
     static func getTargetWindow() -> Window? {
         var result: Window?
 
-        if Defaults[.resizeWindowUnderCursor],
-           let mouseLocation = CGEvent.mouseLocation,
-           let window = WindowEngine.windowAtPosition(mouseLocation) {
-            result = window
+        do {
+            if Defaults[.resizeWindowUnderCursor],
+               let mouseLocation = CGEvent.mouseLocation,
+               let window = try WindowEngine.windowAtPosition(mouseLocation) {
+                result = window
+            }
+        } catch {
+            print("Failed to get window at cursor: \(error.localizedDescription)")
         }
 
+
         if result == nil {
-            result = WindowEngine.frontmostWindow
+            do {
+                result = try WindowEngine.getFrontmostWindow()
+            } catch {
+                print("Failed to get frontmost window: \(error.localizedDescription)")
+            }
         }
 
         return result
@@ -127,21 +136,17 @@ enum WindowEngine {
 
     /// Get the frontmost Window
     /// - Returns: Window?
-    static var frontmostWindow: Window? {
-        guard
-            let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }),
-            let window = Window(pid: app.processIdentifier)
-        else {
+    static func getFrontmostWindow() throws -> Window? {
+        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }) else {
             return nil
         }
-        return window
+        return try Window(pid: app.processIdentifier)
     }
 
-    static func windowAtPosition(_ position: CGPoint) -> Window? {
-        if let element = AXUIElement.systemWide.getElementAtPosition(position),
-           let windowElement: AXUIElement = element.getValue(.window),
-           let window = Window(element: windowElement) {
-            return window
+    static func windowAtPosition(_ position: CGPoint) throws -> Window? {
+        if let element = try AXUIElement.systemWide.getElementAtPosition(position),
+           let windowElement: AXUIElement = try element.getValue(.window) {
+            return try Window(element: windowElement)
         }
 
         let windowList = WindowEngine.windowList
@@ -162,9 +167,13 @@ enum WindowEngine {
 
         var windowList: [Window] = []
         for window in list {
-            if let pid = window[kCGWindowOwnerPID as String] as? Int32,
-               let window = Window(pid: pid) {
-                windowList.append(window)
+            if let pid = window[kCGWindowOwnerPID as String] as? Int32 {
+                do {
+                    let window = try Window(pid: pid)
+                    windowList.append(window)
+                } catch {
+                    print("Failed to create window: \(error.localizedDescription)")
+                }
             }
         }
 
@@ -205,6 +214,6 @@ enum WindowEngine {
             fixedWindowFrame.origin.y = bounds.maxY - fixedWindowFrame.height - bottomPadding
         }
 
-        window.setPosition(fixedWindowFrame.origin)
+        window.position = fixedWindowFrame.origin
     }
 }

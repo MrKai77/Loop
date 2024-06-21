@@ -10,39 +10,41 @@ import SwiftUI
 extension AXUIElement {
     static let systemWide = AXUIElementCreateSystemWide()
 
-    func getValue<T>(_ attribute: NSAccessibility.Attribute) -> T? {
+    func getValue<T>(_ attribute: NSAccessibility.Attribute) throws -> T? {
         var value: AnyObject?
-        let result = AXUIElementCopyAttributeValue(self, attribute as CFString, &value)
-        
-        if result == .noValue || result == .attributeUnsupported {
+        let error = AXUIElementCopyAttributeValue(self, attribute as CFString, &value)
+
+        if error == .noValue || error == .attributeUnsupported {
             return nil
         }
 
-        guard result == .success else {
-            return nil
+        guard error == .success else {
+            throw error
         }
 
         guard let unpackedValue = (unpackAXValue(value!) as? T) else {
-            return nil
+            throw AXError.illegalArgument
         }
 
         return unpackedValue
     }
 
-    @discardableResult
-    func setValue(_ attribute: NSAccessibility.Attribute, value: Any) -> Bool {
-        let result = AXUIElementSetAttributeValue(self, attribute as CFString, packAXValue(value))
-        return result == .success
+    func setValue(_ attribute: NSAccessibility.Attribute, value: Any) throws {
+        let error = AXUIElementSetAttributeValue(self, attribute as CFString, packAXValue(value))
+
+        guard error == .success else {
+            throw error
+        }
     }
 
-    func performAction(_ action: String) {
-        AXUIElementPerformAction(self, action as CFString)
-    }
-
-    func getElementAtPosition(_ position: CGPoint) -> AXUIElement? {
+    func getElementAtPosition(_ position: CGPoint) throws -> AXUIElement? {
         var element: AXUIElement?
-        let result = AXUIElementCopyElementAtPosition(self, Float(position.x), Float(position.y), &element)
-        guard result == .success else { return nil }
+        let error = AXUIElementCopyElementAtPosition(self, Float(position.x), Float(position.y), &element)
+
+        guard error == .success else {
+            throw error
+        }
+
         return element
     }
 
@@ -115,17 +117,30 @@ extension AXUIElement {
         }
     }
 
-    func getPID() -> pid_t? {
+    func getPID() throws -> pid_t? {
         var pid: pid_t = 0
-        let result = AXUIElementGetPid(self, &pid)
+        let error = AXUIElementGetPid(self, &pid)
 
-        guard result == .success else {
-            return nil
+        guard error == .success else {
+            throw error
         }
 
         return pid
     }
+
+    func getWindowID() throws -> CGWindowID {
+        var id: CGWindowID = 0
+        let error = _AXUIElementGetWindow(self, &id)
+
+        guard error == .success else {
+            throw error
+        }
+
+        return id
+    }
 }
+
+extension AXError: Swift.Error {}
 
 extension NSAccessibility.Attribute {
     static let fullScreen: NSAccessibility.Attribute = .init(rawValue: "AXFullScreen")

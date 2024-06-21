@@ -185,13 +185,17 @@ class Updater: ObservableObject {
 
             DispatchQueue.main.async {
                 self.progressBar = 0.8
-                try? fileManager.removeItem(atPath: fileURL) // Clean up the zip file after extraction.
+                do {
+                    try fileManager.removeItem(atPath: fileURL) // Clean up the zip file after extraction.
+                } catch {
+                    print("Failed to delete downloaded file: \(error.localizedDescription)")
+                }
                 self.progressBar = 1.0
                 self.updateState = .unavailable // Update the state to reflect that the update has been applied.
             }
         } catch {
             DispatchQueue.main.async {
-                NSLog("Error updating the app: \(error)")
+                NSLog("Error updating the app: \(error.localizedDescription)")
             }
         }
     }

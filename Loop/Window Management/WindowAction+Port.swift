@@ -87,7 +87,7 @@ extension WindowAction {
                 attemptSave(of: json)
             }
         } catch {
-            print("Error encoding keybinds: \(error)")
+            print("Error encoding keybinds: \(error.localizedDescription)")
         }
     }
 
@@ -109,7 +109,7 @@ extension WindowAction {
                     do {
                         try data?.write(to: destUrl)
                     } catch {
-                        print("Error writing to file: \(error)")
+                        print("Error writing to file: \(error.localizedDescription)")
                     }
                 }
             }
@@ -128,7 +128,7 @@ extension WindowAction {
                         let jsonString = try String(contentsOf: selectedFileURL)
                         importKeybinds(from: jsonString)
                     } catch {
-                        print("Error reading file: \(error)")
+                        print("Error reading file: \(error.localizedDescription)")
                     }
                 }
             }
@@ -169,7 +169,7 @@ extension WindowAction {
                 }
             }
         } catch {
-            print("Error decoding keybinds: \(error)")
+            print("Error decoding keybinds: \(error.localizedDescription)")
 
             let alert = NSAlert()
             alert.messageText = "Error Reading Keybinds"

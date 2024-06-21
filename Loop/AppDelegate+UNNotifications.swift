@@ -40,7 +40,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             }
 
             if let error {
-                print(error)
+                print(error.localizedDescription)
             }
         }
     }
