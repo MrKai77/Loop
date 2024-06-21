@@ -1878,7 +1878,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "5000次环绕达成！这个宇宙见证了又一位Loop大师的诞生。享受你应得的奖励吧：一个全新设计的纪念图标！"
+            "value" : "5000次环绕达成！这个宇宙见证了又一位Loop大师的诞生！享受你应得的奖励吧：一个全新设计的纪念图标！"
           }
         },
         "zh-HK" : {
@@ -3156,7 +3156,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "尺寸增加"
+            "value" : "尺寸增量"
           }
         },
         "zh-HK" : {
@@ -3288,7 +3288,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "建议一个新图标"
+            "value" : "建议新图标"
           }
         },
         "zh-HK" : {
@@ -3398,7 +3398,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此版本的原力很强大。"
+            "value" : "此版本的原力很强大！"
           }
         },
         "zh-HK" : {
@@ -3662,7 +3662,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "使用包含光标的屏幕"
+            "value" : "使用光标所在的屏幕"
           }
         },
         "zh-HK" : {
@@ -4097,7 +4097,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拉伸底部"
+            "value" : "扩张底部"
           }
         },
         "zh-HK" : {
@@ -4126,7 +4126,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拉伸左侧"
+            "value" : "扩张左侧"
           }
         },
         "zh-HK" : {
@@ -4155,7 +4155,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拉伸右侧"
+            "value" : "扩张右侧"
           }
         },
         "zh-HK" : {
@@ -4184,7 +4184,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拉伸顶部"
+            "value" : "扩张顶部"
           }
         },
         "zh-HK" : {
@@ -4300,7 +4300,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更大一点"
+            "value" : "扩大一点"
           }
         },
         "zh-HK" : {
@@ -4909,7 +4909,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更小一点"
+            "value" : "缩小一点"
           }
         },
         "zh-HK" : {
