@@ -19,7 +19,7 @@ class WindowDragManager {
     private var leftMouseUpMonitor: EventMonitor?
 
     func addObservers() {
-        leftMouseDraggedMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseDragged) { _ in
+        leftMouseDraggedMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseDragged) { _ in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
