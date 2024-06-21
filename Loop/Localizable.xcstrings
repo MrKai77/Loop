@@ -47,6 +47,12 @@
     },
     "%" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -69,6 +75,12 @@
     },
     "%@" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -97,6 +109,12 @@
             "value" : "%1$@ %2$@"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -119,6 +137,12 @@
     },
     "%@ is already used as your trigger key." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ está actualmente en uso como la tecla de activación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -141,6 +165,12 @@
     },
     "%@ places windows slightly above the absolute center,\nwhich can be found more ergonomic." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ sitúa la ventana algo por encima del centro absoluto, lo que resulta más ergonómico."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -163,6 +193,12 @@
     },
     "%lld" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%11d"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -185,6 +221,12 @@
     },
     "About" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -207,6 +249,12 @@
     },
     "Accent Color" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color de acento"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -229,6 +277,12 @@
     },
     "Accessibility access" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acceso a Accesibilidad"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -258,6 +312,12 @@
             "value" : "Please grant access to be able to resize windows."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, concede permiso para que Loop pueda cambiar el tamaño de las ventanas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -285,6 +345,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%@ Needs Accessibility Permissions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ necesita permisos de Accesibilidad"
           }
         },
         "it" : {
@@ -331,6 +397,12 @@
     },
     "Advanced" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avanzado"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -353,6 +425,12 @@
     },
     "Animate window resize" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animar redimensionamiento de la venta"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -375,6 +453,12 @@
     },
     "Animation speed" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocidad de animación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -397,6 +481,12 @@
     },
     "Behavior" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comportamiento"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -441,6 +531,12 @@
     },
     "Border thickness" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grosor del borde"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -463,6 +559,12 @@
     },
     "Bottom" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abajo"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -485,6 +587,12 @@
     },
     "Bottom Cycle" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotar abajo"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -507,6 +615,12 @@
     },
     "Cannot be enabled when the preview is disabled." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se puede activar cuando la previsualización esté desactivada"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -529,6 +643,12 @@
     },
     "Change" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -551,6 +671,12 @@
     },
     "Check back next time!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuelve a comprobarlo más adelante!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -573,6 +699,12 @@
     },
     "Check for updates…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprobar actualizaciones..."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -595,6 +727,12 @@
     },
     "Close" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerrar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -617,6 +755,12 @@
     },
     "Color" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -639,6 +783,12 @@
     },
     "Configure padding..." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurar separación..."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -661,6 +811,12 @@
     },
     "Corner radius" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radio de las esquinas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -683,6 +839,12 @@
     },
     "Credits" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créditos"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -705,6 +867,12 @@
     },
     "Cursor" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cursor"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -727,6 +895,12 @@
     },
     "Custom" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalizado"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -749,6 +923,12 @@
     },
     "Custom Cycle" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotación personalizada"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -771,6 +951,12 @@
     },
     "Custom Keybind" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinación personalizada"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -793,6 +979,12 @@
     },
     "Customize this keybind's action." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalizar la acción de esta combinación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -815,6 +1007,12 @@
     },
     "Customize this keybind's custom frame." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalizar el marco de esta combinación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -837,6 +1035,12 @@
     },
     "Customize what this keybind cycles through." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalizar la rotación de esta combinación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -859,6 +1063,12 @@
     },
     "Cycle Keybind" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotar combinación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -888,6 +1098,12 @@
             "value" : "You will now be notified when you unlock a new icon."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te notificaremos cuando desbloquees un nuevo icono"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -910,6 +1126,12 @@
     },
     "Design" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diseño"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -932,6 +1154,12 @@
     },
     "Development" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desarrollador"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -954,6 +1182,12 @@
     },
     "Development support" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suporte al desarollador"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -976,6 +1210,12 @@
     },
     "Disable cursor interaction" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deshabilitar interacción con el cursor"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -998,6 +1238,12 @@
     },
     "Donate" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Donar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1020,6 +1266,12 @@
     },
     "Donate…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Donar..."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1042,6 +1294,12 @@
     },
     "Double-click to trigger" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doble click para activar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1064,6 +1322,12 @@
     },
     "Excluded Apps" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apps excluidas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1086,6 +1350,12 @@
     },
     "Export" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1108,6 +1378,12 @@
     },
     "External bar" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Barra externa"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1130,6 +1406,12 @@
     },
     "Fast" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rápida"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1152,6 +1434,12 @@
     },
     "Focus window on resize" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resaltar ventana al redimensionar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1174,6 +1462,12 @@
     },
     "General" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1196,6 +1490,12 @@
     },
     "Gradient" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gradiente"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1240,6 +1540,12 @@
     },
     "Halves" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitades"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1262,6 +1568,12 @@
     },
     "Haptic feedback" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback háptico"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1284,6 +1596,12 @@
     },
     "Height" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altura"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1306,6 +1624,12 @@
     },
     "Hide menu bar icon" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar icono en la barra de menú"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1328,6 +1652,12 @@
     },
     "Hide until direction is chosen" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar hasta que se escoge una dirección"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1350,6 +1680,12 @@
     },
     "Horizontal Thirds" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercios horizontales"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1372,6 +1708,12 @@
     },
     "Icon" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icono"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1394,6 +1736,12 @@
     },
     "Icon contributor" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contribuidor de iconos"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1421,6 +1769,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Black"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Negro"
           }
         },
         "it" : {
@@ -1452,6 +1806,12 @@
             "value" : "Black Hole"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agujero negro"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1479,6 +1839,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Classic"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clásico"
           }
         },
         "it" : {
@@ -1510,6 +1876,12 @@
             "value" : "Developer"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desarrollador"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1536,6 +1908,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Holo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Holo"
           }
         },
@@ -1568,6 +1946,12 @@
             "value" : "Keycap"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tecla"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1594,6 +1978,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Loop Master"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Loop Master"
           }
         },
@@ -1626,6 +2016,12 @@
             "value" : "Meta Loop"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta Loop"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1652,6 +2048,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Neon"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Neon"
           }
         },
@@ -1684,6 +2086,12 @@
             "value" : "Rosé Pine"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosé Pine"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1710,6 +2118,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Simon"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Simon"
           }
         },
@@ -1742,6 +2156,12 @@
             "value" : "Summer"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summer"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1768,6 +2188,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Synthwave Sunset"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Synthwave Sunset"
           }
         },
@@ -1800,6 +2226,12 @@
             "value" : "White"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "White"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1827,6 +2259,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You've unlocked a new icon: %@!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has desbloqueado un nuevo icono: %@!"
           }
         },
         "it" : {
@@ -1858,6 +2296,12 @@
             "value" : "You've already looped 25 times! As a reward, here's new icon: %@. Continue to loop more to unlock new icons!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has usado Loop 25 veces! Como recompensa, aquí tienes un nuevo icono: %@. Continúa usando Loop para desbloquear más iconos!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1887,6 +2331,12 @@
             "value" : "5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has usado Loop 5.000 veces! El universo ha presenciado el nacimiento de un Master de Loop! Disfruta de este merecido regalo: un nuevo icono!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1909,6 +2359,12 @@
     },
     "Import" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1931,6 +2387,12 @@
     },
     "Include development versions" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir versiones de desarrollo"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1953,6 +2415,12 @@
     },
     "Include padding" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir separación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1975,6 +2443,12 @@
     },
     "Install" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1997,6 +2471,12 @@
     },
     "Instant" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instantánea"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2019,6 +2499,12 @@
     },
     "Keybindings" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asignaciones de teclas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2041,6 +2527,12 @@
     },
     "Keybinds" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinaciones"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2063,6 +2555,12 @@
     },
     "Launch at login" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejecutar al inicio"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2085,6 +2583,12 @@
     },
     "Left" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izquierda"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2107,6 +2611,12 @@
     },
     "Left Cycle" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotar en la izquierda"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2129,6 +2639,12 @@
     },
     "Loop" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2151,6 +2667,12 @@
     },
     "May the Force be with you... next time!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que la Fuerza esté contigo... la próxima vez!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2173,6 +2695,12 @@
     },
     "Middle-click to trigger" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Click central para activar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2195,6 +2723,12 @@
     },
     "More" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2217,6 +2751,12 @@
     },
     "Move cursor with window" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover cursor con la ventana"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2239,6 +2779,12 @@
     },
     "No excluded applications" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay aplicaciones excluidas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2261,6 +2807,12 @@
     },
     "No keybinds" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin combinaciones"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2283,6 +2835,12 @@
     },
     "No new intel, Commander." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin novedad, Comandante."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2305,6 +2863,12 @@
     },
     "No updates yet!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay actualizaciones!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2327,6 +2891,12 @@
     },
     "None" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ninguno"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2349,6 +2919,12 @@
     },
     "Nothing to cycle through" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay nada que rotar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2378,6 +2954,12 @@
             "value" : "Set Current Icon"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar icono actual"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2400,6 +2982,12 @@
     },
     "Notify when unlocking new icons" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notificarme cuando se desbloquean nuevos iconos"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2422,6 +3010,12 @@
     },
     "Options" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opciones"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2444,6 +3038,12 @@
     },
     "Padding" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Separación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2466,6 +3066,12 @@
     },
     "Permissions" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permisos"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2488,6 +3094,12 @@
     },
     "Press \"Add\" to add a cycle item" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presiona \"añadir\" para añadir a la rotación "
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2510,6 +3122,12 @@
     },
     "Press \"Add\" to add a keybind" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presiona añadir para añadir una combinación de teclas "
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2532,6 +3150,12 @@
     },
     "Press \"Add\" to add an application" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presiona añadir para añadir una aplicación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2554,6 +3178,12 @@
     },
     "Preview" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previsualización"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2576,6 +3206,12 @@
     },
     "px" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2598,6 +3234,12 @@
     },
     "Quarters" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuartos"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2620,6 +3262,12 @@
     },
     "Quit" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salir"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2642,6 +3290,12 @@
     },
     "Radial menu" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radial Menu"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2664,6 +3318,12 @@
     },
     "Radial Menu" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radial Menu"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2708,6 +3368,12 @@
     },
     "Remind me later" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recuérdame más adelante"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2752,6 +3418,12 @@
     },
     "Request…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solicitar..."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2774,6 +3446,12 @@
     },
     "Reset" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2796,6 +3474,12 @@
     },
     "Resize window under cursor" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redimensionar la ventana bajo el cursor"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2818,6 +3502,12 @@
     },
     "Resize…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambiar tamaño..."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2840,6 +3530,12 @@
     },
     "Respect Stage Manager" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respetar Organizador Visual"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2862,6 +3558,12 @@
     },
     "Restart to complete" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar para terminar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2884,6 +3586,12 @@
     },
     "Restore window frame on drag" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar el marco de la ventana al arrastrar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2906,6 +3614,12 @@
     },
     "Right" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derecha"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2928,6 +3642,12 @@
     },
     "Right Cycle" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotar en la derecha"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2950,6 +3670,12 @@
     },
     "Screen Switching" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambio de pantalla"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2979,6 +3705,12 @@
             "value" : "s"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3001,6 +3733,12 @@
     },
     "Send Feedback" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar feedback"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3023,6 +3761,12 @@
     },
     "Set a trigger key…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar Loop Key"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3045,6 +3789,12 @@
     },
     "Settings" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3067,6 +3817,12 @@
     },
     "Settings…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes..."
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3089,6 +3845,12 @@
     },
     "Share feedback on our GitHub page, where you can let us know about any bugs, suggest features, or provide other valuable input. We also accept donations if you feel that Loop has improved your workflow :)" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparte tus comentarios en nuestra página de GitHub, donde puedes informarnos sobre cualquier error, sugerir características o proporcionarnos otra información valiosa. También aceptamos donaciones si crees que Loop ha mejorado tu flujo de trabajo :)"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3111,6 +3873,12 @@
     },
     "Show in dock" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar en el dock"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3133,6 +3901,12 @@
     },
     "Show preview when looping" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar animación al mover"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3155,6 +3929,12 @@
     },
     "Simple" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3177,6 +3957,12 @@
     },
     "Size increment" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incremento de tamaño"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3199,6 +3985,12 @@
     },
     "Smooth" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suave"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3221,6 +4013,12 @@
     },
     "Some features, ideas, and bug fixes" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algunas funcionalidades, ideas y corrección de errores"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3243,6 +4041,12 @@
     },
     "Stage Manager" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organizador Visual"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3265,6 +4069,12 @@
     },
     "Stage strip size" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño de la tira de apps"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3287,6 +4097,12 @@
     },
     "Stay sharp, more intel coming soon!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronto habrá novedades!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3309,6 +4125,12 @@
     },
     "Suggest new icon" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sugerir nuevo icono"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3331,6 +4153,12 @@
     },
     "System" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3353,6 +4181,12 @@
     },
     "That key is already used as your trigger key." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta tecla está actualmente en uso como tecla de activación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3375,6 +4209,12 @@
     },
     "That keybind is already being used by %@." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta combinación está siendo usada por %@"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3397,6 +4237,12 @@
     },
     "That keybind is already being used by another custom keybind." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta combinación está siendo usada por otra combinación personalizada"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3419,6 +4265,12 @@
     },
     "The Force is strong with this version!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La Fuerza es fuerte en esta versión!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3441,6 +4293,12 @@
     },
     "Theming" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3463,6 +4321,12 @@
     },
     "Thickness" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grosor"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3485,6 +4349,12 @@
     },
     "This feature is still under development." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta funcionalidad aún está en desarrollo"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3507,6 +4377,12 @@
     },
     "This is not the update you're looking for!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta no es la actualización que estás buscando"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3529,6 +4405,12 @@
     },
     "Top" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arriba"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3551,6 +4433,12 @@
     },
     "Top Cycle" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotar arriba"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3573,6 +4461,12 @@
     },
     "Trigger delay" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retardo en la activación"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3595,6 +4489,12 @@
     },
     "Trigger Key" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop Key"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3617,6 +4517,12 @@
     },
     "Use coordinates" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar coordenadas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3639,6 +4545,12 @@
     },
     "Use macOS center" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar el centro de MacOS"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3661,6 +4573,12 @@
     },
     "Use pixels" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar píxeles"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3683,6 +4601,12 @@
     },
     "Use screen with cursor" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar la pantalla del cursor"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3705,6 +4629,12 @@
     },
     "Use this if you are using a custom menubar." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa esto si estás utilizando una barra de menú personalizada"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3733,6 +4663,12 @@
             "value" : "Version %1$@ (%2$@)"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión %1$@ (%2$@)"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3755,6 +4691,12 @@
     },
     "Vertical Thirds" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercios verticales"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3777,6 +4719,12 @@
     },
     "Width" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ancho"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3799,6 +4747,12 @@
     },
     "Window" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ventana"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3826,6 +4780,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Almost Maximize"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Casi maximizar"
           }
         },
         "it" : {
@@ -3857,6 +4817,12 @@
             "value" : "Bottom Half"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitad inferior"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3884,6 +4850,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Bottom Left Quarter"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuarto inferior derecho"
           }
         },
         "it" : {
@@ -3915,6 +4887,12 @@
             "value" : "Bottom Right Quarter"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuarto inferior derecho"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3942,6 +4920,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Bottom Third"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercio inferior"
           }
         },
         "it" : {
@@ -3973,6 +4957,12 @@
             "value" : "Bottom Two Thirds"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dos tercios inferiores"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4000,6 +4990,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Center"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centrar"
           }
         },
         "it" : {
@@ -4031,6 +5027,12 @@
             "value" : "Custom"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalizado"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4058,6 +5060,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Cycle"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotar"
           }
         },
         "it" : {
@@ -4089,6 +5097,12 @@
             "value" : "Fullscreen"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantalla completa"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4116,6 +5130,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Grow Bottom"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crecer hacia abajo"
           }
         },
         "it" : {
@@ -4147,6 +5167,12 @@
             "value" : "Grow Left"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crecer hacia la izquierda"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4174,6 +5200,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Grow Right"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crecer hacia la derecha"
           }
         },
         "it" : {
@@ -4205,6 +5237,12 @@
             "value" : "Grow Top"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crecer hacia arriba"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4232,6 +5270,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Hide"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar"
           }
         },
         "it" : {
@@ -4263,6 +5307,12 @@
             "value" : "Horizontal Center Third"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercio central horizontal"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4290,6 +5340,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Initial Frame"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño inicial"
           }
         },
         "it" : {
@@ -4321,6 +5377,12 @@
             "value" : "Larger"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más grande"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4348,6 +5410,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Left Half"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitad izquierda"
           }
         },
         "it" : {
@@ -4379,6 +5447,12 @@
             "value" : "Left Third"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercio izquierdo"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4406,6 +5480,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Left Two Thirds"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dos tercios a la izquierda"
           }
         },
         "it" : {
@@ -4437,6 +5517,12 @@
             "value" : "MacOS Center"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centro de MacOS"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4464,6 +5550,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Maximize"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximizar"
           }
         },
         "it" : {
@@ -4495,6 +5587,12 @@
             "value" : "Minimize"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimizar"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4522,6 +5620,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Move Down"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover hacia abajo"
           }
         },
         "it" : {
@@ -4553,6 +5657,12 @@
             "value" : "Move Left"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover hacia la izquierda"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4580,6 +5690,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Move Right"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover hacia la derecha"
           }
         },
         "it" : {
@@ -4611,6 +5727,12 @@
             "value" : "Move Up"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover hacia arriba"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4638,6 +5760,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Next Screen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siguiente pantalla"
           }
         },
         "it" : {
@@ -4669,6 +5797,12 @@
             "value" : "No Action"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin acción"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4696,6 +5830,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Previous Screen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantalla anterior"
           }
         },
         "it" : {
@@ -4727,6 +5867,12 @@
             "value" : "Right Half"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitad derecha"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4754,6 +5900,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Right Third"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercio derecho"
           }
         },
         "it" : {
@@ -4785,6 +5937,12 @@
             "value" : "Right Two Thirds"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dos tercios a la derecha"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4812,6 +5970,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Shrink Bottom"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrecer hacia abajo"
           }
         },
         "it" : {
@@ -4843,6 +6007,12 @@
             "value" : "Shrink Left"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrecer hacia la izquierda"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4870,6 +6040,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Shrink Right"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrecer hacia la derecha"
           }
         },
         "it" : {
@@ -4901,6 +6077,12 @@
             "value" : "Shrink Top"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrecer hacia arriba"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4928,6 +6110,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Smaller"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más pequeño"
           }
         },
         "it" : {
@@ -4959,6 +6147,12 @@
             "value" : "Top Half"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitad superior"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4986,6 +6180,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Top Left Quarter"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuarto superior izquierdo"
           }
         },
         "it" : {
@@ -5017,6 +6217,12 @@
             "value" : "Top Right Quarter"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuarto superior derecho"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5044,6 +6250,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Top Third"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercio superior"
           }
         },
         "it" : {
@@ -5075,6 +6287,12 @@
             "value" : "Top Two Thirds"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dos tercios superiores"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5102,6 +6320,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Undo"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deshacer"
           }
         },
         "it" : {
@@ -5133,6 +6357,12 @@
             "value" : "Vertical Center Third"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tercio central vertical"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5155,6 +6385,12 @@
     },
     "Window gaps" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espacio entre ventanas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5177,6 +6413,12 @@
     },
     "Window Manipulation" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manipulación de ventanas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5199,6 +6441,12 @@
     },
     "Window snapping" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajuste de ventas"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5221,6 +6469,12 @@
     },
     "Window snapping will still use the preview." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se previsualizará el ajuste de ventanass"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5243,6 +6497,12 @@
     },
     "X" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5265,6 +6525,12 @@
     },
     "Y" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5287,6 +6553,12 @@
     },
     "You can only use up to %lld keys in a keybind, including the trigger key." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo se pueden usar hasta %11d teclas en una combinación, incluyendo la Loop Key"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5309,6 +6581,12 @@
     },
     "You can only use up to %lld keys in your trigger key." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo se pueden usar hasta %11d teclas para el Loop Key"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5331,6 +6609,12 @@
     },
     "You're up to date :)" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estás en la versión más actualizada :)"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5353,6 +6637,12 @@
     },
     "You've already got the best Loop!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conseguiste el mejor Loop!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5375,6 +6665,12 @@
     },
     "You've got the precious, no updates needed!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay actualizaciones disponibles!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5397,6 +6693,12 @@
     },
     "You’ve leveled up to the max!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has llegado el nivel más alto!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5419,6 +6721,12 @@
     },
     "You've looped %lld times!" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has usado Loop %11d veces!"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
