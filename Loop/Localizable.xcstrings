@@ -329,6 +329,9 @@
         }
       }
     },
+    "Add" : {
+
+    },
     "Advanced" : {
       "localizations" : {
         "it" : {
@@ -396,6 +399,9 @@
       }
     },
     "Behavior" : {
+    },
+    "Blue" : {
+
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -1238,6 +1244,9 @@
         }
       }
     },
+    "Green" : {
+
+    },
     "Halves" : {
       "localizations" : {
         "it" : {
@@ -1931,8 +1940,11 @@
     },
     "Include development versions" : {
       "localizations" : {
+        "en" : {
         "it" : {
           "stringUnit" : {
+            "state" : "new",
+            "value" : "You've already looped 25 times! As a reward, here's new icon: %@. Continue to loop more to unlock new icons!"
             "state" : "translated",
             "value" : "Includi versioni in fase di sviluppo"
           }
@@ -1951,6 +1963,8 @@
         }
       }
     },
+    "Icon Unlock Message: Loop Master" : {
+      "extractionState" : "extracted_with_value",
     "Include padding" : {
       "localizations" : {
         "it" : {
@@ -2663,6 +2677,9 @@
       }
     },
     "Radial Menu" : {
+    },
+    "Red" : {
+
       "localizations" : {
         "it" : {
           "stringUnit" : {
@@ -2707,6 +2724,9 @@
       }
     },
     "Remind me later" : {
+    },
+    "Remove" : {
+
       "localizations" : {
         "it" : {
           "stringUnit" : {
