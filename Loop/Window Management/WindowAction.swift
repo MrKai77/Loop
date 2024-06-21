@@ -119,7 +119,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             return NSRect(origin: bounds.center, size: .zero)
         }
         var bounds = bounds
-        if !disablePadding { bounds = getPaddedBounds(bounds) }
+        if !disablePadding && Defaults[.enablePadding] {
+            bounds = getPaddedBounds(bounds)
+        }
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         if !willManipulateExistingWindowFrame {
@@ -221,7 +223,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         if !disablePadding {
             if direction != .undo, direction != .initialFrame {
-                result = applyPadding(result, bounds)
+                result = cropThenApplyPadding(result, bounds)
             }
 
             LoopManager.lastTargetFrame = result
@@ -391,45 +393,49 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return bounds
     }
 
-    private func applyPadding(_ windowFrame: CGRect, _ bounds: CGRect) -> CGRect {
+    private func cropThenApplyPadding(_ windowFrame: CGRect, _ bounds: CGRect) -> CGRect {
         guard !direction.willMove else {
             return windowFrame
         }
 
+        var croppedWindowFrame = windowFrame.intersection(bounds)
+
+        guard
+            !willManipulateExistingWindowFrame,
+            Defaults[.enablePadding]
+        else {
+            return croppedWindowFrame
+        }
+
         let padding = Defaults[.padding]
         let halfPadding = padding.window / 2
-        var paddedWindowFrame = windowFrame.intersection(bounds)
-
-        guard !willManipulateExistingWindowFrame else {
-            return paddedWindowFrame
-        }
 
         if direction == .macOSCenter,
            windowFrame.height >= bounds.height {
-            paddedWindowFrame.origin.y = bounds.minY
-            paddedWindowFrame.size.height = bounds.height
+            croppedWindowFrame.origin.y = bounds.minY
+            croppedWindowFrame.size.height = bounds.height
         }
 
         if direction == .center || direction == .macOSCenter {
-            return paddedWindowFrame
+            return croppedWindowFrame
         }
 
-        if paddedWindowFrame.minX != bounds.minX {
-            paddedWindowFrame = paddedWindowFrame.padding(.leading, halfPadding)
+        if croppedWindowFrame.minX != bounds.minX {
+            croppedWindowFrame = croppedWindowFrame.padding(.leading, halfPadding)
         }
 
-        if paddedWindowFrame.maxX != bounds.maxX {
-            paddedWindowFrame = paddedWindowFrame.padding(.trailing, halfPadding)
+        if croppedWindowFrame.maxX != bounds.maxX {
+            croppedWindowFrame = croppedWindowFrame.padding(.trailing, halfPadding)
         }
 
-        if paddedWindowFrame.minY != bounds.minY {
-            paddedWindowFrame = paddedWindowFrame.padding(.top, halfPadding)
+        if croppedWindowFrame.minY != bounds.minY {
+            croppedWindowFrame = croppedWindowFrame.padding(.top, halfPadding)
         }
 
-        if paddedWindowFrame.maxY != bounds.maxY {
-            paddedWindowFrame = paddedWindowFrame.padding(.bottom, halfPadding)
+        if croppedWindowFrame.maxY != bounds.maxY {
+            croppedWindowFrame = croppedWindowFrame.padding(.bottom, halfPadding)
         }
 
-        return paddedWindowFrame
+        return croppedWindowFrame
     }
 }
