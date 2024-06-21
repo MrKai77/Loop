@@ -161,6 +161,7 @@
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
 		A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleActionConfigurationView.swift; sourceTree = "<group>"; };
 		A8A583B92BE5A8D8005F4CB2 /* KeybindingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingItem.swift; sourceTree = "<group>"; };
+		A8AC01D32C251B600037CCD1 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionAnchor.swift; sourceTree = "<group>"; };
 		A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UNNotifications.swift"; sourceTree = "<group>"; };
 		A8CBDF602C2474BF005AE19F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -641,6 +642,7 @@
 			children = (
 				A80111152C246F490071F7D9 /* it */,
 				A8CBDF602C2474BF005AE19F /* zh-Hans */,
+				A8AC01D32C251B600037CCD1 /* zh-HK */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
