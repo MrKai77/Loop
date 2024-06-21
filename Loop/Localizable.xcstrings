@@ -114,7 +114,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@将窗口放置在屏幕中心稍稍靠上的位置，使其更人性化。"
+            "value" : "%@将窗口放置在稍高于屏幕中心的位置，使其更加人性化。"
           }
         }
       }
@@ -201,7 +201,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "请给予权限以允许调整窗口大小。"
+            "value" : "请授予权限以允许调整窗口大小。"
           }
         }
       }
@@ -528,7 +528,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "鼠标"
+            "value" : "光标"
           }
         }
       }
