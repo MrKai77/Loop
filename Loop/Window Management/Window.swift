@@ -48,8 +48,10 @@ class Window {
 
     convenience init?(pid: pid_t) {
         let element = AXUIElementCreateApplication(pid)
-        guard let window = element.getValue(.focusedWindow) else { return nil }
-        self.init(element: window as! AXUIElement)
+        guard let window: AXUIElement = element.getValue(.focusedWindow) else {
+            return nil
+        }
+        self.init(element: window)
     }
 
     func getPid() -> pid_t? {
@@ -60,24 +62,28 @@ class Window {
     }
 
     var role: NSAccessibility.Role? {
-        guard let value = self.axWindow.getValue(.role) as? String else { return nil }
+        guard let value: String = self.axWindow.getValue(.role) else {
+            return nil
+        }
         return NSAccessibility.Role(rawValue: value)
     }
 
     var subrole: NSAccessibility.Subrole? {
-        guard let value = self.axWindow.getValue(.subrole) as? String else { return nil }
+        guard let value: String = self.axWindow.getValue(.subrole) else {
+            return nil
+        }
         return NSAccessibility.Subrole(rawValue: value)
     }
 
     var title: String? {
-        self.axWindow.getValue(.title) as? String
+        self.axWindow.getValue(.title)
     }
 
     var enhancedUserInterface: Bool? {
         get {
             guard let pid = self.getPid() else { return nil }
             let appWindow = AXUIElementCreateApplication(pid)
-            return appWindow.getValue(.enhancedUserInterface) as? Bool
+            return appWindow.getValue(.enhancedUserInterface)
         }
         set {
             guard
@@ -107,7 +113,7 @@ class Window {
     }
 
     var isFullscreen: Bool {
-        let result = self.axWindow.getValue(.fullScreen) as? NSNumber
+        let result: NSNumber? = self.axWindow.getValue(.fullScreen)
         return result?.boolValue ?? false
     }
 
@@ -148,7 +154,7 @@ class Window {
     }
 
     var isMinimized: Bool {
-        let result = self.axWindow.getValue(.minimized) as? NSNumber
+        let result: NSNumber? = self.axWindow.getValue(.minimized)
         return result?.boolValue ?? false
     }
 
@@ -166,10 +172,10 @@ class Window {
     }
 
     var position: CGPoint {
-        var point: CGPoint = .zero
-        guard let value = self.axWindow.getValue(.position) else { return point }
-        AXValueGetValue(value as! AXValue, .cgPoint, &point) // Convert to CGPoint
-        return point
+        guard let result: CGPoint = self.axWindow.getValue(.position) else {
+            return .zero
+        }
+        return result
     }
 
     @discardableResult
@@ -178,10 +184,10 @@ class Window {
     }
 
     var size: CGSize {
-        var size: CGSize = .zero
-        guard let value = self.axWindow.getValue(.size) else { return size }
-        AXValueGetValue(value as! AXValue, .cgSize, &size) // Convert to CGSize
-        return size
+        guard let result: CGSize = self.axWindow.getValue(.size) else {
+            return .zero
+        }
+        return result
     }
 
     @discardableResult

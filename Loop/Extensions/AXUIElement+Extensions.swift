@@ -10,36 +10,29 @@ import SwiftUI
 extension AXUIElement {
     static let systemWide = AXUIElementCreateSystemWide()
 
-    func getValue(_ attribute: NSAccessibility.Attribute) -> AnyObject? {
+    func getValue<T>(_ attribute: NSAccessibility.Attribute) -> T? {
         var value: AnyObject?
         let result = AXUIElementCopyAttributeValue(self, attribute as CFString, &value)
-        if result == .success {
-            return value
+        
+        if result == .noValue || result == .attributeUnsupported {
+            return nil
         }
-        return nil
+
+        guard result == .success else {
+            return nil
+        }
+
+        guard let unpackedValue = (unpackAXValue(value!) as? T) else {
+            return nil
+        }
+
+        return unpackedValue
     }
 
     @discardableResult
-    func setValue(_ attribute: NSAccessibility.Attribute, value: AnyObject) -> Bool {
-        let result = AXUIElementSetAttributeValue(self, attribute as CFString, value)
+    func setValue(_ attribute: NSAccessibility.Attribute, value: Any) -> Bool {
+        let result = AXUIElementSetAttributeValue(self, attribute as CFString, packAXValue(value))
         return result == .success
-    }
-
-    @discardableResult
-    func setValue(_ attribute: NSAccessibility.Attribute, value: Bool) -> Bool {
-        setValue(attribute, value: value as CFBoolean)
-    }
-
-    @discardableResult
-    func setValue(_ attribute: NSAccessibility.Attribute, value: CGPoint) -> Bool {
-        guard let axValue = AXValue.from(value: value, type: .cgPoint) else { return false }
-        return setValue(attribute, value: axValue)
-    }
-
-    @discardableResult
-    func setValue(_ attribute: NSAccessibility.Attribute, value: CGSize) -> Bool {
-        guard let axValue = AXValue.from(value: value, type: .cgSize) else { return false }
-        return setValue(attribute, value: axValue)
     }
 
     func performAction(_ action: String) {
@@ -62,18 +55,69 @@ extension AXUIElement {
         }
         return nil
     }
+
+    private func packAXValue(_ value: Any) -> AnyObject {
+        switch value {
+        case let val as Window:
+            return val.axWindow
+        case let val as Bool:
+            return val as CFBoolean
+        case var val as CFRange:
+            return AXValueCreate(AXValueType(rawValue: kAXValueCFRangeType)!, &val)!
+        case var val as CGPoint:
+            return AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!, &val)!
+        case var val as CGRect:
+            return AXValueCreate(AXValueType(rawValue: kAXValueCGRectType)!, &val)!
+        case var val as CGSize:
+            return AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!, &val)!
+        default:
+            return value as AnyObject
+        }
+    }
+
+    private func unpackAXValue(_ value: AnyObject) -> Any {
+        switch CFGetTypeID(value) {
+        case AXUIElementGetTypeID():
+            return value as! AXUIElement
+        case AXValueGetTypeID():
+            let type = AXValueGetType(value as! AXValue)
+            switch type {
+            case .axError:
+                var result: AXError = .success
+                let success = AXValueGetValue(value as! AXValue, type, &result)
+                assert(success)
+                return result
+            case .cfRange:
+                var result: CFRange = CFRange()
+                let success = AXValueGetValue(value as! AXValue, type, &result)
+                assert(success)
+                return result
+            case .cgPoint:
+                var result: CGPoint = CGPoint.zero
+                let success = AXValueGetValue(value as! AXValue, type, &result)
+                assert(success)
+                return result
+            case .cgRect:
+                var result: CGRect = CGRect.zero
+                let success = AXValueGetValue(value as! AXValue, type, &result)
+                assert(success)
+                return result
+            case .cgSize:
+                var result: CGSize = CGSize.zero
+                let success = AXValueGetValue(value as! AXValue, type, &result)
+                assert(success)
+                return result
+            default:
+                return value
+            }
+        default:
+            return value
+        }
+    }
 }
 
 extension NSAccessibility.Attribute {
     static let fullScreen: NSAccessibility.Attribute = .init(rawValue: "AXFullScreen")
     static let enhancedUserInterface = NSAccessibility.Attribute(rawValue: "AXEnhancedUserInterface")
     static let windowIds = NSAccessibility.Attribute(rawValue: "AXWindowsIDs")
-}
-
-extension AXValue {
-    static func from(value: Any, type: AXValueType) -> AXValue? {
-        withUnsafePointer(to: value) { ptr in
-            AXValueCreate(type, ptr)
-        }
-    }
 }

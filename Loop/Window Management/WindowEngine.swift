@@ -139,8 +139,8 @@ enum WindowEngine {
 
     static func windowAtPosition(_ position: CGPoint) -> Window? {
         if let element = AXUIElement.systemWide.getElementAtPosition(position),
-           let windowElement = element.getValue(.window),
-           let window = Window(element: windowElement as! AXUIElement) {
+           let windowElement: AXUIElement = element.getValue(.window),
+           let window = Window(element: windowElement) {
             return window
         }
 
