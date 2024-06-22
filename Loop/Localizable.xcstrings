@@ -1009,6 +1009,12 @@
     },
     "Contributors on GitHub" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contribuidores en GitHub"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2999,6 +3005,12 @@
     },
     "Initial Size" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño inicial"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3816,6 +3828,12 @@
     },
     "Position" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posición"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3844,6 +3862,12 @@
     },
     "Preserve Size" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conservar tamaño"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4933,6 +4957,12 @@
     },
     "Size" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño"
+          }
+        },
         "it" : {
           "stringUnit" : {
             "state" : "translated",

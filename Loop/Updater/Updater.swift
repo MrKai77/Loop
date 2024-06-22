@@ -57,12 +57,12 @@ class Updater: ObservableObject {
             if let latestRelease = availableReleases.first {
                 let currentVersion = Bundle.main.appVersion
 
-                if latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending {
+//                if latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending {
                     updateState = .available
                     processChangelog(response.body)
-                } else {
-                    updateState = .unavailable
-                }
+//                } else {
+//                    updateState = .unavailable
+//                }
             }
         } catch {
             NSLog("Error: \(error.localizedDescription)")

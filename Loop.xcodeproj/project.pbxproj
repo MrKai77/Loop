@@ -521,7 +521,6 @@
 				"zh-HK",
 				it,
 				"pt-BR",
-				de,
 				es,
 				ru,
 			);
