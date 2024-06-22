@@ -14,7 +14,7 @@ enum CustomWindowActionSizeMode: Int, Codable, CaseIterable, Identifiable {
     case preserveSize = 1
     case initialSize = 2
 
-    var name: String {
+    var name: LocalizedStringKey {
         switch self {
         case .custom:
             "Custom"

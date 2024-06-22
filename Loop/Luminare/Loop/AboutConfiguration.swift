@@ -55,7 +55,7 @@ class AboutConfigurationModel: ObservableObject {
             avatar: Image(.jsdev)
         ),
         .init(
-            "Contributors on GitHub",
+            .init(localized: "Contributors on GitHub"),
             "Some features, ideas, and bug fixes",
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
             avatar: Image(.github)
@@ -173,7 +173,7 @@ struct AboutConfigurationView: View {
 
             // I do not have the code for you to automatically check, it is hardcoded though...
 //            LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
-//            LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
+            LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
         }
 
         LuminareSection {
