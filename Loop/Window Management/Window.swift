@@ -27,6 +27,8 @@ class Window {
     let cgWindowID: CGWindowID
     let nsRunningApplication: NSRunningApplication?
 
+    var observer: Observer?
+
     init(element: AXUIElement) throws {
         self.axWindow = element
 
@@ -55,6 +57,12 @@ class Window {
             throw WindowError.invalidWindow
         }
         try self.init(element: window)
+    }
+
+    deinit {
+        if let observer = self.observer {
+            observer.stop()
+        }
     }
 
     var role: NSAccessibility.Role? {
@@ -286,6 +294,26 @@ class Window {
 
         if enhancedUI {
             self.enhancedUserInterface = true
+        }
+    }
+
+    public func createObserver(_ callback: @escaping Observer.Callback) -> Observer? {
+        do {
+            return try Observer(processID: try self.axWindow.getPID()!, callback: callback)
+        } catch AXError.invalidUIElement {
+            return nil
+        } catch let error {
+            fatalError("Caught unexpected error creating observer: \(error)")
+        }
+    }
+
+    public func createObserver(_ callback: @escaping Observer.CallbackWithInfo) -> Observer? {
+        do {
+            return try Observer(processID: try self.axWindow.getPID()!, callback: callback)
+        } catch AXError.invalidUIElement {
+            return nil
+        } catch let error {
+            fatalError("Caught unexpected error creating observer: \(error)")
         }
     }
 }

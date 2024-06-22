@@ -49,6 +49,7 @@
 		A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */; };
 		A85DDBDA2C1693D4008C103D /* WindowDirection+Snapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85DDBD92C1693D4008C103D /* WindowDirection+Snapping.swift */; };
 		A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* WindowDragManager.swift */; };
+		A867C20E2C26522B005831BC /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C20D2C26522B005831BC /* Observer.swift */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
 		A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* StageManager.swift */; };
 		A86A75102C253BBC004AA154 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A86A750F2C253BBC004AA154 /* Luminare */; };
@@ -136,6 +137,7 @@
 		A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A85DDBD92C1693D4008C103D /* WindowDirection+Snapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+Snapping.swift"; sourceTree = "<group>"; };
 		A864F4672AA660CD00579738 /* WindowDragManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragManager.swift; sourceTree = "<group>"; };
+		A867C20D2C26522B005831BC /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A869C1A02B38C6E600AD1A84 /* StageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManager.swift; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
 				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
 				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
+				A867C20D2C26522B005831BC /* Observer.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -566,6 +569,7 @@
 				A8D4327B2C13ED3C007BE4F2 /* Icon.swift in Sources */,
 				A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */,
 				A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */,
+				A867C20E2C26522B005831BC /* Observer.swift in Sources */,
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
 				A82B1AF62BD35C8500E2F3F9 /* BehaviorConfiguration.swift in Sources */,
 				A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */,
