@@ -59,6 +59,12 @@
             "value" : "%"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -82,6 +88,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@"
@@ -121,6 +133,12 @@
             "value" : "%1$@ %2$@"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -147,6 +165,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ è già in uso come tasto di attivazione."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ já está sendo usado como seu gatilho."
           }
         },
         "zh-Hans" : {
@@ -177,6 +201,12 @@
             "value" : "%@ posiziona la finestra leggermente al di sopra del centro assoluto, risultando più ergonomica per alcuni."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ coloca as janelas levemente acima do centro absoluto, o que pode ser mais ergonômico."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -200,6 +230,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -233,6 +269,12 @@
             "value" : "Informazioni"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobre"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -261,6 +303,12 @@
             "value" : "Colore dettagli"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cor de Destaque"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +335,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Accessibilità"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acesso à acessibilidade"
           }
         },
         "zh-Hans" : {
@@ -324,6 +378,12 @@
             "value" : "Per favore consenti l'accesso per poter ridimensionare le finestre."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, conceda acesso para redimensionar janelas."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -357,6 +417,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ ha bisogno del permesso di accessibilità"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Precisa de Permissões de Acessibilidade"
           }
         },
         "zh-Hans" : {
@@ -409,6 +475,12 @@
             "value" : "Avanzate"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avançado"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -435,6 +507,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Animazione ridimensionamento finestre"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animar o redimensionamento da janela"
           }
         },
         "zh-Hans" : {
@@ -465,6 +543,12 @@
             "value" : "Velocità animazione"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velocidade de animação"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -488,6 +572,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comportamento"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comportamento"
@@ -543,6 +633,12 @@
             "value" : "Spessore del bordo"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espessura da borda"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -569,6 +665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Inferiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inferior"
           }
         },
         "zh-Hans" : {
@@ -599,6 +701,12 @@
             "value" : "Ciclico inferiore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Percorrer para Baixo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -625,6 +733,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Non può essere abilitato quando l’anteprima è disabilitata."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não pode ser habilitado quando a prévia estiver desligada."
           }
         },
         "zh-Hans" : {
@@ -655,6 +769,12 @@
             "value" : "Cambia"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trocar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -681,6 +801,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Controlla la prossima volta!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifique na próxima vez!"
           }
         },
         "zh-Hans" : {
@@ -711,6 +837,12 @@
             "value" : "Ricerca aggiornamenti..."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verificar atualizações..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -737,6 +869,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chiudi"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fechar"
           }
         },
         "zh-Hans" : {
@@ -767,6 +905,12 @@
             "value" : "Colore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cor"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -793,6 +937,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configura spaziatura…"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurar preenchimento..."
           }
         },
         "zh-Hans" : {
@@ -823,6 +973,12 @@
             "value" : "Raggio degli angoli"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raio dos cantos"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -849,6 +1005,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Crediti"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créditos"
           }
         },
         "zh-Hans" : {
@@ -879,6 +1041,12 @@
             "value" : "Cursore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cursor"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -905,6 +1073,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizzata"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customizado"
           }
         },
         "zh-Hans" : {
@@ -935,6 +1109,12 @@
             "value" : "Ciclico personalizzato"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ciclo Customizado"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -961,6 +1141,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scorciatoia personalizzata"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinação Customizada"
           }
         },
         "zh-Hans" : {
@@ -991,6 +1177,12 @@
             "value" : "Personalizza l’azione di questa scorciatoia."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customize a ação dessa tecla."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1017,6 +1209,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizza la finestra di questa scorciatoia."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customize os atalhos desse quadro."
           }
         },
         "zh-Hans" : {
@@ -1047,6 +1245,12 @@
             "value" : "Personalizza il ciclo questa scorciatoia."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalize o que esta combinação de teclas alterna"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1073,6 +1277,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cicla scorciatoie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinação para Alternar"
           }
         },
         "zh-Hans" : {
@@ -1110,6 +1320,12 @@
             "value" : "Verrà inviata una notifica ogni volta che si sblocca una nuova icona."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você será notificado quando desbloquear um novo ícone."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1133,6 +1349,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Design"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Design"
@@ -1166,6 +1388,12 @@
             "value" : "Sviluppo"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desenvolvimento"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1192,6 +1420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Supporto sviluppo"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suporte de desenvolvimento"
           }
         },
         "zh-Hans" : {
@@ -1222,6 +1456,12 @@
             "value" : "Disabilita interazione con cursore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desabilitar interações com o cursor"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1248,6 +1488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dona"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doar"
           }
         },
         "zh-Hans" : {
@@ -1278,6 +1524,12 @@
             "value" : "Dona…"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doar..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1304,6 +1556,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attiva con doppio clic"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clique duplo para ativar"
           }
         },
         "zh-Hans" : {
@@ -1334,6 +1592,12 @@
             "value" : "Esclusioni"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplicativos Excluídos"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1360,6 +1624,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esporta"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar"
           }
         },
         "zh-Hans" : {
@@ -1390,6 +1660,12 @@
             "value" : "Barra dei menu"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Barra externa"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1416,6 +1692,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Veloce"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rápido"
           }
         },
         "zh-Hans" : {
@@ -1446,6 +1728,12 @@
             "value" : "Porta in primo piano durante il ridimensionamento"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focar na janela quando redimensionar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1474,6 +1762,12 @@
             "value" : "Generali"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geral"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1500,6 +1794,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sfumatura"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gradiente"
           }
         },
         "zh-Hans" : {
@@ -1552,6 +1852,12 @@
             "value" : "Metà"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metades"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1578,6 +1884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Feedback aptico"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback háptico"
           }
         },
         "zh-Hans" : {
@@ -1608,6 +1920,12 @@
             "value" : "Altezza"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altura"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1634,6 +1952,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nascondi dalla barra dei menu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esconder ícone da barra de menu"
           }
         },
         "zh-Hans" : {
@@ -1664,6 +1988,12 @@
             "value" : "Nascondi il menu finché non si seleziona una direzione"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esconder até a direção ser selecionada"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1690,6 +2020,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzi orizzontali"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terços Horizontais"
           }
         },
         "zh-Hans" : {
@@ -1720,6 +2056,12 @@
             "value" : "Icona"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ícone"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1746,6 +2088,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contributore icone"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contribuidor de Ícone"
           }
         },
         "zh-Hans" : {
@@ -1783,6 +2131,12 @@
             "value" : "Nera"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preto"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1816,6 +2170,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Buco nero"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buraco negro"
           }
         },
         "zh-Hans" : {
@@ -1853,6 +2213,12 @@
             "value" : "Classica"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clássico"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1886,6 +2252,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sviluppatore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desenvolvedor"
           }
         },
         "zh-Hans" : {
@@ -1923,6 +2295,12 @@
             "value" : "Olografica"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holográfico"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1956,6 +2334,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tasto"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tecla"
           }
         },
         "zh-Hans" : {
@@ -1993,6 +2377,12 @@
             "value" : "Maestro di Loop"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mestre Loop"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2028,6 +2418,12 @@
             "value" : "Loop meta"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta Loop"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2058,6 +2454,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neon"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Neon"
@@ -2098,6 +2500,12 @@
             "value" : "Pino rosé"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosé Pine"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2128,6 +2536,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simon"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simon"
@@ -2168,6 +2582,12 @@
             "value" : "Estate"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verão"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2201,6 +2621,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tramonto synthwave"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pôr do Sol Synthwave"
           }
         },
         "zh-Hans" : {
@@ -2238,6 +2664,12 @@
             "value" : "Bianca"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Branco"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2271,6 +2703,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai sbloccato una nuova icona: %@!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você desbloqueou um novo ícone: %@!"
           }
         },
         "zh-Hans" : {
@@ -2308,6 +2746,12 @@
             "value" : "Hai già utilizzato Loop 25 volte! Come ricompensa, ecco una nuova icona: %@. Continua ad usare Loop per sbloccarne altre!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você ja fez 25 loops! Aqui está um novo ícone como prêmio: %@. Continue dando loops para desbloquear novos ícones."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2343,6 +2787,12 @@
             "value" : "5000 loop conquistati! L'universo ha assistito alla nascita di un maestro di Loop! Goditi il tuo meritato premio: una nuova icona!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5000 loops conquistados! O universo testemunhou o nascimento de um mestre Loop! Aproveite sua merecida recompensa: um ícone totalmente novo!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2369,6 +2819,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importa"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar"
           }
         },
         "zh-Hans" : {
@@ -2399,6 +2855,12 @@
             "value" : "Includi versioni in fase di sviluppo"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir versões de desenvolvimento"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2425,6 +2887,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Includi spaziatura"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluir preenchimento"
           }
         },
         "zh-Hans" : {
@@ -2455,6 +2923,12 @@
             "value" : "Installa"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2481,6 +2955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Istantanea"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instantâneo"
           }
         },
         "zh-Hans" : {
@@ -2511,6 +2991,12 @@
             "value" : "Scorciatoie"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinações"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2537,6 +3023,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scorciatoie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Combinações"
           }
         },
         "zh-Hans" : {
@@ -2567,6 +3059,12 @@
             "value" : "Apri al login"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar com o sistema"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2593,6 +3091,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sinistro"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esquerda"
           }
         },
         "zh-Hans" : {
@@ -2623,6 +3127,12 @@
             "value" : "Ciclico sinistro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Percorrer para a Esquerda"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2646,6 +3156,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loop"
@@ -2679,6 +3195,12 @@
             "value" : "Che la Forza sia con te… la prossima volta!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que a Força esteja com você... na próxima vez!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2705,6 +3227,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attiva con clic centrale"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clique do meio para disparar"
           }
         },
         "zh-Hans" : {
@@ -2735,6 +3263,12 @@
             "value" : "Altro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mais"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2761,6 +3295,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta il cursore con la finestra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover cursor com a janela"
           }
         },
         "zh-Hans" : {
@@ -2791,6 +3331,12 @@
             "value" : "Nessuna applicazione esclusa"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem aplicações excluídas"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2817,6 +3363,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nessuna scorciatoia"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem combinações"
           }
         },
         "zh-Hans" : {
@@ -2847,6 +3399,12 @@
             "value" : "Nessuna novità, Comandante."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem informação, Comandante"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2873,6 +3431,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Niente di nuovo!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem atualizações!"
           }
         },
         "zh-Hans" : {
@@ -2903,6 +3467,12 @@
             "value" : "Nessuno"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2929,6 +3499,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Niente da ciclare"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nada para alternar"
           }
         },
         "zh-Hans" : {
@@ -2966,6 +3542,12 @@
             "value" : "Icona selezionata"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definir Ícone Atual"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2992,6 +3574,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invia una notifica quando si sbloccano nuove icone"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notificar quando desbloquear novos ícones"
           }
         },
         "zh-Hans" : {
@@ -3022,6 +3610,12 @@
             "value" : "Opzioni"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opções"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3048,6 +3642,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spaziatura"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preenchimento"
           }
         },
         "zh-Hans" : {
@@ -3078,6 +3678,12 @@
             "value" : "Permessi"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permissões"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3104,6 +3710,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Premi “Aggiungi” per aggiungere un elemento da ciclare"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressione \"adicionar\" para adicionar um item ao ciclo"
           }
         },
         "zh-Hans" : {
@@ -3134,6 +3746,12 @@
             "value" : "Premi “Aggiungi” per aggiungere una scorciatoia"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressione \"Adicionar\" para adicionar um atalho"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3160,6 +3778,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Premi “Aggiungi” per aggiungere un'applicazione"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pressione \"Adicionar\" para adicionar um aplicativo"
           }
         },
         "zh-Hans" : {
@@ -3190,6 +3814,12 @@
             "value" : "Anteprima"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prévia"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3213,6 +3843,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "px"
@@ -3246,6 +3882,12 @@
             "value" : "Quarti"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrantes"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3272,6 +3914,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esci"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sair"
           }
         },
         "zh-Hans" : {
@@ -3302,6 +3950,12 @@
             "value" : "Menu radiale"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu radial"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3328,6 +3982,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu radiale"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu Radial"
           }
         },
         "zh-Hans" : {
@@ -3380,6 +4040,12 @@
             "value" : "Ricordamelo dopo"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lembre-me mais tarde"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3430,6 +4096,12 @@
             "value" : "Richiedi…"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solicite..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3456,6 +4128,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rirpristina"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resetar"
           }
         },
         "zh-Hans" : {
@@ -3486,6 +4164,12 @@
             "value" : "Ridimensiona finestra sotto il cursore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redimensionar a janela embaixo do cursor"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3512,6 +4196,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ridimensiona..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redimensionar..."
           }
         },
         "zh-Hans" : {
@@ -3542,6 +4232,12 @@
             "value" : "Rispetta Stage Manager"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respeitar o Stage Manager"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3568,6 +4264,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riavvia per completare"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar para completar"
           }
         },
         "zh-Hans" : {
@@ -3598,6 +4300,12 @@
             "value" : "Ridimensiona la finestra durante lo spostamento"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar moldura da janela ao arrastar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3624,6 +4332,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Destro"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direita"
           }
         },
         "zh-Hans" : {
@@ -3654,6 +4368,12 @@
             "value" : "Ciclico destro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Percorrer para a Direita"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3680,6 +4400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cambio schermate"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternância de Telas"
           }
         },
         "zh-Hans" : {
@@ -3717,6 +4443,12 @@
             "value" : "s"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3743,6 +4475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invia feedback"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar Feedback"
           }
         },
         "zh-Hans" : {
@@ -3773,6 +4511,12 @@
             "value" : "Imposta tasti di attivazione..."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defina uma tecla de gatilho..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3799,6 +4543,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impostazioni"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurações"
           }
         },
         "zh-Hans" : {
@@ -3829,6 +4579,12 @@
             "value" : "Impostazioni…"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurações..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3855,6 +4611,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Condividi i tuoi feedback nella nostra pagina GitHub, dove puoi riportare bug, suggerire nuove funzioni, o fornirci altri input preziosi. Accettiamo anche donazioni se ritieni che Loop abbia migliorato il tuo workflow :)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartilhe comentários em nossa página do GitHub, onde você pode nos informar sobre quaisquer bugs, sugerir funcionalidades ou fornecer outras informações valiosas. Também aceitamos doações se você achar que o Loop melhorou seu fluxo de trabalho :)"
           }
         },
         "zh-Hans" : {
@@ -3885,6 +4647,12 @@
             "value" : "Mostra nel dock"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar na Dock"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3911,6 +4679,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostra anteprima durante l'utilizzo"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar prévia ao fazer loops"
           }
         },
         "zh-Hans" : {
@@ -3941,6 +4715,12 @@
             "value" : "Semplice"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simples"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3967,6 +4747,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incremento dimensione"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aumento de tamanho"
           }
         },
         "zh-Hans" : {
@@ -3997,6 +4783,12 @@
             "value" : "Fluida"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suave"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4025,6 +4817,12 @@
             "value" : "Funzioni, idee, e correzione di bug"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algumas funcionalidades, ideias e correções de bugs"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4048,6 +4846,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage Manager"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stage Manager"
@@ -4081,6 +4885,12 @@
             "value" : "Dimensione del menu"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamanho do Stage Manager"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4107,6 +4917,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resta all’erta, presto buone nuove!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha-se alerta, mais informações em breve!"
           }
         },
         "zh-Hans" : {
@@ -4137,6 +4953,12 @@
             "value" : "Proponi nuova icona"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sugerir novos ícones"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4160,6 +4982,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sistema"
@@ -4193,6 +5021,12 @@
             "value" : "Questo tasto è già in uso nei tasti di attivazione."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essa tecla já está sendo usada como gatilho."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4219,6 +5053,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questa combinazione è già in uso da %@."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esse atalho já está sendo usado por %@."
           }
         },
         "zh-Hans" : {
@@ -4249,6 +5089,12 @@
             "value" : "Questa combinazione è già in uso da un'altra scorciatoia personalizzata."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essa combinação já está sendo usado por outro atalho."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4275,6 +5121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La Forza è potente in questa versione!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Força está potente nessa versão!"
           }
         },
         "zh-Hans" : {
@@ -4305,6 +5157,12 @@
             "value" : "Tematizzazione"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customização"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4331,6 +5189,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spessore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espessura"
           }
         },
         "zh-Hans" : {
@@ -4361,6 +5225,12 @@
             "value" : "Questa funzione è ancora in fase di sviluppo."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta funcionalidade está em desenvolvimento."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4387,6 +5257,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questo non è l’aggiornamento che stavi aspettando!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essa não é a atualização que você está procurando!"
           }
         },
         "zh-Hans" : {
@@ -4417,6 +5293,12 @@
             "value" : "Superiore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Superior"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4443,6 +5325,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ciclico superiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternar para Cima"
           }
         },
         "zh-Hans" : {
@@ -4473,6 +5361,12 @@
             "value" : "Ritardo attivazione"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atraso do gatilho"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4499,6 +5393,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tasti di attivazione"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chave de Gatilho"
           }
         },
         "zh-Hans" : {
@@ -4529,6 +5429,12 @@
             "value" : "Usa coordinate"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar coordenadas"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4555,6 +5461,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usa centro macOS"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar o centro do MacOS"
           }
         },
         "zh-Hans" : {
@@ -4585,6 +5497,12 @@
             "value" : "Usa pixel"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar pixels"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4613,6 +5531,12 @@
             "value" : "Usa schermo con cursore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar a tela com o cursor"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4639,6 +5563,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Per l'utilizzo con barra dei menu personalizzata."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use isso se você estiver usando uma barra de menu customizada."
           }
         },
         "zh-Hans" : {
@@ -4675,6 +5605,12 @@
             "value" : "Versione %1$@ (%2$@)"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versão %1$@ (%2$@)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4701,6 +5637,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzi verticale"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terços Verticais"
           }
         },
         "zh-Hans" : {
@@ -4731,6 +5673,12 @@
             "value" : "Larghezza"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Largura"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4757,6 +5705,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finestra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Janela"
           }
         },
         "zh-Hans" : {
@@ -4794,6 +5748,12 @@
             "value" : "Quasi massimizza"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quase Maximizar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4827,6 +5787,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà inferiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metade Inferior"
           }
         },
         "zh-Hans" : {
@@ -4864,6 +5830,12 @@
             "value" : "Quarto inferiore sinistro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrante Inferior Esquerdo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4897,6 +5869,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quarto inferiore destro"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrante Inferior Direiro"
           }
         },
         "zh-Hans" : {
@@ -4934,6 +5912,12 @@
             "value" : "Terzo inferiore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terço Inferior"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4967,6 +5951,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi inferiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dois Terços Inferiores"
           }
         },
         "zh-Hans" : {
@@ -5004,6 +5994,12 @@
             "value" : "Centra"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centro"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5037,6 +6033,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizzata"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customizado"
           }
         },
         "zh-Hans" : {
@@ -5074,6 +6076,12 @@
             "value" : "Ciclico"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alternar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5107,6 +6115,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schermo intero"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tela cheia"
           }
         },
         "zh-Hans" : {
@@ -5144,6 +6158,12 @@
             "value" : "Ingrandisci inferiore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expandir para Baixo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5177,6 +6197,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci sinistro"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expandir para a Equerda"
           }
         },
         "zh-Hans" : {
@@ -5214,6 +6240,12 @@
             "value" : "Ingrandisci destro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expandir para a Direita"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5247,6 +6279,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci superiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expandir para Cima"
           }
         },
         "zh-Hans" : {
@@ -5284,6 +6322,12 @@
             "value" : "Nascondi"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esconder"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5317,6 +6361,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzo orizzontale centrale"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terço Central Horizontal"
           }
         },
         "zh-Hans" : {
@@ -5354,6 +6404,12 @@
             "value" : "Ripristina"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadro Inicial"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5387,6 +6443,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mais largo"
           }
         },
         "zh-Hans" : {
@@ -5424,6 +6486,12 @@
             "value" : "Metà sinistra"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metade Esquerda"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5457,6 +6525,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzo sinistro"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terço Esquerdo"
           }
         },
         "zh-Hans" : {
@@ -5494,6 +6568,12 @@
             "value" : "Due terzi sinistri"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dois terços à Esquerda"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5527,6 +6607,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Centra (macOS)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centro do MacOS"
           }
         },
         "zh-Hans" : {
@@ -5564,6 +6650,12 @@
             "value" : "Massimizza"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximizar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5597,6 +6689,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimizza"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimizar"
           }
         },
         "zh-Hans" : {
@@ -5634,6 +6732,12 @@
             "value" : "Sposta sotto"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover para Baixo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5667,6 +6771,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta a sinistra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover para a Esquerda"
           }
         },
         "zh-Hans" : {
@@ -5704,6 +6814,12 @@
             "value" : "Sposta a destra"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover para a Direita"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5737,6 +6853,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta sopra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mover para Cima"
           }
         },
         "zh-Hans" : {
@@ -5774,6 +6896,12 @@
             "value" : "Schermata successiva"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Próxima Tela"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5807,6 +6935,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nessuna azione"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem Ação"
           }
         },
         "zh-Hans" : {
@@ -5844,6 +6978,12 @@
             "value" : "Schermata precedente"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tela Anterior"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5877,6 +7017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà destra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metade Direita"
           }
         },
         "zh-Hans" : {
@@ -5914,6 +7060,12 @@
             "value" : "Terzo destro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terço Direito"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5947,6 +7099,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi destri"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dois Terços à Direita"
           }
         },
         "zh-Hans" : {
@@ -5984,6 +7142,12 @@
             "value" : "Riduci inferiore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encolher para Baixo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6017,6 +7181,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riduci sinistro"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encolher para a Esquerda"
           }
         },
         "zh-Hans" : {
@@ -6054,6 +7224,12 @@
             "value" : "Riduci destro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encolher para a Direita"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6087,6 +7263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riduci superiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encolher para Cima"
           }
         },
         "zh-Hans" : {
@@ -6124,6 +7306,12 @@
             "value" : "Riduci"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menor"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6157,6 +7345,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà superiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metade Superior"
           }
         },
         "zh-Hans" : {
@@ -6194,6 +7388,12 @@
             "value" : "Quarto superiore sinistro"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrante Superior Esquerdo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6227,6 +7427,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quarto superiore destro"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quadrante Superior Direito"
           }
         },
         "zh-Hans" : {
@@ -6264,6 +7470,12 @@
             "value" : "Terzo superiore"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terço Superior"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6297,6 +7509,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi superiore"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dois Terços Superiores"
           }
         },
         "zh-Hans" : {
@@ -6334,6 +7552,12 @@
             "value" : "Annulla"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desfazer"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6369,6 +7593,12 @@
             "value" : "Terzo verticale centrale"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terço Vertical do Centro"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6395,6 +7625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spaziatura finestra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espaçamento entre janelas"
           }
         },
         "zh-Hans" : {
@@ -6425,6 +7661,12 @@
             "value" : "Manipolazione finestra"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manipulação de Janelas"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6451,6 +7693,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aggancio finestra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encaixe de janelas"
           }
         },
         "zh-Hans" : {
@@ -6481,6 +7729,12 @@
             "value" : "Durante lo spostamento si potrà ancora vedere l’anteprima."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O encaixe de janelas continuará usando a prévia."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6504,6 +7758,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X"
+          }
+        },
+        "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "X"
@@ -6537,6 +7797,12 @@
             "value" : "Y"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6563,6 +7829,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Puoi usare un massimo di %lld tasti nelle scorciatoie, compresi i tasti di attivazione."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você pode usar até %lld teclas em um atalho, incluindo a tecla de gatilho."
           }
         },
         "zh-Hans" : {
@@ -6593,6 +7865,12 @@
             "value" : "Puoi usare un massimo di %lld tasti come tasti di attivazione."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você pode usar até %lld teclas no seu gatilho."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6619,6 +7897,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tutto aggiornato :)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O aplicativo está atualizado :)"
           }
         },
         "zh-Hans" : {
@@ -6649,6 +7933,12 @@
             "value" : "Hai già il miglior Loop possibile!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você já está com o melhor Loop!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6675,6 +7965,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai il meglio, nessun aggiornamento necessario!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você está com o precioso. Não é necessário atualizar!"
           }
         },
         "zh-Hans" : {
@@ -6705,6 +8001,12 @@
             "value" : "Hai livellato fino al massimo!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você está no nível máximo!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6731,6 +8033,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai usato Loop %lld volte!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você já fez %lld loops!"
           }
         },
         "zh-Hans" : {
