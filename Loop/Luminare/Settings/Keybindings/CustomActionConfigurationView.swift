@@ -19,7 +19,7 @@ struct CustomActionConfigurationView: View {
     private enum Tab: CaseIterable {
         case position, size
 
-        var name: String {
+        var name: LocalizedStringKey {
             switch self {
             case .position:
                 "Position"
