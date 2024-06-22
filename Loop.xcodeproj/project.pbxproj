@@ -106,6 +106,7 @@
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
 		A8063A722B19891900EAB3D9 /* grid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = grid.metal; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		A80AB7E22C276E0300BE0360 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Port.swift"; sourceTree = "<group>"; };
 		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
 		A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarResizeButton.swift; sourceTree = "<group>"; };
@@ -180,7 +181,6 @@
 		A8E8903B2BA7AAFE006C5074 /* NSEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSEvent+Extensions.swift"; sourceTree = "<group>"; };
 		A8EF1F08299C87DF00633440 /* IconManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconManager.swift; sourceTree = "<group>"; };
 		A8F0125A2AEDD7660017307F /* WindowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAction.swift; sourceTree = "<group>"; };
-		A8F063712985B2730010C33D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A8F1E9652C253F5B00AAF871 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A8F1E9682C253F8D00AAF871 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A8F1E96A2C253F9900AAF871 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -450,9 +450,8 @@
 				A80900D12AA3F9F20085C63B /* Utilities */,
 				A8330AD52A3AC29C00673C8D /* Extensions */,
 				A8E59C3C297F5E9B0064D4BA /* Assets.xcassets */,
-				A8F063712985B2730010C33D /* Info.plist */,
-				A8F1E9672C253F8D00AAF871 /* InfoPlist.strings */,
 				A8E59C41297F5E9B0064D4BA /* Loop.entitlements */,
+				A8F1E9672C253F8D00AAF871 /* InfoPlist.strings */,
 				A8F1E9652C253F5B00AAF871 /* Localizable.xcstrings */,
 				A8E59C3E297F5E9B0064D4BA /* Preview Content */,
 			);
@@ -522,6 +521,7 @@
 				it,
 				"pt-BR",
 				es,
+				"en-GB",
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
@@ -644,6 +644,7 @@
 				A8F1E9682C253F8D00AAF871 /* it */,
 				A8F1E96A2C253F9900AAF871 /* zh-HK */,
 				A8F1E96B2C253FA200AAF871 /* zh-Hans */,
+				A80AB7E22C276E0300BE0360 /* en-GB */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -790,7 +791,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Loop/Info.plist;
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_CFBundleDisplayName = Loop;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Loop";
@@ -825,7 +826,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Loop/Info.plist;
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_CFBundleDisplayName = Loop;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Loop";

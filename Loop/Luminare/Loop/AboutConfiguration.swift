@@ -122,7 +122,7 @@ struct AboutConfigurationView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Loop")
+                        Text(Bundle.main.appName)
                             .fontWeight(.medium)
 
                         Text(
