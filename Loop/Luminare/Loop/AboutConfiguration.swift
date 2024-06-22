@@ -55,7 +55,7 @@ class AboutConfigurationModel: ObservableObject {
             avatar: Image(.jsdev)
         ),
         .init(
-            "Contributors on GitHub",
+            .init(localized: "Contributors on GitHub"),
             "Some features, ideas, and bug fixes",
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
             avatar: Image(.github)

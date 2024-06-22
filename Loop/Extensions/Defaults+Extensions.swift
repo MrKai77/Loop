@@ -57,22 +57,22 @@ extension Defaults.Keys {
     static let keybinds = Key<[WindowAction]>("keybinds", default: [
         WindowAction(.maximize, keybind: [.kVK_Space]),
         WindowAction(.center, keybind: [.kVK_Return]),
-        WindowAction(.init(localized: .init("Top Cycle", defaultValue: "Top Cycle")), [
+        WindowAction(.init(localized: "Top Cycle"), [
             .init(.topHalf),
             .init(.topThird),
             .init(.topTwoThirds)
         ], [.kVK_UpArrow]),
-        WindowAction(.init(localized: .init("Bottom Cycle", defaultValue: "Bottom Cycle")), [
+        WindowAction(.init(localized: "Bottom Cycle"), [
             .init(.bottomHalf),
             .init(.bottomThird),
             .init(.bottomTwoThirds)
         ], [.kVK_DownArrow]),
-        WindowAction(.init(localized: .init("Right Cycle", defaultValue: "Right Cycle")), [
+        WindowAction(.init(localized: "Right Cycle"), [
             .init(.rightHalf),
             .init(.rightThird),
             .init(.rightTwoThirds)
         ], [.kVK_RightArrow]),
-        WindowAction(.init(localized: .init("Left Cycle", defaultValue: "Left Cycle")), [
+        WindowAction(.init(localized: "Left Cycle"), [
             .init(.leftHalf),
             .init(.leftThird),
             .init(.leftTwoThirds)
