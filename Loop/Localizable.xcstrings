@@ -1015,6 +1015,12 @@
             "value" : "Collaboratori su GitHub"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contribuidores no GitHub"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2999,6 +3005,12 @@
             "value" : "Misure iniziali"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamanho Inicial"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3810,6 +3822,12 @@
             "value" : "Posizione"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posição"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3830,6 +3848,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preserva misure"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preservar Tamanho"
           }
         },
         "zh-Hans" : {
@@ -4913,6 +4937,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dimensione"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamanho"
           }
         },
         "zh-Hans" : {
