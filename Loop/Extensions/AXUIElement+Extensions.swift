@@ -61,19 +61,19 @@ extension AXUIElement {
     private func packAXValue(_ value: Any) -> AnyObject {
         switch value {
         case let val as Window:
-            return val.axWindow
+            val.axWindow
         case let val as Bool:
-            return val as CFBoolean
+            val as CFBoolean
         case var val as CFRange:
-            return AXValueCreate(AXValueType(rawValue: kAXValueCFRangeType)!, &val)!
+            AXValueCreate(AXValueType(rawValue: kAXValueCFRangeType)!, &val)!
         case var val as CGPoint:
-            return AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!, &val)!
+            AXValueCreate(AXValueType(rawValue: kAXValueCGPointType)!, &val)!
         case var val as CGRect:
-            return AXValueCreate(AXValueType(rawValue: kAXValueCGRectType)!, &val)!
+            AXValueCreate(AXValueType(rawValue: kAXValueCGRectType)!, &val)!
         case var val as CGSize:
-            return AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!, &val)!
+            AXValueCreate(AXValueType(rawValue: kAXValueCGSizeType)!, &val)!
         default:
-            return value as AnyObject
+            value as AnyObject
         }
     }
 
@@ -90,22 +90,22 @@ extension AXUIElement {
                 assert(success)
                 return result
             case .cfRange:
-                var result: CFRange = CFRange()
+                var result = CFRange()
                 let success = AXValueGetValue(value as! AXValue, type, &result)
                 assert(success)
                 return result
             case .cgPoint:
-                var result: CGPoint = CGPoint.zero
+                var result = CGPoint.zero
                 let success = AXValueGetValue(value as! AXValue, type, &result)
                 assert(success)
                 return result
             case .cgRect:
-                var result: CGRect = CGRect.zero
+                var result = CGRect.zero
                 let success = AXValueGetValue(value as! AXValue, type, &result)
                 assert(success)
                 return result
             case .cgSize:
-                var result: CGSize = CGSize.zero
+                var result = CGSize.zero
                 let success = AXValueGetValue(value as! AXValue, type, &result)
                 assert(success)
                 return result

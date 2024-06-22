@@ -122,7 +122,6 @@ enum WindowEngine {
             print("Failed to get window at cursor: \(error.localizedDescription)")
         }
 
-
         if result == nil {
             do {
                 result = try WindowEngine.getFrontmostWindow()

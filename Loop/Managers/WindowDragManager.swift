@@ -182,9 +182,7 @@ class WindowDragManager {
     }
 
     private func attemptWindowSnap(_ window: Window) {
-        guard
-            let screen = NSScreen.screenWithMouse
-        else {
+        guard let screen = NSScreen.screenWithMouse else {
             return
         }
 

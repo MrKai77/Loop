@@ -15,7 +15,6 @@
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; settings = {ATTRIBUTES = (Required, ); }; };
 		A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397D32A932993006D2796 /* MenuBarIconView.swift */; };
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
-		A8063A732B19891900EAB3D9 /* grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = A8063A722B19891900EAB3D9 /* grid.metal */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */; };
 		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
@@ -103,7 +102,6 @@
 		A80397D32A932993006D2796 /* MenuBarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
-		A8063A722B19891900EAB3D9 /* grid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = grid.metal; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Port.swift"; sourceTree = "<group>"; };
 		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
@@ -222,7 +220,6 @@
 				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
 				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
 				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
-				A8063A722B19891900EAB3D9 /* grid.metal */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -620,7 +617,6 @@
 				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,
 				A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */,
 				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
-				A8063A732B19891900EAB3D9 /* grid.metal in Sources */,
 				A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */,
 				A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */,
 				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
