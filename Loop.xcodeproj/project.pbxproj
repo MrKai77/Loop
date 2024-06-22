@@ -522,7 +522,6 @@
 				it,
 				"pt-BR",
 				es,
-				ru,
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
