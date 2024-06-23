@@ -28,6 +28,8 @@ body:
     attributes:
       label: Final Checks
       options:
+        - label: My issue is written in **English**
+          required: true
         - label: My issue title is descriptive
           required: true
         - label: This is a single feature request (multiple feature requests should be reported individually)

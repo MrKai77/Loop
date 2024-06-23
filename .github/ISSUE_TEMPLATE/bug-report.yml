@@ -71,6 +71,8 @@ body:
     attributes:
       label: Final Checks
       options:
+        - label: My issue is written in **English**
+          required: true
         - label: My issue title is descriptive
           required: true
         - label: This is a single bug (multiple bugs should be reported individually)
