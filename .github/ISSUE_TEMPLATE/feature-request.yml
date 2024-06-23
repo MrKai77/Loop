@@ -28,7 +28,7 @@ body:
     attributes:
       label: Final Checks
       options:
-        - label: My issue is written in **English**
+        - label: My issue is written in English
           required: true
         - label: My issue title is descriptive
           required: true

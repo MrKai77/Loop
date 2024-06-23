@@ -27,5 +27,5 @@ body:
     attributes:
       label: Final Checks
       options:
-        - label: My seggestion is written in **English**
+        - label: My suggestion is written in English
           required: true
