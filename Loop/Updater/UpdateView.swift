@@ -136,32 +136,27 @@ struct UpdateView: View {
     }
 
     func versionChangeView() -> some View {
-        ZStack {
-            if colorScheme == .dark {
-                HStack {
-                    Text(Bundle.main.appVersion)
+        HStack {
+            if updater.includeDevelopmentVersions, let latestRelease = updater.availableReleases.first {
+                // Use the appBuild property to get the current build version
+                let currentBuildVersion = Bundle.main.appBuild
+                let latestBuildVersion = latestRelease.buildNumber ?? "Unknown"
+                Group {
+                    Text("Current Build: \(currentBuildVersion)")
                     Image(systemName: "arrow.right")
-                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
+                    Text("New Build: \(latestBuildVersion)")
                 }
-                .foregroundStyle(.primary.opacity(0.7))
-                .blendMode(.overlay)
             } else {
-                HStack {
-                    Text(Bundle.main.appVersion)
+                // Display the stable version
+                Group {
+                    Text("Current version: \(Bundle.main.appVersion)")
                     Image(systemName: "arrow.right")
-                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
+                    Text("Version \(updater.availableReleases.first?.tagName ?? "Unknown")")
                 }
-                .foregroundStyle(.primary.opacity(0.7))
-                .blendMode(.overlay)
-
-                HStack {
-                    Text(Bundle.main.appVersion)
-                    Image(systemName: "arrow.right")
-                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
-                }
-                .blendMode(.overlay)
             }
         }
+        .foregroundStyle(.primary.opacity(0.7))
+        .blendMode(.overlay)
     }
 
     func changelogView() -> some View {

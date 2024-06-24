@@ -327,6 +327,15 @@
         }
       }
     },
+    "99 problems, updates ain't one." : {
+
+    },
+    "A penny for your... lack of updates." : {
+
+    },
+    "A watched pot never... updates." : {
+
+    },
     "About" : {
       "localizations" : {
         "en-GB" : {
@@ -621,6 +630,15 @@
         }
       }
     },
+    "All systems are a-go!" : {
+
+    },
+    "All work and no... no updates..." : {
+
+    },
+    "An apple a day keeps the... updates away." : {
+
+    },
     "Animate window resize" : {
       "localizations" : {
         "en-GB" : {
@@ -700,6 +718,9 @@
           }
         }
       }
+    },
+    "Beggars can't be... updaters." : {
+
     },
     "Behavior" : {
       "localizations" : {
@@ -1300,6 +1321,12 @@
           }
         }
       }
+    },
+    "Current Build: %@" : {
+
+    },
+    "Current version: %@" : {
+
     },
     "Cursor" : {
       "localizations" : {
@@ -1948,6 +1975,9 @@
         }
       }
     },
+    "Engage! ...in the current version, it's the latest." : {
+
+    },
     "Excluded Apps" : {
       "localizations" : {
         "en-GB" : {
@@ -2507,6 +2537,15 @@
           }
         }
       }
+    },
+    "I swear it was here somewhere... one sec" : {
+
+    },
+    "I... uhh... one sec I lost it" : {
+
+    },
+    "I'm giving it all she's got, Captain! No updates!" : {
+
     },
     "Icon" : {
       "localizations" : {
@@ -3427,6 +3466,9 @@
         }
       }
     },
+    "In a galaxy far, far away... still no updates!" : {
+
+    },
     "Include development versions" : {
       "localizations" : {
         "en-GB" : {
@@ -3626,6 +3668,9 @@
           }
         }
       }
+    },
+    "Just a small town app, same old version" : {
+
     },
     "Keybindings" : {
       "localizations" : {
@@ -3868,6 +3913,9 @@
         }
       }
     },
+    "Loop is in its prime!" : {
+
+    },
     "May the Force be with you... next time!" : {
       "localizations" : {
         "en-GB" : {
@@ -3948,6 +3996,9 @@
         }
       }
     },
+    "Money can't buy... updates." : {
+
+    },
     "More" : {
       "localizations" : {
         "en-GB" : {
@@ -4027,6 +4078,12 @@
           }
         }
       }
+    },
+    "New Build: %@" : {
+
+    },
+    "New version? Sorry, we're too attached to this one." : {
+
     },
     "No excluded applications" : {
       "localizations" : {
@@ -4148,6 +4205,9 @@
         }
       }
     },
+    "No updates in Ba Sing Se" : {
+
+    },
     "No updates yet!" : {
       "localizations" : {
         "en-GB" : {
@@ -4187,6 +4247,12 @@
           }
         }
       }
+    },
+    "No updates, Mr. Anderson" : {
+
+    },
+    "No updates? Great Scott!" : {
+
     },
     "None" : {
       "localizations" : {
@@ -4355,6 +4421,9 @@
         }
       }
     },
+    "One does not simply update Loop." : {
+
+    },
     "Options" : {
       "localizations" : {
         "en-GB" : {
@@ -4394,6 +4463,9 @@
           }
         }
       }
+    },
+    "Our app is on a digital diet. No new bytes allowed." : {
+
     },
     "Padding" : {
       "localizations" : {
@@ -5315,6 +5387,9 @@
         }
       }
     },
+    "Riding at warp speed, no updates in sight!" : {
+
+    },
     "Right" : {
       "localizations" : {
         "en-GB" : {
@@ -6122,6 +6197,9 @@
         }
       }
     },
+    "Sweet dreams are made of... no updates" : {
+
+    },
     "System" : {
       "localizations" : {
         "en-GB" : {
@@ -6322,6 +6400,12 @@
         }
       }
     },
+    "The odds are ever in your favor, no updates today!" : {
+
+    },
+    "The update fairy skipped us this week." : {
+
+    },
     "Theming" : {
       "localizations" : {
         "en-GB" : {
@@ -6401,6 +6485,9 @@
           }
         }
       }
+    },
+    "This app is more up to date than my diary entries!" : {
+
     },
     "This feature is still under development." : {
       "localizations" : {
@@ -6642,6 +6729,9 @@
         }
       }
     },
+    "Updates? In this economy?" : {
+
+    },
     "Use coordinates" : {
       "localizations" : {
         "en-GB" : {
@@ -6842,6 +6932,9 @@
         }
       }
     },
+    "Version %@" : {
+
+    },
     "Version %@ (%@)" : {
       "localizations" : {
         "en" : {
@@ -6927,6 +7020,12 @@
           }
         }
       }
+    },
+    "We’ll be back. With updates... later" : {
+
+    },
+    "We've misplaced the 'Update' button. Oops!" : {
+
     },
     "Width" : {
       "localizations" : {
@@ -9330,6 +9429,9 @@
         }
       }
     },
+    "Winter is coming. Updates aren't yet." : {
+
+    },
     "X" : {
       "localizations" : {
         "en-GB" : {
@@ -9489,6 +9591,12 @@
           }
         }
       }
+    },
+    "You're cruising on the latest tech!" : {
+
+    },
+    "You're in the clear, no updates in the atmosphere!" : {
+
     },
     "You're up to date :)" : {
       "localizations" : {
@@ -9689,6 +9797,9 @@
           }
         }
       }
+    },
+    "Your Loop is loopier than ever, no updates found!" : {
+
     }
   },
   "version" : "1.0"
