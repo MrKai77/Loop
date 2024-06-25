@@ -137,22 +137,14 @@ struct UpdateView: View {
 
     func versionChangeView() -> some View {
         HStack {
-            if updater.includeDevelopmentVersions, let latestRelease = updater.availableReleases.first {
-                // Use the appBuild property to get the current build version
-                let currentBuildVersion = Bundle.main.appBuild
-                let latestBuildVersion = latestRelease.buildNumber ?? "Unknown"
-                Group {
-                    Text("Current Build: \(currentBuildVersion)")
-                    Image(systemName: "arrow.right")
-                    Text("New Build: \(latestBuildVersion)")
-                }
+            if updater.targetRelease?.prerelease ?? true {
+                Text("\(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
+                Image(systemName: "arrow.right")
+                Text("\(updater.targetRelease?.tagName ?? "Unknown") (\(updater.targetRelease?.buildNumber ?? 0))")
             } else {
-                // Display the stable version
-                Group {
-                    Text("Current version: \(Bundle.main.appVersion)")
-                    Image(systemName: "arrow.right")
-                    Text("Version \(updater.availableReleases.first?.tagName ?? "Unknown")")
-                }
+                Text(Bundle.main.appVersion ?? "Unknown")
+                Image(systemName: "arrow.right")
+                Text(updater.targetRelease?.tagName ?? "Unknown")
             }
         }
         .foregroundStyle(.primary.opacity(0.7))

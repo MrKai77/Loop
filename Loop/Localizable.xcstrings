@@ -161,6 +161,16 @@
         }
       }
     },
+    "%@ (%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$lld)"
+          }
+        }
+      }
+    },
     "%@ %@" : {
       "localizations" : {
         "en" : {
@@ -1321,12 +1331,6 @@
           }
         }
       }
-    },
-    "Current Build: %@" : {
-
-    },
-    "Current version: %@" : {
-
     },
     "Cursor" : {
       "localizations" : {
@@ -4078,9 +4082,6 @@
           }
         }
       }
-    },
-    "New Build: %@" : {
-
     },
     "New version? Sorry, we're too attached to this one." : {
 
@@ -6932,10 +6933,8 @@
         }
       }
     },
-    "Version %@" : {
-
-    },
     "Version %@ (%@)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6977,6 +6976,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@版本（%2$@）"
+          }
+        }
+      }
+    },
+    "Version %@ (%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version %1$@ (%2$lld)"
           }
         }
       }

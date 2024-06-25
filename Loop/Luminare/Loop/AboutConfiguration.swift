@@ -16,12 +16,6 @@ class AboutConfigurationModel: ObservableObject {
 
     @Published var isHoveringOverVersionCopier = false
 
-    @Published var includeDevelopmentVersions = Defaults[.includeDevelopmentVersions] {
-        didSet {
-            Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
-        }
-    }
-
     @Published var updateButtonTitle: LocalizedStringKey = "Check for updates…"
 
     let credits: [CreditItem] = [
@@ -124,7 +118,7 @@ class AboutConfigurationModel: ObservableObject {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(
-            "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+            "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))",
             forType: NSPasteboard.PasteboardType.string
         )
     }
@@ -171,7 +165,7 @@ struct AboutConfigurationView: View {
 
                         Text(
                             model.isHoveringOverVersionCopier
-                                ? "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                                ? "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
                                 : "You've looped \(timesLooped) times!"
                         )
                         .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
@@ -197,7 +191,7 @@ struct AboutConfigurationView: View {
                     await updater.fetchLatestInfo()
 
                     if updater.updateState == .available {
-                        updater.showUpdateWindow()
+                        await updater.showUpdateWindow()
                     } else {
                         // Use getNextUpToDateText to get the next text
                         model.updateButtonTitle = model.getNextUpToDateText()
@@ -218,9 +212,6 @@ struct AboutConfigurationView: View {
             }
 
             // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
-            // LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
-            /// I can't see to have it use `$model`, it won't update but if i use `$updater` it will...
-            /// Can i fix the issue? NOPE, therefore, no longer my issue :smile:
             LuminareToggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
         }
 

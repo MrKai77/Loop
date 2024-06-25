@@ -6,11 +6,12 @@
 //
 
 import Combine
+import Defaults
 import Luminare
 import SwiftUI
 
 class Updater: ObservableObject {
-    @Published var availableReleases = [Release]()
+    @Published var targetRelease: Release?
     @Published var progressBar: Double = 0
     @Published var updateState: UpdateAvailability = .notChecked
 
@@ -27,6 +28,8 @@ class Updater: ObservableObject {
 
     @Published var includeDevelopmentVersions: Bool = false {
         didSet {
+            Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
+
             // When the value changes, trigger a new update check
             Task {
                 await fetchLatestInfo()
@@ -40,7 +43,10 @@ class Updater: ObservableObject {
             .sink { _ in
                 Task {
                     await self.fetchLatestInfo()
-                    self.showUpdateWindow()
+
+                    if self.updateState == .available {
+                        await self.showUpdateWindow()
+                    }
                 }
             }
     }
@@ -65,6 +71,7 @@ class Updater: ObservableObject {
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
+
             // Process data immediately after fetching, reducing the number of async suspension points.
             try await processFetchedData(data)
         } catch {
@@ -72,50 +79,45 @@ class Updater: ObservableObject {
         }
     }
 
-    // Optimized processFetchedData function
     private func processFetchedData(_ data: Data) async throws {
         let decoder = JSONDecoder()
-        // Decode the data based on the flag includeDevelopmentVersions.
+
         if includeDevelopmentVersions {
+            // This would need to parse a list of releases
             let releases = try decoder.decode([Release].self, from: data)
-            // Use compactMap to find the first prerelease and process it, if any.
+
             if let latestPreRelease = releases.compactMap({ $0.prerelease ? $0 : nil }).first {
                 try await processRelease(latestPreRelease)
             }
         } else {
-            // Decode directly into a single Release object.
+            // This would need to parse a single release
             let release = try decoder.decode(Release.self, from: data)
             try await processRelease(release)
         }
     }
 
-    // processRelease function with build number check
     private func processRelease(_ release: Release) async throws {
-        let currentVersion = Bundle.main.appVersion
-        let currentBuildNumber = Bundle.main.appBuild
+        let currentVersion = Bundle.main.appVersion ?? "0.0.0"
 
         await MainActor.run {
-            let isVersionUpdateAvailable = release.tagName.compare(currentVersion, options: .numeric) == .orderedDescending
-            var isUpdateAvailable = isVersionUpdateAvailable
+            var isUpdateAvailable = release.tagName.compare(currentVersion, options: .numeric) == .orderedDescending
 
-            // Extract the build number from the release body if it's a developmental version
-            var releaseBuildNumber: String?
-            if includeDevelopmentVersions {
-                let versionDetails = release.extractVersionDetailsFromBody()
-                releaseBuildNumber = versionDetails.buildNumber
-                if let releaseBuild = releaseBuildNumber.flatMap(Int.init), let currentBuild = Int(currentBuildNumber) {
-                    isUpdateAvailable = isUpdateAvailable || releaseBuild > currentBuild
-                }
+            // If the development version is chosen, compare the build number
+            var buildNumber: Int?
+            if !isUpdateAvailable,
+               includeDevelopmentVersions,
+               let currentBuild = Bundle.main.appBuild,
+               let versionDetails = release.extractVersionFromTitle() {
+                isUpdateAvailable = versionDetails.buildNumber > currentBuild
+                buildNumber = versionDetails.buildNumber
             }
 
             updateState = isUpdateAvailable ? .available : .unavailable
+
             if isUpdateAvailable {
-                // If the developmental branch is chosen and has a higher build number, use its build number.
-                // Create a new Release object with the updated build number
-                var updatedRelease = release
-                updatedRelease.buildNumber = releaseBuildNumber
-                availableReleases = [updatedRelease] // Use the release with the potentially updated build number
-                processChangelog(updatedRelease.body) // Use the updated release body
+                targetRelease = release
+                targetRelease?.buildNumber = buildNumber
+                processChangelog(release.body)
             }
         }
     }
@@ -156,9 +158,10 @@ class Updater: ObservableObject {
         }
     }
 
-    // Checks if the fetched release is newer than the current version and updates the app state.
-    func showUpdateWindow() {
-        if updateState == .available {
+    func showUpdateWindow() async {
+        guard updateState == .available else { return }
+
+        await MainActor.run {
             if windowController?.window == nil {
                 windowController = .init(window: LuminareTrafficLightedWindow { UpdateView() })
             }
@@ -167,10 +170,10 @@ class Updater: ObservableObject {
         }
     }
 
-    // Downloads the update from GitHub and prepares it for installation.
+    // Downloads the update from GitHub and installs it
     func installUpdate() async {
         guard
-            let latestRelease = availableReleases.first,
+            let latestRelease = targetRelease,
             let asset = latestRelease.assets.first
         else {
             DispatchQueue.main.async {
@@ -254,14 +257,15 @@ class Updater: ObservableObject {
 struct Release: Codable {
     var id: Int
     var tagName: String
-    var title: String?
+    var name: String
     var body: String
     var assets: [Asset]
     var prerelease: Bool
-    var buildNumber: String?
+
+    var buildNumber: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id, tagName = "tag_name", title, body, assets, prerelease
+        case id, tagName = "tag_name", name, body, assets, prerelease
     }
 
     struct Asset: Codable {
@@ -275,18 +279,19 @@ struct Release: Codable {
     }
 }
 
-// Extension to Release to extract version details from the body
+// Extension to Release to extract version details from the title
 extension Release {
-    // Function to extract version details from the body
-    func extractVersionDetailsFromBody() -> (preRelease: String?, buildNumber: String?) {
-        let pattern = "Version: (.*?) \\((\\d+)\\)"
-        guard let regex = try? NSRegularExpression(pattern: pattern),
-              let match = regex.firstMatch(in: body, range: NSRange(body.startIndex..., in: body)) else {
-            return (nil, nil)
+    func extractVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
+        let pattern = #"🧪 (.*?) \(\d+\)"#
+        guard
+            let regex = try? NSRegularExpression(pattern: pattern),
+            let match = regex.firstMatch(in: name, range: NSRange(name.startIndex..., in: name))
+        else {
+            return nil
         }
 
-        let preRelease = Range(match.range(at: 1), in: body).flatMap { String(self.body[$0]) }
-        let buildNumber = Range(match.range(at: 2), in: body).flatMap { String(self.body[$0]) }
+        let preRelease = Range(match.range(at: 1), in: name).flatMap { String(self.name[$0]) } ?? "0.0.0"
+        let buildNumber = Int(Range(match.range(at: 2), in: name).flatMap { self.name[$0] } ?? "") ?? 0
 
         return (preRelease, buildNumber)
     }
