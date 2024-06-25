@@ -155,7 +155,9 @@ struct UpdateView: View {
         ScrollView {
             LazyVStack {
                 ForEach(updater.changelog, id: \.title) { item in
-                    ChangelogSectionView(item: item)
+                    if !item.body.isEmpty {
+                        ChangelogSectionView(item: item)
+                    }
                 }
             }
             .padding(.top, 10)

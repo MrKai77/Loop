@@ -26,7 +26,7 @@ class Updater: ObservableObject {
     private var windowController: NSWindowController?
     private var updateCheckCancellable: AnyCancellable?
 
-    @Published var includeDevelopmentVersions: Bool = false {
+    @Published var includeDevelopmentVersions: Bool = Defaults[.includeDevelopmentVersions] {
         didSet {
             Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
 
@@ -60,6 +60,12 @@ class Updater: ObservableObject {
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func fetchLatestInfo() async {
+        await MainActor.run {
+            targetRelease = nil
+            updateState = .notChecked
+            progressBar = 0
+        }
+
         let urlString = includeDevelopmentVersions ?
             "https://api.github.com/repos/MrKai77/Loop/releases" : // Developmental branch
             "https://api.github.com/repos/MrKai77/Loop/releases/latest" // Stable branch
@@ -81,7 +87,6 @@ class Updater: ObservableObject {
 
     private func processFetchedData(_ data: Data) async throws {
         let decoder = JSONDecoder()
-
         if includeDevelopmentVersions {
             // This would need to parse a list of releases
             let releases = try decoder.decode([Release].self, from: data)
@@ -100,23 +105,28 @@ class Updater: ObservableObject {
         let currentVersion = Bundle.main.appVersion ?? "0.0.0"
 
         await MainActor.run {
+            var release = release
+
+            if release.prerelease,
+               let versionDetails = release.extractVersionFromTitle() {
+                release.tagName = versionDetails.preRelease
+                release.buildNumber = versionDetails.buildNumber
+            }
+
             var isUpdateAvailable = release.tagName.compare(currentVersion, options: .numeric) == .orderedDescending
 
             // If the development version is chosen, compare the build number
-            var buildNumber: Int?
             if !isUpdateAvailable,
                includeDevelopmentVersions,
-               let currentBuild = Bundle.main.appBuild,
-               let versionDetails = release.extractVersionFromTitle() {
-                isUpdateAvailable = versionDetails.buildNumber > currentBuild
-                buildNumber = versionDetails.buildNumber
+               let versionBuild = release.buildNumber,
+               let currentBuild = Bundle.main.appBuild {
+                isUpdateAvailable = versionBuild > currentBuild
             }
 
             updateState = isUpdateAvailable ? .available : .unavailable
 
             if isUpdateAvailable {
                 targetRelease = release
-                targetRelease?.buildNumber = buildNumber
                 processChangelog(release.body)
             }
         }
@@ -282,7 +292,7 @@ struct Release: Codable {
 // Extension to Release to extract version details from the title
 extension Release {
     func extractVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
-        let pattern = #"🧪 (.*?) \(\d+\)"#
+        let pattern = #"🧪 (.*?) \((\d+)\)"#
         guard
             let regex = try? NSRegularExpression(pattern: pattern),
             let match = regex.firstMatch(in: name, range: NSRange(name.startIndex..., in: name))
