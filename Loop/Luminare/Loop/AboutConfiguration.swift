@@ -12,14 +12,9 @@ import SwiftUI
 
 class AboutConfigurationModel: ObservableObject {
     let currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here
+    private var shuffledTexts: [LocalizedStringKey] = [] // Store the shuffled texts
 
     @Published var isHoveringOverVersionCopier = false
-
-    @Published var includeDevelopmentVersions = Defaults[.includeDevelopmentVersions] {
-        didSet {
-            Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
-        }
-    }
 
     @Published var updateButtonTitle: LocalizedStringKey = "Check for updates…"
 
@@ -62,25 +57,68 @@ class AboutConfigurationModel: ObservableObject {
         )
     ]
 
-    let upToDateText: [LocalizedStringKey] = [
-        "You're up to date :)",
-        "No updates yet!",
-        "You've already got the best Loop!",
-        "Check back next time!",
+    // A max of 28 W's can fit in here :)
+    var upToDateText: [LocalizedStringKey] = [
+        "Engage! ...in the current version, it's the latest.",
+        "This app is more up to date than my diary entries!",
+        "You're in the clear, no updates in the atmosphere!",
+        "The odds are ever in your favor, no updates today!",
+        "Our app is on a digital diet. No new bytes allowed.",
+        "New version? Sorry, we're too attached to this one.",
+        "Your Loop is loopier than ever, no updates found!",
+        "I'm giving it all she's got, Captain! No updates!",
+        "In a galaxy far, far away... still no updates!",
+        "You've got the precious, no updates needed!",
+        "Riding at warp speed, no updates in sight!",
         "This is not the update you're looking for!",
-        "Stay sharp, more intel coming soon!",
+        "We've misplaced the 'Update' button. Oops!",
+        "I swear it was here somewhere... one sec",
+        "An apple a day keeps the... updates away.",
         "May the Force be with you... next time!",
         "The Force is strong with this version!",
+        "Just a small town app, same old version",
+        "Winter is coming. Updates aren't yet.",
+        "Sweet dreams are made of... no updates",
+        "The update fairy skipped us this week.",
+        "Stay sharp, more intel coming soon!",
+        "You're cruising on the latest tech!",
+        "We’ll be back. With updates... later",
+        "A penny for your... lack of updates.",
+        "You've already got the best Loop!",
+        "One does not simply update Loop.",
+        "All work and no... no updates...",
+        "A watched pot never... updates.",
+        "99 problems, updates ain't one.",
+        "I... uhh... one sec I lost it",
         "You’ve leveled up to the max!",
-        "You've got the precious, no updates needed!",
-        "No new intel, Commander."
+        "Beggars can't be... updaters.",
+        "Money can't buy... updates.",
+        "No new intel, Commander.",
+        "No updates? Great Scott!",
+        "No updates, Mr. Anderson",
+        "No updates in Ba Sing Se",
+        "Updates? In this economy?",
+        "Check back next time!",
+        "Loop is in its prime!",
+        "All systems are a-go!",
+        "You're up to date :)",
+        "No updates yet!"
     ]
+
+    func getNextUpToDateText() -> LocalizedStringKey {
+        // If shuffledTexts is empty, fill it with a shuffled version of upToDateText
+        if shuffledTexts.isEmpty {
+            shuffledTexts = upToDateText.shuffled()
+        }
+        // Pop the last element to ensure it's not repeated until all have been shown
+        return shuffledTexts.popLast() ?? "Check for updates…" // Fallback string
+    }
 
     func copyVersionToClipboard() {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(
-            "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))",
+            "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))",
             forType: NSPasteboard.PasteboardType.string
         )
     }
@@ -127,7 +165,7 @@ struct AboutConfigurationView: View {
 
                         Text(
                             model.isHoveringOverVersionCopier
-                                ? "Version \(Bundle.main.appVersion) (\(Bundle.main.appBuild))"
+                                ? "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
                                 : "You've looped \(timesLooped) times!"
                         )
                         .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
@@ -153,10 +191,12 @@ struct AboutConfigurationView: View {
                     await updater.fetchLatestInfo()
 
                     if updater.updateState == .available {
-                        updater.showUpdateWindow()
+                        await updater.showUpdateWindow()
                     } else {
-                        model.updateButtonTitle = model.upToDateText.randomElement()!
+                        // Use getNextUpToDateText to get the next text
+                        model.updateButtonTitle = model.getNextUpToDateText()
 
+                        // Reset the title after 2 seconds
                         let currentTitle = model.updateButtonTitle
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             if model.updateButtonTitle == currentTitle {
@@ -171,9 +211,8 @@ struct AboutConfigurationView: View {
                     .animation(.smooth(duration: 0.25), value: model.updateButtonTitle)
             }
 
-            // I do not have the code for you to automatically check, it is hardcoded though...
-//            LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
-            LuminareToggle("Include development versions", isOn: $model.includeDevelopmentVersions)
+            // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
+            LuminareToggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
         }
 
         LuminareSection {

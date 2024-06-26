@@ -10,30 +10,30 @@ import Foundation
 // Returns the current build number
 extension Bundle {
     var appName: String {
-        getInfo("CFBundleName")
+        getInfo("CFBundleName") ?? "⚠️"
     }
 
     var displayName: String {
-        getInfo("CFBundleDisplayName")
+        getInfo("CFBundleDisplayName") ?? "⚠️"
     }
 
     var bundleID: String {
-        getInfo("CFBundleIdentifier")
+        getInfo("CFBundleIdentifier") ?? "⚠️"
     }
 
     var copyright: String {
-        getInfo("NSHumanReadableCopyright")
+        getInfo("NSHumanReadableCopyright") ?? "⚠️"
     }
 
-    var appBuild: String {
-        getInfo("CFBundleVersion")
+    var appBuild: Int? {
+        Int(getInfo("CFBundleVersion") ?? "")
     }
 
-    var appVersion: String {
+    var appVersion: String? {
         getInfo("CFBundleShortVersionString")
     }
 
-    func getInfo(_ str: String) -> String {
-        infoDictionary?[str] as? String ?? ""
+    func getInfo(_ str: String) -> String? {
+        infoDictionary?[str] as? String
     }
 }
