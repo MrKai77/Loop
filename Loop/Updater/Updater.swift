@@ -179,7 +179,7 @@ class Updater: ObservableObject {
                 }
 
                 var reference: Int?
-                if let regex = try? NSRegularExpression(pattern: #"#(\d+) "#),
+                if let regex = try? NSRegularExpression(pattern: #"#(\d+)"#),
                    let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..., in: line)) {
                     reference = Int(Range(match.range(at: 1), in: line).flatMap { String(line[$0]) } ?? "")
                 }
@@ -188,7 +188,7 @@ class Updater: ObservableObject {
 
                 let text = line
                     .suffix(line.count - 1)
-                    .replacingOccurrences(of: #"#\d+ "#, with: "", options: .regularExpression) // Remove issue number
+                    .replacingOccurrences(of: #"#\d+"#, with: "", options: .regularExpression) // Remove issue number
                     .replacingOccurrences(of: #"\(@.*\)"#, with: "", options: .regularExpression) // Remove author
                     .trimmingCharacters(in: .whitespacesAndNewlines)
 
