@@ -136,6 +136,19 @@ struct UpdateView: View {
     }
 
     func versionChangeView() -> some View {
+        ZStack {
+            versionChangeText()
+                .foregroundStyle(.primary.opacity(0.7))
+                .blendMode(.overlay)
+
+            if colorScheme == .light {
+                versionChangeText()
+                    .blendMode(.overlay)
+            }
+        }
+    }
+
+    func versionChangeText() -> some View {
         HStack {
             if updater.targetRelease?.prerelease ?? true {
                 Text("\(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
@@ -147,8 +160,6 @@ struct UpdateView: View {
                 Text(updater.targetRelease?.tagName ?? "Unknown")
             }
         }
-        .foregroundStyle(.primary.opacity(0.7))
-        .blendMode(.overlay)
     }
 
     func changelogView() -> some View {
