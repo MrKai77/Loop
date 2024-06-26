@@ -111,7 +111,7 @@ class Updater: ObservableObject {
     }
 
     private func processRelease(_ release: Release) async throws {
-        let currentVersion = Bundle.main.appVersion ?? "0.0.0"
+        let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
 
         await MainActor.run {
             var release = release
