@@ -163,7 +163,7 @@ struct UpdateView: View {
     }
 
     func changelogView() -> some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             LazyVStack {
                 ForEach($updater.changelog, id: \.title) { item in
                     if !item.body.isEmpty {
@@ -232,7 +232,8 @@ struct ChangelogSectionView: View {
                             if let reference = note.reference {
                                 let text = "#\(reference)"
                                 Link(text, destination: URL(string: "https://github.com/MrKai77/Loop/issues/\(reference)")!)
-                                    .frame(width: 35, alignment: .trailing)
+                                    .frame(width: 35, alignment: .leading)
+                                    .monospaced()
                             }
                         }
                         .foregroundStyle(.secondary)
