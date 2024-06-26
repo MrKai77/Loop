@@ -130,7 +130,7 @@ jobs:
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}\n## 💭 Uncategorized\n#{{UNCATEGORIZED}}",
-              "pr_template": "- ##{{NUMBER}} #{{TITLE}}",
+              "pr_template": "- #{{TITLE}} ##{{NUMBER}}",
               "categories": [
                 {
                     "title": "## ✨ New Features",
