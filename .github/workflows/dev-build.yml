@@ -1,0 +1,166 @@
+name: Loop Development Build
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  pre-release:
+    name: Build and Publish Pre-release
+    runs-on: macos-14
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🧪 Set Version and Build number
+        run: |
+          # CHANGE EVERY RELEASE:
+          APP_VERSION="🧪 1.1.0"
+          APP_BUILD=$(git rev-list --count HEAD)
+          FROM_TAG=$(git describe --tags --abbrev=0 --exclude='prerelease')
+
+          # Set VERSION
+          latest_tag=$APP_VERSION
+          echo "Latest tag: $latest_tag"
+          sed -i -e "/VERSION =/ s/= .*/= $latest_tag/" Loop/Config.xcconfig
+
+          # Set BUILD_NUMBER
+          latest_commit_number=$APP_BUILD
+          echo "Latest commit number: $latest_commit_number"
+          sed -i -e "/BUILD_NUMBER =/ s/= .*/= $latest_commit_number/" Loop/Config.xcconfig
+
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "APP_BUILD=$APP_BUILD" >> $GITHUB_ENV
+          echo "FROM_TAG=$FROM_TAG" >> $GITHUB_ENV
+
+      - name: 🔧 Select Xcode
+        run: sudo xcode-select -s "/Applications/Xcode_15.4.app"
+
+      - name: 🎟️ Install Certificate
+        env:
+          DEVELOPMENT_CERT_BASE64: ${{ secrets.DEVELOPMENT_CERT_BASE64 }}
+          DEVELOPER_ID_CERT_BASE64: ${{ secrets.DEVELOPER_ID_CERT_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          DEVELOPMENT_CERT_PATH=$RUNNER_TEMP/dev.p12
+          DEVELOPER_ID_CERT_PATH=$RUNNER_TEMP/devid.p12
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          echo -n "$DEVELOPMENT_CERT_BASE64" | base64 --decode -o $DEVELOPMENT_CERT_PATH
+          echo -n "$DEVELOPER_ID_CERT_BASE64" | base64 --decode -o $DEVELOPER_ID_CERT_PATH
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          security import $DEVELOPMENT_CERT_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $DEVELOPER_ID_CERT_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+      - name: 🛠️ Build Loop
+        run: |
+          xcodebuild \
+            archive \
+            -project Loop.xcodeproj/ \
+            -scheme "Loop (GH ACTIONS)" \
+            -destination 'generic/platform=macOS' \
+            -archivePath dist/Loop.xcarchive
+
+      - name: 🥡 Export Loop.app
+        run: |
+          xcodebuild \
+            -exportArchive \
+            -archivePath dist/Loop.xcarchive \
+            -exportPath dist/ \
+            -exportOptionsPlist assets/ExportOptions.plist \
+            -allowProvisioningUpdates
+
+      - name: 🤏 Compress Loop
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent "dist/Loop.app" "dist/Loop.zip"
+      
+      - name: ✅ Notarize Loop
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PWD: ${{ secrets.APPLE_ID_PWD }}
+        run: |
+          xcrun notarytool store-credentials Loop --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_ID_PWD"
+          xcrun notarytool submit "dist/Loop.zip" --keychain-profile "Loop" --wait
+          xcrun stapler staple "dist/Loop.app"
+
+      - name: ⬆️ Upload Loop
+        uses: actions/upload-artifact@v4
+        with:
+          name: Loop.zip
+          path: dist/Loop.app
+
+      - name: 🏷️ Create/update tag
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/prerelease',
+              sha: context.sha
+            }).catch(err => {
+              if (err.status !== 422) throw err;
+              github.rest.git.updateRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'tags/prerelease',
+                sha: context.sha
+              });
+            })
+
+      - name: 📰 Build Changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          outputFile: CHANGELOG.md
+          fromTag: ${{ env.FROM_TAG }}
+          toTag: "prerelease"
+          configurationJson: |
+            {
+              "template": "#{{CHANGELOG}}\n## 💭 Uncategorized\n#{{UNCATEGORIZED}}",
+              "pr_template": "- ##{{NUMBER}} #{{TITLE}}",
+              "categories": [
+                {
+                    "title": "## ✨ New Features",
+                    "labels": ["Feature", "Luminare"]
+                },
+                {
+                    "title": "## 🐞 Bug Fixes",
+                    "labels": ["Bug"]
+                },
+                {
+                    "title": "## 🌐 Localization",
+                    "labels": ["Localization"]
+                }
+              ],
+              "empty_template": "- ❌ No changes found"
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🥳 Publish Dev Build
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: dist/Loop.zip
+          commit: develop
+          bodyFile: CHANGELOG.md
+          name: "Development Build: ${{ env.APP_VERSION }} (${{ env.APP_BUILD }})"
+          prerelease: true
+          tag: "prerelease"
+
+      - name: 🧹 Cleanup
+        run: |
+          security delete-keychain "$RUNNER_TEMP/app-signing.keychain-db"
