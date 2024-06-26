@@ -126,6 +126,7 @@ jobs:
         with:
           outputFile: CHANGELOG.md
           fromTag: ${{ env.FROM_TAG }}
+          toTag: "prerelease"
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}\n## 💭 Uncategorized\n#{{UNCATEGORIZED}}",
