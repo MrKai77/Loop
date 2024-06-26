@@ -154,7 +154,7 @@ struct UpdateView: View {
     func changelogView() -> some View {
         ScrollView {
             LazyVStack {
-                ForEach(updater.changelog, id: \.title) { item in
+                ForEach($updater.changelog, id: \.title) { item in
                     if !item.body.isEmpty {
                         ChangelogSectionView(item: item)
                     }
@@ -167,7 +167,7 @@ struct UpdateView: View {
 }
 
 struct ChangelogSectionView: View {
-    let item: (title: String, body: [String])
+    @Binding var item: (title: String, body: [Updater.ChangelogNote])
     @State var isExpanded = false
 
     var body: some View {
@@ -195,17 +195,41 @@ struct ChangelogSectionView: View {
             .buttonStyle(.plain)
 
             if isExpanded {
-                ForEach(item.body, id: \.self) { line in
-                    let emoji = line.prefix(1)
-                    let note = line
-                        .suffix(line.count - 1)
+                ForEach($item.body, id: \.id) { line in
+                    let note = line.wrappedValue
+
+                    let emoji = note.text.prefix(1)
+                    let text = note.text
+                        .suffix(note.text.count - 1)
                         .trimmingCharacters(in: .whitespacesAndNewlines)
 
                     HStack(spacing: 8) {
                         Text(emoji)
-                        Text(LocalizedStringKey(note))
+                        Text(LocalizedStringKey(text))
                             .lineSpacing(1.1)
                         Spacer(minLength: 0)
+
+                        HStack(spacing: 0) {
+                            if let user = note.user {
+                                let text = "@\(user)"
+                                Link(text, destination: URL(string: "https://github.com/\(user)")!)
+                                    .frame(width: 105, alignment: .trailing)
+                            }
+
+                            if note.user != nil, note.user != nil {
+                                let text = "•" // Prevents unnecessary localization entries
+                                Text(text)
+                                    .padding(.horizontal, 4)
+                            }
+
+                            if let reference = note.reference {
+                                let text = "#\(reference)"
+                                Link(text, destination: URL(string: "https://github.com/MrKai77/Loop/issues/\(reference)")!)
+                                    .frame(width: 35, alignment: .trailing)
+                            }
+                        }
+                        .foregroundStyle(.secondary)
+                        .buttonStyle(.plain)
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)

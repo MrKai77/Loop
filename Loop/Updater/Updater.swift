@@ -15,7 +15,15 @@ class Updater: ObservableObject {
     @Published var progressBar: Double = 0
     @Published var updateState: UpdateAvailability = .notChecked
 
-    @Published var changelog: [(title: String, body: [String])] = .init()
+    @Published var changelog: [(title: String, body: [ChangelogNote])] = .init()
+
+    struct ChangelogNote: Identifiable {
+        var id: UUID = .init()
+
+        var text: String
+        var user: String?
+        var reference: Int?
+    }
 
     enum UpdateAvailability {
         case notChecked
@@ -152,18 +160,33 @@ class Updater: ObservableObject {
                 }
 
             } else {
-                guard line.hasPrefix("- ") else { continue }
+                guard
+                    line.hasPrefix("- "),
+                    let index = changelog.firstIndex(where: { $0.title == currentSection })
+                else {
+                    continue
+                }
+                let line = String(line)
 
-                // Format list items
-                let line = line
+                var user: String?
+                if let regex = try? NSRegularExpression(pattern: #"\(@(.*)\)"#),
+                   let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..., in: line)) {
+                    user = Range(match.range(at: 1), in: line).flatMap { String(line[$0]) }
+                }
+
+                var reference: Int?
+                if let regex = try? NSRegularExpression(pattern: #"#(\d+) "#),
+                   let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..., in: line)) {
+                    reference = Int(Range(match.range(at: 1), in: line).flatMap { String(line[$0]) } ?? "")
+                }
+
+                let text = line
                     .replacingOccurrences(of: "- ", with: "") // Remove bullet point
                     .replacingOccurrences(of: #"#\d+ "#, with: "", options: .regularExpression) // Remove issue number
                     .replacingOccurrences(of: #"\(@.*\)"#, with: "", options: .regularExpression) // Remove author
                     .trimmingCharacters(in: .whitespacesAndNewlines)
 
-                if let index = changelog.firstIndex(where: { $0.title == currentSection }) {
-                    changelog[index].body.append(line)
-                }
+                changelog[index].body.append(.init(text: text, user: user, reference: reference))
             }
         }
     }
