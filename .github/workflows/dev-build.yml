@@ -157,7 +157,7 @@ jobs:
           artifacts: dist/Loop.zip
           commit: develop
           bodyFile: CHANGELOG.md
-          name: ${{ env.APP_VERSION }} (${{ env.APP_BUILD }})
+          name: "Development Build: ${{ env.APP_VERSION }} (${{ env.APP_BUILD }})"
           prerelease: true
           tag: "prerelease"
 
