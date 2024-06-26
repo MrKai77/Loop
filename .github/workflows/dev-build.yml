@@ -22,6 +22,7 @@ jobs:
           # CHANGE EVERY RELEASE:
           APP_VERSION="🧪 1.1.0"
           APP_BUILD=$(git rev-list --count HEAD)
+          FROM_TAG=$(git describe --tags --abbrev=0 --exclude='prerelease')
 
           # Set VERSION
           latest_tag=$APP_VERSION
@@ -35,6 +36,7 @@ jobs:
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
           echo "APP_BUILD=$APP_BUILD" >> $GITHUB_ENV
+          echo "FROM_TAG=$FROM_TAG" >> $GITHUB_ENV
 
       - name: 🔧 Select Xcode
         run: sudo xcode-select -s "/Applications/Xcode_15.4.app"
@@ -123,10 +125,11 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v4
         with:
           outputFile: CHANGELOG.md
+          fromTag: ${{ env.FROM_TAG }}
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}\n## 💭 Uncategorized\n#{{UNCATEGORIZED}}",
-              "pr_template": "- ##{{NUMBER}} #{{TITLE}}\n",
+              "pr_template": "- ##{{NUMBER}} #{{TITLE}}",
               "categories": [
                 {
                     "title": "## ✨ New Features",
