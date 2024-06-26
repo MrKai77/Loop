@@ -147,7 +147,7 @@ jobs:
         with:
           allowUpdates: true
           artifacts: dist/Loop.zip
-          commit: main
+          commit: develop
           bodyFile: CHANGELOG.md
           name: ${{ env.APP_VERSION }} (${{ env.APP_BUILD }})
           prerelease: true
