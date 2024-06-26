@@ -134,11 +134,15 @@ jobs:
               "categories": [
                 {
                     "title": "## ✨ New Features",
-                    "labels": ["Feature", "Localization", "Luminare"]
+                    "labels": ["Feature", "Luminare"]
                 },
                 {
                     "title": "## 🐞 Bug Fixes",
                     "labels": ["Bug"]
+                },
+                {
+                    "title": "## 🌐 Localization",
+                    "labels": ["Localization"]
                 }
               ],
               "empty_template": "- ❌ No changes found"
@@ -155,7 +159,6 @@ jobs:
           bodyFile: CHANGELOG.md
           name: ${{ env.APP_VERSION }} (${{ env.APP_BUILD }})
           prerelease: true
-          draft: true
           tag: "prerelease"
 
       - name: 🧹 Cleanup
