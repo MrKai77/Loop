@@ -10,7 +10,7 @@ Loop is a macOS app that simplifies window management for you! You can effortles
 > **Compatible with macOS 13 and later**
 
 ### [Homebrew](https://brew.sh)
-`brew install mrkai77/cask/loop`  
+`brew install loop`
 
 ### Manual  
 Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! Unzip the file, and open the app, grant it accessibility access, and you're good to go!
