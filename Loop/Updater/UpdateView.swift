@@ -209,15 +209,11 @@ struct ChangelogSectionView: View {
                 ForEach($item.body, id: \.id) { line in
                     let note = line.wrappedValue
 
-                    let emoji = note.text.prefix(1)
-                    let text = note.text
-                        .suffix(note.text.count - 1)
-                        .trimmingCharacters(in: .whitespacesAndNewlines)
-
                     HStack(spacing: 8) {
-                        Text(emoji)
-                        Text(LocalizedStringKey(text))
+                        Text(note.emoji)
+                        Text(LocalizedStringKey(note.text))
                             .lineSpacing(1.1)
+
                         Spacer(minLength: 0)
 
                         HStack(spacing: 0) {
@@ -241,6 +237,7 @@ struct ChangelogSectionView: View {
                         }
                         .foregroundStyle(.secondary)
                         .buttonStyle(.plain)
+                        .fixedSize()
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)

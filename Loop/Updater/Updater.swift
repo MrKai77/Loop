@@ -20,6 +20,7 @@ class Updater: ObservableObject {
     struct ChangelogNote: Identifiable {
         var id: UUID = .init()
 
+        var emoji: String
         var text: String
         var user: String?
         var reference: Int?
@@ -166,7 +167,10 @@ class Updater: ObservableObject {
                 else {
                     continue
                 }
+
                 let line = String(line)
+                    .replacingOccurrences(of: "- ", with: "") // Remove bullet point
+                    .trimmingCharacters(in: .whitespaces)
 
                 var user: String?
                 if let regex = try? NSRegularExpression(pattern: #"\(@(.*)\)"#),
@@ -180,13 +184,15 @@ class Updater: ObservableObject {
                     reference = Int(Range(match.range(at: 1), in: line).flatMap { String(line[$0]) } ?? "")
                 }
 
+                let emoji = String(line.prefix(1))
+
                 let text = line
-                    .replacingOccurrences(of: "- ", with: "") // Remove bullet point
+                    .suffix(line.count - 1)
                     .replacingOccurrences(of: #"#\d+ "#, with: "", options: .regularExpression) // Remove issue number
                     .replacingOccurrences(of: #"\(@.*\)"#, with: "", options: .regularExpression) // Remove author
                     .trimmingCharacters(in: .whitespacesAndNewlines)
 
-                changelog[index].body.append(.init(text: text, user: user, reference: reference))
+                changelog[index].body.append(.init(emoji: emoji, text: text, user: user, reference: reference))
             }
         }
     }
