@@ -134,7 +134,7 @@ jobs:
               "categories": [
                 {
                     "title": "## ✨ New Features",
-                    "labels": ["Feature", "Luminare"]
+                    "labels": ["Feature", "Luminare", "Improvement"]
                 },
                 {
                     "title": "## 🐞 Bug Fixes",
