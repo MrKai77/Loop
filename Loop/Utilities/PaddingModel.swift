@@ -32,15 +32,15 @@ struct PaddingModel: Codable, Defaults.Serializable, Hashable {
         configureScreenPadding: false
     )
 
-    var totalVerticalPadding: CGFloat {
-        totalTopPadding + bottom
-    }
-
-    var totalHorizontalPadding: CGFloat {
-        right + left
-    }
-
     var allEqual: Bool {
         window == top && window == bottom && window == right && window == left
+    }
+
+    func apply(on initial: CGRect) -> CGRect {
+        initial
+            .padding(.leading, left)
+            .padding(.trailing, right)
+            .padding(.bottom, bottom)
+            .padding(.top, totalTopPadding)
     }
 }
