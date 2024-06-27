@@ -84,7 +84,13 @@ enum WindowEngine {
             return
         }
 
-        let bounds = action.direction.willMove ? .zero : Defaults[.padding].apply(on: screen.safeScreenFrame)
+        let screenFrame = action.direction.willMove ? .zero : screen.safeScreenFrame
+
+        let bounds = if Defaults[.enablePadding] {
+            Defaults[.padding].apply(on: screenFrame)
+        } else {
+            screenFrame
+        }
 
         window.setFrame(
             targetFrame,
