@@ -156,6 +156,7 @@ struct IconVew: View {
                 VStack(alignment: .center) {
                     Spacer()
                     Image(._18PxLock)
+                        .foregroundStyle(.secondary)
                     Text(nextUnlockCount == icon.unlockTime ? "\(loopsLeft) \(loopsLeft > 1 ? "Loops left" : "Loop left")" : "Locked")
                         .font(.caption)
                         .foregroundColor(.secondary)
