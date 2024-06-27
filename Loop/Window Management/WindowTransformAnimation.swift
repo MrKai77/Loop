@@ -78,8 +78,8 @@ class WindowTransformAnimation: NSAnimation {
                 }
             }
 
-            window.setPosition(newFrame.origin)
-            window.setSize(newFrame.size)
+            window.position = newFrame.origin
+            window.size = newFrame.size
             lastWindowFrame = window.frame
 
             if currentProgress >= 1.0 {

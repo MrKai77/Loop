@@ -16,7 +16,6 @@
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; settings = {ATTRIBUTES = (Required, ); }; };
 		A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397D32A932993006D2796 /* MenuBarIconView.swift */; };
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
-		A8063A732B19891900EAB3D9 /* grid.metal in Sources */ = {isa = PBXBuildFile; fileRef = A8063A722B19891900EAB3D9 /* grid.metal */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */; };
 		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
@@ -50,6 +49,7 @@
 		A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */; };
 		A85DDBDA2C1693D4008C103D /* WindowDirection+Snapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85DDBD92C1693D4008C103D /* WindowDirection+Snapping.swift */; };
 		A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* WindowDragManager.swift */; };
+		A867C20E2C26522B005831BC /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C20D2C26522B005831BC /* Observer.swift */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
 		A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* StageManager.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
@@ -101,7 +101,6 @@
 		A80397D32A932993006D2796 /* MenuBarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
-		A8063A722B19891900EAB3D9 /* grid.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = grid.metal; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A80AB7E22C276E0300BE0360 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Port.swift"; sourceTree = "<group>"; };
@@ -137,6 +136,7 @@
 		A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A85DDBD92C1693D4008C103D /* WindowDirection+Snapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+Snapping.swift"; sourceTree = "<group>"; };
 		A864F4672AA660CD00579738 /* WindowDragManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragManager.swift; sourceTree = "<group>"; };
+		A867C20D2C26522B005831BC /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
 		A869C1A02B38C6E600AD1A84 /* StageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManager.swift; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
 				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
 				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
-				A8063A722B19891900EAB3D9 /* grid.metal */,
+				A867C20D2C26522B005831BC /* Observer.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -587,6 +587,7 @@
 				A8D4327B2C13ED3C007BE4F2 /* Icon.swift in Sources */,
 				A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */,
 				A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */,
+				A867C20E2C26522B005831BC /* Observer.swift in Sources */,
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
 				A82B1AF62BD35C8500E2F3F9 /* BehaviorConfiguration.swift in Sources */,
 				A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */,
@@ -638,7 +639,6 @@
 				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,
 				A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */,
 				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
-				A8063A732B19891900EAB3D9 /* grid.metal in Sources */,
 				A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */,
 				A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */,
 				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
