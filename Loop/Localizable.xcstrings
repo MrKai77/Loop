@@ -337,29 +337,6 @@
         }
       }
     },
-    "%lld Loops left" : {
-      "comment" : "Loops left to unlock a new icon",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Loop left"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loops left"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "99 problems, updates ain't one." : {
 
     },
@@ -3975,6 +3952,28 @@
     },
     "Loop is in its prime!" : {
 
+    },
+    "Loops left to unlock a new icon" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loop left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "May the Force be with you... next time!" : {
       "localizations" : {
