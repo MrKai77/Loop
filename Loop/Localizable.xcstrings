@@ -337,12 +337,25 @@
         }
       }
     },
-    "%lld %@" : {
+    "%lld Loops left" : {
+      "comment" : "Loops left to unlock a new icon",
       "localizations" : {
         "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld %2$@"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loop left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              }
+            }
           }
         }
       }
@@ -3911,7 +3924,7 @@
 
     },
     "Locked" : {
-
+      "comment" : "When an app icon is locked"
     },
     "Loop" : {
       "extractionState" : "stale",

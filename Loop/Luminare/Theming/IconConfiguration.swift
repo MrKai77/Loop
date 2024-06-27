@@ -146,21 +146,27 @@ struct IconVew: View {
     @State private var loopsLeft: Int = -1
 
     var body: some View {
-        Group {
+        ZStack {
             if hasBeenUnlocked {
                 Image(nsImage: NSImage(named: icon.iconName)!)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .padding(10)
+                    .transition(.scale(scale: 0.8).combined(with: .opacity))
             } else {
                 VStack(alignment: .center) {
                     Spacer()
                     Image(._18PxLock)
                         .foregroundStyle(.secondary)
-                    Text(nextUnlockCount == icon.unlockTime ? "\(loopsLeft) \(loopsLeft > 1 ? "Loops left" : "Loop left")" : "Locked")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .contentTransition(.numericText())
+
+                    Text(nextUnlockCount == icon.unlockTime ?
+                        .init(localized: "\(loopsLeft) Loops left", comment: "Loops left to unlock a new icon") :
+                        .init(localized: "Locked", comment: "When an app icon is locked")
+                    )
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .contentTransition(.numericText())
+
                     Spacer()
                 }
                 .contentShape(Rectangle())
