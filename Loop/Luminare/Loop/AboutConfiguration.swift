@@ -166,7 +166,7 @@ struct AboutConfigurationView: View {
                         Text(
                             model.isHoveringOverVersionCopier
                                 ? "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
-                                : "You've looped \(timesLooped) times!"
+                                : (timesLooped >= 1_000_000 ? "You've looped... uhh... I... lost count..." : "You've looped \(timesLooped) times!")
                         )
                         .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
                         .animation(.smooth(duration: 0.25), value: model.isHoveringOverVersionCopier)
