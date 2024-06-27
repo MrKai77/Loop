@@ -18,6 +18,19 @@ class WindowDragManager {
     private var leftMouseDraggedMonitor: EventMonitor?
     private var leftMouseUpMonitor: EventMonitor?
 
+    private var adjacentWindows: [AjacentWindowState] = [] // Window, then its initial frame
+    private var resizedSide: Edge?
+
+    struct AjacentWindowState {
+        let window: Window
+        let initialFrame: CGRect
+
+        init(_ window: Window) {
+            self.window = window
+            self.initialFrame = window.frame
+        }
+    }
+
     func addObservers() {
         leftMouseDraggedMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseDragged) { _ in
             // Process window (only ONCE during a window drag)
@@ -26,24 +39,120 @@ class WindowDragManager {
             }
 
             if let window = self.draggingWindow,
-               let initialFrame = self.initialWindowFrame,
-               self.hasWindowMoved(window.frame, initialFrame) {
-                if Defaults[.restoreWindowFrameOnDrag] {
-                    self.restoreInitialWindowSize(window)
-                } else {
-                    WindowRecords.eraseRecords(for: window)
-                }
+               let initialFrame = self.initialWindowFrame {
+                let frame = window.frame
+                let windowSpacing = Defaults[.enablePadding] ? Defaults[.padding].window : 0
 
-                if Defaults[.windowSnapping] {
-                    if let frame = NSScreen.main?.displayBounds,
-                       let mouseLocation = CGEvent.mouseLocation {
-                        if mouseLocation.y == frame.minY {
-                            let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
-                            CGWarpMouseCursorPosition(newOrigin)
+                if frame != initialFrame {
+                    if self.resizedSide == nil {
+                        if !frame.maxX.approximatelyEquals(to: initialFrame.maxX), frame.minX.approximatelyEquals(to: initialFrame.minX) {
+                            self.resizedSide = .trailing
+                        }
+
+                        if !frame.minX.approximatelyEquals(to: initialFrame.minX), frame.maxX.approximatelyEquals(to: initialFrame.maxX) {
+                            self.resizedSide = .leading
+                        }
+
+                        if !frame.maxY.approximatelyEquals(to: initialFrame.maxY), frame.minY.approximatelyEquals(to: initialFrame.minY) {
+                            self.resizedSide = .bottom
+                        }
+
+                        if !frame.minY.approximatelyEquals(to: initialFrame.minY), frame.maxY.approximatelyEquals(to: initialFrame.maxY) {
+                            self.resizedSide = .top
                         }
                     }
 
-                    self.getWindowSnapDirection()
+                    if let resizedSide = self.resizedSide {
+                        if resizedSide == .trailing {
+                            if self.adjacentWindows.isEmpty {
+                                let windows = WindowEngine.windowList
+                                let targetWindows = windows.filter { $0.frame.minX.approximatelyEquals(to: frame.maxX, tolerance: 100) }
+
+                                for target in targetWindows where target.cgWindowID != window.cgWindowID {
+                                    self.adjacentWindows.append(.init(target))
+                                }
+                            } else {
+                                for item in self.adjacentWindows {
+                                    let newOrigin = CGPoint(x: frame.maxX + windowSpacing, y: item.initialFrame.minY)
+                                    let newSize = CGSize(width: item.initialFrame.maxX - frame.maxX - windowSpacing, height: item.initialFrame.height)
+                                    item.window.setFrame(.init(origin: newOrigin, size: newSize))
+                                }
+                            }
+                        }
+
+                        if resizedSide == .leading {
+                            if self.adjacentWindows.isEmpty {
+                                let windows = WindowEngine.windowList
+                                let targetWindows = windows.filter { $0.frame.maxX.approximatelyEquals(to: frame.minX, tolerance: 100) }
+
+                                for target in targetWindows where target.cgWindowID != window.cgWindowID {
+                                    self.adjacentWindows.append(.init(target))
+                                }
+                            } else {
+                                for item in self.adjacentWindows {
+                                    let newOrigin = item.initialFrame.origin
+                                    let newSize = CGSize(width: frame.maxX - frame.width - item.initialFrame.minX - windowSpacing, height: item.initialFrame.height)
+                                    item.window.setFrame(.init(origin: newOrigin, size: newSize))
+                                }
+                            }
+                        }
+
+                        if resizedSide == .bottom {
+                            if self.adjacentWindows.isEmpty {
+                                let windows = WindowEngine.windowList
+                                let targetWindows = windows.filter { $0.frame.minY.approximatelyEquals(to: frame.maxY, tolerance: 100) }
+
+                                for target in targetWindows where target.cgWindowID != window.cgWindowID {
+                                    self.adjacentWindows.append(.init(target))
+                                }
+                            } else {
+                                for item in self.adjacentWindows {
+                                    let newOrigin = CGPoint(x: item.initialFrame.minX, y: frame.maxY + windowSpacing)
+                                    let newSize = CGSize(width: item.initialFrame.width, height: item.initialFrame.maxY - frame.maxY - windowSpacing)
+                                    item.window.setFrame(.init(origin: newOrigin, size: newSize))
+                                }
+                            }
+                        }
+
+                        if resizedSide == .top {
+                            if self.adjacentWindows.isEmpty {
+                                let windows = WindowEngine.windowList
+                                let targetWindows = windows.filter { $0.frame.maxY.approximatelyEquals(to: frame.minY, tolerance: 100) }
+
+                                for target in targetWindows where target.cgWindowID != window.cgWindowID {
+                                    self.adjacentWindows.append(.init(target))
+                                }
+                            } else {
+                                for item in self.adjacentWindows {
+                                    let newOrigin = item.initialFrame.origin
+                                    let newSize = CGSize(width: item.initialFrame.width, height: frame.maxY - frame.height - item.initialFrame.minY - windowSpacing)
+                                    item.window.setFrame(.init(origin: newOrigin, size: newSize))
+                                }
+                            }
+                        }
+                    }
+
+                    return // Don't restore initial window frame
+                }
+
+                if self.hasWindowMoved(window.frame, initialFrame) {
+                    if Defaults[.restoreWindowFrameOnDrag] {
+                        self.restoreInitialWindowSize(window)
+                    } else {
+                        WindowRecords.eraseRecords(for: window)
+                    }
+
+                    if Defaults[.windowSnapping] {
+                        if let frame = NSScreen.main?.displayBounds,
+                           let mouseLocation = CGEvent.mouseLocation {
+                            if mouseLocation.y == frame.minY {
+                                let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
+                                CGWarpMouseCursorPosition(newOrigin)
+                            }
+                        }
+
+                        self.getWindowSnapDirection()
+                    }
                 }
             }
         }
@@ -59,6 +168,9 @@ class WindowDragManager {
 
             self.previewController.close()
             self.draggingWindow = nil
+
+            self.adjacentWindows = []
+            self.resizedSide = nil
         }
 
         leftMouseDraggedMonitor!.start()
@@ -66,15 +178,16 @@ class WindowDragManager {
     }
 
     private func setCurrentDraggingWindow() {
-        guard let screen = NSScreen.screenWithMouse else {
-            return
-        }
+//        guard let screen = NSScreen.screenWithMouse else {
+//            return
+//        }
 
-        let mousePosition = NSEvent.mouseLocation.flipY(screen: screen)
+//        let mousePosition = NSEvent.mouseLocation.flipY(screen: screen)
 
         do {
             guard
-                let draggingWindow = try WindowEngine.windowAtPosition(mousePosition),
+//                let draggingWindow = try WindowEngine.windowAtPosition(mousePosition),
+                let draggingWindow = try WindowEngine.getFrontmostWindow(),
                 !draggingWindow.isAppExcluded
             else {
                 return

@@ -84,13 +84,7 @@ enum WindowEngine {
             return
         }
 
-        let screenFrame = action.direction.willMove ? .zero : screen.safeScreenFrame
-
-        let bounds = if Defaults[.enablePadding] {
-            Defaults[.padding].apply(on: screenFrame)
-        } else {
-            screenFrame
-        }
+        let bounds = action.direction.willMove ? .zero : getValidBounds(for: screen)
 
         window.setFrame(
             targetFrame,
@@ -113,6 +107,16 @@ enum WindowEngine {
         if Defaults[.moveCursorWithWindow] {
             CGWarpMouseCursorPosition(targetFrame.center)
         }
+    }
+
+    static func getValidBounds(for screen: NSScreen) -> CGRect {
+        var screenFrame = screen.safeScreenFrame
+
+        if Defaults[.enablePadding] {
+            screenFrame = Defaults[.padding].apply(on: screenFrame)
+        }
+
+        return screenFrame
     }
 
     static func getTargetWindow() -> Window? {
@@ -177,7 +181,8 @@ enum WindowEngine {
                     let window = try Window(pid: pid)
                     windowList.append(window)
                 } catch {
-                    print("Failed to create window: \(error.localizedDescription)")
+//                    print("Failed to create window: \(error.localizedDescription)")
+                    continue
                 }
             }
         }

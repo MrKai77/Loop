@@ -32,8 +32,6 @@ class Observer {
     let callback: Callback?
     let callbackWithInfo: CallbackWithInfo?
 
-//    public fileprivate(set) lazy var application: Application = Application(forKnownProcessID: self.pid)!
-
     /// Creates and starts an observer on the given `processID`.
     public init(processID: pid_t, callback: @escaping Callback) throws {
         var axObserver: AXObserver?
