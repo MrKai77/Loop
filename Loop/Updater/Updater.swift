@@ -6,15 +6,25 @@
 //
 
 import Combine
+import Defaults
 import Luminare
 import SwiftUI
 
 class Updater: ObservableObject {
-    @Published var availableReleases = [Release]()
+    @Published var targetRelease: Release?
     @Published var progressBar: Double = 0
     @Published var updateState: UpdateAvailability = .notChecked
 
-    @Published var changelog: [(title: String, body: [String])] = .init()
+    @Published var changelog: [(title: String, body: [ChangelogNote])] = .init()
+
+    struct ChangelogNote: Identifiable {
+        var id: UUID = .init()
+
+        var emoji: String
+        var text: String
+        var user: String?
+        var reference: Int?
+    }
 
     enum UpdateAvailability {
         case notChecked
@@ -25,13 +35,27 @@ class Updater: ObservableObject {
     private var windowController: NSWindowController?
     private var updateCheckCancellable: AnyCancellable?
 
+    @Published var includeDevelopmentVersions: Bool = Defaults[.includeDevelopmentVersions] {
+        didSet {
+            Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
+
+            // When the value changes, trigger a new update check
+            Task {
+                await fetchLatestInfo()
+            }
+        }
+    }
+
     init() {
         self.updateCheckCancellable = Timer.publish(every: 21600, on: .main, in: .common)
             .autoconnect()
             .sink { _ in
                 Task {
                     await self.fetchLatestInfo()
-                    self.showUpdateWindow()
+
+                    if self.updateState == .available {
+                        await self.showUpdateWindow()
+                    }
                 }
             }
     }
@@ -44,28 +68,76 @@ class Updater: ObservableObject {
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
-    // Make sure to run checkForUpdate() after this if needed.
     func fetchLatestInfo() async {
-        guard let url = URL(string: "https://api.github.com/repos/MrKai77/Loop/releases/latest") else { return }
+        await MainActor.run {
+            targetRelease = nil
+            updateState = .notChecked
+            progressBar = 0
+        }
+
+        let urlString = includeDevelopmentVersions ?
+            "https://api.github.com/repos/MrKai77/Loop/releases" : // Developmental branch
+            "https://api.github.com/repos/MrKai77/Loop/releases/latest" // Stable branch
+
+        guard let url = URL(string: urlString) else {
+            NSLog("Invalid URL: \(urlString)")
+            return
+        }
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let response = try JSONDecoder().decode(Release.self, from: data)
 
-            availableReleases = [response]
-
-            if let latestRelease = availableReleases.first {
-                let currentVersion = Bundle.main.appVersion
-
-                if latestRelease.tagName.compare(currentVersion, options: .numeric) == .orderedDescending {
-                    updateState = .available
-                    processChangelog(response.body)
-                } else {
-                    updateState = .unavailable
-                }
-            }
+            // Process data immediately after fetching, reducing the number of async suspension points.
+            try await processFetchedData(data)
         } catch {
-            NSLog("Error: \(error.localizedDescription)")
+            NSLog("Error fetching release info: \(error.localizedDescription)")
+        }
+    }
+
+    private func processFetchedData(_ data: Data) async throws {
+        let decoder = JSONDecoder()
+        if includeDevelopmentVersions {
+            // This would need to parse a list of releases
+            let releases = try decoder.decode([Release].self, from: data)
+
+            if let latestPreRelease = releases.compactMap({ $0.prerelease ? $0 : nil }).first {
+                try await processRelease(latestPreRelease)
+            }
+        } else {
+            // This would need to parse a single release
+            let release = try decoder.decode(Release.self, from: data)
+            try await processRelease(release)
+        }
+    }
+
+    private func processRelease(_ release: Release) async throws {
+        let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
+
+        await MainActor.run {
+            var release = release
+
+            if release.prerelease,
+               let versionDetails = release.extractVersionFromTitle() {
+                release.tagName = versionDetails.preRelease
+                release.buildNumber = versionDetails.buildNumber
+            }
+
+            var isUpdateAvailable = release.tagName.compare(currentVersion, options: .numeric) == .orderedDescending
+
+            // If the development version is chosen, compare the build number
+            if !isUpdateAvailable,
+               includeDevelopmentVersions,
+               let versionBuild = release.buildNumber,
+               let currentBuild = Bundle.main.appBuild {
+                isUpdateAvailable = versionBuild > currentBuild
+            }
+
+            updateState = isUpdateAvailable ? .available : .unavailable
+
+            if isUpdateAvailable {
+                targetRelease = release
+                processChangelog(release.body)
+            }
         }
     }
 
@@ -89,25 +161,46 @@ class Updater: ObservableObject {
                 }
 
             } else {
-                guard line.hasPrefix("- ") else { continue }
+                guard
+                    line.hasPrefix("- "),
+                    let index = changelog.firstIndex(where: { $0.title == currentSection })
+                else {
+                    continue
+                }
 
-                // Format list items
-                let line = line
+                let line = String(line)
                     .replacingOccurrences(of: "- ", with: "") // Remove bullet point
-                    .replacingOccurrences(of: #"#\d+ "#, with: "", options: .regularExpression) // Remove issue number
+                    .trimmingCharacters(in: .whitespaces)
+
+                var user: String?
+                if let regex = try? NSRegularExpression(pattern: #"\(@(.*)\)"#),
+                   let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..., in: line)) {
+                    user = Range(match.range(at: 1), in: line).flatMap { String(line[$0]) }
+                }
+
+                var reference: Int?
+                if let regex = try? NSRegularExpression(pattern: #"#(\d+)"#),
+                   let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..., in: line)) {
+                    reference = Int(Range(match.range(at: 1), in: line).flatMap { String(line[$0]) } ?? "")
+                }
+
+                let emoji = String(line.prefix(1))
+
+                let text = line
+                    .suffix(line.count - 1)
+                    .replacingOccurrences(of: #"#\d+"#, with: "", options: .regularExpression) // Remove issue number
                     .replacingOccurrences(of: #"\(@.*\)"#, with: "", options: .regularExpression) // Remove author
                     .trimmingCharacters(in: .whitespacesAndNewlines)
 
-                if let index = changelog.firstIndex(where: { $0.title == currentSection }) {
-                    changelog[index].body.append(line)
-                }
+                changelog[index].body.append(.init(emoji: emoji, text: text, user: user, reference: reference))
             }
         }
     }
 
-    // Checks if the fetched release is newer than the current version and updates the app state.
-    func showUpdateWindow() {
-        if updateState == .available {
+    func showUpdateWindow() async {
+        guard updateState == .available else { return }
+
+        await MainActor.run {
             if windowController?.window == nil {
                 windowController = .init(window: LuminareTrafficLightedWindow { UpdateView() })
             }
@@ -116,10 +209,10 @@ class Updater: ObservableObject {
         }
     }
 
-    // Downloads the update from GitHub and prepares it for installation.
+    // Downloads the update from GitHub and installs it
     func installUpdate() async {
         guard
-            let latestRelease = availableReleases.first,
+            let latestRelease = targetRelease,
             let asset = latestRelease.assets.first
         else {
             DispatchQueue.main.async {
@@ -205,23 +298,44 @@ class Updater: ObservableObject {
 
 // Release model to parse GitHub API response for releases.
 struct Release: Codable {
-    let id: Int
-    let tagName: String
-    let body: String
-    let assets: [Release.Asset]
+    var id: Int
+    var tagName: String
+    var name: String
+    var body: String
+    var assets: [Asset]
+    var prerelease: Bool
+
+    var buildNumber: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id, body, assets
-        case tagName = "tag_name" // Maps JSON key "tag_name" to the property `tagName`.
+        case id, tagName = "tag_name", name, body, assets, prerelease
     }
 
     struct Asset: Codable {
-        let name: String
-        let browserDownloadURL: String
+        var name: String
+        var browserDownloadURL: String
 
         enum CodingKeys: String, CodingKey {
             case name
-            case browserDownloadURL = "browser_download_url" // Maps JSON key "browser_download_url" to the property `browserDownloadURL`.
+            case browserDownloadURL = "browser_download_url"
         }
+    }
+}
+
+// Extension to Release to extract version details from the title
+extension Release {
+    func extractVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
+        let pattern = #"🧪 (.*?) \((\d+)\)"#
+        guard
+            let regex = try? NSRegularExpression(pattern: pattern),
+            let match = regex.firstMatch(in: name, range: NSRange(name.startIndex..., in: name))
+        else {
+            return nil
+        }
+
+        let preRelease = Range(match.range(at: 1), in: name).flatMap { String(self.name[$0]) } ?? "0.0.0"
+        let buildNumber = Int(Range(match.range(at: 2), in: name).flatMap { self.name[$0] } ?? "") ?? 0
+
+        return (preRelease, buildNumber)
     }
 }

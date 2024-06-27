@@ -326,8 +326,13 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         var result = frameToResizeFrom
         let totalBounds: Edge.Set = [.top, .bottom, .leading, .trailing]
         let step = Defaults[.sizeIncrement] * ((direction == .larger || direction.willGrow) ? -1 : 1)
-        let minWidth = Defaults[.padding].totalHorizontalPadding + Defaults[.previewPadding] + 100
-        let minHeight = Defaults[.padding].totalVerticalPadding + Defaults[.previewPadding] + 100
+
+        let padding = Defaults[.padding]
+        let previewPadding = Defaults[.previewPadding]
+        let totalHorizontalPadding = padding.left + padding.right
+        let totalVerticalPadding = padding.totalTopPadding + padding.bottom
+        let minWidth = totalHorizontalPadding + previewPadding + 100
+        let minHeight = totalVerticalPadding + previewPadding + 100
 
         if LoopManager.sidesToAdjust == nil {
             let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)

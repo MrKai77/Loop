@@ -84,7 +84,13 @@ enum WindowEngine {
             return
         }
 
-        let bounds = action.direction.willMove ? .zero : screen.safeScreenFrame
+        let screenFrame = action.direction.willMove ? .zero : screen.safeScreenFrame
+
+        let bounds = if Defaults[.enablePadding] {
+            Defaults[.padding].apply(on: screenFrame)
+        } else {
+            screenFrame
+        }
 
         window.setFrame(
             targetFrame,
@@ -194,25 +200,22 @@ enum WindowEngine {
             return
         }
 
-        let windowFrame = window.frame
+        var windowFrame = window.frame
+
         // If the window is fully shown on the screen
-        if windowFrame.maxX <= bounds.maxX, windowFrame.maxY <= bounds.maxY {
+        if windowFrame.maxX <= bounds.maxX,
+           windowFrame.maxY <= bounds.maxY {
             return
         }
 
-        // If not, then Loop will auto re-adjust the window size to be fully shown on the screen
-        var fixedWindowFrame = windowFrame
-
-        if fixedWindowFrame.maxX > bounds.maxX {
-            let rightPadding = Defaults[.enablePadding] ? Defaults[.padding].right : 0
-            fixedWindowFrame.origin.x = bounds.maxX - fixedWindowFrame.width - rightPadding
+        if windowFrame.maxX > bounds.maxX {
+            windowFrame.origin.x = bounds.maxX - windowFrame.width
         }
 
-        if fixedWindowFrame.maxY > bounds.maxY {
-            let bottomPadding = Defaults[.enablePadding] ? Defaults[.padding].bottom : 0
-            fixedWindowFrame.origin.y = bounds.maxY - fixedWindowFrame.height - bottomPadding
+        if windowFrame.maxY > bounds.maxY {
+            windowFrame.origin.y = bounds.maxY - windowFrame.height
         }
 
-        window.position = fixedWindowFrame.origin
+        window.position = windowFrame.origin
     }
 }

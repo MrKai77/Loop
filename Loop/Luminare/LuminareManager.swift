@@ -38,7 +38,7 @@ class LuminareManager {
                 behaviorConfiguration,
                 keybindingsConfiguration
             ]),
-            .init("Loop", [
+            .init("\(Bundle.main.appName)", [
                 advancedConfiguration,
                 excludedAppsConfiguration,
                 aboutConfiguration

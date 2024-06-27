@@ -22,3 +22,10 @@ body:
       value: |
         Please keep in mind that not all icons may be approved, as they do take up quite a bit of space in the app itself :)
         Thank you for taking the time to make icons for Loop!
+
+  - type: checkboxes
+    attributes:
+      label: Final Checks
+      options:
+        - label: My suggestion is written in English
+          required: true

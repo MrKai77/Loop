@@ -299,20 +299,20 @@ class Window {
 
     public func createObserver(_ callback: @escaping Observer.Callback) -> Observer? {
         do {
-            return try Observer(processID: try self.axWindow.getPID()!, callback: callback)
+            return try Observer(processID: self.axWindow.getPID()!, callback: callback)
         } catch AXError.invalidUIElement {
             return nil
-        } catch let error {
+        } catch {
             fatalError("Caught unexpected error creating observer: \(error)")
         }
     }
 
     public func createObserver(_ callback: @escaping Observer.CallbackWithInfo) -> Observer? {
         do {
-            return try Observer(processID: try self.axWindow.getPID()!, callback: callback)
+            return try Observer(processID: self.axWindow.getPID()!, callback: callback)
         } catch AXError.invalidUIElement {
             return nil
-        } catch let error {
+        } catch {
             fatalError("Caught unexpected error creating observer: \(error)")
         }
     }

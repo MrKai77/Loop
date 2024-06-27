@@ -137,38 +137,38 @@ struct UpdateView: View {
 
     func versionChangeView() -> some View {
         ZStack {
-            if colorScheme == .dark {
-                HStack {
-                    Text(Bundle.main.appVersion)
-                    Image(systemName: "arrow.right")
-                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
-                }
-                .foregroundStyle(.primary.opacity(0.7))
-                .blendMode(.overlay)
-            } else {
-                HStack {
-                    Text(Bundle.main.appVersion)
-                    Image(systemName: "arrow.right")
-                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
-                }
+            versionChangeText()
                 .foregroundStyle(.primary.opacity(0.7))
                 .blendMode(.overlay)
 
-                HStack {
-                    Text(Bundle.main.appVersion)
-                    Image(systemName: "arrow.right")
-                    Text(updater.availableReleases.first?.tagName ?? "Unknown")
-                }
-                .blendMode(.overlay)
+            if colorScheme == .light {
+                versionChangeText()
+                    .blendMode(.overlay)
+            }
+        }
+    }
+
+    func versionChangeText() -> some View {
+        HStack {
+            if updater.targetRelease?.prerelease ?? true {
+                Text("\(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
+                Image(systemName: "arrow.right")
+                Text("\(updater.targetRelease?.tagName ?? "Unknown") (\(updater.targetRelease?.buildNumber ?? 0))")
+            } else {
+                Text(Bundle.main.appVersion ?? "Unknown")
+                Image(systemName: "arrow.right")
+                Text(updater.targetRelease?.tagName ?? "Unknown")
             }
         }
     }
 
     func changelogView() -> some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             LazyVStack {
-                ForEach(updater.changelog, id: \.title) { item in
-                    ChangelogSectionView(item: item)
+                ForEach($updater.changelog, id: \.title) { item in
+                    if !item.body.isEmpty {
+                        ChangelogSectionView(item: item)
+                    }
                 }
             }
             .padding(.top, 10)
@@ -178,7 +178,7 @@ struct UpdateView: View {
 }
 
 struct ChangelogSectionView: View {
-    let item: (title: String, body: [String])
+    @Binding var item: (title: String, body: [Updater.ChangelogNote])
     @State var isExpanded = false
 
     var body: some View {
@@ -206,17 +206,39 @@ struct ChangelogSectionView: View {
             .buttonStyle(.plain)
 
             if isExpanded {
-                ForEach(item.body, id: \.self) { line in
-                    let emoji = line.prefix(1)
-                    let note = line
-                        .suffix(line.count - 1)
-                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                ForEach($item.body, id: \.id) { line in
+                    let note = line.wrappedValue
 
                     HStack(spacing: 8) {
-                        Text(emoji)
-                        Text(LocalizedStringKey(note))
+                        Text(note.emoji)
+                        Text(LocalizedStringKey(note.text))
                             .lineSpacing(1.1)
+
                         Spacer(minLength: 0)
+
+                        HStack(spacing: 0) {
+                            if let user = note.user {
+                                let text = "@\(user)"
+                                Link(text, destination: URL(string: "https://github.com/\(user)")!)
+                                    .frame(width: 105, alignment: .trailing)
+                            }
+
+                            if note.user != nil, note.user != nil {
+                                let text = "•" // Prevents unnecessary localization entries
+                                Text(text)
+                                    .padding(.horizontal, 4)
+                            }
+
+                            if let reference = note.reference {
+                                let text = "#\(reference)"
+                                Link(text, destination: URL(string: "https://github.com/MrKai77/Loop/issues/\(reference)")!)
+                                    .frame(width: 35, alignment: .leading)
+                                    .monospaced()
+                            }
+                        }
+                        .foregroundStyle(.secondary)
+                        .buttonStyle(.plain)
+                        .fixedSize()
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
