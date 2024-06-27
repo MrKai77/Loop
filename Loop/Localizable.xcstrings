@@ -337,8 +337,15 @@
         }
       }
     },
-    "%lld Loops left" : {
-
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
     },
     "99 problems, updates ain't one." : {
 

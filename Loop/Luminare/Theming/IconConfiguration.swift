@@ -38,43 +38,8 @@ class IconConfigurationModel: ObservableObject {
         }
     }
 
-    private func handleNotificationChange() {
-        if notificationWhenIconUnlocked {
-            AppDelegate.sendNotification(Bundle.main.appName, "You will now be notified when you unlock a new icon.")
-            if !AppDelegate.areNotificationsEnabled() {
-                notificationWhenIconUnlocked = false
-                userDisabledNotificationsAlert()
-            }
-        }
-    }
-
-    private func userDisabledNotificationsAlert() {
-        guard let window = LuminareManager.window else { return }
-        let alert = NSAlert()
-        alert.messageText = "\(Bundle.main.appName)'s notification permissions are currently disabled."
-        alert.informativeText = "Please turn them on in System Settings."
-        alert.addButton(withTitle: "Open Settings")
-        alert.alertStyle = .warning
-
-        alert.beginSheetModal(for: window) { modalResponse in
-            if modalResponse == .alertFirstButtonReturn {
-                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension")!)
-            }
-        }
-    }
-
-    func nextIconUnlockLoopCount(timesLooped: Int) -> Int? {
-        Icon.all.first { $0.unlockTime > timesLooped }?.unlockTime
-    }
-}
-
-struct IconConfigurationView: View {
-    @Environment(\.openURL) var openURL
-    @StateObject private var model = IconConfigurationModel()
-    @Default(.timesLooped) var timesLooped
-    @State private var showingLockedAlert = false
-    @State private var selectedLockedMessage = LocalizedStringKey("")
-
+    @Published var showingLockedAlert = false
+    @Published var selectedLockedMessage: LocalizedStringKey = .init("")
     let lockedMessages: [LocalizedStringKey] = [
         "You don’t have that yet!",
         "Who do you think you are, trying to access these top secret icons?",
@@ -106,6 +71,40 @@ struct IconConfigurationView: View {
         "The icons await, hidden behind the veil of loops yet to be made."
     ]
 
+    private func handleNotificationChange() {
+        if notificationWhenIconUnlocked {
+            AppDelegate.sendNotification(Bundle.main.appName, "You will now be notified when you unlock a new icon.")
+            if !AppDelegate.areNotificationsEnabled() {
+                notificationWhenIconUnlocked = false
+                userDisabledNotificationsAlert()
+            }
+        }
+    }
+
+    private func userDisabledNotificationsAlert() {
+        guard let window = LuminareManager.window else { return }
+        let alert = NSAlert()
+        alert.messageText = "\(Bundle.main.appName)'s notification permissions are currently disabled."
+        alert.informativeText = "Please turn them on in System Settings."
+        alert.addButton(withTitle: "Open Settings")
+        alert.alertStyle = .warning
+
+        alert.beginSheetModal(for: window) { modalResponse in
+            if modalResponse == .alertFirstButtonReturn {
+                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension")!)
+            }
+        }
+    }
+
+    func nextIconUnlockLoopCount(timesLooped: Int) -> Int {
+        Icon.all.first { $0.unlockTime > timesLooped }?.unlockTime ?? 0
+    }
+}
+
+struct IconConfigurationView: View {
+    @Environment(\.openURL) var openURL
+    @StateObject private var model = IconConfigurationModel()
+
     var body: some View {
         LuminareSection(showDividers: false) {
             LuminarePicker(
@@ -116,43 +115,15 @@ struct IconConfigurationView: View {
                 ),
                 roundBottom: false
             ) { icon in
-                Group {
-                    if icon.selectable {
-                        Image(nsImage: NSImage(named: icon.iconName)!)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding(10)
-                    } else {
-                        VStack(alignment: .center) {
-                            Spacer()
-                            Image(._18PxLock)
-                            if let nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped),
-                               nextUnlockCount == icon.unlockTime {
-                                Text("\(nextUnlockCount - timesLooped) Loops left")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            } else {
-                                Text("Locked")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedLockedMessage = lockedMessages.randomElement() ?? ""
-                            showingLockedAlert = true
-                        }
+                IconVew(model: model, icon: icon)
+                    .aspectRatio(1, contentMode: .fit)
+                    .alert(isPresented: $model.showingLockedAlert) {
+                        Alert(
+                            title: Text("Icon Locked"),
+                            message: Text(model.selectedLockedMessage),
+                            dismissButton: .default(Text("OK"))
+                        )
                     }
-                }
-                .aspectRatio(1, contentMode: .fit)
-                .alert(isPresented: $showingLockedAlert) {
-                    Alert(
-                        title: Text("Icon Locked"),
-                        message: Text(selectedLockedMessage),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
             }
             Button("Suggest new icon") {
                 openURL(IconConfigurationModel.suggestNewIconLink)
@@ -161,6 +132,62 @@ struct IconConfigurationView: View {
         LuminareSection("Options") {
             LuminareToggle("Show in dock", isOn: $model.showDockIcon)
             LuminareToggle("Notify when unlocking new icons", isOn: $model.notificationWhenIconUnlocked)
+        }
+    }
+}
+
+struct IconVew: View {
+    @ObservedObject var model: IconConfigurationModel
+    let icon: Icon
+
+    @State private var hasBeenUnlocked: Bool = false
+    @Default(.timesLooped) var timesLooped
+    @State private var nextUnlockCount: Int = -1
+    @State private var loopsLeft: Int = -1
+
+    var body: some View {
+        Group {
+            if hasBeenUnlocked {
+                Image(nsImage: NSImage(named: icon.iconName)!)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding(10)
+            } else {
+                VStack(alignment: .center) {
+                    Spacer()
+                    Image(._18PxLock)
+                    Text(nextUnlockCount == icon.unlockTime ? "\(loopsLeft) \(loopsLeft > 1 ? "Loops left" : "Loop left")" : "Locked")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .contentTransition(.numericText())
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    model.selectedLockedMessage = model.lockedMessages.randomElement() ?? ""
+                    model.showingLockedAlert = true
+                }
+            }
+        }
+        .onAppear {
+            hasBeenUnlocked = icon.selectable
+
+            if !hasBeenUnlocked {
+                nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
+                loopsLeft = nextUnlockCount - timesLooped
+            }
+        }
+        .onChange(of: timesLooped) { _ in
+            withAnimation(.smooth(duration: 0.25)) {
+                hasBeenUnlocked = icon.selectable
+            }
+
+            if !hasBeenUnlocked {
+                withAnimation(.smooth(duration: 0.25)) {
+                    nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
+                    loopsLeft = nextUnlockCount - timesLooped
+                }
+            }
         }
     }
 }
