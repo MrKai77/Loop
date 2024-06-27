@@ -729,6 +729,9 @@
         }
       }
     },
+    "As the loops accumulate, so too will your collection of icons." : {
+
+    },
     "Beggars can't be... updaters." : {
 
     },
@@ -1653,7 +1656,7 @@
       }
     },
     "Default notification content" : {
-      "extractionState" : "extracted_with_value",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1979,7 +1982,13 @@
         }
       }
     },
+    "Each loop you complete plants the seeds for icons to grow." : {
+
+    },
     "Engage! ...in the current version, it's the latest." : {
+
+    },
+    "Every loop brings you closer to the treasure that awaits." : {
 
     },
     "Excluded Apps" : {
@@ -2630,6 +2639,9 @@
           }
         }
       }
+    },
+    "Icon Locked" : {
+
     },
     "Icon Name: Black" : {
       "extractionState" : "extracted_with_value",
@@ -3473,6 +3485,9 @@
     "In a galaxy far, far away... still no updates!" : {
 
     },
+    "In due time, this icon shall be revealed to you." : {
+
+    },
     "Include development versions" : {
       "localizations" : {
         "en-GB" : {
@@ -3676,6 +3691,12 @@
     "Just a small town app, same old version" : {
 
     },
+    "Keep looping, and this icon will be yours in no time." : {
+
+    },
+    "Keep up the good work, and this icon will be your reward." : {
+
+    },
     "Keybindings" : {
       "localizations" : {
         "en-GB" : {
@@ -3876,6 +3897,12 @@
         }
       }
     },
+    "Like the moon's phases, your icons will reveal themselves in cycles of loops." : {
+
+    },
+    "Locked" : {
+      "comment" : "When an app icon is locked"
+    },
     "Loop" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3917,8 +3944,36 @@
         }
       }
     },
+    "Loop after loop, your dedication carves the key to success." : {
+
+    },
+    "Loop around the obstacles; your reward is just beyond them." : {
+
+    },
     "Loop is in its prime!" : {
 
+    },
+    "Loops left to unlock a new icon" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loop left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "May the Force be with you... next time!" : {
       "localizations" : {
@@ -4295,6 +4350,9 @@
         }
       }
     },
+    "Not yet, but you're closer than you were yesterday!" : {
+
+    },
     "Nothing to cycle through" : {
       "localizations" : {
         "en-GB" : {
@@ -4422,6 +4480,9 @@
         }
       }
     },
+    "OK" : {
+
+    },
     "One does not simply update Loop." : {
 
     },
@@ -4507,6 +4568,12 @@
           }
         }
       }
+    },
+    "Patience is a virtue, and your key to this icon." : {
+
+    },
+    "Patience, young looper, this icon is not far away." : {
+
     },
     "Permissions" : {
       "localizations" : {
@@ -6038,6 +6105,9 @@
         }
       }
     },
+    "Some icons are worth the wait, don't you think?" : {
+
+    },
     "Stage Manager" : {
       "localizations" : {
         "en-GB" : {
@@ -6117,6 +6187,9 @@
           }
         }
       }
+    },
+    "Stay curious, and soon this icon will be within your reach." : {
+
     },
     "Stay sharp, more intel coming soon!" : {
       "localizations" : {
@@ -6401,6 +6474,15 @@
         }
       }
     },
+    "The icons are not just unlocked; they're earned, loop by loop." : {
+
+    },
+    "The icons await, hidden behind the veil of loops yet to be made." : {
+
+    },
+    "The journey of a thousand loops begins with a single step." : {
+
+    },
     "The odds are ever in your favor, no updates today!" : {
 
     },
@@ -6487,6 +6569,9 @@
         }
       }
     },
+    "Think of each loop as a riddle, solving the mystery of the locked icon." : {
+
+    },
     "This app is more up to date than my diary entries!" : {
 
     },
@@ -6529,6 +6614,18 @@
           }
         }
       }
+    },
+    "This icon is like a fine wine, it needs more time." : {
+
+    },
+    "This icon is locked, but your potential is not!" : {
+
+    },
+    "This icon is reserved for the most dedicated loopers." : {
+
+    },
+    "This icon is still under wraps, stay tuned!" : {
+
     },
     "This is not the update you're looking for!" : {
       "localizations" : {
@@ -6729,6 +6826,9 @@
           }
         }
       }
+    },
+    "Unlocking this icon is just a matter of time and loops." : {
+
     },
     "Updates? In this economy?" : {
 
@@ -7034,6 +7134,9 @@
 
     },
     "We've misplaced the 'Update' button. Oops!" : {
+
+    },
+    "Who do you think you are, trying to access these top secret icons?" : {
 
     },
     "Width" : {
@@ -9441,6 +9544,9 @@
     "Winter is coming. Updates aren't yet." : {
 
     },
+    "With each loop, the lock on this icon weakens." : {
+
+    },
     "X" : {
       "localizations" : {
         "en-GB" : {
@@ -9600,6 +9706,9 @@
           }
         }
       }
+    },
+    "You don’t have that yet!" : {
+
     },
     "You're cruising on the latest tech!" : {
 
@@ -9807,7 +9916,16 @@
         }
       }
     },
+    "You've looped... uhh... I... lost count..." : {
+
+    },
+    "Your journey is not yet complete, this icon awaits at the end." : {
+
+    },
     "Your Loop is loopier than ever, no updates found!" : {
+
+    },
+    "Your persistence in looping is the master key to all icons." : {
 
     }
   },
