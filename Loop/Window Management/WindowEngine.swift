@@ -176,9 +176,22 @@ enum WindowEngine {
 
         var windowList: [Window] = []
         for window in list {
-            if let pid = window[kCGWindowOwnerPID as String] as? Int32 {
+            if let pid = window[kCGWindowOwnerPID as String] as? Int32,
+               let bounds = window[kCGWindowBounds as String] as? NSDictionary {
                 do {
-                    let window = try Window(pid: pid)
+                    guard
+                        let xPoint = bounds["X"] as? CGFloat,
+                        let yPoint = bounds["Y"] as? CGFloat,
+                        let width = bounds["Width"] as? CGFloat,
+                        let height = bounds["Height"] as? CGFloat
+                    else {
+                        continue
+                    }
+
+                    let window = try Window(
+                        pid: pid,
+                        bounds: CGRect(x: xPoint, y: yPoint, width: width, height: height)
+                    )
                     windowList.append(window)
                 } catch {
 //                    print("Failed to create window: \(error.localizedDescription)")

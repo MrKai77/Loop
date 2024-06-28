@@ -53,9 +53,29 @@ class Window {
 
     convenience init(pid: pid_t) throws {
         let element = AXUIElementCreateApplication(pid)
-        guard let window: AXUIElement = try element.getValue(.focusedWindow) else {
+        guard let window: AXUIElement = try element.getValue(.mainWindow) else {
             throw WindowError.invalidWindow
         }
+        try self.init(element: window)
+    }
+
+    // Makes sure the window name matches the provided name
+    convenience init(pid: pid_t, bounds: CGRect) throws {
+        let element = AXUIElementCreateApplication(pid)
+
+        guard
+            let windows: [AXUIElement] = try element.getValue(.windows),
+            let window = windows.first(where: { item in
+                if let size: CGSize = try? item.getValue(.size),
+                   let position: CGPoint = try? item.getValue(.position) {
+                    return bounds == .init(origin: position, size: size)
+                }
+                return false
+            })
+        else {
+            throw WindowError.invalidWindow
+        }
+
         try self.init(element: window)
     }
 
