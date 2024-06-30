@@ -33,3 +33,16 @@ extension Color {
         Color(nsColor: NSColor.systemGray.blended(withFraction: 0.2, of: .black)!)
     }
 }
+
+// MARK: - Extension for wallpaper coloring
+
+extension NSColor {
+    // Converts NSColor to a hexadecimal string representation.
+    var toHexString: String {
+        let rgbColor = usingColorSpace(.deviceRGB) ?? NSColor.black
+        let red = Int(round(rgbColor.redComponent * 0xFF))
+        let green = Int(round(rgbColor.greenComponent * 0xFF))
+        let blue = Int(round(rgbColor.blueComponent * 0xFF))
+        return String(format: "#%02X%02X%02X", red, green, blue)
+    }
+}

@@ -79,7 +79,7 @@ class WindowDragManager {
             self.draggingWindow = draggingWindow
             initialWindowFrame = draggingWindow.frame
         } catch {
-            print("Failed to get window at position: \(error.localizedDescription)")
+            // print("Failed to get window at position: \(error.localizedDescription)")
         }
     }
 

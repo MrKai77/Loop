@@ -9,19 +9,6 @@
 
 import AppKit
 
-extension NSColor {
-    // Converts NSColor to a hexadecimal string representation.
-    // I think we defined this somewhere else? i can't remeber if it
-    // was in Luminare or here, so i just added it apart of this file
-    var toHexString: String {
-        let rgbColor = usingColorSpace(.deviceRGB) ?? NSColor.black
-        let red = Int(round(rgbColor.redComponent * 0xFF))
-        let green = Int(round(rgbColor.greenComponent * 0xFF))
-        let blue = Int(round(rgbColor.blueComponent * 0xFF))
-        return String(format: "#%02X%02X%02X", red, green, blue)
-    }
-}
-
 // The real beans here (I don't like beans)
 extension NSImage {
     // Calculates the dominant colors of the image.
@@ -29,11 +16,12 @@ extension NSImage {
         DispatchQueue.global(qos: .userInitiated).async {
             // Resize the image for faster processing while maintaining aspect ratio
             let aspectRatio = self.size.width / self.size.height
-            // Should be able to set it to 100x100 without any issues for faster cals
-            let resizedImage = self.resized(to: NSSize(width: 200 * aspectRatio, height: 200))
+            // Set it to 100x100 for faster calculations
+            let resizedImage = self.resized(to: NSSize(width: 100 * aspectRatio, height: 100))
 
             guard let resizedCGImage = resizedImage?.cgImage(forProposedRect: nil, context: nil, hints: nil),
-                  let data = CFDataGetBytePtr(resizedCGImage.dataProvider!.data) else {
+                  let dataProvider = resizedCGImage.dataProvider,
+                  let data = CFDataGetBytePtr(dataProvider.data) else {
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -49,23 +37,33 @@ extension NSImage {
             for y in 0 ..< height {
                 for x in 0 ..< width {
                     let pixelData = Int(y * bytesPerRow + x * bytesPerPixel)
+                    // Check for images without an alpha channel
+                    let alpha = (bytesPerPixel == 4) ? CGFloat(data[pixelData + 3]) / 255.0 : 1.0
                     let color = NSColor(
                         red: CGFloat(data[pixelData]) / 255.0,
                         green: CGFloat(data[pixelData + 1]) / 255.0,
                         blue: CGFloat(data[pixelData + 2]) / 255.0,
-                        alpha: CGFloat(data[pixelData + 3]) / 255.0
+                        alpha: alpha
                     )
                     colorCountMap[color, default: 0] += 1
                 }
             }
 
-            let sortedColors = colorCountMap.sorted {
-                $0.value > $1.value || ($0.value == $1.value && $0.key.brightnessComponent > $1.key.brightnessComponent)
-            }.map(\.key)
+            /// Had a warn about high file sizes may cause a force crash, use a diff dom method
+            // let sortedColors = colorCountMap.sorted {
+            //     $0.value > $1.value || ($0.value == $1.value && $0.key.brightnessComponent > $1.key.brightnessComponent)
+            // }.map(\.key)
 
-            // This is filtering 5, but it can do anything
-            // the console button will output 2 values though
-            let dominantColors = Array(sortedColors.prefix(5))
+            // Filter to the top 5 dominant colors
+            // let dominantColors = Array(sortedColors.prefix(5))
+
+            // Use a partial sort to find the top 2 dominant colors without sorting the entire map
+            let dominantColors = colorCountMap
+                .sorted { $0.value > $1.value }
+                // Set prefix to how many colors you want
+                .prefix(2)
+                .sorted { $0.key.brightnessComponent > $1.key.brightnessComponent }
+                .map(\.key)
 
             DispatchQueue.main.async {
                 completion(dominantColors)
@@ -99,17 +97,21 @@ extension NSImage {
 public class WallpaperProcessor {
     private static var lastProcessedColors: [NSColor]?
     private static var wallpaperCheckTimer: Timer?
+    private static var isProcessingWallpaper: Bool = false
 
     // A timer is the best for wallpaper checking, its currently 60 seconds
     // maybe at a later date, add advanced checking like in the system settings
     // wallpaper section ...
-    
+
     // Starts a timer to periodically check the wallpaper.
     public static func startAutoCheckWallpaperTimer() {
         wallpaperCheckTimer?.invalidate()
         wallpaperCheckTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
+            guard !isProcessingWallpaper else { return } // Check if processing is already underway
+            isProcessingWallpaper = true // Set the flag to indicate processing is starting
             processCurrentWallpaper { result in
                 print(result)
+                isProcessingWallpaper = false // Corrected the typo in the variable name
             }
         }
     }
@@ -121,21 +123,22 @@ public class WallpaperProcessor {
     }
 
     // Processes the current wallpaper and returns a message with the dominant colors.
-    public static func processCurrentWallpaper(completion: @escaping (String) -> ()) {
+    public static func processCurrentWallpaper(completion: @escaping (Result<[NSColor], Error>) -> ()) {
         takeScreenshot { screenshot in
             guard let image = screenshot else {
-                completion("Failed to take a screenshot of the desktop wallpaper.")
+                completion(.failure(NSError(domain: "WallpaperProcessorError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to take a screenshot of the desktop wallpaper."])))
                 return
             }
             image.calculateDominantColors { dominantColors in
-                guard let colors = dominantColors, colors.count >= 2 else {
-                    completion("Could not calculate the dominant colors.")
+                guard let colors = dominantColors, !colors.isEmpty else {
+                    completion(.failure(NSError(domain: "WallpaperProcessorError", code: 2, userInfo: [NSLocalizedDescriptionKey: "Could not calculate the dominant colors."])))
                     return
                 }
 
-                let topTwoColorsHex = colors.prefix(2).map(\.toHexString)
-                let message = "Dominant colors: \(topTwoColorsHex.joined(separator: ", "))"
-                completion(message)
+                // Update lastProcessedColors with the new dominant colors
+                lastProcessedColors = colors
+
+                completion(.success(colors))
             }
         }
     }

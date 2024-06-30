@@ -4,6 +4,7 @@
 //
 //  Created by Kai Azim on 2024-04-19.
 //
+#warning("TODO: Connect the 'Dynamic Wallpaper Sync' to the timer to synchronize it as the button currently does.")
 
 import Defaults
 import Luminare
@@ -37,6 +38,9 @@ class AccentColorConfigurationModel: ObservableObject {
     @Published var processWallpaper = Defaults[.processWallpaper] {
         didSet {
             Defaults[.processWallpaper] = processWallpaper
+            if processWallpaper {
+                fetchWallpaperColors()
+            }
         }
     }
 
@@ -52,6 +56,24 @@ class AccentColorConfigurationModel: ObservableObject {
             WallpaperProcessor.startAutoCheckWallpaperTimer()
         } else {
             WallpaperProcessor.stopAutoCheckWallpaperTimer()
+        }
+    }
+
+    private func updateColorsFromWallpaper(with colors: [NSColor]) {
+        DispatchQueue.main.async {
+            self.customAccentColor = Color(colors.first ?? .clear)
+            self.gradientColor = colors.count > 1 ? Color(colors[1]) : self.gradientColor
+        }
+    }
+
+    func fetchWallpaperColors() {
+        WallpaperProcessor.processCurrentWallpaper { [weak self] result in
+            switch result {
+            case let .success(colors):
+                self?.updateColorsFromWallpaper(with: colors)
+            case let .failure(error):
+                print(error.localizedDescription)
+            }
         }
     }
 }
@@ -88,8 +110,6 @@ struct AccentColorConfigurationView: View {
                 .frame(height: 90)
             }
 
-            #warning("TODO: Return the colors from the wallpaper into the colors section")
-
             LuminareToggle("Gradient", isOn: $model.useGradient.animation(.smooth(duration: 0.25)))
             LuminareToggle("Use Wallpaper Colors", isOn: $model.processWallpaper.animation(.smooth(duration: 0.25)))
 
@@ -98,46 +118,29 @@ struct AccentColorConfigurationView: View {
                 LuminareToggle("Dynamic Wallpaper Sync", isOn: $model.autoCheckWallpaper.animation(.smooth(duration: 0.25)))
 
                 // Do we want a force wallpaper button like this in prod? who knows, i don't
+                // It might be useful... Additionally, we should configure a custom timer in the advanced
+                // options section to synchronize with the dynamic changes in the wallpaper section. So
+                // 5s, 1m, 5m, 15m, 30m, 1h, 24h or more if we'd like, this is just sys defaults
                 Button("Sync Wallpaper") {
-                    WallpaperProcessor.processCurrentWallpaper { result in
-                        // Handle the result by printing to console
-                        print(result)
-                    }
+                    model.fetchWallpaperColors()
                 }
             }
         }
 
-        //  VStack {
-        //     if !model.useSystemAccentColor || (model.useGradient && !model.useSystemAccentColor) {
-        //         HStack {
-        //             Text("Color")
-        //             Spacer()
-        //         }
-        //         .foregroundStyle(.secondary)
-
-        //         LuminareColorPicker(color: $model.customAccentColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
-
-        //         if model.useGradient {
-        //             LuminareColorPicker(color: $model.gradientColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
-        //         }
-        //     }
-        // }
-
         VStack {
-            // this needs fixing to display in all modal states
-            HStack {
-                Text("Color")
-                Spacer()
-            }
-            .foregroundStyle(.secondary)
+            // Show the color pickers when 'Use Wallpaper Colors' is toggled off
+            if !model.useSystemAccentColor {
+                HStack {
+                    Text("Color")
+                    Spacer()
+                }
+                .foregroundStyle(.secondary)
 
-            // Display the color pickers, disabled based on processWallpaper
-            LuminareColorPicker(color: $model.customAccentColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
-            // .disabled(model.processWallpaper)
+                LuminareColorPicker(color: $model.customAccentColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
 
-            if model.useGradient {
-                LuminareColorPicker(color: $model.gradientColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
-                // .disabled(model.processWallpaper)
+                if model.useGradient {
+                    LuminareColorPicker(color: $model.gradientColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
+                }
             }
         }
     }
