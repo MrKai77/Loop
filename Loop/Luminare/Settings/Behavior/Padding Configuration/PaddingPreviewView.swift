@@ -5,6 +5,7 @@
 //  Created by Kai Azim on 2024-02-01.
 //
 
+import Luminare
 import SwiftUI
 
 struct PaddingPreviewView: View {
@@ -32,7 +33,7 @@ struct PaddingPreviewView: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }
-        .animation(.smooth(duration: 0.25), value: model)
+        .animation(LuminareSettingsWindow.animation, value: model)
     }
 
     @ViewBuilder
