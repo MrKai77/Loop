@@ -10,10 +10,6 @@ import Luminare
 import SwiftUI
 
 class LuminareManager {
-    static var window: NSWindow? {
-        LuminareManager.luminare.windowController?.window
-    }
-
     static let iconConfiguration = SettingsTab("Icon", Image(._18PxSquareSparkle), IconConfigurationView())
     static let accentColorConfiguration = SettingsTab("Accent Color", Image(._18PxPaintbrush), AccentColorConfigurationView())
     static let radialMenuConfiguration = SettingsTab("Radial Menu", Image("loop"), RadialMenuConfigurationView())
@@ -26,31 +22,11 @@ class LuminareManager {
     static let excludedAppsConfiguration = SettingsTab("Excluded Apps", Image(._18PxWindowLock), ExcludedAppsConfigurationView())
     static let aboutConfiguration = SettingsTab("About", Image(._18PxMsgSmile2), AboutConfigurationView())
 
-    static var luminare = LuminareSettingsWindow(
-        [
-            .init("Theming", [
-                iconConfiguration,
-                accentColorConfiguration,
-                radialMenuConfiguration,
-                previewConfiguration
-            ]),
-            .init("Settings", [
-                behaviorConfiguration,
-                keybindingsConfiguration
-            ]),
-            .init("\(Bundle.main.appName)", [
-                advancedConfiguration,
-                excludedAppsConfiguration,
-                aboutConfiguration
-            ])
-        ],
-        tint: {
-            AppDelegate.isActive ? Color.getLoopAccent(tone: .normal) : Color.systemGray
-        },
-        didTabChange: processTabChange
-    )
+    static var luminare: LuminareSettingsWindow?
 
     static func processTabChange(_ tab: SettingsTab) {
+        guard let luminare else { return }
+
         DispatchQueue.main.async {
             if tab == radialMenuConfiguration {
                 luminare.hidePreview(identifier: "Preview")
@@ -79,32 +55,57 @@ class LuminareManager {
     }
 
     static func open() {
-        if luminare.windowController == nil {
-            luminare.initializeWindow()
+        if luminare == nil {
+            luminare = LuminareSettingsWindow(
+                [
+                    .init("Theming", [
+                        iconConfiguration,
+                        accentColorConfiguration,
+                        radialMenuConfiguration,
+                        previewConfiguration
+                    ]),
+                    .init("Settings", [
+                        behaviorConfiguration,
+                        keybindingsConfiguration
+                    ]),
+                    .init("\(Bundle.main.appName)", [
+                        advancedConfiguration,
+                        excludedAppsConfiguration,
+                        aboutConfiguration
+                    ])
+                ],
+                tint: {
+                    AppDelegate.isActive ? Color.getLoopAccent(tone: .normal) : Color.systemGray
+                },
+                didTabChange: processTabChange,
+                showPreviewIcon: Image(._18PxSidebarLeft3),
+                hidePreviewIcon: Image(._18PxSidebarLeftHide)
+            )
 
             DispatchQueue.main.async {
-                luminare.addPreview(
+                luminare?.addPreview(
                     content: LuminarePreviewView(),
                     identifier: "Preview",
                     fullSize: true
                 )
-                luminare.addPreview(
+                luminare?.addPreview(
                     content: RadialMenuView(previewMode: true),
                     identifier: "RadialMenu"
                 )
 
-                luminare.showPreview(identifier: "Preview")
-                luminare.showPreview(identifier: "RadialMenu")
+                luminare?.showPreview(identifier: "Preview")
+                luminare?.showPreview(identifier: "RadialMenu")
             }
         }
 
-        luminare.show()
+        luminare?.show()
         AppDelegate.isActive = true
         NSApp.setActivationPolicy(.regular)
     }
 
     static func fullyClose() {
-        luminare.deinitWindow()
+        luminare?.close()
+        luminare = nil
 
         if !Defaults[.showDockIcon] {
             NSApp.setActivationPolicy(.accessory)

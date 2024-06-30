@@ -20,7 +20,7 @@ class ExcludedAppsConfigurationModel: ObservableObject {
 
     func showAppChooser() {
         DispatchQueue.main.async {
-            guard let window = LuminareManager.window else { return }
+            guard let window = LuminareManager.luminare else { return }
             let panel = NSOpenPanel()
             panel.worksWhenModal = true
             panel.allowsMultipleSelection = true

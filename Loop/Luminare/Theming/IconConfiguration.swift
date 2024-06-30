@@ -82,7 +82,7 @@ class IconConfigurationModel: ObservableObject {
     }
 
     private func userDisabledNotificationsAlert() {
-        guard let window = LuminareManager.window else { return }
+        guard let window = LuminareManager.luminare else { return }
         let alert = NSAlert()
         alert.messageText = "\(Bundle.main.appName)'s notification permissions are currently disabled."
         alert.informativeText = "Please turn them on in System Settings."

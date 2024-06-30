@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,7 +12,6 @@
 		4C6B93E72C1DCF6E00AFF832 /* TheLoopTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E12C1DCF6E00AFF832 /* TheLoopTimes.swift */; };
 		4C6B93E82C1DCF6E00AFF832 /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E22C1DCF6E00AFF832 /* Updater.swift */; };
 		4C6B93E92C1DCF6E00AFF832 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */; };
-		4CE3CE6F2C2BE1AE007A4DBA /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 4CE3CE6E2C2BE1AE007A4DBA /* Luminare */; };
 		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; settings = {ATTRIBUTES = (Required, ); }; };
 		A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397D32A932993006D2796 /* MenuBarIconView.swift */; };
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
@@ -54,7 +53,6 @@
 		A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* StageManager.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
-		A87376F62AA288EB001890F4 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87376F52AA288EB001890F4 /* Window.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
 		A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87DDD142B50A6A400A32C76 /* ScreenManager.swift */; };
@@ -72,6 +70,8 @@
 		A8A583B82BE5A117005F4CB2 /* CycleActionConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */; };
 		A8A583BA2BE5A8D8005F4CB2 /* KeybindingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B92BE5A8D8005F4CB2 /* KeybindingItem.swift */; };
 		A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */; };
+		A8BC4A6E2C2F4C9800B94B82 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BC4A6D2C2F4C9800B94B82 /* Window.swift */; };
+		A8BC4A7B2C30AAF400B94B82 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8BC4A7A2C30AAF400B94B82 /* Luminare */; };
 		A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */; };
 		A8D4327B2C13ED3C007BE4F2 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D4327A2C13ED3C007BE4F2 /* Icon.swift */; };
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
@@ -142,7 +142,6 @@
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
-		A87376F52AA288EB001890F4 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		A8789F6629805B190040512E /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 		A8789F6829805B340040512E /* PreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		A87DDD142B50A6A400A32C76 /* ScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenManager.swift; sourceTree = "<group>"; };
@@ -160,6 +159,7 @@
 		A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleActionConfigurationView.swift; sourceTree = "<group>"; };
 		A8A583B92BE5A8D8005F4CB2 /* KeybindingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingItem.swift; sourceTree = "<group>"; };
 		A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionAnchor.swift; sourceTree = "<group>"; };
+		A8BC4A6D2C2F4C9800B94B82 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UNNotifications.swift"; sourceTree = "<group>"; };
 		A8D4327A2C13ED3C007BE4F2 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSelectorSquareSegment.swift; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				4CE3CE6F2C2BE1AE007A4DBA /* Luminare in Frameworks */,
+				A8BC4A7B2C30AAF400B94B82 /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 				A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */,
 			);
@@ -303,7 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */,
-				A87376F52AA288EB001890F4 /* Window.swift */,
+				A8BC4A6D2C2F4C9800B94B82 /* Window.swift */,
 				A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */,
 				A8F0125A2AEDD7660017307F /* WindowAction.swift */,
 				A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */,
@@ -480,7 +480,7 @@
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				A80397D12A93287C006D2796 /* MenuBarExtraAccess */,
-				4CE3CE6E2C2BE1AE007A4DBA /* Luminare */,
+				A8BC4A7A2C30AAF400B94B82 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -519,7 +519,7 @@
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */,
-				4CE3CE6D2C2BE1AE007A4DBA /* XCRemoteSwiftPackageReference "Luminare" */,
+				A8BC4A792C30AAF400B94B82 /* XCLocalSwiftPackageReference "../Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -597,7 +597,7 @@
 				A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */,
 				A8330AC12A3AC13100673C8D /* Defaults+Extensions.swift in Sources */,
 				A8A1C51E2BD3705A00515A14 /* PaddingConfigurationView.swift in Sources */,
-				A87376F62AA288EB001890F4 /* Window.swift in Sources */,
+				A8BC4A6E2C2F4C9800B94B82 /* Window.swift in Sources */,
 				A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */,
 				A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */,
 				A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */,
@@ -882,15 +882,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		4CE3CE6D2C2BE1AE007A4DBA /* XCRemoteSwiftPackageReference "Luminare" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MrKai77/Luminare";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		A8BC4A792C30AAF400B94B82 /* XCLocalSwiftPackageReference "../Luminare" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Luminare;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
 		A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MenuBarExtraAccess";
@@ -910,15 +909,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4CE3CE6E2C2BE1AE007A4DBA /* Luminare */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4CE3CE6D2C2BE1AE007A4DBA /* XCRemoteSwiftPackageReference "Luminare" */;
-			productName = Luminare;
-		};
 		A80397D12A93287C006D2796 /* MenuBarExtraAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */;
 			productName = MenuBarExtraAccess;
+		};
+		A8BC4A7A2C30AAF400B94B82 /* Luminare */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
