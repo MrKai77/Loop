@@ -94,7 +94,11 @@ class LuminareManager {
                 )
 
                 luminare?.showPreview(identifier: "Preview")
-                luminare?.showPreview(identifier: "RadialMenu")
+                if Defaults[.radialMenuVisibility] {
+                    luminare?.showPreview(identifier: "RadialMenu")
+                } else {
+                    luminare?.hidePreview(identifier: "RadialMenu")
+                }
             }
         }
 
