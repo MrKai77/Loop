@@ -47,17 +47,17 @@ struct UpdateView: View {
                         AppDelegate.relaunch()
                     }
 
-                    withAnimation(.smooth(duration: 0.25)) {
+                    withAnimation(LuminareSettingsWindow.animation) {
                         isInstalling = true
                     }
                     Task {
                         await AppDelegate.updater.installUpdate()
 
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            withAnimation(.smooth(duration: 0.1)) {
+                            withAnimation(LuminareSettingsWindow.animation) {
                                 isInstalling = false
                             }
-                            withAnimation(.smooth(duration: 0.25)) {
+                            withAnimation(LuminareSettingsWindow.animation) {
                                 readyToRestart = true
                             }
                         }
@@ -184,7 +184,7 @@ struct ChangelogSectionView: View {
     var body: some View {
         LuminareSection {
             Button {
-                withAnimation(.smooth(duration: 0.25)) {
+                withAnimation(LuminareSettingsWindow.animation) {
                     isExpanded.toggle()
                 }
             } label: {

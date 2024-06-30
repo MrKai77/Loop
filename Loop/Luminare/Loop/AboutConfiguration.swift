@@ -169,8 +169,8 @@ struct AboutConfigurationView: View {
                                 : (timesLooped >= 1_000_000 ? "You've looped... uhh... I... lost count..." : "You've looped \(timesLooped) times!")
                         )
                         .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
-                        .animation(.smooth(duration: 0.25), value: model.isHoveringOverVersionCopier)
-                        .animation(.smooth(duration: 0.25), value: timesLooped)
+                        .animation(LuminareSettingsWindow.animation, value: model.isHoveringOverVersionCopier)
+                        .animation(LuminareSettingsWindow.animation, value: timesLooped)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     }
@@ -208,7 +208,7 @@ struct AboutConfigurationView: View {
             } label: {
                 Text(model.updateButtonTitle)
                     .contentTransition(.numericText())
-                    .animation(.smooth(duration: 0.25), value: model.updateButtonTitle)
+                    .animation(LuminareSettingsWindow.animation, value: model.updateButtonTitle)
             }
 
             // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)

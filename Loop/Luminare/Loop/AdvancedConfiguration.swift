@@ -56,7 +56,7 @@ class AdvancedConfigurationModel: ObservableObject {
         let isGranted = AccessibilityManager.getStatus()
 
         if isAccessibilityAccessGranted != isGranted {
-            withAnimation(.smooth) {
+            withAnimation(LuminareSettingsWindow.animation) {
                 isAccessibilityAccessGranted = isGranted
             }
         }

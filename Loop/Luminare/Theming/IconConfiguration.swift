@@ -185,12 +185,12 @@ struct IconVew: View {
             }
         }
         .onChange(of: timesLooped) { _ in
-            withAnimation(.smooth(duration: 0.25)) {
+            withAnimation(LuminareSettingsWindow.animation) {
                 hasBeenUnlocked = icon.selectable
             }
 
             if !hasBeenUnlocked {
-                withAnimation(.smooth(duration: 0.25)) {
+                withAnimation(LuminareSettingsWindow.animation) {
                     nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
                     loopsLeft = nextUnlockCount - timesLooped
                 }
