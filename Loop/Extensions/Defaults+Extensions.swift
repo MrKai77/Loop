@@ -21,6 +21,8 @@ extension Defaults.Keys {
     static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white))
     static let useGradient = Key<Bool>("useGradient", default: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
+    static let processWallpaper = Key<Bool>("processWallpaper", default: false)
+    static let autoCheckWallpaper = Key<Bool>("autoCheckWallpaper", default: false)
 
     // Radial Menu
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true)

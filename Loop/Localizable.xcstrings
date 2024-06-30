@@ -1982,6 +1982,9 @@
         }
       }
     },
+    "Dynamic Wallpaper Sync" : {
+
+    },
     "Each loop you complete plants the seeds for icons to grow." : {
 
     },
@@ -6274,6 +6277,9 @@
     "Sweet dreams are made of... no updates" : {
 
     },
+    "Sync Wallpaper" : {
+
+    },
     "System" : {
       "localizations" : {
         "en-GB" : {
@@ -7032,6 +7038,9 @@
           }
         }
       }
+    },
+    "Use Wallpaper Colors" : {
+
     },
     "Version %@ (%@)" : {
       "extractionState" : "stale",
