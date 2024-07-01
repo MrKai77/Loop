@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,7 @@
 		A81D8D0A2C068B8700188E12 /* LuminarePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D8D092C068B8700188E12 /* LuminarePreviewView.swift */; };
 		A81D8D0C2C06950000188E12 /* LuminareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D8D0B2C06950000188E12 /* LuminareManager.swift */; };
 		A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* PermissionsManager.swift */; };
+		A826BE592C322BD600B4C10D /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A826BE582C322BD600B4C10D /* Luminare */; };
 		A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */; };
 		A827409A2AB0208500B9BDC5 /* TriggerKeycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */; };
 		A82B1AEE2BD352A100E2F3F9 /* AccentColorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82B1AED2BD352A100E2F3F9 /* AccentColorConfiguration.swift */; };
@@ -191,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
+				A826BE592C322BD600B4C10D /* Luminare in Frameworks */,
 				A8BC4A7B2C30AAF400B94B82 /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 				A868CB472C30DD8C008923F8 /* Luminare in Frameworks */,
@@ -484,6 +486,7 @@
 				A80397D12A93287C006D2796 /* MenuBarExtraAccess */,
 				A8BC4A7A2C30AAF400B94B82 /* Luminare */,
 				A868CB462C30DD8C008923F8 /* Luminare */,
+				A826BE582C322BD600B4C10D /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -522,7 +525,7 @@
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */,
-				A868CB452C30DD8C008923F8 /* XCLocalSwiftPackageReference "../Luminare" */,
+				A826BE572C322BD600B4C10D /* XCRemoteSwiftPackageReference "Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -885,13 +888,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		A868CB452C30DD8C008923F8 /* XCLocalSwiftPackageReference "../Luminare" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Luminare;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -899,6 +895,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.5;
+			};
+		};
+		A826BE572C322BD600B4C10D /* XCRemoteSwiftPackageReference "Luminare" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MrKai77/Luminare";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
@@ -916,6 +920,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */;
 			productName = MenuBarExtraAccess;
+		};
+		A826BE582C322BD600B4C10D /* Luminare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A826BE572C322BD600B4C10D /* XCRemoteSwiftPackageReference "Luminare" */;
+			productName = Luminare;
 		};
 		A868CB462C30DD8C008923F8 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
