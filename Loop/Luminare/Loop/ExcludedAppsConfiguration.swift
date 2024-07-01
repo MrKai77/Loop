@@ -34,7 +34,7 @@ class ExcludedAppsConfigurationModel: ObservableObject {
                 if result == .OK {
                     let appsToAdd = panel.urls.compactMap { self.excludedApps.contains($0) ? nil : $0 }
 
-                    withAnimation(.smooth(duration: 0.25)) {
+                    withAnimation(LuminareSettingsWindow.animation) {
                         self.excludedApps.append(contentsOf: appsToAdd)
                     }
                 }

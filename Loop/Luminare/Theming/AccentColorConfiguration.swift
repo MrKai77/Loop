@@ -85,7 +85,7 @@ struct AccentColorConfigurationView: View {
         LuminareSection {
             LuminarePicker(
                 elements: [true, false],
-                selection: $model.useSystemAccentColor.animation(.smooth(duration: 0.25)),
+                selection: $model.useSystemAccentColor.animation(LuminareSettingsWindow.animation),
                 columns: 2,
                 roundBottom: false
             ) { item in

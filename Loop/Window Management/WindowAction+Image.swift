@@ -5,6 +5,7 @@
 //  Created by phlpsong on 2024/3/30.
 //
 
+import Luminare
 import SwiftUI
 
 extension WindowAction {
@@ -88,7 +89,7 @@ struct IconView: View {
                         refreshFrame()
                     }
                     .onChange(of: action) { _ in
-                        withAnimation(.easeOut(duration: 0.1)) {
+                        withAnimation(LuminareSettingsWindow.fastAnimation) {
                             refreshFrame()
                         }
                     }

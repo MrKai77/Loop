@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import Luminare
 import SwiftUI
 
 struct LuminarePreviewView: View {
@@ -98,7 +99,7 @@ struct LuminarePreviewView: View {
     }
 
     func recomputeColors() {
-        withAnimation(.smooth(duration: 0.25)) {
+        withAnimation(LuminareSettingsWindow.animation) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }

@@ -143,8 +143,6 @@ class WindowDragManager {
         ignoredFrame.origin.y += topInset
         ignoredFrame.size.height -= inset + topInset
 
-        print(ignoredFrame.minY, screenFrame.minY)
-
         let oldDirection = direction
 
         if !ignoredFrame.contains(mousePosition) {

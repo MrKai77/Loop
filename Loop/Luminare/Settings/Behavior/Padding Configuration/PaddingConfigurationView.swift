@@ -56,7 +56,7 @@ struct PaddingConfigurationView: View {
                     paddingModel.configureScreenPadding
                 },
                 set: { newValue in
-                    withAnimation(.smooth(duration: 0.25)) {
+                    withAnimation(LuminareSettingsWindow.animation) {
                         paddingModel.configureScreenPadding = newValue
 
                         if !paddingModel.configureScreenPadding {
