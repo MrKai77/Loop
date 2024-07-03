@@ -49,6 +49,13 @@ class AccentColorConfigurationModel: ObservableObject {
         }
     }
 
+    @Published var wallpaperSyncInterval: TimeInterval = Defaults[.wallpaperSyncInterval] {
+        didSet {
+            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
+            updateWallpaperSyncTimerInterval()
+        }
+    }
+
     // MARK: - Wallpaper code
 
     private func handleDynamicWallpaperSyncChange() {
@@ -70,10 +77,15 @@ class AccentColorConfigurationModel: ObservableObject {
             NSLog("Wallpaper sync timer is already running.")
             return
         }
-        wallpaperSyncTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+        wallpaperSyncTimer = Timer.scheduledTimer(withTimeInterval: wallpaperSyncInterval, repeats: true) { [weak self] _ in
             self?.fetchWallpaperColors()
         }
         NSLog("Wallpaper sync timer started.")
+    }
+
+    private func updateWallpaperSyncTimerInterval() {
+        stopWallpaperSyncTimer()
+        startWallpaperSyncTimer()
     }
 
     private func stopWallpaperSyncTimer() {
@@ -101,6 +113,17 @@ class AccentColorConfigurationModel: ObservableObject {
             }
         }
     }
+
+    var wallpaperSyncIntervalInMinutes: Int {
+        get {
+            let minutes = Int(wallpaperSyncInterval / 60)
+            return minutes > 0 ? minutes : Int(wallpaperSyncInterval)
+        }
+        set {
+            wallpaperSyncInterval = newValue >= 1 ? TimeInterval(newValue * 60) : TimeInterval(newValue)
+            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
+        }
+    }
 }
 
 // MARK: - View
@@ -111,37 +134,42 @@ struct AccentColorConfigurationView: View {
     var body: some View {
         LuminareSection {
             LuminarePicker(
-                elements: [true, false],
-                selection: $model.useSystemAccentColor.animation(LuminareSettingsWindow.animation),
-                columns: 2,
-                roundBottom: false
-            ) { item in
+                elements: ["System", "Wallpaper", "Custom"],
+                selection: $model.accentColorOption.animation(LuminareSettingsWindow.animation),
+                columns: 3,
+                roundBottom: true
+            ) { option in
                 VStack {
                     Spacer()
-                    Spacer()
-
-                    if item {
-                        Image(systemName: "apple.logo")
-                    } else {
-                        Image(._18PxColorPalette)
-                    }
-
-                    Spacer()
-
-                    Text(item ? "System" : "Custom")
-
-                    Spacer()
+                    Image(systemName: model.imageName(for: option))
+                    Text(option)
                     Spacer()
                 }
                 .font(.title3)
                 .frame(height: 90)
             }
 
-            LuminareToggle("Gradient", isOn: $model.useGradient.animation(LuminareSettingsWindow.animation))
-            LuminareToggle("Use Wallpaper Colors", isOn: $model.processWallpaper.animation(LuminareSettingsWindow.animation))
+            if model.isCustom || model.isWallpaper {
+                LuminareToggle("Gradient", isOn: $model.useGradient.animation(LuminareSettingsWindow.animation))
+            }
 
             if model.processWallpaper {
-                LuminareToggle("Dynamic Wallpaper Sync", isOn: $model.dynamicWallpaperSyncEnabled.animation(LuminareSettingsWindow.animation))
+                LuminareToggle("Dynamic Sync", isOn: $model.dynamicWallpaperSyncEnabled.animation(LuminareSettingsWindow.animation))
+
+                Picker("Sync Interval", selection: $model.wallpaperSyncIntervalInMinutes) {
+                    Text("30 seconds").tag(30)
+                    Text("1 minute").tag(60)
+                    Text("5 minutes").tag(300)
+                    Text("10 minutes").tag(600)
+                    Text("30 minutes").tag(1800)
+                    Text("1 hour").tag(3600)
+                    Text("2 hours").tag(7200)
+                    Text("3 hours").tag(10800)
+                    Text("6 hours").tag(21600)
+                    Text("12 hours").tag(43200)
+                    Text("24 hours").tag(86400)
+                }
+                .pickerStyle(MenuPickerStyle())
 
                 Button("Sync Wallpaper") {
                     model.fetchWallpaperColors()
@@ -150,7 +178,7 @@ struct AccentColorConfigurationView: View {
         }
 
         VStack {
-            if !model.useSystemAccentColor {
+            if model.isCustom {
                 HStack {
                     Text("Color")
                     Spacer()
@@ -163,6 +191,58 @@ struct AccentColorConfigurationView: View {
                     LuminareColorPicker(color: $model.gradientColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
                 }
             }
+        }
+    }
+}
+
+// MARK: - View Extension
+
+extension AccentColorConfigurationModel {
+    var isCustom: Bool {
+        !useSystemAccentColor && !processWallpaper
+    }
+
+    var isWallpaper: Bool {
+        processWallpaper && !useSystemAccentColor
+    }
+
+    var accentColorOption: String {
+        get {
+            if useSystemAccentColor {
+                "System"
+            } else if processWallpaper {
+                "Wallpaper"
+            } else {
+                "Custom"
+            }
+        }
+        set {
+            switch newValue {
+            case "System":
+                useSystemAccentColor = true
+                processWallpaper = false
+            case "Custom":
+                useSystemAccentColor = false
+                processWallpaper = false
+            case "Wallpaper":
+                useSystemAccentColor = false
+                processWallpaper = true
+            default:
+                break
+            }
+        }
+    }
+
+    func imageName(for option: String) -> String {
+        switch option {
+        case "System":
+            "apple.logo"
+        case "Wallpaper":
+            "photo.on.rectangle.angled"
+        case "Custom":
+            "paintpalette"
+        default:
+            ""
         }
     }
 }

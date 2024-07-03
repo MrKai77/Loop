@@ -337,6 +337,39 @@
         }
       }
     },
+    "1 hour" : {
+
+    },
+    "1 minute" : {
+
+    },
+    "2 hours" : {
+
+    },
+    "3 hours" : {
+
+    },
+    "5 minutes" : {
+
+    },
+    "6 hours" : {
+
+    },
+    "10 minutes" : {
+
+    },
+    "12 hours" : {
+
+    },
+    "24 hours" : {
+
+    },
+    "30 minutes" : {
+
+    },
+    "30 seconds" : {
+
+    },
     "99 problems, updates ain't one." : {
 
     },
@@ -1982,7 +2015,7 @@
         }
       }
     },
-    "Dynamic Wallpaper Sync" : {
+    "Dynamic Sync" : {
 
     },
     "Each loop you complete plants the seeds for icons to grow." : {
@@ -6277,10 +6310,14 @@
     "Sweet dreams are made of... no updates" : {
 
     },
+    "Sync Interval" : {
+
+    },
     "Sync Wallpaper" : {
 
     },
     "System" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -7038,9 +7075,6 @@
           }
         }
       }
-    },
-    "Use Wallpaper Colors" : {
-
     },
     "Version %@ (%@)" : {
       "extractionState" : "stale",
