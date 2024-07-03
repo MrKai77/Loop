@@ -5296,6 +5296,7 @@
       }
     },
     "Resize…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {

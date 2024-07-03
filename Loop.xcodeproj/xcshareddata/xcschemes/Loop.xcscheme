@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "$SRCROOT/assets/set_build_number.sh&#10;"
+               scriptText = "$SRCROOT/assets/set_build_number.sh&#10;/usr/bin/xattr -cr ~/Library/Developer/Xcode/DerivedData&#10;"
                shellToInvoke = "/bin/bash">
                <EnvironmentBuildable>
                   <BuildableReference
