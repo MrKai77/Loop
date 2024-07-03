@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
+               BlueprintIdentifier = "A8849FE72C34C54600C233C2"
                BuildableName = "Loop.app"
                BlueprintName = "Loop"
                ReferencedContainer = "container:Loop.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
+            BlueprintIdentifier = "A8849FE72C34C54600C233C2"
             BuildableName = "Loop.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">
@@ -61,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
+            BlueprintIdentifier = "A8849FE72C34C54600C233C2"
             BuildableName = "Loop.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">

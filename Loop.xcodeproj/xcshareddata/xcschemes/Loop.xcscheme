@@ -9,8 +9,25 @@
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
-               title = "Run Script"
+               title = "Set Build Number"
                scriptText = "$SRCROOT/assets/set_build_number.sh&#10;"
+               shellToInvoke = "/bin/bash">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "A8849FE72C34C54600C233C2"
+                     BuildableName = "Loop.app"
+                     BlueprintName = "Loop"
+                     ReferencedContainer = "container:Loop.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Remove Attributes"
+               scriptText = "/usr/bin/xattr -cr $SRCROOT/DerivedData/&#10;"
                shellToInvoke = "/bin/bash">
                <EnvironmentBuildable>
                   <BuildableReference
@@ -28,7 +45,7 @@
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
-               title = "Run Script"
+               title = "Reset Build Number"
                scriptText = "$SRCROOT/assets/reset_build_number.sh&#10;"
                shellToInvoke = "/bin/bash">
                <EnvironmentBuildable>
