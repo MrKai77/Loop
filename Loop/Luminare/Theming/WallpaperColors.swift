@@ -5,8 +5,6 @@
 //  Created by Kami on 27/06/2024.
 //
 
-#warning("TODO: Remove any unnecessary code - remove timing code as well for prod")
-
 import AppKit
 
 // The real beans here (I don't like beans)
@@ -49,24 +47,16 @@ extension NSImage {
                 }
             }
 
-            /// Had a warn about high file sizes may cause a force crash, use a diff dom method
-            // let sortedColors = colorCountMap.sorted {
-            //     $0.value > $1.value || ($0.value == $1.value && $0.key.brightnessComponent > $1.key.brightnessComponent)
-            // }.map(\.key)
-
-            // Filter to the top 5 dominant colors
-            // let dominantColors = Array(sortedColors.prefix(5))
-
             // Use a partial sort to find the top 2 dominant colors without sorting the entire map
-            let dominantColors = colorCountMap
+            let sortedColors = colorCountMap
                 .sorted { $0.value > $1.value }
-                // Set prefix to how many colors you want
-                .prefix(2)
-                .sorted { $0.key.brightnessComponent > $1.key.brightnessComponent }
                 .map(\.key)
 
+            // Filter out similar colors
+            let filteredColors = self.filterSimilarColors(colors: sortedColors)
+
             DispatchQueue.main.async {
-                completion(dominantColors)
+                completion(filteredColors)
             }
         }
     }
@@ -91,36 +81,31 @@ extension NSImage {
         resizedImage.addRepresentation(bitmapRep)
         return resizedImage
     }
+
+    // Helper function to filter out similar colors.
+    private func filterSimilarColors(colors: [NSColor]) -> [NSColor] {
+        var uniqueColors = [NSColor]()
+        for color in colors {
+            var isSimilar = false
+            for existingColor in uniqueColors {
+                if color.isSimilar(to: existingColor) {
+                    isSimilar = true
+                    break
+                }
+            }
+            if !isSimilar {
+                uniqueColors.append(color)
+                if uniqueColors.count == 2 { break } // We only need the top 2 unique colors
+            }
+        }
+        return uniqueColors
+    }
 }
 
 // Main logic for outside scrips to ref to
 public class WallpaperProcessor {
     private static var lastProcessedColors: [NSColor]?
     private static var wallpaperCheckTimer: Timer?
-    private static var isProcessingWallpaper: Bool = false
-
-    // A timer is the best for wallpaper checking, its currently 60 seconds
-    // maybe at a later date, add advanced checking like in the system settings
-    // wallpaper section ...
-
-    // Starts a timer to periodically check the wallpaper.
-    public static func startAutoCheckWallpaperTimer() {
-        wallpaperCheckTimer?.invalidate()
-        wallpaperCheckTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
-            guard !isProcessingWallpaper else { return } // Check if processing is already underway
-            isProcessingWallpaper = true // Set the flag to indicate processing is starting
-            processCurrentWallpaper { result in
-                print(result)
-                isProcessingWallpaper = false // Corrected the typo in the variable name
-            }
-        }
-    }
-
-    // Stops the wallpaper check timer.
-    public static func stopAutoCheckWallpaperTimer() {
-        wallpaperCheckTimer?.invalidate()
-        wallpaperCheckTimer = nil
-    }
 
     // Processes the current wallpaper and returns a message with the dominant colors.
     public static func processCurrentWallpaper(completion: @escaping (Result<[NSColor], Error>) -> ()) {
@@ -147,6 +132,7 @@ public class WallpaperProcessor {
     private static func takeScreenshot(completion: @escaping (NSImage?) -> ()) {
         let mainDisplayID = CGMainDisplayID()
 
+        #warning("TODO: Add a switch method for CGDisplayCreateImage as it's not longer supported on macOS 14.4/15")
         // Find a method that'll work in macos 14.4/15 this no longer is supported
         guard let screenshotCGImage = CGDisplayCreateImage(mainDisplayID) else {
             completion(nil)

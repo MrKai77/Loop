@@ -22,7 +22,7 @@ extension Defaults.Keys {
     static let useGradient = Key<Bool>("useGradient", default: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black))
     static let processWallpaper = Key<Bool>("processWallpaper", default: false)
-    static let autoCheckWallpaper = Key<Bool>("autoCheckWallpaper", default: false)
+    static let dynamicWallpaperSyncEnabled = Key<Bool>("dynamicWallpaperSyncEnabled", default: false)
 
     // Radial Menu
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true)

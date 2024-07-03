@@ -4,66 +4,91 @@
 //
 //  Created by Kai Azim on 2024-04-19.
 //
-#warning("TODO: Connect the 'Dynamic Wallpaper Sync' to the timer to synchronize it as the button currently does.")
 
 import Defaults
 import Luminare
 import SwiftUI
 
 class AccentColorConfigurationModel: ObservableObject {
+    @StateObject private var model = AppDelegate.accentColorConfigurationModel
+    private var wallpaperSyncTimer: Timer?
+
+    init() {
+        setupWallpaperSync()
+    }
+
+    // MARK: - Defaults
+
     @Published var useSystemAccentColor = Defaults[.useSystemAccentColor] {
-        didSet {
-            Defaults[.useSystemAccentColor] = useSystemAccentColor
-        }
+        didSet { Defaults[.useSystemAccentColor] = useSystemAccentColor }
     }
 
     @Published var useGradient = Defaults[.useGradient] {
-        didSet {
-            Defaults[.useGradient] = useGradient
-        }
+        didSet { Defaults[.useGradient] = useGradient }
     }
 
     @Published var customAccentColor = Defaults[.customAccentColor] {
-        didSet {
-            Defaults[.customAccentColor] = customAccentColor
-        }
+        didSet { Defaults[.customAccentColor] = customAccentColor }
     }
 
     @Published var gradientColor = Defaults[.gradientColor] {
-        didSet {
-            Defaults[.gradientColor] = gradientColor
-        }
+        didSet { Defaults[.gradientColor] = gradientColor }
     }
 
     @Published var processWallpaper = Defaults[.processWallpaper] {
         didSet {
             Defaults[.processWallpaper] = processWallpaper
-            if processWallpaper {
-                fetchWallpaperColors()
-            }
+            if processWallpaper { fetchWallpaperColors() }
         }
     }
 
-    @Published var autoCheckWallpaper = Defaults[.autoCheckWallpaper] {
+    @Published var dynamicWallpaperSyncEnabled = Defaults[.dynamicWallpaperSyncEnabled] {
         didSet {
-            Defaults[.autoCheckWallpaper] = autoCheckWallpaper
-            handleAutoCheckWallpaperToggle(autoCheckWallpaper)
+            Defaults[.dynamicWallpaperSyncEnabled] = dynamicWallpaperSyncEnabled
+            handleDynamicWallpaperSyncChange()
         }
     }
 
-    private func handleAutoCheckWallpaperToggle(_ isOn: Bool) {
-        if isOn {
-            WallpaperProcessor.startAutoCheckWallpaperTimer()
+    // MARK: - Wallpaper code
+
+    private func handleDynamicWallpaperSyncChange() {
+        if dynamicWallpaperSyncEnabled {
+            startWallpaperSyncTimer()
         } else {
-            WallpaperProcessor.stopAutoCheckWallpaperTimer()
+            stopWallpaperSyncTimer()
         }
+    }
+
+    func setupWallpaperSync() {
+        if Defaults[.dynamicWallpaperSyncEnabled] {
+            startWallpaperSyncTimer()
+        }
+    }
+
+    private func startWallpaperSyncTimer() {
+        guard wallpaperSyncTimer == nil else {
+            NSLog("Wallpaper sync timer is already running.")
+            return
+        }
+        wallpaperSyncTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+            self?.fetchWallpaperColors()
+        }
+        NSLog("Wallpaper sync timer started.")
+    }
+
+    private func stopWallpaperSyncTimer() {
+        if let timer = wallpaperSyncTimer {
+            timer.invalidate()
+            NSLog("Wallpaper sync timer stopped.")
+        } else {
+            NSLog("No wallpaper sync timer to stop.")
+        }
+        wallpaperSyncTimer = nil
     }
 
     private func updateColorsFromWallpaper(with colors: [NSColor]) {
-        DispatchQueue.main.async {
-            self.customAccentColor = Color(colors.first ?? .clear)
-            self.gradientColor = colors.count > 1 ? Color(colors[1]) : self.gradientColor
-        }
+        customAccentColor = Color(colors.first ?? .clear)
+        gradientColor = colors.count > 1 ? Color(colors[1]) : gradientColor
     }
 
     func fetchWallpaperColors() {
@@ -77,6 +102,8 @@ class AccentColorConfigurationModel: ObservableObject {
         }
     }
 }
+
+// MARK: - View
 
 struct AccentColorConfigurationView: View {
     @StateObject private var model = AccentColorConfigurationModel()
@@ -110,17 +137,12 @@ struct AccentColorConfigurationView: View {
                 .frame(height: 90)
             }
 
-            LuminareToggle("Gradient", isOn: $model.useGradient.animation(.smooth(duration: 0.25)))
-            LuminareToggle("Use Wallpaper Colors", isOn: $model.processWallpaper.animation(.smooth(duration: 0.25)))
+            LuminareToggle("Gradient", isOn: $model.useGradient.animation(LuminareSettingsWindow.animation))
+            LuminareToggle("Use Wallpaper Colors", isOn: $model.processWallpaper.animation(LuminareSettingsWindow.animation))
 
-            // Show the auto check toggle only if processWallpaper is true
             if model.processWallpaper {
-                LuminareToggle("Dynamic Wallpaper Sync", isOn: $model.autoCheckWallpaper.animation(.smooth(duration: 0.25)))
+                LuminareToggle("Dynamic Wallpaper Sync", isOn: $model.dynamicWallpaperSyncEnabled.animation(LuminareSettingsWindow.animation))
 
-                // Do we want a force wallpaper button like this in prod? who knows, i don't
-                // It might be useful... Additionally, we should configure a custom timer in the advanced
-                // options section to synchronize with the dynamic changes in the wallpaper section. So
-                // 5s, 1m, 5m, 15m, 30m, 1h, 24h or more if we'd like, this is just sys defaults
                 Button("Sync Wallpaper") {
                     model.fetchWallpaperColors()
                 }
@@ -128,7 +150,6 @@ struct AccentColorConfigurationView: View {
         }
 
         VStack {
-            // Show the color pickers when 'Use Wallpaper Colors' is toggled off
             if !model.useSystemAccentColor {
                 HStack {
                     Text("Color")

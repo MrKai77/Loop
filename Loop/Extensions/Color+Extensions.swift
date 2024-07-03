@@ -45,4 +45,12 @@ extension NSColor {
         let blue = Int(round(rgbColor.blueComponent * 0xFF))
         return String(format: "#%02X%02X%02X", red, green, blue)
     }
+
+    // Determines if two colors are similar based on a threshold.
+    func isSimilar(to color: NSColor, threshold: CGFloat = 0.1) -> Bool {
+        let redDiff = abs(redComponent - color.redComponent)
+        let greenDiff = abs(greenComponent - color.greenComponent)
+        let blueDiff = abs(blueComponent - color.blueComponent)
+        return (redDiff < threshold) && (greenDiff < threshold) && (blueDiff < threshold)
+    }
 }
