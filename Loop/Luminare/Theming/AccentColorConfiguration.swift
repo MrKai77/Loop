@@ -74,13 +74,13 @@ class AccentColorConfigurationModel: ObservableObject {
 
     private func startWallpaperSyncTimer() {
         guard wallpaperSyncTimer == nil else {
-            NSLog("Wallpaper sync timer is already running.")
+            // NSLog("Wallpaper sync timer is already running.")
             return
         }
         wallpaperSyncTimer = Timer.scheduledTimer(withTimeInterval: wallpaperSyncInterval, repeats: true) { [weak self] _ in
             self?.fetchWallpaperColors()
         }
-        NSLog("Wallpaper sync timer started.")
+        // NSLog("Wallpaper sync timer started.")
     }
 
     private func updateWallpaperSyncTimerInterval() {
@@ -91,9 +91,9 @@ class AccentColorConfigurationModel: ObservableObject {
     private func stopWallpaperSyncTimer() {
         if let timer = wallpaperSyncTimer {
             timer.invalidate()
-            NSLog("Wallpaper sync timer stopped.")
+            // NSLog("Wallpaper sync timer stopped.")
         } else {
-            NSLog("No wallpaper sync timer to stop.")
+            // NSLog("No wallpaper sync timer to stop.")
         }
         wallpaperSyncTimer = nil
     }
@@ -114,10 +114,10 @@ class AccentColorConfigurationModel: ObservableObject {
         }
     }
 
-    var wallpaperSyncIntervalInMinutes: Int {
+    // Change the type of wallpaperSyncIntervalInMinutes to Double
+    var wallpaperSyncIntervalInMinutes: Double {
         get {
-            let minutes = Int(wallpaperSyncInterval / 60)
-            return minutes > 0 ? minutes : Int(wallpaperSyncInterval)
+            Double(wallpaperSyncInterval / 60)
         }
         set {
             wallpaperSyncInterval = newValue >= 1 ? TimeInterval(newValue * 60) : TimeInterval(newValue)
@@ -156,20 +156,15 @@ struct AccentColorConfigurationView: View {
             if model.processWallpaper {
                 LuminareToggle("Dynamic Sync", isOn: $model.dynamicWallpaperSyncEnabled.animation(LuminareSettingsWindow.animation))
 
-                Picker("Sync Interval", selection: $model.wallpaperSyncIntervalInMinutes) {
-                    Text("30 seconds").tag(30)
-                    Text("1 minute").tag(60)
-                    Text("5 minutes").tag(300)
-                    Text("10 minutes").tag(600)
-                    Text("30 minutes").tag(1800)
-                    Text("1 hour").tag(3600)
-                    Text("2 hours").tag(7200)
-                    Text("3 hours").tag(10800)
-                    Text("6 hours").tag(21600)
-                    Text("12 hours").tag(43200)
-                    Text("24 hours").tag(86400)
-                }
-                .pickerStyle(MenuPickerStyle())
+                #warning("Hi, values need to be adjusting to show S, M or H. No idea how to do this :thumbsup:")
+                LuminareValueAdjuster(
+                    "Sync Interval",
+                    value: $model.wallpaperSyncIntervalInMinutes,
+                    sliderRange: 0.5...1440, // Range in minutes (30 seconds to 24 hours)
+                    suffix: "min",
+                    lowerClamp: true,
+                    upperClamp: true
+                )
 
                 Button("Sync Wallpaper") {
                     model.fetchWallpaperColors()
