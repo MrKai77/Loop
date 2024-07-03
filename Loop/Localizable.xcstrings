@@ -337,39 +337,6 @@
         }
       }
     },
-    "1 hour" : {
-
-    },
-    "1 minute" : {
-
-    },
-    "2 hours" : {
-
-    },
-    "3 hours" : {
-
-    },
-    "5 minutes" : {
-
-    },
-    "6 hours" : {
-
-    },
-    "10 minutes" : {
-
-    },
-    "12 hours" : {
-
-    },
-    "24 hours" : {
-
-    },
-    "30 minutes" : {
-
-    },
-    "30 seconds" : {
-
-    },
     "99 problems, updates ain't one." : {
 
     },
@@ -4091,6 +4058,9 @@
         }
       }
     },
+    "min" : {
+
+    },
     "Money can't buy... updates." : {
 
     },
@@ -5332,6 +5302,7 @@
       }
     },
     "Resize…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
