@@ -17,7 +17,9 @@ struct LoopApp: App {
     var body: some Scene {
         MenuBarExtra(Bundle.main.appName, image: "menubarIcon", isInserted: Binding.constant(!hideMenuBarIcon)) {
             #if DEBUG
-                MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
+                let text = "DEV BUILD: \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
+                Text(text)
+                    .font(.system(size: 11, weight: .semibold))
             #endif
 
             Button {
@@ -31,14 +33,10 @@ struct LoopApp: App {
                 }
             }
 
-            Divider()
-
             Button("Settings…") {
                 LuminareManager.open()
             }
             .keyboardShortcut(",", modifiers: .command)
-
-            Divider()
 
             Button("Quit") {
                 NSApp.terminate(nil)

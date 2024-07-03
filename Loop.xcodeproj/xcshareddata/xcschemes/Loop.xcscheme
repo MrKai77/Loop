@@ -9,30 +9,13 @@
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
-               title = "Set Build Number"
-               scriptText = "$SRCROOT/assets/set_build_number.sh&#10;"
+               title = "Run Script"
+               scriptText = "$SRCROOT/assets/set_build_number.sh&#10;/usr/bin/xattr -cr ~/Library/Developer/Xcode/DerivedData&#10;"
                shellToInvoke = "/bin/bash">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "A8849FE72C34C54600C233C2"
-                     BuildableName = "Loop.app"
-                     BlueprintName = "Loop"
-                     ReferencedContainer = "container:Loop.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Remove Attributes"
-               scriptText = "/usr/bin/xattr -cr $SRCROOT/DerivedData/&#10;"
-               shellToInvoke = "/bin/bash">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "A8849FE72C34C54600C233C2"
+                     BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
                      BuildableName = "Loop.app"
                      BlueprintName = "Loop"
                      ReferencedContainer = "container:Loop.xcodeproj">
@@ -45,13 +28,13 @@
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
-               title = "Reset Build Number"
+               title = "Run Script"
                scriptText = "$SRCROOT/assets/reset_build_number.sh&#10;"
                shellToInvoke = "/bin/bash">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "A8849FE72C34C54600C233C2"
+                     BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
                      BuildableName = "Loop.app"
                      BlueprintName = "Loop"
                      ReferencedContainer = "container:Loop.xcodeproj">
@@ -69,7 +52,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A8849FE72C34C54600C233C2"
+               BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
                BuildableName = "Loop.app"
                BlueprintName = "Loop"
                ReferencedContainer = "container:Loop.xcodeproj">
@@ -99,7 +82,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A8849FE72C34C54600C233C2"
+            BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
             BuildableName = "Loop.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">
@@ -116,7 +99,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A8849FE72C34C54600C233C2"
+            BlueprintIdentifier = "A8E59C34297F5E9A0064D4BA"
             BuildableName = "Loop.app"
             BlueprintName = "Loop"
             ReferencedContainer = "container:Loop.xcodeproj">
