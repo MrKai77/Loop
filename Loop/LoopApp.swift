@@ -6,7 +6,6 @@
 //
 
 import Defaults
-import MenuBarExtraAccess
 import SwiftUI
 
 @main
@@ -16,7 +15,7 @@ struct LoopApp: App {
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
 
     var body: some Scene {
-        MenuBarExtra(Bundle.main.appName, image: "empty", isInserted: Binding.constant(!hideMenuBarIcon)) {
+        MenuBarExtra(Bundle.main.appName, image: "menubarIcon", isInserted: Binding.constant(!hideMenuBarIcon)) {
             #if DEBUG
                 MenuBarHeaderText("DEV BUILD: \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
             #endif
@@ -34,27 +33,6 @@ struct LoopApp: App {
 
             Divider()
 
-            Menu("Resize…") {
-                MenuBarHeaderText("General")
-                ForEach(WindowDirection.general) { MenuBarResizeButton($0) }
-                Divider()
-
-                MenuBarHeaderText("Halves")
-                ForEach(WindowDirection.halves) { MenuBarResizeButton($0) }
-                Divider()
-
-                MenuBarHeaderText("Quarters")
-                ForEach(WindowDirection.quarters) { MenuBarResizeButton($0) }
-                Divider()
-
-                MenuBarHeaderText("Horizontal Thirds")
-                ForEach(WindowDirection.horizontalThirds) { MenuBarResizeButton($0) }
-                Divider()
-
-                MenuBarHeaderText("Vertical Thirds")
-                ForEach(WindowDirection.verticalThirds) { MenuBarResizeButton($0) }
-            }
-
             Button("Settings…") {
                 LuminareManager.open()
             }
@@ -68,17 +46,5 @@ struct LoopApp: App {
             .keyboardShortcut("q", modifiers: .command)
         }
         .menuBarExtraStyle(.menu)
-        .menuBarExtraAccess(isPresented: $isMenubarItemPresented) { statusItem in
-            guard
-                let button = statusItem.button,
-                button.subviews.isEmpty
-            else {
-                return
-            }
-
-            let view = NSHostingView(rootView: MenuBarIconView())
-            view.frame.size = NSSize(width: 26, height: 22)
-            button.addSubview(view)
-        }
     }
 }
