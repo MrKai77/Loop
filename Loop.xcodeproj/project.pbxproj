@@ -12,13 +12,9 @@
 		4C6B93E72C1DCF6E00AFF832 /* TheLoopTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E12C1DCF6E00AFF832 /* TheLoopTimes.swift */; };
 		4C6B93E82C1DCF6E00AFF832 /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E22C1DCF6E00AFF832 /* Updater.swift */; };
 		4C6B93E92C1DCF6E00AFF832 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */; };
-		A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */ = {isa = PBXBuildFile; productRef = A80397D12A93287C006D2796 /* MenuBarExtraAccess */; settings = {ATTRIBUTES = (Required, ); }; };
-		A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80397D32A932993006D2796 /* MenuBarIconView.swift */; };
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */; };
-		A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */; };
-		A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */; };
 		A81B98182BDC854F005FD78C /* AboutConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81B98172BDC854F005FD78C /* AboutConfiguration.swift */; };
 		A81D8D0A2C068B8700188E12 /* LuminarePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D8D092C068B8700188E12 /* LuminarePreviewView.swift */; };
 		A81D8D0C2C06950000188E12 /* LuminareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D8D0B2C06950000188E12 /* LuminareManager.swift */; };
@@ -50,7 +46,7 @@
 		A85DDBDA2C1693D4008C103D /* WindowDirection+Snapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85DDBD92C1693D4008C103D /* WindowDirection+Snapping.swift */; };
 		A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* WindowDragManager.swift */; };
 		A867C20E2C26522B005831BC /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C20D2C26522B005831BC /* Observer.swift */; };
-		A868CB472C30DD8C008923F8 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A868CB462C30DD8C008923F8 /* Luminare */; };
+		A867C3A52C329C520073A906 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A867C3A42C329C520073A906 /* Luminare */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
 		A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* StageManager.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
@@ -73,7 +69,6 @@
 		A8A583BA2BE5A8D8005F4CB2 /* KeybindingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A583B92BE5A8D8005F4CB2 /* KeybindingItem.swift */; };
 		A8B5E1632B43726C00044D30 /* CustomWindowActionAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */; };
 		A8BC4A6E2C2F4C9800B94B82 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BC4A6D2C2F4C9800B94B82 /* Window.swift */; };
-		A8BC4A7B2C30AAF400B94B82 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8BC4A7A2C30AAF400B94B82 /* Luminare */; };
 		A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */; };
 		A8D4327B2C13ED3C007BE4F2 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D4327A2C13ED3C007BE4F2 /* Icon.swift */; };
 		A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D5A7D52A91384D004EA5BB /* DirectionSelectorSquareSegment.swift */; };
@@ -100,14 +95,11 @@
 		4C6B93E12C1DCF6E00AFF832 /* TheLoopTimes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheLoopTimes.swift; sourceTree = "<group>"; };
 		4C6B93E22C1DCF6E00AFF832 /* Updater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
 		4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateView.swift; sourceTree = "<group>"; };
-		A80397D32A932993006D2796 /* MenuBarIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		A80AB7E22C276E0300BE0360 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Port.swift"; sourceTree = "<group>"; };
-		A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarHeaderText.swift; sourceTree = "<group>"; };
-		A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarResizeButton.swift; sourceTree = "<group>"; };
 		A81B98172BDC854F005FD78C /* AboutConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutConfiguration.swift; sourceTree = "<group>"; };
 		A81D8D092C068B8700188E12 /* LuminarePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuminarePreviewView.swift; sourceTree = "<group>"; };
 		A81D8D0B2C06950000188E12 /* LuminareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuminareManager.swift; sourceTree = "<group>"; };
@@ -192,11 +184,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				A826BE592C322BD600B4C10D /* Luminare in Frameworks */,
-				A8BC4A7B2C30AAF400B94B82 /* Luminare in Frameworks */,
+				A867C3A52C329C520073A906 /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
-				A868CB472C30DD8C008923F8 /* Luminare in Frameworks */,
-				A80397D22A93287C006D2796 /* MenuBarExtraAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,16 +270,6 @@
 				A8330ACE2A3AC1E900673C8D /* View+Extensions.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		A83EEEB02AD46BAC00F3EA2D /* MenuBar */ = {
-			isa = PBXGroup;
-			children = (
-				A81989072AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift */,
-				A80397D32A932993006D2796 /* MenuBarIconView.swift */,
-				A81989052AC8EDB300EFF7A1 /* MenuBarHeaderText.swift */,
-			);
-			path = MenuBar;
 			sourceTree = "<group>";
 		};
 		A85891492BDC5D1600C10FB1 /* Loop */ = {
@@ -440,7 +419,6 @@
 				A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */,
 				A893D3622BD3298700063510 /* Luminare */,
 				4C6B93E42C1DCF6E00AFF832 /* Updater */,
-				A83EEEB02AD46BAC00F3EA2D /* MenuBar */,
 				A864F4662AA65EC200579738 /* Window Management */,
 				A8330ABB2A3AC05200673C8D /* Managers */,
 				A88265FB29808E0D00BCB197 /* Radial Menu */,
@@ -483,10 +461,7 @@
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
-				A80397D12A93287C006D2796 /* MenuBarExtraAccess */,
-				A8BC4A7A2C30AAF400B94B82 /* Luminare */,
-				A868CB462C30DD8C008923F8 /* Luminare */,
-				A826BE582C322BD600B4C10D /* Luminare */,
+				A867C3A42C329C520073A906 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -524,8 +499,7 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
-				A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */,
-				A826BE572C322BD600B4C10D /* XCRemoteSwiftPackageReference "Luminare" */,
+				A867C3A32C329C520073A906 /* XCRemoteSwiftPackageReference "Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -621,7 +595,6 @@
 				A81D8D0A2C068B8700188E12 /* LuminarePreviewView.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */,
-				A81989062AC8EDB300EFF7A1 /* MenuBarHeaderText.swift in Sources */,
 				A81B98182BDC854F005FD78C /* AboutConfiguration.swift in Sources */,
 				A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */,
 				A8E59C39297F5E9A0064D4BA /* LoopApp.swift in Sources */,
@@ -642,12 +615,10 @@
 				0A6DC3EB2BB869DE002AB05F /* WindowAction+Image.swift in Sources */,
 				A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */,
 				A85DDBDA2C1693D4008C103D /* WindowDirection+Snapping.swift in Sources */,
-				A81989082AC8F2AE00EFF7A1 /* MenuBarResizeButton.swift in Sources */,
 				A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */,
 				A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */,
 				A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */,
 				A8BC77792C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift in Sources */,
-				A80397D42A932993006D2796 /* MenuBarIconView.swift in Sources */,
 				A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */,
 				4C6B93E92C1DCF6E00AFF832 /* UpdateView.swift in Sources */,
 				A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */,
@@ -889,12 +860,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */ = {
+		A867C3A32C329C520073A906 /* XCRemoteSwiftPackageReference "Luminare" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MenuBarExtraAccess";
+			repositoryURL = "https://github.com/MrKai77/Luminare";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.5;
+				branch = main;
+				kind = branch;
 			};
 		};
 		A826BE572C322BD600B4C10D /* XCRemoteSwiftPackageReference "Luminare" */ = {
@@ -916,22 +887,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A80397D12A93287C006D2796 /* MenuBarExtraAccess */ = {
+		A867C3A42C329C520073A906 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A80397D02A93287C006D2796 /* XCRemoteSwiftPackageReference "MenuBarExtraAccess" */;
-			productName = MenuBarExtraAccess;
-		};
-		A826BE582C322BD600B4C10D /* Luminare */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A826BE572C322BD600B4C10D /* XCRemoteSwiftPackageReference "Luminare" */;
-			productName = Luminare;
-		};
-		A868CB462C30DD8C008923F8 /* Luminare */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Luminare;
-		};
-		A8BC4A7A2C30AAF400B94B82 /* Luminare */ = {
-			isa = XCSwiftPackageProductDependency;
+			package = A867C3A32C329C520073A906 /* XCRemoteSwiftPackageReference "Luminare" */;
 			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
