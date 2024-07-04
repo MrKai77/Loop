@@ -124,7 +124,7 @@ extension NSImage {
 
 public class WallpaperProcessor {
     /// Fetches the latest wallpaper colors and updates the app's theme settings.
-    public static func fetchLatestWallpaperColors() async {
+    static func fetchLatestWallpaperColors() async {
         do {
             // Attempt to process the current wallpaper to get the dominant colors.
             let colors = try await processCurrentWallpaper()

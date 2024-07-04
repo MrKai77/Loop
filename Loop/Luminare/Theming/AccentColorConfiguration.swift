@@ -31,16 +31,28 @@ class AccentColorConfigurationModel: ObservableObject {
     @Published var processWallpaper = Defaults[.processWallpaper] {
         didSet {
             Defaults[.processWallpaper] = processWallpaper
-            if processWallpaper {
-                Task {
-                    await WallpaperProcessor.fetchLatestWallpaperColors()
 
-                    await MainActor.run {
-                        customAccentColor = Defaults[.customAccentColor]
-                        gradientColor = Defaults[.gradientColor]
-                    }
+            if processWallpaper {
+                syncWallpaper()
+            }
+        }
+    }
+
+    func syncWallpaper() {
+        Task {
+            await WallpaperProcessor.fetchLatestWallpaperColors()
+
+            await MainActor.run {
+                withAnimation(LuminareSettingsWindow.fastAnimation) {
+                    customAccentColor = Defaults[.customAccentColor]
+                    gradientColor = Defaults[.gradientColor]
                 }
             }
+
+            // Force-rerender accent colors
+            let window = LuminareManager.luminare
+            await window?.resignMain()
+            await window?.makeKeyAndOrderFront(self)
         }
     }
 }
@@ -74,9 +86,7 @@ struct AccentColorConfigurationView: View {
 
             if model.processWallpaper {
                 Button("Sync Wallpaper") {
-                    Task {
-                        await WallpaperProcessor.fetchLatestWallpaperColors()
-                    }
+                    model.syncWallpaper()
                 }
             }
         }
@@ -89,10 +99,16 @@ struct AccentColorConfigurationView: View {
                 }
                 .foregroundStyle(.secondary)
 
-                LuminareColorPicker(color: $model.customAccentColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
+                LuminareColorPicker(
+                    color: $model.customAccentColor,
+                    colorNames: (red: "Red", green: "Green", blue: "Blue")
+                )
 
                 if model.useGradient {
-                    LuminareColorPicker(color: $model.gradientColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
+                    LuminareColorPicker(
+                        color: $model.gradientColor,
+                        colorNames: (red: "Red", green: "Green", blue: "Blue")
+                    )
                 }
             }
         }
