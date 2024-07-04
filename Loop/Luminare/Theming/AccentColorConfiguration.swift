@@ -34,6 +34,11 @@ class AccentColorConfigurationModel: ObservableObject {
             if processWallpaper {
                 Task {
                     await WallpaperProcessor.fetchLatestWallpaperColors()
+
+                    await MainActor.run {
+                        customAccentColor = Defaults[.customAccentColor]
+                        gradientColor = Defaults[.gradientColor]
+                    }
                 }
             }
         }
