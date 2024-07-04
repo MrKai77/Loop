@@ -150,10 +150,10 @@ struct UpdateView: View {
 
     func versionChangeText() -> some View {
         HStack {
-            if updater.targetRelease?.prerelease ?? true {
-                Text("\(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
+            if let targetRelease = updater.targetRelease, targetRelease.prerelease {
+                Text("🧪 \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
                 Image(systemName: "arrow.right")
-                Text("\(updater.targetRelease?.tagName ?? "Unknown") (\(updater.targetRelease?.buildNumber ?? 0))")
+                Text("🧪 \(targetRelease.tagName) (\(targetRelease.buildNumber ?? 0))")
             } else {
                 Text(Bundle.main.appVersion ?? "Unknown")
                 Image(systemName: "arrow.right")

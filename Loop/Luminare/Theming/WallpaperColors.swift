@@ -12,92 +12,108 @@ import SwiftUI
 
 // The real beans here (I don't like beans)
 extension NSImage {
-    // Calculates the dominant colors of the image.
+    /// Calculates the dominant colors of the image asynchronously.
+    /// - Returns: An array of NSColor representing the dominant colors, or nil if an error occurs.
     func calculateDominantColors() async -> [NSColor]? {
-        // Resize the image for faster processing while maintaining aspect ratio
+        // Resize the image to a smaller size to improve performance of color calculation.
         let aspectRatio = size.width / size.height
-        // Set it to 100x100 for faster calculations
         let resizedImage = resized(to: NSSize(width: 100 * aspectRatio, height: 100))
 
+        // Ensure we can get the CGImage and its data provider.
         guard
             let resizedCGImage = resizedImage?.cgImage(forProposedRect: nil, context: nil, hints: nil),
             let dataProvider = resizedCGImage.dataProvider,
             let data = CFDataGetBytePtr(dataProvider.data)
         else {
+            NSLog("Error: Unable to get CGImage or its data provider from the resized image.")
             return nil
         }
 
+        // Calculate the number of bytes per pixel and per row.
         let bytesPerPixel = resizedCGImage.bitsPerPixel / 8
         let bytesPerRow = resizedCGImage.bytesPerRow
         let width = resizedCGImage.width
         let height = resizedCGImage.height
         var colorCountMap = [NSColor: Int]()
 
+        // Iterate over each pixel to count color occurrences.
         for y in 0 ..< height {
             for x in 0 ..< width {
                 let pixelData = Int(y * bytesPerRow + x * bytesPerPixel)
-                // Check for images without an alpha channel
+                // Determine the alpha value based on the presence of an alpha channel.
                 let alpha = (bytesPerPixel == 4) ? CGFloat(data[pixelData + 3]) / 255.0 : 1.0
+                // Create an NSColor instance for the current pixel.
                 let color = NSColor(
                     red: CGFloat(data[pixelData]) / 255.0,
                     green: CGFloat(data[pixelData + 1]) / 255.0,
                     blue: CGFloat(data[pixelData + 2]) / 255.0,
                     alpha: alpha
                 )
+                // Increment the count for this color.
                 colorCountMap[color, default: 0] += 1
             }
         }
 
-        // Use a partial sort to find the top 2 dominant colors without sorting the entire map
-        let sortedColors = colorCountMap
-            .sorted { $0.value > $1.value }
-            .map(\.key)
+        // Sort the colors by occurrence to find the most dominant colors.
+        let sortedColors = colorCountMap.sorted { $0.value > $1.value }.map(\.key)
 
-        // Filter out similar colors
+        // Filter out colors that are too similar to each other.
         let filteredColors = filterSimilarColors(colors: sortedColors)
 
         return filteredColors
     }
 
-    // Helper function to resize the image.
+    /// Helper function to resize the image to a new size.
+    /// - Parameter newSize: The target size for the resized image.
+    /// - Returns: The resized NSImage or nil if the operation fails.
     func resized(to newSize: NSSize) -> NSImage? {
-        guard let bitmapRep = NSBitmapImageRep(
-            bitmapDataPlanes: nil, pixelsWide: Int(newSize.width),
-            pixelsHigh: Int(newSize.height), bitsPerSample: 8,
-            samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-            colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
-        ) else { return nil }
+        // Create a new bitmap representation with the specified size.
+        guard
+            let bitmapRep = NSBitmapImageRep(
+                bitmapDataPlanes: nil, pixelsWide: Int(newSize.width),
+                pixelsHigh: Int(newSize.height), bitsPerSample: 8,
+                samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+            )
+        else {
+            NSLog("Error: Unable to create NSBitmapImageRep for new size.")
+            return nil
+        }
 
+        // Draw the current image onto the new bitmap representation.
         bitmapRep.size = newSize
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmapRep)
-        draw(
-            in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height),
-            from: NSRect.zero,
-            operation: .copy,
-            fraction: 1.0
-        )
+        draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height),
+             from: NSRect.zero, operation: .copy, fraction: 1.0)
         NSGraphicsContext.restoreGraphicsState()
 
+        // Create a new NSImage from the bitmap representation.
         let resizedImage = NSImage(size: newSize)
         resizedImage.addRepresentation(bitmapRep)
         return resizedImage
     }
 
-    // Helper function to filter out similar colors.
+    /// Filters out similar colors from an array, leaving only distinct colors.
+    /// - Parameter colors: The array of NSColor to filter.
+    /// - Returns: An array of NSColor with similar colors removed.
     private func filterSimilarColors(colors: [NSColor]) -> [NSColor] {
         var uniqueColors = [NSColor]()
+        // Iterate through the colors to build an array of unique colors.
         for color in colors {
             var isSimilar = false
             for existingColor in uniqueColors {
+                // Check if the current color is similar to any already in the array.
                 if color.isSimilar(to: existingColor) {
                     isSimilar = true
                     break
                 }
             }
+            // If the color is not similar to any existing colors, add it to the array.
             if !isSimilar {
                 uniqueColors.append(color)
-                if uniqueColors.count == 2 { break } // We only need the top 2 unique colors
+                // Stop if we have the top 2 unique colors.
+                if uniqueColors.count == 2 { break }
             }
         }
         return uniqueColors
@@ -107,19 +123,28 @@ extension NSImage {
 // MARK: - Wallpaper public function
 
 public class WallpaperProcessor {
+    /// Fetches the latest wallpaper colors and updates the app's theme settings.
     public static func fetchLatestWallpaperColors() async {
         do {
+            // Attempt to process the current wallpaper to get the dominant colors.
             let colors = try await processCurrentWallpaper()
+            // Update the custom accent color with the first dominant color or clear if none.
             Defaults[.customAccentColor] = Color(colors.first ?? .clear)
+            // Update the gradient color with the second dominant color or the existing gradient color if only one color is found.
             Defaults[.gradientColor] = colors.count > 1 ? Color(colors[1]) : Defaults[.gradientColor]
         } catch {
+            // If an error occurs, print the error description.
             print(error.localizedDescription)
         }
     }
 
-    // Processes the current wallpaper and returns a message with the dominant colors.
+    /// Processes the current wallpaper and returns the dominant colors.
+    /// - Throws: An error if the screenshot fails or dominant colors cannot be calculated.
+    /// - Returns: An array of NSColor representing the dominant colors.
     private static func processCurrentWallpaper() async throws -> [NSColor] {
+        // Take a screenshot of the main display.
         guard let screenshot = await takeScreenshot() else {
+            // If taking a screenshot fails, throw an error.
             throw NSError(
                 domain: "WallpaperProcessorError",
                 code: 1,
@@ -127,9 +152,12 @@ public class WallpaperProcessor {
             )
         }
 
+        // Calculate the dominant colors from the screenshot.
         let dominantColors = await screenshot.calculateDominantColors()
 
+        // Ensure that dominant colors are calculated and the array is not empty.
         guard let colors = dominantColors, !colors.isEmpty else {
+            // If no colors are found, throw an error.
             throw NSError(
                 domain: "WallpaperProcessorError",
                 code: 2,
@@ -140,15 +168,20 @@ public class WallpaperProcessor {
         return colors
     }
 
-    // Takes a screenshot of the main display.
+    /// Takes a screenshot of the main display.
+    /// - Returns: An NSImage of the screenshot or nil if the operation fails.
     private static func takeScreenshot() async -> NSImage? {
+        // Get the ID of the main display.
         let mainDisplayID = CGMainDisplayID()
 
-        #warning("TODO: Add a switch method for CGDisplayCreateImage as it's not longer supported on macOS 14.4/15")
+        #warning("TODO: Add a switch method for CGDisplayCreateImage as it's not supported on macOS 14.4/15")
+        // Attempt to create an image from the main display.
         guard let screenshotCGImage = CGDisplayCreateImage(mainDisplayID) else {
+            // If the creation fails, return nil.
             return nil
         }
 
+        // Return an NSImage created from the CGImage of the screenshot.
         return NSImage(cgImage: screenshotCGImage, size: NSSize.zero)
     }
 }

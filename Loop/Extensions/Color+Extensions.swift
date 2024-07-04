@@ -37,20 +37,30 @@ extension Color {
 // MARK: - Extension for wallpaper coloring
 
 extension NSColor {
-    // Converts NSColor to a hexadecimal string representation.
+    /// Converts NSColor to a hexadecimal string representation.
+    /// If the color is not in the device RGB color space, it defaults to black.
     var toHexString: String {
-        let rgbColor = usingColorSpace(.deviceRGB) ?? NSColor.black
-        let red = Int(round(rgbColor.redComponent * 0xFF))
-        let green = Int(round(rgbColor.greenComponent * 0xFF))
-        let blue = Int(round(rgbColor.blueComponent * 0xFF))
-        return String(format: "#%02X%02X%02X", red, green, blue)
+        // Attempt to convert the color to the RGB color space.
+        guard let rgbColor = usingColorSpace(.deviceRGB) else { return "#000000" }
+        // Format the RGB components into a hexadecimal string.
+        return String(format: "#%02X%02X%02X",
+                      Int(rgbColor.redComponent * 0xFF),
+                      Int(rgbColor.greenComponent * 0xFF),
+                      Int(rgbColor.blueComponent * 0xFF))
     }
 
-    // Determines if two colors are similar based on a threshold.
+    /// Determines if two colors are similar based on a threshold.
+    /// - Parameters:
+    ///   - color: The color to compare with the receiver.
+    ///   - threshold: The maximum allowed difference between color components.
+    /// - Returns: A Boolean value indicating whether the two colors are similar.
     func isSimilar(to color: NSColor, threshold: CGFloat = 0.1) -> Bool {
-        let redDiff = abs(redComponent - color.redComponent)
-        let greenDiff = abs(greenComponent - color.greenComponent)
-        let blueDiff = abs(blueComponent - color.blueComponent)
-        return (redDiff < threshold) && (greenDiff < threshold) && (blueDiff < threshold)
+        // Convert both colors to the RGB color space for comparison.
+        guard let color1 = usingColorSpace(.deviceRGB),
+              let color2 = color.usingColorSpace(.deviceRGB) else { return false }
+        // Compare the red, green, and blue components of both colors.
+        return abs(color1.redComponent - color2.redComponent) < threshold &&
+            abs(color1.greenComponent - color2.greenComponent) < threshold &&
+            abs(color1.blueComponent - color2.blueComponent) < threshold
     }
 }
