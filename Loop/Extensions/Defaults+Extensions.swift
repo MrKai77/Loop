@@ -79,7 +79,6 @@ extension Defaults.Keys {
                 .init(.leftThird),
                 .init(.leftTwoThirds)
             ], [.kVK_LeftArrow]),
-            
             WindowAction(.topLeftQuarter, keybind: [.kVK_UpArrow, .kVK_LeftArrow]),
             WindowAction(.topRightQuarter, keybind: [.kVK_UpArrow, .kVK_RightArrow]),
             WindowAction(.bottomRightQuarter, keybind: [.kVK_DownArrow, .kVK_RightArrow]),
