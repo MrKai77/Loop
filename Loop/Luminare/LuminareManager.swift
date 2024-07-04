@@ -20,7 +20,7 @@ class LuminareManager {
 
     static let advancedConfiguration = SettingsTab("Advanced", Image(._18PxFaceNerdSmile), AdvancedConfigurationView())
     static let excludedAppsConfiguration = SettingsTab("Excluded Apps", Image(._18PxWindowLock), ExcludedAppsConfigurationView())
-    static let aboutConfiguration = SettingsTab("About", Image(._18PxMsgSmile2), AboutConfigurationView())
+    static let aboutConfiguration = SettingsTab("About", Image(._18PxMsgSmile2), AboutConfigurationView(), showIndicator: { AppDelegate.updater.updateState == .available })
 
     static var luminare: LuminareSettingsWindow?
 

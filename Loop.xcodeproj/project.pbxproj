@@ -19,6 +19,7 @@
 		A81D8D0A2C068B8700188E12 /* LuminarePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D8D092C068B8700188E12 /* LuminarePreviewView.swift */; };
 		A81D8D0C2C06950000188E12 /* LuminareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81D8D0B2C06950000188E12 /* LuminareManager.swift */; };
 		A82521EE29E235AC00139654 /* PermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82521ED29E235AC00139654 /* PermissionsManager.swift */; };
+		A826BE592C322BD600B4C10D /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A826BE582C322BD600B4C10D /* Luminare */; };
 		A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740972AB00FCE00B9BDC5 /* Color+Extensions.swift */; };
 		A827409A2AB0208500B9BDC5 /* TriggerKeycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82740992AB0208500B9BDC5 /* TriggerKeycorder.swift */; };
 		A82B1AEE2BD352A100E2F3F9 /* AccentColorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82B1AED2BD352A100E2F3F9 /* AccentColorConfiguration.swift */; };
@@ -860,6 +861,14 @@
 
 /* Begin XCRemoteSwiftPackageReference section */
 		A867C3A32C329C520073A906 /* XCRemoteSwiftPackageReference "Luminare" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MrKai77/Luminare";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		A826BE572C322BD600B4C10D /* XCRemoteSwiftPackageReference "Luminare" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MrKai77/Luminare";
 			requirement = {
