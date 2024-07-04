@@ -103,29 +103,24 @@ struct AccentColorConfigurationView: View {
 
 extension AccentColorConfigurationModel {
     var isCustom: Bool {
-        // Combined the conditions using ternary operator for brevity
         useSystemAccentColor ? false : !processWallpaper
     }
 
     var isWallpaper: Bool {
-        // Simplified the condition by directly returning the result of the logical AND
         processWallpaper && !useSystemAccentColor
     }
 
     var accentColorOption: String {
         get {
-            // Using ternary operator to simplify the getter
             useSystemAccentColor ? "System" : (processWallpaper ? "Wallpaper" : "Custom")
         }
         set {
-            // Removed the default case as it's not needed
             useSystemAccentColor = newValue == "System"
             processWallpaper = newValue == "Wallpaper"
         }
     }
 
     func imageName(for option: String) -> String {
-        // Using a dictionary for mapping to reduce the switch statement
         let imageNames = [
             "System": "apple.logo",
             "Wallpaper": "photo.on.rectangle.angled",

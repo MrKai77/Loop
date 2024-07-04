@@ -8,6 +8,8 @@
 import Defaults
 import SwiftUI
 
+// MARK: - Wallpaper colour processor
+
 // The real beans here (I don't like beans)
 extension NSImage {
     // Calculates the dominant colors of the image.
@@ -102,7 +104,8 @@ extension NSImage {
     }
 }
 
-// Main logic for outside scrips to ref to
+// MARK: - Wallpaper public function
+
 public class WallpaperProcessor {
     public static func fetchLatestWallpaperColors() async {
         do {

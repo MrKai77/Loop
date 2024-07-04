@@ -14,7 +14,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     static let windowDragManager = WindowDragManager()
     static let updater = Updater()
     static var isActive: Bool = false
-    static var accentColorConfigurationModel = AccentColorConfigurationModel()
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
