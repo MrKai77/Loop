@@ -58,9 +58,9 @@ struct AccentColorConfigurationView: View {
                 columns: 3,
                 roundBottom: model.useSystemAccentColor
             ) { option in
-                VStack {
+                VStack(spacing: 6) {
                     Spacer()
-                    Image(systemName: model.imageName(for: option))
+                    model.image(for: option)
                     Text(option)
                     Spacer()
                 }
@@ -120,12 +120,12 @@ extension AccentColorConfigurationModel {
         }
     }
 
-    func imageName(for option: String) -> String {
+    func image(for option: String) -> Image {
         let imageNames = [
-            "System": "apple.logo",
-            "Wallpaper": "photo.on.rectangle.angled",
-            "Custom": "paintpalette"
+            "System": Image(systemName: "apple.logo"),
+            "Wallpaper": Image(._18PxImageDepth),
+            "Custom": Image(._18PxColorPalette)
         ]
-        return imageNames[option, default: ""]
+        return imageNames[option] ?? Image(systemName: "exclamationmark.triangle")
     }
 }
