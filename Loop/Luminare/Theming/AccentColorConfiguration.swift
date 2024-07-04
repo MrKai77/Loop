@@ -13,9 +13,9 @@ class AccentColorConfigurationModel: ObservableObject {
     @StateObject private var model = AppDelegate.accentColorConfigurationModel
     private var wallpaperSyncTimer: Timer?
 
-    init() {
-        setupWallpaperSync()
-    }
+//    init() {
+//        setupWallpaperSync()
+//    }
 
     // MARK: - Defaults
 
@@ -38,55 +38,59 @@ class AccentColorConfigurationModel: ObservableObject {
     @Published var processWallpaper = Defaults[.processWallpaper] {
         didSet {
             Defaults[.processWallpaper] = processWallpaper
-            if processWallpaper { fetchWallpaperColors() }
+            if processWallpaper {
+                Task {
+                    await fetchWallpaperColors()
+                }
+            }
         }
     }
 
-    @Published var dynamicWallpaperSyncEnabled = Defaults[.dynamicWallpaperSyncEnabled] {
-        didSet {
-            Defaults[.dynamicWallpaperSyncEnabled] = dynamicWallpaperSyncEnabled
-            handleDynamicWallpaperSyncChange()
-        }
-    }
-
-    @Published var wallpaperSyncInterval: TimeInterval = Defaults[.wallpaperSyncInterval] {
-        didSet {
-            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
-            updateWallpaperSyncTimerInterval()
-        }
-    }
+//    @Published var dynamicWallpaperSyncEnabled = Defaults[.dynamicWallpaperSyncEnabled] {
+//        didSet {
+//            Defaults[.dynamicWallpaperSyncEnabled] = dynamicWallpaperSyncEnabled
+//            handleDynamicWallpaperSyncChange()
+//        }
+//    }
+//
+//    @Published var wallpaperSyncInterval: TimeInterval = Defaults[.wallpaperSyncInterval] {
+//        didSet {
+//            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
+//            updateWallpaperSyncTimerInterval()
+//        }
+//    }
 
     // MARK: - Wallpaper code
 
-    private func handleDynamicWallpaperSyncChange() {
-        if dynamicWallpaperSyncEnabled {
-            startWallpaperSyncTimer()
-        } else {
-            stopWallpaperSyncTimer()
-        }
-    }
+//    private func handleDynamicWallpaperSyncChange() {
+//        if dynamicWallpaperSyncEnabled {
+//            startWallpaperSyncTimer()
+//        } else {
+//            stopWallpaperSyncTimer()
+//        }
+//    }
 
-    func setupWallpaperSync() {
-        if Defaults[.dynamicWallpaperSyncEnabled] {
-            startWallpaperSyncTimer()
-        }
-    }
+//    func setupWallpaperSync() {
+//        if Defaults[.dynamicWallpaperSyncEnabled] {
+//            startWallpaperSyncTimer()
+//        }
+//    }
 
-    private func startWallpaperSyncTimer() {
-        guard wallpaperSyncTimer == nil else {
-            // NSLog("Wallpaper sync timer is already running.")
-            return
-        }
-        wallpaperSyncTimer = Timer.scheduledTimer(withTimeInterval: wallpaperSyncInterval, repeats: true) { [weak self] _ in
-            self?.fetchWallpaperColors()
-        }
-        // NSLog("Wallpaper sync timer started.")
-    }
+//    private func startWallpaperSyncTimer() {
+//        guard wallpaperSyncTimer == nil else {
+//            // NSLog("Wallpaper sync timer is already running.")
+//            return
+//        }
+//        wallpaperSyncTimer = Timer.scheduledTimer(withTimeInterval: wallpaperSyncInterval, repeats: true) { [weak self] _ in
+//            self?.fetchWallpaperColors()
+//        }
+//        // NSLog("Wallpaper sync timer started.")
+//    }
 
-    private func updateWallpaperSyncTimerInterval() {
-        stopWallpaperSyncTimer()
-        startWallpaperSyncTimer()
-    }
+//    private func updateWallpaperSyncTimerInterval() {
+//        stopWallpaperSyncTimer()
+//        startWallpaperSyncTimer()
+//    }
 
     private func stopWallpaperSyncTimer() {
         if let timer = wallpaperSyncTimer {
@@ -103,27 +107,25 @@ class AccentColorConfigurationModel: ObservableObject {
         gradientColor = colors.count > 1 ? Color(colors[1]) : gradientColor
     }
 
-    func fetchWallpaperColors() {
-        WallpaperProcessor.processCurrentWallpaper { [weak self] result in
-            switch result {
-            case let .success(colors):
-                self?.updateColorsFromWallpaper(with: colors)
-            case let .failure(error):
-                print(error.localizedDescription)
-            }
+    func fetchWallpaperColors() async {
+        do {
+            let colors = try await WallpaperProcessor.processCurrentWallpaper()
+            updateColorsFromWallpaper(with: colors)
+        } catch {
+            print(error.localizedDescription)
         }
     }
 
     // Change the type of wallpaperSyncIntervalInMinutes to Double
-    var wallpaperSyncIntervalInMinutes: Double {
-        get {
-            Double(wallpaperSyncInterval / 60)
-        }
-        set {
-            wallpaperSyncInterval = newValue >= 1 ? TimeInterval(newValue * 60) : TimeInterval(newValue)
-            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
-        }
-    }
+//    var wallpaperSyncIntervalInMinutes: Double {
+//        get {
+//            Double(wallpaperSyncInterval / 60)
+//        }
+//        set {
+//            wallpaperSyncInterval = newValue >= 1 ? TimeInterval(newValue * 60) : TimeInterval(newValue)
+//            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
+//        }
+//    }
 }
 
 // MARK: - View
@@ -137,7 +139,7 @@ struct AccentColorConfigurationView: View {
                 elements: ["System", "Wallpaper", "Custom"],
                 selection: $model.accentColorOption.animation(LuminareSettingsWindow.animation),
                 columns: 3,
-                roundBottom: true
+                roundBottom: model.useSystemAccentColor
             ) { option in
                 VStack {
                     Spacer()
@@ -154,20 +156,22 @@ struct AccentColorConfigurationView: View {
             }
 
             if model.processWallpaper {
-                LuminareToggle("Dynamic Sync", isOn: $model.dynamicWallpaperSyncEnabled.animation(LuminareSettingsWindow.animation))
+//                LuminareToggle("Dynamic Sync", isOn: $model.dynamicWallpaperSyncEnabled.animation(LuminareSettingsWindow.animation))
 
-                #warning("Hi, values need to be adjusting to show S, M or H. No idea how to do this :thumbsup:")
-                LuminareValueAdjuster(
-                    "Sync Interval",
-                    value: $model.wallpaperSyncIntervalInMinutes,
-                    sliderRange: 0.5...1440, // Range in minutes (30 seconds to 24 hours)
-                    suffix: "min",
-                    lowerClamp: true,
-                    upperClamp: true
-                )
+//                #warning("Hi, values need to be adjusting to show S, M or H. No idea how to do this :thumbsup:")
+//                LuminareValueAdjuster(
+//                    "Sync Interval",
+//                    value: $model.wallpaperSyncIntervalInMinutes,
+//                    sliderRange: 0.5...1440, // Range in minutes (30 seconds to 24 hours)
+//                    suffix: "min",
+//                    lowerClamp: true,
+//                    upperClamp: true
+//                )
 
                 Button("Sync Wallpaper") {
-                    model.fetchWallpaperColors()
+                    Task {
+                        await model.fetchWallpaperColors()
+                    }
                 }
             }
         }

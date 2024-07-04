@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.loopManager.start()
         AppDelegate.windowDragManager.addObservers()
 
-        AppDelegate.accentColorConfigurationModel.setupWallpaperSync()
+//        AppDelegate.accentColorConfigurationModel.setupWallpaperSync()
 
         if !launchedAsLoginItem {
             LuminareManager.open()

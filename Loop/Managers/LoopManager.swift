@@ -357,6 +357,18 @@ class LoopManager: ObservableObject {
     private func openLoop() {
         guard isLoopActive == false else { return }
 
+        if Defaults[.processWallpaper] {
+            Task {
+                do {
+                    let colors = try await WallpaperProcessor.processCurrentWallpaper()
+                    Defaults[.customAccentColor] = Color(colors.first ?? .clear)
+                    Defaults[.gradientColor] = colors.count > 1 ? Color(colors[1]) : Defaults[.gradientColor]
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+
         currentAction = .init(.noAction)
         targetWindow = nil
 
