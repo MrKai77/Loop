@@ -359,13 +359,7 @@ class LoopManager: ObservableObject {
 
         if Defaults[.processWallpaper] {
             Task {
-                do {
-                    let colors = try await WallpaperProcessor.processCurrentWallpaper()
-                    Defaults[.customAccentColor] = Color(colors.first ?? .clear)
-                    Defaults[.gradientColor] = colors.count > 1 ? Color(colors[1]) : Defaults[.gradientColor]
-                } catch {
-                    print(error.localizedDescription)
-                }
+                await WallpaperProcessor.fetchLatestWallpaperColors()
             }
         }
 

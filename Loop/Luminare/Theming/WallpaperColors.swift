@@ -5,7 +5,8 @@
 //  Created by Kami on 27/06/2024.
 //
 
-import AppKit
+import Defaults
+import SwiftUI
 
 // The real beans here (I don't like beans)
 extension NSImage {
@@ -103,10 +104,18 @@ extension NSImage {
 
 // Main logic for outside scrips to ref to
 public class WallpaperProcessor {
-    private static var lastProcessedColors: [NSColor]?
+    public static func fetchLatestWallpaperColors() async {
+        do {
+            let colors = try await processCurrentWallpaper()
+            Defaults[.customAccentColor] = Color(colors.first ?? .clear)
+            Defaults[.gradientColor] = colors.count > 1 ? Color(colors[1]) : Defaults[.gradientColor]
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 
     // Processes the current wallpaper and returns a message with the dominant colors.
-    public static func processCurrentWallpaper() async throws -> [NSColor] {
+    private static func processCurrentWallpaper() async throws -> [NSColor] {
         guard let screenshot = await takeScreenshot() else {
             throw NSError(
                 domain: "WallpaperProcessorError",
@@ -124,9 +133,6 @@ public class WallpaperProcessor {
                 userInfo: [NSLocalizedDescriptionKey: "Could not calculate the dominant colors."]
             )
         }
-
-        // Update lastProcessedColors with the new dominant colors
-        lastProcessedColors = colors
 
         return colors
     }

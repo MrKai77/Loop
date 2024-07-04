@@ -10,8 +10,6 @@ import Luminare
 import SwiftUI
 
 class AccentColorConfigurationModel: ObservableObject {
-    @StateObject private var model = AppDelegate.accentColorConfigurationModel
-
     // MARK: - Defaults
 
     @Published var useSystemAccentColor = Defaults[.useSystemAccentColor] {
@@ -35,27 +33,9 @@ class AccentColorConfigurationModel: ObservableObject {
             Defaults[.processWallpaper] = processWallpaper
             if processWallpaper {
                 Task {
-                    await fetchWallpaperColors()
+                    await WallpaperProcessor.fetchLatestWallpaperColors()
                 }
             }
-        }
-    }
-
-    // MARK: - Wallpaper code
-
-    private func updateColorsFromWallpaper(with colors: [NSColor]) {
-        // Use compactMap to ensure non-nil colors and avoid unnecessary nil-coalescing
-        let uiColors = colors.compactMap { Color($0) }
-        customAccentColor = uiColors.first ?? .clear
-        gradientColor = uiColors.count > 1 ? uiColors[1] : gradientColor
-    }
-
-    func fetchWallpaperColors() async {
-        do {
-            let colors = try await WallpaperProcessor.processCurrentWallpaper()
-            updateColorsFromWallpaper(with: colors)
-        } catch {
-            NSLog("Error fetching wallpaper colors: \(error.localizedDescription)")
         }
     }
 }
@@ -90,7 +70,7 @@ struct AccentColorConfigurationView: View {
             if model.processWallpaper {
                 Button("Sync Wallpaper") {
                     Task {
-                        await model.fetchWallpaperColors()
+                        await WallpaperProcessor.fetchLatestWallpaperColors()
                     }
                 }
             }
