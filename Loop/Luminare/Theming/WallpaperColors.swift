@@ -104,7 +104,6 @@ extension NSImage {
 // Main logic for outside scrips to ref to
 public class WallpaperProcessor {
     private static var lastProcessedColors: [NSColor]?
-    private static var wallpaperCheckTimer: Timer?
 
     // Processes the current wallpaper and returns a message with the dominant colors.
     public static func processCurrentWallpaper() async throws -> [NSColor] {

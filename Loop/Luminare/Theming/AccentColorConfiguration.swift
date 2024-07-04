@@ -11,11 +11,6 @@ import SwiftUI
 
 class AccentColorConfigurationModel: ObservableObject {
     @StateObject private var model = AppDelegate.accentColorConfigurationModel
-    private var wallpaperSyncTimer: Timer?
-
-//    init() {
-//        setupWallpaperSync()
-//    }
 
     // MARK: - Defaults
 
@@ -46,65 +41,13 @@ class AccentColorConfigurationModel: ObservableObject {
         }
     }
 
-//    @Published var dynamicWallpaperSyncEnabled = Defaults[.dynamicWallpaperSyncEnabled] {
-//        didSet {
-//            Defaults[.dynamicWallpaperSyncEnabled] = dynamicWallpaperSyncEnabled
-//            handleDynamicWallpaperSyncChange()
-//        }
-//    }
-//
-//    @Published var wallpaperSyncInterval: TimeInterval = Defaults[.wallpaperSyncInterval] {
-//        didSet {
-//            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
-//            updateWallpaperSyncTimerInterval()
-//        }
-//    }
-
     // MARK: - Wallpaper code
 
-//    private func handleDynamicWallpaperSyncChange() {
-//        if dynamicWallpaperSyncEnabled {
-//            startWallpaperSyncTimer()
-//        } else {
-//            stopWallpaperSyncTimer()
-//        }
-//    }
-
-//    func setupWallpaperSync() {
-//        if Defaults[.dynamicWallpaperSyncEnabled] {
-//            startWallpaperSyncTimer()
-//        }
-//    }
-
-//    private func startWallpaperSyncTimer() {
-//        guard wallpaperSyncTimer == nil else {
-//            // NSLog("Wallpaper sync timer is already running.")
-//            return
-//        }
-//        wallpaperSyncTimer = Timer.scheduledTimer(withTimeInterval: wallpaperSyncInterval, repeats: true) { [weak self] _ in
-//            self?.fetchWallpaperColors()
-//        }
-//        // NSLog("Wallpaper sync timer started.")
-//    }
-
-//    private func updateWallpaperSyncTimerInterval() {
-//        stopWallpaperSyncTimer()
-//        startWallpaperSyncTimer()
-//    }
-
-    private func stopWallpaperSyncTimer() {
-        if let timer = wallpaperSyncTimer {
-            timer.invalidate()
-            // NSLog("Wallpaper sync timer stopped.")
-        } else {
-            // NSLog("No wallpaper sync timer to stop.")
-        }
-        wallpaperSyncTimer = nil
-    }
-
     private func updateColorsFromWallpaper(with colors: [NSColor]) {
-        customAccentColor = Color(colors.first ?? .clear)
-        gradientColor = colors.count > 1 ? Color(colors[1]) : gradientColor
+        // Use compactMap to ensure non-nil colors and avoid unnecessary nil-coalescing
+        let uiColors = colors.compactMap { Color($0) }
+        customAccentColor = uiColors.first ?? .clear
+        gradientColor = uiColors.count > 1 ? uiColors[1] : gradientColor
     }
 
     func fetchWallpaperColors() async {
@@ -112,20 +55,9 @@ class AccentColorConfigurationModel: ObservableObject {
             let colors = try await WallpaperProcessor.processCurrentWallpaper()
             updateColorsFromWallpaper(with: colors)
         } catch {
-            print(error.localizedDescription)
+            NSLog("Error fetching wallpaper colors: \(error.localizedDescription)")
         }
     }
-
-    // Change the type of wallpaperSyncIntervalInMinutes to Double
-//    var wallpaperSyncIntervalInMinutes: Double {
-//        get {
-//            Double(wallpaperSyncInterval / 60)
-//        }
-//        set {
-//            wallpaperSyncInterval = newValue >= 1 ? TimeInterval(newValue * 60) : TimeInterval(newValue)
-//            Defaults[.wallpaperSyncInterval] = wallpaperSyncInterval
-//        }
-//    }
 }
 
 // MARK: - View
@@ -156,18 +88,6 @@ struct AccentColorConfigurationView: View {
             }
 
             if model.processWallpaper {
-//                LuminareToggle("Dynamic Sync", isOn: $model.dynamicWallpaperSyncEnabled.animation(LuminareSettingsWindow.animation))
-
-//                #warning("Hi, values need to be adjusting to show S, M or H. No idea how to do this :thumbsup:")
-//                LuminareValueAdjuster(
-//                    "Sync Interval",
-//                    value: $model.wallpaperSyncIntervalInMinutes,
-//                    sliderRange: 0.5...1440, // Range in minutes (30 seconds to 24 hours)
-//                    suffix: "min",
-//                    lowerClamp: true,
-//                    upperClamp: true
-//                )
-
                 Button("Sync Wallpaper") {
                     Task {
                         await model.fetchWallpaperColors()
@@ -198,50 +118,34 @@ struct AccentColorConfigurationView: View {
 
 extension AccentColorConfigurationModel {
     var isCustom: Bool {
-        !useSystemAccentColor && !processWallpaper
+        // Combined the conditions using ternary operator for brevity
+        useSystemAccentColor ? false : !processWallpaper
     }
 
     var isWallpaper: Bool {
+        // Simplified the condition by directly returning the result of the logical AND
         processWallpaper && !useSystemAccentColor
     }
 
     var accentColorOption: String {
         get {
-            if useSystemAccentColor {
-                "System"
-            } else if processWallpaper {
-                "Wallpaper"
-            } else {
-                "Custom"
-            }
+            // Using ternary operator to simplify the getter
+            useSystemAccentColor ? "System" : (processWallpaper ? "Wallpaper" : "Custom")
         }
         set {
-            switch newValue {
-            case "System":
-                useSystemAccentColor = true
-                processWallpaper = false
-            case "Custom":
-                useSystemAccentColor = false
-                processWallpaper = false
-            case "Wallpaper":
-                useSystemAccentColor = false
-                processWallpaper = true
-            default:
-                break
-            }
+            // Removed the default case as it's not needed
+            useSystemAccentColor = newValue == "System"
+            processWallpaper = newValue == "Wallpaper"
         }
     }
 
     func imageName(for option: String) -> String {
-        switch option {
-        case "System":
-            "apple.logo"
-        case "Wallpaper":
-            "photo.on.rectangle.angled"
-        case "Custom":
-            "paintpalette"
-        default:
-            ""
-        }
+        // Using a dictionary for mapping to reduce the switch statement
+        let imageNames = [
+            "System": "apple.logo",
+            "Wallpaper": "photo.on.rectangle.angled",
+            "Custom": "paintpalette"
+        ]
+        return imageNames[option, default: ""]
     }
 }
