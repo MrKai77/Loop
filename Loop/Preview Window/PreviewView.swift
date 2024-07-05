@@ -52,5 +52,14 @@ struct PreviewView: View {
             }
             .padding(previewPadding + previewBorderThickness / 2)
         }
+        // This would be called if the user's color mode is set to "wallpaper"
+        .onChange(of: [customAccentColor, gradientColor]) { _ in
+            recomputeColors()
+        }
+    }
+
+    func recomputeColors() {
+        primaryColor = Color.getLoopAccent(tone: .normal)
+        secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
     }
 }
