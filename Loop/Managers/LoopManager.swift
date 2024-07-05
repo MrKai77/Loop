@@ -246,6 +246,7 @@ class LoopManager: ObservableObject {
             if Defaults[.hideUntilDirectionIsChosen] {
                 openWindows()
             }
+
             DispatchQueue.main.async {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
 
@@ -357,12 +358,6 @@ class LoopManager: ObservableObject {
     private func openLoop() {
         guard isLoopActive == false else { return }
 
-        if Defaults[.processWallpaper] {
-            Task {
-                await WallpaperProcessor.fetchLatestWallpaperColors()
-            }
-        }
-
         currentAction = .init(.noAction)
         targetWindow = nil
 
@@ -379,13 +374,20 @@ class LoopManager: ObservableObject {
             mouseMovedEventMonitor?.start()
         }
 
-        if !Defaults[.hideUntilDirectionIsChosen] {
-            openWindows()
-        }
-
         keybindMonitor.start()
-
         isLoopActive = true
+
+        Task {
+            if Defaults[.processWallpaper] {
+                await WallpaperProcessor.fetchLatestWallpaperColors()
+            }
+
+            if !Defaults[.hideUntilDirectionIsChosen] {
+                DispatchQueue.main.async {
+                    self.openWindows()
+                }
+            }
+        }
 
         if let window = targetWindow {
             LoopManager.lastTargetFrame = window.frame
@@ -438,13 +440,18 @@ class LoopManager: ObservableObject {
 
     private func openWindows() {
         if Defaults[.previewVisibility], targetWindow != nil {
-            previewController.open(screen: screenToResizeOn!, window: targetWindow)
+            previewController.open(
+                screen: screenToResizeOn!,
+                window: targetWindow,
+                startingAction: currentAction
+            )
         }
 
         if Defaults[.radialMenuVisibility] {
             radialMenuController.open(
                 position: initialMousePosition,
-                frontmostWindow: targetWindow
+                frontmostWindow: targetWindow,
+                startingAction: currentAction
             )
         }
     }
