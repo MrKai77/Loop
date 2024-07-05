@@ -210,6 +210,16 @@ struct AboutConfigurationView: View {
                     .contentTransition(.numericText())
                     .animation(LuminareSettingsWindow.animation, value: model.updateButtonTitle)
             }
+            .onAppear {
+                if updater.updateState == .available {
+                    model.updateButtonTitle = "Update…"
+                }
+            }
+            .onChange(of: updater.updateState) { _ in
+                if updater.updateState == .available {
+                    model.updateButtonTitle = "Update…"
+                }
+            }
 
             // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
             LuminareToggle("Include development versions", isOn: $updater.includeDevelopmentVersions)

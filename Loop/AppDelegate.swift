@@ -23,6 +23,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_: Notification) {
+        Task {
+            await Defaults.iCloud.waitForSyncCompletion()
+        }
+
         // Check & ask for accessibility access
         AccessibilityManager.requestAccess()
         UNUserNotificationCenter.current().delegate = self
