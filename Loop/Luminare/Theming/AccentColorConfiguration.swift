@@ -81,7 +81,8 @@ struct AccentColorConfigurationView: View {
             }
 
             if model.isCustom || model.isWallpaper {
-                LuminareToggle("Gradient", isOn: $model.useGradient.animation(LuminareSettingsWindow.animation))
+                LuminareToggle("Gradient", isOn: $model.useGradient)
+                    .animation(LuminareSettingsWindow.animation, value: model.useGradient)
             }
 
             if model.processWallpaper {

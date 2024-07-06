@@ -14,12 +14,16 @@ import SwiftUI
 extension NSImage {
     /// Calculates the dominant colors of the image asynchronously.
     /// - Returns: An array of NSColor representing the dominant colors, or nil if an error occurs.
+    /// Resizing the image to a smaller size improves performance by reducing the number of pixels that need to be analyzed.
+    /// NOTE: This function tends to return darker colors, which can be problematic with darker wallpapers. To address this,
+    /// a brightness threshold is applied to filter out excessively dark colors. Additionally, the function filters out colors
+    /// that are very similar to each other, such as #000000 and #010101, to ensure a more diverse and representative color palette.
     func calculateDominantColors() async -> [NSColor]? {
         // Resize the image to a smaller size to improve performance of color calculation.
         let aspectRatio = size.width / size.height
-        let resizedImage = resized(to: NSSize(width: 100 * aspectRatio, height: 100))
+        let resizedImage = resized(to: NSSize(width: 200 * aspectRatio, height: 200))
 
-        // Ensure we can get the CGImage and its data provider.
+        // Ensure we can get the CGImage and its data provider from the resized image.
         guard
             let resizedCGImage = resizedImage?.cgImage(forProposedRect: nil, context: nil, hints: nil),
             let dataProvider = resizedCGImage.dataProvider,
@@ -29,7 +33,7 @@ extension NSImage {
             return nil
         }
 
-        // Calculate the number of bytes per pixel and per row.
+        // Calculate the number of bytes per pixel and per row to access pixel data correctly.
         let bytesPerPixel = resizedCGImage.bitsPerPixel / 8
         let bytesPerRow = resizedCGImage.bytesPerRow
         let width = resizedCGImage.width
@@ -40,55 +44,56 @@ extension NSImage {
         for y in 0 ..< height {
             for x in 0 ..< width {
                 let pixelData = Int(y * bytesPerRow + x * bytesPerPixel)
-                // Determine the alpha value based on the presence of an alpha channel.
                 let alpha = (bytesPerPixel == 4) ? CGFloat(data[pixelData + 3]) / 255.0 : 1.0
-                // Create an NSColor instance for the current pixel.
-                let color = NSColor(
+                // Create an NSColor instance for the current pixel using RGBA values.
+                var color = NSColor(
                     red: CGFloat(data[pixelData]) / 255.0,
                     green: CGFloat(data[pixelData + 1]) / 255.0,
                     blue: CGFloat(data[pixelData + 2]) / 255.0,
                     alpha: alpha
                 )
-                // Increment the count for this color.
+                // Apply a quantization method to the color to reduce the color space complexity.
+                color = color.quantized()
+                // Increment the count for this color in the map.
                 colorCountMap[color, default: 0] += 1
             }
         }
 
+        // Filter out very dark colors based on a brightness threshold to avoid dominance of dark shades.
+        let brightnessThreshold: CGFloat = 0.2 // Filtered threshold.
+        let filteredByBrightness = colorCountMap.filter { $0.key.brightness > brightnessThreshold }
+
+        // If all colors are dark and the filtered map is empty, fallback to the original map.
+        let finalColors = filteredByBrightness.isEmpty ? colorCountMap : filteredByBrightness
+
         // Sort the colors by occurrence to find the most dominant colors.
-        let sortedColors = colorCountMap.sorted { $0.value > $1.value }.map(\.key)
+        let sortedColors = finalColors.sorted { $0.value > $1.value }.map(\.key)
 
-        // Filter out colors that are too similar to each other.
-        let filteredColors = filterSimilarColors(colors: sortedColors)
+        // Further filter out colors that are too similar to each other to ensure a diverse color palette.
+        let distinctColors = filterSimilarColors(colors: sortedColors)
 
-        return filteredColors
+        return distinctColors
     }
 
     /// Helper function to resize the image to a new size.
     /// - Parameter newSize: The target size for the resized image.
     /// - Returns: The resized NSImage or nil if the operation fails.
     func resized(to newSize: NSSize) -> NSImage? {
-        // Create a new bitmap representation with the specified size.
-        guard
-            let bitmapRep = NSBitmapImageRep(
-                bitmapDataPlanes: nil, pixelsWide: Int(newSize.width),
-                pixelsHigh: Int(newSize.height), bitsPerSample: 8,
-                samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-                colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
-            )
-        else {
+        guard let bitmapRep = NSBitmapImageRep(
+            bitmapDataPlanes: nil, pixelsWide: Int(newSize.width),
+            pixelsHigh: Int(newSize.height), bitsPerSample: 8,
+            samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+            colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+        ) else {
             NSLog("Error: Unable to create NSBitmapImageRep for new size.")
             return nil
         }
-
-        // Draw the current image onto the new bitmap representation.
         bitmapRep.size = newSize
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmapRep)
         draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height),
-             from: NSRect.zero, operation: .copy, fraction: 1.0)
+             from: NSRect.zero, operation: .copy, fraction: 1.0, respectFlipped: true, hints: [NSImageRep.HintKey.interpolation: NSNumber(value: NSImageInterpolation.high.rawValue)])
         NSGraphicsContext.restoreGraphicsState()
-
-        // Create a new NSImage from the bitmap representation.
         let resizedImage = NSImage(size: newSize)
         resizedImage.addRepresentation(bitmapRep)
         return resizedImage

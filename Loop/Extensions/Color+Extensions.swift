@@ -8,6 +8,8 @@
 import Defaults
 import SwiftUI
 
+// MARK: - Loop theming
+
 extension Color {
     enum LoopAccentTone {
         case normal
@@ -49,6 +51,17 @@ extension NSColor {
                       Int(rgbColor.blueComponent * 0xFF))
     }
 
+    /// Calculates the brightness of the color based on luminance.
+    /// Brightness is calculated using the luminance formula, which considers the different contributions
+    /// of the red, green, and blue components of the color. This property can be used to determine
+    /// how light or dark a color is perceived to be.
+    var brightness: CGFloat {
+        // Ensure the color is in the sRGB color space for accurate luminance calculation.
+        guard let rgbColor = usingColorSpace(.sRGB) else { return 0 }
+        // Calculate brightness using the luminance formula.
+        return 0.299 * rgbColor.redComponent + 0.587 * rgbColor.greenComponent + 0.114 * rgbColor.blueComponent
+    }
+
     /// Determines if two colors are similar based on a threshold.
     /// - Parameters:
     ///   - color: The color to compare with the receiver.
@@ -62,5 +75,20 @@ extension NSColor {
         return abs(color1.redComponent - color2.redComponent) < threshold &&
             abs(color1.greenComponent - color2.greenComponent) < threshold &&
             abs(color1.blueComponent - color2.blueComponent) < threshold
+    }
+
+    /// Quantizes the color to a limited set of values.
+    /// This process reduces the color's precision, effectively snapping it to a grid
+    /// in the color space defined by the quantization level. This simplification can
+    /// be beneficial for analyzing colors in smaller images by reducing the color palette's complexity.
+    /// - Returns: A quantized NSColor.
+    func quantized(levels: Double = 512.0) -> NSColor {
+        guard let sRGBColor = usingColorSpace(.sRGB) else { return self }
+        let divisionFactor = levels - 1
+        let red = round(sRGBColor.redComponent * divisionFactor) / divisionFactor
+        let green = round(sRGBColor.greenComponent * divisionFactor) / divisionFactor
+        let blue = round(sRGBColor.blueComponent * divisionFactor) / divisionFactor
+        let alpha = round(sRGBColor.alphaComponent * divisionFactor) / divisionFactor
+        return NSColor(srgbRed: red, green: green, blue: blue, alpha: alpha)
     }
 }
