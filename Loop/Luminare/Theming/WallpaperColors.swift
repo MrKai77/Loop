@@ -60,8 +60,11 @@ extension NSImage {
         }
 
         // Filter out very dark colors based on a brightness threshold to avoid dominance of dark shades.
-        let brightnessThreshold: CGFloat = 0.2 // Filtered threshold.
-        let filteredByBrightness = colorCountMap.filter { $0.key.brightness > brightnessThreshold }
+        let brightnessThreshold: CGFloat = 0.3 // Ensure that the chosen color won't be too dark
+        let saturationThreshold: CGFloat = 0.1 // Try and make sure that the chosen color won't be bright white
+        let filteredByBrightness = colorCountMap
+            .filter { $0.key.brightness > brightnessThreshold }
+            .filter { $0.key.saturationComponent > saturationThreshold }
 
         // If all colors are dark and the filtered map is empty, fallback to the original map.
         let finalColors = filteredByBrightness.isEmpty ? colorCountMap : filteredByBrightness
