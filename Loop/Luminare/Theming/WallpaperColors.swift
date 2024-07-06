@@ -135,7 +135,11 @@ public class WallpaperProcessor {
     static func fetchLatestWallpaperColors() async {
         do {
             // Attempt to process the current wallpaper to get the dominant colors.
-            let colors = try await processCurrentWallpaper()
+            let dominantColors = try await processCurrentWallpaper()
+
+            // Sort the first two colors by their brightness
+            let colors = dominantColors[0...1].sorted(by: { $0.brightness > $1.brightness })
+
             // Update the custom accent color with the first dominant color or clear if none.
             Defaults[.customAccentColor] = Color(colors.first ?? .clear)
             // Update the gradient color with the second dominant color or the existing gradient color if only one color is found.
