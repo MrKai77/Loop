@@ -39,17 +39,19 @@ jobs:
           echo "FROM_TAG=$FROM_TAG" >> $GITHUB_ENV
 
       - name: 🔧 Select Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_15.4.app"
+        run: sudo xcode-select -s "/Applications/Xcode_16.0.app"
 
       - name: 🎟️ Install Certificate
         env:
           DEVELOPMENT_CERT_BASE64: ${{ secrets.DEVELOPMENT_CERT_BASE64 }}
           DEVELOPER_ID_CERT_BASE64: ${{ secrets.DEVELOPER_ID_CERT_BASE64 }}
+          PROVISION_PROFILE_B64: ${{ secrets.PROVISION_PROFILE_B64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
           DEVELOPMENT_CERT_PATH=$RUNNER_TEMP/dev.p12
           DEVELOPER_ID_CERT_PATH=$RUNNER_TEMP/devid.p12
+          PROVISION_PROFILE_PATH="$RUNNER_TEMP/provision_profile.provisionprofile"
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           echo -n "$DEVELOPMENT_CERT_BASE64" | base64 --decode -o $DEVELOPMENT_CERT_PATH
@@ -64,6 +66,10 @@ jobs:
 
           security list-keychain -d user -s $KEYCHAIN_PATH
 
+          echo -n "$PROVISION_PROFILE_B64" | base64 --decode --output $PROVISION_PROFILE_PATH
+          mkdir -p "~/Library/MobileDevice/Provisioning Profiles"
+          cp "$PROVISION_PROFILE_PATH" "~/Library/MobileDevice/Provisioning Profiles"
+
       - name: 🛠️ Build Loop
         run: |
           xcodebuild \
@@ -71,7 +77,6 @@ jobs:
             -project Loop.xcodeproj/ \
             -scheme "Loop (GH ACTIONS)" \
             -destination 'generic/platform=macOS' \
-            -allowProvisioningUpdates \
             -archivePath dist/Loop.xcarchive
 
       - name: 🥡 Export Loop.app
