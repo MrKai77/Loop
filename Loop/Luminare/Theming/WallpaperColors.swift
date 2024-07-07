@@ -26,8 +26,8 @@ extension NSImage {
     func calculateDominantColors() async -> [NSColor]? {
         // Resize the image to a smaller size to improve performance of color calculation.
         let aspectRatio = size.width / size.height
-        // Changin the aspect ration will make it faster, but can also make it less accuate
-        // I recommend 100x100 or 200x200
+        // Changing the aspect ratio will make it faster, but can also make it less accurate.
+        // I recommend 100x100 or 200x200.
         let resizedImage = resized(to: NSSize(width: 200 * aspectRatio, height: 200))
 
         // Ensure we can get the CGImage and its data provider from the resized image.
