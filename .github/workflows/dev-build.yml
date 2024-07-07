@@ -51,7 +51,7 @@ jobs:
         run: |
           DEVELOPMENT_CERT_PATH=$RUNNER_TEMP/dev.p12
           DEVELOPER_ID_CERT_PATH=$RUNNER_TEMP/devid.p12
-          PROVISION_PROFILE_PATH="$RUNNER_TEMP/provision_profile.provisionprofile"
+          PROVISION_PROFILE_PATH="$RUNNER_TEMP/Loop.provisionprofile"
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           echo -n "$DEVELOPMENT_CERT_BASE64" | base64 --decode -o $DEVELOPMENT_CERT_PATH
