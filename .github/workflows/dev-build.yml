@@ -39,7 +39,7 @@ jobs:
           echo "FROM_TAG=$FROM_TAG" >> $GITHUB_ENV
 
       - name: 🔧 Select Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_16.0.app"
+        run: sudo xcode-select -s "/Applications/Xcode_15.4.app"
 
       - name: 🎟️ Install Certificate
         id: profile
@@ -57,6 +57,7 @@ jobs:
 
           echo -n "$DEVELOPMENT_CERT_BASE64" | base64 --decode -o $DEVELOPMENT_CERT_PATH
           echo -n "$DEVELOPER_ID_CERT_BASE64" | base64 --decode -o $DEVELOPER_ID_CERT_PATH
+          echo -n "$PROVISION_PROFILE_B64" | base64 --decode --output $PROVISION_PROFILE_PATH
 
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
@@ -67,12 +68,8 @@ jobs:
 
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          echo -n "$PROVISION_PROFILE_B64" | base64 --decode --output $PROVISION_PROFILE_PATH
-          uuid=`grep UUID -A1 -a "$PROVISION_PROFILE_PATH" | grep -io "[-A-F0-9]\{36\}"`
-          echo "uuid=$uuid" >> $GITHUB_OUTPUT
-
-          mkdir -p "~/Library/Developer/Xcode/UserData/Provisioning Profiles"
-          cp "$PROVISION_PROFILE_PATH" "~/Library/Developer/Xcode/UserData/Provisioning Profiles"
+          mkdir -p "~/Library/MobileDevice/Provisioning Profiles"
+          cp "$PROVISION_PROFILE_PATH" "~/Library/MobileDevice/Provisioning Profiles"
 
       - name: 🛠️ Build Loop
         run: |
@@ -81,8 +78,7 @@ jobs:
             -project Loop.xcodeproj/ \
             -scheme "Loop (GH ACTIONS)" \
             -destination 'generic/platform=macOS' \
-            -archivePath dist/Loop.xcarchive \
-            PROVISIONING_PROFILE=${{ steps.profile.outputs.uuid }}
+            -archivePath dist/Loop.xcarchive
 
       - name: 🥡 Export Loop.app
         run: |
