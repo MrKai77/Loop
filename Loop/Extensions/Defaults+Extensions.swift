@@ -21,6 +21,7 @@ extension Defaults.Keys {
     static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white), iCloud: true)
     static let useGradient = Key<Bool>("useGradient", default: true, iCloud: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black), iCloud: true)
+    static let processWallpaper = Key<Bool>("processWallpaper", default: false, iCloud: true)
 
     // Radial Menu
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true, iCloud: true)

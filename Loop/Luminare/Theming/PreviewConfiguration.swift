@@ -22,21 +22,15 @@ class PreviewConfigurationModel: ObservableObject {
     }
 
     @Published var previewPadding = Defaults[.previewPadding] {
-        didSet {
-            Defaults[.previewPadding] = previewPadding
-        }
+        didSet { Defaults[.previewPadding] = previewPadding }
     }
 
     @Published var previewCornerRadius = Defaults[.previewCornerRadius] {
-        didSet {
-            Defaults[.previewCornerRadius] = previewCornerRadius
-        }
+        didSet { Defaults[.previewCornerRadius] = previewCornerRadius }
     }
 
     @Published var previewBorderThickness = Defaults[.previewBorderThickness] {
-        didSet {
-            Defaults[.previewBorderThickness] = previewBorderThickness
-        }
+        didSet { Defaults[.previewBorderThickness] = previewBorderThickness }
     }
 }
 

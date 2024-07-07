@@ -28,51 +28,35 @@ class BehaviorConfigurationModel: ObservableObject {
     }
 
     @Published var hideMenuBarIcon = Defaults[.hideMenuBarIcon] {
-        didSet {
-            Defaults[.hideMenuBarIcon] = hideMenuBarIcon
-        }
+        didSet { Defaults[.hideMenuBarIcon] = hideMenuBarIcon }
     }
 
     @Published var animationConfiguration = Defaults[.animationConfiguration] {
-        didSet {
-            Defaults[.animationConfiguration] = animationConfiguration
-        }
+        didSet { Defaults[.animationConfiguration] = animationConfiguration }
     }
 
     @Published var windowSnapping = Defaults[.windowSnapping] {
-        didSet {
-            Defaults[.windowSnapping] = windowSnapping
-        }
+        didSet { Defaults[.windowSnapping] = windowSnapping }
     }
 
     @Published var restoreWindowFrameOnDrag = Defaults[.restoreWindowFrameOnDrag] {
-        didSet {
-            Defaults[.restoreWindowFrameOnDrag] = restoreWindowFrameOnDrag
-        }
+        didSet { Defaults[.restoreWindowFrameOnDrag] = restoreWindowFrameOnDrag }
     }
 
     @Published var enablePadding = Defaults[.enablePadding] {
-        didSet {
-            Defaults[.enablePadding] = enablePadding
-        }
+        didSet { Defaults[.enablePadding] = enablePadding }
     }
 
     @Published var useScreenWithCursor = Defaults[.useScreenWithCursor] {
-        didSet {
-            Defaults[.useScreenWithCursor] = useScreenWithCursor
-        }
+        didSet { Defaults[.useScreenWithCursor] = useScreenWithCursor }
     }
 
     @Published var moveCursorWithWindow = Defaults[.moveCursorWithWindow] {
-        didSet {
-            Defaults[.moveCursorWithWindow] = moveCursorWithWindow
-        }
+        didSet { Defaults[.moveCursorWithWindow] = moveCursorWithWindow }
     }
 
     @Published var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor] {
-        didSet {
-            Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
-        }
+        didSet { Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor }
     }
 
     @Published var focusWindowOnResize = Defaults[.focusWindowOnResize] {
@@ -82,15 +66,11 @@ class BehaviorConfigurationModel: ObservableObject {
     }
 
     @Published var respectStageManager = Defaults[.respectStageManager] {
-        didSet {
-            Defaults[.respectStageManager] = respectStageManager
-        }
+        didSet { Defaults[.respectStageManager] = respectStageManager }
     }
 
     @Published var stageStripSize = Defaults[.stageStripSize] {
-        didSet {
-            Defaults[.stageStripSize] = stageStripSize
-        }
+        didSet { Defaults[.stageStripSize] = stageStripSize }
     }
 
     @Published var isPaddingConfigurationViewPresented = false
