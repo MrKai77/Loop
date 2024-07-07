@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-  <dict>
-    <key>compileBitcode</key>
-    <false/>
-    <key>method</key>
-    <string>developer-id</string>
-    <key>signingStyle</key>
-    <string>automatic</string>
-    <key>stripSwiftSymbols</key>
-    <true/>
-    <key>teamID</key>
-    <string>5F967GYF84</string>
-    <key>thinning</key>
-    <string>&lt;none&gt;</string>
-  </dict>
+<dict>
+	<key>destination</key>
+	<string>export</string>
+	<key>method</key>
+	<string>developer-id</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.MrKai77.Loop</key>
+		<string>Loop</string>
+	</dict>
+	<key>signingCertificate</key>
+	<string>Developer ID Application</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>teamID</key>
+	<string>5F967GYF84</string>
+</dict>
 </plist>

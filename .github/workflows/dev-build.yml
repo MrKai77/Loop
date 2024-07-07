@@ -77,7 +77,6 @@ jobs:
             -project Loop.xcodeproj/ \
             -scheme "Loop (GH ACTIONS)" \
             -destination 'generic/platform=macOS' \
-            -allowProvisioningUpdates \
             -archivePath dist/Loop.xcarchive
 
       - name: 🥡 Export Loop.app
