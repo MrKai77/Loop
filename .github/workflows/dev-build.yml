@@ -45,7 +45,6 @@ jobs:
         id: profile
         env:
           DEVELOPMENT_CERT_BASE64: ${{ secrets.DEVELOPMENT_CERT_BASE64 }}
-          DEVELOPMENT_PROVISION_PROFILE_B64: ${{ secrets.DEVELOPMENT_PROVISION_PROFILE_B64 }}
           DEVELOPER_ID_CERT_BASE64: ${{ secrets.DEVELOPER_ID_CERT_BASE64 }}
           PROVISION_PROFILE_B64: ${{ secrets.PROVISION_PROFILE_B64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -67,15 +66,11 @@ jobs:
 
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-          DEVELOPMENT_PROVISION_PROFILE_PATH="$RUNNER_TEMP/2fd8c725-ed67-4153-857e-b1b647766bd2.provisionprofile"
-          PROVISION_PROFILE_PATH="$RUNNER_TEMP/a9aeedd8-8333-4a7b-88c6-f87322264626.provisionprofile"
-
-          echo -n "$DEVELOPMENT_PROVISION_PROFILE_B64" | base64 --decode --output $DEVELOPMENT_PROVISION_PROFILE_PATH
+          PROVISION_PROFILE_PATH="$RUNNER_TEMP/Loop.provisionprofile"
           echo -n "$PROVISION_PROFILE_B64" | base64 --decode --output $PROVISION_PROFILE_PATH
-
           mkdir -p "~/Library/MobileDevice/Provisioning Profiles"
-          cp "$DEVELOPMENT_PROVISION_PROFILE_PATH" "~/Library/MobileDevice/Provisioning Profiles"
           cp "$PROVISION_PROFILE_PATH" "~/Library/MobileDevice/Provisioning Profiles"
+          ls "~/Library/MobileDevice/Provisioning Profiles"
 
       - name: 🛠️ Build Loop
         run: |
