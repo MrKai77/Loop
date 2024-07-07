@@ -42,6 +42,7 @@ jobs:
         run: sudo xcode-select -s "/Applications/Xcode_16.0.app"
 
       - name: 🎟️ Install Certificate
+        id: profile
         env:
           DEVELOPMENT_CERT_BASE64: ${{ secrets.DEVELOPMENT_CERT_BASE64 }}
           DEVELOPER_ID_CERT_BASE64: ${{ secrets.DEVELOPER_ID_CERT_BASE64 }}
@@ -67,6 +68,9 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
 
           echo -n "$PROVISION_PROFILE_B64" | base64 --decode --output $PROVISION_PROFILE_PATH
+          uuid=`grep UUID -A1 -a "$PROVISION_PROFILE_PATH" | grep -io "[-A-F0-9]\{36\}"`
+          echo "uuid=$uuid" >> $GITHUB_OUTPUT
+
           mkdir -p "~/Library/MobileDevice/Provisioning Profiles"
           cp "$PROVISION_PROFILE_PATH" "~/Library/MobileDevice/Provisioning Profiles"
 
@@ -77,7 +81,8 @@ jobs:
             -project Loop.xcodeproj/ \
             -scheme "Loop (GH ACTIONS)" \
             -destination 'generic/platform=macOS' \
-            -archivePath dist/Loop.xcarchive
+            -archivePath dist/Loop.xcarchive \
+            PROVISIONING_PROFILE=${{ steps.profile.outputs.uuid }}
 
       - name: 🥡 Export Loop.app
         run: |
