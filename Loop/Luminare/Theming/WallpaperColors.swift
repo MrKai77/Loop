@@ -10,6 +10,11 @@ import SwiftUI
 
 // MARK: - Wallpaper colour processor
 
+/// IMPORTANT: FOR THE COLOR EXTRACTION FEATURE TO FUNCTION AUTOMATICALLY WITH LOOP, IT'S CRUCIAL TO GRANT
+/// ACCESSIBILITY PERMISSIONS TO YOUR DEVELOPMENT VERSION OF LOOP. ADDITIONALLY, ENSURE THAT ANY PREVIOUS
+/// PERMISSIONS GRANTED TO OFFICIALLY SIGNED VERSIONS OF LOOP ARE REVOKED. WITHOUT THESE STEPS, LOOP WILL
+/// NOT BE ABLE TO AUTOMATICALLY FETCH WALLPAPER COLORS, AND YOU'LL BE LIMITED TO THE MANUAL EXTRACTION METHOD.
+
 // The real beans here (I don't like beans)
 extension NSImage {
     /// Calculates the dominant colors of the image asynchronously.
@@ -21,6 +26,8 @@ extension NSImage {
     func calculateDominantColors() async -> [NSColor]? {
         // Resize the image to a smaller size to improve performance of color calculation.
         let aspectRatio = size.width / size.height
+        // Changin the aspect ration will make it faster, but can also make it less accuate
+        // I recommend 100x100 or 200x200
         let resizedImage = resized(to: NSSize(width: 200 * aspectRatio, height: 200))
 
         // Ensure we can get the CGImage and its data provider from the resized image.
@@ -59,12 +66,22 @@ extension NSImage {
             }
         }
 
-        // Filter out very dark colors based on a brightness threshold to avoid dominance of dark shades.
-        let brightnessThreshold: CGFloat = 0.3 // Ensure that the chosen color won't be too dark
-        let saturationThreshold: CGFloat = 0.1 // Try and make sure that the chosen color won't be bright white
+        // Filter out very dark colors based on a brightness threshold to avoid the dominance of dark shades.
+        /// If you're using the saturation value, you can adjust this to 0.3 to get less dark colors
+        /// again, but be aware of darker wallpapers.
+        let brightnessThreshold: CGFloat = 0.2 // Ensure that the chosen color won't be too dark.
+        /// Filtering by saturation is good for some cases; however, in the case of a black wallpaper,
+        /// it will return #ED5A53 & #873D39, which does not match black.
+        // let saturationThreshold: CGFloat = 0.1 // Try to ensure that the chosen color won't be bright white.
         let filteredByBrightness = colorCountMap
             .filter { $0.key.brightness > brightnessThreshold }
-            .filter { $0.key.saturationComponent > saturationThreshold }
+        // .filter { $0.key.saturationComponent > saturationThreshold }
+        /// Using only the brightness will allow us to return close to perfect colors.
+        /// For example, the black wallpaper from above, which previously gave #ED5A53 & #873D39,
+        /// is now returning #555555 & #353535, which matches the black/gray grained wallpaper in
+        /// tests used. If you need a perfect method, this can work, but it is designed for
+        /// beautiful colors and pure speed. It's not a 1:1 accurate method, although, removing the
+        /// filtering and color sorting brings you pretty close to a 1:1 color match.
 
         // If all colors are dark and the filtered map is empty, fallback to the original map.
         let finalColors = filteredByBrightness.isEmpty ? colorCountMap : filteredByBrightness
