@@ -71,7 +71,7 @@ jobs:
           uuid=`grep UUID -A1 -a "$PROVISION_PROFILE_PATH" | grep -io "[-A-F0-9]\{36\}"`
           echo "uuid=$uuid" >> $GITHUB_OUTPUT
 
-          mkdir -p "~/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "~/Library/Developer/Xcode/UserData/Provisioning Profiles"
           cp "$PROVISION_PROFILE_PATH" "~/Library/Developer/Xcode/UserData/Provisioning Profiles"
 
       - name: 🛠️ Build Loop
