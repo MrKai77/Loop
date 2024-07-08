@@ -4,6 +4,7 @@
 //
 //  Created by Kai Azim on 2023-06-14.
 //
+// NOTE: While iCloud is enabled, its service is currently disabled to make GitHub actions work.
 
 import Defaults
 import SwiftUI
