@@ -51,7 +51,7 @@ enum WindowEngine {
             return
         }
 
-        let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
+        let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame, screen: screen)
 
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)
@@ -86,7 +86,8 @@ enum WindowEngine {
 
         let screenFrame = action.direction.willMove ? .zero : screen.safeScreenFrame
 
-        let bounds = if Defaults[.enablePadding] {
+        let bounds = if Defaults[.enablePadding],
+                        Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize] {
             Defaults[.padding].apply(on: screenFrame)
         } else {
             screenFrame
