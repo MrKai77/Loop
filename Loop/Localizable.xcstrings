@@ -3280,6 +3280,9 @@
         }
       }
     },
+    "Ignore fullscreen windows" : {
+
+    },
     "Import" : {
       "localizations" : {
         "en-GB" : {

@@ -95,7 +95,12 @@ private extension LoopManager {
         }
 
         targetWindow = WindowEngine.getTargetWindow()
-        guard targetWindow?.isAppExcluded != true else { return }
+        guard
+            targetWindow?.isAppExcluded != true,
+            (targetWindow?.fullscreen ?? false && Defaults[.ignoreFullscreen]) == false
+        else {
+            return
+        }
 
         // Only recalculate wallpaper colors if Loop was last triggered over 5 seconds ago
         if Defaults[.processWallpaper], lastLoopActivation.distance(to: .now) > 5.0 {

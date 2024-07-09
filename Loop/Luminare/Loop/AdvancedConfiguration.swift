@@ -23,6 +23,10 @@ class AdvancedConfigurationModel: ObservableObject {
         didSet { Defaults[.disableCursorInteraction] = disableCursorInteraction }
     }
 
+    @Published var ignoreFullscreen = Defaults[.ignoreFullscreen] {
+        didSet { Defaults[.ignoreFullscreen] = ignoreFullscreen }
+    }
+
     @Published var hapticFeedback = Defaults[.hapticFeedback] {
         didSet { Defaults[.hapticFeedback] = hapticFeedback }
     }
@@ -70,6 +74,7 @@ struct AdvancedConfigurationView: View {
                 isOn: $model.animateWindowResizes
             )
             LuminareToggle("Disable cursor interaction", isOn: $model.disableCursorInteraction)
+            LuminareToggle("Ignore fullscreen windows", isOn: $model.ignoreFullscreen)
             LuminareToggle("Hide until direction is chosen", isOn: $model.hideUntilDirectionIsChosen)
             LuminareToggle("Haptic feedback", isOn: $model.hapticFeedback)
 
