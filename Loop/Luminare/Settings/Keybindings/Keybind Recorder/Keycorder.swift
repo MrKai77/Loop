@@ -24,7 +24,7 @@ struct Keycorder: View {
     @State private var eventMonitor: NSEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var shouldError: Bool = false
-    @State private var errorMessage: Text = .init("") // We use Text here for String interpolation with images
+    @State private var errorMessage: LocalizedStringKey = .init(String("")) // We use Text here for String interpolation with images
 
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
@@ -65,7 +65,7 @@ struct Keycorder: View {
         .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))
         .animation(Animation.default, value: shouldShake)
         .popover(isPresented: $shouldError, arrowEdge: .bottom) {
-            errorMessage
+            Text(errorMessage)
                 .multilineTextAlignment(.center)
                 .padding(8)
         }
@@ -98,9 +98,9 @@ struct Keycorder: View {
                     selectionKeybind.insert(event.keyCode.baseModifier)
                 } else {
                     if let systemImage = event.keyCode.baseModifier.systemImage {
-                        errorMessage = Text("\(Image(systemName: systemImage)) is already used as your trigger key.")
+                        errorMessage = "\(Image(systemName: systemImage)) is already used as your trigger key."
                     } else {
-                        errorMessage = Text("That key is already used as your trigger key.")
+                        errorMessage = "That key is already used as your trigger key."
                     }
 
                     shouldShake.toggle()
@@ -121,9 +121,7 @@ struct Keycorder: View {
                 }
 
                 if (selectionKeybind.count + triggerKey.count) >= keyLimit {
-                    errorMessage = Text(
-                        "You can only use up to \(keyLimit) keys in a keybind, including the trigger key."
-                    )
+                    errorMessage = "You can only use up to \(keyLimit) keys in a keybind, including the trigger key."
                     shouldShake.toggle()
                     shouldError = true
                 } else {
@@ -151,14 +149,12 @@ struct Keycorder: View {
                 willSet = false
                 if keybind.direction == .custom {
                     if let name = keybind.name {
-                        self.errorMessage = Text("That keybind is already being used by \(name).")
+                        self.errorMessage = "That keybind is already being used by \(name)."
                     } else {
-                        self.errorMessage = Text("That keybind is already being used by another custom keybind.")
+                        self.errorMessage = "That keybind is already being used by another custom keybind."
                     }
                 } else {
-                    self.errorMessage = Text(
-                        "That keybind is already being used by \(keybind.direction.name.lowercased())."
-                    )
+                    self.errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
                 }
                 self.shouldShake.toggle()
                 self.shouldError = true
