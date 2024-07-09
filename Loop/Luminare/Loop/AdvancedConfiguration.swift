@@ -100,6 +100,13 @@ struct AdvancedConfigurationView: View {
             }
         }
 
+        LuminareSection {
+            Button("Import from Rectangle") {
+                initiateImportProcess()
+            }
+            .buttonStyle(LuminareButtonStyle())
+        }
+
         LuminareSection("Permissions") {
             HStack {
                 if model.isAccessibilityAccessGranted {

@@ -15,6 +15,8 @@ extension Notification.Name {
     static let didLoop = Notification.Name("didLoop")
     static let activeStateChanged = Notification.Name("activeStateChanged")
 
+    static let keybindsUpdated = Notification.Name("keybindsUpdated")
+
     @discardableResult
     func onReceive(object: Any? = nil, using: @escaping (Notification) -> ()) -> NSObjectProtocol {
         NotificationCenter.default.addObserver(

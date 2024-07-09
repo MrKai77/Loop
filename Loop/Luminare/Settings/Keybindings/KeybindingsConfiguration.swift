@@ -5,39 +5,30 @@
 //  Created by Kai Azim on 2024-04-20.
 //
 
+import Combine
 import Defaults
 import Luminare
 import SwiftUI
 
 class KeybindingsConfigurationModel: ObservableObject {
     @Published var triggerKey = Defaults[.triggerKey] {
-        didSet {
-            Defaults[.triggerKey] = triggerKey
-        }
+        didSet { Defaults[.triggerKey] = triggerKey }
     }
 
     @Published var triggerDelay = Defaults[.triggerDelay] {
-        didSet {
-            Defaults[.triggerDelay] = triggerDelay
-        }
+        didSet { Defaults[.triggerDelay] = triggerDelay }
     }
 
     @Published var doubleClickToTrigger = Defaults[.doubleClickToTrigger] {
-        didSet {
-            Defaults[.doubleClickToTrigger] = doubleClickToTrigger
-        }
+        didSet { Defaults[.doubleClickToTrigger] = doubleClickToTrigger }
     }
 
     @Published var middleClickTriggersLoop = Defaults[.middleClickTriggersLoop] {
-        didSet {
-            Defaults[.middleClickTriggersLoop] = middleClickTriggersLoop
-        }
+        didSet { Defaults[.middleClickTriggersLoop] = middleClickTriggersLoop }
     }
 
     @Published var keybinds = Defaults[.keybinds] {
-        didSet {
-            Defaults[.keybinds] = keybinds
-        }
+        didSet { Defaults[.keybinds] = keybinds }
     }
 
     @Published var currentEventMonitor: NSEventMonitor?
@@ -75,6 +66,8 @@ struct KeybindingsConfigurationView: View {
             selection: $model.selectedKeybinds,
             addAction: {
                 model.keybinds.insert(.init(.noAction), at: 0)
+                // Post a notification that the keybinds have been updated
+                NotificationCenter.default.post(name: .keybindsUpdated, object: nil)
             },
             content: { keybind in
                 KeybindingItemView(keybind)
@@ -98,5 +91,8 @@ struct KeybindingsConfigurationView: View {
             addText: "Add",
             removeText: "Remove"
         )
+        .onReceive(NotificationCenter.default.publisher(for: .keybindsUpdated)) { _ in
+            model.keybinds = Defaults[.keybinds]
+        }
     }
 }
