@@ -9,8 +9,10 @@ import Defaults
 import Luminare
 import SwiftUI
 
+// MARK: - Model
+
 class AccentColorConfigurationModel: ObservableObject {
-    // MARK: - Defaults
+    // MARK: Defaults
 
     @Published var useSystemAccentColor = Defaults[.useSystemAccentColor] {
         didSet { Defaults[.useSystemAccentColor] = useSystemAccentColor }
@@ -38,6 +40,26 @@ class AccentColorConfigurationModel: ObservableObject {
         }
     }
 
+    // MARK: Color mode helpers
+
+    var isCustom: Bool {
+        useSystemAccentColor ? false : !processWallpaper
+    }
+
+    var isWallpaper: Bool {
+        processWallpaper && !useSystemAccentColor
+    }
+
+    var accentColorOption: AccentColorOption {
+        get {
+            useSystemAccentColor ? .system : (processWallpaper ? .wallpaper : .custom)
+        }
+        set {
+            useSystemAccentColor = newValue == .system
+            processWallpaper = newValue == .wallpaper
+        }
+    }
+
     func syncWallpaper() {
         Task {
             await WallpaperProcessor.fetchLatestWallpaperColors()
@@ -57,6 +79,26 @@ class AccentColorConfigurationModel: ObservableObject {
     }
 }
 
+// MARK: - AccentColorOption
+
+enum AccentColorOption: LocalizedStringKey, CaseIterable {
+    case system = "System"
+    case wallpaper = "Wallpaper"
+    case custom = "Custom"
+
+    var image: Image {
+        switch self {
+        case .system: Image(systemName: "apple.logo")
+        case .wallpaper: Image(._18PxImageDepth)
+        case .custom: Image(._18PxColorPalette)
+        }
+    }
+
+    var text: LocalizedStringKey {
+        rawValue
+    }
+}
+
 // MARK: - View
 
 struct AccentColorConfigurationView: View {
@@ -65,15 +107,15 @@ struct AccentColorConfigurationView: View {
     var body: some View {
         LuminareSection {
             LuminarePicker(
-                elements: ["System", "Wallpaper", "Custom"],
+                elements: AccentColorOption.allCases,
                 selection: $model.accentColorOption.animation(LuminareSettingsWindow.animation),
                 columns: 3,
                 roundBottom: model.useSystemAccentColor
             ) { option in
                 VStack(spacing: 6) {
                     Spacer()
-                    model.image(for: option)
-                    Text(option)
+                    option.image
+                    Text(option.text)
                     Spacer()
                 }
                 .font(.title3)
@@ -113,36 +155,5 @@ struct AccentColorConfigurationView: View {
                 }
             }
         }
-    }
-}
-
-// MARK: - View Extension
-
-extension AccentColorConfigurationModel {
-    var isCustom: Bool {
-        useSystemAccentColor ? false : !processWallpaper
-    }
-
-    var isWallpaper: Bool {
-        processWallpaper && !useSystemAccentColor
-    }
-
-    var accentColorOption: String {
-        get {
-            useSystemAccentColor ? "System" : (processWallpaper ? "Wallpaper" : "Custom")
-        }
-        set {
-            useSystemAccentColor = newValue == "System"
-            processWallpaper = newValue == "Wallpaper"
-        }
-    }
-
-    func image(for option: String) -> Image {
-        let imageNames = [
-            "System": Image(systemName: "apple.logo"),
-            "Wallpaper": Image(._18PxImageDepth),
-            "Custom": Image(._18PxColorPalette)
-        ]
-        return imageNames[option] ?? Image(systemName: "exclamationmark.triangle")
     }
 }

@@ -83,7 +83,8 @@ struct UpdateView: View {
                                 .padding(.horizontal, 4)
                         }
 
-                        Text(isInstalling ? "               " : readyToRestart ? "Restart to complete" : "Install")
+                        let tenSpaces = "          " // This helps with alignment for the animation once the update finishes
+                        Text(isInstalling ? tenSpaces : readyToRestart ? "Restart to complete" : "Install")
                             .contentTransition(.numericText())
                             .opacity(isInstalling ? 0 : 1)
                     }
@@ -151,13 +152,21 @@ struct UpdateView: View {
     func versionChangeText() -> some View {
         HStack {
             if let targetRelease = updater.targetRelease, targetRelease.prerelease {
-                Text("🧪 \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
+                let currentVersion = "🧪 \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
+                Text(currentVersion)
+
                 Image(systemName: "arrow.right")
-                Text("🧪 \(targetRelease.tagName) (\(targetRelease.buildNumber ?? 0))")
+
+                let newVersion = "🧪 \(targetRelease.tagName) (\(targetRelease.buildNumber ?? 0))"
+                Text(newVersion)
             } else {
-                Text(Bundle.main.appVersion ?? "Unknown")
+                let currentVersion = Bundle.main.appVersion ?? "Unknown"
+                Text(currentVersion)
+
                 Image(systemName: "arrow.right")
-                Text(updater.targetRelease?.tagName ?? "Unknown")
+
+                let newVersion = updater.targetRelease?.tagName ?? "Unknown"
+                Text(newVersion)
             }
         }
     }

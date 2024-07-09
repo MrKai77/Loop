@@ -41,46 +41,6 @@
         }
       }
     },
-    "               " : {
-      "localizations" : {
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "               "
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "               "
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "               "
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "               "
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "               "
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "               "
-          }
-        }
-      }
-    },
     "%" : {
       "localizations" : {
         "en-GB" : {
@@ -326,25 +286,6 @@
           }
         }
       }
-    },
-    "🧪 %@ (%lld)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "🧪 %1$@ (%2$lld)"
-          }
-        }
-      }
-    },
-    "99 problems, updates ain't one." : {
-
-    },
-    "A penny for your... lack of updates." : {
-
-    },
-    "A watched pot never... updates." : {
-
     },
     "About" : {
       "localizations" : {
@@ -640,15 +581,6 @@
         }
       }
     },
-    "All systems are a-go!" : {
-
-    },
-    "All work and no... no updates..." : {
-
-    },
-    "An apple a day keeps the... updates away." : {
-
-    },
     "Animate window resize" : {
       "localizations" : {
         "en-GB" : {
@@ -728,12 +660,6 @@
           }
         }
       }
-    },
-    "As the loops accumulate, so too will your collection of icons." : {
-
-    },
-    "Beggars can't be... updaters." : {
-
     },
     "Behavior" : {
       "localizations" : {
@@ -1016,6 +942,7 @@
       }
     },
     "Check back next time!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1176,6 +1103,7 @@
       }
     },
     "Configure padding..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -1214,6 +1142,9 @@
           }
         }
       }
+    },
+    "Configure padding…" : {
+
     },
     "Contributors on GitHub" : {
       "localizations" : {
@@ -1655,53 +1586,6 @@
         }
       }
     },
-    "Default notification content" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You will now be notified when you unlock a new icon."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You will now be notified when you unlock a new icon."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Te notificaremos cuando desbloquees un nuevo icono"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verrà inviata una notifica ogni volta che si sblocca una nuova icona."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Você será notificado quando desbloquear um novo ícone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你将会在解锁新图标时收到通知。"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你將會在解鎖新圖標時受到通知。"
-          }
-        }
-      }
-    },
     "Design" : {
       "localizations" : {
         "en-GB" : {
@@ -1981,15 +1865,6 @@
           }
         }
       }
-    },
-    "Each loop you complete plants the seeds for icons to grow." : {
-
-    },
-    "Engage! ...in the current version, it's the latest." : {
-
-    },
-    "Every loop brings you closer to the treasure that awaits." : {
-
     },
     "Excluded Apps" : {
       "localizations" : {
@@ -2551,15 +2426,6 @@
         }
       }
     },
-    "I swear it was here somewhere... one sec" : {
-
-    },
-    "I... uhh... one sec I lost it" : {
-
-    },
-    "I'm giving it all she's got, Captain! No updates!" : {
-
-    },
     "Icon" : {
       "localizations" : {
         "en-GB" : {
@@ -2641,7 +2507,15 @@
       }
     },
     "Icon Locked" : {
-
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Locked icon alert title"
+          }
+        }
+      }
     },
     "Icon Name: Black" : {
       "extractionState" : "extracted_with_value",
@@ -3301,6 +3175,17 @@
         }
       }
     },
+    "Icon notifications enabled" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You will now be notified when you unlock a new icon."
+          }
+        }
+      }
+    },
     "Icon Unlock Message" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -3482,12 +3367,6 @@
         }
       }
     },
-    "In a galaxy far, far away... still no updates!" : {
-
-    },
-    "In due time, this icon shall be revealed to you." : {
-
-    },
     "Include development versions" : {
       "localizations" : {
         "en-GB" : {
@@ -3609,6 +3488,7 @@
       }
     },
     "Install" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -3687,15 +3567,6 @@
           }
         }
       }
-    },
-    "Just a small town app, same old version" : {
-
-    },
-    "Keep looping, and this icon will be yours in no time." : {
-
-    },
-    "Keep up the good work, and this icon will be your reward." : {
-
     },
     "Keybindings" : {
       "localizations" : {
@@ -3897,61 +3768,316 @@
         }
       }
     },
-    "Like the moon's phases, your icons will reveal themselves in cycles of loops." : {
-
-    },
     "Locked" : {
       "comment" : "When an app icon is locked"
     },
-    "Loop" : {
-      "extractionState" : "stale",
+    "Locked icon message 1" : {
+      "extractionState" : "extracted_with_value",
       "localizations" : {
-        "en-GB" : {
+        "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loop"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loop"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loop"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loop"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loop"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loop"
+            "state" : "new",
+            "value" : "You don’t have that yet!"
           }
         }
       }
     },
-    "Loop after loop, your dedication carves the key to success." : {
-
+    "Locked icon message 2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Who do you think you are, trying to access these top secret icons?"
+          }
+        }
+      }
     },
-    "Loop around the obstacles; your reward is just beyond them." : {
-
+    "Locked icon message 3" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Patience is a virtue, and your key to this icon."
+          }
+        }
+      }
     },
-    "Loop is in its prime!" : {
-
+    "Locked icon message 4" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This icon is locked, but your potential is not!"
+          }
+        }
+      }
+    },
+    "Locked icon message 5" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep Looping, and this icon will be yours in no time."
+          }
+        }
+      }
+    },
+    "Locked icon message 6" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This icon is still under wraps, stay tuned!"
+          }
+        }
+      }
+    },
+    "Locked icon message 7" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Some icons are worth the wait, don't you think?"
+          }
+        }
+      }
+    },
+    "Locked icon message 8" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Not yet, but you're closer than you were yesterday!"
+          }
+        }
+      }
+    },
+    "Locked icon message 9" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unlocking this icon is just a matter of time and Loops."
+          }
+        }
+      }
+    },
+    "Locked icon message 10" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This icon is like a fine wine, it needs more time."
+          }
+        }
+      }
+    },
+    "Locked icon message 11" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stay curious, and soon this icon will be within your reach."
+          }
+        }
+      }
+    },
+    "Locked icon message 12" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keep up the good work, and this icon will be your reward."
+          }
+        }
+      }
+    },
+    "Locked icon message 13" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This icon is reserved for the most dedicated Loopers."
+          }
+        }
+      }
+    },
+    "Locked icon message 14" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your journey is not yet complete, this icon awaits at the end."
+          }
+        }
+      }
+    },
+    "Locked icon message 15" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "In due time, this icon shall be revealed to you."
+          }
+        }
+      }
+    },
+    "Locked icon message 16" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Patience, young Looper, this icon is not far away."
+          }
+        }
+      }
+    },
+    "Locked icon message 17" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The journey of a thousand Loops begins with a single step."
+          }
+        }
+      }
+    },
+    "Locked icon message 18" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Every Loop brings you closer to the treasure that awaits."
+          }
+        }
+      }
+    },
+    "Locked icon message 19" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "With each Loop, the lock on this icon weakens."
+          }
+        }
+      }
+    },
+    "Locked icon message 20" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Loop after Loop, your dedication carves the key to success."
+          }
+        }
+      }
+    },
+    "Locked icon message 21" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The icons are not just unlocked; they're earned, Loop by Loop."
+          }
+        }
+      }
+    },
+    "Locked icon message 22" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "As the Loops accumulate, so too will your collection of icons."
+          }
+        }
+      }
+    },
+    "Locked icon message 23" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Think of each Loop as a riddle, solving the mystery of the locked icon."
+          }
+        }
+      }
+    },
+    "Locked icon message 24" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your persistence in Looping is the master key to all icons."
+          }
+        }
+      }
+    },
+    "Locked icon message 25" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Loop around the obstacles; your reward is just beyond them."
+          }
+        }
+      }
+    },
+    "Locked icon message 26" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Each Loop you complete plants the seeds for icons to grow."
+          }
+        }
+      }
+    },
+    "Locked icon message 27" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Like the moon's phases, your icons will reveal themselves in cycles of Loops."
+          }
+        }
+      }
+    },
+    "Locked icon message 28" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The icons await, hidden behind the veil of Loops yet to be made."
+          }
+        }
+      }
     },
     "Loops left to unlock a new icon" : {
       "localizations" : {
@@ -3976,6 +4102,7 @@
       }
     },
     "May the Force be with you... next time!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4054,9 +4181,6 @@
           }
         }
       }
-    },
-    "Money can't buy... updates." : {
-
     },
     "More" : {
       "localizations" : {
@@ -4137,9 +4261,6 @@
           }
         }
       }
-    },
-    "New version? Sorry, we're too attached to this one." : {
-
     },
     "No excluded applications" : {
       "localizations" : {
@@ -4222,6 +4343,7 @@
       }
     },
     "No new intel, Commander." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4261,10 +4383,492 @@
         }
       }
     },
-    "No updates in Ba Sing Se" : {
-
+    "No updates available message 1" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Engage! …in the current version, it's the latest."
+          }
+        }
+      }
+    },
+    "No updates available message 2" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This app is more up to date than my diary entries!"
+          }
+        }
+      }
+    },
+    "No updates available message 3" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You're in the clear, no updates in the atmosphere!"
+          }
+        }
+      }
+    },
+    "No updates available message 4" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The odds are ever in your favor, no updates today!"
+          }
+        }
+      }
+    },
+    "No updates available message 5" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Our app is on a digital diet. No new bytes allowed."
+          }
+        }
+      }
+    },
+    "No updates available message 6" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "New version? Sorry, we're too attached to this one."
+          }
+        }
+      }
+    },
+    "No updates available message 7" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your Loop is Loopier than ever, no updates found!"
+          }
+        }
+      }
+    },
+    "No updates available message 8" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "I'm giving it all she's got, Captain! No updates!"
+          }
+        }
+      }
+    },
+    "No updates available message 9" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "In a galaxy far, far away… still no updates!"
+          }
+        }
+      }
+    },
+    "No updates available message 10" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You've got the precious, no updates needed!"
+          }
+        }
+      }
+    },
+    "No updates available message 11" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Riding at warp speed, no updates in sight!"
+          }
+        }
+      }
+    },
+    "No updates available message 12" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This is not the update you're looking for!"
+          }
+        }
+      }
+    },
+    "No updates available message 13" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "We've misplaced the 'Update' button. Oops!"
+          }
+        }
+      }
+    },
+    "No updates available message 14" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "I swear it was here somewhere… one sec"
+          }
+        }
+      }
+    },
+    "No updates available message 15" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "An apple a day keeps the… updates away."
+          }
+        }
+      }
+    },
+    "No updates available message 16" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "May the Force be with you… next time!"
+          }
+        }
+      }
+    },
+    "No updates available message 17" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The Force is strong with this version!"
+          }
+        }
+      }
+    },
+    "No updates available message 18" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Just a small town app, same old version"
+          }
+        }
+      }
+    },
+    "No updates available message 19" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Winter is coming. Updates aren't yet."
+          }
+        }
+      }
+    },
+    "No updates available message 20" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Sweet dreams are made of… no updates"
+          }
+        }
+      }
+    },
+    "No updates available message 21" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The update fairy skipped us this week."
+          }
+        }
+      }
+    },
+    "No updates available message 22" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stay sharp, more intel coming soon!"
+          }
+        }
+      }
+    },
+    "No updates available message 23" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You're cruising on the latest tech!"
+          }
+        }
+      }
+    },
+    "No updates available message 24" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "We’ll be back. With updates… later"
+          }
+        }
+      }
+    },
+    "No updates available message 25" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "A penny for your… lack of updates."
+          }
+        }
+      }
+    },
+    "No updates available message 26" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You've already got the best Loop!"
+          }
+        }
+      }
+    },
+    "No updates available message 27" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "One does not simply update Loop."
+          }
+        }
+      }
+    },
+    "No updates available message 28" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "All work and no… no updates…"
+          }
+        }
+      }
+    },
+    "No updates available message 29" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "A watched pot never… updates."
+          }
+        }
+      }
+    },
+    "No updates available message 30" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "99 problems, updates ain't one."
+          }
+        }
+      }
+    },
+    "No updates available message 31" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "I… uhh… one sec I lost it"
+          }
+        }
+      }
+    },
+    "No updates available message 32" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You’ve leveled up to the max!"
+          }
+        }
+      }
+    },
+    "No updates available message 33" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Beggars can't be… updaters."
+          }
+        }
+      }
+    },
+    "No updates available message 34" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Money can't buy… updates."
+          }
+        }
+      }
+    },
+    "No updates available message 35" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No new intel, Commander."
+          }
+        }
+      }
+    },
+    "No updates available message 36" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No updates? Great Scott!"
+          }
+        }
+      }
+    },
+    "No updates available message 37" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No updates, Mr. Anderson"
+          }
+        }
+      }
+    },
+    "No updates available message 38" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No updates in Ba Sing Se"
+          }
+        }
+      }
+    },
+    "No updates available message 39" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Updates? In this economy?"
+          }
+        }
+      }
+    },
+    "No updates available message 40" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Check back next time!"
+          }
+        }
+      }
+    },
+    "No updates available message 41" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Loop is in its prime!"
+          }
+        }
+      }
+    },
+    "No updates available message 42" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "All systems are a-go!"
+          }
+        }
+      }
+    },
+    "No updates available message 43" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You're up to date :)"
+          }
+        }
+      }
+    },
+    "No updates available message 44" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No updates yet!"
+          }
+        }
+      }
     },
     "No updates yet!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -4303,12 +4907,6 @@
           }
         }
       }
-    },
-    "No updates, Mr. Anderson" : {
-
-    },
-    "No updates? Great Scott!" : {
-
     },
     "None" : {
       "localizations" : {
@@ -4350,9 +4948,6 @@
         }
       }
     },
-    "Not yet, but you're closer than you were yesterday!" : {
-
-    },
     "Nothing to cycle through" : {
       "localizations" : {
         "en-GB" : {
@@ -4389,6 +4984,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "沒有內容可供循環"
+          }
+        }
+      }
+    },
+    "Notification permits: info" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%@'s notification permissions are currently disabled."
+          }
+        }
+      }
+    },
+    "Notification permits: open notification settings" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open Settings"
+          }
+        }
+      }
+    },
+    "Notification permits: request" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please turn them on in System Settings."
           }
         }
       }
@@ -4483,9 +5111,6 @@
     "OK" : {
 
     },
-    "One does not simply update Loop." : {
-
-    },
     "Options" : {
       "localizations" : {
         "en-GB" : {
@@ -4526,9 +5151,6 @@
         }
       }
     },
-    "Our app is on a digital diet. No new bytes allowed." : {
-
-    },
     "Padding" : {
       "localizations" : {
         "en-GB" : {
@@ -4568,12 +5190,6 @@
           }
         }
       }
-    },
-    "Patience is a virtue, and your key to this icon." : {
-
-    },
-    "Patience, young looper, this icon is not far away." : {
-
     },
     "Permissions" : {
       "localizations" : {
@@ -5295,47 +5911,6 @@
         }
       }
     },
-    "Resize…" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resize…"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cambiar tamaño..."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ridimensiona..."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redimensionar..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "调整大小…"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "調整大小…"
-          }
-        }
-      }
-    },
     "Respect Stage Manager" : {
       "localizations" : {
         "en-GB" : {
@@ -5377,6 +5952,7 @@
       }
     },
     "Restart to complete" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -5455,9 +6031,6 @@
           }
         }
       }
-    },
-    "Riding at warp speed, no updates in sight!" : {
-
     },
     "Right" : {
       "localizations" : {
@@ -6106,9 +6679,6 @@
         }
       }
     },
-    "Some icons are worth the wait, don't you think?" : {
-
-    },
     "Stage Manager" : {
       "localizations" : {
         "en-GB" : {
@@ -6189,10 +6759,8 @@
         }
       }
     },
-    "Stay curious, and soon this icon will be within your reach." : {
-
-    },
     "Stay sharp, more intel coming soon!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -6272,14 +6840,10 @@
         }
       }
     },
-    "Sweet dreams are made of... no updates" : {
-
-    },
     "Sync Wallpaper" : {
 
     },
     "System" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -6440,6 +7004,7 @@
       }
     },
     "The Force is strong with this version!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -6478,21 +7043,6 @@
           }
         }
       }
-    },
-    "The icons are not just unlocked; they're earned, loop by loop." : {
-
-    },
-    "The icons await, hidden behind the veil of loops yet to be made." : {
-
-    },
-    "The journey of a thousand loops begins with a single step." : {
-
-    },
-    "The odds are ever in your favor, no updates today!" : {
-
-    },
-    "The update fairy skipped us this week." : {
-
     },
     "Theming" : {
       "localizations" : {
@@ -6574,12 +7124,6 @@
         }
       }
     },
-    "Think of each loop as a riddle, solving the mystery of the locked icon." : {
-
-    },
-    "This app is more up to date than my diary entries!" : {
-
-    },
     "This feature is still under development." : {
       "localizations" : {
         "en-GB" : {
@@ -6620,19 +7164,8 @@
         }
       }
     },
-    "This icon is like a fine wine, it needs more time." : {
-
-    },
-    "This icon is locked, but your potential is not!" : {
-
-    },
-    "This icon is reserved for the most dedicated loopers." : {
-
-    },
-    "This icon is still under wraps, stay tuned!" : {
-
-    },
     "This is not the update you're looking for!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -6832,13 +7365,7 @@
         }
       }
     },
-    "Unlocking this icon is just a matter of time and loops." : {
-
-    },
     "Update…" : {
-
-    },
-    "Updates? In this economy?" : {
 
     },
     "Use coordinates" : {
@@ -7138,13 +7665,7 @@
         }
       }
     },
-    "We’ll be back. With updates... later" : {
-
-    },
-    "We've misplaced the 'Update' button. Oops!" : {
-
-    },
-    "Who do you think you are, trying to access these top secret icons?" : {
+    "Wallpaper" : {
 
     },
     "Width" : {
@@ -9549,12 +10070,6 @@
         }
       }
     },
-    "Winter is coming. Updates aren't yet." : {
-
-    },
-    "With each loop, the lock on this icon weakens." : {
-
-    },
     "X" : {
       "localizations" : {
         "en-GB" : {
@@ -9715,16 +10230,8 @@
         }
       }
     },
-    "You don’t have that yet!" : {
-
-    },
-    "You're cruising on the latest tech!" : {
-
-    },
-    "You're in the clear, no updates in the atmosphere!" : {
-
-    },
     "You're up to date :)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -9765,6 +10272,7 @@
       }
     },
     "You've already got the best Loop!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -9805,6 +10313,7 @@
       }
     },
     "You've got the precious, no updates needed!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -9845,6 +10354,7 @@
       }
     },
     "You’ve leveled up to the max!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -9924,16 +10434,7 @@
         }
       }
     },
-    "You've looped... uhh... I... lost count..." : {
-
-    },
-    "Your journey is not yet complete, this icon awaits at the end." : {
-
-    },
-    "Your Loop is loopier than ever, no updates found!" : {
-
-    },
-    "Your persistence in looping is the master key to all icons." : {
+    "You've looped… uhh… I… lost count…" : {
 
     }
   },
