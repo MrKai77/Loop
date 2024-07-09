@@ -246,7 +246,7 @@ struct CustomActionConfigurationView: View {
                     sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
 
@@ -263,7 +263,7 @@ struct CustomActionConfigurationView: View {
                     sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.height),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
             }
@@ -308,7 +308,7 @@ struct CustomActionConfigurationView: View {
                     sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
 
@@ -325,7 +325,7 @@ struct CustomActionConfigurationView: View {
                     sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
             }

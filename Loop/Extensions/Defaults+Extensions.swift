@@ -26,7 +26,6 @@ extension Defaults.Keys {
 
     // Radial Menu
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true, iCloud: true)
-    static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false, iCloud: true)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50, iCloud: true)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22, iCloud: true)
 
@@ -91,6 +90,8 @@ extension Defaults.Keys {
 
     // Advanced
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false, iCloud: true) // BETA
+    static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false, iCloud: true)
+    static let ignoreFullscreen = Key<Bool>("ignoreFullscreen", default: false, iCloud: true)
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false, iCloud: true)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true, iCloud: true)
 

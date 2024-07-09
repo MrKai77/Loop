@@ -50,7 +50,7 @@ struct KeybindingsConfigurationView: View {
                 "Trigger delay",
                 value: $model.triggerDelay,
                 sliderRange: 0...1,
-                suffix: .init(.init(localized: "Seconds", defaultValue: "s")),
+                suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s")),
                 step: 0.1,
                 lowerClamp: true,
                 decimalPlaces: 1

@@ -100,7 +100,7 @@ struct BehaviorConfigurationView: View {
             LuminareToggle("Include padding", isOn: $model.enablePadding)
 
             if model.enablePadding {
-                Button("Configure padding...") {
+                Button("Configure padding…") {
                     model.isPaddingConfigurationViewPresented = true
                 }
                 .luminareModal(isPresented: $model.isPaddingConfigurationViewPresented) {
