@@ -367,6 +367,39 @@
         }
       }
     },
+    "Accent color option: Custom" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Custom"
+          }
+        }
+      }
+    },
+    "Accent color option: System" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "System"
+          }
+        }
+      }
+    },
+    "Accent color option: Wallpaper" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Wallpaper"
+          }
+        }
+      }
+    },
     "Accessibility access" : {
       "localizations" : {
         "en-GB" : {
@@ -6844,6 +6877,7 @@
 
     },
     "System" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -7568,53 +7602,6 @@
         }
       }
     },
-    "Version %@ (%@)" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Version %1$@ (%2$@)"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version %1$@ (%2$@)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versión %1$@ (%2$@)"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versione %1$@ (%2$@)"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versão %1$@ (%2$@)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@版本（%2$@）"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@版本（%2$@）"
-          }
-        }
-      }
-    },
     "Version %@ (%lld)" : {
       "localizations" : {
         "en" : {
@@ -7664,9 +7651,6 @@
           }
         }
       }
-    },
-    "Wallpaper" : {
-
     },
     "Width" : {
       "localizations" : {

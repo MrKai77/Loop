@@ -81,10 +81,10 @@ class AccentColorConfigurationModel: ObservableObject {
 
 // MARK: - AccentColorOption
 
-enum AccentColorOption: LocalizedStringKey, CaseIterable {
-    case system = "System"
-    case wallpaper = "Wallpaper"
-    case custom = "Custom"
+enum AccentColorOption: CaseIterable {
+    case system
+    case wallpaper
+    case custom
 
     var image: Image {
         switch self {
@@ -94,8 +94,12 @@ enum AccentColorOption: LocalizedStringKey, CaseIterable {
         }
     }
 
-    var text: LocalizedStringKey {
-        rawValue
+    var text: String {
+        switch self {
+        case .system: .init(localized: "Accent color option: System", defaultValue: "System")
+        case .wallpaper: .init(localized: "Accent color option: Wallpaper", defaultValue: "Wallpaper")
+        case .custom: .init(localized: "Accent color option: Custom", defaultValue: "Custom")
+        }
     }
 }
 
