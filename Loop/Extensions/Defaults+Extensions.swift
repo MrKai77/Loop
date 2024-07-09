@@ -101,3 +101,11 @@ extension Defaults.Keys {
     static let excludedApps = Key<[URL]>("excludedApps", default: [], iCloud: true)
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20, iCloud: true)
 }
+
+// MARK: - Extra Advanced
+
+extension Defaults.Keys {
+    /// Adjust with `defaults write com.MrKai77.Loop paddingMinimumScreenSize -float x`
+    /// Reset with `defaults delete com.MrKai77.Loop paddingMinimumScreenSize`
+    static let paddingMinimumScreenSize = Key<CGFloat>("paddingMinimumScreenSize", default: 0, iCloud: true)
+}

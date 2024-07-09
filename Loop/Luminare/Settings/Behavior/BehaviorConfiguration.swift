@@ -60,9 +60,7 @@ class BehaviorConfigurationModel: ObservableObject {
     }
 
     @Published var focusWindowOnResize = Defaults[.focusWindowOnResize] {
-        didSet {
-            Defaults[.focusWindowOnResize] = focusWindowOnResize
-        }
+        didSet { Defaults[.focusWindowOnResize] = focusWindowOnResize }
     }
 
     @Published var respectStageManager = Defaults[.respectStageManager] {
