@@ -307,7 +307,9 @@ private extension LoopManager {
         if newAction.direction == .cycle {
             newAction = getNextCycleAction(action)
 
-            // Prevents an endless loop of cycling screens
+            // Prevents an endless loop of cycling screens. example: when a cycle only consists of:
+            // 1. next screen
+            // 2. previous screen
             if triggeredFromScreenChange, newAction.direction.willChangeScreen {
                 performHapticFeedback()
                 return
@@ -395,18 +397,15 @@ private extension LoopManager {
 
         var nextIndex = 0
 
-        if !currentCycle.contains(currentAction),
+        // If the current action is noAction, we can preserve the index from the last action.
+        // This would initially be done by reading the window's records, then would continue by finding the next index from the currentAction.
+        if currentAction.direction == .noAction,
+           !currentCycle.contains(currentAction),
            let window = targetWindow,
            let latestRecord = WindowRecords.getCurrentAction(for: window) {
-            // We "preserve" the cycle index based on the last record
             nextIndex = (currentCycle.firstIndex(of: latestRecord) ?? -1) + 1
-
-        } else if currentAction.direction == .custom {
-            // We need to check if *all* the characteristics of the action are the same
-            nextIndex = (currentCycle.firstIndex(of: currentAction) ?? -1) + 1
         } else {
-            // Only check the direction, since the rest of the info is insignificant
-            nextIndex = (currentCycle.firstIndex { $0.direction == currentAction.direction } ?? -1) + 1
+            nextIndex = (currentCycle.firstIndex(of: currentAction) ?? -1) + 1
         }
 
         if nextIndex >= currentCycle.count {
