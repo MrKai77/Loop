@@ -399,18 +399,17 @@ private extension LoopManager {
 
         // If the current action is noAction, we can preserve the index from the last action.
         // This would initially be done by reading the window's records, then it would continue by simply finding the next index from the currentAction.
-        if currentAction.direction == .noAction {
-            if !currentCycle.contains(currentAction),
-               let window = targetWindow,
-               let latestRecord = WindowRecords.getCurrentAction(for: window) {
-                nextIndex = (currentCycle.firstIndex(of: latestRecord) ?? -1) + 1
-            } else {
-                nextIndex = (currentCycle.firstIndex(of: currentAction) ?? -1) + 1
-            }
+        if currentAction.direction == .noAction,
+           !currentCycle.contains(currentAction),
+           let window = targetWindow,
+           let latestRecord = WindowRecords.getCurrentAction(for: window) {
+            nextIndex = (currentCycle.firstIndex(of: latestRecord) ?? -1) + 1
+        } else {
+            nextIndex = (currentCycle.firstIndex(of: currentAction) ?? -1) + 1
+        }
 
-            if nextIndex >= currentCycle.count {
-                nextIndex = 0
-            }
+        if nextIndex >= currentCycle.count {
+            nextIndex = 0
         }
 
         return currentCycle[nextIndex]
