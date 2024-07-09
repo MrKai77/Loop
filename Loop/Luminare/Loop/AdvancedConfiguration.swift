@@ -12,33 +12,23 @@ import SwiftUI
 
 class AdvancedConfigurationModel: ObservableObject {
     @Published var animateWindowResizes = Defaults[.animateWindowResizes] {
-        didSet {
-            Defaults[.animateWindowResizes] = animateWindowResizes
-        }
+        didSet { Defaults[.animateWindowResizes] = animateWindowResizes }
     }
 
     @Published var hideUntilDirectionIsChosen = Defaults[.hideUntilDirectionIsChosen] {
-        didSet {
-            Defaults[.hideUntilDirectionIsChosen] = hideUntilDirectionIsChosen
-        }
+        didSet { Defaults[.hideUntilDirectionIsChosen] = hideUntilDirectionIsChosen }
     }
 
     @Published var disableCursorInteraction = Defaults[.disableCursorInteraction] {
-        didSet {
-            Defaults[.disableCursorInteraction] = disableCursorInteraction
-        }
+        didSet { Defaults[.disableCursorInteraction] = disableCursorInteraction }
     }
 
     @Published var hapticFeedback = Defaults[.hapticFeedback] {
-        didSet {
-            Defaults[.hapticFeedback] = hapticFeedback
-        }
+        didSet { Defaults[.hapticFeedback] = hapticFeedback }
     }
 
     @Published var sizeIncrement = Defaults[.sizeIncrement] {
-        didSet {
-            Defaults[.sizeIncrement] = sizeIncrement
-        }
+        didSet { Defaults[.sizeIncrement] = sizeIncrement }
     }
 
     @Published var isAccessibilityAccessGranted = AccessibilityManager.getStatus()

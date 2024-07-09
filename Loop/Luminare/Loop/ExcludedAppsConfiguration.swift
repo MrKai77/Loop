@@ -11,9 +11,7 @@ import SwiftUI
 
 class ExcludedAppsConfigurationModel: ObservableObject {
     @Published var excludedApps = Defaults[.excludedApps] {
-        didSet {
-            Defaults[.excludedApps] = excludedApps
-        }
+        didSet { Defaults[.excludedApps] = excludedApps }
     }
 
     @Published var selectedApps = Set<URL>()

@@ -161,16 +161,6 @@
         }
       }
     },
-    "%@ (%lld)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ (%2$lld)"
-          }
-        }
-      }
-    },
     "%@ %@" : {
       "localizations" : {
         "en" : {
@@ -333,6 +323,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
+          }
+        }
+      }
+    },
+    "🧪 %@ (%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "🧪 %1$@ (%2$lld)"
           }
         }
       }
@@ -6275,7 +6275,11 @@
     "Sweet dreams are made of... no updates" : {
 
     },
+    "Sync Wallpaper" : {
+
+    },
     "System" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -6829,6 +6833,9 @@
       }
     },
     "Unlocking this icon is just a matter of time and loops." : {
+
+    },
+    "Update…" : {
 
     },
     "Updates? In this economy?" : {

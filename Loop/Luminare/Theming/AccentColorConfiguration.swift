@@ -10,30 +10,54 @@ import Luminare
 import SwiftUI
 
 class AccentColorConfigurationModel: ObservableObject {
+    // MARK: - Defaults
+
     @Published var useSystemAccentColor = Defaults[.useSystemAccentColor] {
-        didSet {
-            Defaults[.useSystemAccentColor] = useSystemAccentColor
-        }
+        didSet { Defaults[.useSystemAccentColor] = useSystemAccentColor }
     }
 
     @Published var useGradient = Defaults[.useGradient] {
-        didSet {
-            Defaults[.useGradient] = useGradient
-        }
+        didSet { Defaults[.useGradient] = useGradient }
     }
 
     @Published var customAccentColor = Defaults[.customAccentColor] {
-        didSet {
-            Defaults[.customAccentColor] = customAccentColor
-        }
+        didSet { Defaults[.customAccentColor] = customAccentColor }
     }
 
     @Published var gradientColor = Defaults[.gradientColor] {
+        didSet { Defaults[.gradientColor] = gradientColor }
+    }
+
+    @Published var processWallpaper = Defaults[.processWallpaper] {
         didSet {
-            Defaults[.gradientColor] = gradientColor
+            Defaults[.processWallpaper] = processWallpaper
+
+            if processWallpaper {
+                syncWallpaper()
+            }
+        }
+    }
+
+    func syncWallpaper() {
+        Task {
+            await WallpaperProcessor.fetchLatestWallpaperColors()
+
+            await MainActor.run {
+                withAnimation(LuminareSettingsWindow.fastAnimation) {
+                    customAccentColor = Defaults[.customAccentColor]
+                    gradientColor = Defaults[.gradientColor]
+                }
+            }
+
+            // Force-rerender accent colors
+            let window = LuminareManager.luminare
+            await window?.resignMain()
+            await window?.makeKeyAndOrderFront(self)
         }
     }
 }
+
+// MARK: - View
 
 struct AccentColorConfigurationView: View {
     @StateObject private var model = AccentColorConfigurationModel()
@@ -41,49 +65,84 @@ struct AccentColorConfigurationView: View {
     var body: some View {
         LuminareSection {
             LuminarePicker(
-                elements: [true, false],
-                selection: $model.useSystemAccentColor.animation(LuminareSettingsWindow.animation),
-                columns: 2,
-                roundBottom: false
-            ) { item in
-                VStack {
+                elements: ["System", "Wallpaper", "Custom"],
+                selection: $model.accentColorOption.animation(LuminareSettingsWindow.animation),
+                columns: 3,
+                roundBottom: model.useSystemAccentColor
+            ) { option in
+                VStack(spacing: 6) {
                     Spacer()
-                    Spacer()
-
-                    if item {
-                        Image(systemName: "apple.logo")
-                    } else {
-                        Image(._18PxColorPalette)
-                    }
-
-                    Spacer()
-
-                    Text(item ? "System" : "Custom")
-
-                    Spacer()
+                    model.image(for: option)
+                    Text(option)
                     Spacer()
                 }
                 .font(.title3)
                 .frame(height: 90)
             }
 
-            LuminareToggle("Gradient", isOn: $model.useGradient.animation(LuminareSettingsWindow.animation))
+            if model.isCustom || model.isWallpaper {
+                LuminareToggle("Gradient", isOn: $model.useGradient)
+                    .animation(LuminareSettingsWindow.animation, value: model.useGradient)
+            }
+
+            if model.processWallpaper {
+                Button("Sync Wallpaper") {
+                    model.syncWallpaper()
+                }
+            }
         }
 
         VStack {
-            if !model.useSystemAccentColor || (model.useGradient && !model.useSystemAccentColor) {
+            if model.isCustom {
                 HStack {
                     Text("Color")
                     Spacer()
                 }
                 .foregroundStyle(.secondary)
 
-                LuminareColorPicker(color: $model.customAccentColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
+                LuminareColorPicker(
+                    color: $model.customAccentColor,
+                    colorNames: (red: "Red", green: "Green", blue: "Blue")
+                )
 
                 if model.useGradient {
-                    LuminareColorPicker(color: $model.gradientColor, colorNames: (red: "Red", green: "Green", blue: "Blue"))
+                    LuminareColorPicker(
+                        color: $model.gradientColor,
+                        colorNames: (red: "Red", green: "Green", blue: "Blue")
+                    )
                 }
             }
         }
+    }
+}
+
+// MARK: - View Extension
+
+extension AccentColorConfigurationModel {
+    var isCustom: Bool {
+        useSystemAccentColor ? false : !processWallpaper
+    }
+
+    var isWallpaper: Bool {
+        processWallpaper && !useSystemAccentColor
+    }
+
+    var accentColorOption: String {
+        get {
+            useSystemAccentColor ? "System" : (processWallpaper ? "Wallpaper" : "Custom")
+        }
+        set {
+            useSystemAccentColor = newValue == "System"
+            processWallpaper = newValue == "Wallpaper"
+        }
+    }
+
+    func image(for option: String) -> Image {
+        let imageNames = [
+            "System": Image(systemName: "apple.logo"),
+            "Wallpaper": Image(._18PxImageDepth),
+            "Custom": Image(._18PxColorPalette)
+        ]
+        return imageNames[option] ?? Image(systemName: "exclamationmark.triangle")
     }
 }
