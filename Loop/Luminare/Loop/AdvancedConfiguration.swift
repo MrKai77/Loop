@@ -106,8 +106,8 @@ struct AdvancedConfigurationView: View {
         }
 
         LuminareSection {
-            Button("Import from Rectangle") {
-                initiateImportProcess()
+            Button("Import keybinds from Rectangle") {
+                RectangleTranslationLayer.initiateImportProcess()
             }
             .buttonStyle(LuminareButtonStyle())
         }

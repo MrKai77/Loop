@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A6DC3EB2BB869DE002AB05F /* WindowAction+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6DC3EA2BB869DE002AB05F /* WindowAction+Image.swift */; };
 		0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */; };
-		4C0F2ACF2C3CFD09006CB34D /* TranslationLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F2ACE2C3CFD09006CB34D /* TranslationLayer.swift */; };
+		4C0F2ACF2C3CFD09006CB34D /* RectangleTranslationLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F2ACE2C3CFD09006CB34D /* RectangleTranslationLayer.swift */; };
+		4C0F2AD42C3D211F006CB34D /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 4C0F2AD32C3D211F006CB34D /* Luminare */; };
 		4C6B93E72C1DCF6E00AFF832 /* TheLoopTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E12C1DCF6E00AFF832 /* TheLoopTimes.swift */; };
 		4C6B93E82C1DCF6E00AFF832 /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E22C1DCF6E00AFF832 /* Updater.swift */; };
 		4C6B93E92C1DCF6E00AFF832 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */; };
@@ -56,7 +57,6 @@
 		A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87DDD142B50A6A400A32C76 /* ScreenManager.swift */; };
 		A87F78942BAE28050087B1DE /* CustomWindowActionSizeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87F78932BAE28050087B1DE /* CustomWindowActionSizeMode.swift */; };
 		A87F78962BAE333C0087B1DE /* CustomWindowActionPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87F78952BAE333C0087B1DE /* CustomWindowActionPositionMode.swift */; };
-		A881FC2A2C38A67C00853711 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A881FC292C38A67C00853711 /* Luminare */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */; };
 		A88E27AD2BDDE5300042CF04 /* CustomActionConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E27AC2BDDE5300042CF04 /* CustomActionConfigurationView.swift */; };
@@ -88,13 +88,12 @@
 		A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* WindowAction.swift */; };
 		A8F1E9662C253F5B00AAF871 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A8F1E9652C253F5B00AAF871 /* Localizable.xcstrings */; };
 		A8F1E9692C253F8D00AAF871 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A8F1E9672C253F8D00AAF871 /* InfoPlist.strings */; };
-		A8FF7A942C373B4500AF106E /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8FF7A932C373B4500AF106E /* Luminare */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0A6DC3EA2BB869DE002AB05F /* WindowAction+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Image.swift"; sourceTree = "<group>"; };
 		0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+LocalizedString.swift"; sourceTree = "<group>"; };
-		4C0F2ACE2C3CFD09006CB34D /* TranslationLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranslationLayer.swift; sourceTree = "<group>"; };
+		4C0F2ACE2C3CFD09006CB34D /* RectangleTranslationLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectangleTranslationLayer.swift; sourceTree = "<group>"; };
 		4C6B93E12C1DCF6E00AFF832 /* TheLoopTimes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheLoopTimes.swift; sourceTree = "<group>"; };
 		4C6B93E22C1DCF6E00AFF832 /* Updater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
 		4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateView.swift; sourceTree = "<group>"; };
@@ -189,8 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				A881FC2A2C38A67C00853711 /* Luminare in Frameworks */,
-				A8FF7A942C373B4500AF106E /* Luminare in Frameworks */,
+				4C0F2AD42C3D211F006CB34D /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,7 +210,7 @@
 		A80900D12AA3F9F20085C63B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				4C0F2ACE2C3CFD09006CB34D /* TranslationLayer.swift */,
+				4C0F2ACE2C3CFD09006CB34D /* RectangleTranslationLayer.swift */,
 				A8D4327A2C13ED3C007BE4F2 /* Icon.swift */,
 				A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */,
 				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
@@ -470,8 +468,7 @@
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
-				A8FF7A932C373B4500AF106E /* Luminare */,
-				A881FC292C38A67C00853711 /* Luminare */,
+				4C0F2AD32C3D211F006CB34D /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -509,7 +506,7 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
-				A881FC282C38A67C00853711 /* XCRemoteSwiftPackageReference "Luminare" */,
+				4C0F2AD22C3D211F006CB34D /* XCRemoteSwiftPackageReference "Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -574,7 +571,7 @@
 				A8789F6729805B190040512E /* RadialMenuView.swift in Sources */,
 				A8330ABD2A3AC0CA00673C8D /* Bundle+Extensions.swift in Sources */,
 				A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */,
-				4C0F2ACF2C3CFD09006CB34D /* TranslationLayer.swift in Sources */,
+				4C0F2ACF2C3CFD09006CB34D /* RectangleTranslationLayer.swift in Sources */,
 				A8D4327B2C13ED3C007BE4F2 /* Icon.swift in Sources */,
 				A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */,
 				A8D6D3032B6C8D750061B11F /* PaddingPreviewView.swift in Sources */,
@@ -872,7 +869,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A881FC282C38A67C00853711 /* XCRemoteSwiftPackageReference "Luminare" */ = {
+		4C0F2AD22C3D211F006CB34D /* XCRemoteSwiftPackageReference "Luminare" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MrKai77/Luminare";
 			requirement = {
@@ -891,19 +888,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A881FC292C38A67C00853711 /* Luminare */ = {
+		4C0F2AD32C3D211F006CB34D /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A881FC282C38A67C00853711 /* XCRemoteSwiftPackageReference "Luminare" */;
+			package = 4C0F2AD22C3D211F006CB34D /* XCRemoteSwiftPackageReference "Luminare" */;
 			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
-		};
-		A8FF7A932C373B4500AF106E /* Luminare */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Luminare;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

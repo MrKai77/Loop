@@ -91,7 +91,7 @@ struct KeybindingsConfigurationView: View {
             addText: "Add",
             removeText: "Remove"
         )
-        .onReceive(NotificationCenter.default.publisher(for: .keybindsUpdated)) { _ in
+        .onReceive(.keybindsUpdated) { _ in
             model.keybinds = Defaults[.keybinds]
         }
     }
