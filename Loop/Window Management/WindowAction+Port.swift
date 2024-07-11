@@ -41,7 +41,16 @@ extension WindowAction {
     static func exportPrompt() {
         // Check if there are any keybinds to export.
         guard !Defaults[.keybinds].isEmpty else {
-            showAlert("No Keybinds Have Been Set", informativeText: "You can't export something that doesn't exist!")
+            showAlert(
+                .init(
+                    localized: "Export empty keybinds alert title",
+                    defaultValue: "No Keybinds Have Been Set"
+                ),
+                informativeText: .init(
+                    localized: "Export empty keybinds alert description",
+                    defaultValue: "You can't export something that doesn't exist!"
+                )
+            )
             return
         }
 
@@ -63,7 +72,7 @@ extension WindowAction {
         guard let data = keybindsData.data(using: .utf8) else { return }
         let savePanel = NSSavePanel()
         savePanel.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-        savePanel.title = "Export Keybinds"
+        savePanel.title = .init(localized: "Export keybinds")
         savePanel.nameFieldStringValue = "keybinds.json"
         savePanel.allowedContentTypes = [.json]
 
@@ -80,7 +89,7 @@ extension WindowAction {
     /// Presents a prompt to import keybinds from a JSON file.
     static func importPrompt() {
         let openPanel = NSOpenPanel()
-        openPanel.title = "Select Loop Keybinds File"
+        openPanel.title = .init(localized: "Select Loop keybinds file")
         openPanel.allowedContentTypes = [.json]
         openPanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
             guard result == .OK, let selectedFileURL = openPanel.url else { return }
@@ -101,7 +110,16 @@ extension WindowAction {
             let importedKeybinds = try decoder.decode([SavedWindowActionFormat].self, from: keybindsData)
             updateDefaults(with: importedKeybinds)
         } catch {
-            showAlert("Error Reading Keybinds", informativeText: "Make sure the file you selected is in the correct format.")
+            showAlert(
+                .init(
+                    localized: "Error reading keybinds alert title",
+                    defaultValue: "Error Reading Keybinds"
+                ),
+                informativeText: .init(
+                    localized: "Error reading keybinds alert description",
+                    defaultValue: "Make sure the file you selected is in the correct format."
+                )
+            )
         }
     }
 
@@ -135,7 +153,15 @@ extension WindowAction {
 
     /// Presents a decision alert for how to handle imported keybinds.
     private static func showAlertForImportDecision(completion: @escaping (ImportDecision) -> ()) {
-        showAlert("Import Keybinds", informativeText: "Do you want to merge or erase existing keybinds?", buttons: ["Merge", "Erase", "Cancel"]) { response in
+        showAlert(
+            .init(localized: "Import Keybinds"),
+            informativeText: .init(localized: "Do you want to merge or erase existing keybinds?"),
+            buttons: [
+                .init(localized: "Import keybinds: merge", defaultValue: "Merge"),
+                .init(localized: "Import keybinds: erase", defaultValue: "Erase"),
+                .init(localized: "Import keybinds: cancel", defaultValue: "Cancel")
+            ]
+        ) { response in
             switch response {
             case .alertFirstButtonReturn:
                 completion(.merge)
@@ -148,7 +174,12 @@ extension WindowAction {
     }
 
     /// Utility function to show an alert with a completion handler.
-    private static func showAlert(_ messageText: String, informativeText: String, buttons: [String] = [], completion: ((NSApplication.ModalResponse) -> ())? = nil) {
+    private static func showAlert(
+        _ messageText: String,
+        informativeText: String,
+        buttons: [String] = [],
+        completion: ((NSApplication.ModalResponse) -> ())? = nil
+    ) {
         let alert = NSAlert()
         alert.messageText = messageText
         alert.informativeText = informativeText

@@ -58,7 +58,7 @@ enum RectangleTranslationLayer {
     /// Initiates the import process for the RectangleConfig.json file.
     static func importRectangleConfig() {
         let openPanel = NSOpenPanel()
-        openPanel.prompt = "Select Rectangle Config File"
+        openPanel.prompt = .init(localized: "Import from Rectangle", defaultValue: "Select Rectangle config file")
         openPanel.allowedContentTypes = [.json]
 
         // Presents a file open panel to the user.

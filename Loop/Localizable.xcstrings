@@ -614,6 +614,17 @@
         }
       }
     },
+    "App icon is locked" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Locked"
+          }
+        }
+      }
+    },
     "Behavior" : {
       "localizations" : {
         "en-GB" : {
@@ -1699,6 +1710,9 @@
         }
       }
     },
+    "Do you want to merge or erase existing keybinds?" : {
+
+    },
     "Donate" : {
       "localizations" : {
         "en-GB" : {
@@ -1819,6 +1833,28 @@
         }
       }
     },
+    "Error reading keybinds alert description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Make sure the file you selected is in the correct format."
+          }
+        }
+      }
+    },
+    "Error reading keybinds alert title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Error Reading Keybinds"
+          }
+        }
+      }
+    },
     "Excluded Apps" : {
       "localizations" : {
         "en-GB" : {
@@ -1898,6 +1934,31 @@
           }
         }
       }
+    },
+    "Export empty keybinds alert description" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You can't export something that doesn't exist!"
+          }
+        }
+      }
+    },
+    "Export empty keybinds alert title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No Keybinds Have Been Set"
+          }
+        }
+      }
+    },
+    "Export keybinds" : {
+
     },
     "External bar" : {
       "localizations" : {
@@ -3323,8 +3384,55 @@
         }
       }
     },
+    "Import from Rectangle" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Select Rectangle config file"
+          }
+        }
+      }
+    },
+    "Import Keybinds" : {
+
+    },
     "Import keybinds from Rectangle" : {
 
+    },
+    "Import keybinds: cancel" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "Import keybinds: erase" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Erase"
+          }
+        }
+      }
+    },
+    "Import keybinds: merge" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Merge"
+          }
+        }
+      }
     },
     "Include development versions" : {
       "localizations" : {
@@ -3688,9 +3796,6 @@
           }
         }
       }
-    },
-    "Locked" : {
-      "comment" : "App icon is locked"
     },
     "Locked icon message 1" : {
       "extractionState" : "extracted_with_value",
@@ -6164,6 +6269,9 @@
           }
         }
       }
+    },
+    "Select Loop keybinds file" : {
+
     },
     "Send Feedback" : {
       "localizations" : {
