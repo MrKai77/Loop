@@ -8,13 +8,13 @@
 import Defaults
 import SwiftUI
 
+/// Extension of WindowAction to add functionality for saving, loading, and managing window actions.
 extension WindowAction {
+    /// Nested struct to define the format of saved window actions.
     private struct SavedWindowActionFormat: Codable {
+        // Properties representing the details of a window action.
         var direction: WindowDirection
         var keybind: Set<CGKeyCode>
-
-        // MARK: CUSTOM KEYBINDS
-
         var name: String?
         var unit: CustomWindowActionUnit?
         var anchor: CustomWindowActionAnchor?
@@ -24,65 +24,32 @@ extension WindowAction {
         var positionMode: CustomWindowActionPositionMode?
         var xPoint: Double?
         var yPoint: Double?
-
         var cycle: [SavedWindowActionFormat]?
 
+        /// Converts the saved format back into a usable WindowAction object.
         func convertToWindowAction() -> WindowAction {
-            WindowAction(
-                direction,
-                keybind: keybind,
-                name: name,
-                unit: unit,
-                anchor: anchor,
-                width: width,
-                height: height,
-                xPoint: xPoint,
-                yPoint: yPoint,
-                positionMode: positionMode,
-                sizeMode: sizeMode,
-                cycle: cycle?.map { $0.convertToWindowAction() }
-            )
+            WindowAction(direction, keybind: keybind, name: name, unit: unit, anchor: anchor, width: width, height: height, xPoint: xPoint, yPoint: yPoint, positionMode: positionMode, sizeMode: sizeMode, cycle: cycle?.map { $0.convertToWindowAction() })
         }
     }
 
+    /// Converts a WindowAction object into the saved format.
     private func convertToSavedWindowActionFormat() -> SavedWindowActionFormat {
-        SavedWindowActionFormat(
-            direction: direction,
-            keybind: keybind,
-            name: name,
-            unit: unit,
-            anchor: anchor,
-            sizeMode: sizeMode,
-            width: width,
-            height: height,
-            positionMode: positionMode,
-            xPoint: xPoint,
-            yPoint: yPoint,
-            cycle: cycle?.map { $0.convertToSavedWindowActionFormat() }
-        )
+        SavedWindowActionFormat(direction: direction, keybind: keybind, name: name, unit: unit, anchor: anchor, sizeMode: sizeMode, width: width, height: height, positionMode: positionMode, xPoint: xPoint, yPoint: yPoint, cycle: cycle?.map { $0.convertToSavedWindowActionFormat() })
     }
 
+    /// Presents a prompt to export current keybinds to a JSON file.
     static func exportPrompt() {
-        let keybinds = Defaults[.keybinds]
-
-        if keybinds.isEmpty {
-            let alert = NSAlert()
-            alert.messageText = "No Keybinds Have Been Set"
-            alert.informativeText = "You can't export something that doesn't exist!"
-            alert.beginSheetModal(for: NSApplication.shared.mainWindow!)
+        // Check if there are any keybinds to export.
+        guard !Defaults[.keybinds].isEmpty else {
+            showAlert("No Keybinds Have Been Set", informativeText: "You can't export something that doesn't exist!")
             return
         }
 
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-
         do {
-            let exportKeybinds = keybinds.map {
-                $0.convertToSavedWindowActionFormat()
-            }
-
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            let exportKeybinds = Defaults[.keybinds].map { $0.convertToSavedWindowActionFormat() }
             let keybindsData = try encoder.encode(exportKeybinds)
-
             if let json = String(data: keybindsData, encoding: .utf8) {
                 attemptSave(of: json)
             }
@@ -91,118 +58,110 @@ extension WindowAction {
         }
     }
 
+    /// Attempts to save the exported JSON string to a file.
     private static func attemptSave(of keybindsData: String) {
-        let data = keybindsData.data(using: .utf8)
-
+        guard let data = keybindsData.data(using: .utf8) else { return }
         let savePanel = NSSavePanel()
-        if let downloadsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            savePanel.directoryURL = downloadsUrl
-        }
-
+        savePanel.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
         savePanel.title = "Export Keybinds"
-        savePanel.nameFieldStringValue = "keybinds"
+        savePanel.nameFieldStringValue = "keybinds.json"
         savePanel.allowedContentTypes = [.json]
 
         savePanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
-            if result == .OK, let destUrl = savePanel.url {
-                DispatchQueue.main.async {
-                    do {
-                        try data?.write(to: destUrl)
-                    } catch {
-                        print("Error writing to file: \(error.localizedDescription)")
-                    }
-                }
+            guard result == .OK, let destUrl = savePanel.url else { return }
+            do {
+                try data.write(to: destUrl)
+            } catch {
+                print("Error writing to file: \(error.localizedDescription)")
             }
         }
     }
 
+    /// Presents a prompt to import keybinds from a JSON file.
     static func importPrompt() {
         let openPanel = NSOpenPanel()
-        openPanel.title = "Import Keybinds"
+        openPanel.title = "Select Loop Keybinds File"
         openPanel.allowedContentTypes = [.json]
-
         openPanel.beginSheetModal(for: NSApplication.shared.mainWindow!) { result in
-            if result == .OK, let selectedFileURL = openPanel.url {
-                DispatchQueue.main.async {
-                    do {
-                        let jsonString = try String(contentsOf: selectedFileURL)
-                        importKeybinds(from: jsonString)
-                    } catch {
-                        print("Error reading file: \(error.localizedDescription)")
-                    }
-                }
+            guard result == .OK, let selectedFileURL = openPanel.url else { return }
+            do {
+                let jsonString = try String(contentsOf: selectedFileURL)
+                importKeybinds(from: jsonString)
+            } catch {
+                print("Error reading file: \(error.localizedDescription)")
             }
         }
     }
 
+    /// Imports keybinds from a JSON string.
     private static func importKeybinds(from jsonString: String) {
-        let decoder = JSONDecoder()
-
         do {
-            let keybindsData = jsonString.data(using: .utf8)!
+            guard let keybindsData = jsonString.data(using: .utf8) else { return }
+            let decoder = JSONDecoder()
             let importedKeybinds = try decoder.decode([SavedWindowActionFormat].self, from: keybindsData)
-
-            if Defaults[.keybinds].isEmpty {
-                for savedKeybind in importedKeybinds {
-                    Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
-                }
-            } else {
-                showAlertForImportDecision { decision in
-                    switch decision {
-                    case .merge:
-                        for savedKeybind in importedKeybinds where !Defaults[.keybinds].contains(where: {
-                            $0.keybind == savedKeybind.keybind && $0.name == savedKeybind.name
-                        }) {
-                            Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
-                        }
-
-                    case .erase:
-                        Defaults[.keybinds] = []
-
-                        for savedKeybind in importedKeybinds {
-                            Defaults[.keybinds].append(savedKeybind.convertToWindowAction())
-                        }
-
-                    case .cancel:
-                        break
-                    }
-                }
-            }
+            updateDefaults(with: importedKeybinds)
         } catch {
-            print("Error decoding keybinds: \(error.localizedDescription)")
-
-            let alert = NSAlert()
-            alert.messageText = "Error Reading Keybinds"
-            alert.informativeText = "Make sure the file you selected is in the correct format."
-            alert.beginSheetModal(for: NSApplication.shared.mainWindow!)
+            showAlert("Error Reading Keybinds", informativeText: "Make sure the file you selected is in the correct format.")
         }
     }
 
+    /// Updates the app's defaults with the imported keybinds.
+    private static func updateDefaults(with importedKeybinds: [SavedWindowActionFormat]) {
+        if Defaults[.keybinds].isEmpty {
+            Defaults[.keybinds] = importedKeybinds.map { $0.convertToWindowAction() }
+            // Post a notification after updating the keybinds
+            NotificationCenter.default.post(name: .keybindsUpdated, object: nil)
+        } else {
+            showAlertForImportDecision { decision in
+                switch decision {
+                case .merge:
+                    let newKeybinds = importedKeybinds.filter { savedKeybind in
+                        !Defaults[.keybinds].contains { $0.keybind == savedKeybind.keybind && $0.name == savedKeybind.name }
+                    }
+                    Defaults[.keybinds].append(contentsOf: newKeybinds.map { $0.convertToWindowAction() })
+                    // Post a notification after updating the keybinds
+                    NotificationCenter.default.post(name: .keybindsUpdated, object: nil)
+                case .erase:
+                    Defaults[.keybinds] = importedKeybinds.map { $0.convertToWindowAction() }
+                    // Post a notification after updating the keybinds
+                    NotificationCenter.default.post(name: .keybindsUpdated, object: nil)
+                case .cancel:
+                    // No action needed, no notification should be posted
+                    break
+                }
+            }
+        }
+    }
+
+    /// Presents a decision alert for how to handle imported keybinds.
     private static func showAlertForImportDecision(completion: @escaping (ImportDecision) -> ()) {
-        let alert = NSAlert()
-        alert.messageText = "Import Keybinds"
-        alert.informativeText = "Do you want to merge or erase existing keybinds?"
-
-        alert.addButton(withTitle: "Merge")
-        alert.addButton(withTitle: "Erase")
-        alert.addButton(withTitle: "Cancel")
-
-        alert.beginSheetModal(for: NSApplication.shared.mainWindow!) { response in
+        showAlert("Import Keybinds", informativeText: "Do you want to merge or erase existing keybinds?", buttons: ["Merge", "Erase", "Cancel"]) { response in
             switch response {
-            case .alertFirstButtonReturn: // Merge
+            case .alertFirstButtonReturn:
                 completion(.merge)
-            case .alertSecondButtonReturn: // Erase
+            case .alertSecondButtonReturn:
                 completion(.erase)
-            default: // Cancel or other cases
+            default:
                 completion(.cancel)
             }
         }
     }
 
-    // Define an enum for the import decision
+    /// Utility function to show an alert with a completion handler.
+    private static func showAlert(_ messageText: String, informativeText: String, buttons: [String] = [], completion: ((NSApplication.ModalResponse) -> ())? = nil) {
+        let alert = NSAlert()
+        alert.messageText = messageText
+        alert.informativeText = informativeText
+        buttons.forEach { alert.addButton(withTitle: $0) }
+        if let completion {
+            alert.beginSheetModal(for: NSApplication.shared.mainWindow!, completionHandler: completion)
+        } else {
+            alert.runModal()
+        }
+    }
+
+    /// Enum to represent the decision made in the import decision alert.
     enum ImportDecision {
-        case merge
-        case erase
-        case cancel
+        case merge, erase, cancel
     }
 }

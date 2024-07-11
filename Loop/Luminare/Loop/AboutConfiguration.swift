@@ -58,15 +58,15 @@ class AboutConfigurationModel: ObservableObject {
 
     // A max of 28 W's can fit in here :)
     var upToDateText: [String] = [
-        .init(localized: "No updates available message 1", defaultValue: "Engage! …in the current version, it's the latest."),
-        .init(localized: "No updates available message 2", defaultValue: "This app is more up to date than my diary entries!"),
-        .init(localized: "No updates available message 3", defaultValue: "You're in the clear, no updates in the atmosphere!"),
-        .init(localized: "No updates available message 4", defaultValue: "The odds are ever in your favor, no updates today!"),
-        .init(localized: "No updates available message 5", defaultValue: "Our app is on a digital diet. No new bytes allowed."),
-        .init(localized: "No updates available message 6", defaultValue: "New version? Sorry, we're too attached to this one."),
-        .init(localized: "No updates available message 7", defaultValue: "Your Loop is Loopier than ever, no updates found!"),
-        .init(localized: "No updates available message 8", defaultValue: "I'm giving it all she's got, Captain! No updates!"),
-        .init(localized: "No updates available message 9", defaultValue: "In a galaxy far, far away… still no updates!"),
+        .init(localized: "No updates available message 01", defaultValue: "Engage! …in the current version, it's the latest."),
+        .init(localized: "No updates available message 02", defaultValue: "This app is more up to date than my diary entries!"),
+        .init(localized: "No updates available message 03", defaultValue: "You're in the clear, no updates in the atmosphere!"),
+        .init(localized: "No updates available message 04", defaultValue: "The odds are ever in your favor, no updates today!"),
+        .init(localized: "No updates available message 05", defaultValue: "Our app is on a digital diet. No new bytes allowed."),
+        .init(localized: "No updates available message 06", defaultValue: "New version? Sorry, we're too attached to this one."),
+        .init(localized: "No updates available message 07", defaultValue: "Your Loop is Loopier than ever, no updates found!"),
+        .init(localized: "No updates available message 08", defaultValue: "I'm giving it all she's got, Captain! No updates!"),
+        .init(localized: "No updates available message 09", defaultValue: "In a galaxy far, far away… still no updates!"),
         .init(localized: "No updates available message 10", defaultValue: "You've got the precious, no updates needed!"),
         .init(localized: "No updates available message 11", defaultValue: "Riding at warp speed, no updates in sight!"),
         .init(localized: "No updates available message 12", defaultValue: "This is not the update you're looking for!"),
@@ -234,6 +234,10 @@ struct AboutConfigurationView: View {
             HStack(spacing: 2) {
                 Button("Send Feedback") {
                     openURL(URL(string: "https://github.com/MrKai77/Loop")!)
+                }
+
+                Button("Join Discord") {
+                    openURL(URL(string: "https://discord.gg/2CZ2N6PKjq")!)
                 }
 
                 Button("Donate") {

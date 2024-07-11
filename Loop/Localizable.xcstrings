@@ -3486,6 +3486,9 @@
         }
       }
     },
+    "Join Discord" : {
+
+    },
     "Keybindings" : {
       "localizations" : {
         "en-GB" : {
@@ -4346,7 +4349,7 @@
         }
       }
     },
-    "No updates available message 1" : {
+    "No updates available message 01" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4357,7 +4360,7 @@
         }
       }
     },
-    "No updates available message 2" : {
+    "No updates available message 02" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4368,7 +4371,7 @@
         }
       }
     },
-    "No updates available message 3" : {
+    "No updates available message 03" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4379,7 +4382,7 @@
         }
       }
     },
-    "No updates available message 4" : {
+    "No updates available message 04" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4390,7 +4393,7 @@
         }
       }
     },
-    "No updates available message 5" : {
+    "No updates available message 05" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4401,7 +4404,7 @@
         }
       }
     },
-    "No updates available message 6" : {
+    "No updates available message 06" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4412,7 +4415,7 @@
         }
       }
     },
-    "No updates available message 7" : {
+    "No updates available message 07" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4423,7 +4426,7 @@
         }
       }
     },
-    "No updates available message 8" : {
+    "No updates available message 08" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -4434,7 +4437,7 @@
         }
       }
     },
-    "No updates available message 9" : {
+    "No updates available message 09" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
