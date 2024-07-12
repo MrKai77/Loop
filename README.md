@@ -1,59 +1,85 @@
-![](assets/graphics/social_preview.png)
+<p align="center">
+  <p align="center">
+   <img width="150" height="150" src="https://github.com/MrKai77/Loop/blob/develop/Loop/Assets.xcassets/App%20Icons/AppIcon-Loop%20Master.appiconset/Master-1024.png?raw=true" alt="Logo">
+  </p>
+ <h1 align="center"><b>Loop</b></h1>
+ <p align="center">
+  Revolutionize your macOS window management experience.
+    <br />
+    <a href="https://github.com/MrKai77/Loop"><strong>Explore Loop »</strong></a>
+    <br />
+    <br />
+    <b>Download for </b>
+    macOS (<a href="https://github.com/MrKai77/Loop/releases/latest">Download</a>)
+    <br />
+    <i>~ Compatible with macOS 13 and later. ~</i>
+  </p>
+</p>
 
-Loop is a macOS app that simplifies window management for you! You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
+Loop is a macOS app designed to simplify window management with a unique radial menu, triggered by a simple key press. Customize your experience with personalized colors and settings, effortlessly move, resize, and arrange your windows, saving you valuable time and energy.
 
-<div align="center">
-    <img src="assets/graphics/loop_demo.gif" width="100%">
-</div>
+> [!NOTE]
+>
+> Loop is constantly evolving, with new features and improvements added regularly to enhance your window management experience on macOS.
+>
 
-# Installation  
-> **Compatible with macOS 13 and later**
+<p align="center">
+  <img src="assets/graphics/loop_demo.gif" alt="Loop Demo">
+  <br />
+  <br />
+  <a href="https://github.com/MrKai77/Loop/issues">
+    <img src="https://img.shields.io/github/issues/MrKai77/Loop?label=Issues&color=red" />
+  </a>
+  <a href="https://github.com/MrKai77/Loop/stargazers">
+    <img src="https://img.shields.io/github/stars/MrKai77/Loop?label=Stars&color=yellow" />
+  </a>
+  <a href="https://github.com/MrKai77/Loop/network/members">
+    <img src="https://img.shields.io/github/forks/MrKai77/Loop?label=Forks&color=lightblue" />
+  </a>
+  <a href="https://github.com/MrKai77/Loop/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/MrKai77/Loop?label=License&color=2ea44f" />
+  </a>
+  <br />
+</p>
 
-### [Homebrew](https://brew.sh)
-`brew install loop`
+## Features
 
-### Manual  
-Simply download the latest release [here](https://github.com/MrKai77/Loop/releases/latest)! Unzip the file, and open the app, grant it accessibility access, and you're good to go!
+- **Radial Menu:** A unique, fully customizable radial menu for window direction selection.
+- **Window Resizing:** Resize and arrange your windows with style and ease.
+- **Customizable Settings:** Personalize Loop with custom app colors and settings.
+- **Additional Keybindings:** Enhance your workflow with additional keybindings for non-mouse use.
+- **Custom Trigger Key:** Set your own custom trigger key for activating Loop.
 
-# Features
+## Installation
 
-- Window resizing with *style*
-- Customizable app colors
-- Fully customizable radial menu
-- Option to change circular menu to rounded rectangle
-- Additional keybindings for non-mouse use
-- Custom trigger key for Loop
-- Unlock new app icons with increased Loop usage
+Loop is available for macOS 13 and later. You can install Loop via Homebrew or manually by downloading the [latest release](https://github.com/MrKai77/Loop/releases/latest).
 
-# Usage
+### Homebrew
 
-1. After installation, launch Loop from your Applications folder.
-1. Press the designated hotkey (see [here](#triggering-loop)) to trigger the radial menu.
-1. Move your mouse to the direction you want your window to move.
-1. Release the hotkey to apply the window movement.
-1. To customize Loop's settings, click on the Loop icon in the menu bar and select "Settings". From there, you can customize the hotkey, colors, and other settings to your liking.
+```shell
+brew install loop
+```
 
-That's it! With Loop, window management is a breeze.
+### Manual Installation
 
-# Triggering Loop
+Download the latest release from [here](https://github.com/MrKai77/Loop/releases/latest), unzip the file, and you're good to go after granting it accessibility access.
 
-You can set your own custom trigger key for Loop! Currently, the available options for triggering loop are:
-- `Globe`
-- `Left Control`
-- `Right Control` (To use Caps Lock, look [here](#using-caps-lock))
-- `Left Option`
-- `Right Option`
-- `Left Command`
-- `Right Command`
-- `Left Shift` 
-- `Right Shift`
+## Usage
 
-### Using Caps Lock
+1. Launch Loop from your Applications folder.
+2. Press the designated hotkey to trigger the radial menu.
+3. Move your mouse to select the direction you want your window to move.
+4. Release the hotkey to apply the window movement.
+5. Customize Loop's settings by clicking on the Loop icon in the menu bar.
 
-![](assets/graphics/caps_lock.gif)
+## Contributing
 
-To set `Caps Lock` as the trigger key, remap it to `Control` in System Settings, and repeat the process for every connected keyboard. In Loop, make sure the `Right Control` key is selected as your trigger.
+Loop is an open-source project, and contributions are welcome. Check out the [issues](https://github.com/MrKai77/Loop/issues) to see how you can help make Loop even better.
 
-# Additional Notes
+## License
 
-This project is licensed under the [GNU GPLv3 license](LICENSE).
+Loop is licensed under the [GNU GPLv3 license](https://github.com/MrKai77/Loop/blob/main/LICENSE).
+
+---
+
+Add more to this.
