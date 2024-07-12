@@ -21,6 +21,12 @@
             "value" : "%@"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67,6 +73,12 @@
             "value" : "%1$@ %2$@"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -105,6 +117,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ è già in uso come tasto di attivazione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@는 이미 당신의 트리거 키로 사용되고 있습니다."
           }
         },
         "pt-BR" : {
@@ -147,6 +165,12 @@
             "value" : "%@ posiziona la finestra leggermente al di sopra del centro assoluto, risultando più ergonomica per alcuni."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@는 절대 중앙보다 약간 위에 창을 배치하여, 더 인체공학적으로 찾을 수 있습니다."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -182,6 +206,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -227,6 +257,12 @@
             "value" : "Informazioni"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정보"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -267,6 +303,12 @@
             "value" : "Colore dettagli"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "강조 색상"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -295,6 +337,12 @@
             "state" : "new",
             "value" : "Custom"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 정의"
+          }
         }
       }
     },
@@ -306,6 +354,12 @@
             "state" : "new",
             "value" : "System"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시스템"
+          }
         }
       }
     },
@@ -316,6 +370,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Wallpaper"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "배경화면"
           }
         }
       }
@@ -338,6 +398,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Accessibilità"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "접근성 접근"
           }
         },
         "pt-BR" : {
@@ -387,6 +453,12 @@
             "value" : "Per favore consenti l'accesso per poter ridimensionare le finestre."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "창 크기를 조절하려면 접근성 권한을 부여해 주세요"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -434,6 +506,12 @@
             "value" : "%@ ha bisogno del permesso di accessibilità"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 접근성 권한이 필요합니다"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -472,6 +550,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aggiungi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가"
           }
         },
         "pt-BR" : {
@@ -514,6 +598,12 @@
             "value" : "Avanzate"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "고급"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -552,6 +642,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Animazione ridimensionamento finestre"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "창 크기 조정 애니메이션"
           }
         },
         "pt-BR" : {
@@ -594,6 +690,12 @@
             "value" : "Velocità animazione"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애니메이션 속도"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -622,6 +724,12 @@
             "state" : "new",
             "value" : "Locked"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "잠김"
+          }
         }
       }
     },
@@ -643,6 +751,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comportamento"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "동작"
           }
         },
         "pt-BR" : {
@@ -685,6 +799,12 @@
             "value" : "Blu"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "블루"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -723,6 +843,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spessore del bordo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "테두리 두께"
           }
         },
         "pt-BR" : {
@@ -765,6 +891,12 @@
             "value" : "Inferiore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하단"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -803,6 +935,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ciclico inferiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하단 순환"
           }
         },
         "pt-BR" : {
@@ -845,6 +983,12 @@
             "value" : "Non può essere abilitato quando l’anteprima è disabilitata."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "미리보기가 비활성화되어 있을 때는 활성화될 수 없습니다."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -883,6 +1027,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cambia"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변경"
           }
         },
         "pt-BR" : {
@@ -926,6 +1076,12 @@
             "value" : "Controlla la prossima volta!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음에 다시 확인하세요!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -964,6 +1120,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ricerca aggiornamenti..."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트 확인..."
           }
         },
         "pt-BR" : {
@@ -1006,6 +1168,12 @@
             "value" : "Chiudi"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "닫기"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1044,6 +1212,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Colore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "색상"
           }
         },
         "pt-BR" : {
@@ -1087,6 +1261,12 @@
             "value" : "Configura spaziatura…"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "패딩 설정..."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1108,7 +1288,14 @@
       }
     },
     "Configure padding…" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "패딩 설정..."
+          }
+        }
+      }
     },
     "Contributors on GitHub" : {
       "localizations" : {
@@ -1128,6 +1315,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Collaboratori su GitHub"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub 기여자들"
           }
         },
         "pt-BR" : {
@@ -1170,6 +1363,12 @@
             "value" : "Raggio degli angoli"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모서리 반경"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1208,6 +1407,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Crediti"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "크레딧"
           }
         },
         "pt-BR" : {
@@ -1250,6 +1455,12 @@
             "value" : "Cursore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "커서"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1288,6 +1499,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizzata"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 정의"
           }
         },
         "pt-BR" : {
@@ -1330,6 +1547,12 @@
             "value" : "Ciclico personalizzato"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 정의 순환"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1368,6 +1591,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scorciatoia personalizzata"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 정의 키바인드"
           }
         },
         "pt-BR" : {
@@ -1410,6 +1639,12 @@
             "value" : "Personalizza l’azione di questa scorciatoia."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 키바인드의 동작을 사용자 정의하세요."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1448,6 +1683,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizza la finestra di questa scorciatoia."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 키바인드의 사용자 정의 프레임을 사용자 정의하세요."
           }
         },
         "pt-BR" : {
@@ -1490,6 +1731,12 @@
             "value" : "Personalizza il ciclo questa scorciatoia."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 키바인드가 순환하는 것을 사용자 정의합니다."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1528,6 +1775,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cicla scorciatoie"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "순환 키바인드"
           }
         },
         "pt-BR" : {
@@ -1570,6 +1823,12 @@
             "value" : "Design"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디자인"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1608,6 +1867,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sviluppo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개발"
           }
         },
         "pt-BR" : {
@@ -1650,6 +1915,12 @@
             "value" : "Supporto sviluppo"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개발 지원"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1690,6 +1961,12 @@
             "value" : "Disabilita interazione con cursore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "커서 상호작용 비활성화"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1711,7 +1988,14 @@
       }
     },
     "Do you want to merge or erase existing keybinds?" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기존 키바인드를 병합하거나 지우시겠습니까?"
+          }
+        }
+      }
     },
     "Donate" : {
       "localizations" : {
@@ -1731,6 +2015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dona"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기부"
           }
         },
         "pt-BR" : {
@@ -1773,6 +2063,12 @@
             "value" : "Dona…"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기부..."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1813,6 +2109,12 @@
             "value" : "Attiva con doppio clic"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더블 클릭으로 트리거"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1841,6 +2143,12 @@
             "state" : "new",
             "value" : "Make sure the file you selected is in the correct format."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선택한 파일이 올바른 형식인지 확인하세요."
+          }
         }
       }
     },
@@ -1851,6 +2159,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Error Reading Keybinds"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키바인드 읽기 오류"
           }
         }
       }
@@ -1873,6 +2187,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esclusioni"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제외된 앱"
           }
         },
         "pt-BR" : {
@@ -1915,6 +2235,12 @@
             "value" : "Esporta"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내보내기"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1943,6 +2269,12 @@
             "state" : "new",
             "value" : "You can't export something that doesn't exist!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "존재하지 않는 것을 내보낼 수 없습니다!"
+          }
         }
       }
     },
@@ -1954,11 +2286,24 @@
             "state" : "new",
             "value" : "No Keybinds Have Been Set"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키바인드가 설정되지 않음"
+          }
         }
       }
     },
     "Export keybinds" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키바인드 내보내기"
+          }
+        }
+      }
     },
     "External bar" : {
       "localizations" : {
@@ -1978,6 +2323,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Barra dei menu"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "외부 바"
           }
         },
         "pt-BR" : {
@@ -2020,6 +2371,12 @@
             "value" : "Veloce"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빠른"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2058,6 +2415,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Porta in primo piano durante il ridimensionamento"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "크기 조정 시 창에 포커스"
           }
         },
         "pt-BR" : {
@@ -2100,6 +2463,12 @@
             "value" : "Generali"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일반"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2138,6 +2507,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sfumatura"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그라데이션"
           }
         },
         "pt-BR" : {
@@ -2180,6 +2555,12 @@
             "value" : "Verde"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그린"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2218,6 +2599,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "절반"
           }
         },
         "pt-BR" : {
@@ -2260,6 +2647,12 @@
             "value" : "Feedback aptico"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "촉각 피드백"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2298,6 +2691,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Altezza"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "높이"
           }
         },
         "pt-BR" : {
@@ -2340,6 +2739,12 @@
             "value" : "Nascondi dalla barra dei menu"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "메뉴 바 아이콘 숨기기"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2378,6 +2783,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nascondi il menu finché non si seleziona una direzione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방향이 선택될 때까지 숨기기"
           }
         },
         "pt-BR" : {
@@ -2420,6 +2831,12 @@
             "value" : "Terzi orizzontali"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수평 삼분의 일"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2458,6 +2875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Icona"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아이콘"
           }
         },
         "pt-BR" : {
@@ -2500,6 +2923,12 @@
             "value" : "Contributore icone"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아이콘 기여자"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2527,6 +2956,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Locked icon alert title"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "잠긴 아이콘 알림 제목"
           }
         }
       }
@@ -2556,6 +2991,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nera"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "블랙"
           }
         },
         "pt-BR" : {
@@ -2605,6 +3046,12 @@
             "value" : "Buco nero"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "블랙 홀"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2650,6 +3097,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Classica"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "클래식"
           }
         },
         "pt-BR" : {
@@ -2699,6 +3152,12 @@
             "value" : "Sviluppatore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개발자"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2744,6 +3203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Olografica"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "홀로"
           }
         },
         "pt-BR" : {
@@ -2793,6 +3258,12 @@
             "value" : "Tasto"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "케우사르"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2838,6 +3309,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Maestro di Loop"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루프 마스터"
           }
         },
         "pt-BR" : {
@@ -2887,6 +3364,12 @@
             "value" : "Loop meta"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "메타 루프"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2932,6 +3415,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Neon"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네온"
           }
         },
         "pt-BR" : {
@@ -2981,6 +3470,12 @@
             "value" : "Pino rosé"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로제 파인"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3026,6 +3521,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simon"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사이먼"
           }
         },
         "pt-BR" : {
@@ -3075,6 +3576,12 @@
             "value" : "Estate"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "서머"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3120,6 +3627,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tramonto synthwave"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "신스웨이브 선셋"
           }
         },
         "pt-BR" : {
@@ -3169,6 +3682,12 @@
             "value" : "Bianca"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화이트"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3196,6 +3715,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You will now be notified when you unlock a new icon."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 아이콘을 잠금 해제할 때 알림을 받게 됩니다."
           }
         }
       }
@@ -3225,6 +3750,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai sbloccato una nuova icona: %@!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 아이콘을 잠금 해제했습니다: %@!"
           }
         },
         "pt-BR" : {
@@ -3274,6 +3805,12 @@
             "value" : "Hai già utilizzato Loop 25 volte! Come ricompensa, ecco una nuova icona: %@. Continua ad usare Loop per sbloccarne altre!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이미 25번 루프했습니다! 보상으로 새 아이콘을 드립니다: %@. 새 아이콘을 더 많이 잠금 해제하려면 계속 루프하세요!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3321,6 +3858,12 @@
             "value" : "5000 loop conquistati! L'universo ha assistito alla nascita di un maestro di Loop! Goditi il tuo meritato premio: una nuova icona!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5000 루프를 정복했습니다! 우주가 루프 마스터의 탄생을 목격했습니다! 당신이 받을 자격이 있는 보상을 즐기세요: 새로운 아이콘!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3342,7 +3885,14 @@
       }
     },
     "Ignore fullscreen windows" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 화면 창 무시"
+          }
+        }
+      }
     },
     "Import" : {
       "localizations" : {
@@ -3362,6 +3912,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importa"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가져오기"
           }
         },
         "pt-BR" : {
@@ -3392,14 +3948,34 @@
             "state" : "new",
             "value" : "Select Rectangle config file"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rectangle 설정 파일 선택"
+          }
         }
       }
     },
     "Import Keybinds" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키바인드 가져오기"
+          }
+        }
+      }
     },
     "Import keybinds from Rectangle" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rectangle에서 키 바인드 가져오기"
+          }
+        }
+      }
     },
     "Import keybinds: cancel" : {
       "extractionState" : "extracted_with_value",
@@ -3408,6 +3984,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Cancel"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "취소"
           }
         }
       }
@@ -3420,6 +4002,12 @@
             "state" : "new",
             "value" : "Erase"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지우기"
+          }
         }
       }
     },
@@ -3430,6 +4018,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Merge"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "병합"
           }
         }
       }
@@ -3452,6 +4046,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Includi versioni in fase di sviluppo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개발 버전 포함"
           }
         },
         "pt-BR" : {
@@ -3494,6 +4094,12 @@
             "value" : "Includi spaziatura"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여백 포함"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3532,6 +4138,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Misure iniziali"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초기 크기"
           }
         },
         "pt-BR" : {
@@ -3574,6 +4186,12 @@
             "value" : "Istantanea"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "즉시"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3595,7 +4213,14 @@
       }
     },
     "Join Discord" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "디스코드 참여"
+          }
+        }
+      }
     },
     "Keybindings" : {
       "localizations" : {
@@ -3615,6 +4240,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scorciatoie"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키 바인딩"
           }
         },
         "pt-BR" : {
@@ -3657,6 +4288,12 @@
             "value" : "Scorciatoie"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키 바인드"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3695,6 +4332,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apri al login"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로그인 시 실행"
           }
         },
         "pt-BR" : {
@@ -3737,6 +4380,12 @@
             "value" : "Sinistro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "왼쪽"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3777,6 +4426,12 @@
             "value" : "Ciclico sinistro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "왼쪽 순환"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3805,6 +4460,12 @@
             "state" : "new",
             "value" : "You don’t have that yet!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 그것을 가지고 있지 않습니다!"
+          }
         }
       }
     },
@@ -3815,6 +4476,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Who do you think you are, trying to access these top secret icons?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "당신은 누구라고 생각하며, 이 최고 비밀 아이콘에 접근하려고 하나요?"
           }
         }
       }
@@ -3827,6 +4494,12 @@
             "state" : "new",
             "value" : "Patience is a virtue, and your key to this icon."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인내는 미덕이며, 이 아이콘으로 가는 당신의 열쇠입니다."
+          }
         }
       }
     },
@@ -3837,6 +4510,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This icon is locked, but your potential is not!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 아이콘은 잠겨 있지만, 당신의 잠재력은 잠겨 있지 않습니다!"
           }
         }
       }
@@ -3849,6 +4528,12 @@
             "state" : "new",
             "value" : "Keep Looping, and this icon will be yours in no time."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계속해서 루핑하고, 이 아이콘은 금방 당신의 것이 될 것입니다."
+          }
         }
       }
     },
@@ -3859,6 +4544,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This icon is still under wraps, stay tuned!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 아이콘은 아직 공개되지 않았습니다, 계속 기대해 주세요!"
           }
         }
       }
@@ -3871,6 +4562,12 @@
             "state" : "new",
             "value" : "Some icons are worth the wait, don't you think?"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어떤 아이콘들은 기다릴 가치가 있지 않나요?"
+          }
         }
       }
     },
@@ -3881,6 +4578,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Not yet, but you're closer than you were yesterday!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 아니지만, 당신은 어제보다 더 가까워졌습니다!"
           }
         }
       }
@@ -3893,6 +4596,12 @@
             "state" : "new",
             "value" : "Unlocking this icon is just a matter of time and Loops."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 아이콘을 잠금 해제하는 것은 시간과 루프의 문제일 뿐입니다."
+          }
         }
       }
     },
@@ -3903,6 +4612,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This icon is like a fine wine, it needs more time."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 아이콘은 좋은 와인과 같아서, 더 많은 시간이 필요합니다."
           }
         }
       }
@@ -3915,6 +4630,12 @@
             "state" : "new",
             "value" : "Stay curious, and soon this icon will be within your reach."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "호기심을 유지하고, 곧 이 아이콘이 당신의 손에 닿을 것입니다."
+          }
         }
       }
     },
@@ -3925,6 +4646,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Keep up the good work, and this icon will be your reward."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좋은 작업을 계속하고, 이 아이콘이 당신의 보상이 될 것입니다."
           }
         }
       }
@@ -3937,6 +4664,12 @@
             "state" : "new",
             "value" : "This icon is reserved for the most dedicated Loopers."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 아이콘은 가장 헌신적인 루퍼들을 위해 예약되어 있습니다."
+          }
         }
       }
     },
@@ -3947,6 +4680,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Your journey is not yet complete, this icon awaits at the end."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "당신의 여정은 아직 완료되지 않았습니다, 이 아이콘은 끝에서 기다립니다."
           }
         }
       }
@@ -3959,6 +4698,12 @@
             "state" : "new",
             "value" : "In due time, this icon shall be revealed to you."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "적절한 시기에, 이 아이콘이 당신에게 드러날 것입니다."
+          }
         }
       }
     },
@@ -3969,6 +4714,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Patience, young Looper, this icon is not far away."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인내심을 가지세요, 젊은 루퍼여, 이 아이콘은 멀지 않습니다."
           }
         }
       }
@@ -3981,6 +4732,12 @@
             "state" : "new",
             "value" : "The journey of a thousand Loops begins with a single step."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "천 개의 루프 여정은 한 걸음으로 시작됩니다."
+          }
         }
       }
     },
@@ -3991,6 +4748,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Every Loop brings you closer to the treasure that awaits."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "매 루프는 당신을 기다리는 보물에 더 가까이 가져갑니다."
           }
         }
       }
@@ -4003,6 +4766,12 @@
             "state" : "new",
             "value" : "With each Loop, the lock on this icon weakens."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "각 루프와 함께, 이 아이콘에 대한 잠금이 약해집니다."
+          }
         }
       }
     },
@@ -4013,6 +4782,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Loop after Loop, your dedication carves the key to success."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루프 이후 루프, 당신의 헌신이 성공의 열쇠를 조각합니다."
           }
         }
       }
@@ -4025,6 +4800,12 @@
             "state" : "new",
             "value" : "The icons are not just unlocked; they're earned, Loop by Loop."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아이콘은 단순히 잠금 해제되는 것이 아니라, 루프마다 획득됩니다."
+          }
         }
       }
     },
@@ -4035,6 +4816,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "As the Loops accumulate, so too will your collection of icons."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루프가 쌓이면, 당신의 아이콘 컬렉션도 함께 쌓일 것입니다."
           }
         }
       }
@@ -4047,6 +4834,12 @@
             "state" : "new",
             "value" : "Think of each Loop as a riddle, solving the mystery of the locked icon."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "각 루프를 수수께끼로 생각하세요, 잠긴 아이콘의 미스터리를 푸는 것입니다."
+          }
         }
       }
     },
@@ -4057,6 +4850,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Your persistence in Looping is the master key to all icons."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루핑에 대한 당신의 지속성은 모든 아이콘의 마스터 키입니다."
           }
         }
       }
@@ -4069,6 +4868,12 @@
             "state" : "new",
             "value" : "Loop around the obstacles; your reward is just beyond them."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "장애물을 루프로 돌아보세요; 당신의 보상은 그 너머에 있습니다."
+          }
         }
       }
     },
@@ -4079,6 +4884,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Each Loop you complete plants the seeds for icons to grow."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완성하는 각 루프는 아이콘이 자라나는 씨앗을 심습니다."
           }
         }
       }
@@ -4091,6 +4902,12 @@
             "state" : "new",
             "value" : "Like the moon's phases, your icons will reveal themselves in cycles of Loops."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "달의 위상처럼, 당신의 아이콘들은 루프의 주기로 자신을 드러낼 것입니다."
+          }
         }
       }
     },
@@ -4101,6 +4918,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "The icons await, hidden behind the veil of Loops yet to be made."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 만들어지지 않은 루프의 베일 뒤에 숨겨진 아이콘이 기다립니다."
           }
         }
       }
@@ -4125,6 +4948,18 @@
               }
             }
           }
+        },
+        "ko" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "남은 루프 %lld 개"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -4135,6 +4970,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%lld Loops left"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "남은 루프 %lld 개"
           }
         }
       }
@@ -4158,6 +4999,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Che la Forza sia con te… la prossima volta!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "힘이 당신과 함께하기를... 다음 번에!"
           }
         },
         "pt-BR" : {
@@ -4188,6 +5035,12 @@
             "state" : "new",
             "value" : "%"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "퍼센트"
+          }
         }
       }
     },
@@ -4199,6 +5052,12 @@
             "state" : "new",
             "value" : "px"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "픽셀"
+          }
         }
       }
     },
@@ -4209,6 +5068,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "s"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S"
           }
         }
       }
@@ -4231,6 +5096,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Attiva con clic centrale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중간 클릭으로 트리거"
           }
         },
         "pt-BR" : {
@@ -4273,6 +5144,12 @@
             "value" : "Altro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4311,6 +5188,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta il cursore con la finestra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "창과 함께 커서 이동"
           }
         },
         "pt-BR" : {
@@ -4353,6 +5236,12 @@
             "value" : "Nessuna applicazione esclusa"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제외된 애플리케이션 없음"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4391,6 +5280,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nessuna scorciatoia"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키 바인딩 없음"
           }
         },
         "pt-BR" : {
@@ -4434,6 +5329,12 @@
             "value" : "Nessuna novità, Comandante."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로운 정보가 없습니다, 사령관님."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4462,6 +5363,12 @@
             "state" : "new",
             "value" : "Engage! …in the current version, it's the latest."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "참여하세요! ...현재 버전에서, 그것은 최신입니다."
+          }
         }
       }
     },
@@ -4472,6 +5379,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This app is more up to date than my diary entries!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 앱은 내 일기 항목보다 더 최신입니다!"
           }
         }
       }
@@ -4484,6 +5397,12 @@
             "state" : "new",
             "value" : "You're in the clear, no updates in the atmosphere!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "당신은 안전합니다, 대기 중에 업데이트가 없습니다!"
+          }
         }
       }
     },
@@ -4494,6 +5413,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "The odds are ever in your favor, no updates today!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘은 업데이트가 없어 당신의 편입니다!"
           }
         }
       }
@@ -4506,6 +5431,12 @@
             "state" : "new",
             "value" : "Our app is on a digital diet. No new bytes allowed."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우리 앱은 디지털 다이어트 중입니다. 새로운 바이트는 허용되지 않습니다."
+          }
         }
       }
     },
@@ -4516,6 +5447,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "New version? Sorry, we're too attached to this one."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 버전? 죄송합니다, 우리는 이 버전에 너무 애착이 있습니다."
           }
         }
       }
@@ -4528,6 +5465,12 @@
             "state" : "new",
             "value" : "Your Loop is Loopier than ever, no updates found!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " 당신의 Loop는 어느 때보다 Loopier합니다, 업데이트를 찾을 수 없습니다!"
+          }
         }
       }
     },
@@ -4538,6 +5481,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "I'm giving it all she's got, Captain! No updates!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 것을 다하고 있습니다, 선장님! 업데이트가 없습니다!"
           }
         }
       }
@@ -4550,6 +5499,12 @@
             "state" : "new",
             "value" : "In a galaxy far, far away… still no updates!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아주 먼, 먼 은하계에서도... 여전히 업데이트가 없습니다!"
+          }
         }
       }
     },
@@ -4560,6 +5515,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You've got the precious, no updates needed!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "소중한 것을 가지고 있습니다, 업데이트가 필요 없어요!"
           }
         }
       }
@@ -4572,6 +5533,12 @@
             "state" : "new",
             "value" : "Riding at warp speed, no updates in sight!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "워프 속도로 달리고 있지만, 업데이트는 보이지 않습니다!"
+          }
         }
       }
     },
@@ -4582,6 +5549,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This is not the update you're looking for!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "찾고 있는 업데이트가 아닙니다!"
           }
         }
       }
@@ -4594,6 +5567,12 @@
             "state" : "new",
             "value" : "We've misplaced the 'Update' button. Oops!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "'업데이트' 버튼을 잘못 놓았네요. 어머나!"
+          }
         }
       }
     },
@@ -4604,6 +5583,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "I swear it was here somewhere… one sec"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분명 여기 어딘가에 있었어요... 잠깐만요"
           }
         }
       }
@@ -4616,6 +5601,12 @@
             "state" : "new",
             "value" : "An apple a day keeps the… updates away."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루에 사과 하나가... 업데이트를 멀리합니다."
+          }
         }
       }
     },
@@ -4626,6 +5617,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "May the Force be with you… next time!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "힘이 당신과 함께하기를... 다음 번에!"
           }
         }
       }
@@ -4638,6 +5635,12 @@
             "state" : "new",
             "value" : "The Force is strong with this version!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 버전에는 힘이 강합니다!"
+          }
         }
       }
     },
@@ -4648,6 +5651,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Just a small town app, same old version"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그저 작은 마을의 앱, 여전히 같은 오래된 버전"
           }
         }
       }
@@ -4660,6 +5669,12 @@
             "state" : "new",
             "value" : "Winter is coming. Updates aren't yet."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "겨울이 오고 있습니다. 업데이트는 아직이죠."
+          }
         }
       }
     },
@@ -4670,6 +5685,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Sweet dreams are made of… no updates"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "달콤한 꿈은... 업데이트가 없는 것으로 만들어집니다"
           }
         }
       }
@@ -4682,6 +5703,12 @@
             "state" : "new",
             "value" : "The update fairy skipped us this week."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번 주 업데이트 요정이 우리를 건너뛰었습니다."
+          }
         }
       }
     },
@@ -4692,6 +5719,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Stay sharp, more intel coming soon!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계속 주목해주세요, 곧 더 많은 정보가 올 것입니다!"
           }
         }
       }
@@ -4704,6 +5737,12 @@
             "state" : "new",
             "value" : "You're cruising on the latest tech!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최신 기술을 타고 달리고 있습니다!"
+          }
         }
       }
     },
@@ -4714,6 +5753,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "We’ll be back. With updates… later"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우리는 돌아올 것입니다. 업데이트와 함께... 나중에"
           }
         }
       }
@@ -4726,6 +5771,12 @@
             "state" : "new",
             "value" : "A penny for your… lack of updates."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "당신의... 업데이트 부족에 페니를."
+          }
         }
       }
     },
@@ -4736,6 +5787,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You've already got the best Loop!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이미 최고의 Loop를 가지고 있습니다!"
           }
         }
       }
@@ -4748,6 +5805,12 @@
             "state" : "new",
             "value" : "One does not simply update Loop."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "단순히 Loop를 업데이트하는 것은 아닙니다."
+          }
         }
       }
     },
@@ -4758,6 +5821,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "All work and no… no updates…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 일에는... 업데이트가 없습니다..."
           }
         }
       }
@@ -4770,6 +5839,12 @@
             "state" : "new",
             "value" : "A watched pot never… updates."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "쳐다보는 냄비는 결코... 업데이트되지 않습니다."
+          }
         }
       }
     },
@@ -4780,6 +5855,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "99 problems, updates ain't one."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문제가 99개 있어도, 업데이트는 문제가 아니에요."
           }
         }
       }
@@ -4792,6 +5873,12 @@
             "state" : "new",
             "value" : "I… uhh… one sec I lost it"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저... 음... 잠깐, 잃어버렸어요"
+          }
         }
       }
     },
@@ -4802,6 +5889,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You’ve leveled up to the max!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대 레벨까지 올랐습니다!"
           }
         }
       }
@@ -4814,6 +5907,12 @@
             "state" : "new",
             "value" : "Beggars can't be… updaters."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "거지는... 업데이터가 될 수 없습니다."
+          }
         }
       }
     },
@@ -4824,6 +5923,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Money can't buy… updates."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "돈으로는... 업데이트를 살 수 없습니다."
           }
         }
       }
@@ -4836,6 +5941,12 @@
             "state" : "new",
             "value" : "No new intel, Commander."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로운 정보가 없습니다, 사령관님."
+          }
         }
       }
     },
@@ -4846,6 +5957,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "No updates? Great Scott!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트가 없다고? 대단해, Scott!"
           }
         }
       }
@@ -4858,6 +5975,12 @@
             "state" : "new",
             "value" : "No updates, Mr. Anderson"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트가 없습니다, Mr. Anderson"
+          }
         }
       }
     },
@@ -4868,6 +5991,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "No updates in Ba Sing Se"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "바 싱 세에는 업데이트가 없습니다"
           }
         }
       }
@@ -4880,6 +6009,12 @@
             "state" : "new",
             "value" : "Updates? In this economy?"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트? 이 경제에서?"
+          }
         }
       }
     },
@@ -4890,6 +6025,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Check back next time!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음에 다시 확인하세요!"
           }
         }
       }
@@ -4902,6 +6043,12 @@
             "state" : "new",
             "value" : "Loop is in its prime!"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop가 전성기입니다!"
+          }
         }
       }
     },
@@ -4912,6 +6059,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "All systems are a-go!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 시스템이 작동 중입니다!"
           }
         }
       }
@@ -4924,6 +6077,12 @@
             "state" : "new",
             "value" : "You're up to date :)"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최신 상태입니다 :)"
+          }
         }
       }
     },
@@ -4934,6 +6093,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "No updates yet!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 업데이트가 없습니다!"
           }
         }
       }
@@ -4957,6 +6122,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Niente di nuovo!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 업데이트가 없습니다!"
           }
         },
         "pt-BR" : {
@@ -4999,6 +6170,12 @@
             "value" : "Nessuno"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "없음"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5039,6 +6216,12 @@
             "value" : "Niente da ciclare"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "순환할 것이 없습니다"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5067,6 +6250,12 @@
             "state" : "new",
             "value" : "%@'s notification permissions are currently disabled."
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@의 알림 권한이 현재 비활성화되어 있습니다."
+          }
         }
       }
     },
@@ -5078,6 +6267,12 @@
             "state" : "new",
             "value" : "Open Settings"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정 열기"
+          }
         }
       }
     },
@@ -5088,6 +6283,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Please turn them on in System Settings."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시스템 설정에서 활성화해 주세요."
           }
         }
       }
@@ -5117,6 +6318,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Icona selezionata"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 아이콘 설정"
           }
         },
         "pt-BR" : {
@@ -5159,6 +6366,12 @@
             "value" : "Invia una notifica quando si sbloccano nuove icone"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 아이콘 잠금 해제 시 알림"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5180,7 +6393,14 @@
       }
     },
     "OK" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인"
+          }
+        }
+      }
     },
     "Options" : {
       "localizations" : {
@@ -5200,6 +6420,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opzioni"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "옵션"
           }
         },
         "pt-BR" : {
@@ -5242,6 +6468,12 @@
             "value" : "Spaziatura"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여백"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5280,6 +6512,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Permessi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "권한"
           }
         },
         "pt-BR" : {
@@ -5322,6 +6560,12 @@
             "value" : "Posizione"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "위치"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5360,6 +6604,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preserva misure"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "크기 유지"
           }
         },
         "pt-BR" : {
@@ -5402,6 +6652,12 @@
             "value" : "Premi “Aggiungi” per aggiungere un elemento da ciclare"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "순환 항목을 추가하려면 \"추가\"를 누르세요"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5440,6 +6696,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Premi “Aggiungi” per aggiungere una scorciatoia"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "키 바인딩을 추가하려면 \"추가\"를 누르세요"
           }
         },
         "pt-BR" : {
@@ -5482,6 +6744,12 @@
             "value" : "Premi “Aggiungi” per aggiungere un'applicazione"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "애플리케이션을 추가하려면 \"추가\"를 누르세요"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5520,6 +6788,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anteprima"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "미리보기"
           }
         },
         "pt-BR" : {
@@ -5562,6 +6836,12 @@
             "value" : "px"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "픽셀"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5600,6 +6880,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quarti"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사분의 일"
           }
         },
         "pt-BR" : {
@@ -5642,6 +6928,12 @@
             "value" : "Esci"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "종료"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5680,6 +6972,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu radiale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방사형 메뉴"
           }
         },
         "pt-BR" : {
@@ -5722,6 +7020,12 @@
             "value" : "Menu radiale"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방사형 메뉴"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5760,6 +7064,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosso"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "빨간색"
           }
         },
         "pt-BR" : {
@@ -5802,6 +7112,12 @@
             "value" : "Ricordamelo dopo"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "나중에 상기시켜 주세요"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5840,6 +7156,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rimuovi"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제거"
           }
         },
         "pt-BR" : {
@@ -5882,6 +7204,12 @@
             "value" : "Richiedi…"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "요청..."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5920,6 +7248,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rirpristina"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "재설정"
           }
         },
         "pt-BR" : {
@@ -5962,6 +7296,12 @@
             "value" : "Ridimensiona finestra sotto il cursore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "커서 아래 창 크기 조정"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6000,6 +7340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rispetta Stage Manager"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스테이지 매니저 존중"
           }
         },
         "pt-BR" : {
@@ -6043,6 +7389,12 @@
             "value" : "Riavvia per completare"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료하려면 재시작"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6081,6 +7433,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ridimensiona la finestra durante lo spostamento"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "드래그할 때 창 프레임 복원"
           }
         },
         "pt-BR" : {
@@ -6123,6 +7481,12 @@
             "value" : "Destro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오른쪽"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6163,6 +7527,12 @@
             "value" : "Ciclico destro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오른쪽 순환"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6201,6 +7571,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cambio schermate"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 전환"
           }
         },
         "pt-BR" : {
@@ -6250,6 +7626,12 @@
             "value" : "s"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6271,7 +7653,14 @@
       }
     },
     "Select Loop keybinds file" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "루프 키바인드 파일 선택"
+          }
+        }
+      }
     },
     "Send Feedback" : {
       "localizations" : {
@@ -6291,6 +7680,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invia feedback"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "피드백 보내기"
           }
         },
         "pt-BR" : {
@@ -6333,6 +7728,12 @@
             "value" : "Imposta tasti di attivazione..."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트리거 키 설정..."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6371,6 +7772,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Impostazioni"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정"
           }
         },
         "pt-BR" : {
@@ -6413,6 +7820,12 @@
             "value" : "Impostazioni…"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정..."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6451,6 +7864,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Condividi i tuoi feedback nella nostra pagina GitHub, dove puoi riportare bug, suggerire nuove funzioni, o fornirci altri input preziosi. Accettiamo anche donazioni se ritieni che Loop abbia migliorato il tuo workflow :)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub 페이지에서 피드백을 공유하세요. 버그를 알려주거나 기능을 제안하거나 다른 소중한 의견을 제공할 수 있습니다. Loop가 여러분의 작업 흐름을 개선한 것 같다면 기부도 받습니다 :)"
           }
         },
         "pt-BR" : {
@@ -6493,6 +7912,12 @@
             "value" : "Mostra nel dock"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "독에 표시"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6531,6 +7956,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mostra anteprima durante l'utilizzo"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "반복할 때 미리보기 표시"
           }
         },
         "pt-BR" : {
@@ -6573,6 +8004,12 @@
             "value" : "Semplice"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "단순"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6611,6 +8048,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dimensione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "크기"
           }
         },
         "pt-BR" : {
@@ -6653,6 +8096,12 @@
             "value" : "Incremento dimensione"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "크기 증가"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6691,6 +8140,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fluida"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "부드럽게"
           }
         },
         "pt-BR" : {
@@ -6733,6 +8188,12 @@
             "value" : "Funzioni, idee, e correzione di bug"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일부 기능, 아이디어 및 버그 수정"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6773,6 +8234,12 @@
             "value" : "Stage Manager"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스테이지 매니저"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6811,6 +8278,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dimensione del menu"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스테이지 스트립 크기"
           }
         },
         "pt-BR" : {
@@ -6854,6 +8327,12 @@
             "value" : "Resta all’erta, presto buone nuove!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "계속 주목해주세요, 곧 더 많은 정보가 올 것입니다!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6894,6 +8373,12 @@
             "value" : "Proponi nuova icona"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 아이콘 제안"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6915,7 +8400,14 @@
       }
     },
     "Sync Wallpaper" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "배경화면 동기화"
+          }
+        }
+      }
     },
     "That key is already used as your trigger key." : {
       "localizations" : {
@@ -6935,6 +8427,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questo tasto è già in uso nei tasti di attivazione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "해당 키는 이미 트리거 키로 사용 중입니다."
           }
         },
         "pt-BR" : {
@@ -6977,6 +8475,12 @@
             "value" : "Questa combinazione è già in uso da %@."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "해당 키 바인딩은 이미 %@ 에서 사용 중입니다."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7015,6 +8519,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questa combinazione è già in uso da un'altra scorciatoia personalizzata."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "해당 키 바인딩은 이미 다른 사용자 정의 키 바인딩에서 사용 중입니다."
           }
         },
         "pt-BR" : {
@@ -7058,6 +8568,12 @@
             "value" : "La Forza è potente in questa versione!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 버전에는 힘이 강합니다!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7096,6 +8612,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tematizzazione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "테마 설정"
           }
         },
         "pt-BR" : {
@@ -7138,6 +8660,12 @@
             "value" : "Spessore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두께"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7176,6 +8704,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Questa funzione è ancora in fase di sviluppo."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기능은 아직 개발 중입니다."
           }
         },
         "pt-BR" : {
@@ -7219,6 +8753,12 @@
             "value" : "Questo non è l’aggiornamento che stavi aspettando!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "찾고 있는 업데이트가 아닙니다!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7257,6 +8797,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Superiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상단"
           }
         },
         "pt-BR" : {
@@ -7299,6 +8845,12 @@
             "value" : "Ciclico superiore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상단 순환"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7337,6 +8889,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ritardo attivazione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트리거 지연"
           }
         },
         "pt-BR" : {
@@ -7379,6 +8937,12 @@
             "value" : "Tasti di attivazione"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트리거 키"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7400,7 +8964,14 @@
       }
     },
     "Update…" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트..."
+          }
+        }
+      }
     },
     "Use coordinates" : {
       "localizations" : {
@@ -7420,6 +8991,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usa coordinate"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌표 사용"
           }
         },
         "pt-BR" : {
@@ -7462,6 +9039,12 @@
             "value" : "Usa centro macOS"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS 중앙 사용"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7500,6 +9083,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usa pixel"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "픽셀 사용"
           }
         },
         "pt-BR" : {
@@ -7542,6 +9131,12 @@
             "value" : "Usa schermo con cursore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "커서가 있는 화면 사용"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7582,6 +9177,12 @@
             "value" : "Per l'utilizzo con barra dei menu personalizzata."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 정의 메뉴바를 사용하는 경우 이것을 사용하세요."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7609,6 +9210,12 @@
             "state" : "new",
             "value" : "Version %1$@ (%2$lld)"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버전 %1$@ (%2$lld)"
+          }
         }
       }
     },
@@ -7630,6 +9237,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzi verticale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수직 삼분의 일"
           }
         },
         "pt-BR" : {
@@ -7672,6 +9285,12 @@
             "value" : "Larghezza"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "너비"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7710,6 +9329,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finestra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우"
           }
         },
         "pt-BR" : {
@@ -7759,6 +9384,12 @@
             "value" : "Quasi massimizza"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "거의 최대화"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7804,6 +9435,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà inferiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하단 절반"
           }
         },
         "pt-BR" : {
@@ -7853,6 +9490,12 @@
             "value" : "Quarto inferiore sinistro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌하단 사분의 일"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7898,6 +9541,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quarto inferiore destro"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우하단 사분의 일"
           }
         },
         "pt-BR" : {
@@ -7947,6 +9596,12 @@
             "value" : "Terzo inferiore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하단 셋째"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7992,6 +9647,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi inferiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하단 이삼분의 둘"
           }
         },
         "pt-BR" : {
@@ -8041,6 +9702,12 @@
             "value" : "Centra"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "중앙"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8086,6 +9753,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalizzata"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 정의"
           }
         },
         "pt-BR" : {
@@ -8135,6 +9808,12 @@
             "value" : "Ciclico"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "순환"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8180,6 +9859,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schermo intero"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체 화면"
           }
         },
         "pt-BR" : {
@@ -8229,6 +9914,12 @@
             "value" : "Ingrandisci inferiore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하단 확대"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8274,6 +9965,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci sinistro"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌측 확대"
           }
         },
         "pt-BR" : {
@@ -8323,6 +10020,12 @@
             "value" : "Ingrandisci destro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우측 확대"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8368,6 +10071,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci superiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상단 확대"
           }
         },
         "pt-BR" : {
@@ -8417,6 +10126,12 @@
             "value" : "Nascondi"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "숨기기"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8462,6 +10177,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzo orizzontale centrale"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수평 중앙 셋째"
           }
         },
         "pt-BR" : {
@@ -8511,6 +10232,12 @@
             "value" : "Ripristina"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초기 프레임"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8556,6 +10283,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ingrandisci"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 크게"
           }
         },
         "pt-BR" : {
@@ -8605,6 +10338,12 @@
             "value" : "Metà sinistra"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌측 절반"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8650,6 +10389,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terzo sinistro"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌측 셋째"
           }
         },
         "pt-BR" : {
@@ -8699,6 +10444,12 @@
             "value" : "Due terzi sinistri"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌측 이삼분의 둘"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8744,6 +10495,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Centra (macOS)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS 중앙"
           }
         },
         "pt-BR" : {
@@ -8793,6 +10550,12 @@
             "value" : "Massimizza"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대화"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8838,6 +10601,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimizza"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최소화"
           }
         },
         "pt-BR" : {
@@ -8887,6 +10656,12 @@
             "value" : "Sposta sotto"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " 아래로 이동"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8932,6 +10707,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta a sinistra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "왼쪽으로 이동"
           }
         },
         "pt-BR" : {
@@ -8981,6 +10762,12 @@
             "value" : "Sposta a destra"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오른쪽으로 이동"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9026,6 +10813,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sposta sopra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "위로 이동"
           }
         },
         "pt-BR" : {
@@ -9075,6 +10868,12 @@
             "value" : "Schermata successiva"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음 화면"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9120,6 +10919,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nessuna azione"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "작업 없음"
           }
         },
         "pt-BR" : {
@@ -9169,6 +10974,12 @@
             "value" : "Schermata precedente"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " 이전 화면"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9214,6 +11025,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà destra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우측 절반"
           }
         },
         "pt-BR" : {
@@ -9263,6 +11080,12 @@
             "value" : "Terzo destro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우측 셋째"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9308,6 +11131,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi destri"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우측 이삼분의 둘"
           }
         },
         "pt-BR" : {
@@ -9357,6 +11186,12 @@
             "value" : "Riduci inferiore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하단 축소"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9402,6 +11237,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riduci sinistro"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌측 축소"
           }
         },
         "pt-BR" : {
@@ -9451,6 +11292,12 @@
             "value" : "Riduci destro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우측 축소"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9496,6 +11343,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Riduci superiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상단 축소"
           }
         },
         "pt-BR" : {
@@ -9545,6 +11398,12 @@
             "value" : "Riduci"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 작게"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9590,6 +11449,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metà superiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상단 절반"
           }
         },
         "pt-BR" : {
@@ -9639,6 +11504,12 @@
             "value" : "Quarto superiore sinistro"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "좌상단 사분의 일"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9684,6 +11555,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quarto superiore destro"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "우상단 사분의 일"
           }
         },
         "pt-BR" : {
@@ -9733,6 +11610,12 @@
             "value" : "Terzo superiore"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상단 셋째"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9778,6 +11661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due terzi superiore"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "상단 이삼분의 둘"
           }
         },
         "pt-BR" : {
@@ -9827,6 +11716,12 @@
             "value" : "Annulla"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실행 취소"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9874,6 +11769,12 @@
             "value" : "Terzo verticale centrale"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "수직 중앙 셋째"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9912,6 +11813,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spaziatura finestra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 갭"
           }
         },
         "pt-BR" : {
@@ -9954,6 +11861,12 @@
             "value" : "Manipolazione finestra"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 조작"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9992,6 +11905,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aggancio finestra"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 스냅핑"
           }
         },
         "pt-BR" : {
@@ -10034,6 +11953,12 @@
             "value" : "Durante lo spostamento si potrà ancora vedere l’anteprima."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "윈도우 스냅핑은 여전히 미리보기를 사용할 것입니다."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10069,6 +11994,12 @@
           }
         },
         "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X"
+          }
+        },
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "X"
@@ -10114,6 +12045,12 @@
             "value" : "Y"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10154,6 +12091,12 @@
             "value" : "Puoi usare un massimo di %lld tasti nelle scorciatoie, compresi i tasti di attivazione."
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트리거 키를 포함하여 키바인드에는 최대 %lld 개의 키만 사용할 수 있습니다."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10192,6 +12135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Puoi usare un massimo di %lld tasti come tasti di attivazione."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "트리거 키에는 최대 %lld 개의 키만 사용할 수 있습니다."
           }
         },
         "pt-BR" : {
@@ -10235,6 +12184,12 @@
             "value" : "Tutto aggiornato :)"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최신 상태입니다 :)"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10274,6 +12229,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai già il miglior Loop possibile!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이미 최고의 Loop를 가지고 있습니다!"
           }
         },
         "pt-BR" : {
@@ -10317,6 +12278,12 @@
             "value" : "Hai il meglio, nessun aggiornamento necessario!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "귀중한 것을 얻었으니, 업데이트가 필요 없습니다!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10356,6 +12323,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hai livellato fino al massimo!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대 레벨에 도달했습니다!"
           }
         },
         "pt-BR" : {
@@ -10398,6 +12371,12 @@
             "value" : "Hai usato Loop %lld volte!"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 번 반복했습니다!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10419,7 +12398,14 @@
       }
     },
     "You've looped… uhh… I… lost count…" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "당신이 반복했는데... 음... 나... 횟수를 잃어버렸어요..."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
