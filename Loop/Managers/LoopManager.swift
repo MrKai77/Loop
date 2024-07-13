@@ -30,9 +30,11 @@ class LoopManager: ObservableObject {
     private var flagsChangedEventMonitor: EventMonitor?
     private var mouseMovedEventMonitor: EventMonitor?
     private var middleClickMonitor: EventMonitor?
+    private var leftClickMonitor: EventMonitor?
     private var lastTriggerKeyClick: Date = .distantPast
 
     @Published var currentAction: WindowAction = .init(.noAction)
+    private var parentCycleAction: WindowAction? = nil
     private var initialMousePosition: CGPoint = .init()
     private var angleToMouse: Angle = .init(degrees: 0)
     private var distanceToMouse: CGFloat = 0
@@ -111,9 +113,26 @@ private extension LoopManager {
 
         lastLoopActivation = .now
         currentAction = .init(.noAction)
+        parentCycleAction = nil
         initialMousePosition = NSEvent.mouseLocation
         screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
         keybindMonitor.start()
+
+        leftClickMonitor = CGEventMonitor(
+            eventMask: [.leftMouseDown],
+            callback: { cgEvent in
+                guard self.isLoopActive else {
+                    return Unmanaged.passUnretained(cgEvent)
+                }
+
+                if cgEvent.type == .leftMouseDown,
+                   let parentCycleAction = self.parentCycleAction {
+                    self.changeAction(parentCycleAction, disableHapticFeedback: true)
+                }
+
+                return nil
+            }
+        )
 
         if !Defaults[.disableCursorInteraction] {
             mouseMovedEventMonitor?.start()
@@ -138,6 +157,7 @@ private extension LoopManager {
 
         keybindMonitor.stop()
         mouseMovedEventMonitor?.stop()
+        leftClickMonitor?.stop()
 
         currentlyPressedModifiers = []
 
@@ -293,19 +313,48 @@ private extension LoopManager {
 // MARK: - Changing Actions
 
 private extension LoopManager {
-    func changeAction(_ action: WindowAction, triggeredFromScreenChange: Bool = false) {
+    /// Changes the action to the provided one, or the next cycle action if available.
+    /// - Parameters:
+    ///   - newAction: The action to change to. If a cycle is provided, Loop will use the current action as context to choose an appropriate next action.
+    ///   - triggeredFromScreenChange: If this action was triggered from a screen change, this will prevent cycle keybinds from infinitely changing screens.
+    ///   - disableHapticFeedback: This will prevent haptic feedback.
+    ///   - canAdvanceCycle: This will prevent the cycle from advancing if set to false. This is currently used when changing actions via the radial menu.
+    func changeAction(
+        _ newAction: WindowAction,
+        triggeredFromScreenChange: Bool = false,
+        disableHapticFeedback: Bool = false,
+        canAdvanceCycle: Bool = true
+    ) {
         guard
-            currentAction != action || action.willManipulateExistingWindowFrame,
+            currentAction != newAction || newAction.willManipulateExistingWindowFrame,
             isLoopActive,
             let currentScreen = screenToResizeOn
         else {
             return
         }
 
-        var newAction = action
+        // This will allow us to compare different window actions without needing to consider different keybinds/custom names/ids.
+        // This is useful when the radial menu and keybinds have the same set of cycle actions, so we don't need to worry about not having a keybind.
+        var newAction = newAction.stripNonResizingProperties()
 
         if newAction.direction == .cycle {
-            newAction = getNextCycleAction(action)
+            parentCycleAction = newAction
+
+            // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
+            // This will be set to false when the mouse is *moved* to prevent erratic behavior.
+            if canAdvanceCycle {
+                newAction = getNextCycleAction(newAction)
+            } else {
+                if let cycle = newAction.cycle, !cycle.contains(currentAction) {
+                    newAction = cycle.first ?? .init(.noAction)
+                } else {
+                    newAction = currentAction
+                }
+
+                if newAction == currentAction {
+                    return
+                }
+            }
 
             // Prevents an endless loop of cycling screens. example: when a cycle only consists of:
             // 1. next screen
@@ -314,6 +363,9 @@ private extension LoopManager {
                 performHapticFeedback()
                 return
             }
+        } else {
+            // By removing the parent cycle action, a left click will not advance the user's previously set cycle.
+            parentCycleAction = nil
         }
 
         if newAction.direction.willChangeScreen {
@@ -342,14 +394,17 @@ private extension LoopManager {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
             }
 
-            if action.direction == .cycle {
+            if newAction.direction == .cycle {
                 currentAction = newAction
-                changeAction(action, triggeredFromScreenChange: true)
+                changeAction(newAction, triggeredFromScreenChange: true)
             } else {
                 if let screenToResizeOn,
                    let window = targetWindow,
                    !Defaults[.previewVisibility] {
-                    performHapticFeedback()
+                    if !disableHapticFeedback {
+                        performHapticFeedback()
+                    }
+
                     WindowEngine.resize(
                         window,
                         to: currentAction,
@@ -363,7 +418,9 @@ private extension LoopManager {
             return
         }
 
-        performHapticFeedback()
+        if !disableHapticFeedback {
+            performHapticFeedback()
+        }
 
         if newAction != currentAction || newAction.willManipulateExistingWindowFrame {
             currentAction = newAction
@@ -423,7 +480,11 @@ private extension LoopManager {
             )
         }
     }
+}
 
+// MARK: - Radial Menu
+
+private extension LoopManager {
     func mouseMoved(_: NSEvent) {
         guard isLoopActive else { return }
         keybindMonitor.canPassthroughSpecialEvents = false
@@ -443,38 +504,25 @@ private extension LoopManager {
         angleToMouse = mouseAngle
         distanceToMouse = mouseDistance
 
-        var resizeDirection: WindowDirection = .noAction
+        var resizeDirection: WindowAction = .init(.noAction)
 
         // If mouse over 50 points away, select half or quarter positions
         if distanceToMouse > pow(50 - Defaults[.radialMenuThickness], 2) {
             switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-            case 0, 8:
-                resizeDirection = .rightHalf
-            case 1:
-                resizeDirection = .bottomRightQuarter
-            case 2:
-                resizeDirection = .bottomHalf
-            case 3:
-                resizeDirection = .bottomLeftQuarter
-            case 4:
-                resizeDirection = .leftHalf
-            case 5:
-                resizeDirection = .topLeftQuarter
-            case 6:
-                resizeDirection = .topHalf
-            case 7:
-                resizeDirection = .topRightQuarter
-            default:
-                resizeDirection = .noAction
+            case 0, 8: resizeDirection = Defaults[.radialMenuRight]
+            case 1: resizeDirection = Defaults[.radialMenuBottomRight]
+            case 2: resizeDirection = Defaults[.radialMenuBottom]
+            case 3: resizeDirection = Defaults[.radialMenuBottomLeft]
+            case 4: resizeDirection = Defaults[.radialMenuLeft]
+            case 5: resizeDirection = Defaults[.radialMenuTopLeft]
+            case 6: resizeDirection = Defaults[.radialMenuTop]
+            case 7: resizeDirection = Defaults[.radialMenuTopRight]
+            default: break
             }
-        } else if distanceToMouse < pow(noActionDistance, 2) {
-            resizeDirection = .noAction
-        } else {
-            resizeDirection = .maximize
+        } else if distanceToMouse > pow(noActionDistance, 2) {
+            resizeDirection = Defaults[.radialMenuCenter]
         }
 
-        if resizeDirection != currentAction.direction {
-            changeAction(.init(resizeDirection))
-        }
+        changeAction(resizeDirection, canAdvanceCycle: false)
     }
 }

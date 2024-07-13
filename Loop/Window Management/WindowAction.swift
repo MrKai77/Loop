@@ -48,6 +48,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         self.init(.cycle, keybind: keybind, name: name, cycle: cycle)
     }
 
+    init(_ cycle: [WindowAction]) {
+        self.init(nil, cycle)
+    }
+
     var direction: WindowDirection
     var keybind: Set<CGKeyCode>
 
@@ -64,6 +68,21 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     var yPoint: Double?
 
     var cycle: [WindowAction]?
+
+    static let commonID = UUID()
+    // Removes ID, keybind and name. This is useful when checking for equality between an otherwise identical keybind and radial menu action.
+    func stripNonResizingProperties() -> WindowAction {
+        var strippedAction = self
+        strippedAction.id = WindowAction.commonID
+        strippedAction.keybind = []
+        strippedAction.name = nil
+
+        if let cycle {
+            strippedAction.cycle = cycle.map { $0.stripNonResizingProperties() }
+        }
+
+        return strippedAction
+    }
 
     func getName() -> String {
         var result = ""
