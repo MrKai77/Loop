@@ -108,4 +108,55 @@ extension Defaults.Keys {
     /// Adjust with `defaults write com.MrKai77.Loop paddingMinimumScreenSize -float x`
     /// Reset with `defaults delete com.MrKai77.Loop paddingMinimumScreenSize`
     static let paddingMinimumScreenSize = Key<CGFloat>("paddingMinimumScreenSize", default: 0, iCloud: true)
+
+    // Radial Menu
+    // It is not recommended to manually edit these entries yet, as it has not been tested.
+    static let radialMenuTop = Key<WindowAction>(
+        "radialMenuTop",
+        default: .init([
+            .init(.topHalf),
+            .init(.topThird),
+            .init(.topTwoThirds)
+        ]),
+        iCloud: true
+    )
+    static let radialMenuTopRight = Key<WindowAction>("radialMenuTopRight", default: .init(.topRightQuarter), iCloud: true)
+    static let radialMenuRight = Key<WindowAction>(
+        "radialMenuRight",
+        default: .init([
+            .init(.rightHalf),
+            .init(.rightThird),
+            .init(.rightTwoThirds)
+        ]),
+        iCloud: true
+    )
+    static let radialMenuBottomRight = Key<WindowAction>("radialMenuBottomRight", default: .init(.bottomRightQuarter), iCloud: true)
+    static let radialMenuBottom = Key<WindowAction>(
+        "radialMenuBottom",
+        default: .init([
+            .init(.bottomHalf),
+            .init(.bottomThird),
+            .init(.bottomTwoThirds)
+        ]),
+        iCloud: true
+    )
+    static let radialMenuBottomLeft = Key<WindowAction>("radialMenuBottomLeft", default: .init(.bottomLeftQuarter), iCloud: true)
+    static let radialMenuLeft = Key<WindowAction>(
+        "radialMenuLeft",
+        default: .init([
+            .init(.leftHalf),
+            .init(.leftThird),
+            .init(.leftTwoThirds)
+        ]),
+        iCloud: true
+    )
+    static let radialMenuTopLeft = Key<WindowAction>("radialMenuTopLeft", default: .init(.topLeftQuarter), iCloud: true)
+    static let radialMenuCenter = Key<WindowAction>(
+        "radialMenuCenter",
+        default: .init([
+            .init(.maximize),
+            .init(.macOSCenter)
+        ]),
+        iCloud: true
+    )
 }
