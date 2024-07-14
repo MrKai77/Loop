@@ -325,6 +325,10 @@ private extension LoopManager {
         disableHapticFeedback: Bool = false,
         canAdvanceCycle: Bool = true
     ) {
+        // This will allow us to compare different window actions without needing to consider different keybinds/custom names/ids.
+        // This is useful when the radial menu and keybinds have the same set of cycle actions, so we don't need to worry about not having a keybind.
+        var newAction = newAction.stripNonResizingProperties()
+
         guard
             currentAction != newAction || newAction.willManipulateExistingWindowFrame,
             isLoopActive,
@@ -332,10 +336,6 @@ private extension LoopManager {
         else {
             return
         }
-
-        // This will allow us to compare different window actions without needing to consider different keybinds/custom names/ids.
-        // This is useful when the radial menu and keybinds have the same set of cycle actions, so we don't need to worry about not having a keybind.
-        var newAction = newAction.stripNonResizingProperties()
 
         if newAction.direction == .cycle {
             parentCycleAction = newAction
