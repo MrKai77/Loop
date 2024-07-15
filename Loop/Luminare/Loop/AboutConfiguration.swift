@@ -108,10 +108,10 @@ class AboutConfigurationModel: ObservableObject {
     func getNextUpToDateText() -> String {
         // If shuffledTexts is empty, fill it with a shuffled version of upToDateText
         if shuffledTexts.isEmpty {
-            shuffledTexts = upToDateText.shuffled()
+            shuffledTexts = upToDateText.filter { $0 != "-" }.shuffled()
         }
         // Pop the last element to ensure it's not repeated until all have been shown
-        return shuffledTexts.popLast() ?? "Check for updates…" // Fallback string
+        return shuffledTexts.popLast() ?? upToDateText[0] // Fallback string
     }
 
     func copyVersionToClipboard() {
