@@ -122,7 +122,7 @@ struct IconConfigurationView: View {
                     .aspectRatio(1, contentMode: .fit)
                     .alert(isPresented: $model.showingLockedAlert) {
                         Alert(
-                            title: Text(.init(localized: "Icon Locked", defaultValue: "Locked icon alert title")),
+                            title: Text(.init(localized: "Locked icon alert title", defaultValue: "Icon Locked")),
                             message: Text(model.selectedLockedMessage),
                             dismissButton: .default(Text("OK"))
                         )

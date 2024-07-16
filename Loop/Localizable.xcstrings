@@ -202,7 +202,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%11d"
+            "value" : "%lld"
           }
         },
         "it" : {
@@ -338,6 +338,12 @@
             "value" : "Custom"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalizado"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -367,6 +373,12 @@
             "value" : "System"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -393,6 +405,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Wallpaper"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Wallpaper"
           }
         },
@@ -759,6 +777,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Locked"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bblo"
           }
         },
         "ko" : {
@@ -1243,6 +1267,12 @@
     },
     "Configure padding…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurar margen..."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1955,6 +1985,12 @@
     },
     "Do you want to merge or erase existing keybinds?" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quieres unir o borrar las combinaciones existentes?"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2110,6 +2146,12 @@
             "value" : "Make sure the file you selected is in the correct format."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asegúrate de que el archivo seleccionado está en el formato adecuado"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2125,6 +2167,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Error Reading Keybinds"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error leyendo combinaciones"
           }
         },
         "ko" : {
@@ -2236,6 +2284,12 @@
             "value" : "You can't export something that doesn't exist!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No puedes exportar algo que no existe!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2253,6 +2307,12 @@
             "value" : "No Keybinds Have Been Set"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se han definido combinaciones"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2263,6 +2323,12 @@
     },
     "Export keybinds" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar combinaciones"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2911,35 +2977,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "圖標貢獻者"
-          }
-        }
-      }
-    },
-    "Icon Locked" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Locked icon alert title"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "잠긴 아이콘 알림 제목"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "图标未解锁"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "圖標未解鎖"
           }
         }
       }
@@ -3695,6 +3732,12 @@
             "value" : "You will now be notified when you unlock a new icon."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serás notificado cuando hayas desbloqueado un nuevo icono"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3876,6 +3919,12 @@
     },
     "Ignore fullscreen windows" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorar las ventanas a pantalla completa"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3951,6 +4000,12 @@
             "value" : "Select Rectangle config file"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar el archivo de configuración de Rectangle"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3961,6 +4016,12 @@
     },
     "Import Keybinds" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar combinaciones"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3971,6 +4032,12 @@
     },
     "Import keybinds from Rectangle" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar combinaciones desde Rectangle"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4000,6 +4067,12 @@
             "value" : "Cancel"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4017,6 +4090,12 @@
             "value" : "Erase"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4032,6 +4111,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Merge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unir"
           }
         },
         "ko" : {
@@ -4228,6 +4313,12 @@
     },
     "Join Discord" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Únete a Discord"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4466,6 +4557,35 @@
         }
       }
     },
+    "Locked icon alert title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Icon Locked"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "icono bloqueado"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "图标未解锁"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圖標未解鎖"
+          }
+        }
+      }
+    },
     "Locked icon message 1" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -4473,6 +4593,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You don’t have that yet!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tienes eso aún!"
           }
         },
         "ko" : {
@@ -4504,6 +4630,12 @@
             "value" : "Who do you think you are, trying to access these top secret icons?"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quién te crees que eres, intentando acceder a estos iconos secretos?"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4531,6 +4663,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Patience is a virtue, and your key to this icon."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La paciencia es una virtud, y tu llave a este icono"
           }
         },
         "ko" : {
@@ -4562,6 +4700,12 @@
             "value" : "This icon is locked, but your potential is not!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este icono está bloqueado, pero tu potencial no lo está!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4589,6 +4733,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Keep Looping, and this icon will be yours in no time."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue haciendo Loops y este icono será tuyo pronto"
           }
         },
         "ko" : {
@@ -4620,6 +4770,12 @@
             "value" : "This icon is still under wraps, stay tuned!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este icono está aún en pañales, pero presta atención!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4647,6 +4803,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Some icons are worth the wait, don't you think?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algunos iconos merecen la pena la espera, no crees?"
           }
         },
         "ko" : {
@@ -4678,6 +4840,12 @@
             "value" : "Not yet, but you're closer than you were yesterday!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no, pero estás más cerca de lo que estabas ayer!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4705,6 +4873,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Unlocking this icon is just a matter of time and Loops."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquear este icono solo es cuestión de tiempo y de Loops."
           }
         },
         "ko" : {
@@ -4736,6 +4910,12 @@
             "value" : "This icon is like a fine wine, it needs more time."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este icono es como el buen vino, necesita algo de tiempo."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4763,6 +4943,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Stay curious, and soon this icon will be within your reach."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue tu curiosidad y este icono será tuyo pronto."
           }
         },
         "ko" : {
@@ -4794,6 +4980,12 @@
             "value" : "Keep up the good work, and this icon will be your reward."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue así y este icono será tu recompensa."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4821,6 +5013,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This icon is reserved for the most dedicated Loopers."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este icono está reservado a los Loopers más dedicados."
           }
         },
         "ko" : {
@@ -4852,6 +5050,12 @@
             "value" : "Your journey is not yet complete, this icon awaits at the end."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu viaje aún no ha terminado, este icono te espera al final."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4879,6 +5083,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "In due time, this icon shall be revealed to you."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A su debido tiempo, este icono te será revelado."
           }
         },
         "ko" : {
@@ -4910,6 +5120,12 @@
             "value" : "Patience, young Looper, this icon is not far away."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paciencia, joven Looper, este icono no está lejos."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4937,6 +5153,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "The journey of a thousand Loops begins with a single step."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El viaje de mil Loops comienza con un solo paso."
           }
         },
         "ko" : {
@@ -4968,6 +5190,12 @@
             "value" : "Every Loop brings you closer to the treasure that awaits."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada Loop te acerca al tesoro que te espera."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4995,6 +5223,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "With each Loop, the lock on this icon weakens."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con cada Loop, el bloqueo de este icono se debilita."
           }
         },
         "ko" : {
@@ -5026,6 +5260,12 @@
             "value" : "Loop after Loop, your dedication carves the key to success."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bucle tras bucle, tu dedicación esculpe la clave del éxito."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5053,6 +5293,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "The icons are not just unlocked; they're earned, Loop by Loop."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los iconos no sólo se desbloquean; se ganan, Loop a Loop."
           }
         },
         "ko" : {
@@ -5084,6 +5330,12 @@
             "value" : "As the Loops accumulate, so too will your collection of icons."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A medida que se acumulen los Loops, también lo hará tu colección de iconos."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5111,6 +5363,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Think of each Loop as a riddle, solving the mystery of the locked icon."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Piensa en cada Loop como en un acertijo, resolviendo el misterio del icono bloqueado."
           }
         },
         "ko" : {
@@ -5142,6 +5400,12 @@
             "value" : "Your persistence in Looping is the master key to all icons."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu persistencia en el Looping es la llave maestra de todos los iconos."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5169,6 +5433,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Loop around the obstacles; your reward is just beyond them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rodea tus obstáculos; tu recompensa está justo detrás de ellos."
           }
         },
         "ko" : {
@@ -5200,6 +5470,12 @@
             "value" : "Each Loop you complete plants the seeds for icons to grow."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada Loop que completas planta las semillas para que crezcan los iconos."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5227,6 +5503,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Like the moon's phases, your icons will reveal themselves in cycles of Loops."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como las fases de la luna, tus iconos se revelarán en ciclos de Loops."
           }
         },
         "ko" : {
@@ -5258,6 +5540,12 @@
             "value" : "The icons await, hidden behind the veil of Loops yet to be made."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los iconos esperan, ocultos tras un misterio de Loops que descifrar."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5286,6 +5574,24 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
+                  "value" : "%lld Loop left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "new",
                   "value" : "%lld Loop left"
                 }
               },
@@ -5363,6 +5669,12 @@
             "value" : "%"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5392,6 +5704,12 @@
             "value" : "px"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5418,6 +5736,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "s"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "s"
           }
         },
@@ -5680,6 +6004,12 @@
             "value" : "Engage! …in the current version, it's the latest."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Comunícate! ...en la versión actual, es la última."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5707,6 +6037,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This app is more up to date than my diary entries!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta aplicación está más actualizada que las entradas de mi diario."
           }
         },
         "ko" : {
@@ -5738,6 +6074,12 @@
             "value" : "You're in the clear, no updates in the atmosphere!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estás a salvo, ¡no hay actualizaciones en la atmósfera!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5765,6 +6107,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "The odds are ever in your favor, no updates today!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las probabilidades están siempre a tu favor, ¡hoy no hay actualizaciones!"
           }
         },
         "ko" : {
@@ -5796,6 +6144,12 @@
             "value" : "Our app is on a digital diet. No new bytes allowed."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuestra aplicación está a dieta digital. No se permiten nuevos bytes."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5823,6 +6177,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "New version? Sorry, we're too attached to this one."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Una nueva versión? Lo siento, no será hoy, quizás mañana."
           }
         },
         "ko" : {
@@ -5854,6 +6214,12 @@
             "value" : "Your Loop is Loopier than ever, no updates found!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu Loop es más Loop que nunca, ¡no se han encontrado actualizaciones!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5881,6 +6247,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "I'm giving it all she's got, Captain! No updates!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Estoy dando todo lo que tengo, Capitán! ¡Sin actualizaciones!"
           }
         },
         "ko" : {
@@ -5912,6 +6284,12 @@
             "value" : "In a galaxy far, far away… still no updates!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En una galaxia muy, muy lejana... ¡todavía no hay actualizaciones!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5939,6 +6317,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You've got the precious, no updates needed!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tienes tu tesssoro, ¡no hacen falta actualizaciones!"
           }
         },
         "ko" : {
@@ -5970,6 +6354,12 @@
             "value" : "Riding at warp speed, no updates in sight!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A toda velocidad, ¡sin actualizaciones a la vista!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5997,6 +6387,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "This is not the update you're looking for!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Esta no es la actualización que estás buscando!"
           }
         },
         "ko" : {
@@ -6028,6 +6424,12 @@
             "value" : "We've misplaced the 'Update' button. Oops!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hemos perdido el botón \"Actualizar\". ¡Uy!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6055,6 +6457,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "I swear it was here somewhere… one sec"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Juro que estaba aquí en alguna parte ... un segundo"
           }
         },
         "ko" : {
@@ -6086,6 +6494,12 @@
             "value" : "An apple a day keeps the… updates away."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una manzana al día mantiene alejadas las... actualizaciones."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6113,6 +6527,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "May the Force be with you… next time!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que la Fuerza te acompañe... ¡la próxima vez!"
           }
         },
         "ko" : {
@@ -6144,6 +6564,12 @@
             "value" : "The Force is strong with this version!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡La Fuerza es fuerte en esta versión!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6171,6 +6597,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Just a small town app, same old version"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sólo una aplicación de pueblo, la misma versión de siempre"
           }
         },
         "ko" : {
@@ -6202,6 +6634,12 @@
             "value" : "Winter is coming. Updates aren't yet."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se acerca el invierno. Las actualizaciones aún no."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6229,6 +6667,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Sweet dreams are made of… no updates"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dulces sueños están hechos de... no actualizar."
           }
         },
         "ko" : {
@@ -6260,6 +6704,12 @@
             "value" : "The update fairy skipped us this week."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El hada de las actualizaciones no nos ha visitado esta semana."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6287,6 +6737,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Stay sharp, more intel coming soon!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantente alerta, ¡pronto más información!"
           }
         },
         "ko" : {
@@ -6318,6 +6774,12 @@
             "value" : "You're cruising on the latest tech!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estás navegando con la última tecnología."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6345,6 +6807,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "We’ll be back. With updates… later"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volveremos. Con actualizaciones... otro día"
           }
         },
         "ko" : {
@@ -6376,6 +6844,12 @@
             "value" : "A penny for your… lack of updates."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una moneda por tus... faltas de actualizaciones"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6403,6 +6877,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You've already got the best Loop!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Ya tienes el mejor Loop!"
           }
         },
         "ko" : {
@@ -6434,6 +6914,12 @@
             "value" : "One does not simply update Loop."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No basta con actualizar Loop."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6461,6 +6947,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "All work and no… no updates…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mucho trabajar y poco actualizar..."
           }
         },
         "ko" : {
@@ -6492,6 +6984,12 @@
             "value" : "A watched pot never… updates."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin actualizaciones no hay paraíso."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6519,6 +7017,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "99 problems, updates ain't one."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "99 problemas, las actualizaciones no son uno."
           }
         },
         "ko" : {
@@ -6550,6 +7054,12 @@
             "value" : "I… uhh… one sec I lost it"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debi haberla dejado por aquí..."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6577,6 +7087,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You’ve leveled up to the max!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Has subido de nivel al máximo!"
           }
         },
         "ko" : {
@@ -6608,6 +7124,12 @@
             "value" : "Beggars can't be… updaters."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colega, ¿dónde está mi actualización?"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6635,6 +7157,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Money can't buy… updates."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podrá tener todo el dinero que quiera, pero no tiene una actualización"
           }
         },
         "ko" : {
@@ -6666,6 +7194,12 @@
             "value" : "No new intel, Commander."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin nuevas actualizaciones, comandante."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6693,6 +7227,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "No updates? Great Scott!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No actualizaciones? Gran Scott"
           }
         },
         "ko" : {
@@ -6724,6 +7264,12 @@
             "value" : "No updates, Mr. Anderson"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay actualizaciones, señor Anderson..."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6751,6 +7297,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "No updates in Ba Sing Se"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Negativo, camarada."
           }
         },
         "ko" : {
@@ -6782,6 +7334,12 @@
             "value" : "Updates? In this economy?"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizaciones? Con la economía como está?"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6809,6 +7367,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Check back next time!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprueba de nuevo pronto!"
           }
         },
         "ko" : {
@@ -6840,6 +7404,12 @@
             "value" : "Loop is in its prime!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop está mamadísimo"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6867,6 +7437,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "All systems are a-go!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los sistemas en marcha!"
           }
         },
         "ko" : {
@@ -6898,6 +7474,12 @@
             "value" : "You're up to date :)"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estás actualizado!"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6925,6 +7507,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "No updates yet!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin actualizaciones a la vista!"
           }
         },
         "ko" : {
@@ -7048,6 +7636,12 @@
             "value" : "%@'s notification permissions are currently disabled."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La¡os permisos de notificaciones de %@ están desactivados."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7077,6 +7671,12 @@
             "value" : "Open Settings"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Ajustes"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7104,6 +7704,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Please turn them on in System Settings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actívalos en la configuración del sistema."
           }
         },
         "ko" : {
@@ -7227,6 +7833,12 @@
     },
     "OK" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8399,6 +9011,12 @@
     },
     "Select Loop keybinds file" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar el archivo de combinaciones de Loop"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8464,7 +9082,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seleccionar Loop Key"
+            "value" : "Seleccionar tecla de activación"
           }
         },
         "it" : {
@@ -9099,6 +9717,12 @@
     },
     "Sync Wallpaper" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizar fondo"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9544,7 +10168,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Loop Key"
+            "value" : "Tecla de activación"
           }
         },
         "it" : {
@@ -9581,6 +10205,12 @@
     },
     "Update…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar..."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9831,6 +10461,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Version %1$@ (%2$lld)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión %1$@ (%2$lld)"
           }
         },
         "ko" : {
@@ -12716,7 +13352,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo se pueden usar hasta %11d teclas en una combinación, incluyendo la Loop Key"
+            "value" : "Solo se pueden usar hasta %11d teclas en una combinación, incluyendo la tecla de activación"
           }
         },
         "it" : {
@@ -12762,7 +13398,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo se pueden usar hasta %11d teclas para el Loop Key"
+            "value" : "Solo se pueden usar hasta %11d teclas de activación"
           }
         },
         "it" : {
@@ -12808,7 +13444,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Has usado Loop %11d veces!"
+            "value" : "Has usado Loop %lld veces!"
           }
         },
         "it" : {
@@ -12845,6 +13481,12 @@
     },
     "You've looped… uhh… I… lost count…" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Has"
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
