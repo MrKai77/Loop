@@ -151,13 +151,22 @@ struct UpdateView: View {
 
     func versionChangeText() -> some View {
         HStack {
-            if let targetRelease = updater.targetRelease, targetRelease.prerelease {
-                let currentVersion = "🧪 \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
+            if let targetRelease = updater.targetRelease {
+                // Use UserDefaults to check if development versions are included
+                let isDevBuild = UserDefaults.standard.bool(forKey: "includeDevelopmentVersions")
+                let targetIsDevBuild = targetRelease.prerelease
+                let devBuildEmoji = "🧪 "
+
+                let currentVersionBase = Bundle.main.appVersion?.replacingOccurrences(of: devBuildEmoji, with: "") ?? "Unknown"
+                // Apply devBuildEmoji based on UserDefaults setting
+                let currentVersion = "\(isDevBuild ? devBuildEmoji : "")\(currentVersionBase) (\(Bundle.main.appBuild ?? 0))"
                 Text(currentVersion)
 
                 Image(systemName: "arrow.right")
 
-                let newVersion = "🧪 \(targetRelease.tagName) (\(targetRelease.buildNumber ?? 0))"
+                let newVersionBase = targetRelease.tagName.replacingOccurrences(of: devBuildEmoji, with: "")
+                // Apply devBuildEmoji to the new version if it's a dev build and the setting is enabled
+                let newVersion = "\(targetIsDevBuild && isDevBuild ? devBuildEmoji : "")\(newVersionBase) (\(targetRelease.buildNumber ?? 0))"
                 Text(newVersion)
             } else {
                 let currentVersion = Bundle.main.appVersion ?? "Unknown"
@@ -165,7 +174,7 @@ struct UpdateView: View {
 
                 Image(systemName: "arrow.right")
 
-                let newVersion = updater.targetRelease?.tagName ?? "Unknown"
+                let newVersion = "Unknown"
                 Text(newVersion)
             }
         }
