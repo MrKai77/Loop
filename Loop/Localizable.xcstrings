@@ -6047,14 +6047,14 @@
             "plural" : {
               "one" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loop left"
+                  "state" : "translated",
+                  "value" : "%lld loop rimasto"
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loops left"
+                  "state" : "translated",
+                  "value" : "%lld loop rimasti"
                 }
               }
             }
