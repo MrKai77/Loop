@@ -4,19 +4,19 @@
   </p>
  <h1 align="center"><b>Loop</b></h1>
  <p align="center">
-  Revolutionize your macOS window management experience.
+  Revolutionize your macOS window management experience!
     <br />
     <a href="https://github.com/MrKai77/Loop"><strong>Explore Loop »</strong></a>
     <br />
     <br />
     <b>Download for </b>
-    macOS (<a href="https://github.com/MrKai77/Loop/releases/latest">Download</a>)
+    macOS (<a href="https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip">Download</a>)
     <br />
     <i>~ Compatible with macOS 13 and later. ~</i>
   </p>
 </p>
 
-Loop is a macOS app that simplifies window management for you! You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks,saving you valuable time and energy.
+Loop is a macOS app that simplifies window management for you. You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
 
 > [!NOTE]
 >
@@ -90,7 +90,7 @@ Navigate to the [release page](https://github.com/MrKai77/Loop/releases/latest) 
 
 ### Triggering
 
-Loop uses a trigger key to function. This key must be held down or pressed to activate certain features within Loop. To access the radial menu, hold down the trigger key and move the cursor in the desired direction. Users who prefer keyboard shortcuts can assign a key to work with the trigger key, activating specific actions. The trigger key can be set in the "Behavior" tab of the "Settings" section. The trigger key can consist of one or multiple keys.**Using Caps Lock**
+Loop uses a trigger key to function. This key must be held down or pressed to activate certain features within Loop. To access the radial menu, hold down the trigger key and move the cursor in the desired direction. Users who prefer keyboard shortcuts can assign a key to work with the trigger key, activating specific actions. The trigger key can be set in the "Behavior" tab of the "Settings" section. The trigger key can consist of one or multiple keys.
 
 To set Caps Lock as your trigger key, you have two options:
 
