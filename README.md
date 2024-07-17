@@ -48,7 +48,7 @@ Loop is a macOS app that simplifies window management for you! You can effortles
 
 The Radial Menu allows you to manipulate windows using your mouse. You hold down the trigger key and move your mouse in the desired direction to move and resize the window.
 
-<video src="/assets/graphics/Radial Menu.mp4" alt="Radial menu" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+<div><video controls src="https://github.com/user-attachments/assets/658f7043-79a1-4690-83b6-a714fe6245c8" muted="false"></video></div>
 
 ### Keyboard Shortcuts
 
