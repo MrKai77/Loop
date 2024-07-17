@@ -338,6 +338,12 @@
             "value" : "Custom"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -379,6 +385,12 @@
             "value" : "System"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -417,6 +429,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Wallpaper"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Wallpaper"
           }
         },
@@ -794,6 +812,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Locked"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Locked"
           }
         },
@@ -1291,6 +1315,12 @@
     },
     "Configure padding…" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configure padding…"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2015,6 +2045,12 @@
     },
     "Do you want to merge or erase existing keybinds?" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to merge or erase existing keybinds?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2194,6 +2230,12 @@
             "value" : "Make sure the file you selected is in the correct format."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Make sure the file you selected is in the correct format."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2232,6 +2274,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Error Reading Keybinds"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Error Reading Keybinds"
           }
         },
@@ -2368,6 +2416,12 @@
             "value" : "You can't export something that doesn't exist!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can't export something that doesn't exist!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2409,6 +2463,12 @@
             "value" : "No Keybinds Have Been Set"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Keybinds Have Been Set"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2443,6 +2503,12 @@
     },
     "Export keybinds" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export keybinds"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3870,6 +3936,12 @@
             "value" : "You will now be notified when you unlock a new icon."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You will now be notified when you unlock a new icon."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4063,6 +4135,12 @@
     },
     "Ignore fullscreen windows" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignore fullscreen windows"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4150,6 +4228,12 @@
             "value" : "Select Rectangle config file"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Rectangle config file"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4184,6 +4268,12 @@
     },
     "Import Keybinds" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Keybinds"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4218,6 +4308,12 @@
     },
     "Import keybinds from Rectangle" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import keybinds from Rectangle"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4256,6 +4352,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Cancel"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Cancel"
           }
         },
@@ -4300,6 +4402,12 @@
             "value" : "Erase"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erase"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4338,6 +4446,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Merge"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Merge"
           }
         },
@@ -4559,6 +4673,12 @@
     },
     "Join Discord" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Join Discord"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4830,6 +4950,12 @@
             "value" : "Icon Locked"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icon Locked"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4862,6 +4988,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "You don’t have that yet!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "You don’t have that yet!"
           }
         },
@@ -4906,6 +5038,12 @@
             "value" : "Who do you think you are, trying to access these top secret icons?"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Who do you think you are, trying to access these top secret icons?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4944,6 +5082,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Patience is a virtue, and your key to this icon."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Patience is a virtue, and your key to this icon."
           }
         },
@@ -4988,6 +5132,12 @@
             "value" : "This icon is locked, but your potential is not!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This icon is locked, but your potential is not!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5026,6 +5176,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Keep Looping, and this icon will be yours in no time."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Keep Looping, and this icon will be yours in no time."
           }
         },
@@ -5070,6 +5226,12 @@
             "value" : "This icon is still under wraps, stay tuned!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This icon is still under wraps, stay tuned!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5108,6 +5270,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Some icons are worth the wait, don't you think?"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Some icons are worth the wait, don't you think?"
           }
         },
@@ -5152,6 +5320,12 @@
             "value" : "Not yet, but you're closer than you were yesterday!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not yet, but you're closer than you were yesterday!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5190,6 +5364,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Unlocking this icon is just a matter of time and Loops."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Unlocking this icon is just a matter of time and Loops."
           }
         },
@@ -5234,6 +5414,12 @@
             "value" : "This icon is like a fine wine, it needs more time."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This icon is like a fine wine, it needs more time."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5272,6 +5458,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Stay curious, and soon this icon will be within your reach."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Stay curious, and soon this icon will be within your reach."
           }
         },
@@ -5316,6 +5508,12 @@
             "value" : "Keep up the good work, and this icon will be your reward."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep up the good work, and this icon will be your reward."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5354,6 +5552,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "This icon is reserved for the most dedicated Loopers."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "This icon is reserved for the most dedicated Loopers."
           }
         },
@@ -5398,6 +5602,12 @@
             "value" : "Your journey is not yet complete, this icon awaits at the end."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your journey is not yet complete, this icon awaits at the end."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5436,6 +5646,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "In due time, this icon shall be revealed to you."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "In due time, this icon shall be revealed to you."
           }
         },
@@ -5480,6 +5696,12 @@
             "value" : "Patience, young Looper, this icon is not far away."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patience, young Looper, this icon is not far away."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5518,6 +5740,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "The journey of a thousand Loops begins with a single step."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "The journey of a thousand Loops begins with a single step."
           }
         },
@@ -5562,6 +5790,12 @@
             "value" : "Every Loop brings you closer to the treasure that awaits."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every Loop brings you closer to the treasure that awaits."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5600,6 +5834,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "With each Loop, the lock on this icon weakens."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "With each Loop, the lock on this icon weakens."
           }
         },
@@ -5644,6 +5884,12 @@
             "value" : "Loop after Loop, your dedication carves the key to success."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop after Loop, your dedication carves the key to success."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5682,6 +5928,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "The icons are not just unlocked; they're earned, Loop by Loop."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "The icons are not just unlocked; they're earned, Loop by Loop."
           }
         },
@@ -5726,6 +5978,12 @@
             "value" : "As the Loops accumulate, so too will your collection of icons."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As the Loops accumulate, so too will your collection of icons."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5764,6 +6022,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Think of each Loop as a riddle, solving the mystery of the locked icon."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Think of each Loop as a riddle, solving the mystery of the locked icon."
           }
         },
@@ -5808,6 +6072,12 @@
             "value" : "Your persistence in Looping is the master key to all icons."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your persistence in Looping is the master key to all icons."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5846,6 +6116,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Loop around the obstacles; your reward is just beyond them."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Loop around the obstacles; your reward is just beyond them."
           }
         },
@@ -5890,6 +6166,12 @@
             "value" : "Each Loop you complete plants the seeds for icons to grow."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Each Loop you complete plants the seeds for icons to grow."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5931,6 +6213,12 @@
             "value" : "Like the moon's phases, your icons will reveal themselves in cycles of Loops."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Like the moon's phases, your icons will reveal themselves in cycles of Loops."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5969,6 +6257,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "The icons await, hidden behind the veil of Loops yet to be made."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "The icons await, hidden behind the veil of Loops yet to be made."
           }
         },
@@ -6018,6 +6312,24 @@
               "other" : {
                 "stringUnit" : {
                   "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              }
+            }
+          }
+        },
+        "en-GB" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loop left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
                   "value" : "%lld Loops left"
                 }
               }
@@ -6107,6 +6419,12 @@
             "value" : "%"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6148,6 +6466,12 @@
             "value" : "px"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6186,6 +6510,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "s"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "s"
           }
         },
@@ -6460,6 +6790,12 @@
             "value" : "Engage! …in the current version, it's the latest."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engage! …in the current version, it's the latest."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6498,6 +6834,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "This app is more up to date than my diary entries!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "This app is more up to date than my diary entries!"
           }
         },
@@ -6542,6 +6884,12 @@
             "value" : "You're in the clear, no updates in the atmosphere!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're in the clear, no updates in the atmosphere!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6580,6 +6928,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "The odds are ever in your favor, no updates today!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "The odds are ever in your favor, no updates today!"
           }
         },
@@ -6624,6 +6978,12 @@
             "value" : "Our app is on a digital diet. No new bytes allowed."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Our app is on a digital diet. No new bytes allowed."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6662,6 +7022,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "New version? Sorry, we're too attached to this one."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "New version? Sorry, we're too attached to this one."
           }
         },
@@ -6706,6 +7072,12 @@
             "value" : "Your Loop is Loopier than ever, no updates found!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Loop is Loopier than ever, no updates found!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6744,6 +7116,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "I'm giving it all she's got, Captain! No updates!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "I'm giving it all she's got, Captain! No updates!"
           }
         },
@@ -6788,6 +7166,12 @@
             "value" : "In a galaxy far, far away… still no updates!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In a galaxy far, far away… still no updates!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6826,6 +7210,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "You've got the precious, no updates needed!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "You've got the precious, no updates needed!"
           }
         },
@@ -6870,6 +7260,12 @@
             "value" : "Riding at warp speed, no updates in sight!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riding at warp speed, no updates in sight!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6908,6 +7304,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "This is not the update you're looking for!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "This is not the update you're looking for!"
           }
         },
@@ -6952,6 +7354,12 @@
             "value" : "We've misplaced the 'Update' button. Oops!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We've misplaced the 'Update' button. Oops!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6990,6 +7398,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "I swear it was here somewhere… one sec"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "I swear it was here somewhere… one sec"
           }
         },
@@ -7034,6 +7448,12 @@
             "value" : "An apple a day keeps the… updates away."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An apple a day keeps the… updates away."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7072,6 +7492,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "May the Force be with you… next time!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "May the Force be with you… next time!"
           }
         },
@@ -7116,6 +7542,12 @@
             "value" : "The Force is strong with this version!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Force is strong with this version!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7154,6 +7586,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Just a small town app, same old version"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Just a small town app, same old version"
           }
         },
@@ -7198,6 +7636,12 @@
             "value" : "Winter is coming. Updates aren't yet."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Winter is coming. Updates aren't yet."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7236,6 +7680,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Sweet dreams are made of… no updates"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Sweet dreams are made of… no updates"
           }
         },
@@ -7280,6 +7730,12 @@
             "value" : "The update fairy skipped us this week."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The update fairy skipped us this week."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7318,6 +7774,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Stay sharp, more intel coming soon!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Stay sharp, more intel coming soon!"
           }
         },
@@ -7362,6 +7824,12 @@
             "value" : "You're cruising on the latest tech!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're cruising on the latest tech!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7400,6 +7868,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "We’ll be back. With updates… later"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "We’ll be back. With updates… later"
           }
         },
@@ -7444,6 +7918,12 @@
             "value" : "A penny for your… lack of updates."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A penny for your… lack of updates."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7482,6 +7962,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "You've already got the best Loop!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "You've already got the best Loop!"
           }
         },
@@ -7526,6 +8012,12 @@
             "value" : "One does not simply update Loop."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One does not simply update Loop."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7564,6 +8056,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "All work and no… no updates…"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "All work and no… no updates…"
           }
         },
@@ -7608,6 +8106,12 @@
             "value" : "A watched pot never… updates."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A watched pot never… updates."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7646,6 +8150,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "99 problems, updates ain't one."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "99 problems, updates ain't one."
           }
         },
@@ -7690,6 +8200,12 @@
             "value" : "I… uhh… one sec I lost it"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I… uhh… one sec I lost it"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7728,6 +8244,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "You’ve leveled up to the max!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "You’ve leveled up to the max!"
           }
         },
@@ -7772,6 +8294,12 @@
             "value" : "Beggars can't be… updaters."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beggars can't be… updaters."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7810,6 +8338,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Money can't buy… updates."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Money can't buy… updates."
           }
         },
@@ -7854,6 +8388,12 @@
             "value" : "No new intel, Commander."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No new intel, Commander."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7892,6 +8432,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "No updates? Great Scott!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "No updates? Great Scott!"
           }
         },
@@ -7936,6 +8482,12 @@
             "value" : "No updates, Mr. Anderson"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No updates, Mr. Anderson"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7974,6 +8526,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "No updates in Ba Sing Se"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "No updates in Ba Sing Se"
           }
         },
@@ -8018,6 +8576,12 @@
             "value" : "Updates? In this economy?"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates? In this economy?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8056,6 +8620,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Check back next time!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Check back next time!"
           }
         },
@@ -8100,6 +8670,12 @@
             "value" : "Loop is in its prime!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop is in its prime!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8138,6 +8714,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "All systems are a-go!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "All systems are a-go!"
           }
         },
@@ -8182,6 +8764,12 @@
             "value" : "You're up to date :)"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're up to date :)"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8220,6 +8808,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "No updates yet!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "No updates yet!"
           }
         },
@@ -8356,6 +8950,12 @@
             "value" : "%@'s notification permissions are currently disabled."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@'s notification permissions are currently disabled."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8397,6 +8997,12 @@
             "value" : "Open Settings"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8435,6 +9041,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Please turn them on in System Settings."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Please turn them on in System Settings."
           }
         },
@@ -8571,6 +9183,12 @@
     },
     "OK" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9755,6 +10373,12 @@
     },
     "Select Loop keybinds file" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Loop keybinds file"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10479,6 +11103,12 @@
     },
     "Sync Wallpaper" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync Wallpaper"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10973,6 +11603,12 @@
     },
     "Update…" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update…"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11240,6 +11876,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Version %1$@ (%2$lld)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Version %1$@ (%2$lld)"
           }
         },
@@ -14267,6 +14909,12 @@
     },
     "You've looped… uhh… I… lost count…" : {
       "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've looped… uhh… I… lost count…"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
