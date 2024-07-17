@@ -1,6 +1,6 @@
 <p align="center">
   <p align="center">
-   <img width="150" height="150" src="https://github.com/MrKai77/Loop/blob/develop/Loop/Assets.xcassets/App%20Icons/AppIcon-Loop%20Master.appiconset/Master-1024.png?raw=true" alt="Logo">
+   <img width="124" height="124" src="/assets/graphics/Classic.png" alt="Logo">
   </p>
  <h1 align="center"><b>Loop</b></h1>
  <p align="center">
@@ -16,7 +16,7 @@
   </p>
 </p>
 
-Loop is a macOS app designed to simplify window management with a unique radial menu, triggered by a simple key press. Customize your experience with personalized colors and settings, effortlessly move, resize, and arrange your windows, saving you valuable time and energy.
+Loop is a macOS app that simplifies window management for you! You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks,saving you valuable time and energy.
 
 > [!NOTE]
 >
@@ -44,42 +44,117 @@ Loop is a macOS app designed to simplify window management with a unique radial 
 
 ## Features
 
-- **Radial Menu:** A unique, fully customizable radial menu for window direction selection.
-- **Window Resizing:** Resize and arrange your windows with style and ease.
-- **Customizable Settings:** Personalize Loop with custom app colors and settings.
-- **Additional Keybindings:** Enhance your workflow with additional keybindings for non-mouse use.
-- **Custom Trigger Key:** Set your own custom trigger key for activating Loop.
+### Radial Menu
 
-## Installation
+The Radial Menu allows you to manipulate windows using your mouse. You hold down the trigger key and move your mouse in the desired direction to move and resize the window.
 
-Loop is available for macOS 13 and later. You can install Loop via Homebrew or manually by downloading the [latest release](https://github.com/MrKai77/Loop/releases/latest).
+<video src="/assets/graphics/Radial Menu.mp4" alt="Radial menu" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
 
-### Homebrew
+### Keyboard Shortcuts
 
-```shell
-brew install loop
-```
+Loop allows you to assign any key in tandem with the trigger key to initiate a window manipulation action.
 
-### Manual Installation
+<video src="/assets/graphics/Keyboard Shortcuts.mp4" alt="Radial menu" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
 
-Download the latest release from [here](https://github.com/MrKai77/Loop/releases/latest), unzip the file, and you're good to go after granting it accessibility access.
+### Cycles
+
+Cycles enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly.
+
+<video src="/assets/graphics/Cycles.mp4" alt="Cycles" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+
+### Theming
+
+#### Radial Menu
+
+The radial menu is fully customizable in terms of width, shape, and color. It is also completely optional and can be disabled. Both the cursor interaction and the radial menu itself are independently toggleable.
+
+<video src="/assets/graphics/Radial Menu Theming.mp4" alt="Radial Menu Theming" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+
+#### Preview
+
+The optional preview is customisable. You can adjust the padding, corner radius, border color, and border width.
+
+<video src="/assets/graphics/Preview Theming.mov" alt="Radial Menu Theming" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
 
 ## Usage
 
-1. Launch Loop from your Applications folder.
-2. Press the designated hotkey to trigger the radial menu.
-3. Move your mouse to select the direction you want your window to move.
-4. Release the hotkey to apply the window movement.
-5. Customize Loop's settings by clicking on the Loop icon in the menu bar.
+### Installation
 
-## Contributing
+#### Homebrew
 
-Loop is an open-source project, and contributions are welcome. Check out the [issues](https://github.com/MrKai77/Loop/issues) to see how you can help make Loop even better.
+`brew install loop`
 
-## License
+#### Manual Download
 
-Loop is licensed under the [GNU GPLv3 license](https://github.com/MrKai77/Loop/blob/main/LICENSE).
+Navigate to the [release page](https://github.com/MrKai77/Loop/releases/latest) and download the latest `.zip` file located at the bottom.
 
----
+### Triggering
 
-Add more to this.
+Loop uses a trigger key to function. This key must be held down or pressed to activate certain features within Loop. To access the radial menu, hold down the trigger key and move the cursor in the desired direction. Users who prefer keyboard shortcuts can assign a key to work with the trigger key, activating specific actions. The trigger key can be set in the "Behavior" tab of the "Settings" section. The trigger key can consist of one or multiple keys.**Using Caps Lock**
+
+To set Caps Lock as your trigger key, you have two options:
+
+**a. Change System Settings**
+
+1. Go to System Settings → Keyboard → "Keyboard Shortcuts...".
+2. In the "Modifier Keys" tab, remap `Caps Lock (⇪) key` to `(^) Control`.
+3. Repeat this remapping process for every connected keyboard.
+4. In Loop, select the `Right Control` key as your trigger.
+
+**b. Use an External App**
+
+- [Hyperkey](https://hyperkey.app/)
+
+### Radial Menu
+
+- How to use the radial menu for window management
+
+### Preview
+
+- Preview window functionality and usage <video src="/assets/graphics/Preview.mp4" alt="Preview" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+
+### Keyboard Shortcuts
+
+- List of keyboard shortcuts and their functions
+
+### Cycles
+
+- How to set up and use window management cycles
+
+<!-- ### Advanced
+
+- **Defaults**
+  - Explanation of default settings
+- **Wiki Link** to explain every feature
+  - [Link to the Wiki](https://github.com/your-repo/wiki) -->
+
+## Contributors
+
+- **Person 1**
+- **Person 2**
+
+## FAQ
+
+### Comparison
+
+<table>
+<tr><th>App Name</th><th>Loop</th><th>Rectangle&#8239;&#8239;Pro</th><th>Hammerspoon</th><th>1Piece</th><th>BetterTouchTool</th><th>Swish</th><th>Rectangle</th><th>Multitouch</th><th>Emmetapp</th><th>Amethyst</th><th>Window&#8239;&#8239;Fusion</th><th>Tiles</th><th>Magnet</th><th>Moom</th><th>Wins</th><th>Yabai</th><th>MacOS&#8239;&#8239;15</th></tr>
+<tr><td>Price</td><td>Free</td><td>$9.99</td><td>Free</td><td>Free</td><td>$22</td><td>$16</td><td>Free</td><td>$15.99</td><td>$19</td><td>Free</td><td>$12</td><td>Free</td><td>$4.99</td><td>$10</td><td>$13.99</td><td>Free</td><td>Free</td></tr>
+<tr><td>Preview</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Restore Size</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Open Source</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Edge Snapping</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td></tr>
+<tr><td>Set Custom Size</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Save Workspace</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Percentage Units</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Modifier + Mouse</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Modifier + Arrows</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Maximize Window</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td></tr>
+<tr><td>Multi-Screen Move</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Touchpad Gestures</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Modifier + Touchpad</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Margin / Grid Padding</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td></tr>
+<tr><td>Pin/Unpin window on top</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+<tr><td>Resize Adjacent Windows</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td></tr>
+<tr><td>Open&#8239;&#8239;Window&#8239;&#8239;On&#8239;&#8239;Set&#8239;&#8239;Screen</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
+</table>
