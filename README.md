@@ -54,13 +54,13 @@ The Radial Menu allows you to manipulate windows using your mouse. You hold down
 
 Loop allows you to assign any key in tandem with the trigger key to initiate a window manipulation action.
 
-<video src="/assets/graphics/Keyboard Shortcuts.mp4" alt="Radial menu" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+<div><video controls src="https://github.com/user-attachments/assets/d865329f-0533-4eeb-829d-9aa6159f454b" muted="false"></video></div>
 
 ### Cycles
 
 Cycles enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly.
 
-<video src="/assets/graphics/Cycles.mp4" alt="Cycles" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+<div><video controls src="https://github.com/user-attachments/assets/1adb1325-775d-4687-9085-71c7f775d65d" muted="false"></video></div>
 
 ### Theming
 
@@ -68,13 +68,13 @@ Cycles enable you to perform multiple window manipulations in quick succession b
 
 The radial menu is fully customizable in terms of width, shape, and color. It is also completely optional and can be disabled. Both the cursor interaction and the radial menu itself are independently toggleable.
 
-<video src="/assets/graphics/Radial Menu Theming.mp4" alt="Radial Menu Theming" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+<div><video controls src="https://github.com/user-attachments/assets/b2d3f6c8-dd68-4ac2-a30a-19f36a8fd94d muted="false"></video></div>
 
 #### Preview
 
 The optional preview is customisable. You can adjust the padding, corner radius, border color, and border width.
 
-<video src="/assets/graphics/Preview Theming.mov" alt="Radial Menu Theming" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+<div><video controls src="https://github.com/user-attachments/assets/fc107861-8125-42c2-b987-2fff554078d5" muted="false"></video></div>
 
 ## Usage
 
@@ -111,7 +111,9 @@ To set Caps Lock as your trigger key, you have two options:
 
 ### Preview
 
-- Preview window functionality and usage <video src="/assets/graphics/Preview.mp4" alt="Preview" style="border-radius: 16px; -webkit-border-radius: 16px; -moz-border-radius: 16px;"></video>
+- Preview window functionality and usage
+
+<div><video controls src="https://github.com/user-attachments/assets/5ecb3ae8-f295-406f-b968-31e539f4a098" muted="false"></video></div>
 
 ### Keyboard Shortcuts
 
