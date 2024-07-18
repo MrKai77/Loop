@@ -47,58 +47,6 @@
         }
       }
     },
-    "%@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        }
-      }
-    },
     "%@ is already used as your trigger key." : {
       "localizations" : {
         "en-GB" : {
@@ -254,7 +202,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Informazioni"
+            "value" : "Info"
           }
         },
         "ko" : {
@@ -4688,7 +4636,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unisciti a Discord"
+            "value" : "Entra in Discord"
           }
         },
         "ko" : {
@@ -4891,6 +4839,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "左側"
+          }
+        }
+      }
+    },
+    "Left %@" : {
+      "comment" : "Trigger Key: Left side",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Left %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Izquierda %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Sinistro"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "왼쪽 %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esquerda %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左侧 %@"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "左側 %@"
           }
         }
       }
@@ -6347,14 +6342,14 @@
             "plural" : {
               "one" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loop left"
+                  "state" : "translated",
+                  "value" : "%lld Loop restante"
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loops left"
+                  "state" : "translated",
+                  "value" : "%lld Loops restantes"
                 }
               }
             }
@@ -6366,13 +6361,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld loop rimasto"
+                  "value" : "Solo %lld loop!"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld loop rimasti"
+                  "value" : "Solo %lld loop"
                 }
               }
             }
@@ -8221,7 +8216,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ehm… Io… scusa, l’ho perso"
+            "value" : "Ehm… io… scusa, l’ho perso"
           }
         },
         "ko" : {
@@ -10285,6 +10280,53 @@
         }
       }
     },
+    "Right %@" : {
+      "comment" : "Trigger Key: Right side",
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Derecha %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Destro"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오른쪽 %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direita %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右侧 %@"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右側 %@"
+          }
+        }
+      }
+    },
     "Right Cycle" : {
       "localizations" : {
         "en-GB" : {
@@ -11302,7 +11344,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tematizzazione"
+            "value" : "Tema"
           }
         },
         "ko" : {
