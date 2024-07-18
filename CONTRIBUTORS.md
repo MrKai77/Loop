@@ -13,33 +13,33 @@ The localisation efforts have been categorised by language and dialect, showcasi
 ### English
 
 - **United Kingdom**
-  - @MrKai77
-  - @SenpaiHunters
+  - [@MrKai77](https://github.com/MrKai77)
+  - [@SenpaiHunters](https://github.com/SenpaiHunters)
 
 ### Chinese
 
 - **Hong Kong**
-  - @KrLite
+  - [@KrLite](https://github.com/KrLite)
 
 - **Simplified**
-  - @KrLite
+  - [@KrLite](https://github.com/KrLite)
 
 ### Italian
 
-- @Zabriskije
+- [@Zabriskije](https://github.com/Zabriskije)
 
 ### Korean
 
-- @SenpaiHunters
+- [@SenpaiHunters](https://github.com/SenpaiHunters)
 
 ### Portuguese
 
 - **Brazil**
-  - @willianba
+  - [@willianba](https://github.com/willianba)
 
 ### Spanish
 
-- @CarretillaRoja
+- [@CarretillaRoja](https://github.com/CarretillaRoja)
 
 If your language is not listed, it may not yet be localised! Interested in helping? Create an issue to get started. Need guidance? Our [extensive guide](/CONTRIBUTING.md) will help you through the process!
 

@@ -39,7 +39,6 @@ Loop is a macOS app that simplifies window management for you. You can effortles
   <a href="https://github.com/MrKai77/Loop/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/MrKai77/Loop?label=License&color=2ea44f" />
   </a>
-  <br />
   <a href="https://discord.gg/2CZ2N6PKjq">
     <img src="https://img.shields.io/badge/Discord-join%20us-7289da?logo=discord&logoColor=white" />
   </a>
