@@ -83,7 +83,6 @@ struct Keycorder: View {
             }
         }
         .buttonStyle(PlainButtonStyle())
-
         // Don't allow the button to be pressed if more than one keybind is selected in the list
         .allowsHitTesting(model.selectedKeybinds.count <= 1)
     }
