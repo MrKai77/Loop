@@ -2,6 +2,8 @@
 
 Welcome to Loop. If you're here, you may be interested in adding to this awesome project. Well, let's get to it!
 
+If at any time you need help, contact us on [Discord](https://discord.gg/2CZ2N6PKjq) or make an issue on GitHub.
+
 ## Areas of focus
 
 You can improve Loop by doing some of the following:
@@ -42,21 +44,6 @@ cd downloads
 git clone https://github.com/{your-name}/Loop.git
 cd Loop
 open Loop.xcodeproj
-```
-
-RECOMMENDED: Make your Loop folder into its own directory, I normally name it per change.
-EXAMPLE: `Loop-onboarding`
-
-```sh
-mkdir Loop-[change-name]
-cd Loop-[change-name]
-```
-
-Example
-
-```sh
-mkdir Loop-onboarding
-cd Loop-onboarding
 ```
 
 Once you've got your fork, it'll auto open in Xcode!
@@ -216,5 +203,5 @@ TIP: If you're unable to fully localise the file, just leave the unlocalised str
 
 ### Images
 
-<img src="/assets/docs/localise.png" alt="Localise Xcode example" style="width: 50%; display: block; margin-left: auto; margin-right: auto;">
-<img src="/assets/docs/localise_plist.png" alt="Localise plist Xcode example" style="width: 50%; display: block; margin-left: auto; margin-right: auto;">
+<img src="/assets/docs/localise.png" alt="Localise Xcode example">
+<img src="/assets/docs/localise_plist.png" alt="Localise plist Xcode example">

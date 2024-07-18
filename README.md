@@ -40,6 +40,10 @@ Loop is a macOS app that simplifies window management for you. You can effortles
     <img src="https://img.shields.io/github/license/MrKai77/Loop?label=License&color=2ea44f" />
   </a>
   <br />
+  <a href="https://discord.gg/2CZ2N6PKjq">
+    <img src="https://img.shields.io/badge/Discord-join%20us-7289da?logo=discord&logoColor=white" />
+  </a>
+  <br />
 </p>
 
 ## Features
@@ -134,8 +138,7 @@ To set Caps Lock as your trigger key, you have two options:
 
 ## Contributors
 
-- **Person 1**
-- **Person 2**
+- To see all the contributors who have played a significant role in developing Loop, visit our [Contributors](CONTRIBUTORS.md) page.
 
 ### How to Contribute
 
