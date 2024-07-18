@@ -28,7 +28,7 @@ Well, it's very easy: fork the repo, push your changes to the fork, and submit a
 
 ## Forking
 
-To fork, you can go to Loop, and see the "Fork" button at the top of your screen, click that, and change nothing. Once forked you'll see
+To fork, you can go to Loop, and see the "Fork" button at the top of your screen, click that, and change nothing. Once forked, you'll see
 
 ```sh
 Loop
@@ -37,7 +37,7 @@ forked from MrKai77/Loop
 
 ## Getting your fork
 
-Now, you've forked our repo. What next? Don't stress, first go to where you want to code, and push some quick command lines! Here's how I do it!
+Now, you've forked our repo. What next? Don't stress. First, go to where you want to code and execute some quick command lines! Here's how I do it!
 
 ```sh
 cd downloads
@@ -50,7 +50,7 @@ Once you've got your fork, it'll auto open in Xcode!
 
 ## What code? Xcode
 
-Now, for the terror of Xcode, you should be automatically opened into Xcode if you followed the method above, once in Xcode, you'll need to change the cert!
+Now, let's tackle Xcode. If you followed the method above, you should be automatically opened into Xcode. Once in Xcode, you'll need to change the cert!
 
 ### Before You Begin
 
@@ -74,7 +74,7 @@ Now, for the terror of Xcode, you should be automatically opened into Xcode if y
 
 ### Next
 
-Now that you've signed with Loop with your developmental account, it's time to build! First, validate if the current build works `⌘R` (this command is run, this will build and launch loop all in one). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed. You can run both Loop (the one you already have) and the Loop developmental version you are running at the same time!
+Now that you've signed Loop with your developer account, it's time to build! First, validate if the current build works `⌘R` (this command is run, this will build and launch loop all in one). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed. You can run both Loop (the one you already have) and the Loop developmental version you are running at the same time!
 
 **HOWEVER**, it must be made aware that Loop **MAY** fail to build if you run it again. How do we fix this? Clear the build cache, press `⌘⇧K` (command + shift + k); you **MAY** need to do this every time you hit the run command. It has to do with some leftover user cache that makes Loop fail to build. We've tried to fix it to no avail.
 
@@ -140,13 +140,19 @@ git add .
 
 # Commit your changes with a meaningful message
 git commit -m "Your detailed commit message"
+# If you're committing, you must use the following emojis at the start:
+# 🐞 Bug fixes must include a bug emoji.
+# ✨ Added features must include a star emoji.
+# 🌐 Localization must include a globe emoji.
+# An example of this would be:
+# git commit -m "✨ Add wallpaper theming"
 
 # Push your changes to your fork
 git push origin develop
 
 # Then, go to GitHub, navigate to your fork, and you'll see a button to 'Create pull request'.
 # Click it, fill in the details, and submit your PR.
-# IF your PR needs changes you MUST push it as a draft PR
+# IF your PR needs changes, you MUST push it as a draft PR.
 ```
 
 # Icons
@@ -155,7 +161,7 @@ git push origin develop
 
 We love icons, just look at how many we already have! We love talented designers, and we love people who express their creativity for Loop.
 
-But, as Loop grows, and so does the app quality, previous icons may be removed, making room for new icons. Do not feel disheartened, as you've shaped Loop. If your icon is selected, you will still have a section in our readme with your name and previous icon(s).
+But as Loop grows and the app quality improves, some previous icons may be removed, making room for new icons. Do not feel disheartened, as you've shaped Loop. If your icon is selected, you will still have a section in our readme with your name and previous icon(s).
 
 ## How do I submit my icon?
 
@@ -179,7 +185,7 @@ If you need some help, images are provided at the bottom for context.
 
 By now, you'll be familiar. Submit a `localisation` issue, fill out which language you wish to add, change, improve, and complete any required checkboxes.
 
-Once assigned and committed to the localised language, you may ask for the catalogue to localise, or manually do it!
+Once assigned, and after committing to the localised language, you may request the catalogue for localisation or proceed to do it manually.
 
 ### Asking for a Catalogue
 
@@ -203,5 +209,5 @@ TIP: If you're unable to fully localise the file, just leave the unlocalised str
 
 ### Images
 
-<img src="/assets/docs/localise.png" alt="Localise Xcode example">
-<img src="/assets/docs/localise_plist.png" alt="Localise plist Xcode example">
+![Localise Xcode example](/assets/docs/localise.png)
+![Localise plist Xcode example](/assets/docs/localise_plist.png)
