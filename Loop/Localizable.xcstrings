@@ -4968,6 +4968,12 @@
             "value" : "Icona bloccata"
           }
         },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아이콘 잠김"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
