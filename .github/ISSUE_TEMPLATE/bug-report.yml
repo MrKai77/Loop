@@ -44,7 +44,7 @@ body:
 
   - type: input
     attributes:
-      label: MacOS Version
+      label: macOS Version
       description: Apple Logo -> About This Mac
       placeholder: |
         [ex. Ventura 13.1]
@@ -77,6 +77,8 @@ body:
           required: true
         - label: This is a single bug (multiple bugs should be reported individually)
           required: true
+        - label: I can help with fixing or developing this issue (tick if you can help).
+          required: false
 
   - type: markdown
     attributes:

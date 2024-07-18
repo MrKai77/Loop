@@ -24,7 +24,7 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 >
 
 <p align="center">
-  <img src="assets/graphics/loop_demo.gif" alt="Loop Demo">
+  <img src="assets/graphics/Loop Demos/loop_demo.gif" alt="Loop Demo">
   <br />
   <br />
   <a href="https://github.com/MrKai77/Loop/issues">
@@ -68,7 +68,7 @@ Cycles enable you to perform multiple window manipulations in quick succession b
 
 The radial menu is fully customizable in terms of width, shape, and color. It is also completely optional and can be disabled. Both the cursor interaction and the radial menu itself are independently toggleable.
 
-<div><video controls src="https://github.com/user-attachments/assets/b2d3f6c8-dd68-4ac2-a30a-19f36a8fd94d muted="false"></video></div>
+<div><video controls src="https://github.com/user-attachments/assets/b2d3f6c8-dd68-4ac2-a30a-19f36a8fd94d" muted="false"></video></div>
 
 #### Preview
 
@@ -82,7 +82,9 @@ The optional preview is customisable. You can adjust the padding, corner radius,
 
 #### Homebrew
 
-`brew install loop`
+```sh
+brew install loop
+```
 
 #### Manual Download
 
@@ -135,6 +137,10 @@ To set Caps Lock as your trigger key, you have two options:
 - **Person 1**
 - **Person 2**
 
+### How to Contribute
+
+- For an extensive guide on how to contribute, check out the [contributing guide](CONTRIBUTING.md).
+
 ## FAQ
 
 ### Comparison
@@ -160,3 +166,7 @@ To set Caps Lock as your trigger key, you have two options:
 <tr><td>Resize Adjacent Windows</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td></tr>
 <tr><td>Open&#8239;&#8239;Window&#8239;&#8239;On&#8239;&#8239;Set&#8239;&#8239;Screen</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{red}{\textsf{✗}}$</td><td>$\color{green}{\textsf{✓}}$</td><td>$\color{red}{\textsf{✗}}$</td></tr>
 </table>
+
+### License
+
+This project is licensed under the [GNU GPLv3 license](LICENSE).

@@ -34,6 +34,8 @@ body:
           required: true
         - label: This is a single feature request (multiple feature requests should be reported individually)
           required: true
+        - label: I can help with the improvement or development of this feature (tick if you can help)
+          required: false
 
   - type: markdown
     attributes:
