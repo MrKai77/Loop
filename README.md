@@ -21,7 +21,6 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 > [!NOTE]
 >
 > Loop is constantly evolving, with new features and improvements added regularly to enhance your window management experience on macOS.
->
 
 <p align="center">
   <img src="assets/graphics/Loop Demos/loop_demo.gif" alt="Loop Demo">
@@ -85,13 +84,13 @@ The optional preview is customisable. You can adjust the padding, corner radius,
 
 #### Homebrew
 
-```sh
+```bash
 brew install loop
 ```
 
 #### Manual Download
 
-Navigate to the [release page](https://github.com/MrKai77/Loop/releases/latest) and download the latest `.zip` file located at the bottom.
+Navigate to the [release page](https://github.com/MrKai77/Loop/releases/latest) and download the latest `.zip` file located at the bottom, or [click me](https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip).
 
 ### Triggering
 
