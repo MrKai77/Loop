@@ -58,7 +58,7 @@ Now, let's tackle Xcode. If you followed the method above, you should be automat
 
 0. Enrol your account in the Developer Program at [developer.apple.com](https://developer.apple.com/). A free account works just fine; you don't need a paid one.
 1. Install Xcode.
-2. Add your Developer account to Xcode. To do this, click `Xcode → Preferences` in the Menu bar, and in the window that opens, click `Accounts`. You can add your account there.
+2. Add your Developer account to Xcode. To do this, click `Xcode → Preferences` in the menu bar, and in the window that opens, click `Accounts`. You can add your account there.
 3. After adding your account, it will appear in the list of Apple IDs on the left side of the screen. Select your account.
 4. At the bottom of the screen, click `Manage Certificates...`.
 5. On the bottom left, click the **+** icon and select `Apple Development`.
@@ -74,9 +74,9 @@ Now, let's tackle Xcode. If you followed the method above, you should be automat
 
 ### Next
 
-Now that you've signed Loop with your developer account, it's time to build! First, validate if the current build works `⌘R` (this command is run, this will build and launch loop all in one). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed. You can run both Loop (the one you already have) and the Loop developmental version you are running at the same time!
+Now that you've signed Loop with your developer account, it's time to build! First, validate if the current build works <kbd>⌘R</kbd> (this command is run, this will build and launch loop all in one). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed. You can run both Loop (the one you already have) and the Loop developmental version you are running at the same time!
 
-**HOWEVER**, it must be made aware that Loop **MAY** fail to build if you run it again. How do we fix this? Clear the build cache, press `⌘⇧K` (command + shift + k); you **MAY** need to do this every time you hit the run command. It has to do with some leftover user cache that makes Loop fail to build. We've tried to fix it to no avail.
+**HOWEVER**, it must be made aware that Loop **MAY** fail to build if you run it again. How do we fix this? Clear the build cache, press <kbd>⌘⇧K</kbd> (command + shift + k); you **MAY** need to do this every time you hit the run command. It has to do with some leftover user cache that makes Loop fail to build. We've tried to fix it to no avail.
 
 **IF YOUR BUILD FAILS** You've got a few options:
 
@@ -84,12 +84,12 @@ Now that you've signed Loop with your developer account, it's time to build! Fir
 2. If there is a `Command CodeSign failed with a nonzero exit code` issue, follow the above steps and clear your build cache.
 3. If it's a code issue, review your code and adjust accordingly.
 
-Now, you're on your own. We hope you'll make some nice Swift code. On each build you attempt, `SwiftLint` will run. **DO NOT** turn this off. When you submit your PR, this will run another check to validate you have the correct formatting. If the format is wrong, your request will be rejected.
+Now, you're on your own. We hope you'll make some nice Swift code. On each build you attempt, `[SwiftFormat](https://github.com/nicklockwood/SwiftFormat)` will run. **DO NOT** turn this off. When you submit your PR, this will run another check to validate you have the correct formatting. If the format is wrong, your request will be rejected.
 
-**IMPORTANT:** You MUST have `SwiftLint` installed via `brew`. If you know how to use brew, then it's as simple as
+**IMPORTANT:** You MUST have `[SwiftFormat](https://github.com/nicklockwood/SwiftFormat)` installed via `brew`. If you know how to use brew, then it's as simple as
 
 ```sh
-brew install swiftlint
+brew install SwiftFormat
 ```
 
 If you are unfamiliar with `brew`, [brew](https://brew.sh) is a macOS package manager which you can use to install apps (`--casks`) or command line tools (CLTs) called `formulae`.
@@ -100,7 +100,7 @@ First, install brew and follow the onscreen instructions (**DO NOT INSTALL BREW 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Then, after you've installed brew, you can now install any command line tool or app. So, install `swiftlint` next, and you'll then be able to build Loop.
+Then, after you've installed brew, you can now install any command line tool or app. So, install `SwiftFormat` next, and you'll then be able to build Loop.
 
 Now, some **important** notes. All of the code you write **MUST** include comprehensive comments. An example of this would be
 
@@ -177,7 +177,7 @@ Now, for the Issue section, this is **NOT** for you to request an icon. Here, it
 
 We wish to localise (localize) Loop in every language possible!
 
-We use `Localizable.strings` to localise Loop, meaning it's very simple to localise Loop in any language you want.
+We use `Localizable.xcstrings` to localise Loop, meaning it's very simple to localise Loop in any language you want.
 
 If you need some help, images are provided at the bottom for context.
 
@@ -190,7 +190,7 @@ Once assigned, and after committing to the localised language, you may request t
 ### Asking for a Catalogue
 
 1. In your issue, just ask [@MrKai77](https://github.com/MrKai77) or [@SenpaiHunters](https://github.com/SenpaiHunters) for your required language in your issue, and they'll be able to provide you with the needed file.
-2. Next, you need Xcode installed. Once installed, open the language file, for example, `ko.xliff`.
+2. Next, you need Xcode installed. Once installed, open the language file, for example, `ko.xloc` or `ko.xliff`.
 3. Once you've got it, now head over to the right-hand side and add your language localised.
 
 TIP: If you're unable to fully localise the file, just leave the unlocalised strings, and add notes to your issue on what's missed so others can localise it further.
