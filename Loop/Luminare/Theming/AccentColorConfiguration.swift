@@ -119,7 +119,16 @@ struct AccentColorConfigurationView: View {
                 VStack(spacing: 6) {
                     Spacer()
                     option.image
-                    Text(option.text)
+                    // Notice to disable screen recording, however, keep it in the list.
+                    if option == .wallpaper, model.processWallpaper {
+                        HStack(spacing: 0) {
+                            Text(option.text)
+                            LuminareInfoView("Please press deny when Loop \n requests screen recording permissions.", .orange)
+                        }
+                        .fixedSize()
+                    } else {
+                        Text(option.text)
+                    }
                     Spacer()
                 }
                 .font(.title3)

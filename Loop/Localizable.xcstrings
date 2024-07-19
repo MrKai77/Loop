@@ -3154,6 +3154,7 @@
       }
     },
     "Icon contributor" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -9977,6 +9978,9 @@
           }
         }
       }
+    },
+    "Please press deny when Loop \n requests screen recording permissions." : {
+
     },
     "Position" : {
       "localizations" : {

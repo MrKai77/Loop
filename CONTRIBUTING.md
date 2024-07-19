@@ -81,7 +81,7 @@ Now that you've signed Loop with your developer account, it's time to build! Fir
 **IF YOUR BUILD FAILS** You've got a few options:
 
 1. Review the issue, if it's giving `Luminare cannot be found` remove Luminare from the Frameworks list, and readd it.
-2. If there is a `nonzero codesign` issue, follow the above steps and clear your build cache.
+2. If there is a `Command CodeSign failed with a nonzero exit code` issue, follow the above steps and clear your build cache.
 3. If it's a code issue, review your code and adjust accordingly.
 
 Now, you're on your own. We hope you'll make some nice Swift code. On each build you attempt, `SwiftLint` will run. **DO NOT** turn this off. When you submit your PR, this will run another check to validate you have the correct formatting. If the format is wrong, your request will be rejected.
