@@ -1,19 +1,11 @@
-<p align="center">
-  <p align="center">
-   <img width="225" height="225" src="/assets/graphics/Classic.png" alt="Logo">
-  </p>
- <h1 align="center"><b>Loop</b></h1>
- <p align="center">
-  Window management made elegant.
-    <br />
-    <a href="https://github.com/MrKai77/Loop"><strong>Explore Loop »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip">Download for macOS</a>
-    <br />
-    <i>~ Compatible with macOS 13 and later. ~</i>
-  </p>
-</p>
+<div align="center">
+  <img width="225" height="225" src="/assets/graphics/Classic.png" alt="Logo">
+  <h1><b>Loop</b></h1>
+  <p>Window management made elegant.<br>
+  <a href="https://github.com/MrKai77/Loop"><strong>Explore Loop »</strong></a><br><br>
+  <a href="https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip">Download for macOS</a><br>
+  <i>~ Compatible with macOS 13 and later. ~</i></p>
+</div>
 
 Loop is a macOS app that simplifies window management for you. You can effortlessly choose your window direction using a radial menu triggered by a simple key press, and customize it according to your preferences with personalized colors and settings. You can easily move, resize, and arrange your windows with just a few clicks, saving you valuable time and energy.
 
