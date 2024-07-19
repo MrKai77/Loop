@@ -189,7 +189,7 @@ Once assigned, and after committing to the localised language, you may request t
 
 ### Asking for a Catalogue
 
-1. In your issue, just ask @MrKai77 or @SenpaiHunters for your required language in your issue, and they'll be able to provide you with the needed file.
+1. In your issue, just ask [@MrKai77](https://github.com/MrKai77) or [@SenpaiHunters](https://github.com/SenpaiHunters) for your required language in your issue, and they'll be able to provide you with the needed file.
 2. Next, you need Xcode installed. Once installed, open the language file, for example, `ko.xliff`.
 3. Once you've got it, now head over to the right-hand side and add your language localised.
 
