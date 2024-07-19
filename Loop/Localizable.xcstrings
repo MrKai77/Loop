@@ -310,6 +310,12 @@
             "value" : "사용자 정의"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customizado"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -357,6 +363,12 @@
             "value" : "시스템"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -402,6 +414,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "배경화면"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plano de fundo"
           }
         },
         "zh-Hans" : {
@@ -785,6 +803,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "잠김"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloqueado"
           }
         },
         "zh-Hans" : {
@@ -1285,6 +1309,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "패딩 설정..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurar espaçamento..."
           }
         },
         "zh-Hans" : {
@@ -2017,6 +2047,12 @@
             "value" : "기존 키바인드를 병합하거나 지우시겠습니까?"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você quer mesclar ou deletar os atalhos existentes?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2202,6 +2238,12 @@
             "value" : "선택한 파일이 올바른 형식인지 확인하세요."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garanta que o arquivo que você selecionou possui o formato correto."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2247,6 +2289,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "키바인드 읽기 오류"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erro Lendo Atalhos"
           }
         },
         "zh-Hans" : {
@@ -2388,6 +2436,12 @@
             "value" : "존재하지 않는 것을 내보낼 수 없습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você não pode exportar algo que não existe!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2435,6 +2489,12 @@
             "value" : "키바인드가 설정되지 않음"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhum Atalho Definido"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2473,6 +2533,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "키바인드 내보내기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportar atalhos"
           }
         },
         "zh-Hans" : {
@@ -3908,6 +3974,12 @@
             "value" : "새 아이콘을 잠금 해제할 때 알림을 받게 됩니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você será notificado quando desbloquear um novo ícone."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4107,6 +4179,12 @@
             "value" : "전체 화면 창 무시"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ignorar janelas em tela cheia"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4200,6 +4278,12 @@
             "value" : "Rectangle 설정 파일 선택"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecione o arquivo de configuração do Rectangle"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4240,6 +4324,12 @@
             "value" : "키바인드 가져오기"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar Atalhos"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4278,6 +4368,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rectangle에서 키 바인드 가져오기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importar atalhos do Rectangle"
           }
         },
         "zh-Hans" : {
@@ -4327,6 +4423,12 @@
             "value" : "취소"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4374,6 +4476,12 @@
             "value" : "지우기"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apagar"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4419,6 +4527,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "병합"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mesclar"
           }
         },
         "zh-Hans" : {
@@ -4643,6 +4757,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "디스코드 참여"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrar no Discord"
           }
         },
         "zh-Hans" : {
@@ -4873,7 +4993,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Esquerda %@"
+            "value" : "%@ Esquerda"
           }
         },
         "zh-Hans" : {
@@ -4969,6 +5089,12 @@
             "value" : "아이콘 잠김"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ícone Bloqueado"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5014,6 +5140,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 그것을 가지고 있지 않습니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você ainda não possui isso!"
           }
         },
         "zh-Hans" : {
@@ -5063,6 +5195,12 @@
             "value" : "당신은 누구라고 생각하며, 이 최고 비밀 아이콘에 접근하려고 하나요?"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quem você pensa que é, tentando acessar esses ícones super secretos?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5108,6 +5246,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "인내는 미덕이며, 이 아이콘으로 가는 당신의 열쇠입니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paciência é uma virtude, e a sua chave para esse ícone."
           }
         },
         "zh-Hans" : {
@@ -5157,6 +5301,12 @@
             "value" : "이 아이콘은 잠겨 있지만, 당신의 잠재력은 잠겨 있지 않습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O ícone está bloqueado, mas o seu potencial não!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5202,6 +5352,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "계속해서 루핑하고, 이 아이콘은 금방 당신의 것이 될 것입니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue usando o Loop, e logo esse ícone será seu."
           }
         },
         "zh-Hans" : {
@@ -5251,6 +5407,12 @@
             "value" : "이 아이콘은 아직 공개되지 않았습니다, 계속 기대해 주세요!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esse ícone ainda está sob sigilo, fique atento!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5296,6 +5458,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "어떤 아이콘들은 기다릴 가치가 있지 않나요?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alguns ícones valem a espera, você não acha?"
           }
         },
         "zh-Hans" : {
@@ -5345,6 +5513,12 @@
             "value" : "아직 아니지만, 당신은 어제보다 더 가까워졌습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ainda não, mas você está mais perto do que ontem!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5390,6 +5564,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 아이콘을 잠금 해제하는 것은 시간과 루프의 문제일 뿐입니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquear esse ícone é só uma questão de tempo e Loops."
           }
         },
         "zh-Hans" : {
@@ -5439,6 +5619,12 @@
             "value" : "이 아이콘은 좋은 와인과 같아서, 더 많은 시간이 필요합니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esse ícone é como vinho caro, precisa de mais tempo."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5484,6 +5670,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "호기심을 유지하고, 곧 이 아이콘이 당신의 손에 닿을 것입니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue curioso, e logo esse ícone será seu."
           }
         },
         "zh-Hans" : {
@@ -5533,6 +5725,12 @@
             "value" : "좋은 작업을 계속하고, 이 아이콘이 당신의 보상이 될 것입니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue com o bom trabalho e esse ícone será sua recompensa."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5578,6 +5776,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 아이콘은 가장 헌신적인 루퍼들을 위해 예약되어 있습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esse ícone está reservado para os Loppers mais dedicados."
           }
         },
         "zh-Hans" : {
@@ -5627,6 +5831,12 @@
             "value" : "당신의 여정은 아직 완료되지 않았습니다, 이 아이콘은 끝에서 기다립니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sua jornada não está completa, esse ícone te aguarda no final."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5672,6 +5882,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "적절한 시기에, 이 아이콘이 당신에게 드러날 것입니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tempo certo, esse ícone será revelado a você."
           }
         },
         "zh-Hans" : {
@@ -5721,6 +5937,12 @@
             "value" : "인내심을 가지세요, 젊은 루퍼여, 이 아이콘은 멀지 않습니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paciência, pequeno Looper, esse ícone não está tão longe."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5766,6 +5988,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "천 개의 루프 여정은 한 걸음으로 시작됩니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A jornada de mil Loops começa com um simples passo."
           }
         },
         "zh-Hans" : {
@@ -5815,6 +6043,12 @@
             "value" : "매 루프는 당신을 기다리는 보물에 더 가까이 가져갑니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada Loop te deixa mais próximo de encontrar um tesouro."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5860,6 +6094,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "각 루프와 함께, 이 아이콘에 대한 잠금이 약해집니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A cada Loop a trava desse ícone enfraquece."
           }
         },
         "zh-Hans" : {
@@ -5909,6 +6149,12 @@
             "value" : "루프 이후 루프, 당신의 헌신이 성공의 열쇠를 조각합니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop após Loop, sua dedicação esculpirá a chave do sucesso."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5954,6 +6200,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아이콘은 단순히 잠금 해제되는 것이 아니라, 루프마다 획득됩니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os ícones não são apenas desbloqueados; são conquistados, Loop por Loop. "
           }
         },
         "zh-Hans" : {
@@ -6003,6 +6255,12 @@
             "value" : "루프가 쌓이면, 당신의 아이콘 컬렉션도 함께 쌓일 것입니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sua coleção de ícones aumentará conforme sua quantidade de Loops."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6048,6 +6306,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "각 루프를 수수께끼로 생각하세요, 잠긴 아이콘의 미스터리를 푸는 것입니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pense em cada Loop como um enigma, resolvendo o mistério do ícone bloqueado."
           }
         },
         "zh-Hans" : {
@@ -6097,6 +6361,12 @@
             "value" : "루핑에 대한 당신의 지속성은 모든 아이콘의 마스터 키입니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sua persistência em usar o Loop é a chave mesta para todos os ícones."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6142,6 +6412,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "장애물을 루프로 돌아보세요; 당신의 보상은 그 너머에 있습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dê um Loop nos obstáculos; sua recompensa está além deles."
           }
         },
         "zh-Hans" : {
@@ -6191,6 +6467,12 @@
             "value" : "완성하는 각 루프는 아이콘이 자라나는 씨앗을 심습니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada Loop que você completa planta a semente para novos ícones crescerem."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6238,6 +6520,12 @@
             "value" : "달의 위상처럼, 당신의 아이콘들은 루프의 주기로 자신을 드러낼 것입니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como as fases da luz, seus ícones se revelarão em ciclos de Loops."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6283,6 +6571,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 만들어지지 않은 루프의 베일 뒤에 숨겨진 아이콘이 기다립니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os ícones se revelarão, detrás dos Loops que ainda virão."
           }
         },
         "zh-Hans" : {
@@ -6385,6 +6679,24 @@
             }
           }
         },
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loop faltando"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loops faltando"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "variations" : {
             "plural" : {
@@ -6444,6 +6756,12 @@
             "value" : "퍼센트"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6491,6 +6809,12 @@
             "value" : "픽셀"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6536,6 +6860,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "S"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
           }
         },
         "zh-Hans" : {
@@ -6815,6 +7145,12 @@
             "value" : "참여하세요! ...현재 버전에서, 그것은 최신입니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avante! ... na versão atual, é a mais recente."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6860,6 +7196,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 앱은 내 일기 항목보다 더 최신입니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esse app está mais atualizado que o meu diário!"
           }
         },
         "zh-Hans" : {
@@ -6909,6 +7251,12 @@
             "value" : "당신은 안전합니다, 대기 중에 업데이트가 없습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Está tudo bem, nenhuma atualização no ar também!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6954,6 +7302,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘은 업데이트가 없어 당신의 편입니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As probabilidades estão sempre a seu favor, sem atualizações hoje!"
           }
         },
         "zh-Hans" : {
@@ -7003,6 +7357,12 @@
             "value" : "우리 앱은 디지털 다이어트 중입니다. 새로운 바이트는 허용되지 않습니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nosso app está em uma dieta digital. Novos bytes estão proibidos."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7048,6 +7408,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "새 버전? 죄송합니다, 우리는 이 버전에 너무 애착이 있습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova versão? Desculpe, somos muito apegados nesta aqui."
           }
         },
         "zh-Hans" : {
@@ -7097,6 +7463,12 @@
             "value" : " 당신의 Loop는 어느 때보다 Loopier합니다, 업데이트를 찾을 수 없습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seu Loop está mais Loop do que nunca, sem atualizações!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7142,6 +7514,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 것을 다하고 있습니다, 선장님! 업데이트가 없습니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estou dando tudo que ela tem, capitão! Sem atualizações!"
           }
         },
         "zh-Hans" : {
@@ -7191,6 +7569,12 @@
             "value" : "아주 먼, 먼 은하계에서도... 여전히 업데이트가 없습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Em uma galáxia muito, muito distante... não existem atualizações!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7236,6 +7620,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "소중한 것을 가지고 있습니다, 업데이트가 필요 없어요!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você está com o precioso, não precisa de atualizações!"
           }
         },
         "zh-Hans" : {
@@ -7285,6 +7675,12 @@
             "value" : "워프 속도로 달리고 있지만, 업데이트는 보이지 않습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andando em alta velocidade, sem atualizações à vista!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7330,6 +7726,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "찾고 있는 업데이트가 아닙니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essa não é a atualização que você está procurando."
           }
         },
         "zh-Hans" : {
@@ -7379,6 +7781,12 @@
             "value" : "'업데이트' 버튼을 잘못 놓았네요. 어머나!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erramos o lugar do botão de 'Atualizar'. Ops!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7424,6 +7832,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "분명 여기 어딘가에 있었어요... 잠깐만요"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eu juro que estava aqui em algum lugar... Um segundo"
           }
         },
         "zh-Hans" : {
@@ -7473,6 +7887,12 @@
             "value" : "하루에 사과 하나가... 업데이트를 멀리합니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma maçã por dia deixa... as atualizações distantes."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7518,6 +7938,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "힘이 당신과 함께하기를... 다음 번에!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que a Força esteja com você... da próxima vez!"
           }
         },
         "zh-Hans" : {
@@ -7567,6 +7993,12 @@
             "value" : "이 버전에는 힘이 강합니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A Força é potente nessa versão."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7612,6 +8044,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "그저 작은 마을의 앱, 여전히 같은 오래된 버전"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "É só um app de cidade pequena, mesma versão antiga e bacana"
           }
         },
         "zh-Hans" : {
@@ -7661,6 +8099,12 @@
             "value" : "겨울이 오고 있습니다. 업데이트는 아직이죠."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O inverno está chegado. As atualizações ainda não."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7706,6 +8150,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "달콤한 꿈은... 업데이트가 없는 것으로 만들어집니다"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonho meu, sonho meu... sem updates como o céu!"
           }
         },
         "zh-Hans" : {
@@ -7755,6 +8205,12 @@
             "value" : "이번 주 업데이트 요정이 우리를 건너뛰었습니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A fada da atualização pulou a gente essa semana."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7800,6 +8256,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "계속 주목해주세요, 곧 더 많은 정보가 올 것입니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fique atento, mais informações em breve!"
           }
         },
         "zh-Hans" : {
@@ -7849,6 +8311,12 @@
             "value" : "최신 기술을 타고 달리고 있습니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você está viajando com a tecnologia mais recente!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7894,6 +8362,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "우리는 돌아올 것입니다. 업데이트와 함께... 나중에"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voltaremos mais tarde... com atualizações"
           }
         },
         "zh-Hans" : {
@@ -7943,6 +8417,12 @@
             "value" : "당신의... 업데이트 부족에 페니를."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma moeda para sua... falta de atualizações."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7988,6 +8468,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 최고의 Loop를 가지고 있습니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você já está com o melhor Loop."
           }
         },
         "zh-Hans" : {
@@ -8037,6 +8523,12 @@
             "value" : "단순히 Loop를 업데이트하는 것은 아닙니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não dá para simplesmente atualizar o Loop."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8082,6 +8574,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 일에는... 업데이트가 없습니다..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo esse trabalho e... sem atualizações..."
           }
         },
         "zh-Hans" : {
@@ -8131,6 +8629,12 @@
             "value" : "쳐다보는 냄비는 결코... 업데이트되지 않습니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma panela vigiada nunca… atualiza."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8176,6 +8680,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "문제가 99개 있어도, 업데이트는 문제가 아니에요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "99 problemas, atualizações não é um deles."
           }
         },
         "zh-Hans" : {
@@ -8225,6 +8735,12 @@
             "value" : "저... 음... 잠깐, 잃어버렸어요"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eu.. É... Um momento, me perdi"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8270,6 +8786,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최대 레벨까지 올랐습니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você está no nível máximo!"
           }
         },
         "zh-Hans" : {
@@ -8319,6 +8841,12 @@
             "value" : "거지는... 업데이터가 될 수 없습니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mendigos não podem ser... atualizadores."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8364,6 +8892,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "돈으로는... 업데이트를 살 수 없습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dinheiro não compras... atualizações."
           }
         },
         "zh-Hans" : {
@@ -8413,6 +8947,12 @@
             "value" : "새로운 정보가 없습니다, 사령관님."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem informações, Comandante."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8458,6 +8998,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "업데이트가 없다고? 대단해, Scott!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem atualizações? Ótimo Scott!"
           }
         },
         "zh-Hans" : {
@@ -8507,6 +9053,12 @@
             "value" : "업데이트가 없습니다, Mr. Anderson"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem atualizações, Sr. Anderson"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8552,6 +9104,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "바 싱 세에는 업데이트가 없습니다"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem updates em Ba Sing Se"
           }
         },
         "zh-Hans" : {
@@ -8601,6 +9159,12 @@
             "value" : "업데이트? 이 경제에서?"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atualizações? Com essa economia?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8646,6 +9210,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다음에 다시 확인하세요!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifique de novo da próxima vez!"
           }
         },
         "zh-Hans" : {
@@ -8695,6 +9265,12 @@
             "value" : "Loop가 전성기입니다!"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loops está no seu auge!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8740,6 +9316,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 시스템이 작동 중입니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos os sistemas estão em funcionamento!"
           }
         },
         "zh-Hans" : {
@@ -8789,6 +9371,12 @@
             "value" : "최신 상태입니다 :)"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tudo atualizado :)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8834,6 +9422,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 업데이트가 없습니다!"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem updates!"
           }
         },
         "zh-Hans" : {
@@ -8975,6 +9569,12 @@
             "value" : "%@의 알림 권한이 현재 비활성화되어 있습니다."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As notificações de %@ está desabilitadas."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9022,6 +9622,12 @@
             "value" : "설정 열기"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Configurações"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9067,6 +9673,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시스템 설정에서 활성화해 주세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por favor, ligue-as nos Ajustes."
           }
         },
         "zh-Hans" : {
@@ -9206,6 +9818,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "확인"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
         "zh-Hans" : {
@@ -10310,7 +10928,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Direita %@"
+            "value" : "%@ Direita"
           }
         },
         "zh-Hans" : {
@@ -10443,6 +11061,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "루프 키바인드 파일 선택"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecione o arquivo de atalhos do Loop"
           }
         },
         "zh-Hans" : {
@@ -11175,6 +11799,12 @@
             "value" : "배경화면 동기화"
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizar plano de fundo"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11675,6 +12305,12 @@
             "value" : "업데이트..."
           }
         },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atualizar..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11949,6 +12585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "버전 %1$@ (%2$lld)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versão %1$@ (%2$lld)"
           }
         },
         "zh-Hans" : {
@@ -14979,6 +15621,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "당신이 반복했는데... 음... 나... 횟수를 잃어버렸어요..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você fez... hmm... Eu... Perdi as contas..."
           }
         },
         "zh-Hans" : {
