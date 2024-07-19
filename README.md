@@ -2,7 +2,7 @@
   <img width="225" height="225" src="/assets/graphics/Classic.png" alt="Logo">
   <h1><b>Loop</b></h1>
   <p>Window management made elegant.<br>
-  <a href="https://github.com/MrKai77/Loop"><strong>Explore Loop »</strong></a><br><br>
+  <a href="https://github.com/MrKai77/Loop#features"><strong>Explore Loop »</strong></a><br><br>
   <a href="https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip">Download for macOS</a><br>
   <i>~ Compatible with macOS 13 and later. ~</i></p>
 </div>
@@ -17,21 +17,21 @@ Loop is a macOS app that simplifies window management for you. You can effortles
   <img src="assets/graphics/loop_demo.gif" alt="Loop Demo">
   <br />
   <br />
+  <a href="https://discord.gg/2CZ2N6PKjq" style="margin-right: 8px;">
+    <img src="https://img.shields.io/badge/Discord-join%20us-5865F2?logo=discord&logoColor=white&style=flat-square" />
+  </a>
+  <a href="https://github.com/MrKai77/Loop/blob/main/LICENSE" style="margin-right: 8px;">
+    <img src="https://img.shields.io/github/license/MrKai77/Loop?label=License&color=A6E3A1&style=flat-square" />
+  </a>
+  <a href="https://github.com/MrKai77/Loop/stargazers" style="margin-right: 8px;">
+    <img src="https://img.shields.io/github/stars/MrKai77/Loop?label=Stars&color=F5C2E7&style=flat-square" />
+  </a>
+  <a href="https://github.com/MrKai77/Loop/network/members" style="margin-right: 8px;">
+    <img src="https://img.shields.io/github/forks/MrKai77/Loop?label=Forks&color=89DCE" />
+  </a>
   <a href="https://github.com/MrKai77/Loop/issues">
-    <img src="https://img.shields.io/github/issues/MrKai77/Loop?label=Issues&color=red" />
-  </a>
-  <a href="https://github.com/MrKai77/Loop/stargazers">
-    <img src="https://img.shields.io/github/stars/MrKai77/Loop?label=Stars&color=yellow" />
-  </a>
-  <a href="https://github.com/MrKai77/Loop/network/members">
-    <img src="https://img.shields.io/github/forks/MrKai77/Loop?label=Forks&color=lightblue" />
-  </a>
-  <a href="https://github.com/MrKai77/Loop/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/MrKai77/Loop?label=License&color=2ea44f" />
-  </a>
-  <a href="https://discord.gg/2CZ2N6PKjq">
-    <img src="https://img.shields.io/badge/Discord-join%20us-7289da?logo=discord&logoColor=white" />
-  </a>
+    <img src="https://img.shields.io/github/issues/MrKai77/Loop?label=Issues&color=F5A97F" />
+  </a>  
   <br />
 </p>
 
