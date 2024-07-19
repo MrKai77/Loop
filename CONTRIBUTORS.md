@@ -2,9 +2,11 @@
 
 This list contains an exact record of [everyone](https://github.com/MrKai77/Loop/graphs/contributors) who has contributed to Loop, both past and present, including those not listed in GitHub's contributors list.
 
-## Code Contributors
+## Contributors
 
-*To be updated*
+<a href="https://github.com/mrkai77/loop/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mrkai77/loop" />
+</a>
 
 ## Localisation
 
@@ -45,8 +47,14 @@ If your language is not listed, it may not yet be localised! Interested in helpi
 
 ## Icons
 
-- [**Greg Lassale**](https://fxtwitter.com/greglassale): Contributions include Simon, Black Hole, Synthwave Sunset, Neon.
-- @N-coder82: Contributions include Developer, Sunset.
+- [**Greg Lassale**](https://fxtwitter.com/greglassale)
+  - Synthwave Sunset
+  - Black Hole
+  - Neon
+  - Simon
+- [@N-coder82](https://github.com/N-coder82)
+  - Developer
+  - Sunset
 
 ## Documentation
 

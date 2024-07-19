@@ -1,16 +1,16 @@
 # Contributing to Loop
 
-Welcome to Loop. If you're here, you may be interested in adding to this awesome project. Well, let's get to it!
+Welcome to Loop. If you're here, you may be interested in contributing to this awesome project. Well, let's get to it!
 
-If at any time you need help, contact us on [Discord](https://discord.gg/2CZ2N6PKjq) or make an issue on GitHub.
+If at any time you need help, contact us on [Discord](https://discord.gg/2CZ2N6PKjq) or create an issue on GitHub.
 
 ## Areas of focus
 
 You can improve Loop by doing some of the following:
 
 1. Add your language to Loop, or if you see someone make a grammatical error or mistake, help fix it!
-2. Have an idea that you can proactively add, or see an area where some code can be changed? Submit an Issue and explain what you wish to do, and if it's greenlit, push your changes into a PR!
-3. Got an icon? We LOVE icons, good icons! Make a good icon the team likes and it *may* be included for everyone to use.
+2. Have an idea that you can proactively add, or see an area where some code can be changed? Submit an issue and explain what you wish to do, and if it's greenlit, push your changes into a PR!
+3. Got an icon? We LOVE icons, especially good ones! Make a great icon the team likes, and it *may* be included for everyone to use.
 4. Got a bug to report? Head over to the issues tab; here, you'll be walked through what you need!
 
 # Local development
@@ -19,7 +19,7 @@ You can improve Loop by doing some of the following:
 
 First, we need to get a scope of what you're changing, adding, improving, or wanting.
 
-1. Create an Issue and clearly articulate your issue, change, or improvement you want to make.
+1. Create an issue and clearly articulate your issue, change, or improvement you want to make.
 2. Wait for a response from a maintainer; if it's accepted, you're off to the races!
 
 Now, you need to make these changes. HOW?
@@ -35,18 +35,20 @@ Loop
 forked from MrKai77/Loop
 ```
 
-## Getting your fork
+## Cloning your fork
 
-Now, you've forked our repo. What next? Don't stress. First, go to where you want to code and execute some quick command lines! Here's how I do it!
+Now, you've forked our repo. What next? Don't stress. First, go to where you want to code and execute some quick command lines! Here's how to do it!
 
 ```sh
-cd downloads
+cd downloads # Or the directory where you wish to clone Loop
 git clone https://github.com/{your-name}/Loop.git
+# Remember to replace {your-name} with your actual GitHub username!
+# For example: https://github.com/MrKai77/Loop.git
 cd Loop
 open Loop.xcodeproj
 ```
 
-Once you've got your fork, it'll auto open in Xcode!
+Once you've got your fork, it'll auto-open in Xcode!
 
 ## What code? Xcode
 
@@ -56,13 +58,13 @@ Now, let's tackle Xcode. If you followed the method above, you should be automat
 
 *Skip this section if you already have an Apple Developer account.*
 
-0. Enrol your account in the Developer Program at [developer.apple.com](https://developer.apple.com/). A free account works just fine; you don't need a paid one.
+0. Enroll your account in the Developer Program at [developer.apple.com](https://developer.apple.com/). A free account works just fine; you don't need a paid one.
 1. Install Xcode.
 2. Add your Developer account to Xcode. To do this, click `Xcode → Preferences` in the menu bar, and in the window that opens, click `Accounts`. You can add your account there.
 3. After adding your account, it will appear in the list of Apple IDs on the left side of the screen. Select your account.
 4. At the bottom of the screen, click `Manage Certificates...`.
 5. On the bottom left, click the **+** icon and select `Apple Development`.
-6. When a new item labelled `Apple Development Certificates` appears in the list, press `Done` to close the account manager.
+6. When a new item labeled `Apple Development Certificates` appears in the list, press `Done` to close the account manager.
 
 ### Signing Loop
 
@@ -72,11 +74,11 @@ Now, let's tackle Xcode. If you followed the method above, you should be automat
 4. Under `Signing`, change the `Team` dropdown to your ID.
 5. Under `Signing → macOS`, change the `Signing Certificate` to `Development`.
 
-### Next
+### Building
 
-Now that you've signed Loop with your developer account, it's time to build! First, validate if the current build works <kbd>⌘R</kbd> (this command is run, this will build and launch loop all in one). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed. You can run both Loop (the one you already have) and the Loop developmental version you are running at the same time!
+Now that you've signed Loop with your developer account, it's time to build! First, validate if the current build works <kbd>⌘</kbd> + <kbd>R</kbd> (this command will run Loop). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed. You can run both Loop (the one you already have) and the Loop developmental version you are running at the same time!
 
-**HOWEVER**, it must be made aware that Loop **MAY** fail to build if you run it again. How do we fix this? Clear the build cache, press <kbd>⌘⇧K</kbd> (command + shift + k); you **MAY** need to do this every time you hit the run command. It has to do with some leftover user cache that makes Loop fail to build. We've tried to fix it to no avail.
+**HOWEVER**, it must be made aware that Loop **MAY** fail to build if you run it again. How do we fix this? Clear the build cache, press <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>K</kbd>; you **MAY** need to do this every time you hit the run command. It has to do with some leftover user cache that makes Loop fail to build. We've tried to fix it to no avail.
 
 **IF YOUR BUILD FAILS** You've got a few options:
 
@@ -94,7 +96,7 @@ brew install SwiftFormat
 
 If you are unfamiliar with `brew`, [brew](https://brew.sh) is a macOS package manager which you can use to install apps (`--casks`) or command line tools (CLTs) called `formulae`.
 
-First, install brew and follow the onscreen instructions (**DO NOT INSTALL BREW WITH SUDO**).
+First, install brew and follow the onscreen instructions (**NOTE: DO NOT INSTALL `brew` WITH SUDO**).
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -181,21 +183,21 @@ We use `Localizable.xcstrings` to localise Loop, meaning it's very simple to loc
 
 If you need some help, images are provided at the bottom for context.
 
-## How to Localise?
+## How to localise?
 
 By now, you'll be familiar. Submit a `localisation` issue, fill out which language you wish to add, change, improve, and complete any required checkboxes.
 
 Once assigned, and after committing to the localised language, you may request the catalogue for localisation or proceed to do it manually.
 
-### Asking for a Catalogue
+### Asking for a catalogue
 
 1. In your issue, just ask [@MrKai77](https://github.com/MrKai77) or [@SenpaiHunters](https://github.com/SenpaiHunters) for your required language in your issue, and they'll be able to provide you with the needed file.
-2. Next, you need Xcode installed. Once installed, open the language file, for example, `ko.xloc` or `ko.xliff`.
-3. Once you've got it, now head over to the right-hand side and add your language localised.
+2. Next, you need Xcode installed. Once installed, open the language file, named, `[locale].xloc`.
+3. Once you've got it, now head over to the right-hand side and begin translating Loop to your language!
 
 TIP: If you're unable to fully localise the file, just leave the unlocalised strings, and add notes to your issue on what's missed so others can localise it further.
 
-### I Don't Need Help
+### I don't need help
 
 1. Fork and clone Loop (how to do given above).
 2. Open Loop and the `Localizable.strings` file.
@@ -207,7 +209,7 @@ TIP: If you're unable to fully localise the file, just leave the unlocalised str
 5. Also fill in `InfoPlist.strings` that will be auto-generated.
 6. Finally, push your changes to your branch and format the name such as `🌐 [add/change] name`, e.g., `🌐 Add Korean localisation` or `🌐 Update English (United Kingdom)`.
 
-### Images
+## Images
 
 ![Localise Xcode example](/assets/docs/localise.png)
 ![Localise plist Xcode example](/assets/docs/localise_plist.png)

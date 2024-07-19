@@ -1,16 +1,15 @@
 <p align="center">
   <p align="center">
-   <img width="124" height="124" src="/assets/graphics/Classic.png" alt="Logo">
+   <img width="225" height="225" src="/assets/graphics/Classic.png" alt="Logo">
   </p>
  <h1 align="center"><b>Loop</b></h1>
  <p align="center">
-  Revolutionize your macOS window management experience!
+  Window management made elegant.
     <br />
     <a href="https://github.com/MrKai77/Loop"><strong>Explore Loop »</strong></a>
     <br />
     <br />
-    <b>Download for </b>
-    macOS (<a href="https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip">Download</a>)
+    <a href="https://github.com/MrKai77/Loop/releases/latest/download/Loop.zip">Download for macOS</a>
     <br />
     <i>~ Compatible with macOS 13 and later. ~</i>
   </p>
@@ -23,7 +22,7 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 > Loop is constantly evolving, with new features and improvements added regularly to enhance your window management experience on macOS.
 
 <p align="center">
-  <img src="assets/graphics/Loop Demos/loop_demo.gif" alt="Loop Demo">
+  <img src="assets/graphics/loop_demo.gif" alt="Loop Demo">
   <br />
   <br />
   <a href="https://github.com/MrKai77/Loop/issues">
@@ -48,9 +47,15 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 
 ### Radial Menu
 
-The Radial Menu allows you to manipulate windows using your mouse. You hold down the trigger key and move your mouse in the desired direction to move and resize the window.
+The Radial Menu allows you to manipulate windows using your mouse/trackpad. Hold down the trigger key and move your cursor in the desired direction to move and resize the window.
 
 <div><video controls src="https://github.com/user-attachments/assets/658f7043-79a1-4690-83b6-a714fe6245c8" muted="false"></video></div>
+
+### Preview
+
+The preview window enables you to see the resize action *before* commiting to it.
+
+<div><video controls src="https://github.com/user-attachments/assets/5ecb3ae8-f295-406f-b968-31e539f4a098" muted="false"></video></div>
 
 ### Keyboard Shortcuts
 
@@ -60,7 +65,7 @@ Loop allows you to assign any key in tandem with the trigger key to initiate a w
 
 ### Cycles
 
-Cycles enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly.
+Loop can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly, or by left clicking repeatedly!
 
 <div><video controls src="https://github.com/user-attachments/assets/1adb1325-775d-4687-9085-71c7f775d65d" muted="false"></video></div>
 
@@ -74,7 +79,7 @@ The radial menu is fully customizable in terms of width, shape, and color. It is
 
 #### Preview
 
-The optional preview is customisable. You can adjust the padding, corner radius, border color, and border width.
+Adjust the padding, corner radius, border color, and border width or the optional preview window.
 
 <div><video controls src="https://github.com/user-attachments/assets/fc107861-8125-42c2-b987-2fff554078d5" muted="false"></video></div>
 
@@ -98,49 +103,70 @@ Loop uses a trigger key to function. This key must be held down or pressed to ac
 
 To set Caps Lock as your trigger key, you have two options:
 
-**a. Change System Settings**
+#### a. Change System Settings
 
 1. Go to System Settings → Keyboard → "Keyboard Shortcuts...".
 2. In the "Modifier Keys" tab, remap `Caps Lock (⇪) key` to `(^) Control`.
 3. Repeat this remapping process for every connected keyboard.
 4. In Loop, select the `Right Control` key as your trigger.
 
-**b. Use an External App**
+#### b. Use an external App
 
 - [Hyperkey](https://hyperkey.app/)
-
-### Radial Menu
-
-- How to use the radial menu for window management
-
-### Preview
-
-- Preview window functionality and usage
-
-<div><video controls src="https://github.com/user-attachments/assets/5ecb3ae8-f295-406f-b968-31e539f4a098" muted="false"></video></div>
+- [Karabiner elements](https://karabiner-elements.pqrs.org/)
 
 ### Keyboard Shortcuts
 
-- List of keyboard shortcuts and their functions
-
-### Cycles
-
-- How to set up and use window management cycles
-
-<!-- ### Advanced
-
-- **Defaults**
-  - Explanation of default settings
-- **Wiki Link** to explain every feature
-  - [Link to the Wiki](https://github.com/your-repo/wiki) -->
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>General</strong></td>
+      <td>Fullscreen, Maximize, Almost Maximize, Centre, MacOS Centre, Minimize, Hide</td>
+    </tr>
+    <tr>
+      <td><strong>Halves</strong></td>
+      <td>Top Half, Bottom Half, Left Half, Right Half</td>
+    </tr>
+    <tr>
+      <td><strong>Quarters</strong></td>
+      <td>Top Left Quarter, Top Right Quarter, Bottom Left Quarter, Bottom Right Quarter</td>
+    </tr>
+    <tr>
+      <td><strong>Horizontal Thirds</strong></td>
+      <td>Right Third, Right Two Thirds, Horizontal Center Third, Left Two Thirds, Left Third</td>
+    </tr>
+    <tr>
+      <td><strong>Vertical Thirds</strong></td>
+      <td>Top Third, Top Two Thirds, Vertical Center Third, Bottom Two Thirds, Bottom Third</td>
+    </tr>
+    <tr>
+      <td><strong>Screen Switching</strong></td>
+      <td>Next Screen, Previous Screen</td>
+    </tr>
+    <tr>
+      <td><strong>Window Manipulation</strong></td>
+      <td>Larger, Smaller, Shrink Top, Shrink Bottom, Shrink Right, Shrink Left, Grow Top, Grow Bottom, Grow Right, Grow Left, Move Up, Move Down, Move Right, Move Left</td>
+    </tr>
+    <tr>
+      <td><strong>More</strong></td>
+      <td>Initial Frame, Undo, Custom, Cycle</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Contributors
 
-- To see all the contributors who have played a significant role in developing Loop, visit our [Contributors](CONTRIBUTORS.md) page.
+To see all the contributors who have played a significant role in developing Loop, visit our [Contributors](CONTRIBUTORS.md) page.
 
 ### How to Contribute
 
-- For an extensive guide on how to contribute, check out the [contributing guide](CONTRIBUTING.md).
+For an extensive guide on how to contribute, check out the [contributing guide](CONTRIBUTING.md).
 
 ## FAQ
 
