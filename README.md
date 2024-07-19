@@ -44,7 +44,7 @@ The Radial Menu allows you to manipulate windows using your mouse/trackpad. Hold
 
 ### Preview
 
-The preview window enables you to see the resize action *before* commiting to it.
+The preview window enables you to see the resize action *before* committing to it.
 
 <div><video controls src="https://github.com/user-attachments/assets/5ecb3ae8-f295-406f-b968-31e539f4a098" muted="false"></video></div>
 
@@ -56,7 +56,7 @@ Loop allows you to assign any key in tandem with the trigger key to initiate a w
 
 ### Cycles
 
-Loop can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly, or by left clicking repeatedly!
+Loop can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly, or by left-clicking repeatedly!
 
 <div><video controls src="https://github.com/user-attachments/assets/1adb1325-775d-4687-9085-71c7f775d65d" muted="false"></video></div>
 
@@ -70,7 +70,7 @@ The radial menu is fully customizable in terms of width, shape, and color. It is
 
 #### Preview
 
-Adjust the padding, corner radius, border color, and border width or the optional preview window.
+Adjust the padding, corner radius, border color, and border width of the optional preview window.
 
 <div><video controls src="https://github.com/user-attachments/assets/fc107861-8125-42c2-b987-2fff554078d5" muted="false"></video></div>
 
@@ -104,7 +104,7 @@ To set Caps Lock as your trigger key, you have two options:
 #### b. Use an external App
 
 - [Hyperkey](https://hyperkey.app/)
-- [Karabiner elements](https://karabiner-elements.pqrs.org/)
+- [Karabiner Elements](https://karabiner-elements.pqrs.org/)
 
 ### Keyboard Shortcuts
 
