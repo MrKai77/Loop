@@ -15,23 +15,22 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 
 <p align="center">
   <img src="assets/graphics/loop_demo.gif" alt="Loop Demo">
-  <br />
-  <br />
-  <a href="https://discord.gg/2CZ2N6PKjq" style="margin-right: 8px;">
-    <img src="https://img.shields.io/badge/Discord-join%20us-5865F2?logo=discord&logoColor=white&style=flat-square" />
+  <br /><br />
+  <a href="https://discord.gg/2CZ2N6PKjq">
+    <img src="https://img.shields.io/badge/Discord-join%20us-7289DA?logo=discord&logoColor=white&style=for-the-badge&labelColor=23272A" />
   </a>
-  <a href="https://github.com/MrKai77/Loop/blob/main/LICENSE" style="margin-right: 8px;">
-    <img src="https://img.shields.io/github/license/MrKai77/Loop?label=License&color=A6E3A1&style=flat-square" />
+  <a href="https://github.com/MrKai77/Loop/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/MrKai77/Loop?label=License&color=5865F2&style=for-the-badge&labelColor=23272A" />
   </a>
-  <a href="https://github.com/MrKai77/Loop/stargazers" style="margin-right: 8px;">
-    <img src="https://img.shields.io/github/stars/MrKai77/Loop?label=Stars&color=F5C2E7&style=flat-square" />
+  <a href="https://github.com/MrKai77/Loop/stargazers">
+    <img src="https://img.shields.io/github/stars/MrKai77/Loop?label=Stars&color=57F287&style=for-the-badge&labelColor=23272A" />
   </a>
-  <a href="https://github.com/MrKai77/Loop/network/members" style="margin-right: 8px;">
-    <img src="https://img.shields.io/github/forks/MrKai77/Loop?label=Forks&color=89DCE" />
+  <a href="https://github.com/MrKai77/Loop/network/members">
+    <img src="https://img.shields.io/github/forks/MrKai77/Loop?label=Forks&color=ED4245&style=for-the-badge&labelColor=23272A" />
   </a>
   <a href="https://github.com/MrKai77/Loop/issues">
-    <img src="https://img.shields.io/github/issues/MrKai77/Loop?label=Issues&color=F5A97F" />
-  </a>  
+    <img src="https://img.shields.io/github/issues/MrKai77/Loop?label=Issues&color=FEE75C&style=for-the-badge&labelColor=23272A" />
+  </a>
   <br />
 </p>
 
