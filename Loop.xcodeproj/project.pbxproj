@@ -151,6 +151,8 @@
 		A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGEvent+Extensions.swift"; sourceTree = "<group>"; };
 		A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomWindowActionUnit.swift; sourceTree = "<group>"; };
 		A893D3632BD3299000063510 /* IconConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconConfiguration.swift; sourceTree = "<group>"; };
+		A894B0C52C4B31AA00B4CE6F /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		A894B0C62C4B31AA00B4CE6F /* CONTRIBUTORS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTORS.md; sourceTree = "<group>"; };
 		A89E84592C3713B50039D220 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingConfigurationView.swift; sourceTree = "<group>"; };
 		A8A1C5202BD4863B00515A14 /* KeybindingsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingsConfiguration.swift; sourceTree = "<group>"; };
@@ -403,6 +405,8 @@
 				A848130C2BD1A8D100B02E93 /* .github */,
 				A8E6D1FC2A4155DC005751D4 /* .gitignore */,
 				A86AFD7529888B29008F4892 /* README.md */,
+				A894B0C52C4B31AA00B4CE6F /* CONTRIBUTING.md */,
+				A894B0C62C4B31AA00B4CE6F /* CONTRIBUTORS.md */,
 				A8E59C37297F5E9A0064D4BA /* Loop */,
 				A8E59C36297F5E9A0064D4BA /* Products */,
 				A883642D298B7288005D6C19 /* Frameworks */,

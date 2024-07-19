@@ -27,6 +27,12 @@
             "value" : "%@"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -71,6 +77,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@는 이미 당신의 트리거 키로 사용되고 있습니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is al uw trigger knop."
           }
         },
         "pt-BR" : {
@@ -119,6 +131,12 @@
             "value" : "%@는 절대 중앙보다 약간 위에 창을 배치하여, 더 인체공학적으로 찾을 수 있습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ plaatst vensters een beetje boven het center, wat dus meer ergonomisch kan zijn."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -160,6 +178,12 @@
           }
         },
         "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -211,6 +235,12 @@
             "value" : "정보"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Informatie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -255,6 +285,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "강조 색상"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accent Kleur"
           }
         },
         "pt-BR" : {
@@ -310,6 +346,12 @@
             "value" : "사용자 정의"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aangepast"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -361,6 +403,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "시스템"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systeem"
           }
         },
         "pt-BR" : {
@@ -416,6 +464,12 @@
             "value" : "배경화면"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtergrond"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -460,6 +514,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "접근성 접근"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toegankelijkheid"
           }
         },
         "pt-BR" : {
@@ -515,6 +575,12 @@
             "value" : "창 크기를 조절하려면 접근성 권한을 부여해 주세요"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef toegang om het grootte van vensters aan te passen."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -568,6 +634,12 @@
             "value" : "%@ 접근성 권한이 필요합니다"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Heeft toegankelijkheid toegang nodig"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -612,6 +684,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "추가"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toevoegen"
           }
         },
         "pt-BR" : {
@@ -660,6 +738,12 @@
             "value" : "고급"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geavanceerd"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -706,6 +790,12 @@
             "value" : "창 크기 조정 애니메이션"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergroting van vensters animeren"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -750,6 +840,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "애니메이션 속도"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animatie snelheid"
           }
         },
         "pt-BR" : {
@@ -805,6 +901,12 @@
             "value" : "잠김"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vergrendeld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -849,6 +951,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "동작"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gedrag"
           }
         },
         "pt-BR" : {
@@ -897,6 +1005,12 @@
             "value" : "블루"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blauw"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -941,6 +1055,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "테두리 두께"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Randdikte"
           }
         },
         "pt-BR" : {
@@ -989,6 +1109,12 @@
             "value" : "하단"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bodem"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1033,6 +1159,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "하단 순환"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bodem cyclus"
           }
         },
         "pt-BR" : {
@@ -1081,6 +1213,12 @@
             "value" : "미리보기가 비활성화되어 있을 때는 활성화될 수 없습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kan niet worden ingeschakeld als het voorbeeld is uitgeschakeld."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1125,6 +1263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "변경"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verandering"
           }
         },
         "pt-BR" : {
@@ -1173,6 +1317,12 @@
             "value" : "업데이트 확인..."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer voor updates..."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1217,6 +1367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "닫기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sluiten"
           }
         },
         "pt-BR" : {
@@ -1265,6 +1421,12 @@
             "value" : "색상"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kleur"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1309,6 +1471,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "패딩 설정..."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padding instellen…"
           }
         },
         "pt-BR" : {
@@ -1357,6 +1525,12 @@
             "value" : "GitHub 기여자들"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medewerkers op GitHub"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1401,6 +1575,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모서리 반경"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoekradius"
           }
         },
         "pt-BR" : {
@@ -1449,6 +1629,12 @@
             "value" : "크레딧"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credits"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1493,6 +1679,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "커서"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cursor"
           }
         },
         "pt-BR" : {
@@ -1541,6 +1733,12 @@
             "value" : "사용자 정의"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aangepast"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1585,6 +1783,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사용자 정의 순환"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aangepaste Cyclus"
           }
         },
         "pt-BR" : {
@@ -1633,6 +1837,12 @@
             "value" : "사용자 정의 키바인드"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aangepaste toetscombinatie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1677,6 +1887,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 키바인드의 동작을 사용자 정의하세요."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas deze toetscombinatie aan."
           }
         },
         "pt-BR" : {
@@ -1725,6 +1941,12 @@
             "value" : "이 키바인드의 사용자 정의 프레임을 사용자 정의하세요."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas deze toetscombinatie zijn frame aan."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1769,6 +1991,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 키바인드가 순환하는 것을 사용자 정의합니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas wat deze toetscombinatie doorbladert aan."
           }
         },
         "pt-BR" : {
@@ -1817,6 +2045,12 @@
             "value" : "순환 키바인드"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyclus toetscombinatie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1861,6 +2095,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "디자인"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Design"
           }
         },
         "pt-BR" : {
@@ -1909,6 +2149,12 @@
             "value" : "개발"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkeling"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1953,6 +2199,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "개발 지원"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkelingsondersteuning"
           }
         },
         "pt-BR" : {
@@ -2001,6 +2253,12 @@
             "value" : "커서 상호작용 비활성화"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cursor interactie uitschakelen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2045,6 +2303,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기존 키바인드를 병합하거나 지우시겠습니까?"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wil je bestaande toetscombinaties samenvoegen of wissen?"
           }
         },
         "pt-BR" : {
@@ -2093,6 +2357,12 @@
             "value" : "기부"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doneren"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2139,6 +2409,12 @@
             "value" : "기부..."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doneren…"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2183,6 +2459,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "더블 클릭으로 트리거"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dubbelklik om te activeren"
           }
         },
         "pt-BR" : {
@@ -2238,6 +2520,12 @@
             "value" : "선택한 파일이 올바른 형식인지 확인하세요."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer of het geselecteerde bestand het juiste formaat heeft."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2291,6 +2579,12 @@
             "value" : "키바인드 읽기 오류"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fout bij het lezen van toetscombinaties"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2337,6 +2631,12 @@
             "value" : "제외된 앱"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitgesloten Apps"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2381,6 +2681,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "내보내기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export"
           }
         },
         "pt-BR" : {
@@ -2436,6 +2742,12 @@
             "value" : "존재하지 않는 것을 내보낼 수 없습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt niet iets exporteren dat niet bestaat!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2489,6 +2801,12 @@
             "value" : "키바인드가 설정되지 않음"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er zijn geen toetscombinaties ingesteld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2533,6 +2851,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "키바인드 내보내기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toetscombinaties exporteren"
           }
         },
         "pt-BR" : {
@@ -2581,6 +2905,12 @@
             "value" : "외부 바"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe balk"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2625,6 +2955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "빠른"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snel"
           }
         },
         "pt-BR" : {
@@ -2673,6 +3009,12 @@
             "value" : "크기 조정 시 창에 포커스"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Op vergroting de venster in focus zetten"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2717,6 +3059,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "일반"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algemeen"
           }
         },
         "pt-BR" : {
@@ -2765,6 +3113,12 @@
             "value" : "그라데이션"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verloop"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2809,6 +3163,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "그린"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groen"
           }
         },
         "pt-BR" : {
@@ -2857,6 +3217,12 @@
             "value" : "절반"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halven"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2901,6 +3267,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "촉각 피드백"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptische feedback"
           }
         },
         "pt-BR" : {
@@ -2949,6 +3321,12 @@
             "value" : "높이"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoogte"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2993,6 +3371,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "메뉴 바 아이콘 숨기기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstop de menu balk icoon"
           }
         },
         "pt-BR" : {
@@ -3041,6 +3425,12 @@
             "value" : "방향이 선택될 때까지 숨기기"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstop tot dat de richting is uitgekozen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3085,6 +3475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수평 삼분의 일"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizontale Derdes"
           }
         },
         "pt-BR" : {
@@ -3133,6 +3529,12 @@
             "value" : "아이콘"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icoon"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3178,6 +3580,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아이콘 기여자"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icoon bijdrager"
           }
         },
         "pt-BR" : {
@@ -3233,6 +3641,12 @@
             "value" : "블랙"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terug"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3284,6 +3698,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "블랙 홀"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwart gat"
           }
         },
         "pt-BR" : {
@@ -3339,6 +3759,12 @@
             "value" : "클래식"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klassiek"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3390,6 +3816,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "개발자"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkelaar"
           }
         },
         "pt-BR" : {
@@ -3445,6 +3877,12 @@
             "value" : "홀로"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holo"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3496,6 +3934,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "케우사르"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toetskap"
           }
         },
         "pt-BR" : {
@@ -3551,6 +3995,12 @@
             "value" : "루프 마스터"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop Meester"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3602,6 +4052,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "메타 루프"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta Loop"
           }
         },
         "pt-BR" : {
@@ -3657,6 +4113,12 @@
             "value" : "네온"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neon"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3708,6 +4170,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "로제 파인"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosé Pine"
           }
         },
         "pt-BR" : {
@@ -3763,6 +4231,12 @@
             "value" : "사이먼"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simon"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3814,6 +4288,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "서머"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zomer"
           }
         },
         "pt-BR" : {
@@ -3869,6 +4349,12 @@
             "value" : "신스웨이브 선셋"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synthwave Zonsondergang"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3920,6 +4406,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "화이트"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wit"
           }
         },
         "pt-BR" : {
@@ -3975,6 +4467,12 @@
             "value" : "새 아이콘을 잠금 해제할 때 알림을 받게 됩니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je gaat nu een melding krijgen als je een nieuw icoon ontgrendelt"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4026,6 +4524,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "새 아이콘을 잠금 해제했습니다: %@!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt deze icoon ontgrendelt: %@!"
           }
         },
         "pt-BR" : {
@@ -4081,6 +4585,12 @@
             "value" : "이미 25번 루프했습니다! 보상으로 새 아이콘을 드립니다: %@. 새 아이콘을 더 많이 잠금 해제하려면 계속 루프하세요!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt al 25 keer geloopt! Als een cadeau krijg je deze icoon: %@. Blijf loopen voor meer icoontjes!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4134,6 +4644,12 @@
             "value" : "5000 루프를 정복했습니다! 우주가 루프 마스터의 탄생을 목격했습니다! 당신이 받을 자격이 있는 보상을 즐기세요: 새로운 아이콘!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5000 loops veroverd! Het universum is een getuige van de geboorte van een Loop meester! Geniet van je wel verdiende cadeau: een nieuwe icoon!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4180,6 +4696,12 @@
             "value" : "전체 화면 창 무시"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledig scherm-vensters negeren"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4224,6 +4746,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "가져오기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importeren"
           }
         },
         "pt-BR" : {
@@ -4279,6 +4807,12 @@
             "value" : "Rectangle 설정 파일 선택"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer Rectangle configuratiebestand"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4325,6 +4859,12 @@
             "value" : "키바인드 가져오기"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toetscombinaties importeren"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4369,6 +4909,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rectangle에서 키 바인드 가져오기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importeer toetscombinaties van Rectangle"
           }
         },
         "pt-BR" : {
@@ -4424,6 +4970,12 @@
             "value" : "취소"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuleren"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4475,6 +5027,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "지우기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wissen"
           }
         },
         "pt-BR" : {
@@ -4530,6 +5088,12 @@
             "value" : "병합"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samenvoegen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4574,6 +5138,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "개발 버전 포함"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontwikkelingsversies bevatten"
           }
         },
         "pt-BR" : {
@@ -4622,6 +5192,12 @@
             "value" : "여백 포함"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padding bevatten"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4666,6 +5242,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "초기 크기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initiële grootte"
           }
         },
         "pt-BR" : {
@@ -4714,6 +5296,12 @@
             "value" : "즉시"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direct"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4758,6 +5346,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "디스코드 참여"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word lid van onze Discord"
           }
         },
         "pt-BR" : {
@@ -4806,6 +5400,12 @@
             "value" : "키 바인딩"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toetscombinaties"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4850,6 +5450,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "키 바인드"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toetscombinaties"
           }
         },
         "pt-BR" : {
@@ -4898,6 +5504,12 @@
             "value" : "로그인 시 실행"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open op login"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4942,6 +5554,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "왼쪽"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
           }
         },
         "pt-BR" : {
@@ -4991,6 +5609,12 @@
             "value" : "왼쪽 %@"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links %@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5035,6 +5659,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "왼쪽 순환"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links Cyclus"
           }
         },
         "pt-BR" : {
@@ -5090,6 +5720,12 @@
             "value" : "아이콘 잠김"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icoon Vergrendeld"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5141,6 +5777,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 그것을 가지고 있지 않습니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt dat nog niet"
           }
         },
         "pt-BR" : {
@@ -5196,6 +5838,12 @@
             "value" : "당신은 누구라고 생각하며, 이 최고 비밀 아이콘에 접근하려고 하나요?"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie denk je wel dat je bent om toegang te krijgen tot deze topgeheime iconen?"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5247,6 +5895,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "인내는 미덕이며, 이 아이콘으로 가는 당신의 열쇠입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwanst na nie!"
           }
         },
         "pt-BR" : {
@@ -5302,6 +5956,12 @@
             "value" : "이 아이콘은 잠겨 있지만, 당신의 잠재력은 잠겨 있지 않습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit icoon is vergrendeld, maar je potentieel niet!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5353,6 +6013,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "계속해서 루핑하고, 이 아이콘은 금방 당신의 것이 될 것입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blijf Loopen en dit icoon zal snel van jou zijn."
           }
         },
         "pt-BR" : {
@@ -5408,6 +6074,12 @@
             "value" : "이 아이콘은 아직 공개되지 않았습니다, 계속 기대해 주세요!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit icoon is nog niet bekend, blijf kijken!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5459,6 +6131,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "어떤 아이콘들은 기다릴 가치가 있지 않나요?"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommige iconen zijn het wachten waard, vind je niet?"
           }
         },
         "pt-BR" : {
@@ -5514,6 +6192,12 @@
             "value" : "아직 아니지만, 당신은 어제보다 더 가까워졌습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nog niet, maar je bent dichterbij dan gisteren!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5565,6 +6249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 아이콘을 잠금 해제하는 것은 시간과 루프의 문제일 뿐입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Het ontgrendelen van dit pictogram is slechts een kwestie van tijd en Loops."
           }
         },
         "pt-BR" : {
@@ -5620,6 +6310,12 @@
             "value" : "이 아이콘은 좋은 와인과 같아서, 더 많은 시간이 필요합니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit icoon is als een goede wijn, het heeft meer tijd nodig."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5671,6 +6367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "호기심을 유지하고, 곧 이 아이콘이 당신의 손에 닿을 것입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blijf nieuwsgierig en binnenkort ligt dit icoon binnen je bereik."
           }
         },
         "pt-BR" : {
@@ -5726,6 +6428,12 @@
             "value" : "좋은 작업을 계속하고, 이 아이콘이 당신의 보상이 될 것입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ga zo door en dit icoon zal je beloning zijn."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5777,6 +6485,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 아이콘은 가장 헌신적인 루퍼들을 위해 예약되어 있습니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit icoon is voorbehouden aan de meest toegewijde Loopers."
           }
         },
         "pt-BR" : {
@@ -5832,6 +6546,12 @@
             "value" : "당신의 여정은 아직 완료되지 않았습니다, 이 아이콘은 끝에서 기다립니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je reis is nog niet voltooid, dit icoon wacht aan het einde."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5883,6 +6603,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "적절한 시기에, 이 아이콘이 당신에게 드러날 것입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Te zijner tijd zal deze icoon aan jullie worden onthuld."
           }
         },
         "pt-BR" : {
@@ -5938,6 +6664,12 @@
             "value" : "인내심을 가지세요, 젊은 루퍼여, 이 아이콘은 멀지 않습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geduld, jonge Looper, dit icoon is niet ver weg."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5989,6 +6721,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "천 개의 루프 여정은 한 걸음으로 시작됩니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De reis van duizend Loops begint met één enkele stap."
           }
         },
         "pt-BR" : {
@@ -6044,6 +6782,12 @@
             "value" : "매 루프는 당신을 기다리는 보물에 더 가까이 가져갑니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elke Loop brengt je dichter bij de schat die wacht."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6095,6 +6839,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "각 루프와 함께, 이 아이콘에 대한 잠금이 약해집니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Met elke Loop wordt het slot op dit icoon zwakker."
           }
         },
         "pt-BR" : {
@@ -6150,6 +6900,12 @@
             "value" : "루프 이후 루프, 당신의 헌신이 성공의 열쇠를 조각합니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop na Loop, jouw toewijding vormt de sleutel tot succes."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6201,6 +6957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아이콘은 단순히 잠금 해제되는 것이 아니라, 루프마다 획득됩니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De iconen worden niet zomaar ontgrendeld; ze worden verdiend, Loop voor Loop."
           }
         },
         "pt-BR" : {
@@ -6256,6 +7018,12 @@
             "value" : "루프가 쌓이면, 당신의 아이콘 컬렉션도 함께 쌓일 것입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naarmate de Loops zich opstapelen, groeit ook je verzameling iconen."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6307,6 +7075,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "각 루프를 수수께끼로 생각하세요, 잠긴 아이콘의 미스터리를 푸는 것입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zie elke Loop als een raadsel om het mysterie van het vergrendelde icoon op te lossen."
           }
         },
         "pt-BR" : {
@@ -6362,6 +7136,12 @@
             "value" : "루핑에 대한 당신의 지속성은 모든 아이콘의 마스터 키입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je volharding in Looping is de hoofdsleutel tot alle iconen."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6413,6 +7193,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "장애물을 루프로 돌아보세요; 당신의 보상은 그 너머에 있습니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop om de obstakels heen; je beloning ligt net achter de obstakels."
           }
         },
         "pt-BR" : {
@@ -6468,6 +7254,12 @@
             "value" : "완성하는 각 루프는 아이콘이 자라나는 씨앗을 심습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elke Loop die je voltooit, plant de zaadjes voor de iconen om te groeien."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6521,6 +7313,12 @@
             "value" : "달의 위상처럼, 당신의 아이콘들은 루프의 주기로 자신을 드러낼 것입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Net als de fasen van de maan, zullen je iconen zich onthullen in een cyclus van Loops."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6572,6 +7370,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 만들어지지 않은 루프의 베일 뒤에 숨겨진 아이콘이 기다립니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De iconen wachten, verborgen achter de sluier van Loops die nog gemaakt moeten worden."
           }
         },
         "pt-BR" : {
@@ -6680,6 +7484,24 @@
             }
           }
         },
+        "nl-BE" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loop left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              }
+            }
+          }
+        },
         "pt-BR" : {
           "variations" : {
             "plural" : {
@@ -6757,6 +7579,12 @@
             "value" : "퍼센트"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6808,6 +7636,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "픽셀"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
           }
         },
         "pt-BR" : {
@@ -6863,6 +7697,12 @@
             "value" : "S"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6907,6 +7747,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "중간 클릭으로 트리거"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Middelste knop om te activeren"
           }
         },
         "pt-BR" : {
@@ -6955,6 +7801,12 @@
             "value" : "더"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meer"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6999,6 +7851,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "창과 함께 커서 이동"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beweeg de cursor met het venster"
           }
         },
         "pt-BR" : {
@@ -7047,6 +7905,12 @@
             "value" : "제외된 애플리케이션 없음"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen uitgesloten apps"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7091,6 +7955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "키 바인딩 없음"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen toetscombinaties"
           }
         },
         "pt-BR" : {
@@ -7146,6 +8016,12 @@
             "value" : "참여하세요! ...현재 버전에서, 그것은 최신입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7197,6 +8073,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 앱은 내 일기 항목보다 더 최신입니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -7252,6 +8134,12 @@
             "value" : "당신은 안전합니다, 대기 중에 업데이트가 없습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7303,6 +8191,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오늘은 업데이트가 없어 당신의 편입니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -7358,6 +8252,12 @@
             "value" : "우리 앱은 디지털 다이어트 중입니다. 새로운 바이트는 허용되지 않습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7409,6 +8309,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "새 버전? 죄송합니다, 우리는 이 버전에 너무 애착이 있습니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -7464,6 +8370,12 @@
             "value" : " 당신의 Loop는 어느 때보다 Loopier합니다, 업데이트를 찾을 수 없습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7515,6 +8427,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 것을 다하고 있습니다, 선장님! 업데이트가 없습니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -7570,6 +8488,12 @@
             "value" : "아주 먼, 먼 은하계에서도... 여전히 업데이트가 없습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7621,6 +8545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "소중한 것을 가지고 있습니다, 업데이트가 필요 없어요!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt al de top, geen updates nodig."
           }
         },
         "pt-BR" : {
@@ -7676,6 +8606,12 @@
             "value" : "워프 속도로 달리고 있지만, 업데이트는 보이지 않습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rijden op lichtsnelheid, geen updates in zicht!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7727,6 +8663,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "찾고 있는 업데이트가 아닙니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dit is niet de update waar je voor zoekt"
           }
         },
         "pt-BR" : {
@@ -7782,6 +8724,12 @@
             "value" : "'업데이트' 버튼을 잘못 놓았네요. 어머나!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De update button staat op de verkeerde plaats. Oops!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7833,6 +8781,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "분명 여기 어딘가에 있었어요... 잠깐만요"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ik zweer dat het hier ergens was... een seconde"
           }
         },
         "pt-BR" : {
@@ -7888,6 +8842,12 @@
             "value" : "하루에 사과 하나가... 업데이트를 멀리합니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een appel per dag houdt de... updates weg."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7939,6 +8899,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "힘이 당신과 함께하기를... 다음 번에!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moge de Force met je zijn... de volgende keer!"
           }
         },
         "pt-BR" : {
@@ -7994,6 +8960,12 @@
             "value" : "이 버전에는 힘이 강합니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De Force is sterk met deze versie!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8045,6 +9017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "그저 작은 마을의 앱, 여전히 같은 오래된 버전"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewoon een app voor een kleine stad, dezelfde oude versie"
           }
         },
         "pt-BR" : {
@@ -8100,6 +9078,12 @@
             "value" : "겨울이 오고 있습니다. 업데이트는 아직이죠."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De winter komt eraan. Updates zijn er nog niet."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8151,6 +9135,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "달콤한 꿈은... 업데이트가 없는 것으로 만들어집니다"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sweet dreams are made of… geen updates"
           }
         },
         "pt-BR" : {
@@ -8206,6 +9196,12 @@
             "value" : "이번 주 업데이트 요정이 우리를 건너뛰었습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je bent echt ongeduldig! Er zijn geen updates."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8257,6 +9253,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "계속 주목해주세요, 곧 더 많은 정보가 올 것입니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -8312,6 +9314,12 @@
             "value" : "최신 기술을 타고 달리고 있습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8363,6 +9371,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "우리는 돌아올 것입니다. 업데이트와 함께... 나중에"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -8418,6 +9432,12 @@
             "value" : "당신의... 업데이트 부족에 페니를."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8469,6 +9489,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 최고의 Loop를 가지고 있습니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -8524,6 +9550,12 @@
             "value" : "단순히 Loop를 업데이트하는 것은 아닙니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8575,6 +9607,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 일에는... 업데이트가 없습니다..."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -8630,6 +9668,12 @@
             "value" : "쳐다보는 냄비는 결코... 업데이트되지 않습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8681,6 +9725,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "문제가 99개 있어도, 업데이트는 문제가 아니에요."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -8736,6 +9786,12 @@
             "value" : "저... 음... 잠깐, 잃어버렸어요"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8787,6 +9843,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최대 레벨까지 올랐습니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -8842,6 +9904,12 @@
             "value" : "거지는... 업데이터가 될 수 없습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8893,6 +9961,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "돈으로는... 업데이트를 살 수 없습니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -8948,6 +10022,12 @@
             "value" : "새로운 정보가 없습니다, 사령관님."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8999,6 +10079,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "업데이트가 없다고? 대단해, Scott!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -9054,6 +10140,12 @@
             "value" : "업데이트가 없습니다, Mr. Anderson"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9105,6 +10197,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "바 싱 세에는 업데이트가 없습니다"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -9160,6 +10258,12 @@
             "value" : "업데이트? 이 경제에서?"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9211,6 +10315,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다음에 다시 확인하세요!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -9266,6 +10376,12 @@
             "value" : "Loop가 전성기입니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9317,6 +10433,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 시스템이 작동 중입니다!"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "pt-BR" : {
@@ -9372,6 +10494,12 @@
             "value" : "최신 상태입니다 :)"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9425,6 +10553,12 @@
             "value" : "아직 업데이트가 없습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9471,6 +10605,12 @@
             "value" : "없음"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9515,6 +10655,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "순환할 것이 없습니다"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niks oom door te bladeren"
           }
         },
         "pt-BR" : {
@@ -9570,6 +10716,12 @@
             "value" : "%@의 알림 권한이 현재 비활성화되어 있습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@’s melding toestemmingen zijn uitgeschakeld."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9621,6 +10773,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "설정 열기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen openen"
           }
         },
         "pt-BR" : {
@@ -9676,6 +10834,12 @@
             "value" : "시스템 설정에서 활성화해 주세요."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schakel ze in bij Systeeminstellingen."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9729,6 +10893,12 @@
             "value" : "현재 아이콘 설정"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zet icoon"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9773,6 +10943,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "새 아이콘 잠금 해제 시 알림"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waarschuwing bij het ontgrendelen van nieuwe iconen"
           }
         },
         "pt-BR" : {
@@ -9821,6 +10997,12 @@
             "value" : "확인"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ok"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9865,6 +11047,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "옵션"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opties"
           }
         },
         "pt-BR" : {
@@ -9913,6 +11101,12 @@
             "value" : "여백"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opvulling"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9957,6 +11151,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "권한"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toestemmingen"
           }
         },
         "pt-BR" : {
@@ -10015,6 +11215,12 @@
             "value" : "위치"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Positie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10059,6 +11265,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "크기 유지"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preserveer Grootte"
           }
         },
         "pt-BR" : {
@@ -10107,6 +11319,12 @@
             "value" : "순환 항목을 추가하려면 \"추가\"를 누르세요"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Druk op “Toevoegen” om een cyclusitem toe te voegen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10151,6 +11369,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "키 바인딩을 추가하려면 \"추가\"를 누르세요"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Druk op “Toevoegen” om een toetscombinatie toe te voegen"
           }
         },
         "pt-BR" : {
@@ -10199,6 +11423,12 @@
             "value" : "애플리케이션을 추가하려면 \"추가\"를 누르세요"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Druk op “Toevoegen” om een applicatie toe te voegen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10243,6 +11473,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "미리보기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbeeld"
           }
         },
         "pt-BR" : {
@@ -10291,6 +11527,12 @@
             "value" : "픽셀"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10335,6 +11577,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사분의 일"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwartalen"
           }
         },
         "pt-BR" : {
@@ -10383,6 +11631,12 @@
             "value" : "종료"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afsluiten"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10427,6 +11681,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "방사형 메뉴"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radiaal menu"
           }
         },
         "pt-BR" : {
@@ -10475,6 +11735,12 @@
             "value" : "방사형 메뉴"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radiaal menu"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10519,6 +11785,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "빨간색"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rood"
           }
         },
         "pt-BR" : {
@@ -10567,6 +11839,12 @@
             "value" : "나중에 상기시켜 주세요"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herinner me later"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10611,6 +11889,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "제거"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijderen"
           }
         },
         "pt-BR" : {
@@ -10659,6 +11943,12 @@
             "value" : "요청..."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aanvraag…"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10703,6 +11993,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "재설정"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
           }
         },
         "pt-BR" : {
@@ -10751,6 +12047,12 @@
             "value" : "커서 아래 창 크기 조정"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte van venster onder cursor wijzigen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10795,6 +12097,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "스테이지 매니저 존중"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage Manager respecteren"
           }
         },
         "pt-BR" : {
@@ -10843,6 +12151,12 @@
             "value" : "드래그할 때 창 프레임 복원"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vensterframe herstellen bij slepen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10887,6 +12201,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오른쪽"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts"
           }
         },
         "pt-BR" : {
@@ -10936,6 +12256,12 @@
             "value" : "오른쪽 %@"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts %@"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10980,6 +12306,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "오른쪽 순환"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechtse Cyclus"
           }
         },
         "pt-BR" : {
@@ -11028,6 +12360,12 @@
             "value" : "화면 전환"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scherm wisselen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11072,6 +12410,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "루프 키바인드 파일 선택"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selecteer Loop toetscombinaties bestand"
           }
         },
         "pt-BR" : {
@@ -11120,6 +12464,12 @@
             "value" : "피드백 보내기"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback sturen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11164,6 +12514,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "트리거 키 설정..."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zet een activatie knop"
           }
         },
         "pt-BR" : {
@@ -11212,6 +12568,12 @@
             "value" : "설정"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11256,6 +12618,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "설정..."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instellingen…"
           }
         },
         "pt-BR" : {
@@ -11304,6 +12672,12 @@
             "value" : "GitHub 페이지에서 피드백을 공유하세요. 버그를 알려주거나 기능을 제안하거나 다른 소중한 의견을 제공할 수 있습니다. Loop가 여러분의 작업 흐름을 개선한 것 같다면 기부도 받습니다 :)"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deel feedback op onze GitHub-pagina, waar je ons bugs kunt laten weten, functies kunt voorstellen of andere waardevolle input kunt geven. We accepteren ook donaties als je vindt dat Loop je werkstroom heeft verbeterd :)"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11348,6 +12722,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "독에 표시"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toon in dock"
           }
         },
         "pt-BR" : {
@@ -11396,6 +12776,12 @@
             "value" : "반복할 때 미리보기 표시"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voorbeeld laten zien als je Loopt"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11440,6 +12826,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "단순"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simpel"
           }
         },
         "pt-BR" : {
@@ -11488,6 +12880,12 @@
             "value" : "크기"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11532,6 +12930,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "크기 증가"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grootte toename"
           }
         },
         "pt-BR" : {
@@ -11580,6 +12984,12 @@
             "value" : "부드럽게"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vlot"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11624,6 +13034,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "일부 기능, 아이디어 및 버그 수정"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enkele functies, ideeën en bugfixes"
           }
         },
         "pt-BR" : {
@@ -11672,6 +13088,12 @@
             "value" : "스테이지 매니저"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage Manager"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11716,6 +13138,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "스테이지 스트립 크기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage strook grootte"
           }
         },
         "pt-BR" : {
@@ -11764,6 +13192,12 @@
             "value" : "새 아이콘 제안"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nieuw icoon voorstellen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11808,6 +13242,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "배경화면 동기화"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achtergrond synchroniseren"
           }
         },
         "pt-BR" : {
@@ -11856,6 +13296,12 @@
             "value" : "해당 키는 이미 트리거 키로 사용 중입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze toets is al uw activatie knop."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11900,6 +13346,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "해당 키 바인딩은 이미 %@ 에서 사용 중입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die toetscombinatie wordt al gebruikt door %@."
           }
         },
         "pt-BR" : {
@@ -11948,6 +13400,12 @@
             "value" : "해당 키 바인딩은 이미 다른 사용자 정의 키 바인딩에서 사용 중입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die toetscombinatie wordt al gebruikt door een andere aangepaste toetscombinatie."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11992,6 +13450,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "테마 설정"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thema"
           }
         },
         "pt-BR" : {
@@ -12040,6 +13504,12 @@
             "value" : "두께"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dikte"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12084,6 +13554,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이 기능은 아직 개발 중입니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deze functie is nog in ontwikkeling."
           }
         },
         "pt-BR" : {
@@ -12132,6 +13608,12 @@
             "value" : "상단"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12176,6 +13658,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "상단 순환"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bovenste cyclus"
           }
         },
         "pt-BR" : {
@@ -12224,6 +13712,12 @@
             "value" : "트리거 지연"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activatie vertraging"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12268,6 +13762,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "트리거 키"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activatie Knop"
           }
         },
         "pt-BR" : {
@@ -12316,6 +13816,12 @@
             "value" : "업데이트..."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updaten…"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12360,6 +13866,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "좌표 사용"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik coördinaten"
           }
         },
         "pt-BR" : {
@@ -12408,6 +13920,12 @@
             "value" : "macOS 중앙 사용"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik macOS centrum"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12452,6 +13970,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "픽셀 사용"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik pixels"
           }
         },
         "pt-BR" : {
@@ -12500,6 +14024,12 @@
             "value" : "커서가 있는 화면 사용"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scherm met cursor gebruiken"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12544,6 +14074,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사용자 정의 메뉴바를 사용하는 경우 이것을 사용하세요."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gebruik dit als je een eigen menubalk gebruikt."
           }
         },
         "pt-BR" : {
@@ -12598,6 +14134,12 @@
             "value" : "버전 %1$@ (%2$lld)"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versie %1$@ (%2$lld)"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12642,6 +14184,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수직 삼분의 일"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verticale derden"
           }
         },
         "pt-BR" : {
@@ -12690,6 +14238,12 @@
             "value" : "너비"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breedte"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12734,6 +14288,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "윈도우"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venster"
           }
         },
         "pt-BR" : {
@@ -12789,6 +14349,12 @@
             "value" : "거의 최대화"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bijna maximaliseren"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12840,6 +14406,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "하단 절반"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderste helft"
           }
         },
         "pt-BR" : {
@@ -12895,6 +14467,12 @@
             "value" : "좌하단 사분의 일"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwart linksonder"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12946,6 +14524,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "우하단 사분의 일"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwartier rechtsonder"
           }
         },
         "pt-BR" : {
@@ -13001,6 +14585,12 @@
             "value" : "하단 셋째"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderste derde"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13052,6 +14642,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "하단 이삼분의 둘"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderste twee derden"
           }
         },
         "pt-BR" : {
@@ -13107,6 +14703,12 @@
             "value" : "중앙"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Midden"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13158,6 +14760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사용자 정의"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aangepast"
           }
         },
         "pt-BR" : {
@@ -13213,6 +14821,12 @@
             "value" : "순환"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyclus"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13264,6 +14878,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "전체 화면"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volledig scherm"
           }
         },
         "pt-BR" : {
@@ -13319,6 +14939,12 @@
             "value" : "하단 확대"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bodem laten groeien"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13370,6 +14996,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "좌측 확대"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links groeien"
           }
         },
         "pt-BR" : {
@@ -13425,6 +15057,12 @@
             "value" : "우측 확대"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts groeien"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13476,6 +15114,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "상단 확대"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Groeien"
           }
         },
         "pt-BR" : {
@@ -13531,6 +15175,12 @@
             "value" : "숨기기"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstoppen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13582,6 +15232,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "수평 중앙 셋째"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizontaal Midden Derde"
           }
         },
         "pt-BR" : {
@@ -13637,6 +15293,12 @@
             "value" : "초기 프레임"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initieel frame"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13688,6 +15350,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "더 크게"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groter"
           }
         },
         "pt-BR" : {
@@ -13743,6 +15411,12 @@
             "value" : "좌측 절반"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linker helft"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13794,6 +15468,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "좌측 셋째"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links Derde"
           }
         },
         "pt-BR" : {
@@ -13849,6 +15529,12 @@
             "value" : "좌측 이삼분의 둘"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Twee derde links"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13900,6 +15586,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "macOS 중앙"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacOS Centrum"
           }
         },
         "pt-BR" : {
@@ -13955,6 +15647,12 @@
             "value" : "최대화"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximaliseer"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14006,6 +15704,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "최소화"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimaliseer"
           }
         },
         "pt-BR" : {
@@ -14061,6 +15765,12 @@
             "value" : " 아래로 이동"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omlaag"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14112,6 +15822,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "왼쪽으로 이동"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naar links"
           }
         },
         "pt-BR" : {
@@ -14167,6 +15883,12 @@
             "value" : "오른쪽으로 이동"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naar rechts"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14218,6 +15940,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "위로 이동"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Omhoog"
           }
         },
         "pt-BR" : {
@@ -14273,6 +16001,12 @@
             "value" : "다음 화면"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volgende scherm"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14324,6 +16058,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "작업 없음"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geen Actie"
           }
         },
         "pt-BR" : {
@@ -14379,6 +16119,12 @@
             "value" : " 이전 화면"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorig scherm"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14430,6 +16176,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "우측 절반"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechterhelft"
           }
         },
         "pt-BR" : {
@@ -14485,6 +16237,12 @@
             "value" : "우측 셋째"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts Derde"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14536,6 +16294,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "우측 이삼분의 둘"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts Twee Derde"
           }
         },
         "pt-BR" : {
@@ -14591,6 +16355,12 @@
             "value" : "하단 축소"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krimp Bodem"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14642,6 +16412,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "좌측 축소"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krimp links"
           }
         },
         "pt-BR" : {
@@ -14697,6 +16473,12 @@
             "value" : "우측 축소"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts krimpen"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14748,6 +16530,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "상단 축소"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krimp Top"
           }
         },
         "pt-BR" : {
@@ -14803,6 +16591,12 @@
             "value" : "더 작게"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kleiner"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14854,6 +16648,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "상단 절반"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bovenste helft"
           }
         },
         "pt-BR" : {
@@ -14909,6 +16709,12 @@
             "value" : "좌상단 사분의 일"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwartier linksboven"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14960,6 +16766,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "우상단 사분의 일"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kwartier rechtsboven"
           }
         },
         "pt-BR" : {
@@ -15015,6 +16827,12 @@
             "value" : "상단 셋째"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top derde"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15066,6 +16884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "상단 이삼분의 둘"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bovenste twee derden"
           }
         },
         "pt-BR" : {
@@ -15121,6 +16945,12 @@
             "value" : "실행 취소"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ongedaan maken"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15174,6 +17004,12 @@
             "value" : "수직 중앙 셋째"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verticaal Midden Derde"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15218,6 +17054,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "윈도우 갭"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venster gaten"
           }
         },
         "pt-BR" : {
@@ -15266,6 +17108,12 @@
             "value" : "윈도우 조작"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Venster Manipulatie"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15310,6 +17158,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "윈도우 스냅핑"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Window snapping"
           }
         },
         "pt-BR" : {
@@ -15358,6 +17212,12 @@
             "value" : "윈도우 스냅핑은 여전히 미리보기를 사용할 것입니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Window snapping gebruikt nog steeds het voorbeeld."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15399,6 +17259,12 @@
           }
         },
         "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X"
+          }
+        },
+        "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "X"
@@ -15450,6 +17316,12 @@
             "value" : "Y"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15494,6 +17366,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "트리거 키를 포함하여 키바인드에는 최대 %lld 개의 키만 사용할 수 있습니다."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt maximaal %lld toetsen gebruiken in een toetscombinatie, inclusief de activatie knop."
           }
         },
         "pt-BR" : {
@@ -15542,6 +17420,12 @@
             "value" : "트리거 키에는 최대 %lld 개의 키만 사용할 수 있습니다."
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je kunt maximaal %lld toetsen gebruiken in uw activatie knop."
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15588,6 +17472,12 @@
             "value" : "%lld 번 반복했습니다!"
           }
         },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt %lld keer gelooped!"
+          }
+        },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15632,6 +17522,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "당신이 반복했는데... 음... 나... 횟수를 잃어버렸어요..."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt... uhh... ik... ben de tel kwijt..."
           }
         },
         "pt-BR" : {
