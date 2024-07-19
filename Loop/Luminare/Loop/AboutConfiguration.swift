@@ -37,18 +37,6 @@ class AboutConfigurationModel: ObservableObject {
             avatar: Image(.kami)
         ),
         .init(
-            "Greg Lassale",
-            "Icon contributor",
-            url: .init(string: "https://x.com/greglassale")!,
-            avatar: Image(.greglassale)
-        ),
-        .init(
-            "JSDev",
-            "Icon contributor",
-            url: .init(string: "https://github.com/N-coder82")!,
-            avatar: Image(.jsdev)
-        ),
-        .init(
             .init(localized: "Contributors on GitHub"),
             "Some features, ideas, and bug fixes",
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
@@ -221,7 +209,6 @@ struct AboutConfigurationView: View {
                 }
             }
 
-            // LuminareToggle("Automatically check for updates", isOn: $updater.automaticallyChecksForUpdates)
             LuminareToggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
         }
 

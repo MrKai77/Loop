@@ -3154,6 +3154,7 @@
       }
     },
     "Icon contributor" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en-GB" : {
           "stringUnit" : {
@@ -9974,6 +9975,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "權限"
+          }
+        }
+      }
+    },
+    "Please press deny when Loop \n requests screen recording permissions." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop이 화면 녹화 권한을 요청할 때 거부를 누르세요."
           }
         }
       }
