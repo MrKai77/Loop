@@ -13,7 +13,7 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 >
 > Loop is constantly evolving, with new features and improvements added regularly to enhance your window management experience on macOS.
 
-<p align="center">
+<h6 align="center">
   <img src="assets/graphics/loop_demo.gif" alt="Loop Demo">
   <br /><br />
   <a href="https://discord.gg/2CZ2N6PKjq">
@@ -32,7 +32,7 @@ Loop is a macOS app that simplifies window management for you. You can effortles
     <img src="https://img.shields.io/github/issues/MrKai77/Loop?label=Issues&color=FEE75C&style=for-the-badge&labelColor=23272A" />
   </a>
   <br />
-</p>
+</h6>
 
 ## Features
 
