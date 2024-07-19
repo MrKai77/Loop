@@ -143,7 +143,6 @@ struct RadialMenuView: View {
         .shadow(radius: 10)
         .padding(20)
         .fixedSize()
-
         // Animate window
         .scaleEffect(currentAction.direction == .maximize ? 0.85 : 1)
         .animation(animationConfiguration.radialMenuSize, value: currentAction)
