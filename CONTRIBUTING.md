@@ -84,9 +84,9 @@ Now that you've signed Loop with your developer account, it's time to build! Fir
 2. If there is a `Command CodeSign failed with a nonzero exit code` issue, follow the above steps and clear your build cache.
 3. If it's a code issue, review your code and adjust accordingly.
 
-Now, you're on your own. We hope you'll make some nice Swift code. On each build you attempt, `[SwiftFormat](https://github.com/nicklockwood/SwiftFormat)` will run. **DO NOT** turn this off. When you submit your PR, this will run another check to validate you have the correct formatting. If the format is wrong, your request will be rejected.
+Now, you're on your own. We hope you'll make some nice Swift code. On each build you attempt, [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) will run. **DO NOT** turn this off. When you submit your PR, this will run another check to validate you have the correct formatting. If the format is wrong, your request will be rejected.
 
-**IMPORTANT:** You MUST have `[SwiftFormat](https://github.com/nicklockwood/SwiftFormat)` installed via `brew`. If you know how to use brew, then it's as simple as
+**IMPORTANT:** You MUST have [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) installed via `brew`. If you know how to use brew, then it's as simple as
 
 ```sh
 brew install SwiftFormat
