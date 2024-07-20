@@ -14149,13 +14149,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "版本 %1$@（%2$@）"
+            "value" : "版本 %1$@（%2$lld）"
           }
         },
         "zh-HK" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "版本%1$@（%2$@）"
+            "value" : "版本%1$@（%2$lld）"
           }
         }
       }
