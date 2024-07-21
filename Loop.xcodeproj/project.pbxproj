@@ -159,6 +159,7 @@
 		A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindMonitor.swift; sourceTree = "<group>"; };
 		A8A583B72BE5A117005F4CB2 /* CycleActionConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleActionConfigurationView.swift; sourceTree = "<group>"; };
 		A8A583B92BE5A8D8005F4CB2 /* KeybindingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeybindingItem.swift; sourceTree = "<group>"; };
+		A8B1DB202C4CF28400255B13 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A8B5E1622B43726C00044D30 /* CustomWindowActionAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWindowActionAnchor.swift; sourceTree = "<group>"; };
 		A8BC4A6D2C2F4C9800B94B82 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		A8BC77782C0EB4DD008E2EDA /* AppDelegate+UNNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UNNotifications.swift"; sourceTree = "<group>"; };
@@ -509,6 +510,7 @@
 				"en-GB",
 				ko,
 				"nl-BE",
+				ar,
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
@@ -653,6 +655,7 @@
 				A8F1E96B2C253FA200AAF871 /* zh-Hans */,
 				A80AB7E22C276E0300BE0360 /* en-GB */,
 				4C311C1A2C40B4C0003C99D0 /* ko */,
+				A8B1DB202C4CF28400255B13 /* ar */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
