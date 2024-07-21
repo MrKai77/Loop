@@ -95,6 +95,7 @@
 		0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowDirection+LocalizedString.swift"; sourceTree = "<group>"; };
 		4C0F2ACE2C3CFD09006CB34D /* RectangleTranslationLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectangleTranslationLayer.swift; sourceTree = "<group>"; };
 		4C311C1A2C40B4C0003C99D0 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C5853252C4D4FD500FD0FC4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C6B93E12C1DCF6E00AFF832 /* TheLoopTimes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheLoopTimes.swift; sourceTree = "<group>"; };
 		4C6B93E22C1DCF6E00AFF832 /* Updater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
 		4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateView.swift; sourceTree = "<group>"; };
@@ -511,6 +512,7 @@
 				ko,
 				"nl-BE",
 				ar,
+				de,
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
@@ -656,6 +658,7 @@
 				A80AB7E22C276E0300BE0360 /* en-GB */,
 				4C311C1A2C40B4C0003C99D0 /* ko */,
 				A8B1DB202C4CF28400255B13 /* ar */,
+				4C5853252C4D4FD500FD0FC4 /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

@@ -9,6 +9,12 @@
             "value" : "%@"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -65,6 +71,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ مستخدم بالفعل كمفتاح التفعيل الخاص بك."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ wird bereits als Aktivierungstaste benutzt."
           }
         },
         "en-GB" : {
@@ -125,6 +137,12 @@
             "value" : "%@ يضع النوافذ قليلاً فوق المركز المطلق، مما يمكن أن يكون أكثر ملاءمة من الناحية العملية."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ platziert Fenster etwas über der absoluten Mitte, was als ergonomischer empfunden werden kann."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -178,6 +196,12 @@
     "%lld" : {
       "localizations" : {
         "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -241,6 +265,12 @@
             "value" : "حول"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -297,6 +327,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لون اللكنة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akzentfarbe"
           }
         },
         "en-GB" : {
@@ -356,6 +392,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مخصص"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigene"
           }
         },
         "en" : {
@@ -423,6 +465,12 @@
             "value" : "النظام"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -486,6 +534,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "خلفية"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hintergrundbild"
           }
         },
         "en" : {
@@ -552,6 +606,12 @@
             "value" : "الوصول إلى إمكانية الوصول"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bedienungshilfen-Zugriff"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -609,6 +669,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "يرجى منح الوصول لتتمكن من تغيير حجم النوافذ."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte erlaube den Zugriff, um Fenstergrößen ändern zu können."
           }
         },
         "en" : {
@@ -676,6 +742,12 @@
             "value" : "%@ يحتاج إلى أذونات الوصول"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ braucht Zugriff auf Bedienungshilfen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -740,6 +812,12 @@
             "value" : "إضافة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -796,6 +874,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "متقدم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erweitert"
           }
         },
         "en-GB" : {
@@ -856,6 +940,12 @@
             "value" : "تحريك تغيير حجم النافذة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ändern der Fenstergrössen animieren"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -912,6 +1002,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "سرعة التحريك"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animationsgeschwindigkeit"
           }
         },
         "en-GB" : {
@@ -971,6 +1067,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مقفل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesperrt"
           }
         },
         "en" : {
@@ -1037,6 +1139,12 @@
             "value" : "سلوك"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verhalten"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1093,6 +1201,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أزرق"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blau"
           }
         },
         "en-GB" : {
@@ -1153,6 +1267,12 @@
             "value" : "سماكة الحدود"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umrandungsdicke"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1209,6 +1329,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أسفل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unten"
           }
         },
         "en-GB" : {
@@ -1269,6 +1395,12 @@
             "value" : "دورة الأسفل"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unten durchschalten"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1325,6 +1457,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لا يمكن تمكينه عندما يكون المعاينة معطلاً."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kann nicht aktiviert werden wenn die Vorschau noch aktiviert ist."
           }
         },
         "en-GB" : {
@@ -1385,6 +1523,12 @@
             "value" : "تغيير"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ändern"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1441,6 +1585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تحقق من وجود تحديثات…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfen auf Updates..."
           }
         },
         "en-GB" : {
@@ -1501,6 +1651,12 @@
             "value" : "إغلاق"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schliessen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1557,6 +1713,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لون"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe"
           }
         },
         "en-GB" : {
@@ -1617,6 +1779,12 @@
             "value" : "تكوين الهوامش…"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abstand konfigurieren..."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1673,6 +1841,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "المساهمون على GitHub"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitwirkende auf GitHub"
           }
         },
         "en-GB" : {
@@ -1733,6 +1907,12 @@
             "value" : "نصف قطر الزاوية"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eckenradius"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1789,6 +1969,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الاعتمادات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitwirkende"
           }
         },
         "en-GB" : {
@@ -1849,6 +2035,12 @@
             "value" : "المؤشر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mauszeiger"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1905,6 +2097,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مخصص"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzerdefiniert"
           }
         },
         "en-GB" : {
@@ -1965,6 +2163,12 @@
             "value" : "دورة مخصصة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzerdefinierter Zyklus"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2021,6 +2225,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ربط مفتاح مخصص"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzerdefinierter Tastenzuweisung"
           }
         },
         "en-GB" : {
@@ -2081,6 +2291,12 @@
             "value" : "تخصيص إجراء ربط المفتاح هذا."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktion dieser Tastenkombination anpassen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2137,6 +2353,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تخصيص إطار ربط المفتاح هذا."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktion dieser Tastenkombination anpassen."
           }
         },
         "en-GB" : {
@@ -2197,6 +2419,12 @@
             "value" : "تخصيص ما يمر به ربط المفتاح هذا."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anpassen, durch was diese Tastenkombination wechselt"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2253,6 +2481,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "دورة ربط المفتاح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wechsel-Tastenkombination"
           }
         },
         "en-GB" : {
@@ -2313,6 +2547,12 @@
             "value" : "تصميم"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Design"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2369,6 +2609,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تطوير"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklung"
           }
         },
         "en-GB" : {
@@ -2429,6 +2675,12 @@
             "value" : "دعم التطوير"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklungsunterstützung"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2485,6 +2737,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تعطيل تفاعل المؤشر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mauszeiger Interaktion deaktivieren"
           }
         },
         "en-GB" : {
@@ -2545,6 +2803,12 @@
             "value" : "هل تريد دمج أو محو روابط المفاتيح الحالية؟"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bestehende Tastenbelegungen zusammenführen oder löschen?"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2601,6 +2865,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تبرع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spenden"
           }
         },
         "en-GB" : {
@@ -2661,6 +2931,12 @@
             "value" : "تبرع..."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstützen..."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2717,6 +2993,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "انقر مرتين للتشغيل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doppelklick zum Aktivieren"
           }
         },
         "en-GB" : {
@@ -2776,6 +3058,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تأكد من أن الملف الذي اخترته في التنسيق الصحيح."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stelle sicher das die ausgewählte Datei im richtigen Format ist."
           }
         },
         "en" : {
@@ -2843,6 +3131,12 @@
             "value" : "خطأ في قراءة روابط المفاتيح"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler beim lesen von Tastenbelegungen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -2907,6 +3201,12 @@
             "value" : "التطبيقات المستبعدة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgeschlossene Apps"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2963,6 +3263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تصدير"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren"
           }
         },
         "en-GB" : {
@@ -3022,6 +3328,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لا يمكنك تصدير شيء غير موجود!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst etwas, was nicht existiert, nicht exportieren!"
           }
         },
         "en" : {
@@ -3089,6 +3401,12 @@
             "value" : "لم يتم تعيين روابط المفاتيح"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Tastenbelegung wurden eingestellt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -3153,6 +3471,12 @@
             "value" : "تصدير روابط المفاتيح"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tastenbelegungen Exportieren"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3209,6 +3533,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "شريط خارجي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Leiste"
           }
         },
         "en-GB" : {
@@ -3269,6 +3599,12 @@
             "value" : "سريع"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schnell"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3325,6 +3661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تركيز النافذة عند تغيير الحجم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster beim manipulieren fokussieren"
           }
         },
         "en-GB" : {
@@ -3385,6 +3727,12 @@
             "value" : "عام"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3441,6 +3789,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تدرج"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbverlauf"
           }
         },
         "en-GB" : {
@@ -3501,6 +3855,12 @@
             "value" : "أخضر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grün"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3557,6 +3917,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أنصاف"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hälften"
           }
         },
         "en-GB" : {
@@ -3617,6 +3983,12 @@
             "value" : "استجابة لمسية"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptisches Feedback"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3673,6 +4045,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ارتفاع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Höhe"
           }
         },
         "en-GB" : {
@@ -3733,6 +4111,12 @@
             "value" : "إخفاء أيقونة شريط القوائم"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menüleisten Symbol ausblenden"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3789,6 +4173,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إخفاء حتى يتم اختيار الاتجاه"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausblenden bis eine Richtung gewählt wurde"
           }
         },
         "en-GB" : {
@@ -3849,6 +4239,12 @@
             "value" : "أثلاث أفقية"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizontale Drittel"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3905,6 +4301,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أيقونة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icon"
           }
         },
         "en-GB" : {
@@ -3966,6 +4368,12 @@
             "value" : "مساهم الأيقونة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Icon Mitwirkende"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4023,6 +4431,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أسود"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schwarz"
           }
         },
         "en" : {
@@ -4090,6 +4504,12 @@
             "value" : "الثقب الأسود"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schwarzes Lock"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4153,6 +4573,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "كلاسيكي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klassisch"
           }
         },
         "en" : {
@@ -4220,6 +4646,12 @@
             "value" : "مطور"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwickler"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4283,6 +4715,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هولو"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holo"
           }
         },
         "en" : {
@@ -4350,6 +4788,12 @@
             "value" : "غطاء المفتاح"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keycap"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4413,6 +4857,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "معلم الحلقات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop Meister"
           }
         },
         "en" : {
@@ -4480,6 +4930,12 @@
             "value" : "الحلقة الفوقية"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta Loop"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4543,6 +4999,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "نيون"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neon"
           }
         },
         "en" : {
@@ -4610,6 +5072,12 @@
             "value" : "روزي باين"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosé Pine"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4673,6 +5141,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "سيمون"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simon"
           }
         },
         "en" : {
@@ -4740,6 +5214,12 @@
             "value" : "صيف"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommer"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4803,6 +5283,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "غروب سينثويف"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synthwave West"
           }
         },
         "en" : {
@@ -4870,6 +5356,12 @@
             "value" : "أبيض"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiß"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -4933,6 +5425,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "سيتم إخطارك الآن عندما ت\n\nفتح أيقونة جديدة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du wirst benachrichtigt wenn du ein App Icon freischaltest."
           }
         },
         "en" : {
@@ -5000,6 +5498,12 @@
             "value" : "لقد قمت بفتح أيقونة جديدة: %@!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast ein neues App Icon freigeschaltet: %@!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -5063,6 +5567,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لقد قمت بالتكرار بالفعل 25 مرة! كمكافأة، إليك أيقونة جديدة: %@. استمر في التكرار لفتح أيقونات جديدة!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast bereits 25 Mal gelooped! Als Belohnung gibt es ein neues Icon: %@. Loop weiter, um neue Symbole freizuschalten!"
           }
         },
         "en" : {
@@ -5130,6 +5640,12 @@
             "value" : "5000 تكرار تمت السيطرة عليها! لقد شهد الكون ولادة معلم الحلقات! استمتع بمكافأتك المستحقة: أيقونة جديدة تمامًا!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5000 Loops erobert! Das Universum hat die Geburt eines Loop-Meisters erlebt! Genieße deine wohlverdiente Belohnung: Ein brandneues Icon!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -5194,6 +5710,12 @@
             "value" : "تجاهل النوافذ الكاملة الشاشة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollbildfenster ignorieren"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5250,6 +5772,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "استيراد"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importieren"
           }
         },
         "en-GB" : {
@@ -5309,6 +5837,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حدد ملف تكوين Rectangle"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rentable config Datei auswählen"
           }
         },
         "en" : {
@@ -5375,6 +5909,12 @@
             "value" : "استيراد روابط المفاتيح"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tastenbelegungen Importieren"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5431,6 +5971,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "استيراد روابط المفاتيح من Rectangle"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tastenbelegungen von Rectangle importieren"
           }
         },
         "en-GB" : {
@@ -5490,6 +6036,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إلغاء"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
           }
         },
         "en" : {
@@ -5557,6 +6109,12 @@
             "value" : "مسح"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -5620,6 +6178,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "دمج"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zussamenführen"
           }
         },
         "en" : {
@@ -5686,6 +6250,12 @@
             "value" : "تضمين إصدارات التطوير"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklungs-Versionen einbeziehen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5742,6 +6312,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تضمين التوسيد"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abstand einbeziehen"
           }
         },
         "en-GB" : {
@@ -5802,6 +6378,12 @@
             "value" : "الحجم الأولي"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initiale Größe"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5858,6 +6440,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "فوري"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sofort"
           }
         },
         "en-GB" : {
@@ -5918,6 +6506,12 @@
             "value" : "انضم إلى Discord"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discord beitreten"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5974,6 +6568,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "روابط المفاتيح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tastenbelegungen"
           }
         },
         "en-GB" : {
@@ -6034,6 +6634,12 @@
             "value" : "روابط المفاتيح"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tastenbelegung"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6092,6 +6698,12 @@
             "value" : "تشغيل عند تسجيل الدخول"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim anmelden starten"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6148,6 +6760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "يسار"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
           }
         },
         "en-GB" : {
@@ -6209,6 +6827,12 @@
             "value" : "يسار %@"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links %@"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6265,6 +6889,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "دورة اليسار"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links durchschalten"
           }
         },
         "en-GB" : {
@@ -6324,6 +6954,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الأيقونة مقفلة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Icon freigeschaltet!"
           }
         },
         "en" : {
@@ -6391,6 +7027,12 @@
             "value" : "أنت لا تملك هذا بعد!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das hast du noch nicht!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -6454,6 +7096,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "من تظن نفسك، تحاول الوصول إلى هذه الأيقونات السرية للغاية؟"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wer glaubst du, wer du bist, dass du versuchst, auf diese streng geheimen Icons zuzugreifen?"
           }
         },
         "en" : {
@@ -6521,6 +7169,12 @@
             "value" : "الصبر فضيلة، وهو مفتاحك لهذه الأيقونة."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geduld ist eine Tugend und der Schlüssel zu diesem Icon."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -6584,6 +7238,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هذه الأيقونة مقفلة، لكن إمكاناتك ليست كذلك!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Icon ist zwar gesperrt, aber dein Potential nicht!"
           }
         },
         "en" : {
@@ -6651,6 +7311,12 @@
             "value" : "واصل التكرار، وستكون هذه الأيقونة لك قريباً."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleib am Loop dran, und dieses Icon gehört dir im Handumdrehen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -6714,6 +7380,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هذه الأيقونة لا تزال تحت الغطاء، تابع التحديثات!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Icon ist noch nicht veröffentlicht, bleib gespannt!"
           }
         },
         "en" : {
@@ -6781,6 +7453,12 @@
             "value" : "بعض الأيقونات تستحق الانتظار، ألا تعتقد ذلك؟"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für manche Icons lohnt sich das warten, oder?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -6844,6 +7522,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ليس بعد، لكنك أقرب مما كنت عليه بالأمس!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch nicht, aber du bist dem Ziel näher als gestern!"
           }
         },
         "en" : {
@@ -6911,6 +7595,12 @@
             "value" : "فتح هذه الأيقونة مجرد مسألة وقت وتكرار."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlocking this icon is just a matter of time and Loops."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -6974,6 +7664,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هذه الأيقونة مثل النبيذ الجيد، تحتاج إلى المزيد من الوقت."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Icon ist wie ein guter Wein, es braucht noch etwas Zeit."
           }
         },
         "en" : {
@@ -7041,6 +7737,12 @@
             "value" : "ابقَ فضولياً، وسرعان ما ستكون هذه الأيقونة في متناول يدك."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleib neugierig, und bald wird dieses Icon in deiner Reichweite sein."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -7104,6 +7806,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "واصل العمل الجيد، وستكون هذه الأيقونة مكافأتك."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mach weiter so, und dieses Symbol wird deine Belohnung sein."
           }
         },
         "en" : {
@@ -7171,6 +7879,12 @@
             "value" : "هذه الأيقونة مخصصة للأكثر التزاماً بالتكرار."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Icon ist für die engagiertesten Looper reserviert."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -7234,6 +7948,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "رحلتك لم تكتمل بعد، هذه الأيقونة تنتظرك في النهاية."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Reise ist noch nicht abgeschlossen; dieses Symbol wartet am Ende auf dich."
           }
         },
         "en" : {
@@ -7301,6 +8021,12 @@
             "value" : "في الوقت المناسب، ستظهر لك هذه الأيقونة."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu gegebener Zeit wird dir dieses Symbol enthüllt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -7364,6 +8090,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الصبر، أيها المكرر الشاب، هذه الأيقونة ليست بعيدة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geduld, junger Looper, es ist nicht weit entfernt."
           }
         },
         "en" : {
@@ -7431,6 +8163,12 @@
             "value" : "رحلة الألف تكرار تبدأ بخطوة واحدة."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Weg zu tausend Loops beginnt mit einem einzelnen Schritt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -7494,6 +8232,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "كل تكرار يقربك من الكنز الذي ينتظرك."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeder Loop bringt dich näher zum Schatz."
           }
         },
         "en" : {
@@ -7561,6 +8305,12 @@
             "value" : "مع كل تكرار، يضعف القفل على هذه الأيقونة."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit jedem Loop wird dieses Schloss schwächer."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -7624,6 +8374,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تكرار بعد تكرار، تفانيك ينحت مفتاح النجاح."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit jedem Loop formt deine Hingabe den Schlüssel zum Erfolg."
           }
         },
         "en" : {
@@ -7691,6 +8447,12 @@
             "value" : "الأيقونات لا يتم فتحها فقط؛ بل تُكتسب تكراراً بعد تكرار."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Icons werden nicht einfach freigeschaltet; sie werden verdient, Loop für Loop."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -7754,6 +8516,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مع تراكم التكرارات، ستزداد أيضاً مجموعتك من الأيقونات."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit jeder weiteren Nutzung werden auch deine Icons wachsen."
           }
         },
         "en" : {
@@ -7821,6 +8589,12 @@
             "value" : "اعتبر كل تكرار لغزاً، يحل لغز الأيقونة المقفلة."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betrachte jedes Loop als ein Rätsel, das die Geheimnisse des gesperrten Symbols löst."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -7884,6 +8658,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إصرارك على التكرار هو المفتاح الرئيسي لجميع الأيقونات."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein Durchhaltevermögen beim Looping ist der Schlüssel zu allen Icons."
           }
         },
         "en" : {
@@ -7951,6 +8731,12 @@
             "value" : "تكرار حول العقبات؛ مكافأتك تنتظرك فقط خلفها."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umgehe die Hindernisse; deine Belohnung ist nur einen Schritt entfernt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -8014,6 +8800,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "كل تكرار تكمله يزرع بذور نمو الأيقونات."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jedes Loop, das du tust, sät die Samen für Icons, die wachsen werden."
           }
         },
         "en" : {
@@ -8081,6 +8873,12 @@
             "value" : "مثل مراحل القمر، ستكشف أيقوناتك عن نفسها في دورات التكرار."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie die Mondphasen werden sich deine Icons in Zyklen von Loops offenbaren."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -8144,6 +8942,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الأيقونات تنتظر، مخبأة وراء حجاب التكرارات التي لم تُنجز بعد."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Icons warten, verborgen hinter dem Schleier von Loops, die noch gemacht werden müssen"
           }
         },
         "en" : {
@@ -8241,6 +9045,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "بقي %lld تكرار"
+                }
+              }
+            }
+          }
+        },
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loop verbleibend"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Loops verbleibend"
                 }
               }
             }
@@ -8401,6 +9223,12 @@
             "value" : "٪"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -8464,6 +9292,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "بكسل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
           }
         },
         "en" : {
@@ -8531,6 +9365,12 @@
             "value" : "ثانية"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "s"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -8595,6 +9435,12 @@
             "value" : "انقر بالزر الأوسط للتفعيل"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mittel-Klick zum aktivieren"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8651,6 +9497,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "المزيد"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
           }
         },
         "en-GB" : {
@@ -8711,6 +9563,12 @@
             "value" : "حرك المؤشر مع النافذة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mauszeiger mit Fenster bewegen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8767,6 +9625,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لا توجد تطبيقات مستبعدة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine ausgeschlossenen Anwendungen"
           }
         },
         "en-GB" : {
@@ -8827,6 +9691,12 @@
             "value" : "لا توجد اختصارات"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Tastenbelegung"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8884,6 +9754,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تفضل! ... في الإصدار الحالي، هذا هو الأحدث."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engagieren! …in der aktuellen Version ist es die neueste."
           }
         },
         "en" : {
@@ -8951,6 +9827,12 @@
             "value" : "هذا التطبيق أكثر تحديثاً من مدخلات مذكرتي!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App ist aktueller als meine Tagebucheinträge!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9014,6 +9896,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أنت في أمان، لا توجد تحديثات في الأفق!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles Klar! Keine Updates in Sicht!"
           }
         },
         "en" : {
@@ -9081,6 +9969,12 @@
             "value" : "الاحتمالات دائماً لصالحك، لا توجد تحديثات اليوم!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Chancen stehen gut für dich, heute gibt es keine Updates!“"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9144,6 +10038,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تطبيقنا على حمية رقمية. لا توجد بيانات جديدة مسموحة."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsere App ist auf einer Digitalen Diät, keine Bytes erlaubt!"
           }
         },
         "en" : {
@@ -9211,6 +10111,12 @@
             "value" : "إصدار جديد؟ آسف، نحن متعلّقون جداً بهذا الإصدار."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Version? Tut uns echt leid, aber wir hängen zu sehr an dieser."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9274,6 +10180,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تطبيقك Loop أكثر دائرية من أي وقت مضى، لم يتم العثور على تحديثات!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein Loop ist loopiger denn je, keine Updates gefunden!"
           }
         },
         "en" : {
@@ -9341,6 +10253,12 @@
             "value" : "أعطيها كل ما لدي، أيها القبطان! لا توجد تحديثات!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ich gebe alles, was ich habe, Captain! Keine Updates!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9404,6 +10322,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "في مجرة بعيدة، بعيدة... لا توجد تحديثات!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In einer Galaxie weit, weit entfernt, ... immer noch keine Updates!"
           }
         },
         "en" : {
@@ -9471,6 +10395,12 @@
             "value" : "لديك الثمين، لا توجد تحديثات مطلوبة!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast das Kostbare, keine Updates nötig!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9534,6 +10464,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "السير بسرعة فائقة، لا توجد تحديثات في الأفق!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Überlichtgeschwindigkeit unterwegs, keine Updates in Sicht!"
           }
         },
         "en" : {
@@ -9601,6 +10537,12 @@
             "value" : "هذا ليس التحديث الذي تبحث عنه!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist nicht das Update wonach du suchst!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9664,6 +10606,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لقد أضعنا زر \"التحديث\". عذراً!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir haben den Update Knopf falsch platziert, ups!"
           }
         },
         "en" : {
@@ -9731,6 +10679,12 @@
             "value" : "أقسم أنه كان هنا في مكان ما... لحظة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir schwören das es hier irgendwo war... eine Sekunde..."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9794,6 +10748,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تفاحة في اليوم تبقي... التحديثات بعيداً."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Apfel am Tag hält die... Fehler in Schach."
           }
         },
         "en" : {
@@ -9861,6 +10821,12 @@
             "value" : "لتكن القوة معك... في المرة القادمة!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möge die Macht... nächstes mal mit dir sein!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -9924,6 +10890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "القوة قوية مع هذا الإصدار!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die macht ist mit dir in dieser Version!"
           }
         },
         "en" : {
@@ -9991,6 +10963,12 @@
             "value" : "مجرد تطبيق من بلدة صغيرة، نفس الإصدار القديم"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur eine kleine App, dieselbe alte Version"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10054,6 +11032,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الشتاء قادم. التحديثات ليست بعد."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Winter kommt, aber noch keine Updates."
           }
         },
         "en" : {
@@ -10121,6 +11105,12 @@
             "value" : "الأحلام الجميلة تتكون من... لا توجد تحديثات"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Süsse Träume sind aus ... keinen Updates gemacht."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10184,6 +11174,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تخطت علينا جنية التحديثات هذا الأسبوع."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Updatefee hat uns diese Woche vergessen."
           }
         },
         "en" : {
@@ -10251,6 +11247,12 @@
             "value" : "كن يقظاً، المزيد من المعلومات قادمة قريباً!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleib wachsam, bald kommen weitere Informationen!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10314,6 +11316,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أنت تتجول بأحدث التقنيات!"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du fährst mit der neuesten Technik!"
           }
         },
         "en" : {
@@ -10381,6 +11389,12 @@
             "value" : "سنعود. مع التحديثات... لاحقاً"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wir werden später wieder hier sein. Mit updates."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10444,6 +11458,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "قرش مقابل... عدم وجود تحديثات."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein penny für die ... fehlenden Updates."
           }
         },
         "en" : {
@@ -10511,6 +11531,12 @@
             "value" : "لديك بالفعل أفضل تطبيق Loop!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast bereits das beste Loop!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10570,6 +11596,12 @@
     "No updates available message 27" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Man aktualisiert Loop nicht einfach so."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10629,6 +11661,12 @@
     "No updates available message 28" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All die Arbeit und keine Updates..."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10688,6 +11726,12 @@
     "No updates available message 29" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein ständig beobachteter Topf kocht nie."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10747,6 +11791,12 @@
     "No updates available message 30" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "99 Probleme, aber ein Update ist keins davon."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10806,6 +11856,12 @@
     "No updates available message 31" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ich... hm... eine Sekunde, ich hab's gleich."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10865,6 +11921,12 @@
     "No updates available message 32" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast dich zum maximum hochgelevelt!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10924,6 +11986,12 @@
     "No updates available message 33" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bettler können nicht … Updater sein."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -10983,6 +12051,12 @@
     "No updates available message 34" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geld kann keine... Updates kaufen."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11042,6 +12116,12 @@
     "No updates available message 35" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine neuen Informationen, Commander."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11101,6 +12181,12 @@
     "No updates available message 36" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Updates? Verflucht!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11160,6 +12246,12 @@
     "No updates available message 37" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Updates, Mr. Anderson."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11219,6 +12311,12 @@
     "No updates available message 38" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Updates in Ba Sing Se"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11278,6 +12376,12 @@
     "No updates available message 39" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates? In dieser Wirtschaft?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11337,6 +12441,12 @@
     "No updates available message 40" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komm nächstes mal wieder!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11396,6 +12506,12 @@
     "No updates available message 41" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop in seiner prime time!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11455,6 +12571,12 @@
     "No updates available message 42" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Systeme sind bereit!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11514,6 +12636,12 @@
     "No updates available message 43" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du bist up-to-date!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11573,6 +12701,12 @@
     "No updates available message 44" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine updates!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11631,6 +12765,12 @@
     },
     "None" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11683,6 +12823,12 @@
     },
     "Nothing to cycle through" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts zum durchwechseln"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11736,6 +12882,12 @@
     "Notification permits: info" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@'s Benachrichtigungen wurden deaktiviert."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11795,6 +12947,12 @@
     "Notification permits: open notification settings" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen öffnen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11854,6 +13012,12 @@
     "Notification permits: request" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte schalte dies in den Einstellungen ein."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11913,6 +13077,12 @@
     "Notification/Set Icon: Action" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelles Icon auswählen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -11971,6 +13141,12 @@
     },
     "Notify when unlocking new icons" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benachrichtige mich beim freischalten neuer App Icons"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12029,6 +13205,12 @@
             "value" : "موافق"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12081,6 +13263,12 @@
     },
     "Options" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optionen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12133,6 +13321,12 @@
     },
     "Padding" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abstand"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12185,6 +13379,12 @@
     },
     "Permissions" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaubnis"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12237,6 +13437,12 @@
     },
     "Please press deny when Loop \n requests screen recording permissions." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte lehn ab wenn Loop danach fragt, den Bildschirm aufzunehmen."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12247,6 +13453,12 @@
     },
     "Position" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12299,6 +13511,12 @@
     },
     "Preserve Size" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Größe beibehalten"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12351,6 +13569,12 @@
     },
     "Press \"Add\" to add a cycle item" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drücke \"Hinzufügen\" um etwas in den Zyklus hinzuzufügen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12407,6 +13631,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "اضغط على \"إضافة\" لإضافة مفتاح"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drücke \"Hinzufügen\" um eine Tastenbelegung hinzuzufügen"
           }
         },
         "en-GB" : {
@@ -12467,6 +13697,12 @@
             "value" : "اضغط على \"إضافة\" لإضافة تطبيق"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drücke \"Hinzufügen\" um eine Applikation hinzuzufügen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12523,6 +13759,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "معاينة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau"
           }
         },
         "en-GB" : {
@@ -12583,6 +13825,12 @@
             "value" : "بكسل"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12639,6 +13887,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أرباع"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Viertel"
           }
         },
         "en-GB" : {
@@ -12699,6 +13953,12 @@
             "value" : "إنهاء"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlassen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12755,6 +14015,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "قائمة دائرية"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radialmenü"
           }
         },
         "en-GB" : {
@@ -12815,6 +14081,12 @@
             "value" : "قائمة دائرية"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radialmenü"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12871,6 +14143,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أحمر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rot"
           }
         },
         "en-GB" : {
@@ -12931,6 +14209,12 @@
             "value" : "ذكرني لاحقًا"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erinnere mich später"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12987,6 +14271,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إزالة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
           }
         },
         "en-GB" : {
@@ -13047,6 +14337,12 @@
             "value" : "طلب…"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anfragen..."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13103,6 +14399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إعادة ضبط"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurücksetzen"
           }
         },
         "en-GB" : {
@@ -13163,6 +14465,12 @@
             "value" : "تغيير حجم النافذة تحت المؤشر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenstergrösse unter dem Mauszeiger ändern"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13219,6 +14527,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "احترام مدير المرحلة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage Manager berücksichtigen"
           }
         },
         "en-GB" : {
@@ -13279,6 +14593,12 @@
             "value" : "استعادة إطار النافذة عند السحب"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster wiederherstellen beim ziehen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13335,6 +14655,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "يمين"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts"
           }
         },
         "en-GB" : {
@@ -13396,6 +14722,12 @@
             "value" : "يمين %@"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts %@"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13452,6 +14784,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "دورة اليمين"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts durchschalten"
           }
         },
         "en-GB" : {
@@ -13512,6 +14850,12 @@
             "value" : "تبديل الشاشة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirm wechsel"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13568,6 +14912,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "اختر ملف مفتاح دورة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle eine Loop Tastenbelegungs-Datei"
           }
         },
         "en-GB" : {
@@ -13628,6 +14978,12 @@
             "value" : "أرسل ملاحظات"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback senden"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13684,6 +15040,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تعيين مفتاح التنشيط..."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lege eine Aktivierungstaste fest..."
           }
         },
         "en-GB" : {
@@ -13744,6 +15106,12 @@
             "value" : "الإعدادات"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13800,6 +15168,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الإعدادات..."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen..."
           }
         },
         "en-GB" : {
@@ -13860,6 +15234,12 @@
             "value" : "شارك ملاحظاتك على صفحتنا على GitHub، حيث يمكنك إخبارنا بأي أخطاء، اقتراح ميزات، أو تقديم مداخلات قيمة أخرى. نحن أيضًا نقبل التبرعات إذا شعرت أن Loop قد حسّن من سير العمل لديك :)"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teile uns dein Feedback auf unserer GitHub-Seite mit, wo man uns über etwaige Fehler informieren, Funktionen vorschlagen oder andere wertvolle Rückmeldungen geben können. Wir nehmen auch Spenden entgegen, falls du der Meinung sind, dass Loop deine Arbeitsweise verbessert hat :)\n"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13916,6 +15296,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "عرض في الرصيف"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Dock zeigen"
           }
         },
         "en-GB" : {
@@ -13976,6 +15362,12 @@
             "value" : "عرض المعاينة عند التكرار"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeige eine Vorschau beim loopen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14032,6 +15424,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "بسيط"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simpel"
           }
         },
         "en-GB" : {
@@ -14092,6 +15490,12 @@
             "value" : "الحجم"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grösse"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14148,6 +15552,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "زيادة الحجم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Größenzuwachs"
           }
         },
         "en-GB" : {
@@ -14208,6 +15618,12 @@
             "value" : "سلس"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sanft"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14264,6 +15680,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "بعض الميزات، الأفكار، وإصلاحات الأخطاء"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manche Funktionen, Ideen und Fehler Behebungen"
           }
         },
         "en-GB" : {
@@ -14324,6 +15746,12 @@
             "value" : "مدير المرحلة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage Manager"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14380,6 +15808,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حجم شريط المرحلة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stage-Leistenbreite"
           }
         },
         "en-GB" : {
@@ -14440,6 +15874,12 @@
             "value" : "اقتراح رمز جديد"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Icon vorschlagen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14496,6 +15936,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مزامنة خلفية الشاشة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hintergrundbild synchronisieren"
           }
         },
         "en-GB" : {
@@ -14556,6 +16002,12 @@
             "value" : "هذا المفتاح مستخدم بالفعل كمفتاح التنشيط الخاص بك."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Taste wird bereits als Aktivierungstaste verwendet."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14612,6 +16064,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هذا المفتاح مستخدم بالفعل بواسطة %@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Tastenbelegung wird bereits von %@ benutzt."
           }
         },
         "en-GB" : {
@@ -14672,6 +16130,12 @@
             "value" : "هذا المفتاح مستخدم بالفعل بواسطة مفتاح مخصص آخر."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Tastenbelegung wird bereits benutzt."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14728,6 +16192,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "التصميم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thema"
           }
         },
         "en-GB" : {
@@ -14788,6 +16258,12 @@
             "value" : "السماكة\n\n"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dicke"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14844,6 +16320,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هذه الميزة لا تزال تحت التطوير."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Funktion befindet sich in der Entwicklung."
           }
         },
         "en-GB" : {
@@ -14904,6 +16386,12 @@
             "value" : "أعلى"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oben"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14960,6 +16448,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "دورة الأعلى"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oben durschalten"
           }
         },
         "en-GB" : {
@@ -15020,6 +16514,12 @@
             "value" : "تأخير التنشيط"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivierungsverzögerung"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15076,6 +16576,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مفتاح التنشيط"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivierungstaste"
           }
         },
         "en-GB" : {
@@ -15136,6 +16642,12 @@
             "value" : "تحديث…"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update..."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15192,6 +16704,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "استخدام الإحداثيات"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koordinaten benutzen"
           }
         },
         "en-GB" : {
@@ -15252,6 +16770,12 @@
             "value" : "استخدام مركز macOS"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacOS Mitte benutzen"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15308,6 +16832,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "استخدام البيكسل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pixel benutzen"
           }
         },
         "en-GB" : {
@@ -15368,6 +16898,12 @@
             "value" : "استخدام الشاشة مع المؤشر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildschirm mit Mauszeiger verwenden"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15426,6 +16962,12 @@
             "value" : "استخدم هذا إذا كنت تستخدم شريط قوائم مخصص."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutze dies, falls eine eigene Menüleiste benutzt wird."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15478,6 +17020,12 @@
     },
     "Version %@ (%lld)" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %1$@ (%2$lld)"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -15542,6 +17090,12 @@
             "value" : "الثالث العمودي"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertikale Drittel"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15598,6 +17152,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "العرض"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weite"
           }
         },
         "en-GB" : {
@@ -15658,6 +17218,12 @@
             "value" : "نافذة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15715,6 +17281,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تقريبًا تكبير"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fast maximieren"
           }
         },
         "en" : {
@@ -15782,6 +17354,12 @@
             "value" : "النصف السفلي"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untere Hälfte"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -15845,6 +17423,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الربع السفلي الأيسر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unteres linkes Viertel"
           }
         },
         "en" : {
@@ -15912,6 +17496,12 @@
             "value" : "الربع السفلي الأيمن"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unteres rechtes Viertel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -15975,6 +17565,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الثالث السفلي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterer Drittel"
           }
         },
         "en" : {
@@ -16042,6 +17638,12 @@
             "value" : "الثالثين السفليين"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untere Zwei-Drittel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16105,6 +17707,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مركز"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitte"
           }
         },
         "en" : {
@@ -16172,6 +17780,12 @@
             "value" : "مخصص"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzerdefiniert"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16235,6 +17849,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "دورة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durchschalten"
           }
         },
         "en" : {
@@ -16302,6 +17922,12 @@
             "value" : "ملء الشاشة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollbiild"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16365,6 +17991,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تنمية الأسفل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unten vergrössern"
           }
         },
         "en" : {
@@ -16432,6 +18064,12 @@
             "value" : "تنمية اليسار"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links vergrössern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16495,6 +18133,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تنمية اليمين"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts vergrössern"
           }
         },
         "en" : {
@@ -16562,6 +18206,12 @@
             "value" : "تنمية الأعلى"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oben vergrössern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16625,6 +18275,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إخفاء"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstecken"
           }
         },
         "en" : {
@@ -16692,6 +18348,12 @@
             "value" : "الثالث الأفقي المركزي"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizontales Mittel-Drittel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16755,6 +18417,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الإطار الأولي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initialer Rahmen"
           }
         },
         "en" : {
@@ -16822,6 +18490,12 @@
             "value" : "أكبر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grösser"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16885,6 +18559,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "النصف الأيسر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linke Hälfte"
           }
         },
         "en" : {
@@ -16952,6 +18632,12 @@
             "value" : "الثالث الأيسر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linker Drittel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17015,6 +18701,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الثالثين الأيسر"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linke Zwei-Drittel"
           }
         },
         "en" : {
@@ -17082,6 +18774,12 @@
             "value" : "مركز MacOS"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacOS Mitte"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17145,6 +18843,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تكبير"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximieren"
           }
         },
         "en" : {
@@ -17212,6 +18916,12 @@
             "value" : "تصغير"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17275,6 +18985,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تحريك للأسفل"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Unten bewegen"
           }
         },
         "en" : {
@@ -17342,6 +19058,12 @@
             "value" : "تحريك لليسار"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Links bewegen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17405,6 +19127,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تحريك لليمين"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach rechts bewegen"
           }
         },
         "en" : {
@@ -17472,6 +19200,12 @@
             "value" : "تحريك للأعلى"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hochbewegen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17535,6 +19269,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الشاشة التالية"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nächster Bildschirm"
           }
         },
         "en" : {
@@ -17602,6 +19342,12 @@
             "value" : "لا يوجد إجراء"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Aktion"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17665,6 +19411,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الشاشة السابقة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorheriger Bildschirm"
           }
         },
         "en" : {
@@ -17732,6 +19484,12 @@
             "value" : "النصف الأيمن"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechte Hälfte"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17791,6 +19549,12 @@
     "Window Direction/Name: Right Third" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechter Drittel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17854,6 +19618,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الثالثين الأيمن"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechte Zwei-Drittel"
           }
         },
         "en" : {
@@ -17921,6 +19691,12 @@
             "value" : "تقليص الأسفل"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unten verkleinern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -17984,6 +19760,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تقليص اليسار"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links verkleinern"
           }
         },
         "en" : {
@@ -18051,6 +19833,12 @@
             "value" : "تقليص اليمين"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts verkleinern"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -18114,6 +19902,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تقليص الأعلى"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oben verkleinern"
           }
         },
         "en" : {
@@ -18181,6 +19975,12 @@
             "value" : "أصغر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kleiner"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -18244,6 +20044,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "النصف العلوي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obere Hälfte"
           }
         },
         "en" : {
@@ -18311,6 +20117,12 @@
             "value" : "الربع العلوي الأيسر"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oberes linkes Viertel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -18374,6 +20186,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الربع العلوي الأيمن"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oberes rechtes Viertel"
           }
         },
         "en" : {
@@ -18441,6 +20259,12 @@
             "value" : "الثالث العلوي"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oberer Drittel"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -18504,6 +20328,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الثالثين العلويين"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obere Zwei-Drittel"
           }
         },
         "en" : {
@@ -18571,6 +20401,12 @@
             "value" : "تراجع"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widerrufen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -18634,6 +20470,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الثالث العمودي المركزي"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertikales Mittel-Drittel"
           }
         },
         "en" : {
@@ -18700,6 +20542,12 @@
             "value" : "فجوات النافذة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster Lücken"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18756,6 +20604,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تلاعب النافذة"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenstermanipulation"
           }
         },
         "en-GB" : {
@@ -18816,6 +20670,12 @@
             "value" : "التقاط النافذة"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fenster einrasten"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18874,6 +20734,12 @@
             "value" : "الالتقاط النافذة سيظل يستخدم المعاينة."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Einrasten von Fenstern wird weiterhin die Vorschau verwenden."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18927,6 +20793,12 @@
     "X" : {
       "localizations" : {
         "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X"
+          }
+        },
+        "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "X"
@@ -18990,6 +20862,12 @@
             "value" : "Y"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19046,6 +20924,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "يمكنك استخدام حتى %lld مفاتيح في ربط المفتاح، بما في ذلك مفتاح التشغيل."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst in einem Tastenkürzel nur bis zu %lld Tasten verwenden, einschließlich der Aktivierungstaste."
           }
         },
         "en-GB" : {
@@ -19106,6 +20990,12 @@
             "value" : "يمكنك استخدام حتى %lld مفاتيح في مفتاح التشغيل الخاص بك."
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst in deiner Aktivierungstaste nur bis zu %lld Tasten verwenden."
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19164,6 +21054,12 @@
             "value" : "لقد كررت %lld مرات!"
           }
         },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast %lld mal gelooped!"
+          }
+        },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19220,6 +21116,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لقد كررت... آه... لقد... فقدت العد..."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast... Äh... Ich... Ich hab es vergessen..."
           }
         },
         "en-GB" : {
