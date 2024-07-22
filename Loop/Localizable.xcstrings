@@ -6434,6 +6434,64 @@
         }
       }
     },
+    "Install" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installieren"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Install"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installa"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설치"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installeren"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instalar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安装"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "安裝"
+          }
+        }
+      }
+    },
     "Instant" : {
       "localizations" : {
         "ar" : {
@@ -13443,6 +13501,12 @@
             "value" : "Bitte lehn ab wenn Loop danach fragt, den Bildschirm aufzunehmen."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please press deny when Loop request screen recording permissions."
+          }
+        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14581,6 +14645,64 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "避開台前調度區域"
+          }
+        }
+      }
+    },
+    "Restart to complete" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neustarten, um abzuschließen"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart to complete"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar para completar"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riavvia per completare"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료하려면 다시 시작하세요"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstarten om te voltooien"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar para concluir"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重启以完成"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動以完成"
           }
         }
       }
