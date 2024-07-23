@@ -326,7 +326,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "لون اللكنة"
+            "value" : "لون التمييز"
           }
         },
         "de" : {
@@ -6436,6 +6436,12 @@
     },
     "Install" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تثبيت"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12499,6 +12505,12 @@
     "No updates available message 40" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحقق مرة أخرى في المرة القادمة!"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13005,6 +13017,12 @@
     "Notification permits: open notification settings" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح الإعدادات"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13135,6 +13153,12 @@
     "Notification/Set Icon: Action" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعيين الأيقونة الحالية"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13199,6 +13223,12 @@
     },
     "Notify when unlocking new icons" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعلام عند فتح أيقونات جديدة"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13321,6 +13351,12 @@
     },
     "Options" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الخيارات"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13517,6 +13553,12 @@
     },
     "Position" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الموقع"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13575,6 +13617,12 @@
     },
     "Preserve Size" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الحفاظ على الحجم"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19671,6 +19719,12 @@
     "Window Direction/Name: Right Third" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الثلث الأيمن"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20917,7 +20971,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "X"
+            "value" : "س"
           }
         },
         "de" : {
@@ -20981,7 +21035,7 @@
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Y"
+            "value" : "ص"
           }
         },
         "de" : {
