@@ -39,6 +39,14 @@ The localisation efforts have been categorised by language and dialect, showcasi
 - **Brazil**
   - [@willianba](https://github.com/willianba)
 
+### German
+
+- [L1am-cd](https://github.com/L1am-cd)
+
+### Arabic
+
+- [muhammadbahaa2001](https://github.com/muhammadbahaa2001)
+
 ### Spanish
 
 - [@CarretillaRoja](https://github.com/CarretillaRoja)
