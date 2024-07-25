@@ -8,12 +8,14 @@
 import Defaults
 import SwiftUI
 import UserNotifications
+import DynamicNotchKit
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     static let loopManager = LoopManager()
     static let windowDragManager = WindowDragManager()
     static let updater = Updater()
     static var isActive: Bool = false
+    var dynamicNotch: DynamicNotch?
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -23,6 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_: Notification) {
+        NSApplication.shared.delegate = self
         Task {
             await Defaults.iCloud.waitForSyncCompletion()
         }
@@ -74,5 +77,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         task.launch()
         NSApp.terminate(nil)
         exit(0)
+    }
+    
+    func showPopup(content: any View, seconds: Double? = 2) {
+        if let dynamicNotch = self.dynamicNotch,
+           dynamicNotch.isVisible {
+            dynamicNotch.hide()
+        }
+        
+        dynamicNotch = DynamicNotch(content: content)
+        
+        if let seconds = seconds {
+            dynamicNotch?.show(for: seconds)
+        } else {
+            dynamicNotch?.show()
+        }
+    }
+    
+    func hidePopup() {
+        if let dynamicNotch = self.dynamicNotch,
+           dynamicNotch.isVisible {
+            dynamicNotch.hide()
+        }
     }
 }

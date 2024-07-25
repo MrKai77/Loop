@@ -15,6 +15,8 @@
 		4C6B93E92C1DCF6E00AFF832 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */; };
 		4C9405052C4A104A0006216C /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 4C9405042C4A104A0006216C /* Luminare */; };
 		4CD883A42C30F0D7009A132A /* WallpaperColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD883A32C30F0D7009A132A /* WallpaperColors.swift */; };
+		7AC9B9682C52F1DF00BF4B64 /* DynamicNotchKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7AC9B9672C52F1DF00BF4B64 /* DynamicNotchKit */; };
+		7AC9B96A2C52FAA800BF4B64 /* WindowDragView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9B9692C52FAA800BF4B64 /* WindowDragView.swift */; };
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */; };
@@ -100,6 +102,7 @@
 		4C6B93E22C1DCF6E00AFF832 /* Updater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
 		4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateView.swift; sourceTree = "<group>"; };
 		4CD883A32C30F0D7009A132A /* WallpaperColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperColors.swift; sourceTree = "<group>"; };
+		7AC9B9692C52FAA800BF4B64 /* WindowDragView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragView.swift; sourceTree = "<group>"; };
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
@@ -192,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AC9B9682C52F1DF00BF4B64 /* DynamicNotchKit in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				4C9405052C4A104A0006216C /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
@@ -307,6 +311,7 @@
 				0AFE802D2BB98E81009CF06F /* WindowDirection+LocalizedString.swift */,
 				A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */,
 				A8B5E1612B43725B00044D30 /* Custom Window Sizes */,
+				7AC9B9692C52FAA800BF4B64 /* WindowDragView.swift */,
 			);
 			path = "Window Management";
 			sourceTree = "<group>";
@@ -476,6 +481,7 @@
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				4C9405042C4A104A0006216C /* Luminare */,
+				7AC9B9672C52F1DF00BF4B64 /* DynamicNotchKit */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -518,6 +524,7 @@
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				4C9405032C4A104A0006216C /* XCRemoteSwiftPackageReference "Luminare" */,
+				7AC9B9662C52F1DF00BF4B64 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -614,6 +621,7 @@
 				A81D8D0A2C068B8700188E12 /* LuminarePreviewView.swift in Sources */,
 				A8789F6929805B340040512E /* PreviewView.swift in Sources */,
 				A8E59C50298045D90064D4BA /* PreviewController.swift in Sources */,
+				7AC9B96A2C52FAA800BF4B64 /* WindowDragView.swift in Sources */,
 				A81B98182BDC854F005FD78C /* AboutConfiguration.swift in Sources */,
 				4CD883A42C30F0D7009A132A /* WallpaperColors.swift in Sources */,
 				A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */,
@@ -801,7 +809,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
-				DEVELOPMENT_TEAM = 5F967GYF84;
+				DEVELOPMENT_TEAM = D99D8KUTZ2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -836,7 +844,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Loop/Preview Content\"";
-				DEVELOPMENT_TEAM = 5F967GYF84;
+				DEVELOPMENT_TEAM = D99D8KUTZ2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -891,6 +899,14 @@
 				kind = branch;
 			};
 		};
+		7AC9B9662C52F1DF00BF4B64 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MrKai77/DynamicNotchKit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -906,6 +922,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4C9405032C4A104A0006216C /* XCRemoteSwiftPackageReference "Luminare" */;
 			productName = Luminare;
+		};
+		7AC9B9672C52F1DF00BF4B64 /* DynamicNotchKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7AC9B9662C52F1DF00BF4B64 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */;
+			productName = DynamicNotchKit;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -136,7 +136,8 @@ enum WindowEngine {
                 print("Failed to get frontmost window: \(error.localizedDescription)")
             }
         }
-
+        
+      
         return result
     }
 

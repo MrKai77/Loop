@@ -23,6 +23,14 @@ class WindowDragManager {
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
+                if let appDelegate = NSApp.delegate as? AppDelegate {
+                    print("Start showing")
+                    appDelegate
+                        .showPopup(
+                            content: WindowDragView(),
+                            seconds: 99999999
+                        )
+                }
             }
 
             if let window = self.draggingWindow,
@@ -45,6 +53,7 @@ class WindowDragManager {
 
                     self.getWindowSnapDirection()
                 }
+                
             }
         }
 
@@ -54,6 +63,11 @@ class WindowDragManager {
                self.hasWindowMoved(window.frame, initialFrame) {
                 if Defaults[.windowSnapping] {
                     self.attemptWindowSnap(window)
+                }
+                if let appDelegate = NSApp.delegate as? AppDelegate {
+                    print("Stop showing")
+                    appDelegate
+                        .hidePopup()
                 }
             }
 
