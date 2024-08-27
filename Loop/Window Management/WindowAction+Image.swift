@@ -108,7 +108,7 @@ struct IconView: View {
             .clipShape(.rect(cornerRadius: outerCornerRadius - inset))
             .background {
                 RoundedRectangle(cornerRadius: outerCornerRadius)
-                    .stroke(lineWidth: 1.5)
+                    .stroke(lineWidth: 1)
                     .padding(-inset)
             }
             .padding(.horizontal, 4)

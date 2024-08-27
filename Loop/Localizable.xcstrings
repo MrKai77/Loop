@@ -18952,37 +18952,37 @@
         }
       }
     },
-    "Window Direction/Name: MacOS Center" : {
+    "Window Direction/Name: macOS Center" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "مركز MacOS"
+            "value" : "مركز macOS"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacOS Mitte"
+            "value" : "macOS Mitte"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "MacOS Center"
+            "value" : "macOS Center"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacOS Centre"
+            "value" : "macOS Centre"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Centro de MacOS"
+            "value" : "Centro de macOS"
           }
         },
         "it" : {
@@ -19000,13 +19000,13 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacOS Centrum"
+            "value" : "macOS Centrum"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Centro do MacOS"
+            "value" : "Centro do macOS"
           }
         },
         "zh-Hans" : {

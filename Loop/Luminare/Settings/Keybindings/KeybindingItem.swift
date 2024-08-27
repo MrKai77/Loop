@@ -192,8 +192,6 @@ struct KeybindingItemView: View {
 
             Divider()
 
-//            ScrollView(showsIndicators: false) {
-//                VStack(spacing: PopoverPanel.sectionPadding) {
             PickerView(
                 Binding(
                     get: {
@@ -211,9 +209,6 @@ struct KeybindingItemView: View {
                     Text(item.name)
                 }
             }
-//                }
-//                .padding(PopoverPanel.contentPadding)
-//            }
         }
     }
 

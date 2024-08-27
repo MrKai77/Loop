@@ -208,8 +208,12 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
 
     var body: some View {
         Button {
-            selection = item
-            popover.close()
+            Task {
+                await MainActor.run {
+                    selection = item
+                }
+            }
+            popover.resignKey()
         } label: {
             content(item)
                 .padding(PopoverPanel.contentPadding)
