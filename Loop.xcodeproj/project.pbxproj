@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,8 +13,8 @@
 		4C6B93E72C1DCF6E00AFF832 /* TheLoopTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E12C1DCF6E00AFF832 /* TheLoopTimes.swift */; };
 		4C6B93E82C1DCF6E00AFF832 /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E22C1DCF6E00AFF832 /* Updater.swift */; };
 		4C6B93E92C1DCF6E00AFF832 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B93E32C1DCF6E00AFF832 /* UpdateView.swift */; };
-		4C9405052C4A104A0006216C /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 4C9405042C4A104A0006216C /* Luminare */; };
 		4CD883A42C30F0D7009A132A /* WallpaperColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD883A32C30F0D7009A132A /* WallpaperColors.swift */; };
+		A800418A2C7C110F005AD0D3 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A80041892C7C110F005AD0D3 /* Luminare */; };
 		A8055EC22AFEDE0B00459D13 /* Keycorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8055EC12AFEDE0B00459D13 /* Keycorder.swift */; };
 		A80900D52AA3F9F30085C63B /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80900D32AA3F9F20085C63B /* VisualEffectView.swift */; };
 		A80D49BB2BAE479900493B67 /* WindowAction+Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */; };
@@ -187,13 +187,17 @@
 		A8F1E96B2C253FA200AAF871 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A800418D2C7C118E005AD0D3 /* Searchable Popover Picker */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Searchable Popover Picker"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		A8E59C32297F5E9A0064D4BA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				4C9405052C4A104A0006216C /* Luminare in Frameworks */,
+				A800418A2C7C110F005AD0D3 /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -215,15 +219,16 @@
 		A80900D12AA3F9F20085C63B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				4C0F2ACE2C3CFD09006CB34D /* RectangleTranslationLayer.swift */,
-				A8D4327A2C13ED3C007BE4F2 /* Icon.swift */,
+				A800418D2C7C118E005AD0D3 /* Searchable Popover Picker */,
 				A82DDBDD2AEC736300D7F974 /* AnimationConfiguration.swift */,
-				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
 				A85B560D2AAAD62C00386ACE /* EventMonitor.swift */,
-				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
-				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
-				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
+				A8D4327A2C13ED3C007BE4F2 /* Icon.swift */,
 				A867C20D2C26522B005831BC /* Observer.swift */,
+				A8D6D3002B6C894C0061B11F /* PaddingModel.swift */,
+				4C0F2ACE2C3CFD09006CB34D /* RectangleTranslationLayer.swift */,
+				A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */,
+				A80900D32AA3F9F20085C63B /* VisualEffectView.swift */,
+				A8D6D3042B6C92F20061B11F /* WallpaperView.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -472,10 +477,13 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				A800418D2C7C118E005AD0D3 /* Searchable Popover Picker */,
+			);
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
-				4C9405042C4A104A0006216C /* Luminare */,
+				A80041892C7C110F005AD0D3 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -517,7 +525,7 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
-				4C9405032C4A104A0006216C /* XCRemoteSwiftPackageReference "Luminare" */,
+				A80041882C7C110F005AD0D3 /* XCLocalSwiftPackageReference "../Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -882,15 +890,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		4C9405032C4A104A0006216C /* XCRemoteSwiftPackageReference "Luminare" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MrKai77/Luminare";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		A80041882C7C110F005AD0D3 /* XCLocalSwiftPackageReference "../Luminare" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Luminare;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -902,9 +909,8 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4C9405042C4A104A0006216C /* Luminare */ = {
+		A80041892C7C110F005AD0D3 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4C9405032C4A104A0006216C /* XCRemoteSwiftPackageReference "Luminare" */;
 			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {

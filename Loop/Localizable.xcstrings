@@ -3912,6 +3912,7 @@
       }
     },
     "Halves" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4232,6 +4233,7 @@
       }
     },
     "Horizontal Thirds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -9556,6 +9558,7 @@
       }
     },
     "More" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13994,6 +13997,7 @@
       }
     },
     "Quarters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15013,6 +15017,7 @@
       }
     },
     "Screen Switching" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15072,6 +15077,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "屏幕切換"
+          }
+        }
+      }
+    },
+    "Search for a window action" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Search…"
           }
         }
       }
@@ -17253,6 +17269,7 @@
       }
     },
     "Vertical Thirds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -20775,6 +20792,7 @@
       }
     },
     "Window Manipulation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

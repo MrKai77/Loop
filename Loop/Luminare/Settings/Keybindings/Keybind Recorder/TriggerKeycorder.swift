@@ -121,12 +121,14 @@ struct TriggerKeycorder: View {
 
             if event.modifierFlags.wasKeyUp, !selectionKey.isEmpty {
                 finishedObservingKeys()
-                return
+                return nil
             }
 
             if !event.modifierFlags.wasKeyUp, selectionKey.isEmpty {
                 shouldShake.toggle()
             }
+
+            return nil
         }
 
         eventMonitor!.start()

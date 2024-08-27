@@ -29,16 +29,36 @@ struct KeybindingItemView: View {
     @State private var searchText = ""
     @State private var searchResults: [WindowDirection] = []
     @State private var isPresented = false
-    @FocusState private var focusedSearchField: Bool?
 
-    let all: [WindowDirection] = WindowDirection.general + WindowDirection.halves + WindowDirection.quarters + WindowDirection.horizontalThirds + WindowDirection.verticalThirds + WindowDirection.screenSwitching + WindowDirection.sizeAdjustment + WindowDirection.shrink + WindowDirection.grow + WindowDirection.move
+    let sections: [PickerSection] = [
+        .init("General", WindowDirection.general),
+        .init("Halves", WindowDirection.halves),
+        .init("Quarters", WindowDirection.quarters),
+        .init("Horizontal Thirds", WindowDirection.horizontalThirds),
+        .init("Vertical Thirds", WindowDirection.verticalThirds),
+        .init("Screen Switching", WindowDirection.screenSwitching),
+        .init("Size Adjustment", WindowDirection.sizeAdjustment),
+        .init("Shrink", WindowDirection.shrink),
+        .init("Grow", WindowDirection.grow),
+        .init("Move", WindowDirection.move)
+    ]
 
-    var other: [WindowDirection] {
+    var moreSection: PickerSection<WindowDirection> {
         if cycleIndex != nil { // If this is a cycling keybind
-            [.custom]
+            .init("More", [WindowDirection.custom])
         } else {
-            [.custom, .cycle]
+            .init("More", [WindowDirection.custom, WindowDirection.cycle])
         }
+    }
+
+    var sectionItems: [WindowDirection] {
+        var result: [WindowDirection] = []
+
+        for sectionItems in sections.map(\.items) {
+            result.append(contentsOf: sectionItems)
+        }
+
+        return result
     }
 
     var body: some View {
@@ -154,7 +174,6 @@ struct KeybindingItemView: View {
         VStack {
             Button {
                 isPresented.toggle()
-                focusedSearchField = true
             } label: {
                 Image(._18PxPen2)
                     .padding(.vertical, 5) // Increase hitbox size
@@ -168,57 +187,43 @@ struct KeybindingItemView: View {
 
     func directionPickerContents() -> some View {
         VStack(spacing: 0) {
-            TextField("Search...", text: $searchText)
-                .textFieldStyle(.plain)
-                .padding(PopoverPanel.contentPadding)
-                .focused($focusedSearchField, equals: true)
+            CustomTextField($searchText)
+                .padding(PopoverPanel.contentPadding * 2)
 
             Divider()
 
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: PopoverPanel.sectionPadding) {
-                    pickerSection("General", WindowDirection.general)
-                    pickerSection("Halves", WindowDirection.halves)
-                    pickerSection("Quarters", WindowDirection.quarters)
-                    pickerSection("Horizontal Thirds", WindowDirection.horizontalThirds)
-                    pickerSection("Vertical Thirds", WindowDirection.verticalThirds)
-                    pickerSection("Screens", WindowDirection.screenSwitching)
-                    pickerSection("Sizes", WindowDirection.sizeAdjustment)
-                    pickerSection("Shrinks", WindowDirection.shrink)
-                    pickerSection("Grow", WindowDirection.grow)
-                    pickerSection("Moves", WindowDirection.move)
-                    pickerSection("Other", other)
+//            ScrollView(showsIndicators: false) {
+//                VStack(spacing: PopoverPanel.sectionPadding) {
+            PickerView(
+                Binding(
+                    get: {
+                        keybind.direction
+                    },
+                    set: {
+                        keybind.direction = $0
+                    }
+                ),
+                $searchResults,
+                sections + [moreSection]
+            ) { item in
+                HStack(spacing: 8) {
+                    IconView(action: .constant(.init(item)))
+                    Text(item.name)
                 }
-                .padding(PopoverPanel.contentPadding)
             }
+//                }
+//                .padding(PopoverPanel.contentPadding)
+//            }
         }
     }
 
     func computeSearchResults() {
         withAnimation {
             if searchText.isEmpty {
-                searchResults = all + other
+                searchResults = []
             } else {
-                searchResults = all.filter { $0.name.localizedCaseInsensitiveContains(searchText) } + other
+                searchResults = sectionItems.filter { $0.name.localizedCaseInsensitiveContains(searchText) } + moreSection.items
             }
-        }
-    }
-
-    func pickerSection(_ title: String, _ items: [WindowDirection]) -> some View {
-        PopoverPickerSection(
-            title,
-            items,
-            $searchResults,
-            Binding(
-                get: {
-                    keybind.direction
-                },
-                set: {
-                    keybind.direction = $0
-                }
-            )
-        ) { item in
-            Text(item.name)
         }
     }
 }
