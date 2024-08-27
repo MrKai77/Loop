@@ -13555,6 +13555,7 @@
       }
     },
     "Position" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15082,6 +15083,7 @@
       }
     },
     "Search for a window action" : {
+      "comment" : "Default placeholder",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -15669,6 +15671,7 @@
       }
     },
     "Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

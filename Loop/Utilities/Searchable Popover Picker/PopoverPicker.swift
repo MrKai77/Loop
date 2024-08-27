@@ -13,12 +13,12 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
 
     @Binding var selection: V
     @Binding var searchResults: [V]
-    @State var arrowSelection: V?
+
+    @State private var arrowSelection: V?
+    @State private var eventMonitor: EventMonitor?
 
     let sections: [PickerSection<V>]
-    let content: (V) -> Content // for each item
-
-    @State var eventMonitor: EventMonitor?
+    let content: (V) -> Content
 
     init(
         _ selection: Binding<V>,
@@ -36,163 +36,78 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
         ScrollViewReader { reader in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: PopoverPanel.sectionPadding) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        if searchResults.isEmpty {
-                            ForEach(sections) { section in
-                                Text(section.title)
-                                    .foregroundStyle(.secondary)
-                                    .padding(.leading, PopoverPanel.contentPadding)
-                                    .padding(.top, PopoverPanel.sectionPadding)
-
-                                ForEach(section.items, id: \.self) { i in
-                                    PopoverPickerItem(selection: $selection, arrowSelection: $arrowSelection, item: i, content: content)
-                                        .id(i)
-                                }
-                            }
-                        } else {
-                            ForEach(searchResults) { i in
-                                PopoverPickerItem(selection: $selection, arrowSelection: $arrowSelection, item: i, content: content)
-                                    .id(i)
-                            }
-                        }
-                    }
-                    .onChange(of: searchResults) { _ in
-                        arrowSelection = nil
-                    }
-                    .onAppear {
-                        setupEventMonitor(reader: reader)
-                        eventMonitor?.start()
-
-                        popover.closeHandler = {
-                            eventMonitor?.stop()
-                            eventMonitor = nil
-                        }
-                    }
+                    contentStack(reader: reader)
                 }
                 .padding(PopoverPanel.contentPadding)
             }
         }
     }
 
-    func setupEventMonitor(reader: ScrollViewProxy) {
-        eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown]) { event in
-            if event.keyCode == .kVK_DownArrow {
-                if searchResults.isEmpty {
-                    if arrowSelection == nil || arrowSelection == sections.last?.items.last {
-                        arrowSelection = sections.first?.items.first
-                    } else {
-                        var lastScannedItem: V? = nil
-                        outerloop: for section in sections {
-                            for item in section.items {
-                                if lastScannedItem == arrowSelection {
-                                    arrowSelection = item
-                                    break outerloop
-                                }
-
-                                lastScannedItem = item
-                            }
-                        }
-                    }
-                } else {
-                    if arrowSelection == nil || !searchResults.contains(arrowSelection!) {
-                        if searchResults.contains(selection) {
-                            var lastScannedItem: V? = nil
-                            for item in searchResults {
-                                if lastScannedItem == selection {
-                                    arrowSelection = item
-                                    break
-                                }
-
-                                lastScannedItem = item
-                            }
-                        } else {
-                            arrowSelection = searchResults.first
-                        }
-                    } else if arrowSelection == searchResults.last {
-                        arrowSelection = searchResults.first
-                    } else {
-                        var lastScannedItem: V? = nil
-                        for item in searchResults {
-                            if lastScannedItem == arrowSelection {
-                                arrowSelection = item
-                                break
-                            }
-
-                            lastScannedItem = item
-                        }
-                    }
-                }
-                reader.scrollTo(arrowSelection, anchor: .center)
-
-                return nil
+    @ViewBuilder
+    private func contentStack(reader: ScrollViewProxy) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if searchResults.isEmpty {
+                sectionsView
+            } else {
+                searchResultsView
             }
-
-            if event.keyCode == .kVK_UpArrow {
-                if searchResults.isEmpty {
-                    if arrowSelection == nil || arrowSelection == sections.first?.items.first {
-                        arrowSelection = sections.last?.items.last
-                    } else {
-                        var lastScannedItem: V? = nil
-                        outerloop: for section in sections.reversed() {
-                            for item in section.items.reversed() {
-                                if lastScannedItem == arrowSelection {
-                                    arrowSelection = item
-                                    break outerloop
-                                }
-
-                                lastScannedItem = item
-                            }
-                        }
-                    }
-                } else {
-                    if arrowSelection == nil || !searchResults.contains(arrowSelection!) {
-                        if searchResults.contains(selection) {
-                            var lastScannedItem: V? = nil
-                            for item in searchResults.reversed() {
-                                if lastScannedItem == selection {
-                                    arrowSelection = item
-                                    break
-                                }
-
-                                lastScannedItem = item
-                            }
-                        } else {
-                            arrowSelection = searchResults.last
-                        }
-                    } else if arrowSelection == searchResults.first {
-                        arrowSelection = searchResults.last
-                    } else {
-                        var lastScannedItem: V? = nil
-                        for item in searchResults.reversed() {
-                            if lastScannedItem == arrowSelection {
-                                arrowSelection = item
-                                break
-                            }
-
-                            lastScannedItem = item
-                        }
-                    }
-                }
-                reader.scrollTo(arrowSelection, anchor: .center)
-
-                return nil
-            }
-
-            if event.keyCode == .kVK_Return, let arrowSelection {
-                selection = arrowSelection
-                popover.close()
-
-                return nil
-            }
-
-            if event.keyCode == .kVK_Escape {
-                popover.close()
-
-                return nil
-            }
-
-            return event
         }
+        .onChange(of: searchResults) { _ in arrowSelection = nil }
+        .onAppear {
+            setupEventMonitor(reader: reader)
+            eventMonitor?.start()
+            popover.closeHandler = {
+                eventMonitor?.stop()
+                eventMonitor = nil
+            }
+        }
+    }
+
+    private var sectionsView: some View {
+        ForEach(sections) { section in
+            Section(header: Text(section.title).foregroundStyle(.secondary).padding(.leading, PopoverPanel.contentPadding).padding(.top, PopoverPanel.sectionPadding)) {
+                ForEach(section.items, id: \.self) { item in
+                    PopoverPickerItem(selection: $selection, arrowSelection: $arrowSelection, item: item, content: content).id(item)
+                }
+            }
+        }
+    }
+
+    private var searchResultsView: some View {
+        ForEach(searchResults) { item in
+            PopoverPickerItem(selection: $selection, arrowSelection: $arrowSelection, item: item, content: content).id(item)
+        }
+    }
+
+    private func setupEventMonitor(reader: ScrollViewProxy) {
+        eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown]) { event in
+            switch event.keyCode {
+            case .kVK_DownArrow:
+                updateArrowSelection(increment: true, reader: reader)
+            case .kVK_UpArrow:
+                updateArrowSelection(increment: false, reader: reader)
+            case .kVK_Return:
+                if let arrowSelection {
+                    selection = arrowSelection
+                    popover.close()
+                }
+            case .kVK_Escape:
+                popover.close()
+            default:
+                return event
+            }
+            return nil
+        }
+    }
+
+    private func updateArrowSelection(increment: Bool, reader: ScrollViewProxy) {
+        let items = searchResults.isEmpty ? sections.flatMap(\.items) : searchResults
+        guard !items.isEmpty else { return }
+
+        let currentIndex = items.firstIndex(where: { $0 == arrowSelection }) ?? (increment ? -1 : items.count)
+        let nextIndex = (currentIndex + (increment ? 1 : -1) + items.count) % items.count
+        arrowSelection = items[nextIndex]
+        reader.scrollTo(arrowSelection, anchor: .center)
     }
 }
 
