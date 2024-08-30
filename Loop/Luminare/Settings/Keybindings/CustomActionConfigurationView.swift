@@ -46,6 +46,7 @@ struct CustomActionConfigurationView: View {
         ScreenView {
             GeometryReader { geo in
                 let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
+                let _ = print(frame)
                 ZStack {
                     if action.sizeMode == .custom {
                         blurredWindow()
@@ -73,10 +74,38 @@ struct CustomActionConfigurationView: View {
             unitToggle()
         }
 
-        if currentTab == .position {
-            positionConfiguration()
-        } else {
-            sizeConfiguration()
+        Group {
+            if currentTab == .position {
+                positionConfiguration()
+            } else {
+                sizeConfiguration()
+            }
+        }
+        .animation(LuminareSettingsWindow.animation, value: action.unit)
+        .onAppear {
+            if action.unit == nil {
+                action.unit = .percentage
+            }
+
+            if action.sizeMode == nil {
+                action.sizeMode = .custom
+            }
+
+            if action.width == nil {
+                action.width = 80
+            }
+
+            if action.height == nil {
+                action.height = 80
+            }
+
+            if action.positionMode == nil {
+                action.positionMode = .generic
+            }
+
+            if action.anchor == nil {
+                action.anchor = .center
+            }
         }
     }
 
@@ -91,21 +120,7 @@ struct CustomActionConfigurationView: View {
     }
 
     @ViewBuilder private func unitToggle() -> some View {
-        LuminareToggle(
-            "Use pixels",
-            isOn: Binding(
-                get: {
-                    if action.unit == nil {
-                        action.unit = .percentage
-                    }
-
-                    return action.unit == .pixels
-                },
-                set: {
-                    action.unit = $0 ? .pixels : .percentage
-                }
-            )
-        )
+        LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
     }
 
     @ViewBuilder private func actionButtons() -> some View {
@@ -196,7 +211,7 @@ struct CustomActionConfigurationView: View {
                             action.xPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
+                    sliderRange: action.unit != .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
@@ -213,7 +228,7 @@ struct CustomActionConfigurationView: View {
                             action.yPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
+                    sliderRange: action.unit != .percentage ?
                         0...100 :
                         0...Double(screenSize.height),
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
