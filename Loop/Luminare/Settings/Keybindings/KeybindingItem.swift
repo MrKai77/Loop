@@ -66,11 +66,13 @@ struct KeybindingItemView: View {
             HStack {
                 label()
                     .onChange(of: keybind) { _ in
-                        if keybind.direction == .custom {
-                            isConfiguringCustom = true
-                        }
-                        if keybind.direction == .cycle {
-                            isConfiguringCycle = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { // helps smoothen the modal's opening animation
+                            if keybind.direction == .custom {
+                                isConfiguringCustom = true
+                            }
+                            if keybind.direction == .cycle {
+                                isConfiguringCycle = true
+                            }
                         }
                     }
 
