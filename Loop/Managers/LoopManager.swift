@@ -253,7 +253,7 @@ private extension LoopManager {
         }
     }
 
-    func handleLoopKeypress(_ event: NSEvent) {
+    func handleLoopKeypress(_ event: NSEvent) -> NSEvent? {
         triggerDelayTimer = nil
 
         let previousModifiers = currentlyPressedModifiers
@@ -269,14 +269,14 @@ private extension LoopManager {
                 // This makes sure that the amount of keys being pressed is not more than the actual trigger key
                 currentlyPressedModifiers.count <= triggerKey.count
             else {
-                return
+                return nil
             }
 
             let useTriggerDelay = Defaults[.triggerDelay] > 0.1
             let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
 
             if useDoubleClickTrigger {
-                guard currentlyPressedModifiers.sorted() == Defaults[.triggerKey].sorted() else { return }
+                guard currentlyPressedModifiers.sorted() == Defaults[.triggerKey].sorted() else { return nil }
                 handleDoubleClickToTrigger(useTriggerDelay)
             } else if useTriggerDelay {
                 handleTriggerDelay()
@@ -287,6 +287,8 @@ private extension LoopManager {
         } else {
             closeLoop()
         }
+
+        return nil
     }
 
     func processModifiers(_ event: NSEvent) {
@@ -485,8 +487,8 @@ private extension LoopManager {
 // MARK: - Radial Menu
 
 private extension LoopManager {
-    func mouseMoved(_: NSEvent) {
-        guard isLoopActive else { return }
+    func mouseMoved(_: NSEvent) -> NSEvent? {
+        guard isLoopActive else { return nil }
         keybindMonitor.canPassthroughSpecialEvents = false
 
         let noActionDistance: CGFloat = 10
@@ -497,7 +499,7 @@ private extension LoopManager {
 
         // Return if the mouse didn't move
         if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
-            return
+            return nil
         }
 
         // Get angle & distance to mouse
@@ -524,5 +526,7 @@ private extension LoopManager {
         }
 
         changeAction(resizeDirection, canAdvanceCycle: false)
+
+        return nil
     }
 }

@@ -13,20 +13,11 @@ struct CustomActionConfigurationView: View {
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
 
-    @State var action: WindowAction // this is so that onChange is called for each property
-
+    @State private var action: WindowAction
     @State private var currentTab: Tab = .position
-    private enum Tab: CaseIterable {
-        case position, size
 
-        var name: LocalizedStringKey {
-            switch self {
-            case .position:
-                "Position"
-            case .size:
-                "Size"
-            }
-        }
+    private enum Tab: String, CaseIterable {
+        case position = "Position", size = "Size"
 
         var image: Image {
             switch self {
@@ -38,147 +29,89 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    let anchors: [CustomWindowActionAnchor] = [
-        .topLeft, .top, .topRight,
-        .left, .center, .right,
-        .bottomLeft, .bottom, .bottomRight
+    private let anchors: [CustomWindowActionAnchor] = [
+        .topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight
     ]
 
-    let previewController = PreviewController()
-    let screenSize: CGSize
+    private let previewController = PreviewController()
+    private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
 
     init(action: Binding<WindowAction>, isPresented: Binding<Bool>) {
-        self._windowAction = action
-        self._isPresented = isPresented
-        self._action = State(initialValue: action.wrappedValue)
-
-        self.screenSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
+        _windowAction = action
+        _isPresented = isPresented
+        _action = State(initialValue: action.wrappedValue)
     }
 
     var body: some View {
         ScreenView {
             GeometryReader { geo in
-                let frame = action.getFrame(
-                    window: nil,
-                    bounds: .init(origin: .zero, size: geo.size),
-                    disablePadding: true
-                )
-
+                let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
                 ZStack {
                     if action.sizeMode == .custom {
                         blurredWindow()
-                            .frame(
-                                width: frame.width,
-                                height: frame.height
-                            )
-                            .offset(
-                                x: frame.origin.x,
-                                y: frame.origin.y
-                            )
+                            .frame(width: frame.width, height: frame.height)
+                            .offset(x: frame.origin.x, y: frame.origin.y)
                     }
                 }
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
                 .animation(LuminareSettingsWindow.animation, value: frame)
             }
         }
+        .onChange(of: action) { windowAction = $0 }
 
+        configurationSections()
+        actionButtons()
+    }
+
+    @ViewBuilder private func configurationSections() -> some View {
         LuminareSection {
-            LuminareTextField(
-                Binding(
-                    get: {
-                        action.name ?? ""
-                    },
-                    set: {
-                        action.name = $0
-                    }
-                ),
-                placeHolder: "Custom Keybind"
-            )
+            LuminareTextField(Binding(get: { action.name ?? "" }, set: { action.name = $0 }), placeHolder: "Custom Keybind")
         }
 
         LuminareSection {
-            LuminarePicker(
-                elements: Tab.allCases,
-                selection: Binding(
-                    get: {
-                        currentTab
-                    },
-                    set: { newValue in
-                        withAnimation(LuminareSettingsWindow.animation) {
-                            currentTab = newValue
-                        }
-                    }
-                ),
-                columns: 2,
-                roundBottom: false
-            ) { tab in
-                HStack(spacing: 6) {
-                    tab.image
-                    Text(tab.name)
-                }
-                .fixedSize()
-            }
-
-            LuminareToggle(
-                "Use pixels",
-                isOn: Binding(
-                    get: {
-                        if action.unit == nil {
-                            action.unit = .percentage
-                        }
-                        return action.unit == .pixels
-                    },
-                    set: { newValue in
-                        withAnimation(LuminareSettingsWindow.animation) {
-                            if action.unit == .percentage {
-                                action.width = min(action.width ?? 100, 100)
-                                action.height = min(action.height ?? 100, 100)
-
-                                action.xPoint = min(action.xPoint ?? 100, 100)
-                                action.yPoint = min(action.yPoint ?? 100, 100)
-                            }
-
-                            action.unit = newValue ? .pixels : .percentage
-                        }
-                    }
-                )
-            )
+            tabPicker()
+            unitToggle()
         }
 
         if currentTab == .position {
             positionConfiguration()
-        } else if currentTab == .size {
+        } else {
             sizeConfiguration()
-        }
-
-        HStack(spacing: 8) {
-            Button("Preview") {}
-                .onLongPressGesture(
-                    minimumDuration: 100.0,
-                    maximumDistance: .infinity,
-                    pressing: { pressing in
-                        if pressing {
-                            guard let screen = NSScreen.main else { return }
-                            previewController.open(screen: screen, startingAction: action)
-                        } else {
-                            previewController.close()
-                        }
-                    },
-                    perform: {}
-                )
-                .disabled(action.sizeMode != .custom)
-
-            Button("Close") {
-                isPresented = false
-            }
-        }
-        .buttonStyle(LuminareCompactButtonStyle())
-        .onChange(of: action) { _ in
-            windowAction = action
         }
     }
 
-    @ViewBuilder func positionConfiguration() -> some View {
+    @ViewBuilder private func tabPicker() -> some View {
+        LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: false) { tab in
+            HStack(spacing: 6) {
+                tab.image
+                Text(tab.rawValue)
+            }
+            .fixedSize()
+        }
+    }
+
+    @ViewBuilder private func unitToggle() -> some View {
+        LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
+    }
+
+    @ViewBuilder private func actionButtons() -> some View {
+        HStack(spacing: 8) {
+            Button("Preview") {
+                previewAction()
+            }
+            .disabled(action.sizeMode != .custom)
+
+            Button("Close") { isPresented = false }
+        }
+        .buttonStyle(LuminareCompactButtonStyle())
+    }
+
+    private func previewAction() {
+        guard let screen = NSScreen.main else { return }
+        previewController.open(screen: screen, startingAction: action)
+    }
+
+    @ViewBuilder private func positionConfiguration() -> some View {
         LuminareSection {
             LuminareToggle(
                 "Use coordinates",
@@ -270,7 +203,7 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder func sizeConfiguration() -> some View {
+    @ViewBuilder private func sizeConfiguration() -> some View {
         LuminareSection {
             LuminarePicker(
                 elements: CustomWindowActionSizeMode.allCases,
@@ -332,13 +265,12 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder
-    func blurredWindow() -> some View {
+    @ViewBuilder private func blurredWindow() -> some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {
                 RoundedRectangle(cornerRadius: 5)
                     .strokeBorder(.white.opacity(0.1), lineWidth: 2)
             }
-            .clipShape(.rect(cornerRadius: 5))
+            .clipShape(RoundedRectangle(cornerRadius: 5))
     }
 }

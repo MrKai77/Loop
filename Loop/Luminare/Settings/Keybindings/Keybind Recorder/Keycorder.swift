@@ -110,13 +110,13 @@ struct Keycorder: View {
             if event.type == .keyUp ||
                 (event.type == .flagsChanged && !selectionKeybind.isEmpty && event.modifierFlags.rawValue == 256) {
                 finishedObservingKeys()
-                return
+                return nil
             }
 
             if event.type == .keyDown, !event.isARepeat {
                 if event.keyCode == CGKeyCode.kVK_Escape {
                     finishedObservingKeys(wasForced: true)
-                    return
+                    return nil
                 }
 
                 if (selectionKeybind.count + triggerKey.count) >= keyLimit {
@@ -128,6 +128,8 @@ struct Keycorder: View {
                     selectionKeybind.insert(event.keyCode)
                 }
             }
+
+            return nil
         }
 
         eventMonitor!.start()

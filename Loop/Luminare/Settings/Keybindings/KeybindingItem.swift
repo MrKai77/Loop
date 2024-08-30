@@ -25,55 +25,100 @@ struct KeybindingItemView: View {
         self.cycleIndex = cycleIndex
     }
 
+    // Keybind selection popover
+    @State private var searchText = ""
+    @State private var searchResults: [WindowDirection] = []
+    @State private var isPresented = false
+
+    let sections: [PickerSection] = [
+        .init("General", WindowDirection.general),
+        .init("Halves", WindowDirection.halves),
+        .init("Quarters", WindowDirection.quarters),
+        .init("Horizontal Thirds", WindowDirection.horizontalThirds),
+        .init("Vertical Thirds", WindowDirection.verticalThirds),
+        .init("Screen Switching", WindowDirection.screenSwitching),
+        .init("Size Adjustment", WindowDirection.sizeAdjustment),
+        .init("Shrink", WindowDirection.shrink),
+        .init("Grow", WindowDirection.grow),
+        .init("Move", WindowDirection.move)
+    ]
+
+    var moreSection: PickerSection<WindowDirection> {
+        if cycleIndex != nil { // If this is a cycling keybind
+            .init("More", [WindowDirection.custom])
+        } else {
+            .init("More", [WindowDirection.custom, WindowDirection.cycle])
+        }
+    }
+
+    var sectionItems: [WindowDirection] {
+        var result: [WindowDirection] = []
+
+        for sectionItems in sections.map(\.items) {
+            result.append(contentsOf: sectionItems)
+        }
+
+        return result
+    }
+
     var body: some View {
         HStack {
-            label()
-                .onChange(of: keybind) { _ in
-                    if keybind.direction == .custom {
-                        isConfiguringCustom = true
-                    }
-                    if keybind.direction == .cycle {
-                        isConfiguringCycle = true
-                    }
-                }
-
             HStack {
-                if keybind.direction == .custom {
-                    Button(action: {
-                        isConfiguringCustom = true
-                    }, label: {
-                        Image(._18PxRuler)
-                    })
-                    .buttonStyle(.plain)
-                    .luminareModal(isPresented: $isConfiguringCustom) {
-                        CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
-                            .frame(width: 400)
+                label()
+                    .onChange(of: keybind) { _ in
+                        if keybind.direction == .custom {
+                            isConfiguringCustom = true
+                        }
+                        if keybind.direction == .cycle {
+                            isConfiguringCycle = true
+                        }
                     }
-                    .help("Customize this keybind's custom frame.")
-                }
 
-                if keybind.direction == .cycle {
-                    Button(action: {
-                        isConfiguringCycle = true
-                    }, label: {
-                        Image(._18PxRepeat4)
-                    })
-                    .buttonStyle(.plain)
-                    .luminareModal(isPresented: $isConfiguringCycle) {
-                        CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
-                            .frame(width: 400)
+                HStack {
+                    if keybind.direction == .custom {
+                        Button(action: {
+                            isConfiguringCustom = true
+                        }, label: {
+                            Image(._18PxRuler)
+                        })
+                        .buttonStyle(.plain)
+                        .luminareModal(isPresented: $isConfiguringCustom) {
+                            CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+                                .frame(width: 400)
+                        }
+                        .help("Customize this keybind's custom frame.")
                     }
-                    .help("Customize what this keybind cycles through.")
-                }
 
+                    if keybind.direction == .cycle {
+                        Button(action: {
+                            isConfiguringCycle = true
+                        }, label: {
+                            Image(._18PxRepeat4)
+                        })
+                        .buttonStyle(.plain)
+                        .luminareModal(isPresented: $isConfiguringCycle) {
+                            CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
+                                .frame(width: 400)
+                        }
+                        .help("Customize what this keybind cycles through.")
+                    }
+
+                    if isHovering {
+                        directionPicker()
+                            .help("Customize this keybind's action.")
+                    }
+                }
+                .font(.title3)
+                .foregroundStyle(isHovering ? .primary : .secondary)
+            }
+            .background {
                 if isHovering {
-                    WindowDirectionPicker($keybind, isCycle: cycleIndex != nil)
-                        .equatable()
-                        .help("Customize this keybind's action.")
+                    Color.clear
+                        .background(PopoverHolder(isPresented: $isPresented) {
+                            directionPickerContents(keybind: $keybind.direction)
+                        })
                 }
             }
-            .font(.title3)
-            .foregroundStyle(isHovering ? .primary : .secondary)
 
             Spacer()
 
@@ -101,6 +146,20 @@ struct KeybindingItemView: View {
             }
         }
         .padding(.horizontal, 12)
+        .onAppear {
+            computeSearchResults()
+        }
+        .onChange(of: searchText) { _ in
+            computeSearchResults()
+        }
+        .onChange(of: isHovering) { _ in
+            if !isHovering {
+                isPresented = false
+            }
+        }
+        .onChange(of: isPresented) { _ in
+            searchText = ""
+        }
     }
 
     func label() -> some View {
@@ -120,117 +179,49 @@ struct KeybindingItemView: View {
         }
         .fixedSize(horizontal: false, vertical: true)
     }
-}
 
-struct WindowDirectionPicker: View, Equatable {
-    @Binding var keybind: WindowAction
-    let isCycle: Bool
-
-    init(_ keybind: Binding<WindowAction>, isCycle: Bool = false) {
-        self._keybind = keybind
-        self.isCycle = isCycle
-    }
-
-    var body: some View {
-        Menu {
-            Menu("General") {
-                ForEach(WindowDirection.general) { direction in
-                    directionPickerItem(direction)
-                }
+    func directionPicker() -> some View {
+        VStack {
+            Button {
+                isPresented.toggle()
+            } label: {
+                Image(._18PxPen2)
+                    .padding(.vertical, 5) // Increase hitbox size
+                    .contentShape(.rect)
+                    .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox
+                    .contentShape(.rect)
             }
-
-            Menu("Halves") {
-                ForEach(WindowDirection.halves) { direction in
-                    directionPickerItem(direction)
-                }
-            }
-
-            Menu("Quarters") {
-                ForEach(WindowDirection.quarters) { direction in
-                    directionPickerItem(direction)
-                }
-            }
-
-            Menu("Horizontal Thirds") {
-                ForEach(WindowDirection.horizontalThirds) { direction in
-                    directionPickerItem(direction)
-                }
-            }
-
-            Menu("Vertical Thirds") {
-                ForEach(WindowDirection.verticalThirds) { direction in
-                    directionPickerItem(direction)
-                }
-            }
-
-            Menu("Screen Switching") {
-                ForEach(WindowDirection.screenSwitching) { direction in
-                    directionPickerItem(direction)
-                }
-            }
-
-            if !isCycle {
-                Menu("Window Manipulation") {
-                    ForEach(WindowDirection.sizeAdjustment) { direction in
-                        directionPickerItem(direction)
-                    }
-                    Divider()
-                    ForEach(WindowDirection.shrink) { direction in
-                        directionPickerItem(direction)
-                    }
-                    Divider()
-                    ForEach(WindowDirection.grow) { direction in
-                        directionPickerItem(direction)
-                    }
-                    Divider()
-                    ForEach(WindowDirection.move) { direction in
-                        directionPickerItem(direction)
-                    }
-                }
-            }
-
-            Menu("More") {
-                ForEach(WindowDirection.more) { direction in
-                    if isCycle {
-                        if direction != .cycle {
-                            directionPickerItem(direction)
-                        }
-                    } else {
-                        directionPickerItem(direction)
-                    }
-                }
-            }
-        } label: {
-            Image(._18PxPen2)
-                .padding(.vertical, 5) // Increase hitbox size
-                .contentShape(.rect)
-                .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox
+            .buttonStyle(.plain)
         }
-        .buttonStyle(PlainButtonStyle()) // Override Luminare button styling
     }
 
-    func directionPickerItem(_ direction: WindowDirection) -> some View {
-        Button(action: {
-            keybind.direction = direction
+    func directionPickerContents(keybind: Binding<WindowDirection>) -> some View {
+        VStack(spacing: 0) {
+            CustomTextField($searchText)
+                .padding(PopoverPanel.contentPadding * 2)
 
-            if direction == .custom {
-                keybind.unit = .percentage
-                keybind.anchor = .center
-                keybind.sizeMode = .custom
-                keybind.width = 80
-                keybind.height = 80
-                keybind.positionMode = .generic
-                keybind.xPoint = 10
-                keybind.yPoint = 10
+            Divider()
+
+            PickerView(
+                keybind,
+                $searchResults,
+                sections + [moreSection]
+            ) { item in
+                HStack(spacing: 8) {
+                    IconView(action: .constant(.init(item)))
+                    Text(item.name)
+                }
             }
-        }, label: {
-            HStack {
-                Text(direction.name)
-            }
-        })
+        }
     }
 
-    static func == (lhs: WindowDirectionPicker, rhs: WindowDirectionPicker) -> Bool {
-        lhs.keybind == rhs.keybind
+    func computeSearchResults() {
+        withAnimation {
+            if searchText.isEmpty {
+                searchResults = []
+            } else {
+                searchResults = sectionItems.filter { $0.name.localizedCaseInsensitiveContains(searchText) } + moreSection.items
+            }
+        }
     }
 }

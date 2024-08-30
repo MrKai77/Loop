@@ -46,6 +46,8 @@ class WindowDragManager {
                     self.getWindowSnapDirection()
                 }
             }
+
+            return nil
         }
 
         leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
@@ -59,6 +61,8 @@ class WindowDragManager {
 
             self.previewController.close()
             self.draggingWindow = nil
+
+            return nil
         }
 
         leftMouseDraggedMonitor!.start()

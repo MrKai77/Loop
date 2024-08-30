@@ -3912,6 +3912,7 @@
       }
     },
     "Halves" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4232,6 +4233,7 @@
       }
     },
     "Horizontal Thirds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -9556,6 +9558,7 @@
       }
     },
     "More" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13552,6 +13555,7 @@
       }
     },
     "Position" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -13994,6 +13998,7 @@
       }
     },
     "Quarters" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15013,6 +15018,7 @@
       }
     },
     "Screen Switching" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15072,6 +15078,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "屏幕切換"
+          }
+        }
+      }
+    },
+    "Search for a window action" : {
+      "comment" : "Default placeholder",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Search…"
           }
         }
       }
@@ -15653,6 +15671,7 @@
       }
     },
     "Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -17253,6 +17272,7 @@
       }
     },
     "Vertical Thirds" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -18935,37 +18955,37 @@
         }
       }
     },
-    "Window Direction/Name: MacOS Center" : {
+    "Window Direction/Name: macOS Center" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "مركز MacOS"
+            "value" : "مركز macOS"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacOS Mitte"
+            "value" : "macOS Mitte"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "MacOS Center"
+            "value" : "macOS Center"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacOS Centre"
+            "value" : "macOS Centre"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Centro de MacOS"
+            "value" : "Centro de macOS"
           }
         },
         "it" : {
@@ -18983,13 +19003,13 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacOS Centrum"
+            "value" : "macOS Centrum"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Centro do MacOS"
+            "value" : "Centro do macOS"
           }
         },
         "zh-Hans" : {
@@ -20775,6 +20795,7 @@
       }
     },
     "Window Manipulation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
