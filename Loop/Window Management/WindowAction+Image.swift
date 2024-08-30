@@ -11,8 +11,6 @@ import SwiftUI
 extension WindowAction {
     var icon: Image? {
         switch direction {
-        case .noAction:
-            Image(systemName: "questionmark")
         case .undo:
             Image(systemName: "arrow.uturn.backward")
         case .initialFrame:
@@ -30,7 +28,7 @@ extension WindowAction {
         case .smaller:
             Image(systemName: "arrow.down.right.and.arrow.up.left")
         case .shrinkTop, .growBottom, .moveDown:
-            Image(systemName: "arrow.down")
+            Image(systemName: "arrow.down")k
         case .shrinkBottom, .growTop, .moveUp:
             Image(systemName: "arrow.up")
         case .shrinkRight, .growLeft, .moveLeft:
