@@ -81,7 +81,7 @@ struct CustomActionConfigurationView: View {
     }
 
     @ViewBuilder private func tabPicker() -> some View {
-        LuminarePicker(elements: Tab.allCases, selection: $currentTab.animation(LuminareSettingsWindow.animation), columns: 2, roundBottom: false) { tab in
+        LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: false) { tab in
             HStack(spacing: 6) {
                 tab.image
                 Text(tab.rawValue)
