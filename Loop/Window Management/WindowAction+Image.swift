@@ -12,7 +12,7 @@ extension WindowAction {
     var icon: Image? {
         switch direction {
         case .noAction:
-            Image(systemName: "questionMark")
+            Image(systemName: "questionmark")
         case .undo:
             Image(systemName: "arrow.uturn.backward")
         case .initialFrame:

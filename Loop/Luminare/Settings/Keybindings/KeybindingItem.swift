@@ -111,9 +111,14 @@ struct KeybindingItemView: View {
                 .font(.title3)
                 .foregroundStyle(isHovering ? .primary : .secondary)
             }
-            .background(PopoverHolder(isPresented: $isPresented) {
-                directionPickerContents()
-            })
+            .background {
+                if isHovering {
+                    Color.clear
+                        .background(PopoverHolder(isPresented: $isPresented) {
+                            directionPickerContents(keybind: $keybind.direction)
+                        })
+                }
+            }
 
             Spacer()
 
@@ -146,6 +151,11 @@ struct KeybindingItemView: View {
         }
         .onChange(of: searchText) { _ in
             computeSearchResults()
+        }
+        .onChange(of: isHovering) { _ in
+            if !isHovering {
+                isPresented = false
+            }
         }
         .onChange(of: isPresented) { _ in
             searchText = ""
@@ -185,7 +195,7 @@ struct KeybindingItemView: View {
         }
     }
 
-    func directionPickerContents() -> some View {
+    func directionPickerContents(keybind: Binding<WindowDirection>) -> some View {
         VStack(spacing: 0) {
             CustomTextField($searchText)
                 .padding(PopoverPanel.contentPadding * 2)
@@ -193,14 +203,7 @@ struct KeybindingItemView: View {
             Divider()
 
             PickerView(
-                Binding(
-                    get: {
-                        keybind.direction
-                    },
-                    set: {
-                        keybind.direction = $0
-                    }
-                ),
+                keybind,
                 $searchResults,
                 sections + [moreSection]
             ) { item in
