@@ -81,7 +81,7 @@ struct CustomActionConfigurationView: View {
     }
 
     @ViewBuilder private func tabPicker() -> some View {
-        LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: false) { tab in
+        LuminarePicker(elements: Tab.allCases, selection: $currentTab.animation(LuminareSettingsWindow.animation), columns: 2, roundBottom: false) { tab in
             HStack(spacing: 6) {
                 tab.image
                 Text(tab.rawValue)
@@ -91,24 +91,44 @@ struct CustomActionConfigurationView: View {
     }
 
     @ViewBuilder private func unitToggle() -> some View {
-        LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
+        LuminareToggle(
+            "Use pixels",
+            isOn: Binding(
+                get: {
+                    if action.unit == nil {
+                        action.unit = .percentage
+                    }
+
+                    return action.unit == .pixels
+                },
+                set: {
+                    action.unit = $0 ? .pixels : .percentage
+                }
+            )
+        )
     }
 
     @ViewBuilder private func actionButtons() -> some View {
         HStack(spacing: 8) {
-            Button("Preview") {
-                previewAction()
-            }
-            .disabled(action.sizeMode != .custom)
+            Button("Preview") {}
+                .onLongPressGesture( // Allows for a press-and-hold gesture to show the preview
+                    minimumDuration: 100.0,
+                    maximumDistance: .infinity,
+                    pressing: { pressing in
+                        if pressing {
+                            guard let screen = NSScreen.main else { return }
+                            previewController.open(screen: screen, startingAction: action)
+                        } else {
+                            previewController.close()
+                        }
+                    },
+                    perform: {}
+                )
+                .disabled(action.sizeMode != .custom)
 
             Button("Close") { isPresented = false }
         }
         .buttonStyle(LuminareCompactButtonStyle())
-    }
-
-    private func previewAction() {
-        guard let screen = NSScreen.main else { return }
-        previewController.open(screen: screen, startingAction: action)
     }
 
     @ViewBuilder private func positionConfiguration() -> some View {
