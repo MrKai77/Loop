@@ -81,7 +81,6 @@ class IconConfigurationModel: ObservableObject {
         return shuffledTexts.popLast() ?? lockedMessages[0] // Fallback string
     }
 
-
     private func handleNotificationChange() {
         if notificationWhenIconUnlocked {
             AppDelegate.sendNotification(
@@ -177,7 +176,7 @@ struct IconVew: View {
 
                         Text(nextUnlockCount == icon.unlockTime ?
                             .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
-                                .init(localized: "App icon is locked", defaultValue: "Locked")
+                            .init(localized: "App icon is locked", defaultValue: "Locked")
                         )
                         .font(.caption)
                         .foregroundColor(.secondary)

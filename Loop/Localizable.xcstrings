@@ -4271,8 +4271,10 @@
         }
       }
     },
+    "Grow" : {
+
+    },
     "Halves" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4623,7 +4625,6 @@
       }
     },
     "Horizontal Thirds" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4759,77 +4760,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "圖標"
-          }
-        }
-      }
-    },
-    "Icon contributor" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مساهم الأيقونة"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App Icon Mitwirkende"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Icon contributor"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Contribuidor de iconos"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Contributore icone"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "아이콘 기여자"
-          }
-        },
-        "nl-BE" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Icoon bijdrager"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Contribuidor de Ícone"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Автор иконки"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "图标贡献者"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "圖標貢獻者"
           }
         }
       }
@@ -10422,7 +10352,6 @@
       }
     },
     "More" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -10491,6 +10420,9 @@
           }
         }
       }
+    },
+    "Move" : {
+
     },
     "Move cursor with window" : {
       "localizations" : {
@@ -12707,6 +12639,12 @@
     "No updates available message 27" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12778,6 +12716,12 @@
     "No updates available message 28" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12849,6 +12793,12 @@
     "No updates available message 29" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12920,6 +12870,12 @@
     "No updates available message 30" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12991,6 +12947,12 @@
     "No updates available message 31" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13062,6 +13024,12 @@
     "No updates available message 32" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13133,6 +13101,12 @@
     "No updates available message 33" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13204,6 +13178,12 @@
     "No updates available message 34" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13275,6 +13255,12 @@
     "No updates available message 35" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13346,6 +13332,12 @@
     "No updates available message 36" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13417,6 +13409,12 @@
     "No updates available message 37" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13488,6 +13486,12 @@
     "No updates available message 38" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13559,6 +13563,12 @@
     "No updates available message 39" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13707,6 +13717,12 @@
     "No updates available message 41" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13778,6 +13794,12 @@
     "No updates available message 42" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13849,6 +13871,12 @@
     "No updates available message 43" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13920,6 +13948,12 @@
     "No updates available message 44" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14054,6 +14088,12 @@
     },
     "Nothing to cycle through" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14779,7 +14819,6 @@
       }
     },
     "Position" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -15264,7 +15303,6 @@
       }
     },
     "Quarters" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -16380,7 +16418,6 @@
       }
     },
     "Screen Switching" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -16451,7 +16488,6 @@
       }
     },
     "Search for a window action" : {
-      "comment" : "Default placeholder",
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
@@ -17022,6 +17058,9 @@
         }
       }
     },
+    "Shrink" : {
+
+    },
     "Simple" : {
       "localizations" : {
         "ar" : {
@@ -17093,7 +17132,6 @@
       }
     },
     "Size" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -17162,6 +17200,9 @@
           }
         }
       }
+    },
+    "Size Adjustment" : {
+
     },
     "Size increment" : {
       "localizations" : {
@@ -18844,7 +18885,6 @@
       }
     },
     "Vertical Thirds" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -23204,7 +23244,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вы использовали Loop %11d раз!"
+            "value" : "Вы использовали Loop %lld раз!"
           }
         },
         "zh-Hans" : {

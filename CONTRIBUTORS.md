@@ -55,6 +55,9 @@ The localisation efforts have been categorised by language and dialect, showcasi
 
 - **Belgium**
   - [@FormalSnake](https://github.com/FormalSnake)
+  
+### Russian
+- [@w1png](https://github.com/w1png)
 
 If your language is not listed, it may not yet be localised! Interested in helping? Create an issue to get started. Need guidance? Our [extensive guide](/CONTRIBUTING.md) will help you through the process!
 
