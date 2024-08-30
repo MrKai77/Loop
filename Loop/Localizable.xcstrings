@@ -51,6 +51,12 @@
             "value" : "%@"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -113,6 +119,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ já está sendo usado como seu gatilho."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ уже используется как клавиша действия."
           }
         },
         "zh-Hans" : {
@@ -179,6 +191,12 @@
             "value" : "%@ coloca as janelas levemente acima do centro absoluto, o que pode ser mais ergonômico."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ устанавливает окна немного выше настоящего центра, это положение является более эргономичным."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -238,6 +256,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -307,6 +331,12 @@
             "value" : "Sobre"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "О нас"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -369,6 +399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cor de Destaque"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Акцентный Цвет"
           }
         },
         "zh-Hans" : {
@@ -442,6 +478,12 @@
             "value" : "Customizado"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свой цвет"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -511,6 +553,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sistema"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Системный"
           }
         },
         "zh-Hans" : {
@@ -584,6 +632,12 @@
             "value" : "Plano de fundo"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обои"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -646,6 +700,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Acesso à acessibilidade"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Универсальный доступ"
           }
         },
         "zh-Hans" : {
@@ -719,6 +779,12 @@
             "value" : "Por favor, conceda acesso para redimensionar janelas."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожалуйста выдайте доступ к изменению размера окон."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -790,6 +856,12 @@
             "value" : "%@ Precisa de Permissões de Acessibilidade"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ нуждается в разрешении универсального доступа"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -852,6 +924,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adicionar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить"
           }
         },
         "zh-Hans" : {
@@ -918,6 +996,12 @@
             "value" : "Avançado"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продвинутые"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -982,6 +1066,12 @@
             "value" : "Animar o redimensionamento da janela"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Анимировать изменение размера окон"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1044,6 +1134,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Velocidade de animação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скорость анимации"
           }
         },
         "zh-Hans" : {
@@ -1117,6 +1213,12 @@
             "value" : "Bloqueado"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыто"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1179,6 +1281,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comportamento"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поведение"
           }
         },
         "zh-Hans" : {
@@ -1245,6 +1353,12 @@
             "value" : "Azul"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Синий"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1307,6 +1421,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Espessura da borda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ширина рамки"
           }
         },
         "zh-Hans" : {
@@ -1373,6 +1493,12 @@
             "value" : "Inferior"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Снизу"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1435,6 +1561,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Percorrer para Baixo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цикл Вниз"
           }
         },
         "zh-Hans" : {
@@ -1501,6 +1633,12 @@
             "value" : "Não pode ser habilitado quando a prévia estiver desligada."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включите предпросмотр чтобы использовать."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1563,6 +1701,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trocar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить"
           }
         },
         "zh-Hans" : {
@@ -1629,6 +1773,12 @@
             "value" : "Verificar atualizações..."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверить наличие обновлений..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1691,6 +1841,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fechar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрыть"
           }
         },
         "zh-Hans" : {
@@ -1757,6 +1913,12 @@
             "value" : "Cor"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цвет"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1819,6 +1981,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configurar espaçamento..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настроить отступы..."
           }
         },
         "zh-Hans" : {
@@ -1885,6 +2053,12 @@
             "value" : "Contribuidores no GitHub"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Контрибьюторы на GitHub"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1947,6 +2121,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Raio dos cantos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скругление"
           }
         },
         "zh-Hans" : {
@@ -2013,6 +2193,12 @@
             "value" : "Créditos"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создатели"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2075,6 +2261,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cursor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Курсор"
           }
         },
         "zh-Hans" : {
@@ -2141,6 +2333,12 @@
             "value" : "Customizado"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свои значения"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2203,6 +2401,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ciclo Customizado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новый Цикл"
           }
         },
         "zh-Hans" : {
@@ -2269,6 +2473,12 @@
             "value" : "Combinação Customizada"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новое Сочетание Клавиш"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2331,6 +2541,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Customize a ação dessa tecla."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить действие этого сочетания клавиш."
           }
         },
         "zh-Hans" : {
@@ -2397,6 +2613,12 @@
             "value" : "Customize os atalhos desse quadro."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить рамку сочетания клавиш."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2459,6 +2681,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Personalize o que esta combinação de teclas alterna"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить цикл горячей клавиши"
           }
         },
         "zh-Hans" : {
@@ -2525,6 +2753,12 @@
             "value" : "Combinação para Alternar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цикл сочетания клавиш"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2587,6 +2821,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Design"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дизайн"
           }
         },
         "zh-Hans" : {
@@ -2653,6 +2893,12 @@
             "value" : "Desenvolvimento"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разработка"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2715,6 +2961,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Suporte de desenvolvimento"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поддержка в разработке"
           }
         },
         "zh-Hans" : {
@@ -2781,6 +3033,12 @@
             "value" : "Desabilitar interações com o cursor"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отключить взаимодействие курсором"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2843,6 +3101,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você quer mesclar ou deletar os atalhos existentes?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Соединить или удалить существующие горячие клавиши?"
           }
         },
         "zh-Hans" : {
@@ -2909,6 +3173,12 @@
             "value" : "Doar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожертвовать"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2973,6 +3243,12 @@
             "value" : "Doar..."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожертвовать..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3035,6 +3311,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clique duplo para disparar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Двойное нажатие чтобы активировать"
           }
         },
         "zh-Hans" : {
@@ -3108,6 +3390,12 @@
             "value" : "Garanta que o arquivo que você selecionou possui o formato correto."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убедитесь что вы выбрали файл в правильном формате."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3179,6 +3467,12 @@
             "value" : "Erro Lendo Atalhos"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ошибка чтения горячих клавиш"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3243,6 +3537,12 @@
             "value" : "Aplicativos Excluídos"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Игнорировать приложения"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3305,6 +3605,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exportar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспортировать"
           }
         },
         "zh-Hans" : {
@@ -3378,6 +3684,12 @@
             "value" : "Você não pode exportar algo que não existe!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы не можете экспортировать что-то, чего не существует!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3449,6 +3761,12 @@
             "value" : "Nenhum Atalho Definido"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Горячие клавиши не были установлены"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3511,6 +3829,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exportar atalhos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспортировать горячие клавиши"
           }
         },
         "zh-Hans" : {
@@ -3577,6 +3901,12 @@
             "value" : "Barra externa"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Внешняя строка меню"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3639,6 +3969,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rápido"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Быстро"
           }
         },
         "zh-Hans" : {
@@ -3705,6 +4041,12 @@
             "value" : "Focar na janela quando redimensionar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сфокусировать окно при изменении размера"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3767,6 +4109,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geral"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Общее"
           }
         },
         "zh-Hans" : {
@@ -3833,6 +4181,12 @@
             "value" : "Gradiente"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Градиент"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3895,6 +4249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verde"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зеленый"
           }
         },
         "zh-Hans" : {
@@ -3962,6 +4322,12 @@
             "value" : "Metades"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Половины"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4024,6 +4390,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Feedback háptico"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тактильная обратная связь"
           }
         },
         "zh-Hans" : {
@@ -4090,6 +4462,12 @@
             "value" : "Altura"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Высота"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4154,6 +4532,12 @@
             "value" : "Esconder ícone da barra de menu"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спрятать иконку в строке меню"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4216,6 +4600,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esconder até a direção ser selecionada"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спрятать до выбора направения"
           }
         },
         "zh-Hans" : {
@@ -4283,6 +4673,12 @@
             "value" : "Terços Horizontais"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Горизонтальные трети"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4345,6 +4741,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ícone"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иконка"
           }
         },
         "zh-Hans" : {
@@ -4410,6 +4812,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Contribuidor de Ícone"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автор иконки"
           }
         },
         "zh-Hans" : {
@@ -4483,6 +4891,12 @@
             "value" : "Preto"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Черный"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4552,6 +4966,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Buraco negro"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Черная Дыра"
           }
         },
         "zh-Hans" : {
@@ -4625,6 +5045,12 @@
             "value" : "Clássico"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Классический"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4694,6 +5120,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desenvolvedor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разработчик"
           }
         },
         "zh-Hans" : {
@@ -4767,6 +5199,12 @@
             "value" : "Holográfico"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Голографический"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4836,6 +5274,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tecla"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keycap"
           }
         },
         "zh-Hans" : {
@@ -4909,6 +5353,12 @@
             "value" : "Mestre Loop"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop Мастер"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4975,6 +5425,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meta Loop"
+          }
+        },
+        "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Meta Loop"
@@ -5051,6 +5507,12 @@
             "value" : "Neon"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Неон"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5117,6 +5579,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rosé Pine"
+          }
+        },
+        "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rosé Pine"
@@ -5193,6 +5661,12 @@
             "value" : "Simon"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simon"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5262,6 +5736,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verão"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Лето"
           }
         },
         "zh-Hans" : {
@@ -5335,6 +5815,12 @@
             "value" : "Pôr do Sol Synthwave"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synthwave Sunset"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5404,6 +5890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Branco"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Белый"
           }
         },
         "zh-Hans" : {
@@ -5477,6 +5969,12 @@
             "value" : "Você será notificado quando desbloquear um novo ícone."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вам придет уведомление когда вы откроете  новую иконку."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5546,6 +6044,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você desbloqueou um novo ícone: %@!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы разблокировали новую иконку: %@!"
           }
         },
         "zh-Hans" : {
@@ -5619,6 +6123,12 @@
             "value" : "Você ja fez 25 loops! Aqui está um novo ícone como prêmio: %@. Continue dando loops para desbloquear novos ícones."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы использовали Loop 25 раз! В качестве награды вы получили новую иконку: %@. Продолжайте использовать Loop чтобы открывать новые иконки!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5690,6 +6200,12 @@
             "value" : "5000 loops conquistados! O universo testemunhou o nascimento de um mestre Loop! Aproveite sua merecida recompensa: um ícone totalmente novo!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы использовали Loop 5000 раз! Вселенная узрела рождения Loop мастера! Наслаждайтесь своей заслуженной наградой: новой иконкой!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5754,6 +6270,12 @@
             "value" : "Ignorar janelas em tela cheia"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Игнорировать полноэкранные окна"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5816,6 +6338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импортировать"
           }
         },
         "zh-Hans" : {
@@ -5889,6 +6417,12 @@
             "value" : "Selecione o arquivo de configuração do Rectangle"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите файл конфигурации Rectangle"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5953,6 +6487,12 @@
             "value" : "Importar Atalhos"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импортировать горячие клавиши"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6015,6 +6555,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Importar atalhos do Rectangle"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Импортировать горячие клавиши из Rectangle"
           }
         },
         "zh-Hans" : {
@@ -6088,6 +6634,12 @@
             "value" : "Cancelar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6157,6 +6709,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apagar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
           }
         },
         "zh-Hans" : {
@@ -6230,6 +6788,12 @@
             "value" : "Mesclar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Соединить"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6292,6 +6856,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incluir versões de desenvolvimento"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать версии в разработке"
           }
         },
         "zh-Hans" : {
@@ -6358,6 +6928,12 @@
             "value" : "Incluir preenchimento"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включить отступы"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6420,6 +6996,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tamanho Inicial"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изначальный Размер"
           }
         },
         "zh-Hans" : {
@@ -6486,6 +7068,12 @@
             "value" : "Instalar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установить"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6548,6 +7136,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Instantâneo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мгновенно"
           }
         },
         "zh-Hans" : {
@@ -6614,6 +7208,12 @@
             "value" : "Entrar no Discord"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зайти в Discord"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6676,6 +7276,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Combinações"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетания клавиш"
           }
         },
         "zh-Hans" : {
@@ -6742,6 +7348,12 @@
             "value" : "Combinações"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетания клавиш"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6806,6 +7418,12 @@
             "value" : "Iniciar com o sistema"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запускать при входе"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6868,6 +7486,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esquerda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слева"
           }
         },
         "zh-Hans" : {
@@ -6935,6 +7559,12 @@
             "value" : "%@ Esquerda"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Влево %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6997,6 +7627,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Percorrer para a Esquerda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цикл Влево"
           }
         },
         "zh-Hans" : {
@@ -7070,6 +7706,12 @@
             "value" : "Ícone Bloqueado"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иконка заблокирована"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7139,6 +7781,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você ainda não possui isso!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У вас этого ещё нет?"
           }
         },
         "zh-Hans" : {
@@ -7212,6 +7860,12 @@
             "value" : "Quem você pensa que é, tentando acessar esses ícones super secretos?"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кто ты такой, чтобы смотреть эти иконки?"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7281,6 +7935,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Paciência é uma virtude, e a sua chave para esse ícone."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Терпение - сила, и ваш ключ к открытию иконки."
           }
         },
         "zh-Hans" : {
@@ -7354,6 +8014,12 @@
             "value" : "O ícone está bloqueado, mas o seu potencial não!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступ к иконке ограничен, но ваш потенциал нет!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7423,6 +8089,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continue usando o Loop, e logo esse ícone será seu."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжайте Loop'ить и эта иконка скоро будет ваша."
           }
         },
         "zh-Hans" : {
@@ -7496,6 +8168,12 @@
             "value" : "Esse ícone ainda está sob sigilo, fique atento!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эта иконка все еще в процессе, оставайтесь на связи!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7565,6 +8243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alguns ícones valem a espera, você não acha?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ради некоторых иконок стоит подождать, не правда ли?"
           }
         },
         "zh-Hans" : {
@@ -7638,6 +8322,12 @@
             "value" : "Ainda não, mas você está mais perto do que ontem!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все еще нет, но вы ближе чем были вчера!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7707,6 +8397,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desbloquear esse ícone é só uma questão de tempo e Loops."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открытие этой иконки - просто вопрос времени."
           }
         },
         "zh-Hans" : {
@@ -7780,6 +8476,12 @@
             "value" : "Esse ícone é como vinho caro, precisa de mais tempo."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эта иконка как хорошее вино, ей нужно больше времени."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7849,6 +8551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continue curioso, e logo esse ícone será seu."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оставайтесь любопытными и иконка будет ваша."
           }
         },
         "zh-Hans" : {
@@ -7922,6 +8630,12 @@
             "value" : "Continue com o bom trabalho e esse ícone será sua recompensa."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продолжайте работу и эта иконка будет вашей наградой."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7991,6 +8705,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esse ícone está reservado para os Loppers mais dedicados."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эа иконка зарезервирована для самых преданных Loop'еров."
           }
         },
         "zh-Hans" : {
@@ -8064,6 +8784,12 @@
             "value" : "Sua jornada não está completa, esse ícone te aguarda no final."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваше путешествие еще не окончено, в ваш конце ждет эта иконка."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8133,6 +8859,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No tempo certo, esse ícone será revelado a você."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эта иконка будет открыта когда настанет время."
           }
         },
         "zh-Hans" : {
@@ -8206,6 +8938,12 @@
             "value" : "Paciência, pequeno Looper, esse ícone não está tão longe."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Терпение, молодой Loop'ер, эта иконка не так далека как кажется."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8275,6 +9013,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A jornada de mil Loops começa com um simples passo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Путешествие на тысячу Loop'ов начинается с одного шага."
           }
         },
         "zh-Hans" : {
@@ -8348,6 +9092,12 @@
             "value" : "Cada Loop te deixa mais próximo de encontrar um tesouro."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Каждый Loop приближает вас к сокровищу которое вас ожидает."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8417,6 +9167,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "A cada Loop a trava desse ícone enfraquece."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "С каждым Loop'ом замок на этой иконке слабеет."
           }
         },
         "zh-Hans" : {
@@ -8490,6 +9246,12 @@
             "value" : "Loop após Loop, sua dedicação esculpirá a chave do sucesso."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваше упорство вырезает включ у успеху."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8559,6 +9321,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Os ícones não são apenas desbloqueados; são conquistados, Loop por Loop. "
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иконки не открываются сами по себе, их надо заслужить!"
           }
         },
         "zh-Hans" : {
@@ -8632,6 +9400,12 @@
             "value" : "Sua coleção de ícones aumentará conforme sua quantidade de Loops."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "С набором новых Loop'ов увеличивается и ваша коллекция иконок."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8701,6 +9475,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pense em cada Loop como um enigma, resolvendo o mistério do ícone bloqueado."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Представь что каждый Loop - это загадка, которую нужно разгадать чтобы открыть иконку."
           }
         },
         "zh-Hans" : {
@@ -8774,6 +9554,12 @@
             "value" : "Sua persistência em usar o Loop é a chave mesta para todos os ícones."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваше упорство - ключ к открытию всех иконок."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8843,6 +9629,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dê um Loop nos obstáculos; sua recompensa está além deles."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "zh-Hans" : {
@@ -8916,6 +9708,12 @@
             "value" : "Cada Loop que você completa planta a semente para novos ícones crescerem."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Каждый Loop который вы делаете сажает семена новых иконок."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8987,6 +9785,12 @@
             "value" : "Como as fases da luz, seus ícones se revelarão em ciclos de Loops."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как и фазы луны, иконки открываются циклами."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9056,6 +9860,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Os ícones se revelarão, detrás dos Loops que ainda virão."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Иконки ждут, спрятанные за завесой Loop'ов."
           }
         },
         "zh-Hans" : {
@@ -9254,6 +10064,36 @@
             }
           }
         },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "few" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              },
+              "one" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loop left"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld Loops left"
+                }
+              }
+            }
+          }
+        },
         "zh-Hans" : {
           "variations" : {
             "plural" : {
@@ -9337,6 +10177,12 @@
             "value" : "%"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9403,6 +10249,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
+        "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "px"
@@ -9479,6 +10331,12 @@
             "value" : "s"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "c"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9541,6 +10399,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Clique do meio para disparar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Средняя кнопка мыши для активации"
           }
         },
         "zh-Hans" : {
@@ -9608,6 +10472,12 @@
             "value" : "Mais"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Больше"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9670,6 +10540,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mover cursor com a janela"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Двигать курсор за окном"
           }
         },
         "zh-Hans" : {
@@ -9736,6 +10612,12 @@
             "value" : "Sem aplicações excluídas"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет игнорированных приложений"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9798,6 +10680,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sem combinações"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сочетаний клавиш нет"
           }
         },
         "zh-Hans" : {
@@ -9871,6 +10759,12 @@
             "value" : "Avante! ... na versão atual, é a mais recente."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включайтесь! ... в эту версию, она последняя."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9940,6 +10834,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esse app está mais atualizado que o meu diário!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Приложение новее, чем мои записи в дневнике!"
           }
         },
         "zh-Hans" : {
@@ -10013,6 +10913,12 @@
             "value" : "Está tudo bem, nenhuma atualização no ar também!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всё чисто, в атмосфере нет обновлений!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10082,6 +10988,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "As probabilidades estão sempre a seu favor, sem atualizações hoje!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вам везет, сегодня не вышло обновлений!"
           }
         },
         "zh-Hans" : {
@@ -10155,6 +11067,12 @@
             "value" : "Nosso app está em uma dieta digital. Novos bytes estão proibidos."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наше приложение на цифровой диете. Нельзя получать байты."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10224,6 +11142,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nova versão? Desculpe, somos muito apegados nesta aqui."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новая версия? Извини, мы слишком привязаны к этой."
           }
         },
         "zh-Hans" : {
@@ -10297,6 +11221,12 @@
             "value" : "Seu Loop está mais Loop do que nunca, sem atualizações!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваш Loop самый Loop'ерный, обновлений не найдено!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10366,6 +11296,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Estou dando tudo que ela tem, capitão! Sem atualizações!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Люк, я твоё... Обновление"
           }
         },
         "zh-Hans" : {
@@ -10439,6 +11375,12 @@
             "value" : "Em uma galáxia muito, muito distante... não existem atualizações!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В далекой-далекой галактике... все еще нет обновлений!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10508,6 +11450,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você está com o precioso, não precisa de atualizações!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вам не нужны обновления!"
           }
         },
         "zh-Hans" : {
@@ -10581,6 +11529,12 @@
             "value" : "Andando em alta velocidade, sem atualizações à vista!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Летим на огромной скорости, но все еще не видим обновлений!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10650,6 +11604,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Essa não é a atualização que você está procurando."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это не то обновление, которое вы ищете!"
           }
         },
         "zh-Hans" : {
@@ -10723,6 +11683,12 @@
             "value" : "Erramos o lugar do botão de 'Atualizar'. Ops!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мы поставили кнопку \"Обновить\" не туда. Упс!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10792,6 +11758,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eu juro que estava aqui em algum lugar... Um segundo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Клянусь они были где-то тут... секунду"
           }
         },
         "zh-Hans" : {
@@ -10865,6 +11837,12 @@
             "value" : "Uma maçã por dia deixa... as atualizações distantes."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Яблочко в день отпугнет... обновления."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10934,6 +11912,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Que a Força esteja com você... da próxima vez!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Да прибудет с тобой сила... До скорого!"
           }
         },
         "zh-Hans" : {
@@ -11007,6 +11991,12 @@
             "value" : "A Força é potente nessa versão."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Великая сила сильна в этой версии!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11076,6 +12066,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "É só um app de cidade pequena, mesma versão antiga e bacana"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "zh-Hans" : {
@@ -11149,6 +12145,12 @@
             "value" : "O inverno está chegado. As atualizações ainda não."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зима близко. Но обновления нет"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11218,6 +12220,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sonho meu, sonho meu... sem updates como o céu!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "zh-Hans" : {
@@ -11291,6 +12299,12 @@
             "value" : "A fada da atualização pulou a gente essa semana."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фея обновлений не посетила нас на этой неделе."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11360,6 +12374,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fique atento, mais informações em breve!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ждите новостей!"
           }
         },
         "zh-Hans" : {
@@ -11433,6 +12453,12 @@
             "value" : "Você está viajando com a tecnologia mais recente!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы используете новейшие технологии!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11502,6 +12528,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voltaremos mais tarde... com atualizações"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Мы скоро вернемся. С обновлениями... До скорого"
           }
         },
         "zh-Hans" : {
@@ -11575,6 +12607,12 @@
             "value" : "Uma moeda para sua... falta de atualizações."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пенни за ваше... отсутствие обновлений."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11646,6 +12684,12 @@
             "value" : "Você já está com o melhor Loop."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "У вас уже есть лучшая версия Loop!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11709,6 +12753,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Não dá para simplesmente atualizar o Loop."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы не можете просто взять и обновить Loop."
           }
         },
         "zh-Hans" : {
@@ -11776,6 +12826,12 @@
             "value" : "Todo esse trabalho e... sem atualizações..."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Только работа и никаких.. обновлений..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11839,6 +12895,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uma panela vigiada nunca… atualiza."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Кастрюля под присмотром никогда не... обновляется."
           }
         },
         "zh-Hans" : {
@@ -11906,6 +12968,12 @@
             "value" : "99 problemas, atualizações não é um deles."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "99 проблем, ни одного обновления"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11969,6 +13037,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eu.. É... Um momento, me perdi"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Я... эмм... секунду, я потерял его"
           }
         },
         "zh-Hans" : {
@@ -12036,6 +13110,12 @@
             "value" : "Você está no nível máximo!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы прокачались до максимума!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12099,6 +13179,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mendigos não podem ser... atualizadores."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Беднякам не приходится... обновляться."
           }
         },
         "zh-Hans" : {
@@ -12166,6 +13252,12 @@
             "value" : "Dinheiro não compras... atualizações."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновления бесценны..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12229,6 +13321,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sem informações, Comandante."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ничего нового, сэр"
           }
         },
         "zh-Hans" : {
@@ -12296,6 +13394,12 @@
             "value" : "Sem atualizações? Ótimo Scott!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновлений нет? Отлично, Скотт!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12359,6 +13463,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sem atualizações, Sr. Anderson"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновлений нет, Мистер Андерсон"
           }
         },
         "zh-Hans" : {
@@ -12426,6 +13536,12 @@
             "value" : "Sem updates em Ba Sing Se"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновлений в Ба Синг Се нет"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12489,6 +13605,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Atualizações? Com essa economia?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновления? В такой то экономике?"
           }
         },
         "zh-Hans" : {
@@ -12562,6 +13684,12 @@
             "value" : "Verifique de novo da próxima vez!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заходите в следующий раз!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12625,6 +13753,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loops está no seu auge!"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loop на высоте!"
           }
         },
         "zh-Hans" : {
@@ -12692,6 +13826,12 @@
             "value" : "Todos os sistemas estão em funcionamento!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всё в порядке!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12755,6 +13895,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tudo atualizado :)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы обновлены :)"
           }
         },
         "zh-Hans" : {
@@ -12822,6 +13968,12 @@
             "value" : "Sem updates!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновлений нет!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12880,6 +14032,12 @@
             "value" : "Nenhum"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не назначено"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12936,6 +14094,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nada para alternar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет элементов цикла"
           }
         },
         "zh-Hans" : {
@@ -13001,6 +14165,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "As notificações de %@ está desabilitadas."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы не дали %@ разрешение на отправку уведомлений"
           }
         },
         "zh-Hans" : {
@@ -13074,6 +14244,12 @@
             "value" : "Abrir Configurações"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть настройки"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13137,6 +14313,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Por favor, ligue-as nos Ajustes."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включите их в Настройках."
           }
         },
         "zh-Hans" : {
@@ -13210,6 +14392,12 @@
             "value" : "Definir Ícone Atual"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установить иконку"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13272,6 +14460,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notificar quando desbloquear novos ícones"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уведомлять о разблокировке новых иконок"
           }
         },
         "zh-Hans" : {
@@ -13338,6 +14532,12 @@
             "value" : "OK"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ок"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13402,6 +14602,12 @@
             "value" : "Opções"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13458,6 +14664,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preenchimento"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отступ"
           }
         },
         "zh-Hans" : {
@@ -13518,6 +14730,12 @@
             "value" : "Permissões"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разрешения"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13550,6 +14768,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loop이 화면 녹화 권한을 요청할 때 거부를 누르세요."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пожалуйста нажмите отклонить, когда Loop будет запрашивать разрешение на запись экрана."
           }
         }
       }
@@ -13603,6 +14827,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Posição"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Местоположение"
           }
         },
         "zh-Hans" : {
@@ -13669,6 +14899,12 @@
             "value" : "Preservar Tamanho"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить Размер"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13725,6 +14961,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pressione \"adicionar\" para adicionar um item ao ciclo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите \"Добавить\", чтобы добавить элементы цикла"
           }
         },
         "zh-Hans" : {
@@ -13791,6 +15033,12 @@
             "value" : "Pressione \"Adicionar\" para adicionar um atalho"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите \"Добавить\", чтобы добавить сочетание клавиш"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13853,6 +15101,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pressione \"Adicionar\" para adicionar um aplicativo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите \"Добавить\", чтобы добавить приложение"
           }
         },
         "zh-Hans" : {
@@ -13919,6 +15173,12 @@
             "value" : "Prévia"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Превью"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13978,6 +15238,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        },
+        "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "px"
@@ -14048,6 +15314,12 @@
             "value" : "Quadrantes"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Четверти"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14110,6 +15382,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sair"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выйти"
           }
         },
         "zh-Hans" : {
@@ -14176,6 +15454,12 @@
             "value" : "Menu radial"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Радиальное меню"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14238,6 +15522,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menu Radial"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Радиальное Меню"
           }
         },
         "zh-Hans" : {
@@ -14304,6 +15594,12 @@
             "value" : "Vermelho"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Красный"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14366,6 +15662,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lembre-me mais tarde"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напомнить позже"
           }
         },
         "zh-Hans" : {
@@ -14432,6 +15734,12 @@
             "value" : "Remover"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14494,6 +15802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Solicitar..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Запросить..."
           }
         },
         "zh-Hans" : {
@@ -14560,6 +15874,12 @@
             "value" : "Resetar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сбросить"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14622,6 +15942,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Redimensionar a janela embaixo do cursor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменить размер окна под курсором"
           }
         },
         "zh-Hans" : {
@@ -14688,6 +16014,12 @@
             "value" : "Respeitar o Stage Manager"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать с постановщиком"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14744,6 +16076,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reiniciar para concluir"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перезагрузить"
           }
         },
         "zh-Hans" : {
@@ -14810,6 +16148,12 @@
             "value" : "Restaurar moldura da janela ao arrastar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Восстановить окно при перетягивании"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14872,6 +16216,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Direita"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Справа"
           }
         },
         "zh-Hans" : {
@@ -14939,6 +16289,12 @@
             "value" : "%@ Direita"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вправо %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15001,6 +16357,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Percorrer para a Direita"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цикле Вправо"
           }
         },
         "zh-Hans" : {
@@ -15066,6 +16428,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alternância de Telas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изменение экрана"
           }
         },
         "zh-Hans" : {
@@ -15144,6 +16512,12 @@
             "value" : "Selecione o arquivo de atalhos do Loop"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите файл горячих клавиш Loop"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15206,6 +16580,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enviar Feedback"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отправить"
           }
         },
         "zh-Hans" : {
@@ -15272,6 +16652,12 @@
             "value" : "Defina uma tecla de gatilho..."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установить клавишу активации..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15334,6 +16720,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configurações"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки"
           }
         },
         "zh-Hans" : {
@@ -15400,6 +16792,12 @@
             "value" : "Configurações..."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настройки..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15462,6 +16860,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Compartilhe comentários em nossa página do GitHub, onde você pode nos informar sobre quaisquer bugs, sugerir funcionalidades ou fornecer outras informações valiosas. Também aceitamos doações se você achar que o Loop melhorou seu fluxo de trabalho :)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поделитесь вашими впечателениями и предложениями на нашем Github, там вы можете рассказать нам о различных багах, предложить новые функции или рассказать о чем-то еще. Так же, если вы считаете что Loop улучшил ваше взаимодействие с окнами, вы можете оформить пожертвование :)"
           }
         },
         "zh-Hans" : {
@@ -15528,6 +16932,12 @@
             "value" : "Mostrar na Dock"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отобразить в Dock"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15592,6 +17002,12 @@
             "value" : "Mostrar prévia ao fazer loops"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Показывать превью при перемещении"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15654,6 +17070,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Simples"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Простые"
           }
         },
         "zh-Hans" : {
@@ -15721,6 +17143,12 @@
             "value" : "Tamanho"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Размер"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15783,6 +17211,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aumento de tamanho"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличение размера"
           }
         },
         "zh-Hans" : {
@@ -15849,6 +17283,12 @@
             "value" : "Suave"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Плавно"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15911,6 +17351,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Algumas funcionalidades, ideias e correções de bugs"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Некоторые функции, идеи и баг-фиксы"
           }
         },
         "zh-Hans" : {
@@ -15977,6 +17423,12 @@
             "value" : "Stage Manager"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Постановшик"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16039,6 +17491,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tamanho do Stage Manager"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Размер меню постановщика"
           }
         },
         "zh-Hans" : {
@@ -16105,6 +17563,12 @@
             "value" : "Sugerir novos ícones"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предложить новую иконку"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16167,6 +17631,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sincronizar plano de fundo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Синхронизировать с обоями"
           }
         },
         "zh-Hans" : {
@@ -16233,6 +17703,12 @@
             "value" : "Essa tecla já está sendo usada como gatilho."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это сочетание клавиш уже используется в качестве клавиши активации."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16295,6 +17771,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esse atalho já está sendo usado por %@."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это сочетание клавиш уже используется для %@."
           }
         },
         "zh-Hans" : {
@@ -16361,6 +17843,12 @@
             "value" : "Essa combinação já está sendo usado por outro atalho."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это сочетание клавиш уже используется для другого сочетания клавиш."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16423,6 +17911,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Customização"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Внешний вид"
           }
         },
         "zh-Hans" : {
@@ -16489,6 +17983,12 @@
             "value" : "Espessura"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ширина"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16551,6 +18051,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta funcionalidade está em desenvolvimento."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Эта функция все еще в разработке."
           }
         },
         "zh-Hans" : {
@@ -16617,6 +18123,12 @@
             "value" : "Superior"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сверху"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16679,6 +18191,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alternar para Cima"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цикл Вверх"
           }
         },
         "zh-Hans" : {
@@ -16745,6 +18263,12 @@
             "value" : "Atraso do gatilho"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задержка активации"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16807,6 +18331,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Chave de Gatilho"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Клавиша Активации"
           }
         },
         "zh-Hans" : {
@@ -16873,6 +18403,12 @@
             "value" : "Atualizar..."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновление..."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16935,6 +18471,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usar coordenadas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать координаты"
           }
         },
         "zh-Hans" : {
@@ -17001,6 +18543,12 @@
             "value" : "Usar o centro do MacOS"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать центр macOS"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17063,6 +18611,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usar pixels"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать пиксели"
           }
         },
         "zh-Hans" : {
@@ -17129,6 +18683,12 @@
             "value" : "Usar a tela com o cursor"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать экран с курсором"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17193,6 +18753,12 @@
             "value" : "Use isso se você estiver usando uma barra de menu customizada."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включите это, если вы не используете встроенную строку меню"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17255,6 +18821,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Versão %1$@ (%2$lld)"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версия %1$@ (%$11d)"
           }
         },
         "zh-Hans" : {
@@ -17322,6 +18894,12 @@
             "value" : "Terços Verticais"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вертикальные трети"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17386,6 +18964,12 @@
             "value" : "Largura"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ширина"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17448,6 +19032,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Janela"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Окно"
           }
         },
         "zh-Hans" : {
@@ -17521,6 +19111,12 @@
             "value" : "Quase Maximizar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почти на весь экран"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17590,6 +19186,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metade Inferior"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нижняя половина"
           }
         },
         "zh-Hans" : {
@@ -17663,6 +19265,12 @@
             "value" : "Quadrante Inferior Esquerdo"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слева снизу"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17732,6 +19340,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quadrante Inferior Direiro"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Справа снизу"
           }
         },
         "zh-Hans" : {
@@ -17805,6 +19419,12 @@
             "value" : "Terço Inferior"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нижняя треть"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17874,6 +19494,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dois Terços Inferiores"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Две трети снизу"
           }
         },
         "zh-Hans" : {
@@ -17947,6 +19573,12 @@
             "value" : "Centro"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Центр"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18016,6 +19648,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Customizado"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Настроить"
           }
         },
         "zh-Hans" : {
@@ -18089,6 +19727,12 @@
             "value" : "Alternar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цикл"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18158,6 +19802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tela cheia"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Полноэкранный"
           }
         },
         "zh-Hans" : {
@@ -18231,6 +19881,12 @@
             "value" : "Expandir para Baixo"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить Вниз"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18300,6 +19956,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expandir para a Equerda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить Влево"
           }
         },
         "zh-Hans" : {
@@ -18373,6 +20035,12 @@
             "value" : "Expandir para a Direita"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить Вправо"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18442,6 +20110,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Expandir para Cima"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить Вверх"
           }
         },
         "zh-Hans" : {
@@ -18515,6 +20189,12 @@
             "value" : "Esconder"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спрятать"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18584,6 +20264,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Terço Central Horizontal"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Центральная треть"
           }
         },
         "zh-Hans" : {
@@ -18657,6 +20343,12 @@
             "value" : "Quadro Inicial"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Изначальный размер"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18726,6 +20418,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mais largo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Увеличить"
           }
         },
         "zh-Hans" : {
@@ -18799,6 +20497,12 @@
             "value" : "Metade Esquerda"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Левая половина"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18870,6 +20574,12 @@
             "value" : "Terço Esquerdo"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Левая треть"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18939,6 +20649,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dois terços à Esquerda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Две трети слева"
           }
         },
         "zh-Hans" : {
@@ -19083,6 +20799,12 @@
             "value" : "Maximizar"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На весь экран"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19152,6 +20874,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimizar"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Свернуть"
           }
         },
         "zh-Hans" : {
@@ -19225,6 +20953,12 @@
             "value" : "Mover para Baixo"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вниз"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19294,6 +21028,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mover para a Esquerda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Влево"
           }
         },
         "zh-Hans" : {
@@ -19367,6 +21107,12 @@
             "value" : "Mover para a Direita"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вправо"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19436,6 +21182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mover para Cima"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вверх"
           }
         },
         "zh-Hans" : {
@@ -19509,6 +21261,12 @@
             "value" : "Próxima Tela"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Следующий экран"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19578,6 +21336,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sem Ação"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не назначено"
           }
         },
         "zh-Hans" : {
@@ -19651,6 +21415,12 @@
             "value" : "Tela Anterior"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Предыдущий экран"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19720,6 +21490,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metade Direita"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Правая половина"
           }
         },
         "zh-Hans" : {
@@ -19793,6 +21569,12 @@
             "value" : "Terço Direito"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Правая треть"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19862,6 +21644,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dois Terços à Direita"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Две трети справа"
           }
         },
         "zh-Hans" : {
@@ -19935,6 +21723,12 @@
             "value" : "Encolher para Baixo"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сжать Вниз"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20004,6 +21798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Encolher para a Esquerda"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сжать Влево"
           }
         },
         "zh-Hans" : {
@@ -20077,6 +21877,12 @@
             "value" : "Encolher para a Direita"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сжать Вправо"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20146,6 +21952,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Encolher para Cima"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сжать Вверх"
           }
         },
         "zh-Hans" : {
@@ -20219,6 +22031,12 @@
             "value" : "Menor"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уменьшить"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20288,6 +22106,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Metade Superior"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Верхняя половина"
           }
         },
         "zh-Hans" : {
@@ -20361,6 +22185,12 @@
             "value" : "Quadrante Superior Esquerdo"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слева сверху"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20430,6 +22260,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Quadrante Superior Direito"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Справа сверху"
           }
         },
         "zh-Hans" : {
@@ -20503,6 +22339,12 @@
             "value" : "Terço Superior"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Верхняя треть"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20572,6 +22414,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dois Terços Superiores"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Две трети сверху"
           }
         },
         "zh-Hans" : {
@@ -20645,6 +22493,12 @@
             "value" : "Desfazer"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20716,6 +22570,12 @@
             "value" : "Terço Vertical do Centro"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Центральная треть"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20778,6 +22638,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Espaçamento entre janelas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отступы окон"
           }
         },
         "zh-Hans" : {
@@ -20845,6 +22711,12 @@
             "value" : "Manipulação de Janelas"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Управление окнами"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20907,6 +22779,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Encaixe de janelas"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Привязка окон"
           }
         },
         "zh-Hans" : {
@@ -20973,6 +22851,12 @@
             "value" : "O encaixe de janelas continuará usando a prévia."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Использовать предпросмотр для привязки окон."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21032,6 +22916,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X"
+          }
+        },
+        "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "X"
@@ -21101,6 +22991,12 @@
             "value" : "Y"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21163,6 +23059,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você pode usar até %lld teclas em um atalho, incluindo a tecla de gatilho."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы можете использовать до %lld клавиш в этом сочетании, включая клавишу активации."
           }
         },
         "zh-Hans" : {
@@ -21229,6 +23131,12 @@
             "value" : "Você pode usar até %lld teclas no seu gatilho."
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы можете использовать до %lld клавиш в качестве клавиши активации."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21293,6 +23201,12 @@
             "value" : "Você já fez %lld loops!"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы использовали Loop %11d раз!"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21355,6 +23269,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Você fez... hmm... Eu... Perdi as contas..."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Я Loop'ил... эмм... я... я запутался..."
           }
         },
         "zh-Hans" : {
