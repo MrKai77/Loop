@@ -73,7 +73,7 @@ class IconConfigurationModel: ObservableObject {
     private var shuffledTexts: [String] = []
 
     func getNextUpToDateText() -> String {
-        // If shuffledTexts is empty, fill it with a shuffled version of upToDateText
+        // If shuffledTexts is empty, fill it with a shuffled version of lockedMessages
         if shuffledTexts.isEmpty {
             shuffledTexts = lockedMessages.filter { $0 != "-" }.shuffled()
         }
