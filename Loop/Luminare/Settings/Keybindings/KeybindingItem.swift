@@ -31,23 +31,23 @@ struct KeybindingItemView: View {
     @State private var isPresented = false
 
     let sections: [PickerSection] = [
-        .init("General", WindowDirection.general),
-        .init("Halves", WindowDirection.halves),
-        .init("Quarters", WindowDirection.quarters),
-        .init("Horizontal Thirds", WindowDirection.horizontalThirds),
-        .init("Vertical Thirds", WindowDirection.verticalThirds),
-        .init("Screen Switching", WindowDirection.screenSwitching),
-        .init("Size Adjustment", WindowDirection.sizeAdjustment),
-        .init("Shrink", WindowDirection.shrink),
-        .init("Grow", WindowDirection.grow),
-        .init("Move", WindowDirection.move)
+        .init(.init(localized: "General"), WindowDirection.general),
+        .init(.init(localized: "Halves"), WindowDirection.halves),
+        .init(.init(localized: "Quarters"), WindowDirection.quarters),
+        .init(.init(localized: "Horizontal Thirds"), WindowDirection.horizontalThirds),
+        .init(.init(localized: "Vertical Thirds"), WindowDirection.verticalThirds),
+        .init(.init(localized: "Screen Switching"), WindowDirection.screenSwitching),
+        .init(.init(localized: "Size Adjustment"), WindowDirection.sizeAdjustment),
+        .init(.init(localized: "Shrink"), WindowDirection.shrink),
+        .init(.init(localized: "Grow"), WindowDirection.grow),
+        .init(.init(localized: "Move"), WindowDirection.move)
     ]
 
     var moreSection: PickerSection<WindowDirection> {
         if cycleIndex != nil { // If this is a cycling keybind
-            .init("More", [WindowDirection.custom])
+            .init(.init(localized: "More"), [WindowDirection.custom])
         } else {
-            .init("More", [WindowDirection.custom, WindowDirection.cycle])
+            .init(.init(localized: "More"), [WindowDirection.custom, WindowDirection.cycle])
         }
     }
 

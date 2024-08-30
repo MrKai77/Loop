@@ -70,6 +70,16 @@ class IconConfigurationModel: ObservableObject {
         .init(localized: "Locked icon message 27", defaultValue: "Like the moon's phases, your icons will reveal themselves in cycles of Loops."),
         .init(localized: "Locked icon message 28", defaultValue: "The icons await, hidden behind the veil of Loops yet to be made.")
     ]
+    private var shuffledTexts: [String] = []
+
+    func getNextUpToDateText() -> String {
+        // If shuffledTexts is empty, fill it with a shuffled version of lockedMessages
+        if shuffledTexts.isEmpty {
+            shuffledTexts = lockedMessages.filter { $0 != "-" }.shuffled()
+        }
+        // Pop the last element to ensure it's not repeated until all have been shown
+        return shuffledTexts.popLast() ?? lockedMessages[0] // Fallback string
+    }
 
     private func handleNotificationChange() {
         if notificationWhenIconUnlocked {
@@ -157,24 +167,27 @@ struct IconVew: View {
                     .padding(10)
                     .transition(.scale(scale: 0.8).combined(with: .opacity))
             } else {
-                VStack(alignment: .center) {
+                HStack {
                     Spacer()
-                    Image(._18PxLock)
-                        .foregroundStyle(.secondary)
+                    VStack(alignment: .center) {
+                        Spacer()
+                        Image(._18PxLock)
+                            .foregroundStyle(.secondary)
 
-                    Text(nextUnlockCount == icon.unlockTime ?
-                        .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
-                        .init(localized: "App icon is locked", defaultValue: "Locked")
-                    )
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .contentTransition(.numericText())
+                        Text(nextUnlockCount == icon.unlockTime ?
+                            .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
+                            .init(localized: "App icon is locked", defaultValue: "Locked")
+                        )
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .contentTransition(.numericText())
 
+                        Spacer()
+                    }
                     Spacer()
                 }
-                .contentShape(Rectangle())
                 .onTapGesture {
-                    model.selectedLockedMessage = model.lockedMessages.randomElement() ?? ""
+                    model.selectedLockedMessage = model.getNextUpToDateText()
                     model.showingLockedAlert = true
                 }
             }

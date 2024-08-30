@@ -16,7 +16,7 @@ struct CustomActionConfigurationView: View {
     @State private var action: WindowAction
     @State private var currentTab: Tab = .position
 
-    private enum Tab: String, CaseIterable {
+    private enum Tab: LocalizedStringKey, CaseIterable {
         case position = "Position", size = "Size"
 
         var image: Image {
