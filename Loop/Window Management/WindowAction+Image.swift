@@ -28,7 +28,7 @@ extension WindowAction {
         case .smaller:
             Image(systemName: "arrow.down.right.and.arrow.up.left")
         case .shrinkTop, .growBottom, .moveDown:
-            Image(systemName: "arrow.down")k
+            Image(systemName: "arrow.down")
         case .shrinkBottom, .growTop, .moveUp:
             Image(systemName: "arrow.up")
         case .shrinkRight, .growLeft, .moveLeft:
