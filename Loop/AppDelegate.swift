@@ -45,6 +45,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 NSApp.setActivationPolicy(.accessory)
             }
         }
+
+        AdjacentWindowMover.shared.addObservers()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {

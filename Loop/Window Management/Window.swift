@@ -59,6 +59,25 @@ class Window {
         try self.init(element: window)
     }
 
+    convenience init(pid: pid_t, bounds: CGRect) throws {
+        let element = AXUIElementCreateApplication(pid)
+
+        guard
+            let windows: [AXUIElement] = try element.getValue(.windows),
+            let window = windows.first(where: { item in
+                if let size: CGSize = try? item.getValue(.size),
+                   let position: CGPoint = try? item.getValue(.position) {
+                    return bounds == .init(origin: position, size: size)
+                }
+                return false
+            })
+        else {
+            throw WindowError.invalidWindow
+        }
+
+        try self.init(element: window)
+    }
+
     deinit {
         if let observer = self.observer {
             observer.stop()
