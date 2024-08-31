@@ -14,7 +14,8 @@ class AdjacentWindowMover {
     private init() {}
 
     private var mainWindow: Window?
-//    private var mainWindowInitialFrame: CGRect?
+    private var mainWindowInitialFrame: CGRect?
+    private var lastResizedTime: Date = .now
 
     // Using set to prevent duplicates
     private var topAdjacentWindows: [AjacentWindowState] = []
@@ -32,6 +33,7 @@ class AdjacentWindowMover {
                 self.handler()
             } else {
                 self.mainWindow = nil
+                self.mainWindowInitialFrame = nil
                 self.topAdjacentWindows = []
                 self.bottomAdjacentWindows = []
                 self.leadingAdjacentWindows = []
@@ -47,16 +49,10 @@ class AdjacentWindowMover {
         if mainWindow == nil,
            let window = try? WindowEngine.getFrontmostWindow() {
             mainWindow = window
-//            mainWindowInitialFrame = window.frame
+            mainWindowInitialFrame = window.frame
+            getAdjacentWindows()
         }
-
-        guard let mainWindow else { return }
-        getAdjacentWindows()
-
-        moveTopAdjacentWindows()
-        moveBottomAdjacentWindows()
-        moveLeadingAdjacentWindows()
-        moveTrailingAdjacentWindows()
+        moveAdjacentWindows()
     }
 }
 
@@ -134,6 +130,16 @@ private extension AdjacentWindowMover {
         }
     }
 
+    func moveAdjacentWindows() {
+        guard Date.now.timeIntervalSince(lastResizedTime) > 0.1 else { return }
+        lastResizedTime = .now
+
+        moveTopAdjacentWindows()
+        moveBottomAdjacentWindows()
+        moveLeadingAdjacentWindows()
+        moveTrailingAdjacentWindows()
+    }
+
     func moveTopAdjacentWindows() {
         guard let frame = mainWindow?.frame else { return }
 
@@ -150,8 +156,8 @@ private extension AdjacentWindowMover {
 
         for item in bottomAdjacentWindows {
             let shouldAdjustWidth = item.shouldAdjustWidth
-            let newOrigin = CGPoint(x: shouldAdjustWidth ? frame.minX : item.initialFrame.minX, y: frame.maxY)
-            let newSize = CGSize(width: shouldAdjustWidth ? frame.width : item.initialFrame.width, height: item.initialFrame.maxY - frame.maxY - windowSpacing)
+            let newOrigin = CGPoint(x: shouldAdjustWidth ? frame.minX : item.initialFrame.minX, y: frame.maxY + windowSpacing)
+            let newSize = CGSize(width: shouldAdjustWidth ? frame.width : item.initialFrame.width, height: item.initialFrame.maxY - frame.maxY)
             item.window.setFrame(.init(origin: newOrigin, size: newSize))
         }
     }
