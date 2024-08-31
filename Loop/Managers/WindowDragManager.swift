@@ -20,53 +20,59 @@ class WindowDragManager {
 
     func addObservers() {
         leftMouseDraggedMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseDragged) { _ in
-            // Process window (only ONCE during a window drag)
-            if self.draggingWindow == nil {
-                self.setCurrentDraggingWindow()
-            }
-
-            if let window = self.draggingWindow,
-               let initialFrame = self.initialWindowFrame,
-               self.hasWindowMoved(window.frame, initialFrame) {
-                if Defaults[.restoreWindowFrameOnDrag] {
-                    self.restoreInitialWindowSize(window)
-                } else {
-                    WindowRecords.eraseRecords(for: window)
-                }
-
-                if Defaults[.windowSnapping] {
-                    if let frame = NSScreen.main?.displayBounds,
-                       let mouseLocation = CGEvent.mouseLocation {
-                        if mouseLocation.y == frame.minY {
-                            let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
-                            CGWarpMouseCursorPosition(newOrigin)
-                        }
-                    }
-
-                    self.getWindowSnapDirection()
-                }
-            }
-
+            self.leftMouseDraggedHandler()
             return nil
         }
 
         leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
-            if let window = self.draggingWindow,
-               let initialFrame = self.initialWindowFrame,
-               self.hasWindowMoved(window.frame, initialFrame) {
-                if Defaults[.windowSnapping] {
-                    self.attemptWindowSnap(window)
-                }
-            }
-
-            self.previewController.close()
-            self.draggingWindow = nil
-
+            self.leftMouseUpHandler()
             return nil
         }
 
         leftMouseDraggedMonitor!.start()
         leftMouseUpMonitor!.start()
+    }
+
+    private func leftMouseDraggedHandler() {
+        // Process window (only ONCE during a window drag)
+        if draggingWindow == nil {
+            setCurrentDraggingWindow()
+        }
+
+        if let window = draggingWindow,
+           let initialFrame = initialWindowFrame,
+           hasWindowMoved(window.frame, initialFrame) {
+            if Defaults[.restoreWindowFrameOnDrag] {
+                restoreInitialWindowSize(window)
+            } else {
+                WindowRecords.eraseRecords(for: window)
+            }
+
+            if Defaults[.windowSnapping] {
+                if let frame = NSScreen.main?.displayBounds,
+                   let mouseLocation = CGEvent.mouseLocation {
+                    if mouseLocation.y == frame.minY {
+                        let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
+                        CGWarpMouseCursorPosition(newOrigin)
+                    }
+                }
+
+                getWindowSnapDirection()
+            }
+        }
+    }
+
+    private func leftMouseUpHandler() {
+        if let window = draggingWindow,
+           let initialFrame = initialWindowFrame,
+           hasWindowMoved(window.frame, initialFrame) {
+            if Defaults[.windowSnapping] {
+                attemptWindowSnap(window)
+            }
+        }
+
+        previewController.close()
+        draggingWindow = nil
     }
 
     private func setCurrentDraggingWindow() {
