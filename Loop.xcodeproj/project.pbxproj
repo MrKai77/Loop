@@ -41,6 +41,8 @@
 		A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */; };
 		A8427E662C02594E00F20759 /* ExcludedAppsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8427E652C02594E00F20759 /* ExcludedAppsConfiguration.swift */; };
 		A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A848D8A62A8C2F3F00060834 /* LoopManager.swift */; };
+		A849C60B2C817FD100608009 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A849C60A2C817FD100608009 /* Luminare */; };
+		A849C60E2C817FDF00608009 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A849C60D2C817FDF00608009 /* Luminare */; };
 		A858914B2BDC5D3F00C10FB1 /* AdvancedConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A858914A2BDC5D3F00C10FB1 /* AdvancedConfiguration.swift */; };
 		A859799B2B55FE94009FB067 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */; };
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
@@ -58,7 +60,6 @@
 		A87F78942BAE28050087B1DE /* CustomWindowActionSizeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87F78932BAE28050087B1DE /* CustomWindowActionSizeMode.swift */; };
 		A87F78962BAE333C0087B1DE /* CustomWindowActionPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87F78952BAE333C0087B1DE /* CustomWindowActionPositionMode.swift */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
-		A88699DE2C815E3B007EBF47 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A88699DD2C815E3B007EBF47 /* Luminare */; };
 		A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */; };
 		A88E27AD2BDDE5300042CF04 /* CustomActionConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E27AC2BDDE5300042CF04 /* CustomActionConfigurationView.swift */; };
 		A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */; };
@@ -199,8 +200,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				A88699DE2C815E3B007EBF47 /* Luminare in Frameworks */,
+				A849C60B2C817FD100608009 /* Luminare in Frameworks */,
 				A800418A2C7C110F005AD0D3 /* Luminare in Frameworks */,
+				A849C60E2C817FDF00608009 /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -487,7 +489,8 @@
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				A80041892C7C110F005AD0D3 /* Luminare */,
-				A88699DD2C815E3B007EBF47 /* Luminare */,
+				A849C60A2C817FD100608009 /* Luminare */,
+				A849C60D2C817FDF00608009 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -530,7 +533,8 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
-				A88699DC2C815E3B007EBF47 /* XCRemoteSwiftPackageReference "Luminare" */,
+				A849C6092C817FD100608009 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */,
+				A849C60C2C817FDF00608009 /* XCLocalSwiftPackageReference "../Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -896,10 +900,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		A849C60C2C817FDF00608009 /* XCLocalSwiftPackageReference "../Luminare" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Luminare;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
-		A88699DC2C815E3B007EBF47 /* XCRemoteSwiftPackageReference "Luminare" */ = {
+		A849C6092C817FD100608009 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MrKai77/Luminare";
+			repositoryURL = "https://github.com/MrKai77/DynamicNotchKit";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -920,9 +931,13 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Luminare;
 		};
-		A88699DD2C815E3B007EBF47 /* Luminare */ = {
+		A849C60A2C817FD100608009 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A88699DC2C815E3B007EBF47 /* XCRemoteSwiftPackageReference "Luminare" */;
+			package = A849C6092C817FD100608009 /* XCRemoteSwiftPackageReference "DynamicNotchKit" */;
+			productName = Luminare;
+		};
+		A849C60D2C817FDF00608009 /* Luminare */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
