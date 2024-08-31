@@ -46,6 +46,7 @@ struct CustomActionConfigurationView: View {
         ScreenView {
             GeometryReader { geo in
                 let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
+                let _ = print(frame)
                 ZStack {
                     if action.sizeMode == .custom {
                         blurredWindow()
@@ -73,10 +74,38 @@ struct CustomActionConfigurationView: View {
             unitToggle()
         }
 
-        if currentTab == .position {
-            positionConfiguration()
-        } else {
-            sizeConfiguration()
+        Group {
+            if currentTab == .position {
+                positionConfiguration()
+            } else {
+                sizeConfiguration()
+            }
+        }
+        .animation(LuminareSettingsWindow.animation, value: action.unit)
+        .onAppear {
+            if action.unit == nil {
+                action.unit = .percentage
+            }
+
+            if action.sizeMode == nil {
+                action.sizeMode = .custom
+            }
+
+            if action.width == nil {
+                action.width = 80
+            }
+
+            if action.height == nil {
+                action.height = 80
+            }
+
+            if action.positionMode == nil {
+                action.positionMode = .generic
+            }
+
+            if action.anchor == nil {
+                action.anchor = .center
+            }
         }
     }
 
@@ -96,19 +125,25 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder private func actionButtons() -> some View {
         HStack(spacing: 8) {
-            Button("Preview") {
-                previewAction()
-            }
-            .disabled(action.sizeMode != .custom)
+            Button("Preview") {}
+                .onLongPressGesture( // Allows for a press-and-hold gesture to show the preview
+                    minimumDuration: 100.0,
+                    maximumDistance: .infinity,
+                    pressing: { pressing in
+                        if pressing {
+                            guard let screen = NSScreen.main else { return }
+                            previewController.open(screen: screen, startingAction: action)
+                        } else {
+                            previewController.close()
+                        }
+                    },
+                    perform: {}
+                )
+                .disabled(action.sizeMode != .custom)
 
             Button("Close") { isPresented = false }
         }
         .buttonStyle(LuminareCompactButtonStyle())
-    }
-
-    private func previewAction() {
-        guard let screen = NSScreen.main else { return }
-        previewController.open(screen: screen, startingAction: action)
     }
 
     @ViewBuilder private func positionConfiguration() -> some View {
@@ -176,7 +211,7 @@ struct CustomActionConfigurationView: View {
                             action.xPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
+                    sliderRange: action.unit != .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
@@ -193,7 +228,7 @@ struct CustomActionConfigurationView: View {
                             action.yPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
+                    sliderRange: action.unit != .percentage ?
                         0...100 :
                         0...Double(screenSize.height),
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),

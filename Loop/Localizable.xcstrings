@@ -859,7 +859,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ нуждается в разрешении универсального доступа"
+            "value" : "%@ нужны разрешения универсального доступа"
           }
         },
         "zh-Hans" : {
@@ -999,7 +999,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Продвинутые"
+            "value" : "Дополнительные настройки"
           }
         },
         "zh-Hans" : {
@@ -3316,7 +3316,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Двойное нажатие чтобы активировать"
+            "value" : "Двойное нажатие для активации"
           }
         },
         "zh-Hans" : {
@@ -7141,7 +7141,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зайти в Discord"
+            "value" : "Перейти в Discord"
           }
         },
         "zh-Hans" : {
@@ -7492,7 +7492,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Влево %@"
+            "value" : "Левый %@"
           }
         },
         "zh-Hans" : {
@@ -9999,26 +9999,26 @@
             "plural" : {
               "few" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loops left"
+                  "state" : "translated",
+                  "value" : "Осталось %lld Loop’ов"
                 }
               },
               "many" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loops left"
+                  "state" : "translated",
+                  "value" : "Осталось %lld Loop’ов"
                 }
               },
               "one" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loop left"
+                  "state" : "translated",
+                  "value" : "Остался %lld Loop"
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "new",
-                  "value" : "%lld Loops left"
+                  "state" : "translated",
+                  "value" : "Осталось %lld Loop’ов"
                 }
               }
             }
@@ -10477,7 +10477,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Двигать курсор за окном"
+            "value" : "Перемещать курсор за окном"
           }
         },
         "zh-Hans" : {
@@ -10547,7 +10547,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нет игнорированных приложений"
+            "value" : "Нет игнорируемых приложений"
           }
         },
         "zh-Hans" : {
@@ -16330,7 +16330,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Вправо %@"
+            "value" : "Правый %@"
           }
         },
         "zh-Hans" : {
@@ -16621,7 +16621,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Отправить"
+            "value" : "Обратная связь"
           }
         },
         "zh-Hans" : {
@@ -20768,6 +20768,12 @@
             "value" : "Centro do macOS"
           }
         },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "macOS Центр"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22696,77 +22702,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "視窗間距"
-          }
-        }
-      }
-    },
-    "Window Manipulation" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "تلاعب النافذة"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fenstermanipulation"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Window Manipulation"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Manipulación de ventanas"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Manipolazione finestra"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "윈도우 조작"
-          }
-        },
-        "nl-BE" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Venster Manipulatie"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Manipulação de Janelas"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Управление окнами"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "窗口操作"
-          }
-        },
-        "zh-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "視窗操作"
           }
         }
       }
