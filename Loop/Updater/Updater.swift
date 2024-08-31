@@ -62,7 +62,6 @@ class Updater: ObservableObject {
 
     func dismissWindow() {
         DispatchQueue.main.async {
-            self.updateState = .notChecked
             self.windowController?.close()
         }
     }

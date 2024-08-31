@@ -11,5 +11,7 @@ Loop.app
 *.perspectivev3
 *.xcuserstate
 xcuserdata
+project.xcworkspace
 Loop.zip
 Build/
+DerivedData

@@ -11,16 +11,14 @@ import SwiftUI
 
 class ExcludedAppsConfigurationModel: ObservableObject {
     @Published var excludedApps = Defaults[.excludedApps] {
-        didSet {
-            Defaults[.excludedApps] = excludedApps
-        }
+        didSet { Defaults[.excludedApps] = excludedApps }
     }
 
     @Published var selectedApps = Set<URL>()
 
     func showAppChooser() {
         DispatchQueue.main.async {
-            guard let window = LuminareManager.window else { return }
+            guard let window = LuminareManager.luminare else { return }
             let panel = NSOpenPanel()
             panel.worksWhenModal = true
             panel.allowsMultipleSelection = true
@@ -34,7 +32,7 @@ class ExcludedAppsConfigurationModel: ObservableObject {
                 if result == .OK {
                     let appsToAdd = panel.urls.compactMap { self.excludedApps.contains($0) ? nil : $0 }
 
-                    withAnimation(.smooth(duration: 0.25)) {
+                    withAnimation(LuminareSettingsWindow.animation) {
                         self.excludedApps.append(contentsOf: appsToAdd)
                     }
                 }

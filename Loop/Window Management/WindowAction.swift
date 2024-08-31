@@ -48,6 +48,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         self.init(.cycle, keybind: keybind, name: name, cycle: cycle)
     }
 
+    init(_ cycle: [WindowAction]) {
+        self.init(nil, cycle)
+    }
+
     var direction: WindowDirection
     var keybind: Set<CGKeyCode>
 
@@ -64,6 +68,21 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     var yPoint: Double?
 
     var cycle: [WindowAction]?
+
+    static let commonID = UUID()
+    // Removes ID, keybind and name. This is useful when checking for equality between an otherwise identical keybind and radial menu action.
+    func stripNonResizingProperties() -> WindowAction {
+        var strippedAction = self
+        strippedAction.id = WindowAction.commonID
+        strippedAction.keybind = []
+        strippedAction.name = nil
+
+        if let cycle {
+            strippedAction.cycle = cycle.map { $0.stripNonResizingProperties() }
+        }
+
+        return strippedAction
+    }
 
     func getName() -> String {
         var result = ""
@@ -114,12 +133,13 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result.normalized()
     }
 
-    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false) -> CGRect {
+    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil) -> CGRect {
         guard direction != .cycle, direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
         var bounds = bounds
-        if !disablePadding && Defaults[.enablePadding] {
+        if !disablePadding && Defaults[.enablePadding],
+           Defaults[.paddingMinimumScreenSize] == .zero || screen?.diagonalSize ?? .zero > Defaults[.paddingMinimumScreenSize] {
             bounds = getPaddedBounds(bounds)
         }
         var result = CGRect(origin: bounds.origin, size: .zero)
@@ -223,7 +243,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         if !disablePadding {
             if direction != .undo, direction != .initialFrame {
-                result = cropThenApplyPadding(result, bounds)
+                result = cropThenApplyInnerPadding(result, bounds)
             }
 
             LoopManager.lastTargetFrame = result
@@ -398,12 +418,18 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return bounds
     }
 
-    private func cropThenApplyPadding(_ windowFrame: CGRect, _ bounds: CGRect) -> CGRect {
+    private func cropThenApplyInnerPadding(_ windowFrame: CGRect, _ bounds: CGRect, _ screen: NSScreen? = nil) -> CGRect {
         guard !direction.willMove else {
             return windowFrame
         }
 
         var croppedWindowFrame = windowFrame.intersection(bounds)
+
+        let paddingMinimumScreenSize = Defaults[.paddingMinimumScreenSize]
+        if paddingMinimumScreenSize != .zero,
+           screen?.diagonalSize ?? .zero < paddingMinimumScreenSize {
+            return windowFrame
+        }
 
         guard
             !willManipulateExistingWindowFrame,

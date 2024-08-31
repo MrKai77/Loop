@@ -12,33 +12,27 @@ import SwiftUI
 
 class AdvancedConfigurationModel: ObservableObject {
     @Published var animateWindowResizes = Defaults[.animateWindowResizes] {
-        didSet {
-            Defaults[.animateWindowResizes] = animateWindowResizes
-        }
+        didSet { Defaults[.animateWindowResizes] = animateWindowResizes }
     }
 
     @Published var hideUntilDirectionIsChosen = Defaults[.hideUntilDirectionIsChosen] {
-        didSet {
-            Defaults[.hideUntilDirectionIsChosen] = hideUntilDirectionIsChosen
-        }
+        didSet { Defaults[.hideUntilDirectionIsChosen] = hideUntilDirectionIsChosen }
     }
 
     @Published var disableCursorInteraction = Defaults[.disableCursorInteraction] {
-        didSet {
-            Defaults[.disableCursorInteraction] = disableCursorInteraction
-        }
+        didSet { Defaults[.disableCursorInteraction] = disableCursorInteraction }
+    }
+
+    @Published var ignoreFullscreen = Defaults[.ignoreFullscreen] {
+        didSet { Defaults[.ignoreFullscreen] = ignoreFullscreen }
     }
 
     @Published var hapticFeedback = Defaults[.hapticFeedback] {
-        didSet {
-            Defaults[.hapticFeedback] = hapticFeedback
-        }
+        didSet { Defaults[.hapticFeedback] = hapticFeedback }
     }
 
     @Published var sizeIncrement = Defaults[.sizeIncrement] {
-        didSet {
-            Defaults[.sizeIncrement] = sizeIncrement
-        }
+        didSet { Defaults[.sizeIncrement] = sizeIncrement }
     }
 
     @Published var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
@@ -56,7 +50,7 @@ class AdvancedConfigurationModel: ObservableObject {
         let isGranted = AccessibilityManager.getStatus()
 
         if isAccessibilityAccessGranted != isGranted {
-            withAnimation(.smooth) {
+            withAnimation(LuminareSettingsWindow.animation) {
                 isAccessibilityAccessGranted = isGranted
             }
         }
@@ -80,6 +74,7 @@ struct AdvancedConfigurationView: View {
                 isOn: $model.animateWindowResizes
             )
             LuminareToggle("Disable cursor interaction", isOn: $model.disableCursorInteraction)
+            LuminareToggle("Ignore fullscreen windows", isOn: $model.ignoreFullscreen)
             LuminareToggle("Hide until direction is chosen", isOn: $model.hideUntilDirectionIsChosen)
             LuminareToggle("Haptic feedback", isOn: $model.hapticFeedback)
 
@@ -108,6 +103,13 @@ struct AdvancedConfigurationView: View {
                 }
                 .buttonStyle(LuminareDestructiveButtonStyle())
             }
+        }
+
+        LuminareSection {
+            Button("Import keybinds from Rectangle") {
+                RectangleTranslationLayer.initiateImportProcess()
+            }
+            .buttonStyle(LuminareButtonStyle())
         }
 
         LuminareSection("Permissions") {

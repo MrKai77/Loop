@@ -13,20 +13,11 @@ struct CustomActionConfigurationView: View {
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
 
-    @State var action: WindowAction // this is so that onChange is called for each property
-
+    @State private var action: WindowAction
     @State private var currentTab: Tab = .position
-    private enum Tab: CaseIterable {
-        case position, size
 
-        var name: LocalizedStringKey {
-            switch self {
-            case .position:
-                "Position"
-            case .size:
-                "Size"
-            }
-        }
+    private enum Tab: LocalizedStringKey, CaseIterable {
+        case position = "Position", size = "Size"
 
         var image: Image {
             switch self {
@@ -38,122 +29,104 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    let anchors: [CustomWindowActionAnchor] = [
-        .topLeft, .top, .topRight,
-        .left, .center, .right,
-        .bottomLeft, .bottom, .bottomRight
+    private let anchors: [CustomWindowActionAnchor] = [
+        .topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight
     ]
 
-    let previewController = PreviewController()
-    let screenSize: CGSize
+    private let previewController = PreviewController()
+    private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
 
     init(action: Binding<WindowAction>, isPresented: Binding<Bool>) {
-        self._windowAction = action
-        self._isPresented = isPresented
-        self._action = State(initialValue: action.wrappedValue)
-
-        self.screenSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
+        _windowAction = action
+        _isPresented = isPresented
+        _action = State(initialValue: action.wrappedValue)
     }
 
     var body: some View {
         ScreenView {
             GeometryReader { geo in
-                let frame = action.getFrame(
-                    window: nil,
-                    bounds: .init(origin: .zero, size: geo.size),
-                    disablePadding: true
-                )
-
+                let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
+                let _ = print(frame)
                 ZStack {
                     if action.sizeMode == .custom {
                         blurredWindow()
-                            .frame(
-                                width: frame.width,
-                                height: frame.height
-                            )
-                            .offset(
-                                x: frame.origin.x,
-                                y: frame.origin.y
-                            )
+                            .frame(width: frame.width, height: frame.height)
+                            .offset(x: frame.origin.x, y: frame.origin.y)
                     }
                 }
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                .animation(.smooth(duration: 0.25), value: frame)
+                .animation(LuminareSettingsWindow.animation, value: frame)
             }
+        }
+        .onChange(of: action) { windowAction = $0 }
+
+        configurationSections()
+        actionButtons()
+    }
+
+    @ViewBuilder private func configurationSections() -> some View {
+        LuminareSection {
+            LuminareTextField(Binding(get: { action.name ?? "" }, set: { action.name = $0 }), placeHolder: "Custom Keybind")
         }
 
         LuminareSection {
-            LuminareTextField(
-                Binding(
-                    get: {
-                        action.name ?? ""
-                    },
-                    set: {
-                        action.name = $0
-                    }
-                ),
-                placeHolder: "Custom Keybind"
-            )
+            tabPicker()
+            unitToggle()
         }
 
-        LuminareSection {
-            LuminarePicker(
-                elements: Tab.allCases,
-                selection: Binding(
-                    get: {
-                        currentTab
-                    },
-                    set: { newValue in
-                        withAnimation(.smooth(duration: 0.25)) {
-                            currentTab = newValue
-                        }
-                    }
-                ),
-                columns: 2,
-                roundBottom: false
-            ) { tab in
-                HStack(spacing: 6) {
-                    tab.image
-                    Text(tab.name)
-                }
-                .fixedSize()
+        Group {
+            if currentTab == .position {
+                positionConfiguration()
+            } else {
+                sizeConfiguration()
+            }
+        }
+        .animation(LuminareSettingsWindow.animation, value: action.unit)
+        .onAppear {
+            if action.unit == nil {
+                action.unit = .percentage
             }
 
-            LuminareToggle(
-                "Use pixels",
-                isOn: Binding(
-                    get: {
-                        if action.unit == nil {
-                            action.unit = .percentage
-                        }
-                        return action.unit == .pixels
-                    },
-                    set: { newValue in
-                        withAnimation(.smooth(duration: 0.25)) {
-                            if action.unit == .percentage {
-                                action.width = min(action.width ?? 100, 100)
-                                action.height = min(action.height ?? 100, 100)
+            if action.sizeMode == nil {
+                action.sizeMode = .custom
+            }
 
-                                action.xPoint = min(action.xPoint ?? 100, 100)
-                                action.yPoint = min(action.yPoint ?? 100, 100)
-                            }
+            if action.width == nil {
+                action.width = 80
+            }
 
-                            action.unit = newValue ? .pixels : .percentage
-                        }
-                    }
-                )
-            )
+            if action.height == nil {
+                action.height = 80
+            }
+
+            if action.positionMode == nil {
+                action.positionMode = .generic
+            }
+
+            if action.anchor == nil {
+                action.anchor = .center
+            }
         }
+    }
 
-        if currentTab == .position {
-            positionConfiguration()
-        } else if currentTab == .size {
-            sizeConfiguration()
+    @ViewBuilder private func tabPicker() -> some View {
+        LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: false) { tab in
+            HStack(spacing: 6) {
+                tab.image
+                Text(tab.rawValue)
+            }
+            .fixedSize()
         }
+    }
 
+    @ViewBuilder private func unitToggle() -> some View {
+        LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
+    }
+
+    @ViewBuilder private func actionButtons() -> some View {
         HStack(spacing: 8) {
             Button("Preview") {}
-                .onLongPressGesture(
+                .onLongPressGesture( // Allows for a press-and-hold gesture to show the preview
                     minimumDuration: 100.0,
                     maximumDistance: .infinity,
                     pressing: { pressing in
@@ -168,17 +141,12 @@ struct CustomActionConfigurationView: View {
                 )
                 .disabled(action.sizeMode != .custom)
 
-            Button("Close") {
-                isPresented = false
-            }
+            Button("Close") { isPresented = false }
         }
         .buttonStyle(LuminareCompactButtonStyle())
-        .onChange(of: action) { _ in
-            windowAction = action
-        }
     }
 
-    @ViewBuilder func positionConfiguration() -> some View {
+    @ViewBuilder private func positionConfiguration() -> some View {
         LuminareSection {
             LuminareToggle(
                 "Use coordinates",
@@ -187,7 +155,7 @@ struct CustomActionConfigurationView: View {
                         action.positionMode == .coordinates
                     },
                     set: { newValue in
-                        withAnimation(.smooth(duration: 0.25)) {
+                        withAnimation(LuminareSettingsWindow.animation) {
                             action.positionMode = newValue ? .coordinates : .generic
                         }
                     }
@@ -207,7 +175,7 @@ struct CustomActionConfigurationView: View {
                             return action.anchor ?? .center
                         },
                         set: { newValue in
-                            withAnimation(.smooth(duration: 0.25)) {
+                            withAnimation(LuminareSettingsWindow.animation) {
                                 action.anchor = newValue
                             }
                         }
@@ -243,10 +211,10 @@ struct CustomActionConfigurationView: View {
                             action.xPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
+                    sliderRange: action.unit != .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
 
@@ -260,17 +228,17 @@ struct CustomActionConfigurationView: View {
                             action.yPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
+                    sliderRange: action.unit != .percentage ?
                         0...100 :
                         0...Double(screenSize.height),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
             }
         }
     }
 
-    @ViewBuilder func sizeConfiguration() -> some View {
+    @ViewBuilder private func sizeConfiguration() -> some View {
         LuminareSection {
             LuminarePicker(
                 elements: CustomWindowActionSizeMode.allCases,
@@ -279,7 +247,7 @@ struct CustomActionConfigurationView: View {
                         action.sizeMode ?? .custom
                     },
                     set: { newValue in
-                        withAnimation(.smooth(duration: 0.25)) {
+                        withAnimation(LuminareSettingsWindow.animation) {
                             action.sizeMode = newValue
                         }
                     }
@@ -308,7 +276,7 @@ struct CustomActionConfigurationView: View {
                     sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
 
@@ -325,20 +293,19 @@ struct CustomActionConfigurationView: View {
                     sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
-                    suffix: action.unit?.suffix,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
                     lowerClamp: true
                 )
             }
         }
     }
 
-    @ViewBuilder
-    func blurredWindow() -> some View {
+    @ViewBuilder private func blurredWindow() -> some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {
                 RoundedRectangle(cornerRadius: 5)
                     .strokeBorder(.white.opacity(0.1), lineWidth: 2)
             }
-            .clipShape(.rect(cornerRadius: 5))
+            .clipShape(RoundedRectangle(cornerRadius: 5))
     }
 }

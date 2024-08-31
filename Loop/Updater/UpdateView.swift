@@ -47,17 +47,17 @@ struct UpdateView: View {
                         AppDelegate.relaunch()
                     }
 
-                    withAnimation(.smooth(duration: 0.25)) {
+                    withAnimation(LuminareSettingsWindow.animation) {
                         isInstalling = true
                     }
                     Task {
                         await AppDelegate.updater.installUpdate()
 
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            withAnimation(.smooth(duration: 0.1)) {
+                            withAnimation(LuminareSettingsWindow.animation) {
                                 isInstalling = false
                             }
-                            withAnimation(.smooth(duration: 0.25)) {
+                            withAnimation(LuminareSettingsWindow.animation) {
                                 readyToRestart = true
                             }
                         }
@@ -83,7 +83,8 @@ struct UpdateView: View {
                                 .padding(.horizontal, 4)
                         }
 
-                        Text(isInstalling ? "               " : readyToRestart ? "Restart to complete" : "Install")
+                        let tenSpaces = "          " // This helps with alignment for the animation once the update finishes
+                        Text(isInstalling ? tenSpaces : readyToRestart ? NSLocalizedString("Restart to complete", comment: "") : NSLocalizedString("Install", comment: ""))
                             .contentTransition(.numericText())
                             .opacity(isInstalling ? 0 : 1)
                     }
@@ -150,14 +151,31 @@ struct UpdateView: View {
 
     func versionChangeText() -> some View {
         HStack {
-            if updater.targetRelease?.prerelease ?? true {
-                Text("\(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))")
+            if let targetRelease = updater.targetRelease {
+                // Use UserDefaults to check if development versions are included
+                let isDevBuild = UserDefaults.standard.bool(forKey: "includeDevelopmentVersions")
+                let targetIsDevBuild = targetRelease.prerelease
+                let devBuildEmoji = "🧪 "
+
+                let currentVersionBase = Bundle.main.appVersion?.replacingOccurrences(of: devBuildEmoji, with: "") ?? "Unknown"
+                // Apply devBuildEmoji based on UserDefaults setting
+                let currentVersion = "\(isDevBuild ? devBuildEmoji : "")\(currentVersionBase) (\(Bundle.main.appBuild ?? 0))"
+                Text(currentVersion)
+
                 Image(systemName: "arrow.right")
-                Text("\(updater.targetRelease?.tagName ?? "Unknown") (\(updater.targetRelease?.buildNumber ?? 0))")
+
+                let newVersionBase = targetRelease.tagName.replacingOccurrences(of: devBuildEmoji, with: "")
+                // Apply devBuildEmoji to the new version if it's a dev build and the setting is enabled
+                let newVersion = "\(targetIsDevBuild && isDevBuild ? devBuildEmoji : "")\(newVersionBase) (\(targetRelease.buildNumber ?? 0))"
+                Text(newVersion)
             } else {
-                Text(Bundle.main.appVersion ?? "Unknown")
+                let currentVersion = Bundle.main.appVersion ?? "Unknown"
+                Text(currentVersion)
+
                 Image(systemName: "arrow.right")
-                Text(updater.targetRelease?.tagName ?? "Unknown")
+
+                let newVersion = "Unknown"
+                Text(newVersion)
             }
         }
     }
@@ -184,7 +202,7 @@ struct ChangelogSectionView: View {
     var body: some View {
         LuminareSection {
             Button {
-                withAnimation(.smooth(duration: 0.25)) {
+                withAnimation(LuminareSettingsWindow.animation) {
                     isExpanded.toggle()
                 }
             } label: {

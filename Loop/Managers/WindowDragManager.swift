@@ -32,7 +32,7 @@ class WindowDragManager {
     }
 
     func addObservers() {
-        leftMouseDraggedMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseDragged) { _ in
+        leftMouseDraggedMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseDragged) { event in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
@@ -126,7 +126,7 @@ class WindowDragManager {
                         }
                     }
 
-                    return // Don't restore initial window frame
+                    return event // Don't restore initial window frame
                 }
 
                 if self.hasWindowMoved(window.frame, initialFrame) {
@@ -149,9 +149,11 @@ class WindowDragManager {
                     }
                 }
             }
+
+            return nil
         }
 
-        leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { _ in
+        leftMouseUpMonitor = NSEventMonitor(scope: .global, eventMask: .leftMouseUp) { event in
             if let window = self.draggingWindow,
                let initialFrame = self.initialWindowFrame,
                self.hasWindowMoved(window.frame, initialFrame) {
@@ -165,6 +167,8 @@ class WindowDragManager {
 
             self.adjacentWindows = []
             self.resizedSide = []
+
+            return event
         }
 
         leftMouseDraggedMonitor!.start()
@@ -190,7 +194,7 @@ class WindowDragManager {
             self.draggingWindow = draggingWindow
             initialWindowFrame = draggingWindow.frame
         } catch {
-            print("Failed to get window at position: \(error.localizedDescription)")
+            // print("Failed to get window at position: \(error.localizedDescription)")
         }
     }
 
@@ -238,19 +242,21 @@ class WindowDragManager {
         guard let screen = NSScreen.screenWithMouse else {
             return
         }
-        let mousePosition = NSEvent.mouseLocation.flipY(maxY: screen.frame.maxY)
-        let screenFrame = screen.frame.flipY(maxY: screen.frame.maxY)
+
+        let mainScreen = NSScreen.screens[0]
+        let mousePosition = NSEvent.mouseLocation.flipY(screen: mainScreen)
+        let screenFrame = screen.frame.flipY(screen: mainScreen)
 
         previewController.setScreen(to: screen)
 
-        let insets: CGFloat = 2
-        let topInset = screen.menubarHeight / 2
+        let inset: CGFloat = 2
+        let topInset = max(screen.menubarHeight / 2, inset)
         var ignoredFrame = screenFrame
 
-        ignoredFrame.origin.x += insets
-        ignoredFrame.size.width -= insets * 2
+        ignoredFrame.origin.x += inset
+        ignoredFrame.size.width -= inset * 2
         ignoredFrame.origin.y += topInset
-        ignoredFrame.size.height -= insets + topInset
+        ignoredFrame.size.height -= inset + topInset
 
         let oldDirection = direction
 

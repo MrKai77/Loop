@@ -1,0 +1,42 @@
+name: Loop Localisation
+description: Edit, request or localise Loop in your language.
+title: "🌐 [Title here]"
+labels: ["Localization"]
+body:
+  - type: textarea
+    attributes:
+      label: What language do you intend to add or change?
+      description: Provide a clear and concise description of your added or changed language. Clearly indicate if you need a localized file provided or if you can do this on your own.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: Provide any additional information about this localisation request.
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Missed localisation
+      description: Fill this out if you were unable to localize certain parts of the file
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: Final Checks
+      options:
+        - label: My localisation request is written in English
+          required: true
+        - label: My localisation request title is descriptive
+          required: true
+        - label: This is a single localisation request (multiple localisation request should be requested individually)
+          required: true
+        - label: I need a localised file for my language (tick this if needed)
+          required: false
+
+  - type: markdown
+    attributes:
+      value: Thank you for taking the time to report this localisation request!

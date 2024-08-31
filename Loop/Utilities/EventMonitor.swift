@@ -19,7 +19,7 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
 
     private var scope: NSEventMonitor.Scope
     private var eventTypeMask: NSEvent.EventTypeMask
-    private var eventHandler: (NSEvent) -> ()
+    private var eventHandler: (NSEvent) -> (NSEvent?)
     var isEnabled: Bool = false
 
     enum Scope {
@@ -32,7 +32,7 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
         stop()
     }
 
-    init(scope: Scope, eventMask: NSEvent.EventTypeMask, handler: @escaping (NSEvent) -> ()) {
+    init(scope: Scope, eventMask: NSEvent.EventTypeMask, handler: @escaping (NSEvent) -> (NSEvent?)) {
         self.eventTypeMask = eventMask
         self.eventHandler = handler
         self.scope = scope
@@ -41,11 +41,9 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
     func start() {
         if scope == .local || scope == .all {
             localEventMonitor = NSEvent.addLocalMonitorForEvents(
-                matching: eventTypeMask
-            ) { event in
-                self.eventHandler(event)
-                return nil
-            } as AnyObject
+                matching: eventTypeMask,
+                handler: eventHandler
+            ) as AnyObject
 
             isEnabled = true
         }
@@ -53,7 +51,7 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
         if scope == .global || scope == .all {
             globalEventMonitor = NSEvent.addGlobalMonitorForEvents(
                 matching: eventTypeMask,
-                handler: eventHandler
+                handler: { _ = self.eventHandler($0) }
             ) as AnyObject
 
             isEnabled = true

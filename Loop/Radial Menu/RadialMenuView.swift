@@ -7,6 +7,7 @@
 
 import Combine
 import Defaults
+import Luminare
 import SwiftUI
 
 struct RadialMenuView: View {
@@ -142,7 +143,6 @@ struct RadialMenuView: View {
         .shadow(radius: 10)
         .padding(20)
         .fixedSize()
-
         // Animate window
         .scaleEffect(currentAction.direction == .maximize ? 0.85 : 1)
         .animation(animationConfiguration.radialMenuSize, value: currentAction)
@@ -181,7 +181,7 @@ struct RadialMenuView: View {
     }
 
     func recomputeColors() {
-        withAnimation(.smooth(duration: 0.25)) {
+        withAnimation(LuminareSettingsWindow.animation) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }

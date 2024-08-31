@@ -51,7 +51,7 @@ enum WindowEngine {
             return
         }
 
-        let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame)
+        let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame, screen: screen)
 
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)

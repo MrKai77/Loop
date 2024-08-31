@@ -41,7 +41,11 @@ struct TriggerKeycorder: View {
                 } else {
                     HStack(spacing: 12) {
                         ForEach(selectionKey.sorted(), id: \.self) { key in
-                            Text("\(key.isOnRightSide ? String(localized: .init("Right", defaultValue: "Right")) : String(localized: .init("Left", defaultValue: "Left"))) \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))")
+                            let keyText: LocalizedStringKey = key.isOnRightSide ?
+                                "Right \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))" :
+                                "Left \(Image(systemName: key.systemImage ?? "exclamationmark.circle.fill"))"
+
+                            Text(keyText)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .fixedSize(horizontal: true, vertical: false)
 
@@ -117,12 +121,14 @@ struct TriggerKeycorder: View {
 
             if event.modifierFlags.wasKeyUp, !selectionKey.isEmpty {
                 finishedObservingKeys()
-                return
+                return nil
             }
 
             if !event.modifierFlags.wasKeyUp, selectionKey.isEmpty {
                 shouldShake.toggle()
             }
+
+            return nil
         }
 
         eventMonitor!.start()

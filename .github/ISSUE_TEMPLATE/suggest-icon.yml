@@ -29,3 +29,5 @@ body:
       options:
         - label: My suggestion is written in English
           required: true
+        - label: I am submitting an icon (this is not for icon requests)
+          required: true
