@@ -10,6 +10,7 @@ import Luminare
 import SwiftUI
 
 class IconConfigurationModel: ObservableObject {
+    @Published var isHoveringOverVersionCopier = false
     static let suggestNewIconLink = URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!
 
     @Published var currentIcon: String = Defaults[.currentIcon] {
@@ -22,19 +23,13 @@ class IconConfigurationModel: ObservableObject {
     }
 
     @Published var showDockIcon: Bool = Defaults[.showDockIcon] {
-        didSet {
-            if oldValue != showDockIcon {
-                Defaults[.showDockIcon] = showDockIcon
-            }
-        }
+        didSet { Defaults[.showDockIcon] = showDockIcon }
     }
 
     @Published var notificationWhenIconUnlocked: Bool = Defaults[.notificationWhenIconUnlocked] {
         didSet {
-            if oldValue != notificationWhenIconUnlocked {
-                Defaults[.notificationWhenIconUnlocked] = notificationWhenIconUnlocked
-                handleNotificationChange()
-            }
+            Defaults[.notificationWhenIconUnlocked] = notificationWhenIconUnlocked
+            handleNotificationChange()
         }
     }
 
@@ -73,12 +68,19 @@ class IconConfigurationModel: ObservableObject {
     private var shuffledTexts: [String] = []
 
     func getNextUpToDateText() -> String {
-        // If shuffledTexts is empty, fill it with a shuffled version of lockedMessages
         if shuffledTexts.isEmpty {
             shuffledTexts = lockedMessages.filter { $0 != "-" }.shuffled()
         }
-        // Pop the last element to ensure it's not repeated until all have been shown
-        return shuffledTexts.popLast() ?? lockedMessages[0] // Fallback string
+        return shuffledTexts.popLast() ?? lockedMessages[0]
+    }
+
+    func copyVersionToClipboard() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(
+            "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))",
+            forType: .string
+        )
     }
 
     private func handleNotificationChange() {
@@ -117,9 +119,48 @@ class IconConfigurationModel: ObservableObject {
 struct IconConfigurationView: View {
     @Environment(\.openURL) var openURL
     @StateObject private var model = IconConfigurationModel()
+    @Default(.timesLooped) var timesLooped
+    @State private var showCopied = false
 
     var body: some View {
-        LuminareSection(showDividers: false) {
+        LuminareSection {
+            Button(action: {
+                model.copyVersionToClipboard()
+                withAnimation(LuminareSettingsWindow.animation) {
+                    showCopied = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        showCopied = false
+                    }
+                }
+            }) {
+                HStack {
+                    if let image = NSImage(named: model.currentIcon) {
+                        Image(nsImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 60)
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(Bundle.main.appName)
+                            .fontWeight(.medium)
+
+                        Text(showCopied ? "Copied!" : model.isHoveringOverVersionCopier ? "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))" : (timesLooped >= 1_000_000 ? "You've looped… uhh… I… lost count…" : "You've looped \(timesLooped) times!"))
+                            .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
+                            .animation(LuminareSettingsWindow.animation, value: model.isHoveringOverVersionCopier)
+                            .animation(LuminareSettingsWindow.animation, value: timesLooped)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+                }
+                .padding(4)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(LuminareCosmeticButtonStyle(Image(._12PxClipboard)))
+            .onHover { model.isHoveringOverVersionCopier = $0 }
+
             LuminarePicker(
                 elements: Icon.all,
                 selection: Binding(
@@ -138,11 +179,7 @@ struct IconConfigurationView: View {
                         )
                     }
             }
-            Button("Suggest new icon") {
-                openURL(IconConfigurationModel.suggestNewIconLink)
-            }
-        }
-        LuminareSection("Options") {
+
             LuminareToggle("Show in dock", isOn: $model.showDockIcon)
             LuminareToggle("Notify when unlocking new icons", isOn: $model.notificationWhenIconUnlocked)
         }
@@ -194,23 +231,20 @@ struct IconVew: View {
         }
         .onAppear {
             hasBeenUnlocked = icon.selectable
-
-            if !hasBeenUnlocked {
-                nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
-                loopsLeft = nextUnlockCount - timesLooped
-            }
+            updateLoopsLeft()
         }
         .onChange(of: timesLooped) { _ in
             withAnimation(LuminareSettingsWindow.animation) {
                 hasBeenUnlocked = icon.selectable
+                updateLoopsLeft()
             }
+        }
+    }
 
-            if !hasBeenUnlocked {
-                withAnimation(LuminareSettingsWindow.animation) {
-                    nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
-                    loopsLeft = nextUnlockCount - timesLooped
-                }
-            }
+    private func updateLoopsLeft() {
+        if !hasBeenUnlocked {
+            nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
+            loopsLeft = nextUnlockCount - timesLooped
         }
     }
 }
