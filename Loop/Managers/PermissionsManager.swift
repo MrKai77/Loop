@@ -22,6 +22,8 @@ class AccessibilityManager {
         if AccessibilityManager.getStatus() {
             return true
         }
+        resetAccessibility() // In case Loop is actually in the list, but the signature is different
+
         let alert = NSAlert()
         alert.messageText = .init(
             localized: .init(
@@ -41,5 +43,9 @@ class AccessibilityManager {
         let status = AXIsProcessTrustedWithOptions(options)
 
         return status
+    }
+
+    private static func resetAccessibility() {
+        _ = try? Process.run(URL(filePath: "/usr/bin/tccutil"), arguments: ["reset", "Accessibility", Bundle.main.bundleID])
     }
 }
