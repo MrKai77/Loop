@@ -65,14 +65,6 @@ struct KeybindingItemView: View {
         HStack {
             HStack {
                 label()
-                    .onChange(of: keybind) { _ in
-                        if keybind.direction == .custom {
-                            isConfiguringCustom = true
-                        }
-                        if keybind.direction == .cycle {
-                            isConfiguringCycle = true
-                        }
-                    }
 
                 HStack {
                     if keybind.direction == .custom {
@@ -159,6 +151,14 @@ struct KeybindingItemView: View {
         }
         .onChange(of: isPresented) { _ in
             searchText = ""
+        }
+        .onChange(of: keybind.direction) { _ in
+            if keybind.direction == .custom {
+                isConfiguringCustom = true
+            }
+            if keybind.direction == .cycle {
+                isConfiguringCycle = true
+            }
         }
     }
 
