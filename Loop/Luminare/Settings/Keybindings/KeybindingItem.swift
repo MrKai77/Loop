@@ -94,11 +94,6 @@ struct KeybindingItemView: View {
                         }
                         .help("Customize what this keybind cycles through.")
                     }
-
-                    if isHovering {
-                        directionPicker()
-                            .help("Customize this keybind's action.")
-                    }
                 }
                 .font(.title3)
                 .foregroundStyle(isHovering ? .primary : .secondary)
@@ -137,6 +132,7 @@ struct KeybindingItemView: View {
                 .fixedSize()
             }
         }
+        .animation(LuminareSettingsWindow.animation, value: keybind)
         .padding(.horizontal, 12)
         .onAppear {
             computeSearchResults()
@@ -163,21 +159,26 @@ struct KeybindingItemView: View {
     }
 
     func label() -> some View {
-        HStack(spacing: 0) {
-            HStack(spacing: 8) {
-                IconView(action: $keybind)
+        Button {
+            isPresented.toggle()
+        } label: {
+            HStack(spacing: 0) {
+                HStack(spacing: 8) {
+                    IconView(action: $keybind)
 
-                Text(keybind.getName())
-                    .lineLimit(1)
-                    .contentTransition(.numericText())
-                    .animation(LuminareSettingsWindow.animation, value: keybind)
-            }
+                    Text(keybind.getName())
+                        .lineLimit(1)
+                        .contentTransition(.numericText())
+                }
 
-            if let info = keybind.direction.infoView {
-                info
+                if let info = keybind.direction.infoView {
+                    info
+                }
             }
+            .fixedSize(horizontal: false, vertical: true)
         }
-        .fixedSize(horizontal: false, vertical: true)
+        .buttonStyle(CompactButtonStyle())
+        .help("Customize this keybind's action.")
     }
 
     func directionPicker() -> some View {
@@ -221,6 +222,45 @@ struct KeybindingItemView: View {
                 searchResults = []
             } else {
                 searchResults = sectionItems.filter { $0.name.localizedCaseInsensitiveContains(searchText) } + moreSection.items
+            }
+        }
+    }
+}
+
+private struct CompactButtonStyle: ButtonStyle {
+    @Environment(\.hoveringOverLuminareItem) var hoveringOverLuminareItem
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    let elementMinHeight: CGFloat = 25
+    @State var isHovering: Bool = false
+    let cornerRadius: CGFloat = 6
+
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background {
+                if configuration.isPressed || isHovering || hoveringOverLuminareItem {
+                    backgroundForState(isPressed: configuration.isPressed)
+                        .background {
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .strokeBorder(.quaternary, lineWidth: 1)
+                        }
+                        .clipShape(.rect(cornerRadius: cornerRadius))
+                        .padding(-4)
+                }
+            }
+            .onHover { isHovering = $0 }
+            .animation(LuminareSettingsWindow.fastAnimation, value: [isHovering, hoveringOverLuminareItem])
+            .frame(minHeight: elementMinHeight)
+            .opacity(isEnabled ? 1 : 0.5)
+    }
+
+    private func backgroundForState(isPressed: Bool) -> some View {
+        Group {
+            if isPressed {
+                Rectangle().foregroundStyle(.quaternary)
+            } else if isHovering {
+                Rectangle().foregroundStyle(.quaternary.opacity(0.6))
+            } else {
+                Rectangle().foregroundStyle(.quinary.opacity(0.5))
             }
         }
     }
