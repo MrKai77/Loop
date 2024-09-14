@@ -27,16 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             await Defaults.iCloud.waitForSyncCompletion()
         }
 
-        // Check & ask for accessibility access
-        AccessibilityManager.requestAccess()
-        UNUserNotificationCenter.current().delegate = self
-
-        AppDelegate.requestNotificationAuthorization()
-
-        IconManager.refreshCurrentAppIcon()
-        AppDelegate.loopManager.start()
-        AppDelegate.windowDragManager.addObservers()
-
         if !launchedAsLoginItem {
             LuminareManager.open()
         } else {
@@ -44,6 +34,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if !Defaults[.showDockIcon] {
                 NSApp.setActivationPolicy(.accessory)
             }
+        }
+
+        IconManager.refreshCurrentAppIcon()
+        AppDelegate.loopManager.start()
+        AppDelegate.windowDragManager.addObservers()
+
+        UNUserNotificationCenter.current().delegate = self
+        AppDelegate.requestNotificationAuthorization()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            AccessibilityManager.requestAccess()
         }
     }
 
