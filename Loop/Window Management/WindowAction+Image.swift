@@ -70,16 +70,6 @@ struct IconView: View {
                         .font(.system(size: 8))
                         .fontWeight(.bold)
                         .frame(width: size.width, height: size.height)
-                } else if action.direction == .cycle, action.cycle?.first == nil {
-                    Image(._18PxRepeat4)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: size.width, height: size.height)
-                } else if action.direction == .custom, frame == .zero {
-                    Image(._18PxSliders)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: size.width, height: size.height)
                 } else {
                     ZStack {
                         RoundedRectangle(cornerRadius: outerCornerRadius - inset)
