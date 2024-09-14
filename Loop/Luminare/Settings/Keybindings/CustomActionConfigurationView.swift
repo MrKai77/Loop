@@ -43,19 +43,19 @@ struct CustomActionConfigurationView: View {
     }
 
     var body: some View {
-        ScreenView {
+        ScreenView(blurred: .constant(action.sizeMode != .custom)) {
             GeometryReader { geo in
-                let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
-                let _ = print(frame)
                 ZStack {
                     if action.sizeMode == .custom {
+                        let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
+
                         blurredWindow()
                             .frame(width: frame.width, height: frame.height)
                             .offset(x: frame.origin.x, y: frame.origin.y)
+                            .animation(LuminareSettingsWindow.animation, value: frame)
                     }
                 }
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                .animation(LuminareSettingsWindow.animation, value: frame)
             }
         }
         .onChange(of: action) { windowAction = $0 }
@@ -303,9 +303,9 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder private func blurredWindow() -> some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {
-                RoundedRectangle(cornerRadius: 5)
-                    .strokeBorder(.white.opacity(0.1), lineWidth: 2)
+                RoundedRectangle(cornerRadius: 12 - 5)
+                    .strokeBorder(Color.getLoopAccent(tone: .normal), lineWidth: 2)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .clipShape(RoundedRectangle(cornerRadius: 12 - 5))
     }
 }
