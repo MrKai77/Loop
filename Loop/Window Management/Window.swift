@@ -255,6 +255,16 @@ class Window {
         }
     }
 
+    var isResizable: Bool {
+        do {
+            let result: Bool = try self.axWindow.canSetValue(.size)
+            return result
+        } catch {
+            print("Failed to get resizable: \(error.localizedDescription)")
+            return true
+        }
+    }
+
     var frame: CGRect {
         CGRect(origin: self.position, size: self.size)
     }

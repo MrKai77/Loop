@@ -14,7 +14,6 @@ class LoopManager: ObservableObject {
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?
     static var lastTargetFrame: CGRect = .zero
-    static var canAdjustSize: Bool = true
 
     private let keybindMonitor = KeybindMonitor.shared
 
@@ -168,7 +167,6 @@ private extension LoopManager {
            isLoopActive {
             if let screenToResizeOn,
                Defaults[.previewVisibility] {
-                LoopManager.canAdjustSize = false
                 WindowEngine.resize(
                     targetWindow!,
                     to: currentAction,
@@ -191,7 +189,6 @@ private extension LoopManager {
         isLoopActive = false
         LoopManager.sidesToAdjust = nil
         LoopManager.lastTargetFrame = .zero
-        LoopManager.canAdjustSize = true
     }
 
     func openWindows() {

@@ -37,6 +37,15 @@ extension AXUIElement {
         }
     }
 
+    func canSetValue(_ attribute: NSAccessibility.Attribute) throws -> Bool {
+        var isSettable = DarwinBoolean(false)
+        let error = AXUIElementIsAttributeSettable(self, attribute as CFString, &isSettable)
+        guard error == .success else {
+            throw error
+        }
+        return isSettable.boolValue
+    }
+
     func getElementAtPosition(_ position: CGPoint) throws -> AXUIElement? {
         var element: AXUIElement?
         let error = AXUIElementCopyElementAtPosition(self, Float(position.x), Float(position.y), &element)

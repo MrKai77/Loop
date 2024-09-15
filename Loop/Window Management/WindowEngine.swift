@@ -30,17 +30,21 @@ enum WindowEngine {
             window.activate()
         }
 
+        // If window hasn't been recorded yet, record it, so that the user can undo the action
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
         }
 
+        // If the action is fullscreen, toggle fullscreen then return
         if action.direction == .fullscreen {
             window.toggleFullscreen()
             WindowRecords.record(window, action)
             return
         }
+        // Otherwise, we obviously need to disable fullscreen to resize the window
         window.fullscreen = false
 
+        // If the action is to hide or minimize, perform the action then return
         if action.direction == .hide {
             window.toggleHidden()
             return
@@ -51,13 +55,14 @@ enum WindowEngine {
             return
         }
 
+        // Calculate the target frame
         let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame, screen: screen)
+        print("Target window frame: \(targetFrame)")
 
+        // If the action is undo, remove the last action from the window, as the target frame already contains the last action's size
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)
         }
-
-        print("Target window frame: \(targetFrame)")
 
         let enhancedUI = window.enhancedUserInterface
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
