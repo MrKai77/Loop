@@ -72,7 +72,7 @@ enum WindowEngine {
 
         // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
         if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier,
-           let window = NSApp.keyWindow ?? NSApp.windows.first {
+           let window = NSApp.keyWindow ?? NSApp.windows.first(where: { $0.level.rawValue <= NSWindow.Level.floating.rawValue }) {
             NSAnimationContext.runAnimationGroup { context in
                 context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
                 window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
