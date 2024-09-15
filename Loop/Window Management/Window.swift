@@ -28,7 +28,7 @@ class Window {
     let nsRunningApplication: NSRunningApplication?
 
     var observer: Observer?
-    
+
     /// Initialize a window from an AXUIElement
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
     init(element: AXUIElement) throws {
@@ -52,7 +52,7 @@ class Window {
             throw WindowError.invalidWindow
         }
     }
-    
+
     /// Initialize a window from a PID. The frontmost app with the given PID will be used.
     /// - Parameter pid: The PID of the app to get the window from
     convenience init(pid: pid_t) throws {
@@ -129,7 +129,6 @@ class Window {
         }
     }
 
-    
     /// Activate the window. This will bring it to the front and focus it if possible
     func activate() {
         do {
@@ -274,7 +273,7 @@ class Window {
     var frame: CGRect {
         CGRect(origin: self.position, size: self.size)
     }
-    
+
     /// Set the frame of this Window.
     /// - Parameters:
     ///   - rect: The new frame for the window
