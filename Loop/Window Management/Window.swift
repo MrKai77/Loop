@@ -28,7 +28,9 @@ class Window {
     let nsRunningApplication: NSRunningApplication?
 
     var observer: Observer?
-
+    
+    /// Initialize a window from an AXUIElement
+    /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
     init(element: AXUIElement) throws {
         self.axWindow = element
 
@@ -50,7 +52,9 @@ class Window {
             throw WindowError.invalidWindow
         }
     }
-
+    
+    /// Initialize a window from a PID. The frontmost app with the given PID will be used.
+    /// - Parameter pid: The PID of the app to get the window from
     convenience init(pid: pid_t) throws {
         let element = AXUIElementCreateApplication(pid)
         guard let window: AXUIElement = try element.getValue(.focusedWindow) else {
@@ -125,6 +129,8 @@ class Window {
         }
     }
 
+    
+    /// Activate the window. This will bring it to the front and focus it if possible
     func activate() {
         do {
             try self.axWindow.setValue(.main, value: true)
@@ -260,7 +266,7 @@ class Window {
             let result: Bool = try self.axWindow.canSetValue(.size)
             return result
         } catch {
-            print("Failed to get resizable: \(error.localizedDescription)")
+            print("Failed to determine if window size can be set: \(error.localizedDescription)")
             return true
         }
     }
@@ -268,12 +274,19 @@ class Window {
     var frame: CGRect {
         CGRect(origin: self.position, size: self.size)
     }
-
+    
+    /// Set the frame of this Window.
+    /// - Parameters:
+    ///   - rect: The new frame for the window
+    ///   - animate: Whether or not to animate the window resizing
+    ///   - sizeFirst: This will set the size first, which is useful when switching screens. Only does something when window animations are off
+    ///   - bounds: This will prevent the window from going outside the bounds. Only does something when window animations are on
+    ///   - completionHandler: Something to run after the window has been resized. This can include things like moving the cursor to the center of the window
     func setFrame(
         _ rect: CGRect,
         animate: Bool = false,
-        sizeFirst: Bool = false, // Only does something when window animations are off
-        bounds: CGRect = .zero, // Only does something when window animations are on
+        sizeFirst: Bool = false,
+        bounds: CGRect = .zero,
         completionHandler: @escaping (() -> ()) = {}
     ) {
         let enhancedUI = self.enhancedUserInterface
