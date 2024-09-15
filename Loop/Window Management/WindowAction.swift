@@ -139,7 +139,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         var bounds = bounds
-        var result = .zero
+        var result: CGRect = .zero
 
         // Get padded bounds only if padding can be applied
         if !disablePadding && Defaults[.enablePadding],
@@ -154,6 +154,13 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         result = calculateTargetFrame(direction, window, bounds)
 
         if !disablePadding {
+            // If window can't be resized, center it within the already-resized frame.
+            if let window, window.isResizable == false {
+                result = window.frame.size
+                    .center(inside: result)
+                    .pushInside(bounds)
+            }
+
             // Apply padding between windows
             if direction != .undo, direction != .initialFrame {
                 result = applyInnerPadding(result, bounds)
@@ -171,7 +178,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 // MARK: - Window Frame Calculations
 
 private extension WindowAction {
-
     func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect) -> CGRect {
         var result: CGRect = .zero
 

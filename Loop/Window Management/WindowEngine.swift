@@ -70,22 +70,10 @@ enum WindowEngine {
 
         if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier,
            let window = NSApp.keyWindow ?? NSApp.windows.first {
-            var newFrame = targetFrame
-            newFrame.size = window.frame.size
-
-            if newFrame.maxX > screen.safeScreenFrame.maxX {
-                newFrame.origin.x = screen.safeScreenFrame.maxX - newFrame.width - Defaults[.padding].right
-            }
-
-            if newFrame.maxY > screen.safeScreenFrame.maxY {
-                newFrame.origin.y = screen.safeScreenFrame.maxY - newFrame.height - Defaults[.padding].bottom
-            }
-
             NSAnimationContext.runAnimationGroup { context in
                 context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
-                window.animator().setFrame(newFrame.flipY(screen: .screens[0]), display: false)
+                window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
             }
-
             return
         }
 

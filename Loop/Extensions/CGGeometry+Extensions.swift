@@ -52,6 +52,19 @@ extension CGSize {
     func approximatelyEqual(to size: CGSize, tolerance: CGFloat = 10) -> Bool {
         abs(width - size.width) < tolerance && abs(height - size.height) < tolerance
     }
+
+    func center(inside parentRect: CGRect) -> CGRect {
+        let parentRectCenter = parentRect.center
+        let newX = parentRectCenter.x - width / 2
+        let newY = parentRectCenter.y - height / 2
+
+        return CGRect(
+            x: newX,
+            y: newY,
+            width: width,
+            height: height
+        )
+    }
 }
 
 extension CGRect {
@@ -99,8 +112,16 @@ extension CGRect {
             abs(height - rect.height) < tolerance
     }
 
-    func pushBottomRightPointInside(_ rect2: CGRect) -> CGRect {
+    func pushInside(_ rect2: CGRect) -> CGRect {
         var result = self
+
+        if result.minX < rect2.minX {
+            result.origin.x = rect2.minX
+        }
+
+        if result.minY < rect2.minY {
+            result.origin.y = rect2.minY
+        }
 
         if result.maxX > rect2.maxX {
             result.origin.x = rect2.maxX - result.width
