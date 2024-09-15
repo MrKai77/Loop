@@ -63,8 +63,8 @@ enum WindowEngine {
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
         WindowRecords.record(window, action)
 
-        if window.nsRunningApplication == NSRunningApplication.current,
-           let window = NSApp.keyWindow {
+        if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier,
+           let window = NSApp.keyWindow ?? NSApp.windows.first {
             var newFrame = targetFrame
             newFrame.size = window.frame.size
 
