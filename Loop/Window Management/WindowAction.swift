@@ -137,16 +137,43 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         guard direction != .cycle, direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
+
         var bounds = bounds
+        var result = .zero
+
+        // Get padded bounds only if padding can be applied
         if !disablePadding && Defaults[.enablePadding],
            Defaults[.paddingMinimumScreenSize] == .zero || screen?.diagonalSize ?? .zero > Defaults[.paddingMinimumScreenSize] {
             bounds = getPaddedBounds(bounds)
         }
-        var result = CGRect(origin: bounds.origin, size: .zero)
 
         if !willManipulateExistingWindowFrame {
             LoopManager.sidesToAdjust = nil
         }
+
+        result = calculateTargetFrame(direction, window, bounds)
+
+        if !disablePadding {
+            // Apply padding between windows
+            if direction != .undo, direction != .initialFrame {
+                result = applyInnerPadding(result, bounds)
+            }
+
+            // Store the last target frame. This is used when growing/shrinking windows
+            // We only store it when disablePadding is false, as otherwise, it is going to be the preview window using this frame.
+            LoopManager.lastTargetFrame = result
+        }
+
+        return result
+    }
+}
+
+// MARK: - Window Frame Calculations
+
+private extension WindowAction {
+
+    func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect) -> CGRect {
+        var result: CGRect = .zero
 
         if direction.frameMultiplyValues != nil {
             result = applyFrameMultiplyValues(bounds)
@@ -193,21 +220,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result = getInitialFrame(window)
         }
 
-        if !disablePadding {
-            if direction != .undo, direction != .initialFrame {
-                result = applyInnerPadding(result, bounds)
-            }
-
-            LoopManager.lastTargetFrame = result
-        }
-
         return result
     }
-}
 
-// MARK: - Window Frame Calculations
-
-private extension WindowAction {
     func applyFrameMultiplyValues(_ bounds: CGRect) -> CGRect {
         guard let frameMultiplyValues = direction.frameMultiplyValues else {
             return .zero
