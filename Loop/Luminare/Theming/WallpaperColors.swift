@@ -234,7 +234,8 @@ public class WallpaperProcessor {
         let wallpaperWindows = availableContent.windows
             .filter(\.isOnScreen)
             .sorted(by: { $0.windowLayer < $1.windowLayer })
-            .filter { ($0.title ?? "").contains("Wallpaper") } // Might not be the best way. but it works 99% of the time, believe me.
+            .filter { ($0.title ?? "").contains("Wallpaper") }
+            .filter { $0.owningApplication?.bundleIdentifier == "com.apple.dock" }
 
         // Create a content filter to capture the wallpaper windows on the screen.
         let filter = SCContentFilter(
