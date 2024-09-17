@@ -222,6 +222,11 @@ public class WallpaperProcessor {
 
     @available(macOS 14, *)
     private static func takeScreenshotModern(_ screen: NSScreen) async throws -> NSImage? {
+        DispatchQueue.main.async {
+            // New method needs screen capture permits
+            ScreenCaptureManager.requestAccess()
+        }
+
         // Get content that is currently available for capture.
         let availableContent = try await SCShareableContent.current
 
