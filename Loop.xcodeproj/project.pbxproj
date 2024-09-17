@@ -53,6 +53,7 @@
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
 		A8789F6929805B340040512E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6829805B340040512E /* PreviewView.swift */; };
+		A878F56D2C9913CF009EFBEA /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A89E60912C939BEB00A05AD5 /* Luminare */; };
 		A87DDD152B50A6A400A32C76 /* ScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87DDD142B50A6A400A32C76 /* ScreenManager.swift */; };
 		A87F78942BAE28050087B1DE /* CustomWindowActionSizeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87F78932BAE28050087B1DE /* CustomWindowActionSizeMode.swift */; };
 		A87F78962BAE333C0087B1DE /* CustomWindowActionPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87F78952BAE333C0087B1DE /* CustomWindowActionPositionMode.swift */; };
@@ -62,7 +63,6 @@
 		A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */; };
 		A89307312BAE6D0100566AEE /* CustomWindowActionUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */; };
 		A893D3642BD3299000063510 /* IconConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A893D3632BD3299000063510 /* IconConfiguration.swift */; };
-		A89E608F2C932F7000A05AD5 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A89E608E2C932F7000A05AD5 /* Luminare */; };
 		A8A1C51E2BD3705A00515A14 /* PaddingConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */; };
 		A8A1C5212BD4863B00515A14 /* KeybindingsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C5202BD4863B00515A14 /* KeybindingsConfiguration.swift */; };
 		A8A2ABE72A3FB0370067B5A9 /* KeybindMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A2ABE62A3FB0370067B5A9 /* KeybindMonitor.swift */; };
@@ -103,8 +103,8 @@
 		A80521312A84878200BF7E22 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A8055EC12AFEDE0B00459D13 /* Keycorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keycorder.swift; sourceTree = "<group>"; };
 		A80900D32AA3F9F20085C63B /* VisualEffectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
-		A80AB7E22C276E0300BE0360 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A80D49BA2BAE479900493B67 /* WindowAction+Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WindowAction+Port.swift"; sourceTree = "<group>"; };
+		A80FB1EB2C99152300139B4A /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A81B98172BDC854F005FD78C /* AboutConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutConfiguration.swift; sourceTree = "<group>"; };
 		A81D8D092C068B8700188E12 /* LuminarePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuminarePreviewView.swift; sourceTree = "<group>"; };
 		A81D8D0B2C06950000188E12 /* LuminareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuminareManager.swift; sourceTree = "<group>"; };
@@ -184,7 +184,6 @@
 		A8F0125A2AEDD7660017307F /* WindowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAction.swift; sourceTree = "<group>"; };
 		A8F1E9652C253F5B00AAF871 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A8F1E9682C253F8D00AAF871 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A8F1E96A2C253F9900AAF871 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A8F1E96B2C253FA200AAF871 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -197,8 +196,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A878F56D2C9913CF009EFBEA /* Luminare in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				A89E60922C939BEB00A05AD5 /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,16 +512,15 @@
 				en,
 				Base,
 				"zh-Hans",
-				"zh-HK",
 				it,
 				"pt-BR",
 				es,
-				"en-GB",
 				ko,
 				"nl-BE",
 				ar,
 				de,
 				ru,
+				"zh-Hant",
 			);
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
@@ -663,13 +661,12 @@
 			isa = PBXVariantGroup;
 			children = (
 				A8F1E9682C253F8D00AAF871 /* it */,
-				A8F1E96A2C253F9900AAF871 /* zh-HK */,
 				A8F1E96B2C253FA200AAF871 /* zh-Hans */,
-				A80AB7E22C276E0300BE0360 /* en-GB */,
 				4C311C1A2C40B4C0003C99D0 /* ko */,
 				A8B1DB202C4CF28400255B13 /* ar */,
 				4C5853252C4D4FD500FD0FC4 /* de */,
 				A88699E42C816881007EBF47 /* ru */,
+				A80FB1EB2C99152300139B4A /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

@@ -1,9 +1,0 @@
-/* Bundle display name */
-"CFBundleDisplayName" = "Loop";
-
-/* Bundle name */
-"CFBundleName" = "Loop";
-
-/* Copyright (human-readable) */
-"NSHumanReadableCopyright" = "Copyright © 2024 Loop";
-
