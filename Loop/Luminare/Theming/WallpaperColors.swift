@@ -216,16 +216,12 @@ public class WallpaperProcessor {
         } else {
             NSLog("Using existing method for macOS versions below 15.")
             // For macOS versions below 14, use the existing method.
-            guard let screenshotCGImage = CGDisplayCreateImage(screen.displayID!) else {
-                NSLog("Failed to capture the desktop wallpaper using the existing method.")
-                return nil
-            }
-            return NSImage(cgImage: screenshotCGImage, size: NSSize.zero)
+            return takeScreenshotOld(screen)
         }
     }
 
     @available(macOS 14, *)
-    static func takeScreenshotModern(_ screen: NSScreen) async throws -> NSImage? {
+    private static func takeScreenshotModern(_ screen: NSScreen) async throws -> NSImage? {
         // Get content that is currently available for capture.
         let availableContent = try await SCShareableContent.current
 
@@ -260,5 +256,13 @@ public class WallpaperProcessor {
         )
 
         return image
+    }
+
+    private static func takeScreenshotOld(_ screen: NSScreen) -> NSImage? {
+        guard let screenshotCGImage = CGDisplayCreateImage(screen.displayID!) else {
+            NSLog("Failed to capture the desktop wallpaper using the existing method.")
+            return nil
+        }
+        return NSImage(cgImage: screenshotCGImage, size: NSSize.zero)
     }
 }
