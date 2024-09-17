@@ -30,17 +30,21 @@ enum WindowEngine {
             window.activate()
         }
 
+        // If window hasn't been recorded yet, record it, so that the user can undo the action
         if !WindowRecords.hasBeenRecorded(window) {
             WindowRecords.recordFirst(for: window)
         }
 
+        // If the action is fullscreen, toggle fullscreen then return
         if action.direction == .fullscreen {
             window.toggleFullscreen()
             WindowRecords.record(window, action)
             return
         }
+        // Otherwise, we obviously need to disable fullscreen to resize the window
         window.fullscreen = false
 
+        // If the action is to hide or minimize, perform the action then return
         if action.direction == .hide {
             window.toggleHidden()
             return
@@ -51,39 +55,33 @@ enum WindowEngine {
             return
         }
 
+        // Calculate the target frame
         let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame, screen: screen)
+        print("Target window frame: \(targetFrame)")
 
+        // If the action is undo, remove the last action from the window, as the target frame already contains the last action's size
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)
         }
 
-        print("Target window frame: \(targetFrame)")
-
+        // If enhancedUI is enabled, then window animations will likely lag a LOT. So, if it's enabled, force-disable animations
         let enhancedUI = window.enhancedUserInterface
         let animate = Defaults[.animateWindowResizes] && !enhancedUI
+
         WindowRecords.record(window, action)
 
+        // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
         if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier,
-           let window = NSApp.keyWindow ?? NSApp.windows.first {
-            var newFrame = targetFrame
-            newFrame.size = window.frame.size
-
-            if newFrame.maxX > screen.safeScreenFrame.maxX {
-                newFrame.origin.x = screen.safeScreenFrame.maxX - newFrame.width - Defaults[.padding].right
-            }
-
-            if newFrame.maxY > screen.safeScreenFrame.maxY {
-                newFrame.origin.y = screen.safeScreenFrame.maxY - newFrame.height - Defaults[.padding].bottom
-            }
-
+           let window = NSApp.keyWindow ?? NSApp.windows.first(where: { $0.level.rawValue <= NSWindow.Level.floating.rawValue }) {
             NSAnimationContext.runAnimationGroup { context in
                 context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
-                window.animator().setFrame(newFrame.flipY(screen: .screens[0]), display: false)
+                window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
             }
-
             return
         }
 
+        // If the window is being moved via shortcuts (move right, move left etc.), then the screenFrame will be zero.
+        // This is because the window *can* be moved off-screen in this case.
         let screenFrame = action.direction.willMove ? .zero : screen.safeScreenFrame
 
         let bounds = if Defaults[.enablePadding],
@@ -99,23 +97,25 @@ enum WindowEngine {
             sizeFirst: willChangeScreens,
             bounds: bounds
         ) {
-            // If animations are disabled, check if the window needs extra resizing
-            if !animate {
-                // Fixes an issue where window isn't resized correctly on multi-monitor setups
-                if !window.frame.approximatelyEqual(to: targetFrame) {
-                    print("Backup resizing...")
-                    window.setFrame(targetFrame)
-                }
+            // Fixes an issue where window isn't resized correctly on multi-monitor setups
+            // If window is being animated, then the size is very likely to already be correct, as what's really happening is window.setFrame at a really high rate.
+            if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
+                print("Backup resizing...")
+                window.setFrame(targetFrame)
             }
 
+            // If window's minimum size exceeds the screen bounds, push it back in
             WindowEngine.handleSizeConstrainedWindow(window: window, bounds: bounds)
         }
 
+        // Move cursor to center of window if user has enabled it
         if Defaults[.moveCursorWithWindow] {
             CGWarpMouseCursorPosition(targetFrame.center)
         }
     }
 
+    /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
+    /// - Returns: The target window
     static func getTargetWindow() -> Window? {
         var result: Window?
 
@@ -149,12 +149,17 @@ enum WindowEngine {
         return try Window(pid: app.processIdentifier)
     }
 
+    /// Get the Window at a given position.
+    /// - Parameter position: The position to check for
+    /// - Returns: The window at the given position, if any
     static func windowAtPosition(_ position: CGPoint) throws -> Window? {
+        // If we can find the window at a point using the Accessibility API, return it
         if let element = try AXUIElement.systemWide.getElementAtPosition(position),
            let windowElement: AXUIElement = try element.getValue(.window) {
             return try Window(element: windowElement)
         }
 
+        // If the previous method didn't work, loop through all windows on-screen and return the first one that contains the desired point
         let windowList = WindowEngine.windowList
         if let window = (windowList.first { $0.frame.contains(position) }) {
             return window
@@ -163,6 +168,7 @@ enum WindowEngine {
         return nil
     }
 
+    /// Get a list of all windows currently shown, that are likely to be resizable by Loop.
     static var windowList: [Window] {
         guard let list = CGWindowListCopyWindowInfo(
             [.optionOnScreenOnly, .excludeDesktopElements],
@@ -173,19 +179,20 @@ enum WindowEngine {
 
         var windowList: [Window] = []
         for window in list {
-            if let pid = window[kCGWindowOwnerPID as String] as? Int32 {
-                do {
-                    let window = try Window(pid: pid)
-                    windowList.append(window)
-                } catch {
-                    print("Failed to create window: \(error.localizedDescription)")
-                }
+            if let pid = window[kCGWindowOwnerPID as String] as? Int32, let window = try? Window(pid: pid) {
+                windowList.append(window)
             }
         }
 
         return windowList
     }
 
+    /// This function is used to calculate the Y offset for a window to be "macOS centered" on the screen
+    /// It is identical to `NSWindow.center()`.
+    /// - Parameters:
+    ///   - windowHeight: Height of the window to be resized
+    ///   - screenHeight: Height of the screen the window will be resized on
+    /// - Returns: The Y offset of the window, to be added onto the screen's midY point.
     static func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
         let halfScreenHeight = screenHeight / 2
         let windowHeightPercent = windowHeight / screenHeight
