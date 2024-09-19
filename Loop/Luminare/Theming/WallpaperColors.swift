@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import ScreenCaptureKit
 import SwiftUI
 
 // MARK: - Wallpaper colour processor
@@ -155,7 +156,7 @@ public class WallpaperProcessor {
             let dominantColors = try await processCurrentWallpaper()
 
             // Sort the first two colors by their brightness
-            let colors = dominantColors[0...1].sorted(by: { $0.brightness > $1.brightness })
+            let colors = dominantColors.prefix(2).sorted(by: { $0.brightness > $1.brightness })
 
             // Update the custom accent color with the first dominant color or clear if none.
             Defaults[.customAccentColor] = Color(colors.first ?? .clear)
@@ -200,17 +201,74 @@ public class WallpaperProcessor {
     /// Takes a screenshot of the main display.
     /// - Returns: An NSImage of the screenshot or nil if the operation fails.
     private static func takeScreenshot() async -> NSImage? {
-        // Get the ID of the main display.
-        let mainDisplayID = CGMainDisplayID()
+        let screen = NSScreen.screenWithMouse ?? NSScreen.main ?? NSScreen.screens[0]
 
-        #warning("TODO: Add a switch method for CGDisplayCreateImage as it's not supported on macOS 14.4/15")
-        // Attempt to create an image from the main display.
-        guard let screenshotCGImage = CGDisplayCreateImage(mainDisplayID) else {
-            // If the creation fails, return nil.
-            return nil
+        // Check the macOS version to decide the method for capturing the screen.
+        if #available(macOS 14, *) {
+            do {
+                NSLog("Using modern method for macOS 15 and later.")
+                // For macOS versions 14 and later, use the modern method, using ScreenCaptureKit.
+                return try await takeScreenshotModern(screen)
+            } catch {
+                NSLog("Failed to capture the desktop wallpaper using the modern method: \(error.localizedDescription)")
+                return nil
+            }
+        } else {
+            NSLog("Using existing method for macOS versions below 15.")
+            // For macOS versions below 14, use the existing method.
+            return takeScreenshotOld(screen)
+        }
+    }
+
+    @available(macOS 14, *)
+    private static func takeScreenshotModern(_ screen: NSScreen) async throws -> NSImage? {
+        DispatchQueue.main.async {
+            // New method needs screen capture permits
+            ScreenCaptureManager.requestAccess()
         }
 
-        // Return an NSImage created from the CGImage of the screenshot.
+        // Get content that is currently available for capture.
+        let availableContent = try await SCShareableContent.current
+
+        // Find potential wallpaper windows on the screen.
+        let wallpaperWindows = availableContent.windows
+            .filter(\.isOnScreen)
+            .sorted(by: { $0.windowLayer < $1.windowLayer })
+            .filter { ($0.title ?? "").contains("Wallpaper") }
+            .filter { $0.owningApplication?.bundleIdentifier == "com.apple.dock" }
+
+        // Create a content filter to capture the wallpaper windows on the screen.
+        let filter = SCContentFilter(
+            display: availableContent.displays.first(where: { $0.displayID == screen.displayID })!,
+            including: wallpaperWindows
+        )
+        let config = if #available(macOS 15.0, *) { // capture HDR on macOS 15 and later
+            SCStreamConfiguration(preset: .captureHDRScreenshotLocalDisplay)
+        } else {
+            SCStreamConfiguration()
+        }
+        config.showsCursor = false
+
+        // Call the screenshot API to get CGImage representation.
+        let screenshotImage = try await SCScreenshotManager.captureImage(
+            contentFilter: filter,
+            configuration: config
+        )
+
+        // Convert CGImage to NSImage.
+        let image = NSImage(
+            cgImage: screenshotImage,
+            size: .init(width: screenshotImage.width, height: screenshotImage.height)
+        )
+
+        return image
+    }
+
+    private static func takeScreenshotOld(_ screen: NSScreen) -> NSImage? {
+        guard let screenshotCGImage = CGDisplayCreateImage(screen.displayID!) else {
+            NSLog("Failed to capture the desktop wallpaper using the existing method.")
+            return nil
+        }
         return NSImage(cgImage: screenshotCGImage, size: NSSize.zero)
     }
 }

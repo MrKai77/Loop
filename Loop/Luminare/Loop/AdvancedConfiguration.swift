@@ -36,6 +36,7 @@ class AdvancedConfigurationModel: ObservableObject {
     }
 
     @Published var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
+    @Published var isScreenCaptureAccessGranted = ScreenCaptureManager.getStatus()
     @Published var accessibilityChecker: Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @Published var accessibilityChecks: Int = 0
 
@@ -45,17 +46,18 @@ class AdvancedConfigurationModel: ObservableObject {
         AccessibilityManager.requestAccess()
     }
 
+    // No point in checking for screen capture permits since that REQUIRES a relaunch, unfortunately
     func refreshAccessiblityStatus() {
         accessibilityChecks += 1
-        let isGranted = AccessibilityManager.getStatus()
+        let isAccessibilityGranted = AccessibilityManager.getStatus()
 
-        if isAccessibilityAccessGranted != isGranted {
+        if isAccessibilityAccessGranted != isAccessibilityGranted {
             withAnimation(LuminareSettingsWindow.animation) {
-                isAccessibilityAccessGranted = isGranted
+                isAccessibilityAccessGranted = isAccessibilityGranted
             }
         }
 
-        if isGranted || accessibilityChecks > 60 {
+        if isAccessibilityGranted || accessibilityChecks > 60 {
             accessibilityChecker.upstream.connect().cancel()
         }
     }
@@ -113,32 +115,63 @@ struct AdvancedConfigurationView: View {
         }
 
         LuminareSection("Permissions") {
-            HStack {
-                if model.isAccessibilityAccessGranted {
-                    Image(._18PxBadgeCheck2)
-                        .foregroundStyle(tintColor())
-                }
-
-                Text("Accessibility access")
-
-                Spacer()
-
-                Button {
-                    model.beginAccessibilityAccessRequest()
-                } label: {
-                    Text("Request…")
-                        .frame(height: 30)
-                        .padding(.horizontal, 8)
-                }
-                .disabled(model.isAccessibilityAccessGranted)
-                .buttonStyle(LuminareCompactButtonStyle(extraCompact: true))
-            }
-            .padding(.leading, 8)
-            .padding(.trailing, 2)
-            .frame(height: elementHeight)
+            accessibilityComponent()
+            screenCaptureComponent()
         }
         .onReceive(model.accessibilityChecker) { _ in
             model.refreshAccessiblityStatus()
         }
+    }
+
+    func accessibilityComponent() -> some View {
+        HStack {
+            if model.isAccessibilityAccessGranted {
+                Image(._18PxBadgeCheck2)
+                    .foregroundStyle(tintColor())
+            }
+
+            Text("Accessibility access")
+
+            Spacer()
+
+            Button {
+                model.beginAccessibilityAccessRequest()
+            } label: {
+                Text("Request…")
+                    .frame(height: 30)
+                    .padding(.horizontal, 8)
+            }
+            .disabled(model.isAccessibilityAccessGranted)
+            .buttonStyle(LuminareCompactButtonStyle(extraCompact: true))
+        }
+        .padding(.leading, 8)
+        .padding(.trailing, 2)
+        .frame(height: elementHeight)
+    }
+
+    func screenCaptureComponent() -> some View {
+        HStack {
+            if model.isScreenCaptureAccessGranted {
+                Image(._18PxBadgeCheck2)
+                    .foregroundStyle(tintColor())
+            }
+
+            Text("Screen capture access")
+
+            Spacer()
+
+            Button {
+                ScreenCaptureManager.requestAccess()
+            } label: {
+                Text("Request…")
+                    .frame(height: 30)
+                    .padding(.horizontal, 8)
+            }
+            .disabled(model.isScreenCaptureAccessGranted)
+            .buttonStyle(LuminareCompactButtonStyle(extraCompact: true))
+        }
+        .padding(.leading, 8)
+        .padding(.trailing, 2)
+        .frame(height: elementHeight)
     }
 }
