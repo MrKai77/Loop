@@ -40,7 +40,8 @@ struct KeybindingItemView: View {
         .init(.init(localized: "Size Adjustment"), WindowDirection.sizeAdjustment),
         .init(.init(localized: "Shrink"), WindowDirection.shrink),
         .init(.init(localized: "Grow"), WindowDirection.grow),
-        .init(.init(localized: "Move"), WindowDirection.move)
+        .init(.init(localized: "Move"), WindowDirection.move),
+        .init(.init(localized: "Go Back"), [WindowDirection.initialFrame, WindowDirection.undo])
     ]
 
     var moreSection: PickerSection<WindowDirection> {

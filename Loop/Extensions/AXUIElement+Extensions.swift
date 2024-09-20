@@ -147,6 +147,19 @@ extension AXUIElement {
 
         return id
     }
+
+    func performAction(_ action: NSAccessibility.Action) throws {
+        let error = AXUIElementPerformAction(self, action as CFString)
+
+        guard error == .success else {
+            throw error
+        }
+    }
+
+    var children: [AXUIElement] {
+        let children: [AXUIElement]? = try? getValue(.children)
+        return children ?? []
+    }
 }
 
 extension AXError: Swift.Error {}

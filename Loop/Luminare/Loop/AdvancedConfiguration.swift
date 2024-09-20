@@ -11,6 +11,10 @@ import Luminare
 import SwiftUI
 
 class AdvancedConfigurationModel: ObservableObject {
+    @Published var useSystemWindowManagerWhenAvailable = Defaults[.useSystemWindowManagerWhenAvailable] {
+        didSet { Defaults[.useSystemWindowManagerWhenAvailable] = useSystemWindowManagerWhenAvailable }
+    }
+
     @Published var animateWindowResizes = Defaults[.animateWindowResizes] {
         didSet { Defaults[.animateWindowResizes] = animateWindowResizes }
     }
@@ -70,6 +74,9 @@ struct AdvancedConfigurationView: View {
 
     var body: some View {
         LuminareSection("General") {
+            if #available(macOS 15.0, *) {
+                LuminareToggle("Use macOS window manager when available", isOn: $model.useSystemWindowManagerWhenAvailable)
+            }
             LuminareToggle(
                 "Animate window resize",
                 info: .init("This feature is still under development.", .orange),

@@ -4119,6 +4119,9 @@
         }
       }
     },
+    "Go Back" : {
+
+    },
     "Gradient" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9807,6 +9810,9 @@
           }
         }
       }
+    },
+    "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality." : {
+
     },
     "Measurement unit: percentage" : {
       "extractionState" : "manual",
@@ -18495,6 +18501,9 @@
           }
         }
       }
+    },
+    "Use macOS window manager when available" : {
+
     },
     "Use pixels" : {
       "extractionState" : "manual",
