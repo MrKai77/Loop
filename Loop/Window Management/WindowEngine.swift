@@ -30,12 +30,18 @@ enum WindowEngine {
             window.activate()
         }
 
-        if #available(macOS 15, *),
-           let systemAction = action.direction.systemEquivalent,
-           let app = window.nsRunningApplication,
-           app == NSWorkspace.shared.frontmostApplication { // System resizes seem to only be able to be performed on the frontmost app
-            systemAction.perform(on: app)
-            return
+        if #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable] {
+            SystemWindowManager.MoveAndResize.syncPadding()
+
+            // System resizes seem to only be able to be performed on the frontmost app
+            if let systemAction = action.direction.systemEquivalent, let app = window.nsRunningApplication,
+               app == NSWorkspace.shared.frontmostApplication, let axMenuItem = try? systemAction.getItem(for: app) {
+                try? axMenuItem.performAction(.press)
+                WindowRecords.record(window, action)
+                return
+            } else {
+                print("System action not available for \(action.direction)")
+            }
         }
 
         // If window hasn't been recorded yet, record it, so that the user can undo the action

@@ -40,7 +40,6 @@
 		A83E1C352ABFCA3200853FE9 /* WindowRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E1C342ABFCA3200853FE9 /* WindowRecords.swift */; };
 		A8427E662C02594E00F20759 /* ExcludedAppsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8427E652C02594E00F20759 /* ExcludedAppsConfiguration.swift */; };
 		A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A848D8A62A8C2F3F00060834 /* LoopManager.swift */; };
-		A8576C3C2C9BD5330027D482 /* SystemMoveAndResize.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8576C3B2C9BD5330027D482 /* SystemMoveAndResize.swift */; };
 		A858914B2BDC5D3F00C10FB1 /* AdvancedConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A858914A2BDC5D3F00C10FB1 /* AdvancedConfiguration.swift */; };
 		A859799B2B55FE94009FB067 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */; };
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
@@ -49,7 +48,7 @@
 		A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* WindowDragManager.swift */; };
 		A867C20E2C26522B005831BC /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C20D2C26522B005831BC /* Observer.swift */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
-		A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* StageManager.swift */; };
+		A869C1A12B38C6E600AD1A84 /* SystemWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A869C1A02B38C6E600AD1A84 /* SystemWindowManager.swift */; };
 		A86B97AD2AB79E2500099D7F /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */; };
 		A86CB7332A3D22E7006A78F2 /* WindowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */; };
 		A8789F6729805B190040512E /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8789F6629805B190040512E /* RadialMenuView.swift */; };
@@ -130,7 +129,6 @@
 		A8427E652C02594E00F20759 /* ExcludedAppsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExcludedAppsConfiguration.swift; sourceTree = "<group>"; };
 		A848130C2BD1A8D100B02E93 /* .github */ = {isa = PBXFileReference; lastKnownFileType = folder; path = .github; sourceTree = "<group>"; };
 		A848D8A62A8C2F3F00060834 /* LoopManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopManager.swift; sourceTree = "<group>"; };
-		A8576C3B2C9BD5330027D482 /* SystemMoveAndResize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMoveAndResize.swift; sourceTree = "<group>"; };
 		A858914A2BDC5D3F00C10FB1 /* AdvancedConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedConfiguration.swift; sourceTree = "<group>"; };
 		A859799A2B55FE94009FB067 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
 		A85B560D2AAAD62C00386ACE /* EventMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
@@ -139,7 +137,7 @@
 		A864F4672AA660CD00579738 /* WindowDragManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowDragManager.swift; sourceTree = "<group>"; };
 		A867C20D2C26522B005831BC /* Observer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGKeyCode+Extensions.swift"; sourceTree = "<group>"; };
-		A869C1A02B38C6E600AD1A84 /* StageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageManager.swift; sourceTree = "<group>"; };
+		A869C1A02B38C6E600AD1A84 /* SystemWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemWindowManager.swift; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A86B97AC2AB79E2500099D7F /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEngine.swift; sourceTree = "<group>"; };
@@ -265,7 +263,7 @@
 				A864F4672AA660CD00579738 /* WindowDragManager.swift */,
 				A82521ED29E235AC00139654 /* PermissionsManager.swift */,
 				A8EF1F08299C87DF00633440 /* IconManager.swift */,
-				A869C1A02B38C6E600AD1A84 /* StageManager.swift */,
+				A869C1A02B38C6E600AD1A84 /* SystemWindowManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -303,7 +301,6 @@
 		A864F4662AA65EC200579738 /* Window Management */ = {
 			isa = PBXGroup;
 			children = (
-				A8576C3B2C9BD5330027D482 /* SystemMoveAndResize.swift */,
 				A86CB7322A3D22E7006A78F2 /* WindowEngine.swift */,
 				A8BC4A6D2C2F4C9800B94B82 /* Window.swift */,
 				A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */,
@@ -581,7 +578,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A859799B2B55FE94009FB067 /* UNNotification+Extensions.swift in Sources */,
-				A8576C3C2C9BD5330027D482 /* SystemMoveAndResize.swift in Sources */,
 				A8EF1F09299C87DF00633440 /* IconManager.swift in Sources */,
 				A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */,
 				A82B1AF02BD357FC00E2F3F9 /* RadialMenuConfiguration.swift in Sources */,
@@ -601,7 +597,7 @@
 				A867C20E2C26522B005831BC /* Observer.swift in Sources */,
 				A82740982AB00FCE00B9BDC5 /* Color+Extensions.swift in Sources */,
 				A82B1AF62BD35C8500E2F3F9 /* BehaviorConfiguration.swift in Sources */,
-				A869C1A12B38C6E600AD1A84 /* StageManager.swift in Sources */,
+				A869C1A12B38C6E600AD1A84 /* SystemWindowManager.swift in Sources */,
 				A8330ACD2A3AC1D100673C8D /* CGGeometry+Extensions.swift in Sources */,
 				A82B1AF22BD35A3800E2F3F9 /* PreviewConfiguration.swift in Sources */,
 				A8330AC72A3AC19500673C8D /* NSScreen+Extensions.swift in Sources */,

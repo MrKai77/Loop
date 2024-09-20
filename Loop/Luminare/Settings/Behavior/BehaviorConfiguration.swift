@@ -43,6 +43,10 @@ class BehaviorConfigurationModel: ObservableObject {
         didSet { Defaults[.restoreWindowFrameOnDrag] = restoreWindowFrameOnDrag }
     }
 
+    @Published var useSystemWindowManagerWhenAvailable = Defaults[.useSystemWindowManagerWhenAvailable] {
+        didSet { Defaults[.useSystemWindowManagerWhenAvailable] = useSystemWindowManagerWhenAvailable }
+    }
+
     @Published var enablePadding = Defaults[.enablePadding] {
         didSet { Defaults[.enablePadding] = enablePadding }
     }
@@ -93,17 +97,24 @@ struct BehaviorConfigurationView: View {
         }
 
         LuminareSection("Window") {
-            LuminareToggle("Window snapping", isOn: $model.windowSnapping)
+            LuminareToggle(
+                "Window snapping", // TODO: Disable when system one is enabled
+                isOn: $model.windowSnapping
+            )
             LuminareToggle("Restore window frame on drag", isOn: $model.restoreWindowFrameOnDrag)
-            LuminareToggle("Include padding", isOn: $model.enablePadding)
 
-            if model.enablePadding {
-                Button("Configure padding…") {
-                    model.isPaddingConfigurationViewPresented = true
-                }
-                .luminareModal(isPresented: $model.isPaddingConfigurationViewPresented) {
-                    PaddingConfigurationView(isPresented: $model.isPaddingConfigurationViewPresented)
-                        .frame(width: 400)
+            // macOS will manage Loop's padding values when enabled, so we hide this in that case.
+            if !model.useSystemWindowManagerWhenAvailable {
+                LuminareToggle("Include padding", isOn: $model.enablePadding)
+
+                if model.enablePadding {
+                    Button("Configure padding…") {
+                        model.isPaddingConfigurationViewPresented = true
+                    }
+                    .luminareModal(isPresented: $model.isPaddingConfigurationViewPresented) {
+                        PaddingConfigurationView(isPresented: $model.isPaddingConfigurationViewPresented)
+                            .frame(width: 400)
+                    }
                 }
             }
         }

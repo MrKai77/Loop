@@ -4119,6 +4119,9 @@
         }
       }
     },
+    "Go Back" : {
+
+    },
     "Gradient" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -18495,6 +18498,9 @@
           }
         }
       }
+    },
+    "Use macOS window manager when available" : {
+
     },
     "Use pixels" : {
       "extractionState" : "manual",
