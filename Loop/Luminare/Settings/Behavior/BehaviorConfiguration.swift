@@ -78,6 +78,7 @@ class BehaviorConfigurationModel: ObservableObject {
     @Published var isPaddingConfigurationViewPresented = false
 
     let previewVisibility = Defaults[.previewVisibility]
+    let systemSnappingWarning: LuminareInfoView = .init("macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality.")
 }
 
 struct BehaviorConfigurationView: View {
@@ -97,14 +98,19 @@ struct BehaviorConfigurationView: View {
         }
 
         LuminareSection("Window") {
-            LuminareToggle(
-                "Window snapping", // TODO: Disable when system one is enabled
-                isOn: $model.windowSnapping
-            )
-            LuminareToggle("Restore window frame on drag", isOn: $model.restoreWindowFrameOnDrag)
+            if #available(macOS 15, *) {
+                LuminareToggle(
+                    "Window snapping",
+                    info: SystemWindowManager.MoveAndResize.snappingEnabled ? model.systemSnappingWarning : nil,
+                    isOn: $model.windowSnapping
+                )
+            } else {
+                LuminareToggle("Window snapping", isOn: $model.windowSnapping)
+            }
 
-            // macOS will manage Loop's padding values when enabled, so we hide this in that case.
+            // Enabling the system window manager will override these options anyway, so hide them
             if !model.useSystemWindowManagerWhenAvailable {
+                LuminareToggle("Restore window frame on drag", isOn: $model.restoreWindowFrameOnDrag)
                 LuminareToggle("Include padding", isOn: $model.enablePadding)
 
                 if model.enablePadding {
