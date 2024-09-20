@@ -39,7 +39,7 @@ jobs:
           echo "FROM_TAG=$FROM_TAG" >> $GITHUB_ENV
 
       - name: 🔧 Select Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_16.1_beta.app"
+        run: sudo xcode-select -s "/Applications/Xcode_16.1_beta_2.app"
 
       - name: 🎟️ Install Certificate
         id: profile
