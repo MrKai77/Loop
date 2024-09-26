@@ -119,14 +119,14 @@ private extension LoopManager {
 
         leftClickMonitor = CGEventMonitor(
             eventMask: [.leftMouseDown],
-            callback: { cgEvent in
-                guard self.isLoopActive else {
+            callback: { [weak self] cgEvent in
+                guard let self, isLoopActive, currentAction.direction != .noAction else {
                     return Unmanaged.passUnretained(cgEvent)
                 }
 
                 if cgEvent.type == .leftMouseDown,
-                   let parentCycleAction = self.parentCycleAction {
-                    self.changeAction(parentCycleAction, disableHapticFeedback: true)
+                   let parentCycleAction {
+                    changeAction(parentCycleAction, disableHapticFeedback: true)
                 }
 
                 return nil
