@@ -180,10 +180,6 @@ private extension LoopManager {
             // Icon stuff
             Defaults[.timesLooped] += 1
             IconManager.checkIfUnlockedNewIcon()
-        } else {
-            if targetWindow == nil, isLoopActive {
-                NSSound.beep()
-            }
         }
 
         isLoopActive = false

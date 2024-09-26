@@ -131,7 +131,7 @@ struct RadialMenuView: View {
 
             Group {
                 if window == nil, previewMode == false {
-                    Image("custom.macwindow.trianglebadge.exclamationmark")
+                    Image(systemName: "exclamationmark.triangle")
                 } else if let image = currentAction.radialMenuImage {
                     image
                 }
