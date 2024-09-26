@@ -94,15 +94,17 @@ enum WindowEngine {
             return
         }
 
-        // If the window is being moved via shortcuts (move right, move left etc.), then the screenFrame will be zero.
-        // This is because the window *can* be moved off-screen in this case.
-        let screenFrame = action.direction.willMove ? .zero : screen.safeScreenFrame
+        let usePadding = Defaults[.enablePadding] && (Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize])
 
-        let bounds = if Defaults[.enablePadding],
-                        Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize] {
-            Defaults[.padding].apply(on: screenFrame)
+        // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
+        // This is because the window *can* be moved off-screen in this case.
+        // Otherwise padding will be applied if needed.
+        let bounds = if action.direction.willMove {
+            CGRect.zero
+        } else if usePadding {
+            Defaults[.padding].apply(on: screen.safeScreenFrame)
         } else {
-            screenFrame
+            screen.safeScreenFrame
         }
 
         window.setFrame(
