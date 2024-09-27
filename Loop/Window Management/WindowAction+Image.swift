@@ -43,9 +43,9 @@ extension WindowAction {
     var radialMenuImage: Image? {
         switch direction {
         case .hide:
-            Image("custom.rectangle.slash")
+            Image(systemName: "eye.slash")
         case .minimize:
-            Image("custom.arrow.down.right.and.arrow.up.left.rectangle")
+            Image(systemName: "arrow.down.right.and.arrow.up.left")
         default:
             nil
         }

@@ -12,7 +12,7 @@ import SwiftUI
 class LuminareManager {
     static let iconConfiguration = SettingsTab("Icon", Image(._18PxSquareSparkle), IconConfigurationView())
     static let accentColorConfiguration = SettingsTab("Accent Color", Image(._18PxPaintbrush), AccentColorConfigurationView())
-    static let radialMenuConfiguration = SettingsTab("Radial Menu", Image("loop"), RadialMenuConfigurationView())
+    static let radialMenuConfiguration = SettingsTab("Radial Menu", Image(.loop), RadialMenuConfigurationView())
     static let previewConfiguration = SettingsTab("Preview", Image(._18PxSidebarRight2), PreviewConfigurationView())
 
     static let behaviorConfiguration = SettingsTab("Behavior", Image(._18PxGear), BehaviorConfigurationView())
