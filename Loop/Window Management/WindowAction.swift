@@ -186,7 +186,7 @@ private extension WindowAction {
 
         } else if direction.willAdjustSize {
             // Return final frame of preview
-            if !isPreview {
+            if Defaults[.previewVisibility], !isPreview {
                 return LoopManager.lastTargetFrame
             }
 
@@ -196,7 +196,7 @@ private extension WindowAction {
 
         } else if direction.willShrink || direction.willGrow {
             // Return final frame of preview
-            if !isPreview {
+            if Defaults[.previewVisibility], !isPreview {
                 return LoopManager.lastTargetFrame
             }
 
@@ -219,7 +219,7 @@ private extension WindowAction {
 
         } else if direction.willMove {
             // Return final frame of preview
-            if !isPreview {
+            if Defaults[.previewVisibility], !isPreview {
                 return LoopManager.lastTargetFrame
             }
 
