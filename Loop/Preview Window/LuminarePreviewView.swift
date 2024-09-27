@@ -62,7 +62,7 @@ struct LuminarePreviewView: View {
             .offset(x: actionRect.minX, y: actionRect.minY)
             .scaleEffect(CGSize(width: scale, height: scale))
             .onAppear {
-                actionRect = action.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
+                actionRect = action.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size), isPreview: true)
 
                 withAnimation(
                     .interpolatingSpring(
