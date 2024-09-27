@@ -133,7 +133,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return result.normalized()
     }
 
-    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil) -> CGRect {
+    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil, isPreview: Bool = false) -> CGRect {
         guard direction != .cycle, direction != .noAction else {
             return NSRect(origin: bounds.center, size: .zero)
         }
@@ -151,7 +151,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             LoopManager.sidesToAdjust = nil
         }
 
-        result = calculateTargetFrame(direction, window, bounds)
+        result = calculateTargetFrame(direction, window, bounds, isPreview)
 
         if !disablePadding {
             // If window can't be resized, center it within the already-resized frame.
@@ -178,17 +178,28 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 // MARK: - Window Frame Calculations
 
 private extension WindowAction {
-    func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect) -> CGRect {
+    func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect, _ isPreview: Bool) -> CGRect {
         var result: CGRect = .zero
 
         if direction.frameMultiplyValues != nil {
             result = applyFrameMultiplyValues(bounds)
 
         } else if direction.willAdjustSize {
+            // Return final frame of preview
+            if !isPreview {
+                return LoopManager.lastTargetFrame
+            }
+
             let frameToResizeFrom = LoopManager.lastTargetFrame
+
             result = calculateSizeAdjustment(frameToResizeFrom, bounds)
 
         } else if direction.willShrink || direction.willGrow {
+            // Return final frame of preview
+            if !isPreview {
+                return LoopManager.lastTargetFrame
+            }
+
             // This allows for control over each side
             let frameToResizeFrom = LoopManager.lastTargetFrame
 
@@ -207,7 +218,13 @@ private extension WindowAction {
             result = calculateSizeAdjustment(frameToResizeFrom, bounds)
 
         } else if direction.willMove {
+            // Return final frame of preview
+            if !isPreview {
+                return LoopManager.lastTargetFrame
+            }
+
             let frameToResizeFrom = LoopManager.lastTargetFrame
+
             result = calculatePositionAdjustment(frameToResizeFrom)
 
         } else if direction == .custom {
