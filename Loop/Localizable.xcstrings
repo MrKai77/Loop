@@ -20067,6 +20067,17 @@
         }
       }
     },
+    "Window Direction/Name: Horizontal Center Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Horizontal Center Half"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Horizontal Center Third" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -22193,6 +22204,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "撤銷"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Vertical Center Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Vertical Center Half"
           }
         }
       }

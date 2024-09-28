@@ -49,6 +49,10 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Bottom Half", defaultValue: "Bottom Half"))
         case .leftHalf:
             .init(localized: .init("Window Direction/Name: Left Half", defaultValue: "Left Half"))
+        case .horizontalCenterHalf:
+            .init(localized: .init("Window Direction/Name: Horizontal Center Half", defaultValue: "Horizontal Center Half"))
+        case .verticalCenterHalf:
+            .init(localized: .init("Window Direction/Name: Vertical Center Half", defaultValue: "Vertical Center Half"))
         case .topLeftQuarter:
             .init(localized: .init("Window Direction/Name: Top Left Quarter", defaultValue: "Top Left Quarter"))
         case .topRightQuarter:

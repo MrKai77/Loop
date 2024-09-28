@@ -19,6 +19,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     // Halves
     case topHalf = "TopHalf", rightHalf = "RightHalf", bottomHalf = "BottomHalf", leftHalf = "LeftHalf"
+    case horizontalCenterHalf = "HorizontalCenterHalf", verticalCenterHalf = "VerticalCenterHalf"
 
     // Quarters
     case topLeftQuarter = "TopLeftQuarter", topRightQuarter = "TopRightQuarter"
@@ -54,7 +55,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     // These are used in the menubar resize submenu & keybind configuratio
     static var general: [WindowDirection] { [.fullscreen, .maximize, .almostMaximize, .center, .macOSCenter, .minimize, .hide] }
-    static var halves: [WindowDirection] { [.topHalf, .bottomHalf, .leftHalf, .rightHalf] }
+    static var halves: [WindowDirection] { [.topHalf, .bottomHalf, .leftHalf, .rightHalf, .horizontalCenterHalf, .verticalCenterHalf] }
     static var quarters: [WindowDirection] { [.topLeftQuarter, .topRightQuarter, .bottomLeftQuarter, .bottomRightQuarter] }
     static var horizontalThirds: [WindowDirection] { [.rightThird, .rightTwoThirds, .horizontalCenterThird, .leftTwoThirds, .leftThird] }
     static var verticalThirds: [WindowDirection] { [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird] }
@@ -91,6 +92,8 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .rightHalf: .init(x: 1.0 / 2.0, y: 0, width: 1.0 / 2.0, height: 1.0)
         case .bottomHalf: .init(x: 0, y: 1.0 / 2.0, width: 1.0, height: 1.0 / 2.0)
         case .leftHalf: .init(x: 0, y: 0, width: 1.0 / 2.0, height: 1.0)
+        case .horizontalCenterHalf: .init(x: 1.0 / 4.0, y: 0, width: 1.0 / 2.0, height: 1.0)
+        case .verticalCenterHalf: .init(x: 0, y: 1.0 / 4.0, width: 1.0, height: 1.0 / 2.0)
         // Quarters
         case .topLeftQuarter: .init(x: 0, y: 0, width: 1.0 / 2.0, height: 1.0 / 2.0)
         case .topRightQuarter: .init(x: 1.0 / 2.0, y: 0, width: 1.0 / 2.0, height: 1.0 / 2.0)
