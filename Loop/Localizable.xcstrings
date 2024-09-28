@@ -297,7 +297,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Über"
+            "value" : "Über Loop"
           }
         },
         "en" : {
@@ -1575,7 +1575,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kann nicht aktiviert werden wenn die Vorschau noch aktiviert ist."
+            "value" : "Kann nicht aktiviert werden, wenn die Vorschau noch aktiviert ist."
           }
         },
         "en" : {
@@ -1788,7 +1788,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schliessen"
+            "value" : "Schließen"
           }
         },
         "en" : {
@@ -3350,7 +3350,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stelle sicher das die ausgewählte Datei im richtigen Format ist."
+            "value" : "Stelle sicher, dass die ausgewählte Datei im richtigen Format ist."
           }
         },
         "en" : {
@@ -3421,7 +3421,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fehler beim lesen von Tastenbelegungen"
+            "value" : "Fehler beim Lesen von Tastenbelegungen"
           }
         },
         "en" : {
@@ -3634,7 +3634,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du kannst etwas, was nicht existiert, nicht exportieren!"
+            "value" : "Du kannst nicht etwas exportieren, das nicht existiert!"
           }
         },
         "en" : {
@@ -3704,8 +3704,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keine Tastenbelegung wurden eingestellt."
+            "state" : "translated",
+            "value" : "Keine Tastenbelegung wurden eingestellt"
           }
         },
         "en" : {
@@ -4120,7 +4120,14 @@
       }
     },
     "Go Back" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurückgehen"
+          }
+        }
+      }
     },
     "Gradient" : {
       "extractionState" : "manual",
@@ -4275,8 +4282,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow"
+            "state" : "translated",
+            "value" : "Vergrößern"
           }
         },
         "en" : {
@@ -4915,7 +4922,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schwarzes Lock"
+            "value" : "Schwarzes Loch"
           }
         },
         "en" : {
@@ -5838,7 +5845,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du wirst benachrichtigt wenn du ein App Icon freischaltest."
+            "value" : "Du wirst benachrichtigt, wenn du ein App Icon freischaltest."
           }
         },
         "en" : {
@@ -6264,7 +6271,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rentable config Datei auswählen"
+            "value" : "Rectangle-Konfigurationsdatei auswählen"
           }
         },
         "en" : {
@@ -6335,7 +6342,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tastenbelegungen Importieren"
+            "value" : "Tastenbelegungen importieren"
           }
         },
         "en" : {
@@ -6619,7 +6626,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zussamenführen"
+            "value" : "Zusammenführen"
           }
         },
         "en" : {
@@ -6761,7 +6768,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abstand einbeziehen"
+            "value" : "Abstand einfügen"
           }
         },
         "en" : {
@@ -7258,7 +7265,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beim anmelden starten"
+            "value" : "Beim Anmelden starten"
           }
         },
         "en" : {
@@ -8181,8 +8188,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Unlocking this icon is just a matter of time and Loops."
+            "state" : "translated",
+            "value" : "Dieses Icon freizuschalten ist nur eine Frage der Zeit und Loops."
           }
         },
         "en" : {
@@ -9530,8 +9537,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Die Icons warten, verborgen hinter dem Schleier von Loops, die noch gemacht werden müssen"
+            "state" : "translated",
+            "value" : "Die Icons warten verborgen hinter dem Schleier von Loops, die noch gemacht werden müssen."
           }
         },
         "en" : {
@@ -9812,7 +9819,14 @@
       }
     },
     "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mac-OS-Funktion \"Fenster durch Ziehen zum Bildschirmrand als Kachel anzeigen\" ist derzeit aktiviert. Dies führt zu Problemen mit Loops Funktion Fenster einzurasten ."
+          }
+        }
+      }
     },
     "Measurement unit: percentage" : {
       "extractionState" : "manual",
@@ -10039,7 +10053,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mittel-Klick zum aktivieren"
+            "value" : "Mittel-Klick zum Aktivieren"
           }
         },
         "en" : {
@@ -10465,7 +10479,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Engagieren! …in der aktuellen Version ist es die neueste."
+            "value" : "Los geht’s! ...in der aktuellen Version, es ist die neueste."
           }
         },
         "en" : {
@@ -11032,8 +11046,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "In einer Galaxie weit, weit entfernt, ... immer noch keine Updates!"
+            "state" : "translated",
+            "value" : "In einer Galaxie weit, weit entfernt... immer noch keine Updates!"
           }
         },
         "en" : {
@@ -11317,7 +11331,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wir haben den Update Knopf falsch platziert, ups!"
+            "value" : "Wir haben den „Update“ Knopf falsch platziert, ups!"
           }
         },
         "en" : {
@@ -11813,8 +11827,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Süsse Träume sind aus ... keinen Updates gemacht."
+            "state" : "translated",
+            "value" : "Süße Träume sind aus ... keinen Updates gemacht."
           }
         },
         "en" : {
@@ -12097,8 +12111,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Wir werden später wieder hier sein. Mit updates."
+            "state" : "translated",
+            "value" : "Wir werden später wieder hier sein. Mit Updates."
           }
         },
         "en" : {
@@ -12168,8 +12182,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Ein penny für die ... fehlenden Updates."
+            "state" : "translated",
+            "value" : "Ein Penny für die ... fehlenden Updates."
           }
         },
         "en" : {
@@ -12381,8 +12395,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "All die Arbeit und keine Updates..."
+            "state" : "translated",
+            "value" : "All die Arbeit und keine… keine Updates..."
           }
         },
         "en" : {
@@ -12453,7 +12467,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein ständig beobachteter Topf kocht nie."
+            "value" : "Ein ständig beobachteter Topf… kocht nie."
           }
         },
         "en" : {
@@ -13305,7 +13319,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Loop in seiner prime time!"
+            "value" : "Loop in seiner Primetime!"
           }
         },
         "en" : {
@@ -13518,7 +13532,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Noch keine updates!"
+            "value" : "Noch keine Updates!"
           }
         },
         "en" : {
@@ -13660,7 +13674,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nichts zum durchwechseln"
+            "value" : "Nichts zum Durchwechseln"
           }
         },
         "en" : {
@@ -14370,7 +14384,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitte lehn ab wenn Loop danach fragt, den Bildschirm aufzunehmen."
+            "value" : "Bitte lehn ab, wenn Loop danach fragt, den Bildschirm aufzunehmen."
           }
         },
         "en" : {
@@ -14583,7 +14597,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drücke \"Hinzufügen\" um etwas in den Zyklus hinzuzufügen"
+            "value" : "Drücke „Hinzufügen\" um etwas in den Zyklus hinzuzufügen"
           }
         },
         "en" : {
@@ -14654,7 +14668,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drücke \"Hinzufügen\" um eine Tastenbelegung hinzuzufügen"
+            "value" : "Drücke „Hinzufügen\" um eine Tastenbelegung hinzuzufügen"
           }
         },
         "en" : {
@@ -15577,7 +15591,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fenstergrösse unter dem Mauszeiger ändern"
+            "value" : "Fenstergröße unter dem Mauszeiger ändern"
           }
         },
         "en" : {
@@ -16064,11 +16078,24 @@
       }
     },
     "Screen capture access" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriff zur Bildschirmaufnahme"
+          }
+        }
+      }
     },
     "Screen Capture Request: Content" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte gewähre den Zugriff, um die Akzentfarbe von Loop dynamisch auf Basis deines Hintergrundbildes einstellen zu können. Bitte starten %@ erneut, nachdem du den Zugriff gewährt hast."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16080,6 +16107,12 @@
     "Screen Capture Request: Title" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ braucht Zugriff auf die Bildschirmaufnahme"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -16170,8 +16203,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Search…"
+            "state" : "translated",
+            "value" : "Suche…"
           }
         },
         "en" : {
@@ -16596,8 +16629,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Teile uns dein Feedback auf unserer GitHub-Seite mit, wo man uns über etwaige Fehler informieren, Funktionen vorschlagen oder andere wertvolle Rückmeldungen geben können. Wir nehmen auch Spenden entgegen, falls du der Meinung sind, dass Loop deine Arbeitsweise verbessert hat :)\n"
+            "state" : "translated",
+            "value" : "Teile uns dein Feedback auf unserer GitHub-Seite mit, wo man uns über etwaige Fehler informieren, Funktionen vorschlagen oder andere wertvolle Rückmeldungen geben kann. Wir nehmen auch Spenden entgegen, falls du der Meinung bist, dass Loop deine Arbeitsweise verbessert hat :)\n"
           }
         },
         "en" : {
@@ -16809,8 +16842,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink"
+            "state" : "translated",
+            "value" : "Verkleinern"
           }
         },
         "en" : {
@@ -16952,7 +16985,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Grösse"
+            "value" : "Größe"
           }
         },
         "en" : {
@@ -17022,8 +17055,8 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Size Adjustment"
+            "state" : "translated",
+            "value" : "Größenänderung"
           }
         },
         "en" : {
@@ -17236,7 +17269,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Manche Funktionen, Ideen und Fehler Behebungen"
+            "value" : "Manche Funktionen, Ideen und Fehlerbehebungen"
           }
         },
         "en" : {
@@ -18443,7 +18476,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacOS Mitte benutzen"
+            "value" : "macOS Mitte benutzen"
           }
         },
         "en" : {
@@ -18503,7 +18536,14 @@
       }
     },
     "Use macOS window manager when available" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutze den macOs Fenstermanager wenn verfügbar"
+          }
+        }
+      }
     },
     "Use pixels" : {
       "extractionState" : "manual",
