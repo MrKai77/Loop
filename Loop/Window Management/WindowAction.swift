@@ -134,7 +134,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 
     func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil, isPreview: Bool = false) -> CGRect {
-        guard direction != .cycle, direction != .noAction else {
+        let noFrameActions: [WindowDirection] = [.noAction, .cycle, .minimize, .hide]
+        guard !noFrameActions.contains(direction) else {
             return NSRect(origin: bounds.center, size: .zero)
         }
 
