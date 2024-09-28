@@ -92,7 +92,8 @@ class PreviewController {
         let targetWindowFrame = action.getFrame(
             window: window,
             bounds: screen.safeScreenFrame,
-            screen: screen
+            screen: screen,
+            isPreview: true
         )
         .flipY(maxY: NSScreen.screens[0].frame.maxY)
 
