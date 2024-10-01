@@ -27,6 +27,8 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Maximize", defaultValue: "Maximize"))
         case .almostMaximize:
             .init(localized: .init("Window Direction/Name: Almost Maximize", defaultValue: "Almost Maximize"))
+        case .maximizeHeight:
+            .init(localized: .init("Window Direction/Name: Maximize Height", defaultValue: "Maximize Height"))
         case .fullscreen:
             .init(localized: .init("Window Direction/Name: Fullscreen", defaultValue: "Fullscreen"))
         case .undo:

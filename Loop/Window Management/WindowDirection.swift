@@ -13,7 +13,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var id: Self { self }
 
     // General Actions
-    case noAction = "NoAction", maximize = "Maximize", almostMaximize = "AlmostMaximize", fullscreen = "Fullscreen"
+    case noAction = "NoAction", maximize = "Maximize", almostMaximize = "AlmostMaximize", fullscreen = "Fullscreen", maximizeHeight = "MaximizeHeight"
     case undo = "Undo", initialFrame = "InitialFrame", hide = "Hide", minimize = "Minimize"
     case macOSCenter = "MacOSCenter", center = "Center"
 
@@ -53,7 +53,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case custom = "Custom", cycle = "Cycle"
 
     // These are used in the menubar resize submenu & keybind configuratio
-    static var general: [WindowDirection] { [.fullscreen, .maximize, .almostMaximize, .center, .macOSCenter, .minimize, .hide] }
+    static var general: [WindowDirection] { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .center, .macOSCenter, .minimize, .hide] }
     static var halves: [WindowDirection] { [.topHalf, .bottomHalf, .leftHalf, .rightHalf] }
     static var quarters: [WindowDirection] { [.topLeftQuarter, .topRightQuarter, .bottomLeftQuarter, .bottomRightQuarter] }
     static var horizontalThirds: [WindowDirection] { [.rightThird, .rightTwoThirds, .horizontalCenterThird, .leftTwoThirds, .leftThird] }
@@ -84,6 +84,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var frameMultiplyValues: CGRect? {
         switch self {
         case .maximize: .init(x: 0, y: 0, width: 1.0, height: 1.0)
+        case .maximizeHeight: .init(x: nil, y: nil, width: nil, height: 1.0)
         case .almostMaximize: .init(x: 0.5 / 10.0, y: 0.5 / 10.0, width: 9.0 / 10.0, height: 9.0 / 10.0)
         case .fullscreen: .init(x: 0, y: 0, width: 1.0, height: 1.0)
         // Halves
