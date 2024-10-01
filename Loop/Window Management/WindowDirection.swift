@@ -55,7 +55,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     // These are used in the menubar resize submenu & keybind configuratio
     static var general: [WindowDirection] { [.fullscreen, .maximize, .almostMaximize, .center, .macOSCenter, .minimize, .hide] }
-    static var halves: [WindowDirection] { [.topHalf, .bottomHalf, .leftHalf, .rightHalf, .horizontalCenterHalf, .verticalCenterHalf] }
+    static var halves: [WindowDirection] { [.topHalf, .verticalCenterHalf, .bottomHalf, .leftHalf, .horizontalCenterHalf, .rightHalf] }
     static var quarters: [WindowDirection] { [.topLeftQuarter, .topRightQuarter, .bottomLeftQuarter, .bottomRightQuarter] }
     static var horizontalThirds: [WindowDirection] { [.rightThird, .rightTwoThirds, .horizontalCenterThird, .leftTwoThirds, .leftThird] }
     static var verticalThirds: [WindowDirection] { [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird] }
