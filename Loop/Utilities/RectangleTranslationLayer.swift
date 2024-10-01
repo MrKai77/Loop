@@ -27,6 +27,7 @@ enum RectangleTranslationLayer {
         "bottomHalf": .bottomHalf,
         "bottomRight": .bottomRightQuarter,
         "center": .center,
+        "centerHalf": .horizontalCenterHalf,
         "larger": .larger,
         "leftHalf": .leftHalf,
         "maximize": .maximize,
