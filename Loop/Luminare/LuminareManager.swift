@@ -79,67 +79,15 @@ enum Tab: LuminareTabItem, CaseIterable {
 class LuminareManager {
     static var luminare: LuminareWindow?
 
-//    static func processTabChange(_ tab: SettingsTab) {
-//        guard let luminare else { return }
-//
-//        DispatchQueue.main.async {
-//            if tab == radialMenuConfiguration {
-//                luminare.hidePreview(identifier: "Preview")
-//                if Defaults[.radialMenuVisibility] {
-//                    luminare.showPreview(identifier: "RadialMenu")
-//                } else {
-//                    luminare.hidePreview(identifier: "RadialMenu")
-//                }
-//                return
-//            }
-//            if tab == previewConfiguration {
-//                luminare.showPreview(identifier: "Preview")
-//                luminare.hidePreview(identifier: "RadialMenu")
-//                return
-//            }
-//            if tab == accentColorConfiguration || tab == behaviorConfiguration {
-//                luminare.showPreview(identifier: "Preview")
-//                if Defaults[.radialMenuVisibility] {
-//                    luminare.showPreview(identifier: "RadialMenu")
-//                } else {
-//                    luminare.hidePreview(identifier: "RadialMenu")
-//                }
-//                return
-//            }
-//        }
-//    }
-
     static func open() {
         if luminare == nil {
-            luminare = LuminareWindow(blurRadius: 20) {
+            luminare = LuminareWindow(blurRadius: 20)  {
                 LuminareContentView()
             }
         }
 
-        luminare?.makeKeyAndOrderFront(nil)
+        luminare?.show()
         luminare?.center()
-//
-//            DispatchQueue.main.async {
-//                luminare?.addPreview(
-//                    content: LuminarePreviewView(),
-//                    identifier: "Preview",
-//                    fullSize: true
-//                )
-//                luminare?.addPreview(
-//                    content: RadialMenuView(previewMode: true),
-//                    identifier: "RadialMenu"
-//                )
-//
-//                luminare?.showPreview(identifier: "Preview")
-//                if Defaults[.radialMenuVisibility] {
-//                    luminare?.showPreview(identifier: "RadialMenu")
-//                } else {
-//                    luminare?.hidePreview(identifier: "RadialMenu")
-//                }
-//            }
-//        }
-//
-//        luminare?.show()
 
         LuminareWindowModel.shared.startTimer()
 
@@ -201,7 +149,6 @@ class LuminareWindowModel: ObservableObject {
             .autoconnect()
             .sink { [weak self] _ in
                 guard AppDelegate.isActive, let self = self else { return }
-                print("Previewed action: \(self.previewedAction.direction)")
                 self.previewedAction.direction = self.previewedAction.direction.nextPreviewDirection
             }
     }

@@ -45,9 +45,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
         AppDelegate.requestNotificationAuthorization()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            AccessibilityManager.requestAccess()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//            AccessibilityManager.requestAccess()
+//        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
