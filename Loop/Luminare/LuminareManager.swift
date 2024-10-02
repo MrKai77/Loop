@@ -8,101 +8,141 @@
 import Defaults
 import Luminare
 import SwiftUI
+import Combine
 
-class LuminareManager {
-    static let iconConfiguration = SettingsTab("Icon", Image(._18PxSquareSparkle), IconConfigurationView())
-    static let accentColorConfiguration = SettingsTab("Accent Color", Image(._18PxPaintbrush), AccentColorConfigurationView())
-    static let radialMenuConfiguration = SettingsTab("Radial Menu", Image(.loop), RadialMenuConfigurationView())
-    static let previewConfiguration = SettingsTab("Preview", Image(._18PxSidebarRight2), PreviewConfigurationView())
+extension String: @retroactive Identifiable {
+    public var id: String { self }
+}
 
-    static let behaviorConfiguration = SettingsTab("Behavior", Image(._18PxGear), BehaviorConfigurationView())
-    static let keybindingsConfiguration = SettingsTab("Keybindings", Image(._18PxCommand), KeybindingsConfigurationView())
+enum Tab: LuminareTabItem, CaseIterable {
+    var id: String { title }
 
-    static let advancedConfiguration = SettingsTab("Advanced", Image(._18PxFaceNerdSmile), AdvancedConfigurationView())
-    static let excludedAppsConfiguration = SettingsTab("Excluded Apps", Image(._18PxWindowLock), ExcludedAppsConfigurationView())
-    static let aboutConfiguration = SettingsTab("About", Image(._18PxMsgSmile2), AboutConfigurationView(), showIndicator: { AppDelegate.updater.updateState == .available })
+    case icon
+    case accentColor
+    case radialMenu
+    case preview
 
-    static var luminare: LuminareSettingsWindow?
+    case behavior
+    case keybindings
 
-    static func processTabChange(_ tab: SettingsTab) {
-        guard let luminare else { return }
+    case advanced
+    case excludedApps
+    case about
 
-        DispatchQueue.main.async {
-            if tab == radialMenuConfiguration {
-                luminare.hidePreview(identifier: "Preview")
-                if Defaults[.radialMenuVisibility] {
-                    luminare.showPreview(identifier: "RadialMenu")
-                } else {
-                    luminare.hidePreview(identifier: "RadialMenu")
-                }
-                return
-            }
-            if tab == previewConfiguration {
-                luminare.showPreview(identifier: "Preview")
-                luminare.hidePreview(identifier: "RadialMenu")
-                return
-            }
-            if tab == accentColorConfiguration || tab == behaviorConfiguration {
-                luminare.showPreview(identifier: "Preview")
-                if Defaults[.radialMenuVisibility] {
-                    luminare.showPreview(identifier: "RadialMenu")
-                } else {
-                    luminare.hidePreview(identifier: "RadialMenu")
-                }
-                return
-            }
+    var title: String {
+        switch self {
+        case .icon: return "Icon"
+        case .accentColor: return "Accent Color"
+        case .radialMenu: return "Radial Menu"
+        case .preview: return "Preview"
+        case .behavior: return "Behavior"
+        case .keybindings: return "Keybindings"
+        case .advanced: return "Advanced"
+        case .excludedApps: return "Excluded Apps"
+        case .about: return "About"
         }
     }
 
+    var icon: Image {
+        switch self {
+        case .icon: return Image(._18PxSquareSparkle)
+        case .accentColor: return Image(._18PxPaintbrush)
+        case .radialMenu: return Image(.loop)
+        case .preview: return Image(._18PxSidebarRight2)
+        case .behavior: return Image(._18PxGear)
+        case .keybindings: return Image(._18PxCommand)
+        case .advanced: return Image(._18PxFaceNerdSmile)
+        case .excludedApps: return Image(._18PxWindowLock)
+        case .about: return Image(._18PxMsgSmile2)
+        }
+    }
+
+    @ViewBuilder func view() -> some View {
+        switch self {
+        case .icon: IconConfigurationView()
+        case .accentColor: AccentColorConfigurationView()
+        case .radialMenu: RadialMenuConfigurationView()
+        case .preview: PreviewConfigurationView()
+        case .behavior: BehaviorConfigurationView()
+        case .keybindings: KeybindingsConfigurationView()
+        case .advanced: AdvancedConfigurationView()
+        case .excludedApps: ExcludedAppsConfigurationView()
+        case .about: AboutConfigurationView()
+        }
+    }
+
+    static let theming: [Tab] = [.icon, .accentColor, .radialMenu, .preview]
+    static let settings: [Tab] = [.behavior, .keybindings]
+    static let loop: [Tab] = [.advanced, .excludedApps, .about]
+}
+
+class LuminareManager {
+    static var luminare: LuminareWindow?
+
+//    static func processTabChange(_ tab: SettingsTab) {
+//        guard let luminare else { return }
+//
+//        DispatchQueue.main.async {
+//            if tab == radialMenuConfiguration {
+//                luminare.hidePreview(identifier: "Preview")
+//                if Defaults[.radialMenuVisibility] {
+//                    luminare.showPreview(identifier: "RadialMenu")
+//                } else {
+//                    luminare.hidePreview(identifier: "RadialMenu")
+//                }
+//                return
+//            }
+//            if tab == previewConfiguration {
+//                luminare.showPreview(identifier: "Preview")
+//                luminare.hidePreview(identifier: "RadialMenu")
+//                return
+//            }
+//            if tab == accentColorConfiguration || tab == behaviorConfiguration {
+//                luminare.showPreview(identifier: "Preview")
+//                if Defaults[.radialMenuVisibility] {
+//                    luminare.showPreview(identifier: "RadialMenu")
+//                } else {
+//                    luminare.hidePreview(identifier: "RadialMenu")
+//                }
+//                return
+//            }
+//        }
+//    }
+
     static func open() {
         if luminare == nil {
-            luminare = LuminareSettingsWindow(
-                [
-                    .init("Theming", [
-                        iconConfiguration,
-                        accentColorConfiguration,
-                        radialMenuConfiguration,
-                        previewConfiguration
-                    ]),
-                    .init("Settings", [
-                        behaviorConfiguration,
-                        keybindingsConfiguration
-                    ]),
-                    .init("\(Bundle.main.appName)", [
-                        advancedConfiguration,
-                        excludedAppsConfiguration,
-                        aboutConfiguration
-                    ])
-                ],
-                tint: {
-                    AppDelegate.isActive ? Color.getLoopAccent(tone: .normal) : Color.systemGray
-                },
-                didTabChange: processTabChange,
-                showPreviewIcon: Image(._18PxSidebarLeft3),
-                hidePreviewIcon: Image(._18PxSidebarLeftHide)
-            )
-
-            DispatchQueue.main.async {
-                luminare?.addPreview(
-                    content: LuminarePreviewView(),
-                    identifier: "Preview",
-                    fullSize: true
-                )
-                luminare?.addPreview(
-                    content: RadialMenuView(previewMode: true),
-                    identifier: "RadialMenu"
-                )
-
-                luminare?.showPreview(identifier: "Preview")
-                if Defaults[.radialMenuVisibility] {
-                    luminare?.showPreview(identifier: "RadialMenu")
-                } else {
-                    luminare?.hidePreview(identifier: "RadialMenu")
-                }
+            luminare = LuminareWindow(blurRadius: 20) {
+                LuminareContentView()
             }
         }
 
-        luminare?.show()
+        luminare?.makeKeyAndOrderFront(nil)
+        luminare?.center()
+//
+//            DispatchQueue.main.async {
+//                luminare?.addPreview(
+//                    content: LuminarePreviewView(),
+//                    identifier: "Preview",
+//                    fullSize: true
+//                )
+//                luminare?.addPreview(
+//                    content: RadialMenuView(previewMode: true),
+//                    identifier: "RadialMenu"
+//                )
+//
+//                luminare?.showPreview(identifier: "Preview")
+//                if Defaults[.radialMenuVisibility] {
+//                    luminare?.showPreview(identifier: "RadialMenu")
+//                } else {
+//                    luminare?.hidePreview(identifier: "RadialMenu")
+//                }
+//            }
+//        }
+//
+//        luminare?.show()
+
+        LuminareWindowModel.shared.startTimer()
+
         AppDelegate.isActive = true
         NSApp.setActivationPolicy(.regular)
     }
@@ -111,8 +151,111 @@ class LuminareManager {
         luminare?.close()
         luminare = nil
 
+        LuminareWindowModel.shared.stopTimer()
+
         if !Defaults[.showDockIcon] {
             NSApp.setActivationPolicy(.accessory)
+        }
+    }
+}
+
+class LuminareWindowModel: ObservableObject {
+    static let shared = LuminareWindowModel()
+    private init() {}
+
+    @Published var currentTab: Tab = .icon {
+        didSet {
+            if currentTab == .radialMenu {
+                showRadialMenu = true
+                showPreview = false
+            } else if currentTab == .preview {
+                showRadialMenu = false
+                showPreview = true
+            } else {
+                showRadialMenu = true
+                showPreview = true
+            }
+        }
+    }
+    @Published var showRadialMenu: Bool = false
+    @Published var showPreview: Bool = false
+
+    @Published var timer: AnyCancellable?
+    @Published var previewedAction: WindowAction = .init(.topHalf)
+
+    let themingTabs: [Tab] = Tab.theming
+    let settingsTabs: [Tab] = Tab.settings
+    let loopTabs: [Tab] = Tab.loop
+
+    func startTimer() {
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard AppDelegate.isActive, let self = self else { return }
+                print("Previewed action: \(self.previewedAction.direction)")
+                self.previewedAction.direction = self.previewedAction.direction.nextPreviewDirection
+            }
+    }
+
+    func stopTimer() {
+        timer?.cancel()
+    }
+}
+
+struct LuminareContentView: View {
+    @ObservedObject var model = LuminareWindowModel.shared
+    @State var isSidebarShown = true
+
+    var body: some View {
+        LuminareDividedStack {
+            LuminareSidebar {
+                LuminareSidebarSection("Theming", selection: $model.currentTab, items: model.themingTabs)
+                LuminareSidebarSection("Settings", selection: $model.currentTab, items: model.settingsTabs)
+                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: model.loopTabs)
+            }
+            LuminarePane {
+                HStack {
+                    model.currentTab.iconView()
+
+                    Text(model.currentTab.title)
+                        .font(.title2)
+
+                    Spacer()
+
+                    Button {
+                        isSidebarShown.toggle()
+                    } label: {
+                        Image(isSidebarShown ? ._18PxSidebarLeftHide : ._18PxSidebarLeft3)
+                    }
+                }
+            } content: {
+                model.currentTab.view()
+            }
+            .frame(width: 390)
+
+            if isSidebarShown {
+                ZStack {
+                    if model.showPreview {
+                        LuminarePreviewView()
+                    }
+
+                    if model.showRadialMenu {
+                        VStack {
+                            RadialMenuView(previewMode: true, startingAction: model.previewedAction)
+                        }
+                        .frame(maxHeight: .infinity, alignment: .center)
+                    }
+                }
+                .animation(LuminareConstants.animation, value: [model.showRadialMenu, model.showPreview])
+                .ignoresSafeArea()
+                .frame(width: 520)
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.async {
+                model.showPreview = true
+                model.showRadialMenu = true
+            }
         }
     }
 }

@@ -52,7 +52,7 @@ struct CustomActionConfigurationView: View {
                         blurredWindow()
                             .frame(width: frame.width, height: frame.height)
                             .offset(x: frame.origin.x, y: frame.origin.y)
-                            .animation(LuminareSettingsWindow.animation, value: frame)
+                            .animation(LuminareConstants.animation, value: frame)
                     }
                 }
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
@@ -81,7 +81,7 @@ struct CustomActionConfigurationView: View {
                 sizeConfiguration()
             }
         }
-        .animation(LuminareSettingsWindow.animation, value: action.unit)
+        .animation(LuminareConstants.animation, value: action.unit)
         .onAppear {
             if action.unit == nil {
                 action.unit = .percentage
@@ -155,7 +155,7 @@ struct CustomActionConfigurationView: View {
                         action.positionMode == .coordinates
                     },
                     set: { newValue in
-                        withAnimation(LuminareSettingsWindow.animation) {
+                        withAnimation(LuminareConstants.animation) {
                             action.positionMode = newValue ? .coordinates : .generic
                         }
                     }
@@ -175,7 +175,7 @@ struct CustomActionConfigurationView: View {
                             return action.anchor ?? .center
                         },
                         set: { newValue in
-                            withAnimation(LuminareSettingsWindow.animation) {
+                            withAnimation(LuminareConstants.animation) {
                                 action.anchor = newValue
                             }
                         }
@@ -247,7 +247,7 @@ struct CustomActionConfigurationView: View {
                         action.sizeMode ?? .custom
                     },
                     set: { newValue in
-                        withAnimation(LuminareSettingsWindow.animation) {
+                        withAnimation(LuminareConstants.animation) {
                             action.sizeMode = newValue
                         }
                     }

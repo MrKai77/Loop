@@ -133,7 +133,7 @@ struct KeybindingItemView: View {
                 .fixedSize()
             }
         }
-        .animation(LuminareSettingsWindow.animation, value: keybind)
+        .animation(LuminareConstants.animation, value: keybind)
         .padding(.horizontal, 12)
         .onAppear {
             computeSearchResults()
@@ -249,7 +249,7 @@ private struct CompactButtonStyle: ButtonStyle {
                 }
             }
             .onHover { isHovering = $0 }
-            .animation(LuminareSettingsWindow.fastAnimation, value: [isHovering, hoveringOverLuminareItem])
+            .animation(LuminareConstants.fastAnimation, value: [isHovering, hoveringOverLuminareItem])
             .frame(minHeight: elementMinHeight)
             .opacity(isEnabled ? 1 : 0.5)
     }

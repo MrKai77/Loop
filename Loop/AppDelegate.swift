@@ -36,7 +36,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+#if !DEBUG
         IconManager.refreshCurrentAppIcon()
+#endif
         AppDelegate.loopManager.start()
         AppDelegate.windowDragManager.addObservers()
 

@@ -190,7 +190,7 @@ struct SearchablePickerButtonStyle: ButtonStyle {
                         .strokeBorder(.quaternary, lineWidth: 1)
                 }
             }
-            .animation(LuminareSettingsWindow.fastAnimation, value: [isHovering, isActive, configuration.isPressed])
+            .animation(LuminareConstants.fastAnimation, value: [isHovering, isActive, configuration.isPressed])
             .clipShape(.rect(cornerRadius: cornerRadius))
     }
 }
