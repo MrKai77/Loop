@@ -179,6 +179,15 @@ class LuminareWindowModel: ObservableObject {
     }
     @Published var showRadialMenu: Bool = false
     @Published var showPreview: Bool = false
+    @Published var showInspector: Bool = true {
+        didSet {
+            if showInspector {
+                startTimer()
+            } else {
+                stopTimer()
+            }
+        }
+    }
 
     @Published var timer: AnyCancellable?
     @Published var previewedAction: WindowAction = .init(.topHalf)
@@ -204,7 +213,6 @@ class LuminareWindowModel: ObservableObject {
 
 struct LuminareContentView: View {
     @ObservedObject var model = LuminareWindowModel.shared
-    @State var isSidebarShown = true
 
     var body: some View {
         LuminareDividedStack {
@@ -223,9 +231,9 @@ struct LuminareContentView: View {
                     Spacer()
 
                     Button {
-                        isSidebarShown.toggle()
+                        model.showInspector.toggle()
                     } label: {
-                        Image(isSidebarShown ? ._18PxSidebarLeftHide : ._18PxSidebarLeft3)
+                        Image(model.showInspector ? ._18PxSidebarLeftHide : ._18PxSidebarLeft3)
                     }
                 }
             } content: {
@@ -233,7 +241,7 @@ struct LuminareContentView: View {
             }
             .frame(width: 390)
 
-            if isSidebarShown {
+            if model.showInspector {
                 ZStack {
                     if model.showPreview {
                         LuminarePreviewView()
