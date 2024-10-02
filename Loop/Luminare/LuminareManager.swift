@@ -185,6 +185,7 @@ struct LuminareContentView: View {
                 }
             } content: {
                 model.currentTab.view()
+                    .transition(.opacity.animation(.easeInOut(duration: 0.1)))
             }
             .frame(width: 390)
 
