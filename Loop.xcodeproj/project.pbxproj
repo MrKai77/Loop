@@ -45,6 +45,7 @@
 		A85B560E2AAAD62C00386ACE /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85B560D2AAAD62C00386ACE /* EventMonitor.swift */; };
 		A85CB5852ACFA5F700BF63E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85CB5842ACFA5F700BF63E6 /* AppDelegate.swift */; };
 		A85DDBDA2C1693D4008C103D /* WindowDirection+Snapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85DDBD92C1693D4008C103D /* WindowDirection+Snapping.swift */; };
+		A860324F2CB34A6C005742EB /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A860324E2CB34A6C005742EB /* Luminare */; };
 		A864F4682AA660CD00579738 /* WindowDragManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A864F4672AA660CD00579738 /* WindowDragManager.swift */; };
 		A867C20E2C26522B005831BC /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A867C20D2C26522B005831BC /* Observer.swift */; };
 		A86949862A8F2BB70051AAAF /* CGKeyCode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86949852A8F2BB60051AAAF /* CGKeyCode+Extensions.swift */; };
@@ -60,7 +61,6 @@
 		A8878A252AA3B2C800850A66 /* WindowTransformAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8878A242AA3B2C800850A66 /* WindowTransformAnimation.swift */; };
 		A88E27AD2BDDE5300042CF04 /* CustomActionConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E27AC2BDDE5300042CF04 /* CustomActionConfigurationView.swift */; };
 		A88E83C52B37B354009D332F /* CGEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88E83C42B37B354009D332F /* CGEvent+Extensions.swift */; };
-		A892F6202CACE37900116842 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A892F61F2CACE37900116842 /* Luminare */; };
 		A89307312BAE6D0100566AEE /* CustomWindowActionUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89307302BAE6D0100566AEE /* CustomWindowActionUnit.swift */; };
 		A893D3642BD3299000063510 /* IconConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A893D3632BD3299000063510 /* IconConfiguration.swift */; };
 		A8A1C51E2BD3705A00515A14 /* PaddingConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A1C51D2BD3705A00515A14 /* PaddingConfigurationView.swift */; };
@@ -197,7 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
-				A892F6202CACE37900116842 /* Luminare in Frameworks */,
+				A860324F2CB34A6C005742EB /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -482,7 +482,6 @@
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
-				A892F61F2CACE37900116842 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -524,7 +523,7 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
-				A892F61E2CACE37900116842 /* XCLocalSwiftPackageReference "../Luminare" */,
+				A860324D2CB34A6C005742EB /* XCRemoteSwiftPackageReference "Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -867,14 +866,15 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		A892F61E2CACE37900116842 /* XCLocalSwiftPackageReference "../Luminare" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Luminare;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
+		A860324D2CB34A6C005742EB /* XCRemoteSwiftPackageReference "Luminare" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MrKai77/Luminare";
+			requirement = {
+				branch = rewrite;
+				kind = branch;
+			};
+		};
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -886,8 +886,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A892F61F2CACE37900116842 /* Luminare */ = {
+		A860324E2CB34A6C005742EB /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = A860324D2CB34A6C005742EB /* XCRemoteSwiftPackageReference "Luminare" */;
 			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {

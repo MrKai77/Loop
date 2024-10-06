@@ -178,6 +178,8 @@ struct LuminareContentView: View {
                 LuminareSidebarSection("Settings", selection: $model.currentTab, items: model.settingsTabs)
                 LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: model.loopTabs)
             }
+            .frame(width: 260)
+
             LuminarePane {
                 HStack {
                     model.currentTab.iconView()
