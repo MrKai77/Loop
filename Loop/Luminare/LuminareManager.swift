@@ -5,10 +5,10 @@
 //  Created by Kai Azim on 2024-05-28.
 //
 
+import Combine
 import Defaults
 import Luminare
 import SwiftUI
-import Combine
 
 extension String: @retroactive Identifiable {
     public var id: String { self }
@@ -31,29 +31,29 @@ enum Tab: LuminareTabItem, CaseIterable {
 
     var title: String {
         switch self {
-        case .icon: return "Icon"
-        case .accentColor: return "Accent Color"
-        case .radialMenu: return "Radial Menu"
-        case .preview: return "Preview"
-        case .behavior: return "Behavior"
-        case .keybindings: return "Keybindings"
-        case .advanced: return "Advanced"
-        case .excludedApps: return "Excluded Apps"
-        case .about: return "About"
+        case .icon: "Icon"
+        case .accentColor: "Accent Color"
+        case .radialMenu: "Radial Menu"
+        case .preview: "Preview"
+        case .behavior: "Behavior"
+        case .keybindings: "Keybindings"
+        case .advanced: "Advanced"
+        case .excludedApps: "Excluded Apps"
+        case .about: "About"
         }
     }
 
     var icon: Image {
         switch self {
-        case .icon: return Image(._18PxSquareSparkle)
-        case .accentColor: return Image(._18PxPaintbrush)
-        case .radialMenu: return Image(.loop)
-        case .preview: return Image(._18PxSidebarRight2)
-        case .behavior: return Image(._18PxGear)
-        case .keybindings: return Image(._18PxCommand)
-        case .advanced: return Image(._18PxFaceNerdSmile)
-        case .excludedApps: return Image(._18PxWindowLock)
-        case .about: return Image(._18PxMsgSmile2)
+        case .icon: Image(._18PxSquareSparkle)
+        case .accentColor: Image(._18PxPaintbrush)
+        case .radialMenu: Image(.loop)
+        case .preview: Image(._18PxSidebarRight2)
+        case .behavior: Image(._18PxGear)
+        case .keybindings: Image(._18PxCommand)
+        case .advanced: Image(._18PxFaceNerdSmile)
+        case .excludedApps: Image(._18PxWindowLock)
+        case .about: Image(._18PxMsgSmile2)
         }
     }
 
@@ -91,7 +91,7 @@ class LuminareManager {
             LuminareConstants.tint = {
                 AppDelegate.isActive ? Color.getLoopAccent(tone: .normal) : Color.systemGray
             }
-            luminare = LuminareWindow(blurRadius: 20)  {
+            luminare = LuminareWindow(blurRadius: 20) {
                 LuminareContentView()
             }
             luminare?.center()
@@ -135,6 +135,7 @@ class LuminareWindowModel: ObservableObject {
             }
         }
     }
+
     @Published var showRadialMenu: Bool = false
     @Published var showPreview: Bool = false
     @Published var showInspector: Bool = true {
@@ -158,8 +159,8 @@ class LuminareWindowModel: ObservableObject {
         timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                guard AppDelegate.isActive, let self = self else { return }
-                self.previewedAction.direction = self.previewedAction.direction.nextPreviewDirection
+                guard AppDelegate.isActive, let self else { return }
+                previewedAction.direction = previewedAction.direction.nextPreviewDirection
             }
     }
 

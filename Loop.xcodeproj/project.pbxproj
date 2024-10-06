@@ -468,6 +468,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */;
 			buildPhases = (
+				A80FD0D82CB34BA300DCC00B /* Run SwiftLint */,
 				A8E59C31297F5E9A0064D4BA /* Sources */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
 				A8E59C33297F5E9A0064D4BA /* Resources */,
@@ -547,6 +548,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A80FD0D82CB34BA300DCC00B /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Default Homebrew installation path on Intel-based Macs\nHOMEBREW_INTEL_PATH=\"/usr/local/bin/swiftformat\"\n\n# Default Homebrew installation path on Apple Silicon Macs\nHOMEBREW_ARM_PATH=\"/opt/homebrew/bin/swiftformat\"\n\n# Determine the architecture of the machine (arm64 or x86_64)\nARCH=$(uname -m)\n\n# Set the Homebrew path based on the architecture\nif [ \"$ARCH\" = \"arm64\" ]; then\n    SWIFTFORMAT_PATH=\"$HOMEBREW_ARM_PATH\"\nelse\n    SWIFTFORMAT_PATH=\"$HOMEBREW_INTEL_PATH\"\nfi\n\n# Check if SwiftFormat is installed via Homebrew\nif [ -x \"$SWIFTFORMAT_PATH\" ]; then\n    \"$SWIFTFORMAT_PATH\" .\nelse\n    echo \"warning: SwiftFormat not installed via Homebrew or not found in expected paths\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A8E59C31297F5E9A0064D4BA /* Sources */ = {
