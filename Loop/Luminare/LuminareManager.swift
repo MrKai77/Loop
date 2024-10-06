@@ -81,7 +81,9 @@ class LuminareManager {
 
     static func open() {
         if luminare == nil {
-            LuminareConstants.tint = { Color.getLoopAccent(tone: .normal) }
+            LuminareConstants.tint = {
+                AppDelegate.isActive ? Color.getLoopAccent(tone: .normal) : Color.systemGray
+            }
             luminare = LuminareWindow(blurRadius: 20)  {
                 LuminareContentView()
             }
