@@ -211,7 +211,7 @@ struct CustomActionConfigurationView: View {
                             action.xPoint = $0
                         }
                     ),
-                    sliderRange: action.unit != .percentage ?
+                    sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.width),
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
@@ -228,7 +228,7 @@ struct CustomActionConfigurationView: View {
                             action.yPoint = $0
                         }
                     ),
-                    sliderRange: action.unit != .percentage ?
+                    sliderRange: action.unit == .percentage ?
                         0...100 :
                         0...Double(screenSize.height),
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
