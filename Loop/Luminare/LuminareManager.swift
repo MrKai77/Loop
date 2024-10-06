@@ -31,15 +31,15 @@ enum Tab: LuminareTabItem, CaseIterable {
 
     var title: String {
         switch self {
-        case .icon: "Icon"
-        case .accentColor: "Accent Color"
-        case .radialMenu: "Radial Menu"
-        case .preview: "Preview"
-        case .behavior: "Behavior"
-        case .keybindings: "Keybindings"
-        case .advanced: "Advanced"
-        case .excludedApps: "Excluded Apps"
-        case .about: "About"
+        case .icon: .init(localized: "Settings tab: Icon", defaultValue: "Icon")
+        case .accentColor: .init(localized: "Settings tab: Accent Color", defaultValue: "Accent Color")
+        case .radialMenu: .init(localized: "Settings tab: Radial Menu", defaultValue: "Radial Menu")
+        case .preview: .init(localized: "Settings tab: Preview", defaultValue: "Preview")
+        case .behavior: .init(localized: "Settings tab: Behavior", defaultValue: "Behavior")
+        case .keybindings: .init(localized: "Settings tab: Keybindings", defaultValue: "Keybindings")
+        case .advanced: .init(localized: "Settings tab: Advanced", defaultValue: "Advanced")
+        case .excludedApps: .init(localized: "Settings tab: Excluded Apps", defaultValue: "Excluded Apps")
+        case .about: .init(localized: "Settings tab: About", defaultValue: "About")
         }
     }
 
