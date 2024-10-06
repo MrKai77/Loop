@@ -57,6 +57,13 @@ enum Tab: LuminareTabItem, CaseIterable {
         }
     }
 
+    var showIndicator: Bool {
+        switch self {
+        case .about: AppDelegate.updater.updateState == .available
+        default: false
+        }
+    }
+
     @ViewBuilder func view() -> some View {
         switch self {
         case .icon: IconConfigurationView()
