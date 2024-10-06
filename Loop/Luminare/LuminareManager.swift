@@ -81,13 +81,14 @@ class LuminareManager {
 
     static func open() {
         if luminare == nil {
+            LuminareConstants.tint = { Color.getLoopAccent(tone: .normal) }
             luminare = LuminareWindow(blurRadius: 20)  {
                 LuminareContentView()
             }
+            luminare?.center()
         }
 
         luminare?.show()
-        luminare?.center()
 
         LuminareWindowModel.shared.startTimer()
 
