@@ -894,7 +894,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MrKai77/Luminare";
 			requirement = {
-				branch = rewrite;
+				branch = main;
 				kind = branch;
 			};
 		};
