@@ -66,7 +66,7 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder private func configurationSections() -> some View {
         LuminareSection {
-            LuminareTextField(Binding(get: { action.name ?? "" }, set: { action.name = $0 }), placeHolder: "Custom Keybind")
+            LuminareTextField("Custom Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
         }
 
         LuminareSection {
