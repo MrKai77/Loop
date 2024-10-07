@@ -33,7 +33,7 @@ struct PaddingPreviewView: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }
-        .animation(LuminareSettingsWindow.animation, value: model)
+        .animation(LuminareConstants.animation, value: model)
     }
 
     @ViewBuilder

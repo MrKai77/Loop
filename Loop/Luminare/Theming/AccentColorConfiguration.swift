@@ -65,7 +65,7 @@ class AccentColorConfigurationModel: ObservableObject {
             await WallpaperProcessor.fetchLatestWallpaperColors()
 
             await MainActor.run {
-                withAnimation(LuminareSettingsWindow.fastAnimation) {
+                withAnimation(LuminareConstants.fastAnimation) {
                     customAccentColor = Defaults[.customAccentColor]
                     gradientColor = Defaults[.gradientColor]
                 }
@@ -112,7 +112,7 @@ struct AccentColorConfigurationView: View {
         LuminareSection {
             LuminarePicker(
                 elements: AccentColorOption.allCases,
-                selection: $model.accentColorOption.animation(LuminareSettingsWindow.animation),
+                selection: $model.accentColorOption.animation(LuminareConstants.animation),
                 columns: 3,
                 roundBottom: model.useSystemAccentColor
             ) { option in
@@ -140,7 +140,7 @@ struct AccentColorConfigurationView: View {
 
             if model.isCustom || model.isWallpaper {
                 LuminareToggle("Gradient", isOn: $model.useGradient)
-                    .animation(LuminareSettingsWindow.animation, value: model.useGradient)
+                    .animation(LuminareConstants.animation, value: model.useGradient)
             }
 
             if model.processWallpaper {

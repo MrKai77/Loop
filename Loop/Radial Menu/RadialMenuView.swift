@@ -11,6 +11,8 @@ import Luminare
 import SwiftUI
 
 struct RadialMenuView: View {
+    @ObservedObject var luminareModel: LuminareWindowModel = .shared
+
     let radialMenuSize: CGFloat = 100
 
     @State var currentAction: WindowAction
@@ -18,8 +20,6 @@ struct RadialMenuView: View {
 
     private let window: Window?
     private let previewMode: Bool
-
-    @State var timer: Publishers.Autoconnect<Timer.TimerPublisher>
 
     // Variables that store the radial menu's shape
     @Default(.radialMenuCornerRadius) var radialMenuCornerRadius
@@ -34,14 +34,7 @@ struct RadialMenuView: View {
     init(previewMode: Bool = false, window: Window? = nil, startingAction: WindowAction = .init(.noAction)) {
         self.window = window
         self.previewMode = previewMode
-
-        if previewMode {
-            self._timer = State(initialValue: Timer.publish(every: 1, on: .main, in: .common).autoconnect())
-            self._currentAction = State(initialValue: .init(.topHalf))
-        } else {
-            self._timer = State(initialValue: Timer.publish(every: -1, on: .main, in: .common).autoconnect())
-            self._currentAction = State(initialValue: .init(startingAction.direction))
-        }
+        self._currentAction = State(initialValue: startingAction)
     }
 
     @State var angle: Double = .zero
@@ -149,11 +142,11 @@ struct RadialMenuView: View {
         .onAppear {
             recomputeAngle()
         }
-        .onReceive(timer) { _ in
+        .onChange(of: luminareModel.previewedAction) { _ in
             if previewMode {
                 guard isActive else { return }
                 previousAction = currentAction
-                currentAction.direction = currentAction.direction.nextPreviewDirection
+                currentAction.direction = luminareModel.previewedAction.direction
             }
         }
         .onReceive(.updateUIDirection) { obj in
@@ -181,7 +174,7 @@ struct RadialMenuView: View {
     }
 
     func recomputeColors() {
-        withAnimation(LuminareSettingsWindow.animation) {
+        withAnimation(LuminareConstants.animation) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }

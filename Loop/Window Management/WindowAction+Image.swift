@@ -87,7 +87,7 @@ struct IconView: View {
                         refreshFrame()
                     }
                     .onChange(of: action) { _ in
-                        withAnimation(LuminareSettingsWindow.fastAnimation) {
+                        withAnimation(LuminareConstants.fastAnimation) {
                             refreshFrame()
                         }
                     }

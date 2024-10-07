@@ -10,10 +10,10 @@ import Luminare
 import SwiftUI
 
 struct LuminarePreviewView: View {
-    @State var action: WindowAction = .init(.topHalf)
+    @ObservedObject var model: LuminareWindowModel = .shared
+
     @State var actionRect: CGRect = .zero
     @State private var scale: CGFloat = 1
-    @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     @Default(.previewPadding) var previewPadding
     @Default(.padding) var padding
@@ -62,7 +62,7 @@ struct LuminarePreviewView: View {
             .offset(x: actionRect.minX, y: actionRect.minY)
             .scaleEffect(CGSize(width: scale, height: scale))
             .onAppear {
-                actionRect = action.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size), isPreview: true)
+                actionRect = model.previewedAction.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size), isPreview: true)
 
                 withAnimation(
                     .interpolatingSpring(
@@ -74,13 +74,9 @@ struct LuminarePreviewView: View {
                     scale = 1
                 }
             }
-            .onReceive(timer) { _ in
-                guard isActive else { return }
-
-                action.direction = action.direction.nextPreviewDirection
-
+            .onChange(of: model.previewedAction) { _ in
                 withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
-                    actionRect = action.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
+                    actionRect = model.previewedAction.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
                 }
             }
         }
@@ -99,7 +95,7 @@ struct LuminarePreviewView: View {
     }
 
     func recomputeColors() {
-        withAnimation(LuminareSettingsWindow.animation) {
+        withAnimation(LuminareConstants.animation) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }

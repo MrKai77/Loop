@@ -25,17 +25,7 @@ struct CycleActionConfigurationView: View {
 
     var body: some View {
         LuminareSection {
-            LuminareTextField(
-                Binding(
-                    get: {
-                        action.name ?? ""
-                    },
-                    set: {
-                        action.name = $0
-                    }
-                ),
-                placeHolder: "Cycle Keybind"
-            )
+            LuminareTextField("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
         }
 
         LuminareList(
