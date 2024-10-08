@@ -57,8 +57,8 @@ class LoopManager: ObservableObject {
 
         mouseMovedEventMonitor = NSEventMonitor(
             scope: .all,
-            eventMask: [.mouseMoved, .otherMouseDragged],
-            handler: mouseMoved(_:)
+            eventMask: [.mouseMoved, .otherMouseDragged, .scrollWheel],
+            handler: mouseMovedOrScrolled(_:)
         )
 
         middleClickMonitor = CGEventMonitor(
@@ -480,9 +480,29 @@ private extension LoopManager {
 // MARK: - Radial Menu
 
 private extension LoopManager {
-    func mouseMoved(_: NSEvent) -> NSEvent? {
+    func mouseMovedOrScrolled(_ event: NSEvent) -> NSEvent? {
         guard isLoopActive else { return nil }
         keybindMonitor.canPassthroughSpecialEvents = false
+
+        // Handle scroll events
+        if event.type == .scrollWheel {
+            var action: WindowAction = .init(.noAction)
+            if abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY) {
+                if event.scrollingDeltaX > 0 { // Scroll right
+                    action = .init(.larger)
+                } else { // Scroll left
+                    action = .init(.smaller)
+                }
+            } else {
+                if event.scrollingDeltaY > 0 { // Scroll up
+                    action = .init(.smaller)
+                } else { // Scroll down
+                    action = .init(.larger)
+                }
+            }
+            changeAction(action, canAdvanceCycle: false)
+            return nil
+        }
 
         let noActionDistance: CGFloat = 10
 
