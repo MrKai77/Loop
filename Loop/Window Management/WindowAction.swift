@@ -313,7 +313,7 @@ private extension WindowAction {
                 }
 
                 if let yPoint {
-                    result.origin.y += bounds.width * (yPoint / 100.0)
+                    result.origin.y += bounds.height * (yPoint / 100.0)
                 }
             }
         } else { // positionMode would be generic

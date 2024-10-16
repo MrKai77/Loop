@@ -16514,6 +16514,105 @@
         }
       }
     },
+    "Settings tab: About" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "About"
+          }
+        }
+      }
+    },
+    "Settings tab: Accent Color" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Accent Color"
+          }
+        }
+      }
+    },
+    "Settings tab: Advanced" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Advanced"
+          }
+        }
+      }
+    },
+    "Settings tab: Behavior" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Behavior"
+          }
+        }
+      }
+    },
+    "Settings tab: Excluded Apps" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Excluded Apps"
+          }
+        }
+      }
+    },
+    "Settings tab: Icon" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Icon"
+          }
+        }
+      }
+    },
+    "Settings tab: Keybindings" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Keybindings"
+          }
+        }
+      }
+    },
+    "Settings tab: Preview" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Preview"
+          }
+        }
+      }
+    },
+    "Settings tab: Radial Menu" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Radial Menu"
+          }
+        }
+      }
+    },
     "Settings…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -20067,6 +20166,17 @@
         }
       }
     },
+    "Window Direction/Name: Horizontal Center Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Horizontal Center Half"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Horizontal Center Third" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -22204,6 +22314,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "撤銷"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Vertical Center Half" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Vertical Center Half"
           }
         }
       }

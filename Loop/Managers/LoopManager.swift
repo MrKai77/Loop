@@ -389,9 +389,9 @@ private extension LoopManager {
                 Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
             }
 
-            if newAction.direction == .cycle {
+            if let parentCycleAction {
                 currentAction = newAction
-                changeAction(newAction, triggeredFromScreenChange: true)
+                changeAction(parentCycleAction, triggeredFromScreenChange: true)
             } else {
                 if let screenToResizeOn,
                    let window = targetWindow,

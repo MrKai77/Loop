@@ -13,7 +13,6 @@ class RadialMenuConfigurationModel: ObservableObject {
     @Published var radialMenuVisibility = Defaults[.radialMenuVisibility] {
         didSet {
             Defaults[.radialMenuVisibility] = radialMenuVisibility
-            LuminareManager.processTabChange(LuminareManager.radialMenuConfiguration)
         }
     }
 
