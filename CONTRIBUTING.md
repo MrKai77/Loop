@@ -28,7 +28,7 @@ Well, it's very easy: fork the repo, push your changes to the fork, and submit a
 
 ## Forking
 
-To fork, you can go to Loop, and see the "Fork" button at the top of your screen, click that, and change nothing. Once forked, you'll see
+Forking creates a personal copy of the Loop repository under your GitHub account. This allows you to make changes without affecting the original project. To fork, go to the Loop repository page on GitHub and click the "Fork" button at the top right of your screen. Once forked, you'll see:
 
 ```sh
 Loop
@@ -78,33 +78,29 @@ Now, let's tackle Xcode. If you followed the method above, you should be automat
 
 Now that you've signed Loop with your developer account, it's time to build! First, validate if the current build works <kbd>⌘</kbd> + <kbd>R</kbd> (this command will run Loop). If the build was successful, you should see an alert that Loop requires Accessibility permissions; if you change any code related to Loop's movement or core code, you will need to enable this. For cases of simple code changes, this is not needed. You can run both Loop (the one you already have) and the Loop developmental version you are running at the same time!
 
-**HOWEVER**, it must be made aware that Loop **MAY** fail to build if you run it again. How do we fix this? Clear the build cache, press <kbd>⌘</kbd> + <kbd>⇧</kbd> + <kbd>K</kbd>; you **MAY** need to do this every time you hit the run command. It has to do with some leftover user cache that makes Loop fail to build. We've tried to fix it to no avail.
+### SwiftFormat
 
-**IF YOUR BUILD FAILS** You've got a few options:
+**IMPORTANT:** You MUST have [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) installed via `brew`. SwiftFormat will run on each build attempt to ensure consistent code formatting. **DO NOT** turn this off. When you submit your PR, another check will run to validate your formatting. If the format is incorrect, your request will be rejected.
 
-1. Review the issue, if it's giving `Luminare cannot be found` remove Luminare from the Frameworks list, and readd it.
-2. If there is a `Command CodeSign failed with a nonzero exit code` issue, follow the above steps and clear your build cache.
-3. If it's a code issue, review your code and adjust accordingly.
+To install SwiftFormat:
 
-Now, you're on your own. We hope you'll make some nice Swift code. On each build you attempt, [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) will run. **DO NOT** turn this off. When you submit your PR, this will run another check to validate you have the correct formatting. If the format is wrong, your request will be rejected.
+1. Install Homebrew (if not already installed):
 
-**IMPORTANT:** You MUST have [SwiftFormat](https://github.com/nicklockwood/SwiftFormat) installed via `brew`. If you know how to use brew, then it's as simple as
+   ```sh
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
 
-```sh
-brew install SwiftFormat
-```
+   **NOTE: DO NOT INSTALL `brew` WITH SUDO**
 
-If you are unfamiliar with `brew`, [brew](https://brew.sh) is a macOS package manager which you can use to install apps (`--casks`) or command line tools (CLTs) called `formulae`.
+2. Install SwiftFormat:
 
-First, install brew and follow the onscreen instructions (**NOTE: DO NOT INSTALL `brew` WITH SUDO**).
+   ```sh
+   brew install SwiftFormat
+   ```
 
-```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+For more information on Homebrew, visit [brew.sh](https://brew.sh).
 
-Then, after you've installed brew, you can now install any command line tool or app. So, install `SwiftFormat` next, and you'll then be able to build Loop.
-
-Now, some **important** notes. All of the code you write **MUST** include comprehensive comments. An example of this would be
+Now, some **important** notes. All of the code you write **MUST** include comprehensive comments. Proper documentation helps other contributors understand your code and makes maintenance easier. An example of this would be:
 
 ```swift
     /// Determines if two colors are similar based on a threshold.
@@ -179,37 +175,13 @@ Now, for the Issue section, this is **NOT** for you to request an icon. Here, it
 
 We wish to localise (localize) Loop in every language possible!
 
-We use `Localizable.xcstrings` to localise Loop, meaning it's very simple to localise Loop in any language you want.
-
-If you need some help, images are provided at the bottom for context.
+For quick, and easy localisation, we use [Crowdin](https://crowdin.com/project/loop-i18n).
 
 ## How to localise?
 
-By now, you'll be familiar. Submit a `localisation` issue, fill out which language you wish to add, change, improve, and complete any required checkboxes.
-
-Once assigned, and after committing to the localised language, you may request the catalogue for localisation or proceed to do it manually.
-
-### Asking for a catalogue
-
-1. In your issue, just ask [@MrKai77](https://github.com/MrKai77) or [@SenpaiHunters](https://github.com/SenpaiHunters) for your required language in your issue, and they'll be able to provide you with the needed file.
-2. Next, you need Xcode installed. Once installed, open the language file, named, `[locale].xloc`.
-3. Once you've got it, now head over to the right-hand side and begin translating Loop to your language!
-
-TIP: If you're unable to fully localise the file, just leave the unlocalised strings, and add notes to your issue on what's missed so others can localise it further.
-
-### I don't need help
-
-1. Fork and clone Loop (how to do given above).
-2. Open Loop and the `Localizable.strings` file.
-3. Add your language using the `+` button at the bottom.
-4. Fill in your language.
-
-    - Incomplete translations? Leave a note in your issue to further help other localisers.
-
-5. Also fill in `InfoPlist.strings` that will be auto-generated.
-6. Finally, push your changes to your branch and format the name such as `🌐 [add/change] name`, e.g., `🌐 Add Korean localisation` or `🌐 Update English (United Kingdom)`.
-
-## Images
-
-![Localise Xcode example](/assets/docs/localise.png)
-![Localise plist Xcode example](/assets/docs/localise_plist.png)
+1. Go to the [Loop Crowdin page](https://crowdin.com/project/loop-i18n).
+2. Click the `Join the team` button.
+3. Login or signup with your GitHub account.
+4. Add a message to the top of the page, and click `Request Access`.
+5. Wait for the account to be approved.
+6. Start translating!
