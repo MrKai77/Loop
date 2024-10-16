@@ -74,7 +74,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var willMove: Bool { WindowDirection.move.contains(self) }
 
     var hasRadialMenuAngle: Bool {
-        let noAngleActions: [WindowDirection] = [.noAction, .maximize, .center, .macOSCenter, .almostMaximize, .fullscreen, .minimize, .hide, .initialFrame, .undo, .cycle]
+        let noAngleActions: [WindowDirection] = [.noAction, .maximize, .center, .macOSCenter, .almostMaximize, .maximizeHeight, .fullscreen, .minimize, .hide, .initialFrame, .undo, .cycle]
         return !(noAngleActions.contains(self) || willChangeScreen || willAdjustSize || willShrink || willGrow || willMove)
     }
 
