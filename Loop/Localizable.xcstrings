@@ -20745,6 +20745,17 @@
         }
       }
     },
+    "Window Direction/Name: Maximize Height" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximize Height"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Minimize" : {
       "extractionState" : "manual",
       "localizations" : {

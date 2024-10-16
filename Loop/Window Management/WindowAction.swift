@@ -234,6 +234,9 @@ private extension WindowAction {
         } else if direction == .center {
             result = calculateCenterFrame(window, bounds)
 
+        } else if direction == .maximizeHeight {
+            result = calculateMaximizeHeightFrame(window, bounds)
+
         } else if direction == .macOSCenter {
             result = calculateMacOSCenterFrame(window, bounds)
 
@@ -363,6 +366,27 @@ private extension WindowAction {
                 y: bounds.midY - (windowSize.height / 2)
             ),
             size: windowSize
+        )
+    }
+
+    func calculateMaximizeHeightFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
+        let windowSize: CGSize = if let window {
+            window.size
+        } else {
+            .init(width: bounds.width, height: bounds.height / 2)
+        }
+
+        let maxHeight = bounds.height
+
+        return CGRect(
+            origin: CGPoint(
+                x: bounds.midX - (windowSize.width / 2),
+                y: bounds.midY
+            ),
+            size: CGSize(
+                width: windowSize.width,
+                height: maxHeight
+            )
         )
     }
 

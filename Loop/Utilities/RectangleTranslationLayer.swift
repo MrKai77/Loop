@@ -31,6 +31,7 @@ enum RectangleTranslationLayer {
         "larger": .larger,
         "leftHalf": .leftHalf,
         "maximize": .maximize,
+        "maximizeHeight": .maximizeHeight,
         "nextDisplay": .nextScreen,
         "previousDisplay": .previousScreen,
         "restore": .undo,
