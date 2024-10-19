@@ -373,16 +373,19 @@ private extension WindowAction {
         let windowSize: CGSize = if let window {
             window.size
         } else {
-            .init(width: bounds.width, height: bounds.height / 2)
+            .init(width: bounds.width / 2, height: bounds.height / 2)
         }
 
         let maxHeight = bounds.height
 
+        let origin: CGPoint = if let window {
+            window.frame.origin
+        } else {
+            .init(x: bounds.midX, y: bounds.midY)
+        }
+
         return CGRect(
-            origin: CGPoint(
-                x: bounds.midX - (windowSize.width / 2),
-                y: bounds.midY
-            ),
+            origin: origin,
             size: CGSize(
                 width: windowSize.width,
                 height: maxHeight

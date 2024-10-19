@@ -85,7 +85,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var frameMultiplyValues: CGRect? {
         switch self {
         case .maximize: .init(x: 0, y: 0, width: 1.0, height: 1.0)
-        case .maximizeHeight: .init(x: nil, y: nil, width: nil, height: 1.0)
+        case .maximizeHeight: .init(x: 0, y: 0, width: 0, height: 1.0)
         case .almostMaximize: .init(x: 0.5 / 10.0, y: 0.5 / 10.0, width: 9.0 / 10.0, height: 9.0 / 10.0)
         case .fullscreen: .init(x: 0, y: 0, width: 1.0, height: 1.0)
         // Halves
