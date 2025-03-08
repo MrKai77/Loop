@@ -11,10 +11,7 @@ import Luminare
 import SwiftUI
 
 class AboutConfigurationModel: ObservableObject {
-    let currentIcon = Defaults[.currentIcon] // no need for didSet since it won't change here
-
     @Published var isHoveringOverVersionCopier = false
-
     @Published var updateButtonTitle: String = .init(localized: "Check for updates…")
 
     let credits: [CreditItem] = [
@@ -129,23 +126,35 @@ struct CreditItem: Identifiable {
 }
 
 struct AboutConfigurationView: View {
+    @Environment(\.luminareAnimation) private var luminareAnimation
     @Environment(\.openURL) private var openURL
+
     @StateObject private var model = AboutConfigurationModel()
     @ObservedObject private var updater = AppDelegate.updater
-    @Default(.timesLooped) var timesLooped
+
+    @Default(.timesLooped) private var timesLooped
+    @Default(.currentIcon) private var currentIcon
+
     @State private var isHoveringOverUpdateButton = false
 
-    var updateButtonEnabled: Bool {
+    private var updateButtonEnabled: Bool {
         isHoveringOverUpdateButton || updater.updatesEnabled
     }
 
     var body: some View {
+        iconHeader()
+        updateCheckerView()
+        communityView()
+        allCreditsView()
+    }
+
+    private func iconHeader() -> some View {
         LuminareSection {
             Button {
                 model.copyVersionToClipboard()
             } label: {
                 HStack {
-                    if let image = NSImage(named: model.currentIcon) {
+                    if let image = NSImage(named: currentIcon) {
                         Image(nsImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -162,8 +171,8 @@ struct AboutConfigurationView: View {
                                 : (timesLooped >= 1_000_000 ? "You've looped… uhh… I… lost count…" : "You've looped \(timesLooped) times!")
                         )
                         .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
-                        .animation(LuminareConstants.animation, value: model.isHoveringOverVersionCopier)
-                        .animation(LuminareConstants.animation, value: timesLooped)
+                        .animation(luminareAnimation, value: model.isHoveringOverVersionCopier)
+                        .animation(luminareAnimation, value: timesLooped)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     }
@@ -172,12 +181,14 @@ struct AboutConfigurationView: View {
                 }
                 .padding(4)
             }
-            .buttonStyle(LuminareCosmeticButtonStyle(Image(._12PxClipboard)))
+            .buttonStyle(.luminareCosmetic(icon: Image(.clipboard)))
             .onHover {
                 model.isHoveringOverVersionCopier = $0
             }
         }
+    }
 
+    private func updateCheckerView() -> some View {
         LuminareSection {
             Button {
                 Task {
@@ -204,7 +215,7 @@ struct AboutConfigurationView: View {
             } label: {
                 Text(.init(model.updateButtonTitle))
                     .contentTransition(.numericText())
-                    .animation(LuminareConstants.animation, value: model.updateButtonTitle)
+                    .animation(luminareAnimation, value: model.updateButtonTitle)
             }
             .disabled(!updateButtonEnabled)
             .onHover { hovering in
@@ -240,7 +251,9 @@ struct AboutConfigurationView: View {
 
             LuminareToggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
         }
+    }
 
+    private func communityView() -> some View {
         LuminareSection {
             Text(
                 "Share feedback on our GitHub page, where you can let us know about any bugs, suggest features, or provide other valuable input. We also accept donations if you feel that Loop has improved your workflow :)"
@@ -261,16 +274,17 @@ struct AboutConfigurationView: View {
                 }
             }
         }
+    }
 
+    private func allCreditsView() -> some View {
         LuminareSection("Credits") {
             ForEach(model.credits) { credit in
-                creditsView(credit)
+                creditView(credit)
             }
         }
     }
 
-    @ViewBuilder
-    func creditsView(_ credit: CreditItem) -> some View {
+    private func creditView(_ credit: CreditItem) -> some View {
         Button {
             openURL(credit.url)
         } label: {
@@ -299,6 +313,6 @@ struct AboutConfigurationView: View {
             }
             .padding(12)
         }
-        .buttonStyle(LuminareCosmeticButtonStyle(Image(._12PxShareUpRight)))
+        .buttonStyle(.luminareCosmetic(icon: Image(.shareUpRight)))
     }
 }
