@@ -28,11 +28,11 @@ enum CustomWindowActionSizeMode: Int, Codable, CaseIterable, Identifiable {
     var image: Image {
         switch self {
         case .custom:
-            Image(._18PxRulerPen)
+            Image(.rulerPen)
         case .preserveSize:
-            Image(._18PxTableLock)
+            Image(.tableLock)
         case .initialSize:
-            Image(._18PxReturnKey)
+            Image(.returnKey)
         }
     }
 }

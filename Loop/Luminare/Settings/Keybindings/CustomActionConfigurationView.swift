@@ -10,6 +10,8 @@ import Luminare
 import SwiftUI
 
 struct CustomActionConfigurationView: View {
+    @Environment(\.luminareAnimation) private var luminareAnimation
+
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
 
@@ -22,9 +24,9 @@ struct CustomActionConfigurationView: View {
         var image: Image {
             switch self {
             case .position:
-                Image(._18PxTableRows3Cols3)
+                Image(.tableRows3Cols3)
             case .size:
-                Image(._18PxSize)
+                Image(.size)
             }
         }
     }
@@ -43,7 +45,7 @@ struct CustomActionConfigurationView: View {
     }
 
     var body: some View {
-        ScreenView(blurred: .constant(action.sizeMode != .custom)) {
+        ScreenView(isBlurred: action.sizeMode != .custom) {
             GeometryReader { geo in
                 ZStack {
                     if action.sizeMode == .custom {
@@ -52,7 +54,7 @@ struct CustomActionConfigurationView: View {
                         blurredWindow()
                             .frame(width: frame.width, height: frame.height)
                             .offset(x: frame.origin.x, y: frame.origin.y)
-                            .animation(LuminareConstants.animation, value: frame)
+                            .animation(luminareAnimation, value: frame)
                     }
                 }
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
@@ -81,7 +83,7 @@ struct CustomActionConfigurationView: View {
                 sizeConfiguration()
             }
         }
-        .animation(LuminareConstants.animation, value: action.unit)
+        .animation(luminareAnimation, value: action.unit)
         .onAppear {
             if action.unit == nil {
                 action.unit = .percentage
@@ -110,13 +112,18 @@ struct CustomActionConfigurationView: View {
     }
 
     @ViewBuilder private func tabPicker() -> some View {
-        LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: false) { tab in
+        LuminarePicker(
+            elements: Tab.allCases,
+            selection: $currentTab,
+            columns: 2
+        ) { tab in
             HStack(spacing: 6) {
                 tab.image
                 Text(tab.rawValue)
             }
             .fixedSize()
         }
+        .luminarePickerRoundedCorner(bottom: .always)
     }
 
     @ViewBuilder private func unitToggle() -> some View {
@@ -143,7 +150,7 @@ struct CustomActionConfigurationView: View {
 
             Button("Close") { isPresented = false }
         }
-        .buttonStyle(LuminareCompactButtonStyle())
+        .buttonStyle(.luminareCompact)
     }
 
     @ViewBuilder private func positionConfiguration() -> some View {
@@ -155,7 +162,7 @@ struct CustomActionConfigurationView: View {
                         action.positionMode == .coordinates
                     },
                     set: { newValue in
-                        withAnimation(LuminareConstants.animation) {
+                        withAnimation(luminareAnimation) {
                             action.positionMode = newValue ? .coordinates : .generic
                         }
                     }
@@ -175,13 +182,12 @@ struct CustomActionConfigurationView: View {
                             return action.anchor ?? .center
                         },
                         set: { newValue in
-                            withAnimation(LuminareConstants.animation) {
+                            withAnimation(luminareAnimation) {
                                 action.anchor = newValue
                             }
                         }
                     ),
-                    columns: 3,
-                    roundTop: false
+                    columns: 3
                 ) { anchor in
                     IconView(action: anchor.iconAction)
                 }
@@ -189,7 +195,7 @@ struct CustomActionConfigurationView: View {
                 if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
                     LuminareToggle(
                         "Use macOS center",
-                        info: WindowDirection.macOSCenter.infoView,
+//                        info: WindowDirection.macOSCenter.infoView, // TODO: FIX
                         isOn: Binding(
                             get: {
                                 action.anchor == .macOSCenter
@@ -201,7 +207,7 @@ struct CustomActionConfigurationView: View {
                     )
                 }
             } else {
-                LuminareValueAdjuster(
+                LuminareSlider(
                     "X",
                     value: Binding(
                         get: {
@@ -211,14 +217,12 @@ struct CustomActionConfigurationView: View {
                             action.xPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
-                        0...100 :
-                        0...Double(screenSize.width),
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    lowerClamp: true
+                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    clampsLower: true,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
 
-                LuminareValueAdjuster(
+                LuminareSlider(
                     "Y",
                     value: Binding(
                         get: {
@@ -228,11 +232,9 @@ struct CustomActionConfigurationView: View {
                             action.yPoint = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
-                        0...100 :
-                        0...Double(screenSize.height),
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    lowerClamp: true
+                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    clampsLower: true,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
             }
         }
@@ -247,13 +249,12 @@ struct CustomActionConfigurationView: View {
                         action.sizeMode ?? .custom
                     },
                     set: { newValue in
-                        withAnimation(LuminareConstants.animation) {
+                        withAnimation(luminareAnimation) {
                             action.sizeMode = newValue
                         }
                     }
                 ),
-                columns: 3,
-                roundBottom: action.sizeMode != .custom
+                columns: 3
             ) { mode in
                 VStack(spacing: 4) {
                     mode.image
@@ -261,9 +262,10 @@ struct CustomActionConfigurationView: View {
                 }
                 .padding(.vertical, 15)
             }
+            .luminarePickerRoundedCorner(bottom: action.sizeMode != .custom ? .never : .always)
 
             if action.sizeMode ?? .custom == .custom {
-                LuminareValueAdjuster(
+                LuminareSlider(
                     "Width",
                     value: Binding(
                         get: {
@@ -273,14 +275,12 @@ struct CustomActionConfigurationView: View {
                             action.width = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
-                        0...100 :
-                        0...Double(screenSize.width),
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    lowerClamp: true
+                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    clampsLower: true,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
 
-                LuminareValueAdjuster(
+                LuminareSlider(
                     "Height",
                     value: Binding(
                         get: {
@@ -290,11 +290,9 @@ struct CustomActionConfigurationView: View {
                             action.height = $0
                         }
                     ),
-                    sliderRange: action.unit == .percentage ?
-                        0...100 :
-                        0...Double(screenSize.width),
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    lowerClamp: true
+                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    clampsLower: true,
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
             }
         }

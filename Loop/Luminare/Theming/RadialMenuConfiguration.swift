@@ -45,22 +45,22 @@ struct RadialMenuConfigurationView: View {
             LuminareToggle("Radial menu", isOn: $model.radialMenuVisibility)
 
             if model.radialMenuVisibility {
-                LuminareValueAdjuster(
+                LuminareSlider(
                     "Corner radius",
-                    value: $model.radialMenuCornerRadius,
-                    sliderRange: 30...50,
-                    suffix: "px",
-                    lowerClamp: true,
-                    upperClamp: true
+                    value: $model.radialMenuCornerRadius.doubleBinding,
+                    in: 30...50,
+                    clampsUpper: true,
+                    clampsLower: true,
+                    suffix: "px"
                 )
 
-                LuminareValueAdjuster(
+                LuminareSlider(
                     "Thickness",
-                    value: $model.radialMenuThickness,
-                    sliderRange: 10...35,
-                    suffix: "px",
-                    lowerClamp: true,
-                    upperClamp: true
+                    value: $model.radialMenuThickness.doubleBinding,
+                    in: 10...35,
+                    clampsUpper: true,
+                    clampsLower: true,
+                    suffix: "px"
                 )
             }
         }

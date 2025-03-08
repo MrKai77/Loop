@@ -45,15 +45,15 @@ enum Tab: LuminareTabItem, CaseIterable {
 
     var icon: Image {
         switch self {
-        case .icon: Image(._18PxSquareSparkle)
-        case .accentColor: Image(._18PxPaintbrush)
+        case .icon: Image(.squareSparkle)
+        case .accentColor: Image(.paintbrush)
         case .radialMenu: Image(.loop)
-        case .preview: Image(._18PxSidebarRight2)
-        case .behavior: Image(._18PxGear)
-        case .keybinds: Image(._18PxCommand)
-        case .advanced: Image(._18PxFaceNerdSmile)
-        case .excludedApps: Image(._18PxWindowLock)
-        case .about: Image(._18PxMsgSmile2)
+        case .preview: Image(.sidebarRight2)
+        case .behavior: Image(.gear)
+        case .keybinds: Image(.command)
+        case .advanced: Image(.faceNerdSmile)
+        case .excludedApps: Image(.windowLock)
+        case .about: Image(.msgSmile2)
         }
     }
 
@@ -83,43 +83,16 @@ enum Tab: LuminareTabItem, CaseIterable {
     static let loop: [Tab] = [.advanced, .excludedApps, .about]
 }
 
-class LuminareManager {
-    static var luminare: LuminareWindow?
+class LuminareManager: LuminareCoordinator, ObservableObject {
+    static let shared = LuminareManager()
 
-    static func open() {
-        if luminare == nil {
-            LuminareConstants.tint = {
-                AppDelegate.isActive ? Color.getLoopAccent(tone: .normal) : Color.systemGray
-            }
-            luminare = LuminareWindow(blurRadius: 20) {
-                LuminareContentView()
-            }
-            luminare?.center()
-        }
+    var luminare: LuminareWindow?
 
-        luminare?.show()
+    @Published var timer: AnyCancellable?
+    @Published var previewedAction: WindowAction = .init(.topHalf)
 
-        LuminareWindowModel.shared.startTimer()
-
-        AppDelegate.isActive = true
-        NSApp.setActivationPolicy(.regular)
-    }
-
-    static func fullyClose() {
-        luminare?.close()
-        luminare = nil
-
-        LuminareWindowModel.shared.stopTimer()
-
-        if !Defaults[.showDockIcon] {
-            NSApp.setActivationPolicy(.accessory)
-        }
-    }
-}
-
-class LuminareWindowModel: ObservableObject {
-    static let shared = LuminareWindowModel()
-    private init() {}
+    @Published var showRadialMenu: Bool = false
+    @Published var showPreview: Bool = false
 
     @Published var currentTab: Tab = .icon {
         didSet {
@@ -136,8 +109,6 @@ class LuminareWindowModel: ObservableObject {
         }
     }
 
-    @Published var showRadialMenu: Bool = false
-    @Published var showPreview: Bool = false
     @Published var showInspector: Bool = true {
         didSet {
             if showInspector {
@@ -148,12 +119,27 @@ class LuminareWindowModel: ObservableObject {
         }
     }
 
-    @Published var timer: AnyCancellable?
-    @Published var previewedAction: WindowAction = .init(.topHalf)
+    var body: some View {
+        LuminareContentView(model: self)
+            .tint(.getLoopAccent(tone: .normal))
+            .luminareTint(.getLoopAccent(tone: .normal))
+            .frame(height: 620)
+    }
 
-    let themingTabs: [Tab] = Tab.theming
-    let settingsTabs: [Tab] = Tab.settings
-    let loopTabs: [Tab] = Tab.loop
+    func open() {
+        showWindow()
+        startTimer()
+        NSApp.setActivationPolicy(.regular)
+    }
+
+    func close() {
+        closeWindow()
+        stopTimer()
+
+        if !Defaults[.showDockIcon] {
+            NSApp.setActivationPolicy(.accessory)
+        }
+    }
 
     func startTimer() {
         timer = Timer.publish(every: 1, on: .main, in: .common)
@@ -170,18 +156,22 @@ class LuminareWindowModel: ObservableObject {
 }
 
 struct LuminareContentView: View {
-    @ObservedObject var model = LuminareWindowModel.shared
+    @ObservedObject var model: LuminareManager
+    @Environment(\.luminareAnimation) private var animation
 
     var body: some View {
         LuminareDividedStack {
             LuminareSidebar {
-                LuminareSidebarSection("Theming", selection: $model.currentTab, items: model.themingTabs)
-                LuminareSidebarSection("Settings", selection: $model.currentTab, items: model.settingsTabs)
-                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: model.loopTabs)
+                LuminareSidebarSection("Theming", selection: $model.currentTab, items: Tab.theming)
+                LuminareSidebarSection("Settings", selection: $model.currentTab, items: Tab.settings)
+                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: Tab.loop)
             }
             .frame(width: 260)
 
             LuminarePane {
+                model.currentTab.view()
+                    .transition(.opacity.animation(.easeInOut(duration: 0.1)))
+            } header: {
                 HStack {
                     model.currentTab.iconView()
 
@@ -193,12 +183,9 @@ struct LuminareContentView: View {
                     Button {
                         model.showInspector.toggle()
                     } label: {
-                        Image(model.showInspector ? ._18PxSidebarLeftHide : ._18PxSidebarLeft3)
+                        Image(model.showInspector ? .sidebarLeftHide : .sidebarLeft3)
                     }
                 }
-            } content: {
-                model.currentTab.view()
-                    .transition(.opacity.animation(.easeInOut(duration: 0.1)))
             }
             .frame(width: 390)
 
@@ -215,7 +202,7 @@ struct LuminareContentView: View {
                         .frame(maxHeight: .infinity, alignment: .center)
                     }
                 }
-                .animation(LuminareConstants.animation, value: [model.showRadialMenu, model.showPreview])
+//                .animation(luminareAnimation, value: [model.showRadialMenu, model.showPreview])
                 .ignoresSafeArea()
                 .frame(width: 520)
             }

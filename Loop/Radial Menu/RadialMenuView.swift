@@ -11,7 +11,9 @@ import Luminare
 import SwiftUI
 
 struct RadialMenuView: View {
-    @ObservedObject var luminareModel: LuminareWindowModel = .shared
+    @Environment(\.luminareAnimation) private var luminareAnimation
+
+    @ObservedObject var luminareModel: LuminareManager = .shared
 
     let radialMenuSize: CGFloat = 100
 
@@ -174,7 +176,7 @@ struct RadialMenuView: View {
     }
 
     func recomputeColors() {
-        withAnimation(LuminareConstants.animation) {
+        withAnimation(luminareAnimation) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }

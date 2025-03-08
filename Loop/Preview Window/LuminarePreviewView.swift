@@ -10,7 +10,8 @@ import Luminare
 import SwiftUI
 
 struct LuminarePreviewView: View {
-    @ObservedObject var model: LuminareWindowModel = .shared
+    @Environment(\.luminareAnimation) private var luminareAnimation
+    @ObservedObject var model: LuminareManager = .shared
 
     @State var actionRect: CGRect = .zero
     @State private var scale: CGFloat = 1
@@ -95,7 +96,7 @@ struct LuminarePreviewView: View {
     }
 
     func recomputeColors() {
-        withAnimation(LuminareConstants.animation) {
+        withAnimation(luminareAnimation) {
             primaryColor = Color.getLoopAccent(tone: .normal)
             secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }

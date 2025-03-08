@@ -24,13 +24,13 @@ import SwiftUI
 /// - Summer: 3000 Loops
 /// - Master: 5000 Loops
 
-struct Icon: Hashable, LuminarePickerData {
+struct Icon: Hashable, LuminareSelectionData {
     var name: String
     var iconName: String
     var unlockTime: Int
     var unlockMessage: String?
 
-    var selectable: Bool {
+    var isSelectable: Bool {
         IconManager.returnUnlockedIcons().contains(self)
     }
 

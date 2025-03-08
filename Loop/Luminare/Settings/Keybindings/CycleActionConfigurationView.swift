@@ -28,34 +28,43 @@ struct CycleActionConfigurationView: View {
             LuminareTextField("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
         }
 
-        LuminareList(
-            items: Binding(
-                get: {
+        LuminareSection {
+            HStack(spacing: 2) {
+                Button("Add") {
                     if action.cycle == nil {
                         action.cycle = []
                     }
 
-                    return action.cycle ?? []
-                }, set: { newValue in
-                    action.cycle = newValue
-                }
-            ),
-            selection: $selectedKeybinds,
-            addAction: {
-                if action.cycle == nil {
-                    action.cycle = []
+                    action.cycle?.insert(.init(.noAction), at: 0)
                 }
 
-                action.cycle?.insert(.init(.noAction), at: 0)
-            },
-            content: { item in
+                Button("Remove", role: .destructive) {
+                    action.cycle?.removeAll(where: { selectedKeybinds.contains($0) })
+                }
+                .disabled(selectedKeybinds.isEmpty)
+            }
+
+            LuminareList(
+                items: Binding(
+                    get: {
+                        if action.cycle == nil {
+                            action.cycle = []
+                        }
+
+                        return action.cycle ?? []
+                    }, set: { newValue in
+                        action.cycle = newValue
+                    }
+                ),
+                selection: $selectedKeybinds,
+                id: \.id
+            ) { item in
                 KeybindItemView(
                     item,
                     cycleIndex: action.cycle?.firstIndex(of: item.wrappedValue)
                 )
                 .environmentObject(KeybindsConfigurationModel())
-            },
-            emptyView: {
+            } emptyView: {
                 HStack {
                     Spacer()
                     VStack {
@@ -68,11 +77,8 @@ struct CycleActionConfigurationView: View {
                 }
                 .foregroundStyle(.secondary)
                 .padding()
-            },
-            id: \.id,
-            addText: "Add",
-            removeText: "Remove"
-        )
+            }
+        }
         .onChange(of: action) { _ in
             windowAction = action
         }
@@ -80,6 +86,6 @@ struct CycleActionConfigurationView: View {
         Button("Close") {
             isPresented = false
         }
-        .buttonStyle(LuminareCompactButtonStyle())
+        .buttonStyle(.luminareCompact)
     }
 }

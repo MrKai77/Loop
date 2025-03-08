@@ -9,7 +9,8 @@ import Luminare
 import SwiftUI
 
 struct UpdateView: View {
-    @Environment(\.tintColor) var tintColor
+    @Environment(\.luminareTint) var tintColor
+    @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.colorScheme) var colorScheme
 
     @ObservedObject var updater = AppDelegate.updater
@@ -48,17 +49,17 @@ struct UpdateView: View {
                         AppDelegate.relaunch()
                     }
 
-                    withAnimation(LuminareConstants.animation) {
+                    withAnimation(luminareAnimation) {
                         isInstalling = true
                     }
                     Task {
                         await AppDelegate.updater.installUpdate()
 
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            withAnimation(LuminareConstants.animation) {
+                            withAnimation(luminareAnimation) {
                                 isInstalling = false
                             }
-                            withAnimation(LuminareConstants.animation) {
+                            withAnimation(luminareAnimation) {
                                 readyToRestart = true
                             }
                         }
@@ -73,12 +74,12 @@ struct UpdateView: View {
                                 .overlay {
                                     GeometryReader { geo in
                                         Capsule()
-                                            .foregroundStyle(tintColor())
+                                            .foregroundStyle(tintColor)
                                             .frame(width: CGFloat(updater.progressBar) * geo.size.width)
                                             .animation(.smooth(duration: 0.8), value: updater.progressBar)
-                                            .shadow(color: tintColor().opacity(0.1), radius: 12)
-                                            .shadow(color: tintColor().opacity(0.4), radius: 6)
-                                            .shadow(color: tintColor(), radius: 1)
+                                            .shadow(color: tintColor.opacity(0.1), radius: 12)
+                                            .shadow(color: tintColor.opacity(0.4), radius: 6)
+                                            .shadow(color: tintColor, radius: 1)
                                     }
                                 }
                                 .padding(.horizontal, 4)
@@ -197,18 +198,19 @@ struct UpdateView: View {
 }
 
 struct ChangelogSectionView: View {
+    @Environment(\.luminareAnimation) var luminareAnimation
     @Binding var item: (title: String, body: [Updater.ChangelogNote])
     @State var isExpanded = false
 
     var body: some View {
         LuminareSection {
             Button {
-                withAnimation(LuminareConstants.animation) {
+                withAnimation(luminareAnimation) {
                     isExpanded.toggle()
                 }
             } label: {
                 HStack {
-                    Image(._12PxChevronRight)
+                    Image(.chevronRight)
                         .bold()
                         .rotationEffect(isExpanded ? .degrees(90) : .zero)
 

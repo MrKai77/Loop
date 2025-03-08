@@ -10,150 +10,106 @@ import Luminare
 import ServiceManagement
 import SwiftUI
 
-class BehaviorConfigurationModel: ObservableObject {
-    @Published var launchAtLogin = Defaults[.launchAtLogin] {
-        didSet {
-            Defaults[.launchAtLogin] = launchAtLogin
-
-            do {
-                if launchAtLogin {
-                    try SMAppService().register()
-                } else {
-                    try SMAppService().unregister()
-                }
-            } catch {
-                print("Failed to \(launchAtLogin ? "register" : "unregister") login item: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    @Published var hideMenuBarIcon = Defaults[.hideMenuBarIcon] {
-        didSet { Defaults[.hideMenuBarIcon] = hideMenuBarIcon }
-    }
-
-    @Published var animationConfiguration = Defaults[.animationConfiguration] {
-        didSet { Defaults[.animationConfiguration] = animationConfiguration }
-    }
-
-    @Published var windowSnapping = Defaults[.windowSnapping] {
-        didSet { Defaults[.windowSnapping] = windowSnapping }
-    }
-
-    @Published var restoreWindowFrameOnDrag = Defaults[.restoreWindowFrameOnDrag] {
-        didSet { Defaults[.restoreWindowFrameOnDrag] = restoreWindowFrameOnDrag }
-    }
-
-    @Published var useSystemWindowManagerWhenAvailable = Defaults[.useSystemWindowManagerWhenAvailable] {
-        didSet { Defaults[.useSystemWindowManagerWhenAvailable] = useSystemWindowManagerWhenAvailable }
-    }
-
-    @Published var enablePadding = Defaults[.enablePadding] {
-        didSet { Defaults[.enablePadding] = enablePadding }
-    }
-
-    @Published var useScreenWithCursor = Defaults[.useScreenWithCursor] {
-        didSet { Defaults[.useScreenWithCursor] = useScreenWithCursor }
-    }
-
-    @Published var moveCursorWithWindow = Defaults[.moveCursorWithWindow] {
-        didSet { Defaults[.moveCursorWithWindow] = moveCursorWithWindow }
-    }
-
-    @Published var resizeWindowUnderCursor = Defaults[.resizeWindowUnderCursor] {
-        didSet { Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor }
-    }
-
-    @Published var focusWindowOnResize = Defaults[.focusWindowOnResize] {
-        didSet { Defaults[.focusWindowOnResize] = focusWindowOnResize }
-    }
-
-    @Published var respectStageManager = Defaults[.respectStageManager] {
-        didSet { Defaults[.respectStageManager] = respectStageManager }
-    }
-
-    @Published var stageStripSize = Defaults[.stageStripSize] {
-        didSet { Defaults[.stageStripSize] = stageStripSize }
-    }
-
-    @Published var isPaddingConfigurationViewPresented = false
-
-    let previewVisibility = Defaults[.previewVisibility]
-    let systemSnappingWarning: LuminareInfoView = .init("macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality.")
-}
+//    let systemSnappingWarning: LuminareInfoView = .init("macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality.")
 
 struct BehaviorConfigurationView: View {
-    @StateObject private var model = BehaviorConfigurationModel()
+    @Default(.launchAtLogin) var launchAtLogin
+    @Default(.hideMenuBarIcon) var hideMenuBarIcon
+    @Default(.animationConfiguration) var animationConfiguration
+    @Default(.windowSnapping) var windowSnapping
+    @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
+    @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
+    @Default(.enablePadding) var enablePadding
+    @Default(.useScreenWithCursor) var useScreenWithCursor
+    @Default(.moveCursorWithWindow) var moveCursorWithWindow
+    @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
+    @Default(.focusWindowOnResize) var focusWindowOnResize
+    @Default(.respectStageManager) var respectStageManager
+    @Default(.stageStripSize) var stageStripSize
+    @Default(.previewVisibility) var previewVisibility
+
+    @State private var isPaddingConfigurationViewPresented = false
 
     var body: some View {
         LuminareSection("General") {
-            LuminareToggle("Launch at login", isOn: $model.launchAtLogin)
-            LuminareToggle("Hide menu bar icon", isOn: $model.hideMenuBarIcon)
+            LuminareToggle("Launch at login", isOn: $launchAtLogin)
+                .onChange(of: launchAtLogin) { _ in
+                    do {
+                        if launchAtLogin {
+                            try SMAppService().register()
+                        } else {
+                            try SMAppService().unregister()
+                        }
+                    } catch {
+                        print("Failed to \(launchAtLogin ? "register" : "unregister") login item: \(error.localizedDescription)")
+                    }
+                }
+
+            LuminareToggle("Hide menu bar icon", isOn: $hideMenuBarIcon)
             LuminareSliderPicker(
                 "Animation speed",
                 AnimationConfiguration.allCases.reversed(),
-                selection: $model.animationConfiguration
+                selection: $animationConfiguration
             ) {
                 $0.name
             }
         }
 
         LuminareSection("Window") {
-            LuminareToggle("Move window to cursor's screen", isOn: $model.useScreenWithCursor)
+            LuminareToggle("Move window to cursor's screen", isOn: $useScreenWithCursor)
 
             if #available(macOS 15, *) {
                 LuminareToggle(
                     "Window snapping",
-                    info: SystemWindowManager.MoveAndResize.snappingEnabled ? model.systemSnappingWarning : nil,
-                    isOn: $model.windowSnapping
+//                    info: SystemWindowManager.MoveAndResize.snappingEnabled ? systemSnappingWarning : nil, // TODO: Fix this
+                    isOn: $windowSnapping
                 )
             } else {
-                LuminareToggle("Window snapping", isOn: $model.windowSnapping)
+                LuminareToggle("Window snapping", isOn: $windowSnapping)
             }
 
             // Enabling the system window manager will override these options anyway, so hide them
-            if !model.useSystemWindowManagerWhenAvailable {
-                LuminareToggle("Restore window frame on drag", isOn: $model.restoreWindowFrameOnDrag)
-                LuminareToggle("Apply padding", isOn: $model.enablePadding)
+            if !useSystemWindowManagerWhenAvailable {
+                LuminareToggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
+                LuminareToggle("Apply padding", isOn: $enablePadding)
 
-                if model.enablePadding {
+                if enablePadding {
                     Button("Configure padding…") {
-                        model.isPaddingConfigurationViewPresented = true
+                        isPaddingConfigurationViewPresented = true
                     }
-                    .luminareModal(isPresented: $model.isPaddingConfigurationViewPresented) {
-                        PaddingConfigurationView(isPresented: $model.isPaddingConfigurationViewPresented)
+                    .luminareModal(isPresented: $isPaddingConfigurationViewPresented) {
+                        PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
                             .frame(width: 400)
                     }
                 }
             }
         }
-        .onReceive(.systemWindowManagerStateChanged) { _ in
-            model.useSystemWindowManagerWhenAvailable = Defaults[.useSystemWindowManagerWhenAvailable]
-        }
 
         LuminareSection("Cursor") {
             LuminareToggle(
                 "Move cursor with window",
-                info: model.previewVisibility ? nil : .init("Cannot be enabled when the preview is disabled."),
-                isOn: $model.moveCursorWithWindow,
-                disabled: !model.previewVisibility
+//                info: previewVisibility ? nil : .init("Cannot be enabled when the preview is disabled."), // TODO: Fix this
+                isOn: $moveCursorWithWindow
             )
-            LuminareToggle("Resize window under cursor", isOn: $model.resizeWindowUnderCursor)
+            .disabled(!previewVisibility)
 
-            if model.resizeWindowUnderCursor {
-                LuminareToggle("Focus window on resize", isOn: $model.focusWindowOnResize)
+            LuminareToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)
+
+            if resizeWindowUnderCursor {
+                LuminareToggle("Focus window on resize", isOn: $focusWindowOnResize)
             }
         }
 
         LuminareSection("Stage Manager") {
-            LuminareToggle("Respect Stage Manager", isOn: $model.respectStageManager)
+            LuminareToggle("Respect Stage Manager", isOn: $respectStageManager)
 
-            if model.respectStageManager {
-                LuminareValueAdjuster(
+            if respectStageManager {
+                LuminareSlider(
                     "Stage strip size",
-                    value: $model.stageStripSize,
-                    sliderRange: 50...200,
-                    suffix: "px",
-                    lowerClamp: true
+                    value: $stageStripSize.doubleBinding,
+                    in: 50...200,
+                    clampsLower: true,
+                    suffix: "px"
                 )
             }
         }

@@ -10,10 +10,12 @@ import Luminare
 import SwiftUI
 
 struct PaddingConfigurationView: View {
+    @Environment(\.luminareAnimation) var luminareAnimation
+
     @State var paddingModel = Defaults[.padding]
     @Binding var isPresented: Bool
 
-    let range: ClosedRange<CGFloat> = 0...200
+    let range: ClosedRange<Double> = 0...200
 
     var body: some View {
         Group {
@@ -56,7 +58,7 @@ struct PaddingConfigurationView: View {
                     paddingModel.configureScreenPadding
                 },
                 set: { newValue in
-                    withAnimation(LuminareConstants.animation) {
+                    withAnimation(luminareAnimation) {
                         paddingModel.configureScreenPadding = newValue
 
                         if !paddingModel.configureScreenPadding {
@@ -77,24 +79,24 @@ struct PaddingConfigurationView: View {
                     }
                 }
             ),
-            columns: 2,
-            roundBottom: false
+            columns: 2
         ) { custom in
             HStack(spacing: 6) {
                 if custom {
-                    Image(._18PxSliders)
+                    Image(.sliders)
                     Text("Custom")
                 } else {
-                    Image(._18PxShapeSquare)
+                    Image(.shapeSquare)
                     Text("Simple")
                 }
             }
             .fixedSize()
         }
+        .luminarePickerRoundedCorner(bottom: .always)
     }
 
     func nonScreenPaddingConfiguration() -> some View {
-        LuminareValueAdjuster(
+        LuminareSlider(
             "Padding",
             value: Binding(
                 get: {
@@ -108,66 +110,85 @@ struct PaddingConfigurationView: View {
                     paddingModel.left = $0
                 }
             ),
-            sliderRange: range,
-            suffix: "px",
-            lowerClamp: true
+            in: range,
+            clampsLower: true,
+            suffix: "px"
         )
     }
 
     func screenSidesPaddingConfiguration() -> some View {
         Group {
-            LuminareValueAdjuster(
+            LuminareSlider(
                 "Top",
-                value: $paddingModel.top,
-                sliderRange: range,
-                suffix: "px",
-                lowerClamp: true,
-                controlSize: .compact
+                value: $paddingModel.top.doubleBinding,
+                in: range,
+                clampsLower: true,
+                suffix: "px"
             )
-            LuminareValueAdjuster(
+            .luminareComposeStyle(.inline)
+
+            LuminareSlider(
                 "Bottom",
-                value: $paddingModel.bottom,
-                sliderRange: range,
-                suffix: "px",
-                lowerClamp: true,
-                controlSize: .compact
+                value: $paddingModel.bottom.doubleBinding,
+                in: range,
+                clampsLower: true,
+                suffix: "px"
             )
-            LuminareValueAdjuster(
+            .luminareComposeStyle(.inline)
+
+            LuminareSlider(
                 "Right",
-                value: $paddingModel.right,
-                sliderRange: range,
-                suffix: "px",
-                lowerClamp: true,
-                controlSize: .compact
+                value: $paddingModel.right.doubleBinding,
+                in: range,
+                clampsLower: true,
+                suffix: "px"
             )
-            LuminareValueAdjuster(
+            .luminareComposeStyle(.inline)
+
+            LuminareSlider(
                 "Left",
-                value: $paddingModel.left,
-                sliderRange: range,
-                suffix: "px",
-                lowerClamp: true,
-                controlSize: .compact
+                value: $paddingModel.left.doubleBinding,
+                in: range,
+                clampsLower: true,
+                suffix: "px"
             )
+            .luminareComposeStyle(.inline)
         }
     }
 
     func screenInsetsPaddingConfiguration() -> some View {
         Group {
-            LuminareValueAdjuster(
+            LuminareSlider(
                 "Window gaps",
-                value: $paddingModel.window,
-                sliderRange: 0...100,
-                suffix: "px",
-                lowerClamp: true
+                value: $paddingModel.window.doubleBinding,
+                in: 0...100,
+                clampsLower: true,
+                suffix: "px"
             )
-            LuminareValueAdjuster(
+
+            LuminareSlider(
                 "External bar",
-                info: .init("Use this if you are using a custom menubar."),
-                value: $paddingModel.externalBar,
-                sliderRange: 0...100,
-                suffix: "px",
-                lowerClamp: true
+                value: $paddingModel.externalBar.doubleBinding,
+                in: 0...100,
+                clampsLower: true,
+                suffix: "px"
             )
+            // TODO: Implement info
+//            LuminareValueAdjuster(
+//                "Window gaps",
+//                value: $paddingModel.window,
+//                sliderRange: 0...100,
+//                suffix: "px",
+//                lowerClamp: true
+//            )
+//            LuminareValueAdjuster(
+//                "External bar",
+//                info: .init("Use this if you are using a custom menubar."),
+//                value: $paddingModel.externalBar,
+//                sliderRange: 0...100,
+//                suffix: "px",
+//                lowerClamp: true
+//            )
         }
     }
 }

@@ -9,6 +9,8 @@ import Luminare
 import SwiftUI
 
 struct PaddingPreviewView: View {
+    @Environment(\.luminareAnimation) private var luminareAnimation
+
     @Binding var model: PaddingModel
 
     init(_ paddingModel: Binding<PaddingModel>) {
@@ -33,7 +35,7 @@ struct PaddingPreviewView: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }
-        .animation(LuminareConstants.animation, value: model)
+        .animation(luminareAnimation, value: model)
     }
 
     @ViewBuilder

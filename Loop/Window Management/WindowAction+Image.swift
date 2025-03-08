@@ -57,6 +57,8 @@ extension WindowAction {
 }
 
 struct IconView: View {
+    @Environment(\.luminareAnimationFast) private var luminareAnimationFast
+
     let action: WindowAction
 
     @State private var frame: CGRect = .init(x: 0, y: 0, width: 1, height: 1)
@@ -69,7 +71,7 @@ struct IconView: View {
         if action.direction == .cycle, let first = action.cycle?.first {
             IconView(action: first)
                 .id(first.id)
-                .animation(LuminareConstants.fastAnimation, value: first)
+                .animation(luminareAnimationFast, value: first)
         } else {
             ZStack {
                 if frame.size.area != 0 {
@@ -89,7 +91,7 @@ struct IconView: View {
                         refreshFrame()
                     }
                     .onChange(of: action) { _ in
-                        withAnimation(LuminareConstants.fastAnimation) {
+                        withAnimation(luminareAnimationFast) {
                             refreshFrame()
                         }
                     }
@@ -100,11 +102,11 @@ struct IconView: View {
                                 .font(.system(size: 8))
                                 .fontWeight(.bold)
                         } else if action.direction == .cycle {
-                            Image(._18PxRepeat4)
+                            Image(.repeat4)
                                 .resizable()
                                 .scaledToFit()
                         } else {
-                            Image(._18PxRuler)
+                            Image(.ruler)
                                 .resizable()
                                 .scaledToFit()
                         }

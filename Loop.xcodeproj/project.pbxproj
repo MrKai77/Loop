@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A860324F2CB34A6C005742EB /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A860324E2CB34A6C005742EB /* Luminare */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
+		A8C752052D7BAB0300B58784 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = A8C752042D7BAB0300B58784 /* Luminare */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
+				A8C752052D7BAB0300B58784 /* Luminare in Frameworks */,
 				A860324F2CB34A6C005742EB /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 			);
@@ -89,7 +91,7 @@
 			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */;
 			buildPhases = (
 				A8E59C31297F5E9A0064D4BA /* Sources */,
-				A80FD0D82CB34BA300DCC00B /* Run SwiftLint */,
+				A80FD0D82CB34BA300DCC00B /* Run SwiftFormat */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
 				A8E59C33297F5E9A0064D4BA /* Resources */,
 			);
@@ -103,6 +105,7 @@
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
+				A8C752042D7BAB0300B58784 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -144,7 +147,7 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
-				A80554C32D235233009238C7 /* XCRemoteSwiftPackageReference "Luminare" */,
+				A8C752032D7BAB0300B58784 /* XCLocalSwiftPackageReference "../KrLite" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -166,7 +169,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A80FD0D82CB34BA300DCC00B /* Run SwiftLint */ = {
+		A80FD0D82CB34BA300DCC00B /* Run SwiftFormat */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -176,7 +179,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Run SwiftLint";
+			name = "Run SwiftFormat";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -416,15 +419,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		A80554C32D235233009238C7 /* XCRemoteSwiftPackageReference "Luminare" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MrKai77/Luminare";
-			requirement = {
-				branch = "loop-1.2.0";
-				kind = branch;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		A8C752032D7BAB0300B58784 /* XCLocalSwiftPackageReference "../KrLite" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../KrLite;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -437,6 +439,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		A860324E2CB34A6C005742EB /* Luminare */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Luminare;
+		};
+		A8C752042D7BAB0300B58784 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Luminare;
 		};

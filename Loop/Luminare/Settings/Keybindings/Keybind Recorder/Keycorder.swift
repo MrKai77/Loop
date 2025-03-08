@@ -66,7 +66,7 @@ struct Keycorder: View {
                     }
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .modifier(LuminareBordered(highlight: $isHovering))
+                    .modifier(LuminareBordered(isHovering: isHovering))
                 }
             }
         }

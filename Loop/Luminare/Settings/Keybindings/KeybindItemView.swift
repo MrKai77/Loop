@@ -10,7 +10,9 @@ import Luminare
 import SwiftUI
 
 struct KeybindItemView: View {
-    @Environment(\.hoveringOverLuminareItem) var isHovering
+    @Environment(\.luminareListItemHighlightOnHover) var isHovering
+    @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.luminarePopupPadding) var luminarePopupPadding
 
     @Default(.triggerKey) var triggerKey
     @Binding var keybind: WindowAction
@@ -72,7 +74,7 @@ struct KeybindItemView: View {
                         Button(action: {
                             isConfiguringCustom = true
                         }, label: {
-                            Image(._18PxRuler)
+                            Image(.ruler)
                         })
                         .buttonStyle(.plain)
                         .luminareModal(isPresented: $isConfiguringCustom) {
@@ -86,7 +88,7 @@ struct KeybindItemView: View {
                         Button(action: {
                             isConfiguringCycle = true
                         }, label: {
-                            Image(._18PxRepeat4)
+                            Image(.repeat4)
                         })
                         .buttonStyle(.plain)
                         .luminareModal(isPresented: $isConfiguringCycle) {
@@ -102,9 +104,12 @@ struct KeybindItemView: View {
             .background {
                 if isHovering {
                     Color.clear
-                        .background(PopoverHolder(isPresented: $isPresented) {
+//                        .background(PopoverHolder(isPresented: $isPresented) {
+//                            directionPickerContents(keybind: $keybind.direction)
+//                        })
+                        .luminarePopup(isPresented: $isPresented) {
                             directionPickerContents(keybind: $keybind.direction)
-                        })
+                        }
                 }
             }
 
@@ -118,12 +123,12 @@ struct KeybindItemView: View {
                 HStack(spacing: 6) {
                     let hasConflicts = hasDuplicateKeybinds()
 
-                    if hasConflicts {
-                        LuminareInfoView(
-                            "There are other keybinds that conflict with this key combination.",
-                            .red
-                        )
-                    }
+//                    if hasConflicts { // TODO: Implement this
+//                        LuminareInfoView(
+//                            "There are other keybinds that conflict with this key combination.",
+//                            .red
+//                        )
+//                    }
 
                     HStack {
                         ForEach(triggerKey.sorted().compactMap(\.systemImage), id: \.self) { image in
@@ -143,7 +148,7 @@ struct KeybindItemView: View {
                 .fixedSize()
             }
         }
-        .animation(LuminareConstants.animation, value: keybind)
+        .animation(luminareAnimation, value: keybind)
         .padding(.horizontal, 12)
         .onAppear {
             computeSearchResults()
@@ -182,8 +187,12 @@ struct KeybindItemView: View {
                         .contentTransition(.numericText())
                 }
 
-                if let info = keybind.direction.infoView {
-                    info
+                if let info = keybind.direction.infoText {
+                    LuminarePopover {
+                        Text(info)
+                            .padding()
+                    }
+                    .tint(.yellow)
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
@@ -204,7 +213,7 @@ struct KeybindItemView: View {
             Button {
                 isPresented.toggle()
             } label: {
-                Image(._18PxPen2)
+                Image(.pen2)
                     .padding(.vertical, 5) // Increase hitbox size
                     .contentShape(.rect)
                     .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox
@@ -217,7 +226,7 @@ struct KeybindItemView: View {
     func directionPickerContents(keybind: Binding<WindowDirection>) -> some View {
         VStack(spacing: 0) {
             CustomTextField($searchText)
-                .padding(PopoverPanel.contentPadding * 2)
+                .padding(luminarePopupPadding)
 
             Divider()
 
@@ -246,8 +255,10 @@ struct KeybindItemView: View {
 }
 
 private struct CompactButtonStyle: ButtonStyle {
-    @Environment(\.hoveringOverLuminareItem) var hoveringOverLuminareItem
+    @Environment(\.luminareListItemHighlightOnHover) private var hoveringOverLuminareItem
+    @Environment(\.luminareAnimationFast) private var luminareAnimationFast
     @Environment(\.isEnabled) private var isEnabled: Bool
+
     let elementMinHeight: CGFloat = 25
     @State var isHovering: Bool = false
     let cornerRadius: CGFloat = 6
@@ -266,7 +277,7 @@ private struct CompactButtonStyle: ButtonStyle {
                 }
             }
             .onHover { isHovering = $0 }
-            .animation(LuminareConstants.fastAnimation, value: [isHovering, hoveringOverLuminareItem])
+            .animation(luminareAnimationFast, value: [isHovering, hoveringOverLuminareItem])
             .frame(minHeight: elementMinHeight)
             .opacity(isEnabled ? 1 : 0.5)
     }

@@ -9,16 +9,44 @@ import Defaults
 import Luminare
 import SwiftUI
 
-class ExcludedAppsConfigurationModel: ObservableObject {
-    @Published var excludedApps = Defaults[.excludedApps] {
-        didSet { Defaults[.excludedApps] = excludedApps }
+struct ExcludedAppsConfigurationView: View {
+    @Environment(\.luminareAnimation) private var luminareAnimation
+
+    @Default(.excludedApps) private var excludedApps
+    @State private var selectedApps = Set<URL>()
+
+    var body: some View {
+        LuminareSection {
+            HStack(spacing: 2) {
+                Button("Add") {
+                    showAppChooser()
+                }
+
+                Button("Remove", role: .destructive) {
+                    withAnimation(luminareAnimation) {
+                        excludedApps.removeAll { selectedApps.contains($0) }
+                    }
+                }
+                .disabled(selectedApps.isEmpty)
+                .buttonStyle(.luminareProminent)
+            }
+
+            LuminareList(
+                items: $excludedApps,
+                selection: $selectedApps,
+                id: \.self
+            ) { item in
+                AppView(url: item)
+                    .equatable()
+            }
+            .luminareListRoundedCorner(bottom: .always)
+        }
     }
 
-    @Published var selectedApps = Set<URL>()
-
     func showAppChooser() {
-        DispatchQueue.main.async {
-            guard let window = LuminareManager.luminare else { return }
+        Task { @MainActor in
+            guard let window = LuminareManager.shared.luminare else { return }
+
             let panel = NSOpenPanel()
             panel.worksWhenModal = true
             panel.allowsMultipleSelection = true
@@ -28,51 +56,17 @@ class ExcludedAppsConfigurationModel: ObservableObject {
             panel.allowsOtherFileTypes = false
             panel.resolvesAliases = true
             panel.directoryURL = FileManager.default.urls(for: .applicationDirectory, in: .localDomainMask).first
-            panel.beginSheetModal(for: window) { result in
-                if result == .OK {
-                    let appsToAdd = panel.urls.compactMap { self.excludedApps.contains($0) ? nil : $0 }
 
-                    withAnimation(LuminareConstants.animation) {
-                        self.excludedApps.append(contentsOf: appsToAdd)
-                    }
+            let result = await panel.beginSheetModal(for: window)
+
+            if result == .OK {
+                let appsToAdd = panel.urls.compactMap { excludedApps.contains($0) ? nil : $0 }
+
+                withAnimation(luminareAnimation) {
+                    excludedApps.append(contentsOf: appsToAdd)
                 }
             }
         }
-    }
-}
-
-struct ExcludedAppsConfigurationView: View {
-    @StateObject private var model = ExcludedAppsConfigurationModel()
-
-    var body: some View {
-        LuminareList(
-            items: $model.excludedApps,
-            selection: $model.selectedApps,
-            addAction: {
-                model.showAppChooser()
-            },
-            content: { url in
-                AppView(url: url)
-                    .equatable()
-            },
-            emptyView: {
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text("No excluded applications")
-                            .font(.title3)
-                        Text("Press \"Add\" to add an application")
-                            .font(.caption)
-                    }
-                    Spacer()
-                }
-                .foregroundStyle(.secondary)
-                .padding()
-            },
-            id: \.self,
-            addText: "Add",
-            removeText: "Remove"
-        )
     }
 }
 
@@ -113,7 +107,7 @@ struct AppView: View, Equatable {
             Button {
                 NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: app.path)])
             } label: {
-                Image(._18PxFinder)
+                Image(.finder)
                     .foregroundStyle(.tertiary)
             }
             .buttonStyle(PlainButtonStyle())

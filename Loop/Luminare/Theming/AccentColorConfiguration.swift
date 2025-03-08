@@ -9,76 +9,6 @@ import Defaults
 import Luminare
 import SwiftUI
 
-// MARK: - Model
-
-class AccentColorConfigurationModel: ObservableObject {
-    // MARK: Defaults
-
-    @Published var useSystemAccentColor = Defaults[.useSystemAccentColor] {
-        didSet { Defaults[.useSystemAccentColor] = useSystemAccentColor }
-    }
-
-    @Published var useGradient = Defaults[.useGradient] {
-        didSet { Defaults[.useGradient] = useGradient }
-    }
-
-    @Published var customAccentColor = Defaults[.customAccentColor] {
-        didSet { Defaults[.customAccentColor] = customAccentColor }
-    }
-
-    @Published var gradientColor = Defaults[.gradientColor] {
-        didSet { Defaults[.gradientColor] = gradientColor }
-    }
-
-    @Published var processWallpaper = Defaults[.processWallpaper] {
-        didSet {
-            Defaults[.processWallpaper] = processWallpaper
-
-            if processWallpaper {
-                syncWallpaper()
-            }
-        }
-    }
-
-    // MARK: Color mode helpers
-
-    var isCustom: Bool {
-        useSystemAccentColor ? false : !processWallpaper
-    }
-
-    var isWallpaper: Bool {
-        processWallpaper && !useSystemAccentColor
-    }
-
-    var accentColorOption: AccentColorOption {
-        get {
-            useSystemAccentColor ? .system : (processWallpaper ? .wallpaper : .custom)
-        }
-        set {
-            useSystemAccentColor = newValue == .system
-            processWallpaper = newValue == .wallpaper
-        }
-    }
-
-    func syncWallpaper() {
-        Task {
-            await WallpaperProcessor.fetchLatestWallpaperColors()
-
-            await MainActor.run {
-                withAnimation(LuminareConstants.fastAnimation) {
-                    customAccentColor = Defaults[.customAccentColor]
-                    gradientColor = Defaults[.gradientColor]
-                }
-            }
-
-            // Force-rerender accent colors
-            let window = LuminareManager.luminare
-            await window?.resignMain()
-            await window?.makeKeyAndOrderFront(self)
-        }
-    }
-}
-
 // MARK: - AccentColorOption
 
 enum AccentColorOption: CaseIterable {
@@ -89,8 +19,8 @@ enum AccentColorOption: CaseIterable {
     var image: Image {
         switch self {
         case .system: Image(systemName: "apple.logo")
-        case .wallpaper: Image(._18PxImageDepth)
-        case .custom: Image(._18PxColorPalette)
+        case .wallpaper: Image(.imageDepth)
+        case .custom: Image(.colorPalette)
         }
     }
 
@@ -106,50 +36,76 @@ enum AccentColorOption: CaseIterable {
 // MARK: - View
 
 struct AccentColorConfigurationView: View {
-    @StateObject private var model = AccentColorConfigurationModel()
+    @Environment(\.luminareAnimation) private var luminareAnimation
+//    @StateObject private var model = AccentColorConfigurationModel()
+    @Default(.useSystemAccentColor) private var useSystemAccentColor
+    @Default(.useGradient) private var useGradient
+    @Default(.customAccentColor) private var customAccentColor
+    @Default(.gradientColor) private var gradientColor
+    @Default(.processWallpaper) private var processWallpaper
+
+    var isCustom: Bool {
+        useSystemAccentColor ? false : !processWallpaper
+    }
+
+    var isWallpaper: Bool {
+        processWallpaper && !useSystemAccentColor
+    }
+
+    var accentColorOption: Binding<AccentColorOption> {
+        Binding(
+            get: {
+                useSystemAccentColor ? .system : (processWallpaper ? .wallpaper : .custom)
+            },
+            set: { newValue in
+                useSystemAccentColor = newValue == .system
+                processWallpaper = newValue == .wallpaper
+            }
+        )
+    }
 
     var body: some View {
         LuminareSection {
             LuminarePicker(
                 elements: AccentColorOption.allCases,
-                selection: $model.accentColorOption.animation(LuminareConstants.animation),
-                columns: 3,
-                roundBottom: model.useSystemAccentColor
+                selection: accentColorOption.animation(luminareAnimation),
+                columns: 3
             ) { option in
                 VStack(spacing: 6) {
                     Spacer()
                     option.image
 
-                    // if macOS version is below 14, add screen recording warning
-                    if #unavailable(macOS 14.0), option == .wallpaper, model.processWallpaper {
-                        // Notice to disable screen recording, however, keep it in the list.
-                        HStack(spacing: 0) {
-                            Text(option.text)
-                            LuminareInfoView("Please press deny when Loop \n requests screen recording permissions.", .orange)
-                        }
-                        .fixedSize()
-                    } else {
-                        Text(option.text)
-                    }
+                    // TODO: Fix this
+//                    // if macOS version is below 14, add screen recording warning
+//                    if #unavailable(macOS 14.0), option == .wallpaper, processWallpaper {
+//                        // Notice to disable screen recording, however, keep it in the list.
+//                        HStack(spacing: 0) {
+//                            Text(option.text)
+//                            LuminareInfoView("Please press deny when Loop \n requests screen recording permissions.", .orange)
+//                        }
+//                        .fixedSize()
+//                    } else {
+                    Text(option.text)
+//                    }
 
                     Spacer()
                 }
                 .font(.title3)
                 .frame(height: 90)
             }
+            .luminarePickerRoundedCorner(bottom: .always)
 
-            LuminareToggle("Gradient", isOn: $model.useGradient)
-                .animation(LuminareConstants.animation, value: model.useGradient)
+            LuminareToggle("Gradient", isOn: $useGradient.animation(luminareAnimation))
 
-            if model.processWallpaper {
+            if processWallpaper {
                 Button("Sync Wallpaper") {
-                    model.syncWallpaper()
+                    syncWallpaper()
                 }
             }
         }
 
         VStack {
-            if model.isCustom {
+            if isCustom {
                 HStack {
                     Text("Color")
                     Spacer()
@@ -157,17 +113,37 @@ struct AccentColorConfigurationView: View {
                 .foregroundStyle(.secondary)
 
                 LuminareColorPicker(
-                    color: $model.customAccentColor,
-                    colorNames: (red: "Red", green: "Green", blue: "Blue")
+                    color: $customAccentColor,
+                    style: .textFieldWithColorWell()
                 )
+                .luminareAspectRatio(contentMode: .fill)
 
-                if model.useGradient {
+                if useGradient {
                     LuminareColorPicker(
-                        color: $model.gradientColor,
-                        colorNames: (red: "Red", green: "Green", blue: "Blue")
+                        color: $gradientColor,
+                        style: .textFieldWithColorWell()
                     )
+                    .luminareAspectRatio(contentMode: .fill)
                 }
             }
+        }
+    }
+
+    func syncWallpaper() {
+        Task {
+            await WallpaperProcessor.fetchLatestWallpaperColors()
+
+            await MainActor.run {
+                withAnimation(luminareAnimation) {
+                    customAccentColor = Defaults[.customAccentColor]
+                    gradientColor = Defaults[.gradientColor]
+                }
+            }
+
+            // Force-rerender accent colors
+            let window = LuminareManager.shared.luminare
+            window?.resignMain()
+            window?.makeKeyAndOrderFront(self)
         }
     }
 }

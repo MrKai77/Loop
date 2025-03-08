@@ -10,34 +10,6 @@ import Luminare
 import SwiftUI
 
 class IconConfigurationModel: ObservableObject {
-    static let suggestNewIconLink = URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!
-
-    @Published var currentIcon: String = Defaults[.currentIcon] {
-        didSet {
-            if oldValue != currentIcon {
-                Defaults[.currentIcon] = currentIcon
-                IconManager.refreshCurrentAppIcon()
-            }
-        }
-    }
-
-    @Published var showDockIcon: Bool = Defaults[.showDockIcon] {
-        didSet {
-            if oldValue != showDockIcon {
-                Defaults[.showDockIcon] = showDockIcon
-            }
-        }
-    }
-
-    @Published var notificationWhenIconUnlocked: Bool = Defaults[.notificationWhenIconUnlocked] {
-        didSet {
-            if oldValue != notificationWhenIconUnlocked {
-                Defaults[.notificationWhenIconUnlocked] = notificationWhenIconUnlocked
-                handleNotificationChange()
-            }
-        }
-    }
-
     @Published var showingLockedAlert = false
     @Published var selectedLockedMessage: String = ""
     let lockedMessages: [String] = [
@@ -81,28 +53,29 @@ class IconConfigurationModel: ObservableObject {
         return shuffledTexts.popLast() ?? lockedMessages[0] // Fallback string
     }
 
-    private func handleNotificationChange() {
-        if notificationWhenIconUnlocked {
+    func handleNotificationChange() {
+        if Defaults[.notificationWhenIconUnlocked] {
             AppDelegate.sendNotification(
                 Bundle.main.appName,
                 .init(localized: "Icon notifications enabled", defaultValue: "You will now be notified when you unlock a new icon.")
             )
             if !AppDelegate.areNotificationsEnabled() {
-                notificationWhenIconUnlocked = false
+                Defaults[.notificationWhenIconUnlocked] = false
                 userDisabledNotificationsAlert()
             }
         }
     }
 
     private func userDisabledNotificationsAlert() {
-        guard let window = LuminareManager.luminare else { return }
-        let alert = NSAlert()
-        alert.messageText = .init(localized: "Notification permits: info", defaultValue: "\(Bundle.main.appName)'s notification permissions are currently disabled.")
-        alert.informativeText = .init(localized: "Notification permits: request", defaultValue: "Please turn them on in System Settings.")
-        alert.addButton(withTitle: .init(localized: "Notification permits: open notification settings", defaultValue: "Open Settings"))
-        alert.alertStyle = .warning
+        Task { @MainActor in
+            guard let window = LuminareManager.shared.luminare else { return }
+            let alert = NSAlert()
+            alert.messageText = .init(localized: "Notification permits: info", defaultValue: "\(Bundle.main.appName)'s notification permissions are currently disabled.")
+            alert.informativeText = .init(localized: "Notification permits: request", defaultValue: "Please turn them on in System Settings.")
+            alert.addButton(withTitle: .init(localized: "Notification permits: open notification settings", defaultValue: "Open Settings"))
+            alert.alertStyle = .warning
+            let modalResponse = await alert.beginSheetModal(for: window)
 
-        alert.beginSheetModal(for: window) { modalResponse in
             if modalResponse == .alertFirstButtonReturn {
                 NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension")!)
             }
@@ -118,15 +91,24 @@ struct IconConfigurationView: View {
     @Environment(\.openURL) var openURL
     @StateObject private var model = IconConfigurationModel()
 
+    let suggestNewIconLink = URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!
+
+    @Default(.currentIcon) var currentIcon
+    @Default(.showDockIcon) var showDockIcon
+    @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked
+
     var body: some View {
-        LuminareSection(showDividers: false) {
+        LuminareSection {
             LuminarePicker(
                 elements: Icon.all,
                 selection: Binding(
-                    get: { IconManager.currentAppIcon },
-                    set: { model.currentIcon = $0.iconName }
-                ),
-                roundBottom: false
+                    get: { IconManager.currentAppIcon
+                    },
+                    set: {
+                        currentIcon = $0.iconName
+                        IconManager.refreshCurrentAppIcon()
+                    }
+                )
             ) { icon in
                 IconVew(model: model, icon: icon)
                     .aspectRatio(1, contentMode: .fit)
@@ -138,18 +120,30 @@ struct IconConfigurationView: View {
                         )
                     }
             }
-            Button("Suggest new icon") {
-                openURL(IconConfigurationModel.suggestNewIconLink)
-            }
+            .luminarePickerRoundedCorner(.always)
         }
+
         LuminareSection("Options") {
-            LuminareToggle("Show in dock", isOn: $model.showDockIcon)
-            LuminareToggle("Notify when unlocking new icons", isOn: $model.notificationWhenIconUnlocked)
+            LuminareToggle("Show in dock", isOn: $showDockIcon)
+            LuminareToggle(
+                "Notify when unlocking new icons",
+                isOn: Binding(
+                    get: {
+                        notificationWhenIconUnlocked
+                    },
+                    set: {
+                        notificationWhenIconUnlocked = $0
+                        model.handleNotificationChange()
+                    }
+                )
+            )
         }
     }
 }
 
 struct IconVew: View {
+    @Environment(\.luminareAnimation) private var luminareAnimation
+
     @ObservedObject var model: IconConfigurationModel
     let icon: Icon
 
@@ -171,7 +165,7 @@ struct IconVew: View {
                     Spacer()
                     VStack(alignment: .center) {
                         Spacer()
-                        Image(._18PxLock)
+                        Image(.lock)
                             .foregroundStyle(.secondary)
 
                         Text(nextUnlockCount == icon.unlockTime ?
@@ -194,7 +188,7 @@ struct IconVew: View {
             }
         }
         .onAppear {
-            hasBeenUnlocked = icon.selectable
+            hasBeenUnlocked = icon.isSelectable
 
             if !hasBeenUnlocked {
                 nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
@@ -202,12 +196,12 @@ struct IconVew: View {
             }
         }
         .onChange(of: timesLooped) { _ in
-            withAnimation(LuminareConstants.animation) {
-                hasBeenUnlocked = icon.selectable
+            withAnimation(luminareAnimation) {
+                hasBeenUnlocked = icon.isSelectable
             }
 
             if !hasBeenUnlocked {
-                withAnimation(LuminareConstants.animation) {
+                withAnimation(luminareAnimation) {
                     nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
                     loopsLeft = nextUnlockCount - timesLooped
                 }

@@ -5,18 +5,15 @@
 //  Created by phlpsong on 2024/3/31.
 //
 
-import Foundation
 import Luminare
+import SwiftUI
 
 extension WindowDirection {
-    var infoView: LuminareInfoView? {
-        var result: LuminareInfoView?
-
-        if self == .macOSCenter {
-            result = .init("\(name) places windows slightly above the absolute center,\nwhich can be found more ergonomic.")
+    var infoText: LocalizedStringKey? {
+        switch self {
+        case .macOSCenter: "\(name) places windows slightly above the absolute center,\nwhich can be found more ergonomic."
+        default: nil
         }
-
-        return result
     }
 
     var name: String {
