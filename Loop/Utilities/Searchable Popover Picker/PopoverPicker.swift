@@ -35,11 +35,11 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
 
     var body: some View {
         ScrollViewReader { reader in
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: luminarePopupPadding) {
+            ScrollView {
+                LazyVStack(spacing: luminarePopupPadding) {
                     contentStack(reader: reader)
                 }
-                .padding(luminarePopupPadding)
+                .padding(luminarePopupPadding / 2)
             }
         }
     }
@@ -80,8 +80,8 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
             } header: {
                 Text(section.title)
                     .foregroundStyle(.secondary)
-                    .padding(.leading, luminarePopupPadding)
-                    .padding(.top, luminarePopupPadding)
+                    .padding(.leading, luminarePopupPadding / 2)
+                    .padding(.top, luminarePopupPadding / 2)
             }
         }
     }
@@ -151,7 +151,7 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
             popover.resignKey()
         } label: {
             content(item)
-                .padding(luminarePopupPadding)
+                .padding(luminarePopupPadding / 2)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(SearchablePickerButtonStyle(isHovering: $isHovering, isActive: $isActive))
@@ -190,10 +190,10 @@ struct SearchablePickerButtonStyle: ButtonStyle {
 
     var cornerRadius: RectangleCornerRadii {
         .init(
-            topLeading: luminarePopupCornerRadii.topLeading - luminarePopupPadding,
-            bottomLeading: luminarePopupCornerRadii.topLeading - luminarePopupPadding,
-            bottomTrailing: luminarePopupCornerRadii.topLeading - luminarePopupPadding,
-            topTrailing: luminarePopupCornerRadii.topLeading - luminarePopupPadding
+            topLeading: luminarePopupCornerRadii.topLeading - luminarePopupPadding / 2,
+            bottomLeading: luminarePopupCornerRadii.topLeading - luminarePopupPadding / 2,
+            bottomTrailing: luminarePopupCornerRadii.topLeading - luminarePopupPadding / 2,
+            topTrailing: luminarePopupCornerRadii.topLeading - luminarePopupPadding / 2
         )
     }
 

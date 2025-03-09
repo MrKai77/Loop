@@ -10,7 +10,7 @@ import Luminare
 import SwiftUI
 
 struct KeybindItemView: View {
-    @Environment(\.luminareListItemHighlightOnHover) var isHovering
+    @Environment(\.luminareItemBeingHovered) var isHovering
     @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.luminarePopupPadding) var luminarePopupPadding
 
@@ -77,7 +77,7 @@ struct KeybindItemView: View {
                             Image(.ruler)
                         })
                         .buttonStyle(.plain)
-                        .luminareModal(isPresented: $isConfiguringCustom) {
+                        .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCustom, isCompact: false) {
                             CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
                                 .frame(width: 400)
                         }
@@ -91,7 +91,7 @@ struct KeybindItemView: View {
                             Image(.repeat4)
                         })
                         .buttonStyle(.plain)
-                        .luminareModal(isPresented: $isConfiguringCycle) {
+                        .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCycle, isCompact: false) {
                             CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
                                 .frame(width: 400)
                         }
@@ -104,12 +104,10 @@ struct KeybindItemView: View {
             .background {
                 if isHovering {
                     Color.clear
-//                        .background(PopoverHolder(isPresented: $isPresented) {
-//                            directionPickerContents(keybind: $keybind.direction)
-//                        })
-                        .luminarePopup(isPresented: $isPresented) {
+                        .luminarePopup(isPresented: $isPresented, alignment: .leadingLastTextBaseline) {
                             directionPickerContents(keybind: $keybind.direction)
                         }
+                        .luminareSheetClosesOnDefocus(true)
                 }
             }
 
@@ -184,7 +182,6 @@ struct KeybindItemView: View {
 
                     Text(keybind.getName())
                         .lineLimit(1)
-                        .contentTransition(.numericText())
                 }
 
                 if let info = keybind.direction.infoText {
@@ -239,8 +236,10 @@ struct KeybindItemView: View {
                     IconView(action: .init(item))
                     Text(item.name)
                 }
+                .compositingGroup()
             }
         }
+        .frame(width: 300, height: 300)
     }
 
     func computeSearchResults() {
@@ -255,7 +254,7 @@ struct KeybindItemView: View {
 }
 
 private struct CompactButtonStyle: ButtonStyle {
-    @Environment(\.luminareListItemHighlightOnHover) private var hoveringOverLuminareItem
+    @Environment(\.luminareItemBeingHovered) private var luminareItemBeingHovered
     @Environment(\.luminareAnimationFast) private var luminareAnimationFast
     @Environment(\.isEnabled) private var isEnabled: Bool
 
@@ -266,7 +265,7 @@ private struct CompactButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background {
-                if configuration.isPressed || isHovering || hoveringOverLuminareItem {
+                if configuration.isPressed || isHovering || luminareItemBeingHovered {
                     backgroundForState(isPressed: configuration.isPressed)
                         .background {
                             RoundedRectangle(cornerRadius: cornerRadius)
@@ -277,7 +276,7 @@ private struct CompactButtonStyle: ButtonStyle {
                 }
             }
             .onHover { isHovering = $0 }
-            .animation(luminareAnimationFast, value: [isHovering, hoveringOverLuminareItem])
+            .animation(luminareAnimationFast, value: [isHovering, luminareItemBeingHovered])
             .frame(minHeight: elementMinHeight)
             .opacity(isEnabled ? 1 : 0.5)
     }

@@ -73,8 +73,13 @@ struct IconView: View {
                 .id(first.id)
                 .animation(luminareAnimationFast, value: first)
         } else {
-            ZStack {
-                if frame.size.area != 0 {
+            Group {
+                if let icon = action.icon {
+                    icon
+                        .font(.system(size: 8))
+                        .fontWeight(.bold)
+                        .frame(width: size.width, height: size.height, alignment: .center)
+                } else if frame.size.area != 0 {
                     ZStack {
                         RoundedRectangle(cornerRadius: outerCornerRadius - inset)
                             .frame(
@@ -86,7 +91,6 @@ struct IconView: View {
                                 y: frame.origin.y
                             )
                     }
-                    .frame(width: size.width, height: size.height, alignment: .topLeading)
                     .onAppear {
                         refreshFrame()
                     }
@@ -95,23 +99,17 @@ struct IconView: View {
                             refreshFrame()
                         }
                     }
+                    .frame(width: size.width, height: size.height, alignment: .topLeading)
+                } else if action.direction == .cycle {
+                    Image(.repeat4)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: size.width, height: size.height, alignment: .center)
                 } else {
-                    Group {
-                        if let icon = action.icon {
-                            icon
-                                .font(.system(size: 8))
-                                .fontWeight(.bold)
-                        } else if action.direction == .cycle {
-                            Image(.repeat4)
-                                .resizable()
-                                .scaledToFit()
-                        } else {
-                            Image(.ruler)
-                                .resizable()
-                                .scaledToFit()
-                        }
-                    }
-                    .frame(width: size.width, height: size.height)
+                    Image(.ruler)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: size.width, height: size.height, alignment: .center)
                 }
             }
             .clipShape(.rect(cornerRadius: outerCornerRadius - inset))

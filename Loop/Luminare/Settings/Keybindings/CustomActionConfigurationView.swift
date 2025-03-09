@@ -45,33 +45,42 @@ struct CustomActionConfigurationView: View {
     }
 
     var body: some View {
-        ScreenView(isBlurred: action.sizeMode != .custom) {
-            GeometryReader { geo in
-                ZStack {
-                    if action.sizeMode == .custom {
-                        let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
+        VStack(spacing: 12) {
+            ScreenView(isBlurred: action.sizeMode != .custom) {
+                GeometryReader { geo in
+                    ZStack {
+                        if action.sizeMode == .custom {
+                            let frame = action.getFrame(
+                                window: nil,
+                                bounds: CGRect(origin: .zero, size: geo.size),
+                                disablePadding: true
+                            )
 
-                        blurredWindow()
-                            .frame(width: frame.width, height: frame.height)
-                            .offset(x: frame.origin.x, y: frame.origin.y)
-                            .animation(luminareAnimation, value: frame)
+                            blurredWindow()
+                                .frame(width: frame.width, height: frame.height)
+                                .offset(x: frame.origin.x, y: frame.origin.y)
+                                .animation(luminareAnimation, value: frame)
+                        }
                     }
+                    .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
                 }
-                .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
             }
-        }
-        .onChange(of: action) { windowAction = $0 }
+            .onChange(of: action) { windowAction = $0 }
 
-        configurationSections()
-        actionButtons()
+            configurationSections()
+            actionButtons()
+        }
+        .compositingGroup()
     }
 
     @ViewBuilder private func configurationSections() -> some View {
-        LuminareSection {
+        LuminareSection(outerPadding: 0) {
             LuminareTextField("Custom Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
+                .luminareBordered(false)
+                .luminareAspectRatio(contentMode: .fill)
         }
 
-        LuminareSection {
+        LuminareSection(outerPadding: 0) {
             tabPicker()
             unitToggle()
         }
@@ -114,7 +123,7 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder private func tabPicker() -> some View {
         LuminarePicker(
             elements: Tab.allCases,
-            selection: $currentTab,
+            selection: $currentTab.animation(luminareAnimation),
             columns: 2
         ) { tab in
             HStack(spacing: 6) {
@@ -123,7 +132,8 @@ struct CustomActionConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminarePickerRoundedCorner(bottom: .always)
+        .luminarePickerRoundedCorner(top: .always)
+        .frame(height: 40)
     }
 
     @ViewBuilder private func unitToggle() -> some View {
@@ -150,11 +160,12 @@ struct CustomActionConfigurationView: View {
 
             Button("Close") { isPresented = false }
         }
+        .luminareAspectRatio(contentMode: .fill)
         .buttonStyle(.luminareCompact)
     }
 
     @ViewBuilder private func positionConfiguration() -> some View {
-        LuminareSection {
+        LuminareSection(outerPadding: 0) {
             LuminareToggle(
                 "Use coordinates",
                 isOn: Binding(
@@ -190,7 +201,9 @@ struct CustomActionConfigurationView: View {
                     columns: 3
                 ) { anchor in
                     IconView(action: anchor.iconAction)
+                        .compositingGroup()
                 }
+                .luminarePickerRoundedCorner(top: .always)
 
                 if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
                     LuminareToggle(
@@ -241,7 +254,7 @@ struct CustomActionConfigurationView: View {
     }
 
     @ViewBuilder private func sizeConfiguration() -> some View {
-        LuminareSection {
+        LuminareSection(outerPadding: 0) {
             LuminarePicker(
                 elements: CustomWindowActionSizeMode.allCases,
                 selection: Binding(
@@ -261,8 +274,9 @@ struct CustomActionConfigurationView: View {
                     Text(mode.name)
                 }
                 .padding(.vertical, 15)
+                .compositingGroup()
             }
-            .luminarePickerRoundedCorner(bottom: action.sizeMode != .custom ? .never : .always)
+            .luminarePickerRoundedCorner(top: .always, bottom: action.sizeMode == .custom ? .never : .always)
 
             if action.sizeMode ?? .custom == .custom {
                 LuminareSlider(
