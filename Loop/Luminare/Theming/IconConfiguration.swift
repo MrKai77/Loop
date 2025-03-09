@@ -161,26 +161,25 @@ struct IconVew: View {
                     .padding(10)
                     .transition(.scale(scale: 0.8).combined(with: .opacity))
             } else {
-                HStack {
+                VStack(alignment: .center) {
                     Spacer()
-                    VStack(alignment: .center) {
-                        Spacer()
-                        Image(.lock)
-                            .foregroundStyle(.secondary)
 
-                        Text(nextUnlockCount == icon.unlockTime ?
-                            .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
-                            .init(localized: "App icon is locked", defaultValue: "Locked")
-                        )
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .contentTransition(.numericText())
-                        .multilineTextAlignment(.center)
+                    Image(.lock)
+                        .foregroundStyle(.secondary)
 
-                        Spacer()
-                    }
+                    Text(nextUnlockCount == icon.unlockTime ?
+                        .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
+                        .init(localized: "App icon is locked", defaultValue: "Locked")
+                    )
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .contentTransition(.numericText())
+                    .multilineTextAlignment(.center)
+
                     Spacer()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(.rect)
                 .onTapGesture {
                     model.selectedLockedMessage = model.getNextUpToDateText()
                     model.showingLockedAlert = true
