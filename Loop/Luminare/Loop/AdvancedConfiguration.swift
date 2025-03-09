@@ -219,17 +219,7 @@ struct AdvancedConfigurationView: View {
     }
 
     func accessibilityComponent() -> some View {
-        LuminareCompose(contentMaxWidth: nil) {
-            Button {
-                model.beginAccessibilityAccessRequest()
-            } label: {
-                Text("Request…")
-                    .frame(height: 30)
-                    .padding(.horizontal, 8)
-            }
-            .disabled(model.isAccessibilityAccessGranted)
-            .buttonStyle(.luminareCompact)
-        } label: {
+        LuminareButtonCompose {
             HStack {
                 if model.isAccessibilityAccessGranted {
                     Image(.badgeCheck2)
@@ -238,21 +228,16 @@ struct AdvancedConfigurationView: View {
 
                 Text("Accessibility access")
             }
+        } content: {
+            Text("Request…")
+        } action: {
+            model.beginAccessibilityAccessRequest()
         }
+        .disabled(model.isAccessibilityAccessGranted)
     }
 
     func screenCaptureComponent() -> some View {
-        LuminareCompose(contentMaxWidth: nil) {
-            Button {
-                ScreenCaptureManager.requestAccess()
-            } label: {
-                Text("Request…")
-                    .frame(height: 30)
-                    .padding(.horizontal, 8)
-            }
-            .disabled(model.isScreenCaptureAccessGranted)
-            .buttonStyle(.luminareCompact)
-        } label: {
+        LuminareButtonCompose {
             HStack {
                 if model.isScreenCaptureAccessGranted {
                     Image(.badgeCheck2)
@@ -261,7 +246,12 @@ struct AdvancedConfigurationView: View {
 
                 Text("Screen capture access")
             }
+        } content: {
+            Text("Request…")
+        } action: {
+            ScreenCaptureManager.requestAccess()
         }
+        .disabled(model.isScreenCaptureAccessGranted)
     }
 }
 
