@@ -93,7 +93,7 @@ struct AccentColorConfigurationView: View {
                 .font(.title3)
                 .frame(height: 90)
             }
-            .luminarePickerRoundedCorner(bottom: .always)
+            .luminarePickerRoundedCorner(top: .always)
 
             LuminareToggle("Gradient", isOn: $useGradient.animation(luminareAnimation))
 
@@ -117,6 +117,7 @@ struct AccentColorConfigurationView: View {
                     style: .textFieldWithColorWell()
                 )
                 .luminareAspectRatio(contentMode: .fill)
+                .luminareSheetClosesOnDefocus()
 
                 if useGradient {
                     LuminareColorPicker(
@@ -124,6 +125,7 @@ struct AccentColorConfigurationView: View {
                         style: .textFieldWithColorWell()
                     )
                     .luminareAspectRatio(contentMode: .fill)
+                    .luminareSheetClosesOnDefocus()
                 }
             }
         }

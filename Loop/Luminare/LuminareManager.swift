@@ -121,13 +121,20 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
 
     var body: some View {
         LuminareContentView(model: self)
-            .tint(.getLoopAccent(tone: .normal))
-            .luminareTint(.getLoopAccent(tone: .normal))
             .frame(height: 620)
     }
 
     func open() {
         showWindow()
+
+        do {
+            try luminare?.setBackgroundBlur(radius: 20)
+            luminare?.backgroundColor = .white.withAlphaComponent(0.001)
+            luminare?.ignoresMouseEvents = false
+        } catch {
+            print(error)
+        }
+
         startTimer()
         NSApp.setActivationPolicy(.regular)
     }
@@ -202,7 +209,7 @@ struct LuminareContentView: View {
                         .frame(maxHeight: .infinity, alignment: .center)
                     }
                 }
-//                .animation(luminareAnimation, value: [model.showRadialMenu, model.showPreview])
+                //                .animation(luminareAnimation, value: [model.showRadialMenu, model.showPreview])
                 .ignoresSafeArea()
                 .frame(width: 520)
             }
@@ -213,5 +220,42 @@ struct LuminareContentView: View {
                 model.showRadialMenu = true
             }
         }
+        .overrideTint(.getLoopAccent(tone: .normal))
     }
 }
+
+// MARK: LuminareWindow.setBackgroundBlur(radius:)
+
+extension LuminareWindow {
+    func setBackgroundBlur(radius: Int) throws {
+        guard let connection = CGSDefaultConnectionForThread() else {
+            throw NSError(
+                domain: "com.Luminare.NSWindow",
+                code: 0,
+                userInfo: [NSLocalizedDescriptionKey: "Error getting default connection"]
+            )
+        }
+
+        let status = CGSSetWindowBackgroundBlurRadius(connection, windowNumber, radius)
+
+        if status != noErr {
+            throw NSError(
+                domain: "com.Luminare.NSWindow",
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "Error setting blur radius: \(status)"]
+            )
+        }
+    }
+}
+
+typealias CGSConnectionID = UInt32
+
+@_silgen_name("CGSDefaultConnectionForThread")
+func CGSDefaultConnectionForThread() -> CGSConnectionID?
+
+@_silgen_name("CGSSetWindowBackgroundBlurRadius") @discardableResult
+func CGSSetWindowBackgroundBlurRadius(
+    _ connection: CGSConnectionID,
+    _ windowNum: NSInteger,
+    _ radius: Int
+) -> OSStatus

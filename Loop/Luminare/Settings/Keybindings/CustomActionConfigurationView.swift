@@ -70,7 +70,6 @@ struct CustomActionConfigurationView: View {
             configurationSections()
             actionButtons()
         }
-        .compositingGroup()
     }
 
     @ViewBuilder private func configurationSections() -> some View {
@@ -201,14 +200,12 @@ struct CustomActionConfigurationView: View {
                     columns: 3
                 ) { anchor in
                     IconView(action: anchor.iconAction)
-                        .compositingGroup()
+                        .equatable()
                 }
-                .luminarePickerRoundedCorner(top: .always)
+                .luminarePickerRoundedCorner(bottom: .always)
 
                 if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
                     LuminareToggle(
-                        "Use macOS center",
-//                        info: WindowDirection.macOSCenter.infoView, // TODO: FIX
                         isOn: Binding(
                             get: {
                                 action.anchor == .macOSCenter
@@ -217,7 +214,14 @@ struct CustomActionConfigurationView: View {
                                 action.anchor = $0 ? .macOSCenter : .center
                             }
                         )
-                    )
+                    ) {
+                        Text("Use macOS center")
+
+                        if let info = WindowDirection.macOSCenter.infoText {
+                            LuminarePopover(info)
+                                .frame(maxHeight: .infinity, alignment: .top)
+                        }
+                    }
                 }
             } else {
                 LuminareSlider(

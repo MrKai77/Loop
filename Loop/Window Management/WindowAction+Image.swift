@@ -56,7 +56,7 @@ extension WindowAction {
     }
 }
 
-struct IconView: View {
+struct IconView: View, Equatable {
     @Environment(\.luminareAnimationFast) private var luminareAnimationFast
 
     let action: WindowAction
@@ -124,5 +124,9 @@ struct IconView: View {
 
     func refreshFrame() {
         frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), disablePadding: true)
+    }
+
+    static func == (lhs: IconView, rhs: IconView) -> Bool {
+        lhs.action == rhs.action
     }
 }
