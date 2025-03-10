@@ -74,9 +74,7 @@ class AdvancedConfigurationModel: ObservableObject {
         let isAccessibilityGranted = AccessibilityManager.getStatus()
 
         if isAccessibilityAccessGranted != isAccessibilityGranted {
-//            withAnimation(LuminareConstants.animation) { // TODO: Add animation to view instead
             isAccessibilityAccessGranted = isAccessibilityGranted
-//            }
         }
 
         if isAccessibilityGranted || accessibilityChecks > 60 {
@@ -112,11 +110,15 @@ struct AdvancedConfigurationView: View {
             if #available(macOS 15.0, *) {
                 LuminareToggle("Use macOS window manager when available", isOn: $useSystemWindowManagerWhenAvailable)
             }
-            LuminareToggle(
-                "Animate window resize",
-//                info: .init("This feature is still under development.", .orange),
-                isOn: $animateWindowResizes
-            )
+
+            LuminareToggle(isOn: $animateWindowResizes) {
+                Text("Animate window resize")
+
+                LuminarePopover("This feature is still under development.")
+                    .overrideTint(.orange)
+                    .frame(maxHeight: .infinity, alignment: .top)
+            }
+
             LuminareToggle("Disable cursor interaction", isOn: $disableCursorInteraction)
             LuminareToggle("Ignore fullscreen windows", isOn: $ignoreFullscreen)
             LuminareToggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
@@ -126,16 +128,10 @@ struct AdvancedConfigurationView: View {
                 "Size increment",
                 value: $sizeIncrement.doubleBinding,
                 in: 5...50,
+                step: 4.5,
+                clampsLower: true,
                 suffix: "px"
             )
-//            LuminareSlider(
-//                "Size increment", // Description: Used in size adjustment window actions
-//                value: $sizeIncrement,
-//                sliderRange: 5...50,
-//                suffix: "px",
-//                step: 4.5,
-//                lowerClamp: true
-//            )
         }
     }
 

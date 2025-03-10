@@ -143,8 +143,9 @@ struct AppView: View, Equatable {
             self.path = path
             self.url = url
 
-            DispatchQueue.main.async {
-                self.icon = NSWorkspace.shared.icon(forFile: self.path)
+            Task { @MainActor in
+                let icon = NSWorkspace.shared.icon(forFile: path)
+                self.icon = icon
             }
         }
 
