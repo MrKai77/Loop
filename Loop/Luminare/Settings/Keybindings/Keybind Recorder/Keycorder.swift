@@ -47,7 +47,7 @@ struct Keycorder: View {
                     .fixedSize(horizontal: true, vertical: false)
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .modifier(LuminareBordered())
+                    .modifier(LuminareBorderedModifier())
             } else {
                 HStack(spacing: 5) {
                     // First show modifiers in order
@@ -66,7 +66,7 @@ struct Keycorder: View {
                     }
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .modifier(LuminareBordered(isHovering: isHovering))
+                    .modifier(LuminareBorderedModifier(isHovering: isHovering))
                 }
             }
         }

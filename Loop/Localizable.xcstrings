@@ -10797,6 +10797,9 @@
         }
       }
     },
+    "macOS center places windows slightly above the absolute center,\nwhich can be found more ergonomic." : {
+
+    },
     "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality." : {
       "extractionState" : "manual",
       "localizations" : {

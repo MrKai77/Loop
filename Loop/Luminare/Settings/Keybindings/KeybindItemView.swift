@@ -116,7 +116,7 @@ struct KeybindItemView: View {
             if let cycleIndex {
                 Text("\(cycleIndex)")
                     .frame(width: 27, height: 27)
-                    .modifier(LuminareBordered())
+                    .modifier(LuminareBorderedModifier())
             } else {
                 HStack(spacing: 6) {
                     let hasConflicts = hasDuplicateKeybinds()
@@ -136,7 +136,7 @@ struct KeybindItemView: View {
                     .font(.callout)
                     .padding(6)
                     .frame(height: 27)
-                    .modifier(LuminareBordered())
+                    .modifier(LuminareBorderedModifier())
 
                     Image(systemName: "plus")
 
@@ -180,16 +180,18 @@ struct KeybindItemView: View {
                 HStack(spacing: 8) {
                     IconView(action: keybind)
 
-                    Text(keybind.getName())
-                        .lineLimit(1)
-                }
-
-                if let info = keybind.direction.infoText {
-                    LuminarePopover {
-                        Text(info)
-                            .padding()
+                    if let info = keybind.direction.infoText {
+                        Text(keybind.getName())
+                            .lineLimit(1)
+                            .luminarePopover(attachedTo: .topTrailing) {
+                                Text(info)
+                                    .padding()
+                            }
+                            .tint(.yellow)
+                    } else {
+                        Text(keybind.getName())
+                            .lineLimit(1)
                     }
-                    .tint(.yellow)
                 }
             }
             .fixedSize(horizontal: false, vertical: true)

@@ -40,27 +40,30 @@ struct PreviewConfigurationView: View {
                 "Padding",
                 value: $previewPadding.doubleBinding,
                 in: 0...20,
+                format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: true,
                 clampsLower: true,
-                suffix: "px"
+                suffix: Text("px")
             )
 
             LuminareSlider(
                 "Corner radius",
                 value: $previewCornerRadius.doubleBinding,
                 in: 0...20,
+                format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: true,
                 clampsLower: true,
-                suffix: "px"
+                suffix: Text("px")
             )
 
             LuminareSlider(
                 "Border thickness",
                 value: $previewBorderThickness.doubleBinding,
                 in: 0...10,
+                format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: true,
                 clampsLower: true,
-                suffix: "px"
+                suffix: Text("px")
             )
         }
     }

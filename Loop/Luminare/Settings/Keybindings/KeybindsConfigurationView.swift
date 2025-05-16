@@ -45,9 +45,9 @@ struct KeybindsConfigurationView: View {
                 "Trigger delay",
                 value: $triggerDelay,
                 in: 0...1,
+                format: .number.precision(.fractionLength(1...1)),
                 clampsLower: true,
                 suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s")),
-                maxDecimalPlaces: 1
             )
 
             LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)

@@ -108,8 +108,9 @@ struct BehaviorConfigurationView: View {
                     "Stage strip size",
                     value: $stageStripSize.doubleBinding,
                     in: 50...200,
+                    format: .number.precision(.fractionLength(0...0)),
                     clampsLower: true,
-                    suffix: "px"
+                    suffix: Text("px")
                 )
             }
         }

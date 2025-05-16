@@ -49,18 +49,20 @@ struct RadialMenuConfigurationView: View {
                     "Corner radius",
                     value: $model.radialMenuCornerRadius.doubleBinding,
                     in: 30...50,
+                    format: .number.precision(.fractionLength(0...0)),
                     clampsUpper: true,
                     clampsLower: true,
-                    suffix: "px"
+                    suffix: Text("px")
                 )
 
                 LuminareSlider(
                     "Thickness",
                     value: $model.radialMenuThickness.doubleBinding,
                     in: 10...35,
+                    format: .number.precision(.fractionLength(0...0)),
                     clampsUpper: true,
                     clampsLower: true,
-                    suffix: "px"
+                    suffix: Text("px")
                 )
             }
         }

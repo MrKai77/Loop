@@ -216,11 +216,10 @@ struct CustomActionConfigurationView: View {
                         )
                     ) {
                         Text("Use macOS center")
-
-                        if let info = WindowDirection.macOSCenter.infoText {
-                            LuminarePopover(info)
-                                .frame(maxHeight: .infinity, alignment: .top)
-                        }
+                            .luminarePopover(attachedTo: .topTrailing) {
+                                Text("macOS center places windows slightly above the absolute center,\nwhich can be found more ergonomic.")
+                                    .padding()
+                            }
                     }
                 }
             } else {
@@ -235,8 +234,9 @@ struct CustomActionConfigurationView: View {
                         }
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    format: .number.precision(.fractionLength(0...0)),
                     clampsLower: true,
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
+                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
 
                 LuminareSlider(
@@ -250,8 +250,9 @@ struct CustomActionConfigurationView: View {
                         }
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    format: .number.precision(.fractionLength(0...0)),
                     clampsLower: true,
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
+                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
             }
         }
@@ -294,6 +295,7 @@ struct CustomActionConfigurationView: View {
                         }
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    format: .number.precision(.fractionLength(0...0)),
                     clampsLower: true,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
@@ -309,6 +311,7 @@ struct CustomActionConfigurationView: View {
                         }
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    format: .number.precision(.fractionLength(0...0)),
                     clampsLower: true,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )

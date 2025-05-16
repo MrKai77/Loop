@@ -43,7 +43,7 @@ enum Tab: LuminareTabItem, CaseIterable {
         }
     }
 
-    var icon: Image {
+    var image: Image {
         switch self {
         case .icon: Image(.squareSparkle)
         case .accentColor: Image(.paintbrush)
@@ -180,7 +180,7 @@ struct LuminareContentView: View {
                     .transition(.opacity.animation(.easeInOut(duration: 0.1)))
             } header: {
                 HStack {
-                    model.currentTab.iconView()
+                    model.currentTab.image
 
                     Text(model.currentTab.title)
                         .font(.title2)
@@ -220,7 +220,7 @@ struct LuminareContentView: View {
                 model.showRadialMenu = true
             }
         }
-        .overrideTint(.getLoopAccent(tone: .normal))
+        .tint(.getLoopAccent(tone: .normal))
     }
 }
 

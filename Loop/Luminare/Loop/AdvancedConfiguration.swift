@@ -84,7 +84,7 @@ class AdvancedConfigurationModel: ObservableObject {
 }
 
 struct AdvancedConfigurationView: View {
-    @Environment(\.luminareTint) var tint
+    @Environment(\.luminareTintColor) var tint
     @Environment(\.luminareAnimation) var luminareAnimation
 
     @StateObject private var model = AdvancedConfigurationModel()
@@ -113,10 +113,11 @@ struct AdvancedConfigurationView: View {
 
             LuminareToggle(isOn: $animateWindowResizes) {
                 Text("Animate window resize")
-
-                LuminarePopover("This feature is still under development.")
-                    .overrideTint(.orange)
-                    .frame(maxHeight: .infinity, alignment: .top)
+                    .luminarePopover(attachedTo: .topTrailing) {
+                        Text("This feature is still under development.")
+                            .padding()
+                    }
+                    .tint(.orange)
             }
 
             LuminareToggle("Disable cursor interaction", isOn: $disableCursorInteraction)
@@ -129,8 +130,9 @@ struct AdvancedConfigurationView: View {
                 value: $sizeIncrement.doubleBinding,
                 in: 5...50,
                 step: 4.5,
+                format: .number.precision(.fractionLength(0...0)),
                 clampsLower: true,
-                suffix: "px"
+                suffix: Text("px")
             )
         }
     }
@@ -215,7 +217,7 @@ struct AdvancedConfigurationView: View {
     }
 
     func accessibilityComponent() -> some View {
-        LuminareButtonCompose {
+        LuminareButton {
             HStack {
                 if model.isAccessibilityAccessGranted {
                     Image(.badgeCheck2)
@@ -233,7 +235,7 @@ struct AdvancedConfigurationView: View {
     }
 
     func screenCaptureComponent() -> some View {
-        LuminareButtonCompose {
+        LuminareButton {
             HStack {
                 if model.isScreenCaptureAccessGranted {
                     Image(.badgeCheck2)

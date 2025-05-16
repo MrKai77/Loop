@@ -9,7 +9,7 @@ import Luminare
 import SwiftUI
 
 struct UpdateView: View {
-    @Environment(\.luminareTint) var tintColor
+    @Environment(\.luminareTintColor) var tintColor
     @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.colorScheme) var colorScheme
 
