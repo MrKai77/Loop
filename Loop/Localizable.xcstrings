@@ -6,7 +6,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@"
           }
         },
@@ -24,7 +24,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@"
           }
         },
@@ -54,13 +54,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "%@"
           }
         },
@@ -101,7 +101,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "%@ está actualmente en uso como la tecla de activación"
           }
         },
@@ -237,7 +237,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%lld"
           }
         },
@@ -255,7 +255,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%lld"
           }
         },
@@ -279,19 +279,19 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%lld"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%lld"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "%lld"
           }
         },
@@ -640,7 +640,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Wallpaper"
           }
         },
@@ -794,7 +794,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Por favor, concede permiso para que Loop pueda cambiar el tamaño de las ventanas"
           }
         },
@@ -1311,7 +1311,6 @@
       }
     },
     "Apply padding" : {
-      "comment" : "",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -1340,8 +1339,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Apply padding"
+            "state" : "translated",
+            "value" : "Ajouter des marges"
           }
         },
         "it" : {
@@ -1774,7 +1773,14 @@
       }
     },
     "Brisk" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "활발한"
+          }
+        }
+      }
     },
     "Cannot be enabled when the preview is disabled." : {
       "extractionState" : "manual",
@@ -1799,7 +1805,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "No se puede activar cuando la previsualización esté desactivada"
           }
         },
@@ -1953,7 +1959,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Comprobar actualizaciones..."
           }
         },
@@ -1983,14 +1989,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Verificar atualizações..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Проверить наличие обновлений..."
+            "state" : "translated",
+            "value" : "Проверить наличие обновлений…"
           }
         },
         "zh-Hans" : {
@@ -2107,7 +2113,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Color"
           }
         },
@@ -2184,7 +2190,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Configurar margen..."
           }
         },
@@ -2214,14 +2220,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Configurar espaçamento..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Настроить отступы..."
+            "state" : "translated",
+            "value" : "Настроить отступы…"
           }
         },
         "zh-Hans" : {
@@ -2439,7 +2445,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Credits"
           }
         },
@@ -2492,7 +2498,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Cursor"
           }
         },
@@ -2522,7 +2528,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Cursor"
           }
         },
@@ -2800,7 +2806,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Personalizar la acción de esta combinación"
           }
         },
@@ -2877,7 +2883,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Personalizar el marco de esta combinación"
           }
         },
@@ -2954,7 +2960,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Personalizar la rotación de esta combinación"
           }
         },
@@ -2984,14 +2990,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Personalize o que esta combinação de teclas alterna"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Изменить цикл горячей клавиши"
+            "state" : "translated",
+            "value" : "Изменить цикл горячей клавиши."
           }
         },
         "zh-Hans" : {
@@ -3138,7 +3144,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Design"
           }
         },
@@ -3552,7 +3558,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "تبرع..."
           }
         },
@@ -3570,7 +3576,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Donar..."
           }
         },
@@ -3600,14 +3606,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Doar..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Пожертвовать..."
+            "state" : "translated",
+            "value" : "Пожертвовать…"
           }
         },
         "zh-Hans" : {
@@ -3724,7 +3730,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Asegúrate de que el archivo seleccionado está en el formato adecuado"
           }
         },
@@ -3961,8 +3967,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Export"
+            "state" : "translated",
+            "value" : "Exporter"
           }
         },
         "it" : {
@@ -4038,8 +4044,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can't export something that doesn't exist!"
+            "state" : "translated",
+            "value" : "Impossible d’exporter quelque chose qui n’existe pas !"
           }
         },
         "it" : {
@@ -4115,8 +4121,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No Keybinds Have Been Set"
+            "state" : "translated",
+            "value" : "Aucun raccourci clavier n'a été défini"
           }
         },
         "it" : {
@@ -4192,8 +4198,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Export keybinds"
+            "state" : "translated",
+            "value" : "Exporter les raccourcis"
           }
         },
         "it" : {
@@ -4269,8 +4275,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "External bar"
+            "state" : "translated",
+            "value" : "Bar externe"
           }
         },
         "it" : {
@@ -4346,8 +4352,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fast"
+            "state" : "translated",
+            "value" : "Rapide"
           }
         },
         "it" : {
@@ -4395,7 +4401,14 @@
       }
     },
     "Fluid" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체액"
+          }
+        }
+      }
     },
     "Focus window on resize" : {
       "extractionState" : "manual",
@@ -4426,8 +4439,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus window on resize"
+            "state" : "translated",
+            "value" : "Donner le focus à la fenêtre lors du redimensionnement"
           }
         },
         "it" : {
@@ -4497,14 +4510,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "General"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "General"
+            "state" : "translated",
+            "value" : "Général"
           }
         },
         "it" : {
@@ -4556,7 +4569,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Go Back"
           }
         },
@@ -4574,14 +4587,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Go Back"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Go Back"
+            "state" : "translated",
+            "value" : "Réinitialiser"
           }
         },
         "it" : {
@@ -4592,8 +4605,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Go Back"
+            "state" : "translated",
+            "value" : "뒤로 가기"
           }
         },
         "nl-BE" : {
@@ -4604,14 +4617,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Go Back"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Go Back"
+            "state" : "translated",
+            "value" : "Назад"
           }
         },
         "zh-Hans" : {
@@ -4657,8 +4670,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Gradient"
+            "state" : "translated",
+            "value" : "Dégradé"
           }
         },
         "it" : {
@@ -4734,8 +4747,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Green"
+            "state" : "translated",
+            "value" : "Vert"
           }
         },
         "it" : {
@@ -4787,7 +4800,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Grow"
           }
         },
@@ -4805,14 +4818,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Grow"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow"
+            "state" : "translated",
+            "value" : "Agrandir"
           }
         },
         "it" : {
@@ -4835,14 +4848,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Grow"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow"
+            "state" : "translated",
+            "value" : "Увеличить"
           }
         },
         "zh-Hans" : {
@@ -4888,8 +4901,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Halves"
+            "state" : "translated",
+            "value" : "Moitiés"
           }
         },
         "it" : {
@@ -4965,8 +4978,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Haptic feedback"
+            "state" : "translated",
+            "value" : "Retour haptique"
           }
         },
         "it" : {
@@ -5042,8 +5055,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Height"
+            "state" : "translated",
+            "value" : "Hauteur"
           }
         },
         "it" : {
@@ -5119,8 +5132,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Hide menu bar icon"
+            "state" : "translated",
+            "value" : "Masquer l’icône de la barre de menu"
           }
         },
         "it" : {
@@ -5196,8 +5209,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Hide until direction is chosen"
+            "state" : "translated",
+            "value" : "Masquer jusqu’à ce qu'une direction soit choisie"
           }
         },
         "it" : {
@@ -5273,8 +5286,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Horizontal Thirds"
+            "state" : "translated",
+            "value" : "Tiers horizontal"
           }
         },
         "it" : {
@@ -5350,8 +5363,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Icon"
+            "state" : "translated",
+            "value" : "Icône"
           }
         },
         "it" : {
@@ -5427,8 +5440,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Black"
+            "state" : "translated",
+            "value" : "Noir"
           }
         },
         "it" : {
@@ -5504,8 +5517,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Black Hole"
+            "state" : "translated",
+            "value" : "Trou noir"
           }
         },
         "it" : {
@@ -5581,7 +5594,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Classic"
           }
         },
@@ -5630,11 +5643,11 @@
       }
     },
     "Icon Name: Daylight" : {
-      "extractionState" : "manual",
+      "extractionState" : "extracted_with_value",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Daylight"
           }
         },
@@ -5646,19 +5659,19 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Daylight"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Daylight"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Daylight"
           }
         },
@@ -5670,25 +5683,25 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Daylight"
+            "state" : "translated",
+            "value" : "주간"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Daylight"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Daylight"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Daylight"
           }
         },
@@ -5735,8 +5748,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Developer"
+            "state" : "translated",
+            "value" : "Developpeur"
           }
         },
         "it" : {
@@ -5806,13 +5819,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Holo"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Holo"
           }
         },
@@ -5830,7 +5843,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Holo"
           }
         },
@@ -5889,7 +5902,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Keycap"
           }
         },
@@ -5919,7 +5932,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Keycap"
           }
         },
@@ -5960,13 +5973,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Loop Master"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Loop Master"
           }
         },
@@ -6037,13 +6050,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Meta Loop"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Meta Loop"
           }
         },
@@ -6061,19 +6074,19 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Meta Loop"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Meta Loop"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Meta Loop"
           }
         },
@@ -6114,14 +6127,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Neon"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Neon"
+            "state" : "translated",
+            "value" : "Néon"
           }
         },
         "it" : {
@@ -6138,13 +6151,13 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Neon"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Neon"
           }
         },
@@ -6191,13 +6204,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Rosé Pine"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Rosé Pine"
           }
         },
@@ -6215,19 +6228,19 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Rosé Pine"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Rosé Pine"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Rosé Pine"
           }
         },
@@ -6268,13 +6281,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Simon"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Simon"
           }
         },
@@ -6298,13 +6311,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Simon"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Simon"
           }
         },
@@ -6345,14 +6358,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Summer"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Summer"
+            "state" : "translated",
+            "value" : "Été"
           }
         },
         "it" : {
@@ -6422,13 +6435,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Synthwave Sunset"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Synthwave Sunset"
           }
         },
@@ -6458,7 +6471,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Synthwave Sunset"
           }
         },
@@ -6499,14 +6512,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "White"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "White"
+            "state" : "translated",
+            "value" : "Blanc"
           }
         },
         "it" : {
@@ -6576,14 +6589,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Serás notificado cuando hayas desbloqueado un nuevo icono"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You will now be notified when you unlock a new icon."
+            "state" : "translated",
+            "value" : "Vous serez désormais averti lorsque vous débloquez une nouvelle icône."
           }
         },
         "it" : {
@@ -6612,8 +6625,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Вам придет уведомление когда вы откроете  новую иконку."
+            "state" : "translated",
+            "value" : "Вам придет уведомление когда вы откроете новую иконку."
           }
         },
         "zh-Hans" : {
@@ -6659,8 +6672,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You've unlocked a new icon: %@!"
+            "state" : "translated",
+            "value" : "Vous avez débloqué une nouvelle icône : %@ !"
           }
         },
         "it" : {
@@ -6736,8 +6749,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You've already looped 25 times! As a reward, here's new icon: %@. Continue to loop more to unlock new icons!"
+            "state" : "translated",
+            "value" : "Vous avez utilisé Loop 25 fois ! En récompense, voici une nouvelle icône : %@. Continuez à boucler pour en débloquer d’autres !"
           }
         },
         "it" : {
@@ -6760,7 +6773,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Você ja fez 25 loops! Aqui está um novo ícone como prêmio: %@. Continue dando loops para desbloquear novos ícones."
           }
         },
@@ -6813,8 +6826,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!"
+            "state" : "translated",
+            "value" : "5000 Loops accomplies ! L’univers a été témoin de la naissance d’un maître de Loop ! Profitez de votre récompense bien méritée : une toute nouvelle icône !"
           }
         },
         "it" : {
@@ -6890,8 +6903,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Ignore fullscreen windows"
+            "state" : "translated",
+            "value" : "Ignorer les fenêtres en plein écran"
           }
         },
         "it" : {
@@ -6967,8 +6980,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Import"
+            "state" : "translated",
+            "value" : "Importer"
           }
         },
         "it" : {
@@ -7044,8 +7057,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Select Rectangle config file"
+            "state" : "translated",
+            "value" : "Selectionner le fichier de configuration de Rectangle"
           }
         },
         "it" : {
@@ -7121,8 +7134,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Import Keybinds"
+            "state" : "translated",
+            "value" : "Importer des raccourcis"
           }
         },
         "it" : {
@@ -7198,8 +7211,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Import keybinds from Rectangle"
+            "state" : "translated",
+            "value" : "Importer des raccourcis de Rectangle"
           }
         },
         "it" : {
@@ -7275,8 +7288,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Annuler"
           }
         },
         "it" : {
@@ -7352,8 +7365,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Erase"
+            "state" : "translated",
+            "value" : "Effacer"
           }
         },
         "it" : {
@@ -7429,8 +7442,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Merge"
+            "state" : "translated",
+            "value" : "Fusionner"
           }
         },
         "it" : {
@@ -7506,8 +7519,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Include development versions"
+            "state" : "translated",
+            "value" : "Inclure les versions de développement"
           }
         },
         "it" : {
@@ -7583,8 +7596,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Initial Size"
+            "state" : "translated",
+            "value" : "Taille initiale"
           }
         },
         "it" : {
@@ -7660,8 +7673,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install"
+            "state" : "translated",
+            "value" : "Installer"
           }
         },
         "it" : {
@@ -7737,8 +7750,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Instant"
+            "state" : "translated",
+            "value" : "Instantané"
           }
         },
         "it" : {
@@ -8348,7 +8361,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "icono bloqueado"
           }
         },
@@ -8461,8 +8474,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "У вас этого ещё нет?"
+            "state" : "translated",
+            "value" : "У вас этого ещё нет!"
           }
         },
         "zh-Hans" : {
@@ -8579,7 +8592,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "La paciencia es una virtud, y tu llave a este icono"
           }
         },
@@ -8733,7 +8746,7 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Sigue haciendo Loops y este icono será tuyo pronto"
           }
         },
@@ -9740,8 +9753,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Every Loop brings you closer to the treasure that awaits."
+            "state" : "translated",
+            "value" : "Chaque Loop vous rapproche du trésor qui vous attend."
           }
         },
         "it" : {
@@ -9817,8 +9830,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "With each Loop, the lock on this icon weakens."
+            "state" : "translated",
+            "value" : "À chaque Loop, le verrou sur cette icône s’affaiblit."
           }
         },
         "it" : {
@@ -9894,8 +9907,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Loop after Loop, your dedication carves the key to success."
+            "state" : "translated",
+            "value" : "Loop après Loop, votre détermination façonne la clé du succès."
           }
         },
         "it" : {
@@ -9971,8 +9984,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "The icons are not just unlocked; they're earned, Loop by Loop."
+            "state" : "translated",
+            "value" : "Les icônes ne sont pas débloquées par défaut ; elles sont gagnées Loop après Loop."
           }
         },
         "it" : {
@@ -9995,13 +10008,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Os ícones não são apenas desbloqueados; são conquistados, Loop por Loop. "
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Иконки не открываются сами по себе, их надо заслужить!"
           }
         },
@@ -10048,8 +10061,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "As the Loops accumulate, so too will your collection of icons."
+            "state" : "translated",
+            "value" : "À mesure que les Loops s’accumulent, votre collection d’icônes grandira elle aussi."
           }
         },
         "it" : {
@@ -10125,8 +10138,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Think of each Loop as a riddle, solving the mystery of the locked icon."
+            "state" : "translated",
+            "value" : "Chaque Loop est une énigme à résoudre, pour percer le mystère des icônes verrouillées."
           }
         },
         "it" : {
@@ -10202,8 +10215,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Your persistence in Looping is the master key to all icons."
+            "state" : "translated",
+            "value" : "Votre persévérance a Looper est la passe-partout de toutes les icônes."
           }
         },
         "it" : {
@@ -10279,8 +10292,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Loop around the obstacles; your reward is just beyond them."
+            "state" : "translated",
+            "value" : "Loop autour des obstacles ; votre récompense est juste derrière."
           }
         },
         "it" : {
@@ -10356,8 +10369,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Each Loop you complete plants the seeds for icons to grow."
+            "state" : "translated",
+            "value" : "Chaque Loop que vous accomplissez sème les graines d’icônes à venir."
           }
         },
         "it" : {
@@ -10433,8 +10446,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Like the moon's phases, your icons will reveal themselves in cycles of Loops."
+            "state" : "translated",
+            "value" : "À l’image des phases de la lune, vos icônes se dévoileront au fil des cycles de Loops."
           }
         },
         "it" : {
@@ -10510,8 +10523,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "The icons await, hidden behind the veil of Loops yet to be made."
+            "state" : "translated",
+            "value" : "Les icônes patientent, cachées derrière le voile des Loops à venir."
           }
         },
         "it" : {
@@ -10566,37 +10579,37 @@
             "plural" : {
               "few" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "translated",
                   "value" : "بقي %lld تكرار"
                 }
               },
               "many" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "translated",
                   "value" : "بقي %lld تكرار"
                 }
               },
               "one" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "translated",
                   "value" : "بقي تكرار واحد"
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "new",
                   "value" : "%lld Loops left"
                 }
               },
               "two" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "translated",
                   "value" : "بقي تكراران"
                 }
               },
               "zero" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "translated",
                   "value" : "بقي %lld تكرار"
                 }
               }
@@ -10662,14 +10675,14 @@
             "plural" : {
               "one" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
-                  "value" : "%lld Loop left"
+                  "state" : "translated",
+                  "value" : "%lld Loop restant"
                 }
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
-                  "value" : "%lld Loops left"
+                  "state" : "translated",
+                  "value" : "%lld Loops restant"
                 }
               }
             }
@@ -10805,7 +10818,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
           }
         },
@@ -10823,14 +10836,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
+            "state" : "translated",
+            "value" : "La fonctionnalité macOS \"Faire glisser les fenêtres vers les bords de l'écran pour créer une mosaïque\" est actuellement activée, ce qui entre en conflit avec le magnétisme des fenêtres de Loop."
           }
         },
         "it" : {
@@ -10841,26 +10854,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
+            "state" : "translated",
+            "value" : "macOS의 \"창을 화면 가장자리로 드래그하여 타일 배치\" 기능이 현재 활성화되어 있으며, 이는 Loop의 창 스냅 기능과 충돌할 수 있습니다."
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
+            "state" : "translated",
+            "value" : "Настройка плиточного расположения окон macOS включена, отключите привязку окон в настройках Loop."
           }
         },
         "zh-Hans" : {
@@ -10900,13 +10913,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "%"
           }
         },
@@ -10924,19 +10937,19 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "%"
           }
         },
@@ -10977,13 +10990,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "px"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -11001,19 +11014,19 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "px"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "px"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -11054,13 +11067,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "s"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "s"
           }
         },
@@ -11078,13 +11091,13 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "s"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "s"
           }
         },
@@ -11137,8 +11150,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Middle-click to trigger"
+            "state" : "translated",
+            "value" : "Clic central pour activer"
           }
         },
         "it" : {
@@ -11214,8 +11227,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "More"
+            "state" : "translated",
+            "value" : "Plus"
           }
         },
         "it" : {
@@ -11267,7 +11280,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Move"
           }
         },
@@ -11285,14 +11298,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Move"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move"
+            "state" : "translated",
+            "value" : "Déplacer"
           }
         },
         "it" : {
@@ -11315,14 +11328,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Move"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move"
+            "state" : "translated",
+            "value" : "Двигать"
           }
         },
         "zh-Hans" : {
@@ -11368,8 +11381,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move cursor with window"
+            "state" : "translated",
+            "value" : "Déplacer le curseur avec la fenêtre"
           }
         },
         "it" : {
@@ -11417,7 +11430,6 @@
       }
     },
     "Move window to cursor's screen" : {
-      "comment" : "",
       "extractionState" : "manual",
       "localizations" : {
         "ar" : {
@@ -11446,8 +11458,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move window to cursor's screen"
+            "state" : "translated",
+            "value" : "Déplacer la fenêtre sur l’écran où se trouve le curseur"
           }
         },
         "it" : {
@@ -11523,8 +11535,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No excluded applications"
+            "state" : "translated",
+            "value" : "Pas d'applications ignorées"
           }
         },
         "it" : {
@@ -11600,8 +11612,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No keybinds"
+            "state" : "translated",
+            "value" : "Pas de raccourcis"
           }
         },
         "it" : {
@@ -11671,14 +11683,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "¡Comunícate! ...en la versión actual, es la última."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Engage! …in the current version, it's the latest."
+            "state" : "translated",
+            "value" : "Engagez ! … avec la version actuelle. C’est la plus récente."
           }
         },
         "it" : {
@@ -11748,14 +11760,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Esta aplicación está más actualizada que las entradas de mi diario."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This app is more up to date than my diary entries!"
+            "state" : "translated",
+            "value" : "Cette appli est mieux tenue à jour que mon journal intime !"
           }
         },
         "it" : {
@@ -11831,8 +11843,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You're in the clear, no updates in the atmosphere!"
+            "state" : "translated",
+            "value" : "Ciel dégagé : aucune mise à jour à l’horizon !"
           }
         },
         "it" : {
@@ -11908,8 +11920,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "The odds are ever in your favor, no updates today!"
+            "state" : "translated",
+            "value" : "Que la chance soit toujours avec vous… pas de mise à jour aujourd’hui !"
           }
         },
         "it" : {
@@ -11985,8 +11997,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Our app is on a digital diet. No new bytes allowed."
+            "state" : "translated",
+            "value" : "L’appli est au régime… numérique. Pas un octet de plus."
           }
         },
         "it" : {
@@ -12062,8 +12074,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "New version? Sorry, we're too attached to this one."
+            "state" : "translated",
+            "value" : "Une nouvelle version ? Non merci, on adore celle-là."
           }
         },
         "it" : {
@@ -12139,8 +12151,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Your Loop is Loopier than ever, no updates found!"
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "it" : {
@@ -12216,8 +12228,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "I'm giving it all she's got, Captain! No updates!"
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "it" : {
@@ -12246,8 +12258,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Люк, я твоё... Обновление"
+            "state" : "translated",
+            "value" : "Люк, я твоё... Обновление!"
           }
         },
         "zh-Hans" : {
@@ -12293,8 +12305,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "In a galaxy far, far away… still no updates!"
+            "state" : "translated",
+            "value" : "Dans une galaxie lointaine, très lointaine… toujours pas de mise à jour !"
           }
         },
         "it" : {
@@ -12370,8 +12382,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You've got the precious, no updates needed!"
+            "state" : "translated",
+            "value" : "Vous possédez le précieux. Nul besoin de mise à jour !"
           }
         },
         "it" : {
@@ -12447,8 +12459,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Riding at warp speed, no updates in sight!"
+            "state" : "translated",
+            "value" : "À vitesse lumière… aucune mise à jour en vue !"
           }
         },
         "it" : {
@@ -12524,8 +12536,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This is not the update you're looking for!"
+            "state" : "translated",
+            "value" : "Ça n'est pas la mise à jour que vous recherchez !"
           }
         },
         "it" : {
@@ -12548,7 +12560,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Essa não é a atualização que você está procurando."
           }
         },
@@ -12601,8 +12613,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "We've misplaced the 'Update' button. Oops!"
+            "state" : "translated",
+            "value" : "On a égaré le bouton “Mettre à jour”. Oups !"
           }
         },
         "it" : {
@@ -12672,14 +12684,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Juro que estaba aquí en alguna parte ... un segundo"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "I swear it was here somewhere… one sec"
+            "state" : "translated",
+            "value" : "Je te jure que c’était là… une seconde."
           }
         },
         "it" : {
@@ -12755,8 +12767,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "An apple a day keeps the… updates away."
+            "state" : "translated",
+            "value" : "Une pomme par jour éloigne les… mises à jour pour toujours."
           }
         },
         "it" : {
@@ -12832,8 +12844,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "May the Force be with you… next time!"
+            "state" : "translated",
+            "value" : "Que la Force soit avec vous… la prochaine fois !"
           }
         },
         "it" : {
@@ -12909,8 +12921,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "The Force is strong with this version!"
+            "state" : "translated",
+            "value" : "La Force est puissante avec cette version !"
           }
         },
         "it" : {
@@ -12933,7 +12945,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "A Força é potente nessa versão."
           }
         },
@@ -12986,8 +12998,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Just a small town app, same old version"
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "it" : {
@@ -13063,8 +13075,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Winter is coming. Updates aren't yet."
+            "state" : "translated",
+            "value" : "L’hiver arrive. Les mises à jour, pas encore."
           }
         },
         "it" : {
@@ -13093,8 +13105,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Зима близко. Но обновления нет"
+            "state" : "translated",
+            "value" : "Зима близко. Но обновления нет."
           }
         },
         "zh-Hans" : {
@@ -13134,14 +13146,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Dulces sueños están hechos de... no actualizar."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Sweet dreams are made of… no updates"
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "it" : {
@@ -13164,7 +13176,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Sonho meu, sonho meu... sem updates como o céu!"
           }
         },
@@ -13217,8 +13229,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "The update fairy skipped us this week."
+            "state" : "translated",
+            "value" : "La fée des mises à jour nous a oubliés cette semaine."
           }
         },
         "it" : {
@@ -13294,8 +13306,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Stay sharp, more intel coming soon!"
+            "state" : "translated",
+            "value" : "Restez vigilant, d’autres infos arrivent bientôt !"
           }
         },
         "it" : {
@@ -13365,14 +13377,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Estás navegando con la última tecnología."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You're cruising on the latest tech!"
+            "state" : "translated",
+            "value" : "Vous êtes déjà à la pointe de la technologie !"
           }
         },
         "it" : {
@@ -13448,8 +13460,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "We’ll be back. With updates… later"
+            "state" : "translated",
+            "value" : "Nous reviendrons. Avec des mises à jour… un jour"
           }
         },
         "it" : {
@@ -13519,14 +13531,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Una moneda por tus... faltas de actualizaciones"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "A penny for your… lack of updates."
+            "state" : "translated",
+            "value" : "Un sou pour ton… absence de mises à jour."
           }
         },
         "it" : {
@@ -13602,8 +13614,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You've already got the best Loop!"
+            "state" : "translated",
+            "value" : "Vous avez déjà la meilleure version de Loop !"
           }
         },
         "it" : {
@@ -13626,7 +13638,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Você já está com o melhor Loop."
           }
         },
@@ -13679,8 +13691,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "One does not simply update Loop."
+            "state" : "translated",
+            "value" : "On ne met pas à jour Loop si facilement."
           }
         },
         "it" : {
@@ -13750,14 +13762,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Mucho trabajar y poco actualizar..."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "All work and no… no updates…"
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "it" : {
@@ -13780,14 +13792,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Todo esse trabalho e... sem atualizações..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Только работа и никаких.. обновлений..."
+            "state" : "translated",
+            "value" : "Только работа и никаких… обновлений…"
           }
         },
         "zh-Hans" : {
@@ -13833,8 +13845,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "A watched pot never… updates."
+            "state" : "translated",
+            "value" : "Tout vient à point à qui sait attendre... les mises à jour."
           }
         },
         "it" : {
@@ -13910,8 +13922,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "99 problems, updates ain't one."
+            "state" : "translated",
+            "value" : "J’ai 99 problèmes, mais les mises à jour n’en font pas partie."
           }
         },
         "it" : {
@@ -13940,8 +13952,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "99 проблем, ни одного обновления"
+            "state" : "translated",
+            "value" : "99 проблем, ни одного обновления."
           }
         },
         "zh-Hans" : {
@@ -13981,14 +13993,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Debi haberla dejado por aquí..."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "I… uhh… one sec I lost it"
+            "state" : "translated",
+            "value" : "Euh… une seconde… j’ai perdu le fil"
           }
         },
         "it" : {
@@ -14064,8 +14076,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You’ve leveled up to the max!"
+            "state" : "translated",
+            "value" : "Vous avez atteint le niveau max !"
           }
         },
         "it" : {
@@ -14135,14 +14147,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Colega, ¿dónde está mi actualización?"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Beggars can't be… updaters."
+            "state" : "translated",
+            "value" : "-"
           }
         },
         "it" : {
@@ -14212,14 +14224,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Podrá tener todo el dinero que quiera, pero no tiene una actualización"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Money can't buy… updates."
+            "state" : "translated",
+            "value" : "L’argent ne peut pas acheter… de mises à jour."
           }
         },
         "it" : {
@@ -14248,8 +14260,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Обновления бесценны..."
+            "state" : "translated",
+            "value" : "Обновления бесценны…"
           }
         },
         "zh-Hans" : {
@@ -14295,8 +14307,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No new intel, Commander."
+            "state" : "translated",
+            "value" : "Rien à signaler, Commandant."
           }
         },
         "it" : {
@@ -14325,8 +14337,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Ничего нового, сэр"
+            "state" : "translated",
+            "value" : "Ничего нового, сэр."
           }
         },
         "zh-Hans" : {
@@ -14366,14 +14378,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "No actualizaciones? Gran Scott"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No updates? Great Scott!"
+            "state" : "translated",
+            "value" : "Pas de mises à jour ? Nom de Zeus !"
           }
         },
         "it" : {
@@ -14443,14 +14455,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "No hay actualizaciones, señor Anderson..."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No updates, Mr. Anderson"
+            "state" : "translated",
+            "value" : "Pas de mise à jour, Mr Anderson"
           }
         },
         "it" : {
@@ -14520,14 +14532,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Negativo, camarada."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No updates in Ba Sing Se"
+            "state" : "translated",
+            "value" : "Pas de mises à jour à Ba Sing Se"
           }
         },
         "it" : {
@@ -14603,8 +14615,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates? In this economy?"
+            "state" : "translated",
+            "value" : "Des mises à jour ? Avec la conjoncture actuelle ?"
           }
         },
         "it" : {
@@ -14680,8 +14692,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Check back next time!"
+            "state" : "translated",
+            "value" : "Revenez plus tard !"
           }
         },
         "it" : {
@@ -14751,14 +14763,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Loop está mamadísimo"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Loop is in its prime!"
+            "state" : "translated",
+            "value" : "Loop fonctionne à plein régime !"
           }
         },
         "it" : {
@@ -14834,8 +14846,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "All systems are a-go!"
+            "state" : "translated",
+            "value" : "Tous les systèmes sont opérationnels !"
           }
         },
         "it" : {
@@ -14905,14 +14917,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Estás actualizado!"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You're up to date :)"
+            "state" : "translated",
+            "value" : "Vous êtes à jour :)"
           }
         },
         "it" : {
@@ -14988,8 +15000,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No updates yet!"
+            "state" : "translated",
+            "value" : "Aucune mise à jour pour le moment !"
           }
         },
         "it" : {
@@ -15041,7 +15053,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "None"
           }
         },
@@ -15065,8 +15077,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "None"
+            "state" : "translated",
+            "value" : "Non défini"
           }
         },
         "it" : {
@@ -15142,8 +15154,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Nothing to cycle through"
+            "state" : "translated",
+            "value" : "La séquence est vide"
           }
         },
         "it" : {
@@ -15195,7 +15207,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@'s notification permissions are currently disabled."
           }
         },
@@ -15219,8 +15231,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@'s notification permissions are currently disabled."
+            "state" : "translated",
+            "value" : "%@ n’a pas l’autorisation d’envoyer des notifications pour le moment."
           }
         },
         "it" : {
@@ -15249,8 +15261,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Вы не дали %@ разрешение на отправку уведомлений"
+            "state" : "translated",
+            "value" : "Вы не дали %@ разрешение на отправку уведомлений."
           }
         },
         "zh-Hans" : {
@@ -15296,8 +15308,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Open Settings"
+            "state" : "translated",
+            "value" : "Ouvrir les réglages"
           }
         },
         "it" : {
@@ -15349,7 +15361,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please turn them on in System Settings."
           }
         },
@@ -15373,8 +15385,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please turn them on in System Settings."
+            "state" : "translated",
+            "value" : "Activez-les dans les réglages système."
           }
         },
         "it" : {
@@ -15450,8 +15462,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Set Current Icon"
+            "state" : "translated",
+            "value" : "Utiliser cette icône"
           }
         },
         "it" : {
@@ -15527,8 +15539,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Notify when unlocking new icons"
+            "state" : "translated",
+            "value" : "Avertir quand de nouvelles icônes sont débloquées"
           }
         },
         "it" : {
@@ -15598,13 +15610,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "OK"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -15628,7 +15640,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "OK"
           }
         },
@@ -15681,7 +15693,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Options"
           }
         },
@@ -15734,7 +15746,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Padding"
           }
         },
@@ -15758,8 +15770,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Padding"
+            "state" : "translated",
+            "value" : "Marge"
           }
         },
         "it" : {
@@ -15811,7 +15823,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Permissions"
           }
         },
@@ -15835,7 +15847,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Permissions"
           }
         },
@@ -15888,7 +15900,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please press deny when Loop \n requests screen recording permissions."
           }
         },
@@ -15906,14 +15918,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please press deny when Loop \n requests screen recording permissions."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please press deny when Loop \n requests screen recording permissions."
+            "state" : "translated",
+            "value" : "Veuillez cliquer sur Refuser lorsque Loop \n demande l’autorisation pour enregistrer l’écran."
           }
         },
         "it" : {
@@ -15930,13 +15942,13 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please press deny when Loop \n requests screen recording permissions."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please press deny when Loop \n requests screen recording permissions."
           }
         },
@@ -15989,7 +16001,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Position"
           }
         },
@@ -16066,8 +16078,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Preserve Size"
+            "state" : "translated",
+            "value" : "Conserver les dimensions"
           }
         },
         "it" : {
@@ -16119,7 +16131,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Press \"Add\" to add a cycle item"
           }
         },
@@ -16137,14 +16149,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Presiona \"añadir\" para añadir a la rotación "
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Press \"Add\" to add a cycle item"
+            "state" : "translated",
+            "value" : "Appuyez sur \"Ajouter\" pour ajouter un élément à la séquence."
           }
         },
         "it" : {
@@ -16214,14 +16226,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Presiona añadir para añadir una combinación de teclas "
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Press \"Add\" to add a keybind"
+            "state" : "translated",
+            "value" : "Appuyez sur \"Ajouter\" pour ajouter un raccourci"
           }
         },
         "it" : {
@@ -16297,8 +16309,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Press \"Add\" to add an application"
+            "state" : "translated",
+            "value" : "Appuyez sur \"Ajouter\" pour ajouter une application"
           }
         },
         "it" : {
@@ -16374,8 +16386,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Preview"
+            "state" : "translated",
+            "value" : "Aperçu"
           }
         },
         "it" : {
@@ -16445,13 +16457,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "px"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -16469,19 +16481,19 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "px"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "px"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -16528,8 +16540,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Quarters"
+            "state" : "translated",
+            "value" : "Quart"
           }
         },
         "it" : {
@@ -16605,8 +16617,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Quit"
+            "state" : "translated",
+            "value" : "Quitter"
           }
         },
         "it" : {
@@ -16682,8 +16694,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Radial menu"
+            "state" : "translated",
+            "value" : "Menu radial"
           }
         },
         "it" : {
@@ -16753,14 +16765,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Radial Menu"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Radial Menu"
+            "state" : "translated",
+            "value" : "Menu Radial"
           }
         },
         "it" : {
@@ -16836,8 +16848,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Red"
+            "state" : "translated",
+            "value" : "Rouge"
           }
         },
         "it" : {
@@ -16885,7 +16897,14 @@
       }
     },
     "Relaxed" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "느긋한"
+          }
+        }
+      }
     },
     "Remind me later" : {
       "extractionState" : "manual",
@@ -16916,8 +16935,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Remind me later"
+            "state" : "translated",
+            "value" : "Me le rappeler plus tard"
           }
         },
         "it" : {
@@ -16993,8 +17012,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Remove"
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         },
         "it" : {
@@ -17064,14 +17083,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Solicitar..."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Request…"
+            "state" : "translated",
+            "value" : "Autoriser"
           }
         },
         "it" : {
@@ -17094,14 +17113,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Solicitar..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Запросить..."
+            "state" : "translated",
+            "value" : "Запросить…"
           }
         },
         "zh-Hans" : {
@@ -17147,8 +17166,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset"
+            "state" : "translated",
+            "value" : "Réinitialiser"
           }
         },
         "it" : {
@@ -17224,8 +17243,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Resize window under cursor"
+            "state" : "translated",
+            "value" : "Redimensionner la fenêtre sous le curseur"
           }
         },
         "it" : {
@@ -17301,8 +17320,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Respect Stage Manager"
+            "state" : "translated",
+            "value" : "Gérer la compatibilité avec Stage Manage"
           }
         },
         "it" : {
@@ -17354,7 +17373,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Restart to complete"
           }
         },
@@ -17378,8 +17397,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Restart to complete"
+            "state" : "translated",
+            "value" : "Redémarrer pour terminer"
           }
         },
         "it" : {
@@ -17455,8 +17474,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Restore window frame on drag"
+            "state" : "translated",
+            "value" : "Restaurer le cadre de la fenêtre lors du glissement"
           }
         },
         "it" : {
@@ -17532,8 +17551,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Right"
+            "state" : "translated",
+            "value" : "Droit"
           }
         },
         "it" : {
@@ -17610,8 +17629,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Right %@"
+            "state" : "translated",
+            "value" : "%@ droit"
           }
         },
         "it" : {
@@ -17687,8 +17706,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Right Cycle"
+            "state" : "translated",
+            "value" : "Séquence droite"
           }
         },
         "it" : {
@@ -17740,7 +17759,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Screen capture access"
           }
         },
@@ -17758,14 +17777,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Screen capture access"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Screen capture access"
+            "state" : "translated",
+            "value" : "Accès à l'enregistrement d'écran"
           }
         },
         "it" : {
@@ -17776,26 +17795,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Screen capture access"
+            "state" : "translated",
+            "value" : "화면 캡처 접근 권한"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Screen capture access"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Screen capture access"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Screen capture access"
+            "state" : "translated",
+            "value" : "Доступ к записи экрана"
           }
         },
         "zh-Hans" : {
@@ -17817,7 +17836,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please grant access to be able to dynamically set Loop's accent color based on your wallpaper. Please relaunch %@ after granting access."
           }
         },
@@ -17835,14 +17854,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please grant access to be able to dynamically set Loop's accent color based on your wallpaper. Please relaunch %@ after granting access."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please grant access to be able to dynamically set Loop's accent color based on your wallpaper. Please relaunch %@ after granting access."
+            "state" : "translated",
+            "value" : "Merci d’accorder l’accès afin que Loop puisse adapter dynamiquement sa couleur d’accentuation à votre fond d’écran. Relancez %@ après avoir autorisé l’accès."
           }
         },
         "it" : {
@@ -17853,26 +17872,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please grant access to be able to dynamically set Loop's accent color based on your wallpaper. Please relaunch %@ after granting access."
+            "state" : "translated",
+            "value" : "배경화면에 따라 Loop의 강조 색상을 동적으로 설정할 수 있도록 접근 권한을 부여해주세요. 접근 권한을 부여한 후 %@을(를) 다시 실행해주세요."
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please grant access to be able to dynamically set Loop's accent color based on your wallpaper. Please relaunch %@ after granting access."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Please grant access to be able to dynamically set Loop's accent color based on your wallpaper. Please relaunch %@ after granting access."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please grant access to be able to dynamically set Loop's accent color based on your wallpaper. Please relaunch %@ after granting access."
+            "state" : "translated",
+            "value" : "Пожалуйста, выдайте доступ, чтобы вы могли динамически устанавливать акцентный цвет для Loop основываясь на ваших обоях. Пожалуйста, перезапустите %@ после выдачи доступа."
           }
         },
         "zh-Hans" : {
@@ -17894,7 +17913,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@ Needs Screen Recording Permissions"
           }
         },
@@ -17912,14 +17931,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@ Needs Screen Recording Permissions"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ Needs Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "%@ nécessite l'autorisation d’enregistrement de l’écran"
           }
         },
         "it" : {
@@ -17930,26 +17949,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ Needs Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "%@ 화면 녹화 권한이 필요합니다"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@ Needs Screen Recording Permissions"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "%@ Needs Screen Recording Permissions"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ Needs Screen Recording Permissions"
+            "state" : "translated",
+            "value" : "%@ Нужно разрешение на запись экрана"
           }
         },
         "zh-Hans" : {
@@ -17995,8 +18014,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Screen Switching"
+            "state" : "translated",
+            "value" : "Changement d'écran"
           }
         },
         "it" : {
@@ -18048,7 +18067,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Search…"
           }
         },
@@ -18066,14 +18085,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Search…"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Search…"
+            "state" : "translated",
+            "value" : "Rechercher…"
           }
         },
         "it" : {
@@ -18096,14 +18115,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Search…"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Search…"
+            "state" : "translated",
+            "value" : "Поиск…"
           }
         },
         "zh-Hans" : {
@@ -18121,11 +18140,10 @@
       }
     },
     "Select a keybinds file" : {
-      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Select a keybinds file"
           }
         },
@@ -18135,22 +18153,16 @@
             "value" : "Wähle eine Keybind-Datei aus"
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select a keybinds file"
-          }
-        },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Select a keybinds file"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Select a keybinds file"
+            "state" : "translated",
+            "value" : "Sélectionner un fichier de raccourcis"
           }
         },
         "it" : {
@@ -18161,26 +18173,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Select a keybinds file"
+            "state" : "translated",
+            "value" : "키바인드 파일 선택"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Select a keybinds file"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Select a keybinds file"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Select a keybinds file"
+            "state" : "translated",
+            "value" : "Выберите файл с горячими клавишами"
           }
         },
         "zh-Hans" : {
@@ -18226,8 +18238,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Select Loop keybinds file"
+            "state" : "translated",
+            "value" : "Sélectionner le fichier de raccourcis de Loop"
           }
         },
         "it" : {
@@ -18303,8 +18315,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Send Feedback"
+            "state" : "translated",
+            "value" : "Envoyer un feedback"
           }
         },
         "it" : {
@@ -18356,7 +18368,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "تعيين مفتاح التنشيط..."
           }
         },
@@ -18374,14 +18386,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Seleccionar tecla de activación"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Set a trigger key…"
+            "state" : "translated",
+            "value" : "Attribuer une touche d’activation"
           }
         },
         "it" : {
@@ -18404,14 +18416,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Defina uma tecla de gatilho..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Установить клавишу активации..."
+            "state" : "translated",
+            "value" : "Установить клавишу активации…"
           }
         },
         "zh-Hans" : {
@@ -18457,8 +18469,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Settings"
+            "state" : "translated",
+            "value" : "Réglages"
           }
         },
         "it" : {
@@ -18510,7 +18522,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "حول"
           }
         },
@@ -18528,14 +18540,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Acerca de"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "About"
+            "state" : "translated",
+            "value" : "À Propos"
           }
         },
         "it" : {
@@ -18546,8 +18558,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "About"
+            "state" : "translated",
+            "value" : "정보"
           }
         },
         "nl-BE" : {
@@ -18558,13 +18570,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Sobre"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "О нас"
           }
         },
@@ -18587,7 +18599,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "لون التمييز"
           }
         },
@@ -18605,14 +18617,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Color de acento"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Accent Color"
+            "state" : "translated",
+            "value" : "Couleur d'accentuation"
           }
         },
         "it" : {
@@ -18623,8 +18635,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Accent Color"
+            "state" : "translated",
+            "value" : "강조 색상"
           }
         },
         "nl-BE" : {
@@ -18635,13 +18647,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Cor de Destaque"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Акцентный Цвет"
           }
         },
@@ -18664,7 +18676,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "متقدم"
           }
         },
@@ -18682,14 +18694,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Avanzado"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Advanced"
+            "state" : "translated",
+            "value" : "Avancé"
           }
         },
         "it" : {
@@ -18700,8 +18712,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Advanced"
+            "state" : "translated",
+            "value" : "고급"
           }
         },
         "nl-BE" : {
@@ -18712,13 +18724,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Avançado"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Дополнительные настройки"
           }
         },
@@ -18741,7 +18753,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "سلوك"
           }
         },
@@ -18759,14 +18771,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Comportamiento"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Behavior"
+            "state" : "translated",
+            "value" : "Comportement"
           }
         },
         "it" : {
@@ -18777,8 +18789,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Behavior"
+            "state" : "translated",
+            "value" : "동작"
           }
         },
         "nl-BE" : {
@@ -18789,13 +18801,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Comportamento"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Поведение"
           }
         },
@@ -18818,7 +18830,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "التطبيقات المستبعدة"
           }
         },
@@ -18836,14 +18848,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Apps excluidas"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Excluded Apps"
+            "state" : "translated",
+            "value" : "Applications ignorées"
           }
         },
         "it" : {
@@ -18854,8 +18866,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Excluded Apps"
+            "state" : "translated",
+            "value" : "제외된 앱"
           }
         },
         "nl-BE" : {
@@ -18866,13 +18878,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Aplicativos Excluídos"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Игнорировать приложения"
           }
         },
@@ -18895,7 +18907,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "أيقونة"
           }
         },
@@ -18913,14 +18925,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Icono"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Icon"
+            "state" : "translated",
+            "value" : "Icône"
           }
         },
         "it" : {
@@ -18931,8 +18943,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Icon"
+            "state" : "translated",
+            "value" : "아이콘"
           }
         },
         "nl-BE" : {
@@ -18943,13 +18955,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Ícone"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Иконка"
           }
         },
@@ -18972,7 +18984,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "روابط المفاتيح"
           }
         },
@@ -18990,14 +19002,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Asignaciones de teclas"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keybinds"
+            "state" : "translated",
+            "value" : "Raccourcis"
           }
         },
         "it" : {
@@ -19008,8 +19020,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keybinds"
+            "state" : "translated",
+            "value" : "키바인드"
           }
         },
         "nl-BE" : {
@@ -19020,13 +19032,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Combinações"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Сочетания клавиш"
           }
         },
@@ -19049,7 +19061,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "معاينة"
           }
         },
@@ -19067,14 +19079,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Previsualización"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Preview"
+            "state" : "translated",
+            "value" : "Aperçu"
           }
         },
         "it" : {
@@ -19085,8 +19097,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Preview"
+            "state" : "translated",
+            "value" : "미리보기"
           }
         },
         "nl-BE" : {
@@ -19097,13 +19109,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Prévia"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Превью"
           }
         },
@@ -19126,7 +19138,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "قائمة دائرية"
           }
         },
@@ -19144,14 +19156,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Radial Menu"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Radial Menu"
+            "state" : "translated",
+            "value" : "Menu Radial"
           }
         },
         "it" : {
@@ -19162,8 +19174,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "방사형 메뉴"
+            "state" : "translated",
+            "value" : "원형 메뉴 "
           }
         },
         "nl-BE" : {
@@ -19174,13 +19186,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Menu Radial"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Радиальное Меню"
           }
         },
@@ -19203,7 +19215,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "الإعدادات..."
           }
         },
@@ -19221,14 +19233,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Ajustes..."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Settings…"
+            "state" : "translated",
+            "value" : "Réglages…"
           }
         },
         "it" : {
@@ -19251,14 +19263,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Configurações..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Настройки..."
+            "state" : "translated",
+            "value" : "Настройки…"
           }
         },
         "zh-Hans" : {
@@ -19304,8 +19316,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Share feedback on our GitHub page, where you can let us know about any bugs, suggest features, or provide other valuable input. We also accept donations if you feel that Loop has improved your workflow :)"
+            "state" : "translated",
+            "value" : "Partagez vos retours sur notre page GitHub : vous pouvez y signaler des bugs, suggérer des fonctionnalités ou nous faire part de vos idées. Si Loop a amélioré votre productivité, vous pouvez aussi nous soutenir par un don :)\""
           }
         },
         "it" : {
@@ -19381,8 +19393,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Show in dock"
+            "state" : "translated",
+            "value" : "Afficher dans le dock"
           }
         },
         "it" : {
@@ -19458,8 +19470,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Show preview when looping"
+            "state" : "translated",
+            "value" : "Afficher un aperçu pendant l'utilisation"
           }
         },
         "it" : {
@@ -19511,7 +19523,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Shrink"
           }
         },
@@ -19529,14 +19541,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Shrink"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink"
+            "state" : "translated",
+            "value" : "Réduire"
           }
         },
         "it" : {
@@ -19553,20 +19565,20 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Shrink"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Shrink"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink"
+            "state" : "translated",
+            "value" : "Уменьшить"
           }
         },
         "zh-Hans" : {
@@ -19606,13 +19618,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Simple"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Simple"
           }
         },
@@ -19689,8 +19701,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Size"
+            "state" : "translated",
+            "value" : "Taille"
           }
         },
         "it" : {
@@ -19742,7 +19754,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Size Adjustment"
           }
         },
@@ -19760,14 +19772,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Size Adjustment"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Size Adjustment"
+            "state" : "translated",
+            "value" : "Ajustement de la taille"
           }
         },
         "it" : {
@@ -19784,20 +19796,20 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Size Adjustment"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Size Adjustment"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Size Adjustment"
+            "state" : "translated",
+            "value" : "Изменение размера"
           }
         },
         "zh-Hans" : {
@@ -19843,8 +19855,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Size increment"
+            "state" : "translated",
+            "value" : "Incrément de taille"
           }
         },
         "it" : {
@@ -19920,8 +19932,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Smooth"
+            "state" : "translated",
+            "value" : "Fluide"
           }
         },
         "it" : {
@@ -19969,7 +19981,14 @@
       }
     },
     "Snappy" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "딸깍 반응"
+          }
+        }
+      }
     },
     "Some features, ideas, and bug fixes" : {
       "extractionState" : "manual",
@@ -20000,8 +20019,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Some features, ideas, and bug fixes"
+            "state" : "translated",
+            "value" : "Fonctionnalités, idées et correctifs"
           }
         },
         "it" : {
@@ -20077,7 +20096,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Stage Manager"
           }
         },
@@ -20095,13 +20114,13 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Stage Manager"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Stage Manager"
           }
         },
@@ -20154,8 +20173,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Stage strip size"
+            "state" : "translated",
+            "value" : "Taille de la bande du Stage Manager"
           }
         },
         "it" : {
@@ -20231,8 +20250,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Suggest new icon"
+            "state" : "translated",
+            "value" : "Proposer une nouvelle icône"
           }
         },
         "it" : {
@@ -20308,8 +20327,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Sync Wallpaper"
+            "state" : "translated",
+            "value" : "Synchroniser avec le fond d'écran"
           }
         },
         "it" : {
@@ -20379,14 +20398,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Esta tecla está actualmente en uso como tecla de activación"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "That key is already used as your trigger key."
+            "state" : "translated",
+            "value" : "Cette touche est déjà utilisée en tant que touche d'activation."
           }
         },
         "it" : {
@@ -20456,14 +20475,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Esta combinación está siendo usada por %@"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "That keybind is already being used by %@."
+            "state" : "translated",
+            "value" : "Ce raccourci est déjà utilisé par %@"
           }
         },
         "it" : {
@@ -20533,14 +20552,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Esta combinación está siendo usada por otra combinación personalizada"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "That keybind is already being used by another custom keybind."
+            "state" : "translated",
+            "value" : "Ce raccourci est déjà utilisé par un autre raccourci personnalisé."
           }
         },
         "it" : {
@@ -20616,8 +20635,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Theming"
+            "state" : "translated",
+            "value" : "Thème"
           }
         },
         "it" : {
@@ -20665,11 +20684,10 @@
       }
     },
     "There are other keybinds that conflict with this key combination." : {
-      "extractionState" : "manual",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "There are other keybinds that conflict with this key combination."
           }
         },
@@ -20679,22 +20697,16 @@
             "value" : "Es gibt andere Tastenkombinationen, die mit dieser in Konflikt stehen."
           }
         },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "There are other keybinds that conflict with this key combination."
-          }
-        },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "There are other keybinds that conflict with this key combination."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "There are other keybinds that conflict with this key combination."
+            "state" : "translated",
+            "value" : "Cette combinaison est déjà utilisée par un autre raccourci."
           }
         },
         "it" : {
@@ -20705,26 +20717,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "There are other keybinds that conflict with this key combination."
+            "state" : "translated",
+            "value" : "이 키 조합과 충돌하는 다른 키바인드가 있습니다"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "There are other keybinds that conflict with this key combination."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "There are other keybinds that conflict with this key combination."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "There are other keybinds that conflict with this key combination."
+            "state" : "translated",
+            "value" : "У вас уже есть другие назначения клавиш на эту комбинацию клавиш."
           }
         },
         "zh-Hans" : {
@@ -20746,7 +20758,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "السماكة\n\n"
           }
         },
@@ -20770,8 +20782,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Thickness"
+            "state" : "translated",
+            "value" : "Épaisseur"
           }
         },
         "it" : {
@@ -20841,14 +20853,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Esta funcionalidad aún está en desarrollo"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This feature is still under development."
+            "state" : "translated",
+            "value" : "Cette fonctionnalité est encore en cours de développement."
           }
         },
         "it" : {
@@ -20924,8 +20936,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top"
+            "state" : "translated",
+            "value" : "Haut"
           }
         },
         "it" : {
@@ -20942,7 +20954,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Top"
           }
         },
@@ -21001,8 +21013,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top Cycle"
+            "state" : "translated",
+            "value" : "Séquence haute"
           }
         },
         "it" : {
@@ -21078,8 +21090,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Trigger delay"
+            "state" : "translated",
+            "value" : "Délai d'activation"
           }
         },
         "it" : {
@@ -21155,8 +21167,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Trigger Key"
+            "state" : "translated",
+            "value" : "Touche d'activation"
           }
         },
         "it" : {
@@ -21226,14 +21238,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Actualizar..."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Update…"
+            "state" : "translated",
+            "value" : "Mise à jour…"
           }
         },
         "it" : {
@@ -21256,14 +21268,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Atualizar..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Обновление..."
+            "state" : "translated",
+            "value" : "Обновление…"
           }
         },
         "zh-Hans" : {
@@ -21281,7 +21293,14 @@
       }
     },
     "Updates are disabled" : {
-
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "업데이트가 비활성화되었습니다"
+          }
+        }
+      }
     },
     "Use coordinates" : {
       "extractionState" : "manual",
@@ -21312,8 +21331,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use coordinates"
+            "state" : "translated",
+            "value" : "Utiliser des coordonnées"
           }
         },
         "it" : {
@@ -21389,8 +21408,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use macOS center"
+            "state" : "translated",
+            "value" : "Utiliser le centre selon macOS"
           }
         },
         "it" : {
@@ -21442,7 +21461,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Use macOS window manager when available"
           }
         },
@@ -21460,14 +21479,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Use macOS window manager when available"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use macOS window manager when available"
+            "state" : "translated",
+            "value" : "Utiliser le gestionnaire de fenêtres de macOS si possible"
           }
         },
         "it" : {
@@ -21478,26 +21497,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use macOS window manager when available"
+            "state" : "translated",
+            "value" : "사용 가능한 경우 macOS 창 관리자 사용"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Use macOS window manager when available"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Use macOS window manager when available"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use macOS window manager when available"
+            "state" : "translated",
+            "value" : "Использовать оконный менеджер macOS"
           }
         },
         "zh-Hans" : {
@@ -21543,8 +21562,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use pixels"
+            "state" : "translated",
+            "value" : "Valeurs fixes en pixels"
           }
         },
         "it" : {
@@ -21614,14 +21633,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Usa esto si estás utilizando una barra de menú personalizada"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use this if you are using a custom menubar."
+            "state" : "translated",
+            "value" : "À utiliser si vous avez une barre de menu personnalisée."
           }
         },
         "it" : {
@@ -21650,8 +21669,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Включите это, если вы не используете встроенную строку меню"
+            "state" : "translated",
+            "value" : "Включите это, если вы не используете встроенную строку меню."
           }
         },
         "zh-Hans" : {
@@ -21673,7 +21692,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Version %1$@ (%2$lld)"
           }
         },
@@ -21697,7 +21716,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Version %1$@ (%2$lld)"
           }
         },
@@ -21727,8 +21746,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Версия %1$@ (%$11d)"
+            "state" : "translated",
+            "value" : "Версия %1$@ (%2$lld)"
           }
         },
         "zh-Hans" : {
@@ -21774,8 +21793,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Vertical Thirds"
+            "state" : "translated",
+            "value" : "Tiers verticaux"
           }
         },
         "it" : {
@@ -21851,8 +21870,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Width"
+            "state" : "translated",
+            "value" : "Largeur"
           }
         },
         "it" : {
@@ -21928,8 +21947,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Window"
+            "state" : "translated",
+            "value" : "Fenêtre"
           }
         },
         "it" : {
@@ -22005,8 +22024,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Almost Maximize"
+            "state" : "translated",
+            "value" : "Presque maximiser"
           }
         },
         "it" : {
@@ -22082,8 +22101,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bottom Half"
+            "state" : "translated",
+            "value" : "Moitié basse"
           }
         },
         "it" : {
@@ -22159,8 +22178,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bottom Left Quarter"
+            "state" : "translated",
+            "value" : "Quart inférieur gauche"
           }
         },
         "it" : {
@@ -22236,8 +22255,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bottom Right Quarter"
+            "state" : "translated",
+            "value" : "Quart inférieur droit"
           }
         },
         "it" : {
@@ -22313,8 +22332,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bottom Third"
+            "state" : "translated",
+            "value" : "Tiers bas"
           }
         },
         "it" : {
@@ -22390,8 +22409,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bottom Two Thirds"
+            "state" : "translated",
+            "value" : "Deux tiers inférieurs"
           }
         },
         "it" : {
@@ -22467,8 +22486,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Center"
+            "state" : "translated",
+            "value" : "Centrer"
           }
         },
         "it" : {
@@ -22544,8 +22563,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Custom"
+            "state" : "translated",
+            "value" : "Personnalisé"
           }
         },
         "it" : {
@@ -22621,8 +22640,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cycle"
+            "state" : "translated",
+            "value" : "Séquence"
           }
         },
         "it" : {
@@ -22698,8 +22717,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fullscreen"
+            "state" : "translated",
+            "value" : "Plein écran"
           }
         },
         "it" : {
@@ -22775,8 +22794,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow Bottom"
+            "state" : "translated",
+            "value" : "Agrandir en bas"
           }
         },
         "it" : {
@@ -22852,8 +22871,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow Left"
+            "state" : "translated",
+            "value" : "Agrandir à gauche"
           }
         },
         "it" : {
@@ -22929,8 +22948,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow Right"
+            "state" : "translated",
+            "value" : "Agrandir à droite"
           }
         },
         "it" : {
@@ -23006,8 +23025,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow Top"
+            "state" : "translated",
+            "value" : "Agrandir en haut"
           }
         },
         "it" : {
@@ -23083,8 +23102,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Hide"
+            "state" : "translated",
+            "value" : "Cacher"
           }
         },
         "it" : {
@@ -23136,7 +23155,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Horizontal Center Half"
           }
         },
@@ -23154,14 +23173,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Horizontal Center Half"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Horizontal Center Half"
+            "state" : "translated",
+            "value" : "Moitié centrale horizontale"
           }
         },
         "it" : {
@@ -23172,26 +23191,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Horizontal Center Half"
+            "state" : "translated",
+            "value" : "수평 중앙 절반"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Horizontal Center Half"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Horizontal Center Half"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Horizontal Center Half"
+            "state" : "translated",
+            "value" : "Горизонтальная половина по центру"
           }
         },
         "zh-Hans" : {
@@ -23237,8 +23256,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Horizontal Center Third"
+            "state" : "translated",
+            "value" : "Tiers central horizontal"
           }
         },
         "it" : {
@@ -23314,8 +23333,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Initial Frame"
+            "state" : "translated",
+            "value" : "Dimensions initiales"
           }
         },
         "it" : {
@@ -23391,8 +23410,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Larger"
+            "state" : "translated",
+            "value" : "Agrandir"
           }
         },
         "it" : {
@@ -23468,8 +23487,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left Half"
+            "state" : "translated",
+            "value" : "Moitié gauche"
           }
         },
         "it" : {
@@ -23545,8 +23564,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left Third"
+            "state" : "translated",
+            "value" : "Tiers gauche"
           }
         },
         "it" : {
@@ -23622,8 +23641,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left Two Thirds"
+            "state" : "translated",
+            "value" : "Deux tiers gauches"
           }
         },
         "it" : {
@@ -23693,14 +23712,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Centro de macOS"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "macOS Center"
+            "state" : "translated",
+            "value" : "Centre (macOS)"
           }
         },
         "it" : {
@@ -23723,7 +23742,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Centro do macOS"
           }
         },
@@ -23776,8 +23795,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize"
+            "state" : "translated",
+            "value" : "Maximiser"
           }
         },
         "it" : {
@@ -23825,11 +23844,11 @@
       }
     },
     "Window Direction/Name: Maximize Height" : {
-      "extractionState" : "manual",
+      "extractionState" : "extracted_with_value",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Height"
           }
         },
@@ -23841,20 +23860,20 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Maximize Height"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Height"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Height"
+            "state" : "translated",
+            "value" : "Hauteur max"
           }
         },
         "it" : {
@@ -23865,26 +23884,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Height"
+            "state" : "translated",
+            "value" : "높이 최대화"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Height"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Height"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Height"
+            "state" : "translated",
+            "value" : "Максимизировать высоту"
           }
         },
         "zh-Hans" : {
@@ -23902,11 +23921,11 @@
       }
     },
     "Window Direction/Name: Maximize Width" : {
-      "extractionState" : "manual",
+      "extractionState" : "extracted_with_value",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Width"
           }
         },
@@ -23918,20 +23937,20 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "new",
             "value" : "Maximize Width"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Width"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Width"
+            "state" : "translated",
+            "value" : "Largeur max"
           }
         },
         "it" : {
@@ -23942,26 +23961,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Width"
+            "state" : "translated",
+            "value" : "너비 최대화"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Width"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Maximize Width"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Width"
+            "state" : "translated",
+            "value" : "Максимизировать ширину"
           }
         },
         "zh-Hans" : {
@@ -24007,8 +24026,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Minimize"
+            "state" : "translated",
+            "value" : "Minimiser"
           }
         },
         "it" : {
@@ -24084,8 +24103,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move Down"
+            "state" : "translated",
+            "value" : "Déplacer en bas"
           }
         },
         "it" : {
@@ -24161,8 +24180,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move Left"
+            "state" : "translated",
+            "value" : "Déplacer à droite"
           }
         },
         "it" : {
@@ -24238,8 +24257,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move Right"
+            "state" : "translated",
+            "value" : "Déplacer à droite"
           }
         },
         "it" : {
@@ -24315,8 +24334,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move Up"
+            "state" : "translated",
+            "value" : "Déplacer en haut"
           }
         },
         "it" : {
@@ -24392,8 +24411,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Next Screen"
+            "state" : "translated",
+            "value" : "Écran suivant"
           }
         },
         "it" : {
@@ -24469,8 +24488,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No Action"
+            "state" : "translated",
+            "value" : "Pas d'action"
           }
         },
         "it" : {
@@ -24546,8 +24565,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Previous Screen"
+            "state" : "translated",
+            "value" : "Écran précédent"
           }
         },
         "it" : {
@@ -24623,8 +24642,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Right Half"
+            "state" : "translated",
+            "value" : "Moitié droite"
           }
         },
         "it" : {
@@ -24700,8 +24719,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Right Third"
+            "state" : "translated",
+            "value" : "Tiers droit"
           }
         },
         "it" : {
@@ -24777,8 +24796,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Right Two Thirds"
+            "state" : "translated",
+            "value" : "Deux tiers droits"
           }
         },
         "it" : {
@@ -24854,8 +24873,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink Bottom"
+            "state" : "translated",
+            "value" : "Réduire en bas"
           }
         },
         "it" : {
@@ -24931,8 +24950,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink Left"
+            "state" : "translated",
+            "value" : "Réduire à gauche"
           }
         },
         "it" : {
@@ -25008,8 +25027,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink Right"
+            "state" : "translated",
+            "value" : "Réduire à droite"
           }
         },
         "it" : {
@@ -25085,8 +25104,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink Top"
+            "state" : "translated",
+            "value" : "Réduire en haut"
           }
         },
         "it" : {
@@ -25162,8 +25181,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Smaller"
+            "state" : "translated",
+            "value" : "Réduire"
           }
         },
         "it" : {
@@ -25239,8 +25258,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top Half"
+            "state" : "translated",
+            "value" : "Moitié haute"
           }
         },
         "it" : {
@@ -25316,8 +25335,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top Left Quarter"
+            "state" : "translated",
+            "value" : "Quart supérieur gauche"
           }
         },
         "it" : {
@@ -25393,8 +25412,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top Right Quarter"
+            "state" : "translated",
+            "value" : "Quart supérieur droit"
           }
         },
         "it" : {
@@ -25470,8 +25489,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top Third"
+            "state" : "translated",
+            "value" : "Tiers haut"
           }
         },
         "it" : {
@@ -25547,8 +25566,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top Two Thirds"
+            "state" : "translated",
+            "value" : "Deux tiers supérieurs"
           }
         },
         "it" : {
@@ -25624,8 +25643,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Undo"
+            "state" : "translated",
+            "value" : "Annuler"
           }
         },
         "it" : {
@@ -25677,7 +25696,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Vertical Center Half"
           }
         },
@@ -25695,14 +25714,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Vertical Center Half"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Vertical Center Half"
+            "state" : "translated",
+            "value" : "Moitié centrale verticale"
           }
         },
         "it" : {
@@ -25713,26 +25732,26 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Vertical Center Half"
+            "state" : "translated",
+            "value" : "수직 중앙 절반"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Vertical Center Half"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Vertical Center Half"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Vertical Center Half"
+            "state" : "translated",
+            "value" : "Вертикальная половина по центру"
           }
         },
         "zh-Hans" : {
@@ -25778,8 +25797,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Vertical Center Third"
+            "state" : "translated",
+            "value" : "Tiers central vertical"
           }
         },
         "it" : {
@@ -25855,8 +25874,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Window gaps"
+            "state" : "translated",
+            "value" : "Espacement entre les fenêtres"
           }
         },
         "it" : {
@@ -25932,8 +25951,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Window snapping"
+            "state" : "translated",
+            "value" : "Magnétisme des fenêtres"
           }
         },
         "it" : {
@@ -25950,7 +25969,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Window snapping"
           }
         },
@@ -26003,14 +26022,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Se previsualizará el ajuste de ventanas"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Window snapping will still use the preview."
+            "state" : "translated",
+            "value" : "Le magnétisme des fenêtres utilisera toujours l'aperçu."
           }
         },
         "it" : {
@@ -26080,13 +26099,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "X"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "X"
           }
         },
@@ -26104,19 +26123,19 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "X"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "X"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "X"
           }
         },
@@ -26157,13 +26176,13 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Y"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Y"
           }
         },
@@ -26187,13 +26206,13 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "new",
             "value" : "Y"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Y"
           }
         },
@@ -26234,14 +26253,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Solo se pueden usar hasta %lld teclas en una combinación, incluyendo la tecla de activación"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in a keybind, including the trigger key."
+            "state" : "translated",
+            "value" : "Vous pouvez utiliser un maximum de %lld touches par raccourci, touches d'activation incluses."
           }
         },
         "it" : {
@@ -26311,14 +26330,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Solo se pueden usar hasta %lld teclas de activación"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in your trigger key."
+            "state" : "translated",
+            "value" : "Vous pouvez utiliser un maximum de %lld touches d'activation."
           }
         },
         "it" : {
@@ -26394,8 +26413,8 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You've looped %lld times!"
+            "state" : "translated",
+            "value" : "Vous avez utilisé Loop %lld fois !"
           }
         },
         "it" : {
@@ -26447,7 +26466,7 @@
       "localizations" : {
         "ar" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "لقد كررت... آه... لقد... فقدت العد..."
           }
         },
@@ -26465,14 +26484,14 @@
         },
         "es" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Has"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You've looped… uhh… I… lost count…"
+            "state" : "translated",
+            "value" : "Vous avez bouclé… euh… j’ai perdu le compte…"
           }
         },
         "it" : {
@@ -26495,14 +26514,14 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Você fez... hmm... Eu... Perdi as contas..."
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Я Loop'ил... эмм... я... я запутался..."
+            "state" : "translated",
+            "value" : "Я Loop'ил… эмм… я… я запутался…"
           }
         },
         "zh-Hans" : {

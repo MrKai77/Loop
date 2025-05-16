@@ -28,6 +28,10 @@ extension Defaults.Keys {
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true, iCloud: true)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50, iCloud: true)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22, iCloud: true)
+    /// Lock radial menu to the center of the screen
+    /// Adjust with `defaults write com.MrKai77.Loop lockRadialMenuToCenter -bool true`
+    /// Reset with `defaults delete com.MrKai77.Loop lockRadialMenuToCenter`
+    static let lockRadialMenuToCenter = Key<Bool>("lockRadialMenuToCenter", default: false, iCloud: true)
 
     // Preview
     static let previewVisibility = Key<Bool>("previewVisibility", default: true, iCloud: true)

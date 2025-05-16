@@ -62,6 +62,18 @@ extension NSColor {
         return 0.299 * rgbColor.redComponent + 0.587 * rgbColor.greenComponent + 0.114 * rgbColor.blueComponent
     }
 
+    /// Returns the saturation component of the color.
+    /// Higher values indicate more vibrant colors.
+    var saturationComponent: CGFloat {
+        guard let hsbColor = usingColorSpace(.deviceRGB) else { return 0 }
+        var hue: CGFloat = 0
+        var saturation: CGFloat = 0
+        var brightness: CGFloat = 0
+        var alpha: CGFloat = 0
+        hsbColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+        return saturation
+    }
+
     /// Determines if two colors are similar based on a threshold.
     /// - Parameters:
     ///   - color: The color to compare with the receiver.
@@ -71,10 +83,23 @@ extension NSColor {
         // Convert both colors to the RGB color space for comparison.
         guard let color1 = usingColorSpace(.deviceRGB),
               let color2 = color.usingColorSpace(.deviceRGB) else { return false }
-        // Compare the red, green, and blue components of both colors.
-        return abs(color1.redComponent - color2.redComponent) < threshold &&
-            abs(color1.greenComponent - color2.greenComponent) < threshold &&
-            abs(color1.blueComponent - color2.blueComponent) < threshold
+
+        // Calculate difference in HSB space for better perceptual comparison
+        var hue1: CGFloat = 0, sat1: CGFloat = 0, bri1: CGFloat = 0, alpha1: CGFloat = 0
+        var hue2: CGFloat = 0, sat2: CGFloat = 0, bri2: CGFloat = 0, alpha2: CGFloat = 0
+
+        color1.getHue(&hue1, saturation: &sat1, brightness: &bri1, alpha: &alpha1)
+        color2.getHue(&hue2, saturation: &sat2, brightness: &bri2, alpha: &alpha2)
+
+        // Hue is circular, so we need to account for colors like red (0) and purplish-red (0.95)
+        let hueDiff = min(abs(hue1 - hue2), 1 - abs(hue1 - hue2))
+
+        // For low saturation colors, hue matters less
+        let hueThreshold = threshold * (1 + (1 - min(sat1, sat2)))
+
+        return hueDiff < hueThreshold &&
+            abs(sat1 - sat2) < threshold * 1.5 &&
+            abs(bri1 - bri2) < threshold * 1.5
     }
 
     /// Quantizes the color to a limited set of values.

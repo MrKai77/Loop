@@ -187,9 +187,89 @@ private extension Migrator {
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        let data = try encoder.encode(keybinds)
 
-        guard let json = String(data: data, encoding: .utf8) else {
+        // Convert to a dictionary we can manipulate before final encoding
+        var rootDict = try JSONSerialization.jsonObject(
+            with: encoder.encode(keybinds),
+            options: [.mutableContainers]
+        ) as! [String: Any]
+
+        // Process trigger key if present
+        if var triggerKey = rootDict["triggerKey"] as? [CGKeyCode] {
+            triggerKey.sort()
+            rootDict["triggerKey"] = triggerKey
+        }
+
+        // Process actions array
+        if var actions = rootDict["actions"] as? [[String: Any]] {
+            // First ensure all keybind arrays are sorted
+            for i in 0 ..< actions.count {
+                // Sort the keybind array in each action
+                if var keybind = actions[i]["keybind"] as? [CGKeyCode] {
+                    keybind.sort()
+                    actions[i]["keybind"] = keybind
+                }
+
+                // Handle nested cycle actions if present
+                if var cycle = actions[i]["cycle"] as? [[String: Any]] {
+                    // Sort the cycle actions by direction
+                    cycle.sort { first, second -> Bool in
+                        let firstDir = first["direction"] as? String ?? ""
+                        let secondDir = second["direction"] as? String ?? ""
+                        return firstDir < secondDir
+                    }
+
+                    // For each action in the cycle
+                    for j in 0 ..< cycle.count {
+                        // Sort the keybind array in each cycle action
+                        if var cycleKeybind = cycle[j]["keybind"] as? [CGKeyCode] {
+                            cycleKeybind.sort()
+                            cycle[j]["keybind"] = cycleKeybind
+                        }
+                    }
+                    actions[i]["cycle"] = cycle
+                }
+            }
+
+            // Sort the actions array by direction and keybind for a consistent ordering
+            actions.sort { first, second -> Bool in
+                // First compare by direction
+                let firstDir = first["direction"] as? String ?? ""
+                let secondDir = second["direction"] as? String ?? ""
+
+                if firstDir != secondDir {
+                    return firstDir < secondDir
+                }
+
+                // If directions are equal, compare by name (if present)
+                let firstName = first["name"] as? String ?? ""
+                let secondName = second["name"] as? String ?? ""
+
+                if firstName != secondName {
+                    return firstName < secondName
+                }
+
+                // If names are equal or empty, compare by keybind
+                let firstKeybind = first["keybind"] as? [CGKeyCode] ?? []
+                let secondKeybind = second["keybind"] as? [CGKeyCode] ?? []
+
+                // Convert keybinds to strings for comparison
+                let firstKeyStr = firstKeybind.map { String($0) }.joined(separator: "-")
+                let secondKeyStr = secondKeybind.map { String($0) }.joined(separator: "-")
+
+                return firstKeyStr < secondKeyStr
+            }
+
+            rootDict["actions"] = actions
+        }
+
+        // Convert back to JSON data with our sorted arrays
+        let sortedData = try JSONSerialization.data(
+            withJSONObject: rootDict,
+            options: [.prettyPrinted, .sortedKeys]
+        )
+
+        guard let json = String(data: sortedData, encoding: .utf8) else {
             throw MigratorError.failedToConvertToString
         }
 

@@ -3,21 +3,16 @@ name: Loop Development Build
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        type: string
-        default: 'develop'
-        description: 'branch'
-        required: true
       release-new-build:
         type: boolean
         default: false
-        description: 'Release new build'
+        description: 'Release new dev build'
         required: true
 
 jobs:
   pre-release:
     name: Development Build
-    runs-on: macos-14
+    runs-on: macos-15
     permissions:
       contents: write
       pull-requests: read
@@ -26,7 +21,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ inputs.branch }}
 
       - name: 🧪 Set Version and Build number
         run: |
@@ -50,7 +44,7 @@ jobs:
           echo "FROM_TAG=$FROM_TAG" >> $GITHUB_ENV
 
       - name: 🔧 Select Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_16.2.app"
+        run: sudo xcode-select -s "/Applications/Xcode_16.3.app"
 
       - name: 🎟️ Install Certificate
         id: profile

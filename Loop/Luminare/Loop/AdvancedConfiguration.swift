@@ -16,7 +16,6 @@ class AdvancedConfigurationModel: ObservableObject {
     @Published var didResetSuccessfullyAlert = false
 
     @Published var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
-    @Published var isScreenCaptureAccessGranted = ScreenCaptureManager.getStatus()
     @Published var accessibilityChecker: Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @Published var accessibilityChecks: Int = 0
 
@@ -208,7 +207,6 @@ struct AdvancedConfigurationView: View {
     func permissionsSection() -> some View {
         LuminareSection("Permissions") {
             accessibilityComponent()
-            screenCaptureComponent()
         }
         .onReceive(model.accessibilityChecker) { _ in
             model.refreshAccessiblityStatus()
@@ -232,32 +230,5 @@ struct AdvancedConfigurationView: View {
             model.beginAccessibilityAccessRequest()
         }
         .disabled(model.isAccessibilityAccessGranted)
-    }
-
-    func screenCaptureComponent() -> some View {
-        LuminareButton {
-            HStack {
-                if model.isScreenCaptureAccessGranted {
-                    Image(.badgeCheck2)
-                        .foregroundStyle(tint)
-                }
-
-                Text("Screen capture access")
-            }
-        } content: {
-            Text("Request…")
-        } action: {
-            ScreenCaptureManager.requestAccess()
-        }
-        .disabled(model.isScreenCaptureAccessGranted)
-    }
-}
-
-extension Binding where Value == CGFloat {
-    var doubleBinding: Binding<Double> {
-        .init(
-            get: { Double(wrappedValue) },
-            set: { wrappedValue = CGFloat($0) }
-        )
     }
 }

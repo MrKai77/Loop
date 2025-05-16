@@ -40,12 +40,27 @@ class RadialMenuController {
             )
         )
         panel.alphaValue = 0
-        panel.setFrameOrigin(
-            NSPoint(
-                x: mouseX - windowSize / 2,
-                y: mouseY - windowSize / 2
+
+        // Position the panel
+        if Defaults[.lockRadialMenuToCenter], let screen = NSApp.keyWindow?.screen ?? NSScreen.main {
+            // Position at the center of the screen
+            let screenFrame = screen.frame
+            panel.setFrameOrigin(
+                NSPoint(
+                    x: screenFrame.midX - windowSize / 2,
+                    y: screenFrame.midY - windowSize / 2
+                )
             )
-        )
+        } else {
+            // Position at the mouse cursor
+            panel.setFrameOrigin(
+                NSPoint(
+                    x: mouseX - windowSize / 2,
+                    y: mouseY - windowSize / 2
+                )
+            )
+        }
+
         panel.orderFrontRegardless()
 
         controller = .init(window: panel)
