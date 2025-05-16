@@ -68,3 +68,12 @@ struct PreviewConfigurationView: View {
         }
     }
 }
+
+extension Binding where Value == CGFloat {
+    var doubleBinding: Binding<Double> {
+        Binding<Double>(
+            get: { Double(wrappedValue) },
+            set: { wrappedValue = CGFloat($0) }
+        )
+    }
+}

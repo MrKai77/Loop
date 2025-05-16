@@ -248,8 +248,6 @@ extension LuminareWindow {
     }
 }
 
-typealias CGSConnectionID = UInt32
-
 @_silgen_name("CGSDefaultConnectionForThread")
 func CGSDefaultConnectionForThread() -> CGSConnectionID?
 

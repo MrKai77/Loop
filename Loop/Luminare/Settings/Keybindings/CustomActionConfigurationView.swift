@@ -26,7 +26,7 @@ struct CustomActionConfigurationView: View {
             case .position:
                 Image(.tableRows3Cols3)
             case .size:
-                Image(.size)
+                Image(.frame)
             }
         }
     }
