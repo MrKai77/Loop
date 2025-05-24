@@ -20224,6 +20224,9 @@
         }
       }
     },
+    "Stash" : {
+
+    },
     "Suggest new icon" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25232,6 +25235,28 @@
         }
       }
     },
+    "Window Direction/Name: Stash Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Right"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Top Half" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25690,6 +25715,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "撤銷"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Unstash" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unstash"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Unstash All" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unstash All"
           }
         }
       }

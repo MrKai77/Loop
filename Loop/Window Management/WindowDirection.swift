@@ -50,6 +50,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     // Move
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
+    case stashRight = "StashRight", stashLeft = "StashLeft", unstash = "Unstash", unstashAll = "UnstashAll"
 
     // Custom Actions
     case custom = "Custom", cycle = "Cycle"
@@ -65,6 +66,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var shrink: [WindowDirection] { [.shrinkTop, .shrinkBottom, .shrinkRight, .shrinkLeft] }
     static var grow: [WindowDirection] { [.growTop, .growBottom, .growRight, .growLeft] }
     static var move: [WindowDirection] { [.moveUp, .moveDown, .moveRight, .moveLeft] }
+    static var stash: [WindowDirection] { [.stashRight, .stashLeft, .unstash, .unstashAll] }
     static var more: [WindowDirection] { [.initialFrame, .undo, .custom, .cycle] }
 
     // Computed properties for checking conditions
@@ -73,6 +75,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var willShrink: Bool { WindowDirection.shrink.contains(self) }
     var willGrow: Bool { WindowDirection.grow.contains(self) }
     var willMove: Bool { WindowDirection.move.contains(self) }
+    var willStash: Bool { WindowDirection.stash.contains(self) }
     var willMaximize: Bool { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth].contains(self) }
     var willCenter: Bool { [.center, .macOSCenter, .verticalCenterHalf, .horizontalCenterHalf].contains(self) }
 

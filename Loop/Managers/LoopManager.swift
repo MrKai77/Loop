@@ -16,6 +16,7 @@ class LoopManager: ObservableObject {
     static var lastTargetFrame: CGRect = .zero
 
     private let keybindMonitor = KeybindMonitor.shared
+    private let stashManager = StashManager()
 
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
@@ -375,6 +376,12 @@ private extension LoopManager {
         } else {
             // By removing the parent cycle action, a left click will not advance the user's previously set cycle.
             parentCycleAction = nil
+        }
+
+        if let window = targetWindow {
+            if stashManager.handle(window: window, on: currentScreen, action: newAction) {
+                return
+            }
         }
 
         if newAction.direction.willChangeScreen {
