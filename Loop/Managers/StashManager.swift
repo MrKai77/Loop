@@ -185,15 +185,8 @@ private extension StashManager {
 
     /// Handles mouse movement events to reveal or hide stashed windows.
     private func handleMouseMoved() {
-        // TODO: - Test with multiple displays
         for (windowID, window) in stashedWindows {
-            let screen = window.screen
-
-            // TODO: Investigate why we need to flip mouse Y coordinate
-            // I'm not exactly sure why we need to flip the mouse Y coordinate here, but it seems to work
-            let invertedMouseY = screen.frame.maxY - NSEvent.mouseLocation.y
-            let mouseLocation = CGPoint(x: NSEvent.mouseLocation.x, y: invertedMouseY)
-
+            let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
             let isWindowRevealed = revealedWindows.contains(windowID)
             let isMouseOverStashedWindow = window.stashedFrame.contains(mouseLocation)
             let isMouseOverRevealFrame = window.revealFrame.contains(mouseLocation)
