@@ -54,6 +54,7 @@ extension Defaults.Keys {
     static let respectStageManager = Key<Bool>("respectStageManager", default: true, iCloud: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150, iCloud: true)
     static let animateStashedWindows = Key<Bool>("animateStashedWindows", default: true, iCloud: true)
+    static let stashedWindowVisiblePadding = Key<CGFloat>("stashedWindowVisiblePadding", default: 20, iCloud: true)
 
     // Keybinds
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function], iCloud: true)

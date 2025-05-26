@@ -26,9 +26,10 @@ class StashManager {
         Defaults[.animateStashedWindows]
     }
 
-    // TODO: Store this in Defaults
     /// How many pixels of the window should be visible when stashed
-    private let stashedWindowPadding: CGFloat = 20
+    private var stashedWindowVisiblePadding: CGFloat {
+        Defaults[.stashedWindowVisiblePadding]
+    }
 
     /// The time interval to debounce mouse moved events to avoid excessive processing.
     private let mouseMovedDebounceInterval: TimeInterval = 0.05
@@ -82,11 +83,11 @@ private extension StashManager {
 
         if action.direction == .stashRight {
             revealFrame.origin.x = screen.frame.maxX - revealFrame.width - Defaults[.padding].right
-            stashedFrame.origin.x = screen.frame.maxX - stashedWindowPadding
+            stashedFrame.origin.x = screen.frame.maxX - stashedWindowVisiblePadding
             direction = .right
         } else if action.direction == .stashLeft {
             revealFrame.origin.x = screen.frame.minX + Defaults[.padding].left
-            stashedFrame.origin.x = screen.frame.minX - stashedFrame.width + stashedWindowPadding
+            stashedFrame.origin.x = screen.frame.minX - stashedFrame.width + stashedWindowVisiblePadding
             direction = .left
         } else {
             return
