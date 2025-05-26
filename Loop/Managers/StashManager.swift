@@ -32,7 +32,7 @@ class StashManager {
 
     private var stashedWindows: [CGWindowID: StashedWindow] = [:]
     private var revealedWindows: Set<CGWindowID> = []
-    private var mouseMonitor: Any?
+    private var mouseMonitor: NSEventMonitor?
 }
 
 // MARK: - Public methods
@@ -169,22 +169,22 @@ private extension StashManager {
     private func startListeningMouseMoved() {
         print("Listening for mouse moved events…")
 
-        mouseMonitor = NSEvent.addGlobalMonitorForEvents(matching: .mouseMoved) { [weak self] event in
-            self?.handleMouseMoved(event)
+        mouseMonitor = NSEventMonitor(scope: .global, eventMask: .mouseMoved) { [weak self] _ in
+            self?.handleMouseMoved()
+            return nil
         }
+        mouseMonitor?.start()
     }
 
     private func stopListeningMouseMoved() {
         print("Stopping listening for mouse moved events…")
 
-        guard let monitor = mouseMonitor else { return }
-
-        NSEvent.removeMonitor(monitor)
+        mouseMonitor?.stop()
         mouseMonitor = nil
     }
 
     /// Handles mouse movement events to reveal or hide stashed windows.
-    private func handleMouseMoved(_: NSEvent) {
+    private func handleMouseMoved() {
         // TODO: - Test with multiple displays
         for (windowID, window) in stashedWindows {
             let screen = window.screen
