@@ -206,13 +206,3 @@ private extension StashManager {
         }
     }
 }
-
-// MARK: - Helpers
-
-private extension NSScreen {
-    func isSameScreen(_ other: NSScreen) -> Bool {
-        let screen1Number = deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber
-        let screen2Number = other.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber
-        return screen1Number == screen2Number
-    }
-}

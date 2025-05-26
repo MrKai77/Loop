@@ -89,6 +89,10 @@ extension NSScreen {
     var menubarHeight: CGFloat {
         frame.maxY - visibleFrame.maxY
     }
+
+    func isSameScreen(_ other: NSScreen) -> Bool {
+        displayID == other.displayID
+    }
 }
 
 // MARK: - Calculate physical screen size
