@@ -195,8 +195,8 @@ private extension StashManager {
             let mouseLocation = CGPoint(x: NSEvent.mouseLocation.x, y: invertedMouseY)
 
             let isWindowRevealed = revealedWindows.contains(windowID)
-            let isMouseOverStashedWindow = NSPointInRect(mouseLocation, window.stashedFrame)
-            let isMouseOverRevealFrame = NSPointInRect(mouseLocation, window.revealFrame)
+            let isMouseOverStashedWindow = window.stashedFrame.contains(mouseLocation)
+            let isMouseOverRevealFrame = window.revealFrame.contains(mouseLocation)
 
             if isWindowRevealed, !isMouseOverRevealFrame, !isMouseOverStashedWindow {
                 hideWindow(window, animate: animate)
