@@ -30,10 +30,15 @@ class StashManager {
     /// How many pixels of the window should be visible when stashed
     private let stashedWindowPadding: CGFloat = 20
 
+    /// The time interval to debounce mouse moved events to avoid excessive processing.
     private let mouseMovedDebounceInterval: TimeInterval = 0.05
+
+    /// The throttle interval for revealing/hiding windows when the mouse moves.
+    private let revealThrottleInterval: TimeInterval = 0.1
 
     private var stashedWindows: [CGWindowID: StashedWindow] = [:]
     private var revealedWindows: Set<CGWindowID> = []
+    private var lastRevealTime: [CGWindowID: Date] = [:]
     private var mouseMonitor: NSEventMonitor?
     private var mouseMoveWorkItem: DispatchWorkItem?
 
@@ -58,7 +63,7 @@ extension StashManager {
             return true
         } else {
             // The window will be moved or resized by another command so it won't be stashed anymore:
-            stashedWindows.removeValue(forKey: window.cgWindowID)
+            unmanage(windowID: window.cgWindowID)
             return false
         }
     }
@@ -68,7 +73,7 @@ extension StashManager {
 
 private extension StashManager {
     /// Stashes the given window in the direction specified by `action`.
-    private func stash(window: Window, on screen: NSScreen, action: WindowAction) {
+    func stash(window: Window, on screen: NSScreen, action: WindowAction) {
         let windowID = window.cgWindowID
         let currentFrame = window.frame
         var revealFrame = currentFrame
@@ -101,7 +106,7 @@ private extension StashManager {
     }
 
     /// Handle the `.unstash` or `.unstashAll` action for the given window.
-    private func unstash(window: Window, action: WindowAction) {
+    func unstash(window: Window, action: WindowAction) {
         if action.direction == .unstash {
             unstash(windowID: window.cgWindowID)
         } else if action.direction == .unstashAll {
@@ -114,13 +119,11 @@ private extension StashManager {
     }
 
     /// Unstashes a specific window by its ID.
-    private func unstash(windowID: CGWindowID) {
+    func unstash(windowID: CGWindowID) {
         guard let stashedWindow = stashedWindows[windowID] else { return }
 
-        revealWindow(stashedWindow, animate: false)
-
-        revealedWindows.remove(windowID)
-        stashedWindows.removeValue(forKey: windowID)
+        revealWindow(stashedWindow, animate: animate)
+        unmanage(windowID: windowID)
     }
 }
 
@@ -128,10 +131,11 @@ private extension StashManager {
 
 private extension StashManager {
     /// Reveals a stashed window by moving it to its reveal frame.
-    private func revealWindow(_ window: StashedWindow, animate: Bool) {
+    func revealWindow(_ window: StashedWindow, animate: Bool) {
         let windowID = window.window.cgWindowID
 
         guard !revealedWindows.contains(windowID) else { return }
+        guard !shouldThrottle(windowID: windowID) else { return }
 
         window.window.activate()
         window.window.setFrame(window.revealFrame, animate: animate)
@@ -139,13 +143,25 @@ private extension StashManager {
     }
 
     /// Hides a stashed window by moving it to its stashed frame.
-    private func hideWindow(_ window: StashedWindow, animate: Bool) {
+    func hideWindow(_ window: StashedWindow, animate: Bool) {
         let windowID = window.window.cgWindowID
+
+        guard !shouldThrottle(windowID: windowID) else { return }
 
         // current `unfocus` implementation is doing more bad than good atm.
         // unfocus(windowID)
         window.window.setFrame(window.stashedFrame, animate: animate)
         revealedWindows.remove(windowID)
+    }
+
+    /// Checks if the window reveal / hide should be throttled based on the last reveal time.
+    func shouldThrottle(windowID: CGWindowID) -> Bool {
+        let now = Date.now
+        if let lastTime = lastRevealTime[windowID], now.timeIntervalSince(lastTime) < revealThrottleInterval {
+            return true
+        }
+        lastRevealTime[windowID] = now
+        return false
     }
 
     // TODO: unfocus should only focus window in the same (virtual) space.
@@ -174,7 +190,7 @@ private extension StashManager {
 // MARK: - Mouse moved listener
 
 private extension StashManager {
-    private func startListeningMouseMoved() {
+    func startListeningMouseMoved() {
         print("Listening for mouse moved events…")
 
         mouseMonitor = NSEventMonitor(scope: .global, eventMask: .mouseMoved) { [weak self] _ in
@@ -184,7 +200,7 @@ private extension StashManager {
         mouseMonitor?.start()
     }
 
-    private func stopListeningMouseMoved() {
+    func stopListeningMouseMoved() {
         print("Stopping listening for mouse moved events…")
 
         mouseMonitor?.stop()
@@ -192,7 +208,7 @@ private extension StashManager {
     }
 
     /// Handles mouse movement events with a debounce to avoid excessive processing.
-    private func handleMouseMoved() {
+    func handleMouseMoved() {
         mouseMoveWorkItem?.cancel()
         let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
         mouseMoveWorkItem = workItem
@@ -200,7 +216,7 @@ private extension StashManager {
     }
 
     /// Handles mouse movement events to reveal or hide stashed windows.
-    private func processMouseMovement() {
+    func processMouseMovement() {
         for (windowID, window) in stashedWindows {
             let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
             let isWindowRevealed = revealedWindows.contains(windowID)
@@ -213,5 +229,16 @@ private extension StashManager {
                 revealWindow(window, animate: animate)
             }
         }
+    }
+}
+
+// MARK: - Helpers
+
+private extension StashManager {
+    /// Cleanup references of the given window ID from the stash manager.
+    func unmanage(windowID: CGWindowID) {
+        stashedWindows.removeValue(forKey: windowID)
+        revealedWindows.remove(windowID)
+        lastRevealTime.removeValue(forKey: windowID)
     }
 }
