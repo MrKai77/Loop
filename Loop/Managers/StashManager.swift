@@ -21,11 +21,10 @@ struct StashedWindow {
 }
 
 class StashManager {
-    // TODO: Store this in Defaults
-    private let animateReveal: Bool = true
-
-    // TODO: Store this in Defaults
-    private let animateHide: Bool = true
+    /// Should the stashed windows be animated when revealed or hidden?
+    private var animate: Bool {
+        Defaults[.animateStashedWindows]
+    }
 
     // TODO: Store this in Defaults
     /// How many pixels of the window should be visible when stashed
@@ -89,7 +88,7 @@ private extension StashManager {
         )
 
         stashedWindows[windowID] = stashedWindow
-        hideWindow(stashedWindow, animate: animateHide)
+        hideWindow(stashedWindow, animate: animate)
         startListeningMouseMoved()
     }
 
@@ -200,9 +199,9 @@ private extension StashManager {
             let isMouseOverRevealFrame = NSPointInRect(mouseLocation, window.revealFrame)
 
             if isWindowRevealed, !isMouseOverRevealFrame, !isMouseOverStashedWindow {
-                hideWindow(window, animate: animateHide)
+                hideWindow(window, animate: animate)
             } else if isMouseOverStashedWindow {
-                revealWindow(window, animate: animateReveal)
+                revealWindow(window, animate: animate)
             }
         }
     }
