@@ -30,9 +30,17 @@ class StashManager {
     /// How many pixels of the window should be visible when stashed
     private let stashedWindowPadding: CGFloat = 20
 
+    private let mouseMovedDebounceInterval: TimeInterval = 0.05
+
     private var stashedWindows: [CGWindowID: StashedWindow] = [:]
     private var revealedWindows: Set<CGWindowID> = []
     private var mouseMonitor: NSEventMonitor?
+    private var mouseMoveWorkItem: DispatchWorkItem?
+
+    deinit {
+        mouseMoveWorkItem?.cancel()
+        stopListeningMouseMoved()
+    }
 }
 
 // MARK: - Public methods
@@ -183,8 +191,16 @@ private extension StashManager {
         mouseMonitor = nil
     }
 
-    /// Handles mouse movement events to reveal or hide stashed windows.
+    /// Handles mouse movement events with a debounce to avoid excessive processing.
     private func handleMouseMoved() {
+        mouseMoveWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
+        mouseMoveWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + mouseMovedDebounceInterval, execute: workItem)
+    }
+
+    /// Handles mouse movement events to reveal or hide stashed windows.
+    private func processMouseMovement() {
         for (windowID, window) in stashedWindows {
             let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
             let isWindowRevealed = revealedWindows.contains(windowID)
