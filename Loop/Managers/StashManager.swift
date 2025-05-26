@@ -126,7 +126,6 @@ private extension StashManager {
 
         guard !revealedWindows.contains(windowID) else { return }
 
-        // TODO: - Investigate activate not always working
         window.window.activate()
         window.window.setFrame(window.revealFrame, animate: animate)
         revealedWindows.insert(windowID)

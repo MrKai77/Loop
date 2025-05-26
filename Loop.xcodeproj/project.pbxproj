@@ -92,6 +92,7 @@
 		A8F1E9692C253F8D00AAF871 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A8F1E9672C253F8D00AAF871 /* InfoPlist.strings */; };
 		F0642DAA2DD8C9F00049F167 /* CycleBackwardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */; };
 		F01C125C2DDF5ACA00DDC361 /* StashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01C125B2DDF5AC700DDC361 /* StashManager.swift */; };
+		F0A98C242DE488EB002328D6 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A98C232DE488EB002328D6 /* SkyLight.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -193,6 +194,7 @@
 		A8F1E96B2C253FA200AAF871 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleBackwardsView.swift; sourceTree = "<group>"; };
 		F01C125B2DDF5AC700DDC361 /* StashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StashManager.swift; sourceTree = "<group>"; };
+		F0A98C232DE488EB002328D6 /* SkyLight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyLight.framework; path = ../../../../System/Library/PrivateFrameworks/SkyLight.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -204,6 +206,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0A98C242DE488EB002328D6 /* SkyLight.framework in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				A860324F2CB34A6C005742EB /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
@@ -360,6 +363,7 @@
 		A883642D298B7288005D6C19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F0A98C232DE488EB002328D6 /* SkyLight.framework */,
 				A883642E298B7288005D6C19 /* ServiceManagement.framework */,
 			);
 			name = Frameworks;
@@ -647,6 +651,8 @@
 				2A738F722DEA3802002E253D /* PreviewStartingPosition.swift in Sources */,
 				A82521EE29E235AC00139654 /* AccessibilityManager.swift in Sources */,
 				F01C125C2DDF5ACA00DDC361 /* StashManager.swift in Sources */,
+				A82521EE29E235AC00139654 /* AccessibilityManager.swift in Sources */,
+				F01C125C2DDF5ACA00DDC361 /* StashManager.swift in Sources */,
 				A8E59C4A297F98670064D4BA /* RadialMenuController.swift in Sources */,
 				0AFE802E2BB98E81009CF06F /* WindowDirection+LocalizedString.swift in Sources */,
 				A8A583B82BE5A117005F4CB2 /* CycleActionConfigurationView.swift in Sources */,
@@ -844,6 +850,10 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 			};
 			name = Debug;
 		};
@@ -879,6 +889,10 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 			};
 			name = Release;
 		};
