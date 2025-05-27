@@ -117,6 +117,8 @@ private extension StashManager {
     /// Add the given `StashWindow` to the list of monitored windows, move the window to the stashed area
     /// and start mouse moved listener if needed.
     func stash(_ windowToStash: StashedWindow) {
+        print("StashManager: Stashing window \(windowToStash.window)")
+
         // TODO: Handle window overlap
         stashedWindows[windowToStash.window.cgWindowID] = windowToStash
         hideWindow(windowToStash, animate: animate)
@@ -125,6 +127,8 @@ private extension StashManager {
 
     /// Stop monitoring the window with the given `CGWindowID`.
     func unstash(_ windowID: CGWindowID) {
+        print("StashManager: Unstashing window \(windowID)")
+
         unmanage(windowID: windowID)
     }
 }
@@ -144,6 +148,8 @@ private extension StashManager {
         window.window.activate()
         revealedWindows.insert(windowID)
         window.window.setFrame(frame, animate: animate)
+
+        print("StashManager: revealWindow \(window.window)")
     }
 
     /// Hides a stashed window by moving it to its stashed frame.
@@ -158,6 +164,8 @@ private extension StashManager {
         // unfocus(windowID)
         window.window.setFrame(frame, animate: animate)
         revealedWindows.remove(windowID)
+
+        print("StashManager: hideWindow \(window.window)")
     }
 
     /// Checks if the window reveal / hide should be throttled based on the last reveal time.
@@ -310,8 +318,6 @@ extension StashedWindow {
         }
 
         update(frame: &revealFrame, in: direction.region, windowPadding: windowPadding)
-
-        // TODO: Check for frame.width overflow?
 
         return revealFrame
     }
