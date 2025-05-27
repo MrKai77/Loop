@@ -105,8 +105,6 @@ private extension StashManager {
             stash(windowToStash)
         } else if action.direction == .unstash {
             unstash(window.cgWindowID)
-        } else if action.direction == .unstashAll {
-            unstashAll()
         } else if action.direction == .undo {
             // TODO: If the previous action was not a stack action we should unmanage the window.
         } else {
@@ -123,11 +121,6 @@ private extension StashManager {
         stashedWindows[windowToStash.window.cgWindowID] = windowToStash
         hideWindow(windowToStash, animate: animate)
         startListeningMouseMoved()
-    }
-
-    /// Stop monitoring all the monitored windows.
-    func unstashAll() {
-        stashedWindows.keys.forEach(unstash)
     }
 
     /// Stop monitoring the window with the given `CGWindowID`.

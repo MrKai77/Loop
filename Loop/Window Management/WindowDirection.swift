@@ -56,7 +56,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case stashFullLeft = "StashFullLeft", stashTopHalfLeft = "StashTopHalfLeft", stashBottomHalfLeft = "StashBottomHalfLeft"
     case stashTopRight = "StashTopRight", stashBottomRight = "StashBottomRight", stashCenterRight = "StashCenterRight"
     case stashFullRight = "StashFullRight", stashTopHalfRight = "StashTopHalfRight", stashBottomHalfRight = "StashBottomHalfRight"
-    case unstash = "Unstash", unstashAll = "UnstashAll"
+    case unstash = "Unstash"
 
     // Custom Actions
     case custom = "Custom", cycle = "Cycle"
@@ -75,7 +75,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var stash: [WindowDirection] { [
         .stashTopLeft, .stashBottomLeft, .stashCenterLeft, .stashFullLeft, .stashTopHalfLeft, .stashBottomHalfLeft,
         .stashTopRight, .stashBottomRight, .stashCenterRight, .stashFullRight, .stashTopHalfRight, .stashBottomHalfRight,
-        .unstash, .unstashAll
+        .unstash
     ] }
     static var more: [WindowDirection] { [.initialFrame, .undo, .custom, .cycle] }
 

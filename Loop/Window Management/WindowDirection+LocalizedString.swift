@@ -143,8 +143,6 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Stash Bottom Half Right", defaultValue: "Stash Bottom Half Right"))
         case .unstash:
             .init(localized: .init("Window Direction/Name: Unstash", defaultValue: "Unstash"))
-        case .unstashAll:
-            .init(localized: .init("Window Direction/Name: Unstash All", defaultValue: "Unstash All"))
         case .custom:
             .init(localized: .init("Window Direction/Name: Custom", defaultValue: "Custom"))
         case .cycle:
