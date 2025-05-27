@@ -58,7 +58,7 @@ class StashManager {
     }
 
     private var padding: PaddingModel {
-        Defaults[.padding]
+        Defaults[.enablePadding] == true ? Defaults[.padding] : .zero
     }
 
     /// The time interval to debounce mouse moved events to avoid excessive processing.
@@ -152,7 +152,7 @@ private extension StashManager {
 
         guard !shouldThrottle(windowID: windowID) else { return }
 
-        let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, windowPadding: padding.window)
+        let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, padding: padding)
 
         // current `unfocus` implementation is doing more bad than good atm.
         // unfocus(windowID)
@@ -231,7 +231,7 @@ private extension StashManager {
             let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
             let isWindowRevealed = revealedWindows.contains(windowID)
 
-            let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
+            let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, padding: padding)
 
             if isWindowRevealed {
                 let revealedFrame = window.computeRevealedFrame()
@@ -268,7 +268,14 @@ private extension StashManager {
 // MARK: - Frame computation
 
 extension StashedWindow {
-    func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2, windowPadding: CGFloat = 0) -> CGRect {
+    /// Computes the frame for a stashed window.
+    ///
+    /// - Parameters:
+    ///   - peekSize: The number of pixels that remain visible on the screen when the window is stashed.
+    ///   - maxPeekPercent: The maximum percentage of the window’s width that can remain visible.
+    ///   - padding: User-defined padding. Use `PaddingModel.zero` if padding is disabled.
+    /// - Returns: The computed frame for the stashed window.
+    func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2, padding: PaddingModel = .zero) -> CGRect {
         let currentFrame = window.frame
         let minPeekSize: CGFloat = 1
         let maxPeekSize = currentFrame.width * maxPeekPercent
@@ -279,11 +286,15 @@ extension StashedWindow {
         switch direction {
         case .left:
             stashedFrame.origin.x = screenBounds.minX - currentFrame.width + clampedPeekSize
+            // If padding is enabled and not zero, it will be added to screenBounds.
+            // We need to remove the padding.left value so the `peekSize` value is respected.
+            stashedFrame.origin.x -= padding.left
         case .right:
             stashedFrame.origin.x = screenBounds.maxX - clampedPeekSize
+            stashedFrame.origin.x += padding.right
         }
 
-        update(frame: &stashedFrame, in: direction.region, windowPadding: windowPadding)
+        update(frame: &stashedFrame, in: direction.region, windowPadding: padding.window)
 
         return stashedFrame
     }
