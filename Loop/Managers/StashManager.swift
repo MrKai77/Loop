@@ -231,18 +231,18 @@ private extension StashManager {
             let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
             let isWindowRevealed = revealedWindows.contains(windowID)
 
-            if isWindowRevealed {
-                // if the mouse is not over the reveal frame, hide the window
-                let frame = window.computeRevealedFrame()
+            let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
 
-                if !frame.contains(mouseLocation) {
+            if isWindowRevealed {
+                let revealedFrame = window.computeRevealedFrame()
+
+                // Hide the window if the mouse is not over the revealFrame nor over the stashedFrame
+                if !revealedFrame.contains(mouseLocation), !stashedFrame.contains(mouseLocation) {
                     hideWindow(window, animate: animate)
                 }
             } else {
                 // if the mouse is over the stashed frame, reveal the window
-                let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-
-                if frame.contains(mouseLocation) {
+                if stashedFrame.contains(mouseLocation) {
                     revealWindow(window, animate: animate)
                 }
             }
