@@ -90,8 +90,8 @@
 		A8F0125B2AEDD7660017307F /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F0125A2AEDD7660017307F /* WindowAction.swift */; };
 		A8F1E9662C253F5B00AAF871 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A8F1E9652C253F5B00AAF871 /* Localizable.xcstrings */; };
 		A8F1E9692C253F8D00AAF871 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A8F1E9672C253F8D00AAF871 /* InfoPlist.strings */; };
-		F0642DAA2DD8C9F00049F167 /* CycleBackwardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */; };
 		F01C125C2DDF5ACA00DDC361 /* StashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01C125B2DDF5AC700DDC361 /* StashManager.swift */; };
+		F0642DAA2DD8C9F00049F167 /* CycleBackwardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */; };
 		F0A98C242DE488EB002328D6 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A98C232DE488EB002328D6 /* SkyLight.framework */; };
 /* End PBXBuildFile section */
 
@@ -192,8 +192,8 @@
 		A8F1E9652C253F5B00AAF871 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A8F1E9682C253F8D00AAF871 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A8F1E96B2C253FA200AAF871 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleBackwardsView.swift; sourceTree = "<group>"; };
 		F01C125B2DDF5AC700DDC361 /* StashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StashManager.swift; sourceTree = "<group>"; };
+		F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleBackwardsView.swift; sourceTree = "<group>"; };
 		F0A98C232DE488EB002328D6 /* SkyLight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyLight.framework; path = ../../../../System/Library/PrivateFrameworks/SkyLight.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

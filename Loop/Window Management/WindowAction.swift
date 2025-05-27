@@ -221,7 +221,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             LoopManager.sidesToAdjust = nil
         }
 
-        var bounds: CGRect = getBounds(from: bounds, disablePadding: disablePadding, screen: screen)
+        var bounds: CGRect = Self.getBounds(from: bounds, disablePadding: disablePadding, screen: screen)
         var result: CGRect = calculateTargetFrame(direction, window, bounds, isPreview)
 
         if !disablePadding {
@@ -256,7 +256,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 }
 
-// MARK: - Window Frame Calculations
+// MARK: - Static methods for bounds calculation
 
 extension WindowAction {
     /// Retrieves the bounds for the action based on: the original bounds, whether padding should be applied, and the screen size.
@@ -265,7 +265,7 @@ extension WindowAction {
     ///   - disablePadding: whether to disable padding. If `true`, the bounds will not be padded. This is useful when calculating frames for the radial menu.
     ///   - screen: the screen on which the bounds are located. This is used to determine if padding should be applied based on the screen size (if applicable).
     /// - Returns: the padded bounds if padding can be applied, otherwise the original bounds.
-    private func getBounds(from originalBounds: CGRect, disablePadding: Bool, screen: NSScreen?) -> CGRect {
+    static func getBounds(from originalBounds: CGRect, disablePadding: Bool, screen: NSScreen?) -> CGRect {
         // Get padded bounds only if padding can be applied
         if !disablePadding && Defaults[.enablePadding],
            Defaults[.paddingMinimumScreenSize] == .zero || screen?.diagonalSize ?? .zero > Defaults[.paddingMinimumScreenSize] {
@@ -275,6 +275,25 @@ extension WindowAction {
         }
     }
 
+    /// Retrieves the padded bounds for the specified bounds, based on user preferences.
+    /// - Parameter bounds: the bounds to be padded.
+    /// - Returns: the padded bounds with the specified padding applied.
+    private static func getPaddedBounds(_ bounds: CGRect) -> CGRect {
+        let padding = Defaults[.padding]
+
+        var bounds = bounds
+        bounds = bounds.padding(.top, padding.totalTopPadding)
+        bounds = bounds.padding(.bottom, padding.bottom)
+        bounds = bounds.padding(.leading, padding.left)
+        bounds = bounds.padding(.trailing, padding.right)
+
+        return bounds
+    }
+}
+
+// MARK: - Window Frame Calculations
+
+private extension WindowAction {
     /// Calculates the target frame for the specified window action based on the direction, window, bounds, and whether it is a preview.
     /// - Parameters:
     ///   - direction: the direction of the window action.
@@ -282,7 +301,7 @@ extension WindowAction {
     ///   - bounds: the bounds within which the window should be manipulated.
     ///   - isPreview: whether the action is being performed on a preview window.
     /// - Returns: the calculated target frame for the specified window action.
-    private func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect, _ isPreview: Bool) -> CGRect {
+    func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect, _ isPreview: Bool) -> CGRect {
         var result: CGRect = .zero
 
         if direction.frameMultiplyValues != nil {
@@ -631,21 +650,6 @@ extension WindowAction {
         }
 
         return result
-    }
-
-    /// Retrieves the padded bounds for the specified bounds, based on user preferences.
-    /// - Parameter bounds: the bounds to be padded.
-    /// - Returns: the padded bounds with the specified padding applied.
-    private func getPaddedBounds(_ bounds: CGRect) -> CGRect {
-        let padding = Defaults[.padding]
-
-        var bounds = bounds
-        bounds = bounds.padding(.top, padding.totalTopPadding)
-        bounds = bounds.padding(.bottom, padding.bottom)
-        bounds = bounds.padding(.leading, padding.left)
-        bounds = bounds.padding(.trailing, padding.right)
-
-        return bounds
     }
 
     /// Applies inner padding to the specified window frame based on the direction and bounds.

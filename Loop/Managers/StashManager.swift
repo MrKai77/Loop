@@ -99,7 +99,8 @@ private extension StashManager {
     /// Other actions (e.g., resizing or moving) will cancel the stashed state so monitoring is stopped.
     func onUIDirectionUpdated(action: WindowAction, window: Window, screen: NSScreen) {
         if let direction = StashDirection(direction: action.direction) {
-            let windowToStash = StashedWindow(window: window, screenBounds: screen.frame, direction: direction)
+            let bounds = WindowAction.getBounds(from: screen.safeScreenFrame, disablePadding: false, screen: screen)
+            let windowToStash = StashedWindow(window: window, screenBounds: bounds, direction: direction)
 
             stash(windowToStash)
         } else if action.direction == .unstash {
