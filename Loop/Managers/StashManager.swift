@@ -139,9 +139,7 @@ private extension StashManager {
         guard !revealedWindows.contains(windowID) else { return }
         guard !shouldThrottle(windowID: windowID) else { return }
 
-        let frame = window.computeRevealedFrame()
-
-        // TODO: Apply padding
+        let frame = window.computeRevealedFrame(windowPadding: padding.window)
 
         window.window.activate()
         revealedWindows.insert(windowID)
@@ -154,7 +152,7 @@ private extension StashManager {
 
         guard !shouldThrottle(windowID: windowID) else { return }
 
-        let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
+        let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, windowPadding: padding.window)
 
         // current `unfocus` implementation is doing more bad than good atm.
         // unfocus(windowID)
@@ -270,7 +268,7 @@ private extension StashManager {
 // MARK: - Frame computation
 
 extension StashedWindow {
-    func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) -> CGRect {
+    func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2, windowPadding: CGFloat = 0) -> CGRect {
         let currentFrame = window.frame
         let minPeekSize: CGFloat = 1
         let maxPeekSize = currentFrame.width * maxPeekPercent
@@ -285,12 +283,12 @@ extension StashedWindow {
             stashedFrame.origin.x = screenBounds.maxX - clampedPeekSize
         }
 
-        update(frame: &stashedFrame, in: direction.region)
+        update(frame: &stashedFrame, in: direction.region, windowPadding: windowPadding)
 
         return stashedFrame
     }
 
-    func computeRevealedFrame() -> CGRect {
+    func computeRevealedFrame(windowPadding: CGFloat = 0) -> CGRect {
         var revealFrame = window.frame
 
         switch direction {
@@ -300,7 +298,7 @@ extension StashedWindow {
             revealFrame.origin.x = screenBounds.maxX - revealFrame.width
         }
 
-        update(frame: &revealFrame, in: direction.region)
+        update(frame: &revealFrame, in: direction.region, windowPadding: windowPadding)
 
         // TODO: Check for frame.width overflow?
 
@@ -312,7 +310,7 @@ extension StashedWindow {
     /// Only the y-coordinate and height are modified based on the region.
     /// The x-coordinate should be set based on the `StashDirection` before or after calling this function.
     /// In the future we may add more regions that modify the width as well.
-    private func update(frame: inout CGRect, in region: StashRegion) {
+    private func update(frame: inout CGRect, in region: StashRegion, windowPadding: CGFloat = 0) {
         switch region {
         case .top:
             frame.origin.y = screenBounds.minY
@@ -325,10 +323,10 @@ extension StashedWindow {
             frame.size.height = screenBounds.height
         case .topHalf:
             frame.origin.y = screenBounds.minY
-            frame.size.height = screenBounds.height / 2
+            frame.size.height = screenBounds.height / 2 - windowPadding / 2
         case .bottomHalf:
-            frame.size.height = screenBounds.height / 2
-            frame.origin.y = screenBounds.minY + screenBounds.height / 2
+            frame.size.height = screenBounds.height / 2 - windowPadding / 2
+            frame.origin.y = screenBounds.minY + screenBounds.height / 2 + windowPadding / 2
         }
     }
 }
