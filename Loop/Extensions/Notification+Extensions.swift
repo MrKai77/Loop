@@ -10,6 +10,7 @@ import Foundation
 extension Notification.Name {
     static let updateBackendDirection = Notification.Name("updateBackendDirection")
     static let updateUIDirection = Notification.Name("updateUIDirection")
+    static let UIDirectionUpdated = Notification.Name("UIDirectionUpdated")
 
     static let forceCloseLoop = Notification.Name("forceCloseLoop")
     static let activeStateChanged = Notification.Name("activeStateChanged")

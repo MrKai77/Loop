@@ -117,10 +117,30 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Move Right", defaultValue: "Move Right"))
         case .moveLeft:
             .init(localized: .init("Window Direction/Name: Move Left", defaultValue: "Move Left"))
-        case .stashRight:
-            .init(localized: .init("Window Direction/Name: Stash Right", defaultValue: "Stash Right"))
-        case .stashLeft:
-            .init(localized: .init("Window Direction/Name: Stash Left", defaultValue: "Stash Left"))
+        case .stashTopLeft:
+            .init(localized: .init("Window Direction/Name: Stash Top Left", defaultValue: "Stash Top Left"))
+        case .stashBottomLeft:
+            .init(localized: .init("Window Direction/Name: Stash Bottom Left", defaultValue: "Stash Bottom Left"))
+        case .stashCenterLeft:
+            .init(localized: .init("Window Direction/Name: Stash Center Left", defaultValue: "Stash Center Left"))
+        case .stashFullLeft:
+            .init(localized: .init("Window Direction/Name: Stash Full Left", defaultValue: "Stash Full Left"))
+        case .stashTopHalfLeft:
+            .init(localized: .init("Window Direction/Name: Stash Top Half Left", defaultValue: "Stash Top Half Left"))
+        case .stashBottomHalfLeft:
+            .init(localized: .init("Window Direction/Name: Stash Bottom Half Left", defaultValue: "Stash Bottom Half Left"))
+        case .stashTopRight:
+            .init(localized: .init("Window Direction/Name: Stash Top Right", defaultValue: "Stash Top Right"))
+        case .stashBottomRight:
+            .init(localized: .init("Window Direction/Name: Stash Bottom Right", defaultValue: "Stash Bottom Right"))
+        case .stashCenterRight:
+            .init(localized: .init("Window Direction/Name: Stash Center Right", defaultValue: "Stash Center Right"))
+        case .stashFullRight:
+            .init(localized: .init("Window Direction/Name: Stash Full Right", defaultValue: "Stash Full Right"))
+        case .stashTopHalfRight:
+            .init(localized: .init("Window Direction/Name: Stash Top Half Right", defaultValue: "Stash Top Half Right"))
+        case .stashBottomHalfRight:
+            .init(localized: .init("Window Direction/Name: Stash Bottom Half Right", defaultValue: "Stash Bottom Half Right"))
         case .unstash:
             .init(localized: .init("Window Direction/Name: Unstash", defaultValue: "Unstash"))
         case .unstashAll:

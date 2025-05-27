@@ -50,7 +50,13 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     // Move
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
-    case stashRight = "StashRight", stashLeft = "StashLeft", unstash = "Unstash", unstashAll = "UnstashAll"
+
+    // Stash
+    case stashTopLeft = "StashTopLeft", stashBottomLeft = "StashBottomLeft", stashCenterLeft = "StashCenterLeft"
+    case stashFullLeft = "StashFullLeft", stashTopHalfLeft = "StashTopHalfLeft", stashBottomHalfLeft = "StashBottomHalfLeft"
+    case stashTopRight = "StashTopRight", stashBottomRight = "StashBottomRight", stashCenterRight = "StashCenterRight"
+    case stashFullRight = "StashFullRight", stashTopHalfRight = "StashTopHalfRight", stashBottomHalfRight = "StashBottomHalfRight"
+    case unstash = "Unstash", unstashAll = "UnstashAll"
 
     // Custom Actions
     case custom = "Custom", cycle = "Cycle"
@@ -66,7 +72,11 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var shrink: [WindowDirection] { [.shrinkTop, .shrinkBottom, .shrinkRight, .shrinkLeft] }
     static var grow: [WindowDirection] { [.growTop, .growBottom, .growRight, .growLeft] }
     static var move: [WindowDirection] { [.moveUp, .moveDown, .moveRight, .moveLeft] }
-    static var stash: [WindowDirection] { [.stashRight, .stashLeft, .unstash, .unstashAll] }
+    static var stash: [WindowDirection] { [
+        .stashTopLeft, .stashBottomLeft, .stashCenterLeft, .stashFullLeft, .stashTopHalfLeft, .stashBottomHalfLeft,
+        .stashTopRight, .stashBottomRight, .stashCenterRight, .stashFullRight, .stashTopHalfRight, .stashBottomHalfRight,
+        .unstash, .unstashAll
+    ] }
     static var more: [WindowDirection] { [.initialFrame, .undo, .custom, .cycle] }
 
     // Computed properties for checking conditions

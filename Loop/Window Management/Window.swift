@@ -399,3 +399,9 @@ class Window {
         }
     }
 }
+
+extension Window: CustomDebugStringConvertible {
+    var debugDescription: String {
+        nsRunningApplication?.localizedName ?? title ?? "<unknown>"
+    }
+}

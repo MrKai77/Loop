@@ -360,6 +360,11 @@ extension WindowAction {
                 width: bounds.width,
                 height: window.frame.height
             )
+        } else if let stashDirection = StashDirection(direction: direction), let window {
+            let window = StashedWindow(window: window, screenBounds: bounds, direction: stashDirection)
+            result = window.computeRevealedFrame()
+        } else if let window, [.unstash, .unstashAll].contains(direction) {
+            result = getInitialFrame(window)
         }
 
         return result

@@ -25235,24 +25235,134 @@
         }
       }
     },
-    "Window Direction/Name: Stash Left" : {
+    "Window Direction/Name: Stash Bottom Half Left" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Stash Left"
+            "value" : "Stash Bottom Half Left"
           }
         }
       }
     },
-    "Window Direction/Name: Stash Right" : {
+    "Window Direction/Name: Stash Bottom Half Right" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Stash Right"
+            "value" : "Stash Bottom Half Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Bottom Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Bottom Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Bottom Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Bottom Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Center Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Center Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Center Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Center Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Full Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Full Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Full Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Full Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Top Half Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Top Half Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Top Half Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Top Half Right"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Top Left" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Top Left"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Stash Top Right" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Stash Top Right"
           }
         }
       }
