@@ -383,7 +383,7 @@ private extension WindowAction {
             let window = StashedWindow(window: window, screenBounds: bounds, direction: stashDirection)
             result = window.computeRevealedFrame()
         } else if direction == .unstash, let window {
-            result = getInitialFrame(window)
+            result = calculateCenterFrame(window, bounds)
         }
 
         return result
