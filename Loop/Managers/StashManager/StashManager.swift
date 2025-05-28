@@ -90,7 +90,7 @@ class StashManager {
     private var mouseMonitor: NSEventMonitor?
     private var mouseMoveWorkItem: DispatchWorkItem?
 
-    init() {
+    func start() {
         Notification.Name.UIDirectionUpdated.onReceive { [weak self] obj in
             guard let action = obj.userInfo?["action"] as? WindowAction else { return }
             guard let window = obj.userInfo?["window"] as? Window else { return }
@@ -106,16 +106,20 @@ class StashManager {
         }
     }
 
-    deinit {
-        mouseMoveWorkItem?.cancel()
-        stopListeningMouseMoved()
-    }
-
     func onApplicationWillTerminate() {
         // Move back all stashed windows back into the screen before closing the app:
         for stashedWindowID in store.stashed.keys {
             unstash(stashedWindowID, resestFrame: true, resetFrameAnimated: false)
         }
+    }
+
+    func onWindowDragged(_ id: CGWindowID) {
+        unmanage(windowID: id)
+    }
+
+    deinit {
+        mouseMoveWorkItem?.cancel()
+        stopListeningMouseMoved()
     }
 }
 

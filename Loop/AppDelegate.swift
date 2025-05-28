@@ -43,6 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #endif
         AppDelegate.loopManager.start()
         AppDelegate.windowDragManager.addObservers()
+        AppDelegate.stashManager.start()
 
         UNUserNotificationCenter.current().delegate = self
         AppDelegate.requestNotificationAuthorization()

@@ -31,6 +31,7 @@ class WindowDragManager {
                 if Defaults[.restoreWindowFrameOnDrag] {
                     self.restoreInitialWindowSize(window)
                 } else {
+                    AppDelegate.stashManager.onWindowDragged(window.cgWindowID)
                     WindowRecords.eraseRecords(for: window)
                 }
 
