@@ -8,6 +8,58 @@
 import Defaults
 import SwiftUI
 
+/// `StashManager` is responsible "stashing" app windows on the edge of the sceen
+///
+/// ## Purpose:
+/// The main objective of `StashManager` is to allow windows to be temporarily hidden (stashed) off-screen, with a small
+/// visible "peek" area. When the user moves the cursor near this peek area, the window is revealed (unstashed).
+/// This behavior was made to reduce screen clutter while maintaining quick access to important windows.
+///
+/// ## Key Responsibilities:
+/// - **Stashing windows**: Moves windows to a hidden area along a screen edge, with a small portion visible.
+/// - **Revealing windows**: When the mouse hovers over the peek area, the window is fully revealed.
+/// - **Hiding windows**: If the mouse moves away from a revealed window, it returns to the stash position.
+/// - **Overlap handling**: Ensures multiple stashed windows do not overlap excessively, using a configurable tolerance.
+///
+/// ## How it Works:
+/// 1. **Initialization**:
+///    - Subscribes to `.UIDirectionUpdated` notifications, which indicate a window as been moved or resized by an user action.
+///      If this action is related to the stash logic, the `StashManager` will act accordingly.
+///    - Maintains a dictionary of currently stashed windows (`stashedWindows`), keyed by `CGWindowID`.
+///    - Tracks revealed windows (`revealedWindows`) and the last reveal time for throttling.
+/// 3. **Mouse Monitoring**:
+///    - Uses a global `NSEventMonitor` to track mouse movements.
+///    - Applies debounce and throttle intervals to control reveal/hide frequency.
+///    - Determines which window (if any) should be revealed based on cursor position and z-index order.
+/// 4. **Stashing Logic**:
+///    - Moves a window to the stashed area based on its direction (`StashDirection`).
+///    - Checks for overlapping with other stashed windows and unstashes conflicting ones.
+///    - Applies optional animation during transitions.
+/// 5. **Unstashing Logic**:
+///    - Restores a window from stash, optionally resetting its position to the center of the screen.
+///    - Stops monitoring windows that are unstashed or unmanaged.
+/// 6. **Overlap Handling**:
+///    - Checks whether two windows overlap or have sufficient non-overlapping space based on a configured `tolerance`.
+/// 7. **Focus Management**:
+///    - Attempts to shift focus to another window on the same screen when unfocusing a stashed window (currently a placeholder).
+///
+/// ## Configuration:
+/// Some behavior of `StashManager` can be user defined:
+/// - `Defaults[.animateStashedWindows]`: Whether animations should be used when revealing or hiding windows.
+/// - `Defaults[.stashedWindowVisiblePadding]`: Amount (in points) of the window's edge that remains visible when it is stashed (peek area).
+/// - `Defaults[.enablePadding]` and `Defaults[.padding]`: Additional padding applied to window positioning to ensure consistent spacing.
+///
+/// Other behaviors are defined by constants:
+/// - `mouseMovedDebounceInterval`: The minimum time interval (in seconds) between processing consecutive mouse move events.
+/// - `revealThrottleInterval`: The minimum time interval (in seconds) between revealing or hiding actions for a specific window.
+/// - `minimunVisibleHeightToKeepWindowStacked`:
+///     - The minimum required visible vertical height (in points) between two stashed windows on the same screen edge.
+///     - Ensures that multiple stashed windows do not overlap too much vertically.
+///     - Allows the user to move the mouse into the stash area and target a specific window, even if windows are stacked.
+///
+/// ## Considerations:
+/// - Currently supports only one revealed window at a time.
+/// - The `unfocus` method is incomplete and requires virtual space awareness for precise focus handling.
 class StashManager {
     /// Should the stashed windows be animated when revealed or hidden?
     private var animate: Bool {
