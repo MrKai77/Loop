@@ -16,8 +16,6 @@ class LoopManager: ObservableObject {
     static var lastTargetFrame: CGRect = .zero
 
     private let keybindMonitor = KeybindMonitor.shared
-    private let stashManager = StashManager()
-
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 

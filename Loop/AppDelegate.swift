@@ -11,6 +11,7 @@ import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     static let loopManager = LoopManager()
+    static let stashManager = StashManager()
     static let windowDragManager = WindowDragManager()
     static let updater = Updater()
     static var isActive: Bool = false
@@ -87,6 +88,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillResignActive(_: Notification) {
         Notification.Name.activeStateChanged.post(object: false)
         AppDelegate.isActive = false
+    }
+
+    func applicationWillTerminate(_: Notification) {
+        Self.stashManager.onApplicationWillTerminate()
     }
 
     static func relaunch(after seconds: TimeInterval = 0.5) -> Never {

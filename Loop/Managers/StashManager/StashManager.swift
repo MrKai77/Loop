@@ -110,6 +110,13 @@ class StashManager {
         mouseMoveWorkItem?.cancel()
         stopListeningMouseMoved()
     }
+
+    func onApplicationWillTerminate() {
+        // Move back all stashed windows back into the screen before closing the app:
+        for stashedWindowID in store.stashed.keys {
+            unstash(stashedWindowID, resestFrame: true, resetFrameAnimated: false)
+        }
+    }
 }
 
 // MARK: - Stash and Unstash
@@ -129,7 +136,7 @@ private extension StashManager {
         } else if action.direction == .unstash {
             // No need to reset the frame here: the frame has already been moved to the stash area
             // by the code that sent the UIDirectionUpdated notification.
-            unstash(window.cgWindowID, resestFrame: false)
+            unstash(window.cgWindowID, resestFrame: false, resetFrameAnimated: animate)
         } else if action.direction == .undo {
             // TODO: If the previous action was not a stack action we should unmanage the window.
         } else {
@@ -163,29 +170,29 @@ private extension StashManager {
             // Trying to store windowToStash in the same place as stashedWindow.
             // No need for frame comparaison, it will always overlap.
             if stashedWindow.direction == windowToStash.direction {
-                unstash(stashedWindow, resetFrame: true)
+                unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
             } else {
                 let currentFrame = stashedWindow.computeRevealedFrame(windowPadding: padding.window)
                 let tolerance = minimunVisibleHeightToKeepWindowStacked
 
                 if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
-                    unstash(stashedWindow, resetFrame: true)
+                    unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
                 }
             }
         }
     }
 
     /// Stop monitoring the window with the given `CGWindowID`.
-    func unstash(_ windowID: CGWindowID, resestFrame: Bool) {
+    func unstash(_ windowID: CGWindowID, resestFrame: Bool, resetFrameAnimated: Bool) {
         if let windowToUnstash = store.stashed[windowID] {
-            unstash(windowToUnstash, resetFrame: resestFrame)
+            unstash(windowToUnstash, resetFrame: resestFrame, resetFrameAnimated: resetFrameAnimated)
         } else {
             unmanage(windowID: windowID)
         }
     }
 
     /// Stop monitoring the window. If `resetFrame` is true, the window will be moved in the center of the screen.
-    func unstash(_ window: StashedWindow, resetFrame: Bool) {
+    func unstash(_ window: StashedWindow, resetFrame: Bool, resetFrameAnimated: Bool) {
         print("StashManager: unstash \(window.window)")
 
         if resetFrame {
@@ -194,7 +201,7 @@ private extension StashManager {
             let y = window.screenBounds.midY - (windowSize.height / 2)
             let center = CGRect(origin: CGPoint(x: x, y: y), size: windowSize)
 
-            window.window.setFrame(center, animate: animate)
+            window.window.setFrame(center, animate: resetFrameAnimated)
         }
 
         unmanage(windowID: window.window.cgWindowID)
