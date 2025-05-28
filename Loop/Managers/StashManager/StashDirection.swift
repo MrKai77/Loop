@@ -5,9 +5,10 @@
 //  Created by Guillaume Clédat on 28/05/2025.
 //
 
+import Defaults
 import Foundation
 
-enum StashDirection {
+enum StashDirection: Codable, Defaults.Serializable {
     case left(StashRegion)
     case right(StashRegion)
 }
@@ -24,7 +25,9 @@ enum StashDirection {
 ///
 ///   While it would be possible to add more `StashRegion` cases—such as ones modifying both height and width—
 ///   this would require creating a `WindowDirection` for each possible combination of `StashDirection` and `StashRegion`.
-enum StashRegion {
+///
+///   A solution would be to make stash work like WindowDirection.custom.
+enum StashRegion: Codable, Defaults.Serializable {
     /// The top edge of the screen. The window retains its original size.
     case top
     /// The bottom edge of the screen. The window retains its original size.
@@ -40,19 +43,6 @@ enum StashRegion {
 }
 
 // MARK: - Helpers
-
-extension StashDirection {
-    func isSameEdgeAs(_ other: StashDirection) -> Bool {
-        switch (self, other) {
-        case (.left, .left):
-            true
-        case (.right, .right):
-            true
-        default:
-            false
-        }
-    }
-}
 
 extension StashDirection: Equatable {
     init?(direction: WindowDirection) {
@@ -99,6 +89,17 @@ extension StashDirection: Equatable {
             lhs == rhs
         case let (.right(lhs), .right(rhs)):
             lhs == rhs
+        default:
+            false
+        }
+    }
+
+    func isSameEdgeAs(_ other: StashDirection) -> Bool {
+        switch (self, other) {
+        case (.left, .left):
+            true
+        case (.right, .right):
+            true
         default:
             false
         }

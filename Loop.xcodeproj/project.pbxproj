@@ -92,6 +92,7 @@
 		A8F1E9692C253F8D00AAF871 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A8F1E9672C253F8D00AAF871 /* InfoPlist.strings */; };
 		F000C8D42DE748CA004EECFB /* StashDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000C8D32DE748CA004EECFB /* StashDirection.swift */; };
 		F000C8D62DE7491A004EECFB /* StashedWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000C8D52DE7491A004EECFB /* StashedWindow.swift */; };
+		F000C8D82DE75664004EECFB /* StashedWindowStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F000C8D72DE75664004EECFB /* StashedWindowStore.swift */; };
 		F01C125C2DDF5ACA00DDC361 /* StashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01C125B2DDF5AC700DDC361 /* StashManager.swift */; };
 		F0642DAA2DD8C9F00049F167 /* CycleBackwardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */; };
 		F0A98C242DE488EB002328D6 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A98C232DE488EB002328D6 /* SkyLight.framework */; };
@@ -196,6 +197,7 @@
 		A8F1E96B2C253FA200AAF871 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		F000C8D32DE748CA004EECFB /* StashDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StashDirection.swift; sourceTree = "<group>"; };
 		F000C8D52DE7491A004EECFB /* StashedWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StashedWindow.swift; sourceTree = "<group>"; };
+		F000C8D72DE75664004EECFB /* StashedWindowStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StashedWindowStore.swift; sourceTree = "<group>"; };
 		F01C125B2DDF5AC700DDC361 /* StashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StashManager.swift; sourceTree = "<group>"; };
 		F0642DA92DD8C9F00049F167 /* CycleBackwardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleBackwardsView.swift; sourceTree = "<group>"; };
 		F0A98C232DE488EB002328D6 /* SkyLight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyLight.framework; path = ../../../../System/Library/PrivateFrameworks/SkyLight.framework; sourceTree = "<group>"; };
@@ -487,6 +489,7 @@
 				F01C125B2DDF5AC700DDC361 /* StashManager.swift */,
 				F000C8D52DE7491A004EECFB /* StashedWindow.swift */,
 				F000C8D32DE748CA004EECFB /* StashDirection.swift */,
+				F000C8D72DE75664004EECFB /* StashedWindowStore.swift */,
 			);
 			path = StashManager;
 			sourceTree = "<group>";
@@ -608,6 +611,7 @@
 			files = (
 				A859799B2B55FE94009FB067 /* UNNotification+Extensions.swift in Sources */,
 				A8EF1F09299C87DF00633440 /* IconManager.swift in Sources */,
+				F000C8D82DE75664004EECFB /* StashedWindowStore.swift in Sources */,
 				A848D8A72A8C2F3F00060834 /* LoopManager.swift in Sources */,
 				A82B1AF02BD357FC00E2F3F9 /* RadialMenuConfiguration.swift in Sources */,
 				A8D5A7D62A91384D004EA5BB /* DirectionSelectorSquareSegment.swift in Sources */,

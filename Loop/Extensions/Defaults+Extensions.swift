@@ -199,4 +199,8 @@ extension Defaults.Keys {
         ]),
         iCloud: true
     )
+
+    // StashManager
+    static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>(), iCloud: false)
+    static let stashManagerStashedWindows = Key<[CGWindowID: StashDirection]>("stashManagerStashed", default: [:], iCloud: false)
 }
