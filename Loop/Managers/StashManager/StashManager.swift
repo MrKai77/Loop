@@ -108,9 +108,7 @@ class StashManager {
 
     func onApplicationWillTerminate() {
         // Move back all stashed windows back into the screen before closing the app:
-        for stashedWindowID in store.stashed.keys {
-            unstash(stashedWindowID, resestFrame: true, resetFrameAnimated: false)
-        }
+        restoreAllStashedWindows(animate: false)
     }
 
     func onWindowDragged(_ id: CGWindowID) {
@@ -120,6 +118,7 @@ class StashManager {
     deinit {
         mouseMoveWorkItem?.cancel()
         stopListeningMouseMoved()
+        restoreAllStashedWindows(animate: false)
     }
 }
 
@@ -209,6 +208,12 @@ private extension StashManager {
         }
 
         unmanage(windowID: window.window.cgWindowID)
+    }
+
+    func restoreAllStashedWindows(animate: Bool) {
+        for stashedWindowID in store.stashed.keys {
+            unstash(stashedWindowID, resestFrame: true, resetFrameAnimated: animate)
+        }
     }
 }
 
