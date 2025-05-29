@@ -47,6 +47,7 @@ import SwiftUI
 /// Some behavior of `StashManager` can be user defined:
 /// - `Defaults[.animateStashedWindows]`: Whether animations should be used when revealing or hiding windows.
 /// - `Defaults[.stashedWindowVisiblePadding]`: Amount (in points) of the window's edge that remains visible when it is stashed (peek area).
+/// - `Defaults[.shiftFocusWhenStashed]`: When a window is hidden in the stash, should `StashManager` try to focus the topmost window.
 /// - `Defaults[.enablePadding]` and `Defaults[.padding]`: Additional padding applied to window positioning to ensure consistent spacing.
 ///
 /// Other behaviors are defined by constants:
@@ -73,6 +74,10 @@ class StashManager {
 
     private var padding: PaddingModel {
         Defaults[.enablePadding] == true ? Defaults[.padding] : .zero
+    }
+
+    private var shiftFocusWhenStashed: Bool {
+        Defaults[.shiftFocusWhenStashed]
     }
 
     /// The time interval to debounce mouse moved events to avoid excessive processing.
@@ -283,7 +288,7 @@ private extension StashManager {
     /// This method looks for the first (topmost) visible, non-minimized window on the same screen as the specified window,
     /// and tries to activate it (i.e., bring it to the foreground).
     func unfocus(_ windowID: CGWindowID) {
-        guard Defaults[.shiftFocusWhenStashed] else { return }
+        guard shiftFocusWhenStashed else { return }
         guard let stashedWindow = store.stashed[windowID] else { return }
         guard let screen = ScreenManager.screenContaining(stashedWindow.window) ?? NSScreen.main else { return }
 

@@ -75,6 +75,18 @@ class BehaviorConfigurationModel: ObservableObject {
         didSet { Defaults[.stageStripSize] = stageStripSize }
     }
 
+    @Published var animateStashedWindows = Defaults[.animateStashedWindows] {
+        didSet { Defaults[.animateStashedWindows] = animateStashedWindows }
+    }
+
+    @Published var stashedWindowVisiblePadding = Defaults[.stashedWindowVisiblePadding] {
+        didSet { Defaults[.stashedWindowVisiblePadding] = stashedWindowVisiblePadding }
+    }
+
+    @Published var shiftFocusWhenStashed = Defaults[.shiftFocusWhenStashed] {
+        didSet { Defaults[.shiftFocusWhenStashed] = shiftFocusWhenStashed }
+    }
+
     @Published var isPaddingConfigurationViewPresented = false
 
     let previewVisibility = Defaults[.previewVisibility]
@@ -156,6 +168,18 @@ struct BehaviorConfigurationView: View {
                     lowerClamp: true
                 )
             }
+        }
+
+        LuminareSection("Stash") {
+            LuminareToggle("Animated", isOn: $model.animateStashedWindows)
+            LuminareValueAdjuster(
+                "Peek size",
+                value: $model.stashedWindowVisiblePadding,
+                sliderRange: 1...200,
+                suffix: "px",
+                lowerClamp: true
+            )
+            LuminareToggle("Shift focus when stashed", isOn: $model.shiftFocusWhenStashed)
         }
     }
 }

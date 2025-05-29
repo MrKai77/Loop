@@ -1156,6 +1156,9 @@
         }
       }
     },
+    "Animated" : {
+
+    },
     "Animation speed" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15821,6 +15824,9 @@
         }
       }
     },
+    "Peek size" : {
+
+    },
     "Permissions" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19366,6 +19372,9 @@
           }
         }
       }
+    },
+    "Shift focus when stashed" : {
+
     },
     "Show in dock" : {
       "extractionState" : "manual",
