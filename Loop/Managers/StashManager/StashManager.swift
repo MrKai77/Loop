@@ -85,7 +85,12 @@ class StashManager {
     /// to allow the user to easily position the cursor over either window.
     private let minimunVisibleHeightToKeepWindowStacked: CGFloat = 100
 
-    private var store = StashedWindowsStore()
+    private lazy var store: StashedWindowsStore = {
+        let store = StashedWindowsStore()
+        store.delegate = self
+        return store
+    }()
+
     private var lastRevealTime: [CGWindowID: Date] = [:]
     private var mouseMonitor: NSEventMonitor?
     private var mouseMoveWorkItem: DispatchWorkItem?
@@ -100,10 +105,6 @@ class StashManager {
         }
 
         store.restore()
-
-        if !store.stashed.isEmpty {
-            startListeningMouseMoved()
-        }
     }
 
     func onApplicationWillTerminate() {
@@ -119,6 +120,16 @@ class StashManager {
         mouseMoveWorkItem?.cancel()
         stopListeningMouseMoved()
         restoreAllStashedWindows(animate: false)
+    }
+}
+
+// MARK: - StashedWindowsStoreDelegate
+
+extension StashManager: StashedWindowsStoreDelegate {
+    func onStashedWindowsRestored() {
+        if !store.stashed.isEmpty {
+            startListeningMouseMoved()
+        }
     }
 }
 
