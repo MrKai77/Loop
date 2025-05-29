@@ -144,6 +144,11 @@ private extension StashManager {
     /// Handles `UIDirectionUpdated` notification for the specified window and action.
     private func onUIDirectionUpdated(action: WindowAction, window: Window, screen: NSScreen) {
         if let direction = StashDirection(direction: action.direction) {
+            guard hasNoAdjacentScreen(on: direction, currentScreen: screen) else {
+                print("StashManager: Can't stash a window if there is an adjacent screen on that side.")
+                return
+            }
+
             let bounds = WindowAction.getBounds(from: screen.safeScreenFrame, disablePadding: false, screen: screen)
             let windowToStash = StashedWindow(window: window, screenBounds: bounds, direction: direction)
 
@@ -451,6 +456,15 @@ private extension StashManager {
 
         if store.stashed.isEmpty {
             stopListeningMouseMoved()
+        }
+    }
+
+    func hasNoAdjacentScreen(on direction: StashDirection, currentScreen: NSScreen) -> Bool {
+        switch direction {
+        case .left:
+            !currentScreen.hasScreenOnLeft
+        case .right:
+            !currentScreen.hasScreenOnRight
         }
     }
 }

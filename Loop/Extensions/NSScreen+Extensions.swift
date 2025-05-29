@@ -131,4 +131,32 @@ extension NSScreen {
             return CGSize(width: 72.0, height: 72.0)
         }
     }
+
+    var hasScreenOnRight: Bool {
+        for otherScreen in NSScreen.screens where otherScreen != self {
+            let otherFrame = otherScreen.frame
+
+            if otherFrame.minX == frame.maxX,
+               otherFrame.minY < frame.maxY,
+               otherFrame.maxY > frame.minY {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    var hasScreenOnLeft: Bool {
+        for otherScreen in NSScreen.screens where otherScreen != self {
+            let otherFrame = otherScreen.frame
+
+            if otherFrame.maxX == frame.minX,
+               otherFrame.minY < frame.maxY,
+               otherFrame.maxY > frame.minY {
+                return true
+            }
+        }
+
+        return false
+    }
 }
