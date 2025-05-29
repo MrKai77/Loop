@@ -10,7 +10,7 @@ import Foundation
 struct StashedWindow {
     let window: Window
     let screenBounds: CGRect
-    let direction: StashDirection
+    var direction: StashDirection
 }
 
 // MARK: - Frame computation

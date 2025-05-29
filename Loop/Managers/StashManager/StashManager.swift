@@ -41,13 +41,13 @@ import SwiftUI
 /// 6. **Overlap Handling**:
 ///    - Checks whether two windows overlap or have sufficient non-overlapping space based on a configured `tolerance`.
 /// 7. **Focus Management**:
-///    - Attempts to shift focus to another window on the same screen when unfocusing a stashed window (currently a placeholder).
+///    - Attempts to shift focus to the topmost window on the same screen when a stashed window is hidden.
 ///
 /// ## Configuration:
 /// Some behavior of `StashManager` can be user defined:
 /// - `Defaults[.animateStashedWindows]`: Whether animations should be used when revealing or hiding windows.
 /// - `Defaults[.stashedWindowVisiblePadding]`: Amount (in points) of the window's edge that remains visible when it is stashed (peek area).
-/// - `Defaults[.shiftFocusWhenStashed]`: When a window is hidden in the stash, should `StashManager` try to focus the topmost window.
+/// - `Defaults[.shiftFocusWhenStashed]`: Attempts to shift focus to the topmost window on the same screen when a stashed window is hidden.
 /// - `Defaults[.enablePadding]` and `Defaults[.padding]`: Additional padding applied to window positioning to ensure consistent spacing.
 ///
 /// Other behaviors are defined by constants:
@@ -142,11 +142,7 @@ extension StashManager: StashedWindowsStoreDelegate {
 
 private extension StashManager {
     /// Handles `UIDirectionUpdated` notification for the specified window and action.
-    ///
-    /// If the action corresponds to a stash direction, the window is hidden in the stash area and monitored.
-    /// If the action corresponds to an unstash, the window is moved out of the stash area and monitoring is stopped.
-    /// Other actions (e.g., resizing or moving) will cancel the stashed state so monitoring is stopped.
-    func onUIDirectionUpdated(action: WindowAction, window: Window, screen: NSScreen) {
+    private func onUIDirectionUpdated(action: WindowAction, window: Window, screen: NSScreen) {
         if let direction = StashDirection(direction: action.direction) {
             let bounds = WindowAction.getBounds(from: screen.safeScreenFrame, disablePadding: false, screen: screen)
             let windowToStash = StashedWindow(window: window, screenBounds: bounds, direction: direction)
@@ -157,7 +153,10 @@ private extension StashManager {
             // by the code that sent the UIDirectionUpdated notification.
             unstash(window.cgWindowID, resestFrame: false, resetFrameAnimated: animate)
         } else if action.direction == .undo {
-            // TODO: If the previous action was not a stack action we should unmanage the window.
+            guard let action = WindowRecords.getCurrentAction(for: window) else { return }
+            guard action.direction != .undo else { return }
+
+            onUIDirectionUpdated(action: action, window: window, screen: screen)
         } else {
             // TODO: Handle .smaller, .bigger, .shrink, .grow, .move
             // The window will be moved or resized by another command so it won't be stashed anymore:
