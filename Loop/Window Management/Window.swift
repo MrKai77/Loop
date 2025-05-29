@@ -232,8 +232,37 @@ class Window {
         fullscreen = !fullscreen
     }
 
+    /// Check with the `NSRunningApplication` if the app is hidden (⌘H).
     var isHidden: Bool {
         self.nsRunningApplication?.isHidden ?? false
+    }
+
+    /// Checks if the app has any visible windows using the `CGWindow` API.
+    ///
+    /// This is useful because `NSRunningApplication.isHidden` might return `false`
+    /// even when the app has no visible windows (for example, if it's a menu bar app).
+    /// This method iterates through the list of on-screen windows and checks if
+    /// any window belongs to this application and is visible.
+    ///
+    /// - Returns: `true` if no visible windows are found (i.e., the app is "hidden"); `false` otherwise.
+    var isWindowHidden: Bool {
+        let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
+
+        guard let windowListInfo = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
+            return true
+        }
+
+        for windowInfo in windowListInfo {
+            if let pid = windowInfo[kCGWindowOwnerPID as String] as? pid_t,
+               let nsRunningApplication,
+               pid == nsRunningApplication.processIdentifier,
+               let isVisible = windowInfo[kCGWindowIsOnscreen as String] as? Bool,
+               isVisible {
+                return false
+            }
+        }
+
+        return true
     }
 
     @discardableResult

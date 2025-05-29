@@ -267,11 +267,12 @@ private extension StashManager {
         return false
     }
 
-    /// Unfocuses a window by attempting to focus another window on the same screen.
+    /// Attempts to unfocus (i.e., shift focus away from) a specified window.
+    ///
+    /// This method looks for the first (topmost) visible, non-minimized window on the same screen as the specified window,
+    /// and tries to activate it (i.e., bring it to the foreground).
     func unfocus(_ windowID: CGWindowID) {
-        // TODO: unfocus should only focus window in the same (virtual) space.
-        return
-
+        guard Defaults[.shiftFocusWhenStashed] else { return }
         guard let stashedWindow = store.stashed[windowID] else { return }
         guard let screen = ScreenManager.screenContaining(stashedWindow.window) ?? NSScreen.main else { return }
 
@@ -279,13 +280,14 @@ private extension StashManager {
             guard let currentWindowScreen = ScreenManager.screenContaining(window) ?? NSScreen.main else { return false }
             guard screen.isSameScreen(currentWindowScreen) else { return false }
 
-            return window.cgWindowID != windowID && !window.isHidden && !window.minimized
+            return window.cgWindowID != windowID
+                && !window.isHidden
+                && !window.isWindowHidden
+                && !window.minimized
         })
 
         if let focusWindow {
-            if let id = focusWindow.nsRunningApplication?.bundleIdentifier {
-                print("StashManager: Focusing another window on the same screen: \(id).")
-            }
+            print("StashManager: Focusing another window on the same screen: \(focusWindow).")
             focusWindow.activate()
         }
     }
