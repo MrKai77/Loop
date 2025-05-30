@@ -10,8 +10,6 @@ import Luminare
 import ServiceManagement
 import SwiftUI
 
-//    let systemSnappingWarning: LuminareInfoView = .init("macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality.")
-
 struct BehaviorConfigurationView: View {
     @Default(.launchAtLogin) var launchAtLogin
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
@@ -46,12 +44,14 @@ struct BehaviorConfigurationView: View {
                 }
 
             LuminareToggle("Hide menu bar icon", isOn: $hideMenuBarIcon)
+
             LuminareSliderPicker(
                 "Animation speed",
                 AnimationConfiguration.allCases.reversed(),
                 selection: $animationConfiguration
-            ) {
-                $0.name
+            ) { item in
+                Text(item.name)
+                    .monospaced()
             }
         }
 
@@ -59,11 +59,17 @@ struct BehaviorConfigurationView: View {
             LuminareToggle("Move window to cursor's screen", isOn: $useScreenWithCursor)
 
             if #available(macOS 15, *) {
-                LuminareToggle(
-                    "Window snapping",
-//                    info: SystemWindowManager.MoveAndResize.snappingEnabled ? systemSnappingWarning : nil, // TODO: Fix this
-                    isOn: $windowSnapping
-                )
+                LuminareToggle(isOn: $windowSnapping) {
+                    if SystemWindowManager.MoveAndResize.snappingEnabled {
+                        Text("Window snapping")
+                            .luminarePopover(attachedTo: .topTrailing) {
+                                Text("macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality.")
+                                    .padding()
+                            }
+                    } else {
+                        Text("Window snapping")
+                    }
+                }
             } else {
                 LuminareToggle("Window snapping", isOn: $windowSnapping)
             }

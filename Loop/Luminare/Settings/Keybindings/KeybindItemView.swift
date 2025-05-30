@@ -121,27 +121,16 @@ struct KeybindItemView: View {
                 HStack(spacing: 6) {
                     let hasConflicts = hasDuplicateKeybinds()
 
-//                    if hasConflicts { // TODO: Implement this
-//                        LuminareInfoView(
-//                            "There are other keybinds that conflict with this key combination.",
-//                            .red
-//                        )
-//                    }
-
-                    HStack {
-                        ForEach(triggerKey.sorted().compactMap(\.systemImage), id: \.self) { image in
-                            Text("\(Image(systemName: image))")
-                        }
+                    if hasConflicts {
+                        keycorderSection(hasConflicts: true)
+                            .luminarePopover(attachedTo: .topLeading) {
+                                Text("There are other keybinds that conflict with this key combination.")
+                                    .padding()
+                            }
+                            .tint(.red)
+                    } else {
+                        keycorderSection(hasConflicts: false)
                     }
-                    .font(.callout)
-                    .padding(6)
-                    .frame(height: 27)
-                    .modifier(LuminareBorderedModifier())
-
-                    Image(systemName: "plus")
-
-                    Keycorder($keybind)
-                        .opacity(hasConflicts ? 0.5 : 1)
                 }
                 .fixedSize()
             }
@@ -242,6 +231,25 @@ struct KeybindItemView: View {
             }
         }
         .frame(width: 300, height: 300)
+    }
+
+    func keycorderSection(hasConflicts: Bool) -> some View {
+        HStack(spacing: 6) {
+            HStack {
+                ForEach(triggerKey.sorted().compactMap(\.systemImage), id: \.self) { image in
+                    Text("\(Image(systemName: image))")
+                }
+            }
+            .font(.callout)
+            .padding(6)
+            .frame(height: 27)
+            .modifier(LuminareBorderedModifier())
+
+            Image(systemName: "plus")
+
+            Keycorder($keybind)
+                .opacity(hasConflicts ? 0.5 : 1)
+        }
     }
 
     func computeSearchResults() {

@@ -180,22 +180,28 @@ struct PaddingConfigurationView: View {
                 clampsLower: true,
                 suffix: Text("px")
             )
-            // TODO: Implement info
-//            LuminareValueAdjuster(
-//                "Window gaps",
-//                value: $paddingModel.window,
-//                sliderRange: 0...100,
-//                suffix: "px",
-//                lowerClamp: true
-//            )
-//            LuminareValueAdjuster(
-//                "External bar",
-//                info: .init("Use this if you are using a custom menubar."),
-//                value: $paddingModel.externalBar,
-//                sliderRange: 0...100,
-//                suffix: "px",
-//                lowerClamp: true
-//            )
+
+            LuminareSlider(
+                "Window gaps",
+                value: $paddingModel.window.doubleBinding,
+                in: 0...100,
+                format: .number.precision(.fractionLength(0...0)),
+                clampsLower: true,
+                suffix: Text("px")
+            )
+
+            LuminareSlider(
+                value: $paddingModel.externalBar.doubleBinding,
+                in: 0...100,
+                format: .number.precision(.fractionLength(0...3)),
+                suffix: Text("px")
+            ) {
+                Text("External bar")
+                    .luminarePopover(attachedTo: .topTrailing) {
+                        Text("Use this if you are using a custom menubar.")
+                            .padding()
+                    }
+            }
         }
     }
 }
