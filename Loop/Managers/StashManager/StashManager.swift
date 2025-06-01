@@ -8,49 +8,23 @@
 import Defaults
 import SwiftUI
 
-/// `StashManager` is responsible "stashing" app windows on the edge of the sceen
+/// Manages the behavior of windows that can be temporarily hidden (stashed) and revealed on screen edges.
 ///
-/// ## Purpose:
-/// The main objective of `StashManager` is to allow windows to be temporarily hidden (stashed) off-screen, with a small
-/// visible "peek" area. When the user moves the cursor near this peek area, the window is revealed (unstashed).
-/// This behavior was made to reduce screen clutter while maintaining quick access to important windows.
+/// `StashManager` orchestrates a system for "stashing" windows by moving them to the edge of a screen,
+/// revealing them when the mouse approaches, and hiding them again when the mouse leaves. It handles:
+/// - Window stashing logic: deciding where and how to stash windows, and ensuring non-overlapping placements.
+/// - Reveal/hide logic: dynamically revealing stashed windows when the mouse is nearby, and hiding them otherwise.
+/// - Input events: listens to mouse movements to manage reveal/hide behavior efficiently.
+/// - Cleanup and restore: restores windows when the app terminates or when a window is explicitly unstashed.
 ///
-/// ## Key Responsibilities:
-/// - **Stashing windows**: Moves windows to a hidden area along a screen edge, with a small portion visible.
-/// - **Revealing windows**: When the mouse hovers over the peek area, the window is fully revealed.
-/// - **Hiding windows**: If the mouse moves away from a revealed window, it returns to the stash position.
-/// - **Overlap handling**: Ensures multiple stashed windows do not overlap excessively, using a configurable tolerance.
+/// ## Key Features:
+/// - Configurable animations for reveal/hide behaviors (see `Defaults[.animateStashedWindows]`).
+/// - Configurable visibility padding to determine how much of a stashed window remains visible (see `Defaults[.stashedWindowVisiblePadding]`).
+/// - Smart handling of overlapping stashed windows along the same screen edge, using vertical range tolerance.
+/// - Debounced and throttled mouse movement handling to avoid performance issues.
+/// - Automatic focus-shifting to another window when a window is hidden (optional) (see `Defaults[.shiftFocusWhenStashed]`).
 ///
-/// ## How it Works:
-/// 1. **Initialization**:
-///    - Subscribes to `.UIDirectionUpdated` notifications, which indicate a window as been moved or resized by an user action.
-///      If this action is related to the stash logic, the `StashManager` will act accordingly.
-///    - Maintains a dictionary of currently stashed windows (`stashedWindows`), keyed by `CGWindowID`.
-///    - Tracks revealed windows (`revealedWindows`) and the last reveal time for throttling.
-/// 3. **Mouse Monitoring**:
-///    - Uses a global `NSEventMonitor` to track mouse movements.
-///    - Applies debounce and throttle intervals to control reveal/hide frequency.
-///    - Determines which window (if any) should be revealed based on cursor position and z-index order.
-/// 4. **Stashing Logic**:
-///    - Moves a window to the stashed area based on its direction (`StashDirection`).
-///    - Checks for overlapping with other stashed windows and unstashes conflicting ones.
-///    - Applies optional animation during transitions.
-/// 5. **Unstashing Logic**:
-///    - Restores a window from stash, optionally resetting its position to the center of the screen.
-///    - Stops monitoring windows that are unstashed or unmanaged.
-/// 6. **Overlap Handling**:
-///    - Checks whether two windows overlap or have sufficient non-overlapping space based on a configured `tolerance`.
-/// 7. **Focus Management**:
-///    - Attempts to shift focus to the topmost window on the same screen when a stashed window is hidden.
-///
-/// ## Configuration:
-/// Some behavior of `StashManager` can be user defined:
-/// - `Defaults[.animateStashedWindows]`: Whether animations should be used when revealing or hiding windows.
-/// - `Defaults[.stashedWindowVisiblePadding]`: Amount (in points) of the window's edge that remains visible when it is stashed (peek area).
-/// - `Defaults[.shiftFocusWhenStashed]`: Attempts to shift focus to the topmost window on the same screen when a stashed window is hidden.
-/// - `Defaults[.enablePadding]` and `Defaults[.padding]`: Additional padding applied to window positioning to ensure consistent spacing.
-///
-/// Other behaviors are defined by constants:
+/// ## Constants:
 /// - `mouseMovedDebounceInterval`: The minimum time interval (in seconds) between processing consecutive mouse move events.
 /// - `revealThrottleInterval`: The minimum time interval (in seconds) between revealing or hiding actions for a specific window.
 /// - `minimunVisibleHeightToKeepWindowStacked`:
@@ -60,7 +34,6 @@ import SwiftUI
 ///
 /// ## Considerations:
 /// - Currently supports only one revealed window at a time.
-/// - The `unfocus` method is incomplete and requires virtual space awareness for precise focus handling.
 class StashManager {
     /// Should the stashed windows be animated when revealed or hidden?
     private var animate: Bool {
@@ -70,10 +43,6 @@ class StashManager {
     /// How many pixels of the window should be visible when stashed
     private var stashedWindowVisiblePadding: CGFloat {
         Defaults[.stashedWindowVisiblePadding]
-    }
-
-    private var padding: PaddingModel {
-        Defaults[.enablePadding] == true ? Defaults[.padding] : .zero
     }
 
     private var shiftFocusWhenStashed: Bool {
@@ -143,14 +112,13 @@ extension StashManager: StashedWindowsStoreDelegate {
 private extension StashManager {
     /// Handles `UIDirectionUpdated` notification for the specified window and action.
     private func onUIDirectionUpdated(action: WindowAction, window: Window, screen: NSScreen) {
-        if let direction = StashDirection(direction: action.direction) {
-            guard hasNoAdjacentScreen(on: direction, currentScreen: screen) else {
+        if let edge = action.stashEdge {
+            guard hasNoAdjacentScreen(on: edge, currentScreen: screen) else {
                 print("StashManager: Can't stash a window if there is an adjacent screen on that side.")
                 return
             }
 
-            let bounds = WindowAction.getBounds(from: screen.safeScreenFrame, disablePadding: false, screen: screen)
-            let windowToStash = StashedWindow(window: window, screenBounds: bounds, direction: direction)
+            let windowToStash = StashedWindow(window: window, screen: screen, action: action)
 
             stash(windowToStash)
         } else if action.direction == .unstash {
@@ -165,8 +133,10 @@ private extension StashManager {
         } else if action.direction.willGrow
             || action.direction.willShrink
             || action.direction.willAdjustSize {
-            // If the window’s frame is updated while it’s stashed and hidden, the update will cause the window to move back on-screen.
-            // However, since the window ID isn't added to `store.revealed`, the hide animation won't trigger.
+            // Grow, shrink, or adjustSize actions won't work for predefined stash actions, since they have a custom size.
+
+            // If the window’s frame is updated while it’s stashed and hidden, the update will cause the window to move back on-screen
+            // without adding its id to `store.revealed`. Whe need to add it back so the hide animation can be triggered.
             if isManaged(window.cgWindowID) {
                 // If the window frame is fully on screen while the window ID is not in the `store.reveal` set, we add it.
                 let isWindowFullyOnScreen = screen.safeScreenFrame.contains(window.frame)
@@ -177,7 +147,7 @@ private extension StashManager {
             }
         } else if action.direction.willMove {
             // Since StashManager recomputes the frame on every show/dismiss, if the user moves a stashed window,
-            // the next time the window is shown/hidden, its frame will be reset to the `StashRegion`.
+            // the next time the window is shown or hidden, its frame will be reset to its `Direction`.
             // This could be an improvement to consider adding later.
         } else {
             // The window will be moved by another command so it won't be stashed anymore:
@@ -198,20 +168,20 @@ private extension StashManager {
     }
 
     func unstashOverlappingWindows(_ windowToStash: StashedWindow) {
-        let newFrame = windowToStash.computeRevealedFrame(windowPadding: padding.window)
+        let newFrame = windowToStash.computeRevealedFrame()
 
         for (id, stashedWindow) in store.stashed {
             // windowToStash is already managed by StashManager. Can't overlap with itself.
             guard id != windowToStash.window.cgWindowID else { continue }
             // if windowToStash is not on the same edge of the screen as stashWindow, no need to check for overlap.
-            guard windowToStash.direction.isSameEdgeAs(stashedWindow.direction) else { continue }
+            guard windowToStash.action.stashEdge == stashedWindow.action.stashEdge else { continue }
 
             // Trying to store windowToStash in the same place as stashedWindow.
             // No need for frame comparaison, it will always overlap.
-            if stashedWindow.direction == windowToStash.direction {
+            if stashedWindow.action.isSameManipulation(as: windowToStash.action) {
                 unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
             } else {
-                let currentFrame = stashedWindow.computeRevealedFrame(windowPadding: padding.window)
+                let currentFrame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
                 let tolerance = minimunVisibleHeightToKeepWindowStacked
 
                 if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
@@ -235,10 +205,8 @@ private extension StashManager {
         print("StashManager: unstash \(window.window)")
 
         if resetFrame {
-            let windowSize = window.window.size
-            let x = window.screenBounds.midX - (windowSize.width / 2)
-            let y = window.screenBounds.midY - (windowSize.height / 2)
-            let center = CGRect(origin: CGPoint(x: x, y: y), size: windowSize)
+            let action = WindowAction(.center)
+            let center = action.getFrame(window: window.window, bounds: window.screen.safeScreenFrame)
 
             window.window.setFrame(center, animate: resetFrameAnimated)
         }
@@ -267,7 +235,7 @@ private extension StashManager {
             hideWindow(revealedWindow, animate: animate)
         }
 
-        let frame = window.computeRevealedFrame(windowPadding: padding.window)
+        let frame = window.computeRevealedFrame()
 
         window.window.activate()
         store.markWindowAsRevealed(window.id)
@@ -280,7 +248,7 @@ private extension StashManager {
     func hideWindow(_ window: StashedWindow, animate: Bool) {
         guard !shouldThrottle(windowID: window.id) else { return }
 
-        let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, padding: padding)
+        let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
 
         unfocus(window.id)
         window.window.setFrame(frame, animate: animate)
@@ -369,7 +337,7 @@ private extension StashManager {
 
         for window in zIndexSortedStashedWindows {
             let isWindowRevealed = store.isWindowRevealed(window.id)
-            let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, padding: padding)
+            let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
 
             if isWindowRevealed {
                 let revealedFrame = window.computeRevealedFrame()
@@ -475,8 +443,8 @@ private extension StashManager {
         }
     }
 
-    func hasNoAdjacentScreen(on direction: StashDirection, currentScreen: NSScreen) -> Bool {
-        switch direction {
+    func hasNoAdjacentScreen(on edge: StashEdge, currentScreen: NSScreen) -> Bool {
+        switch edge {
         case .left:
             !currentScreen.hasScreenOnLeft
         case .right:

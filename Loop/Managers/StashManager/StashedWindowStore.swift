@@ -27,7 +27,7 @@ class StashedWindowsStore {
     }
 
     /// Hold data from `Defaults[.stashManagerStashedWindows]` for windows that failed to be restored.
-    private var failedToRestore: [CGWindowID: StashDirection] = [:]
+    private var failedToRestore: [CGWindowID: WindowAction] = [:]
     private var spaceObserver: NSObjectProtocol?
 }
 
@@ -65,7 +65,7 @@ private extension StashedWindowsStore {
         var restoredStashedWindows: [CGWindowID: StashedWindow] = [:]
 
         for (windowId, direction) in defaultStashedWindows {
-            guard let stashedWindow = getStashedWindow(for: windowId, in: windows, direction: direction) else {
+            guard let stashedWindow = getStashedWindow(for: windowId, in: windows, action: direction) else {
                 failedToRestore[windowId] = direction
                 continue
             }
@@ -97,7 +97,7 @@ private extension StashedWindowsStore {
         print("StashedWindowStore: Space changed. Attempting to restore windows.")
 
         for (windowId, direction) in failedToRestore {
-            guard let stashedWindow = getStashedWindow(for: windowId, in: windows, direction: direction) else {
+            guard let stashedWindow = getStashedWindow(for: windowId, in: windows, action: direction) else {
                 continue
             }
 
@@ -115,13 +115,11 @@ private extension StashedWindowsStore {
         }
     }
 
-    func getStashedWindow(for windowId: CGWindowID, in windows: [Window], direction: StashDirection) -> StashedWindow? {
+    func getStashedWindow(for windowId: CGWindowID, in windows: [Window], action: WindowAction) -> StashedWindow? {
         guard let window = windows.first(where: { $0.cgWindowID == windowId }) else { return nil }
         guard let screen = ScreenManager.screenContaining(window) ?? NSScreen.main else { return nil }
 
-        let bounds = WindowAction.getBounds(from: screen.safeScreenFrame, disablePadding: false, screen: screen)
-
-        return StashedWindow(window: window, screenBounds: bounds, direction: direction)
+        return StashedWindow(window: window, screen: screen, action: action)
     }
 
     func persistRevealedWindows() {
@@ -129,6 +127,6 @@ private extension StashedWindowsStore {
     }
 
     func persistStashedWindows() {
-        Defaults[.stashManagerStashedWindows] = stashed.mapValues(\.direction)
+        Defaults[.stashManagerStashedWindows] = stashed.mapValues(\.action)
     }
 }

@@ -29,12 +29,24 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    private let anchors: [CustomWindowActionAnchor] = [
-        .topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight
-    ]
+    private var anchors: [CustomWindowActionAnchor] {
+        if action.direction == .customStash {
+            [.topLeft, .topRight, .left, .right, .bottomLeft, .bottomRight]
+        } else {
+            [.topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight]
+        }
+    }
 
     private let previewController = PreviewController()
     private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
+
+    var sizeModes: [CustomWindowActionSizeMode] {
+        if action.direction == .customStash {
+            [.custom, .preserveSize]
+        } else {
+            CustomWindowActionSizeMode.allCases
+        }
+    }
 
     init(action: Binding<WindowAction>, isPresented: Binding<Bool>) {
         _windowAction = action
@@ -148,19 +160,21 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder private func positionConfiguration() -> some View {
         LuminareSection {
-            LuminareToggle(
-                "Use coordinates",
-                isOn: Binding(
-                    get: {
-                        action.positionMode == .coordinates
-                    },
-                    set: { newValue in
-                        withAnimation(LuminareConstants.animation) {
-                            action.positionMode = newValue ? .coordinates : .generic
+            if action.direction != .customStash {
+                LuminareToggle(
+                    "Use coordinates",
+                    isOn: Binding(
+                        get: {
+                            action.positionMode == .coordinates
+                        },
+                        set: { newValue in
+                            withAnimation(LuminareConstants.animation) {
+                                action.positionMode = newValue ? .coordinates : .generic
+                            }
                         }
-                    }
+                    )
                 )
-            )
+            }
 
             if action.positionMode ?? .generic == .generic {
                 LuminarePicker(
@@ -180,7 +194,7 @@ struct CustomActionConfigurationView: View {
                             }
                         }
                     ),
-                    columns: 3,
+                    columns: action.direction == .customStash ? 2 : 3,
                     roundTop: false
                 ) { anchor in
                     IconView(action: anchor.iconAction)
@@ -241,7 +255,7 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder private func sizeConfiguration() -> some View {
         LuminareSection {
             LuminarePicker(
-                elements: CustomWindowActionSizeMode.allCases,
+                elements: sizeModes,
                 selection: Binding(
                     get: {
                         action.sizeMode ?? .custom
@@ -252,7 +266,7 @@ struct CustomActionConfigurationView: View {
                         }
                     }
                 ),
-                columns: 3,
+                columns: sizeModes.count,
                 roundBottom: action.sizeMode != .custom
             ) { mode in
                 VStack(spacing: 4) {

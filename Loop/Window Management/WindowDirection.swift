@@ -51,11 +51,17 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // Move
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
 
-    // Stash
-    case stashTopLeft = "StashTopLeft", stashBottomLeft = "StashBottomLeft", stashCenterLeft = "StashCenterLeft"
-    case stashFullLeft = "StashFullLeft", stashTopHalfLeft = "StashTopHalfLeft", stashBottomHalfLeft = "StashBottomHalfLeft"
-    case stashTopRight = "StashTopRight", stashBottomRight = "StashBottomRight", stashCenterRight = "StashCenterRight"
-    case stashFullRight = "StashFullRight", stashTopHalfRight = "StashTopHalfRight", stashBottomHalfRight = "StashBottomHalfRight"
+    // Stash (Halves)
+    case stashRightHalf = "StashRightHalf", stashLeftHalf = "StashLeftHalf"
+
+    // Stash (Quarters)
+    case stashTopLeftQuarter = "StashTopLeftQuarter", stashTopRightQuarter = "StashTopRightQuarter"
+    case stashBottomRightQuarter = "StashBottomRightQuarter", stashBottomLeftQuarter = "StashBottomLeftQuarter"
+
+    // Stash (Thirds)
+    case stashRightThird = "StashRightThird", stashLeftThird = "StashLeftThird"
+    case stashRightTwoThirds = "StashRightTwoThirds", stashLeftTwoThirds = "StashLeftTwoThirds"
+    case customStash = "Custom Stash"
     case unstash = "Unstash"
 
     // Custom Actions
@@ -73,8 +79,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var grow: [WindowDirection] { [.growTop, .growBottom, .growRight, .growLeft] }
     static var move: [WindowDirection] { [.moveUp, .moveDown, .moveRight, .moveLeft] }
     static var stash: [WindowDirection] { [
-        .stashTopLeft, .stashBottomLeft, .stashCenterLeft, .stashFullLeft, .stashTopHalfLeft, .stashBottomHalfLeft,
-        .stashTopRight, .stashBottomRight, .stashCenterRight, .stashFullRight, .stashTopHalfRight, .stashBottomHalfRight,
+        .stashRightHalf, .stashLeftHalf,
+        .stashTopLeftQuarter, .stashTopRightQuarter, .stashBottomRightQuarter, .stashBottomLeftQuarter,
+        .stashRightThird, .stashLeftThird, .stashRightTwoThirds, .stashLeftTwoThirds,
+        .customStash,
         .unstash
     ] }
     static var more: [WindowDirection] { [.initialFrame, .undo, .custom, .cycle] }
@@ -88,6 +96,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var willStash: Bool { WindowDirection.stash.contains(self) }
     var willMaximize: Bool { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth].contains(self) }
     var willCenter: Bool { [.center, .macOSCenter, .verticalCenterHalf, .horizontalCenterHalf].contains(self) }
+    var isCustom: Bool { [.custom, .customStash].contains(self) }
 
     var hasRadialMenuAngle: Bool {
         let noAngleActions: [WindowDirection] = [.noAction, .minimize, .hide, .initialFrame, .undo, .cycle]
@@ -125,6 +134,8 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .verticalCenterThird: .init(x: 0, y: 1.0 / 3.0, width: 1.0, height: 1.0 / 3.0)
         case .bottomThird: .init(x: 0, y: 2.0 / 3.0, width: 1.0, height: 1.0 / 3.0)
         case .bottomTwoThirds: .init(x: 0, y: 1.0 / 3.0, width: 1.0, height: 2.0 / 3.0)
+        // Stash
+        case let other where other.willStash: unstashedDirection?.frameMultiplyValues
         default: nil
         }
     }
@@ -140,6 +151,35 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .leftHalf: .topLeftQuarter
         case .topLeftQuarter: .maximize
         default: .topHalf
+        }
+    }
+
+    /// Returns the corresponding non-stashed `WindowDirection` for a given stashed variant.
+    /// If the current case does not have a non-stashed equivalent, it returns `nil`.
+    var unstashedDirection: WindowDirection? {
+        switch self {
+        case .stashRightHalf:
+            .rightHalf
+        case .stashLeftHalf:
+            .leftHalf
+        case .stashTopLeftQuarter:
+            .topLeftQuarter
+        case .stashTopRightQuarter:
+            .topRightQuarter
+        case .stashBottomRightQuarter:
+            .bottomRightQuarter
+        case .stashBottomLeftQuarter:
+            .bottomLeftQuarter
+        case .stashRightThird:
+            .rightThird
+        case .stashLeftThird:
+            .leftThird
+        case .stashRightTwoThirds:
+            .rightTwoThirds
+        case .stashLeftTwoThirds:
+            .leftTwoThirds
+        default:
+            nil
         }
     }
 }
