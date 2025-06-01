@@ -38,6 +38,18 @@ extension StashedWindowsStore {
         restoreRevealedWindows()
         restoreStashedWindows()
     }
+
+    func isWindowRevealed(_ id: CGWindowID) -> Bool {
+        revealed.contains(id)
+    }
+
+    func markWindowAsRevealed(_ id: CGWindowID) {
+        revealed.insert(id)
+    }
+
+    func markWindowAsHidden(_ id: CGWindowID) {
+        revealed.remove(id)
+    }
 }
 
 // MARK: Private methods
@@ -63,8 +75,8 @@ private extension StashedWindowsStore {
 
         if !restoredStashedWindows.isEmpty {
             stashed = restoredStashedWindows
-            delegate?.onStashedWindowsRestored()
             print("StashedWindowsStore: \(restoredStashedWindows.count) stashed window restored.")
+            delegate?.onStashedWindowsRestored()
         }
 
         if !failedToRestore.isEmpty {

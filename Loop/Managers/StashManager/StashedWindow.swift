@@ -6,11 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct StashedWindow {
     let window: Window
     let screenBounds: CGRect
     var direction: StashDirection
+
+    var id: CGWindowID {
+        window.cgWindowID
+    }
 }
 
 // MARK: - Frame computation

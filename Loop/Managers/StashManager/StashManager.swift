@@ -162,9 +162,25 @@ private extension StashManager {
             guard action.direction != .undo else { return }
 
             onUIDirectionUpdated(action: action, window: window, screen: screen)
+        } else if action.direction.willGrow
+            || action.direction.willShrink
+            || action.direction.willAdjustSize {
+            // If the window’s frame is updated while it’s stashed and hidden, the update will cause the window to move back on-screen.
+            // However, since the window ID isn't added to `store.revealed`, the hide animation won't trigger.
+            if isManaged(window.cgWindowID) {
+                // If the window frame is fully on screen while the window ID is not in the `store.reveal` set, we add it.
+                let isWindowFullyOnScreen = screen.safeScreenFrame.contains(window.frame)
+
+                if isWindowFullyOnScreen, !store.isWindowRevealed(window.cgWindowID) {
+                    store.markWindowAsRevealed(window.cgWindowID)
+                }
+            }
+        } else if action.direction.willMove {
+            // Since StashManager recomputes the frame on every show/dismiss, if the user moves a stashed window,
+            // the next time the window is shown/hidden, its frame will be reset to the `StashRegion`.
+            // This could be an improvement to consider adding later.
         } else {
-            // TODO: Handle .smaller, .bigger, .shrink, .grow, .move
-            // The window will be moved or resized by another command so it won't be stashed anymore:
+            // The window will be moved by another command so it won't be stashed anymore:
             unmanage(windowID: window.cgWindowID)
         }
     }
@@ -227,7 +243,7 @@ private extension StashManager {
             window.window.setFrame(center, animate: resetFrameAnimated)
         }
 
-        unmanage(windowID: window.window.cgWindowID)
+        unmanage(windowID: window.id)
     }
 
     func restoreAllStashedWindows(animate: Bool) {
@@ -242,10 +258,8 @@ private extension StashManager {
 private extension StashManager {
     /// Reveals a stashed window by moving it to its reveal frame.
     func revealWindow(_ window: StashedWindow, animate: Bool) {
-        let windowID = window.window.cgWindowID
-
-        guard !store.revealed.contains(windowID) else { return }
-        guard !shouldThrottle(windowID: windowID) else { return }
+        guard !store.isWindowRevealed(window.id) else { return }
+        guard !shouldThrottle(windowID: window.id) else { return }
 
         // Keep only one window as revealed
         for revealedWindowId in store.revealed {
@@ -256,7 +270,7 @@ private extension StashManager {
         let frame = window.computeRevealedFrame(windowPadding: padding.window)
 
         window.window.activate()
-        store.revealed.insert(windowID)
+        store.markWindowAsRevealed(window.id)
         window.window.setFrame(frame, animate: animate)
 
         print("StashManager: revealWindow \(window.window)")
@@ -264,15 +278,13 @@ private extension StashManager {
 
     /// Hides a stashed window by moving it to its stashed frame.
     func hideWindow(_ window: StashedWindow, animate: Bool) {
-        let windowID = window.window.cgWindowID
-
-        guard !shouldThrottle(windowID: windowID) else { return }
+        guard !shouldThrottle(windowID: window.id) else { return }
 
         let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, padding: padding)
 
-        unfocus(windowID)
+        unfocus(window.id)
         window.window.setFrame(frame, animate: animate)
-        store.revealed.remove(windowID)
+        store.markWindowAsHidden(window.id)
 
         print("StashManager: hideWindow \(window.window)")
     }
@@ -356,7 +368,7 @@ private extension StashManager {
         let zIndexSortedStashedWindows = WindowEngine.windowList.compactMap { store.stashed[$0.cgWindowID] }
 
         for window in zIndexSortedStashedWindows {
-            let isWindowRevealed = store.revealed.contains(window.window.cgWindowID)
+            let isWindowRevealed = store.isWindowRevealed(window.id)
             let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding, padding: padding)
 
             if isWindowRevealed {
@@ -448,10 +460,14 @@ private extension StashManager {
 // MARK: - Helpers
 
 private extension StashManager {
+    func isManaged(_ windowID: CGWindowID) -> Bool {
+        store.stashed[windowID] != nil
+    }
+
     /// Cleanup references of the given window ID from the stash manager.
     func unmanage(windowID: CGWindowID) {
         store.stashed.removeValue(forKey: windowID)
-        store.revealed.remove(windowID)
+        store.markWindowAsRevealed(windowID)
         lastRevealTime.removeValue(forKey: windowID)
 
         if store.stashed.isEmpty {
