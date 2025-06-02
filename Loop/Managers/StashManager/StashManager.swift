@@ -167,30 +167,6 @@ private extension StashManager {
         startListeningMouseMoved()
     }
 
-    func unstashOverlappingWindows(_ windowToStash: StashedWindow) {
-        let newFrame = windowToStash.computeRevealedFrame()
-
-        for (id, stashedWindow) in store.stashed {
-            // windowToStash is already managed by StashManager. Can't overlap with itself.
-            guard id != windowToStash.window.cgWindowID else { continue }
-            // if windowToStash is not on the same edge of the screen as stashWindow, no need to check for overlap.
-            guard windowToStash.action.stashEdge == stashedWindow.action.stashEdge else { continue }
-
-            // Trying to store windowToStash in the same place as stashedWindow.
-            // No need for frame comparaison, it will always overlap.
-            if stashedWindow.action.isSameManipulation(as: windowToStash.action) {
-                unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
-            } else {
-                let currentFrame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-                let tolerance = minimunVisibleHeightToKeepWindowStacked
-
-                if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
-                    unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
-                }
-            }
-        }
-    }
-
     /// Stop monitoring the window with the given `CGWindowID`.
     func unstash(_ windowID: CGWindowID, resestFrame: Bool, resetFrameAnimated: Bool) {
         if let windowToUnstash = store.stashed[windowID] {
@@ -363,6 +339,38 @@ private extension StashManager {
 // MARK: - Overlap logic
 
 private extension StashManager {
+    /// Unstashes windows that overlap the newly stashed window, ensuring that all stashed windows on the same edge
+    /// have sufficient non-overlapping space to remain individually accessible.
+    ///
+    /// This function scans all currently stashed windows (excluding the `window` just stashed) and checks for overlap
+    /// using `isThereEnoughNonOverlappingSpace`.
+    ///
+    /// If there is not enough space, the stashed window will be unstashed (i.e., made fully visible and removed from the stash)
+    /// and replaced by `windowToStash`
+    func unstashOverlappingWindows(_ windowToStash: StashedWindow) {
+        let newFrame = windowToStash.computeRevealedFrame()
+
+        for (id, stashedWindow) in store.stashed {
+            // windowToStash is already managed by StashManager. Can't overlap with itself.
+            guard id != windowToStash.window.cgWindowID else { continue }
+            // if windowToStash is not on the same edge of the screen as stashWindow, no need to check for overlap.
+            guard windowToStash.action.stashEdge == stashedWindow.action.stashEdge else { continue }
+
+            // Trying to store windowToStash in the same place as stashedWindow.
+            // No need for frame comparaison, it will always overlap.
+            if stashedWindow.action.isSameManipulation(as: windowToStash.action) {
+                unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
+            } else {
+                let currentFrame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
+                let tolerance = minimunVisibleHeightToKeepWindowStacked
+
+                if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
+                    unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
+                }
+            }
+        }
+    }
+
     /// Determines whether two rectangles have enough non-overlapping space between them.
     ///
     /// This function compares the vertical ranges (y-axis) of two rectangles, `rect1` and `rect2`,
