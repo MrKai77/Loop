@@ -331,7 +331,7 @@ extension WindowAction {
 
             result = calculatePositionAdjustment(frameToResizeFrom)
 
-        } else if direction.isCustom {
+        } else if direction.isCustomizable {
             result = calculateCustomFrame(window, bounds)
 
         } else if direction == .center {

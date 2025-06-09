@@ -257,7 +257,7 @@ private extension StashManager {
             guard screen.isSameScreen(currentWindowScreen) else { return false }
 
             return window.cgWindowID != windowID
-                && !window.isHidden
+                && !window.isApplicationHidden
                 && !window.isWindowHidden
                 && !window.minimized
         })
@@ -362,7 +362,7 @@ private extension StashManager {
                 unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
             } else {
                 let currentFrame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-                let tolerance = minimunVisibleHeightToKeepWindowStacked
+                let tolerance = minimumVisibleHeightToKeepWindowStacked
 
                 if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
                     unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)

@@ -355,7 +355,7 @@ final class URLCommandHandler {
 
             let isLoop = app.bundleIdentifier == Bundle.main.bundleIdentifier
             let isRegular = app.activationPolicy == .regular
-            let isVisible = !win.isHidden && !win.minimized
+            let isVisible = !win.isApplicationHidden && !win.minimized
 
             logWindowDetails(win, app, isLoop, isRegular, isVisible)
 
@@ -466,7 +466,7 @@ final class URLCommandHandler {
             // Try multiple methods to get the target window
             let targetWindow = findTargetWindow(from: WindowEngine.windowList.filter { win in
                 guard let app = win.nsRunningApplication else { return false }
-                return app.activationPolicy == .regular && !win.isHidden && !win.minimized
+                return app.activationPolicy == .regular && !win.isApplicationHidden && !win.minimized
             })
 
             if let window = targetWindow,
@@ -661,7 +661,7 @@ final class URLCommandHandler {
         if let lastWindow = lastActiveWindow,
            let app = lastWindow.nsRunningApplication,
            app.bundleIdentifier != Bundle.main.bundleIdentifier,
-           !lastWindow.isHidden, !lastWindow.minimized,
+           !lastWindow.isApplicationHidden, !lastWindow.minimized,
            let lastTime = lastActiveTime,
            lastTime.timeIntervalSinceNow > -5 {
             writeToOutput("[URLHandler] Using last active window: \(lastWindow.title ?? "unknown")")

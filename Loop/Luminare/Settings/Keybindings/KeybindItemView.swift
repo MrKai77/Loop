@@ -69,7 +69,7 @@ struct KeybindItemView: View {
                 label()
 
                 HStack {
-                    if keybind.direction.isCustom {
+                    if keybind.direction.isCustomizable {
                         Button(action: {
                             isConfiguringCustom = true
                         }, label: {

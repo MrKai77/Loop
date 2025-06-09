@@ -278,7 +278,7 @@ class Window {
 
     @discardableResult
     func toggleHidden() -> Bool {
-        if !self.isHidden {
+        if !self.isApplicationHidden {
             return self.setHidden(true)
         }
         return self.setHidden(false)
