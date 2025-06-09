@@ -57,7 +57,7 @@ class StashManager {
 
     /// Two windows can be stacked along the same edge of the screen as long as there is enough non-overlapping space
     /// to allow the user to easily position the cursor over either window.
-    private let minimunVisibleHeightToKeepWindowStacked: CGFloat = 100
+    private let minimumVisibleHeightToKeepWindowStacked: CGFloat = 100
 
     private lazy var store: StashedWindowsStore = {
         let store = StashedWindowsStore()
