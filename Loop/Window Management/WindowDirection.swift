@@ -96,7 +96,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var willStash: Bool { WindowDirection.stash.contains(self) }
     var willMaximize: Bool { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth].contains(self) }
     var willCenter: Bool { [.center, .macOSCenter, .verticalCenterHalf, .horizontalCenterHalf].contains(self) }
-    var isCustom: Bool { [.custom, .customStash].contains(self) }
+    var isCustomizable: Bool { [.custom, .customStash].contains(self) }
 
     var hasRadialMenuAngle: Bool {
         let noAngleActions: [WindowDirection] = [.noAction, .minimize, .hide, .initialFrame, .undo, .cycle]
