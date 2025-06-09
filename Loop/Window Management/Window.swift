@@ -432,6 +432,6 @@ class Window {
 extension Window: CustomDebugStringConvertible {
     var debugDescription: String {
         let name = nsRunningApplication?.localizedName ?? title ?? "<unknown>"
-        return "Window{id:\(cgWindowID),name:\(name)}"
+        return "Window(id:\(cgWindowID), name:\(name))"
     }
 }
