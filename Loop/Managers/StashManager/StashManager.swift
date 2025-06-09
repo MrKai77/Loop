@@ -70,12 +70,12 @@ class StashManager {
     private var mouseMoveWorkItem: DispatchWorkItem?
 
     func start() {
-        Notification.Name.UIDirectionUpdated.onReceive { [weak self] obj in
+        Notification.Name.windowResized.onReceive { [weak self] obj in
             guard let action = obj.userInfo?["action"] as? WindowAction else { return }
             guard let window = obj.userInfo?["window"] as? Window else { return }
             guard let screen = obj.userInfo?["screen"] as? NSScreen else { return }
 
-            self?.onUIDirectionUpdated(action: action, window: window, screen: screen)
+            self?.onWindowResized(action: action, window: window, screen: screen)
         }
 
         store.restore()
@@ -110,8 +110,8 @@ extension StashManager: StashedWindowsStoreDelegate {
 // MARK: - Stash and Unstash
 
 private extension StashManager {
-    /// Handles `UIDirectionUpdated` notification for the specified window and action.
-    private func onUIDirectionUpdated(action: WindowAction, window: Window, screen: NSScreen) {
+    /// Handles `windowResized` notification for the specified window and action.
+    private func onWindowResized(action: WindowAction, window: Window, screen: NSScreen) {
         if let edge = action.stashEdge {
             guard hasNoAdjacentScreen(on: edge, currentScreen: screen) else {
                 print("StashManager: Can't stash a window if there is an adjacent screen on that side.")
@@ -123,13 +123,13 @@ private extension StashManager {
             stash(windowToStash)
         } else if action.direction == .unstash {
             // No need to reset the frame here: the frame has already been moved to the stash area
-            // by the code that sent the UIDirectionUpdated notification.
+            // by the code that sent the windowResized notification.
             unstash(window.cgWindowID, resestFrame: false, resetFrameAnimated: animate)
         } else if action.direction == .undo {
             guard let action = WindowRecords.getCurrentAction(for: window) else { return }
             guard action.direction != .undo else { return }
 
-            onUIDirectionUpdated(action: action, window: window, screen: screen)
+            onWindowResized(action: action, window: window, screen: screen)
         } else if action.direction.willGrow
             || action.direction.willShrink
             || action.direction.willAdjustSize {
