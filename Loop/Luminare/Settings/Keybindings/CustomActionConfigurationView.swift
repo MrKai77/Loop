@@ -125,7 +125,7 @@ struct CustomActionConfigurationView: View {
         LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: false) { tab in
             HStack(spacing: 6) {
                 tab.image
-                Text(tab.rawValue)
+                Text(title(for: tab))
             }
             .fixedSize()
         }
@@ -321,5 +321,16 @@ struct CustomActionConfigurationView: View {
                     .strokeBorder(Color.getLoopAccent(tone: .normal), lineWidth: 2)
             }
             .clipShape(RoundedRectangle(cornerRadius: 12 - 5))
+    }
+
+    private func title(for tab: Tab) -> String {
+        switch (tab, action.direction == .customStash) {
+        case (.position, _):
+            "Position"
+        case (.size, true):
+            "Unstashed Size"
+        case (.size, false):
+            "Size"
+        }
     }
 }
