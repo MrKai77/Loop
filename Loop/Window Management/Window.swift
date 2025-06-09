@@ -233,7 +233,7 @@ class Window {
     }
 
     /// Check with the `NSRunningApplication` if the app is hidden (⌘H).
-    var isHidden: Bool {
+    var isApplicationHidden: Bool {
         self.nsRunningApplication?.isHidden ?? false
     }
 
