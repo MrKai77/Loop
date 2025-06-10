@@ -41,7 +41,7 @@ struct KeybindItemView: View {
         .init(.init(localized: "Shrink"), WindowDirection.shrink),
         .init(.init(localized: "Grow"), WindowDirection.grow),
         .init(.init(localized: "Move"), WindowDirection.move),
-        .init(.init(localized: "Stash"), WindowDirection.stash),
+        .init(.init(localized: "Stash"), [WindowDirection.stash]),
         .init(.init(localized: "Go Back"), [WindowDirection.initialFrame, WindowDirection.undo])
     ]
 

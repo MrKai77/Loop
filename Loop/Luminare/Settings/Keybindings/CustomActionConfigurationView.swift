@@ -30,7 +30,7 @@ struct CustomActionConfigurationView: View {
     }
 
     private var anchors: [CustomWindowActionAnchor] {
-        if action.direction == .customStash {
+        if action.direction == .stash {
             [.topLeft, .topRight, .left, .right, .bottomLeft, .bottomRight]
         } else {
             [.topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight]
@@ -41,7 +41,7 @@ struct CustomActionConfigurationView: View {
     private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
 
     var sizeModes: [CustomWindowActionSizeMode] {
-        if action.direction == .customStash {
+        if action.direction == .stash {
             [.custom, .preserveSize]
         } else {
             CustomWindowActionSizeMode.allCases
@@ -160,7 +160,7 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder private func positionConfiguration() -> some View {
         LuminareSection {
-            if action.direction != .customStash {
+            if action.direction != .stash {
                 LuminareToggle(
                     "Use coordinates",
                     isOn: Binding(
@@ -194,7 +194,7 @@ struct CustomActionConfigurationView: View {
                             }
                         }
                     ),
-                    columns: action.direction == .customStash ? 2 : 3,
+                    columns: action.direction == .stash ? 2 : 3,
                     roundTop: false
                 ) { anchor in
                     IconView(action: anchor.iconAction)
@@ -324,7 +324,7 @@ struct CustomActionConfigurationView: View {
     }
 
     private func title(for tab: Tab) -> String {
-        switch (tab, action.direction == .customStash) {
+        switch (tab, action.direction == .stash) {
         case (.position, _):
             "Position"
         case (.size, true):

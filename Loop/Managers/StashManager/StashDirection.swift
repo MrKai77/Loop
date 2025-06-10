@@ -16,23 +16,11 @@ enum StashEdge {
 // MARK: - Helpers
 
 extension WindowAction {
-    private var leftEdgeStashDirections: [WindowDirection] {
-        [.stashLeftHalf, .stashTopLeftQuarter, .stashBottomLeftQuarter, .stashLeftThird, .stashLeftTwoThirds]
-    }
-
-    private var rightEdgeStashDirections: [WindowDirection] {
-        [.stashRightHalf, .stashTopRightQuarter, .stashBottomRightQuarter, .stashRightThird, .stashRightTwoThirds]
-    }
-
     var stashEdge: StashEdge? {
         switch direction {
-        case let direction where leftEdgeStashDirections.contains(direction):
+        case .stash where [.left, .topLeft, .bottomLeft].contains(anchor):
             .left
-        case let direction where rightEdgeStashDirections.contains(direction):
-            .right
-        case .customStash where [.left, .topLeft, .bottomLeft].contains(anchor):
-            .left
-        case .customStash where [.right, .topRight, .bottomRight].contains(anchor):
+        case .stash where [.right, .topRight, .bottomRight].contains(anchor):
             .right
         default:
             nil

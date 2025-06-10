@@ -22626,17 +22626,6 @@
         }
       }
     },
-    "Window Direction/Name: Custom Stash" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Custom Stash"
-          }
-        }
-      }
-    },
     "Window Direction/Name: Cycle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25255,112 +25244,13 @@
         }
       }
     },
-    "Window Direction/Name: Stash Bottom Left Quarter" : {
+    "Window Direction/Name: Stash" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Stash Bottom Left Quarter"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Bottom Right Quarter" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Bottom Right Quarter"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Left Half" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Left Half"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Left Third" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Left Third"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Left Two Thirds" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Left Two Thirds"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Right Half" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Right Half"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Right Third" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Right Third"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Right Two Thirds" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Right Two Thirds"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Top Left Quarter" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Top Left Quarter"
-          }
-        }
-      }
-    },
-    "Window Direction/Name: Stash Top Right Quarter" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Stash Top Right Quarter"
+            "value" : "Stash"
           }
         }
       }
