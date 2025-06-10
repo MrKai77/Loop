@@ -361,7 +361,7 @@ extension WindowAction {
                 height: window.frame.height
             )
         } else if direction == .unstash, let window {
-            result = calculateCenterFrame(window, bounds)
+            result = getInitialFrame(window)
         }
 
         return result

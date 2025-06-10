@@ -182,7 +182,7 @@ private extension StashManager {
         print("StashManager: unstash \(window.window)")
 
         if resetFrame {
-            let action = WindowAction(.center)
+            let action = WindowAction(.initialFrame)
             let center = action.getFrame(window: window.window, bounds: window.screen.safeScreenFrame)
 
             window.window.setFrame(center, animate: resetFrameAnimated)
