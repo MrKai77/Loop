@@ -115,7 +115,9 @@ struct CustomActionConfigurationView: View {
                 action.positionMode = .generic
             }
 
-            if action.anchor == nil {
+            if action.anchor == nil, action.direction == .stash {
+                action.anchor = .right
+            } else if action.anchor == nil {
                 action.anchor = .center
             }
         }
