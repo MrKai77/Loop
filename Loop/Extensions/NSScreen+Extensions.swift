@@ -132,31 +132,11 @@ extension NSScreen {
         }
     }
 
-    var hasScreenOnRight: Bool {
-        for otherScreen in NSScreen.screens where otherScreen != self {
-            let otherFrame = otherScreen.frame
-
-            if otherFrame.minX == frame.maxX,
-               otherFrame.minY < frame.maxY,
-               otherFrame.maxY > frame.minY {
-                return true
-            }
-        }
-
-        return false
+    static var rightmostScreen: NSScreen? {
+        NSScreen.screens.max(by: { $0.frame.maxX < $1.frame.maxX })
     }
 
-    var hasScreenOnLeft: Bool {
-        for otherScreen in NSScreen.screens where otherScreen != self {
-            let otherFrame = otherScreen.frame
-
-            if otherFrame.maxX == frame.minX,
-               otherFrame.minY < frame.maxY,
-               otherFrame.maxY > frame.minY {
-                return true
-            }
-        }
-
-        return false
+    static var leftmostScreen: NSScreen? {
+        NSScreen.screens.min(by: { $0.frame.minX < $1.frame.minX })
     }
 }

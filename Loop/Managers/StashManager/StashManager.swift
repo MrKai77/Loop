@@ -113,14 +113,15 @@ private extension StashManager {
     /// Handles `windowResized` notification for the specified window and action.
     private func onWindowResized(action: WindowAction, window: Window, screen: NSScreen) {
         if let edge = action.stashEdge {
-            guard hasNoAdjacentScreen(on: edge, currentScreen: screen) else {
-                print("StashManager: Can't stash a window if there is an adjacent screen on that side.")
-                return
+            // Treat all screens as a unified virtual space. `getScreenForEdge` determines the appropriate screen based on the edge:
+            // the leftmost screen for `.left` or the rightmost screen for `.right`. If the window's current screen differs from the target screen,
+            // the function recursively adjusts the window's position to ensure it is stashed on the correct screen.
+            if let screenForEdge = getScreenForEdge(edge), screen != screenForEdge {
+                onWindowResized(action: action, window: window, screen: screenForEdge)
+            } else {
+                let windowToStash = StashedWindow(window: window, screen: screen, action: action)
+                stash(windowToStash)
             }
-
-            let windowToStash = StashedWindow(window: window, screen: screen, action: action)
-
-            stash(windowToStash)
         } else if action.direction == .unstash {
             // No need to reset the frame here: the frame has already been moved to the stash area
             // by the code that sent the windowResized notification.
@@ -451,12 +452,12 @@ private extension StashManager {
         }
     }
 
-    func hasNoAdjacentScreen(on edge: StashEdge, currentScreen: NSScreen) -> Bool {
+    func getScreenForEdge(_ edge: StashEdge) -> NSScreen? {
         switch edge {
         case .left:
-            !currentScreen.hasScreenOnLeft
+            NSScreen.leftmostScreen
         case .right:
-            !currentScreen.hasScreenOnRight
+            NSScreen.rightmostScreen
         }
     }
 }
