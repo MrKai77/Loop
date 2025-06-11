@@ -177,7 +177,7 @@ private extension StashManager {
         }
     }
 
-    /// Stop monitoring the window. If `resetFrame` is true, the window will be moved in the center of the screen.
+    /// Stop monitoring the window. If `resetFrame` is true, the window will be moved to its initial frame.
     func unstash(_ window: StashedWindow, resetFrame: Bool, resetFrameAnimated: Bool) {
         print("StashManager: unstash \(window.window)")
 
