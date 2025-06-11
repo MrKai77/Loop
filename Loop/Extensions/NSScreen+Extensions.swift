@@ -132,11 +132,11 @@ extension NSScreen {
         }
     }
 
-    static var rightmostScreen: NSScreen? {
-        NSScreen.screens.max(by: { $0.frame.maxX < $1.frame.maxX })
+    static var rightMostScreen: NSScreen? {
+        NSScreen.screens.max { $0.frame.maxX < $1.frame.maxX }
     }
 
-    static var leftmostScreen: NSScreen? {
-        NSScreen.screens.min(by: { $0.frame.minX < $1.frame.minX })
+    static var leftMostScreen: NSScreen? {
+        NSScreen.screens.min { $0.frame.minX < $1.frame.minX }
     }
 }

@@ -155,16 +155,15 @@ class Window {
         focus()
     }
 
-    /**
-     Focuses the window. This will attempt to bring the window to the front and make it the active window.
-
-     - Returns:
-     `true` if the window was successfully focused; `false` otherwise.
-
-     - Description:
-     This method uses a private API to focus the window.
-     The code for this method is derived from the Amethyst source code. Details of its implementation can be found [here](https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468)
-     */
+    ///
+    /// Focuses the window. This will attempt to bring the window to the front and make it the active window.
+    ///
+    /// - Returns:
+    /// `true` if the window was successfully focused; `false` otherwise.
+    ///
+    /// - Description:
+    /// This method uses a private API to focus the window.
+    /// The code for this method is derived from the Amethyst source code. Details of its implementation can be found [here](https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468)
     @discardableResult
     private func focus() -> Bool {
         guard let pid = try? axWindow.getPID() else { return false }

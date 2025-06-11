@@ -125,7 +125,7 @@ private extension StashManager {
         } else if action.direction == .unstash {
             // No need to reset the frame here: the frame has already been moved to the stash area
             // by the code that sent the windowResized notification.
-            unstash(window.cgWindowID, resestFrame: false, resetFrameAnimated: animate)
+            unstash(window.cgWindowID, resetFrame: false, resetFrameAnimated: animate)
         } else if action.direction == .undo {
             guard let action = WindowRecords.getCurrentAction(for: window) else { return }
             guard action.direction != .undo else { return }
@@ -169,9 +169,9 @@ private extension StashManager {
     }
 
     /// Stop monitoring the window with the given `CGWindowID`.
-    func unstash(_ windowID: CGWindowID, resestFrame: Bool, resetFrameAnimated: Bool) {
+    func unstash(_ windowID: CGWindowID, resetFrame: Bool, resetFrameAnimated: Bool) {
         if let windowToUnstash = store.stashed[windowID] {
-            unstash(windowToUnstash, resetFrame: resestFrame, resetFrameAnimated: resetFrameAnimated)
+            unstash(windowToUnstash, resetFrame: resetFrame, resetFrameAnimated: resetFrameAnimated)
         } else {
             unmanage(windowID: windowID)
         }
@@ -193,7 +193,7 @@ private extension StashManager {
 
     func restoreAllStashedWindows(animate: Bool) {
         for stashedWindowID in store.stashed.keys {
-            unstash(stashedWindowID, resestFrame: true, resetFrameAnimated: animate)
+            unstash(stashedWindowID, resetFrame: true, resetFrameAnimated: animate)
         }
     }
 }
@@ -455,9 +455,9 @@ private extension StashManager {
     func getScreenForEdge(_ edge: StashEdge) -> NSScreen? {
         switch edge {
         case .left:
-            NSScreen.leftmostScreen
+            NSScreen.leftMostScreen
         case .right:
-            NSScreen.rightmostScreen
+            NSScreen.rightMostScreen
         }
     }
 }
