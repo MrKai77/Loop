@@ -317,7 +317,9 @@ private extension StashManager {
             let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
 
             if isWindowRevealed {
-                let revealedFrame = window.computeRevealedFrame()
+                // Add a tolerance to make manual window resizing easier for the user.
+                let tolerance: CGFloat = 15
+                let revealedFrame = window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
 
                 // Hide the window if the cursor is neither over the revealedFrame nor the stashedFrame.
                 if !revealedFrame.contains(mouseLocation), !stashedFrame.contains(mouseLocation) {
