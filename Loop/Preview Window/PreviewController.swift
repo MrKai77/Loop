@@ -89,6 +89,16 @@ class PreviewController {
             return
         }
 
+        /// Check screen bounds
+        print("Screen frame: \(screen.frame)")
+        print("Screen safeScreenFrame: \(screen.safeScreenFrame)")
+
+        // Validate screen bounds before proceeding
+        guard screen.safeScreenFrame.isFinite else {
+            print("ERROR: Invalid screen bounds detected!")
+            return
+        }
+
         let targetWindowFrame = action.getFrame(
             window: window,
             bounds: screen.safeScreenFrame,
@@ -96,6 +106,15 @@ class PreviewController {
             isPreview: true
         )
         .flipY(maxY: NSScreen.screens[0].frame.maxY)
+
+        // What is the screen's frame
+        print("Target frame: \(targetWindowFrame)")
+
+        // Validate target frame before setting
+        guard targetWindowFrame.isFinite else {
+            print("ERROR: Invalid target frame calculated!")
+            return
+        }
 
         let isCurrentlyTransparent = windowController.window?.alphaValue == 0
         let shouldBecomeTransparent = targetWindowFrame.size.area == 0

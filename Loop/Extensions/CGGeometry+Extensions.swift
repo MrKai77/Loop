@@ -203,4 +203,14 @@ extension CGRect {
             height: floor(height)
         )
     }
+
+    /// Returns true if the rectangle is finite, false otherwise.
+    var isFinite: Bool {
+        origin.x.isFinite &&
+            origin.y.isFinite &&
+            size.width.isFinite &&
+            size.height.isFinite &&
+            !isNull &&
+            !isInfinite
+    }
 }
