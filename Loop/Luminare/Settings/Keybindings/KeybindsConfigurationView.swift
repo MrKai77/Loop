@@ -19,9 +19,15 @@ struct KeybindsConfigurationView: View {
 
     @Default(.triggerKey) var triggerKey
     @Default(.triggerDelay) var triggerDelay
+    @Default(.cycleBackwardsOnShiftPressed) var cycleBackwardsOnShiftPressed
     @Default(.doubleClickToTrigger) var doubleClickToTrigger
     @Default(.middleClickTriggersLoop) var middleClickTriggersLoop
     @Default(.keybinds) var keybinds
+
+    /// Is there at least one keybind action that is a cycle?
+    private var isCycleActionPresentInKeybinds: Bool {
+        keybinds.contains(where: { $0.cycle != nil })
+    }
 
     var body: some View {
         LuminareSection("Trigger Key") {

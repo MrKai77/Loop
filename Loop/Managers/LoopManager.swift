@@ -34,7 +34,7 @@ class LoopManager: ObservableObject {
 
     @Published var currentAction: WindowAction = .init(.noAction)
     private var parentCycleAction: WindowAction? = nil
-    private var initialMousePosition: CGPoint = .init()
+    private(set) var initialMousePosition: CGPoint = .init()
     private var angleToMouse: Angle = .init(degrees: 0)
     private var distanceToMouse: CGFloat = 0
 
@@ -328,17 +328,23 @@ private extension LoopManager {
         disableHapticFeedback: Bool = false,
         canAdvanceCycle: Bool = true
     ) {
-        // This will allow us to compare different window actions without needing to consider different keybinds/custom names/ids.
-        // This is useful when the radial menu and keybinds have the same set of cycle actions, so we don't need to worry about not having a keybind.
-        var newAction = newAction.stripNonResizingProperties()
+        // Allow cycling backwards only if:
+        // - Shift is not part of the action's keybind
+        // - Shift is not part of the trigger key
+        // - The user has enabled the setting
+        let allowReverseCycle = newAction.keybind.contains(.kVK_Shift) == false
+            && Defaults[.triggerKey].contains(.kVK_Shift) == false
+            && Defaults[.cycleBackwardsOnShiftPressed]
 
         guard
-            currentAction != newAction || newAction.willManipulateExistingWindowFrame,
+            !currentAction.isSameManipulation(as: newAction) || newAction.willManipulateExistingWindowFrame,
             isLoopActive,
             let currentScreen = screenToResizeOn
         else {
             return
         }
+
+        var newAction = newAction
 
         if newAction.direction == .cycle {
             parentCycleAction = newAction
@@ -346,7 +352,7 @@ private extension LoopManager {
             // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
             // This will be set to false when the mouse is *moved* to prevent erratic behavior.
             if canAdvanceCycle {
-                newAction = getNextCycleAction(newAction)
+                newAction = getNextCycleAction(newAction, allowReverseCycle: allowReverseCycle)
             } else {
                 if let cycle = newAction.cycle, !cycle.contains(currentAction) {
                     newAction = cycle.first ?? .init(.noAction)
@@ -452,12 +458,13 @@ private extension LoopManager {
         }
     }
 
-    func getNextCycleAction(_ action: WindowAction) -> WindowAction {
+    func getNextCycleAction(_ action: WindowAction, allowReverseCycle: Bool) -> WindowAction {
         guard let currentCycle = action.cycle else {
             return action
         }
 
-        var nextIndex = 0
+        let shouldCycleBackwards = keybindMonitor.isShiftPressed() && allowReverseCycle
+        var currentIndex: Int? = nil
 
         // If the current action is noAction, we can preserve the index from the last action.
         // This would initially be done by reading the window's records, then would continue by finding the next index from the currentAction.
@@ -465,13 +472,24 @@ private extension LoopManager {
            !currentCycle.contains(currentAction),
            let window = targetWindow,
            let latestRecord = WindowRecords.getCurrentAction(for: window) {
-            nextIndex = (currentCycle.firstIndex(of: latestRecord) ?? -1) + 1
+            currentIndex = currentCycle.firstIndex(of: latestRecord)
         } else {
-            nextIndex = (currentCycle.firstIndex(of: currentAction) ?? -1) + 1
+            currentIndex = currentCycle.firstIndex(of: currentAction)
         }
 
+        guard var nextIndex = currentIndex else {
+            return currentCycle[0]
+        }
+
+        nextIndex += shouldCycleBackwards ? -1 : 1
+
+        // Wrap around the cycle index if we've reached the end or gone before the start.
         if nextIndex >= currentCycle.count {
             nextIndex = 0
+        }
+
+        if nextIndex < 0 {
+            nextIndex = currentCycle.count - 1
         }
 
         return currentCycle[nextIndex]

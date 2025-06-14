@@ -104,7 +104,6 @@ struct Keycorder: View {
         selectionKeybind = []
         isActive = true
         eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp]) { event in
-
             // Handle regular key presses first
             if event.type == .keyDown, !event.isARepeat {
                 if event.keyCode == .kVK_Escape {

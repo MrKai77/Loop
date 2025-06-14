@@ -59,31 +59,48 @@ extension Defaults.Keys {
     static let triggerDelay = Key<Double>("triggerDelay", default: 0, iCloud: true)
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false, iCloud: true)
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false, iCloud: true)
+    static let cycleBackwardsOnShiftPressed = Key<Bool>("cycleBackwardsOnShiftPressed", default: true, iCloud: true)
     static let keybinds = Key<[WindowAction]>(
         "keybinds",
         default: [
             WindowAction(.maximize, keybind: [.kVK_Space]),
             WindowAction(.center, keybind: [.kVK_Return]),
-            WindowAction(.init(localized: "Top Cycle"), [
-                .init(.topHalf),
-                .init(.topThird),
-                .init(.topTwoThirds)
-            ], [.kVK_UpArrow]),
-            WindowAction(.init(localized: "Bottom Cycle"), [
-                .init(.bottomHalf),
-                .init(.bottomThird),
-                .init(.bottomTwoThirds)
-            ], [.kVK_DownArrow]),
-            WindowAction(.init(localized: "Right Cycle"), [
-                .init(.rightHalf),
-                .init(.rightThird),
-                .init(.rightTwoThirds)
-            ], [.kVK_RightArrow]),
-            WindowAction(.init(localized: "Left Cycle"), [
-                .init(.leftHalf),
-                .init(.leftThird),
-                .init(.leftTwoThirds)
-            ], [.kVK_LeftArrow]),
+            WindowAction(
+                .init(localized: "Top Cycle"),
+                cycle: [
+                    .init(.topHalf),
+                    .init(.topThird),
+                    .init(.topTwoThirds)
+                ],
+                keybind: [.kVK_UpArrow]
+            ),
+            WindowAction(
+                .init(localized: "Bottom Cycle"),
+                cycle: [
+                    .init(.bottomHalf),
+                    .init(.bottomThird),
+                    .init(.bottomTwoThirds)
+                ],
+                keybind: [.kVK_DownArrow]
+            ),
+            WindowAction(
+                .init(localized: "Right Cycle"),
+                cycle: [
+                    .init(.rightHalf),
+                    .init(.rightThird),
+                    .init(.rightTwoThirds)
+                ],
+                keybind: [.kVK_RightArrow]
+            ),
+            WindowAction(
+                .init(localized: "Left Cycle"),
+                cycle: [
+                    .init(.leftHalf),
+                    .init(.leftThird),
+                    .init(.leftTwoThirds)
+                ],
+                keybind: [.kVK_LeftArrow]
+            ),
             WindowAction(.topLeftQuarter, keybind: [.kVK_UpArrow, .kVK_LeftArrow]),
             WindowAction(.topRightQuarter, keybind: [.kVK_UpArrow, .kVK_RightArrow]),
             WindowAction(.bottomRightQuarter, keybind: [.kVK_DownArrow, .kVK_RightArrow]),
@@ -120,6 +137,15 @@ extension Defaults.Keys {
     /// Adjust with `defaults write com.MrKai77.Loop snapThreshold -float x`
     /// Reset with `defaults delete com.MrKai77.Loop snapThreshold`
     static let snapThreshold = Key<CGFloat>("snapThreshold", default: 2, iCloud: true)
+
+    /// Adjust with `defaults write com.MrKai77.Loop previewStartingPosition [option]`
+    /// Reset with `defaults delete com.MrKai77.Loop previewStartingPosition`
+    ///
+    /// Available options:
+    /// - `screenCenter`: Center of the screen (default behavior)
+    /// - `radialMenu`: Center of radial menu
+    /// - `actionCenter`: Center of the selected action (e.g. for left half, it will grow from the center of that left half)
+    static let previewStartingPosition = Key<PreviewStartingPosition>("previewStartingPosition", default: .screenCenter, iCloud: true)
 
     // Radial Menu
     // It is not recommended to manually edit these entries yet, as it has not been tested.

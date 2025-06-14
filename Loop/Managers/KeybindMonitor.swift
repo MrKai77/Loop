@@ -100,6 +100,10 @@ class KeybindMonitor {
         flagsEventMonitor = nil
     }
 
+    func isShiftPressed() -> Bool {
+        pressedKeys.contains(.kVK_Shift)
+    }
+
     @discardableResult
     private func performKeybind(event: NSEvent) -> Bool {
         if event.type == .keyUp {

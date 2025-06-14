@@ -97,17 +97,36 @@ class PreviewController {
         )
         .flipY(maxY: NSScreen.screens[0].frame.maxY)
 
-        let shouldBeTransparent = targetWindowFrame.size.area == 0
+        let isCurrentlyTransparent = windowController.window?.alphaValue == 0
+        let shouldBecomeTransparent = targetWindowFrame.size.area == 0
+
+        // If the window is currently hidden, and the next action will present it.
+        if isCurrentlyTransparent, !shouldBecomeTransparent {
+            switch Defaults[.previewStartingPosition] {
+            case .screenCenter:
+                // No-op, this is the default behavior
+                break
+            case .radialMenu:
+                // Center the preview window on the initial mouse position
+                let mousePosition = AppDelegate.loopManager.initialMousePosition
+                let centerFrame: NSRect = .init(origin: mousePosition, size: .zero)
+                windowController.window?.setFrame(centerFrame, display: true)
+            case .actionCenter:
+                // Center the preview window on the action's target frame
+                let centerFrame: NSRect = .init(origin: targetWindowFrame.center, size: .zero)
+                windowController.window?.setFrame(centerFrame, display: true)
+            }
+        }
 
         if let animation = Defaults[.animationConfiguration].previewTimingFunction {
             NSAnimationContext.runAnimationGroup { context in
                 context.timingFunction = animation
                 windowController.window?.animator().setFrame(targetWindowFrame, display: true)
-                windowController.window?.animator().alphaValue = shouldBeTransparent ? 0 : 1
+                windowController.window?.animator().alphaValue = shouldBecomeTransparent ? 0 : 1
             }
         } else {
             windowController.window?.setFrame(targetWindowFrame, display: true)
-            windowController.window?.alphaValue = shouldBeTransparent ? 0 : 1
+            windowController.window?.alphaValue = shouldBecomeTransparent ? 0 : 1
         }
 
         print("New preview window action received: \(action.direction)")

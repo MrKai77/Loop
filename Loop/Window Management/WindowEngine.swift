@@ -58,6 +58,11 @@ enum WindowEngine {
             } else {
                 print("System action not available for \(action.direction)")
             }
+
+            // If the preview wasn't visible, then that means that this is the new live frame.
+            if !Defaults[.previewVisibility] {
+                LoopManager.lastTargetFrame = window.frame
+            }
         }
 
         // If the action is fullscreen, toggle fullscreen then return
