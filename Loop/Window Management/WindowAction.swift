@@ -171,7 +171,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             return false
         }
 
-        if direction == .custom, sizeMode == .initialSize || sizeMode == .preserveSize {
+        if direction.isCustomizable, sizeMode == .initialSize || sizeMode == .preserveSize {
             return false
         }
 
