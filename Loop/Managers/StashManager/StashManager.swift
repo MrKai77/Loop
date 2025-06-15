@@ -116,7 +116,7 @@ private extension StashManager {
             // Treat all screens as a unified virtual space. `getScreenForEdge` determines the appropriate screen based on the edge:
             // the leftmost screen for `.left` or the rightmost screen for `.right`. If the window's current screen differs from the target screen,
             // the function recursively adjusts the window's position to ensure it is stashed on the correct screen.
-            if let screenForEdge = getScreenForEdge(edge), screen != screenForEdge {
+            if let screenForEdge = getScreenForEdge(currentScreen: screen, edge: edge), screen != screenForEdge {
                 onWindowResized(action: action, window: window, screen: screenForEdge)
             } else {
                 let windowToStash = StashedWindow(window: window, screen: screen, action: action)
@@ -454,12 +454,15 @@ private extension StashManager {
         }
     }
 
-    func getScreenForEdge(_ edge: StashEdge) -> NSScreen? {
-        switch edge {
+    func getScreenForEdge(currentScreen: NSScreen, edge: StashEdge) -> NSScreen? {
+        // Two screens are considered in the same "row" if they overlap vertically by at least `threshold` points
+        let threshold: CGFloat = 100
+
+        return switch edge {
         case .left:
-            NSScreen.leftMostScreen
+            currentScreen.leftmostScreenInSameRow(overlapThreshold: threshold)
         case .right:
-            NSScreen.rightMostScreen
+            currentScreen.rightmostScreenInSameRow(overlapThreshold: threshold)
         }
     }
 }
