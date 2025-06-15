@@ -345,6 +345,10 @@ private extension LoopManager {
 
         var newAction = newAction
 
+        if AppDelegate.stashManager.handleIfStashed(newAction, screen: currentScreen) {
+            return
+        }
+
         if newAction.direction == .cycle {
             parentCycleAction = newAction
 

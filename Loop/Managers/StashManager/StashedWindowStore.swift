@@ -50,6 +50,16 @@ extension StashedWindowsStore {
     func markWindowAsHidden(_ id: CGWindowID) {
         revealed.remove(id)
     }
+
+    /// Return the stashed window that match the given `action` and `screen`
+    func stashedWindow(for action: WindowAction, on screen: NSScreen) -> StashedWindow? {
+        for stashedWindow in stashed.values {
+            if stashedWindow.action.isSameManipulation(as: action), stashedWindow.screen.isSameScreen(screen) {
+                return stashedWindow
+            }
+        }
+        return nil
+    }
 }
 
 // MARK: Private methods

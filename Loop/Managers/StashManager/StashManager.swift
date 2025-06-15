@@ -90,6 +90,33 @@ class StashManager {
         unmanage(windowID: id)
     }
 
+    /// Determines whether the given window action should be intercepted by the StashManager.
+    ///
+    /// If the action targets a stashed window that is no longer visible, the currently focused
+    /// window will be stashed in its place. The stashed window is then either revealed or hidden,
+    /// depending on its current state. This allows the StashManager to take over the behavior,
+    /// bypassing the default flow handled by the LoopManager.
+    ///
+    /// - Parameter action: The window action triggered.
+    /// - Returns: `true` if the action is handled by the StashManager and the normal flow should be bypassed; otherwise, `false`.
+    @discardableResult
+    func handleIfStashed(_ action: WindowAction, screen: NSScreen) -> Bool {
+        guard action.direction == .stash else { return false }
+        guard let stashedWindow = store.stashedWindow(for: action, on: screen) else { return false }
+        guard !stashedWindow.window.isWindowHidden, !stashedWindow.window.isApplicationHidden else { return false }
+        guard stashedWindow.screen.isSameScreen(screen) else { return false }
+
+        print("StashManager: Intercepting window action for stashed window \(stashedWindow.window)")
+
+        if store.isWindowRevealed(stashedWindow.id) {
+            hideWindow(stashedWindow, animate: true)
+        } else {
+            revealWindow(stashedWindow, animate: true)
+        }
+
+        return true
+    }
+
     deinit {
         mouseMoveWorkItem?.cancel()
         stopListeningMouseMoved()
@@ -117,6 +144,7 @@ private extension StashManager {
             // the leftmost screen for `.left` or the rightmost screen for `.right`. If the window's current screen differs from the target screen,
             // the function recursively adjusts the window's position to ensure it is stashed on the correct screen.
             if let screenForEdge = getScreenForEdge(currentScreen: screen, edge: edge), screen != screenForEdge {
+                print("StashManager: Attempting to stash window on the \(edge) edge, but \(screen.localizedName) is not the \(edge)most screen. Redirecting to the correct screen.")
                 onWindowResized(action: action, window: window, screen: screenForEdge)
             } else {
                 let windowToStash = StashedWindow(window: window, screen: screen, action: action)
@@ -361,13 +389,15 @@ private extension StashManager {
 
             // Trying to store windowToStash in the same place as stashedWindow.
             // No need for frame comparaison, it will always overlap.
-            if stashedWindow.action.isSameManipulation(as: windowToStash.action) {
+            if stashedWindow.action.isSameManipulation(as: windowToStash.action), stashedWindow.screen.isSameScreen(windowToStash.screen) {
+                print("StashManager: Trying to stash a window in the same place as another one. Replacing…")
                 unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
             } else {
                 let currentFrame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
                 let tolerance = minimumVisibleHeightToKeepWindowStacked
 
                 if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
+                    print("StashManager: Trying to stash a window overlapping another one. Replacing…")
                     unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
                 }
             }
