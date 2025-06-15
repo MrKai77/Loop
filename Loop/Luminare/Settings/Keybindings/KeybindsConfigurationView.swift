@@ -29,6 +29,11 @@ struct KeybindsConfigurationView: View {
         keybinds.contains(where: { $0.cycle != nil })
     }
 
+    /// Is Shift used in the trigger key?
+    var isShiftUsedByTriggerKey: Bool {
+        triggerKey.contains(.kVK_Shift)
+    }
+
     var body: some View {
         LuminareSection("Trigger Key") {
             TriggerKeycorder($triggerKey)
@@ -53,11 +58,21 @@ struct KeybindsConfigurationView: View {
                 in: 0...1,
                 format: .number.precision(.fractionLength(1...1)),
                 clampsLower: true,
-                suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s")),
+                suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s"))
             )
 
             LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
             LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
+
+            if isCycleActionPresentInKeybinds {
+                LuminareToggle(isOn: $cycleBackwardsOnShiftPressed) {
+                    Text("Cycle backward with Shift")
+                        .luminarePopover(hidden: !isShiftUsedByTriggerKey) {
+                            Text("Cycling actions backward will only work\nif Shift isn't in your trigger key")
+                        }
+                        .tint(.blue)
+                }
+            }
         }
 
         LuminareSection("Keybinds") {
