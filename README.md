@@ -64,6 +64,8 @@ Loop can become very powerful when paired with cycles. These enable you to perfo
 
 Hide windows at the screen edge to declutter your workspace. Hover near the edge or use a keybind to access them whenever you need.
 
+<div><video controls src="https://github.com/user-attachments/assets/8749a3bd-7a6f-4844-bb8b-e1eeacbe259c" muted="false"></video></div>
+
 ### Theming
 
 #### Radial Menu
