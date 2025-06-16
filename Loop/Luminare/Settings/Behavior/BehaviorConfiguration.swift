@@ -83,7 +83,7 @@ struct BehaviorConfigurationView: View {
                     Button("Configure padding…") {
                         isPaddingConfigurationViewPresented = true
                     }
-                    .luminareModal(isPresented: $isPaddingConfigurationViewPresented) {
+                    .luminareModalWithPredefinedSheetStyle(isPresented: $isPaddingConfigurationViewPresented, isCompact: false) {
                         PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
                             .frame(width: 400)
                     }

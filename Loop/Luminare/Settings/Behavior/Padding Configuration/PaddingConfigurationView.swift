@@ -18,7 +18,7 @@ struct PaddingConfigurationView: View {
     let range: ClosedRange<Double> = 0...200
 
     var body: some View {
-        Group {
+        VStack(spacing: 12) {
             ScreenView {
                 PaddingPreviewView($paddingModel)
             }
@@ -42,7 +42,8 @@ struct PaddingConfigurationView: View {
             Button("Close") {
                 isPresented = false
             }
-            .buttonStyle(LuminareCompactButtonStyle())
+            .luminareAspectRatio(contentMode: .fill)
+            .buttonStyle(.luminareCompact)
         }
         .onChange(of: paddingModel) { _ in
             // This fixes some weird animations.
@@ -163,24 +164,6 @@ struct PaddingConfigurationView: View {
 
     func screenInsetsPaddingConfiguration() -> some View {
         Group {
-            LuminareSlider(
-                "Window gaps",
-                value: $paddingModel.window.doubleBinding,
-                in: 0...100,
-                format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
-                suffix: Text("px")
-            )
-
-            LuminareSlider(
-                "External bar",
-                value: $paddingModel.externalBar.doubleBinding,
-                in: 0...100,
-                format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
-                suffix: Text("px")
-            )
-
             LuminareSlider(
                 "Window gaps",
                 value: $paddingModel.window.doubleBinding,
