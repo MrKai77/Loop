@@ -69,6 +69,8 @@ class StashManager {
     private var mouseMonitor: NSEventMonitor?
     private var mouseMoveWorkItem: DispatchWorkItem?
 
+    // MARK: - Public methods
+
     func start() {
         Notification.Name.windowResized.onReceive { [weak self] obj in
             guard let action = obj.userInfo?["action"] as? WindowAction else { return }
@@ -115,6 +117,10 @@ class StashManager {
         }
 
         return true
+    }
+
+    func getRevealedFrameForStashedWindow(id: CGWindowID) -> CGRect? {
+        store.stashed[id]?.computeRevealedFrame()
     }
 
     deinit {
