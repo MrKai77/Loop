@@ -43,19 +43,11 @@ struct KeybindsConfigurationView: View {
         .luminareBordered(false)
 
         LuminareSection("Settings") {
-//            LuminareValueAdjuster(
-//                "Trigger delay",
-//                value: $model.triggerDelay,
-//                sliderRange: 0...1,
-//                suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s")),
-//                step: 0.1,
-//                lowerClamp: true,
-//                decimalPlaces: 1
-//            )
             LuminareSlider(
                 "Trigger delay",
                 value: $triggerDelay,
                 in: 0...1,
+                step: 0.1,
                 format: .number.precision(.fractionLength(1...1)),
                 clampsLower: true,
                 suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s"))

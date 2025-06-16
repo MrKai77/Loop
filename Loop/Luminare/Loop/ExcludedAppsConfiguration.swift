@@ -38,6 +38,19 @@ struct ExcludedAppsConfigurationView: View {
             ) { item in
                 AppView(url: item)
                     .equatable()
+            } emptyView: {
+                HStack {
+                    Spacer()
+                    VStack {
+                        Text("No excluded applications")
+                            .font(.title3)
+                        Text("Press \"Add\" to add an application")
+                            .font(.caption)
+                    }
+                    Spacer()
+                }
+                .foregroundStyle(.secondary)
+                .padding()
             }
             .luminareListRoundedCorner(bottom: .always)
         }

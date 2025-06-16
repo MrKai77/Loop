@@ -121,7 +121,7 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
 
     var body: some View {
         LuminareContentView(model: self)
-            .frame(height: 620)
+            .frame(height: 570) // Does not include titlebar height
     }
 
     func open() {
@@ -177,10 +177,9 @@ struct LuminareContentView: View {
 
             LuminarePane {
                 model.currentTab.view()
-                    .transition(.opacity.animation(.easeInOut(duration: 0.1)))
             } header: {
                 HStack {
-                    model.currentTab.image
+                    model.currentTab.decoratedImageView
 
                     Text(model.currentTab.title)
                         .font(.title2)
@@ -209,7 +208,7 @@ struct LuminareContentView: View {
                         .frame(maxHeight: .infinity, alignment: .center)
                     }
                 }
-                //                .animation(luminareAnimation, value: [model.showRadialMenu, model.showPreview])
+                .animation(animation, value: [model.showRadialMenu, model.showPreview])
                 .ignoresSafeArea()
                 .frame(width: 520)
             }
@@ -220,7 +219,7 @@ struct LuminareContentView: View {
                 model.showRadialMenu = true
             }
         }
-        .tint(.getLoopAccent(tone: .normal))
+        .luminareTint(overridingWith: .getLoopAccent(tone: .normal))
         .luminareSliderLayout(.regular)
         .luminareSliderPickerLayout(.regular)
     }
