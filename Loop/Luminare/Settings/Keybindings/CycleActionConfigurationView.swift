@@ -27,6 +27,7 @@ struct CycleActionConfigurationView: View {
         VStack(spacing: 12) {
             LuminareSection(outerPadding: 0) {
                 LuminareTextField("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
+                    .luminareHasBackground(false)
                     .luminareBordered(false)
                     .luminareAspectRatio(contentMode: .fill)
             }

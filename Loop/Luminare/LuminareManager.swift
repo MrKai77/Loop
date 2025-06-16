@@ -220,8 +220,6 @@ struct LuminareContentView: View {
             }
         }
         .luminareTint(overridingWith: .getLoopAccent(tone: .normal))
-        .luminareSliderLayout(.regular)
-        .luminareSliderPickerLayout(.regular)
     }
 }
 

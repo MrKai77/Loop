@@ -75,6 +75,7 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder private func configurationSections() -> some View {
         LuminareSection(outerPadding: 0) {
             LuminareTextField("Custom Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
+                .luminareHasBackground(false)
                 .luminareBordered(false)
                 .luminareAspectRatio(contentMode: .fill)
         }
