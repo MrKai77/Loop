@@ -51,7 +51,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // Move
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
 
-    // Stash (Thirds)
+    // Stash
     case stash = "Stash"
     case unstash = "Unstash"
 
