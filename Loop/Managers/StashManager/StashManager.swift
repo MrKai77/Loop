@@ -347,39 +347,50 @@ private extension StashManager {
     }
 
     /// Handles mouse movement events to reveal or hide stashed windows.
-    /// We use the fact that `WindowEngine.windowList` returns windows sorted by z-index.
-    /// This sorting is essential because if multiple stashed windows overlap and the cursor
-    /// is over their shared area, we should only reveal the topmost window.
     func processMouseMovement() {
         let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+        let windows = getZSortedStashedWindows()
 
-        // get stashedWindows sorted by z-index
-        let zIndexSortedStashedWindows = WindowEngine.windowList.compactMap { store.stashed[$0.cgWindowID] }
-
-        for window in zIndexSortedStashedWindows {
-            let isWindowRevealed = store.isWindowRevealed(window.id)
-            let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-
-            if isWindowRevealed {
-                // Add a tolerance to make manual window resizing easier for the user.
-                let tolerance: CGFloat = 15
-                let revealedFrame = window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
-
-                // Hide the window if the cursor is neither over the revealedFrame nor the stashedFrame.
-                if !revealedFrame.contains(mouseLocation), !stashedFrame.contains(mouseLocation) {
+        for window in windows {
+            if store.isWindowRevealed(window.id) {
+                if shouldHide(window: window, for: mouseLocation) {
                     hideWindow(window, animate: animate)
                 } else {
-                    // If the cursor is over the topmost revealed window, no need to process other windows below.
                     break
                 }
-            } else if stashedFrame.contains(mouseLocation) {
-                // The cursor is over the topmost stashed window that should be revealed.
+            } else if isMouseOverStashed(window: window, location: mouseLocation) {
+                // The cursor is over the topmost stashed window that should be revealed
                 // revealWindow will move it on screen and hide any other revealed window.
                 revealWindow(window, animate: animate)
                 // Only one window can be revealed at a time, so stop processing.
                 break
             }
         }
+    }
+
+    /// Returns the list of stashed windows sorted by their z-index (front to back).
+    /// This sorting is essential because if multiple stashed windows overlap and the cursor
+    /// is over their shared area, we should only reveal the topmost window.
+    private func getZSortedStashedWindows() -> [StashedWindow] {
+        // Leverage the fact that WindowEngine returns windows sorted by z-index.
+        // Map WindowEngine.windowList to store.stashed to retrieve the stashed windows in z-index order.
+        WindowEngine.windowList.compactMap { store.stashed[$0.cgWindowID] }
+    }
+
+    /// Determines whether a revealed window should be hidden based on the mouse location.
+    /// Adds a tolerance to the revealed frame to avoid hiding the window during minor cursor movement and on resize.
+    private func shouldHide(window: StashedWindow, for location: CGPoint) -> Bool {
+        // Hide the window if the cursor is neither over the revealedFrame nor the stashedFrame.
+        let tolerance: CGFloat = 15
+        let revealedFrame = window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
+        let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
+        return !revealedFrame.contains(location) && !stashedFrame.contains(location)
+    }
+
+    /// Checks if the mouse is currently hovering over the stashed frame of a window.
+    private func isMouseOverStashed(window: StashedWindow, location: CGPoint) -> Bool {
+        let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
+        return stashedFrame.contains(location)
     }
 }
 
