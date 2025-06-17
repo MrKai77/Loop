@@ -141,6 +141,9 @@ struct BehaviorConfigurationView: View {
         .onReceive(.systemWindowManagerStateChanged) { _ in
             model.useSystemWindowManagerWhenAvailable = Defaults[.useSystemWindowManagerWhenAvailable]
         }
+        .onChange(of: model.stashedWindowVisiblePadding) { _ in
+            AppDelegate.stashManager.onConfigurationChanged()
+        }
 
         LuminareSection("Cursor") {
             LuminareToggle(

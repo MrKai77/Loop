@@ -27,7 +27,7 @@ import SwiftUI
 /// ## Constants:
 /// - `mouseMovedDebounceInterval`: The minimum time interval (in seconds) between processing consecutive mouse move events.
 /// - `revealThrottleInterval`: The minimum time interval (in seconds) between revealing or hiding actions for a specific window.
-/// - `minimunVisibleHeightToKeepWindowStacked`:
+/// - `minimumVisibleHeightToKeepWindowStacked`:
 ///     - The minimum required visible vertical height (in points) between two stashed windows on the same screen edge.
 ///     - Ensures that multiple stashed windows do not overlap too much vertically.
 ///     - Allows the user to move the mouse into the stash area and target a specific window, even if windows are stacked.
@@ -90,6 +90,13 @@ class StashManager {
 
     func onWindowDragged(_ id: CGWindowID) {
         unmanage(windowID: id)
+    }
+
+    func onConfigurationChanged() {
+        for stashedWindow in store.stashed.values {
+            let frame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
+            stashedWindow.window.setFrame(frame, animate: animate)
+        }
     }
 
     /// Determines whether the given window action should be intercepted by the StashManager.
@@ -248,7 +255,10 @@ private extension StashManager {
 
         let frame = window.computeRevealedFrame()
 
-        window.window.activate()
+        if shiftFocusWhenStashed {
+            window.window.activate()
+        }
+
         store.markWindowAsRevealed(window.id)
         window.window.setFrame(frame, animate: animate)
 
@@ -312,7 +322,7 @@ private extension StashManager {
 
         print("StashManager: Listening for mouse moved events…")
 
-        mouseMonitor = NSEventMonitor(scope: .global, eventMask: .mouseMoved) { [weak self] _ in
+        mouseMonitor = NSEventMonitor(scope: .all, eventMask: .mouseMoved) { [weak self] _ in
             self?.handleMouseMoved()
             return nil
         }
