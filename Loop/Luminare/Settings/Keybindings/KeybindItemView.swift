@@ -77,8 +77,13 @@ struct KeybindItemView: View {
                         })
                         .buttonStyle(.plain)
                         .luminareModal(isPresented: $isConfiguringCustom) {
-                            CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
-                                .frame(width: 400)
+                            if keybind.direction == .custom {
+                                CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+                                    .frame(width: 400)
+                            } else {
+                                StashActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+                                    .frame(width: 400)
+                            }
                         }
                         .help("Customize this keybind's custom frame.")
                     }

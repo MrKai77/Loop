@@ -1,15 +1,16 @@
 //
-//  CustomActionConfigurationView.swift
+//  StashActionConfigurationView.swift
 //  Loop
 //
-//  Created by Kai Azim on 2024-04-27.
+//  Created by Guillaume Clédat on 19/06/2025.
 //
 
 import Defaults
+import Foundation
 import Luminare
 import SwiftUI
 
-struct CustomActionConfigurationView: View {
+struct StashActionConfigurationView: View {
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
 
@@ -17,7 +18,7 @@ struct CustomActionConfigurationView: View {
     @State private var currentTab: Tab = .position
 
     private enum Tab: LocalizedStringKey, CaseIterable {
-        case position = "Position", size = "Size"
+        case position = "Position", size = "Unstashed Size"
 
         var image: Image {
             switch self {
@@ -29,9 +30,15 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    private let anchors: [CustomWindowActionAnchor] = [
-        .topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight
-    ]
+    private let defaultAnchor: CustomWindowActionAnchor = .topLeft
+
+    private var anchors: [CustomWindowActionAnchor] {
+        [.topLeft, .topRight, .left, .right, .bottomLeft, .bottomRight]
+    }
+
+    private var sizeModes: [CustomWindowActionSizeMode] {
+        [.custom, .preserveSize]
+    }
 
     private let previewController = PreviewController()
     private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
@@ -71,7 +78,6 @@ struct CustomActionConfigurationView: View {
 
         LuminareSection {
             tabPicker()
-            unitToggle()
         }
 
         Group {
@@ -104,13 +110,13 @@ struct CustomActionConfigurationView: View {
             }
 
             if action.anchor == nil {
-                action.anchor = .center
+                action.anchor = defaultAnchor
             }
         }
     }
 
     @ViewBuilder private func tabPicker() -> some View {
-        LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: false) { tab in
+        LuminarePicker(elements: Tab.allCases, selection: $currentTab, columns: 2, roundBottom: true) { tab in
             HStack(spacing: 6) {
                 tab.image
                 Text(tab.rawValue)
@@ -148,31 +154,12 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder private func positionConfiguration() -> some View {
         LuminareSection {
-            LuminareToggle(
-                "Use coordinates",
-                isOn: Binding(
-                    get: {
-                        action.positionMode == .coordinates
-                    },
-                    set: { newValue in
-                        withAnimation(LuminareConstants.animation) {
-                            action.positionMode = newValue ? .coordinates : .generic
-                        }
-                    }
-                )
-            )
-
             if action.positionMode ?? .generic == .generic {
                 LuminarePicker(
                     elements: anchors,
                     selection: Binding(
                         get: {
-                            // since center/macOS center use the same icon on the picker
-                            if action.anchor == .macOSCenter {
-                                return .center
-                            }
-
-                            return action.anchor ?? .center
+                            action.anchor ?? defaultAnchor
                         },
                         set: { newValue in
                             withAnimation(LuminareConstants.animation) {
@@ -180,25 +167,10 @@ struct CustomActionConfigurationView: View {
                             }
                         }
                     ),
-                    columns: 3,
+                    columns: action.direction == .stash ? 2 : 3,
                     roundTop: false
                 ) { anchor in
                     IconView(action: anchor.iconAction)
-                }
-
-                if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
-                    LuminareToggle(
-                        "Use macOS center",
-                        info: WindowDirection.macOSCenter.infoView,
-                        isOn: Binding(
-                            get: {
-                                action.anchor == .macOSCenter
-                            },
-                            set: {
-                                action.anchor = $0 ? .macOSCenter : .center
-                            }
-                        )
-                    )
                 }
             } else {
                 LuminareValueAdjuster(
@@ -241,7 +213,7 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder private func sizeConfiguration() -> some View {
         LuminareSection {
             LuminarePicker(
-                elements: CustomWindowActionSizeMode.allCases,
+                elements: sizeModes,
                 selection: Binding(
                     get: {
                         action.sizeMode ?? .custom
@@ -252,7 +224,7 @@ struct CustomActionConfigurationView: View {
                         }
                     }
                 ),
-                columns: 3,
+                columns: sizeModes.count,
                 roundBottom: action.sizeMode != .custom
             ) { mode in
                 VStack(spacing: 4) {
@@ -263,6 +235,8 @@ struct CustomActionConfigurationView: View {
             }
 
             if action.sizeMode ?? .custom == .custom {
+                unitToggle()
+
                 LuminareValueAdjuster(
                     "Width",
                     value: Binding(
