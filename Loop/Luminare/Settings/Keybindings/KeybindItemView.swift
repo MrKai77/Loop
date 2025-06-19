@@ -161,7 +161,7 @@ struct KeybindItemView: View {
             searchText = ""
         }
         .onChange(of: keybind.direction) { _ in
-            if keybind.direction == .custom {
+            if keybind.direction.isCustomizable {
                 isConfiguringCustom = true
             }
             if keybind.direction == .cycle {

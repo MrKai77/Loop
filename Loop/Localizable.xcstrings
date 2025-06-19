@@ -20621,6 +20621,9 @@
         }
       }
     },
+    "That keybind is already being used by another stash keybind." : {
+
+    },
     "Theming" : {
       "extractionState" : "manual",
       "localizations" : {

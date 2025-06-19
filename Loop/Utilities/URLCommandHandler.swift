@@ -312,7 +312,7 @@ final class URLCommandHandler {
         writeToOutput("Processing direction: \(directionStr)")
 
         // First check if this is a custom action being called via direction
-        if directionStr.hasPrefix("custom") {
+        if directionStr.hasPrefix("custom") || directionStr.hasPrefix("stash") {
             handleActionCommand(parameters)
             return
         }
@@ -459,7 +459,7 @@ final class URLCommandHandler {
         }
 
         // First check for custom actions by name
-        let customKeybinds = Defaults[.keybinds].filter { $0.direction == .custom && $0.name != nil }
+        let customKeybinds = Defaults[.keybinds].filter { $0.direction.isCustomizable && $0.name != nil }
         if let customAction = customKeybinds.first(where: { ($0.name?.lowercased() ?? "") == actionStr }) {
             writeToOutput("Executing custom action: \(customAction.name ?? "unnamed")")
 
@@ -499,6 +499,17 @@ final class URLCommandHandler {
         if !customKeybinds.isEmpty {
             items.append("Custom Actions:")
             items.append(contentsOf: customKeybinds.compactMap { keybind in
+                guard let name = keybind.name else { return nil }
+                return "  • loop://action/\(name.lowercased())"
+            })
+            items.append("")
+        }
+
+        // Get any stash keybinds with names and custom direction
+        let stashKeybinds = Defaults[.keybinds].filter { $0.direction == .stash && $0.name?.isEmpty == false }
+        if !stashKeybinds.isEmpty {
+            items.append("Stash Actions:")
+            items.append(contentsOf: stashKeybinds.compactMap { keybind in
                 guard let name = keybind.name else { return nil }
                 return "  • loop://action/\(name.lowercased())"
             })
@@ -583,6 +594,16 @@ final class URLCommandHandler {
                 })
             }
 
+            // Get any stash keybinds with names and custom direction
+            let stashKeybinds = Defaults[.keybinds].filter { $0.direction == .stash && $0.name?.isEmpty == false }
+            if !stashKeybinds.isEmpty {
+                items.append("\nStash Actions:")
+                items.append(contentsOf: stashKeybinds.compactMap { keybind in
+                    guard let name = keybind.name else { return nil }
+                    return "  • loop://action/\(name.lowercased())"
+                })
+            }
+
             let categories: [(String, [WindowDirection])] = [
                 ("General Actions", Array(WindowDirection.general.dropFirst(3))),
                 ("Halves", WindowDirection.halves),
@@ -627,6 +648,16 @@ final class URLCommandHandler {
             if !customKeybinds.isEmpty {
                 items.append("\nCustom Actions:")
                 items.append(contentsOf: customKeybinds.compactMap { keybind in
+                    guard let name = keybind.name else { return nil }
+                    return "  • loop://action/\(name.lowercased())"
+                })
+            }
+
+            // Get any stash keybinds with names and custom direction
+            let stashKeybinds = Defaults[.keybinds].filter { $0.direction == .stash && $0.name?.isEmpty == false }
+            if !stashKeybinds.isEmpty {
+                items.append("\nStash Actions:")
+                items.append(contentsOf: stashKeybinds.compactMap { keybind in
                     guard let name = keybind.name else { return nil }
                     return "  • loop://action/\(name.lowercased())"
                 })
