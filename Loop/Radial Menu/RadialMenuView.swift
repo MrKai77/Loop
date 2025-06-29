@@ -90,7 +90,7 @@ struct RadialMenuView: View {
                                     .compositingGroup()
                                     .opacity(
                                         !currentAction.direction.hasRadialMenuAngle ||
-                                            currentAction.direction == .custom ?
+                                            currentAction.direction.isCustomizable ?
                                             0 : 1
                                     )
                                 }

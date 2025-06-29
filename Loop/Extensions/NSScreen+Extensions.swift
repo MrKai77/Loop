@@ -89,6 +89,10 @@ extension NSScreen {
     var menubarHeight: CGFloat {
         frame.maxY - visibleFrame.maxY
     }
+
+    func isSameScreen(_ other: NSScreen) -> Bool {
+        displayID == other.displayID
+    }
 }
 
 // MARK: - Calculate physical screen size
@@ -126,5 +130,68 @@ extension NSScreen {
             // https://developer.apple.com/documentation/coregraphics/1456599-cgdisplayscreensize?language=objc
             return CGSize(width: 72.0, height: 72.0)
         }
+    }
+}
+
+// MARK: - Screen overlap
+
+extension NSScreen {
+    private func verticalOverlap(with other: NSScreen) -> CGFloat {
+        let a = frame
+        let b = other.frame
+
+        let top = max(a.minY, b.minY)
+        let bottom = min(a.maxY, b.maxY)
+        return max(0, bottom - top)
+    }
+
+    private func screensInSameRow(screens: [NSScreen], overlapThreshold: CGFloat = 10.0) -> [NSScreen] {
+        screens.filter { verticalOverlap(with: $0) >= overlapThreshold }
+    }
+
+    func leftmostScreenInSameRow(overlapThreshold: CGFloat = 10.0) -> NSScreen {
+        let sameRowScreens = screensInSameRow(screens: NSScreen.screens, overlapThreshold: overlapThreshold)
+
+        let leftCandidates = sameRowScreens.filter { $0.frame.maxX <= self.frame.minX }
+
+        guard !leftCandidates.isEmpty else {
+            return self
+        }
+
+        var bestScreen: NSScreen? = nil
+        var bestOverlap: CGFloat = -1
+
+        for screen in leftCandidates {
+            let overlap = verticalOverlap(with: screen)
+            if overlap > bestOverlap || (overlap == bestOverlap && screen.frame.minX < bestScreen?.frame.minX ?? .infinity) {
+                bestScreen = screen
+                bestOverlap = overlap
+            }
+        }
+
+        return bestScreen ?? self
+    }
+
+    func rightmostScreenInSameRow(overlapThreshold: CGFloat = 10.0) -> NSScreen {
+        let sameRowScreens = screensInSameRow(screens: NSScreen.screens, overlapThreshold: overlapThreshold)
+
+        let rightCandidates = sameRowScreens.filter { $0.frame.minX >= self.frame.maxX }
+
+        guard !rightCandidates.isEmpty else {
+            return self
+        }
+
+        var bestScreen: NSScreen? = nil
+        var bestOverlap: CGFloat = -1
+
+        for screen in rightCandidates {
+            let overlap = verticalOverlap(with: screen)
+            if overlap > bestOverlap || (overlap == bestOverlap && screen.frame.maxX > bestScreen?.frame.maxX ?? -.infinity) {
+                bestScreen = screen
+                bestOverlap = overlap
+            }
+        }
+
+        return bestScreen ?? self
     }
 }

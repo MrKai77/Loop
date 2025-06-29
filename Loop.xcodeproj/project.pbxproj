@@ -10,6 +10,7 @@
 		2A4D6F682DFE7A99002E3B6F /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A4D6F672DFE7A99002E3B6F /* Luminare */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; settings = {ATTRIBUTES = (Required, ); }; };
+		F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06D76892DFF7A77007EEDA9 /* SkyLight.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		A894B0C62C4B31AA00B4CE6F /* CONTRIBUTORS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTORS.md; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E6D1FC2A4155DC005751D4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		F06D76892DFF7A77007EEDA9 /* SkyLight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyLight.framework; path = ../../../../System/Library/PrivateFrameworks/SkyLight.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -42,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				2A4D6F682DFE7A99002E3B6F /* Luminare in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
@@ -54,6 +57,7 @@
 		A883642D298B7288005D6C19 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F06D76892DFF7A77007EEDA9 /* SkyLight.framework */,
 				A883642E298B7288005D6C19 /* ServiceManagement.framework */,
 			);
 			name = Frameworks;
@@ -356,6 +360,10 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 			};
 			name = Debug;
 		};
@@ -391,6 +399,10 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 			};
 			name = Release;
 		};

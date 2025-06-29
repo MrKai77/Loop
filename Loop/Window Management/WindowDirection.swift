@@ -51,6 +51,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // Move
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
 
+    // Stash
+    case stash = "Stash"
+    case unstash = "Unstash"
+
     // Custom Actions
     case custom = "Custom", cycle = "Cycle"
 
@@ -75,6 +79,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var willMove: Bool { WindowDirection.move.contains(self) }
     var willMaximize: Bool { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth].contains(self) }
     var willCenter: Bool { [.center, .macOSCenter, .verticalCenterHalf, .horizontalCenterHalf].contains(self) }
+    var isCustomizable: Bool { [.custom, .stash].contains(self) }
 
     var hasRadialMenuAngle: Bool {
         let noAngleActions: [WindowDirection] = [.noAction, .minimize, .hide, .initialFrame, .undo, .cycle]

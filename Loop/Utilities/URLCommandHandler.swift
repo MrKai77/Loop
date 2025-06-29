@@ -312,7 +312,7 @@ final class URLCommandHandler {
         writeToOutput("Processing direction: \(directionStr)")
 
         // First check if this is a custom action being called via direction
-        if directionStr.hasPrefix("custom") {
+        if directionStr.hasPrefix("custom") || directionStr.hasPrefix("stash") {
             handleActionCommand(parameters)
             return
         }
@@ -355,7 +355,7 @@ final class URLCommandHandler {
 
             let isLoop = app.bundleIdentifier == Bundle.main.bundleIdentifier
             let isRegular = app.activationPolicy == .regular
-            let isVisible = !win.isHidden && !win.minimized
+            let isVisible = !win.isApplicationHidden && !win.minimized
 
             logWindowDetails(win, app, isLoop, isRegular, isVisible)
 
@@ -459,14 +459,14 @@ final class URLCommandHandler {
         }
 
         // First check for custom actions by name
-        let customKeybinds = Defaults[.keybinds].filter { $0.direction == .custom && $0.name != nil }
+        let customKeybinds = Defaults[.keybinds].filter { $0.direction.isCustomizable && $0.name != nil }
         if let customAction = customKeybinds.first(where: { ($0.name?.lowercased() ?? "") == actionStr }) {
             writeToOutput("Executing custom action: \(customAction.name ?? "unnamed")")
 
             // Try multiple methods to get the target window
             let targetWindow = findTargetWindow(from: WindowEngine.windowList.filter { win in
                 guard let app = win.nsRunningApplication else { return false }
-                return app.activationPolicy == .regular && !win.isHidden && !win.minimized
+                return app.activationPolicy == .regular && !win.isApplicationHidden && !win.minimized
             })
 
             if let window = targetWindow,
@@ -499,6 +499,17 @@ final class URLCommandHandler {
         if !customKeybinds.isEmpty {
             items.append("Custom Actions:")
             items.append(contentsOf: customKeybinds.compactMap { keybind in
+                guard let name = keybind.name else { return nil }
+                return "  • loop://action/\(name.lowercased())"
+            })
+            items.append("")
+        }
+
+        // Get any stash keybinds with names and custom direction
+        let stashKeybinds = Defaults[.keybinds].filter { $0.direction == .stash && $0.name?.isEmpty == false }
+        if !stashKeybinds.isEmpty {
+            items.append("Stash Actions:")
+            items.append(contentsOf: stashKeybinds.compactMap { keybind in
                 guard let name = keybind.name else { return nil }
                 return "  • loop://action/\(name.lowercased())"
             })
@@ -583,6 +594,16 @@ final class URLCommandHandler {
                 })
             }
 
+            // Get any stash keybinds with names and custom direction
+            let stashKeybinds = Defaults[.keybinds].filter { $0.direction == .stash && $0.name?.isEmpty == false }
+            if !stashKeybinds.isEmpty {
+                items.append("\nStash Actions:")
+                items.append(contentsOf: stashKeybinds.compactMap { keybind in
+                    guard let name = keybind.name else { return nil }
+                    return "  • loop://action/\(name.lowercased())"
+                })
+            }
+
             let categories: [(String, [WindowDirection])] = [
                 ("General Actions", Array(WindowDirection.general.dropFirst(3))),
                 ("Halves", WindowDirection.halves),
@@ -632,6 +653,16 @@ final class URLCommandHandler {
                 })
             }
 
+            // Get any stash keybinds with names and custom direction
+            let stashKeybinds = Defaults[.keybinds].filter { $0.direction == .stash && $0.name?.isEmpty == false }
+            if !stashKeybinds.isEmpty {
+                items.append("\nStash Actions:")
+                items.append(contentsOf: stashKeybinds.compactMap { keybind in
+                    guard let name = keybind.name else { return nil }
+                    return "  • loop://action/\(name.lowercased())"
+                })
+            }
+
             items.append("\nKeybind Commands:")
             items.append(contentsOf: Defaults[.keybinds].compactMap { keybind in
                 guard let name = keybind.name else { return nil }
@@ -661,7 +692,7 @@ final class URLCommandHandler {
         if let lastWindow = lastActiveWindow,
            let app = lastWindow.nsRunningApplication,
            app.bundleIdentifier != Bundle.main.bundleIdentifier,
-           !lastWindow.isHidden, !lastWindow.minimized,
+           !lastWindow.isApplicationHidden, !lastWindow.minimized,
            let lastTime = lastActiveTime,
            lastTime.timeIntervalSinceNow > -5 {
             writeToOutput("[URLHandler] Using last active window: \(lastWindow.title ?? "unknown")")

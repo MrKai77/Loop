@@ -16,7 +16,6 @@ class LoopManager: ObservableObject {
     static var lastTargetFrame: CGRect = .zero
 
     private let keybindMonitor = KeybindMonitor.shared
-
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
@@ -149,7 +148,12 @@ private extension LoopManager {
         }
 
         if let window = targetWindow {
-            LoopManager.lastTargetFrame = window.frame
+            // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
+            if let frame = AppDelegate.stashManager.getRevealedFrameForStashedWindow(id: window.cgWindowID) {
+                LoopManager.lastTargetFrame = frame
+            } else {
+                LoopManager.lastTargetFrame = window.frame
+            }
         }
 
         isLoopActive = true
@@ -345,6 +349,10 @@ private extension LoopManager {
         }
 
         var newAction = newAction
+
+        if AppDelegate.stashManager.handleIfStashed(newAction, screen: currentScreen) {
+            return
+        }
 
         if newAction.direction == .cycle {
             parentCycleAction = newAction

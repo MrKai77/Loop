@@ -90,6 +90,12 @@ struct BehaviorConfigurationView: View {
                 }
             }
         }
+        .onReceive(.systemWindowManagerStateChanged) { _ in
+            model.useSystemWindowManagerWhenAvailable = Defaults[.useSystemWindowManagerWhenAvailable]
+        }
+        .onChange(of: model.stashedWindowVisiblePadding) { _ in
+            AppDelegate.stashManager.onConfigurationChanged()
+        }
 
         LuminareSection("Cursor") {
             LuminareToggle(
@@ -119,6 +125,18 @@ struct BehaviorConfigurationView: View {
                     suffix: Text("px")
                 )
             }
+        }
+
+        LuminareSection("Stash") {
+            LuminareToggle("Animated", isOn: $model.animateStashedWindows)
+            LuminareValueAdjuster(
+                "Peek size",
+                value: $model.stashedWindowVisiblePadding,
+                sliderRange: 1...200,
+                suffix: "px",
+                lowerClamp: true
+            )
+            LuminareToggle("Shift focus when stashed", isOn: $model.shiftFocusWhenStashed)
         }
     }
 }

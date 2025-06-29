@@ -182,15 +182,17 @@ struct Keycorder: View {
             for keybind in Defaults[.keybinds] where
                 keybind.keybind == selectionKeybind {
                 willSet = false
-                if keybind.direction == .custom {
-                    if let name = keybind.name {
-                        self.errorMessage = "That keybind is already being used by \(name)."
-                    } else {
-                        self.errorMessage = "That keybind is already being used by another custom keybind."
-                    }
+
+                if let name = keybind.name, !name.isEmpty {
+                    self.errorMessage = "That keybind is already being used by \(name)."
+                } else if keybind.direction == .custom {
+                    self.errorMessage = "That keybind is already being used by another custom keybind."
+                } else if keybind.direction == .stash {
+                    self.errorMessage = "That keybind is already being used by another stash keybind."
                 } else {
                     self.errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
                 }
+
                 self.shouldShake.toggle()
                 self.shouldError = true
                 break

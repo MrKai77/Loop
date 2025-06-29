@@ -11,6 +11,17 @@ import SwiftUI
 @_silgen_name("_AXUIElementGetWindow") @discardableResult
 func _AXUIElementGetWindow(_ axUiElement: AXUIElement, _ wid: inout CGWindowID) -> AXError
 
+@_silgen_name("GetProcessForPID") @discardableResult
+func GetProcessForPID(_ pid: pid_t, _ psn: inout ProcessSerialNumber) -> OSStatus
+
+@_silgen_name("_SLPSSetFrontProcessWithOptions") @discardableResult
+func _SLPSSetFrontProcessWithOptions(_ psn: inout ProcessSerialNumber, _ wid: UInt32, _ mode: UInt32) -> CGError
+
+@_silgen_name("SLPSPostEventRecordTo") @discardableResult
+func SLPSPostEventRecordTo(_ psn: inout ProcessSerialNumber, _ bytes: inout UInt8) -> CGError
+
+let kCPSUserGenerated: UInt32 = 0x200
+
 enum WindowError: Error {
     case invalidWindow
 
@@ -131,19 +142,62 @@ class Window {
 
     /// Activate the window. This will bring it to the front and focus it if possible
     func activate() {
-        do {
-            // First activate the application to ensure proper window management context
-            if let runningApplication = self.nsRunningApplication {
-                runningApplication.activate(options: .activateIgnoringOtherApps)
-            }
-
-            // Then set the window as main after a brief delay to ensure proper ordering
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                try? self.axWindow.setValue(.main, value: true)
-            }
-        } catch {
-            print("Failed to activate window: \(error.localizedDescription)")
+        // First activate the application to ensure proper window management context
+        if let runningApplication = self.nsRunningApplication {
+            runningApplication.activate(options: .activateIgnoringOtherApps)
         }
+
+        // Then set the window as main after a brief delay to ensure proper ordering
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            try? self.axWindow.setValue(.main, value: true)
+        }
+
+        focus()
+    }
+
+    ///
+    /// Focuses the window. This will attempt to bring the window to the front and make it the active window.
+    ///
+    /// - Returns:
+    /// `true` if the window was successfully focused; `false` otherwise.
+    ///
+    /// - Description:
+    /// This method uses a private API to focus the window.
+    /// The code for this method is derived from the Amethyst source code. Details of its implementation can be found [here](https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468)
+    @discardableResult
+    private func focus() -> Bool {
+        guard let pid = try? axWindow.getPID() else { return false }
+
+        var wid = cgWindowID
+        var psn = ProcessSerialNumber()
+        let status = GetProcessForPID(pid, &psn)
+
+        guard status == noErr else {
+            return false
+        }
+
+        var cgStatus = _SLPSSetFrontProcessWithOptions(&psn, wid, kCPSUserGenerated)
+
+        guard cgStatus == .success else {
+            return false
+        }
+
+        for byte in [0x01, 0x02] {
+            var bytes = [UInt8](repeating: 0, count: 0xF8)
+            bytes[0x04] = 0xF8
+            bytes[0x08] = UInt8(byte)
+            bytes[0x3A] = 0x10
+            memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
+            memset(&bytes[0x20], 0xFF, 0x10)
+            cgStatus = bytes.withUnsafeMutableBufferPointer { pointer in
+                SLPSPostEventRecordTo(&psn, &pointer.baseAddress!.pointee)
+            }
+            guard cgStatus == .success else {
+                return false
+            }
+        }
+
+        return true
     }
 
     var isAppExcluded: Bool {
@@ -177,8 +231,37 @@ class Window {
         fullscreen = !fullscreen
     }
 
-    var isHidden: Bool {
+    /// Check with the `NSRunningApplication` if the app is hidden (⌘H).
+    var isApplicationHidden: Bool {
         self.nsRunningApplication?.isHidden ?? false
+    }
+
+    /// Checks if the app has any visible windows using the `CGWindow` API.
+    ///
+    /// This is useful because `NSRunningApplication.isHidden` might return `false`
+    /// even when the app has no visible windows (for example, if it's a menu bar app).
+    /// This method iterates through the list of on-screen windows and checks if
+    /// any window belongs to this application and is visible.
+    ///
+    /// - Returns: `true` if no visible windows are found (i.e., the app is "hidden"); `false` otherwise.
+    var isWindowHidden: Bool {
+        let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
+
+        guard let windowListInfo = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
+            return true
+        }
+
+        for windowInfo in windowListInfo {
+            if let pid = windowInfo[kCGWindowOwnerPID as String] as? pid_t,
+               let nsRunningApplication,
+               pid == nsRunningApplication.processIdentifier,
+               let isVisible = windowInfo[kCGWindowIsOnscreen as String] as? Bool,
+               isVisible {
+                return false
+            }
+        }
+
+        return true
     }
 
     @discardableResult
@@ -194,7 +277,7 @@ class Window {
 
     @discardableResult
     func toggleHidden() -> Bool {
-        if !self.isHidden {
+        if !self.isApplicationHidden {
             return self.setHidden(true)
         }
         return self.setHidden(false)
@@ -342,5 +425,12 @@ class Window {
         } catch {
             fatalError("Caught unexpected error creating observer: \(error)")
         }
+    }
+}
+
+extension Window: CustomDebugStringConvertible {
+    var debugDescription: String {
+        let name = nsRunningApplication?.localizedName ?? title ?? "<unknown>"
+        return "Window(id:\(cgWindowID), name:\(name))"
     }
 }

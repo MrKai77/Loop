@@ -140,6 +140,12 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             } else {
                 .init(localized: .init("Custom Keybind", defaultValue: "Custom Keybind"))
             }
+        } else if direction == .stash {
+            result = if let name, !name.isEmpty {
+                name
+            } else {
+                .init(localized: .init("Stash", defaultValue: "Stash"))
+            }
         } else if direction == .cycle {
             result = if let name, !name.isEmpty {
                 name
@@ -171,7 +177,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             return false
         }
 
-        if direction == .custom, sizeMode == .initialSize || sizeMode == .preserveSize {
+        if direction.isCustomizable, sizeMode == .initialSize || sizeMode == .preserveSize {
             return false
         }
 
@@ -331,7 +337,7 @@ extension WindowAction {
 
             result = calculatePositionAdjustment(frameToResizeFrom)
 
-        } else if direction == .custom {
+        } else if direction.isCustomizable {
             result = calculateCustomFrame(window, bounds)
 
         } else if direction == .center {
@@ -360,6 +366,8 @@ extension WindowAction {
                 width: bounds.width,
                 height: window.frame.height
             )
+        } else if direction == .unstash, let window {
+            result = getInitialFrame(window)
         }
 
         return result

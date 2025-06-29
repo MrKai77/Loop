@@ -128,6 +128,8 @@ enum WindowEngine {
         if Defaults[.moveCursorWithWindow] {
             CGWarpMouseCursorPosition(targetFrame.center)
         }
+
+        Notification.Name.windowResized.post(userInfo: ["action": action, "window": window, "screen": screen])
     }
 
     /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
@@ -195,9 +197,15 @@ enum WindowEngine {
 
         var windowList: [Window] = []
         for window in list {
-            if let pid = window[kCGWindowOwnerPID as String] as? Int32, let window = try? Window(pid: pid) {
-                windowList.append(window)
+            guard
+                let alpha = window[kCGWindowAlpha as String] as? Double, alpha > 0.01,
+                let pid = window[kCGWindowOwnerPID as String] as? Int32,
+                let window = try? Window(pid: pid)
+            else {
+                continue
             }
+
+            windowList.append(window)
         }
 
         return windowList
