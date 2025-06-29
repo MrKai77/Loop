@@ -108,6 +108,10 @@ enum MigratorError: Error {
 
 // Adds functionality for saving, loading, and managing window actions.
 enum Migrator {
+    private static var documentsDirectory: URL? {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    }
+
     /// Presents a prompt to export current keybinds to a JSON file.
     static func exportPrompt() async throws {
         // Check if there are any keybinds to export.
@@ -162,10 +166,11 @@ enum Migrator {
 // MARK: Migrator + Export
 
 private extension Migrator {
+    /// Presents a save panel to select a directory for exporting keybinds.
     @MainActor
     static func getSaveDirectoryURL() async throws -> URL {
         let savePanel = NSSavePanel()
-        savePanel.directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+        savePanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
         savePanel.title = .init(localized: "Export keybinds")
         savePanel.nameFieldStringValue = "Loop Keybinds.json"
 
@@ -175,13 +180,17 @@ private extension Migrator {
 
         let result = await savePanel.beginSheetModal(for: window)
 
-        guard result == .OK, let destUrl = savePanel.url else {
+        guard result == .OK, let selectedFileURL = savePanel.url else {
             throw MigratorError.directorySelectionCancelled
         }
 
-        return destUrl
+        // Save the last used directory for future exports
+        Defaults[.lastMigratorURL] = selectedFileURL.deletingLastPathComponent()
+
+        return selectedFileURL
     }
 
+    /// Saves the keybinds in the specified directory URL.
     static func saveKeybinds(_: SavedKeybindsFormat, in directoryURL: URL) async throws {
         let keybinds = SavedKeybindsFormat.generateFromDefaults()
 
@@ -288,6 +297,7 @@ private extension Migrator {
     @MainActor
     static func getKeybindsFileURL() async throws -> URL {
         let openPanel = NSOpenPanel()
+        openPanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
         openPanel.title = .init(localized: "Select a keybinds file")
         openPanel.allowedContentTypes = [.json]
 
@@ -300,6 +310,9 @@ private extension Migrator {
         guard result == .OK, let selectedFileURL = openPanel.url else {
             throw MigratorError.fileSelectionCancelled
         }
+
+        // Save the last used directory for future imports
+        Defaults[.lastMigratorURL] = selectedFileURL.deletingLastPathComponent()
 
         return selectedFileURL
     }

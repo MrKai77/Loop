@@ -9,7 +9,8 @@
 import Defaults
 import SwiftUI
 
-// Add variables for default values (which are stored even then the app is closed)
+// MARK: - UI-configurable Settings
+
 extension Defaults.Keys {
     // Icon
     static let currentIcon = Key<String>("currentIcon", default: "AppIcon-Classic", iCloud: true)
@@ -130,7 +131,7 @@ extension Defaults.Keys {
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20, iCloud: true)
 }
 
-// MARK: - Extra Advanced
+// MARK: - Hidden Settings
 
 extension Defaults.Keys {
     /// Adjust with `defaults write com.MrKai77.Loop paddingMinimumScreenSize -float x`
@@ -201,7 +202,10 @@ extension Defaults.Keys {
         iCloud: true
     )
 
+    // Migrator
+    static let lastMigratorURL = Key<URL?>("lastMigratorURL", default: nil)
+
     // StashManager
-    static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>(), iCloud: false)
-    static let stashManagerStashedWindows = Key<[CGWindowID: WindowAction]>("stashManagerStashed", default: [:], iCloud: false)
+    static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>())
+    static let stashManagerStashedWindows = Key<[CGWindowID: WindowAction]>("stashManagerStashed", default: [:])
 }
