@@ -52,33 +52,42 @@ struct StashActionConfigurationView: View {
     }
 
     var body: some View {
-        ScreenView(isBlurred: action.sizeMode != .custom) {
-            GeometryReader { geo in
-                ZStack {
-                    if action.sizeMode == .custom {
-                        let frame = action.getFrame(window: nil, bounds: CGRect(origin: .zero, size: geo.size), disablePadding: true)
+        VStack(spacing: 12) {
+            ScreenView(isBlurred: action.sizeMode != .custom) {
+                GeometryReader { geo in
+                    ZStack {
+                        if action.sizeMode == .custom {
+                            let frame = action.getFrame(
+                                window: nil,
+                                bounds: CGRect(origin: .zero, size: geo.size),
+                                disablePadding: true
+                            )
 
-                        blurredWindow()
-                            .frame(width: frame.width, height: frame.height)
-                            .offset(x: frame.origin.x, y: frame.origin.y)
-                            .animation(luminareAnimation, value: frame)
+                            blurredWindow()
+                                .frame(width: frame.width, height: frame.height)
+                                .offset(x: frame.origin.x, y: frame.origin.y)
+                                .animation(luminareAnimation, value: frame)
+                        }
                     }
+                    .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
                 }
-                .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
             }
-        }
-        .onChange(of: action) { windowAction = $0 }
+            .onChange(of: action) { windowAction = $0 }
 
-        configurationSections()
-        actionButtons()
+            configurationSections()
+            actionButtons()
+        }
     }
 
     @ViewBuilder private func configurationSections() -> some View {
-        LuminareSection {
+        LuminareSection(outerPadding: 0) {
             LuminareTextField("Stash", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
+                .luminareHasBackground(false)
+                .luminareBordered(false)
+                .luminareAspectRatio(contentMode: .fill)
         }
 
-        LuminareSection {
+        LuminareSection(outerPadding: 0) {
             tabPicker()
         }
 
@@ -120,7 +129,7 @@ struct StashActionConfigurationView: View {
     @ViewBuilder private func tabPicker() -> some View {
         LuminarePicker(
             elements: Tab.allCases,
-            selection: $currentTab,
+            selection: $currentTab.animation(luminareAnimation),
             columns: 2
         ) { tab in
             HStack(spacing: 6) {
@@ -129,6 +138,8 @@ struct StashActionConfigurationView: View {
             }
             .fixedSize()
         }
+        .luminarePickerRoundedCorner(top: .always, bottom: .always)
+        .frame(height: 40)
     }
 
     @ViewBuilder private func unitToggle() -> some View {
@@ -155,11 +166,12 @@ struct StashActionConfigurationView: View {
 
             Button("Close") { isPresented = false }
         }
-        .buttonStyle(LuminareCompactButtonStyle())
+        .luminareAspectRatio(contentMode: .fill)
+        .buttonStyle(.luminareCompact)
     }
 
     @ViewBuilder private func positionConfiguration() -> some View {
-        LuminareSection {
+        LuminareSection(outerPadding: 0) {
             if action.positionMode ?? .generic == .generic {
                 LuminarePicker(
                     elements: anchors,
@@ -173,10 +185,12 @@ struct StashActionConfigurationView: View {
                             }
                         }
                     ),
-                    columns: action.direction == .stash ? 2 : 3
+                    columns: 2
                 ) { anchor in
                     IconView(action: anchor.iconAction)
+                        .equatable()
                 }
+                .luminarePickerRoundedCorner(top: .always, bottom: .always)
             } else {
                 LuminareSlider(
                     "X",
