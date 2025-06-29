@@ -25,6 +25,9 @@ struct BehaviorConfigurationView: View {
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
     @Default(.previewVisibility) var previewVisibility
+    @Default(.stashedWindowVisiblePadding) var stashedWindowVisiblePadding
+    @Default(.animateStashedWindows) var animateStashedWindows
+    @Default(.shiftFocusWhenStashed) var shiftFocusWhenStashed
 
     @State private var isPaddingConfigurationViewPresented = false
 
@@ -90,12 +93,6 @@ struct BehaviorConfigurationView: View {
                 }
             }
         }
-        .onReceive(.systemWindowManagerStateChanged) { _ in
-            model.useSystemWindowManagerWhenAvailable = Defaults[.useSystemWindowManagerWhenAvailable]
-        }
-        .onChange(of: model.stashedWindowVisiblePadding) { _ in
-            AppDelegate.stashManager.onConfigurationChanged()
-        }
 
         LuminareSection("Cursor") {
             LuminareToggle(
@@ -128,15 +125,21 @@ struct BehaviorConfigurationView: View {
         }
 
         LuminareSection("Stash") {
-            LuminareToggle("Animated", isOn: $model.animateStashedWindows)
-            LuminareValueAdjuster(
+            LuminareToggle("Animated", isOn: $animateStashedWindows)
+
+            LuminareSlider(
                 "Peek size",
-                value: $model.stashedWindowVisiblePadding,
-                sliderRange: 1...200,
-                suffix: "px",
-                lowerClamp: true
+                value: $stashedWindowVisiblePadding.doubleBinding,
+                in: 1...200,
+                format: .number.precision(.fractionLength(0...0)),
+                clampsLower: true,
+                suffix: Text("px")
             )
-            LuminareToggle("Shift focus when stashed", isOn: $model.shiftFocusWhenStashed)
+
+            LuminareToggle("Shift focus when stashed", isOn: $shiftFocusWhenStashed)
+        }
+        .onChange(of: stashedWindowVisiblePadding) { _ in
+            AppDelegate.stashManager.onConfigurationChanged()
         }
     }
 }

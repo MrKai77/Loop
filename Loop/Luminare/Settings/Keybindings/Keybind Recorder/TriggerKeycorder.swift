@@ -89,7 +89,7 @@ struct TriggerKeycorder: View {
                 startObservingKeys()
             } label: {
                 Text("Change")
-                .frame(height: 32)
+                    .frame(height: 32)
             }
             .buttonStyle(.luminareCompact)
             .fixedSize()
