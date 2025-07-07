@@ -112,9 +112,10 @@ struct AdvancedConfigurationView: View {
 
             LuminareToggle(isOn: $animateWindowResizes) {
                 Text("Animate window resize")
+                    .padding(.trailing, 4)
                     .luminarePopover(attachedTo: .topTrailing) {
                         Text("This feature is still under development.")
-                            .padding()
+                            .padding(4)
                     }
                     .tint(.orange)
             }

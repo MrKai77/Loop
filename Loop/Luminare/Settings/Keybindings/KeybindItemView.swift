@@ -129,9 +129,10 @@ struct KeybindItemView: View {
 
                     if hasConflicts {
                         keycorderSection(hasConflicts: true)
+                            .padding(.trailing, 4)
                             .luminarePopover(attachedTo: .topLeading) {
                                 Text("There are other keybinds that conflict with this key combination.")
-                                    .padding()
+                                    .padding(4)
                             }
                             .tint(.red)
                     } else {
@@ -178,9 +179,10 @@ struct KeybindItemView: View {
                     if let info = keybind.direction.infoText {
                         Text(keybind.getName())
                             .lineLimit(1)
+                            .padding(.trailing, 4)
                             .luminarePopover(attachedTo: .topTrailing) {
                                 Text(info)
-                                    .padding()
+                                    .padding(4)
                             }
                             .tint(.yellow)
                     } else {

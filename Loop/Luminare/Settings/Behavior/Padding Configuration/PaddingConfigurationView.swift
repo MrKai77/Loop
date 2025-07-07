@@ -180,9 +180,10 @@ struct PaddingConfigurationView: View {
                 suffix: Text("px")
             ) {
                 Text("External bar")
+                    .padding(.trailing, 4)
                     .luminarePopover(attachedTo: .topTrailing) {
                         Text("Use this if you are using a custom menubar.")
-                            .padding()
+                            .padding(4)
                     }
             }
         }
