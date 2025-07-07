@@ -14,6 +14,9 @@ class AboutConfigurationModel: ObservableObject {
     @Published var isHoveringOverVersionCopier = false
     @Published var updateButtonTitle: String = .init(localized: "Check for updates…")
 
+    @Published var didCompleteCopyToClipboard: Bool = false
+    @Published var didCompleteCopyToClipboardDebounced: Bool = false
+
     let credits: [CreditItem] = [
         .init(
             "Kai",
@@ -106,6 +109,13 @@ class AboutConfigurationModel: ObservableObject {
             "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))",
             forType: NSPasteboard.PasteboardType.string
         )
+
+        didCompleteCopyToClipboard = true
+
+        Task { @MainActor in
+            try await Task.sleep(for: .seconds(2))
+            didCompleteCopyToClipboard = false
+        }
     }
 }
 
@@ -184,6 +194,13 @@ struct AboutConfigurationView: View {
             .buttonStyle(.luminareCosmetic(icon: Image(.clipboard)))
             .onHover {
                 model.isHoveringOverVersionCopier = $0
+            }
+            .booleanThrottleDebounced(model.didCompleteCopyToClipboard) {
+                model.didCompleteCopyToClipboardDebounced = $0
+            }
+            .popover(isPresented: $model.didCompleteCopyToClipboardDebounced) {
+                Text("Copied!")
+                    .padding(4)
             }
         }
     }
