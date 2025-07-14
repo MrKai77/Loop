@@ -73,20 +73,9 @@ struct AccentColorConfigurationView: View {
             ) { option in
                 VStack(spacing: 6) {
                     Spacer()
-                    option.image
 
-                    // TODO: Fix this
-//                    // if macOS version is below 14, add screen recording warning
-//                    if #unavailable(macOS 14.0), option == .wallpaper, processWallpaper {
-//                        // Notice to disable screen recording, however, keep it in the list.
-//                        HStack(spacing: 0) {
-//                            Text(option.text)
-//                            LuminareInfoView("Please press deny when Loop \n requests screen recording permissions.", .orange)
-//                        }
-//                        .fixedSize()
-//                    } else {
+                    option.image
                     Text(option.text)
-//                    }
 
                     Spacer()
                 }

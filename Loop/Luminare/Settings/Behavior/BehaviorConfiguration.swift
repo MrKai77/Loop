@@ -11,6 +11,8 @@ import ServiceManagement
 import SwiftUI
 
 struct BehaviorConfigurationView: View {
+    @Environment(\.luminareAnimation) private var luminareAnimation
+
     @Default(.launchAtLogin) var launchAtLogin
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
     @Default(.animationConfiguration) var animationConfiguration
@@ -96,12 +98,12 @@ struct BehaviorConfigurationView: View {
         }
 
         LuminareSection("Cursor") {
-            LuminareToggle(
-                "Move cursor with window",
-//                info: previewVisibility ? nil : .init("Cannot be enabled when the preview is disabled."), // TODO: Fix this
-                isOn: $moveCursorWithWindow
-            )
-            .disabled(!previewVisibility)
+            // This can only be enabled when the preview is visible.
+            // Because when the preview is disabled, the window moves live with cursor movement,
+            // so moving the cursor would be unusable.
+            if previewVisibility {
+                LuminareToggle("Move cursor with window", isOn: $moveCursorWithWindow)
+            }
 
             LuminareToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)
 

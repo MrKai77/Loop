@@ -10,7 +10,8 @@ import Luminare
 import SwiftUI
 
 struct PreviewConfigurationView: View {
-//    @StateObject private var model = PreviewConfigurationModel()
+    @Environment(\.luminareAnimation) private var luminareAnimation
+
     @Default(.previewVisibility) var previewVisibility
     @Default(.moveCursorWithWindow) var moveCursorWithWindow
     @Default(.previewPadding) var previewPadding
@@ -20,8 +21,6 @@ struct PreviewConfigurationView: View {
     var body: some View {
         LuminareSection {
             LuminareToggle(
-                "Show preview when looping",
-//                info: model.previewVisibility ? nil : .init("Window snapping will still use the preview."), // TODO: Add this
                 isOn: Binding(
                     get: {
                         previewVisibility
@@ -34,7 +33,15 @@ struct PreviewConfigurationView: View {
                         }
                     }
                 )
-            )
+            ) {
+                Text("Animate window resize")
+                    .padding(.trailing, 4)
+                    .luminarePopover(attachedTo: .topTrailing, hidden: previewVisibility) {
+                        Text("Window snapping will still use the preview.")
+                            .padding(4)
+                    }
+                    .animation(luminareAnimation, value: previewVisibility)
+            }
 
             LuminareSlider(
                 "Padding",
