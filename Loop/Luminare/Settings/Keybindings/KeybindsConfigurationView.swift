@@ -78,6 +78,7 @@ struct KeybindsConfigurationView: View {
                 }
                 .disabled(model.selectedKeybinds.isEmpty)
                 .buttonStyle(.luminareProminent)
+                .keyboardShortcut(.delete)
             }
 
             LuminareList(

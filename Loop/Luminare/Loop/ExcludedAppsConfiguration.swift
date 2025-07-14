@@ -23,12 +23,11 @@ struct ExcludedAppsConfigurationView: View {
                 }
 
                 Button("Remove", role: .destructive) {
-                    withAnimation(luminareAnimation) {
-                        excludedApps.removeAll { selectedApps.contains($0) }
-                    }
+                    excludedApps.removeAll { selectedApps.contains($0) }
                 }
                 .disabled(selectedApps.isEmpty)
                 .buttonStyle(.luminareProminent)
+                .keyboardShortcut(.delete)
             }
 
             LuminareList(
@@ -74,10 +73,7 @@ struct ExcludedAppsConfigurationView: View {
 
             if result == .OK {
                 let appsToAdd = panel.urls.compactMap { excludedApps.contains($0) ? nil : $0 }
-
-                withAnimation(luminareAnimation) {
-                    excludedApps.append(contentsOf: appsToAdd)
-                }
+                excludedApps.append(contentsOf: appsToAdd)
             }
         }
     }

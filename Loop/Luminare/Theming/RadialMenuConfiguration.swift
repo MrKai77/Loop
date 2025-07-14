@@ -9,62 +9,47 @@ import Defaults
 import Luminare
 import SwiftUI
 
-class RadialMenuConfigurationModel: ObservableObject {
-    @Published var radialMenuVisibility = Defaults[.radialMenuVisibility] {
-        didSet {
-            Defaults[.radialMenuVisibility] = radialMenuVisibility
-        }
-    }
-
-    @Published var radialMenuCornerRadius = Defaults[.radialMenuCornerRadius] {
-        didSet {
-            Defaults[.radialMenuCornerRadius] = radialMenuCornerRadius
-
-            if radialMenuCornerRadius - 1 < radialMenuThickness {
-                radialMenuThickness = radialMenuCornerRadius - 1
-            }
-        }
-    }
-
-    @Published var radialMenuThickness = Defaults[.radialMenuThickness] {
-        didSet {
-            Defaults[.radialMenuThickness] = radialMenuThickness
-
-            if radialMenuThickness + 1 > radialMenuCornerRadius {
-                radialMenuCornerRadius = radialMenuThickness + 1
-            }
-        }
-    }
-}
-
 struct RadialMenuConfigurationView: View {
-    @StateObject private var model = RadialMenuConfigurationModel()
+    @Default(.radialMenuVisibility) private var radialMenuVisibility
+    @Default(.radialMenuCornerRadius) private var radialMenuCornerRadius
+    @Default(.radialMenuThickness) private var radialMenuThickness
 
     var body: some View {
         LuminareSection {
-            LuminareToggle("Radial menu", isOn: $model.radialMenuVisibility)
+            LuminareToggle("Radial menu", isOn: $radialMenuVisibility)
 
-            if model.radialMenuVisibility {
+            if radialMenuVisibility {
                 LuminareSlider(
                     "Corner radius",
-                    value: $model.radialMenuCornerRadius.doubleBinding,
+                    value: $radialMenuCornerRadius.doubleBinding,
                     in: 30...50,
                     format: .number.precision(.fractionLength(0...0)),
                     clampsUpper: true,
                     clampsLower: true,
                     suffix: Text("px")
                 )
+                .onChange(of: radialMenuCornerRadius) { _ in
+                    if radialMenuCornerRadius - 1 < radialMenuThickness {
+                        radialMenuThickness = radialMenuCornerRadius - 1
+                    }
+                }
 
                 LuminareSlider(
                     "Thickness",
-                    value: $model.radialMenuThickness.doubleBinding,
+                    value: $radialMenuThickness.doubleBinding,
                     in: 10...35,
                     format: .number.precision(.fractionLength(0...0)),
                     clampsUpper: true,
                     clampsLower: true,
                     suffix: Text("px")
                 )
+                .onChange(of: radialMenuThickness) { _ in
+                    if radialMenuThickness + 1 > radialMenuCornerRadius {
+                        radialMenuCornerRadius = radialMenuThickness + 1
+                    }
+                }
             }
         }
+        .animation(.smooth(duration: 0.25), value: radialMenuVisibility)
     }
 }

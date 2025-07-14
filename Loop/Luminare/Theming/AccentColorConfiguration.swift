@@ -37,7 +37,7 @@ enum AccentColorOption: CaseIterable {
 
 struct AccentColorConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
-//    @StateObject private var model = AccentColorConfigurationModel()
+
     @Default(.useSystemAccentColor) private var useSystemAccentColor
     @Default(.useGradient) private var useGradient
     @Default(.customAccentColor) private var customAccentColor

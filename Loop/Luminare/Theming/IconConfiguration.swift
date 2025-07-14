@@ -12,6 +12,7 @@ import SwiftUI
 class IconConfigurationModel: ObservableObject {
     @Published var showingLockedAlert = false
     @Published var selectedLockedMessage: String = ""
+
     let lockedMessages: [String] = [
         .init(localized: "Locked icon message 1", defaultValue: "You don’t have that yet!"),
         .init(localized: "Locked icon message 2", defaultValue: "Who do you think you are, trying to access these top secret icons?"),
