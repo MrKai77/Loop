@@ -116,7 +116,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             strippedAction.keybind = []
             strippedAction.name = nil
 
-            if let cycle {
+            if let cycle = action.cycle {
                 strippedAction.cycle = cycle.map { stripNonResizingProperties(of: $0) }
             }
 

@@ -81,7 +81,11 @@ class SystemWindowManager {
 
             // Scan menubar items
             let element = AXUIElementCreateApplication(pid)
-            let menubar = try (element.getValue(.menuBar) as CFTypeRef?) as! AXUIElement
+
+            guard let menubar: AXUIElement = try element.getValue(.menuBar) else {
+                return nil
+            }
+
             let menubarItems = menubar.children.reversed() // Help menu will be last
 
             for menubarItem in menubarItems {
@@ -89,14 +93,21 @@ class SystemWindowManager {
                     continue
                 }
 
-                if MoveAndResize.generalActions.contains(self),
-                   let menuItem = try windowMenuItems.first(where: { try $0.getValue(.identifier) == rawValue }) {
-                    return menuItem
+                if MoveAndResize.generalActions.contains(self) {
+                    if let menuItem = try windowMenuItems.first(where: {
+                        guard let identifier = try $0.getValue(.identifier) as String? else { return false }
+                        return identifier == rawValue
+                    }) {
+                        return menuItem
+                    }
                 } else {
                     let menuItemsWithSubmenu = windowMenuItems.filter { $0.children.first?.children != nil }.map(\.children.first)
 
                     for item in menuItemsWithSubmenu {
-                        if let menuItem = try item?.children.first(where: { try $0.getValue(.identifier) as String? == rawValue }) {
+                        if let menuItem = try item?.children.first(where: {
+                            guard let identifier = try $0.getValue(.identifier) as String? else { return false }
+                            return identifier == rawValue
+                        }) {
                             return menuItem
                         }
                     }

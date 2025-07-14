@@ -125,7 +125,9 @@ class KeybindMonitor {
         }
 
         if let newAction = WindowAction.getAction(for: pressedKeys) {
-            if !event.isARepeat || newAction.willManipulateExistingWindowFrame {
+            let isRepeatEvent = (event.type == .keyDown || event.type == .keyUp) && event.isARepeat
+
+            if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
                 Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
                 print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
             }
@@ -133,7 +135,9 @@ class KeybindMonitor {
             return true
         } else if let lastKey, let newAction = WindowAction.getAction(for: [lastKey]) {
             // If multiple keys have been added to `pressedKeys` and none of the keybinds match, fall back to searching for the last single key.
-            if !event.isARepeat || newAction.willManipulateExistingWindowFrame {
+            let isRepeatEvent = (event.type == .keyDown || event.type == .keyUp) && event.isARepeat
+
+            if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
                 Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
                 print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
             }

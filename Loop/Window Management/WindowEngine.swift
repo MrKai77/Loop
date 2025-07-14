@@ -51,8 +51,10 @@ enum WindowEngine {
             SystemWindowManager.MoveAndResize.syncPadding()
 
             // System resizes seem to only be able to be performed on the frontmost app
-            if let systemAction = action.direction.systemEquivalent, let app = window.nsRunningApplication,
-               app == NSWorkspace.shared.frontmostApplication, let axMenuItem = try? systemAction.getItem(for: app) {
+            if let systemAction = action.direction.systemEquivalent,
+               let app = window.nsRunningApplication,
+               app == NSWorkspace.shared.frontmostApplication,
+               let axMenuItem = try? systemAction.getItem(for: app) {
                 try? axMenuItem.performAction(.press)
                 return
             } else {
