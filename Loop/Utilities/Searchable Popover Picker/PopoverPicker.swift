@@ -125,8 +125,27 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
 
         let currentIndex = items.firstIndex(where: { $0 == arrowSelection }) ?? (increment ? -1 : items.count)
         let nextIndex = (currentIndex + (increment ? 1 : -1) + items.count) % items.count
-        arrowSelection = items[nextIndex]
-        reader.scrollTo(arrowSelection, anchor: .center)
+
+        /// Ensure nextIndex is valid
+        guard nextIndex >= 0, nextIndex < items.count else {
+            print("Invalid nextIndex: \(nextIndex), items count: \(items.count)")
+            return
+        }
+
+        let newSelection = items[nextIndex]
+        arrowSelection = newSelection
+
+        /// Only scroll if the selection is valid and not nil
+        guard let validSelection = arrowSelection else {
+            print("arrowSelection is nil, skipping scroll")
+            return
+        }
+
+        DispatchQueue.main.async {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                reader.scrollTo(validSelection, anchor: .center)
+            }
+        }
     }
 }
 
