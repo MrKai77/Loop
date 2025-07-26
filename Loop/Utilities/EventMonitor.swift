@@ -89,12 +89,17 @@ class NSEventMonitor: EventMonitor, Identifiable, Equatable {
 }
 
 class CGEventMonitor: EventMonitor, Identifiable, Equatable {
+    let id = UUID()
+
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
-    var isEnabled: Bool = false
+    private(set) var isEnabled: Bool = false
 
-    init(eventMask: NSEvent.EventTypeMask, callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?) {
+    init(
+        eventMask: NSEvent.EventTypeMask,
+        callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?
+    ) {
         self.eventCallback = callback
 
         self.eventTap = CGEvent.tapCreate(
@@ -104,6 +109,12 @@ class CGEventMonitor: EventMonitor, Identifiable, Equatable {
             eventsOfInterest: eventMask.rawValue,
             callback: { _, _, event, refcon in
                 let observer = Unmanaged<CGEventMonitor>.fromOpaque(refcon!).takeUnretainedValue()
+
+                // If disabled, simply pass the event through without processing.
+                if event.type == .tapDisabledByTimeout || event.type == .tapDisabledByUserInput {
+                    return Unmanaged.passUnretained(event)
+                }
+
                 return observer.handleEvent(event: event)
             },
             userInfo: Unmanaged.passUnretained(self).toOpaque()
@@ -154,7 +165,6 @@ class CGEventMonitor: EventMonitor, Identifiable, Equatable {
         isEnabled = false
     }
 
-    var id = UUID()
     static func == (lhs: CGEventMonitor, rhs: CGEventMonitor) -> Bool {
         lhs.id == rhs.id
     }
