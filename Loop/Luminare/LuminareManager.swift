@@ -127,6 +127,12 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
     func open() {
         showWindow()
 
+        if #available(macOS 14.0, *) {
+            NSApp.activate()
+        } else {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+
         do {
             try luminare?.setBackgroundBlur(radius: 20)
             luminare?.backgroundColor = .white.withAlphaComponent(0.001)

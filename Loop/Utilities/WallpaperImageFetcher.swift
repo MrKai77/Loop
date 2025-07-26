@@ -5,7 +5,6 @@
 //  Created by Kai Azim on 2025-07-26.
 //
 
-import ScreenCaptureKit
 import SwiftUI
 
 final class WallpaperImageFetcher {
