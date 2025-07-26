@@ -57,12 +57,15 @@ struct KeybindsConfigurationView: View {
             LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
 
             if isCycleActionPresentInKeybinds {
-                LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
-                    // TODO: Add back the tint and tooltip
-                    /// Hi, Kai!
-                    /// It seems that if the tooltip is included, the text cannot render; that's 100% a bug in Luminare.
-                    /// So for now, I just removed the tooltip and it renders fine.
-                    .help(!isShiftUsedByTriggerKey ? "" : "Cycling actions backward will only work if Shift isn't in your trigger key")
+                LuminareToggle(isOn: $cycleBackwardsOnShiftPressed) {
+                    Text("Cycle backward with Shift")
+                        .padding(.trailing, 4)
+                        .luminarePopover(attachedTo: .topTrailing) {
+                            Text("Cycling actions backward will only work\nif Shift isn't in your trigger key")
+                                .padding(4)
+                        }
+                        .tint(.blue)
+                }
             }
         }
 

@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "%@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3103,7 +3100,7 @@
         }
       }
     },
-    "Cycling actions backward will only work if Shift isn't in your trigger key" : {
+    "Cycling actions backward will only work\nif Shift isn't in your trigger key" : {
 
     },
     "Design" : {
