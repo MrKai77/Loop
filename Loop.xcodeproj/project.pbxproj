@@ -107,7 +107,6 @@
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
-				2A4D6F672DFE7A99002E3B6F /* Luminare */,
 				3E0A881B2E251F1A006725C3 /* Luminare */,
 			);
 			productName = WindowManager;
@@ -450,10 +449,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2A4D6F672DFE7A99002E3B6F /* Luminare */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Luminare;
-		};
 		3E0A881B2E251F1A006725C3 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3E0A881A2E251F1A006725C3 /* XCRemoteSwiftPackageReference "Luminare" */;
