@@ -47,13 +47,6 @@ public struct ScreenView<Content>: View where Content: View {
                 }
             }
             .allowsHitTesting(false)
-            .onAppear {
-                DispatchQueue.main.async {
-                    Task {
-                        await updateImage()
-                    }
-                }
-            }
             .overlay {
                 content()
                     .padding(5)
@@ -72,21 +65,28 @@ public struct ScreenView<Content>: View where Content: View {
                 .stroke(.gray.opacity(0.2), lineWidth: 1)
         }
         .aspectRatio(16 / 10, contentMode: .fill)
-    }
+        .task {
+            guard let fetchedImage = await fetchImage() else {
+                return
+            }
 
-    func updateImage() async {
-        guard
-            let screen = NSScreen.main,
-            let url = NSWorkspace.shared.desktopImageURL(for: screen),
-            image == nil || image!.isValid == false
-        else {
-            return
-        }
-
-        if let newImage = NSImage.resize(url, width: 300) {
-            withAnimation(animationFast) {
-                image = newImage
+            await MainActor.run {
+                withAnimation(animationFast) {
+                    image = fetchedImage
+                }
             }
         }
+    }
+
+    func fetchImage() async -> NSImage? {
+        let wallpaperImageFetcher = WallpaperImageFetcher()
+        guard let image = await wallpaperImageFetcher.takeScreenshot() else {
+            return nil
+        }
+
+        let aspectRatio = image.size.width / image.size.height
+        let resizedImage = image.resized(to: .init(width: 300 * aspectRatio, height: 300))
+
+        return resizedImage
     }
 }
