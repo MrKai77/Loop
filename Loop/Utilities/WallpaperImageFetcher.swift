@@ -89,7 +89,7 @@ final class WallpaperImageFetcher {
             &captureWindowIDs,
             captureWindowIDs.count,
             [.ignoreGlobalClipShape, .bestResolution, .fullSize]
-        ).takeUnretainedValue() as! [CGImage]
+        ).takeRetainedValue() as! [CGImage]
 
         guard let image = images.first else {
             throw WallpaperProcessorError.wallpaperWindowCaptureFailed
