@@ -47,7 +47,7 @@ class WindowTransformAnimation: NSAnimation {
         }
     }
 
-    override public var currentProgress: NSAnimation.Progress {
+    override var currentProgress: NSAnimation.Progress {
         didSet {
             guard WindowTransformAnimation.currentAnimations.contains(where: { $0.value == self.id }) else {
                 stop()

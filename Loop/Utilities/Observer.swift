@@ -35,7 +35,7 @@ class Observer {
 //    public fileprivate(set) lazy var application: Application = Application(forKnownProcessID: self.pid)!
 
     /// Creates and starts an observer on the given `processID`.
-    public init(processID: pid_t, callback: @escaping Callback) throws {
+    init(processID: pid_t, callback: @escaping Callback) throws {
         var axObserver: AXObserver?
         let error = AXObserverCreate(processID, internalCallback, &axObserver)
 
@@ -55,7 +55,7 @@ class Observer {
     /// Creates and starts an observer on the given `processID`.
     ///
     /// Use this initializer if you want the extra user info provided with notifications.
-    public init(processID: pid_t, callback: @escaping CallbackWithInfo) throws {
+    init(processID: pid_t, callback: @escaping CallbackWithInfo) throws {
         var axObserver: AXObserver?
         let error = AXObserverCreateWithInfoCallback(processID, internalInfoCallback, &axObserver)
 
@@ -79,7 +79,7 @@ class Observer {
     /// Starts watching for events. You don't need to call this method unless you use `stop()`.
     ///
     /// If the observer has already been started, this method does nothing.
-    public func start() {
+    func start() {
         CFRunLoopAddSource(
             RunLoop.current.getCFRunLoop(),
             AXObserverGetRunLoopSource(axObserver),
@@ -93,7 +93,7 @@ class Observer {
     ///
     /// - important: Events will still be queued in the target process until the Observer is started
     ///              again or destroyed. If you don't want them, create a new Observer.
-    public func stop() {
+    func stop() {
         CFRunLoopRemoveSource(
             RunLoop.current.getCFRunLoop(),
             AXObserverGetRunLoopSource(axObserver),
@@ -110,7 +110,7 @@ class Observer {
     ///         error is not passed on for consistency with `start()` and `stop()`.
     /// - throws: `Error.NotificationUnsupported`: The element does not support notifications (note
     ///           that the system-wide element does not support notifications).
-    public func addNotification(
+    func addNotification(
         _ notification: AXNotification,
         forElement element: Window
     ) throws {
@@ -131,7 +131,7 @@ class Observer {
     ///         error is not passed on for consistency with `start()` and `stop()`.
     /// - throws: `Error.NotificationUnsupported`: The element does not support notifications (note
     ///           that the system-wide element does not support notifications).
-    public func removeNotification(
+    func removeNotification(
         _ notification: AXNotification,
         forElement element: Window
     ) throws {

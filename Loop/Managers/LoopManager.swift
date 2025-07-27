@@ -32,7 +32,7 @@ class LoopManager: ObservableObject {
     private var lastTriggerKeyClick: Date = .distantPast
 
     @Published var currentAction: WindowAction = .init(.noAction)
-    private var parentCycleAction: WindowAction? = nil
+    private var parentCycleAction: WindowAction?
     private(set) var initialMousePosition: CGPoint = .init()
     private var angleToMouse: Angle = .init(degrees: 0)
     private var distanceToMouse: CGFloat = 0

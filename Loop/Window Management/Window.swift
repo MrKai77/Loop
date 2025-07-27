@@ -407,7 +407,7 @@ class Window {
         }
     }
 
-    public func createObserver(_ callback: @escaping Observer.Callback) -> Observer? {
+    func createObserver(_ callback: @escaping Observer.Callback) -> Observer? {
         do {
             return try Observer(processID: self.axWindow.getPID()!, callback: callback)
         } catch AXError.invalidUIElement {
@@ -417,7 +417,7 @@ class Window {
         }
     }
 
-    public func createObserver(_ callback: @escaping Observer.CallbackWithInfo) -> Observer? {
+    func createObserver(_ callback: @escaping Observer.CallbackWithInfo) -> Observer? {
         do {
             return try Observer(processID: self.axWindow.getPID()!, callback: callback)
         } catch AXError.invalidUIElement {
