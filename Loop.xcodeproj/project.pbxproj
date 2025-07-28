@@ -108,6 +108,7 @@
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				2A85FD602E37F0300053C932 /* Luminare */,
+				2A85FD632E38245A0053C932 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -441,6 +442,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2A85FD622E38245A0053C932 /* XCRemoteSwiftPackageReference "luminare" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mrkai77/luminare";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -455,6 +464,11 @@
 		2A85FD632E38245A0053C932 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2A85FD622E38245A0053C932 /* XCRemoteSwiftPackageReference "Luminare" */;
+			productName = Luminare;
+		};
+		2A85FD632E38245A0053C932 /* Luminare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2A85FD622E38245A0053C932 /* XCRemoteSwiftPackageReference "luminare" */;
 			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {
