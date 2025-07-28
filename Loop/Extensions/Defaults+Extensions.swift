@@ -134,13 +134,20 @@ extension Defaults.Keys {
 // MARK: - Hidden Settings
 
 extension Defaults.Keys {
+    /// Minimum screen size, defined in inches on the diagonal, for which padding will be applied on windows.
     /// Adjust with `defaults write com.MrKai77.Loop paddingMinimumScreenSize -float x`
     /// Reset with `defaults delete com.MrKai77.Loop paddingMinimumScreenSize`
     static let paddingMinimumScreenSize = Key<CGFloat>("paddingMinimumScreenSize", default: 0, iCloud: true)
 
+    /// Snap threshold for window snapping, defined in points.
     /// Adjust with `defaults write com.MrKai77.Loop snapThreshold -float x`
     /// Reset with `defaults delete com.MrKai77.Loop snapThreshold`
     static let snapThreshold = Key<CGFloat>("snapThreshold", default: 2, iCloud: true)
+
+    /// Whether to ignore low power mode for certain features, such as window animations.
+    /// Adjust with `defaults write com.MrKai77.Loop ignoreLowPowerMode -bool x`
+    /// Reset with `defaults delete com.MrKai77.Loop ignoreLowPowerMode`
+    static let ignoreLowPowerMode = Key<Bool>("ignoreLowPowerMode", default: false, iCloud: true)
 
     /// Adjust with `defaults write com.MrKai77.Loop previewStartingPosition [option]`
     /// Reset with `defaults delete com.MrKai77.Loop previewStartingPosition`

@@ -220,7 +220,7 @@ struct CustomActionConfigurationView: View {
                             .padding(.trailing, 4)
                             .luminarePopover(attachedTo: .topTrailing) {
                                 Text("macOS center places windows slightly above the absolute center,\nwhich can be found more ergonomic.")
-                                    .padding(4)
+                                    .padding(6)
                             }
                     }
                 }

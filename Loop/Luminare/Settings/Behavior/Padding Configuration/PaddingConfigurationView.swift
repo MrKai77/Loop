@@ -183,7 +183,7 @@ struct PaddingConfigurationView: View {
                     .padding(.trailing, 4)
                     .luminarePopover(attachedTo: .topTrailing) {
                         Text("Use this if you are using a custom menubar.")
-                            .padding(4)
+                            .padding(6)
                     }
             }
         }

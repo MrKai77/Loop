@@ -11,13 +11,34 @@ import Luminare
 import SwiftUI
 
 class AdvancedConfigurationModel: ObservableObject {
-    @Published var didImportSuccessfullyAlert = false
-    @Published var didExportSuccessfullyAlert = false
-    @Published var didResetSuccessfullyAlert = false
+    @Published private(set) var didImportSuccessfullyAlert = false
+    @Published private(set) var didExportSuccessfullyAlert = false
+    @Published private(set) var didResetSuccessfullyAlert = false
 
-    @Published var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
-    @Published var accessibilityChecker: Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    @Published var accessibilityChecks: Int = 0
+    @Published private(set) var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
+    @Published private(set) var accessibilityChecker: Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @Published private(set) var accessibilityChecks: Int = 0
+
+    @Published private(set) var isLowPowerModeEnabled: Bool = ProcessInfo.processInfo.isLowPowerModeEnabled
+
+    init() {
+        trackLowPowerMode()
+    }
+
+    private func trackLowPowerMode() {
+        Task {
+            let notifications = NotificationCenter.default
+                .notifications(named: Notification.Name.NSProcessInfoPowerStateDidChange)
+
+            for await info in notifications {
+                guard let processInfo = info.object as? ProcessInfo else { continue }
+
+                await MainActor.run {
+                    isLowPowerModeEnabled = processInfo.isLowPowerModeEnabled
+                }
+            }
+        }
+    }
 
     func importedSuccessfully() {
         DispatchQueue.main.async { [weak self] in
@@ -85,10 +106,12 @@ class AdvancedConfigurationModel: ObservableObject {
 struct AdvancedConfigurationView: View {
     @Environment(\.luminareTintColor) var tint
     @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.openURL) private var openURL
 
     @StateObject private var model = AdvancedConfigurationModel()
 
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
+    @Default(.ignoreLowPowerMode) var ignoreLowPowerMode
     @Default(.animateWindowResizes) var animateWindowResizes
     @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
     @Default(.disableCursorInteraction) var disableCursorInteraction
@@ -96,7 +119,9 @@ struct AdvancedConfigurationView: View {
     @Default(.hapticFeedback) var hapticFeedback
     @Default(.sizeIncrement) var sizeIncrement
 
-    let elementHeight: CGFloat = 34
+    private var showLowPowerModeWarning: Bool {
+        animateWindowResizes && !ignoreLowPowerMode && model.isLowPowerModeEnabled
+    }
 
     var body: some View {
         generalSection()
@@ -113,11 +138,26 @@ struct AdvancedConfigurationView: View {
             LuminareToggle(isOn: $animateWindowResizes) {
                 Text("Animate window resize")
                     .padding(.trailing, 4)
-                    .luminarePopover(attachedTo: .topTrailing) {
-                        Text("This feature is still under development.")
-                            .padding(4)
+                    .luminarePopover(attachedTo: .topTrailing, hidden: !showLowPowerModeWarning) {
+                        HStack(spacing: 4) {
+                            Text("To save power, window animations are\nunavailable in Low Power Mode.")
+                                .multilineTextAlignment(.leading)
+
+                            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.battery") {
+                                Button {
+                                    openURL(url)
+                                } label: {
+                                    Image(.shareUpRight)
+                                        .foregroundStyle(.secondary)
+                                        .padding(4)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .padding(6)
                     }
-                    .tint(.orange)
+                    .luminareTint(overridingWith: .yellow)
+                    .animation(luminareAnimation, value: showLowPowerModeWarning)
             }
 
             LuminareToggle("Disable cursor interaction", isOn: $disableCursorInteraction)

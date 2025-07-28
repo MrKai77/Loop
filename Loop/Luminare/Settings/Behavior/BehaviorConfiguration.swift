@@ -70,7 +70,7 @@ struct BehaviorConfigurationView: View {
                             .padding(.trailing, 4)
                             .luminarePopover(attachedTo: .topTrailing) {
                                 Text("macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality.")
-                                    .padding(4)
+                                    .padding(6)
                             }
                     } else {
                         Text("Window snapping")

@@ -38,7 +38,7 @@ struct PreviewConfigurationView: View {
                     .padding(.trailing, 4)
                     .luminarePopover(attachedTo: .topTrailing, hidden: previewVisibility) {
                         Text("Window snapping will still use the preview.")
-                            .padding(4)
+                            .padding(6)
                     }
                     .animation(luminareAnimation, value: previewVisibility)
             }

@@ -62,9 +62,9 @@ struct KeybindsConfigurationView: View {
                         .padding(.trailing, 4)
                         .luminarePopover(attachedTo: .topTrailing) {
                             Text("Cycling actions backward will only work\nif Shift isn't in your trigger key")
-                                .padding(4)
+                                .padding(6)
                         }
-                        .tint(.blue)
+                        .luminareTint(overridingWith: .blue)
                 }
             }
         }

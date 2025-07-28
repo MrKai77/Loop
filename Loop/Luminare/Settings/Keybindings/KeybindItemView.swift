@@ -132,9 +132,9 @@ struct KeybindItemView: View {
                             .padding(.leading, 4)
                             .luminarePopover(attachedTo: .topLeading) {
                                 Text("There are other keybinds that conflict with this key combination.")
-                                    .padding(4)
+                                    .padding(6)
                             }
-                            .tint(.red)
+                            .luminareTint(overridingWith: .red)
                     } else {
                         keycorderSection(hasConflicts: false)
                     }
@@ -182,9 +182,9 @@ struct KeybindItemView: View {
                             .padding(.trailing, 4)
                             .luminarePopover(attachedTo: .topTrailing) {
                                 Text(info)
-                                    .padding(4)
+                                    .padding(6)
                             }
-                            .tint(.yellow)
+                            .luminareTint(overridingWith: .yellow)
                     } else {
                         Text(keybind.getName())
                             .lineLimit(1)

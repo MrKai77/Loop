@@ -245,6 +245,11 @@ enum WindowEngine {
             return false
         }
 
+        // If the user has enabled low power mode and hasn't set the preference to ignore it, then return false
+        if ProcessInfo.processInfo.isLowPowerModeEnabled, !Defaults[.ignoreLowPowerMode] {
+            return false
+        }
+
         return true
     }
 

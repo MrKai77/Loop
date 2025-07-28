@@ -20931,6 +20931,9 @@
         }
       }
     },
+    "To save power, window resize animations\nare unavailable in Low Power Mode." : {
+
+    },
     "Top" : {
       "extractionState" : "manual",
       "localizations" : {
