@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3E0A881C2E251F1A006725C3 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 3E0A881B2E251F1A006725C3 /* Luminare */; };
+		2A85FD612E37F0300053C932 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A85FD602E37F0300053C932 /* Luminare */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; settings = {ATTRIBUTES = (Required, ); }; };
 		F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06D76892DFF7A77007EEDA9 /* SkyLight.framework */; };
@@ -45,7 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
-				3E0A881C2E251F1A006725C3 /* Luminare in Frameworks */,
+				2A85FD612E37F0300053C932 /* Luminare in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 			);
@@ -107,7 +107,7 @@
 			name = Loop;
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
-				3E0A881B2E251F1A006725C3 /* Luminare */,
+				2A85FD602E37F0300053C932 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -149,7 +149,7 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
-				3E0A881A2E251F1A006725C3 /* XCRemoteSwiftPackageReference "Luminare" */,
+				2A85FD5F2E37F0300053C932 /* XCLocalSwiftPackageReference "../Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -429,15 +429,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		3E0A881A2E251F1A006725C3 /* XCRemoteSwiftPackageReference "Luminare" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MrKai77/Luminare";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		2A85FD5F2E37F0300053C932 /* XCLocalSwiftPackageReference "../Luminare" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Luminare;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
 		A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sindresorhus/Defaults";
@@ -449,9 +448,8 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3E0A881B2E251F1A006725C3 /* Luminare */ = {
+		2A85FD602E37F0300053C932 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3E0A881A2E251F1A006725C3 /* XCRemoteSwiftPackageReference "Luminare" */;
 			productName = Luminare;
 		};
 		A8DCC97A2980D5F500D41065 /* Defaults */ = {

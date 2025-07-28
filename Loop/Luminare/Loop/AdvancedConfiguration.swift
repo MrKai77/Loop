@@ -15,27 +15,50 @@ class AdvancedConfigurationModel: ObservableObject {
     @Published private(set) var didExportSuccessfullyAlert = false
     @Published private(set) var didResetSuccessfullyAlert = false
 
-    @Published private(set) var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
-    @Published private(set) var accessibilityChecker: Publishers.Autoconnect<Timer.TimerPublisher> = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    @Published private(set) var accessibilityChecks: Int = 0
-
     @Published private(set) var isLowPowerModeEnabled: Bool = ProcessInfo.processInfo.isLowPowerModeEnabled
+    @Published private(set) var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
 
-    init() {
+    private var lowPowerModeCheckerTask: Task<(), Never>?
+    private var accessibilityCheckerTask: Task<(), Never>?
+
+    func startTracking() {
         trackLowPowerMode()
+        trackAccessibilityStatus()
+    }
+
+    func stopTracking() {
+        lowPowerModeCheckerTask?.cancel()
+        accessibilityCheckerTask?.cancel()
     }
 
     private func trackLowPowerMode() {
-        Task {
+        lowPowerModeCheckerTask = Task(priority: .background) {
             let notifications = NotificationCenter.default
                 .notifications(named: Notification.Name.NSProcessInfoPowerStateDidChange)
 
             for await info in notifications {
+                guard !Task.isCancelled else { break }
                 guard let processInfo = info.object as? ProcessInfo else { continue }
 
                 await MainActor.run {
                     isLowPowerModeEnabled = processInfo.isLowPowerModeEnabled
                 }
+            }
+        }
+    }
+
+    private func trackAccessibilityStatus() {
+        accessibilityCheckerTask = Task(priority: .background) {
+            while !Task.isCancelled {
+                let isAccessibilityGranted = AccessibilityManager.getStatus()
+
+                if isAccessibilityAccessGranted != isAccessibilityGranted {
+                    await MainActor.run {
+                        isAccessibilityAccessGranted = isAccessibilityGranted
+                    }
+                }
+
+                try? await Task.sleep(for: .seconds(1))
             }
         }
     }
@@ -81,26 +104,6 @@ class AdvancedConfigurationModel: ObservableObject {
             }
         }
     }
-
-    func beginAccessibilityAccessRequest() {
-        accessibilityChecker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-        accessibilityChecks = 0
-        AccessibilityManager.requestAccess()
-    }
-
-    // No point in checking for screen capture permits since that REQUIRES a relaunch, unfortunately
-    func refreshAccessiblityStatus() {
-        accessibilityChecks += 1
-        let isAccessibilityGranted = AccessibilityManager.getStatus()
-
-        if isAccessibilityAccessGranted != isAccessibilityGranted {
-            isAccessibilityAccessGranted = isAccessibilityGranted
-        }
-
-        if isAccessibilityGranted || accessibilityChecks > 60 {
-            accessibilityChecker.upstream.connect().cancel()
-        }
-    }
 }
 
 struct AdvancedConfigurationView: View {
@@ -127,6 +130,8 @@ struct AdvancedConfigurationView: View {
         generalSection()
         keybindsSection()
         permissionsSection()
+            .onAppear(perform: model.startTracking)
+            .onDisappear(perform: model.stopTracking)
     }
 
     func generalSection() -> some View {
@@ -249,16 +254,13 @@ struct AdvancedConfigurationView: View {
         LuminareSection("Permissions") {
             accessibilityComponent()
         }
-        .onReceive(model.accessibilityChecker) { _ in
-            model.refreshAccessiblityStatus()
-        }
         .animation(luminareAnimation, value: model.isAccessibilityAccessGranted)
     }
 
     func accessibilityComponent() -> some View {
         LuminareCompose {
             Button {
-                model.beginAccessibilityAccessRequest()
+                AccessibilityManager.requestAccess()
             } label: {
                 Text("Request…")
             }
