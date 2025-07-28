@@ -16,7 +16,7 @@ struct VisualEffectView: NSViewRepresentable {
         let visualEffectView = NSVisualEffectView()
         visualEffectView.material = material
         visualEffectView.blendingMode = blendingMode
-        visualEffectView.state = NSVisualEffectView.State.active
+        visualEffectView.state = .active
         visualEffectView.isEmphasized = true
         return visualEffectView
     }
