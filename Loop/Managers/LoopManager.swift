@@ -386,7 +386,6 @@ private extension LoopManager {
         }
 
         if newAction.direction.willChangeScreen {
-            let currentScreen = targetWindow.flatMap(ScreenManager.screenContaining) ?? currentScreen
             var newScreen: NSScreen = currentScreen
 
             if newAction.direction == .nextScreen,
