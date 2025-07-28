@@ -386,7 +386,8 @@ private extension LoopManager {
         }
 
         if newAction.direction.willChangeScreen {
-            var newScreen = currentScreen
+            let currentScreen = targetWindow.flatMap(ScreenManager.screenContaining) ?? currentScreen
+            var newScreen: NSScreen = currentScreen
 
             if newAction.direction == .nextScreen,
                let nextScreen = ScreenManager.nextScreen(from: currentScreen) {
@@ -399,7 +400,11 @@ private extension LoopManager {
             }
 
             if currentAction.direction == .noAction {
-                currentAction = .init(.center)
+                if let targetWindow, let lastAction = WindowRecords.getCurrentAction(for: targetWindow) {
+                    currentAction = lastAction
+                } else {
+                    currentAction = .init(.center)
+                }
             }
 
             screenToResizeOn = newScreen
