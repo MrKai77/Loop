@@ -216,7 +216,16 @@ struct AdvancedConfigurationView: View {
     }
 
     func accessibilityComponent() -> some View {
-        LuminareButton {
+        LuminareCompose {
+            Button {
+                model.beginAccessibilityAccessRequest()
+            } label: {
+                Text("Request…")
+            }
+            .buttonStyle(.luminareCompact)
+            .luminareComposeIgnoreSafeArea(edges: .trailing)
+            .disabled(model.isAccessibilityAccessGranted)
+        } label: {
             HStack {
                 if model.isAccessibilityAccessGranted {
                     Image(.badgeCheck2)
@@ -225,11 +234,7 @@ struct AdvancedConfigurationView: View {
 
                 Text("Accessibility access")
             }
-        } content: {
-            Text("Request…")
-        } action: {
-            model.beginAccessibilityAccessRequest()
         }
-        .disabled(model.isAccessibilityAccessGranted)
+        .luminareComposeStyle(.inline)
     }
 }
