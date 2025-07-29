@@ -45,6 +45,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.windowDragManager.addObservers()
         AppDelegate.stashManager.start()
 
+        Task {
+            // Wait to let the app settle and to prevent overwhelming the user
+            try? await Task.sleep(for: .seconds(2))
+            await AppDelegate.updater.fetchLatestInfo()
+        }
+
         UNUserNotificationCenter.current().delegate = self
         AppDelegate.requestNotificationAuthorization()
 
