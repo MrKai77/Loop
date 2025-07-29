@@ -186,7 +186,7 @@ struct UpdateView: View {
     func changelogView() -> some View {
         ScrollView(showsIndicators: false) {
             LazyVStack {
-                ForEach($updater.changelog, id: \.title) { item in
+                ForEach(updater.changelog, id: \.title) { item in
                     if !item.body.isEmpty {
                         ChangelogSectionView(item: item)
                     }
@@ -200,8 +200,8 @@ struct UpdateView: View {
 
 struct ChangelogSectionView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
-    @Binding var item: (title: String, body: [Updater.ChangelogNote])
     @State var isExpanded = false
+    let item: (title: String, body: [Updater.ChangelogNote])
 
     var body: some View {
         LuminareSection {
@@ -228,9 +228,7 @@ struct ChangelogSectionView: View {
             .buttonStyle(.plain)
 
             if isExpanded {
-                ForEach($item.body, id: \.id) { line in
-                    let note = line.wrappedValue
-
+                ForEach(item.body, id: \.id) { note in
                     HStack(spacing: 8) {
                         Text(note.emoji)
                         Text(LocalizedStringKey(note.text))

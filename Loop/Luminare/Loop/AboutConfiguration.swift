@@ -144,6 +144,7 @@ struct AboutConfigurationView: View {
 
     @Default(.timesLooped) private var timesLooped
     @Default(.currentIcon) private var currentIcon
+    @Default(.includeDevelopmentVersions) private var includeDevelopmentVersions
 
     @State private var isHoveringOverUpdateButton = false
 
@@ -266,7 +267,7 @@ struct AboutConfigurationView: View {
                 }
             }
 
-            LuminareToggle("Include development versions", isOn: $updater.includeDevelopmentVersions)
+            LuminareToggle("Include development versions", isOn: $includeDevelopmentVersions)
         }
     }
 

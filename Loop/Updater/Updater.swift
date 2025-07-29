@@ -5,21 +5,29 @@
 //  Created by Kami on 11/5/2024.
 //
 
-import Combine
 import Defaults
 import Luminare
+import OSLog
 import SwiftUI
 
 final class Updater: ObservableObject {
-    @Published var targetRelease: Release?
-    @Published var progressBar: Double = 0
-    @Published var updateState: UpdateAvailability = .notChecked
+    @Published private(set) var targetRelease: Release?
+    @Published private(set) var progressBar: Double = 0
+    @Published private(set) var updateState: UpdateAvailability = .notChecked
+    @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
+    @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
 
-    @Published var changelog: [(title: String, body: [ChangelogNote])] = .init()
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.loop", category: "Updater")
+    private var windowController: NSWindowController?
+    private var includeDevelopmentVersions: Bool { Defaults[.includeDevelopmentVersions] }
+
+    private var updateFetcherTask: Task<(), Never>?
+    private var updateCheckerTask: Task<(), Never>?
+    private var includeDevelopmentVersionsObserver: Task<(), Never>?
+    private var updatesEnabledObserver: Task<(), Never>?
 
     struct ChangelogNote: Identifiable {
         var id: UUID = .init()
-
         var emoji: String
         var text: String
         var user: String?
@@ -33,48 +41,19 @@ final class Updater: ObservableObject {
         case disabled
     }
 
-    private var windowController: NSWindowController?
-    private var updateCheckCancellable: AnyCancellable?
-
-    @Published var includeDevelopmentVersions: Bool = Defaults[.includeDevelopmentVersions] {
-        didSet {
-            Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
-
-            // When the value changes, trigger a new update check
-            Task {
-                await fetchLatestInfo()
-            }
-        }
-    }
-
-    @Published var updatesEnabled: Bool {
-        didSet {
-            handleUpdatesEnabledChange()
-        }
-    }
-
     init() {
-        self.updatesEnabled = Self.initialUpdatesEnabled()
-
         // Only set up the timer if updates are enabled and env var is not set
         if updatesEnabled {
-            self.updateCheckCancellable = Timer.publish(every: 21600, on: .main, in: .common)
-                .autoconnect()
-                .sink { _ in
-                    Task {
-                        await self.fetchLatestInfo()
-
-                        if self.updateState == .available {
-                            await self.showUpdateWindow()
-                        }
-                    }
-                }
+            self.updateCheckerTask = makeUpdateCheckerTask()
+            self.includeDevelopmentVersionsObserver = makeIncludeDevelopmentVersionsObserver()
         } else {
             self.updateState = .disabled
         }
+
+        self.updatesEnabledObserver = makeUpdatesEnabledObserver()
     }
 
-    private static func initialUpdatesEnabled() -> Bool {
+    private static func checkIfUpdatesEnabled() -> Bool {
         if let env = ProcessInfo.processInfo.environment["LOOP_SKIP_UPDATE_CHECK"],
            env == "1" || env.lowercased() == "true" {
             return false
@@ -82,56 +61,104 @@ final class Updater: ObservableObject {
         return Defaults[.updatesEnabled]
     }
 
-    private func handleUpdatesEnabledChange() {
-        Defaults[.updatesEnabled] = updatesEnabled
-        if updatesEnabled {
-            Task {
-                await fetchLatestInfo()
+    private func makeUpdateCheckerTask() -> Task<(), Never>? {
+        Task {
+            while !Task.isCancelled {
+                await self.fetchLatestInfo()
+
+                if self.updateState == .available {
+                    await self.showUpdateWindow()
+                }
+
+                // 6 hours
+                try? await Task.sleep(for: .seconds(21600))
             }
-        } else {
-            updateState = .disabled
         }
     }
 
-    func dismissWindow() {
-        DispatchQueue.main.async {
-            self.windowController?.close()
+    private func makeIncludeDevelopmentVersionsObserver() -> Task<(), Never>? {
+        Task {
+            for await _ in Defaults.updates(.includeDevelopmentVersions) {
+                guard !Task.isCancelled else { break }
+                await fetchLatestInfo()
+            }
         }
+    }
+
+    private func makeUpdatesEnabledObserver() -> Task<(), Never>? {
+        Task {
+            for await _ in Defaults.updates(.updatesEnabled) {
+                guard !Task.isCancelled else { break }
+
+                updatesEnabled = Updater.checkIfUpdatesEnabled()
+
+                if updatesEnabled {
+                    self.updateCheckerTask = makeUpdateCheckerTask()
+                    self.includeDevelopmentVersionsObserver = makeIncludeDevelopmentVersionsObserver()
+                } else {
+                    self.updateCheckerTask?.cancel()
+                    self.includeDevelopmentVersionsObserver?.cancel()
+                    self.updateCheckerTask = nil
+                    self.includeDevelopmentVersionsObserver = nil
+
+                    await MainActor.run {
+                        targetRelease = nil
+                        updateState = .disabled
+                        progressBar = 0
+                    }
+                }
+            }
+        }
+    }
+
+    @MainActor
+    func dismissWindow() {
+        windowController?.close()
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func fetchLatestInfo(force: Bool = false) async {
-        // Early return if updates are disabled and not forcing
-        guard updatesEnabled || force else {
+        if let updateFetcherTask {
+            return await updateFetcherTask.value // If already fetching, wait for it to finish
+        }
+
+        updateFetcherTask = Task {
+            defer { updateFetcherTask = nil }
+
+            // Early return if updates are disabled and not forcing
+            guard updatesEnabled || force else {
+                await MainActor.run {
+                    targetRelease = nil
+                    updateState = .disabled
+                }
+                return
+            }
+
+            logger.info("Fetching latest release info...")
+
             await MainActor.run {
                 targetRelease = nil
-                updateState = .disabled
+                updateState = .notChecked
+                progressBar = 0
             }
-            return
-        }
 
-        await MainActor.run {
-            targetRelease = nil
-            updateState = .notChecked
-            progressBar = 0
-        }
+            let urlString = includeDevelopmentVersions ?
+                "https://api.github.com/repos/MrKai77/Loop/releases" : // Developmental branch
+                "https://api.github.com/repos/MrKai77/Loop/releases/latest" // Stable branch
 
-        let urlString = includeDevelopmentVersions ?
-            "https://api.github.com/repos/MrKai77/Loop/releases" : // Developmental branch
-            "https://api.github.com/repos/MrKai77/Loop/releases/latest" // Stable branch
+            guard let url = URL(string: urlString) else {
+                logger.error("Invalid URL: \(urlString)")
+                return
+            }
 
-        guard let url = URL(string: urlString) else {
-            NSLog("Invalid URL: \(urlString)")
-            return
-        }
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
 
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-
-            // Process data immediately after fetching, reducing the number of async suspension points.
-            try await processFetchedData(data)
-        } catch {
-            NSLog("Error fetching release info: \(error.localizedDescription)")
+                // Process data immediately after fetching, reducing the number of async suspension points.
+                try await processFetchedData(data)
+            } catch {
+                logger.error("Error fetching release info: \(error.localizedDescription)")
+            }
         }
     }
 
@@ -176,13 +203,15 @@ final class Updater: ObservableObject {
             updateState = isUpdateAvailable ? .available : .unavailable
 
             if isUpdateAvailable {
+                logger.info("Update available: \(release.name)")
+
                 targetRelease = release
                 processChangelog(release.body)
             }
         }
     }
 
-    func processChangelog(_ body: String) {
+    private func processChangelog(_ body: String) {
         changelog = .init()
 
         let lines = body
@@ -256,81 +285,90 @@ final class Updater: ObservableObject {
             let latestRelease = targetRelease,
             let asset = latestRelease.assets.first
         else {
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.progressBar = 0
             }
             return
         }
 
-        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(asset.name)
+        logger.info("Installing update: \(latestRelease.name)")
 
-        DispatchQueue.main.async {
-            self.progressBar = 0.2
+        let tempUrl = FileManager.default.temporaryDirectory.appendingPathComponent("\(asset.name)_\(latestRelease.tagName)")
+
+        await MainActor.run {
+            self.progressBar = 0.25
         }
 
-        if !FileManager.default.fileExists(atPath: destinationURL.path) {
-            await downloadUpdate(asset, to: destinationURL)
+        if !FileManager.default.fileExists(atPath: tempUrl.path) {
+            await downloadUpdate(asset, to: tempUrl)
         }
 
-        unzipAndReplace(downloadedFileURL: destinationURL.path)
+        await MainActor.run {
+            self.progressBar = 0.75
+        }
+
+        await unzipAndSwap(downloadedFileURL: tempUrl.path)
+
+        try? FileManager.default.removeItem(at: tempUrl)
+
+        await MainActor.run {
+            self.progressBar = 1.0
+            self.updateState = .unavailable
+        }
+
+        logger.info("Update installed successfully")
     }
 
     private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {
-        guard let url = URL(string: asset.browserDownloadURL) else {
-            return
-        }
+        logger.info("Downloading update asset: \(asset.name) to \(destinationURL.path)")
 
         do {
-            let (fileURL, _) = try await URLSession.shared.download(from: url)
-
+            let (fileURL, _) = try await URLSession.shared.download(from: asset.browserDownloadURL)
             try FileManager.default.moveItem(at: fileURL, to: destinationURL)
-
-            DispatchQueue.main.async {
-                self.progressBar = 0.2
-                self.unzipAndReplace(downloadedFileURL: destinationURL.path)
-            }
         } catch {
-            NSLog("Error: \(error.localizedDescription)")
+            logger.error("Error: \(error.localizedDescription)")
         }
     }
 
-    private func unzipAndReplace(downloadedFileURL fileURL: String) {
-        let appDirectory = Bundle.main.bundleURL.deletingLastPathComponent()
+    private func unzipAndSwap(downloadedFileURL fileURL: String) async {
+        logger.info("Unzipping and swapping app bundle at \(fileURL)")
+
         let appBundle = Bundle.main.bundleURL
         let fileManager = FileManager.default
 
         do {
-            // Unzip the downloaded file and replace the existing app.
-            DispatchQueue.main.async {
-                self.progressBar = 0.4
-            }
-            try fileManager.removeItem(at: appBundle)
+            // Create a temporary directory
+            // It's ideal to keep this separate from the fileURL since this is where the swapping happens, and
+            // if this fails, it can't affect the original downloaded zip file.
+            let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+            try fileManager.createDirectory(at: tempDir, withIntermediateDirectories: true)
 
-            DispatchQueue.main.async {
-                self.progressBar = 0.6
-            }
+            // Unzip to a temp directory
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
-            process.arguments = ["-xk", fileURL, appDirectory.path]
-
-            // Run the unzip process.
+            process.arguments = ["-xk", fileURL, tempDir.path]
             try process.run()
             process.waitUntilExit()
 
-            DispatchQueue.main.async {
-                self.progressBar = 0.8
-                do {
-                    try fileManager.removeItem(atPath: fileURL) // Clean up the zip file after extraction.
-                } catch {
-                    print("Failed to delete downloaded file: \(error.localizedDescription)")
-                }
-                self.progressBar = 1.0
-                self.updateState = .unavailable // Update the state to reflect that the update has been applied.
+            // Find the unzipped app bundle
+            let contents = try fileManager.contentsOfDirectory(at: tempDir, includingPropertiesForKeys: nil)
+            guard let newAppBundle = contents.first(where: { $0.pathExtension == "app" }) else {
+                logger.error("No app bundle found in extracted contents")
+                return
             }
+
+            // Atomically swap the old app bundle with the new one
+            _ = try fileManager.replaceItemAt(
+                appBundle,
+                withItemAt: newAppBundle,
+                backupItemName: nil,
+                options: [.usingNewMetadataOnly]
+            )
+
+            // Clean up
+            try fileManager.removeItem(at: tempDir)
         } catch {
-            DispatchQueue.main.async {
-                NSLog("Error updating the app: \(error.localizedDescription)")
-            }
+            logger.error("Error updating the app: \(error.localizedDescription)")
         }
     }
 }
@@ -354,7 +392,7 @@ struct Release: Codable {
 
     struct Asset: Codable {
         var name: String
-        var browserDownloadURL: String
+        var browserDownloadURL: URL
 
         enum CodingKeys: String, CodingKey {
             case name
