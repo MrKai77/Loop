@@ -122,7 +122,7 @@ struct AccentColorConfigurationView: View {
 
     func syncWallpaper() {
         Task {
-            await WallpaperProcessor.fetchLatestWallpaperColors()
+            await WallpaperProcessor.fetchLatest(ignoreThrottle: true)
 
             await MainActor.run {
                 withAnimation(luminareAnimation) {

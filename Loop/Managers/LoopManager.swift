@@ -21,7 +21,6 @@ class LoopManager: ObservableObject {
 
     private var currentlyPressedModifiers: Set<CGKeyCode> = []
     private var isLoopActive: Bool = false
-    private var lastLoopActivation: Date = .distantPast
     private var targetWindow: Window?
     private var screenToResizeOn: NSScreen?
 
@@ -109,14 +108,13 @@ private extension LoopManager {
             WindowRecords.recordFirst(for: targetWindow)
         }
 
-        // Only recalculate wallpaper colors if Loop was last triggered over 5 seconds ago
-        if Defaults[.processWallpaper], lastLoopActivation.distance(to: .now) > 5.0 {
+        // Only recalculate wallpaper colors if user has enabled it.
+        if Defaults[.processWallpaper] {
             Task {
-                await WallpaperProcessor.fetchLatestWallpaperColors()
+                await WallpaperProcessor.fetchLatest()
             }
         }
 
-        lastLoopActivation = .now
         currentAction = .init(.noAction)
         parentCycleAction = nil
         initialMousePosition = NSEvent.mouseLocation

@@ -208,6 +208,20 @@ extension NSImage {
 /// This class provides methods to capture the current desktop wallpaper and extract
 /// vibrant, visually appealing colors that can be used as accent colors in the UI.
 public class WallpaperProcessor {
+    private static var lastProcessedDate: Date = .distantPast
+
+    /// Fetches the latest wallpaper colors, respecting a throttle period.
+    /// This helps prevent excessive processing if called frequently, when the wallpaper is most likely unchanged.
+    /// - Parameter ignoreThrottle: If true, the method will ignore the throttle and fetch colors immediately. This is useful when called from settings or manual triggers.
+    static func fetchLatest(ignoreThrottle: Bool = false) async {
+        guard ignoreThrottle || lastProcessedDate.distance(to: .now) > 5.0 else {
+            return
+        }
+
+        lastProcessedDate = .now
+        await fetchLatestWallpaperColors()
+    }
+
     /// Fetches the latest wallpaper colors and updates the app's theme settings.
     ///
     /// This method:
@@ -218,7 +232,7 @@ public class WallpaperProcessor {
     /// The first (most vibrant) color is used as the primary accent color, while
     /// the second color is used as a gradient/secondary color. This provides
     /// a cohesive theme that matches the user's desktop environment.
-    static func fetchLatestWallpaperColors() async {
+    private static func fetchLatestWallpaperColors() async {
         do {
             // Attempt to process the current wallpaper to get the dominant colors.
             let dominantColors = try await processCurrentWallpaper()

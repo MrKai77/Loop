@@ -151,6 +151,13 @@ class WindowDragManager {
         let oldDirection = direction
 
         if !ignoredFrame.contains(mousePosition) {
+            // Only recalculate wallpaper colors if user has enabled it.
+            if Defaults[.processWallpaper] {
+                Task {
+                    await WallpaperProcessor.fetchLatest()
+                }
+            }
+
             direction = WindowDirection.processSnap(
                 mouseLocation: mousePosition,
                 currentDirection: direction,
