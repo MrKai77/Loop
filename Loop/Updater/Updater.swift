@@ -90,7 +90,9 @@ final class Updater: ObservableObject {
             for await _ in Defaults.updates(.updatesEnabled) {
                 guard !Task.isCancelled else { break }
 
-                updatesEnabled = Updater.checkIfUpdatesEnabled()
+                await MainActor.run {
+                    updatesEnabled = Updater.checkIfUpdatesEnabled()
+                }
 
                 if updatesEnabled {
                     self.updateCheckerTask = makeUpdateCheckerTask()
