@@ -106,6 +106,10 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Grow Right", defaultValue: "Grow Right"))
         case .growLeft:
             .init(localized: .init("Window Direction/Name: Grow Left", defaultValue: "Grow Left"))
+        case .growHorizontal:
+            .init(localized: .init("Window Direction/Name: Grow Horizontal", defaultValue: "Grow Horizontal"))
+        case .growVertical:
+            .init(localized: .init("Window Direction/Name: Grow Vertical", defaultValue: "Grow Vertical"))
         case .moveUp:
             .init(localized: .init("Window Direction/Name: Move Up", defaultValue: "Move Up"))
         case .moveDown:
