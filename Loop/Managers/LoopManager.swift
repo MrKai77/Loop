@@ -476,6 +476,12 @@ private extension LoopManager {
         let shouldCycleBackwards = keybindMonitor.isShiftPressed() && allowReverseCycle
         var currentIndex: Int? = nil
 
+        if Defaults[.cycleModeRestartEnabled],
+           currentAction.direction == .noAction ||
+           !currentCycle.contains(currentAction) {
+            return currentCycle[0]
+        }
+
         // If the current action is noAction, we can preserve the index from the last action.
         // This would initially be done by reading the window's records, then would continue by finding the next index from the currentAction.
         if currentAction.direction == .noAction,

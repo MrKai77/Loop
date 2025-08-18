@@ -57,6 +57,7 @@ extension Defaults.Keys {
     static let animateStashedWindows = Key<Bool>("animateStashedWindows", default: true, iCloud: true)
     static let stashedWindowVisiblePadding = Key<CGFloat>("stashedWindowVisiblePadding", default: 20, iCloud: true)
     static let shiftFocusWhenStashed = Key<Bool>("shiftFocusWhenStashed", default: true, iCloud: true)
+    static let cycleModeRestartEnabled = Key<Bool>("cycleModeRestartEnabled", default: false, iCloud: true)
 
     // Keybinds
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function], iCloud: true)
