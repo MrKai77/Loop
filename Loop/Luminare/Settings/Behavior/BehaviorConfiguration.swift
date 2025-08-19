@@ -20,6 +20,7 @@ struct BehaviorConfigurationView: View {
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
     @Default(.enablePadding) var enablePadding
+    @Default(.cycleModeRestartEnabled) var cycleModeRestartEnabled
     @Default(.useScreenWithCursor) var useScreenWithCursor
     @Default(.moveCursorWithWindow) var moveCursorWithWindow
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
@@ -79,6 +80,8 @@ struct BehaviorConfigurationView: View {
             } else {
                 LuminareToggle("Window snapping", isOn: $windowSnapping)
             }
+
+            LuminareToggle("Cycle always start at first item", isOn: $cycleModeRestartEnabled)
 
             // Enabling the system window manager will override these options anyway, so hide them
             if !useSystemWindowManagerWhenAvailable {
