@@ -36,6 +36,13 @@ struct CustomTextField: NSViewRepresentable {
 
     func updateNSView(_ nsView: NSTextField, context _: Context) {
         nsView.stringValue = text
+
+        // Focus the text field when the popover is shown
+        if nsView.window?.firstResponder != nsView {
+            DispatchQueue.main.async {
+                nsView.window?.makeFirstResponder(nsView)
+            }
+        }
     }
 
     func makeCoordinator() -> Coordinator {
