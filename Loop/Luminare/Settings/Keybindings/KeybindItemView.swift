@@ -49,9 +49,9 @@ struct KeybindItemView: View {
 
     var moreSection: PickerSection<WindowDirection> {
         if cycleIndex != nil { // If this is a cycling keybind
-            .init(.init(localized: "More"), [WindowDirection.custom])
+            .init(.init(localized: "Special"), [WindowDirection.custom])
         } else {
-            .init(.init(localized: "More"), [WindowDirection.custom, WindowDirection.cycle])
+            .init(.init(localized: "Special"), [WindowDirection.custom, WindowDirection.cycle])
         }
     }
 
@@ -228,7 +228,7 @@ struct KeybindItemView: View {
             PickerView(
                 keybind,
                 $searchResults,
-                sections + [moreSection]
+                [moreSection] + sections
             ) { item in
                 HStack(spacing: 8) {
                     IconView(action: .init(item))
