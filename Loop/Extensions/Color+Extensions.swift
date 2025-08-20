@@ -117,3 +117,36 @@ extension NSColor {
         return NSColor(srgbRed: red, green: green, blue: blue, alpha: alpha)
     }
 }
+
+// MARK: - SwiftUI Color Codable support
+
+extension Color: Codable {
+    enum CodingKeys: String, CodingKey {
+        case red, green, blue, alpha
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let red = try container.decode(Double.self, forKey: .red)
+        let green = try container.decode(Double.self, forKey: .green)
+        let blue = try container.decode(Double.self, forKey: .blue)
+        let alpha = try container.decode(Double.self, forKey: .alpha)
+
+        self.init(red: red, green: green, blue: blue, opacity: alpha)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        // Convert SwiftUI Color to NSColor for component extraction
+        let nsColor = NSColor(self)
+        guard let rgbColor = nsColor.usingColorSpace(.sRGB) else {
+            throw EncodingError.invalidValue(self, EncodingError.Context(codingPath: encoder.codingPath, debugDescription: "Cannot convert color to RGB space"))
+        }
+
+        try container.encode(Double(rgbColor.redComponent), forKey: .red)
+        try container.encode(Double(rgbColor.greenComponent), forKey: .green)
+        try container.encode(Double(rgbColor.blueComponent), forKey: .blue)
+        try container.encode(Double(rgbColor.alphaComponent), forKey: .alpha)
+    }
+}

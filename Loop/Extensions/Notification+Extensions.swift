@@ -15,8 +15,8 @@ extension Notification.Name {
     static let forceCloseLoop = Notification.Name("forceCloseLoop")
     static let activeStateChanged = Notification.Name("activeStateChanged")
 
-    static let didImportKeybindsSuccessfully = Notification.Name("didImportKeybindsSuccessfully")
-    static let didExportKeybindsSuccessfully = Notification.Name("didExportKeybindsSuccessfully")
+    static let didImportSettingsSuccessfully = Notification.Name("didImportSettingsSuccessfully")
+    static let didExportSettingsSuccessfully = Notification.Name("didExportSettingsSuccessfully")
 
     @discardableResult
     func onReceive(object: Any? = nil, using: @escaping (Notification) -> ()) -> NSObjectProtocol {

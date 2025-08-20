@@ -8,7 +8,7 @@
 import Defaults
 import SwiftUI
 
-enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifiable {
+enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifiable, Codable {
     var id: Self { self }
 
     case smooth = 0
