@@ -8,19 +8,151 @@
 import Defaults
 import SwiftUI
 
-// MARK: - Saved Keybinds Format
+// MARK: - Saved Settings Format
 
-/// Struct to represent the JSON contents of a Loop keybinds file.
-struct SavedKeybindsFormat: Codable {
+/// Struct to represent the JSON contents of a Loop settings file.
+struct SavedSettingsFormat: Codable {
     let version: String?
-    let triggerKey: Set<CGKeyCode>?
     let actions: [SavedWindowActionFormat]
 
-    static func generateFromDefaults() -> SavedKeybindsFormat {
-        SavedKeybindsFormat(
+    // Icon
+    let currentIcon: String?
+    let timesLooped: Int?
+    let showDockIcon: Bool?
+    let notificationWhenIconUnlocked: Bool?
+
+    // Accent Color
+    let useSystemAccentColor: Bool?
+    let customAccentColor: Color?
+    let useGradient: Bool?
+    let gradientColor: Color?
+    let processWallpaper: Bool?
+
+    // Radial Menu
+    let radialMenuVisibility: Bool?
+    let radialMenuCornerRadius: CGFloat?
+    let radialMenuThickness: CGFloat?
+    let lockRadialMenuToCenter: Bool?
+
+    // Preview
+    let previewVisibility: Bool?
+    let previewPadding: CGFloat?
+    let previewCornerRadius: CGFloat?
+    let previewBorderThickness: CGFloat?
+
+    // Behavior
+    let launchAtLogin: Bool?
+    let hideMenuBarIcon: Bool?
+    let animationConfiguration: AnimationConfiguration?
+    let windowSnapping: Bool?
+    let restoreWindowFrameOnDrag: Bool?
+    let enablePadding: Bool?
+    let padding: PaddingModel?
+    let useScreenWithCursor: Bool?
+    let moveCursorWithWindow: Bool?
+    let resizeWindowUnderCursor: Bool?
+    let focusWindowOnResize: Bool?
+    let respectStageManager: Bool?
+    let stageStripSize: CGFloat?
+    let animateStashedWindows: Bool?
+    let stashedWindowVisiblePadding: CGFloat?
+    let shiftFocusWhenStashed: Bool?
+    let cycleModeRestartEnabled: Bool?
+
+    // Keybinds
+    let triggerKey: Set<CGKeyCode>?
+    let triggerDelay: Double?
+    let doubleClickToTrigger: Bool?
+    let middleClickTriggersLoop: Bool?
+    let cycleBackwardsOnShiftPressed: Bool?
+    let keybinds: [WindowAction]?
+
+    // Advanced
+    let useSystemWindowManagerWhenAvailable: Bool?
+    let animateWindowResizes: Bool?
+    let disableCursorInteraction: Bool?
+    let ignoreFullscreen: Bool?
+    let hideUntilDirectionIsChosen: Bool?
+    let hapticFeedback: Bool?
+
+    // About
+    let includeDevelopmentVersions: Bool?
+    let updatesEnabled: Bool?
+
+    let excludedApps: [URL]?
+    let sizeIncrement: CGFloat?
+
+    static func generateFromDefaults() -> SavedSettingsFormat {
+        SavedSettingsFormat(
             version: Bundle.main.appVersion,
+            actions: Defaults[.keybinds].map { SavedWindowActionFormat($0) },
+
+            // Icon
+            currentIcon: Defaults[.currentIcon],
+            timesLooped: Defaults[.timesLooped],
+            showDockIcon: Defaults[.showDockIcon],
+            notificationWhenIconUnlocked: Defaults[.notificationWhenIconUnlocked],
+
+            // Accent Color
+            useSystemAccentColor: Defaults[.useSystemAccentColor],
+            customAccentColor: Defaults[.customAccentColor],
+            useGradient: Defaults[.useGradient],
+            gradientColor: Defaults[.gradientColor],
+            processWallpaper: Defaults[.processWallpaper],
+
+            // Radial Menu
+            radialMenuVisibility: Defaults[.radialMenuVisibility],
+            radialMenuCornerRadius: Defaults[.radialMenuCornerRadius],
+            radialMenuThickness: Defaults[.radialMenuThickness],
+            lockRadialMenuToCenter: Defaults[.lockRadialMenuToCenter],
+
+            // Preview
+            previewVisibility: Defaults[.previewVisibility],
+            previewPadding: Defaults[.previewPadding],
+            previewCornerRadius: Defaults[.previewCornerRadius],
+            previewBorderThickness: Defaults[.previewBorderThickness],
+
+            // Behavior
+            launchAtLogin: Defaults[.launchAtLogin],
+            hideMenuBarIcon: Defaults[.hideMenuBarIcon],
+            animationConfiguration: Defaults[.animationConfiguration],
+            windowSnapping: Defaults[.windowSnapping],
+            restoreWindowFrameOnDrag: Defaults[.restoreWindowFrameOnDrag],
+            enablePadding: Defaults[.enablePadding],
+            padding: Defaults[.padding],
+            useScreenWithCursor: Defaults[.useScreenWithCursor],
+            moveCursorWithWindow: Defaults[.moveCursorWithWindow],
+            resizeWindowUnderCursor: Defaults[.resizeWindowUnderCursor],
+            focusWindowOnResize: Defaults[.focusWindowOnResize],
+            respectStageManager: Defaults[.respectStageManager],
+            stageStripSize: Defaults[.stageStripSize],
+            animateStashedWindows: Defaults[.animateStashedWindows],
+            stashedWindowVisiblePadding: Defaults[.stashedWindowVisiblePadding],
+            shiftFocusWhenStashed: Defaults[.shiftFocusWhenStashed],
+            cycleModeRestartEnabled: Defaults[.cycleModeRestartEnabled],
+
+            // Keybinds
             triggerKey: Defaults[.triggerKey],
-            actions: Defaults[.keybinds].map { SavedWindowActionFormat($0) }
+            triggerDelay: Defaults[.triggerDelay],
+            doubleClickToTrigger: Defaults[.doubleClickToTrigger],
+            middleClickTriggersLoop: Defaults[.middleClickTriggersLoop],
+            cycleBackwardsOnShiftPressed: Defaults[.cycleBackwardsOnShiftPressed],
+            keybinds: Defaults[.keybinds],
+
+            // Advanced
+            useSystemWindowManagerWhenAvailable: Defaults[.useSystemWindowManagerWhenAvailable],
+            animateWindowResizes: Defaults[.animateWindowResizes],
+            disableCursorInteraction: Defaults[.disableCursorInteraction],
+            ignoreFullscreen: Defaults[.ignoreFullscreen],
+            hideUntilDirectionIsChosen: Defaults[.hideUntilDirectionIsChosen],
+            hapticFeedback: Defaults[.hapticFeedback],
+
+            // About
+            includeDevelopmentVersions: Defaults[.includeDevelopmentVersions],
+            updatesEnabled: Defaults[.updatesEnabled],
+
+            excludedApps: Defaults[.excludedApps],
+            sizeIncrement: Defaults[.sizeIncrement]
         )
     }
 }
@@ -81,7 +213,7 @@ struct SavedWindowActionFormat: Codable {
 // MARK: - Migrator
 
 enum MigratorError: Error {
-    case keybindsEmpty
+    case settingsEmpty
     case failedToConvertToString
     case mainWindowNotAvailableForPanel
     case fileSelectionCancelled
@@ -90,10 +222,10 @@ enum MigratorError: Error {
 
     var localizedDescription: String {
         switch self {
-        case .keybindsEmpty:
-            "Keybinds are empty."
+        case .settingsEmpty:
+            "Settings are empty."
         case .failedToConvertToString:
-            "Failed to convert keybinds to string."
+            "Failed to convert settings to string."
         case .mainWindowNotAvailableForPanel:
             "Main window not available for panel."
         case .fileSelectionCancelled:
@@ -106,13 +238,13 @@ enum MigratorError: Error {
     }
 }
 
-// Adds functionality for saving, loading, and managing window actions.
+// Adds functionality for saving, loading, and managing settings.
 enum Migrator {
     private static var documentsDirectory: URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     }
 
-    /// Presents a prompt to export current keybinds to a JSON file.
+    /// Presents a prompt to export current settings to a JSON file.
     static func exportPrompt() async throws {
         // Check if there are any keybinds to export.
         guard !Defaults[.keybinds].isEmpty else {
@@ -127,23 +259,23 @@ enum Migrator {
                 )
             )
 
-            throw MigratorError.keybindsEmpty
+            throw MigratorError.settingsEmpty
         }
 
         let directoryURL = try await getSaveDirectoryURL()
-        let keybinds = SavedKeybindsFormat.generateFromDefaults()
-        try await saveKeybinds(keybinds, in: directoryURL)
+        let settings = SavedSettingsFormat.generateFromDefaults()
+        try await saveSettings(settings, in: directoryURL)
 
-        Notification.Name.didExportKeybindsSuccessfully.post()
+        Notification.Name.didExportSettingsSuccessfully.post()
     }
 
-    /// Presents a prompt to import keybinds from a JSON file.
+    /// Presents a prompt to import settings from a JSON file.
     static func importPrompt() async throws {
-        let fileURL = try await getKeybindsFileURL()
+        let fileURL = try await getSettingsFileURL()
         let jsonString = try String(contentsOf: fileURL)
 
         do {
-            try await importKeybinds(from: jsonString)
+            try await importSettings(from: jsonString)
         } catch {
             if case MigratorError.failedToReadFile = error {
                 await showAlert(
@@ -166,13 +298,13 @@ enum Migrator {
 // MARK: Migrator + Export
 
 private extension Migrator {
-    /// Presents a save panel to select a directory for exporting keybinds.
+    /// Presents a save panel to select a directory for exporting settings.
     @MainActor
     static func getSaveDirectoryURL() async throws -> URL {
         let savePanel = NSSavePanel()
         savePanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
         savePanel.title = .init(localized: "Export keybinds")
-        savePanel.nameFieldStringValue = "Loop Keybinds.json"
+        savePanel.nameFieldStringValue = "Loop Settings.json"
 
         guard let window = NSApplication.shared.mainWindow else {
             throw MigratorError.mainWindowNotAvailableForPanel
@@ -190,16 +322,16 @@ private extension Migrator {
         return selectedFileURL
     }
 
-    /// Saves the keybinds in the specified directory URL.
-    static func saveKeybinds(_: SavedKeybindsFormat, in directoryURL: URL) async throws {
-        let keybinds = SavedKeybindsFormat.generateFromDefaults()
+    /// Saves the settings in the specified directory URL.
+    static func saveSettings(_: SavedSettingsFormat, in directoryURL: URL) async throws {
+        let settings = SavedSettingsFormat.generateFromDefaults()
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 
         // Convert to a dictionary we can manipulate before final encoding
         var rootDict = try JSONSerialization.jsonObject(
-            with: encoder.encode(keybinds),
+            with: encoder.encode(settings),
             options: [.mutableContainers]
         ) as! [String: Any]
 
@@ -293,9 +425,9 @@ private extension Migrator {
 // MARK: Migrator + Import
 
 private extension Migrator {
-    /// Presents a file picker to select a keybinds file.
+    /// Presents a file picker to select a settings file.
     @MainActor
-    static func getKeybindsFileURL() async throws -> URL {
+    static func getSettingsFileURL() async throws -> URL {
         let openPanel = NSOpenPanel()
         openPanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
         openPanel.title = .init(localized: "Select a keybinds file")
@@ -317,24 +449,24 @@ private extension Migrator {
         return selectedFileURL
     }
 
-    /// Imports keybinds from a JSON string.
-    static func importKeybinds(from jsonString: String) async throws {
+    /// Imports settings from a JSON string.
+    static func importSettings(from jsonString: String) async throws {
         guard let data = jsonString.data(using: .utf8) else {
             throw MigratorError.failedToReadFile
         }
 
-        /// First, try to import the general Loop keybinds format.
+        /// First, try to import the general Loop settings format.
         do {
-            let savedData = try await importLoopKeybinds(from: data)
+            let savedData = try await importLoopSettings(from: data)
             await updateDefaults(with: savedData)
             return
         } catch {
-            print("Error importing Loop keybinds: \(error)")
+            print("Error importing Loop settings: \(error)")
         }
 
         /// If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
         do {
-            let savedData = try await importLoopLegacyKeybinds(from: data)
+            let savedData = try await importLoopLegacySettings(from: data)
             await updateDefaults(with: savedData)
             return
         } catch {
@@ -343,7 +475,7 @@ private extension Migrator {
 
         /// If that fails, try to import the Rectangle keybinds format.
         do {
-            let savedData = try await importRectangleKeybinds(from: data)
+            let savedData = try await importRectangleSettings(from: data)
             await updateDefaults(with: savedData)
             return
         } catch {
@@ -354,39 +486,238 @@ private extension Migrator {
         throw MigratorError.failedToReadFile
     }
 
-    /// Tries to import Loop's keybinds format.
-    static func importLoopKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
+    /// Tries to import Loop's settings format.
+    static func importLoopSettings(from data: Data) async throws -> SavedSettingsFormat {
         let decoder = JSONDecoder()
-        let keybinds = try decoder.decode(SavedKeybindsFormat.self, from: data)
-        return keybinds
+        let settings = try decoder.decode(SavedSettingsFormat.self, from: data)
+        return settings
     }
 
     /// Tries to import Loop's old (pre 1.2.0) keybinds format.
-    static func importLoopLegacyKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
+    static func importLoopLegacySettings(from data: Data) async throws -> SavedSettingsFormat {
         let decoder = JSONDecoder()
         let keybinds = try decoder.decode([SavedWindowActionFormat].self, from: data)
-        return SavedKeybindsFormat(version: nil, triggerKey: nil, actions: keybinds)
+
+        // Create a SavedSettingsFormat with only version and actions, all other fields will be nil
+        return SavedSettingsFormat(
+            version: nil,
+            actions: keybinds,
+            currentIcon: nil, timesLooped: nil, showDockIcon: nil, notificationWhenIconUnlocked: nil,
+            useSystemAccentColor: nil, customAccentColor: nil, useGradient: nil, gradientColor: nil, processWallpaper: nil,
+            radialMenuVisibility: nil, radialMenuCornerRadius: nil, radialMenuThickness: nil, lockRadialMenuToCenter: nil,
+            previewVisibility: nil, previewPadding: nil, previewCornerRadius: nil, previewBorderThickness: nil,
+            launchAtLogin: nil, hideMenuBarIcon: nil, animationConfiguration: nil, windowSnapping: nil, restoreWindowFrameOnDrag: nil,
+            enablePadding: nil, padding: nil, useScreenWithCursor: nil, moveCursorWithWindow: nil, resizeWindowUnderCursor: nil,
+            focusWindowOnResize: nil, respectStageManager: nil, stageStripSize: nil, animateStashedWindows: nil,
+            stashedWindowVisiblePadding: nil, shiftFocusWhenStashed: nil, cycleModeRestartEnabled: nil,
+            triggerKey: nil, triggerDelay: nil, doubleClickToTrigger: nil, middleClickTriggersLoop: nil,
+            cycleBackwardsOnShiftPressed: nil, keybinds: nil,
+            useSystemWindowManagerWhenAvailable: nil, animateWindowResizes: nil, disableCursorInteraction: nil,
+            ignoreFullscreen: nil, hideUntilDirectionIsChosen: nil, hapticFeedback: nil,
+            includeDevelopmentVersions: nil, updatesEnabled: nil, excludedApps: nil, sizeIncrement: nil
+        )
     }
 
     /// Tries to import Rectangle's keybinds format.
-    static func importRectangleKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
+    static func importRectangleSettings(from data: Data) async throws -> SavedSettingsFormat {
         let keybinds = try RectangleTranslationLayer.importKeybinds(from: data)
-        return SavedKeybindsFormat(version: nil, triggerKey: nil, actions: keybinds)
+
+        // Create a SavedSettingsFormat with only version and actions, all other fields will be nil
+        return SavedSettingsFormat(
+            version: nil,
+            actions: keybinds,
+            currentIcon: nil, timesLooped: nil, showDockIcon: nil, notificationWhenIconUnlocked: nil,
+            useSystemAccentColor: nil, customAccentColor: nil, useGradient: nil, gradientColor: nil, processWallpaper: nil,
+            radialMenuVisibility: nil, radialMenuCornerRadius: nil, radialMenuThickness: nil, lockRadialMenuToCenter: nil,
+            previewVisibility: nil, previewPadding: nil, previewCornerRadius: nil, previewBorderThickness: nil,
+            launchAtLogin: nil, hideMenuBarIcon: nil, animationConfiguration: nil, windowSnapping: nil, restoreWindowFrameOnDrag: nil,
+            enablePadding: nil, padding: nil, useScreenWithCursor: nil, moveCursorWithWindow: nil, resizeWindowUnderCursor: nil,
+            focusWindowOnResize: nil, respectStageManager: nil, stageStripSize: nil, animateStashedWindows: nil,
+            stashedWindowVisiblePadding: nil, shiftFocusWhenStashed: nil, cycleModeRestartEnabled: nil,
+            triggerKey: nil, triggerDelay: nil, doubleClickToTrigger: nil, middleClickTriggersLoop: nil,
+            cycleBackwardsOnShiftPressed: nil, keybinds: nil,
+            useSystemWindowManagerWhenAvailable: nil, animateWindowResizes: nil, disableCursorInteraction: nil,
+            ignoreFullscreen: nil, hideUntilDirectionIsChosen: nil, hapticFeedback: nil,
+            includeDevelopmentVersions: nil, updatesEnabled: nil, excludedApps: nil, sizeIncrement: nil
+        )
     }
 
     // MARK: Saving Imports
 
     /// Updates the app's defaults with the imported keybinds.
-    static func updateDefaults(with savedData: SavedKeybindsFormat) async {
+    static func updateDefaults(with savedData: SavedSettingsFormat) async {
+        // Import all available settings from SavedSettingsFormat
+
+        // Icon settings
+        if let currentIcon = savedData.currentIcon {
+            Defaults[.currentIcon] = currentIcon
+        }
+        if let timesLooped = savedData.timesLooped {
+            Defaults[.timesLooped] = timesLooped
+        }
+        if let showDockIcon = savedData.showDockIcon {
+            Defaults[.showDockIcon] = showDockIcon
+        }
+        if let notificationWhenIconUnlocked = savedData.notificationWhenIconUnlocked {
+            Defaults[.notificationWhenIconUnlocked] = notificationWhenIconUnlocked
+        }
+
+        // Accent Color settings
+        if let useSystemAccentColor = savedData.useSystemAccentColor {
+            Defaults[.useSystemAccentColor] = useSystemAccentColor
+        }
+        if let customAccentColor = savedData.customAccentColor {
+            Defaults[.customAccentColor] = customAccentColor
+        }
+        if let useGradient = savedData.useGradient {
+            Defaults[.useGradient] = useGradient
+        }
+        if let gradientColor = savedData.gradientColor {
+            Defaults[.gradientColor] = gradientColor
+        }
+        if let processWallpaper = savedData.processWallpaper {
+            Defaults[.processWallpaper] = processWallpaper
+        }
+
+        // Radial Menu settings
+        if let radialMenuVisibility = savedData.radialMenuVisibility {
+            Defaults[.radialMenuVisibility] = radialMenuVisibility
+        }
+        if let radialMenuCornerRadius = savedData.radialMenuCornerRadius {
+            Defaults[.radialMenuCornerRadius] = radialMenuCornerRadius
+        }
+        if let radialMenuThickness = savedData.radialMenuThickness {
+            Defaults[.radialMenuThickness] = radialMenuThickness
+        }
+        if let lockRadialMenuToCenter = savedData.lockRadialMenuToCenter {
+            Defaults[.lockRadialMenuToCenter] = lockRadialMenuToCenter
+        }
+
+        // Preview settings
+        if let previewVisibility = savedData.previewVisibility {
+            Defaults[.previewVisibility] = previewVisibility
+        }
+        if let previewPadding = savedData.previewPadding {
+            Defaults[.previewPadding] = previewPadding
+        }
+        if let previewCornerRadius = savedData.previewCornerRadius {
+            Defaults[.previewCornerRadius] = previewCornerRadius
+        }
+        if let previewBorderThickness = savedData.previewBorderThickness {
+            Defaults[.previewBorderThickness] = previewBorderThickness
+        }
+
+        // Behavior settings
+        if let launchAtLogin = savedData.launchAtLogin {
+            Defaults[.launchAtLogin] = launchAtLogin
+        }
+        if let hideMenuBarIcon = savedData.hideMenuBarIcon {
+            Defaults[.hideMenuBarIcon] = hideMenuBarIcon
+        }
+        if let animationConfiguration = savedData.animationConfiguration {
+            Defaults[.animationConfiguration] = animationConfiguration
+        }
+        if let windowSnapping = savedData.windowSnapping {
+            Defaults[.windowSnapping] = windowSnapping
+        }
+        if let restoreWindowFrameOnDrag = savedData.restoreWindowFrameOnDrag {
+            Defaults[.restoreWindowFrameOnDrag] = restoreWindowFrameOnDrag
+        }
+        if let enablePadding = savedData.enablePadding {
+            Defaults[.enablePadding] = enablePadding
+        }
+        if let padding = savedData.padding {
+            Defaults[.padding] = padding
+        }
+        if let useScreenWithCursor = savedData.useScreenWithCursor {
+            Defaults[.useScreenWithCursor] = useScreenWithCursor
+        }
+        if let moveCursorWithWindow = savedData.moveCursorWithWindow {
+            Defaults[.moveCursorWithWindow] = moveCursorWithWindow
+        }
+        if let resizeWindowUnderCursor = savedData.resizeWindowUnderCursor {
+            Defaults[.resizeWindowUnderCursor] = resizeWindowUnderCursor
+        }
+        if let focusWindowOnResize = savedData.focusWindowOnResize {
+            Defaults[.focusWindowOnResize] = focusWindowOnResize
+        }
+        if let respectStageManager = savedData.respectStageManager {
+            Defaults[.respectStageManager] = respectStageManager
+        }
+        if let stageStripSize = savedData.stageStripSize {
+            Defaults[.stageStripSize] = stageStripSize
+        }
+        if let animateStashedWindows = savedData.animateStashedWindows {
+            Defaults[.animateStashedWindows] = animateStashedWindows
+        }
+        if let stashedWindowVisiblePadding = savedData.stashedWindowVisiblePadding {
+            Defaults[.stashedWindowVisiblePadding] = stashedWindowVisiblePadding
+        }
+        if let shiftFocusWhenStashed = savedData.shiftFocusWhenStashed {
+            Defaults[.shiftFocusWhenStashed] = shiftFocusWhenStashed
+        }
+        if let cycleModeRestartEnabled = savedData.cycleModeRestartEnabled {
+            Defaults[.cycleModeRestartEnabled] = cycleModeRestartEnabled
+        }
+
+        // Keybinds settings
         if let triggerKey = savedData.triggerKey {
             Defaults[.triggerKey] = triggerKey
+        }
+        if let triggerDelay = savedData.triggerDelay {
+            Defaults[.triggerDelay] = triggerDelay
+        }
+        if let doubleClickToTrigger = savedData.doubleClickToTrigger {
+            Defaults[.doubleClickToTrigger] = doubleClickToTrigger
+        }
+        if let middleClickTriggersLoop = savedData.middleClickTriggersLoop {
+            Defaults[.middleClickTriggersLoop] = middleClickTriggersLoop
+        }
+        if let cycleBackwardsOnShiftPressed = savedData.cycleBackwardsOnShiftPressed {
+            Defaults[.cycleBackwardsOnShiftPressed] = cycleBackwardsOnShiftPressed
+        }
+
+        // Advanced settings
+        if let useSystemWindowManagerWhenAvailable = savedData.useSystemWindowManagerWhenAvailable {
+            Defaults[.useSystemWindowManagerWhenAvailable] = useSystemWindowManagerWhenAvailable
+        }
+        if let animateWindowResizes = savedData.animateWindowResizes {
+            Defaults[.animateWindowResizes] = animateWindowResizes
+        }
+        if let disableCursorInteraction = savedData.disableCursorInteraction {
+            Defaults[.disableCursorInteraction] = disableCursorInteraction
+        }
+        if let ignoreFullscreen = savedData.ignoreFullscreen {
+            Defaults[.ignoreFullscreen] = ignoreFullscreen
+        }
+        if let hideUntilDirectionIsChosen = savedData.hideUntilDirectionIsChosen {
+            Defaults[.hideUntilDirectionIsChosen] = hideUntilDirectionIsChosen
+        }
+        if let hapticFeedback = savedData.hapticFeedback {
+            Defaults[.hapticFeedback] = hapticFeedback
+        }
+
+        // About settings
+        if let includeDevelopmentVersions = savedData.includeDevelopmentVersions {
+            Defaults[.includeDevelopmentVersions] = includeDevelopmentVersions
+        }
+        if let updatesEnabled = savedData.updatesEnabled {
+            Defaults[.updatesEnabled] = updatesEnabled
+        }
+
+        // Other settings
+        if let excludedApps = savedData.excludedApps {
+            Defaults[.excludedApps] = excludedApps
+        }
+        if let sizeIncrement = savedData.sizeIncrement {
+            Defaults[.sizeIncrement] = sizeIncrement
         }
 
         if Defaults[.keybinds].isEmpty {
             Defaults[.keybinds] = savedData.actions.map { $0.convertToWindowAction() }
 
             // Post a notification after updating the keybinds
-            Notification.Name.didImportKeybindsSuccessfully.post()
+            Notification.Name.didImportSettingsSuccessfully.post()
         } else {
             let result = await showAlertForImportDecision()
 
@@ -401,12 +732,12 @@ private extension Migrator {
                 Defaults[.keybinds].append(contentsOf: newKeybinds)
 
                 // Post a notification after updating the keybinds
-                Notification.Name.didImportKeybindsSuccessfully.post()
+                Notification.Name.didImportSettingsSuccessfully.post()
             case .erase:
                 Defaults[.keybinds] = savedData.actions.map { $0.convertToWindowAction() }
 
                 // Post a notification after updating the keybinds
-                Notification.Name.didImportKeybindsSuccessfully.post()
+                Notification.Name.didImportSettingsSuccessfully.post()
             case .cancel:
                 // No action needed, no notification should be posted
                 break
@@ -417,12 +748,12 @@ private extension Migrator {
     /// Presents a decision alert for how to handle imported keybinds.
     static func showAlertForImportDecision() async -> ImportDecision {
         let response = await showAlert(
-            .init(localized: "Import Keybinds"),
-            informativeText: .init(localized: "Do you want to merge or erase existing keybinds?"),
+            .init(localized: "Import Settings"),
+            informativeText: .init(localized: "Do you want to merge or erase existing settings?"),
             buttons: [
-                .init(localized: "Import keybinds: merge", defaultValue: "Merge"),
-                .init(localized: "Import keybinds: erase", defaultValue: "Erase"),
-                .init(localized: "Import keybinds: cancel", defaultValue: "Cancel")
+                .init(localized: "Import settings: merge", defaultValue: "Merge"),
+                .init(localized: "Import settings: erase", defaultValue: "Erase"),
+                .init(localized: "Import settings: cancel", defaultValue: "Cancel")
             ]
         )
 
