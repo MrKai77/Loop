@@ -49,9 +49,9 @@ struct KeybindItemView: View {
 
     var moreSection: PickerSection<WindowDirection> {
         if cycleIndex != nil { // If this is a cycling keybind
-            .init(.init(localized: "Special"), [WindowDirection.custom])
+            .init(.init(localized: "More"), [WindowDirection.custom])
         } else {
-            .init(.init(localized: "Special"), [WindowDirection.custom, WindowDirection.cycle])
+            .init(.init(localized: "More"), [WindowDirection.custom, WindowDirection.cycle])
         }
     }
 
