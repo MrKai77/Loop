@@ -204,7 +204,7 @@ struct AdvancedConfigurationView: View {
                         }
                     }
                 }
-                .onReceive(.didImportKeybindsSuccessfully) { _ in
+                .onReceive(.didImportSettingsSuccessfully) { _ in
                     model.importedSuccessfully()
                 }
 
@@ -227,7 +227,7 @@ struct AdvancedConfigurationView: View {
                         }
                     }
                 }
-                .onReceive(.didExportKeybindsSuccessfully) { _ in
+                .onReceive(.didExportSettingsSuccessfully) { _ in
                     model.exportedSuccessfully()
                 }
 

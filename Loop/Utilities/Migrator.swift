@@ -7,93 +7,27 @@
 
 import Defaults
 import SwiftUI
-
-// MARK: - Saved Keybinds Format
-
-/// Struct to represent the JSON contents of a Loop keybinds file.
-struct SavedKeybindsFormat: Codable {
-    let version: String?
-    let triggerKey: Set<CGKeyCode>?
-    let actions: [SavedWindowActionFormat]
-
-    static func generateFromDefaults() -> SavedKeybindsFormat {
-        SavedKeybindsFormat(
-            version: Bundle.main.appVersion,
-            triggerKey: Defaults[.triggerKey],
-            actions: Defaults[.keybinds].map { SavedWindowActionFormat($0) }
-        )
-    }
-}
-
-// MARK: - SavedWindowActionFormat
-
-/// Struct to define the format of saved window actions.
-struct SavedWindowActionFormat: Codable {
-    let direction: WindowDirection
-    let keybind: Set<CGKeyCode>
-    let name: String?
-    let unit: CustomWindowActionUnit?
-    let anchor: CustomWindowActionAnchor?
-    let sizeMode: CustomWindowActionSizeMode?
-    let width: Double?
-    let height: Double?
-    let positionMode: CustomWindowActionPositionMode?
-    let xPoint: Double?
-    let yPoint: Double?
-    let cycle: [SavedWindowActionFormat]?
-
-    /// Initialize from a WindowAction.
-    init(_ action: WindowAction) {
-        self.direction = action.direction
-        self.keybind = action.keybind
-        self.name = action.name
-        self.unit = action.unit
-        self.anchor = action.anchor
-        self.sizeMode = action.sizeMode
-        self.width = action.width
-        self.height = action.height
-        self.positionMode = action.positionMode
-        self.xPoint = action.xPoint
-        self.yPoint = action.yPoint
-        self.cycle = action.cycle?.map { SavedWindowActionFormat($0) }
-    }
-
-    /// Converts the saved format back into a usable WindowAction object.
-    func convertToWindowAction() -> WindowAction {
-        WindowAction(
-            direction,
-            keybind: keybind,
-            name: name,
-            unit: unit,
-            anchor: anchor,
-            width: width,
-            height: height,
-            xPoint: xPoint,
-            yPoint: yPoint,
-            positionMode: positionMode,
-            sizeMode: sizeMode,
-            cycle: cycle?.map { $0.convertToWindowAction()
-            }
-        )
-    }
-}
+import UniformTypeIdentifiers
 
 // MARK: - Migrator
 
 enum MigratorError: Error {
-    case keybindsEmpty
+    case settingsEmpty
     case failedToConvertToString
     case mainWindowNotAvailableForPanel
     case fileSelectionCancelled
     case directorySelectionCancelled
     case failedToReadFile
+    case invalidPlistFormat
+    case importFailed
+    case backupFailed
 
     var localizedDescription: String {
         switch self {
-        case .keybindsEmpty:
-            "Keybinds are empty."
+        case .settingsEmpty:
+            "Settings are empty."
         case .failedToConvertToString:
-            "Failed to convert keybinds to string."
+            "Failed to convert settings to string."
         case .mainWindowNotAvailableForPanel:
             "Main window not available for panel."
         case .fileSelectionCancelled:
@@ -102,63 +36,73 @@ enum MigratorError: Error {
             "Directory selection was cancelled."
         case .failedToReadFile:
             "Failed to read file."
+        case .invalidPlistFormat:
+            "Invalid plist file format."
+        case .importFailed:
+            "Failed to import settings."
+        case .backupFailed:
+            "Failed to create backup."
         }
     }
 }
 
-// Adds functionality for saving, loading, and managing window actions.
+// Adds functionality for saving, loading, and managing Loop settings.
 enum Migrator {
     private static var documentsDirectory: URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     }
 
-    /// Presents a prompt to export current keybinds to a JSON file.
+    /// Presents a prompt to export current settings to a plist file.
     static func exportPrompt() async throws {
-        // Check if there are any keybinds to export.
-        guard !Defaults[.keybinds].isEmpty else {
-            await showAlert(
-                .init(
-                    localized: "Export empty keybinds alert title",
-                    defaultValue: "No Keybinds Have Been Set"
-                ),
-                informativeText: .init(
-                    localized: "Export empty keybinds alert description",
-                    defaultValue: "You can't export something that doesn't exist!"
-                )
-            )
+        let fileURL = try await getSaveDirectoryURL()
+        try await saveSettings(to: fileURL)
 
-            throw MigratorError.keybindsEmpty
-        }
-
-        let directoryURL = try await getSaveDirectoryURL()
-        let keybinds = SavedKeybindsFormat.generateFromDefaults()
-        try await saveKeybinds(keybinds, in: directoryURL)
-
-        Notification.Name.didExportKeybindsSuccessfully.post()
+        Notification.Name.didExportSettingsSuccessfully.post()
     }
 
-    /// Presents a prompt to import keybinds from a JSON file.
+    /// Presents a prompt to import settings from a plist file.
     static func importPrompt() async throws {
-        let fileURL = try await getKeybindsFileURL()
-        let jsonString = try String(contentsOf: fileURL)
+        let fileURL = try await getSettingsFileURL()
 
         do {
-            try await importKeybinds(from: jsonString)
+            try await importSettings(from: fileURL)
         } catch {
-            if case MigratorError.failedToReadFile = error {
-                await showAlert(
-                    .init(
-                        localized: "Error reading keybinds alert title",
-                        defaultValue: "Error Reading Keybinds"
-                    ),
-                    informativeText: .init(
-                        localized: "Error reading keybinds alert description",
-                        defaultValue: "Make sure the file you selected is in the correct format."
-                    )
+            let errorTitle: String
+            let errorMessage: String
+
+            switch error {
+            case MigratorError.failedToReadFile:
+                errorTitle = .init(
+                    localized: "Error reading settings alert title",
+                    defaultValue: "Error Reading Settings"
                 )
-            } else {
+                errorMessage = .init(
+                    localized: "Error reading settings alert description",
+                    defaultValue: "Make sure the file you selected is in the correct format."
+                )
+            case MigratorError.invalidPlistFormat:
+                errorTitle = .init(
+                    localized: "Invalid file format alert title",
+                    defaultValue: "Invalid File Format"
+                )
+                errorMessage = .init(
+                    localized: "Invalid file format alert description",
+                    defaultValue: "The selected file is not a valid Loop settings file."
+                )
+            case MigratorError.backupFailed:
+                errorTitle = .init(
+                    localized: "Backup failed alert title",
+                    defaultValue: "Backup Failed"
+                )
+                errorMessage = .init(
+                    localized: "Backup failed alert description",
+                    defaultValue: "Failed to create backup or copy settings file."
+                )
+            default:
                 throw error
             }
+
+            await showAlert(errorTitle, informativeText: errorMessage)
         }
     }
 }
@@ -166,13 +110,13 @@ enum Migrator {
 // MARK: Migrator + Export
 
 private extension Migrator {
-    /// Presents a save panel to select a directory for exporting keybinds.
+    /// Presents a save panel to select a location for exporting settings.
     @MainActor
     static func getSaveDirectoryURL() async throws -> URL {
         let savePanel = NSSavePanel()
         savePanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
-        savePanel.title = .init(localized: "Export keybinds")
-        savePanel.nameFieldStringValue = "Loop Keybinds.json"
+        savePanel.title = .init(localized: "Export settings")
+        savePanel.nameFieldStringValue = "Loop Settings.plist"
 
         guard let window = NSApplication.shared.mainWindow else {
             throw MigratorError.mainWindowNotAvailableForPanel
@@ -190,102 +134,39 @@ private extension Migrator {
         return selectedFileURL
     }
 
-    /// Saves the keybinds in the specified directory URL.
-    static func saveKeybinds(_: SavedKeybindsFormat, in directoryURL: URL) async throws {
-        let keybinds = SavedKeybindsFormat.generateFromDefaults()
+    /// Saves the current settings to the specified file URL.
+    static func saveSettings(to fileURL: URL) async throws {
+        let fileManager = FileManager.default
+        let sourceURL = fileManager.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Preferences/com.MrKai77.Loop.plist")
 
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-
-        // Convert to a dictionary we can manipulate before final encoding
-        var rootDict = try JSONSerialization.jsonObject(
-            with: encoder.encode(keybinds),
-            options: [.mutableContainers]
-        ) as! [String: Any]
-
-        // Process trigger key if present
-        if var triggerKey = rootDict["triggerKey"] as? [CGKeyCode] {
-            triggerKey.sort()
-            rootDict["triggerKey"] = triggerKey
+        // Ensure the source file exists
+        guard fileManager.fileExists(atPath: sourceURL.path) else {
+            throw MigratorError.failedToReadFile
         }
 
-        // Process actions array
-        if var actions = rootDict["actions"] as? [[String: Any]] {
-            // First ensure all keybind arrays are sorted
-            for i in 0 ..< actions.count {
-                // Sort the keybind array in each action
-                if var keybind = actions[i]["keybind"] as? [CGKeyCode] {
-                    keybind.sort()
-                    actions[i]["keybind"] = keybind
-                }
-
-                // Handle nested cycle actions if present
-                if var cycle = actions[i]["cycle"] as? [[String: Any]] {
-                    // Sort the cycle actions by direction
-                    cycle.sort { first, second -> Bool in
-                        let firstDir = first["direction"] as? String ?? ""
-                        let secondDir = second["direction"] as? String ?? ""
-                        return firstDir < secondDir
-                    }
-
-                    // For each action in the cycle
-                    for j in 0 ..< cycle.count {
-                        // Sort the keybind array in each cycle action
-                        if var cycleKeybind = cycle[j]["keybind"] as? [CGKeyCode] {
-                            cycleKeybind.sort()
-                            cycle[j]["keybind"] = cycleKeybind
-                        }
-                    }
-                    actions[i]["cycle"] = cycle
-                }
+        // If destination file already exists, remove it first
+        if fileManager.fileExists(atPath: fileURL.path) {
+            do {
+                try fileManager.removeItem(at: fileURL)
+            } catch {
+                throw MigratorError.backupFailed
             }
-
-            // Sort the actions array by direction and keybind for a consistent ordering
-            actions.sort { first, second -> Bool in
-                // First compare by direction
-                let firstDir = first["direction"] as? String ?? ""
-                let secondDir = second["direction"] as? String ?? ""
-
-                if firstDir != secondDir {
-                    return firstDir < secondDir
-                }
-
-                // If directions are equal, compare by name (if present)
-                let firstName = first["name"] as? String ?? ""
-                let secondName = second["name"] as? String ?? ""
-
-                if firstName != secondName {
-                    return firstName < secondName
-                }
-
-                // If names are equal or empty, compare by keybind
-                let firstKeybind = first["keybind"] as? [CGKeyCode] ?? []
-                let secondKeybind = second["keybind"] as? [CGKeyCode] ?? []
-
-                // Convert keybinds to strings for comparison
-                let firstKeyStr = firstKeybind.map { String($0) }.joined(separator: "-")
-                let secondKeyStr = secondKeybind.map { String($0) }.joined(separator: "-")
-
-                return firstKeyStr < secondKeyStr
-            }
-
-            rootDict["actions"] = actions
         }
 
-        // Convert back to JSON data with our sorted arrays
-        let sortedData = try JSONSerialization.data(
-            withJSONObject: rootDict,
-            options: [.prettyPrinted, .sortedKeys]
-        )
-
-        guard let json = String(data: sortedData, encoding: .utf8) else {
-            throw MigratorError.failedToConvertToString
+        do {
+            try fileManager.copyItem(at: sourceURL, to: fileURL)
+        } catch {
+            throw MigratorError.backupFailed
         }
 
-        try json.write(
-            to: directoryURL,
-            atomically: true,
-            encoding: .utf8
+        await showExportSuccessAlert()
+    }
+
+    static func showExportSuccessAlert() async {
+        await showAlert(
+            .init(localized: "Export Successful"),
+            informativeText: .init(localized: "Settings have been exported successfully.")
         )
     }
 }
@@ -293,13 +174,13 @@ private extension Migrator {
 // MARK: Migrator + Import
 
 private extension Migrator {
-    /// Presents a file picker to select a keybinds file.
+    /// Presents a file picker to select a settings file.
     @MainActor
-    static func getKeybindsFileURL() async throws -> URL {
+    static func getSettingsFileURL() async throws -> URL {
         let openPanel = NSOpenPanel()
         openPanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
-        openPanel.title = .init(localized: "Select a keybinds file")
-        openPanel.allowedContentTypes = [.json]
+        openPanel.title = .init(localized: "Select a settings file")
+        openPanel.allowedContentTypes = [.propertyList]
 
         guard let window = NSApplication.shared.mainWindow else {
             throw MigratorError.mainWindowNotAvailableForPanel
@@ -317,123 +198,62 @@ private extension Migrator {
         return selectedFileURL
     }
 
-    /// Imports keybinds from a JSON string.
-    static func importKeybinds(from jsonString: String) async throws {
-        guard let data = jsonString.data(using: .utf8) else {
+    /// Imports settings from a plist file.
+    static func importSettings(from fileURL: URL) async throws {
+        guard validatePlistFile(at: fileURL) else {
+            throw MigratorError.invalidPlistFormat
+        }
+
+        let data: Data
+        do {
+            data = try Data(contentsOf: fileURL)
+        } catch {
             throw MigratorError.failedToReadFile
         }
 
-        /// First, try to import the general Loop keybinds format.
+        let plist: Any
         do {
-            let savedData = try await importLoopKeybinds(from: data)
-            await updateDefaults(with: savedData)
-            return
+            plist = try PropertyListSerialization.propertyList(from: data, format: nil)
         } catch {
-            print("Error importing Loop keybinds: \(error)")
+            throw MigratorError.invalidPlistFormat
         }
 
-        /// If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
-        do {
-            let savedData = try await importLoopLegacyKeybinds(from: data)
-            await updateDefaults(with: savedData)
-            return
-        } catch {
-            print("Error importing Loop (pre 1.2.0) keybinds: \(error)")
-        }
+        let defaults = UserDefaults.standard
 
-        /// If that fails, try to import the Rectangle keybinds format.
-        do {
-            let savedData = try await importRectangleKeybinds(from: data)
-            await updateDefaults(with: savedData)
-            return
-        } catch {
-            print("Error importing Rectangle keybinds: \(error)")
-        }
+        if await showImportConfirmationAlert() {
+            // Create backup before importing
+            try await createBackupBeforeImport()
 
-        // If all attempts fail, show an error alert.
-        throw MigratorError.failedToReadFile
-    }
-
-    /// Tries to import Loop's keybinds format.
-    static func importLoopKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
-        let decoder = JSONDecoder()
-        let keybinds = try decoder.decode(SavedKeybindsFormat.self, from: data)
-        return keybinds
-    }
-
-    /// Tries to import Loop's old (pre 1.2.0) keybinds format.
-    static func importLoopLegacyKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
-        let decoder = JSONDecoder()
-        let keybinds = try decoder.decode([SavedWindowActionFormat].self, from: data)
-        return SavedKeybindsFormat(version: nil, triggerKey: nil, actions: keybinds)
-    }
-
-    /// Tries to import Rectangle's keybinds format.
-    static func importRectangleKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
-        let keybinds = try RectangleTranslationLayer.importKeybinds(from: data)
-        return SavedKeybindsFormat(version: nil, triggerKey: nil, actions: keybinds)
-    }
-
-    // MARK: Saving Imports
-
-    /// Updates the app's defaults with the imported keybinds.
-    static func updateDefaults(with savedData: SavedKeybindsFormat) async {
-        if let triggerKey = savedData.triggerKey {
-            Defaults[.triggerKey] = triggerKey
-        }
-
-        if Defaults[.keybinds].isEmpty {
-            Defaults[.keybinds] = savedData.actions.map { $0.convertToWindowAction() }
-
-            // Post a notification after updating the keybinds
-            Notification.Name.didImportKeybindsSuccessfully.post()
-        } else {
-            let result = await showAlertForImportDecision()
-
-            switch result {
-            case .merge:
-                let newKeybinds = savedData.actions
-                    .map { $0.convertToWindowAction() }
-                    .filter { newKeybind in
-                        !Defaults[.keybinds].contains { $0.keybind == newKeybind.keybind && $0.name == newKeybind.name }
-                    }
-
-                Defaults[.keybinds].append(contentsOf: newKeybinds)
-
-                // Post a notification after updating the keybinds
-                Notification.Name.didImportKeybindsSuccessfully.post()
-            case .erase:
-                Defaults[.keybinds] = savedData.actions.map { $0.convertToWindowAction() }
-
-                // Post a notification after updating the keybinds
-                Notification.Name.didImportKeybindsSuccessfully.post()
-            case .cancel:
-                // No action needed, no notification should be posted
-                break
+            for (key, value) in plist as? [String: Any] ?? [:] {
+                defaults.set(value, forKey: key)
             }
+
+            await reloadUserDefaults()
+            await showImportSuccessAlert()
+
+            Notification.Name.didImportSettingsSuccessfully.post()
         }
     }
 
-    /// Presents a decision alert for how to handle imported keybinds.
-    static func showAlertForImportDecision() async -> ImportDecision {
+    /// Shows confirmation alert before importing settings.
+    static func showImportConfirmationAlert() async -> Bool {
         let response = await showAlert(
-            .init(localized: "Import Keybinds"),
-            informativeText: .init(localized: "Do you want to merge or erase existing keybinds?"),
+            .init(localized: "Import Settings Confirmation"),
+            informativeText: .init(localized: "This will replace all current settings. Do you want to continue?"),
             buttons: [
-                .init(localized: "Import keybinds: merge", defaultValue: "Merge"),
-                .init(localized: "Import keybinds: erase", defaultValue: "Erase"),
-                .init(localized: "Import keybinds: cancel", defaultValue: "Cancel")
+                .init(localized: "Import settings: continue", defaultValue: "Continue"),
+                .init(localized: "Import settings: cancel", defaultValue: "Cancel")
             ]
         )
 
-        switch response {
-        case .alertFirstButtonReturn:
-            return .merge
-        case .alertSecondButtonReturn:
-            return .erase
-        default:
-            return .cancel
-        }
+        return response == .alertFirstButtonReturn
+    }
+
+    static func showImportSuccessAlert() async {
+        await showAlert(
+            .init(localized: "Import Successful"),
+            informativeText: .init(localized: "Settings have been imported successfully.")
+        )
     }
 
     /// Utility function to show an alert with a completion handler.
@@ -456,8 +276,85 @@ private extension Migrator {
         }
     }
 
-    /// Enum to represent the decision made in the import decision alert.
-    enum ImportDecision {
-        case merge, erase, cancel
+    /// Reloads UserDefaults to ensure all changes are applied.
+    private static func reloadUserDefaults() async {
+        print("Migrator: Forcing UserDefaults reload...")
+
+        CFPreferencesAppSynchronize(Bundle.main.bundleIdentifier! as CFString)
+        UserDefaults.standard.synchronize()
+
+        print("Migrator: UserDefaults reload completed")
+    }
+
+    /// Validates that the plist file is readable and contains valid preference data
+    private static func validatePlistFile(at fileURL: URL) -> Bool {
+        do {
+            let data = try Data(contentsOf: fileURL)
+            let plist = try PropertyListSerialization.propertyList(from: data, format: nil)
+
+            // Check if it's a dictionary
+            guard let settings = plist as? [String: Any] else {
+                print("Migrator: Plist is not a dictionary format")
+                return false
+            }
+
+            // Check for common macOS preference patterns
+            // Accept files that contain preference-like keys or are simply valid dictionaries
+            let hasPreferenceKeys = settings.keys.contains { key in
+                // Check for common macOS preference patterns
+                key.hasPrefix("NS") || // NSUserDefaults keys
+                    key.hasPrefix("com.") || // Bundle identifier patterns
+                    key.contains("Loop") || // Loop-specific keys
+                    key.contains("keybind") || // Keybind-related keys
+                    key.contains("setting") || // General setting keys
+                    key.contains("config") // Configuration keys
+            }
+
+            if !hasPreferenceKeys && !settings.isEmpty {
+                print("Migrator: Plist doesn't match expected patterns but contains data - allowing import to proceed")
+                return true
+            }
+
+            return hasPreferenceKeys || !settings.isEmpty
+        } catch {
+            print("Migrator: Plist validation failed: \(error.localizedDescription)")
+            return false
+        }
+    }
+
+    /// Creates a backup of current settings before importing
+    /// Saves a backup in the Downloads folder
+    private static func createBackupBeforeImport() async throws {
+        let fileManager = FileManager.default
+        let sourceURL = fileManager.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Preferences/com.MrKai77.Loop.plist")
+
+        guard fileManager.fileExists(atPath: sourceURL.path) else {
+            // No existing settings to backup
+            return
+        }
+
+        guard let downloadsDirectory = fileManager.urls(for: .downloadsDirectory, in: .userDomainMask).first else {
+            throw MigratorError.backupFailed
+        }
+
+        let backupURL = downloadsDirectory.appendingPathComponent("Loop Settings Backup.plist")
+
+        // Remove existing backup if it exists
+        if fileManager.fileExists(atPath: backupURL.path) {
+            do {
+                try fileManager.removeItem(at: backupURL)
+            } catch {
+                print("Migrator: Warning - Could not remove existing backup: \(error)")
+            }
+        }
+
+        do {
+            try fileManager.copyItem(at: sourceURL, to: backupURL)
+            print("Migrator: Created backup at \(backupURL.path)")
+        } catch {
+            print("Migrator: Failed to create backup: \(error)")
+            throw MigratorError.backupFailed
+        }
     }
 }
