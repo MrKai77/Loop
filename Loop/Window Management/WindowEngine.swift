@@ -38,6 +38,11 @@ enum WindowEngine {
             return
         }
 
+        if action.direction == .minimizeOther {
+            minimizeOtherWindows(exceptWindow: window)
+            return
+        }
+
         // Note that this is only really useful when "Resize window under cursor" is enabled
         if Defaults[.focusWindowOnResize] {
             window.activate()
@@ -279,5 +284,26 @@ enum WindowEngine {
         }
 
         window.position = windowFrame.origin
+    }
+
+    /// Minimizes all windows except the current one
+    private static func minimizeOtherWindows(exceptWindow: Window) {
+        let allWindows = windowList
+        let windowsToMinimize = allWindows.filter { otherWindow in
+            // Don't minimize the current window
+            guard otherWindow.cgWindowID != exceptWindow.cgWindowID else { return false }
+
+            // Only minimize windows that are not already minimized or hidden
+            guard !otherWindow.minimized, !otherWindow.isWindowHidden else { return false }
+
+            return true
+        }
+
+        print("Minimizing \(windowsToMinimize.count) other windows")
+
+        // Minimize all other windows
+        for window in windowsToMinimize {
+            window.minimized = true
+        }
     }
 }

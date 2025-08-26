@@ -38,6 +38,8 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Hide", defaultValue: "Hide"))
         case .minimize:
             .init(localized: .init("Window Direction/Name: Minimize", defaultValue: "Minimize"))
+        case .minimizeOther:
+            .init(localized: .init("Window Direction/Name: Minimize Other", defaultValue: "Minimize Other"))
         case .macOSCenter:
             .init(localized: .init("Window Direction/Name: macOS Center", defaultValue: "macOS Center"))
         case .center:

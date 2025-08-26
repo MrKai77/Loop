@@ -19,6 +19,8 @@ extension WindowAction {
             Image(systemName: "eye.slash.fill")
         case .minimize:
             Image(systemName: "arrow.down.right.and.arrow.up.left")
+        case .minimizeOther:
+            Image(systemName: "minus.rectangle.portrait")
         case .maximizeHeight:
             Image(systemName: "arrow.up.and.down")
         case .maximizeWidth:

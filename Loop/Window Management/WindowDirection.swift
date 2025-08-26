@@ -15,7 +15,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // General Actions
     case noAction = "NoAction", maximize = "Maximize", almostMaximize = "AlmostMaximize", fullscreen = "Fullscreen"
     case maximizeHeight = "MaximizeHeight", maximizeWidth = "MaximizeWidth"
-    case undo = "Undo", initialFrame = "InitialFrame", hide = "Hide", minimize = "Minimize"
+    case undo = "Undo", initialFrame = "InitialFrame", hide = "Hide", minimize = "Minimize", minimizeOther = "MinimizeOther"
     case macOSCenter = "MacOSCenter", center = "Center"
 
     // Halves
@@ -59,7 +59,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case custom = "Custom", cycle = "Cycle"
 
     // These are used in the menubar resize submenu & keybind configuration
-    static var general: [WindowDirection] { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth, .center, .macOSCenter, .minimize, .hide] }
+    static var general: [WindowDirection] { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth, .center, .macOSCenter, .minimize, .minimizeOther, .hide] }
     static var halves: [WindowDirection] { [.topHalf, .verticalCenterHalf, .bottomHalf, .leftHalf, .horizontalCenterHalf, .rightHalf] }
     static var quarters: [WindowDirection] { [.topLeftQuarter, .topRightQuarter, .bottomLeftQuarter, .bottomRightQuarter] }
     static var horizontalThirds: [WindowDirection] { [.rightThird, .rightTwoThirds, .horizontalCenterThird, .leftTwoThirds, .leftThird] }
@@ -82,7 +82,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var isCustomizable: Bool { [.custom, .stash].contains(self) }
 
     var hasRadialMenuAngle: Bool {
-        let noAngleActions: [WindowDirection] = [.noAction, .minimize, .hide, .initialFrame, .undo, .cycle]
+        let noAngleActions: [WindowDirection] = [.noAction, .minimize, .minimizeOther, .hide, .initialFrame, .undo, .cycle]
         return !(noAngleActions.contains(self) || willChangeScreen || willAdjustSize || willShrink || willGrow || willMove || willMaximize || willCenter)
     }
 
