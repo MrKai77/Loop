@@ -225,6 +225,10 @@ private extension Migrator {
             try await createBackupBeforeImport()
 
             for (key, value) in plist as? [String: Any] ?? [:] {
+                if shouldSkipKey(key, importedValue: value, currentDefaults: defaults) {
+                    continue
+                }
+
                 defaults.set(value, forKey: key)
             }
 
@@ -247,6 +251,21 @@ private extension Migrator {
         )
 
         return response == .alertFirstButtonReturn
+    }
+
+    /// Determines whether a key should be skipped during import based on business logic
+    private static func shouldSkipKey(_ key: String, importedValue: Any, currentDefaults: UserDefaults) -> Bool {
+        switch key {
+        case "timesLooped":
+            // Prevent counter regression: only import if imported value is higher than current
+            guard let importedCount = importedValue as? Int else { return false }
+            let currentCount = currentDefaults.integer(forKey: key)
+            return currentCount >= importedCount
+            
+        case "currentIcon":
+            // Current icon depends on timesLooped, let user manually select
+            return true
+        }
     }
 
     static func showImportSuccessAlert() async {
