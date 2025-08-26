@@ -261,10 +261,14 @@ private extension Migrator {
             guard let importedCount = importedValue as? Int else { return false }
             let currentCount = currentDefaults.integer(forKey: key)
             return currentCount >= importedCount
-            
+
         case "currentIcon":
             // Current icon depends on timesLooped, let user manually select
             return true
+
+        default:
+            // Allow all other keys to be imported
+            return false
         }
     }
 
