@@ -93,6 +93,7 @@ final class TriggerKeyObserver {
             lastTriggerkeyPressTime = .now
         } else {
             closeCallback()
+            currentlyPressedKeys = []
         }
 
         return event
