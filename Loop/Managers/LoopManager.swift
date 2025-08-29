@@ -16,19 +16,29 @@ class LoopManager: ObservableObject {
     static var lastTargetFrame: CGRect = .zero
 
     private let keybindMonitor = KeybindMonitor.shared
+
+    @MainActor
     private let radialMenuController = RadialMenuController()
+
+    @MainActor
     private let previewController = PreviewController()
 
-    private var currentlyPressedModifiers: Set<CGKeyCode> = []
+    private lazy var triggerKeyObserver = TriggerKeyObserver(
+        openCallback: { [weak self] in self?.openLoop() },
+        closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
+    )
+
+    private lazy var middleClickObserver = MiddleClickObserver(
+        openCallback: { [weak self] in self?.openLoop() },
+        closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
+    )
+
     private var isLoopActive: Bool = false
     private var targetWindow: Window?
     private var screenToResizeOn: NSScreen?
 
-    private var flagsChangedEventMonitor: EventMonitor?
     private var mouseMovedEventMonitor: EventMonitor?
-    private var middleClickMonitor: EventMonitor?
     private var leftClickMonitor: EventMonitor?
-    private var lastTriggerKeyClick: Date = .distantPast
 
     @Published var currentAction: WindowAction = .init(.noAction)
     private var parentCycleAction: WindowAction?
@@ -36,11 +46,11 @@ class LoopManager: ObservableObject {
     private var angleToMouse: Angle = .init(degrees: 0)
     private var distanceToMouse: CGFloat = 0
 
-    private var triggerDelayTimer: Timer? {
-        willSet {
-            triggerDelayTimer?.invalidate()
-        }
-    }
+//    private var triggerDelayTimer: Timer? {
+//        willSet {
+//            triggerDelayTimer?.invalidate()
+//        }
+//    }
 
     func start() {
         Notification.Name.forceCloseLoop.onReceive { _ in
@@ -59,26 +69,14 @@ class LoopManager: ObservableObject {
             handler: mouseMoved(_:)
         )
 
-        middleClickMonitor = CGEventMonitor(
-            eventMask: [.otherMouseDragged, .otherMouseUp],
-            callback: handleMiddleClick(cgEvent:)
-        )
+//        middleClickMonitor = CGEventMonitor(
+//            eventMask: [.otherMouseDragged, .otherMouseUp],
+//            callback: handleMiddleClick(cgEvent:)
+//        )
 
-        setFlagsObservers(scope: .all)
-        middleClickMonitor?.start()
-    }
-
-    // This is called when setting the trigger key, so that there aren't conflicting event monitors
-    func setFlagsObservers(scope: NSEventMonitor.Scope) {
-        flagsChangedEventMonitor?.stop()
-
-        flagsChangedEventMonitor = NSEventMonitor(
-            scope: scope,
-            eventMask: .flagsChanged,
-            handler: handleLoopKeypress(_:)
-        )
-
-        flagsChangedEventMonitor?.start()
+//        setFlagsObservers(scope: .all)
+        triggerKeyObserver.start()
+        middleClickObserver.start()
     }
 }
 
@@ -157,17 +155,14 @@ private extension LoopManager {
         isLoopActive = true
     }
 
-    func closeLoop(forceClose: Bool = false) {
+    func closeLoop(forceClose: Bool) {
         guard isLoopActive == true else { return }
 
-        triggerDelayTimer = nil
         closeWindows()
 
         keybindMonitor.stop()
         mouseMovedEventMonitor?.stop()
         leftClickMonitor?.stop()
-
-        currentlyPressedModifiers = []
 
         if let targetWindow,
            let screenToResizeOn,
@@ -216,102 +211,6 @@ private extension LoopManager {
     func closeWindows() {
         radialMenuController.close()
         previewController.close()
-    }
-}
-
-// MARK: - Triggering
-
-private extension LoopManager {
-    func handleMiddleClick(cgEvent: CGEvent) -> Unmanaged<CGEvent>? {
-        if let event = NSEvent(cgEvent: cgEvent), event.buttonNumber == 2, Defaults[.middleClickTriggersLoop] {
-            if event.type == .otherMouseDragged, !isLoopActive {
-                openLoop()
-            }
-
-            if event.type == .otherMouseUp, isLoopActive {
-                closeLoop()
-            }
-        }
-        return Unmanaged.passUnretained(cgEvent)
-    }
-
-    func handleTriggerDelay() {
-        if triggerDelayTimer == nil {
-            triggerDelayTimer = Timer.scheduledTimer(
-                withTimeInterval: Double(Defaults[.triggerDelay]),
-                repeats: false
-            ) { _ in
-                self.openLoop()
-            }
-        }
-    }
-
-    func handleDoubleClickToTrigger(_ useTriggerDelay: Bool) {
-        if abs(lastTriggerKeyClick.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
-            if useTriggerDelay {
-                handleTriggerDelay()
-            } else {
-                openLoop()
-            }
-        }
-    }
-
-    func handleLoopKeypress(_ event: NSEvent) -> NSEvent? {
-        triggerDelayTimer = nil
-
-        let previousModifiers = currentlyPressedModifiers
-        processModifiers(event)
-
-        let triggerKey = Defaults[.triggerKey]
-        let wasKeyDown = event.type == .keyDown || currentlyPressedModifiers.count > previousModifiers.count
-
-        if wasKeyDown, triggerKey.isSubset(of: currentlyPressedModifiers) {
-            guard
-                !isLoopActive,
-
-                // This makes sure that the amount of keys being pressed is not more than the actual trigger key
-                currentlyPressedModifiers.count <= triggerKey.count
-            else {
-                return nil
-            }
-
-            let useTriggerDelay = Defaults[.triggerDelay] > 0.1
-            let useDoubleClickTrigger = Defaults[.doubleClickToTrigger]
-
-            if useDoubleClickTrigger {
-                guard currentlyPressedModifiers.sorted() == Defaults[.triggerKey].sorted() else { return nil }
-                handleDoubleClickToTrigger(useTriggerDelay)
-            } else if useTriggerDelay {
-                handleTriggerDelay()
-            } else {
-                openLoop()
-            }
-            lastTriggerKeyClick = .now
-        } else {
-            closeLoop()
-        }
-
-        return nil
-    }
-
-    func processModifiers(_ event: NSEvent) {
-        if event.modifierFlags.wasKeyUp {
-            currentlyPressedModifiers = []
-        } else if currentlyPressedModifiers.contains(event.keyCode) {
-            currentlyPressedModifiers.remove(event.keyCode)
-        } else {
-            currentlyPressedModifiers.insert(event.keyCode)
-        }
-
-        // Backup system in case keys are pressed at the exact same time
-        let flags = event.modifierFlags.convertToCGKeyCode()
-        if flags.count != currentlyPressedModifiers.count {
-            for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
-                if !currentlyPressedModifiers.map(\.baseModifier).contains(key) {
-                    currentlyPressedModifiers.insert(key)
-                }
-            }
-        }
     }
 }
 
