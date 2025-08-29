@@ -126,7 +126,8 @@ class SystemWindowManager {
         }
 
         static var padding: CGFloat {
-            CGFloat(windowManagerDefaults?.float(forKey: "TiledWindowSpacing") ?? 8)
+            // Using .object(forKey:) to avoid returning 0 if the key doesn't exist
+            windowManagerDefaults?.object(forKey: "TiledWindowSpacing") as? CGFloat ?? 8.0
         }
 
         static var enableAnimations: Bool {
