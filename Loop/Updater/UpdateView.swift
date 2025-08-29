@@ -13,7 +13,7 @@ struct UpdateView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.colorScheme) var colorScheme
 
-    @ObservedObject var updater = AppDelegate.updater
+    @ObservedObject var updater = Updater.shared
     @State var isInstalling: Bool = false
     @State var readyToRestart: Bool = false
 
@@ -40,7 +40,7 @@ struct UpdateView: View {
 
             HStack {
                 Button("Remind me later") {
-                    AppDelegate.updater.dismissWindow()
+                    Updater.shared.dismissWindow()
                 }
                 .disabled(isInstalling || readyToRestart)
 
@@ -53,7 +53,7 @@ struct UpdateView: View {
                         isInstalling = true
                     }
                     Task {
-                        await AppDelegate.updater.installUpdate()
+                        await Updater.shared.installUpdate()
 
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             withAnimation(luminareAnimation) {

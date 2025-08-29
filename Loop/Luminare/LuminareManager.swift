@@ -59,7 +59,7 @@ enum Tab: LuminareTabItem, CaseIterable {
 
     var showIndicator: Bool {
         switch self {
-        case .about: AppDelegate.updater.updateState == .available
+        case .about: Updater.shared.updateState == .available
         default: false
         }
     }
@@ -158,7 +158,7 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
         timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                guard AppDelegate.isActive, let self else { return }
+                guard self?.luminare?.isKeyWindow == true, let self else { return }
                 previewedAction.direction = previewedAction.direction.nextPreviewDirection
             }
     }

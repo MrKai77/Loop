@@ -22,7 +22,7 @@ enum WindowEngine {
         shouldRecord: Bool = true
     ) {
         guard action.direction != .noAction else { return }
-        let willChangeScreens = ScreenManager.screenContaining(window) != screen
+        let willChangeScreens = ScreenUtility.screenContaining(window) != screen
 
         let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
         print("Resizing \(windowTitle) to \(action.direction) on \(screen.localizedName)")

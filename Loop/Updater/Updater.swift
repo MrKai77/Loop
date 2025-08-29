@@ -11,6 +11,8 @@ import OSLog
 import SwiftUI
 
 final class Updater: ObservableObject {
+    static let shared = Updater()
+
     @Published private(set) var targetRelease: Release?
     @Published private(set) var progressBar: Double = 0
     @Published private(set) var updateState: UpdateAvailability = .notChecked
@@ -41,7 +43,7 @@ final class Updater: ObservableObject {
         case disabled
     }
 
-    init() {
+    private init() {
         // Only set up the timer if updates are enabled and env var is not set
         if updatesEnabled {
             self.updateCheckerTask = makeUpdateCheckerTask()

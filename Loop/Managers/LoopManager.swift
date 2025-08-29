@@ -11,6 +11,9 @@ import SwiftUI
 // MARK: - LoopManager
 
 class LoopManager: ObservableObject {
+    static let shared = LoopManager()
+    private init() {}
+
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?
     static var lastTargetFrame: CGRect = .zero
@@ -129,7 +132,7 @@ private extension LoopManager {
 
         if let window = targetWindow {
             // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
-            if let frame = AppDelegate.stashManager.getRevealedFrameForStashedWindow(id: window.cgWindowID) {
+            if let frame = StashManager.shared.getRevealedFrameForStashedWindow(id: window.cgWindowID) {
                 LoopManager.lastTargetFrame = frame
             } else {
                 LoopManager.lastTargetFrame = window.frame
@@ -231,7 +234,7 @@ private extension LoopManager {
 
         var newAction = newAction
 
-        if AppDelegate.stashManager.handleIfStashed(newAction, screen: currentScreen) {
+        if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
             return
         }
 
@@ -270,12 +273,12 @@ private extension LoopManager {
             var newScreen: NSScreen = currentScreen
 
             if newAction.direction == .nextScreen,
-               let nextScreen = ScreenManager.nextScreen(from: currentScreen) {
+               let nextScreen = ScreenUtility.nextScreen(from: currentScreen) {
                 newScreen = nextScreen
             }
 
             if newAction.direction == .previousScreen,
-               let previousScreen = ScreenManager.previousScreen(from: currentScreen) {
+               let previousScreen = ScreenUtility.previousScreen(from: currentScreen) {
                 newScreen = previousScreen
             }
 

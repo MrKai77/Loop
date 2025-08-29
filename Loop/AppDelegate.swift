@@ -10,12 +10,7 @@ import SwiftUI
 import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    static let loopManager = LoopManager()
-    static let stashManager = StashManager()
-    static let windowDragManager = WindowDragManager()
-    static let updater = Updater()
-    static var isActive: Bool = false
-    static let urlCommandHandler = URLCommandHandler()
+    private let urlCommandHandler = URLCommandHandler()
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -41,14 +36,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #if !DEBUG
             IconManager.refreshCurrentAppIcon()
         #endif
-        AppDelegate.loopManager.start()
-        AppDelegate.windowDragManager.addObservers()
-        AppDelegate.stashManager.start()
+        LoopManager.shared.start()
+        WindowDragManager.shared.addObservers()
+        StashManager.shared.start()
 
         Task {
             // Wait to let the app settle and to prevent overwhelming the user
             try? await Task.sleep(for: .seconds(2))
-            await AppDelegate.updater.fetchLatestInfo()
+            await Updater.shared.fetchLatestInfo()
         }
 
         UNUserNotificationCenter.current().delegate = self
@@ -74,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         print("Received URL: \(url)")
-        AppDelegate.urlCommandHandler.handle(url)
+        urlCommandHandler.handle(url)
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
@@ -87,18 +82,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 
-    func applicationWillBecomeActive(_: Notification) {
-        Notification.Name.activeStateChanged.post(object: true)
-        AppDelegate.isActive = true
-    }
-
-    func applicationWillResignActive(_: Notification) {
-        Notification.Name.activeStateChanged.post(object: false)
-        AppDelegate.isActive = false
-    }
-
     func applicationWillTerminate(_: Notification) {
-        Self.stashManager.onApplicationWillTerminate()
+        StashManager.shared.onApplicationWillTerminate()
     }
 
     static func relaunch(after seconds: TimeInterval = 0.5) -> Never {
@@ -112,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func application(_: NSApplication, open urls: [URL]) {
         for url in urls {
-            AppDelegate.urlCommandHandler.handle(url)
+            urlCommandHandler.handle(url)
         }
     }
 }

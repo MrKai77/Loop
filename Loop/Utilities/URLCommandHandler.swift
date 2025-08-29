@@ -740,10 +740,10 @@ final class URLCommandHandler {
 
     /// Moves a window to another screen
     private func moveWindowToScreen(_ window: Window, _ direction: WindowDirection) {
-        if let currentScreen = ScreenManager.screenContaining(window),
+        if let currentScreen = ScreenUtility.screenContaining(window),
            let targetScreen = direction == .nextScreen ?
-           ScreenManager.nextScreen(from: currentScreen) :
-           ScreenManager.previousScreen(from: currentScreen) {
+           ScreenUtility.nextScreen(from: currentScreen) :
+           ScreenUtility.previousScreen(from: currentScreen) {
             writeToOutput("[URLHandler] Moving window to screen: \(targetScreen.localizedName)")
             DispatchQueue.main.async {
                 WindowEngine.resize(window, to: .init(direction), on: targetScreen)

@@ -127,7 +127,7 @@ class PreviewController {
                 break
             case .radialMenu:
                 // Center the preview window on the initial mouse position
-                let mousePosition = AppDelegate.loopManager.initialMousePosition
+                let mousePosition = LoopManager.shared.initialMousePosition
                 let centerFrame: NSRect = .init(origin: mousePosition, size: .zero)
                 windowController.window?.setFrame(centerFrame, display: true)
             case .actionCenter:

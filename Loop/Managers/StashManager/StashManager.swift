@@ -34,7 +34,10 @@ import SwiftUI
 ///
 /// ## Considerations:
 /// - Currently supports only one revealed window at a time.
-class StashManager {
+final class StashManager {
+    static let shared = StashManager()
+    private init() {}
+
     /// Should the stashed windows be animated when revealed or hidden?
     private var animate: Bool {
         Defaults[.animateStashedWindows]
@@ -295,10 +298,10 @@ private extension StashManager {
     func unfocus(_ windowID: CGWindowID) {
         guard shiftFocusWhenStashed else { return }
         guard let stashedWindow = store.stashed[windowID] else { return }
-        guard let screen = ScreenManager.screenContaining(stashedWindow.window) ?? NSScreen.main else { return }
+        guard let screen = ScreenUtility.screenContaining(stashedWindow.window) ?? NSScreen.main else { return }
 
         let focusWindow = WindowEngine.windowList.first(where: { window in
-            guard let currentWindowScreen = ScreenManager.screenContaining(window) ?? NSScreen.main else { return false }
+            guard let currentWindowScreen = ScreenUtility.screenContaining(window) ?? NSScreen.main else { return false }
             guard screen.isSameScreen(currentWindowScreen) else { return false }
 
             return window.cgWindowID != windowID
