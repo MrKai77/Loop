@@ -8,7 +8,10 @@
 import AppKit
 import Defaults
 
-/// This class is in charge of observing the trigger key and calling the appropriate callbacks to open/close Loop.
+/// This class is in charge of observing the user's pressed keys and calling the appropriate callbacks to open/close Loop.
+///
+/// To achieve this, it uses a NSEventMonitor to listen for key events.
+/// It is important that a NSEventMonitor is used instead of a CGEventMonitor here, so that external key remappers (such as Karabiner or HyperKey) can take precedence.
 final class TriggerKeyObserver {
     // Callbacks
     private let openCallback: () -> ()

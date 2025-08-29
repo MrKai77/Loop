@@ -8,6 +8,7 @@
 import AppKit
 import Defaults
 
+/// Reads middle-click events using a CGEventMonitor, and triggers Loop open/close callbacks, when appropriate.
 final class MiddleClickObserver {
     // Callbacks
     private let openCallback: () -> ()
