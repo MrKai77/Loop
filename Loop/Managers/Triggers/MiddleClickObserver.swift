@@ -19,7 +19,7 @@ final class MiddleClickObserver {
 
     // Defaults
     private var middleClickTriggersLoop: Bool { Defaults[.middleClickTriggersLoop] }
-    private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
+    private var useTriggerDelay: Bool { Defaults[.enableTriggerDelayOnMiddleClick] && Defaults[.triggerDelay] > 0.1 }
     private var triggerDelay: TimeInterval { Defaults[.triggerDelay] }
 
     /// Initializes a ``MiddleClickObserver``.

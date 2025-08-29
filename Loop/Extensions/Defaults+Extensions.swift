@@ -64,6 +64,7 @@ extension Defaults.Keys {
     static let triggerDelay = Key<Double>("triggerDelay", default: 0, iCloud: true)
     static let doubleClickToTrigger = Key<Bool>("doubleClickToTrigger", default: false, iCloud: true)
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false, iCloud: true)
+    static let enableTriggerDelayOnMiddleClick = Key<Bool>("enableTriggerDelayOnMiddleClick", default: false, iCloud: true)
     static let cycleBackwardsOnShiftPressed = Key<Bool>("cycleBackwardsOnShiftPressed", default: true, iCloud: true)
     static let keybinds = Key<[WindowAction]>(
         "keybinds",
