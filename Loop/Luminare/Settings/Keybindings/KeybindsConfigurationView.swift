@@ -21,6 +21,7 @@ struct KeybindsConfigurationView: View {
 
     @Default(.triggerKey) var triggerKey
     @Default(.triggerDelay) var triggerDelay
+    @Default(.cycleModeRestartEnabled) var cycleModeRestartEnabled
     @Default(.cycleBackwardsOnShiftPressed) var cycleBackwardsOnShiftPressed
     @Default(.doubleClickToTrigger) var doubleClickToTrigger
     @Default(.middleClickTriggersLoop) var middleClickTriggersLoop
@@ -42,9 +43,12 @@ struct KeybindsConfigurationView: View {
         triggerKey.map(\.baseKey).contains(.kVK_Shift)
     }
 
-    ///
     private var showMiddleClickTriggerDelayOption: Bool {
         middleClickTriggersLoop && useTriggerDelay
+    }
+
+    private var showCycleRestartOption: Bool {
+        isCycleActionPresentInKeybinds
     }
 
     private var showCycleBackwardsOption: Bool {
@@ -76,6 +80,17 @@ struct KeybindsConfigurationView: View {
 
                 if showMiddleClickTriggerDelayOption {
                     LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
+                }
+
+                if showCycleRestartOption {
+                    LuminareToggle(isOn: $cycleModeRestartEnabled) {
+                        Text("Always start cycles from first item")
+                            .padding(.trailing, 4)
+                            .luminarePopover(attachedTo: .topTrailing) {
+                                Text("By default, Loop resumes cycles from where you last left off in each window.")
+                                    .padding(6)
+                            }
+                    }
                 }
 
                 if showCycleBackwardsOption {
@@ -125,6 +140,7 @@ struct KeybindsConfigurationView: View {
             luminareAnimation,
             value: [
                 showMiddleClickTriggerDelayOption,
+                cycleModeRestartEnabled,
                 showCycleBackwardsOption
             ]
         )

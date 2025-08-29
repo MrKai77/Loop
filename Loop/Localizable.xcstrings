@@ -1079,6 +1079,9 @@
         }
       }
     },
+    "Always start cycles from first item" : {
+
+    },
     "Animate window resize" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1787,6 +1790,9 @@
           }
         }
       }
+    },
+    "By default, Loop resumes cycles from where you last left off in each window." : {
+
     },
     "Cannot be enabled when the preview is disabled." : {
       "extractionState" : "manual",
@@ -3022,9 +3028,6 @@
           }
         }
       }
-    },
-    "Cycle always start at first item" : {
-
     },
     "Cycle backward with Shift" : {
 
