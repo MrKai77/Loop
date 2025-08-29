@@ -35,10 +35,13 @@ final class MiddleClickObserver {
     }
 
     func start() {
+        stop()
+
         monitor = CGEventMonitor(
             eventMask: [.otherMouseDown, .otherMouseUp],
             callback: handleOtherMouseKeypress(_:)
         )
+        monitor?.start()
     }
 
     func stop() {

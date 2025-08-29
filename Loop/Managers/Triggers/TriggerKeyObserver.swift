@@ -39,9 +39,11 @@ final class TriggerKeyObserver {
     }
 
     /// Starts observing key events.
-    func start() {
+    func start(scope: NSEventMonitor.Scope) {
+        stop()
+
         monitor = NSEventMonitor(
-            scope: .all,
+            scope: scope,
             eventMask: [.keyUp, .keyDown, .flagsChanged],
             handler: handleKeypress
         )

@@ -16,19 +16,15 @@ class LoopManager: ObservableObject {
     static var lastTargetFrame: CGRect = .zero
 
     private let keybindMonitor = KeybindMonitor.shared
-
-    @MainActor
     private let radialMenuController = RadialMenuController()
-
-    @MainActor
     private let previewController = PreviewController()
 
-    private lazy var triggerKeyObserver = TriggerKeyObserver(
+    private(set) lazy var triggerKeyObserver = TriggerKeyObserver(
         openCallback: { [weak self] in self?.openLoop() },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
-    private lazy var middleClickObserver = MiddleClickObserver(
+    private(set) lazy var middleClickObserver = MiddleClickObserver(
         openCallback: { [weak self] in self?.openLoop() },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
@@ -45,12 +41,6 @@ class LoopManager: ObservableObject {
     private(set) var initialMousePosition: CGPoint = .init()
     private var angleToMouse: Angle = .init(degrees: 0)
     private var distanceToMouse: CGFloat = 0
-
-//    private var triggerDelayTimer: Timer? {
-//        willSet {
-//            triggerDelayTimer?.invalidate()
-//        }
-//    }
 
     func start() {
         Notification.Name.forceCloseLoop.onReceive { _ in
@@ -69,13 +59,7 @@ class LoopManager: ObservableObject {
             handler: mouseMoved(_:)
         )
 
-//        middleClickMonitor = CGEventMonitor(
-//            eventMask: [.otherMouseDragged, .otherMouseUp],
-//            callback: handleMiddleClick(cgEvent:)
-//        )
-
-//        setFlagsObservers(scope: .all)
-        triggerKeyObserver.start()
+        triggerKeyObserver.start(scope: .all)
         middleClickObserver.start()
     }
 }
