@@ -273,7 +273,7 @@ extension WindowAction {
     /// - Returns: the padded bounds if padding can be applied, otherwise the original bounds.
     private func getBounds(from originalBounds: CGRect, disablePadding: Bool, screen: NSScreen?) -> CGRect {
         // Get padded bounds only if padding can be applied
-        if !disablePadding && Defaults[.enablePadding],
+        if !disablePadding, PaddingSettings.enablePadding,
            Defaults[.paddingMinimumScreenSize] == .zero || screen?.diagonalSize ?? .zero > Defaults[.paddingMinimumScreenSize] {
             getPaddedBounds(originalBounds)
         } else {
@@ -588,7 +588,7 @@ extension WindowAction {
         let totalBounds: Edge.Set = [.top, .bottom, .leading, .trailing]
         let step = Defaults[.sizeIncrement] * ((direction == .larger || direction.willGrow) ? -1 : 1)
 
-        let padding = Defaults[.padding]
+        let padding = PaddingSettings.padding
         let previewPadding = Defaults[.previewPadding]
         let totalHorizontalPadding = padding.left + padding.right
         let totalVerticalPadding = padding.totalTopPadding + padding.bottom
@@ -654,7 +654,7 @@ extension WindowAction {
     /// - Parameter bounds: the bounds to be padded.
     /// - Returns: the padded bounds with the specified padding applied.
     private func getPaddedBounds(_ bounds: CGRect) -> CGRect {
-        let padding = Defaults[.padding]
+        let padding = PaddingSettings.padding
 
         var bounds = bounds
         bounds = bounds.padding(.top, padding.totalTopPadding)
@@ -673,7 +673,7 @@ extension WindowAction {
     ///   - screen: the screen on which the bounds are located. This is used to determine if padding should be applied based on the screen size (if applicable).
     /// - Returns: the window frame with the specified padding applied.
     private func applyInnerPadding(_ windowFrame: CGRect, _ bounds: CGRect, _ screen: NSScreen? = nil) -> CGRect {
-        guard !direction.willMove else {
+        guard PaddingSettings.enablePadding, !direction.willMove else {
             return windowFrame
         }
 
@@ -692,7 +692,7 @@ extension WindowAction {
             return croppedWindowFrame
         }
 
-        let padding = Defaults[.padding]
+        let padding = PaddingSettings.padding
         let halfPadding = padding.window / 2
 
         if direction == .macOSCenter,

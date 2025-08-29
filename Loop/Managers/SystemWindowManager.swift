@@ -132,25 +132,6 @@ class SystemWindowManager {
         static var enableAnimations: Bool {
             !(windowManagerDefaults?.bool(forKey: "DisableTilingAnimations") ?? false)
         }
-
-        static func syncPadding() {
-            let enablePadding = enablePadding
-            Defaults[.enablePadding] = enablePadding
-
-            if enablePadding {
-                let newPadding = padding
-
-                Defaults[.padding] = PaddingModel(
-                    window: newPadding,
-                    externalBar: 0,
-                    top: newPadding,
-                    bottom: newPadding,
-                    right: newPadding,
-                    left: newPadding,
-                    configureScreenPadding: false
-                )
-            }
-        }
     }
 }
 
