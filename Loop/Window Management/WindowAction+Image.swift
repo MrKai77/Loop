@@ -2,8 +2,7 @@
 //  WindowAction+Image.swift
 //  Loop
 //
-//  Created by phlpsong on 2024/3/30.
-//
+//  Created by phlpsong on 2024-03-30.
 
 import Luminare
 import SwiftUI

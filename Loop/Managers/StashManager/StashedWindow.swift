@@ -2,8 +2,7 @@
 //  StashedWindow.swift
 //  Loop
 //
-//  Created by Guillaume Clédat on 28/05/2025.
-//
+//  Created by Guillaume Clédat on 2025-05-28.
 
 import Foundation
 import SwiftUI

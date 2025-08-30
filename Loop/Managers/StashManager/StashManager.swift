@@ -2,7 +2,7 @@
 //  StashManager.swift
 //  Loop
 //
-//  Created by Guillaume Clédat on 22/05/2025.
+//  Created by Guillaume Clédat on 2025-05-22.
 //
 
 import Defaults

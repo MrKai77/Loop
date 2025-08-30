@@ -2,7 +2,7 @@
 //  WindowDirection+LocalizedString.swift
 //  Loop
 //
-//  Created by phlpsong on 2024/3/31.
+//  Created by phlpsong on 2024-03-31.
 //
 
 import Luminare

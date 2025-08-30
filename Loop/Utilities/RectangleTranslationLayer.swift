@@ -2,7 +2,7 @@
 //  RectangleTranslationLayer.swift
 //  Loop
 //
-//  Created by Kami on 8/7/2024.
+//  Created by Kami on 2024-07-08.
 //
 
 import AppKit

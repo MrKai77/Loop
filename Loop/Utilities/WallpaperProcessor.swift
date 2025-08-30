@@ -2,7 +2,7 @@
 //  WallpaperProcessor.swift
 //  Loop
 //
-//  Created by Kami on 27/06/2024.
+//  Created by Kami on 2024-06-27.
 //
 
 import AppKit

@@ -2,7 +2,7 @@
 //  StashActionConfigurationView.swift
 //  Loop
 //
-//  Created by Guillaume Clédat on 19/06/2025.
+//  Created by Guillaume Clédat on 2025-06-19.
 //
 
 import Defaults
