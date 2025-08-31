@@ -99,9 +99,9 @@ extension WindowDirection {
         case .shrinkLeft:
             .init(localized: .init("Window Direction/Name: Shrink Left", defaultValue: "Shrink Left"))
         case .shrinkHorizontal:
-            .init(localized: .init("Window Direction/Name: Shrink Horizontal", defaultValue: "Shrink Horizontal"))
+            .init(localized: .init("Window Direction/Name: Shrink Horizontally", defaultValue: "Shrink Horizontally"))
         case .shrinkVertical:
-            .init(localized: .init("Window Direction/Name: Shrink Vertical", defaultValue: "Shrink Vertical"))
+            .init(localized: .init("Window Direction/Name: Shrink Vertically", defaultValue: "Shrink Vertically"))
         case .growTop:
             .init(localized: .init("Window Direction/Name: Grow Top", defaultValue: "Grow Top"))
         case .growBottom:
@@ -111,9 +111,9 @@ extension WindowDirection {
         case .growLeft:
             .init(localized: .init("Window Direction/Name: Grow Left", defaultValue: "Grow Left"))
         case .growHorizontal:
-            .init(localized: .init("Window Direction/Name: Grow Horizontal", defaultValue: "Grow Horizontal"))
+            .init(localized: .init("Window Direction/Name: Grow Horizontally", defaultValue: "Grow Horizontally"))
         case .growVertical:
-            .init(localized: .init("Window Direction/Name: Grow Vertical", defaultValue: "Grow Vertical"))
+            .init(localized: .init("Window Direction/Name: Grow Vertically", defaultValue: "Grow Vertically"))
         case .moveUp:
             .init(localized: .init("Window Direction/Name: Move Up", defaultValue: "Move Up"))
         case .moveDown:
