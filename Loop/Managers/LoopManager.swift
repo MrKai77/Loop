@@ -66,7 +66,7 @@ extension LoopManager {
         }
 
         guard !isLoopActive else {
-            if let startingAction {
+            if let startingAction, currentAction.direction == .noAction {
                 changeAction(startingAction, disableHapticFeedback: true)
             }
             return
