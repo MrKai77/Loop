@@ -75,14 +75,6 @@ final class StashManager {
     // MARK: - Public methods
 
     func start() {
-        Notification.Name.windowResized.onReceive { [weak self] obj in
-            guard let action = obj.userInfo?["action"] as? WindowAction else { return }
-            guard let window = obj.userInfo?["window"] as? Window else { return }
-            guard let screen = obj.userInfo?["screen"] as? NSScreen else { return }
-
-            self?.onWindowResized(action: action, window: window, screen: screen)
-        }
-
         store.restore()
     }
 
@@ -152,9 +144,9 @@ extension StashManager: StashedWindowsStoreDelegate {
 
 // MARK: - Stash and Unstash
 
-private extension StashManager {
+extension StashManager {
     /// Handles `windowResized` notification for the specified window and action.
-    private func onWindowResized(action: WindowAction, window: Window, screen: NSScreen) {
+    func onWindowResized(action: WindowAction, window: Window, screen: NSScreen) {
         if let edge = action.stashEdge {
             // Treat all screens as a unified virtual space. `getScreenForEdge` determines the appropriate screen based on the edge:
             // the leftmost screen for `.left` or the rightmost screen for `.right`. If the window's current screen differs from the target screen,
@@ -202,7 +194,7 @@ private extension StashManager {
 
     /// Add the given `StashWindow` to the list of monitored windows, move the window to the stashed area
     /// and start mouse moved listener if needed.
-    func stash(_ windowToStash: StashedWindow) {
+    private func stash(_ windowToStash: StashedWindow) {
         print("StashManager: stash \(windowToStash.window)")
 
         unstashOverlappingWindows(windowToStash)
@@ -213,7 +205,7 @@ private extension StashManager {
     }
 
     /// Stop monitoring the window with the given `CGWindowID`.
-    func unstash(_ windowID: CGWindowID, resetFrame: Bool, resetFrameAnimated: Bool) {
+    private func unstash(_ windowID: CGWindowID, resetFrame: Bool, resetFrameAnimated: Bool) {
         if let windowToUnstash = store.stashed[windowID] {
             unstash(windowToUnstash, resetFrame: resetFrame, resetFrameAnimated: resetFrameAnimated)
         } else {
@@ -222,7 +214,7 @@ private extension StashManager {
     }
 
     /// Stop monitoring the window. If `resetFrame` is true, the window will be moved to its initial frame.
-    func unstash(_ window: StashedWindow, resetFrame: Bool, resetFrameAnimated: Bool) {
+    private func unstash(_ window: StashedWindow, resetFrame: Bool, resetFrameAnimated: Bool) {
         print("StashManager: unstash \(window.window)")
 
         if resetFrame {

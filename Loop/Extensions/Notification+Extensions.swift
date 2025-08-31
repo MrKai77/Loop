@@ -9,8 +9,6 @@ import Foundation
 
 // TODO: Move away from using notifications, try and call functions directly instead
 extension Notification.Name {
-    static let windowResized = Notification.Name("windowResized")
-
     static let didImportKeybindsSuccessfully = Notification.Name("didImportKeybindsSuccessfully")
     static let didExportKeybindsSuccessfully = Notification.Name("didExportKeybindsSuccessfully")
 

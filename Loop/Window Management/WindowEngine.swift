@@ -123,7 +123,11 @@ enum WindowEngine {
             CGWarpMouseCursorPosition(targetFrame.center)
         }
 
-        Notification.Name.windowResized.post(userInfo: ["action": action, "window": window, "screen": screen])
+        StashManager.shared.onWindowResized(
+            action: action,
+            window: window,
+            screen: screen
+        )
     }
 
     /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
