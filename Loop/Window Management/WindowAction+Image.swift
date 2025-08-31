@@ -69,13 +69,17 @@ struct IconView: View, Equatable {
 
     let action: WindowAction
 
-    @State private var frame: CGRect = .init(x: 0, y: 0, width: 1, height: 1)
+    private var frame: CGRect {
+        action.getFrame(
+            window: nil,
+            bounds: .init(origin: .zero, size: size),
+            disablePadding: true
+        )
+    }
 
     private let size = CGSize(width: 14, height: 10)
     private let inset: CGFloat = 2
     private let outerCornerRadius: CGFloat = 3
-
-    @State private var refreshFrameDebounceTask: Task<(), Never>?
 
     var body: some View {
         if action.direction == .cycle, let first = action.cycle?.first {
@@ -121,30 +125,6 @@ struct IconView: View, Equatable {
                     .padding(-inset)
             }
             .padding(.horizontal, 4)
-            .onAppear {
-                refreshFrame(immediately: true)
-            }
-            .onChange(of: action) { _ in
-                refreshFrame()
-            }
-        }
-    }
-
-    func refreshFrame(immediately: Bool = false) {
-        if immediately {
-            frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), disablePadding: true)
-            return
-        }
-
-        refreshFrameDebounceTask?.cancel()
-        refreshFrameDebounceTask = Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(50))
-
-            guard !Task.isCancelled else { return }
-
-            withAnimation(luminareAnimationFast) {
-                refreshFrame(immediately: true)
-            }
         }
     }
 
