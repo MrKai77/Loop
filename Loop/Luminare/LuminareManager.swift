@@ -184,7 +184,6 @@ class LuminareManager: NSWindowController, ObservableObject {
                         previewedAction.direction = previewedAction.direction.nextPreviewDirection
                         radialMenuViewModel.setAction(to: previewedAction)
                     }
-                }
             }
         }
     }
