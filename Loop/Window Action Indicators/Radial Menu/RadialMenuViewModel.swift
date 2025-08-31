@@ -34,8 +34,6 @@ final class RadialMenuViewModel: ObservableObject {
         self.secondaryColor = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
         recomputeAngle()
-
-        print("RadialMenuViewModel: Initialized with action \(startingAction?.direction.rawValue ?? "nil")")
     }
 
     var invalidWindowSelected: Bool {

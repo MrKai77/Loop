@@ -23,12 +23,12 @@ class LoopManager: ObservableObject {
     private let previewController = PreviewController()
 
     private(set) lazy var triggerKeyObserver = TriggerKeyObserver(
-        openCallback: { [weak self] in self?.openLoop() },
+        openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
     private(set) lazy var middleClickObserver = MiddleClickObserver(
-        openCallback: { [weak self] in self?.openLoop() },
+        openCallback: { [weak self] in self?.openLoop(startingAction: nil) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
@@ -60,7 +60,7 @@ class LoopManager: ObservableObject {
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    private func openLoop() {
+    private func openLoop(startingAction: WindowAction?) {
         guard
             isLoopActive == false,
             AccessibilityManager.getStatus()
@@ -130,6 +130,10 @@ extension LoopManager {
         }
 
         isLoopActive = true
+
+        if let startingAction {
+            changeAction(startingAction, disableHapticFeedback: true)
+        }
     }
 
     // Internal method to force close the loop without applying changes

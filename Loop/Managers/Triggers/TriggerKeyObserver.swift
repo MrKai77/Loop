@@ -14,7 +14,7 @@ import Defaults
 /// It is important that a NSEventMonitor is used instead of a CGEventMonitor here, so that external key remappers (such as Karabiner or HyperKey) can take precedence.
 final class TriggerKeyObserver {
     // Callbacks
-    private let openCallback: () -> ()
+    private let openCallback: (WindowAction?) -> ()
     private let closeCallback: () -> ()
 
     // State-tracking
@@ -34,7 +34,7 @@ final class TriggerKeyObserver {
     ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated.
     ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
     init(
-        openCallback: @escaping () -> (),
+        openCallback: @escaping (WindowAction?) -> (),
         closeCallback: @escaping () -> ()
     ) {
         self.openCallback = openCallback
@@ -81,13 +81,13 @@ final class TriggerKeyObserver {
                     if useTriggerDelay {
                         startTriggerDelayTimer()
                     } else {
-                        openCallback()
+                        openCallback(nil)
                     }
                 }
             } else if useTriggerDelay {
                 startTriggerDelayTimer()
             } else {
-                openCallback()
+                openCallback(nil)
             }
 
             lastTriggerkeyPressTime = .now
@@ -108,7 +108,7 @@ final class TriggerKeyObserver {
             guard !Task.isCancelled else { return }
             triggerDelayTimer = nil
 
-            openCallback()
+            openCallback(nil)
         }
     }
 
