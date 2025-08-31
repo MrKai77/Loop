@@ -11,6 +11,7 @@ import SwiftUI
 
 struct LuminarePreviewView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.appearsActive) private var appearsActive
     @ObservedObject var model: LuminareManager = .shared
 
     @State var actionRect: CGRect = .zero
@@ -29,7 +30,6 @@ struct LuminarePreviewView: View {
 
     @State var primaryColor: Color = .getLoopAccent(tone: .normal)
     @State var secondaryColor: Color = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
-    @State var isActive: Bool = true
 
     var body: some View {
         GeometryReader { geo in
@@ -48,8 +48,8 @@ struct LuminarePreviewView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    isActive ? primaryColor : .systemGray,
-                                    isActive ? secondaryColor : .systemGray
+                                    appearsActive ? primaryColor : .systemGray,
+                                    appearsActive ? secondaryColor : .systemGray
                                 ]
                             ),
                             startPoint: .topLeading,
@@ -86,11 +86,6 @@ struct LuminarePreviewView: View {
         }
         .onChange(of: [useSystemAccentColor, useGradient]) { _ in
             recomputeColors()
-        }
-        .onReceive(.activeStateChanged) { notif in
-            if let active = notif.object as? Bool {
-                isActive = active
-            }
         }
         .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 10, topTrailingRadius: 10))
     }

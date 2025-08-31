@@ -16,7 +16,7 @@ final class RadialMenuViewModel: ObservableObject {
 
     private var previousAction: WindowAction?
     private let window: Window?
-    private let previewMode: Bool
+    let previewMode: Bool
 
     init(
         startingAction: WindowAction?,

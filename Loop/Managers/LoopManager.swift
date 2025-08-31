@@ -46,16 +46,6 @@ class LoopManager: ObservableObject {
     private var distanceToMouse: CGFloat = 0
 
     func start() {
-        Notification.Name.forceCloseLoop.onReceive { _ in
-            self.closeLoop(forceClose: true)
-        }
-
-//        Notification.Name.updateBackendDirection.onReceive { notification in
-//            if let action = notification.userInfo?["action"] as? WindowAction {
-//                self.changeAction(action)
-//            }
-//        }
-
         mouseMovedEventMonitor = NSEventMonitor(
             scope: .all,
             eventMask: [.mouseMoved, .otherMouseDragged],
@@ -69,8 +59,8 @@ class LoopManager: ObservableObject {
 
 // MARK: - Opening/Closing Loop
 
-private extension LoopManager {
-    func openLoop() {
+extension LoopManager {
+    private func openLoop() {
         guard
             isLoopActive == false,
             AccessibilityManager.getStatus()
@@ -142,7 +132,12 @@ private extension LoopManager {
         isLoopActive = true
     }
 
-    func closeLoop(forceClose: Bool) {
+    // Internal method to force close the loop without applying changes
+    func forceCloseLoop() {
+        closeLoop(forceClose: true)
+    }
+
+    private func closeLoop(forceClose: Bool) {
         guard isLoopActive == true else { return }
 
         closeWindows()
@@ -179,7 +174,7 @@ private extension LoopManager {
         LoopManager.lastTargetFrame = .zero
     }
 
-    func openWindows() {
+    private func openWindows() {
         if Defaults[.previewVisibility], targetWindow != nil {
             previewController.open(
                 screen: screenToResizeOn!,
@@ -197,7 +192,7 @@ private extension LoopManager {
         }
     }
 
-    func closeWindows() {
+    private func closeWindows() {
         radialMenuController.close()
         previewController.close()
     }

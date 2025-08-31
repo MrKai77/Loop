@@ -11,9 +11,6 @@ import Foundation
 extension Notification.Name {
     static let windowResized = Notification.Name("windowResized")
 
-    static let forceCloseLoop = Notification.Name("forceCloseLoop")
-    static let activeStateChanged = Notification.Name("activeStateChanged")
-
     static let didImportKeybindsSuccessfully = Notification.Name("didImportKeybindsSuccessfully")
     static let didExportKeybindsSuccessfully = Notification.Name("didExportKeybindsSuccessfully")
 

@@ -63,7 +63,7 @@ class KeybindMonitor {
             // If this wasn't, check if it was a system keybind (ex. screenshot), and
             // in that case, passthrough and force-close Loop
             if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
-                Notification.Name.forceCloseLoop.post()
+                LoopManager.shared.forceCloseLoop()
                 print("Detected system keybind, closing!")
                 return Unmanaged.passUnretained(cgEvent)
             }
@@ -119,7 +119,7 @@ class KeybindMonitor {
         }
 
         if pressedKeys.contains(.kVK_Escape) {
-            Notification.Name.forceCloseLoop.post()
+            LoopManager.shared.forceCloseLoop()
             print("performKeybind: returning true due to force close")
             return true
         }

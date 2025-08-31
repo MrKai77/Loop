@@ -11,6 +11,7 @@ import SwiftUI
 
 struct RadialMenuView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.appearsActive) private var appearsActive
     @ObservedObject private var viewModel: RadialMenuViewModel
     private let radialMenuSize: CGFloat = 100
 
@@ -26,6 +27,10 @@ struct RadialMenuView: View {
         self.viewModel = viewModel
     }
 
+    private var shouldAppearActive: Bool {
+        !viewModel.previewMode || (viewModel.previewMode && appearsActive)
+    }
+
     var body: some View {
         ZStack {
             ZStack {
@@ -38,8 +43,8 @@ struct RadialMenuView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    viewModel.primaryColor,
-                                    viewModel.secondaryColor
+                                    shouldAppearActive ? viewModel.primaryColor : .systemGray,
+                                    shouldAppearActive ? viewModel.secondaryColor : .systemGray
                                 ]
                             ),
                             startPoint: .topLeading,
