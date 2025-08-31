@@ -12,7 +12,7 @@ enum WindowEngine {
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized
-    ///   - direction: WindowDirection
+    ///   - direction: WindowDirection to resize the window to
     ///   - screen: Screen the window should be resized on
     ///   - shouldRecord: only set to false when preview window is disabled (so live preview)
     static func resize(
@@ -48,20 +48,13 @@ enum WindowEngine {
         }
 
         if #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable], !willChangeScreens {
-            // System resizes seem to only be able to be performed on the frontmost app
-            if let systemAction = action.direction.systemEquivalent,
-               let app = window.nsRunningApplication,
-               app == NSWorkspace.shared.frontmostApplication,
-               let axMenuItem = try? systemAction.getItem(for: app) {
-                try? axMenuItem.performAction(.press)
-                return
-            } else {
-                print("System action not available for \(action.direction)")
-            }
+            if resizeWithSystemWindowManager(window: window, to: action) {
+                // If the preview wasn't visible, then that means that this is the new live frame.
+                if !Defaults[.previewVisibility] {
+                    LoopManager.lastTargetFrame = window.frame
+                }
 
-            // If the preview wasn't visible, then that means that this is the new live frame.
-            if !Defaults[.previewVisibility] {
-                LoopManager.lastTargetFrame = window.frame
+                return
             }
         }
 
@@ -224,6 +217,31 @@ enum WindowEngine {
         return (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
     }
 
+    /// Resize a window using the system window manager, if available (macOS 15+)
+    /// - Parameters:
+    ///   - window: Window to be resized
+    ///   - action: WindowDirection to resize the window to
+    /// - Returns: Whether the action was performed successfully
+    @available(macOS 15, *)
+    private static func resizeWithSystemWindowManager(
+        window: Window,
+        to action: WindowAction
+    ) -> Bool {
+        guard
+            let systemAction = action.direction.systemEquivalent,       // Ensure that there's a system equivalent action for the desired action
+            let app = window.nsRunningApplication,                      // Ensure that we can get the app's NSRunningApplication and that it's frontmost
+            app == NSWorkspace.shared.frontmostApplication,
+            let axMenuItem = try? systemAction.getItem(for: app),       // Try and get the AXMenuItem for the action
+            (try? axMenuItem.getValue(.enabled)) == true                // Ensure that the action is enabled (e.g. "Zoom" is disabled for size-constrained windows)
+        else {
+            print("System action not available for \(action.direction) on \(window.title ?? "<unknown>")")
+            return false
+        }
+        
+        try? axMenuItem.performAction(.press)
+        return true
+    }
+
     /// Determines if a window resize should be animated by Loop or not.
     /// Note that this does not affect the system window manager.
     /// - Parameter window: The window to be resized
@@ -254,7 +272,7 @@ enum WindowEngine {
 
     /// Will move a window back onto the screen. To be run AFTER a window has been resized.
     /// - Parameters:
-    ///   - window: Window
+    ///   - window: Window to be checked
     ///   - screenFrame: The screen's frame
     private static func handleSizeConstrainedWindow(window: Window, bounds: CGRect) {
         guard bounds != .zero else {
