@@ -75,6 +75,8 @@ struct IconView: View, Equatable {
     private let inset: CGFloat = 2
     private let outerCornerRadius: CGFloat = 3
 
+    @State private var refreshFrameDebounceTask: Task<(), Never>?
+
     var body: some View {
         if action.direction == .cycle, let first = action.cycle?.first {
             IconView(action: first)
@@ -99,14 +101,6 @@ struct IconView: View, Equatable {
                                 y: frame.origin.y
                             )
                     }
-                    .onAppear {
-                        refreshFrame()
-                    }
-                    .onChange(of: action) { _ in
-                        withAnimation(luminareAnimationFast) {
-                            refreshFrame()
-                        }
-                    }
                     .frame(width: size.width, height: size.height, alignment: .topLeading)
                 } else if action.direction == .cycle {
                     Image(.repeat4)
@@ -127,11 +121,31 @@ struct IconView: View, Equatable {
                     .padding(-inset)
             }
             .padding(.horizontal, 4)
+            .onAppear {
+                refreshFrame(immediately: true)
+            }
+            .onChange(of: action) { _ in
+                refreshFrame()
+            }
         }
     }
 
-    func refreshFrame() {
-        frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), disablePadding: true)
+    func refreshFrame(immediately: Bool = false) {
+        if immediately {
+            frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), disablePadding: true)
+            return
+        }
+
+        refreshFrameDebounceTask?.cancel()
+        refreshFrameDebounceTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(50))
+
+            guard !Task.isCancelled else { return }
+
+            withAnimation(luminareAnimationFast) {
+                refreshFrame(immediately: true)
+            }
+        }
     }
 
     static func == (lhs: IconView, rhs: IconView) -> Bool {
