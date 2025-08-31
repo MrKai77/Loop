@@ -30,7 +30,7 @@ struct CustomTextField: NSViewRepresentable {
 
         // Set the target-action for text changes
         textField.delegate = context.coordinator
-        
+
         DispatchQueue.main.async {
             textField.becomeFirstResponder()
         }
