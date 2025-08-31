@@ -61,10 +61,14 @@ class LoopManager: ObservableObject {
 
 extension LoopManager {
     private func openLoop(startingAction: WindowAction?) {
-        guard
-            isLoopActive == false,
-            AccessibilityManager.getStatus()
-        else {
+        guard AccessibilityManager.getStatus() else {
+            return
+        }
+
+        guard !isLoopActive else {
+            if let startingAction {
+                changeAction(startingAction, disableHapticFeedback: true)
+            }
             return
         }
 
