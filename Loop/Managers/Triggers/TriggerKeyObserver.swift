@@ -74,24 +74,26 @@ final class TriggerKeyObserver {
         processModifiers(in: event)
 
         let wasKeyDown = event.type == .keyDown || currentlyPressedKeys.count > previouslyPressedKeys.count
+        let containsTriggerKey = triggerKey.isSubset(of: currentlyPressedKeys)
+        let selectedAction = WindowAction.getAction(for: currentlyPressedKeys.subtracting(triggerKey))
+        let exactTriggerKeyMatch = triggerKey == currentlyPressedKeys.filter(\.isModifier)
 
-        if wasKeyDown,
-           triggerKey.isSubset(of: currentlyPressedKeys) {
+        if wasKeyDown, exactTriggerKeyMatch || (containsTriggerKey && selectedAction != nil) {
             if useDoubleClickTrigger {
                 // Ensure that only the trigger key was pressed, nothing else
                 guard currentlyPressedKeys == triggerKey else { return event }
 
                 if abs(lastTriggerkeyPressTime.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
                     if useTriggerDelay {
-                        startTriggerDelayTimer()
+                        startTriggerDelayTimer(selectedAction)
                     } else {
-                        openWithSelectedActionIfAvailable()
+                        openCallback(selectedAction)
                     }
                 }
             } else if useTriggerDelay {
-                startTriggerDelayTimer()
+                startTriggerDelayTimer(selectedAction)
             } else {
-                openWithSelectedActionIfAvailable()
+                openCallback(selectedAction)
             }
 
             lastTriggerkeyPressTime = .now
@@ -104,7 +106,7 @@ final class TriggerKeyObserver {
     }
 
     /// Starts a trigger delay timer, which will call the open callback after the specified delay.
-    private func startTriggerDelayTimer() {
+    private func startTriggerDelayTimer(_ action: WindowAction?) {
         triggerDelayTimer?.cancel()
 
         triggerDelayTimer = Task { @MainActor in
@@ -112,7 +114,7 @@ final class TriggerKeyObserver {
             guard !Task.isCancelled else { return }
             triggerDelayTimer = nil
 
-            openWithSelectedActionIfAvailable()
+            openCallback(action)
         }
     }
 
@@ -137,14 +139,6 @@ final class TriggerKeyObserver {
                     currentlyPressedKeys.insert(key)
                 }
             }
-        }
-    }
-
-    private func openWithSelectedActionIfAvailable() {
-        if let action = WindowAction.getAction(for: currentlyPressedKeys.subtracting(triggerKey)) {
-            openCallback(action)
-        } else {
-            openCallback(nil)
         }
     }
 }
