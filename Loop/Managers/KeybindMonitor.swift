@@ -111,7 +111,7 @@ class KeybindMonitor {
             // This is used when the user is pressing 2+ keys so that it doesn't switch back
             // to the one key direction when they're letting go of the keys.
             if abs(lastKeyReleaseTime.timeIntervalSinceNow) < 0.1 {
-                print("performKeybind: returning true due to key release")
+                print("performKeybind: valid event detected; not passing through due to rapid key release")
                 return true
             }
             lastKeyReleaseTime = Date.now
@@ -120,7 +120,7 @@ class KeybindMonitor {
 
         if pressedKeys.contains(.kVK_Escape) {
             LoopManager.shared.forceCloseLoop()
-            print("performKeybind: returning true due to force close")
+            print("performKeybind: valid event detected; not passing through due to force-closing of Loop")
             return true
         }
 
@@ -129,7 +129,7 @@ class KeybindMonitor {
 
             if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
                 LoopManager.shared.changeAction(newAction)
-                print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
+                print("performKeybind: valid event detected; new action: \(newAction.direction)")
             }
 
             return true
@@ -139,15 +139,13 @@ class KeybindMonitor {
 
             if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
                 LoopManager.shared.changeAction(newAction)
-                print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
+                print("performKeybind: valid event detected with last key only; new action: \(newAction.direction)")
             }
 
             return true
         }
 
-        // If this wasn't a valid keybind, return false, which will
-        // then forward the key event to the frontmost app
-        print("performKeybind: returning false due to invalid event")
+        // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
         return false
     }
 

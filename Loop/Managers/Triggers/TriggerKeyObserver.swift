@@ -63,6 +63,10 @@ final class TriggerKeyObserver {
 
     /// Handles keypress events, and opens/closes Loop as necessary.
     private func handleKeypress(_ event: NSEvent) -> NSEvent? {
+        if event.type == .keyDown || event.type == .keyUp, event.isARepeat {
+            return event
+        }
+
         triggerDelayTimer?.cancel()
         triggerDelayTimer = nil
 
@@ -81,13 +85,13 @@ final class TriggerKeyObserver {
                     if useTriggerDelay {
                         startTriggerDelayTimer()
                     } else {
-                        openCallback(nil)
+                        openWithSelectedActionIfAvailable()
                     }
                 }
             } else if useTriggerDelay {
                 startTriggerDelayTimer()
             } else {
-                openCallback(nil)
+                openWithSelectedActionIfAvailable()
             }
 
             lastTriggerkeyPressTime = .now
@@ -100,7 +104,7 @@ final class TriggerKeyObserver {
     }
 
     /// Starts a trigger delay timer, which will call the open callback after the specified delay.
-    func startTriggerDelayTimer() {
+    private func startTriggerDelayTimer() {
         triggerDelayTimer?.cancel()
 
         triggerDelayTimer = Task { @MainActor in
@@ -108,7 +112,7 @@ final class TriggerKeyObserver {
             guard !Task.isCancelled else { return }
             triggerDelayTimer = nil
 
-            openCallback(nil)
+            openWithSelectedActionIfAvailable()
         }
     }
 
@@ -116,7 +120,7 @@ final class TriggerKeyObserver {
     /// By default, it will try and preserve right/left modifier keys.
     /// However, if necessary, it will fallback to just using the base modifier keys.
     /// This is necessary when more than one modifier keys is pressed at the exact same time (such as when using Karabiner or HyperKey).
-    func processModifiers(in event: NSEvent) {
+    private func processModifiers(in event: NSEvent) {
         if event.modifierFlags.wasKeyUp {
             currentlyPressedKeys = []
         } else if currentlyPressedKeys.contains(event.keyCode) {
@@ -133,6 +137,14 @@ final class TriggerKeyObserver {
                     currentlyPressedKeys.insert(key)
                 }
             }
+        }
+    }
+
+    private func openWithSelectedActionIfAvailable() {
+        if let action = WindowAction.getAction(for: currentlyPressedKeys.subtracting(triggerKey)) {
+            openCallback(action)
+        } else {
+            openCallback(nil)
         }
     }
 }

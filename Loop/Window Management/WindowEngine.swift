@@ -228,16 +228,16 @@ enum WindowEngine {
         to action: WindowAction
     ) -> Bool {
         guard
-            let systemAction = action.direction.systemEquivalent,       // Ensure that there's a system equivalent action for the desired action
-            let app = window.nsRunningApplication,                      // Ensure that we can get the app's NSRunningApplication and that it's frontmost
+            let systemAction = action.direction.systemEquivalent, // Ensure that there's a system equivalent action for the desired action
+            let app = window.nsRunningApplication, // Ensure that we can get the app's NSRunningApplication and that it's frontmost
             app == NSWorkspace.shared.frontmostApplication,
-            let axMenuItem = try? systemAction.getItem(for: app),       // Try and get the AXMenuItem for the action
-            (try? axMenuItem.getValue(.enabled)) == true                // Ensure that the action is enabled (e.g. "Zoom" is disabled for size-constrained windows)
+            let axMenuItem = try? systemAction.getItem(for: app), // Try and get the AXMenuItem for the action
+            (try? axMenuItem.getValue(.enabled)) == true // Ensure that the action is enabled (e.g. "Zoom" is disabled for size-constrained windows)
         else {
             print("System action not available for \(action.direction) on \(window.title ?? "<unknown>")")
             return false
         }
-        
+
         try? axMenuItem.performAction(.press)
         return true
     }
