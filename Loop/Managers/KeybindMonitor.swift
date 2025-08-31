@@ -128,7 +128,7 @@ class KeybindMonitor {
             let isRepeatEvent = (event.type == .keyDown || event.type == .keyUp) && event.isARepeat
 
             if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
-                Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
+                LoopManager.shared.changeAction(newAction)
                 print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
             }
 
@@ -138,7 +138,7 @@ class KeybindMonitor {
             let isRepeatEvent = (event.type == .keyDown || event.type == .keyUp) && event.isARepeat
 
             if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
-                Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
+                LoopManager.shared.changeAction(newAction)
                 print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
             }
 

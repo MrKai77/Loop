@@ -6,16 +6,30 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 
-class RadialMenuController {
+final class RadialMenuController {
     private var controller: NSWindowController?
+    private var viewModel: RadialMenuViewModel?
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.loop", category: "RadialMenuController")
 
-    func open(position: CGPoint, frontmostWindow: Window?, startingAction: WindowAction = .init(.noAction)) {
+    func open(
+        position: CGPoint,
+        window: Window?,
+        startingAction: WindowAction?
+    ) {
         if let windowController = controller {
             windowController.window?.orderFrontRegardless()
             return
         }
+
+        let viewModel = RadialMenuViewModel(
+            startingAction: startingAction,
+            window: window,
+            previewMode: false
+        )
+        self.viewModel = viewModel
 
         let mouseX: CGFloat = position.x
         let mouseY: CGFloat = position.y
@@ -33,12 +47,7 @@ class RadialMenuController {
         panel.hasShadow = false
         panel.backgroundColor = .clear
         panel.level = .screenSaver
-        panel.contentView = NSHostingView(
-            rootView: RadialMenuView(
-                window: frontmostWindow,
-                startingAction: startingAction
-            )
-        )
+        panel.contentView = NSHostingView(rootView: RadialMenuView(viewModel: viewModel))
         panel.alphaValue = 0
 
         // Position the panel
@@ -82,5 +91,11 @@ class RadialMenuController {
         }, completionHandler: {
             windowController.close()
         })
+    }
+
+    func setAction(to newAction: WindowAction) {
+        viewModel?.setAction(to: newAction)
+
+        logger.log("RadialMenuController: Set action to '\(newAction.getName())'")
     }
 }

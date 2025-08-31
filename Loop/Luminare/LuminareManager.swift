@@ -86,7 +86,9 @@ enum Tab: LuminareTabItem, CaseIterable {
 class LuminareManager: NSWindowController, ObservableObject {
     static let shared = LuminareManager()
 
+    var luminare: LuminareWindow?
     private var previewActionTimerTask: Task<(), Error>?
+
     @Published private(set) var previewedAction: WindowAction
 
     @Published var showRadialMenu: Bool = false
@@ -117,10 +119,13 @@ class LuminareManager: NSWindowController, ObservableObject {
         }
     }
 
+    let radialMenuViewModel: RadialMenuViewModel
+
     private init() {
         let startingAction: WindowAction = .init(.topHalf)
 
         self.previewedAction = startingAction
+        self.radialMenuViewModel = .init(startingAction: startingAction, window: nil, previewMode: true)
 
         super.init(window: nil)
 
@@ -177,8 +182,8 @@ class LuminareManager: NSWindowController, ObservableObject {
                 if window?.isKeyWindow == true, !Task.isCancelled {
                     await MainActor.run {
                         previewedAction.direction = previewedAction.direction.nextPreviewDirection
+						 radialMenuViewModel.setAction(to: previewedAction)
                     }
-                }
             }
         }
     }
@@ -230,7 +235,7 @@ struct LuminareContentView: View {
 
                     if model.showRadialMenu {
                         VStack {
-                            RadialMenuView(previewMode: true, startingAction: model.previewedAction)
+                            RadialMenuView(viewModel: model.radialMenuViewModel)
                         }
                         .frame(maxHeight: .infinity, alignment: .center)
                     }

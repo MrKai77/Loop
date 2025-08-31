@@ -143,13 +143,18 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder private func actionButtons() -> some View {
         HStack(spacing: 8) {
             Button("Preview") {}
-                .onLongPressGesture( // Allows for a press-and-hold gesture to show the preview
+                .onLongPressGesture(
+                    // Allows for a press-and-hold gesture to show the preview
                     minimumDuration: 100.0,
                     maximumDistance: .infinity,
                     pressing: { pressing in
                         if pressing {
                             guard let screen = NSScreen.main else { return }
-                            previewController.open(screen: screen, startingAction: action)
+                            previewController.open(
+                                screen: screen,
+                                window: nil,
+                                startingAction: action
+                            )
                         } else {
                             previewController.close()
                         }

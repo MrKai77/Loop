@@ -50,11 +50,11 @@ class LoopManager: ObservableObject {
             self.closeLoop(forceClose: true)
         }
 
-        Notification.Name.updateBackendDirection.onReceive { notification in
-            if let action = notification.userInfo?["action"] as? WindowAction {
-                self.changeAction(action)
-            }
-        }
+//        Notification.Name.updateBackendDirection.onReceive { notification in
+//            if let action = notification.userInfo?["action"] as? WindowAction {
+//                self.changeAction(action)
+//            }
+//        }
 
         mouseMovedEventMonitor = NSEventMonitor(
             scope: .all,
@@ -183,14 +183,16 @@ private extension LoopManager {
         if Defaults[.previewVisibility], targetWindow != nil {
             previewController.open(
                 screen: screenToResizeOn!,
-                window: targetWindow
+                window: targetWindow,
+                startingAction: nil
             )
         }
 
         if Defaults[.radialMenuVisibility] {
             radialMenuController.open(
                 position: initialMousePosition,
-                frontmostWindow: targetWindow
+                window: targetWindow,
+                startingAction: nil
             )
         }
     }
@@ -203,7 +205,7 @@ private extension LoopManager {
 
 // MARK: - Changing Actions
 
-private extension LoopManager {
+extension LoopManager {
     /// Changes the action to the provided one, or the next cycle action if available.
     /// - Parameters:
     ///   - newAction: The action to change to. If a cycle is provided, Loop will use the current action as context to choose an appropriate next action.
@@ -295,9 +297,8 @@ private extension LoopManager {
 
             // This is only needed because if preview window is moved
             // onto a new screen, it needs to receive a window action
-            DispatchQueue.main.async {
-                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
-            }
+            previewController.setAction(to: currentAction)
+            radialMenuController.setAction(to: currentAction)
 
             if let parentCycleAction {
                 currentAction = newAction
@@ -336,7 +337,8 @@ private extension LoopManager {
             }
 
             DispatchQueue.main.async {
-                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
+                self.previewController.setAction(to: self.currentAction)
+                self.radialMenuController.setAction(to: self.currentAction)
 
                 if let screenToResizeOn = self.screenToResizeOn,
                    let window = self.targetWindow,
@@ -354,7 +356,7 @@ private extension LoopManager {
         }
     }
 
-    func getNextCycleAction(_ action: WindowAction, allowReverseCycle: Bool) -> WindowAction {
+    private func getNextCycleAction(_ action: WindowAction, allowReverseCycle: Bool) -> WindowAction {
         guard let currentCycle = action.cycle else {
             return action
         }
@@ -397,7 +399,7 @@ private extension LoopManager {
         return currentCycle[nextIndex]
     }
 
-    func performHapticFeedback() {
+    private func performHapticFeedback() {
         if Defaults[.hapticFeedback] {
             NSHapticFeedbackManager.defaultPerformer.perform(
                 NSHapticFeedbackManager.FeedbackPattern.alignment,

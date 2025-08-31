@@ -7,9 +7,8 @@
 
 import Foundation
 
+// TODO: Move away from using notifications, try and call functions directly instead
 extension Notification.Name {
-    static let updateBackendDirection = Notification.Name("updateBackendDirection")
-    static let updateUIDirection = Notification.Name("updateUIDirection")
     static let windowResized = Notification.Name("windowResized")
 
     static let forceCloseLoop = Notification.Name("forceCloseLoop")
