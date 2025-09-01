@@ -78,14 +78,7 @@ extension LoopManager {
             return
         }
 
-        currentAction = .init(.noAction)
-        parentCycleAction = nil
-        initialMousePosition = NSEvent.mouseLocation
-        screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
-        keybindMonitor.start()
-
         targetWindow = WindowEngine.getTargetWindow()
-
         guard
             targetWindow?.isAppExcluded != true,
             (targetWindow?.fullscreen ?? false && Defaults[.ignoreFullscreen]) == false
@@ -94,18 +87,10 @@ extension LoopManager {
         }
 
         // Record the first frame in advance if the preview window is disabled
-        if let targetWindow {
-            if !WindowRecords.hasBeenRecorded(targetWindow),
-               !Defaults[.previewVisibility] {
-                WindowRecords.recordFirst(for: targetWindow)
-            }
-
-            // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
-            if let frame = StashManager.shared.getRevealedFrameForStashedWindow(id: targetWindow.cgWindowID) {
-                LoopManager.lastTargetFrame = frame
-            } else {
-                LoopManager.lastTargetFrame = targetWindow.frame
-            }
+        if let targetWindow,
+           !WindowRecords.hasBeenRecorded(targetWindow),
+           !Defaults[.previewVisibility] {
+            WindowRecords.recordFirst(for: targetWindow)
         }
 
         // Only recalculate wallpaper colors if user has enabled it.
@@ -115,17 +100,11 @@ extension LoopManager {
             }
         }
 
-        if !Defaults[.disableCursorInteraction] {
-            mouseMovedEventMonitor?.start()
-        }
-
-        if !Defaults[.hideUntilDirectionIsChosen] {
-            openWindows(startingAction: startingAction)
-        }
-
-        if let startingAction {
-            changeAction(startingAction, disableHapticFeedback: true)
-        }
+        currentAction = .init(.noAction)
+        parentCycleAction = nil
+        initialMousePosition = NSEvent.mouseLocation
+        screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
+        keybindMonitor.start()
 
         leftClickMonitor = CGEventMonitor(
             eventMask: [.leftMouseDown],
@@ -142,9 +121,29 @@ extension LoopManager {
                 return nil
             }
         )
-        leftClickMonitor?.start()
+
+        if !Defaults[.disableCursorInteraction] {
+            mouseMovedEventMonitor?.start()
+        }
+
+        if !Defaults[.hideUntilDirectionIsChosen] {
+            openWindows(startingAction: startingAction)
+        }
+
+        if let window = targetWindow {
+            // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
+            if let frame = StashManager.shared.getRevealedFrameForStashedWindow(id: window.cgWindowID) {
+                LoopManager.lastTargetFrame = frame
+            } else {
+                LoopManager.lastTargetFrame = window.frame
+            }
+        }
 
         isLoopActive = true
+
+        if let startingAction {
+            changeAction(startingAction, disableHapticFeedback: true)
+        }
     }
 
     // Internal method to force close the loop without applying changes
