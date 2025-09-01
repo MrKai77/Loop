@@ -12,7 +12,7 @@ enum WindowEngine {
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized
-    ///   - direction: WindowDirection to resize the window to
+    ///   - action: WindowAction to resize the window to
     ///   - screen: Screen the window should be resized on
     ///   - shouldRecord: only set to false when preview window is disabled (so live preview)
     static func resize(
@@ -276,7 +276,7 @@ enum WindowEngine {
 
     /// Will move a window back onto the screen. To be run AFTER a window has been resized.
     /// - Parameters:
-    ///   - window: Window to be checked
+    ///   - window: The window to handle size constraints for
     ///   - screenFrame: The screen's frame
     private static func handleSizeConstrainedWindow(window: Window, bounds: CGRect) {
         guard bounds != .zero else {

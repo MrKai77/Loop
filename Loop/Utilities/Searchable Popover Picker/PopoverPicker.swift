@@ -128,7 +128,7 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
         guard !items.isEmpty else { return }
 
         let currentIndex = items.firstIndex(where: { $0 == arrowSelection }) ?? (increment ? -1 : items.count)
-        let nextIndex = currentIndex + (increment ? 1 : -1) /* % items.count */
+        let nextIndex = currentIndex + (increment ? 1 : -1)
 
         /// Ensure nextIndex is valid
         guard nextIndex >= 0, nextIndex < items.count else {

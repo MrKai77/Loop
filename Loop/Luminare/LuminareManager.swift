@@ -182,8 +182,9 @@ class LuminareManager: NSWindowController, ObservableObject {
                 if window?.isKeyWindow == true, !Task.isCancelled {
                     await MainActor.run {
                         previewedAction.direction = previewedAction.direction.nextPreviewDirection
-						 radialMenuViewModel.setAction(to: previewedAction)
+                        radialMenuViewModel.setAction(to: previewedAction)
                     }
+                }
             }
         }
     }

@@ -126,7 +126,7 @@ final class TriggerKeyObserver {
     /// However, if necessary, it will fallback to just using the base modifier keys.
     /// This is necessary when more than one modifier keys is pressed at the exact same time (such as when using Karabiner or HyperKey).
     private func processModifiers(in event: NSEvent) {
-        // Event Logi Options+ seems to send when a mouse button assigned to a keybind is released
+        // Event that Logi Options+ seems to send when a mouse button assigned to a keybind is released
         let nonModifierFlagsChanged = event.type == .flagsChanged && event.keyCode.isModifier == false
 
         if event.modifierFlags.wasKeyUp || nonModifierFlagsChanged {
