@@ -8,6 +8,8 @@
 import Defaults
 import SwiftUI
 
+/// This class is in charge of managing the state of the radial menu, including the current action, angle, and colors.
+/// By keeping the state separate, we are able to use the same `RadialMenuView` both in the app's settings, as well as in actual usage.
 final class RadialMenuViewModel: ObservableObject {
     @Published private(set) var angle: Double
     @Published private(set) var primaryColor: Color

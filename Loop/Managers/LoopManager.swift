@@ -66,13 +66,26 @@ extension LoopManager {
         }
 
         guard !isLoopActive else {
+            /// If using Karabiner-Elements, TriggerKeyObserver may call openLoop twice.
+            /// This happens because Karabiner-Elements sends modifier keys and other keys as separate, rapid events.
+            /// As a result, Loop might be opened before the full keybind is pressed.
+            /// In these cases, we can simply update the action instead of reopening the Loop.
+            /// Enabling keybindMonitor was considered as a workaround, but it doesn't start quickly enough.
+            /// Although Karabiner-Elements sends key events separately, they arrive in quick succession.
             if let startingAction, currentAction.direction == .noAction {
                 changeAction(startingAction, disableHapticFeedback: true)
             }
             return
         }
 
+        currentAction = .init(.noAction)
+        parentCycleAction = nil
+        initialMousePosition = NSEvent.mouseLocation
+        screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
+        keybindMonitor.start()
+
         targetWindow = WindowEngine.getTargetWindow()
+
         guard
             targetWindow?.isAppExcluded != true,
             (targetWindow?.fullscreen ?? false && Defaults[.ignoreFullscreen]) == false
@@ -81,10 +94,18 @@ extension LoopManager {
         }
 
         // Record the first frame in advance if the preview window is disabled
-        if let targetWindow,
-           !WindowRecords.hasBeenRecorded(targetWindow),
-           !Defaults[.previewVisibility] {
-            WindowRecords.recordFirst(for: targetWindow)
+        if let targetWindow {
+            if !WindowRecords.hasBeenRecorded(targetWindow),
+               !Defaults[.previewVisibility] {
+                WindowRecords.recordFirst(for: targetWindow)
+            }
+
+            // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
+            if let frame = StashManager.shared.getRevealedFrameForStashedWindow(id: targetWindow.cgWindowID) {
+                LoopManager.lastTargetFrame = frame
+            } else {
+                LoopManager.lastTargetFrame = targetWindow.frame
+            }
         }
 
         // Only recalculate wallpaper colors if user has enabled it.
@@ -94,11 +115,17 @@ extension LoopManager {
             }
         }
 
-        currentAction = .init(.noAction)
-        parentCycleAction = nil
-        initialMousePosition = NSEvent.mouseLocation
-        screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
-        keybindMonitor.start()
+        if !Defaults[.disableCursorInteraction] {
+            mouseMovedEventMonitor?.start()
+        }
+
+        if !Defaults[.hideUntilDirectionIsChosen] {
+            openWindows(startingAction: startingAction)
+        }
+
+        if let startingAction {
+            changeAction(startingAction, disableHapticFeedback: true)
+        }
 
         leftClickMonitor = CGEventMonitor(
             eventMask: [.leftMouseDown],
@@ -115,29 +142,9 @@ extension LoopManager {
                 return nil
             }
         )
-
-        if !Defaults[.disableCursorInteraction] {
-            mouseMovedEventMonitor?.start()
-        }
-
-        if !Defaults[.hideUntilDirectionIsChosen] {
-            openWindows()
-        }
-
-        if let window = targetWindow {
-            // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
-            if let frame = StashManager.shared.getRevealedFrameForStashedWindow(id: window.cgWindowID) {
-                LoopManager.lastTargetFrame = frame
-            } else {
-                LoopManager.lastTargetFrame = window.frame
-            }
-        }
+        leftClickMonitor?.start()
 
         isLoopActive = true
-
-        if let startingAction {
-            changeAction(startingAction, disableHapticFeedback: true)
-        }
     }
 
     // Internal method to force close the loop without applying changes
@@ -182,12 +189,12 @@ extension LoopManager {
         LoopManager.lastTargetFrame = .zero
     }
 
-    private func openWindows() {
+    private func openWindows(startingAction: WindowAction?) {
         if Defaults[.previewVisibility], targetWindow != nil {
             previewController.open(
                 screen: screenToResizeOn!,
                 window: targetWindow,
-                startingAction: nil
+                startingAction: startingAction
             )
         }
 
@@ -195,7 +202,7 @@ extension LoopManager {
             radialMenuController.open(
                 position: initialMousePosition,
                 window: targetWindow,
-                startingAction: nil
+                startingAction: startingAction
             )
         }
     }
@@ -336,7 +343,7 @@ extension LoopManager {
             currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
-                openWindows()
+                openWindows(startingAction: currentAction)
             }
 
             DispatchQueue.main.async {

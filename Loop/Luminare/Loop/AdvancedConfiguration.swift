@@ -63,6 +63,7 @@ class AdvancedConfigurationModel: ObservableObject {
         }
     }
 
+    /// Prompts the user to import keybinds from a file.
     func importPrompt() {
         Task {
             do {
@@ -73,6 +74,7 @@ class AdvancedConfigurationModel: ObservableObject {
         }
     }
 
+    /// Prompts the user to export keybinds to a file.
     func exportPrompt() {
         Task {
             do {
@@ -83,6 +85,7 @@ class AdvancedConfigurationModel: ObservableObject {
         }
     }
 
+    /// Resets keybinds to default values.
     func reset() {
         Defaults.reset(.keybinds)
         resetSuccessfully()

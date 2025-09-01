@@ -31,7 +31,7 @@ final class TriggerKeyObserver {
 
     /// Initializes a ``TriggerKeyObserver``.
     /// - Parameters:
-    ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated.
+    ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated. It takes in an optional `WindowAction` as a starting action.
     ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
     init(
         openCallback: @escaping (WindowAction?) -> (),
@@ -78,6 +78,9 @@ final class TriggerKeyObserver {
         let selectedAction = WindowAction.getAction(for: currentlyPressedKeys.subtracting(triggerKey))
         let exactTriggerKeyMatch = triggerKey == currentlyPressedKeys.filter(\.isModifier)
 
+        /// To open Loop, the latest event must have pressed a new key, and either:
+        /// - be an exact match for the trigger key (no other keys pressed)
+        /// - contain the trigger key, and also a valid keybind as configured in the user's keybind settings
         if wasKeyDown, exactTriggerKeyMatch || (containsTriggerKey && selectedAction != nil) {
             if useDoubleClickTrigger {
                 // Ensure that only the trigger key was pressed, nothing else
