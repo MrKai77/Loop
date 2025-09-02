@@ -83,13 +83,11 @@ enum Tab: LuminareTabItem, CaseIterable {
     static let loop: [Tab] = [.advanced, .excludedApps, .about]
 }
 
-class LuminareManager: LuminareCoordinator, ObservableObject {
+class LuminareManager: NSWindowController, ObservableObject {
     static let shared = LuminareManager()
 
-    var luminare: LuminareWindow?
-
-    @Published var timer: AnyCancellable?
-    @Published var previewedAction: WindowAction = .init(.topHalf)
+    private var previewActionTimerTask: Task<(), Error>?
+    @Published private(set) var previewedAction: WindowAction
 
     @Published var showRadialMenu: Bool = false
     @Published var showPreview: Bool = false
@@ -119,13 +117,28 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
         }
     }
 
-    var body: some View {
-        LuminareContentView(model: self)
-            .frame(height: 570) // Does not include titlebar height
+    private init() {
+        let startingAction: WindowAction = .init(.topHalf)
+
+        self.previewedAction = startingAction
+
+        super.init(window: nil)
+
+        let window = LuminareWindow {
+            LuminareContentView(model: self)
+                .frame(height: 570) // Does not include titlebar height
+        }
+
+        self.window = window
     }
 
-    func open() {
-        showWindow()
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func showWindow(_ sender: Any?) {
+        super.showWindow(sender)
 
         if #available(macOS 14.0, *) {
             NSApp.activate()
@@ -134,9 +147,9 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
         }
 
         do {
-            try luminare?.setBackgroundBlur(radius: 20)
-            luminare?.backgroundColor = .white.withAlphaComponent(0.001)
-            luminare?.ignoresMouseEvents = false
+            try window?.setBackgroundBlur(radius: 20)
+            window?.backgroundColor = .white.withAlphaComponent(0.001)
+            window?.ignoresMouseEvents = false
         } catch {
             print(error)
         }
@@ -145,8 +158,9 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
         NSApp.setActivationPolicy(.regular)
     }
 
-    func close() {
-        closeWindow()
+    override func close() {
+        super.close()
+
         stopTimer()
 
         if !Defaults[.showDockIcon] {
@@ -155,16 +169,23 @@ class LuminareManager: LuminareCoordinator, ObservableObject {
     }
 
     func startTimer() {
-        timer = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                guard self?.luminare?.isKeyWindow == true, let self else { return }
-                previewedAction.direction = previewedAction.direction.nextPreviewDirection
+        previewActionTimerTask?.cancel()
+        previewActionTimerTask = Task(priority: .utility) {
+            while true {
+                try await Task.sleep(for: .seconds(1))
+
+                if window?.isKeyWindow == true, !Task.isCancelled {
+                    await MainActor.run {
+                        previewedAction.direction = previewedAction.direction.nextPreviewDirection
+                    }
+                }
             }
+        }
     }
 
     func stopTimer() {
-        timer?.cancel()
+        previewActionTimerTask?.cancel()
+        previewActionTimerTask = nil
     }
 }
 
@@ -231,9 +252,9 @@ struct LuminareContentView: View {
 
 // MARK: LuminareWindow.setBackgroundBlur(radius:)
 
-extension LuminareWindow {
+extension NSWindow {
     func setBackgroundBlur(radius: Int) throws {
-        guard let connection = CGSDefaultConnectionForThread() else {
+        guard let connection = SLSDefaultConnectionForThread() else {
             throw NSError(
                 domain: "com.Luminare.NSWindow",
                 code: 0,
@@ -241,7 +262,7 @@ extension LuminareWindow {
             )
         }
 
-        let status = CGSSetWindowBackgroundBlurRadius(connection, windowNumber, radius)
+        let status = SLSSetWindowBackgroundBlurRadius(connection, windowNumber, radius)
 
         if status != noErr {
             throw NSError(
@@ -253,12 +274,12 @@ extension LuminareWindow {
     }
 }
 
-@_silgen_name("CGSDefaultConnectionForThread")
-func CGSDefaultConnectionForThread() -> CGSConnectionID?
+@_silgen_name("SLSDefaultConnectionForThread")
+func SLSDefaultConnectionForThread() -> SLSConnectionID?
 
-@_silgen_name("CGSSetWindowBackgroundBlurRadius") @discardableResult
-func CGSSetWindowBackgroundBlurRadius(
-    _ connection: CGSConnectionID,
+@_silgen_name("SLSSetWindowBackgroundBlurRadius") @discardableResult
+func SLSSetWindowBackgroundBlurRadius(
+    _ connection: SLSConnectionID,
     _ windowNum: NSInteger,
     _ radius: Int
 ) -> OSStatus

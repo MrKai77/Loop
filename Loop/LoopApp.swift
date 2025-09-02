@@ -34,7 +34,7 @@ struct LoopApp: App {
             }
 
             Button("Settings…") {
-                LuminareManager.shared.open()
+                LuminareManager.shared.showWindow(self)
             }
             .keyboardShortcut(",", modifiers: .command)
 

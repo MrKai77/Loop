@@ -132,7 +132,7 @@ struct AccentColorConfigurationView: View {
             }
 
             // Force-rerender accent colors
-            let window = LuminareManager.shared.luminare
+            let window = LuminareManager.shared.window
             window?.resignMain()
             window?.makeKeyAndOrderFront(self)
         }

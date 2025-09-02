@@ -57,7 +57,7 @@ struct ExcludedAppsConfigurationView: View {
 
     func showAppChooser() {
         Task { @MainActor in
-            guard let window = LuminareManager.shared.luminare else { return }
+            guard let window = LuminareManager.shared.window else { return }
 
             let panel = NSOpenPanel()
             panel.worksWhenModal = true
