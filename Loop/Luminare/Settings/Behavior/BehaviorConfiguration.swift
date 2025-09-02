@@ -119,9 +119,9 @@ struct BehaviorConfigurationView: View {
                 LuminareSlider(
                     "Stage strip size",
                     value: $stageStripSize.doubleBinding,
-                    in: 50...200,
+                    in: 50...250,
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsLower: true,
+                    clampsUpper: false,
                     suffix: Text("px")
                 )
             }
@@ -135,7 +135,7 @@ struct BehaviorConfigurationView: View {
                 value: $stashedWindowVisiblePadding.doubleBinding,
                 in: 1...200,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
 

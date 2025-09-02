@@ -71,7 +71,7 @@ struct KeybindsConfigurationView: View {
                     in: 0...1,
                     step: 0.1,
                     format: .number.precision(.fractionLength(1...1)),
-                    clampsLower: true,
+                    clampsUpper: false,
                     suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s"))
                 )
 

@@ -113,7 +113,7 @@ struct PaddingConfigurationView: View {
             ),
             in: range,
             format: .number.precision(.fractionLength(0...0)),
-            clampsLower: true,
+            clampsUpper: false,
             suffix: Text("px")
         )
     }
@@ -125,7 +125,7 @@ struct PaddingConfigurationView: View {
                 value: $paddingModel.top.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
             .luminareComposeStyle(.inline)
@@ -135,7 +135,7 @@ struct PaddingConfigurationView: View {
                 value: $paddingModel.bottom.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
             .luminareComposeStyle(.inline)
@@ -145,7 +145,7 @@ struct PaddingConfigurationView: View {
                 value: $paddingModel.right.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
             .luminareComposeStyle(.inline)
@@ -155,7 +155,7 @@ struct PaddingConfigurationView: View {
                 value: $paddingModel.left.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
             .luminareComposeStyle(.inline)
@@ -169,7 +169,7 @@ struct PaddingConfigurationView: View {
                 value: $paddingModel.window.doubleBinding,
                 in: 0...100,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
 

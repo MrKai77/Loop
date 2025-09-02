@@ -48,8 +48,8 @@ struct PreviewConfigurationView: View {
                 value: $previewPadding.doubleBinding,
                 in: 0...20,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsUpper: true,
-                clampsLower: true,
+                clampsUpper: false,
+                clampsLower: false,
                 suffix: Text("px")
             )
 
@@ -58,8 +58,8 @@ struct PreviewConfigurationView: View {
                 value: $previewCornerRadius.doubleBinding,
                 in: 0...20,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsUpper: true,
-                clampsLower: true,
+                clampsUpper: false,
+                clampsLower: false,
                 suffix: Text("px")
             )
 
@@ -68,8 +68,8 @@ struct PreviewConfigurationView: View {
                 value: $previewBorderThickness.doubleBinding,
                 in: 0...10,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsUpper: true,
-                clampsLower: true,
+                clampsUpper: false,
+                clampsLower: false,
                 suffix: Text("px")
             )
         }

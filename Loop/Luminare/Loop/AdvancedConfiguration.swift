@@ -176,7 +176,7 @@ struct AdvancedConfigurationView: View {
                 in: 5...50,
                 step: 4.5,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
         }
