@@ -1,5 +1,5 @@
 //
-//  ScreenManager.swift
+//  ScreenUtility.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-01-11.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class ScreenManager {
+enum ScreenUtility {
     static func screenContaining(_ window: Window) -> NSScreen? {
         let screens = getScreensInOrder()
         return screenContaining(window, in: screens)
@@ -29,7 +29,7 @@ class ScreenManager {
         return canRestartCycle ? screens.last : nil
     }
 
-    // MARK: PRIVATE
+    // MARK: Private
 
     private static func screenContaining(_ window: Window, in screens: [NSScreen]) -> NSScreen? {
         guard let firstScreen = screens.first else {
@@ -84,7 +84,7 @@ class ScreenManager {
     }
 }
 
-extension Array where Element: Hashable {
+private extension Array where Element: Hashable {
     func next(from item: Element) -> Element? {
         guard let index = firstIndex(of: item) else {
             return nil

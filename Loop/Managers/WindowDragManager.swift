@@ -9,6 +9,9 @@ import Defaults
 import SwiftUI
 
 class WindowDragManager {
+    static let shared = WindowDragManager()
+    private init() {}
+
     private var draggingWindow: Window?
     private var initialWindowFrame: CGRect?
     private var direction: WindowDirection = .noAction
@@ -31,7 +34,7 @@ class WindowDragManager {
                 if Defaults[.restoreWindowFrameOnDrag] {
                     self.restoreInitialWindowSize(window)
                 } else {
-                    AppDelegate.stashManager.onWindowDragged(window.cgWindowID)
+                    StashManager.shared.onWindowDragged(window.cgWindowID)
                     WindowRecords.eraseRecords(for: window)
                 }
 

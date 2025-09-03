@@ -237,7 +237,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsLower: true,
+                    clampsUpper: false,
                     suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
 
@@ -253,7 +253,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsLower: true,
+                    clampsUpper: false,
                     suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
             }
@@ -298,7 +298,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsLower: true,
+                    clampsUpper: false,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
 
@@ -314,7 +314,7 @@ struct CustomActionConfigurationView: View {
                     ),
                     in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsLower: true,
+                    clampsUpper: false,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
             }

@@ -102,7 +102,7 @@ struct TriggerKeycorder: View {
         isActive = true
 
         // So that if doesn't interfere with the key detection here
-        AppDelegate.loopManager.setFlagsObservers(scope: .global)
+        LoopManager.shared.triggerKeyObserver.start(scope: .global)
 
         eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
@@ -110,14 +110,14 @@ struct TriggerKeycorder: View {
                 finishedObservingKeys(wasForced: true)
             }
 
-            if CGKeyCode.keyToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
+            if CGKeyCode.modifierToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
                 selectionKey.insert(event.keyCode)
             }
 
             // Backup system in case keys are pressed at the exact same time
             let flags = event.modifierFlags.convertToCGKeyCode()
             if flags.count != selectionKey.count {
-                for key in flags where CGKeyCode.keyToImage.contains(where: { $0.key == key }) {
+                for key in flags where CGKeyCode.modifierToImage.contains(where: { $0.key == key }) {
                     if !self.selectionKey.map(\.baseModifier).contains(key) {
                         self.selectionKey.insert(key)
                     }
@@ -161,6 +161,6 @@ struct TriggerKeycorder: View {
 
         eventMonitor?.stop()
         eventMonitor = nil
-        AppDelegate.loopManager.setFlagsObservers(scope: .all)
+        LoopManager.shared.triggerKeyObserver.start(scope: .all)
     }
 }

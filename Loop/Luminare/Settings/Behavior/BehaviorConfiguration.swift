@@ -20,7 +20,6 @@ struct BehaviorConfigurationView: View {
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
     @Default(.enablePadding) var enablePadding
-    @Default(.cycleModeRestartEnabled) var cycleModeRestartEnabled
     @Default(.useScreenWithCursor) var useScreenWithCursor
     @Default(.moveCursorWithWindow) var moveCursorWithWindow
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
@@ -81,9 +80,7 @@ struct BehaviorConfigurationView: View {
                 LuminareToggle("Window snapping", isOn: $windowSnapping)
             }
 
-            LuminareToggle("Cycle always start at first item", isOn: $cycleModeRestartEnabled)
-
-            // Enabling the system window manager will override these options anyway, so hide them
+            // Enabling the system window manager will override these options.
             if !useSystemWindowManagerWhenAvailable {
                 LuminareToggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
                 LuminareToggle("Apply padding", isOn: $enablePadding)
@@ -122,9 +119,9 @@ struct BehaviorConfigurationView: View {
                 LuminareSlider(
                     "Stage strip size",
                     value: $stageStripSize.doubleBinding,
-                    in: 50...200,
+                    in: 50...250,
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsLower: true,
+                    clampsUpper: false,
                     suffix: Text("px")
                 )
             }
@@ -138,14 +135,14 @@ struct BehaviorConfigurationView: View {
                 value: $stashedWindowVisiblePadding.doubleBinding,
                 in: 1...200,
                 format: .number.precision(.fractionLength(0...0)),
-                clampsLower: true,
+                clampsUpper: false,
                 suffix: Text("px")
             )
 
             LuminareToggle("Shift focus when stashed", isOn: $shiftFocusWhenStashed)
         }
         .onChange(of: stashedWindowVisiblePadding) { _ in
-            AppDelegate.stashManager.onConfigurationChanged()
+            StashManager.shared.onConfigurationChanged()
         }
     }
 }

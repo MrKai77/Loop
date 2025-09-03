@@ -69,7 +69,7 @@ class IconConfigurationModel: ObservableObject {
 
     private func userDisabledNotificationsAlert() {
         Task { @MainActor in
-            guard let window = LuminareManager.shared.luminare else { return }
+            guard let window = LuminareManager.shared.window else { return }
             let alert = NSAlert()
             alert.messageText = .init(localized: "Notification permits: info", defaultValue: "\(Bundle.main.appName)'s notification permissions are currently disabled.")
             alert.informativeText = .init(localized: "Notification permits: request", defaultValue: "Please turn them on in System Settings.")
