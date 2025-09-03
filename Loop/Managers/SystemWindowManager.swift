@@ -126,30 +126,12 @@ class SystemWindowManager {
         }
 
         static var padding: CGFloat {
-            CGFloat(windowManagerDefaults?.float(forKey: "TiledWindowSpacing") ?? 8)
+            // Using .object(forKey:) to avoid returning 0 if the key doesn't exist
+            windowManagerDefaults?.object(forKey: "TiledWindowSpacing") as? CGFloat ?? 8.0
         }
 
         static var enableAnimations: Bool {
             !(windowManagerDefaults?.bool(forKey: "DisableTilingAnimations") ?? false)
-        }
-
-        static func syncPadding() {
-            let enablePadding = enablePadding
-            Defaults[.enablePadding] = enablePadding
-
-            if enablePadding {
-                let newPadding = padding
-
-                Defaults[.padding] = PaddingModel(
-                    window: newPadding,
-                    externalBar: 0,
-                    top: newPadding,
-                    bottom: newPadding,
-                    right: newPadding,
-                    left: newPadding,
-                    configureScreenPadding: false
-                )
-            }
         }
     }
 }

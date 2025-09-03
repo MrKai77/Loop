@@ -127,7 +127,7 @@ private extension StashedWindowsStore {
 
     func getStashedWindow(for windowId: CGWindowID, in windows: [Window], action: WindowAction) -> StashedWindow? {
         guard let window = windows.first(where: { $0.cgWindowID == windowId }) else { return nil }
-        guard let screen = ScreenManager.screenContaining(window) ?? NSScreen.main else { return nil }
+        guard let screen = ScreenUtility.screenContaining(window) ?? NSScreen.main else { return nil }
 
         return StashedWindow(window: window, screen: screen, action: action)
     }

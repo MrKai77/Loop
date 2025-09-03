@@ -22,7 +22,7 @@ enum WindowEngine {
         shouldRecord: Bool = true
     ) {
         guard action.direction != .noAction else { return }
-        let willChangeScreens = ScreenManager.screenContaining(window) != screen
+        let willChangeScreens = ScreenUtility.screenContaining(window) != screen
 
         let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
         print("Resizing \(windowTitle) to \(action.direction) on \(screen.localizedName)")
@@ -48,8 +48,6 @@ enum WindowEngine {
         }
 
         if #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable], !willChangeScreens {
-            SystemWindowManager.MoveAndResize.syncPadding()
-
             // System resizes seem to only be able to be performed on the frontmost app
             if let systemAction = action.direction.systemEquivalent,
                let app = window.nsRunningApplication,
@@ -97,7 +95,8 @@ enum WindowEngine {
             return
         }
 
-        let usePadding = Defaults[.enablePadding] && (Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize])
+        let usePadding = PaddingSettings.enablePadding &&
+            (Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize])
 
         // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
         // This is because the window *can* be moved off-screen in this case.
@@ -105,7 +104,7 @@ enum WindowEngine {
         let bounds = if action.direction.willMove {
             CGRect.zero
         } else if usePadding {
-            Defaults[.padding].apply(on: screen.safeScreenFrame)
+            PaddingSettings.padding.apply(on: screen.safeScreenFrame)
         } else {
             screen.safeScreenFrame
         }

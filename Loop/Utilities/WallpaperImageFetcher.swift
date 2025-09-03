@@ -83,8 +83,8 @@ final class WallpaperImageFetcher {
         // Use the private CGSHWCaptureWindowList API to capture high-quality images of the windows
         // This approach provides better results than the public APIs for this specific use case
         var captureWindowIDs = windowIDs
-        let cid = CGSMainConnectionID()
-        let images = CGSHWCaptureWindowList(
+        let cid = SLSMainConnectionID()
+        let images = SLSHWCaptureWindowList(
             cid,
             &captureWindowIDs,
             captureWindowIDs.count,
@@ -128,25 +128,25 @@ final class WallpaperImageFetcher {
 /// Thanks to AltTab for some of the code!
 /// https://github.com/lwouis/alt-tab-macos/blob/master/src/api-wrappers/private-apis/SkyLight.framework.swift
 
-typealias CGSConnectionID = UInt32
+typealias SLSConnectionID = UInt32
 
-@_silgen_name("CGSMainConnectionID")
-func CGSMainConnectionID() -> CGSConnectionID
+@_silgen_name("SLSMainConnectionID")
+func SLSMainConnectionID() -> SLSConnectionID
 
-@_silgen_name("CGSHWCaptureWindowList")
-func CGSHWCaptureWindowList(
-    _ cid: CGSConnectionID,
+@_silgen_name("SLSHWCaptureWindowList")
+func SLSHWCaptureWindowList(
+    _ cid: SLSConnectionID,
     _ windowList: UnsafeMutablePointer<CGWindowID>,
     _ windowCount: Int,
-    _ options: CGSWindowCaptureOptions
+    _ options: SLSWindowCaptureOptions
 ) -> Unmanaged<CFArray>
 
-struct CGSWindowCaptureOptions: OptionSet {
+struct SLSWindowCaptureOptions: OptionSet {
     let rawValue: UInt32
-    static let ignoreGlobalClipShape = CGSWindowCaptureOptions(rawValue: 1 << 11)
+    static let ignoreGlobalClipShape = Self(rawValue: 1 << 11)
     // on a retina display, 1px is spread on 4px, so nominalResolution is 1/4 of bestResolution
-    static let nominalResolution = CGSWindowCaptureOptions(rawValue: 1 << 9)
-    static let bestResolution = CGSWindowCaptureOptions(rawValue: 1 << 8)
+    static let nominalResolution = Self(rawValue: 1 << 9)
+    static let bestResolution = Self(rawValue: 1 << 8)
     // when Stage Manager is enabled, screenshots can become skewed. This param gets us full-size screenshots regardless
-    static let fullSize = CGSWindowCaptureOptions(rawValue: 1 << 19)
+    static let fullSize = Self(rawValue: 1 << 19)
 }

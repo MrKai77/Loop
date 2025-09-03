@@ -140,7 +140,7 @@ struct AboutConfigurationView: View {
     @Environment(\.openURL) private var openURL
 
     @StateObject private var model = AboutConfigurationModel()
-    @ObservedObject private var updater = AppDelegate.updater
+    @ObservedObject private var updater = Updater.shared
 
     @Default(.timesLooped) private var timesLooped
     @Default(.currentIcon) private var currentIcon
