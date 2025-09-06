@@ -286,7 +286,7 @@ enum WindowEngine {
     }
 
     /// Minimizes all windows except the current one
-    private static func minimizeOthersWindows(exceptWindow: Window) {
+    private static func minimizeOtherWindows(exceptWindow: Window) {
         let allWindows = windowList
         let windowsToMinimize = allWindows.filter { otherWindow in
             // Don't minimize the current window

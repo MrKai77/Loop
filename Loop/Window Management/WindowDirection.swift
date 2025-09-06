@@ -15,7 +15,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // General Actions
     case noAction = "NoAction", maximize = "Maximize", almostMaximize = "AlmostMaximize", fullscreen = "Fullscreen"
     case maximizeHeight = "MaximizeHeight", maximizeWidth = "MaximizeWidth"
-    case undo = "Undo", initialFrame = "InitialFrame", hide = "Hide", minimize = "Minimize", minimizeOthers
+    case undo = "Undo", initialFrame = "InitialFrame", hide = "Hide", minimize = "Minimize", minimizeOthers = "MinimizeOthers"
     case macOSCenter = "MacOSCenter", center = "Center"
 
     // Halves
