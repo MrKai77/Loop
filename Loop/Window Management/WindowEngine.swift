@@ -39,7 +39,7 @@ enum WindowEngine {
         }
 
         if action.direction == .minimizeOthers {
-            minimizeOthersWindows(exceptWindow: window)
+            minimizeOtherWindows(exceptWindow: window)
             return
         }
 
