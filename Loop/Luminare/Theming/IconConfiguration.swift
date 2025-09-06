@@ -106,7 +106,7 @@ struct IconConfigurationView: View {
                     get: { IconManager.currentAppIcon
                     },
                     set: {
-                        currentIcon = $0.iconName
+                        currentIcon = $0.assetName
                         IconManager.refreshCurrentAppIcon()
                     }
                 )
@@ -156,7 +156,7 @@ struct IconVew: View {
     var body: some View {
         ZStack {
             if hasBeenUnlocked {
-                Image(nsImage: NSImage(named: icon.iconName)!)
+                Image(nsImage: NSImage(named: icon.assetName)!)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .padding(10)

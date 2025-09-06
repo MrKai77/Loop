@@ -33,9 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        #if !DEBUG
-            IconManager.refreshCurrentAppIcon()
-        #endif
+        IconManager.refreshCurrentAppIcon()
         LoopManager.shared.start()
         WindowDragManager.shared.addObservers()
         StashManager.shared.start()
