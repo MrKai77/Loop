@@ -93,7 +93,7 @@ class CGEventMonitor: EventMonitor, Identifiable, Equatable {
 
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private var eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
+    private let eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
     private(set) var isEnabled: Bool = false
 
     init(
@@ -108,13 +108,12 @@ class CGEventMonitor: EventMonitor, Identifiable, Equatable {
             options: .defaultTap,
             eventsOfInterest: eventMask.rawValue,
             callback: { _, _, event, refcon in
-                let observer = Unmanaged<CGEventMonitor>.fromOpaque(refcon!).takeUnretainedValue()
-
                 // If disabled, simply pass the event through without processing.
                 if event.type == .tapDisabledByTimeout || event.type == .tapDisabledByUserInput {
                     return Unmanaged.passUnretained(event)
                 }
 
+                let observer = Unmanaged<CGEventMonitor>.fromOpaque(refcon!).takeUnretainedValue()
                 return observer.handleEvent(event: event)
             },
             userInfo: Unmanaged.passUnretained(self).toOpaque()

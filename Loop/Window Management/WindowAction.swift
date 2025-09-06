@@ -184,6 +184,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return true
     }
 
+    var eligibleForReverseCycle: Bool {
+        direction == .cycle && !keybind.contains(.kVK_Shift)
+    }
+
     /// Determines the angle to show in the radial menu, if applicable.
     /// Examples of actions where the radial menu angle is not applicable:
     /// - No action (noAction)
@@ -730,9 +734,22 @@ extension WindowAction {
     /// - Parameter keybind: the keybind to search for.
     /// - Returns: the `WindowAction` that matches the keybind, or `nil` if no action is found.
     static func getAction(for keybind: Set<CGKeyCode>) -> WindowAction? {
+        guard !keybind.isEmpty else { return nil }
+
+        // First do a simple lookup for exact matches
         for item in Defaults[.keybinds] where item.keybind == keybind {
             return item
         }
+
+        if keybind.contains(.kVK_Shift), Defaults[.cycleBackwardsOnShiftPressed] {
+            // Reverse cycling is an option, so check for that
+            let modifiedKeybind = keybind.subtracting([.kVK_Shift])
+
+            for item in Defaults[.keybinds] where item.eligibleForReverseCycle && item.keybind == modifiedKeybind {
+                return item
+            }
+        }
+
         return nil
     }
 }

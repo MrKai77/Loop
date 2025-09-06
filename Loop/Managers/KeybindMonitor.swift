@@ -100,10 +100,6 @@ class KeybindMonitor {
         flagsEventMonitor = nil
     }
 
-    func isShiftPressed() -> Bool {
-        pressedKeys.contains(.kVK_Shift)
-    }
-
     @discardableResult
     private func performKeybind(event: NSEvent) -> Bool {
         if event.type == .keyUp {
@@ -115,8 +111,10 @@ class KeybindMonitor {
                 return true
             }
             lastKeyReleaseTime = Date.now
-            return false
+            return true
         }
+
+        LoopManager.shared.isShiftKeyPressed = event.modifierFlags.contains(.shift)
 
         if pressedKeys.contains(.kVK_Escape) {
             LoopManager.shared.forceCloseLoop()
@@ -130,16 +128,6 @@ class KeybindMonitor {
             if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
                 LoopManager.shared.changeAction(newAction)
                 print("performKeybind: valid event detected; new action: \(newAction.direction)")
-            }
-
-            return true
-        } else if let lastKey, let newAction = WindowAction.getAction(for: [lastKey]) {
-            // If multiple keys have been added to `pressedKeys` and none of the keybinds match, fall back to searching for the last single key.
-            let isRepeatEvent = (event.type == .keyDown || event.type == .keyUp) && event.isARepeat
-
-            if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
-                LoopManager.shared.changeAction(newAction)
-                print("performKeybind: valid event detected with last key only; new action: \(newAction.direction)")
             }
 
             return true

@@ -101,6 +101,16 @@ final class TriggerKeyObserver {
 
             lastTriggerkeyPressTime = .now
         } else {
+            // If the user has set Loop to cycle backwards when shift is pressed, and the user has just pressed shift while Loop is open,
+            // But it no longer matches the conditions of either exactly matching the trigger key or containing a valid keybind,
+            // We should cycle backwards instead of closing Loop.
+            if Defaults[.cycleBackwardsOnShiftPressed],
+               !triggerKey.contains(.kVK_Shift),
+               event.keyCode == .kVK_Shift {
+                // We shouldn't close Loop, but cycle backwards instead
+                return event
+            }
+
             closeCallback()
             currentlyPressedKeys = []
         }

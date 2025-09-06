@@ -35,6 +35,7 @@ class LoopManager: ObservableObject {
     private var isLoopActive: Bool = false
     private var targetWindow: Window?
     private var screenToResizeOn: NSScreen?
+    var isShiftKeyPressed: Bool = false
 
     private var mouseMovedEventMonitor: EventMonitor?
     private var leftClickMonitor: EventMonitor?
@@ -104,6 +105,7 @@ extension LoopManager {
         parentCycleAction = nil
         initialMousePosition = NSEvent.mouseLocation
         screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
+        isShiftKeyPressed = false
         keybindMonitor.start()
 
         leftClickMonitor = CGEventMonitor(
@@ -227,14 +229,6 @@ extension LoopManager {
         disableHapticFeedback: Bool = false,
         canAdvanceCycle: Bool = true
     ) {
-        // Allow cycling backwards only if:
-        // - Shift is not part of the action's keybind
-        // - Shift is not part of the trigger key
-        // - The user has enabled the setting
-        let allowReverseCycle = newAction.keybind.contains(.kVK_Shift) == false
-            && Defaults[.triggerKey].contains(.kVK_Shift) == false
-            && Defaults[.cycleBackwardsOnShiftPressed]
-
         guard
             !currentAction.isSameManipulation(as: newAction) || newAction.willManipulateExistingWindowFrame,
             isLoopActive,
@@ -255,7 +249,7 @@ extension LoopManager {
             // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
             // This will be set to false when the mouse is *moved* to prevent erratic behavior.
             if canAdvanceCycle {
-                newAction = getNextCycleAction(newAction, allowReverseCycle: allowReverseCycle)
+                newAction = getNextCycleAction(newAction)
             } else {
                 if let cycle = newAction.cycle, !cycle.contains(currentAction) {
                     newAction = cycle.first ?? .init(.noAction)
@@ -365,12 +359,20 @@ extension LoopManager {
         }
     }
 
-    private func getNextCycleAction(_ action: WindowAction, allowReverseCycle: Bool) -> WindowAction {
+    private func getNextCycleAction(_ action: WindowAction) -> WindowAction {
         guard let currentCycle = action.cycle else {
             return action
         }
 
-        let shouldCycleBackwards = keybindMonitor.isShiftPressed() && allowReverseCycle
+        // Allow cycling backwards only if:
+        // - Shift is not part of the action's keybind (eligibleForReverseCycle)
+        // - Shift is not part of the trigger key
+        // - The user has enabled the setting
+        let allowReverseCycle = action.eligibleForReverseCycle
+            && Defaults[.triggerKey].contains(.kVK_Shift) == false
+            && Defaults[.cycleBackwardsOnShiftPressed]
+
+        let shouldCycleBackwards = allowReverseCycle && isShiftKeyPressed
         var currentIndex: Int? = nil
 
         if Defaults[.cycleModeRestartEnabled],
