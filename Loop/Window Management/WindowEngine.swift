@@ -38,8 +38,8 @@ enum WindowEngine {
             return
         }
 
-        if action.direction == .minimizeOther {
-            minimizeOtherWindows(exceptWindow: window)
+        if action.direction == .minimizeOthers {
+            minimizeOthersWindows(exceptWindow: window)
             return
         }
 
@@ -286,7 +286,7 @@ enum WindowEngine {
     }
 
     /// Minimizes all windows except the current one
-    private static func minimizeOtherWindows(exceptWindow: Window) {
+    private static func minimizeOthersWindows(exceptWindow: Window) {
         let allWindows = windowList
         let windowsToMinimize = allWindows.filter { otherWindow in
             // Don't minimize the current window
