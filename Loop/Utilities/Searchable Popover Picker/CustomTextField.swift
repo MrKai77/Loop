@@ -35,10 +35,6 @@ struct CustomTextField: NSViewRepresentable {
             textField.becomeFirstResponder()
         }
 
-        DispatchQueue.main.async {
-            textField.becomeFirstResponder()
-        }
-
         return textField
     }
 

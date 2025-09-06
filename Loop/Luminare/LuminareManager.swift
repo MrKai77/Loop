@@ -144,6 +144,7 @@ class LuminareManager: NSWindowController, ObservableObject {
 
     override func showWindow(_ sender: Any?) {
         super.showWindow(sender)
+        window?.orderFrontRegardless()
 
         if #available(macOS 14.0, *) {
             NSApp.activate()

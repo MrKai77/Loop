@@ -106,7 +106,10 @@ struct IconConfigurationView: View {
                     get: { IconManager.currentAppIcon },
                     set: {
                         currentIcon = $0.assetName
-                        IconManager.refreshCurrentAppIcon()
+
+                        Task {
+                            IconManager.refreshCurrentAppIcon()
+                        }
                     }
                 )
             ) { icon in
