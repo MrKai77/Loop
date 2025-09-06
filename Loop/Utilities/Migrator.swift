@@ -113,7 +113,7 @@ enum Migrator {
     }
 
     /// Presents a prompt to export current keybinds to a JSON file.
-    static func exportPrompt() async throws {
+    static func exportPrompt(onSuccess: () -> ()) async throws {
         // Check if there are any keybinds to export.
         guard !Defaults[.keybinds].isEmpty else {
             await showAlert(
@@ -134,16 +134,16 @@ enum Migrator {
         let keybinds = SavedKeybindsFormat.generateFromDefaults()
         try await saveKeybinds(keybinds, in: directoryURL)
 
-        Notification.Name.didExportKeybindsSuccessfully.post()
+        onSuccess()
     }
 
     /// Presents a prompt to import keybinds from a JSON file.
-    static func importPrompt() async throws {
+    static func importPrompt(onSuccess: () -> ()) async throws {
         let fileURL = try await getKeybindsFileURL()
         let jsonString = try String(contentsOf: fileURL)
 
         do {
-            try await importKeybinds(from: jsonString)
+            try await importKeybinds(from: jsonString, onSuccess: onSuccess)
         } catch {
             if case MigratorError.failedToReadFile = error {
                 await showAlert(
@@ -318,7 +318,7 @@ private extension Migrator {
     }
 
     /// Imports keybinds from a JSON string.
-    static func importKeybinds(from jsonString: String) async throws {
+    static func importKeybinds(from jsonString: String, onSuccess: () -> ()) async throws {
         guard let data = jsonString.data(using: .utf8) else {
             throw MigratorError.failedToReadFile
         }
@@ -326,7 +326,7 @@ private extension Migrator {
         /// First, try to import the general Loop keybinds format.
         do {
             let savedData = try await importLoopKeybinds(from: data)
-            await updateDefaults(with: savedData)
+            await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
             print("Error importing Loop keybinds: \(error)")
@@ -335,7 +335,7 @@ private extension Migrator {
         /// If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
         do {
             let savedData = try await importLoopLegacyKeybinds(from: data)
-            await updateDefaults(with: savedData)
+            await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
             print("Error importing Loop (pre 1.2.0) keybinds: \(error)")
@@ -344,7 +344,7 @@ private extension Migrator {
         /// If that fails, try to import the Rectangle keybinds format.
         do {
             let savedData = try await importRectangleKeybinds(from: data)
-            await updateDefaults(with: savedData)
+            await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
             print("Error importing Rectangle keybinds: \(error)")
@@ -377,16 +377,14 @@ private extension Migrator {
     // MARK: Saving Imports
 
     /// Updates the app's defaults with the imported keybinds.
-    static func updateDefaults(with savedData: SavedKeybindsFormat) async {
+    static func updateDefaults(with savedData: SavedKeybindsFormat, onSuccess: () -> ()) async {
         if let triggerKey = savedData.triggerKey {
             Defaults[.triggerKey] = triggerKey
         }
 
         if Defaults[.keybinds].isEmpty {
             Defaults[.keybinds] = savedData.actions.map { $0.convertToWindowAction() }
-
-            // Post a notification after updating the keybinds
-            Notification.Name.didImportKeybindsSuccessfully.post()
+            onSuccess()
         } else {
             let result = await showAlertForImportDecision()
 
@@ -399,14 +397,10 @@ private extension Migrator {
                     }
 
                 Defaults[.keybinds].append(contentsOf: newKeybinds)
-
-                // Post a notification after updating the keybinds
-                Notification.Name.didImportKeybindsSuccessfully.post()
+                onSuccess()
             case .erase:
                 Defaults[.keybinds] = savedData.actions.map { $0.convertToWindowAction() }
-
-                // Post a notification after updating the keybinds
-                Notification.Name.didImportKeybindsSuccessfully.post()
+                onSuccess()
             case .cancel:
                 // No action needed, no notification should be posted
                 break

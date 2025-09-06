@@ -14,7 +14,7 @@ import Defaults
 /// It is important that a NSEventMonitor is used instead of a CGEventMonitor here, so that external key remappers (such as Karabiner or HyperKey) can take precedence.
 final class TriggerKeyObserver {
     // Callbacks
-    private let openCallback: () -> ()
+    private let openCallback: (WindowAction?) -> ()
     private let closeCallback: () -> ()
 
     // State-tracking
@@ -31,10 +31,10 @@ final class TriggerKeyObserver {
 
     /// Initializes a ``TriggerKeyObserver``.
     /// - Parameters:
-    ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated.
+    ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated. It takes in an optional `WindowAction` as a starting action.
     ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
     init(
-        openCallback: @escaping () -> (),
+        openCallback: @escaping (WindowAction?) -> (),
         closeCallback: @escaping () -> ()
     ) {
         self.openCallback = openCallback
@@ -63,6 +63,10 @@ final class TriggerKeyObserver {
 
     /// Handles keypress events, and opens/closes Loop as necessary.
     private func handleKeypress(_ event: NSEvent) -> NSEvent? {
+        if event.type == .keyDown || event.type == .keyUp, event.isARepeat {
+            return event
+        }
+
         triggerDelayTimer?.cancel()
         triggerDelayTimer = nil
 
@@ -70,28 +74,43 @@ final class TriggerKeyObserver {
         processModifiers(in: event)
 
         let wasKeyDown = event.type == .keyDown || currentlyPressedKeys.count > previouslyPressedKeys.count
+        let containsTriggerKey = triggerKey.isSubset(of: currentlyPressedKeys)
+        let selectedAction = WindowAction.getAction(for: currentlyPressedKeys.subtracting(triggerKey))
+        let exactTriggerKeyMatch = triggerKey == currentlyPressedKeys.filter(\.isModifier)
 
-        if wasKeyDown,
-           triggerKey.isSubset(of: currentlyPressedKeys) {
+        /// To open Loop, the latest event must have pressed a new key, and either:
+        /// - be an exact match for the trigger key (no other keys pressed)
+        /// - contain the trigger key, and also a valid keybind as configured in the user's keybind settings
+        if wasKeyDown, exactTriggerKeyMatch || (containsTriggerKey && selectedAction != nil) {
             if useDoubleClickTrigger {
                 // Ensure that only the trigger key was pressed, nothing else
                 guard currentlyPressedKeys == triggerKey else { return event }
 
                 if abs(lastTriggerkeyPressTime.timeIntervalSinceNow) < NSEvent.doubleClickInterval {
                     if useTriggerDelay {
-                        startTriggerDelayTimer()
+                        startTriggerDelayTimer(selectedAction)
                     } else {
-                        openCallback()
+                        openCallback(selectedAction)
                     }
                 }
             } else if useTriggerDelay {
-                startTriggerDelayTimer()
+                startTriggerDelayTimer(selectedAction)
             } else {
-                openCallback()
+                openCallback(selectedAction)
             }
 
             lastTriggerkeyPressTime = .now
         } else {
+            // If the user has set Loop to cycle backwards when shift is pressed, and the user has just pressed shift while Loop is open,
+            // But it no longer matches the conditions of either exactly matching the trigger key or containing a valid keybind,
+            // We should cycle backwards instead of closing Loop.
+            if Defaults[.cycleBackwardsOnShiftPressed],
+               !triggerKey.contains(.kVK_Shift),
+               event.keyCode == .kVK_Shift {
+                // We shouldn't close Loop, but cycle backwards instead
+                return event
+            }
+
             closeCallback()
             currentlyPressedKeys = []
         }
@@ -100,7 +119,7 @@ final class TriggerKeyObserver {
     }
 
     /// Starts a trigger delay timer, which will call the open callback after the specified delay.
-    func startTriggerDelayTimer() {
+    private func startTriggerDelayTimer(_ action: WindowAction?) {
         triggerDelayTimer?.cancel()
 
         triggerDelayTimer = Task { @MainActor in
@@ -108,7 +127,7 @@ final class TriggerKeyObserver {
             guard !Task.isCancelled else { return }
             triggerDelayTimer = nil
 
-            openCallback()
+            openCallback(action)
         }
     }
 
@@ -116,8 +135,11 @@ final class TriggerKeyObserver {
     /// By default, it will try and preserve right/left modifier keys.
     /// However, if necessary, it will fallback to just using the base modifier keys.
     /// This is necessary when more than one modifier keys is pressed at the exact same time (such as when using Karabiner or HyperKey).
-    func processModifiers(in event: NSEvent) {
-        if event.modifierFlags.wasKeyUp {
+    private func processModifiers(in event: NSEvent) {
+        // Event that Logi Options+ seems to send when a mouse button assigned to a keybind is released
+        let nonModifierFlagsChanged = event.type == .flagsChanged && event.keyCode.isModifier == false
+
+        if event.modifierFlags.wasKeyUp || nonModifierFlagsChanged {
             currentlyPressedKeys = []
         } else if currentlyPressedKeys.contains(event.keyCode) {
             currentlyPressedKeys.remove(event.keyCode)

@@ -21,21 +21,35 @@ class IconManager {
     }
 
     static func setAppIcon(to icon: Icon) {
-        Defaults[.currentIcon] = icon.iconName
+        Defaults[.currentIcon] = icon.assetName
         refreshCurrentAppIcon()
         print("Setting app icon to: \(icon.name)")
     }
 
-    static func setAppIcon(to iconName: String) {
-        if let targetIcon = Icon.all.first(where: { $0.iconName == iconName }) {
+    static func setAppIcon(to assetName: String) {
+        if let targetIcon = Icon.all.first(where: { $0.assetName == assetName }) {
             setAppIcon(to: targetIcon)
         }
     }
 
     // This function is run at startup to set the current icon to the user's set icon.
     static func refreshCurrentAppIcon() {
-        NSWorkspace.shared.setIcon(NSImage(named: Defaults[.currentIcon]), forFile: Bundle.main.bundlePath, options: [])
-        NSApp.applicationIconImage = NSImage(named: Defaults[.currentIcon])
+        guard let image = NSImage(named: Defaults[.currentIcon]) else {
+            print("Failed to load icon: \(Defaults[.currentIcon])")
+            return
+        }
+
+        #if !DEBUG
+            // Changing the app's actual icon on a developer build can cause Xcode to have incremental codesign issues.
+            // To prevent this, we only change the icon on release builds.
+            NSWorkspace.shared.setIcon(image, forFile: Bundle.main.bundlePath, options: [])
+        #endif
+
+        if Defaults[.currentIcon] == Icon.default.assetName {
+            NSApp.applicationIconImage = nil
+        } else {
+            NSApp.applicationIconImage = image
+        }
     }
 
     static func checkIfUnlockedNewIcon() {
@@ -57,10 +71,10 @@ class IconManager {
                 )
             }
 
-            if let data = NSImage(named: icon.iconName)?.tiffRepresentation,
+            if let data = NSImage(named: icon.assetName)?.tiffRepresentation,
                let attachment = UNNotificationAttachment.create(NSData(data: data)) {
                 content.attachments = [attachment]
-                content.userInfo = ["icon": icon.iconName]
+                content.userInfo = ["icon": icon.assetName]
             }
 
             content.categoryIdentifier = "icon_unlocked"
@@ -71,7 +85,7 @@ class IconManager {
 
     static var currentAppIcon: Icon {
         Icon.all.first {
-            $0.iconName == Defaults[.currentIcon]
+            $0.assetName == Defaults[.currentIcon]
         } ?? Icon.all.first!
     }
 }

@@ -26,7 +26,7 @@ import SwiftUI
 
 struct Icon: Hashable, LuminareSelectionData {
     var name: String
-    var iconName: String
+    var assetName: String
     var unlockTime: Int
     var unlockMessage: String?
 
@@ -51,6 +51,8 @@ struct Icon: Hashable, LuminareSelectionData {
             .summer,
             .master
         ]
+
+        static let `default` = Icon.developer
     #else
         static let all: [Icon] = [
             .classic,
@@ -67,6 +69,8 @@ struct Icon: Hashable, LuminareSelectionData {
             .summer,
             .master
         ]
+
+        static let `default` = Icon.classic
     #endif
 }
 
@@ -75,12 +79,12 @@ struct Icon: Hashable, LuminareSelectionData {
 extension Icon {
     static let classic = Icon(
         name: .init(localized: .init("Icon Name: Classic", defaultValue: "Classic")),
-        iconName: "AppIcon-Classic",
+        assetName: "AppIcon-Classic",
         unlockTime: 0
     )
     static let holo = Icon(
         name: .init(localized: .init("Icon Name: Holo", defaultValue: "Holo")),
-        iconName: "AppIcon-Holo",
+        assetName: "AppIcon-Holo",
         unlockTime: 25,
         unlockMessage: .init(
             localized: .init(
@@ -93,32 +97,32 @@ extension Icon {
     )
     static let rosePine = Icon(
         name: .init(localized: .init("Icon Name: Rosé Pine", defaultValue: "Rosé Pine")),
-        iconName: "AppIcon-Rose Pine",
+        assetName: "AppIcon-Rose Pine",
         unlockTime: 50
     )
     static let metaLoop = Icon(
         name: .init(localized: .init("Icon Name: Meta Loop", defaultValue: "Meta Loop")),
-        iconName: "AppIcon-Meta Loop",
+        assetName: "AppIcon-Meta Loop",
         unlockTime: 100
     )
     static let keycap = Icon(
         name: .init(localized: .init("Icon Name: Keycap", defaultValue: "Keycap")),
-        iconName: "AppIcon-Keycap",
+        assetName: "AppIcon-Keycap",
         unlockTime: 200
     )
     static let white = Icon(
         name: .init(localized: .init("Icon Name: White", defaultValue: "White")),
-        iconName: "AppIcon-White",
+        assetName: "AppIcon-White",
         unlockTime: 400
     )
     static let black = Icon(
         name: .init(localized: .init("Icon Name: Black", defaultValue: "Black")),
-        iconName: "AppIcon-Black",
+        assetName: "AppIcon-Black",
         unlockTime: 500
     )
     static let master = Icon(
         name: .init(localized: .init("Icon Name: Loop Master", defaultValue: "Loop Master")),
-        iconName: "AppIcon-Loop Master",
+        assetName: "AppIcon-Loop Master",
         unlockTime: 5000,
         unlockMessage: .init(
             localized: .init(
@@ -134,17 +138,17 @@ extension Icon {
 extension Icon {
     static let neon = Icon(
         name: .init(localized: .init("Icon Name: Neon", defaultValue: "Neon")),
-        iconName: "AppIcon-Neon",
+        assetName: "AppIcon-Neon",
         unlockTime: 1500
     )
     static let synthwaveSunset = Icon(
         name: .init(localized: .init("Icon Name: Synthwave Sunset", defaultValue: "Synthwave Sunset")),
-        iconName: "AppIcon-Synthwave Sunset",
+        assetName: "AppIcon-Synthwave Sunset",
         unlockTime: 2000
     )
     static let blackHole = Icon(
         name: .init(localized: .init("Icon Name: Black Hole", defaultValue: "Black Hole")),
-        iconName: "AppIcon-Black Hole",
+        assetName: "AppIcon-Black Hole",
         unlockTime: 2500
     )
 }
@@ -154,13 +158,13 @@ extension Icon {
 extension Icon {
     static let developer = Icon(
         name: .init(localized: .init("Icon Name: Developer", defaultValue: "Developer")),
-        iconName: "AppIcon-Developer",
+        assetName: "AppIcon-Developer",
         unlockTime: 0
     )
 
     static let summer = Icon(
         name: .init(localized: .init("Icon Name: Summer", defaultValue: "Summer")),
-        iconName: "AppIcon-Summer",
+        assetName: "AppIcon-Summer",
         unlockTime: 3000
     )
 }
@@ -170,7 +174,7 @@ extension Icon {
 extension Icon {
     static let daylight = Icon(
         name: .init(localized: .init("Icon Name: Daylight", defaultValue: "Daylight")),
-        iconName: "AppIcon-Daylight",
+        assetName: "AppIcon-Daylight",
         unlockTime: 1000
     )
 }

@@ -23,18 +23,19 @@ class LoopManager: ObservableObject {
     private let previewController = PreviewController()
 
     private(set) lazy var triggerKeyObserver = TriggerKeyObserver(
-        openCallback: { [weak self] in self?.openLoop() },
+        openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
     private(set) lazy var middleClickObserver = MiddleClickObserver(
-        openCallback: { [weak self] in self?.openLoop() },
+        openCallback: { [weak self] in self?.openLoop(startingAction: nil) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
     private var isLoopActive: Bool = false
     private var targetWindow: Window?
     private var screenToResizeOn: NSScreen?
+    var isShiftKeyPressed: Bool = false
 
     private var mouseMovedEventMonitor: EventMonitor?
     private var leftClickMonitor: EventMonitor?
@@ -46,16 +47,6 @@ class LoopManager: ObservableObject {
     private var distanceToMouse: CGFloat = 0
 
     func start() {
-        Notification.Name.forceCloseLoop.onReceive { _ in
-            self.closeLoop(forceClose: true)
-        }
-
-        Notification.Name.updateBackendDirection.onReceive { notification in
-            if let action = notification.userInfo?["action"] as? WindowAction {
-                self.changeAction(action)
-            }
-        }
-
         mouseMovedEventMonitor = NSEventMonitor(
             scope: .all,
             eventMask: [.mouseMoved, .otherMouseDragged],
@@ -69,12 +60,22 @@ class LoopManager: ObservableObject {
 
 // MARK: - Opening/Closing Loop
 
-private extension LoopManager {
-    func openLoop() {
-        guard
-            isLoopActive == false,
-            AccessibilityManager.getStatus()
-        else {
+extension LoopManager {
+    private func openLoop(startingAction: WindowAction?) {
+        guard AccessibilityManager.getStatus() else {
+            return
+        }
+
+        guard !isLoopActive else {
+            /// If using Karabiner-Elements, TriggerKeyObserver may call openLoop twice.
+            /// This happens because Karabiner-Elements sends modifier keys and other keys as separate, rapid events.
+            /// As a result, Loop might be opened before the full keybind is pressed.
+            /// In these cases, we can simply update the action instead of reopening the Loop.
+            /// Enabling keybindMonitor was considered as a workaround, but it doesn't start quickly enough.
+            /// Although Karabiner-Elements sends key events separately, they arrive in quick succession.
+            if let startingAction, currentAction.direction == .noAction {
+                changeAction(startingAction, disableHapticFeedback: true)
+            }
             return
         }
 
@@ -104,6 +105,7 @@ private extension LoopManager {
         parentCycleAction = nil
         initialMousePosition = NSEvent.mouseLocation
         screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
+        isShiftKeyPressed = false
         keybindMonitor.start()
 
         leftClickMonitor = CGEventMonitor(
@@ -127,7 +129,7 @@ private extension LoopManager {
         }
 
         if !Defaults[.hideUntilDirectionIsChosen] {
-            openWindows()
+            openWindows(startingAction: startingAction)
         }
 
         if let window = targetWindow {
@@ -140,9 +142,18 @@ private extension LoopManager {
         }
 
         isLoopActive = true
+
+        if let startingAction {
+            changeAction(startingAction, disableHapticFeedback: true)
+        }
     }
 
-    func closeLoop(forceClose: Bool) {
+    // Internal method to force close the loop without applying changes
+    func forceCloseLoop() {
+        closeLoop(forceClose: true)
+    }
+
+    private func closeLoop(forceClose: Bool) {
         guard isLoopActive == true else { return }
 
         closeWindows()
@@ -179,23 +190,25 @@ private extension LoopManager {
         LoopManager.lastTargetFrame = .zero
     }
 
-    func openWindows() {
+    private func openWindows(startingAction: WindowAction?) {
         if Defaults[.previewVisibility], targetWindow != nil {
             previewController.open(
                 screen: screenToResizeOn!,
-                window: targetWindow
+                window: targetWindow,
+                startingAction: startingAction
             )
         }
 
         if Defaults[.radialMenuVisibility] {
             radialMenuController.open(
                 position: initialMousePosition,
-                frontmostWindow: targetWindow
+                window: targetWindow,
+                startingAction: startingAction
             )
         }
     }
 
-    func closeWindows() {
+    private func closeWindows() {
         radialMenuController.close()
         previewController.close()
     }
@@ -203,7 +216,7 @@ private extension LoopManager {
 
 // MARK: - Changing Actions
 
-private extension LoopManager {
+extension LoopManager {
     /// Changes the action to the provided one, or the next cycle action if available.
     /// - Parameters:
     ///   - newAction: The action to change to. If a cycle is provided, Loop will use the current action as context to choose an appropriate next action.
@@ -216,14 +229,6 @@ private extension LoopManager {
         disableHapticFeedback: Bool = false,
         canAdvanceCycle: Bool = true
     ) {
-        // Allow cycling backwards only if:
-        // - Shift is not part of the action's keybind
-        // - Shift is not part of the trigger key
-        // - The user has enabled the setting
-        let allowReverseCycle = newAction.keybind.contains(.kVK_Shift) == false
-            && Defaults[.triggerKey].contains(.kVK_Shift) == false
-            && Defaults[.cycleBackwardsOnShiftPressed]
-
         guard
             !currentAction.isSameManipulation(as: newAction) || newAction.willManipulateExistingWindowFrame,
             isLoopActive,
@@ -244,7 +249,7 @@ private extension LoopManager {
             // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
             // This will be set to false when the mouse is *moved* to prevent erratic behavior.
             if canAdvanceCycle {
-                newAction = getNextCycleAction(newAction, allowReverseCycle: allowReverseCycle)
+                newAction = getNextCycleAction(newAction)
             } else {
                 if let cycle = newAction.cycle, !cycle.contains(currentAction) {
                     newAction = cycle.first ?? .init(.noAction)
@@ -295,9 +300,8 @@ private extension LoopManager {
 
             // This is only needed because if preview window is moved
             // onto a new screen, it needs to receive a window action
-            DispatchQueue.main.async {
-                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
-            }
+            previewController.setAction(to: currentAction)
+            radialMenuController.setAction(to: currentAction)
 
             if let parentCycleAction {
                 currentAction = newAction
@@ -332,11 +336,12 @@ private extension LoopManager {
             currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
-                openWindows()
+                openWindows(startingAction: currentAction)
             }
 
             DispatchQueue.main.async {
-                Notification.Name.updateUIDirection.post(userInfo: ["action": self.currentAction])
+                self.previewController.setAction(to: self.currentAction)
+                self.radialMenuController.setAction(to: self.currentAction)
 
                 if let screenToResizeOn = self.screenToResizeOn,
                    let window = self.targetWindow,
@@ -354,12 +359,20 @@ private extension LoopManager {
         }
     }
 
-    func getNextCycleAction(_ action: WindowAction, allowReverseCycle: Bool) -> WindowAction {
+    private func getNextCycleAction(_ action: WindowAction) -> WindowAction {
         guard let currentCycle = action.cycle else {
             return action
         }
 
-        let shouldCycleBackwards = keybindMonitor.isShiftPressed() && allowReverseCycle
+        // Allow cycling backwards only if:
+        // - Shift is not part of the action's keybind (eligibleForReverseCycle)
+        // - Shift is not part of the trigger key
+        // - The user has enabled the setting
+        let allowReverseCycle = action.eligibleForReverseCycle
+            && Defaults[.triggerKey].contains(.kVK_Shift) == false
+            && Defaults[.cycleBackwardsOnShiftPressed]
+
+        let shouldCycleBackwards = allowReverseCycle && isShiftKeyPressed
         var currentIndex: Int? = nil
 
         if Defaults[.cycleModeRestartEnabled],
@@ -397,7 +410,7 @@ private extension LoopManager {
         return currentCycle[nextIndex]
     }
 
-    func performHapticFeedback() {
+    private func performHapticFeedback() {
         if Defaults[.hapticFeedback] {
             NSHapticFeedbackManager.defaultPerformer.perform(
                 NSHapticFeedbackManager.FeedbackPattern.alignment,

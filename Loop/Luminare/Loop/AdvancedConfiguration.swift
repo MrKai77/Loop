@@ -63,7 +63,35 @@ class AdvancedConfigurationModel: ObservableObject {
         }
     }
 
-    func importedSuccessfully() {
+    /// Prompts the user to import keybinds from a file.
+    func importPrompt() {
+        Task {
+            do {
+                try await Migrator.importPrompt(onSuccess: importedSuccessfully)
+            } catch {
+                print("Error importing keybinds: \(error)")
+            }
+        }
+    }
+
+    /// Prompts the user to export keybinds to a file.
+    func exportPrompt() {
+        Task {
+            do {
+                try await Migrator.exportPrompt(onSuccess: exportedSuccessfully)
+            } catch {
+                print("Error exporting keybinds: \(error)")
+            }
+        }
+    }
+
+    /// Resets keybinds to default values.
+    func reset() {
+        Defaults.reset(.keybinds)
+        resetSuccessfully()
+    }
+
+    private func importedSuccessfully() {
         DispatchQueue.main.async { [weak self] in
             withAnimation(.smooth(duration: 0.5)) {
                 self?.didImportSuccessfullyAlert = true
@@ -77,7 +105,7 @@ class AdvancedConfigurationModel: ObservableObject {
         }
     }
 
-    func exportedSuccessfully() {
+    private func exportedSuccessfully() {
         DispatchQueue.main.async { [weak self] in
             withAnimation(.smooth(duration: 0.5)) {
                 self?.didExportSuccessfullyAlert = true
@@ -91,7 +119,7 @@ class AdvancedConfigurationModel: ObservableObject {
         }
     }
 
-    func resetSuccessfully() {
+    private func resetSuccessfully() {
         DispatchQueue.main.async { [weak self] in
             withAnimation(.smooth(duration: 0.5)) {
                 self?.didResetSuccessfullyAlert = true
@@ -185,15 +213,7 @@ struct AdvancedConfigurationView: View {
     func keybindsSection() -> some View {
         LuminareSection("Keybinds") {
             HStack(spacing: 2) {
-                Button {
-                    Task {
-                        do {
-                            try await Migrator.importPrompt()
-                        } catch {
-                            print("Error importing keybinds: \(error)")
-                        }
-                    }
-                } label: {
+                Button(action: model.importPrompt) {
                     HStack {
                         Text("Import")
 
@@ -204,19 +224,8 @@ struct AdvancedConfigurationView: View {
                         }
                     }
                 }
-                .onReceive(.didImportKeybindsSuccessfully) { _ in
-                    model.importedSuccessfully()
-                }
 
-                Button {
-                    Task {
-                        do {
-                            try await Migrator.exportPrompt()
-                        } catch {
-                            print("Error exporting keybinds: \(error)")
-                        }
-                    }
-                } label: {
+                Button(action: model.exportPrompt) {
                     HStack {
                         Text("Export")
 
@@ -227,14 +236,8 @@ struct AdvancedConfigurationView: View {
                         }
                     }
                 }
-                .onReceive(.didExportKeybindsSuccessfully) { _ in
-                    model.exportedSuccessfully()
-                }
 
-                Button(role: .destructive) {
-                    Defaults.reset(.keybinds)
-                    model.resetSuccessfully()
-                } label: {
+                Button(role: .destructive, action: model.reset) {
                     HStack {
                         Text("Reset")
 

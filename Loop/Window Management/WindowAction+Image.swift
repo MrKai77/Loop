@@ -68,16 +68,35 @@ extension WindowAction {
     }
 }
 
+/// An icon to represent a `WindowAction`.
+/// When the action is a cycle, it will display the first action in the cycle.
+/// Icons will prioritize using the action's `icon` property, then a simple frame preview, and finally a default icon.
+/// - the `icon` property is used for common actions like hide, minimize, growing and shrinking, which cannot be easily represented by a frame.
+/// - a simple frame preview is used for more general actions such as right half, maximize, and center, as well as custom keybinds when available.
+/// - finally, a default icon is used for cycle actions and actions without a specific icon or frame representation as backup (just in case, they shouldn't be needed in practice).
+///
+/// It is also important to note that this view conforms to `Equatable` to prevent accidental re-renders when used in lists or other dynamic views.
+/// Please ensure that the `.equatable()` modifier is applied when using this view in such contexts.
 struct IconView: View, Equatable {
     @Environment(\.luminareAnimationFast) private var luminareAnimationFast
 
-    let action: WindowAction
-
-    @State private var frame: CGRect = .init(x: 0, y: 0, width: 1, height: 1)
-
+    private let action: WindowAction
     private let size = CGSize(width: 14, height: 10)
     private let inset: CGFloat = 2
     private let outerCornerRadius: CGFloat = 3
+    private var frame: CGRect {
+        action.getFrame(
+            window: nil,
+            bounds: .init(origin: .zero, size: size),
+            disablePadding: true
+        )
+    }
+
+    /// Creates an icon view for a given window action.
+    /// - Parameter action: The window action to represent.
+    init(action: WindowAction) {
+        self.action = action
+    }
 
     var body: some View {
         if action.direction == .cycle, let first = action.cycle?.first {
@@ -103,14 +122,6 @@ struct IconView: View, Equatable {
                                 y: frame.origin.y
                             )
                     }
-                    .onAppear {
-                        refreshFrame()
-                    }
-                    .onChange(of: action) { _ in
-                        withAnimation(luminareAnimationFast) {
-                            refreshFrame()
-                        }
-                    }
                     .frame(width: size.width, height: size.height, alignment: .topLeading)
                 } else if action.direction == .cycle {
                     Image(.repeat4)
@@ -132,10 +143,6 @@ struct IconView: View, Equatable {
             }
             .padding(.horizontal, 4)
         }
-    }
-
-    func refreshFrame() {
-        frame = action.getFrame(window: nil, bounds: .init(origin: .zero, size: size), disablePadding: true)
     }
 
     static func == (lhs: IconView, rhs: IconView) -> Bool {

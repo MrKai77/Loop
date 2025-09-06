@@ -31,18 +31,15 @@ struct CustomTextField: NSViewRepresentable {
         // Set the target-action for text changes
         textField.delegate = context.coordinator
 
+        DispatchQueue.main.async {
+            textField.becomeFirstResponder()
+        }
+
         return textField
     }
 
     func updateNSView(_ nsView: NSTextField, context _: Context) {
         nsView.stringValue = text
-
-        // Focus the text field when the popover is shown
-        if nsView.window?.firstResponder != nsView {
-            DispatchQueue.main.async {
-                nsView.window?.makeFirstResponder(nsView)
-            }
-        }
     }
 
     func makeCoordinator() -> Coordinator {

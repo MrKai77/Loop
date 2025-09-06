@@ -103,11 +103,13 @@ struct IconConfigurationView: View {
             LuminarePicker(
                 elements: Icon.all,
                 selection: Binding(
-                    get: { IconManager.currentAppIcon
-                    },
+                    get: { IconManager.currentAppIcon },
                     set: {
-                        currentIcon = $0.iconName
-                        IconManager.refreshCurrentAppIcon()
+                        currentIcon = $0.assetName
+
+                        Task {
+                            IconManager.refreshCurrentAppIcon()
+                        }
                     }
                 )
             ) { icon in
@@ -153,39 +155,29 @@ struct IconVew: View {
     @State private var nextUnlockCount: Int = -1
     @State private var loopsLeft: Int = -1
 
+    private var showLiquidGlassIndicator: Bool {
+        if #available(macOS 26.0, *), icon == Icon.default {
+            true
+        } else {
+            false
+        }
+    }
+
     var body: some View {
         ZStack {
             if hasBeenUnlocked {
-                Image(nsImage: NSImage(named: icon.iconName)!)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(10)
-                    .transition(.scale(scale: 0.8).combined(with: .opacity))
+                unlockedIconView
             } else {
-                VStack(alignment: .center) {
-                    Spacer()
-
-                    Image(.lock)
-                        .foregroundStyle(.secondary)
-
-                    Text(nextUnlockCount == icon.unlockTime ?
-                        .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
-                        .init(localized: "App icon is locked", defaultValue: "Locked")
-                    )
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .contentTransition(.numericText())
-                    .multilineTextAlignment(.center)
-
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .contentShape(.rect)
-                .onTapGesture {
-                    model.selectedLockedMessage = model.getNextUpToDateText()
-                    model.showingLockedAlert = true
-                }
+                lockedIconView
             }
+
+            Color.clear
+                .luminarePopover(attachedTo: .topTrailing, hidden: !showLiquidGlassIndicator) {
+                    Text("Supports macOS Tahoe’s Liquid Glass effects")
+                        .padding(6)
+                }
+                .luminareTint(overridingWith: .blue)
+                .padding(8)
         }
         .onAppear {
             hasBeenUnlocked = icon.isSelectable
@@ -198,14 +190,46 @@ struct IconVew: View {
         .onChange(of: timesLooped) { _ in
             withAnimation(luminareAnimation) {
                 hasBeenUnlocked = icon.isSelectable
-            }
 
-            if !hasBeenUnlocked {
-                withAnimation(luminareAnimation) {
+                if !hasBeenUnlocked {
                     nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
                     loopsLeft = nextUnlockCount - timesLooped
                 }
             }
+        }
+    }
+
+    private var unlockedIconView: some View {
+        Image(nsImage: NSImage(named: icon.assetName)!)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .padding(10)
+            .transition(.scale(scale: 0.8).combined(with: .opacity))
+    }
+
+    private var lockedIconView: some View {
+        VStack(alignment: .center) {
+            Spacer()
+
+            Image(.lock)
+                .foregroundStyle(.secondary)
+
+            Text(nextUnlockCount == icon.unlockTime ?
+                .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
+                .init(localized: "App icon is locked", defaultValue: "Locked")
+            )
+            .font(.caption)
+            .foregroundColor(.secondary)
+            .contentTransition(.numericText())
+            .multilineTextAlignment(.center)
+
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .contentShape(.rect)
+        .onTapGesture {
+            model.selectedLockedMessage = model.getNextUpToDateText()
+            model.showingLockedAlert = true
         }
     }
 }

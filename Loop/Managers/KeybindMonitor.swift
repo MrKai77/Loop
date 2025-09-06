@@ -63,7 +63,7 @@ class KeybindMonitor {
             // If this wasn't, check if it was a system keybind (ex. screenshot), and
             // in that case, passthrough and force-close Loop
             if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
-                Notification.Name.forceCloseLoop.post()
+                LoopManager.shared.forceCloseLoop()
                 print("Detected system keybind, closing!")
                 return Unmanaged.passUnretained(cgEvent)
             }
@@ -100,10 +100,6 @@ class KeybindMonitor {
         flagsEventMonitor = nil
     }
 
-    func isShiftPressed() -> Bool {
-        pressedKeys.contains(.kVK_Shift)
-    }
-
     @discardableResult
     private func performKeybind(event: NSEvent) -> Bool {
         if event.type == .keyUp {
@@ -111,16 +107,18 @@ class KeybindMonitor {
             // This is used when the user is pressing 2+ keys so that it doesn't switch back
             // to the one key direction when they're letting go of the keys.
             if abs(lastKeyReleaseTime.timeIntervalSinceNow) < 0.1 {
-                print("performKeybind: returning true due to key release")
+                print("performKeybind: valid event detected; not passing through due to rapid key release")
                 return true
             }
             lastKeyReleaseTime = Date.now
-            return false
+            return true
         }
 
+        LoopManager.shared.isShiftKeyPressed = event.modifierFlags.contains(.shift)
+
         if pressedKeys.contains(.kVK_Escape) {
-            Notification.Name.forceCloseLoop.post()
-            print("performKeybind: returning true due to force close")
+            LoopManager.shared.forceCloseLoop()
+            print("performKeybind: valid event detected; not passing through due to force-closing of Loop")
             return true
         }
 
@@ -128,26 +126,14 @@ class KeybindMonitor {
             let isRepeatEvent = (event.type == .keyDown || event.type == .keyUp) && event.isARepeat
 
             if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
-                Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
-                print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
-            }
-
-            return true
-        } else if let lastKey, let newAction = WindowAction.getAction(for: [lastKey]) {
-            // If multiple keys have been added to `pressedKeys` and none of the keybinds match, fall back to searching for the last single key.
-            let isRepeatEvent = (event.type == .keyDown || event.type == .keyUp) && event.isARepeat
-
-            if !isRepeatEvent || newAction.willManipulateExistingWindowFrame {
-                Notification.Name.updateBackendDirection.post(userInfo: ["action": newAction])
-                print("performKeybind: returning true due to valid event: \(newAction.direction)", #line)
+                LoopManager.shared.changeAction(newAction)
+                print("performKeybind: valid event detected; new action: \(newAction.direction)")
             }
 
             return true
         }
 
-        // If this wasn't a valid keybind, return false, which will
-        // then forward the key event to the frontmost app
-        print("performKeybind: returning false due to invalid event")
+        // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
         return false
     }
 

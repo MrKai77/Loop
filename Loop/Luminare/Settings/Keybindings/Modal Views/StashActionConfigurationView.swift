@@ -1,15 +1,16 @@
 //
-//  CustomActionConfigurationView.swift
+//  StashActionConfigurationView.swift
 //  Loop
 //
-//  Created by Kai Azim on 2024-04-27.
+//  Created by Guillaume Clédat on 19/06/2025.
 //
 
 import Defaults
+import Foundation
 import Luminare
 import SwiftUI
 
-struct CustomActionConfigurationView: View {
+struct StashActionConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
 
     @Binding var windowAction: WindowAction
@@ -19,7 +20,7 @@ struct CustomActionConfigurationView: View {
     @State private var currentTab: Tab = .position
 
     private enum Tab: LocalizedStringKey, CaseIterable {
-        case position = "Position", size = "Size"
+        case position = "Position", size = "Unstashed Size"
 
         var image: Image {
             switch self {
@@ -31,9 +32,15 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    private let anchors: [CustomWindowActionAnchor] = [
-        .topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight
-    ]
+    private let defaultAnchor: CustomWindowActionAnchor = .topLeft
+
+    private var anchors: [CustomWindowActionAnchor] {
+        [.topLeft, .topRight, .left, .right, .bottomLeft, .bottomRight]
+    }
+
+    private var sizeModes: [CustomWindowActionSizeMode] {
+        [.custom, .preserveSize]
+    }
 
     private let previewController = PreviewController()
     private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
@@ -74,7 +81,7 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder private func configurationSections() -> some View {
         LuminareSection(outerPadding: 0) {
-            LuminareTextField("Custom Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
+            LuminareTextField("Stash", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
                 .luminareHasBackground(false)
                 .luminareBordered(false)
                 .luminareAspectRatio(contentMode: .fill)
@@ -82,7 +89,6 @@ struct CustomActionConfigurationView: View {
 
         LuminareSection(outerPadding: 0) {
             tabPicker()
-            unitToggle()
         }
 
         Group {
@@ -115,7 +121,7 @@ struct CustomActionConfigurationView: View {
             }
 
             if action.anchor == nil {
-                action.anchor = .center
+                action.anchor = defaultAnchor
             }
         }
     }
@@ -132,7 +138,7 @@ struct CustomActionConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminarePickerRoundedCorner(top: .always)
+        .luminarePickerRoundedCorner(top: .always, bottom: .always)
         .frame(height: 40)
     }
 
@@ -143,13 +149,18 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder private func actionButtons() -> some View {
         HStack(spacing: 8) {
             Button("Preview") {}
-                .onLongPressGesture( // Allows for a press-and-hold gesture to show the preview
+                .onLongPressGesture(
+                    // Allows for a press-and-hold gesture to show the preview
                     minimumDuration: 100.0,
                     maximumDistance: .infinity,
                     pressing: { pressing in
                         if pressing {
                             guard let screen = NSScreen.main else { return }
-                            previewController.open(screen: screen, startingAction: action)
+                            previewController.open(
+                                screen: screen,
+                                window: nil,
+                                startingAction: action
+                            )
                         } else {
                             previewController.close()
                         }
@@ -166,31 +177,12 @@ struct CustomActionConfigurationView: View {
 
     @ViewBuilder private func positionConfiguration() -> some View {
         LuminareSection(outerPadding: 0) {
-            LuminareToggle(
-                "Use coordinates",
-                isOn: Binding(
-                    get: {
-                        action.positionMode == .coordinates
-                    },
-                    set: { newValue in
-                        withAnimation(luminareAnimation) {
-                            action.positionMode = newValue ? .coordinates : .generic
-                        }
-                    }
-                )
-            )
-
             if action.positionMode ?? .generic == .generic {
                 LuminarePicker(
                     elements: anchors,
                     selection: Binding(
                         get: {
-                            // since center/macOS center use the same icon on the picker
-                            if action.anchor == .macOSCenter {
-                                return .center
-                            }
-
-                            return action.anchor ?? .center
+                            action.anchor ?? defaultAnchor
                         },
                         set: { newValue in
                             withAnimation(luminareAnimation) {
@@ -198,32 +190,12 @@ struct CustomActionConfigurationView: View {
                             }
                         }
                     ),
-                    columns: 3
+                    columns: 2
                 ) { anchor in
                     IconView(action: anchor.iconAction)
                         .equatable()
                 }
-                .luminarePickerRoundedCorner(bottom: .always)
-
-                if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
-                    LuminareToggle(
-                        isOn: Binding(
-                            get: {
-                                action.anchor == .macOSCenter
-                            },
-                            set: {
-                                action.anchor = $0 ? .macOSCenter : .center
-                            }
-                        )
-                    ) {
-                        Text("Use macOS center")
-                            .padding(.trailing, 4)
-                            .luminarePopover(attachedTo: .topTrailing) {
-                                Text("macOS center places windows slightly above the absolute center,\nwhich can be found more ergonomic.")
-                                    .padding(6)
-                            }
-                    }
-                }
+                .luminarePickerRoundedCorner(top: .always, bottom: .always)
             } else {
                 LuminareSlider(
                     "X",

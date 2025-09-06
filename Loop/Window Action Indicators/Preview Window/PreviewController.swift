@@ -6,22 +6,20 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 
-class PreviewController {
-    var controller: NSWindowController?
+final class PreviewController {
+    private var controller: NSWindowController?
     private var screen: NSScreen?
     private var window: Window?
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.loop", category: "PreviewController")
 
-    init() {
-        Notification.Name.updateUIDirection.onReceive { obj in
-            if let action = obj.userInfo?["action"] as? WindowAction {
-                self.setAction(to: action)
-            }
-        }
-    }
-
-    func open(screen: NSScreen, window: Window? = nil, startingAction: WindowAction? = nil) {
+    func open(
+        screen: NSScreen,
+        window: Window?,
+        startingAction: WindowAction?
+    ) {
         if let windowController = controller {
             windowController.window?.orderFrontRegardless()
             return
@@ -74,17 +72,17 @@ class PreviewController {
         }
 
         close()
-        open(screen: newScreen, window: window)
+        open(screen: newScreen, window: window, startingAction: nil)
 
         print("Changed preview window's screen")
     }
 
-    func setAction(to action: WindowAction) {
+    func setAction(to newAction: WindowAction) {
         guard
             let windowController = controller,
             let screen,
-            !action.direction.willChangeScreen,
-            action.direction != .cycle
+            !newAction.direction.willChangeScreen,
+            newAction.direction != .cycle
         else {
             return
         }
@@ -99,7 +97,7 @@ class PreviewController {
             return
         }
 
-        let targetWindowFrame = action.getFrame(
+        let targetWindowFrame = newAction.getFrame(
             window: window,
             bounds: screen.safeScreenFrame,
             screen: screen,
@@ -148,6 +146,6 @@ class PreviewController {
             windowController.window?.alphaValue = shouldBecomeTransparent ? 0 : 1
         }
 
-        print("New preview window action received: \(action.direction)")
+        logger.log("PreviewController: Set action to '\(newAction.getName())'")
     }
 }

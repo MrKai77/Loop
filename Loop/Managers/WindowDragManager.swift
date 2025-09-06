@@ -170,15 +170,8 @@ class WindowDragManager {
 
             print("Window snapping direction changed: \(direction)")
 
-            previewController.open(screen: screen, window: nil)
-
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(
-                    name: Notification.Name.updateUIDirection,
-                    object: nil,
-                    userInfo: ["action": WindowAction(self.direction)]
-                )
-            }
+            previewController.open(screen: screen, window: nil, startingAction: nil)
+            previewController.setAction(to: WindowAction(direction))
         } else {
             direction = .noAction
             previewController.close()

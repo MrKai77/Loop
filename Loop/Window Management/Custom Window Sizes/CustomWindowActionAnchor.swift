@@ -20,9 +20,18 @@ enum CustomWindowActionAnchor: Int, Codable, CaseIterable, Identifiable {
     case left = 7
     case center = 8
     case macOSCenter = 9
+}
+
+extension CustomWindowActionAnchor {
+    private static var iconActionCache: [CustomWindowActionAnchor: WindowAction] = [:]
 
     var iconAction: WindowAction {
-        switch self {
+        // Prevents re-initializing the same action multiple times
+        if let cachedAction = CustomWindowActionAnchor.iconActionCache[self] {
+            return cachedAction
+        }
+
+        let newAction: WindowAction = switch self {
         case .topLeft: .init(.topLeftQuarter)
         case .top: .init(.topHalf)
         case .topRight: .init(.topRightQuarter)
@@ -34,5 +43,8 @@ enum CustomWindowActionAnchor: Int, Codable, CaseIterable, Identifiable {
         case .center: .init(.center)
         case .macOSCenter: .init(.macOSCenter)
         }
+
+        CustomWindowActionAnchor.iconActionCache[self] = newAction
+        return newAction
     }
 }

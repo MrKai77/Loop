@@ -15,7 +15,7 @@ struct KeybindItemView: View {
     @Environment(\.luminarePopupPadding) var luminarePopupPadding
 
     @Default(.triggerKey) var triggerKey
-    @Binding var keybind: WindowAction
+    @Binding var action: WindowAction
 
     @State var isConfiguringCustom: Bool = false
     @State var isConfiguringCycle: Bool = false
@@ -23,7 +23,7 @@ struct KeybindItemView: View {
     let cycleIndex: Int?
 
     init(_ keybind: Binding<WindowAction>, cycleIndex: Int? = nil) {
-        self._keybind = keybind
+        self._action = keybind
         self.cycleIndex = cycleIndex
     }
 
@@ -71,7 +71,7 @@ struct KeybindItemView: View {
                 label()
 
                 HStack {
-                    if keybind.direction.isCustomizable {
+                    if action.direction.isCustomizable {
                         Button(action: {
                             isConfiguringCustom = true
                         }, label: {
@@ -79,18 +79,18 @@ struct KeybindItemView: View {
                         })
                         .buttonStyle(.plain)
                         .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCustom, isCompact: false) {
-                            if keybind.direction == .custom {
-                                CustomActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+                            if action.direction == .custom {
+                                CustomActionConfigurationView(action: $action, isPresented: $isConfiguringCustom)
                                     .frame(width: 400)
                             } else {
-                                StashActionConfigurationView(action: $keybind, isPresented: $isConfiguringCustom)
+                                StashActionConfigurationView(action: $action, isPresented: $isConfiguringCustom)
                                     .frame(width: 400)
                             }
                         }
                         .help("Customize this keybind's custom frame.")
                     }
 
-                    if keybind.direction == .cycle {
+                    if action.direction == .cycle {
                         Button(action: {
                             isConfiguringCycle = true
                         }, label: {
@@ -98,7 +98,7 @@ struct KeybindItemView: View {
                         })
                         .buttonStyle(.plain)
                         .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCycle, isCompact: false) {
-                            CycleActionConfigurationView(action: $keybind, isPresented: $isConfiguringCycle)
+                            CycleActionConfigurationView(action: $action, isPresented: $isConfiguringCycle)
                                 .frame(width: 400)
                         }
                         .help("Customize what this keybind cycles through.")
@@ -111,7 +111,7 @@ struct KeybindItemView: View {
                 if isHovering {
                     Color.clear
                         .luminarePopup(isPresented: $isPresented, alignment: .leadingLastTextBaseline) {
-                            directionPickerContents(keybind: $keybind.direction)
+                            directionPickerContents(keybind: $action.direction)
                         }
                         .luminareSheetClosesOnDefocus(true)
                 }
@@ -142,7 +142,7 @@ struct KeybindItemView: View {
                 .fixedSize()
             }
         }
-        .animation(luminareAnimation, value: keybind)
+        .animation(luminareAnimation, value: action)
         .padding(.horizontal, 12)
         .onAppear {
             computeSearchResults()
@@ -158,11 +158,11 @@ struct KeybindItemView: View {
         .onChange(of: isPresented) { _ in
             searchText = ""
         }
-        .onChange(of: keybind.direction) { _ in
-            if keybind.direction.isCustomizable {
+        .onChange(of: action.direction) { _ in
+            if action.direction.isCustomizable {
                 isConfiguringCustom = true
             }
-            if keybind.direction == .cycle {
+            if action.direction == .cycle {
                 isConfiguringCycle = true
             }
         }
@@ -172,23 +172,22 @@ struct KeybindItemView: View {
         Button {
             isPresented.toggle()
         } label: {
-            HStack(spacing: 0) {
-                HStack(spacing: 8) {
-                    IconView(action: keybind)
+            HStack(spacing: 8) {
+                IconView(action: action)
+                    .equatable()
 
-                    if let info = keybind.direction.infoText {
-                        Text(keybind.getName())
-                            .lineLimit(1)
-                            .padding(.trailing, 4)
-                            .luminarePopover(attachedTo: .topTrailing) {
-                                Text(info)
-                                    .padding(6)
-                            }
-                            .luminareTint(overridingWith: .yellow)
-                    } else {
-                        Text(keybind.getName())
-                            .lineLimit(1)
-                    }
+                if let info = action.direction.infoText {
+                    Text(action.getName())
+                        .lineLimit(1)
+                        .padding(.trailing, 4)
+                        .luminarePopover(attachedTo: .topTrailing) {
+                            Text(info)
+                                .padding(6)
+                        }
+                        .luminareTint(overridingWith: .yellow)
+                } else {
+                    Text(action.getName())
+                        .lineLimit(1)
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
@@ -200,7 +199,7 @@ struct KeybindItemView: View {
     /// Checks if there are any existing keybinds with the same key combination
     func hasDuplicateKeybinds() -> Bool {
         Defaults[.keybinds]
-            .count { $0.keybind == keybind.keybind } > 1
+            .count { $0.keybind == action.keybind } > 1
     }
 
     func directionPicker() -> some View {
@@ -232,6 +231,8 @@ struct KeybindItemView: View {
             ) { item in
                 HStack(spacing: 8) {
                     IconView(action: .init(item))
+                        .equatable()
+
                     Text(item.name)
                 }
                 .compositingGroup()
@@ -254,7 +255,7 @@ struct KeybindItemView: View {
 
             Image(systemName: "plus")
 
-            Keycorder($keybind)
+            Keycorder($action)
                 .opacity(hasConflicts ? 0.5 : 1)
         }
     }
