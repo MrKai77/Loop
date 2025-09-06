@@ -74,6 +74,44 @@ class Window {
         try self.init(element: window)
     }
 
+    /// Initialize a window from an entry in a dictionary returned by `CGWindowListCopyWindowInfo`.
+    /// - Parameter windowInfo: The dictionary containing information about the window.
+    convenience init(windowInfo: [String: AnyObject]) throws {
+        guard
+            let alpha = windowInfo[kCGWindowAlpha as String] as? Double, alpha > 0.01, // Don't allow invisible windows
+            let pid = windowInfo[kCGWindowOwnerPID as String] as? pid_t,
+            let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
+            let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary)
+        else {
+            throw WindowError.invalidWindow
+        }
+
+        let element = AXUIElementCreateApplication(pid)
+        guard
+            let windows: [AXUIElement] = try element.getValue(.windows),
+            !windows.isEmpty
+        else {
+            throw WindowError.invalidWindow
+        }
+
+        // If there’s only one window, use that as there's no need to grab its frame
+        if windows.count == 1, let window = windows.first {
+            try self.init(element: window)
+            return
+        }
+
+        // Otherwise, match on bounds
+        guard let match = try windows.first(where: { window in
+            let position: CGPoint? = try window.getValue(.position)
+            let size: CGSize? = try window.getValue(.size)
+            return position == frame.origin && size == frame.size
+        }) else {
+            throw WindowError.invalidWindow
+        }
+
+        try self.init(element: match)
+    }
+
     deinit {
         if let observer = self.observer {
             observer.stop()

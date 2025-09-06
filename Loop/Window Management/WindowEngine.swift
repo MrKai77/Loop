@@ -164,7 +164,7 @@ enum WindowEngine {
     /// Get the frontmost Window
     /// - Returns: Window?
     static func getFrontmostWindow() throws -> Window? {
-        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.isActive }) else {
+        guard let app = NSWorkspace.shared.frontmostApplication else {
             return nil
         }
         return try Window(pid: app.processIdentifier)
@@ -199,16 +199,10 @@ enum WindowEngine {
         }
 
         var windowList: [Window] = []
-        for window in list {
-            guard
-                let alpha = window[kCGWindowAlpha as String] as? Double, alpha > 0.01,
-                let pid = window[kCGWindowOwnerPID as String] as? Int32,
-                let window = try? Window(pid: pid)
-            else {
-                continue
+        for windowInfo in list {
+            if let window = try? Window(windowInfo: windowInfo) {
+                windowList.append(window)
             }
-
-            windowList.append(window)
         }
 
         return windowList
