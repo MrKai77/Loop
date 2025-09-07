@@ -70,7 +70,7 @@ private extension StashedWindowsStore {
     }
 
     func restoreStashedWindows() {
-        let windows = WindowEngine.windowList
+        let windows = WindowUtility.windowList()
         let defaultStashedWindows = Defaults[.stashManagerStashedWindows]
         var restoredStashedWindows: [CGWindowID: StashedWindow] = [:]
 
@@ -101,7 +101,7 @@ private extension StashedWindowsStore {
     }
 
     func onSpaceChanged(_: Notification) {
-        let windows = WindowEngine.windowList
+        let windows = WindowUtility.windowList()
         var restored = 0
 
         print("StashedWindowStore: Space changed. Attempting to restore windows.")

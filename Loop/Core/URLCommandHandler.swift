@@ -344,7 +344,7 @@ final class URLCommandHandler {
     private func executeWindowAction(_ direction: WindowDirection) {
         writeToOutput("[URLHandler] Executing direction: \(direction.rawValue)")
 
-        let allWindows = WindowEngine.windowList
+        let allWindows = WindowUtility.windowList()
         writeToOutput("[URLHandler] Found \(allWindows.count) total windows")
 
         let visibleWindows = allWindows.filter { win in
@@ -382,7 +382,7 @@ final class URLCommandHandler {
     /// - Parameter parameters: Screen command parameters
     private func handleScreenCommand(_ parameters: [String]) {
         guard let command = parameters.first?.lowercased(),
-              let window = try? WindowEngine.getFrontmostWindow() else {
+              let window = try? WindowUtility.frontmostWindow() else {
             writeToOutput("[URLHandler] No screen command or window")
             return
         }
@@ -464,7 +464,7 @@ final class URLCommandHandler {
             writeToOutput("Executing custom action: \(customAction.name ?? "unnamed")")
 
             // Try multiple methods to get the target window
-            let targetWindow = findTargetWindow(from: WindowEngine.windowList.filter { win in
+            let targetWindow = findTargetWindow(from: WindowUtility.windowList().filter { win in
                 guard let app = win.nsRunningApplication else { return false }
                 return app.activationPolicy == .regular && !win.isApplicationHidden && !win.minimized
             })
@@ -480,7 +480,7 @@ final class URLCommandHandler {
             // For list command, just show the actions without the invalid message
             printAvailableActions()
         } else if let direction = WindowDirection.allCases.first(where: { $0.rawValue.lowercased() == actionStr }),
-                  let window = findTargetWindow(from: WindowEngine.windowList),
+                  let window = findTargetWindow(from: WindowUtility.windowList()),
                   let screen = NSScreen.main {
             writeToOutput("Executing action: \(direction.rawValue)")
             activateAndResizeWindow(window, .init(direction), screen)
@@ -564,7 +564,7 @@ final class URLCommandHandler {
 
         if let keybind = keybinds.first(where: { $0.name?.lowercased() == keybindName.lowercased() }) {
             writeToOutput("[URLHandler] Executing keybind: \(keybind.name ?? "unnamed")")
-            if let window = WindowEngine.getTargetWindow(),
+            if let window = WindowUtility.userDefinedTargetWindow(),
                let screen = NSScreen.main {
                 WindowEngine.resize(window, to: keybind, on: screen)
             }
@@ -684,7 +684,7 @@ final class URLCommandHandler {
     /// - Parameter visibleWindows: Array of visible windows to choose from
     /// - Returns: The most appropriate window or nil if none found
     private func findTargetWindow(from visibleWindows: [Window]) -> Window? {
-        if let targetWindow = WindowEngine.getTargetWindow() {
+        if let targetWindow = WindowUtility.userDefinedTargetWindow() {
             writeToOutput("[URLHandler] Using WindowEngine.getTargetWindow(): \(targetWindow.title ?? "unknown")")
             return targetWindow
         }

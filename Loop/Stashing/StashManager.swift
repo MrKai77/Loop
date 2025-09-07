@@ -292,7 +292,7 @@ private extension StashManager {
         guard let stashedWindow = store.stashed[windowID] else { return }
         guard let screen = ScreenUtility.screenContaining(stashedWindow.window) ?? NSScreen.main else { return }
 
-        let focusWindow = WindowEngine.windowList.first(where: { window in
+        let focusWindow = WindowUtility.windowList().first(where: { window in
             guard let currentWindowScreen = ScreenUtility.screenContaining(window) ?? NSScreen.main else { return false }
             guard screen.isSameScreen(currentWindowScreen) else { return false }
 
@@ -369,7 +369,7 @@ private extension StashManager {
     private func getZSortedStashedWindows() -> [StashedWindow] {
         // Leverage the fact that WindowEngine returns windows sorted by z-index.
         // Map WindowEngine.windowList to store.stashed to retrieve the stashed windows in z-index order.
-        WindowEngine.windowList.compactMap { store.stashed[$0.cgWindowID] }
+        WindowUtility.windowList().compactMap { store.stashed[$0.cgWindowID] }
     }
 
     /// Determines whether a revealed window should be hidden based on the mouse location.

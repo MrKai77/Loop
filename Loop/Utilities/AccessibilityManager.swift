@@ -8,7 +8,7 @@
 import Defaults
 import SwiftUI
 
-class AccessibilityManager {
+enum AccessibilityManager {
     static func getStatus() -> Bool {
         // Get current state for accessibility access
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: false]

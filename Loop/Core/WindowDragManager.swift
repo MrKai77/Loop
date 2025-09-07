@@ -78,7 +78,7 @@ class WindowDragManager {
 
         do {
             guard
-                let draggingWindow = try WindowEngine.windowAtPosition(mousePosition),
+                let draggingWindow = try WindowUtility.windowAtPosition(mousePosition),
                 !draggingWindow.isAppExcluded
             else {
                 return

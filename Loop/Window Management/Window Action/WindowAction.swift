@@ -493,7 +493,7 @@ extension WindowAction {
                 result.origin.x = bounds.midX - result.width / 2
                 result.origin.y = bounds.midY - result.height / 2
             case .macOSCenter:
-                let yOffset = WindowEngine.getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
+                let yOffset = getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
                 result.origin.x = bounds.midX - result.width / 2
                 result.origin.y = (bounds.midY - result.height / 2) + yOffset
             default:
@@ -541,7 +541,7 @@ extension WindowAction {
             .init(width: bounds.width / 2, height: bounds.height / 2)
         }
 
-        let yOffset = WindowEngine.getMacOSCenterYOffset(
+        let yOffset = getMacOSCenterYOffset(
             windowSize.height,
             screenHeight: bounds.height
         )
@@ -553,6 +553,18 @@ extension WindowAction {
             ),
             size: windowSize
         )
+    }
+
+    /// This function is used to calculate the Y offset for a window to be "macOS centered" on the screen
+    /// It is identical to `NSWindow.center()`.
+    /// - Parameters:
+    ///   - windowHeight: Height of the window to be resized
+    ///   - screenHeight: Height of the screen the window will be resized on
+    /// - Returns: The Y offset of the window, to be added onto the screen's midY point.
+    private func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
+        let halfScreenHeight = screenHeight / 2
+        let windowHeightPercent = windowHeight / screenHeight
+        return (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
     }
 
     /// Retrieves the last action frame for the specified window, based on the last action recorded in `WindowRecords`.

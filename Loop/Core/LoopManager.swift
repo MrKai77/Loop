@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - LoopManager
 
-class LoopManager: ObservableObject {
+final class LoopManager: ObservableObject {
     static let shared = LoopManager()
     private init() {}
 
@@ -22,13 +22,13 @@ class LoopManager: ObservableObject {
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
-    private(set) lazy var triggerKeyObserver = TriggerKeyObserver(
+    private(set) lazy var triggerKeyObserver = TriggerKeybindObserver(
         openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
     private(set) lazy var middleClickObserver = MiddleClickObserver(
-        openCallback: { [weak self] in self?.openLoop(startingAction: nil) },
+        openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
@@ -67,7 +67,7 @@ extension LoopManager {
         }
 
         guard !isLoopActive else {
-            /// If using Karabiner-Elements, TriggerKeyObserver may call openLoop twice.
+            /// If using Karabiner-Elements, TriggerKeybindObserver may call openLoop twice.
             /// This happens because Karabiner-Elements sends modifier keys and other keys as separate, rapid events.
             /// As a result, Loop might be opened before the full keybind is pressed.
             /// In these cases, we can simply update the action instead of reopening the Loop.
@@ -79,7 +79,7 @@ extension LoopManager {
             return
         }
 
-        targetWindow = WindowEngine.getTargetWindow()
+        targetWindow = WindowUtility.userDefinedTargetWindow()
         guard
             targetWindow?.isAppExcluded != true,
             (targetWindow?.fullscreen ?? false && Defaults[.ignoreFullscreen]) == false

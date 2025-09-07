@@ -1,5 +1,5 @@
 //
-//  TriggerKeyObserver.swift
+//  TriggerKeybindObserver.swift
 //  Loop
 //
 //  Created by Kai Azim on 2025-08-29.
@@ -12,7 +12,7 @@ import Defaults
 ///
 /// To achieve this, it uses a NSEventMonitor to listen for key events.
 /// It is important that a NSEventMonitor is used instead of a CGEventMonitor here, so that external key remappers (such as Karabiner or HyperKey) can take precedence.
-final class TriggerKeyObserver {
+final class TriggerKeybindObserver: LoopTrigger {
     // Callbacks
     private let openCallback: (WindowAction?) -> ()
     private let closeCallback: () -> ()
@@ -29,7 +29,7 @@ final class TriggerKeyObserver {
     private var triggerDelay: TimeInterval { Defaults[.triggerDelay] }
     private var useDoubleClickTrigger: Bool { Defaults[.doubleClickToTrigger] }
 
-    /// Initializes a ``TriggerKeyObserver``.
+    /// Initializes a ``TriggerKeybindObserver``.
     /// - Parameters:
     ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated. It takes in an optional `WindowAction` as a starting action.
     ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
@@ -39,6 +39,10 @@ final class TriggerKeyObserver {
     ) {
         self.openCallback = openCallback
         self.closeCallback = closeCallback
+    }
+
+    func start() {
+        start(scope: .all)
     }
 
     /// Starts observing key events.

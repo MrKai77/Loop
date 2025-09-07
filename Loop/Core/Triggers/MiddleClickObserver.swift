@@ -9,7 +9,7 @@ import AppKit
 import Defaults
 
 /// Reads middle-click events using a CGEventMonitor, and triggers Loop open/close callbacks, when appropriate.
-final class MiddleClickObserver {
+final class MiddleClickObserver: LoopTrigger {
     // Callbacks
     private let openCallback: () -> ()
     private let closeCallback: () -> ()
@@ -28,10 +28,11 @@ final class MiddleClickObserver {
     ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated.
     ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
     init(
-        openCallback: @escaping () -> (),
+        openCallback: @escaping (WindowAction?) -> (),
         closeCallback: @escaping () -> ()
     ) {
-        self.openCallback = openCallback
+        // We will never start off with an action from this trigger, so pass in nil
+        self.openCallback = { openCallback(nil) }
         self.closeCallback = closeCallback
     }
 

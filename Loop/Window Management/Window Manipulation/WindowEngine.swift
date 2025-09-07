@@ -8,6 +8,7 @@
 import Defaults
 import SwiftUI
 
+/// This enum handles the execution of `WindowAction`s on windows within the user's workspace.
 enum WindowEngine {
     /// Resize a Window
     /// - Parameters:
@@ -27,7 +28,13 @@ enum WindowEngine {
         let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
         print("Resizing \(windowTitle) to \(action.direction) on \(screen.localizedName)")
 
-        // If the action is to hide or minimize, perform the action then return
+        // Before commiting to anything, we should record the action.
+        // This allows the user to undo any one of their actions.
+        if shouldRecord {
+            WindowRecords.record(window, action)
+        }
+
+        // If the action is to hide, minimize or fullscreen perform the action then return
         if action.direction == .hide {
             window.toggleHidden()
             return
@@ -38,6 +45,13 @@ enum WindowEngine {
             return
         }
 
+        if action.direction == .fullscreen {
+            window.toggleFullscreen()
+            return
+        }
+
+        // If the action is minimizeOthers, we don't need to actually perform any actions on the window itself.
+        // So after minimizing other windows, we should simply return.
         if action.direction == .minimizeOthers {
             minimizeOtherWindows(exceptWindow: window)
             return
@@ -48,10 +62,8 @@ enum WindowEngine {
             window.activate()
         }
 
-        if shouldRecord {
-            WindowRecords.record(window, action)
-        }
-
+        // Use the system window manager if it has been set by the user.
+        // Note that we don't use it when switching screens, as the system window manager doesn't support that.
         if #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable], !willChangeScreens {
             if resizeWithSystemWindowManager(window: window, to: action) {
                 // If the preview wasn't visible, then that means that this is the new live frame.
@@ -63,20 +75,18 @@ enum WindowEngine {
             }
         }
 
-        // If the action is fullscreen, toggle fullscreen then return
-        if action.direction == .fullscreen {
-            window.toggleFullscreen()
-            return
-        }
-
         // Otherwise, we obviously need to disable fullscreen to resize the window
         window.fullscreen = false
 
         // Calculate the target frame
-        let targetFrame = action.getFrame(window: window, bounds: screen.safeScreenFrame, screen: screen)
+        let targetFrame = action.getFrame(
+            window: window,
+            bounds: screen.safeScreenFrame,
+            screen: screen
+        )
         print("Target window frame: \(targetFrame)")
 
-        // If the action is undo, remove the last action from the window, as the target frame already contains the last action's size
+        // If the action is undo, remove the last action from the window records.
         if action.direction == .undo {
             WindowRecords.removeLastAction(for: window)
         }
@@ -84,22 +94,19 @@ enum WindowEngine {
         let animate = shouldAnimateResize(for: window)
 
         // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
-        if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier,
-           let window = NSApp.keyWindow ?? NSApp.windows.first(where: { $0.level.rawValue <= NSWindow.Level.floating.rawValue }) {
-            NSAnimationContext.runAnimationGroup { context in
-                context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
-                window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
-            }
-            return
+        if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
+            resizeOwnWindow(targetFrame: targetFrame)
         }
 
         let usePadding = PaddingSettings.enablePadding &&
             (Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize])
 
-        // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
-        // This is because the window *can* be moved off-screen in this case.
-        // Otherwise padding will be applied if needed.
+        // Grab the bounds of the screen, with padding applied. This is generally not needed, except for:
+        // - when window animations are enabled, we use the bounds to keep the window on-screen
+        // - when the window finishes resizing, we move the window into the bounds if needed
         let bounds = if action.direction.willMove {
+            // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
+            // This is because the window *can* be moved off-screen in this case.
             CGRect.zero
         } else if usePadding {
             PaddingSettings.padding.apply(on: screen.safeScreenFrame)
@@ -133,91 +140,6 @@ enum WindowEngine {
             window: window,
             screen: screen
         )
-    }
-
-    /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
-    /// - Returns: The target window
-    static func getTargetWindow() -> Window? {
-        var result: Window?
-
-        do {
-            if Defaults[.resizeWindowUnderCursor],
-               let mouseLocation = CGEvent.mouseLocation,
-               let window = try WindowEngine.windowAtPosition(mouseLocation) {
-                result = window
-            }
-        } catch {
-            print("Failed to get window at cursor: \(error.localizedDescription)")
-        }
-
-        if result == nil {
-            do {
-                result = try WindowEngine.getFrontmostWindow()
-            } catch {
-                print("Failed to get frontmost window: \(error.localizedDescription)")
-            }
-        }
-
-        return result
-    }
-
-    /// Get the frontmost Window
-    /// - Returns: Window?
-    static func getFrontmostWindow() throws -> Window? {
-        guard let app = NSWorkspace.shared.frontmostApplication else {
-            return nil
-        }
-        return try Window(pid: app.processIdentifier)
-    }
-
-    /// Get the Window at a given position.
-    /// - Parameter position: The position to check for
-    /// - Returns: The window at the given position, if any
-    static func windowAtPosition(_ position: CGPoint) throws -> Window? {
-        // If we can find the window at a point using the Accessibility API, return it
-        if let element = try AXUIElement.systemWide.getElementAtPosition(position),
-           let windowElement: AXUIElement = try element.getValue(.window) {
-            return try Window(element: windowElement)
-        }
-
-        // If the previous method didn't work, loop through all windows on-screen and return the first one that contains the desired point
-        let windowList = WindowEngine.windowList
-        if let window = (windowList.first { $0.frame.contains(position) }) {
-            return window
-        }
-
-        return nil
-    }
-
-    /// Get a list of all windows currently shown, that are likely to be resizable by Loop.
-    static var windowList: [Window] {
-        guard let list = CGWindowListCopyWindowInfo(
-            [.optionOnScreenOnly, .excludeDesktopElements],
-            kCGNullWindowID
-        ) as NSArray? as? [[String: AnyObject]] else {
-            return []
-        }
-
-        var windowList: [Window] = []
-        for windowInfo in list {
-            if let window = try? Window(windowInfo: windowInfo) {
-                windowList.append(window)
-            }
-        }
-
-        return windowList
-    }
-
-    /// This function is used to calculate the Y offset for a window to be "macOS centered" on the screen
-    /// It is identical to `NSWindow.center()`.
-    /// - Parameters:
-    ///   - windowHeight: Height of the window to be resized
-    ///   - screenHeight: Height of the screen the window will be resized on
-    /// - Returns: The Y offset of the window, to be added onto the screen's midY point.
-    static func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
-        let halfScreenHeight = screenHeight / 2
-        let windowHeightPercent = windowHeight / screenHeight
-        return (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
     }
 
     /// Resize a window using the system window manager, if available (macOS 15+)
@@ -273,6 +195,20 @@ enum WindowEngine {
         return true
     }
 
+    private static func resizeOwnWindow(targetFrame: CGRect) {
+        guard let window = NSApp.keyWindow ?? NSApp.windows.first(where: {
+            $0.level.rawValue <= NSWindow.Level.floating.rawValue
+        }) else {
+            print("Failed to get own main window to resize")
+            return
+        }
+
+        NSAnimationContext.runAnimationGroup { context in
+            context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
+            window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
+        }
+    }
+
     /// Will move a window back onto the screen. To be run AFTER a window has been resized.
     /// - Parameters:
     ///   - window: The window to handle size constraints for
@@ -303,7 +239,7 @@ enum WindowEngine {
 
     /// Minimizes all windows except the current one
     private static func minimizeOtherWindows(exceptWindow: Window) {
-        let allWindows = windowList
+        let allWindows = WindowUtility.windowList()
         let windowsToMinimize = allWindows.filter { otherWindow in
             // Don't minimize the current window
             guard otherWindow.cgWindowID != exceptWindow.cgWindowID else { return false }
