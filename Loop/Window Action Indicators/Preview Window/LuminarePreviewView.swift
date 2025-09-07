@@ -13,6 +13,7 @@ struct LuminarePreviewView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
     @Environment(\.appearsActive) private var appearsActive
     @ObservedObject var model: LuminareManager = .shared
+    @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @State var actionRect: CGRect = .zero
     @State private var scale: CGFloat = 1
@@ -22,14 +23,6 @@ struct LuminarePreviewView: View {
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
-
-    @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.customAccentColor) var customAccentColor
-    @Default(.useGradient) var useGradient
-    @Default(.gradientColor) var gradientColor
-
-    @State var primaryColor: Color = .getLoopAccent(tone: .normal)
-    @State var secondaryColor: Color = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
     var body: some View {
         GeometryReader { geo in
@@ -48,8 +41,8 @@ struct LuminarePreviewView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    appearsActive ? primaryColor : .systemGray,
-                                    appearsActive ? secondaryColor : .systemGray
+                                    appearsActive ? accentColorController.color1 : .systemGray,
+                                    appearsActive ? accentColorController.color2 : .systemGray
                                 ]
                             ),
                             startPoint: .topLeading,
@@ -58,6 +51,7 @@ struct LuminarePreviewView: View {
                         lineWidth: previewBorderThickness
                     )
             }
+            .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
             .padding(previewPadding + previewBorderThickness / 2)
             .frame(width: actionRect.width, height: actionRect.height)
             .offset(x: actionRect.minX, y: actionRect.minY)
@@ -80,20 +74,6 @@ struct LuminarePreviewView: View {
                     actionRect = model.previewedAction.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
                 }
             }
-        }
-        .onChange(of: [customAccentColor, gradientColor]) { _ in
-            recomputeColors()
-        }
-        .onChange(of: [useSystemAccentColor, useGradient]) { _ in
-            recomputeColors()
-        }
-        .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 10, topTrailingRadius: 10))
-    }
-
-    func recomputeColors() {
-        withAnimation(luminareAnimation) {
-            primaryColor = Color.getLoopAccent(tone: .normal)
-            secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
         }
     }
 }

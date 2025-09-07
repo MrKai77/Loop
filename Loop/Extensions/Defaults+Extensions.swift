@@ -19,11 +19,10 @@ extension Defaults.Keys {
     static let notificationWhenIconUnlocked = Key<Bool>("notificationWhenIconUnlocked", default: true, iCloud: true)
 
     // Accent Color
-    static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true, iCloud: true)
+    static let accentColorMode: Key<AccentColorOption> = Key("accentColorMode", default: .system, iCloud: true)
     static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white), iCloud: true)
     static let useGradient = Key<Bool>("useGradient", default: true, iCloud: true)
     static let gradientColor = Key<Color>("gradientColor", default: Color(.black), iCloud: true)
-    static let processWallpaper = Key<Bool>("processWallpaper", default: false, iCloud: true)
 
     // Radial Menu
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true, iCloud: true)
@@ -217,4 +216,17 @@ extension Defaults.Keys {
     // StashManager
     static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>())
     static let stashManagerStashedWindows = Key<[CGWindowID: WindowAction]>("stashManagerStashed", default: [:])
+
+    // AccentColorController
+    static let lastUsedAccentColor1 = Key<Color>("lastUsedAccentColor1", default: .black)
+    static let lastUsedAccentColor2 = Key<Color>("lastUsedAccentColor2", default: .black)
+
+    @available(*, deprecated, renamed: "accentColorMode", message: "Use accentColorMode.system")
+    static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true, iCloud: true)
+
+    @available(*, deprecated, renamed: "accentColorMode", message: "Use accentColorMode.wallpaper")
+    static let processWallpaper = Key<Bool>("processWallpaper", default: false, iCloud: true)
+
+    // DataPatcher
+    static let patchesApplied = Key<DataPatcher.Patch>("patchesApplied", default: [], iCloud: true)
 }

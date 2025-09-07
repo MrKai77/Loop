@@ -11,6 +11,7 @@ import SwiftUI
 
 struct CustomActionConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
+    @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
@@ -72,7 +73,8 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder private func configurationSections() -> some View {
+    @ViewBuilder
+    private func configurationSections() -> some View {
         LuminareSection(outerPadding: 0) {
             LuminareTextField(
                 "Custom Keybind",
@@ -126,7 +128,8 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder private func tabPicker() -> some View {
+    @ViewBuilder
+    private func tabPicker() -> some View {
         LuminarePicker(
             elements: Tab.allCases,
             selection: $currentTab.animation(luminareAnimation),
@@ -142,11 +145,13 @@ struct CustomActionConfigurationView: View {
         .frame(height: 40)
     }
 
-    @ViewBuilder private func unitToggle() -> some View {
+    @ViewBuilder
+    private func unitToggle() -> some View {
         LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
     }
 
-    @ViewBuilder private func actionButtons() -> some View {
+    @ViewBuilder
+    private func actionButtons() -> some View {
         HStack(spacing: 8) {
             Button("Preview") {}
                 .onLongPressGesture(
@@ -175,7 +180,8 @@ struct CustomActionConfigurationView: View {
         .buttonStyle(.luminareCompact)
     }
 
-    @ViewBuilder private func positionConfiguration() -> some View {
+    @ViewBuilder
+    private func positionConfiguration() -> some View {
         LuminareSection(outerPadding: 0) {
             LuminareToggle(
                 "Use coordinates",
@@ -271,7 +277,8 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder private func sizeConfiguration() -> some View {
+    @ViewBuilder
+    private func sizeConfiguration() -> some View {
         LuminareSection(outerPadding: 0) {
             LuminarePicker(
                 elements: CustomWindowActionSizeMode.allCases,
@@ -332,11 +339,12 @@ struct CustomActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder private func blurredWindow() -> some View {
+    @ViewBuilder
+    private func blurredWindow() -> some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {
                 RoundedRectangle(cornerRadius: 12 - 5)
-                    .strokeBorder(Color.getLoopAccent(tone: .normal), lineWidth: 2)
+                    .strokeBorder(accentColorController.color1, lineWidth: 2)
             }
             .clipShape(RoundedRectangle(cornerRadius: 12 - 5))
     }

@@ -9,19 +9,14 @@ import Defaults
 import SwiftUI
 
 struct PreviewView: View {
+    @Environment(\.luminareAnimation) var luminareAnimation
+    @ObservedObject private var accentColorController: AccentColorController = .shared
+
     @Default(.previewPadding) var previewPadding
     @Default(.padding) var padding
     @Default(.previewCornerRadius) var previewCornerRadius
     @Default(.previewBorderThickness) var previewBorderThickness
     @Default(.animationConfiguration) var animationConfiguration
-
-    @Default(.useSystemAccentColor) var useSystemAccentColor
-    @Default(.customAccentColor) var customAccentColor
-    @Default(.useGradient) var useGradient
-    @Default(.gradientColor) var gradientColor
-
-    @State var primaryColor: Color = .getLoopAccent(tone: .normal)
-    @State var secondaryColor: Color = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
     var body: some View {
         GeometryReader { _ in
@@ -40,8 +35,8 @@ struct PreviewView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    primaryColor,
-                                    secondaryColor
+                                    accentColorController.color1,
+                                    accentColorController.color2
                                 ]
                             ),
                             startPoint: .topLeading,
@@ -51,15 +46,7 @@ struct PreviewView: View {
                     )
             }
             .padding(previewPadding + previewBorderThickness / 2)
+            .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
         }
-        // This would be called if the user's color mode is set to "wallpaper"
-        .onChange(of: [customAccentColor, gradientColor]) { _ in
-            recomputeColors()
-        }
-    }
-
-    func recomputeColors() {
-        primaryColor = Color.getLoopAccent(tone: .normal)
-        secondaryColor = Color.getLoopAccent(tone: useGradient ? .darker : .normal)
     }
 }

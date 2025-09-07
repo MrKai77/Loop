@@ -154,11 +154,9 @@ class WindowDragManager {
         let oldDirection = direction
 
         if !ignoredFrame.contains(mousePosition) {
-            // Only recalculate wallpaper colors if user has enabled it.
-            if Defaults[.processWallpaper] {
-                Task {
-                    await WallpaperProcessor.fetchLatest()
-                }
+            // Refresh accent colors in case user has enabled the wallpaper processor
+            Task {
+                await AccentColorController.shared.refresh()
             }
 
             direction = WindowDirection.processSnap(

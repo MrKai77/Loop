@@ -12,8 +12,6 @@ import SwiftUI
 /// By keeping the state separate, we are able to use the same `RadialMenuView` both in the app's settings, as well as in actual usage.
 final class RadialMenuViewModel: ObservableObject {
     @Published private(set) var angle: Double
-    @Published private(set) var primaryColor: Color
-    @Published private(set) var secondaryColor: Color
     @Published private(set) var currentAction: WindowAction?
 
     private var previousAction: WindowAction?
@@ -32,8 +30,6 @@ final class RadialMenuViewModel: ObservableObject {
 
         // Auto-set properties
         self.angle = .zero
-        self.primaryColor = .getLoopAccent(tone: .normal)
-        self.secondaryColor = .getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
 
         recomputeAngle()
     }
@@ -63,12 +59,6 @@ final class RadialMenuViewModel: ObservableObject {
         currentAction = action
 
         recomputeAngle()
-        recomputeColors()
-    }
-
-    func recomputeColors() {
-        primaryColor = Color.getLoopAccent(tone: .normal)
-        secondaryColor = Color.getLoopAccent(tone: Defaults[.useGradient] ? .darker : .normal)
     }
 
     func recomputeAngle() {

@@ -33,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+        DataPatcher.run()
         IconManager.refreshCurrentAppIcon()
         LoopManager.shared.start()
         WindowDragManager.shared.addObservers()

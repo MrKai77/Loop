@@ -12,16 +12,13 @@ import SwiftUI
 struct RadialMenuView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
     @Environment(\.appearsActive) private var appearsActive
+    @ObservedObject private var accentColorController: AccentColorController = .shared
     @ObservedObject private var viewModel: RadialMenuViewModel
     private let radialMenuSize: CGFloat = 100
 
     @Default(.radialMenuCornerRadius) private var radialMenuCornerRadius
     @Default(.radialMenuThickness) private var radialMenuThickness
     @Default(.animationConfiguration) private var animationConfiguration
-    @Default(.useSystemAccentColor) private var useSystemAccentColor
-    @Default(.customAccentColor) private var customAccentColor
-    @Default(.useGradient) private var useGradient
-    @Default(.gradientColor) private var gradientColor
 
     init(viewModel: RadialMenuViewModel) {
         self.viewModel = viewModel
@@ -43,8 +40,8 @@ struct RadialMenuView: View {
                         LinearGradient(
                             gradient: Gradient(
                                 colors: [
-                                    shouldAppearActive ? viewModel.primaryColor : .systemGray,
-                                    shouldAppearActive ? viewModel.secondaryColor : .systemGray
+                                    shouldAppearActive ? accentColorController.color1 : .systemGray,
+                                    shouldAppearActive ? accentColorController.color2 : .systemGray
                                 ]
                             ),
                             startPoint: .topLeading,
@@ -65,8 +62,7 @@ struct RadialMenuView: View {
         .fixedSize()
         .scaleEffect(viewModel.radialMenuScale)
         .animation(animationConfiguration.radialMenuSize, value: viewModel.currentAction)
-        .onChange(of: [customAccentColor, gradientColor]) { _ in viewModel.recomputeColors() }
-        .onChange(of: [useSystemAccentColor, useGradient]) { _ in viewModel.recomputeColors() }
+        .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
     }
 
     private func directionSelectorMask() -> some View {
@@ -137,7 +133,7 @@ struct RadialMenuView: View {
                 image
             }
         }
-        .foregroundStyle(Color.getLoopAccent(tone: .normal))
+        .foregroundStyle(accentColorController.color1)
         .font(.system(size: 20, weight: .bold))
     }
 }

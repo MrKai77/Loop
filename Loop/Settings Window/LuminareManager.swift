@@ -198,6 +198,7 @@ class LuminareManager: NSWindowController, ObservableObject {
 
 struct LuminareContentView: View {
     @ObservedObject var model: LuminareManager
+    @ObservedObject private var accentColorController: AccentColorController = .shared
     @Environment(\.luminareAnimation) private var animation
 
     var body: some View {
@@ -253,7 +254,7 @@ struct LuminareContentView: View {
                 model.showRadialMenu = true
             }
         }
-        .luminareTint(overridingWith: .getLoopAccent(tone: .normal))
+        .luminareTint(overridingWith: accentColorController.color1)
     }
 }
 
