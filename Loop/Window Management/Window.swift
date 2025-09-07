@@ -79,43 +79,39 @@ class Window {
     convenience init(windowInfo: [String: AnyObject]) throws {
         // First, check if we can initialize a window simply based on its PID.
         guard
-            let alpha = windowInfo[kCGWindowAlpha as String] as? Double, alpha > 0.01, // Don't allow invisible windows
+            let alpha = windowInfo[kCGWindowAlpha as String] as? Double, alpha > 0.01, // Ignore invisible windows
             let pid = windowInfo[kCGWindowOwnerPID as String] as? pid_t
         else {
             throw WindowError.invalidWindow
         }
 
         let element = AXUIElementCreateApplication(pid)
-        guard
-            let windows: [AXUIElement] = try element.getValue(.windows),
-            !windows.isEmpty
+        guard let windows: [AXUIElement] = try element.getValue(.windows),
+              !windows.isEmpty
         else {
             throw WindowError.invalidWindow
         }
 
         // If there’s only one window, use that as there's no need to grab its frame
-        if windows.count == 1, let window = windows.first {
-            try self.init(element: window)
+        if windows.count == 1 {
+            try self.init(element: windows[0])
             return
         }
 
-        // Now that we know that we can't *only* match by PID, fetch the window's frame, and match on bounds.
-        guard
-            let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
-            let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary)
-        else {
-            throw WindowError.invalidWindow
+        // Try to match against the frame when there are multiple windows
+        if let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
+           let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary),
+           let match = try windows.first(where: { window in
+               let position: CGPoint? = try window.getValue(.position)
+               let size: CGSize? = try window.getValue(.size)
+               return position == frame.origin && size == frame.size
+           }) {
+            try self.init(element: match)
+            return
         }
 
-        guard let match = try windows.first(where: { window in
-            let position: CGPoint? = try window.getValue(.position)
-            let size: CGSize? = try window.getValue(.size)
-            return position == frame.origin && size == frame.size
-        }) else {
-            throw WindowError.invalidWindow
-        }
-
-        try self.init(element: match)
+        // Fallback! initialize from the first available window
+        try self.init(element: windows[0])
     }
 
     deinit {
