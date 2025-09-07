@@ -77,11 +77,10 @@ class Window {
     /// Initialize a window from an entry in a dictionary returned by `CGWindowListCopyWindowInfo`.
     /// - Parameter windowInfo: The dictionary containing information about the window.
     convenience init(windowInfo: [String: AnyObject]) throws {
+        // First, check if we can initialize a window simply based on its PID.
         guard
             let alpha = windowInfo[kCGWindowAlpha as String] as? Double, alpha > 0.01, // Don't allow invisible windows
-            let pid = windowInfo[kCGWindowOwnerPID as String] as? pid_t,
-            let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
-            let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary)
+            let pid = windowInfo[kCGWindowOwnerPID as String] as? pid_t
         else {
             throw WindowError.invalidWindow
         }
@@ -100,7 +99,14 @@ class Window {
             return
         }
 
-        // Otherwise, match on bounds
+        // Now that we know that we can't *only* match by PID, fetch the window's frame, and match on bounds.
+        guard
+            let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
+            let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary)
+        else {
+            throw WindowError.invalidWindow
+        }
+
         guard let match = try windows.first(where: { window in
             let position: CGPoint? = try window.getValue(.position)
             let size: CGSize? = try window.getValue(.size)
