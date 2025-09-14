@@ -88,6 +88,14 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Next Screen", defaultValue: "Next Screen"))
         case .previousScreen:
             .init(localized: .init("Window Direction/Name: Previous Screen", defaultValue: "Previous Screen"))
+        case .leftScreen:
+            .init(localized: .init("Window Direction/Name: Left Screen", defaultValue: "Left Screen"))
+        case .rightScreen:
+            .init(localized: .init("Window Direction/Name: Right Screen", defaultValue: "Right Screen"))
+        case .topScreen:
+            .init(localized: .init("Window Direction/Name: Top Screen", defaultValue: "Top Screen"))
+        case .bottomScreen:
+            .init(localized: .init("Window Direction/Name: Bottom Screen", defaultValue: "Bottom Screen"))
         case .larger:
             .init(localized: .init("Window Direction/Name: Larger", defaultValue: "Larger"))
         case .smaller:

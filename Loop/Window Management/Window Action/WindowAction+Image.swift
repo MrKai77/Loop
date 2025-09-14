@@ -29,6 +29,14 @@ extension WindowAction {
             Image(systemName: "forward.fill")
         case .previousScreen:
             Image(systemName: "backward.fill")
+        case .leftScreen:
+            Image(systemName: "arrow.left.to.line")
+        case .rightScreen:
+            Image(systemName: "arrow.right.to.line")
+        case .topScreen:
+            Image(systemName: "arrow.up.to.line")
+        case .bottomScreen:
+            Image(systemName: "arrow.down.to.line")
         case .larger:
             Image(systemName: "arrow.up.left.and.arrow.down.right")
         case .smaller:
