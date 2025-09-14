@@ -751,6 +751,5 @@ final class URLCommandHandler {
         } else {
             writeToOutput("[URLHandler] Failed to find target screen")
         }
-
     }
 }
