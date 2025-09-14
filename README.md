@@ -177,7 +177,7 @@ open "loop://list/keybinds"      # List custom keybinds
     </tr>
     <tr>
       <td><strong>Screen Switching</strong></td>
-      <td>Next Screen, Previous Screen</td>
+      <td>Next Screen, Previous Screen, Left Screen, Right Screen, Top Screen, Bottom Screen</td>
     </tr>
     <tr>
       <td><strong>Window Manipulation</strong></td>

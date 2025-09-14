@@ -751,5 +751,37 @@ final class URLCommandHandler {
         } else {
             writeToOutput("[URLHandler] Failed to find target screen")
         }
+
+        if let currentScreen = ScreenUtility.screenContaining(window) {
+            var targetScreen: NSScreen? = nil
+
+            switch direction {
+            case .nextScreen:
+                targetScreen = ScreenUtility.nextScreen(from: currentScreen)
+            case .previousScreen:
+                targetScreen = ScreenUtility.previousScreen(from: currentScreen)
+            case .leftScreen:
+                targetScreen = ScreenUtility.leftScreen(from: currentScreen)
+            case .rightScreen:
+                targetScreen = ScreenUtility.rightScreen(from: currentScreen)
+            case .topScreen:
+                targetScreen = ScreenUtility.topScreen(from: currentScreen)
+            case .bottomScreen:
+                targetScreen = ScreenUtility.bottomScreen(from: currentScreen)
+            default:
+                break
+            }
+
+            if let targetScreen {
+                writeToOutput("[URLHandler] Moving window to screen: \(targetScreen.localizedName)")
+                DispatchQueue.main.async {
+                    WindowEngine.resize(window, to: .init(direction), on: targetScreen)
+                }
+            } else {
+                writeToOutput("[URLHandler] Failed to find target screen in \(direction.rawValue) direction")
+            }
+        } else {
+            writeToOutput("[URLHandler] Failed to find current screen for window")
+        }
     }
 }

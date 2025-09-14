@@ -282,6 +282,26 @@ private extension LoopManager {
                 newScreen = previousScreen
             }
 
+            if newAction.direction == .leftScreen,
+               let leftScreen = ScreenUtility.leftScreen(from: currentScreen) {
+                newScreen = leftScreen
+            }
+
+            if newAction.direction == .rightScreen,
+               let rightScreen = ScreenUtility.rightScreen(from: currentScreen) {
+                newScreen = rightScreen
+            }
+
+            if newAction.direction == .topScreen,
+               let topScreen = ScreenUtility.topScreen(from: currentScreen) {
+                newScreen = topScreen
+            }
+
+            if newAction.direction == .bottomScreen,
+               let bottomScreen = ScreenUtility.bottomScreen(from: currentScreen) {
+                newScreen = bottomScreen
+            }
+
             if currentAction.direction == .noAction {
                 if let targetWindow, let lastAction = WindowRecords.getCurrentAction(for: targetWindow) {
                     currentAction = lastAction
