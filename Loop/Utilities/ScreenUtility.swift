@@ -15,6 +15,7 @@ enum ScreenUtility {
     private static var cachedScreenCount: Int = 0
     private static let cacheValidityDuration: TimeInterval = 0.5
     private static let cacheLock = NSLock()
+    private static let overlapThreshold: CGFloat = 10.0
 
     // MARK: - Cache Setup
 
@@ -63,7 +64,6 @@ enum ScreenUtility {
         }
 
         let currentFrame = screen.frame
-        let overlapThreshold: CGFloat = 10.0
 
         let overlappingScreens = screens.filter { otherScreen in
             guard otherScreen != screen else { return false }
@@ -95,7 +95,6 @@ enum ScreenUtility {
         }
 
         let currentFrame = screen.frame
-        let overlapThreshold: CGFloat = 10.0
 
         let overlappingScreens = screens.filter { otherScreen in
             guard otherScreen != screen else { return false }
@@ -127,7 +126,6 @@ enum ScreenUtility {
         }
 
         let currentFrame = screen.frame
-        let overlapThreshold: CGFloat = 10.0
 
         let overlappingScreens = screens.filter { otherScreen in
             guard otherScreen != screen else { return false }
@@ -159,7 +157,6 @@ enum ScreenUtility {
         }
 
         let currentFrame = screen.frame
-        let overlapThreshold: CGFloat = 10.0
 
         let overlappingScreens = screens.filter { otherScreen in
             guard otherScreen != screen else { return false }
@@ -310,131 +307,87 @@ private extension Array where Element: Hashable {
         return nil
     }
 
-    func left(from item: Element) -> Element? {
+    private func directionalScreen(
+        from item: Element,
+        isCandidate: (NSScreen, NSScreen, CGFloat) -> Bool,
+        overlap: (NSScreen, NSScreen) -> CGFloat,
+        distance: (NSScreen, NSScreen) -> CGFloat
+    ) -> Element? {
         guard let screen = item as? NSScreen else { return nil }
         let currentFrame = screen.frame
-
         let overlapThreshold: CGFloat = 10.0
 
-        let leftScreens = compactMap { $0 as? NSScreen }
+        let candidates = compactMap { $0 as? NSScreen }
             .filter { otherScreen in
                 guard otherScreen != screen else { return false }
-
-                let isToTheLeft = otherScreen.frame.maxX <= currentFrame.minX + overlapThreshold
-
-                let verticalOverlap = Swift.min(currentFrame.maxY, otherScreen.frame.maxY) -
-                    Swift.max(currentFrame.minY, otherScreen.frame.minY)
-                let hasVerticalOverlap = verticalOverlap >= overlapThreshold
-
-                let isValid = isToTheLeft && hasVerticalOverlap
-
-                return isValid
+                let ov = overlap(screen, otherScreen)
+                return isCandidate(screen, otherScreen, overlapThreshold) && ov >= overlapThreshold
             }
 
-        let sortedLeftScreens = leftScreens.sorted { screen1, screen2 in
-            let distance1 = currentFrame.minX - screen1.frame.maxX
-            let distance2 = currentFrame.minX - screen2.frame.maxX
-            return distance1 < distance2
+        let sorted = candidates.sorted { s1, s2 in
+            distance(screen, s1) < distance(screen, s2)
         }
 
-        let result = sortedLeftScreens.first as? Element
+        return sorted.first as? Element
+    }
 
-        return result
+    func left(from item: Element) -> Element? {
+        directionalScreen(
+            from: item,
+            isCandidate: { current, other, threshold in
+                other.frame.maxX <= current.frame.minX + threshold
+            },
+            overlap: { current, other in
+                Swift.min(current.frame.maxY, other.frame.maxY) - Swift.max(current.frame.minY, other.frame.minY)
+            },
+            distance: { current, other in
+                current.frame.minX - other.frame.maxX
+            }
+        )
     }
 
     func right(from item: Element) -> Element? {
-        guard let screen = item as? NSScreen else { return nil }
-        let currentFrame = screen.frame
-
-        let overlapThreshold: CGFloat = 10.0
-
-        let rightScreens = compactMap { $0 as? NSScreen }
-            .filter { otherScreen in
-                guard otherScreen != screen else { return false }
-
-                let isToTheRight = otherScreen.frame.minX >= currentFrame.maxX - overlapThreshold
-
-                let verticalOverlap = Swift.min(currentFrame.maxY, otherScreen.frame.maxY) -
-                    Swift.max(currentFrame.minY, otherScreen.frame.minY)
-                let hasVerticalOverlap = verticalOverlap >= overlapThreshold
-
-                let isValid = isToTheRight && hasVerticalOverlap
-
-                return isValid
+        directionalScreen(
+            from: item,
+            isCandidate: { current, other, threshold in
+                other.frame.minX >= current.frame.maxX - threshold
+            },
+            overlap: { current, other in
+                Swift.min(current.frame.maxY, other.frame.maxY) - Swift.max(current.frame.minY, other.frame.minY)
+            },
+            distance: { current, other in
+                other.frame.minX - current.frame.maxX
             }
-
-        let sortedRightScreens = rightScreens.sorted { screen1, screen2 in
-            let distance1 = screen1.frame.minX - currentFrame.maxX
-            let distance2 = screen2.frame.minX - currentFrame.maxX
-            return distance1 < distance2
-        }
-
-        let result = sortedRightScreens.first as? Element
-
-        return result
+        )
     }
 
     func top(from item: Element) -> Element? {
-        guard let screen = item as? NSScreen else { return nil }
-        let currentFrame = screen.frame
-
-        let overlapThreshold: CGFloat = 10.0
-
-        let topScreens = compactMap { $0 as? NSScreen }
-            .filter { otherScreen in
-                guard otherScreen != screen else { return false }
-
-                let isAbove = otherScreen.frame.minY >= currentFrame.maxY - overlapThreshold
-
-                let horizontalOverlap = Swift.min(currentFrame.maxX, otherScreen.frame.maxX) -
-                    Swift.max(currentFrame.minX, otherScreen.frame.minX)
-                let hasHorizontalOverlap = horizontalOverlap >= overlapThreshold
-
-                let isValid = isAbove && hasHorizontalOverlap
-
-                return isValid
+        directionalScreen(
+            from: item,
+            isCandidate: { current, other, threshold in
+                other.frame.minY >= current.frame.maxY - threshold
+            },
+            overlap: { current, other in
+                Swift.min(current.frame.maxX, other.frame.maxX) - Swift.max(current.frame.minX, other.frame.minX)
+            },
+            distance: { current, other in
+                other.frame.minY - current.frame.maxY
             }
-
-        let sortedTopScreens = topScreens.sorted { screen1, screen2 in
-            let distance1 = screen1.frame.minY - currentFrame.maxY
-            let distance2 = screen2.frame.minY - currentFrame.maxY
-            return distance1 < distance2
-        }
-
-        let result = sortedTopScreens.first as? Element
-
-        return result
+        )
     }
 
     func bottom(from item: Element) -> Element? {
-        guard let screen = item as? NSScreen else { return nil }
-        let currentFrame = screen.frame
-
-        let overlapThreshold: CGFloat = 10.0
-
-        let bottomScreens = compactMap { $0 as? NSScreen }
-            .filter { otherScreen in
-                guard otherScreen != screen else { return false }
-
-                let isBelow = otherScreen.frame.maxY <= currentFrame.minY + overlapThreshold
-
-                let horizontalOverlap = Swift.min(currentFrame.maxX, otherScreen.frame.maxX) -
-                    Swift.max(currentFrame.minX, otherScreen.frame.minX)
-                let hasHorizontalOverlap = horizontalOverlap >= overlapThreshold
-
-                let isValid = isBelow && hasHorizontalOverlap
-
-                return isValid
+        directionalScreen(
+            from: item,
+            isCandidate: { current, other, threshold in
+                other.frame.maxY <= current.frame.minY + threshold
+            },
+            overlap: { current, other in
+                Swift.min(current.frame.maxX, other.frame.maxX) - Swift.max(current.frame.minX, other.frame.minX)
+            },
+            distance: { current, other in
+                current.frame.minY - other.frame.maxY
             }
-
-        let sortedBottomScreens = bottomScreens.sorted { screen1, screen2 in
-            let distance1 = currentFrame.minY - screen1.frame.maxY
-            let distance2 = currentFrame.minY - screen2.frame.maxY
-            return distance1 < distance2
-        }
-
-        let result = sortedBottomScreens.first as? Element
-
-        return result
+        )
     }
 }
