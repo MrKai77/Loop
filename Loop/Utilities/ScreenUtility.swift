@@ -13,7 +13,7 @@ enum ScreenUtility {
     private static var cachedScreens: [NSScreen]?
     private static var cacheTimestamp: Date?
     private static var cachedScreenCount: Int = 0
-    private static let cacheValidityDuration: TimeInterval = 0.1
+    private static let cacheValidityDuration: TimeInterval = 0.5
     private static let cacheLock = NSLock()
 
     // MARK: - Cache Setup
@@ -144,7 +144,6 @@ enum ScreenUtility {
         }
 
         let fallback = bottommostScreen(in: screens)
-        return fallback
         return fallback
     }
 
