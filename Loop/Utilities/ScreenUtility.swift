@@ -317,7 +317,7 @@ private extension Array where Element: Hashable {
         let currentFrame = screen.frame
         let overlapThreshold: CGFloat = 10.0
 
-        let candidates = compactMap { $0 as? NSScreen }
+        let candidates = self.compactMap { $0 as? NSScreen }
             .filter { otherScreen in
                 guard otherScreen != screen else { return false }
                 let ov = overlap(screen, otherScreen)
@@ -332,7 +332,7 @@ private extension Array where Element: Hashable {
     }
 
     func left(from item: Element) -> Element? {
-        directionalScreen(
+        return directionalScreen(
             from: item,
             isCandidate: { current, other, threshold in
                 other.frame.maxX <= current.frame.minX + threshold
@@ -347,7 +347,7 @@ private extension Array where Element: Hashable {
     }
 
     func right(from item: Element) -> Element? {
-        directionalScreen(
+        return directionalScreen(
             from: item,
             isCandidate: { current, other, threshold in
                 other.frame.minX >= current.frame.maxX - threshold
@@ -362,7 +362,7 @@ private extension Array where Element: Hashable {
     }
 
     func top(from item: Element) -> Element? {
-        directionalScreen(
+        return directionalScreen(
             from: item,
             isCandidate: { current, other, threshold in
                 other.frame.minY >= current.frame.maxY - threshold
@@ -377,7 +377,7 @@ private extension Array where Element: Hashable {
     }
 
     func bottom(from item: Element) -> Element? {
-        directionalScreen(
+        return directionalScreen(
             from: item,
             isCandidate: { current, other, threshold in
                 other.frame.maxY <= current.frame.minY + threshold
