@@ -32,7 +32,15 @@ struct RadialMenuView: View {
         ZStack {
             ZStack {
                 // NSVisualEffect on background
-                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                if #available(macOS 26.0, *) {
+                    Color.clear
+                        .glassEffect(
+                            .regular,
+                            in: .rect(cornerRadius: radialMenuCornerRadius)
+                        )
+                } else {
+                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                }
 
                 // This rectangle with a gradient is masked with the current direction radial menu view
                 Rectangle()

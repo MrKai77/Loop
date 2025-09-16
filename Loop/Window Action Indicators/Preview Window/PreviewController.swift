@@ -25,7 +25,7 @@ final class PreviewController {
             return
         }
 
-        let panel = NSPanel(
+        let panel = ActivePanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,

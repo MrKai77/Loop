@@ -21,11 +21,21 @@ struct PreviewView: View {
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                    .mask {
-                        RoundedRectangle(cornerRadius: previewCornerRadius)
-                            .foregroundColor(.white)
+                ZStack {
+                    if #available(macOS 26.0, *) {
+                        Color.clear
+                            .glassEffect(
+                                .regular,
+                                in: .rect(cornerRadius: previewCornerRadius)
+                            )
+                    } else {
+                        VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
                     }
+                }
+                .mask {
+                    RoundedRectangle(cornerRadius: previewCornerRadius)
+                        .foregroundColor(.white)
+                }
 
                 RoundedRectangle(cornerRadius: previewCornerRadius)
                     .strokeBorder(.quinary, lineWidth: 1)

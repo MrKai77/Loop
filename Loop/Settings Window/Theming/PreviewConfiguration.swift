@@ -34,7 +34,7 @@ struct PreviewConfigurationView: View {
                     }
                 )
             ) {
-                Text("Animate window resize")
+                Text("Show preview when looping")
                     .padding(.trailing, 4)
                     .luminarePopover(attachedTo: .topTrailing, hidden: previewVisibility) {
                         Text("Window snapping will still use the preview.")
