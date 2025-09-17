@@ -23396,6 +23396,17 @@
         }
       }
     },
+    "Window Direction/Name: Bottom Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bottom Screen"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Bottom Third" : {
       "localizations" : {
         "ar" : {
@@ -24788,6 +24799,17 @@
         }
       }
     },
+    "Window Direction/Name: Left Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Screen"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Left Third" : {
       "localizations" : {
         "ar" : {
@@ -25939,6 +25961,17 @@
         }
       }
     },
+    "Window Direction/Name: Right Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Screen"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Right Third" : {
       "localizations" : {
         "ar" : {
@@ -26947,6 +26980,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "右上角四分之一屏"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Top Screen" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Top Screen"
           }
         }
       }
