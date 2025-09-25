@@ -69,8 +69,8 @@ enum ScreenUtility {
             return rightmostOverlapping
         }
 
-        let fallback = rightmostScreen(in: screens)
-        return fallback
+        let rightmostScreen = screens.max { $0.frame.maxX < $1.frame.maxX }
+        return rightmostScreen
     }
 
     static func rightScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
@@ -90,8 +90,8 @@ enum ScreenUtility {
             return leftmostOverlapping
         }
 
-        let fallback = leftmostScreen(in: screens)
-        return fallback
+        let leftmostScreen = screens.min { $0.frame.minX < $1.frame.minX }
+        return leftmostScreen
     }
 
     static func topScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
@@ -111,8 +111,8 @@ enum ScreenUtility {
             return bottommostOverlapping
         }
 
-        let fallback = bottommostScreen(in: screens)
-        return fallback
+        let bottommostScreen = screens.max { $0.frame.maxY < $1.frame.maxY }
+        return bottommostScreen
     }
 
     static func bottomScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
@@ -132,13 +132,13 @@ enum ScreenUtility {
             return topmostOverlapping
         }
 
-        let fallback = topmostScreen(in: screens)
-        return fallback
+        let topmostScreen = screens.min { $0.frame.minY < $1.frame.minY }
+        return topmostScreen
     }
 
-    // MARK: - Cache Management
+    // MARK: Private
 
-    static func invalidateScreenCache() {
+    private static func invalidateScreenCache() {
         cacheLock.lock()
         defer { cacheLock.unlock() }
 
@@ -146,8 +146,6 @@ enum ScreenUtility {
         cacheTimestamp = nil
         cachedScreenCount = 0
     }
-
-    // MARK: Private
 
     private static func overlappingScreens(from screen: NSScreen, in screens: [NSScreen], verticalOverlap: Bool = false) -> [NSScreen] {
         let currentFrame = screen.frame
@@ -169,21 +167,7 @@ enum ScreenUtility {
         }
     }
 
-    private static func leftmostScreen(in screens: [NSScreen]) -> NSScreen? {
-        screens.min { $0.frame.minX < $1.frame.minX }
-    }
 
-    private static func rightmostScreen(in screens: [NSScreen]) -> NSScreen? {
-        screens.max { $0.frame.maxX < $1.frame.maxX }
-    }
-
-    private static func topmostScreen(in screens: [NSScreen]) -> NSScreen? {
-        screens.min { $0.frame.minY < $1.frame.minY }
-    }
-
-    private static func bottommostScreen(in screens: [NSScreen]) -> NSScreen? {
-        screens.max { $0.frame.maxY < $1.frame.maxY }
-    }
 
     private static func screenContaining(_ window: Window, in screens: [NSScreen]) -> NSScreen? {
         guard let firstScreen = screens.first else {
