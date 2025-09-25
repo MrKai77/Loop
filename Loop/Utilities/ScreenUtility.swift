@@ -14,7 +14,7 @@ enum ScreenUtility {
     private static var cacheTimestamp: Date?
     private static var cachedScreenCount: Int = 0
     private static let cacheValidityDuration: TimeInterval = 0.5
-    private static let cacheLock = NSLock()
+    private static let cacheQueue = DispatchQueue(label: "com.loop.screenUtility.cache", attributes: .concurrent)
     private static let overlapThreshold: CGFloat = 10.0
 
     // MARK: - Cache Setup
@@ -139,12 +139,11 @@ enum ScreenUtility {
     // MARK: Private
 
     private static func invalidateScreenCache() {
-        cacheLock.lock()
-        defer { cacheLock.unlock() }
-
-        cachedScreens = nil
-        cacheTimestamp = nil
-        cachedScreenCount = 0
+        cacheQueue.sync(flags: .barrier) {
+            cachedScreens = nil
+            cacheTimestamp = nil
+            cachedScreenCount = 0
+        }
     }
 
     private static func overlappingScreens(from screen: NSScreen, in screens: [NSScreen], verticalOverlap: Bool = false) -> [NSScreen] {
@@ -167,8 +166,6 @@ enum ScreenUtility {
         }
     }
 
-
-
     private static func screenContaining(_ window: Window, in screens: [NSScreen]) -> NSScreen? {
         guard let firstScreen = screens.first else {
             return nil
@@ -186,37 +183,36 @@ enum ScreenUtility {
     }
 
     private static func getScreensInOrder() -> [NSScreen] {
-        cacheLock.lock()
-        defer { cacheLock.unlock() }
+        cacheQueue.sync {
+            let currentScreenCount = NSScreen.screens.count
 
-        let currentScreenCount = NSScreen.screens.count
-
-        if currentScreenCount != cachedScreenCount {
-            cachedScreens = nil
-            cacheTimestamp = nil
-            cachedScreenCount = currentScreenCount
-        }
-
-        if let cached = cachedScreens,
-           let timestamp = cacheTimestamp,
-           Date().timeIntervalSince(timestamp) < cacheValidityDuration,
-           currentScreenCount == cachedScreenCount {
-            return cached
-        }
-
-        let screens = NSScreen.screens
-            .sorted { screen1, screen2 in
-                if abs(screen1.frame.origin.x - screen2.frame.origin.x) > 1.0 {
-                    return screen1.frame.origin.x < screen2.frame.origin.x
-                }
-                return screen1.frame.origin.y < screen2.frame.origin.y
+            if currentScreenCount != cachedScreenCount {
+                cachedScreens = nil
+                cacheTimestamp = nil
+                cachedScreenCount = currentScreenCount
             }
 
-        cachedScreens = screens
-        cacheTimestamp = Date()
-        cachedScreenCount = currentScreenCount
+            if let cached = cachedScreens,
+               let timestamp = cacheTimestamp,
+               Date().timeIntervalSince(timestamp) < cacheValidityDuration,
+               currentScreenCount == cachedScreenCount {
+                return cached
+            }
 
-        return screens
+            let screens = NSScreen.screens
+                .sorted { screen1, screen2 in
+                    if abs(screen1.frame.origin.x - screen2.frame.origin.x) > 1.0 {
+                        return screen1.frame.origin.x < screen2.frame.origin.x
+                    }
+                    return screen1.frame.origin.y < screen2.frame.origin.y
+                }
+
+            cachedScreens = screens
+            cacheTimestamp = Date()
+            cachedScreenCount = currentScreenCount
+
+            return screens
+        }
     }
 
     private static func findScreen(with window: Window, _ screens: [NSScreen]) -> NSScreen? {
@@ -278,7 +274,6 @@ private extension Array where Element: Hashable {
         distance: (NSScreen, NSScreen) -> CGFloat
     ) -> Element? {
         guard let screen = item as? NSScreen else { return nil }
-        let currentFrame = screen.frame
         let overlapThreshold: CGFloat = 10.0
 
         let candidates = compactMap { $0 as? NSScreen }
