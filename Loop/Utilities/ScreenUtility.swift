@@ -63,17 +63,7 @@ enum ScreenUtility {
             return nil
         }
 
-        let currentFrame = screen.frame
-
-        let overlappingScreens = screens.filter { otherScreen in
-            guard otherScreen != screen else { return false }
-
-            let verticalOverlap = Swift.min(currentFrame.maxY, otherScreen.frame.maxY) -
-                Swift.max(currentFrame.minY, otherScreen.frame.minY)
-            let hasOverlap = verticalOverlap >= overlapThreshold
-
-            return hasOverlap
-        }
+        let overlappingScreens = overlappingScreens(from: screen, in: screens)
 
         if let rightmostOverlapping = overlappingScreens.max(by: { $0.frame.maxX < $1.frame.maxX }) {
             return rightmostOverlapping
@@ -94,17 +84,7 @@ enum ScreenUtility {
             return nil
         }
 
-        let currentFrame = screen.frame
-
-        let overlappingScreens = screens.filter { otherScreen in
-            guard otherScreen != screen else { return false }
-
-            let verticalOverlap = Swift.min(currentFrame.maxY, otherScreen.frame.maxY) -
-                Swift.max(currentFrame.minY, otherScreen.frame.minY)
-            let hasOverlap = verticalOverlap >= overlapThreshold
-
-            return hasOverlap
-        }
+        let overlappingScreens = overlappingScreens(from: screen, in: screens)
 
         if let leftmostOverlapping = overlappingScreens.min(by: { $0.frame.minX < $1.frame.minX }) {
             return leftmostOverlapping
@@ -125,17 +105,7 @@ enum ScreenUtility {
             return nil
         }
 
-        let currentFrame = screen.frame
-
-        let overlappingScreens = screens.filter { otherScreen in
-            guard otherScreen != screen else { return false }
-
-            let horizontalOverlap = Swift.min(currentFrame.maxX, otherScreen.frame.maxX) -
-                Swift.max(currentFrame.minX, otherScreen.frame.minX)
-            let hasOverlap = horizontalOverlap >= overlapThreshold
-
-            return hasOverlap
-        }
+        let overlappingScreens = overlappingScreens(from: screen, in: screens, verticalOverlap: true)
 
         if let bottommostOverlapping = overlappingScreens.max(by: { $0.frame.maxY < $1.frame.maxY }) {
             return bottommostOverlapping
@@ -156,17 +126,7 @@ enum ScreenUtility {
             return nil
         }
 
-        let currentFrame = screen.frame
-
-        let overlappingScreens = screens.filter { otherScreen in
-            guard otherScreen != screen else { return false }
-
-            let horizontalOverlap = Swift.min(currentFrame.maxX, otherScreen.frame.maxX) -
-                Swift.max(currentFrame.minX, otherScreen.frame.minX)
-            let hasOverlap = horizontalOverlap >= overlapThreshold
-
-            return hasOverlap
-        }
+        let overlappingScreens = overlappingScreens(from: screen, in: screens, verticalOverlap: true)
 
         if let topmostOverlapping = overlappingScreens.min(by: { $0.frame.minY < $1.frame.minY }) {
             return topmostOverlapping
@@ -188,6 +148,26 @@ enum ScreenUtility {
     }
 
     // MARK: Private
+
+    private static func overlappingScreens(from screen: NSScreen, in screens: [NSScreen], verticalOverlap: Bool = false) -> [NSScreen] {
+        let currentFrame = screen.frame
+
+        return screens.filter { otherScreen in
+            guard otherScreen != screen else { return false }
+
+            let overlap: CGFloat = if verticalOverlap {
+                // For top/bottom navigation, check horizontal overlap
+                Swift.min(currentFrame.maxX, otherScreen.frame.maxX) -
+                    Swift.max(currentFrame.minX, otherScreen.frame.minX)
+            } else {
+                // For left/right navigation, check vertical overlap
+                Swift.min(currentFrame.maxY, otherScreen.frame.maxY) -
+                    Swift.max(currentFrame.minY, otherScreen.frame.minY)
+            }
+
+            return overlap >= overlapThreshold
+        }
+    }
 
     private static func leftmostScreen(in screens: [NSScreen]) -> NSScreen? {
         screens.min { $0.frame.minX < $1.frame.minX }
