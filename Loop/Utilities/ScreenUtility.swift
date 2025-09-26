@@ -8,16 +8,7 @@
 import SwiftUI
 
 enum ScreenUtility {
-    // MARK: - Screen Cache
-
-    private static var cachedScreens: [NSScreen]?
-    private static var cacheTimestamp: Date?
-    private static var cachedScreenCount: Int = 0
-    private static let cacheValidityDuration: TimeInterval = 0.5
-    private static let cacheQueue = DispatchQueue(label: "com.loop.screenUtility.cache", attributes: .concurrent)
     private static let overlapThreshold: CGFloat = 10.0
-
-    // MARK: - Cache Setup
 
     static func setupDisplayChangeNotifications() {
         NotificationCenter.default.addObserver(
@@ -25,19 +16,25 @@ enum ScreenUtility {
             object: nil,
             queue: .main
         ) { _ in
-            invalidateScreenCache()
+            Task { @MainActor in
+                invalidateScreenCache()
+            }
         }
     }
 
     // MARK: - Public Methods
 
     static func screenContaining(_ window: Window) -> NSScreen? {
-        let screens = getScreensInOrder()
+        let screens = MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
+        }
         return screenContaining(window, in: screens)
     }
 
     static func nextScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
-        let screens = getScreensInOrder()
+        let screens = MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
+        }
         if let nextScreen = screens.next(from: screen) {
             return nextScreen
         }
@@ -45,7 +42,9 @@ enum ScreenUtility {
     }
 
     static func previousScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
-        let screens = getScreensInOrder()
+        let screens = MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
+        }
         if let previousScreen = screens.previous(from: screen) {
             return previousScreen
         }
@@ -53,7 +52,9 @@ enum ScreenUtility {
     }
 
     static func leftScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
-        let screens = getScreensInOrder()
+        let screens = MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
+        }
 
         if let leftScreen = leftScreen(from: screen, in: screens) {
             return leftScreen
@@ -74,7 +75,9 @@ enum ScreenUtility {
     }
 
     static func rightScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
-        let screens = getScreensInOrder()
+        let screens = MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
+        }
 
         if let rightScreen = rightScreen(from: screen, in: screens) {
             return rightScreen
@@ -95,7 +98,9 @@ enum ScreenUtility {
     }
 
     static func topScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
-        let screens = getScreensInOrder()
+        let screens = MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
+        }
 
         if let topScreen = topScreen(from: screen, in: screens) {
             return topScreen
@@ -116,7 +121,9 @@ enum ScreenUtility {
     }
 
     static func bottomScreen(from screen: NSScreen, canRestartCycle: Bool = true) -> NSScreen? {
-        let screens = getScreensInOrder()
+        let screens = MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
+        }
 
         if let bottomScreen = bottomScreen(from: screen, in: screens) {
             return bottomScreen
@@ -139,10 +146,8 @@ enum ScreenUtility {
     // MARK: Private
 
     private static func invalidateScreenCache() {
-        cacheQueue.sync(flags: .barrier) {
-            cachedScreens = nil
-            cacheTimestamp = nil
-            cachedScreenCount = 0
+        MainActor.assumeIsolated {
+            ScreenCache.invalidateCache()
         }
     }
 
@@ -183,35 +188,8 @@ enum ScreenUtility {
     }
 
     private static func getScreensInOrder() -> [NSScreen] {
-        cacheQueue.sync {
-            let currentScreenCount = NSScreen.screens.count
-
-            if currentScreenCount != cachedScreenCount {
-                cachedScreens = nil
-                cacheTimestamp = nil
-                cachedScreenCount = currentScreenCount
-            }
-
-            if let cached = cachedScreens,
-               let timestamp = cacheTimestamp,
-               Date().timeIntervalSince(timestamp) < cacheValidityDuration,
-               currentScreenCount == cachedScreenCount {
-                return cached
-            }
-
-            let screens = NSScreen.screens
-                .sorted { screen1, screen2 in
-                    if abs(screen1.frame.origin.x - screen2.frame.origin.x) > 1.0 {
-                        return screen1.frame.origin.x < screen2.frame.origin.x
-                    }
-                    return screen1.frame.origin.y < screen2.frame.origin.y
-                }
-
-            cachedScreens = screens
-            cacheTimestamp = Date()
-            cachedScreenCount = currentScreenCount
-
-            return screens
+        MainActor.assumeIsolated {
+            ScreenCache.getScreensInOrder()
         }
     }
 
