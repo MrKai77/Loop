@@ -21,7 +21,7 @@ extension WindowDirection {
             newDirection = WindowDirection.processLeftSnap(mouseLocation, screenFrame)
         } else if mouseLocation.x > ignoredFrame.maxX {
             newDirection = WindowDirection.processRightSnap(mouseLocation, screenFrame)
-        } else if mouseLocation.y < ignoredFrame.minY, !Defaults[.disableTopSnapArea] {
+        } else if mouseLocation.y < ignoredFrame.minY {
             newDirection = WindowDirection.processTopSnap(mouseLocation, screenFrame)
         } else if mouseLocation.y > ignoredFrame.maxY {
             newDirection = WindowDirection.processBottomSnap(mouseLocation, screenFrame, currentDirection)

@@ -17,7 +17,7 @@ struct BehaviorConfigurationView: View {
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
     @Default(.animationConfiguration) var animationConfiguration
     @Default(.windowSnapping) var windowSnapping
-    @Default(.disableTopSnapArea) var disableTopSnapArea
+    @Default(.suppressMissionControlOnTopDrag) var suppressMissionControlOnTopDrag
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
     @Default(.enablePadding) var enablePadding
@@ -82,11 +82,11 @@ struct BehaviorConfigurationView: View {
             }
 
             if windowSnapping {
-                LuminareToggle(isOn: $disableTopSnapArea) {
-                    Text("Disable top snap area")
+                LuminareToggle(isOn: $suppressMissionControlOnTopDrag) {
+                    Text("Allow Mission Control on top drag")
                         .padding(.trailing, 4)
                         .luminarePopover(attachedTo: .topTrailing) {
-                            Text("Disables snapping to the menu bar area, allowing macOS features like\n\"Drag windows to top of screen to enter Mission Control\" to work.")
+                            Text("Allows mission control to work while still keeping top snap functionality.")
                                 .padding(6)
                         }
                 }
