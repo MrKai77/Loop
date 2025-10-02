@@ -5,6 +5,7 @@
 //  Created by Kai Azim on 2024-06-09.
 //
 
+import Defaults
 import Foundation
 
 extension WindowDirection {
@@ -20,7 +21,7 @@ extension WindowDirection {
             newDirection = WindowDirection.processLeftSnap(mouseLocation, screenFrame)
         } else if mouseLocation.x > ignoredFrame.maxX {
             newDirection = WindowDirection.processRightSnap(mouseLocation, screenFrame)
-        } else if mouseLocation.y < ignoredFrame.minY {
+        } else if mouseLocation.y < ignoredFrame.minY, !Defaults[.disableTopSnapArea] {
             newDirection = WindowDirection.processTopSnap(mouseLocation, screenFrame)
         } else if mouseLocation.y > ignoredFrame.maxY {
             newDirection = WindowDirection.processBottomSnap(mouseLocation, screenFrame, currentDirection)

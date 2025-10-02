@@ -39,11 +39,14 @@ class WindowDragManager {
                 }
 
                 if Defaults[.windowSnapping] {
-                    if let frame = NSScreen.main?.displayBounds,
-                       let mouseLocation = CGEvent.mouseLocation {
-                        if mouseLocation.y == frame.minY {
-                            let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
-                            CGWarpMouseCursorPosition(newOrigin)
+                    // Only warp cursor away from top edge if top snap area is enabled
+                    if !Defaults[.disableTopSnapArea] {
+                        if let frame = NSScreen.main?.displayBounds,
+                           let mouseLocation = CGEvent.mouseLocation {
+                            if mouseLocation.y == frame.minY {
+                                let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
+                                CGWarpMouseCursorPosition(newOrigin)
+                            }
                         }
                     }
 
