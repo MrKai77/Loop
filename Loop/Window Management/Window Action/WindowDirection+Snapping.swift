@@ -5,7 +5,6 @@
 //  Created by Kai Azim on 2024-06-09.
 //
 
-import Defaults
 import Foundation
 
 extension WindowDirection {
