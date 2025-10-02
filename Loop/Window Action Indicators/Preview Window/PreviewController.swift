@@ -103,7 +103,7 @@ final class PreviewController {
             screen: screen,
             isPreview: true
         )
-        .flipY(maxY: NSScreen.screens[0].frame.maxY)
+        .flipY(maxY: screen.frame.maxY)
 
         // What is the screen's frame
         print("Target frame: \(targetWindowFrame)")

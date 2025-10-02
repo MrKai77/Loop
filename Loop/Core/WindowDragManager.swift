@@ -74,7 +74,11 @@ class WindowDragManager {
     }
 
     private func setCurrentDraggingWindow() {
-        let mousePosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+        guard let currentScreen = NSScreen.screenWithMouse else {
+            return
+        }
+        
+        let mousePosition = NSEvent.mouseLocation.flipY(screen: currentScreen)
 
         do {
             guard
@@ -136,9 +140,8 @@ class WindowDragManager {
             return
         }
 
-        let mainScreen = NSScreen.screens[0]
-        let mousePosition = NSEvent.mouseLocation.flipY(screen: mainScreen)
-        let screenFrame = screen.frame.flipY(screen: mainScreen)
+        let mousePosition = NSEvent.mouseLocation.flipY(screen: screen)
+        let screenFrame = screen.frame.flipY(screen: screen)
 
         previewController.setScreen(to: screen)
 

@@ -95,7 +95,7 @@ enum WindowEngine {
 
         // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
         if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
-            resizeOwnWindow(targetFrame: targetFrame)
+            resizeOwnWindow(targetFrame: targetFrame, screen: screen)
         }
 
         let usePadding = PaddingSettings.enablePadding &&
@@ -195,7 +195,7 @@ enum WindowEngine {
         return true
     }
 
-    private static func resizeOwnWindow(targetFrame: CGRect) {
+    private static func resizeOwnWindow(targetFrame: CGRect, screen: NSScreen) {
         guard let window = NSApp.keyWindow ?? NSApp.windows.first(where: {
             $0.level.rawValue <= NSWindow.Level.floating.rawValue
         }) else {
@@ -205,7 +205,7 @@ enum WindowEngine {
 
         NSAnimationContext.runAnimationGroup { context in
             context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
-            window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
+            window.animator().setFrame(targetFrame.flipY(screen: screen), display: false)
         }
     }
 
