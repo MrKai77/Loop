@@ -202,7 +202,7 @@ struct AdvancedConfigurationView: View {
                 "Size increment",
                 value: $sizeIncrement.doubleBinding,
                 in: 5...50,
-                step: 4.5,
+                step: 5,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
                 suffix: Text("px")
