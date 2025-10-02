@@ -86,7 +86,7 @@ struct BehaviorConfigurationView: View {
                     Text("Allow Mission Control on top drag")
                         .padding(.trailing, 4)
                         .luminarePopover(attachedTo: .topTrailing) {
-                            Text("Allows mission control to work while still keeping top snap functionality.")
+                            Text("Whether to allow mission control to open when windows are dragged to the top.")
                                 .padding(6)
                         }
                 }
