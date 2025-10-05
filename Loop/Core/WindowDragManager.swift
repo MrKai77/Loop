@@ -40,7 +40,7 @@ class WindowDragManager {
 
                 if Defaults[.windowSnapping] {
                     // Only warp cursor away from top edge if top snap area is enabled
-                    if !Defaults[.suppressMissionControlOnTopDrag],
+                    if Defaults[.suppressMissionControlOnTopDrag],
                        let frame = NSScreen.main?.displayBounds,
                        let mouseLocation = CGEvent.mouseLocation,
                        mouseLocation.y == frame.minY {

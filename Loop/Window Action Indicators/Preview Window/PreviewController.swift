@@ -56,11 +56,11 @@ final class PreviewController {
         controller = nil
 
         windowController.window?.animator().alphaValue = 1
-        NSAnimationContext.runAnimationGroup({ _ in
+        NSAnimationContext.runAnimationGroup { _ in
             windowController.window?.animator().alphaValue = 0
-        }, completionHandler: {
+        } completionHandler: {
             windowController.close()
-        })
+        }
     }
 
     func setScreen(to newScreen: NSScreen) {

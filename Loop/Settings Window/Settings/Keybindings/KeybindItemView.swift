@@ -280,7 +280,7 @@ private struct CompactButtonStyle: ButtonStyle {
     @State var isHovering: Bool = false
     let cornerRadius: CGFloat = 6
 
-    public func makeBody(configuration: Configuration) -> some View {
+    func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background {
                 if configuration.isPressed || isHovering || luminareItemBeingHovered {

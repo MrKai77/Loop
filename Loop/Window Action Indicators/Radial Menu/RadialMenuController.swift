@@ -85,12 +85,12 @@ final class RadialMenuController {
         controller = nil
 
         windowController.window?.animator().alphaValue = 1
-        NSAnimationContext.runAnimationGroup({ context in
+        NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.15
             windowController.window?.animator().alphaValue = 0
-        }, completionHandler: {
+        } completionHandler: {
             windowController.close()
-        })
+        }
     }
 
     func setAction(to newAction: WindowAction) {
