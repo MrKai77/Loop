@@ -286,22 +286,22 @@ extension LoopManager {
             }
 
             if newAction.direction == .leftScreen,
-               let leftScreen = ScreenUtility.leftScreen(from: currentScreen) {
+               let leftScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .leading) {
                 newScreen = leftScreen
             }
 
             if newAction.direction == .rightScreen,
-               let rightScreen = ScreenUtility.rightScreen(from: currentScreen) {
+               let rightScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .trailing) {
                 newScreen = rightScreen
             }
 
             if newAction.direction == .topScreen,
-               let topScreen = ScreenUtility.topScreen(from: currentScreen) {
+               let topScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .top) {
                 newScreen = topScreen
             }
 
             if newAction.direction == .bottomScreen,
-               let bottomScreen = ScreenUtility.bottomScreen(from: currentScreen) {
+               let bottomScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .bottom) {
                 newScreen = bottomScreen
             }
 
