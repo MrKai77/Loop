@@ -66,9 +66,9 @@ final class MiddleClickObserver: LoopTrigger {
                 openCallback()
             }
 
-            return nil
-
+            return Unmanaged.passUnretained(event)
         } else {
+            triggerDelayTimer?.cancel()
             closeCallback()
             return Unmanaged.passUnretained(event)
         }
