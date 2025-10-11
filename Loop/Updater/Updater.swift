@@ -19,7 +19,7 @@ final class Updater: ObservableObject {
     @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
     @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
 
-    private let logger = Logger(subsystem: Bundle.main.bundleID, category: "Updater")
+    private let logger = Logger(category: "Updater")
     private var windowController: NSWindowController?
     private var includeDevelopmentVersions: Bool { Defaults[.includeDevelopmentVersions] }
 

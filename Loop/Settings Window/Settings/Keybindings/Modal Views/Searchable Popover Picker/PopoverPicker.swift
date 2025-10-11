@@ -16,7 +16,7 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
     @Binding var searchResults: [V]
 
     @State private var arrowSelection: V?
-    @State private var eventMonitor: EventMonitor?
+    @State private var eventMonitor: NSEventMonitor?
     @State private var isInitialRender = true
 
     let sections: [PickerSection<V>]

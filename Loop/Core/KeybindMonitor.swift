@@ -11,8 +11,8 @@ import Defaults
 class KeybindMonitor {
     static let shared = KeybindMonitor()
 
-    private var eventMonitor: CGEventMonitor?
-    private var flagsEventMonitor: CGEventMonitor?
+    private var eventMonitor: ActiveEventMonitor?
+    private var flagsEventMonitor: PassiveEventMonitor?
     private var pressedKeys = Set<CGKeyCode>()
     private var lastKey: CGKeyCode?
     private var lastKeyReleaseTime: Date = .now
@@ -32,12 +32,12 @@ class KeybindMonitor {
             return
         }
 
-        eventMonitor = CGEventMonitor(eventMask: [.keyDown, .keyUp]) { cgEvent in
+        eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp]) { cgEvent in
             guard
                 cgEvent.type == .keyDown || cgEvent.type == .keyUp,
                 let event = NSEvent(cgEvent: cgEvent)
             else {
-                return Unmanaged.passUnretained(cgEvent)
+                return true
             }
 
             if event.type == .keyUp {
@@ -50,14 +50,14 @@ class KeybindMonitor {
             // Special events such as the emoji key
             if self.specialEvents.contains(event.keyCode.baseKey) {
                 if self.canPassthroughSpecialEvents {
-                    return Unmanaged.passUnretained(cgEvent)
+                    return true
                 }
-                return nil
+                return false
             }
 
             // If this is a valid event, don't passthrough
             if self.performKeybind(event: event) {
-                return nil
+                return false
             }
 
             // If this wasn't, check if it was a system keybind (ex. screenshot), and
@@ -65,13 +65,13 @@ class KeybindMonitor {
             if CGKeyCode.systemKeybinds.contains(self.pressedKeys) {
                 LoopManager.shared.forceCloseLoop()
                 print("Detected system keybind, closing!")
-                return Unmanaged.passUnretained(cgEvent)
+                return true
             }
 
-            return Unmanaged.passUnretained(cgEvent)
+            return true
         }
 
-        flagsEventMonitor = CGEventMonitor(eventMask: .flagsChanged) { cgEvent in
+        flagsEventMonitor = PassiveEventMonitor(events: [.flagsChanged]) { cgEvent in
             if cgEvent.type == .flagsChanged,
                let event = NSEvent(cgEvent: cgEvent),
                !Defaults[.triggerKey].contains(where: { $0.baseModifier == event.keyCode.baseModifier }) {
@@ -82,7 +82,6 @@ class KeybindMonitor {
 
                 self.performKeybind(event: event)
             }
-            return Unmanaged.passUnretained(cgEvent)
         }
 
         eventMonitor!.start()

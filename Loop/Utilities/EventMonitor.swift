@@ -1,24 +1,44 @@
 //
-//  CGEventMonitor.swift
+//  EventMonitor.swift
 //  Loop
 //
 //  Created by Kai Azim on 2025-10-10.
 //
 
-import Cocoa
+import CoreGraphics
 import OSLog
 
-// Base class to share common functionality. DO NOT USE DIRECTLY!
-class BaseCGEventMonitor: Identifiable, Equatable {
+/// Base class to share common functionality. DO NOT USE DIRECTLY!
+class BaseEventMonitor: Identifiable, Equatable {
     let id = UUID()
-    private let logger = Logger(subsystem: Bundle.main.bundleID, category: "BaseCGEventMonitor")
+    private let logger = Logger(category: "BaseCGEventMonitor")
 
     private var eventTap: CFMachPort?
     private var runLoop: CFRunLoop?
     private var runLoopSource: CFRunLoopSource?
     private(set) var isEnabled: Bool = false
 
-    func setupRunLoopSource(eventTap: CFMachPort, runLoop: CFRunLoop) {
+    /// Prevent class from being initialized outside of this file
+    fileprivate init() {}
+
+    deinit {
+        if isEnabled {
+            stop()
+        }
+
+        // Clean up run loop source and event tap
+        if let runLoop, let runLoopSource {
+            CFRunLoopRemoveSource(runLoop, runLoopSource, .commonModes)
+            self.runLoopSource = nil
+        }
+
+        if let eventTap {
+            CFMachPortInvalidate(eventTap)
+            self.eventTap = nil
+        }
+    }
+
+    fileprivate func setupRunLoopSource(eventTap: CFMachPort, runLoop: CFRunLoop) {
         if let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0) {
             self.eventTap = eventTap
             self.runLoop = runLoop
@@ -39,7 +59,7 @@ class BaseCGEventMonitor: Identifiable, Equatable {
 
     func stop() {
         guard let eventTap else { return }
-        
+
         // swiftformat:disable:next redundantSelf
         logger.info("Stopping BaseCGEventMonitor with ID \(self.id)")
 
@@ -47,47 +67,57 @@ class BaseCGEventMonitor: Identifiable, Equatable {
         isEnabled = false
     }
 
-    deinit {
-        if isEnabled {
-            stop()
-        }
-
-        // Clean up run loop source and event tap
-        if let runLoop, let runLoopSource {
-            CFRunLoopRemoveSource(runLoop, runLoopSource, .commonModes)
-            self.runLoopSource = nil
-        }
-
-        if let eventTap {
-            CFMachPortInvalidate(eventTap)
-            self.eventTap = nil
-        }
-    }
-
-    static func == (lhs: BaseCGEventMonitor, rhs: BaseCGEventMonitor) -> Bool {
+    static func == (lhs: BaseEventMonitor, rhs: BaseEventMonitor) -> Bool {
         lhs.id == rhs.id
     }
 }
 
-// Original active monitor that can process and alter events
-class ActiveCGEventMonitor: BaseCGEventMonitor {
+/// Active event monitor that can process and alter events when needed.
+final class ActiveEventMonitor: BaseEventMonitor {
     private let eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
 
+    /// Initializes an `ActiveEventMonitor`, with a simplified callback.
+    /// - Parameters:
+    ///   - tapLocation: the location at which this event tap will be placed.
+    ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
+    ///   - events: the events to capture within this event monitor.
+    ///   - callback: A callback to process receieved events. Return `true` to pass the event along, `false` to block the event from reaching downstream receivers.
+    convenience init(
+        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        placement: CGEventTapPlacement = .tailAppendEventTap,
+        events: [CGEventType],
+        callback: @escaping (CGEvent) -> Bool
+    ) {
+        self.init(
+            tapLocation: tapLocation,
+            placement: placement,
+            events: events,
+            callback: { callback($0) ? Unmanaged.passUnretained($0) : nil }
+        )
+    }
+
+    /// Initializes an `ActiveEventMonitor`.
+    /// - Parameters:
+    ///   - tapLocation: the location at which this event tap will be placed.
+    ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
+    ///   - events: the events to capture within this event monitor.
+    ///   - callback: A callback to process and potentially alter receieved events.
     init(
-        tapLocation: CGEventTapLocation,
-        placement: CGEventTapPlacement,
-        eventMask: CGEventMask,
+        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        placement: CGEventTapPlacement = .tailAppendEventTap,
+        events: [CGEventType],
         callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?
     ) {
         self.eventCallback = callback
         super.init()
 
+        let eventsOfInterest = events.reduce(CGEventMask(0)) { $0 | (1 << $1.rawValue) }
         let callback: CGEventTapCallBack = { _, _, event, refcon in
             // Try and obtain a reference to self, but if we fail, just return the unprocessed event.
             guard let refcon else {
                 return Unmanaged.passUnretained(event)
             }
-            let observer = Unmanaged<ActiveCGEventMonitor>.fromOpaque(refcon).takeUnretainedValue()
+            let observer = Unmanaged<ActiveEventMonitor>.fromOpaque(refcon).takeUnretainedValue()
 
             // If disabled, simply pass the event through, but attempt to restart the event tap.
             if event.type == .tapDisabledByTimeout || event.type == .tapDisabledByUserInput {
@@ -103,7 +133,7 @@ class ActiveCGEventMonitor: BaseCGEventMonitor {
             tap: tapLocation,
             place: placement,
             options: .defaultTap,
-            eventsOfInterest: eventMask,
+            eventsOfInterest: eventsOfInterest,
             callback: callback,
             userInfo: userInfo
         ) {
@@ -118,26 +148,27 @@ class ActiveCGEventMonitor: BaseCGEventMonitor {
     }
 }
 
-// Passive monitor that only listens to events.
-// Callback will be called on a separate thread to keep the CFMachPort's callback fast.
-class PassiveCGEventMonitor: BaseCGEventMonitor {
+/// Passive monitor that only listens to events.
+/// Callback will be called on a separate thread to keep the CFMachPort's callback fast.
+final class PassiveEventMonitor: BaseEventMonitor {
     private let eventCallback: (CGEvent) -> ()
 
     init(
-        tapLocation: CGEventTapLocation,
-        placement: CGEventTapPlacement,
-        eventMask: CGEventMask,
+        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        placement: CGEventTapPlacement = .tailAppendEventTap,
+        events: [CGEventType],
         callback: @escaping (CGEvent) -> ()
     ) {
         self.eventCallback = callback
         super.init()
 
+        let eventsOfInterest = events.reduce(CGEventMask(0)) { $0 | (1 << $1.rawValue) }
         let callback: CGEventTapCallBack = { _, _, event, refcon in
             // Try and obtain a reference to self
             guard let refcon else {
                 return Unmanaged.passUnretained(event)
             }
-            let observer = Unmanaged<PassiveCGEventMonitor>.fromOpaque(refcon).takeUnretainedValue()
+            let observer = Unmanaged<PassiveEventMonitor>.fromOpaque(refcon).takeUnretainedValue()
 
             // If disabled, attempt to restart the event tap
             if event.type == .tapDisabledByTimeout || event.type == .tapDisabledByUserInput {
@@ -154,8 +185,8 @@ class PassiveCGEventMonitor: BaseCGEventMonitor {
         if let eventTap = CGEvent.tapCreate(
             tap: tapLocation,
             place: placement,
-            options: .listenOnly, // Use listenOnly mode
-            eventsOfInterest: eventMask,
+            options: .listenOnly,
+            eventsOfInterest: eventsOfInterest,
             callback: callback,
             userInfo: userInfo
         ) {

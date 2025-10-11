@@ -17,7 +17,7 @@ final class AccentColorController: ObservableObject {
 
     private let wallpaperProcessor = WallpaperProcessor()
     private var observationTask: Task<(), Never>?
-    private let logger = Logger(subsystem: Bundle.main.bundleID, category: "AccentColorController")
+    private let logger = Logger(category: "AccentColorController")
 
     private init() {
         self.observationTask = Task { [weak self] in

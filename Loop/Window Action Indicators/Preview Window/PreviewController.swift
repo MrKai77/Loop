@@ -13,7 +13,7 @@ final class PreviewController {
     private var controller: NSWindowController?
     private var screen: NSScreen?
     private var window: Window?
-    private let logger = Logger(subsystem: Bundle.main.bundleID, category: "PreviewController")
+    private let logger = Logger(category: "PreviewController")
 
     func open(
         screen: NSScreen,

@@ -37,8 +37,8 @@ final class LoopManager: ObservableObject {
     private var screenToResizeOn: NSScreen?
     var isShiftKeyPressed: Bool = false
 
-    private var mouseMovedEventMonitor: EventMonitor?
-    private var leftClickMonitor: EventMonitor?
+    private var mouseMovedEventMonitor: NSEventMonitor?
+    private var leftClickMonitor: PassiveEventMonitor?
 
     @Published var currentAction: WindowAction = .init(.noAction)
     private var parentCycleAction: WindowAction?
@@ -106,19 +106,17 @@ extension LoopManager {
         isShiftKeyPressed = false
         keybindMonitor.start()
 
-        leftClickMonitor = CGEventMonitor(
-            eventMask: [.leftMouseDown],
+        leftClickMonitor = PassiveEventMonitor(
+            events: [.leftMouseDown],
             callback: { [weak self] cgEvent in
                 guard let self, isLoopActive, currentAction.direction != .noAction else {
-                    return Unmanaged.passUnretained(cgEvent)
+                    return
                 }
 
                 if cgEvent.type == .leftMouseDown,
                    let parentCycleAction {
                     changeAction(parentCycleAction, disableHapticFeedback: true)
                 }
-
-                return nil
             }
         )
 

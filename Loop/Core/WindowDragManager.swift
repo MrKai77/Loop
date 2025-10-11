@@ -18,8 +18,8 @@ class WindowDragManager {
 
     private let previewController = PreviewController()
 
-    private var leftMouseDraggedMonitor: EventMonitor?
-    private var leftMouseUpMonitor: EventMonitor?
+    private var leftMouseDraggedMonitor: NSEventMonitor?
+    private var leftMouseUpMonitor: NSEventMonitor?
 
     func addObservers() {
         leftMouseDraggedMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseDragged) { event in

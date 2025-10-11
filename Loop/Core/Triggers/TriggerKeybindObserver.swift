@@ -12,13 +12,13 @@ import Defaults
 ///
 /// To achieve this, it uses a NSEventMonitor to listen for key events.
 /// It is important that a NSEventMonitor is used instead of a CGEventMonitor here, so that external key remappers (such as Karabiner or HyperKey) can take precedence.
-final class TriggerKeybindObserver: LoopTrigger {
+final class TriggerKeybindObserver: LoopTriggerObserver {
     // Callbacks
     private let openCallback: (WindowAction?) -> ()
     private let closeCallback: () -> ()
 
     // State-tracking
-    private var monitor: EventMonitor?
+    private var monitor: NSEventMonitor?
     private var currentlyPressedKeys: Set<CGKeyCode> = []
     private var lastTriggerkeyPressTime: Date = .distantPast
     private var triggerDelayTimer: Task<(), Never>?

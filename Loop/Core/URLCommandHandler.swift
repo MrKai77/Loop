@@ -140,7 +140,7 @@ final class URLCommandHandler {
     // MARK: - Properties
 
     /// Logger for debugging and error tracking
-    private let logger = Logger(subsystem: Bundle.main.bundleID, category: "URLHandler")
+    private let logger = Logger(category: "URLHandler")
 
     /// Tracks the last active window for context preservation
     private var lastActiveWindow: Window?

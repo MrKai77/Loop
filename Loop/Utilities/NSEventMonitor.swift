@@ -8,9 +8,10 @@
 import Cocoa
 import OSLog
 
+@available(*, deprecated, renamed: "PassiveEventMonitor", message: "Use a passive CGEvent monitor to receive events before it reaches the application level.")
 final class NSEventMonitor: Identifiable, Equatable {
     let id = UUID()
-    private let logger = Logger(subsystem: Bundle.main.bundleID, category: "NSEventMonitor")
+    private let logger = Logger(category: "NSEventMonitor")
 
     private var localEventMonitor: Any?
     private var globalEventMonitor: Any?
@@ -43,7 +44,7 @@ final class NSEventMonitor: Identifiable, Equatable {
 
     func start() {
         guard !isEnabled else { return }
-        
+
         // swiftformat:disable:next redundantSelf
         logger.info("Starting NSEventMonitor with ID \(self.id) and scope \(self.scope)")
 

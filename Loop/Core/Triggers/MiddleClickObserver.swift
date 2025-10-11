@@ -9,13 +9,13 @@ import AppKit
 import Defaults
 
 /// Reads middle-click events using a CGEventMonitor, and triggers Loop open/close callbacks, when appropriate.
-final class MiddleClickObserver: LoopTrigger {
+final class MiddleClickObserver: LoopTriggerObserver {
     // Callbacks
     private let openCallback: () -> ()
     private let closeCallback: () -> ()
 
     // State-tracking
-    private var monitor: EventMonitor?
+    private var monitor: PassiveEventMonitor?
     private var triggerDelayTimer: Task<(), Never>?
 
     // Defaults
@@ -39,11 +39,13 @@ final class MiddleClickObserver: LoopTrigger {
     func start() {
         stop()
 
-        monitor = CGEventMonitor(
-            eventMask: [.otherMouseDown, .otherMouseUp],
-            callback: handleOtherMouseKeypress(_:)
+        let monitor = PassiveEventMonitor(
+            events: [.otherMouseDown, .otherMouseUp],
+            callback: handleOtherMouseKeypress
         )
-        monitor?.start()
+        monitor.start()
+
+        self.monitor = monitor
     }
 
     func stop() {
@@ -53,9 +55,9 @@ final class MiddleClickObserver: LoopTrigger {
 
     // MARK: Private
 
-    private func handleOtherMouseKeypress(_ event: CGEvent) -> Unmanaged<CGEvent>? {
+    private func handleOtherMouseKeypress(_ event: CGEvent) {
         guard middleClickTriggersLoop else {
-            return Unmanaged.passUnretained(event)
+            return
         }
 
         if event.type == .otherMouseDown,
@@ -65,12 +67,9 @@ final class MiddleClickObserver: LoopTrigger {
             } else {
                 openCallback()
             }
-
-            return Unmanaged.passUnretained(event)
         } else {
             triggerDelayTimer?.cancel()
             closeCallback()
-            return Unmanaged.passUnretained(event)
         }
     }
 
