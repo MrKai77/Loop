@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol LoopTrigger {
+protocol LoopTriggerObserver {
     init(
         openCallback: @escaping (WindowAction?) -> (),
         closeCallback: @escaping () -> ()
