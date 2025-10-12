@@ -53,7 +53,6 @@ final class LoopManager: ObservableObject {
             handler: mouseMoved(_:)
         )
 
-//        triggerKeyObserver.start(scope: .all)
         keybindObserver.start()
         middleClickObserver.start()
     }
@@ -106,9 +105,6 @@ extension LoopManager {
         screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
         isShiftKeyPressed = false
 
-//        keybindObserver.start()
-//        triggerKeyObserver.stop()
-
         leftClickMonitor = PassiveEventMonitor(
             events: [.leftMouseDown],
             callback: { [weak self] cgEvent in
@@ -152,11 +148,8 @@ extension LoopManager {
 
         closeWindows()
 
-//        keybindObserver.stop()
         mouseMovedEventMonitor?.stop()
         leftClickMonitor?.stop()
-
-//        triggerKeyObserver.start()
 
         if let targetWindow,
            let screenToResizeOn,

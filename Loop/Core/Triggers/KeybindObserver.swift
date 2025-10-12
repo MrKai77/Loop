@@ -48,12 +48,10 @@ final class KeybindObserver {
 
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
 
-            if !keyCode.isModifier {
-                if event.type == .keyUp {
-                    pressedKeys.remove(keyCode.baseKey)
-                } else if event.type == .keyDown {
-                    pressedKeys.insert(keyCode.baseKey)
-                }
+            if event.type == .keyUp {
+                pressedKeys.remove(keyCode.baseKey)
+            } else if event.type == .keyDown {
+                pressedKeys.insert(keyCode.baseKey)
             }
 
             // Special events such as the emoji key

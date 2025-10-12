@@ -36,6 +36,8 @@ extension CGEventFlags {
         if contains(.maskCommand) || contains(.maskLeftCommand) { result.insert(.kVK_Command) }
         if contains(.maskRightCommand) { result.insert(.kVK_RightCommand) }
 
+        if contains(.maskSecondaryFn) { result.insert(.kVK_Function) }
+
         return result
     }
 }
