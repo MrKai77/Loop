@@ -131,7 +131,7 @@ struct Keycorder: View {
         /// Get current selected keys that aren't modifiers
         let currentKeys = selectionKeybind + [event.keyCode]
             .filter { !$0.isModifier }
-            .map(\.baseKey)
+            .map { $0.baseKey(flags: event.modifierFlags) }
 
         /// Get current modifiers that are actually pressed
         let modifierMapping: [(NSEvent.ModifierFlags, CGKeyCode)] = [

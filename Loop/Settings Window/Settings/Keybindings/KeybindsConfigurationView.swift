@@ -40,7 +40,7 @@ struct KeybindsConfigurationView: View {
 
     /// Is Shift used in the trigger key?
     private var isShiftUsedByTriggerKey: Bool {
-        triggerKey.map(\.baseKey).contains(.kVK_Shift)
+        triggerKey.map(\.baseModifier).contains(.kVK_Shift)
     }
 
     private var showMiddleClickTriggerDelayOption: Bool {

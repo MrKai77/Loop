@@ -46,8 +46,6 @@ final class KeybindObserver {
         eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
 
-            let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
-
             /// When Command + arrow keys are pressed simultaneously, we've observed that the CGEvent
             /// incorrectly has the function key flag along with `CGEventFlags(rawValue: 1 << 21)` added to the modifier flags.
             /// This is inconsistent behavior as function keys should only be set when actual function keys are pressed.
@@ -58,14 +56,16 @@ final class KeybindObserver {
                 flags.remove(.maskFunction)
             }
 
+            let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode)).baseKey(flags: .init(rawValue: UInt(flags.rawValue)))
+
             if event.type == .keyUp {
-                pressedKeys.remove(keyCode.baseKey)
+                pressedKeys.remove(keyCode)
             } else if event.type == .keyDown {
-                pressedKeys.insert(keyCode.baseKey)
+                pressedKeys.insert(keyCode)
             }
 
             // Special events such as the emoji key
-            if specialEvents.contains(keyCode.baseKey) {
+            if specialEvents.contains(keyCode) {
                 return canPassthroughSpecialEvents ? .forward : .ignore
             }
 

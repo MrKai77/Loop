@@ -212,7 +212,7 @@ extension LoopManager {
     ///   - triggeredFromScreenChange: If this action was triggered from a screen change, this will prevent cycle keybinds from infinitely changing screens.
     ///   - disableHapticFeedback: This will prevent haptic feedback.
     ///   - canAdvanceCycle: This will prevent the cycle from advancing if set to false. This is currently used when changing actions via the radial menu.
-    func changeAction(
+    private func changeAction(
         _ newAction: WindowAction,
         triggeredFromScreenChange: Bool = false,
         disableHapticFeedback: Bool = false,

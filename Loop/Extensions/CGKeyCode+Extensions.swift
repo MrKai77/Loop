@@ -144,15 +144,22 @@ extension CGKeyCode {
     static let kVK_JIS_Kana: CGKeyCode = 0x68
 
     // Some keycodes seem to alter when a modifier key (ex. the globe key) is being pressed.
-    var baseKey: CGKeyCode {
-        switch self {
-        case .kVK_ANSI_KeypadEnter: CGKeyCode.kVK_Return
-        case .kVK_LeftArrow_Globe: CGKeyCode.kVK_LeftArrow
-        case .kVK_RightArrow_Globe: CGKeyCode.kVK_RightArrow
-        case .kVK_DownArrow_Globe: CGKeyCode.kVK_DownArrow
-        case .kVK_UpArrow_Globe: CGKeyCode.kVK_UpArrow
-        default: self
+    func baseKey(flags: NSEvent.ModifierFlags) -> CGKeyCode {
+        if self == .kVK_ANSI_KeypadEnter {
+            return .kVK_Return
         }
+
+        if flags.contains(.function) {
+            switch self {
+            case .kVK_LeftArrow_Globe: return .kVK_LeftArrow
+            case .kVK_RightArrow_Globe: return .kVK_RightArrow
+            case .kVK_DownArrow_Globe: return .kVK_DownArrow
+            case .kVK_UpArrow_Globe: return .kVK_UpArrow
+            default: break
+            }
+        }
+
+        return self
     }
 
     var baseModifier: CGKeyCode {
