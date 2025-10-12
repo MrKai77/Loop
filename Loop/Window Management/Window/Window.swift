@@ -85,6 +85,11 @@ class Window {
             throw WindowError.invalidWindow
         }
 
+        if let level = windowInfo[kCGWindowLayer as String] as? Int,
+           level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
+            throw WindowError.invalidWindow
+        }
+
         let element = AXUIElementCreateApplication(pid)
         guard let windows: [AXUIElement] = try element.getValue(.windows),
               !windows.isEmpty
@@ -468,9 +473,9 @@ class Window {
     }
 }
 
-extension Window: CustomDebugStringConvertible {
-    var debugDescription: String {
+extension Window: CustomStringConvertible {
+    var description: String {
         let name = nsRunningApplication?.localizedName ?? title ?? "<unknown>"
-        return "Window(id:\(cgWindowID), name:\(name))"
+        return "Window(id: \(cgWindowID), title: \(name))"
     }
 }
