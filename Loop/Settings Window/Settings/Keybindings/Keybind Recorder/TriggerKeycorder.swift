@@ -102,7 +102,8 @@ struct TriggerKeycorder: View {
         isActive = true
 
         // So that if doesn't interfere with the key detection here
-        LoopManager.shared.triggerKeyObserver.start(scope: .global)
+//        LoopManager.shared.triggerKeyObserver.start(scope: .global)
+        print("FIXME: NOT STOPPING EVENT MONITOR!!!")
 
         eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
@@ -161,6 +162,7 @@ struct TriggerKeycorder: View {
 
         eventMonitor?.stop()
         eventMonitor = nil
-        LoopManager.shared.triggerKeyObserver.start(scope: .all)
+//        LoopManager.shared.triggerKeyObserver.start(scope: .all)
+        print("FIXME: NOT STOPPING EVENT MONITOR!!!")
     }
 }

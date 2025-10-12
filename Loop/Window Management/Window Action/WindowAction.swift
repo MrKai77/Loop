@@ -740,28 +740,3 @@ extension WindowAction {
         return croppedWindowFrame
     }
 }
-
-extension WindowAction {
-    /// Returns the respective action for the given keybind.
-    /// - Parameter keybind: the keybind to search for.
-    /// - Returns: the `WindowAction` that matches the keybind, or `nil` if no action is found.
-    static func getAction(for keybind: Set<CGKeyCode>) -> WindowAction? {
-        guard !keybind.isEmpty else { return nil }
-
-        // First do a simple lookup for exact matches
-        for item in Defaults[.keybinds] where item.keybind == keybind {
-            return item
-        }
-
-        if keybind.contains(.kVK_Shift), Defaults[.cycleBackwardsOnShiftPressed] {
-            // Reverse cycling is an option, so check for that
-            let modifiedKeybind = keybind.subtracting([.kVK_Shift])
-
-            for item in Defaults[.keybinds] where item.eligibleForReverseCycle && item.keybind == modifiedKeybind {
-                return item
-            }
-        }
-
-        return nil
-    }
-}

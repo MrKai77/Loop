@@ -76,23 +76,28 @@ class BaseEventMonitor: Identifiable, Equatable {
 final class ActiveEventMonitor: BaseEventMonitor {
     private let eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
 
+    enum EventHandling {
+        case forward
+        case ignore
+    }
+
     /// Initializes an `ActiveEventMonitor`, with a simplified callback.
     /// - Parameters:
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
-    ///   - callback: A callback to process receieved events. Return `true` to pass the event along, `false` to block the event from reaching downstream receivers.
+    ///   - callback: A callback to process receieved events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
     convenience init(
-        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
-        callback: @escaping (CGEvent) -> Bool
+        callback: @escaping (CGEvent) -> EventHandling
     ) {
         self.init(
             tapLocation: tapLocation,
             placement: placement,
             events: events,
-            callback: { callback($0) ? Unmanaged.passUnretained($0) : nil }
+            callback: { callback($0) == .forward ? Unmanaged.passUnretained($0) : nil }
         )
     }
 
