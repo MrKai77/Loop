@@ -88,7 +88,7 @@ final class ActiveEventMonitor: BaseEventMonitor {
     ///   - events: the events to capture within this event monitor.
     ///   - callback: A callback to process receieved events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
     convenience init(
-        tapLocation: CGEventTapLocation = .cgSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> EventHandling
@@ -108,7 +108,7 @@ final class ActiveEventMonitor: BaseEventMonitor {
     ///   - events: the events to capture within this event monitor.
     ///   - callback: A callback to process and potentially alter receieved events.
     init(
-        tapLocation: CGEventTapLocation = .cgSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?
@@ -144,6 +144,7 @@ final class ActiveEventMonitor: BaseEventMonitor {
         ) {
             setupRunLoopSource(eventTap: eventTap, runLoop: CFRunLoopGetCurrent())
         } else {
+            print("FAILED TO CREATE EVENT TAP")
             Unmanaged<Self>.fromOpaque(userInfo).release()
         }
     }
@@ -159,7 +160,7 @@ final class PassiveEventMonitor: BaseEventMonitor {
     private let eventCallback: (CGEvent) -> ()
 
     init(
-        tapLocation: CGEventTapLocation = .cgSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> ()

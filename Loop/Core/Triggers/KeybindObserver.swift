@@ -38,12 +38,15 @@ final class KeybindObserver {
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
+    @MainActor
     func start() {
-        guard eventMonitor == nil, AccessibilityManager.shared.isGranted else {
+        guard AccessibilityManager.shared.isGranted else {
             return
         }
 
-        eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
+        eventMonitor?.stop()
+
+        let eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
 
             /// When Command + arrow keys are pressed simultaneously, we've observed that the CGEvent
@@ -88,9 +91,11 @@ final class KeybindObserver {
             return .forward
         }
 
-        eventMonitor!.start()
+        eventMonitor.start()
+        self.eventMonitor = eventMonitor
     }
 
+    @MainActor
     func stop() {
         pressedKeys = []
         canPassthroughSpecialEvents = true

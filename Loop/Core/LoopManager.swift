@@ -61,11 +61,11 @@ final class LoopManager: ObservableObject {
                 }
 
                 if status {
-                    keybindObserver.start()
-                    middleClickObserver.start()
+                    await keybindObserver.start()
+                    await middleClickObserver.start()
                 } else {
-                    keybindObserver.stop()
-                    middleClickObserver.stop()
+                    await keybindObserver.stop()
+                    await middleClickObserver.stop()
                 }
             }
         }

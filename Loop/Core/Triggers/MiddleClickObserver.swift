@@ -36,6 +36,7 @@ final class MiddleClickObserver {
         self.closeCallback = closeCallback
     }
 
+    @MainActor
     func start() {
         stop()
 
@@ -48,6 +49,7 @@ final class MiddleClickObserver {
         self.monitor = monitor
     }
 
+    @MainActor
     func stop() {
         monitor?.stop()
         monitor = nil
