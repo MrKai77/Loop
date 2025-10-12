@@ -8,18 +8,80 @@
 import Defaults
 import SwiftUI
 
-enum AccessibilityManager {
-    static func getStatus() -> Bool {
-        // Get current state for accessibility access
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: false]
-        let status = AXIsProcessTrustedWithOptions(options)
+final class AccessibilityManager {
+    static let shared: AccessibilityManager = .init()
 
-        return status
+    private var permissionCheckerTask: Task<(), Never>!
+    private var continuations: [UUID: AsyncStream<Bool>.Continuation] = [:]
+    private(set) var isGranted: Bool
+
+    private init() {
+        self.isGranted = Self.getStatus()
+
+        // Setup permission change notification monitoring
+        self.permissionCheckerTask = Task {
+            let notifications = DistributedNotificationCenter
+                .default()
+                .notifications(named: .AXPermissionsChanged)
+
+            for await _ in notifications {
+                /// It seems like the notification is sent immediately after a state change, sometimes before the actual
+                /// reading from `AXIsProcessTrustedWithOptions` is updated.
+                /// So sleep for 250 milliseconds (this is generous, but just to ensure that the reading will be correct).
+                try? await Task.sleep(for: .milliseconds(250))
+
+                let status = Self.getStatus()
+                self.yield(status)
+            }
+        }
     }
+
+    deinit {
+        permissionCheckerTask.cancel()
+
+        let currentContinuations = Array(continuations.values)
+        continuations.removeAll()
+
+        for continuation in currentContinuations {
+            continuation.finish()
+        }
+    }
+
+    // MARK: Streaming
+
+    func stream(initial: Bool = true) -> AsyncStream<Bool> {
+        AsyncStream<Bool> { continuation in
+            let id = UUID()
+            continuations[id] = continuation
+
+            if initial {
+                continuation.yield(isGranted)
+            }
+
+            continuation.onTermination = { [weak self] _ in
+                guard let self else { return }
+                continuations[id] = nil
+            }
+        }
+    }
+
+    private func yield(_ value: Bool) {
+        guard value != isGranted else { return }
+
+        let currentContinuations = continuations.values
+
+        for continuation in currentContinuations {
+            continuation.yield(value)
+        }
+
+        isGranted = value
+    }
+
+    // MARK: Permissions Checking
 
     @discardableResult
     static func requestAccess() -> Bool {
-        if AccessibilityManager.getStatus() {
+        if getStatus() {
             return true
         }
         resetAccessibility() // In case Loop is actually in the list, but the signature is different
@@ -45,7 +107,17 @@ enum AccessibilityManager {
         return status
     }
 
+    private static func getStatus() -> Bool {
+        AXIsProcessTrusted()
+    }
+
     private static func resetAccessibility() {
         _ = try? Process.run(URL(filePath: "/usr/bin/tccutil"), arguments: ["reset", "Accessibility", Bundle.main.bundleID])
     }
+}
+
+private extension Notification.Name {
+    /// Not publicly documented, but gets sent when ANY application's AX API permission change.
+    /// From `HIServices.framework`
+    static let AXPermissionsChanged = Notification.Name(rawValue: "com.apple.accessibility.api")
 }

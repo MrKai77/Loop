@@ -20,7 +20,7 @@ final class KeybindObserver {
     private var eventMonitor: ActiveEventMonitor?
 
     // Special events only contain the globe key, as it can also be used as an emoji key.
-    private let specialEvents: [CGKeyCode] = [179]
+    private let specialEvents: [CGKeyCode] = [.kVK_Globe_Emoji]
     var canPassthroughSpecialEvents = true // If mouse has been moved
 
     /// Initializes a ``KeybindObserver``.
@@ -39,7 +39,7 @@ final class KeybindObserver {
     }
 
     func start() {
-        guard eventMonitor == nil, AccessibilityManager.getStatus() else {
+        guard eventMonitor == nil, AccessibilityManager.shared.isGranted else {
             return
         }
 

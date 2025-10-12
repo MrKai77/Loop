@@ -32,13 +32,14 @@ final class LoopManager: ObservableObject {
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
+    private var mouseMovedEventMonitor: NSEventMonitor?
+    private var leftClickMonitor: PassiveEventMonitor?
+    private var accessibilityCheckerTask: Task<(), Never>?
+
     private(set) var isLoopActive: Bool = false
     private var targetWindow: Window?
     private var screenToResizeOn: NSScreen?
     var isShiftKeyPressed: Bool = false
-
-    private var mouseMovedEventMonitor: NSEventMonitor?
-    private var leftClickMonitor: PassiveEventMonitor?
 
     @Published var currentAction: WindowAction = .init(.noAction)
     private var parentCycleAction: WindowAction?
@@ -53,8 +54,21 @@ final class LoopManager: ObservableObject {
             handler: mouseMoved(_:)
         )
 
-        keybindObserver.start()
-        middleClickObserver.start()
+        accessibilityCheckerTask = Task(priority: .background) { [weak self] in
+            for await status in AccessibilityManager.shared.stream(initial: true) {
+                guard let self, !Task.isCancelled else {
+                    return
+                }
+
+                if status {
+                    keybindObserver.start()
+                    middleClickObserver.start()
+                } else {
+                    keybindObserver.stop()
+                    middleClickObserver.stop()
+                }
+            }
+        }
     }
 }
 
@@ -62,7 +76,7 @@ final class LoopManager: ObservableObject {
 
 extension LoopManager {
     private func openLoop(startingAction: WindowAction?) {
-        guard AccessibilityManager.getStatus() else {
+        guard AccessibilityManager.shared.isGranted else {
             return
         }
 

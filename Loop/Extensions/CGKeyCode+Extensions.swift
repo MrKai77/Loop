@@ -133,6 +133,8 @@ extension CGKeyCode {
     static let kVK_DownArrow_Globe: CGKeyCode = 0x79
     static let kVK_UpArrow_Globe: CGKeyCode = 0x74
 
+    static let kVK_Globe_Emoji: CGKeyCode = 0xB3
+
     // ISO keyboards only
     static let kVK_ISO_Section: CGKeyCode = 0x0A
 
@@ -155,6 +157,7 @@ extension CGKeyCode {
             case .kVK_RightArrow_Globe: return .kVK_RightArrow
             case .kVK_DownArrow_Globe: return .kVK_DownArrow
             case .kVK_UpArrow_Globe: return .kVK_UpArrow
+            case .kVK_ForwardDelete: return .kVK_Delete
             default: break
             }
         }

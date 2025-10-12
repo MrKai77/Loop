@@ -108,7 +108,7 @@ final class ActiveEventMonitor: BaseEventMonitor {
     ///   - events: the events to capture within this event monitor.
     ///   - callback: A callback to process and potentially alter receieved events.
     init(
-        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?
@@ -159,7 +159,7 @@ final class PassiveEventMonitor: BaseEventMonitor {
     private let eventCallback: (CGEvent) -> ()
 
     init(
-        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> ()

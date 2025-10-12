@@ -16,7 +16,7 @@ class AdvancedConfigurationModel: ObservableObject {
     @Published private(set) var didResetSuccessfullyAlert = false
 
     @Published private(set) var isLowPowerModeEnabled: Bool = ProcessInfo.processInfo.isLowPowerModeEnabled
-    @Published private(set) var isAccessibilityAccessGranted = AccessibilityManager.getStatus()
+    @Published private(set) var isAccessibilityAccessGranted = AccessibilityManager.shared.isGranted
 
     private var lowPowerModeCheckerTask: Task<(), Never>?
     private var accessibilityCheckerTask: Task<(), Never>?
@@ -49,16 +49,10 @@ class AdvancedConfigurationModel: ObservableObject {
 
     private func trackAccessibilityStatus() {
         accessibilityCheckerTask = Task(priority: .background) {
-            while !Task.isCancelled {
-                let isAccessibilityGranted = AccessibilityManager.getStatus()
-
-                if isAccessibilityAccessGranted != isAccessibilityGranted {
-                    await MainActor.run {
-                        isAccessibilityAccessGranted = isAccessibilityGranted
-                    }
+            for await status in AccessibilityManager.shared.stream(initial: true) {
+                await MainActor.run {
+                    isAccessibilityAccessGranted = status
                 }
-
-                try? await Task.sleep(for: .seconds(1))
             }
         }
     }
