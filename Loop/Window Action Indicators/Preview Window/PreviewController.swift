@@ -97,7 +97,7 @@ final class PreviewController {
             return
         }
 
-        let targetWindowFrame = newAction.getFrame(
+        var targetWindowFrame = newAction.getFrame(
             window: window,
             bounds: screen.safeScreenFrame,
             screen: screen,
@@ -129,9 +129,9 @@ final class PreviewController {
                 let centerFrame: NSRect = .init(origin: mousePosition, size: .zero)
                 windowController.window?.setFrame(centerFrame, display: true)
             case .actionCenter:
-                // Center the preview window on the action's target frame (at 85% size)
-                let previewWidth = targetWindowFrame.width * 0.85
-                let previewHeight = targetWindowFrame.height * 0.85
+                // Center the preview window on the action's target frame (at 80% size)
+                let previewWidth = targetWindowFrame.width * 0.8
+                let previewHeight = targetWindowFrame.height * 0.8
 
                 let centerFrame: NSRect = .init(
                     x: targetWindowFrame.center.x - (previewWidth / 2),
@@ -142,6 +142,19 @@ final class PreviewController {
 
                 windowController.window?.setFrame(centerFrame, display: true)
             }
+        }
+
+        if !isCurrentlyTransparent, shouldBecomeTransparent, let currentFrame = windowController.window?.frame {
+            // Center the preview window on the last target frame (at 80% size)
+            let scaledWidth = currentFrame.width * 0.8
+            let scaledHeight = currentFrame.height * 0.8
+
+            targetWindowFrame = .init(
+                x: currentFrame.center.x - (scaledWidth / 2),
+                y: currentFrame.center.y - (scaledHeight / 2),
+                width: scaledWidth,
+                height: scaledHeight
+            )
         }
 
         if let animation = Defaults[.animationConfiguration].previewTimingFunction {
