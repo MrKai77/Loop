@@ -48,6 +48,16 @@ final class KeybindObserver {
 
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
 
+            /// When Command + arrow keys are pressed simultaneously, we've observed that the CGEvent
+            /// incorrectly has the function key flag along with `CGEventFlags(rawValue: 1 << 21)` added to the modifier flags.
+            /// This is inconsistent behavior as function keys should only be set when actual function keys are pressed.
+            /// The following code detects this specific scenario and removes the set function flag.
+            var flags = event.flags
+            let commandArrowKeyFlag = CGEventFlags(rawValue: 1 << 21)
+            if flags.contains(commandArrowKeyFlag) {
+                flags.remove(.maskFunction)
+            }
+
             if event.type == .keyUp {
                 pressedKeys.remove(keyCode.baseKey)
             } else if event.type == .keyDown {
@@ -60,7 +70,11 @@ final class KeybindObserver {
             }
 
             // If this is a valid event, don't passthrough
-            if performKeybind(event: event) {
+            if performKeybind(
+                type: event.type,
+                isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
+                flags: flags
+            ) {
                 return .ignore
             }
 
@@ -85,11 +99,10 @@ final class KeybindObserver {
         eventMonitor = nil
     }
 
-    private func performKeybind(event: CGEvent) -> Bool {
-        let isRepeatEvent = event.getIntegerValueField(.keyboardEventAutorepeat) == 1
+    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags) -> Bool {
         let triggerKey: Set<CGKeyCode> = Defaults[.triggerKey]
 
-        let pressedKeys: Set<CGKeyCode> = pressedKeys.union(event.flags.keyCodes)
+        let pressedKeys: Set<CGKeyCode> = pressedKeys.union(flags.keyCodes)
         let actionKeys: Set<CGKeyCode> = pressedKeys.subtracting(triggerKey)
         let containsTrigger = pressedKeys.isSuperset(of: triggerKey)
 
@@ -102,7 +115,7 @@ final class KeybindObserver {
                 return true
             }
 
-            if event.type == .keyUp {
+            if type == .keyUp {
                 // Ignore key-up events occurring within 100ms of each other.
                 // Prevents direction changes when rapidly (normally) releasing multiple pressed keys.
                 if abs(lastKeyReleaseTime.timeIntervalSinceNow) > 0.1 {
@@ -112,14 +125,14 @@ final class KeybindObserver {
                 return true
             }
 
-            if event.type != .keyDown, !containsTrigger {
+            if type != .keyDown, !containsTrigger {
                 closeCallback(false)
                 return true
             }
         }
 
-        if event.type != .keyUp, containsTrigger {
-            if let action = WindowActionCache.shared[actionKeys], !isRepeatEvent || action.willManipulateExistingWindowFrame {
+        if type != .keyUp, containsTrigger {
+            if let action = WindowActionCache.shared[actionKeys], !isARepeat || action.willManipulateExistingWindowFrame {
                 openCallback(action)
             } else {
                 openCallback(nil)
