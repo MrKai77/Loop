@@ -129,8 +129,17 @@ final class PreviewController {
                 let centerFrame: NSRect = .init(origin: mousePosition, size: .zero)
                 windowController.window?.setFrame(centerFrame, display: true)
             case .actionCenter:
-                // Center the preview window on the action's target frame
-                let centerFrame: NSRect = .init(origin: targetWindowFrame.center, size: .zero)
+                // Center the preview window on the action's target frame (at 85% size)
+                let previewWidth = targetWindowFrame.width * 0.85
+                let previewHeight = targetWindowFrame.height * 0.85
+
+                let centerFrame: NSRect = .init(
+                    x: targetWindowFrame.center.x - (previewWidth / 2),
+                    y: targetWindowFrame.center.y - (previewHeight / 2),
+                    width: previewWidth,
+                    height: previewHeight
+                )
+
                 windowController.window?.setFrame(centerFrame, display: true)
             }
         }

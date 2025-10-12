@@ -83,7 +83,7 @@ enum Tab: LuminareTabItem, CaseIterable {
     static let loop: [Tab] = [.advanced, .excludedApps, .about]
 }
 
-class LuminareManager: NSWindowController, ObservableObject {
+final class LuminareManager: NSWindowController, ObservableObject {
     static let shared = LuminareManager()
 
     var luminare: LuminareWindow?

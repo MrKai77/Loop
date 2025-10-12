@@ -46,17 +46,15 @@ extension AXUIElement {
         return isSettable.boolValue
     }
 
-    func getElementAtPosition(_: CGPoint) throws -> AXUIElement? {
-//        var element: AXUIElement?
-//        let error = AXUIElementCopyElementAtPosition(self, Float(position.x), Float(position.y), &element)
-//
-//        guard error == .success else {
-//            throw error
-//        }
-//
-//        return element
+    func getElementAtPosition(_ position: CGPoint) throws -> AXUIElement? {
+        var element: AXUIElement?
+        let error = AXUIElementCopyElementAtPosition(self, Float(position.x), Float(position.y), &element)
 
-        nil
+        guard error == .success else {
+            throw error
+        }
+
+        return element
     }
 
     // Only used when experimenting

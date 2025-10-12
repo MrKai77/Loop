@@ -8,7 +8,8 @@
 import Defaults
 import SwiftUI
 
-class WindowDragManager {
+@MainActor
+final class WindowDragManager {
     static let shared = WindowDragManager()
     private init() {}
 
@@ -21,18 +22,35 @@ class WindowDragManager {
     private var leftMouseDraggedMonitor: PassiveEventMonitor?
     private var leftMouseUpMonitor: PassiveEventMonitor?
 
+    private var determineDraggedWindowTask: Task<(), Never>?
+
     func addObservers() {
-        leftMouseDraggedMonitor = PassiveEventMonitor(events: [.leftMouseDragged]) { _ in
+        leftMouseDraggedMonitor = PassiveEventMonitor(
+            events: [.leftMouseDragged],
+            callback: leftMouseDragged
+        )
+
+        leftMouseUpMonitor = PassiveEventMonitor(
+            events: [.leftMouseUp],
+            callback: leftMouseUp
+        )
+
+        leftMouseDraggedMonitor!.start()
+        leftMouseUpMonitor!.start()
+    }
+
+    private func leftMouseDragged(_: CGEvent) {
+        Task { @MainActor in
             // Process window (only ONCE during a window drag)
-            if self.draggingWindow == nil {
-                self.setCurrentDraggingWindow()
+            if draggingWindow == nil {
+                setCurrentDraggingWindow()
             }
 
-            if let window = self.draggingWindow,
-               let initialFrame = self.initialWindowFrame,
-               self.hasWindowMoved(window.frame, initialFrame) {
+            if let window = draggingWindow,
+               let initialFrame = initialWindowFrame,
+               hasWindowMoved(window.frame, initialFrame) {
                 if Defaults[.restoreWindowFrameOnDrag] {
-                    self.restoreInitialWindowSize(window)
+                    restoreInitialWindowSize(window)
                 } else {
                     StashManager.shared.onWindowDragged(window.cgWindowID)
                     WindowRecords.eraseRecords(for: window)
@@ -48,43 +66,50 @@ class WindowDragManager {
                         CGWarpMouseCursorPosition(newOrigin)
                     }
 
-                    self.getWindowSnapDirection()
+                    processSnapAction()
                 }
             }
         }
+    }
 
-        leftMouseUpMonitor = PassiveEventMonitor(events: [.leftMouseUp]) { _ in
-            if let window = self.draggingWindow,
-               let initialFrame = self.initialWindowFrame,
-               self.hasWindowMoved(window.frame, initialFrame) {
+    private func leftMouseUp(_: CGEvent) {
+        Task { @MainActor in
+            if let window = draggingWindow,
+               let initialFrame = initialWindowFrame,
+               hasWindowMoved(window.frame, initialFrame) {
                 if Defaults[.windowSnapping] {
-                    self.attemptWindowSnap(window)
+                    attemptWindowSnap(window)
                 }
             }
 
-            self.previewController.close()
-            self.draggingWindow = nil
+            previewController.close()
+            draggingWindow = nil
         }
-
-        leftMouseDraggedMonitor!.start()
-        leftMouseUpMonitor!.start()
     }
 
     private func setCurrentDraggingWindow() {
-        let mousePosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+        if determineDraggedWindowTask != nil { return }
 
-        do {
-            guard
-                let draggingWindow = try WindowUtility.windowAtPosition(mousePosition),
-                !draggingWindow.isAppExcluded
-            else {
-                return
+        determineDraggedWindowTask = Task {
+            let mousePosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+
+            do {
+                guard
+                    let draggingWindow = try WindowUtility.windowAtPosition(mousePosition),
+                    !draggingWindow.isAppExcluded
+                else {
+                    return
+                }
+
+                self.draggingWindow = draggingWindow
+                initialWindowFrame = draggingWindow.frame
+
+                print("Determined window being dragged: \(draggingWindow)")
+            } catch {
+                // print("Failed to get window at position: \(error.localizedDescription)")
             }
 
-            self.draggingWindow = draggingWindow
-            initialWindowFrame = draggingWindow.frame
-        } catch {
-            // print("Failed to get window at position: \(error.localizedDescription)")
+            determineDraggedWindowTask = nil
         }
     }
 
@@ -128,7 +153,7 @@ class WindowDragManager {
         WindowRecords.eraseRecords(for: window)
     }
 
-    private func getWindowSnapDirection() {
+    private func processSnapAction() {
         guard let screen = NSScreen.screenWithMouse else {
             return
         }
@@ -156,7 +181,7 @@ class WindowDragManager {
                 await AccentColorController.shared.refresh()
             }
 
-            direction = WindowDirection.processSnap(
+            direction = WindowDirection.getSnapDirection(
                 mouseLocation: mousePosition,
                 currentDirection: direction,
                 screenFrame: screenFrame,

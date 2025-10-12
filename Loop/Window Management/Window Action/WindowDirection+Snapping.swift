@@ -8,7 +8,7 @@
 import Foundation
 
 extension WindowDirection {
-    static func processSnap(
+    static func getSnapDirection(
         mouseLocation: CGPoint,
         currentDirection: WindowDirection,
         screenFrame: CGRect,
@@ -29,7 +29,7 @@ extension WindowDirection {
         return newDirection
     }
 
-    static func processLeftSnap(
+    private static func processLeftSnap(
         _ mouseLocation: CGPoint,
         _ screenFrame: CGRect
     ) -> WindowDirection {
@@ -46,7 +46,7 @@ extension WindowDirection {
         return .leftHalf
     }
 
-    static func processRightSnap(
+    private static func processRightSnap(
         _ mouseLocation: CGPoint,
         _ screenFrame: CGRect
     ) -> WindowDirection {
@@ -63,7 +63,7 @@ extension WindowDirection {
         return .rightHalf
     }
 
-    static func processTopSnap(
+    private static func processTopSnap(
         _ mouseLocation: CGPoint,
         _ screenFrame: CGRect
     ) -> WindowDirection {
@@ -77,7 +77,7 @@ extension WindowDirection {
         return .maximize
     }
 
-    static func processBottomSnap(
+    private static func processBottomSnap(
         _ mouseLocation: CGPoint,
         _ screenFrame: CGRect,
         _ currentDirection: WindowDirection

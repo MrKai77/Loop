@@ -9,6 +9,7 @@ import Defaults
 import OSLog
 import SwiftUI
 
+@MainActor
 final class AccentColorController: ObservableObject {
     static let shared = AccentColorController()
 
@@ -44,7 +45,6 @@ final class AccentColorController: ObservableObject {
         observationTask?.cancel()
     }
 
-    @MainActor
     func refresh() async {
         switch Defaults[.accentColorMode] {
         case .system:
