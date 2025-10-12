@@ -22,7 +22,7 @@ struct Keycorder: View {
     @State private var selectionKeybind: Set<CGKeyCode>
     @Binding private var direction: WindowDirection
 
-    @State private var eventMonitor: NSEventMonitor?
+    @State private var eventMonitor: LocalEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var shouldError: Bool = false
     @State private var errorMessage: LocalizedStringKey = .init(String("")) // We use Text here for String interpolation with images
@@ -103,7 +103,7 @@ struct Keycorder: View {
     func startObservingKeys() {
         selectionKeybind = []
         isActive = true
-        eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .keyUp]) { event in
+        eventMonitor = LocalEventMonitor(events: [.keyDown, .keyUp]) { event in
             // Handle regular key presses first
             if event.type == .keyDown, !event.isARepeat {
                 if event.keyCode == .kVK_Escape {

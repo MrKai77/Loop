@@ -18,11 +18,11 @@ class WindowDragManager {
 
     private let previewController = PreviewController()
 
-    private var leftMouseDraggedMonitor: NSEventMonitor?
-    private var leftMouseUpMonitor: NSEventMonitor?
+    private var leftMouseDraggedMonitor: PassiveEventMonitor?
+    private var leftMouseUpMonitor: PassiveEventMonitor?
 
     func addObservers() {
-        leftMouseDraggedMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseDragged) { event in
+        leftMouseDraggedMonitor = PassiveEventMonitor(events: [.leftMouseDragged]) { _ in
             // Process window (only ONCE during a window drag)
             if self.draggingWindow == nil {
                 self.setCurrentDraggingWindow()
@@ -51,11 +51,9 @@ class WindowDragManager {
                     self.getWindowSnapDirection()
                 }
             }
-
-            return event
         }
 
-        leftMouseUpMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseUp) { event in
+        leftMouseUpMonitor = PassiveEventMonitor(events: [.leftMouseUp]) { _ in
             if let window = self.draggingWindow,
                let initialFrame = self.initialWindowFrame,
                self.hasWindowMoved(window.frame, initialFrame) {
@@ -66,8 +64,6 @@ class WindowDragManager {
 
             self.previewController.close()
             self.draggingWindow = nil
-
-            return event
         }
 
         leftMouseDraggedMonitor!.start()

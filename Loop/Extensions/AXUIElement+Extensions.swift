@@ -46,15 +46,17 @@ extension AXUIElement {
         return isSettable.boolValue
     }
 
-    func getElementAtPosition(_ position: CGPoint) throws -> AXUIElement? {
-        var element: AXUIElement?
-        let error = AXUIElementCopyElementAtPosition(self, Float(position.x), Float(position.y), &element)
+    func getElementAtPosition(_: CGPoint) throws -> AXUIElement? {
+//        var element: AXUIElement?
+//        let error = AXUIElementCopyElementAtPosition(self, Float(position.x), Float(position.y), &element)
+//
+//        guard error == .success else {
+//            throw error
+//        }
+//
+//        return element
 
-        guard error == .success else {
-            throw error
-        }
-
-        return element
+        nil
     }
 
     // Only used when experimenting
@@ -162,6 +164,8 @@ extension AXUIElement {
     }
 }
 
+extension AXError: @retroactive _BridgedNSError {}
+extension AXError: @retroactive _ObjectiveCBridgeableError {}
 extension AXError: Swift.Error {}
 
 extension NSAccessibility.Attribute {

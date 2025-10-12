@@ -16,7 +16,7 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
     @Binding var searchResults: [V]
 
     @State private var arrowSelection: V?
-    @State private var eventMonitor: NSEventMonitor?
+    @State private var eventMonitor: LocalEventMonitor?
     @State private var isInitialRender = true
 
     let sections: [PickerSection<V>]
@@ -103,7 +103,7 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
     }
 
     private func setupEventMonitor(reader: ScrollViewProxy) {
-        eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown]) { event in
+        eventMonitor = LocalEventMonitor(events: [.keyDown]) { event in
             switch event.keyCode {
             case .kVK_DownArrow:
                 updateArrowSelection(increment: true, reader: reader)

@@ -10,7 +10,7 @@ import Luminare
 import SwiftUI
 
 class KeybindsConfigurationModel: ObservableObject {
-    @Published var currentEventMonitor: NSEventMonitor?
+    @Published var currentEventMonitor: LocalEventMonitor?
     @Published var selectedKeybinds = Set<WindowAction>()
 }
 

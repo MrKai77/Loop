@@ -32,7 +32,7 @@ final class LoopManager: ObservableObject {
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
-    private var mouseMovedEventMonitor: NSEventMonitor?
+    private var mouseMovedEventMonitor: PassiveEventMonitor?
     private var leftClickMonitor: PassiveEventMonitor?
     private var accessibilityCheckerTask: Task<(), Never>?
 
@@ -48,10 +48,9 @@ final class LoopManager: ObservableObject {
     private var distanceToMouse: CGFloat = 0
 
     func start() {
-        mouseMovedEventMonitor = NSEventMonitor(
-            scope: .all,
-            eventMask: [.mouseMoved, .otherMouseDragged],
-            handler: mouseMoved(_:)
+        mouseMovedEventMonitor = PassiveEventMonitor(
+            events: [.mouseMoved, .otherMouseDragged],
+            callback: mouseMoved
         )
 
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
@@ -446,8 +445,8 @@ extension LoopManager {
 // MARK: - Radial Menu
 
 private extension LoopManager {
-    func mouseMoved(_: NSEvent) -> NSEvent? {
-        guard isLoopActive else { return nil }
+    func mouseMoved(cgEvent _: CGEvent) {
+        guard isLoopActive else { return }
         keybindObserver.canPassthroughSpecialEvents = false
 
         let noActionDistance: CGFloat = 10
@@ -458,7 +457,7 @@ private extension LoopManager {
 
         // Return if the mouse didn't move
         if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
-            return nil
+            return
         }
 
         // Get angle & distance to mouse
@@ -485,7 +484,5 @@ private extension LoopManager {
         }
 
         changeAction(resizeDirection, canAdvanceCycle: false)
-
-        return nil
     }
 }

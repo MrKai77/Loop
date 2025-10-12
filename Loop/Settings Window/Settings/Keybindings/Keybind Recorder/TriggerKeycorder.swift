@@ -17,7 +17,7 @@ struct TriggerKeycorder: View {
     @Binding private var validCurrentKey: Set<CGKeyCode>
     @State private var selectionKey: Set<CGKeyCode>
 
-    @State private var eventMonitor: NSEventMonitor?
+    @State private var eventMonitor: LocalEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
@@ -104,7 +104,7 @@ struct TriggerKeycorder: View {
         // So that if doesn't interfere with the key detection here
         LoopManager.shared.keybindObserver.stop()
 
-        eventMonitor = NSEventMonitor(scope: .local, eventMask: [.keyDown, .flagsChanged]) { event in
+        eventMonitor = LocalEventMonitor(events: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
             if event.type == .keyDown, event.keyCode == CGKeyCode.kVK_Escape {
                 finishedObservingKeys(wasForced: true)

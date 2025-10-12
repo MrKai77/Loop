@@ -69,7 +69,7 @@ final class StashManager {
     }()
 
     private var lastRevealTime: [CGWindowID: Date] = [:]
-    private var mouseMonitor: NSEventMonitor?
+    private var mouseMonitor: PassiveEventMonitor?
     private var mouseMoveWorkItem: DispatchWorkItem?
 
     // MARK: - Public methods
@@ -317,10 +317,11 @@ private extension StashManager {
 
         print("StashManager: Listening for mouse moved events…")
 
-        mouseMonitor = NSEventMonitor(scope: .all, eventMask: .mouseMoved) { [weak self] _ in
-            self?.handleMouseMoved()
-            return nil
-        }
+        mouseMonitor = PassiveEventMonitor(
+            events: [.mouseMoved],
+            callback: handleMouseMoved
+        )
+
         mouseMonitor?.start()
     }
 
@@ -334,7 +335,7 @@ private extension StashManager {
     }
 
     /// Handles mouse movement events with a debounce to avoid excessive processing.
-    func handleMouseMoved() {
+    func handleMouseMoved(cgEvent _: CGEvent) {
         mouseMoveWorkItem?.cancel()
         let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
         mouseMoveWorkItem = workItem
