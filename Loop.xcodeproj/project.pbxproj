@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A28A1DF2E9B2DBF0018E78D /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28A1DE2E9B2DBF0018E78D /* AsyncAlgorithms */; };
 		2A70158F2E399270002F6C32 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A70158E2E399270002F6C32 /* Luminare */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = A8DCC97A2980D5F500D41065 /* Defaults */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -49,7 +48,6 @@
 				2A70158F2E399270002F6C32 /* Luminare in Frameworks */,
 				A8DCC97B2980D5F500D41065 /* Defaults in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
-				2A28A1DF2E9B2DBF0018E78D /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,7 +108,6 @@
 			packageProductDependencies = (
 				A8DCC97A2980D5F500D41065 /* Defaults */,
 				2A70158E2E399270002F6C32 /* Luminare */,
-				2A28A1DE2E9B2DBF0018E78D /* AsyncAlgorithms */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -153,7 +150,6 @@
 			packageReferences = (
 				A8DCC9792980D5F500D41065 /* XCRemoteSwiftPackageReference "Defaults" */,
 				2A70158D2E399270002F6C32 /* XCRemoteSwiftPackageReference "luminare" */,
-				2A28A1DD2E9B2DBF0018E78D /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -436,14 +432,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2A28A1DD2E9B2DBF0018E78D /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-async-algorithms.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.4;
-			};
-		};
 		2A70158D2E399270002F6C32 /* XCRemoteSwiftPackageReference "luminare" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mrkai77/luminare";
@@ -463,11 +451,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2A28A1DE2E9B2DBF0018E78D /* AsyncAlgorithms */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2A28A1DD2E9B2DBF0018E78D /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
-			productName = AsyncAlgorithms;
-		};
 		2A70158E2E399270002F6C32 /* Luminare */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2A70158D2E399270002F6C32 /* XCRemoteSwiftPackageReference "luminare" */;

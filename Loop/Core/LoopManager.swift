@@ -18,14 +18,14 @@ final class LoopManager: ObservableObject {
     static var sidesToAdjust: Edge.Set?
     static var lastTargetFrame: CGRect = .zero
 
-    private let keybindMonitor = KeybindMonitor()
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
-//    private(set) lazy var triggerKeyObserver = TriggerKeybindObserver(
-//        openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
-//        closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
-//    )
+    private(set) lazy var keybindObserver = KeybindObserver(
+        openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
+        closeCallback: { [weak self] in self?.closeLoop(forceClose: $0) },
+        checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
+    )
 
     private(set) lazy var middleClickObserver = MiddleClickObserver(
         openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
@@ -54,7 +54,7 @@ final class LoopManager: ObservableObject {
         )
 
 //        triggerKeyObserver.start(scope: .all)
-        keybindMonitor.start()
+        keybindObserver.start()
         middleClickObserver.start()
     }
 }
@@ -62,7 +62,7 @@ final class LoopManager: ObservableObject {
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    func openLoop(startingAction: WindowAction?) {
+    private func openLoop(startingAction: WindowAction?) {
         guard AccessibilityManager.getStatus() else {
             return
         }
@@ -72,7 +72,7 @@ extension LoopManager {
             /// This happens because Karabiner-Elements sends modifier keys and other keys as separate, rapid events.
             /// As a result, Loop might be opened before the full keybind is pressed.
             /// In these cases, we can simply update the action instead of reopening the Loop.
-            /// Enabling keybindMonitor was considered as a workaround, but it doesn't start quickly enough.
+            /// Enabling keybindObserver was considered as a workaround, but it doesn't start quickly enough.
             /// Although Karabiner-Elements sends key events separately, they arrive in quick succession.
             if let startingAction {
                 changeAction(startingAction, disableHapticFeedback: true)
@@ -106,7 +106,7 @@ extension LoopManager {
         screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
         isShiftKeyPressed = false
 
-//        keybindMonitor.start()
+//        keybindObserver.start()
 //        triggerKeyObserver.stop()
 
         leftClickMonitor = PassiveEventMonitor(
@@ -147,17 +147,12 @@ extension LoopManager {
         }
     }
 
-    // Internal method to force close the loop without applying changes
-    func forceCloseLoop() {
-        closeLoop(forceClose: true)
-    }
-
-    func closeLoop(forceClose: Bool) {
+    private func closeLoop(forceClose: Bool) {
         guard isLoopActive == true else { return }
 
         closeWindows()
 
-//        keybindMonitor.stop()
+//        keybindObserver.stop()
         mouseMovedEventMonitor?.stop()
         leftClickMonitor?.stop()
 
@@ -446,7 +441,7 @@ extension LoopManager {
 private extension LoopManager {
     func mouseMoved(_: NSEvent) -> NSEvent? {
         guard isLoopActive else { return nil }
-        keybindMonitor.canPassthroughSpecialEvents = false
+        keybindObserver.canPassthroughSpecialEvents = false
 
         let noActionDistance: CGFloat = 10
 

@@ -6,7 +6,6 @@
 //
 
 import AppKit
-import AsyncAlgorithms
 import Defaults
 import OSLog
 
@@ -14,29 +13,31 @@ final class WindowActionCache {
     static let shared: WindowActionCache = .init()
 
     private var actionsByKeybind: [Set<CGKeyCode>: WindowAction] = [:]
-    private var regenerationObserverTask: Task<(), Never>?
-    private let logger = Logger(category: "WindowActionFetcher")
+    private var observationTask: Task<(), Never>?
+    private let logger = Logger(category: "WindowActionCache")
 
     private init() {
-        regenerateCache()
+        self.observationTask = Task { [weak self] in
+            let updates = Defaults.updates(
+                .keybinds,
+                .cycleBackwardsOnShiftPressed
+            )
 
-        self.regenerationObserverTask = Task(priority: .background) {
-            let keybindsStream = Defaults.updates(.keybinds)
-            let cycleBackwardsOnShiftPressedStream = Defaults.updates(.cycleBackwardsOnShiftPressed)
-            let combinedStream = zip(keybindsStream, cycleBackwardsOnShiftPressedStream)
+            for await _ in updates {
+                guard
+                    !Task.isCancelled,
+                    let self
+                else {
+                    break
+                }
 
-            for await _ in combinedStream {
                 regenerateCache()
             }
         }
     }
 
     subscript(_ keybind: Set<CGKeyCode>) -> WindowAction? {
-        if actionsByKeybind.isEmpty {
-            regenerateCache()
-        }
-
-        return actionsByKeybind[keybind]
+        actionsByKeybind[keybind]
     }
 
     private func regenerateCache() {

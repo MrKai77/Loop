@@ -304,20 +304,17 @@ extension CGKeyCode {
             return []
         }
 
-        return shortcuts.compactMap {
+        return shortcuts.compactMap { shortcut -> Set<CGKeyCode>? in
             guard
-                ($0[kHISymbolicHotKeyEnabled] as? Bool) == true,
-                let carbonKeyCode = $0[kHISymbolicHotKeyCode] as? CGKeyCode,
-                let carbonModifiers = $0[kHISymbolicHotKeyModifiers] as? UInt
+                (shortcut[kHISymbolicHotKeyEnabled] as? Bool) == true,
+                let carbonKeyCode = shortcut[kHISymbolicHotKeyCode] as? CGKeyCode,
+                let carbonModifiers = shortcut[kHISymbolicHotKeyModifiers] as? UInt64
             else {
                 return nil
             }
 
-            let modifiers = NSEvent.ModifierFlags(rawValue: carbonModifiers)
-            var result = modifiers.convertToCGKeyCode()
-            result.insert(carbonKeyCode)
-
-            return result
+            let modifiers = CGEventFlags(rawValue: carbonModifiers).keyCodes
+            return modifiers.union([carbonKeyCode])
         }
     }
 

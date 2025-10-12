@@ -1,5 +1,5 @@
 //
-//  KeybindMonitor.swift
+//  KeybindObserver.swift
 //  Loop
 //
 //  Created by Kai Azim on 2023-06-18.
@@ -8,24 +8,43 @@
 import Cocoa
 import Defaults
 
-final class KeybindMonitor {
-    private var eventMonitor: ActiveEventMonitor?
+final class KeybindObserver {
+    // Callbacks
+    private let openCallback: (WindowAction?) -> ()
+    private let closeCallback: (Bool) -> ()
+    private let checkIfLoopOpen: () -> Bool
 
+    // State-tracking
     private var pressedKeys: Set<CGKeyCode> = []
     private var lastKeyReleaseTime: Date = .now
+    private var eventMonitor: ActiveEventMonitor?
 
-    // Currently, special events only contain the globe key, as it can also be used as a emoji key.
+    // Special events only contain the globe key, as it can also be used as an emoji key.
     private let specialEvents: [CGKeyCode] = [179]
     var canPassthroughSpecialEvents = true // If mouse has been moved
+
+    /// Initializes a ``KeybindObserver``.
+    /// - Parameters:
+    ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated.
+    ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
+    init(
+        openCallback: @escaping (WindowAction?) -> (),
+        closeCallback: @escaping (Bool) -> (),
+        checkIfLoopOpen: @escaping () -> Bool
+    ) {
+        // We will never start off with an action from this trigger, so pass in nil
+        self.openCallback = openCallback
+        self.closeCallback = closeCallback
+        self.checkIfLoopOpen = checkIfLoopOpen
+    }
 
     func start() {
         guard eventMonitor == nil, AccessibilityManager.getStatus() else {
             return
         }
 
-        eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event in
+        eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
-            print("EVENT")
 
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
 
@@ -38,9 +57,9 @@ final class KeybindMonitor {
             }
 
             // Special events such as the emoji key
-//            if specialEvents.contains(keyCode.baseKey) {
-//                return canPassthroughSpecialEvents ? .forward : .ignore
-//            }
+            if specialEvents.contains(keyCode.baseKey) {
+                return canPassthroughSpecialEvents ? .forward : .ignore
+            }
 
             // If this is a valid event, don't passthrough
             if performKeybind(event: event) {
@@ -49,10 +68,10 @@ final class KeybindMonitor {
 
             // If this wasn't, check if it was a system keybind (ex. screenshot), and
             // in that case, passthrough and force-close Loop
-//            if CGKeyCode.systemKeybinds.contains(pressedKeys) {
-//                LoopManager.shared.forceCloseLoop()
-//                return .forward
-//            }
+            if CGKeyCode.systemKeybinds.contains(pressedKeys) {
+                closeCallback(true)
+                return .forward
+            }
 
             return .forward
         }
@@ -76,12 +95,12 @@ final class KeybindMonitor {
         let actionKeys: Set<CGKeyCode> = pressedKeys.subtracting(triggerKey)
         let containsTrigger = pressedKeys.isSuperset(of: triggerKey)
 
-        if LoopManager.shared.isLoopActive {
+        if checkIfLoopOpen() {
             if pressedKeys.contains(.kVK_Escape) {
                 self.pressedKeys = []
                 canPassthroughSpecialEvents = true
 
-                LoopManager.shared.closeLoop(forceClose: true)
+                closeCallback(true)
                 return true
             }
 
@@ -96,16 +115,16 @@ final class KeybindMonitor {
             }
 
             if event.type != .keyDown, !containsTrigger {
-                LoopManager.shared.closeLoop(forceClose: false)
+                closeCallback(false)
                 return true
             }
         }
 
         if event.type != .keyUp, containsTrigger {
             if let action = WindowActionCache.shared[actionKeys], !isRepeatEvent || action.willManipulateExistingWindowFrame {
-                LoopManager.shared.openLoop(startingAction: action)
+                openCallback(action)
             } else {
-                LoopManager.shared.openLoop(startingAction: nil)
+                openCallback(nil)
             }
 
             return true
