@@ -35,7 +35,7 @@ struct ExcludedAppsConfigurationView: View {
                 selection: $selectedApps,
                 id: \.self
             ) { item in
-                AppView(url: item)
+                ExcludedListAppView(url: item.wrappedValue)
                     .equatable()
             } emptyView: {
                 HStack {
@@ -79,15 +79,15 @@ struct ExcludedAppsConfigurationView: View {
     }
 }
 
-struct AppView: View, Equatable {
+struct ExcludedListAppView: View, Equatable {
     @State var app: App
 
-    init(url: Binding<URL>) {
-        self.app = App(url: url.wrappedValue) ?? App(
+    init(url: URL) {
+        self.app = App(url: url) ?? App(
             bundleID: "unknown",
-            displayName: url.wrappedValue.lastPathComponent,
-            path: url.wrappedValue.relativePath,
-            url: url.wrappedValue.absoluteURL,
+            displayName: url.lastPathComponent,
+            path: url.relativePath,
+            url: url.absoluteURL,
             icon: .init(systemSymbolName: "exclamationmark.triangle", accessibilityDescription: nil)
         )
     }
