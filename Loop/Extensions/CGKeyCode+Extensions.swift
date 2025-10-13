@@ -336,32 +336,3 @@ extension CGKeyCode {
         }
     }
 }
-
-extension NSEvent.ModifierFlags {
-    func convertToCGKeyCode() -> Set<CGKeyCode> {
-        let deviceIndependent = intersection(.deviceIndependentFlagsMask)
-        var result: Set<CGKeyCode> = []
-
-        if deviceIndependent.contains(.command) {
-            result.insert(.kVK_Command)
-        }
-
-        if deviceIndependent.contains(.shift) {
-            result.insert(.kVK_Shift)
-        }
-
-        if deviceIndependent.contains(.option) {
-            result.insert(.kVK_Option)
-        }
-
-        if deviceIndependent.contains(.control) {
-            result.insert(.kVK_Control)
-        }
-
-        if deviceIndependent.contains(.function) {
-            result.insert(.kVK_Function)
-        }
-
-        return result
-    }
-}

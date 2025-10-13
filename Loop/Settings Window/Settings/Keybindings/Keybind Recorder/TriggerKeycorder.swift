@@ -18,7 +18,6 @@ struct TriggerKeycorder: View {
     @State private var selectionKey: Set<CGKeyCode>
 
     @State private var eventMonitor: LocalEventMonitor?
-    @State private var test_eventmonitor: PassiveEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
@@ -112,7 +111,6 @@ struct TriggerKeycorder: View {
             }
 
             let flags = CGEventFlags(cocoaFlags: event.modifierFlags)
-
             let keycodes = flags.keyCodes
             selectionKey.formUnion(keycodes)
 
