@@ -18,6 +18,7 @@ struct TriggerKeycorder: View {
     @State private var selectionKey: Set<CGKeyCode>
 
     @State private var eventMonitor: LocalEventMonitor?
+    @State private var test_eventmonitor: PassiveEventMonitor?
     @State private var shouldShake: Bool = false
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
@@ -106,30 +107,21 @@ struct TriggerKeycorder: View {
 
         eventMonitor = LocalEventMonitor(events: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
-            if event.type == .keyDown, event.keyCode == CGKeyCode.kVK_Escape {
+            if event.keyCode == CGKeyCode.kVK_Escape {
                 finishedObservingKeys(wasForced: true)
             }
 
-            if CGKeyCode.modifierToImage.contains(where: { $0.key == event.keyCode.baseModifier }) {
-                selectionKey.insert(event.keyCode)
-            }
+            let flags = CGEventFlags(cocoaFlags: event.modifierFlags)
 
-            // Backup system in case keys are pressed at the exact same time
-            let flags = event.modifierFlags.convertToCGKeyCode()
-            if flags.count != selectionKey.count {
-                for key in flags where CGKeyCode.modifierToImage.contains(where: { $0.key == key }) {
-                    if !self.selectionKey.map(\.baseModifier).contains(key) {
-                        self.selectionKey.insert(key)
-                    }
-                }
-            }
+            let keycodes = flags.keyCodes
+            selectionKey.formUnion(keycodes)
 
-            if event.modifierFlags.wasKeyUp, !selectionKey.isEmpty {
+            if keycodes.isEmpty, !selectionKey.isEmpty {
                 finishedObservingKeys()
                 return nil
             }
 
-            if !event.modifierFlags.wasKeyUp, selectionKey.isEmpty {
+            if !keycodes.isEmpty, selectionKey.isEmpty {
                 shouldShake.toggle()
             }
 

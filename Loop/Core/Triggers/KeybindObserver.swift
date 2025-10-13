@@ -59,7 +59,7 @@ final class KeybindObserver {
             var flags = event.flags
             let commandArrowKeyFlag = CGEventFlags(rawValue: 1 << 21)
             if flags.contains(commandArrowKeyFlag) {
-                flags.remove(.maskFunction)
+                flags.remove(.maskSecondaryFn)
             }
 
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode)).baseKey(flags: .init(rawValue: UInt(flags.rawValue)))
