@@ -203,7 +203,7 @@ extension NSImage {
 /// Processes desktop wallpapers to extract colors for theming Loop.
 /// This class provides methods to capture the current desktop wallpaper and extract
 /// vibrant, visually appealing colors that can be used as accent colors in the UI.
-public class WallpaperProcessor {
+final class WallpaperProcessor {
     private var lastProcessedDate: Date = .distantPast
     private var lastResult: (primary: Color, secondary: Color) = (.black, .black)
 

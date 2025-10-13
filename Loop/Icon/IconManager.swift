@@ -7,10 +7,13 @@
 
 import Defaults
 import Luminare
+import OSLog
 import SwiftUI
 import UserNotifications
 
-class IconManager {
+enum IconManager {
+    private static let logger = Logger(category: "IconManager")
+
     static func returnUnlockedIcons() -> [Icon] {
         var returnValue: [Icon] = []
         for icon in Icon.all where icon.unlockTime <= Defaults[.timesLooped] {
@@ -23,7 +26,7 @@ class IconManager {
     static func setAppIcon(to icon: Icon) {
         Defaults[.currentIcon] = icon.assetName
         refreshCurrentAppIcon()
-        print("Setting app icon to: \(icon.name)")
+        logger.info("Setting app icon to: \(icon.name)")
     }
 
     static func setAppIcon(to assetName: String) {
@@ -35,7 +38,7 @@ class IconManager {
     // This function is run at startup to set the current icon to the user's set icon.
     static func refreshCurrentAppIcon() {
         guard let image = NSImage(named: Defaults[.currentIcon]) else {
-            print("Failed to load icon: \(Defaults[.currentIcon])")
+            logger.error("Failed to load icon: \(Defaults[.currentIcon])")
             return
         }
 

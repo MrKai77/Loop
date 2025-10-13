@@ -6,10 +6,13 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 
 /// This enum handles the execution of `WindowAction`s on windows within the user's workspace.
 enum WindowEngine {
+    private static let logger = Logger(category: "WindowEngine")
+
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized
@@ -26,7 +29,7 @@ enum WindowEngine {
         let willChangeScreens = ScreenUtility.screenContaining(window) != screen
 
         let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
-        print("Resizing \(windowTitle) to \(action.direction) on \(screen.localizedName)")
+        logger.info("Resizing \(windowTitle) to \(action.direction.debugDescription) on \(screen.localizedName)")
 
         // Before commiting to anything, we should record the action.
         // This allows the user to undo any one of their actions.
@@ -79,12 +82,12 @@ enum WindowEngine {
         window.fullscreen = false
 
         // Calculate the target frame
-        let targetFrame = action.getFrame(
+        let targetFrame: CGRect = action.getFrame(
             window: window,
             bounds: screen.safeScreenFrame,
             screen: screen
         )
-        print("Target window frame: \(targetFrame)")
+        logger.info("Target window frame: \(targetFrame.debugDescription)")
 
         // If the action is undo, remove the last action from the window records.
         if action.direction == .undo {
@@ -159,7 +162,7 @@ enum WindowEngine {
             let axMenuItem = try? systemAction.getItem(for: app), // Try and get the AXMenuItem for the action
             (try? axMenuItem.getValue(.enabled)) == true // Ensure that the action is enabled (e.g. "Zoom" is disabled for size-constrained windows)
         else {
-            print("System action not available for \(action.direction) on \(window.title ?? "<unknown>")")
+            logger.info("System action not available for \(action.direction.debugDescription) on \(window.title ?? "<unknown>")")
             return false
         }
 
@@ -199,7 +202,7 @@ enum WindowEngine {
         guard let window = NSApp.keyWindow ?? NSApp.windows.first(where: {
             $0.level.rawValue <= NSWindow.Level.floating.rawValue
         }) else {
-            print("Failed to get own main window to resize")
+            logger.info("Failed to get own main window to resize")
             return
         }
 
@@ -250,7 +253,7 @@ enum WindowEngine {
             return true
         }
 
-        print("Minimizing \(windowsToMinimize.count) other windows")
+        logger.info("Minimizing \(windowsToMinimize.count) other windows")
 
         // Minimize all other windows
         for window in windowsToMinimize {

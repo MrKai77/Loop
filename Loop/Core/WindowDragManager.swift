@@ -6,12 +6,14 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 
-@MainActor
 final class WindowDragManager {
     static let shared = WindowDragManager()
     private init() {}
+
+    private let logger = Logger(category: "WindowDragManager")
 
     private var draggingWindow: Window?
     private var initialWindowFrame: CGRect?
@@ -104,7 +106,7 @@ final class WindowDragManager {
                 self.draggingWindow = draggingWindow
                 initialWindowFrame = draggingWindow.frame
 
-                print("Determined window being dragged: \(draggingWindow)")
+                logger.info("Determined window being dragged: \(draggingWindow.debugDescription)")
             } catch {
                 // print("Failed to get window at position: \(error.localizedDescription)")
             }
@@ -188,7 +190,8 @@ final class WindowDragManager {
                 ignoredFrame: ignoredFrame
             )
 
-            print("Window snapping direction changed: \(direction)")
+            // swiftformat:disable:next redundantSelf
+            logger.info("Window snapping direction changed: \(self.direction.debugDescription)")
 
             previewController.open(screen: screen, window: draggingWindow, startingAction: nil)
             previewController.setAction(to: WindowAction(direction))

@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 
 // MARK: - Saved Keybinds Format
@@ -108,6 +109,8 @@ enum MigratorError: Error {
 
 // Adds functionality for saving, loading, and managing window actions.
 enum Migrator {
+    private static let logger = Logger(category: "Migrator")
+
     private static var documentsDirectory: URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     }
@@ -329,7 +332,7 @@ private extension Migrator {
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
-            print("Error importing Loop keybinds: \(error)")
+            logger.error("Error importing Loop keybinds: \(error)")
         }
 
         /// If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
@@ -338,7 +341,7 @@ private extension Migrator {
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
-            print("Error importing Loop (pre 1.2.0) keybinds: \(error)")
+            logger.error("Error importing Loop (pre 1.2.0) keybinds: \(error)")
         }
 
         /// If that fails, try to import the Rectangle keybinds format.
@@ -347,7 +350,7 @@ private extension Migrator {
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
-            print("Error importing Rectangle keybinds: \(error)")
+            logger.error("Error importing Rectangle keybinds: \(error)")
         }
 
         // If all attempts fail, show an error alert.

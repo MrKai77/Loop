@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 
 // MARK: - LoopManager
@@ -13,6 +14,8 @@ import SwiftUI
 final class LoopManager: ObservableObject {
     static let shared = LoopManager()
     private init() {}
+
+    private let logger = Logger(category: "LoopManager")
 
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?
@@ -345,7 +348,7 @@ extension LoopManager {
                 }
             }
 
-            print("Screen changed: \(newScreen.localizedName)")
+            logger.info("Screen changed: \(newScreen.localizedName)")
 
             return
         }
@@ -377,7 +380,8 @@ extension LoopManager {
                 }
             }
 
-            print("Window action changed: \(currentAction.direction)")
+            // swiftformat:disable:next redundantSelf
+            logger.info("Window action changed: \(self.currentAction.direction.debugDescription)")
         }
     }
 

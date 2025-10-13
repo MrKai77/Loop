@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 
 @_silgen_name("_AXUIElementGetWindow") @discardableResult
@@ -33,12 +34,12 @@ enum WindowError: Error {
     }
 }
 
-class Window {
+final class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
     let nsRunningApplication: NSRunningApplication?
 
-    var observer: Observer?
+    private let logger = Logger(category: "Window")
 
     /// Initialize a window from an AXUIElement
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
@@ -119,12 +120,6 @@ class Window {
         try self.init(element: windows[0])
     }
 
-    deinit {
-        if let observer = self.observer {
-            observer.stop()
-        }
-    }
-
     var role: NSAccessibility.Role? {
         do {
             guard let value: String = try self.axWindow.getValue(.role) else {
@@ -132,7 +127,7 @@ class Window {
             }
             return NSAccessibility.Role(rawValue: value)
         } catch {
-            print("Failed to get role: \(error.localizedDescription)")
+            logger.error("Failed to get role: \(error.localizedDescription)")
             return nil
         }
     }
@@ -144,7 +139,7 @@ class Window {
             }
             return NSAccessibility.Subrole(rawValue: value)
         } catch {
-            print("Failed to get subrole: \(error.localizedDescription)")
+            logger.error("Failed to get subrole: \(error.localizedDescription)")
             return nil
         }
     }
@@ -153,7 +148,7 @@ class Window {
         do {
             return try self.axWindow.getValue(.title)
         } catch {
-            print("Failed to get title: \(error.localizedDescription)")
+            logger.error("Failed to get title: \(error.localizedDescription)")
             return nil
         }
     }
@@ -168,7 +163,7 @@ class Window {
                 let result: Bool? = try appWindow.getValue(.enhancedUserInterface)
                 return result ?? false
             } catch {
-                print("Failed to get enhancedUserInterface: \(error.localizedDescription)")
+                logger.error("Failed to get enhancedUserInterface: \(error.localizedDescription)")
                 return false
             }
         }
@@ -180,7 +175,7 @@ class Window {
                 let appWindow = AXUIElementCreateApplication(pid)
                 try appWindow.setValue(.enhancedUserInterface, value: newValue)
             } catch {
-                print("Failed to set enhancedUserInterface: \(error.localizedDescription)")
+                logger.error("Failed to set enhancedUserInterface: \(error.localizedDescription)")
             }
         }
     }
@@ -259,7 +254,7 @@ class Window {
                 let result: NSNumber? = try self.axWindow.getValue(.fullScreen)
                 return result?.boolValue ?? false
             } catch {
-                print("Failed to get fullscreen: \(error.localizedDescription)")
+                logger.error("Failed to get fullscreen: \(error.localizedDescription)")
                 return false
             }
         }
@@ -267,7 +262,7 @@ class Window {
             do {
                 try self.axWindow.setValue(.fullScreen, value: newValue)
             } catch {
-                print("Failed to set fullscreen: \(error.localizedDescription)")
+                logger.error("Failed to set fullscreen: \(error.localizedDescription)")
             }
         }
     }
@@ -334,7 +329,7 @@ class Window {
                 let result: NSNumber? = try self.axWindow.getValue(.minimized)
                 return result?.boolValue ?? false
             } catch {
-                print("Failed to get minimized: \(error.localizedDescription)")
+                logger.error("Failed to get minimized: \(error.localizedDescription)")
                 return false
             }
         }
@@ -342,7 +337,7 @@ class Window {
             do {
                 try self.axWindow.setValue(.minimized, value: newValue)
             } catch {
-                print("Failed to set minimized: \(error.localizedDescription)")
+                logger.error("Failed to set minimized: \(error.localizedDescription)")
             }
         }
     }
@@ -359,7 +354,7 @@ class Window {
                 }
                 return result
             } catch {
-                print("Failed to get position: \(error.localizedDescription)")
+                logger.error("Failed to get position: \(error.localizedDescription)")
                 return .zero
             }
         }
@@ -367,7 +362,7 @@ class Window {
             do {
                 try self.axWindow.setValue(.position, value: newValue)
             } catch {
-                print("Failed to set position: \(error.localizedDescription)")
+                logger.error("Failed to set position: \(error.localizedDescription)")
             }
         }
     }
@@ -380,7 +375,7 @@ class Window {
                 }
                 return result
             } catch {
-                print("Failed to get size: \(error.localizedDescription)")
+                logger.error("Failed to get size: \(error.localizedDescription)")
                 return .zero
             }
         }
@@ -388,7 +383,7 @@ class Window {
             do {
                 try self.axWindow.setValue(.size, value: newValue)
             } catch {
-                print("Failed to set size: \(error.localizedDescription)")
+                logger.error("Failed to set size: \(error.localizedDescription)")
             }
         }
     }
@@ -398,7 +393,7 @@ class Window {
             let result: Bool = try self.axWindow.canSetValue(.size)
             return result
         } catch {
-            print("Failed to determine if window size can be set: \(error.localizedDescription)")
+            logger.error("Failed to determine if window size can be set: \(error.localizedDescription)")
             return true
         }
     }
@@ -425,7 +420,7 @@ class Window {
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
-            print("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.")
+            logger.info("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.")
             self.enhancedUserInterface = false
         }
 
@@ -451,30 +446,10 @@ class Window {
             self.enhancedUserInterface = true
         }
     }
-
-    func createObserver(_ callback: @escaping Observer.Callback) -> Observer? {
-        do {
-            return try Observer(processID: self.axWindow.getPID()!, callback: callback)
-        } catch AXError.invalidUIElement {
-            return nil
-        } catch {
-            fatalError("Caught unexpected error creating observer: \(error)")
-        }
-    }
-
-    func createObserver(_ callback: @escaping Observer.CallbackWithInfo) -> Observer? {
-        do {
-            return try Observer(processID: self.axWindow.getPID()!, callback: callback)
-        } catch AXError.invalidUIElement {
-            return nil
-        } catch {
-            fatalError("Caught unexpected error creating observer: \(error)")
-        }
-    }
 }
 
-extension Window: CustomStringConvertible {
-    var description: String {
+extension Window: CustomDebugStringConvertible {
+    var debugDescription: String {
         let name = nsRunningApplication?.localizedName ?? title ?? "<unknown>"
         return "Window(id: \(cgWindowID), title: \(name))"
     }

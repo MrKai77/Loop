@@ -74,7 +74,7 @@ final class PreviewController {
         close()
         open(screen: newScreen, window: window, startingAction: nil)
 
-        print("Changed preview window's screen")
+        logger.info("Changed preview window's screen")
     }
 
     func setAction(to newAction: WindowAction) {
@@ -88,12 +88,12 @@ final class PreviewController {
         }
 
         /// Check screen bounds
-        print("Screen frame: \(screen.frame)")
-        print("Screen safeScreenFrame: \(screen.safeScreenFrame)")
+        logger.info("Screen frame: \(screen.frame.debugDescription)")
+        logger.info("Screen safeScreenFrame: \(screen.safeScreenFrame.debugDescription)")
 
         // Validate screen bounds before proceeding
         guard screen.safeScreenFrame.isFinite else {
-            print("ERROR: Invalid screen bounds detected!")
+            logger.error("Invalid screen bounds detected")
             return
         }
 
@@ -106,11 +106,11 @@ final class PreviewController {
         .flipY(maxY: NSScreen.screens[0].frame.maxY)
 
         // What is the screen's frame
-        print("Target frame: \(targetWindowFrame)")
+        logger.info("Target frame: \(targetWindowFrame.debugDescription)")
 
         // Validate target frame before setting
         guard targetWindowFrame.isFinite else {
-            print("ERROR: Invalid target frame calculated!")
+            logger.info("Invalid target frame calculated")
             return
         }
 

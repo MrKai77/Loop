@@ -740,3 +740,9 @@ extension WindowAction {
         return croppedWindowFrame
     }
 }
+
+extension WindowAction: CustomDebugStringConvertible {
+    var debugDescription: String {
+        "WindowAction(direction: \(direction), name: \(getName()))"
+    }
+}

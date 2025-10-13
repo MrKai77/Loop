@@ -8,9 +8,13 @@
 import Defaults
 import Foundation
 
-enum StashEdge {
+enum StashEdge: String, CustomDebugStringConvertible {
     case left
     case right
+
+    var debugDescription: String {
+        rawValue
+    }
 }
 
 // MARK: - Helpers

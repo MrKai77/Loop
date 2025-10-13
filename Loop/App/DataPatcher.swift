@@ -7,8 +7,11 @@
 
 import Defaults
 import Foundation
+import OSLog
 
 enum DataPatcher {
+    private static let logger = Logger(category: "DataPatcher")
+
     static func run() {
         let initialPatches = Defaults[.patchesApplied]
 
@@ -24,7 +27,7 @@ enum DataPatcher {
             }
 
             Defaults[.patchesApplied].formUnion(.accentColorMode)
-            print("DataPatcher: Ran patch accentColorMode")
+            logger.info("DataPatcher: Ran patch accentColorMode")
         }
     }
 
