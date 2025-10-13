@@ -8,6 +8,8 @@
 import Cocoa
 import Defaults
 
+/// Monitors `keyDown`, `keyUp`, and `flagsChanged` events using an ActiveEventMonitor, invoking Loop’s open and close callbacks as needed.
+/// Additionally, this class manages keybind action retrieval and updates Loop based on those actions.
 final class KeybindObserver {
     // Callbacks
     private let openCallback: (WindowAction?) -> ()
@@ -32,7 +34,6 @@ final class KeybindObserver {
         closeCallback: @escaping (Bool) -> (),
         checkIfLoopOpen: @escaping () -> Bool
     ) {
-        // We will never start off with an action from this trigger, so pass in nil
         self.openCallback = openCallback
         self.closeCallback = closeCallback
         self.checkIfLoopOpen = checkIfLoopOpen
@@ -103,7 +104,13 @@ final class KeybindObserver {
         eventMonitor?.stop()
         eventMonitor = nil
     }
-
+    
+    /// Determines if an event corresponds to a valid Loop action.
+    /// - Parameters:
+    ///   - type: the type of this event.
+    ///   - isARepeat: whether this event is a repeat event.
+    ///   - flags: modifier flags associated with this event.
+    /// - Returns: whether this event was processed by Loop.
     private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags) -> Bool {
         let triggerKey: Set<CGKeyCode> = Defaults[.triggerKey]
 

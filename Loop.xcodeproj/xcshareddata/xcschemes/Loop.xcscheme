@@ -92,7 +92,7 @@
          <EnvironmentVariable
             key = "LOOP_SKIP_UPDATE_CHECK"
             value = "1"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>

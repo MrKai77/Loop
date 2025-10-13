@@ -8,6 +8,7 @@
 import Defaults
 import SwiftUI
 
+/// Stores and manages the accessibility permission state for Loop.
 final class AccessibilityManager {
     static let shared: AccessibilityManager = .init()
 
@@ -48,7 +49,10 @@ final class AccessibilityManager {
     }
 
     // MARK: Streaming
-
+    
+    /// Stream new changes to Loop's accessibility permissions.
+    /// - Parameter initial: whether to send an initial value corresponding to Loop's current permissions
+    /// - Returns: an AsyncStream.
     func stream(initial: Bool = true) -> AsyncStream<Bool> {
         AsyncStream<Bool> { continuation in
             let id = UUID()
@@ -64,7 +68,9 @@ final class AccessibilityManager {
             }
         }
     }
-
+    
+    /// This will yield a new value to all streams if the provided value differs from the previous value.
+    /// - Parameter value: the provided value.
     private func yield(_ value: Bool) {
         guard value != isGranted else { return }
 
@@ -78,7 +84,9 @@ final class AccessibilityManager {
     }
 
     // MARK: Permissions Checking
-
+    
+    /// Requests accessibility permissions to the user.
+    /// - Returns: whether the user granted the permission.
     @discardableResult
     static func requestAccess() -> Bool {
         if getStatus() {
@@ -106,11 +114,15 @@ final class AccessibilityManager {
 
         return status
     }
-
+    
+    /// Determines if the app has accessibility permissions.
+    /// - Returns: whether the app has accessibility permissions.
     private static func getStatus() -> Bool {
         AXIsProcessTrusted()
     }
-
+    
+    /// Executes `/usr/bin/tccutil reset Accessibility <Bundle ID>`.
+    /// This fully removes any accessibility permissions the user may have previously granted to Loop.
     private static func resetAccessibility() {
         _ = try? Process.run(URL(filePath: "/usr/bin/tccutil"), arguments: ["reset", "Accessibility", Bundle.main.bundleID])
     }

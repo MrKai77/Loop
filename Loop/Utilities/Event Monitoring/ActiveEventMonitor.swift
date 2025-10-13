@@ -21,7 +21,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
-    ///   - callback: A callback to process received events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
+    ///   - callback: a callback to process received events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
     convenience init(
         tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
@@ -41,7 +41,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
-    ///   - callback: A callback to process and potentially alter received events.
+    ///   - callback: a callback to process and potentially alter received events.
     init(
         tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
