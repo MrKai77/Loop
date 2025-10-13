@@ -17,7 +17,7 @@ final class LocalEventMonitor: Identifiable, Equatable {
     private let eventHandler: (NSEvent) -> (NSEvent?)
 
     private(set) var isEnabled: Bool = false
-    
+
     /// Initializes a `LocalEventMonitor`.
     /// - Parameters:
     ///   - events: the events to capture within this event monitor.

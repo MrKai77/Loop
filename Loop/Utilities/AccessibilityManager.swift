@@ -49,7 +49,7 @@ final class AccessibilityManager {
     }
 
     // MARK: Streaming
-    
+
     /// Stream new changes to Loop's accessibility permissions.
     /// - Parameter initial: whether to send an initial value corresponding to Loop's current permissions
     /// - Returns: an AsyncStream.
@@ -68,7 +68,7 @@ final class AccessibilityManager {
             }
         }
     }
-    
+
     /// This will yield a new value to all streams if the provided value differs from the previous value.
     /// - Parameter value: the provided value.
     private func yield(_ value: Bool) {
@@ -84,7 +84,7 @@ final class AccessibilityManager {
     }
 
     // MARK: Permissions Checking
-    
+
     /// Requests accessibility permissions to the user.
     /// - Returns: whether the user granted the permission.
     @discardableResult
@@ -114,13 +114,13 @@ final class AccessibilityManager {
 
         return status
     }
-    
+
     /// Determines if the app has accessibility permissions.
     /// - Returns: whether the app has accessibility permissions.
     private static func getStatus() -> Bool {
         AXIsProcessTrusted()
     }
-    
+
     /// Executes `/usr/bin/tccutil reset Accessibility <Bundle ID>`.
     /// This fully removes any accessibility permissions the user may have previously granted to Loop.
     private static func resetAccessibility() {

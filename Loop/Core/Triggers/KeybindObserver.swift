@@ -25,6 +25,8 @@ final class KeybindObserver {
     private let specialEvents: [CGKeyCode] = [.kVK_Globe_Emoji]
     var canPassthroughSpecialEvents = true // If mouse has been moved
 
+    private let actionsByKeybindCache = WindowActionCache()
+
     /// Initializes a ``KeybindObserver``.
     /// - Parameters:
     ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated.
@@ -104,7 +106,7 @@ final class KeybindObserver {
         eventMonitor?.stop()
         eventMonitor = nil
     }
-    
+
     /// Determines if an event corresponds to a valid Loop action.
     /// - Parameters:
     ///   - type: the type of this event.
@@ -144,7 +146,7 @@ final class KeybindObserver {
         }
 
         if type != .keyUp, containsTrigger {
-            if let action = WindowActionCache.shared[actionKeys], !isARepeat || action.willManipulateExistingWindowFrame {
+            if let action = actionsByKeybindCache[actionKeys], !isARepeat || action.willManipulateExistingWindowFrame {
                 openCallback(action)
             } else {
                 openCallback(nil)

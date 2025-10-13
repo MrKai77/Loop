@@ -190,7 +190,7 @@ final class WindowDragManager {
 
             print("Window snapping direction changed: \(direction)")
 
-            previewController.open(screen: screen, window: nil, startingAction: nil)
+            previewController.open(screen: screen, window: draggingWindow, startingAction: nil)
             previewController.setAction(to: WindowAction(direction))
         } else {
             direction = .noAction

@@ -15,7 +15,7 @@ final class WindowActionCache {
     private var actionsByKeybind: [Set<CGKeyCode>: WindowAction] = [:]
     private var observationTask: Task<(), Never>?
     private let logger = Logger(category: "WindowActionCache")
-    
+
     /// Initializes a new instance of `WindowActionCache`.
     /// Will automatically build cache, and update according to changes the user makes to Loop's keybinds.
     init() {
@@ -41,7 +41,7 @@ final class WindowActionCache {
     subscript(_ keybind: Set<CGKeyCode>) -> WindowAction? {
         actionsByKeybind[keybind]
     }
-    
+
     /// Rebuilds the cache and includes extra entries for cycle actions with shift keys if the user has enabled `cycleBackwardsOnShiftPressed`.
     private func regenerateCache() {
         let keybinds: [WindowAction] = Defaults[.keybinds].filter { !$0.keybind.isEmpty }
@@ -55,7 +55,7 @@ final class WindowActionCache {
         if cycleBackwardsOnShiftPressed {
             actionsByKeybind.merge(
                 keybinds
-                    .filter { $0.direction == .cycle}
+                    .filter { $0.direction == .cycle }
                     .map { ($0.keybind.union([.kVK_Shift]), $0) },
                 uniquingKeysWith: { first, _ in first }
             )
