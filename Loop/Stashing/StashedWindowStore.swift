@@ -32,11 +32,9 @@ final class StashedWindowsStore {
     /// Hold data from `Defaults[.stashManagerStashedWindows]` for windows that failed to be restored.
     private var failedToRestore: [CGWindowID: WindowAction] = [:]
     private var spaceObserver: NSObjectProtocol?
-}
 
-// MARK: - Public methods
+    // MARK: - Public methods
 
-extension StashedWindowsStore {
     func restore() {
         restoreRevealedWindows()
         restoreStashedWindows()
@@ -63,11 +61,9 @@ extension StashedWindowsStore {
         }
         return nil
     }
-}
 
-// MARK: Private methods
+    // MARK: Private methods
 
-private extension StashedWindowsStore {
     func restoreRevealedWindows() {
         revealed = Defaults[.stashManagerRevealedWindows]
     }

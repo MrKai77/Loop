@@ -31,7 +31,7 @@ extension UNNotificationAttachment {
             )
             return imageAttachment
         } catch {
-            print("error \(error.localizedDescription)")
+            NSLog("Failed to create attachment: \(error.localizedDescription)")
         }
 
         return nil

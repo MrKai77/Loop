@@ -81,7 +81,7 @@ struct SavedWindowActionFormat: Codable {
 
 // MARK: - Migrator
 
-enum MigratorError: Error {
+enum MigratorError: LocalizedError {
     case keybindsEmpty
     case failedToConvertToString
     case mainWindowNotAvailableForPanel
@@ -89,7 +89,7 @@ enum MigratorError: Error {
     case directorySelectionCancelled
     case failedToReadFile
 
-    var localizedDescription: String {
+    var errorDescription: String {
         switch self {
         case .keybindsEmpty:
             "Keybinds are empty."

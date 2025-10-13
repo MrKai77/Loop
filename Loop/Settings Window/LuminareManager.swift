@@ -8,6 +8,7 @@
 import Combine
 import Defaults
 import Luminare
+import OSLog
 import SwiftUI
 
 extension String: @retroactive Identifiable {
@@ -85,6 +86,7 @@ enum Tab: LuminareTabItem, CaseIterable {
 
 final class LuminareManager: NSWindowController, ObservableObject {
     static let shared = LuminareManager()
+    private let logger = Logger(category: "LuminareManager")
 
     var luminare: LuminareWindow?
     private var previewActionTimerTask: Task<(), Error>?
@@ -157,7 +159,7 @@ final class LuminareManager: NSWindowController, ObservableObject {
             window?.backgroundColor = .white.withAlphaComponent(0.001)
             window?.ignoresMouseEvents = false
         } catch {
-            print(error)
+            logger.error("\(error.localizedDescription)")
         }
 
         startTimer()

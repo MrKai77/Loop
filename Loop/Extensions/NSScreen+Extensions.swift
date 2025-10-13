@@ -39,7 +39,7 @@ extension NSScreen {
         guard
             let displayID
         else {
-            print("ERROR: Failed to get NSScreen.displayID in NSScreen.safeScreenFrame")
+            NSLog("Error: Failed to get NSScreen.displayID in NSScreen.safeScreenFrame")
             return frame.flipY(screen: self)
         }
 
@@ -79,7 +79,7 @@ extension NSScreen {
         guard
             let displayID
         else {
-            print("ERROR: Failed to get NSScreen.displayID in NSScreen.displayBounds")
+            NSLog("Error: Failed to get NSScreen.displayID in NSScreen.displayBounds")
             return frame.flipY(screen: self)
         }
 

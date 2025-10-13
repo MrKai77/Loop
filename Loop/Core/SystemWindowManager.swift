@@ -8,7 +8,7 @@
 import Defaults
 import SwiftUI
 
-class SystemWindowManager {
+final class SystemWindowManager {
     private static let windowManagerDefaults = UserDefaults(suiteName: "com.apple.WindowManager")
     private static let dockDefaults = UserDefaults(suiteName: "com.apple.dock")
 

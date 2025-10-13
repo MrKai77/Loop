@@ -23,10 +23,10 @@ func SLPSPostEventRecordTo(_ psn: inout ProcessSerialNumber, _ bytes: inout UInt
 
 let kCPSUserGenerated: UInt32 = 0x200
 
-enum WindowError: Error {
+enum WindowError: LocalizedError {
     case invalidWindow
 
-    var localizedDescription: String {
+    var errorDescription: String {
         switch self {
         case .invalidWindow:
             "Invalid window"

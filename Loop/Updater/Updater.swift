@@ -332,7 +332,7 @@ final class Updater: ObservableObject {
             let (fileURL, _) = try await URLSession.shared.download(from: asset.browserDownloadURL)
             try FileManager.default.moveItem(at: fileURL, to: destinationURL)
         } catch {
-            logger.error("Error: \(error.localizedDescription)")
+            logger.error("Failed to download update: \(error.localizedDescription)")
         }
     }
 

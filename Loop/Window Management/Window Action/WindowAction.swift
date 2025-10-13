@@ -13,6 +13,8 @@ import SwiftUI
 ///
 /// Common actions, such as right half, or bottom right quarter, are represented by `WindowDirection` enum, while user-made actions, such as custom frames and cycles are speciied by this struct.
 struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
+    private static let logger = Logger(category: "WindowAction")
+
     var id: UUID = .init()
 
     /// Initializes a `WindowAction` with the specified parameters. Only to be used when decoding from JSON.
@@ -574,10 +576,10 @@ extension WindowAction {
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
     private func getLastActionFrame(_ window: Window, _ bounds: CGRect) -> CGRect {
         if let previousAction = WindowRecords.getLastAction(for: window) {
-            print("Last action was \(previousAction.direction) (name: \(previousAction.name ?? "nil"))")
+            Self.logger.info("Last action was \(previousAction.direction.debugDescription) (name: \(previousAction.name ?? "nil"))")
             return previousAction.getFrame(window: window, bounds: bounds)
         } else {
-            print("Didn't find frame to undo; using current frame")
+            Self.logger.info("Didn't find frame to undo; using current frame")
             return window.frame
         }
     }
@@ -589,7 +591,7 @@ extension WindowAction {
         if let initialFrame = WindowRecords.getInitialFrame(for: window) {
             return initialFrame
         } else {
-            print("Didn't find initial frame; using current frame")
+            Self.logger.info("Didn't find initial frame; using current frame")
             return window.frame
         }
     }

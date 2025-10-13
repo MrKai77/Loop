@@ -46,7 +46,7 @@ struct CustomTextField: NSViewRepresentable {
         Coordinator(self)
     }
 
-    class Coordinator: NSObject, NSTextFieldDelegate {
+    final class Coordinator: NSObject, NSTextFieldDelegate {
         var parent: CustomTextField
 
         init(_ parent: CustomTextField) {

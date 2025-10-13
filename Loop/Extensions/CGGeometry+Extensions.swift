@@ -22,12 +22,9 @@ extension CGPoint {
         return CGFloat(bearingRadians)
     }
 
-    func distanceSquared(to comparisonPoint: CGPoint) -> CGFloat {
+    func distance(to comparisonPoint: CGPoint) -> CGFloat {
         let from = CGPoint(x: x, y: y)
-        return (from.x - comparisonPoint.x)
-            * (from.x - comparisonPoint.x)
-            + (from.y - comparisonPoint.y)
-            * (from.y - comparisonPoint.y)
+        return sqrt(pow(from.x - comparisonPoint.x, 2) + pow(from.y - comparisonPoint.y, 2))
     }
 
     func flipY(maxY: CGFloat) -> CGPoint {

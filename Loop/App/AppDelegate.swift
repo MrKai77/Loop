@@ -6,11 +6,13 @@
 //
 
 import Defaults
+import OSLog
 import SwiftUI
 import UserNotifications
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate {
     private let urlCommandHandler = URLCommandHandler()
+    static let logger = Logger(category: "AppDelegate")
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -64,10 +66,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func handleGetURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent _: NSAppleEventDescriptor) {
         guard let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
               let url = URL(string: urlString) else {
-            print("Failed to get URL from event")
+            Self.logger.info("Failed to get URL from event")
             return
         }
-        print("Received URL: \(url)")
+        Self.logger.info("Received URL: \(url)")
         urlCommandHandler.handle(url)
     }
 

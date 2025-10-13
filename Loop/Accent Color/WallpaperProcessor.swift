@@ -7,19 +7,134 @@
 
 import AppKit
 import Defaults
+import OSLog
 import SwiftUI
 
 // MARK: - Wallpaper processor errors
 
 /// Represents errors that can occur during wallpaper processing.
-public enum WallpaperProcessorError: Error {
+public enum WallpaperProcessorError: LocalizedError {
     case screenshotFailed
     case dominantColorsCalculationFailed
     case noWallpaperWindowsFound
     case wallpaperWindowCaptureFailed
-    case screenCaptureFailed
     case imageResizeFailed
     case bitmapCreationFailed
+
+    var errorDescription: String {
+        switch self {
+        case .screenshotFailed:
+            "Screenshot failed."
+        case .dominantColorsCalculationFailed:
+            "Failed to calculate dominant colors."
+        case .noWallpaperWindowsFound:
+            "No wallpaper windows found"
+        case .wallpaperWindowCaptureFailed:
+            "Failed to capture wallpaper window"
+        case .imageResizeFailed:
+            "Could not resize image."
+        case .bitmapCreationFailed:
+            "Failed to create bitmap image"
+        }
+    }
+}
+
+// MARK: - Wallpaper public function
+
+/// Processes desktop wallpapers to extract colors for theming Loop.
+/// This class provides methods to capture the current desktop wallpaper and extract
+/// vibrant, visually appealing colors that can be used as accent colors in the UI.
+final class WallpaperProcessor {
+    private var lastProcessedDate: Date = .distantPast
+    private var lastResult: (primary: Color, secondary: Color) = (.black, .black)
+    private let logger = Logger(category: "WallpaperProcessor")
+
+    /// Fetches the latest wallpaper colors, respecting a throttle period.
+    /// This helps prevent excessive processing if called frequently, when the wallpaper is most likely unchanged.
+    /// - Parameter ignoreThrottle: If true, the method will ignore the throttle and fetch colors immediately. This is useful when called from settings or manual triggers.
+    func fetchLatest(ignoreThrottle: Bool = false) async -> (primary: Color, secondary: Color) {
+        // Only proceed if the caller has chosen to ignore the throttle, or over 5 seconds have passed since the last refresh
+        guard ignoreThrottle || lastProcessedDate.distance(to: .now) > 5.0 else {
+            return lastResult
+        }
+        lastProcessedDate = .now
+
+        // If we succeed in obtaining new colors, then return them
+        if let newColors = await fetchLatestWallpaperColors() {
+            lastResult = newColors
+            return newColors
+        }
+
+        // If we didn't succeed, simply return the last set of valid colors
+        return lastResult
+    }
+
+    /// Fetches the latest wallpaper colors and updates the app's theme settings.
+    ///
+    /// This method:
+    /// 1. Captures the current wallpaper image
+    /// 2. Processes it to extract dominant colors
+    /// 3. Updates the app's accent color settings with the extracted colors
+    ///
+    /// The first (most vibrant) color is used as the primary accent color, while
+    /// the second color is used as a gradient/secondary color. This provides
+    /// a cohesive theme that matches the user's desktop environment.
+    ///
+    /// Note that you shouldn't call this method directly, but rather, call ``AccentColorController.refresh``.
+    private func fetchLatestWallpaperColors() async -> (primary: Color, secondary: Color)? {
+        do {
+            // Attempt to process the current wallpaper to get the dominant colors.
+            let dominantColors = try await processCurrentWallpaper()
+
+            // Sort the first two colors by their brightness
+            // Using brightness sorting ensures that the brighter color is used as the primary accent,
+            // which typically works better for UI elements that need good contrast
+            let colors = dominantColors.prefix(2).sorted(by: { $0.brightness > $1.brightness })
+
+            // Use the first dominant color or clear if none.
+            let primaryColor = Color(colors.first ?? .clear)
+
+            // Use the second dominant color if possible, otherwise return the primary color.
+            let secondaryColor = colors.count > 1 ? Color(colors[1]) : primaryColor
+
+            logger.info("Successfully calculated dominant colors from wallpaper")
+
+            return (primaryColor, secondaryColor)
+        } catch {
+            // If an error occurs, print the error description.
+            logger.error("Failed to fetch wallpaper colors: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    /// Processes the current wallpaper and returns the dominant colors.
+    /// - Throws: A WallpaperProcessorError if the screenshot fails or dominant colors cannot be calculated.
+    /// - Returns: An array of NSColor representing the dominant colors.
+    ///
+    /// This method coordinates the wallpaper capture and color analysis process.
+    /// It first attempts to capture a screenshot of the desktop wallpaper, then
+    /// passes that image to the color analysis algorithm to extract vibrant,
+    /// visually distinct colors suitable for UI accents.
+    private func processCurrentWallpaper() async throws -> [NSColor] {
+        let wallpaperImageFetcher = WallpaperImageFetcher()
+
+        // Take a screenshot of the main display.
+        guard let screenshot = try await wallpaperImageFetcher.takeScreenshot() else {
+            // If taking a screenshot fails, throw an error.
+            throw WallpaperProcessorError.screenshotFailed
+        }
+
+        // Calculate the dominant colors from the screenshot.
+        let dominantColors = await screenshot.calculateDominantColors()
+
+        // Ensure that dominant colors are calculated and the array is not empty.
+        guard let colors = dominantColors, !colors.isEmpty else {
+            // If no colors are found, throw an error.
+            throw WallpaperProcessorError.dominantColorsCalculationFailed
+        }
+
+        return colors
+    }
 }
 
 // MARK: - NSImage extensions
@@ -195,100 +310,5 @@ extension NSImage {
         let resizedImage = NSImage(size: newSize)
         resizedImage.addRepresentation(bitmapRep)
         return resizedImage
-    }
-}
-
-// MARK: - Wallpaper public function
-
-/// Processes desktop wallpapers to extract colors for theming Loop.
-/// This class provides methods to capture the current desktop wallpaper and extract
-/// vibrant, visually appealing colors that can be used as accent colors in the UI.
-final class WallpaperProcessor {
-    private var lastProcessedDate: Date = .distantPast
-    private var lastResult: (primary: Color, secondary: Color) = (.black, .black)
-
-    /// Fetches the latest wallpaper colors, respecting a throttle period.
-    /// This helps prevent excessive processing if called frequently, when the wallpaper is most likely unchanged.
-    /// - Parameter ignoreThrottle: If true, the method will ignore the throttle and fetch colors immediately. This is useful when called from settings or manual triggers.
-    func fetchLatest(ignoreThrottle: Bool = false) async -> (primary: Color, secondary: Color) {
-        // Only proceed if the caller has chosen to ignore the throttle, or over 5 seconds have passed since the last refresh
-        guard ignoreThrottle || lastProcessedDate.distance(to: .now) > 5.0 else {
-            return lastResult
-        }
-        lastProcessedDate = .now
-
-        // If we succeed in obtaining new colors, then return them
-        if let newColors = await fetchLatestWallpaperColors() {
-            lastResult = newColors
-            return newColors
-        }
-
-        // If we didn't succeed, simply return the last set of valid colors
-        return lastResult
-    }
-
-    /// Fetches the latest wallpaper colors and updates the app's theme settings.
-    ///
-    /// This method:
-    /// 1. Captures the current wallpaper image
-    /// 2. Processes it to extract dominant colors
-    /// 3. Updates the app's accent color settings with the extracted colors
-    ///
-    /// The first (most vibrant) color is used as the primary accent color, while
-    /// the second color is used as a gradient/secondary color. This provides
-    /// a cohesive theme that matches the user's desktop environment.
-    ///
-    /// Note that you shouldn't call this method directly, but rather, call ``AccentColorController.refresh``.
-    private func fetchLatestWallpaperColors() async -> (primary: Color, secondary: Color)? {
-        do {
-            // Attempt to process the current wallpaper to get the dominant colors.
-            let dominantColors = try await processCurrentWallpaper()
-
-            // Sort the first two colors by their brightness
-            // Using brightness sorting ensures that the brighter color is used as the primary accent,
-            // which typically works better for UI elements that need good contrast
-            let colors = dominantColors.prefix(2).sorted(by: { $0.brightness > $1.brightness })
-
-            // Use the first dominant color or clear if none.
-            let primaryColor = Color(colors.first ?? .clear)
-
-            // Use the second dominant color if possible, otherwise return the primary color.
-            let secondaryColor = colors.count > 1 ? Color(colors[1]) : primaryColor
-
-            return (primaryColor, secondaryColor)
-        } catch {
-            // If an error occurs, print the error description.
-            print(error.localizedDescription)
-            return nil
-        }
-    }
-
-    /// Processes the current wallpaper and returns the dominant colors.
-    /// - Throws: A WallpaperProcessorError if the screenshot fails or dominant colors cannot be calculated.
-    /// - Returns: An array of NSColor representing the dominant colors.
-    ///
-    /// This method coordinates the wallpaper capture and color analysis process.
-    /// It first attempts to capture a screenshot of the desktop wallpaper, then
-    /// passes that image to the color analysis algorithm to extract vibrant,
-    /// visually distinct colors suitable for UI accents.
-    private func processCurrentWallpaper() async throws -> [NSColor] {
-        let wallpaperImageFetcher = WallpaperImageFetcher()
-
-        // Take a screenshot of the main display.
-        guard let screenshot = await wallpaperImageFetcher.takeScreenshot() else {
-            // If taking a screenshot fails, throw an error.
-            throw WallpaperProcessorError.screenshotFailed
-        }
-
-        // Calculate the dominant colors from the screenshot.
-        let dominantColors = await screenshot.calculateDominantColors()
-
-        // Ensure that dominant colors are calculated and the array is not empty.
-        guard let colors = dominantColors, !colors.isEmpty else {
-            // If no colors are found, throw an error.
-            throw WallpaperProcessorError.dominantColorsCalculationFailed
-        }
-
-        return colors
     }
 }

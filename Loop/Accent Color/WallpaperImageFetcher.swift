@@ -19,7 +19,7 @@ final class WallpaperImageFetcher {
     /// The direct wallpaper capture is preferred as it gets only the wallpaper without desktop icons,
     /// but requires accessibility permissions (this is accepted required for Loop, so it's fine).
     /// The fallback ensures we still get colors even if permissions aren't granted.
-    func takeScreenshot() async -> NSImage? {
+    func takeScreenshot() async throws -> NSImage? {
         let screen = NSScreen.screenWithMouse ?? NSScreen.main ?? NSScreen.screens[0]
         let screenFrame = screen.displayBounds
 
@@ -38,8 +38,7 @@ final class WallpaperImageFetcher {
             return fallbackImage
         }
 
-        NSLog("Error: \(WallpaperProcessorError.screenshotFailed)")
-        return nil
+        throw WallpaperProcessorError.screenshotFailed
     }
 
     /// Attempts to capture the wallpaper window from the Dock app.
@@ -116,7 +115,7 @@ final class WallpaperImageFetcher {
             kCGNullWindowID,
             [.shouldBeOpaque, .bestResolution]
         ) else {
-            throw WallpaperProcessorError.screenCaptureFailed
+            throw WallpaperProcessorError.screenshotFailed
         }
 
         return NSImage(cgImage: cgImage, size: NSSize.zero)

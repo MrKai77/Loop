@@ -9,7 +9,7 @@ import Defaults
 import Luminare
 import SwiftUI
 
-class IconConfigurationModel: ObservableObject {
+final class IconConfigurationModel: ObservableObject {
     @Published var showingLockedAlert = false
     @Published var selectedLockedMessage: String = ""
 

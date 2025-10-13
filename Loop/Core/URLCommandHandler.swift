@@ -197,7 +197,7 @@ final class URLCommandHandler {
             outputBuffer.append(contentsOf: formattedItems)
         } else {
             logger.info("\n\(title)")
-            formattedItems.forEach { print($0) }
+            formattedItems.forEach { logger.info("\($0)") }
         }
     }
 

@@ -80,7 +80,7 @@ struct ExcludedAppsConfigurationView: View {
 }
 
 struct AppView: View, Equatable {
-    @ObservedObject var app: App
+    @State var app: App
 
     init(url: Binding<URL>) {
         self.app = App(url: url.wrappedValue) ?? App(
@@ -123,16 +123,19 @@ struct AppView: View, Equatable {
             .padding(4)
         }
         .padding(.horizontal, 12)
+        .task {
+            app = await app.loadIconIfNeeded()
+        }
     }
 
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.app.url == rhs.app.url
     }
 
-    class App: Identifiable, ObservableObject {
+    struct App: Identifiable {
         var id: String { bundleID }
         let bundleID: String
-        @Published var icon: NSImage?
+        let icon: NSImage?
         let displayName: String
         let path: String
         let url: URL
@@ -148,22 +151,30 @@ struct AppView: View, Equatable {
             }
 
             self.bundleID = bundleId
+            self.icon = nil
             self.displayName = displayName
             self.path = path
             self.url = url
-
-            Task { @MainActor in
-                let icon = NSWorkspace.shared.icon(forFile: path)
-                self.icon = icon
-            }
         }
 
-        init(bundleID: String, displayName: String, path: String, url: URL, icon: NSImage? = nil) {
+        init(bundleID: String, displayName: String, path: String, url: URL, icon: NSImage?) {
             self.bundleID = bundleID
             self.displayName = displayName
             self.path = path
             self.url = url
             self.icon = icon
+        }
+
+        func loadIconIfNeeded() async -> App {
+            guard icon == nil else { return self }
+
+            return .init(
+                bundleID: bundleID,
+                displayName: displayName,
+                path: path,
+                url: url,
+                icon: NSWorkspace.shared.icon(forFile: path)
+            )
         }
     }
 }

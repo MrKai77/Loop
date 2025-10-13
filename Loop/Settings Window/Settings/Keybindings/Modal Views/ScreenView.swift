@@ -80,7 +80,7 @@ public struct ScreenView<Content>: View where Content: View {
 
     func fetchImage() async -> NSImage? {
         let wallpaperImageFetcher = WallpaperImageFetcher()
-        guard let image = await wallpaperImageFetcher.takeScreenshot() else {
+        guard let image = try? await wallpaperImageFetcher.takeScreenshot() else {
             return nil
         }
 

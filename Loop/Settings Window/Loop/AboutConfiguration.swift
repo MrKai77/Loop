@@ -10,7 +10,7 @@ import Defaults
 import Luminare
 import SwiftUI
 
-class AboutConfigurationModel: ObservableObject {
+final class AboutConfigurationModel: ObservableObject {
     @Published var isHoveringOverVersionCopier = false
     @Published var updateButtonTitle: String = .init(localized: "Check for updates…")
 

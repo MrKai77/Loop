@@ -457,7 +457,7 @@ private extension LoopManager {
 
         let currentMouseLocation = NSEvent.mouseLocation
         let mouseAngle = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
-        let mouseDistance = initialMousePosition.distanceSquared(to: currentMouseLocation)
+        let mouseDistance = initialMousePosition.distance(to: currentMouseLocation)
 
         // Return if the mouse didn't move
         if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
@@ -471,7 +471,7 @@ private extension LoopManager {
         var resizeDirection: WindowAction = .init(.noAction)
 
         // If mouse over 50 points away, select half or quarter positions
-        if distanceToMouse > pow(50 - Defaults[.radialMenuThickness], 2) {
+        if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
             switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
             case 0, 8: resizeDirection = Defaults[.radialMenuRight]
             case 1: resizeDirection = Defaults[.radialMenuBottomRight]
@@ -483,7 +483,7 @@ private extension LoopManager {
             case 7: resizeDirection = Defaults[.radialMenuTopRight]
             default: break
             }
-        } else if distanceToMouse > pow(noActionDistance, 2) {
+        } else if distanceToMouse > noActionDistance {
             resizeDirection = Defaults[.radialMenuCenter]
         }
 

@@ -15,6 +15,10 @@ final class WindowDragManager {
 
     private let logger = Logger(category: "WindowDragManager")
 
+    private var initialMousePosition: CGPoint?
+    private var didPassDragDistanceThreshold: Bool = false
+    private var dragDistanceThreshold: CGFloat = 5
+
     private var draggingWindow: Window?
     private var initialWindowFrame: CGRect?
     private var direction: WindowDirection = .noAction
@@ -25,6 +29,10 @@ final class WindowDragManager {
     private var leftMouseUpMonitor: PassiveEventMonitor?
 
     private var determineDraggedWindowTask: Task<(), Never>?
+
+    private var currentMousePosition: CGPoint {
+        NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+    }
 
     func addObservers() {
         leftMouseDraggedMonitor = PassiveEventMonitor(
@@ -41,8 +49,21 @@ final class WindowDragManager {
         leftMouseUpMonitor!.start()
     }
 
-    private func leftMouseDragged(_: CGEvent) {
+    private func leftMouseDragged(event _: CGEvent) {
         Task { @MainActor in
+            guard let initialMousePosition else {
+                initialMousePosition = currentMousePosition
+                return
+            }
+
+            if !didPassDragDistanceThreshold {
+                didPassDragDistanceThreshold = currentMousePosition.distance(to: initialMousePosition) > dragDistanceThreshold
+
+                guard didPassDragDistanceThreshold else {
+                    return
+                }
+            }
+
             // Process window (only ONCE during a window drag)
             if draggingWindow == nil {
                 setCurrentDraggingWindow()
@@ -89,27 +110,22 @@ final class WindowDragManager {
         }
     }
 
+    @MainActor
     private func setCurrentDraggingWindow() {
         if determineDraggedWindowTask != nil { return }
 
         determineDraggedWindowTask = Task {
-            let mousePosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
-
-            do {
-                guard
-                    let draggingWindow = try WindowUtility.windowAtPosition(mousePosition),
-                    !draggingWindow.isAppExcluded
-                else {
-                    return
-                }
-
-                self.draggingWindow = draggingWindow
-                initialWindowFrame = draggingWindow.frame
-
-                logger.info("Determined window being dragged: \(draggingWindow.debugDescription)")
-            } catch {
-                // print("Failed to get window at position: \(error.localizedDescription)")
+            guard
+                let draggingWindow = try? WindowUtility.windowAtPosition(currentMousePosition),
+                !draggingWindow.isAppExcluded
+            else {
+                return
             }
+
+            self.draggingWindow = draggingWindow
+            initialWindowFrame = draggingWindow.frame
+
+            logger.info("Determined window being dragged: \(draggingWindow.debugDescription)")
 
             determineDraggedWindowTask = nil
         }

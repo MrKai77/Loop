@@ -6,11 +6,14 @@
 //
 
 import Luminare
+import OSLog
 import SwiftUI
 
 struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
     @EnvironmentObject private var popover: LuminarePopupPanel
     @Environment(\.luminarePopupPadding) private var luminarePopupPadding
+
+    private let logger = Logger(category: "PickerView")
 
     @Binding var selection: V
     @Binding var searchResults: [V]
@@ -63,7 +66,7 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
             }
         }
         .onDisappear {
-            print("Stopping event monitor")
+            logger.info("Stopping event monitor")
             eventMonitor?.stop()
             eventMonitor = nil
         }
@@ -132,7 +135,7 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
 
         /// Ensure nextIndex is valid
         guard nextIndex >= 0, nextIndex < items.count else {
-            print("Invalid nextIndex: \(nextIndex), items count: \(items.count)")
+            logger.error("Invalid nextIndex: \(nextIndex), items count: \(items.count)")
             return
         }
 
@@ -141,7 +144,7 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
 
         /// Only scroll if the selection is valid and not nil
         guard let validSelection = arrowSelection else {
-            print("arrowSelection is nil, skipping scroll")
+            logger.info("arrowSelection is nil, skipping scroll")
             return
         }
 

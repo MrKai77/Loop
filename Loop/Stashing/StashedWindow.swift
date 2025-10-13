@@ -6,21 +6,22 @@
 //
 
 import Foundation
+import OSLog
 import SwiftUI
 
-struct StashedWindow {
-    let window: Window
-    let screen: NSScreen
-    let action: WindowAction
+struct StashedWindow: Identifiable {
+    private let logger = Logger(category: "StashedWindow")
 
     var id: CGWindowID {
         window.cgWindowID
     }
-}
 
-// MARK: - Frame computation
+    let window: Window
+    let screen: NSScreen
+    let action: WindowAction
 
-extension StashedWindow {
+    // MARK: - Frame computation
+
     /// Computes the frame for a stashed window.
     func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) -> CGRect {
         let bounds = screen.safeScreenFrame
@@ -36,7 +37,7 @@ extension StashedWindow {
         case .right:
             frame.origin.x = bounds.maxX - clampedPeekSize
         case .none:
-            print("Trying to compute the stash frame for a non-stash related action.")
+            logger.warning("Trying to compute the stash frame for a non-stash related action.")
         }
 
         return frame

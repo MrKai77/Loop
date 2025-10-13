@@ -8,7 +8,7 @@
 import SwiftUI
 
 // Animate a window's resize!
-class WindowTransformAnimation: NSAnimation {
+final class WindowTransformAnimation: NSAnimation {
     private var targetFrame: CGRect
     private let originalFrame: CGRect
     private let window: Window
