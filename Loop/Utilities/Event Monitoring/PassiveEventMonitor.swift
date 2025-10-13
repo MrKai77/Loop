@@ -52,7 +52,6 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
             setupRunLoopSource(eventTap: eventTap, runLoop: CFRunLoopGetCurrent())
         } else {
             super.logger.info("Failed to create event tap")
-            Unmanaged<Self>.fromOpaque(userInfo).release()
         }
     }
 

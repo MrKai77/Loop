@@ -21,7 +21,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
-    ///   - callback: A callback to process receieved events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
+    ///   - callback: A callback to process received events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
     convenience init(
         tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
@@ -41,7 +41,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
-    ///   - callback: A callback to process and potentially alter receieved events.
+    ///   - callback: A callback to process and potentially alter received events.
     init(
         tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
@@ -80,7 +80,6 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
             setupRunLoopSource(eventTap: eventTap, runLoop: CFRunLoopGetCurrent())
         } else {
             super.logger.info("Failed to create event tap")
-            Unmanaged<Self>.fromOpaque(userInfo).release()
         }
     }
 
