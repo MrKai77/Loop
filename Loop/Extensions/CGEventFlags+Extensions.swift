@@ -26,17 +26,17 @@ extension CGEventFlags {
     var keyCodes: Set<CGKeyCode> {
         var result: Set<CGKeyCode> = []
 
-        if contains(.maskShift) || contains(.maskLeftShift) { result.insert(.kVK_Shift) }
         if contains(.maskRightShift) { result.insert(.kVK_RightShift) }
+        if contains(.maskLeftShift) { result.insert(.kVK_Shift) }
 
-        if contains(.maskControl) || contains(.maskLeftControl) { result.insert(.kVK_Control) }
         if contains(.maskRightControl) { result.insert(.kVK_RightControl) }
+        if contains(.maskLeftControl) { result.insert(.kVK_Control) }
 
-        if contains(.maskAlternate) || contains(.maskLeftAlternate) { result.insert(.kVK_Option) }
         if contains(.maskRightAlternate) { result.insert(.kVK_RightOption) }
+        if contains(.maskLeftAlternate) { result.insert(.kVK_Option) }
 
-        if contains(.maskCommand) || contains(.maskLeftCommand) { result.insert(.kVK_Command) }
         if contains(.maskRightCommand) { result.insert(.kVK_RightCommand) }
+        if contains(.maskLeftCommand) { result.insert(.kVK_Command) }
 
         if contains(.maskSecondaryFn) { result.insert(.kVK_Function) }
 
