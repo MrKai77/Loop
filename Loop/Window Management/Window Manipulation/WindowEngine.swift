@@ -67,8 +67,9 @@ enum WindowEngine {
 
         // Use the system window manager if it has been set by the user.
         // Note that we don't use it when switching screens, as the system window manager doesn't support that.
-        if #available(macOS 15, *),
-           Defaults[.useSystemWindowManagerWhenAvailable], !willChangeScreens,
+        if !willChangeScreens,
+           #available(macOS 15, *),
+           Defaults[.useSystemWindowManagerWhenAvailable],
            resizeWithSystemWindowManager(window: window, to: action) {
             // If the preview wasn't visible, then that means that this is the new live frame.
             if !Defaults[.previewVisibility] {
@@ -98,7 +99,10 @@ enum WindowEngine {
         if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
             resizeOwnWindow(targetFrame: targetFrame)
         } else {
-            let shouldAnimate = shouldAnimateResize(for: window)
+            let shouldAnimate = shouldAnimateResize(
+                for: window,
+                willChangeScreens: willChangeScreens
+            )
             resizeWindow(
                 window,
                 targetFrame: targetFrame,
@@ -150,14 +154,15 @@ enum WindowEngine {
     /// Note that this does not affect the system window manager.
     /// - Parameter window: The window to be resized
     /// - Returns: Whether the window should be animated or not
-    private static func shouldAnimateResize(for window: Window) -> Bool {
+    private static func shouldAnimateResize(for window: Window, willChangeScreens: Bool) -> Bool {
         // If enhancedUI is enabled, then window animations will likely lag a LOT. So, if it's enabled, force-disable animations
         if window.enhancedUserInterface {
             return false
         }
 
         // If the user has enabled the system window manager, then return the system's animation setting
-        if #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable] {
+        // Note that this is only if we're not changing screens. Otherwise, it ends up looking a little glitchy at the moment.
+        if !willChangeScreens, #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable] {
             return SystemWindowManager.MoveAndResize.enableAnimations
         }
 

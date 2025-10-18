@@ -39,7 +39,7 @@ enum ScreenUtility {
         var largestRecordedArea: CGFloat = .zero
 
         for screen in screens {
-            let screenFrame = screen.frame
+            let screenFrame = screen.displayBounds
 
             if screenFrame.contains(windowFrame) {
                 result = screen
