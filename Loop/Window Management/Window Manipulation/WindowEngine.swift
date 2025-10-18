@@ -99,38 +99,38 @@ enum WindowEngine {
         // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
         if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
             resizeOwnWindow(targetFrame: targetFrame)
-        }
-
-        let usePadding = PaddingSettings.enablePadding &&
-            (Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize])
-
-        // Grab the bounds of the screen, with padding applied. This is generally not needed, except for:
-        // - when window animations are enabled, we use the bounds to keep the window on-screen
-        // - when the window finishes resizing, we move the window into the bounds if needed
-        let bounds = if action.direction.willMove {
-            // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
-            // This is because the window *can* be moved off-screen in this case.
-            CGRect.zero
-        } else if usePadding {
-            PaddingSettings.padding.apply(on: screen.safeScreenFrame)
         } else {
-            screen.safeScreenFrame
-        }
+            let respectsPaddingThreshold = Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize]
+            let usePadding = PaddingSettings.enablePadding && respectsPaddingThreshold
 
-        window.setFrame(
-            targetFrame,
-            animate: animate,
-            sizeFirst: willChangeScreens,
-            bounds: bounds
-        ) {
-            // Fixes an issue where window isn't resized correctly on multi-monitor setups
-            // If window is being animated, then the size is very likely to already be correct, as what's really happening is window.setFrame at a really high rate.
-            if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
-                window.setFrame(targetFrame)
+            // Grab the bounds of the screen, with padding applied. This is generally not needed, except for:
+            // - when window animations are enabled, we use the bounds to keep the window on-screen
+            // - when the window finishes resizing, we move the window into the bounds if needed
+            let bounds = if action.direction.willMove {
+                // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
+                // This is because the window *can* be moved off-screen in this case.
+                CGRect.zero
+            } else if usePadding {
+                PaddingSettings.padding.apply(on: screen.safeScreenFrame)
+            } else {
+                screen.safeScreenFrame
             }
 
-            // If window's minimum size exceeds the screen bounds, push it back in
-            WindowEngine.handleSizeConstrainedWindow(window: window, bounds: bounds)
+            window.setFrame(
+                targetFrame,
+                animate: animate,
+                sizeFirst: willChangeScreens,
+                bounds: bounds
+            ) {
+                // Fixes an issue where window isn't resized correctly on multi-monitor setups
+                // If window is being animated, then the size is very likely to already be correct, as what's really happening is window.setFrame at a really high rate.
+                if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
+                    window.setFrame(targetFrame)
+                }
+
+                // If window's minimum size exceeds the screen bounds, push it back in
+                WindowEngine.handleSizeConstrainedWindow(window: window, bounds: bounds)
+            }
         }
 
         // Move cursor to center of window if user has enabled it
