@@ -21,6 +21,10 @@ class WindowDragManager {
     private var leftMouseDraggedMonitor: EventMonitor?
     private var leftMouseUpMonitor: EventMonitor?
 
+    private var currentMousePosition: CGPoint {
+        NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+    }
+
     func addObservers() {
         leftMouseDraggedMonitor = NSEventMonitor(scope: .all, eventMask: .leftMouseDragged) { event in
             // Process window (only ONCE during a window drag)
@@ -75,11 +79,9 @@ class WindowDragManager {
     }
 
     private func setCurrentDraggingWindow() {
-        let mousePosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
-
         do {
             guard
-                let draggingWindow = try WindowUtility.windowAtPosition(mousePosition),
+                let draggingWindow = try WindowUtility.windowAtPosition(currentMousePosition),
                 !draggingWindow.isAppExcluded
             else {
                 return
@@ -109,22 +111,22 @@ class WindowDragManager {
         if let screen = NSScreen.screenWithMouse {
             var newWindowFrame = window.frame
             newWindowFrame.size = initialFrame.size
-            newWindowFrame = newWindowFrame.pushInside(screen.frame)
+            newWindowFrame = newWindowFrame.pushInside(screen.displayBounds)
             window.setFrame(newWindowFrame)
         } else {
             window.size = initialFrame.size
         }
 
         // If the window doesn't contain the cursor, keep the original maxX
-        if let cursorLocation = CGEvent.mouseLocation, !window.frame.contains(cursorLocation) {
+        if !window.frame.contains(currentMousePosition) {
             var newFrame = window.frame
 
             newFrame.origin.x = startFrame.maxX - newFrame.width
             window.setFrame(newFrame)
 
             // If it still doesn't contain the cursor, move the window to be centered with the cursor
-            if !newFrame.contains(cursorLocation) {
-                newFrame.origin.x = cursorLocation.x - (newFrame.width / 2)
+            if !newFrame.contains(currentMousePosition) {
+                newFrame.origin.x = currentMousePosition.x - (newFrame.width / 2)
                 window.setFrame(newFrame)
             }
         }
