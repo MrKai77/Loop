@@ -28,10 +28,7 @@ struct LuminarePreviewView: View {
         GeometryReader { geo in
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                    .mask {
-                        RoundedRectangle(cornerRadius: previewCornerRadius)
-                            .foregroundColor(.white)
-                    }
+                    .clipShape(.rect(cornerRadius: previewCornerRadius))
 
                 RoundedRectangle(cornerRadius: previewCornerRadius)
                     .strokeBorder(.quinary, lineWidth: 1)
