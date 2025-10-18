@@ -67,15 +67,15 @@ enum WindowEngine {
 
         // Use the system window manager if it has been set by the user.
         // Note that we don't use it when switching screens, as the system window manager doesn't support that.
-        if #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable], !willChangeScreens {
-            if resizeWithSystemWindowManager(window: window, to: action) {
-                // If the preview wasn't visible, then that means that this is the new live frame.
-                if !Defaults[.previewVisibility] {
-                    LoopManager.lastTargetFrame = window.frame
-                }
-
-                return
+        if #available(macOS 15, *),
+           Defaults[.useSystemWindowManagerWhenAvailable], !willChangeScreens,
+           resizeWithSystemWindowManager(window: window, to: action) {
+            // If the preview wasn't visible, then that means that this is the new live frame.
+            if !Defaults[.previewVisibility] {
+                LoopManager.lastTargetFrame = window.frame
             }
+
+            return
         }
 
         // Otherwise, we obviously need to disable fullscreen to resize the window
@@ -94,43 +94,19 @@ enum WindowEngine {
             WindowRecords.removeLastAction(for: window)
         }
 
-        let animate = shouldAnimateResize(for: window)
-
         // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
         if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
             resizeOwnWindow(targetFrame: targetFrame)
         } else {
-            let respectsPaddingThreshold = Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize]
-            let usePadding = PaddingSettings.enablePadding && respectsPaddingThreshold
-
-            // Grab the bounds of the screen, with padding applied. This is generally not needed, except for:
-            // - when window animations are enabled, we use the bounds to keep the window on-screen
-            // - when the window finishes resizing, we move the window into the bounds if needed
-            let bounds = if action.direction.willMove {
-                // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
-                // This is because the window *can* be moved off-screen in this case.
-                CGRect.zero
-            } else if usePadding {
-                PaddingSettings.padding.apply(on: screen.safeScreenFrame)
-            } else {
-                screen.safeScreenFrame
-            }
-
-            window.setFrame(
-                targetFrame,
-                animate: animate,
-                sizeFirst: willChangeScreens,
-                bounds: bounds
-            ) {
-                // Fixes an issue where window isn't resized correctly on multi-monitor setups
-                // If window is being animated, then the size is very likely to already be correct, as what's really happening is window.setFrame at a really high rate.
-                if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
-                    window.setFrame(targetFrame)
-                }
-
-                // If window's minimum size exceeds the screen bounds, push it back in
-                WindowEngine.handleSizeConstrainedWindow(window: window, bounds: bounds)
-            }
+            let shouldAnimate = shouldAnimateResize(for: window)
+            resizeWindow(
+                window,
+                targetFrame: targetFrame,
+                screen: screen,
+                willChangeScreens: willChangeScreens,
+                ignorePadding: action.direction.willMove,
+                animate: shouldAnimate
+            )
         }
 
         // Move cursor to center of window if user has enabled it
@@ -209,6 +185,47 @@ enum WindowEngine {
         NSAnimationContext.runAnimationGroup { context in
             context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
             window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
+        }
+    }
+
+    private static func resizeWindow(
+        _ window: Window,
+        targetFrame: CGRect,
+        screen: NSScreen,
+        willChangeScreens: Bool,
+        ignorePadding: Bool,
+        animate: Bool
+    ) {
+        let respectsPaddingThreshold = Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize]
+        let usePadding = PaddingSettings.enablePadding && respectsPaddingThreshold
+
+        // Grab the bounds of the screen, with padding applied. This is generally not needed, except for:
+        // - when window animations are enabled, we use the bounds to keep the window on-screen
+        // - when the window finishes resizing, we move the window into the bounds if needed
+        let bounds = if ignorePadding {
+            // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
+            // This is because the window *can* be moved off-screen in this case.
+            CGRect.zero
+        } else if usePadding {
+            PaddingSettings.padding.apply(on: screen.safeScreenFrame)
+        } else {
+            screen.safeScreenFrame
+        }
+
+        window.setFrame(
+            targetFrame,
+            animate: animate,
+            sizeFirst: willChangeScreens,
+            bounds: bounds
+        ) {
+            // Fixes an issue where window isn't resized correctly on multi-monitor setups
+            // If window is being animated, then the size is very likely to already be correct, as what's really happening is window.setFrame at a really high rate.
+            if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
+                window.setFrame(targetFrame)
+            }
+
+            // If window's minimum size exceeds the screen bounds, push it back in
+            WindowEngine.handleSizeConstrainedWindow(window: window, bounds: bounds)
         }
     }
 
