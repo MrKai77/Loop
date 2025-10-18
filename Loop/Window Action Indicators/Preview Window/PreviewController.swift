@@ -168,6 +168,6 @@ final class PreviewController {
             windowController.window?.alphaValue = shouldBecomeTransparent ? 0 : 1
         }
 
-        logger.log("PreviewController: Set action to '\(newAction.getName())'")
+        logger.log("PreviewController: Set action to '\(newAction.debugDescription)'")
     }
 }

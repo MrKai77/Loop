@@ -42,6 +42,8 @@ class BaseEventTapMonitor: Identifiable, Equatable {
             self.runLoopSource = runLoopSource
             CFRunLoopAddSource(runLoop, runLoopSource, .commonModes)
         }
+
+        stop()
     }
 
     func start() {

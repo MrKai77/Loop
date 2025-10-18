@@ -197,6 +197,7 @@ final class Window {
 
     ///
     /// Focuses the window. This will attempt to bring the window to the front and make it the active window.
+    /// Note that this first sets the process as frontmost, *then* sends a left click event to the window itself.
     ///
     /// - Returns:
     /// `true` if the window was successfully focused; `false` otherwise.
@@ -222,7 +223,13 @@ final class Window {
             return false
         }
 
+        /// `0x01` is left click down, `0x02` is left click up (see `CGEventType`)
         for byte in [0x01, 0x02] {
+            /// Create raw `SLSEvent` data.
+            /// Future consideration: instead of manually creating the bytes here, investigate:
+            /// - Creating a `SLSEvent` (likely analogous to `CGEvent`)
+            /// - Apply an identifier to the event to help Loop differentiate events that originate from itself
+            /// - Converting the `SLSEvent` to data using `SLEventCreateData` in SkyLight
             var bytes = [UInt8](repeating: 0, count: 0xF8)
             bytes[0x04] = 0xF8
             bytes[0x08] = UInt8(byte)

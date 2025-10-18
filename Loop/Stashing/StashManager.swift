@@ -339,10 +339,12 @@ private extension StashManager {
 
     /// Handles mouse movement events with a debounce to avoid excessive processing.
     func handleMouseMoved(cgEvent _: CGEvent) {
-        mouseMoveWorkItem?.cancel()
-        let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
-        mouseMoveWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + mouseMovedDebounceInterval, execute: workItem)
+        Task { @MainActor in
+            mouseMoveWorkItem?.cancel()
+            let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
+            mouseMoveWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + mouseMovedDebounceInterval, execute: workItem)
+        }
     }
 
     /// Handles mouse movement events to reveal or hide stashed windows.

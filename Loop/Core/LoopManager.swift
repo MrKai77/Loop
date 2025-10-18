@@ -123,14 +123,22 @@ extension LoopManager {
 
         leftClickMonitor = PassiveEventMonitor(
             events: [.leftMouseDown],
-            callback: { [weak self] cgEvent in
-                guard let self, isLoopActive, currentAction.direction != .noAction else {
+            callback: { [weak self] event in
+                /// Ensure that the source originates from the HID state ID.
+                /// Otherwise, this event was likely sent from Loop to focus the frontmost click (see `Window.focus` which sends a `SLSEvent` to the window)
+                let sourceID = CGEventSourceStateID(rawValue: Int32(event.getIntegerValueField(.eventSourceStateID)))
+                guard sourceID == .hidSystemState else {
                     return
                 }
 
-                if cgEvent.type == .leftMouseDown,
-                   let parentCycleAction {
-                    changeAction(parentCycleAction, disableHapticFeedback: true)
+                Task { @MainActor [weak self] in
+                    guard let self, isLoopActive, currentAction.direction != .noAction else {
+                        return
+                    }
+
+                    if let parentCycleAction {
+                        changeAction(parentCycleAction, disableHapticFeedback: true)
+                    }
                 }
             }
         )
@@ -252,7 +260,7 @@ extension LoopManager {
             parentCycleAction = newAction
 
             // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
-            // This will be set to false when the mouse is *moved* to prevent erratic behavior.
+            // This should be set to false when the mouse is moved to prevent rapid cycling.
             if canAdvanceCycle {
                 newAction = getNextCycleAction(newAction)
             } else {
@@ -361,27 +369,24 @@ extension LoopManager {
             currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
-                openWindows(startingAction: currentAction)
+                openWindows(startingAction: newAction)
             }
 
             DispatchQueue.main.async {
-                self.previewController.setAction(to: self.currentAction)
-                self.radialMenuController.setAction(to: self.currentAction)
+                self.previewController.setAction(to: newAction)
+                self.radialMenuController.setAction(to: newAction)
 
-                if let screenToResizeOn = self.screenToResizeOn,
-                   let window = self.targetWindow,
-                   !Defaults[.previewVisibility] {
+                if !Defaults[.previewVisibility], let screenToResizeOn = self.screenToResizeOn, let window = self.targetWindow {
                     WindowEngine.resize(
                         window,
-                        to: self.currentAction,
+                        to: newAction,
                         on: screenToResizeOn,
                         shouldRecord: false
                     )
                 }
             }
 
-            // swiftformat:disable:next redundantSelf
-            logger.info("Window action changed: \(self.currentAction.direction.debugDescription)")
+            logger.info("Window action changed: \(newAction.debugDescription)")
         }
     }
 
@@ -450,43 +455,45 @@ extension LoopManager {
 
 private extension LoopManager {
     func mouseMoved(cgEvent _: CGEvent) {
-        guard isLoopActive else { return }
-        keybindObserver.canPassthroughSpecialEvents = false
+        Task { @MainActor in
+            guard isLoopActive else { return }
+            keybindObserver.canPassthroughSpecialEvents = false
 
-        let noActionDistance: CGFloat = 10
+            let noActionDistance: CGFloat = 10
 
-        let currentMouseLocation = NSEvent.mouseLocation
-        let mouseAngle = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
-        let mouseDistance = initialMousePosition.distance(to: currentMouseLocation)
+            let currentMouseLocation = NSEvent.mouseLocation
+            let mouseAngle = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
+            let mouseDistance = initialMousePosition.distance(to: currentMouseLocation)
 
-        // Return if the mouse didn't move
-        if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
-            return
-        }
-
-        // Get angle & distance to mouse
-        angleToMouse = mouseAngle
-        distanceToMouse = mouseDistance
-
-        var resizeDirection: WindowAction = .init(.noAction)
-
-        // If mouse over 50 points away, select half or quarter positions
-        if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
-            switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-            case 0, 8: resizeDirection = Defaults[.radialMenuRight]
-            case 1: resizeDirection = Defaults[.radialMenuBottomRight]
-            case 2: resizeDirection = Defaults[.radialMenuBottom]
-            case 3: resizeDirection = Defaults[.radialMenuBottomLeft]
-            case 4: resizeDirection = Defaults[.radialMenuLeft]
-            case 5: resizeDirection = Defaults[.radialMenuTopLeft]
-            case 6: resizeDirection = Defaults[.radialMenuTop]
-            case 7: resizeDirection = Defaults[.radialMenuTopRight]
-            default: break
+            // Return if the mouse didn't move
+            if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
+                return
             }
-        } else if distanceToMouse > noActionDistance {
-            resizeDirection = Defaults[.radialMenuCenter]
-        }
 
-        changeAction(resizeDirection, canAdvanceCycle: false)
+            // Get angle & distance to mouse
+            angleToMouse = mouseAngle
+            distanceToMouse = mouseDistance
+
+            var resizeDirection: WindowAction = .init(.noAction)
+
+            // If mouse over 50 points away, select half or quarter positions
+            if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
+                switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
+                case 0, 8: resizeDirection = Defaults[.radialMenuRight]
+                case 1: resizeDirection = Defaults[.radialMenuBottomRight]
+                case 2: resizeDirection = Defaults[.radialMenuBottom]
+                case 3: resizeDirection = Defaults[.radialMenuBottomLeft]
+                case 4: resizeDirection = Defaults[.radialMenuLeft]
+                case 5: resizeDirection = Defaults[.radialMenuTopLeft]
+                case 6: resizeDirection = Defaults[.radialMenuTop]
+                case 7: resizeDirection = Defaults[.radialMenuTopRight]
+                default: break
+                }
+            } else if distanceToMouse > noActionDistance {
+                resizeDirection = Defaults[.radialMenuCenter]
+            }
+
+            changeAction(resizeDirection, canAdvanceCycle: false)
+        }
     }
 }
