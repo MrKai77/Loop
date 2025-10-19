@@ -10,7 +10,7 @@ import Defaults
 import Luminare
 import SwiftUI
 
-class AboutConfigurationModel: ObservableObject {
+final class AboutConfigurationModel: ObservableObject {
     @Published var isHoveringOverVersionCopier = false
     @Published var updateButtonTitle: String = .init(localized: "Check for updates…")
 
@@ -153,13 +153,13 @@ struct AboutConfigurationView: View {
     }
 
     var body: some View {
-        iconHeader()
-        updateCheckerView()
-        communityView()
-        allCreditsView()
+        iconHeader
+        updateSection
+        communitySection
+        creditsSection
     }
 
-    private func iconHeader() -> some View {
+    private var iconHeader: some View {
         LuminareSection {
             Button {
                 model.copyVersionToClipboard()
@@ -206,7 +206,7 @@ struct AboutConfigurationView: View {
         }
     }
 
-    private func updateCheckerView() -> some View {
+    private var updateSection: some View {
         LuminareSection {
             Button {
                 Task {
@@ -271,7 +271,7 @@ struct AboutConfigurationView: View {
         }
     }
 
-    private func communityView() -> some View {
+    private var communitySection: some View {
         LuminareSection {
             Text(
                 "Share feedback on our GitHub page, where you can let us know about any bugs, suggest features, or provide other valuable input. We also accept donations if you feel that Loop has improved your workflow :)"
@@ -294,7 +294,7 @@ struct AboutConfigurationView: View {
         }
     }
 
-    private func allCreditsView() -> some View {
+    private var creditsSection: some View {
         LuminareSection("Credits") {
             ForEach(model.credits) { credit in
                 creditView(credit)
