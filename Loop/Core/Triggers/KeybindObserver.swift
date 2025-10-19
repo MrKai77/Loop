@@ -150,11 +150,11 @@ final class KeybindObserver {
         if type != .keyUp, containsTrigger {
             if let action = actionsByKeybindCache[actionKeys], !isARepeat || action.willManipulateExistingWindowFrame {
                 openCallback(action)
+                return true
             } else {
                 openCallback(nil)
+                return false
             }
-
-            return true
         }
 
         // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
