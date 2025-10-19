@@ -1,5 +1,5 @@
 //
-//  PopoverPicker.swift
+//  PickerList.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-08-25.
@@ -8,7 +8,7 @@
 import Luminare
 import SwiftUI
 
-struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
+struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
     @EnvironmentObject private var popover: LuminarePopupPanel
     @Environment(\.luminarePopupPadding) private var luminarePopupPadding
 
@@ -19,8 +19,8 @@ struct PickerView<Content, V>: View where Content: View, V: Hashable, V: Identif
     @State private var eventMonitor: EventMonitor?
     @State private var isInitialRender = true
 
-    let sections: [PickerSection<V>]
-    let content: (V) -> Content
+    private let sections: [PickerSection<V>]
+    private let content: (V) -> Content
 
     init(
         _ selection: Binding<V>,

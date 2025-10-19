@@ -12,11 +12,11 @@ import SwiftUI
 struct PreviewConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
 
-    @Default(.previewVisibility) var previewVisibility
-    @Default(.moveCursorWithWindow) var moveCursorWithWindow
-    @Default(.previewPadding) var previewPadding
-    @Default(.previewCornerRadius) var previewCornerRadius
-    @Default(.previewBorderThickness) var previewBorderThickness
+    @Default(.previewVisibility) private var previewVisibility
+    @Default(.moveCursorWithWindow) private var moveCursorWithWindow
+    @Default(.previewPadding) private var previewPadding
+    @Default(.previewCornerRadius) private var previewCornerRadius
+    @Default(.previewBorderThickness) private var previewBorderThickness
 
     var body: some View {
         LuminareSection {
@@ -73,14 +73,5 @@ struct PreviewConfigurationView: View {
                 suffix: Text("px")
             )
         }
-    }
-}
-
-extension Binding where Value == CGFloat {
-    var doubleBinding: Binding<Double> {
-        Binding<Double>(
-            get: { Double(wrappedValue) },
-            set: { wrappedValue = CGFloat($0) }
-        )
     }
 }
