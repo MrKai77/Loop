@@ -68,6 +68,7 @@ struct Keycorder: View {
                     .font(.callout)
                     .modifier(LuminareBorderedModifier(isHovering: isHovering))
                 }
+                .contentShape(.rect)
             }
         }
         .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))

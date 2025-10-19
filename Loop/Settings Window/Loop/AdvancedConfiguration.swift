@@ -152,14 +152,14 @@ struct AdvancedConfigurationView: View {
     }
 
     var body: some View {
-        generalSection()
-        keybindsSection()
-        permissionsSection()
+        generalSection
+        keybindsSection
+        permissionsSection
             .onAppear(perform: model.startTracking)
             .onDisappear(perform: model.stopTracking)
     }
 
-    func generalSection() -> some View {
+    private var generalSection: some View {
         LuminareSection("General") {
             if #available(macOS 15.0, *) {
                 LuminareToggle("Use macOS window manager when available", isOn: $useSystemWindowManagerWhenAvailable)
@@ -207,7 +207,7 @@ struct AdvancedConfigurationView: View {
         }
     }
 
-    func keybindsSection() -> some View {
+    private var keybindsSection: some View {
         LuminareSection("Keybinds") {
             HStack(spacing: 2) {
                 Button(action: model.importPrompt) {
@@ -250,14 +250,14 @@ struct AdvancedConfigurationView: View {
         }
     }
 
-    func permissionsSection() -> some View {
+    private var permissionsSection: some View {
         LuminareSection("Permissions") {
             accessibilityComponent()
         }
         .animation(luminareAnimation, value: model.isAccessibilityAccessGranted)
     }
 
-    func accessibilityComponent() -> some View {
+    private func accessibilityComponent() -> some View {
         LuminareCompose {
             Button {
                 AccessibilityManager.requestAccess()

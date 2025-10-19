@@ -101,9 +101,13 @@ final class WindowDragManager {
                let initialFrame = initialWindowFrame,
                hasWindowMoved(window.frame, initialFrame) {
                 if Defaults[.windowSnapping] {
+                    self.attemptWindowSnap(window)
                     attemptWindowSnap(window)
                 }
             }
+
+            self.previewController.close()
+            self.draggingWindow = nil
 
             previewController.close()
             draggingWindow = nil
@@ -148,22 +152,22 @@ final class WindowDragManager {
         if let screen = NSScreen.screenWithMouse {
             var newWindowFrame = window.frame
             newWindowFrame.size = initialFrame.size
-            newWindowFrame = newWindowFrame.pushInside(screen.frame)
+            newWindowFrame = newWindowFrame.pushInside(screen.displayBounds)
             window.setFrame(newWindowFrame)
         } else {
             window.size = initialFrame.size
         }
 
         // If the window doesn't contain the cursor, keep the original maxX
-        if let cursorLocation = CGEvent.mouseLocation, !window.frame.contains(cursorLocation) {
+        if !window.frame.contains(currentMousePosition) {
             var newFrame = window.frame
 
             newFrame.origin.x = startFrame.maxX - newFrame.width
             window.setFrame(newFrame)
 
             // If it still doesn't contain the cursor, move the window to be centered with the cursor
-            if !newFrame.contains(cursorLocation) {
-                newFrame.origin.x = cursorLocation.x - (newFrame.width / 2)
+            if !newFrame.contains(currentMousePosition) {
+                newFrame.origin.x = currentMousePosition.x - (newFrame.width / 2)
                 window.setFrame(newFrame)
             }
         }
@@ -177,7 +181,6 @@ final class WindowDragManager {
         }
 
         let mainScreen = NSScreen.screens[0]
-        let mousePosition = NSEvent.mouseLocation.flipY(screen: mainScreen)
         let screenFrame = screen.frame.flipY(screen: mainScreen)
 
         previewController.setScreen(to: screen)
@@ -193,14 +196,14 @@ final class WindowDragManager {
 
         let oldDirection = direction
 
-        if !ignoredFrame.contains(mousePosition) {
+        if !ignoredFrame.contains(currentMousePosition) {
             // Refresh accent colors in case user has enabled the wallpaper processor
             Task {
                 await AccentColorController.shared.refresh()
             }
 
             direction = WindowDirection.getSnapDirection(
-                mouseLocation: mousePosition,
+                mouseLocation: currentMousePosition,
                 currentDirection: direction,
                 screenFrame: screenFrame,
                 ignoredFrame: ignoredFrame

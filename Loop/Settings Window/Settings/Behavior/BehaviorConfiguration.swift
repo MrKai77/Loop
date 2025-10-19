@@ -37,6 +37,26 @@ struct BehaviorConfigurationView: View {
     @State private var isPaddingConfigurationViewPresented = false
 
     var body: some View {
+        Group {
+            generalSection
+            windowSection
+            cursorSection
+            windowSnappingSection
+            stageManagerSection
+            stashSection
+        }
+        .animation(
+            luminareAnimation,
+            value: [
+                enablePadding,
+                resizeWindowUnderCursor,
+                windowSnapping,
+                respectStageManager
+            ]
+        )
+    }
+
+    private var generalSection: some View {
         LuminareSection("General") {
             LuminareToggle("Launch at login", isOn: $launchAtLogin)
                 .onChange(of: launchAtLogin) { _ in
@@ -62,7 +82,9 @@ struct BehaviorConfigurationView: View {
                     .monospaced()
             }
         }
+    }
 
+    private var windowSection: some View {
         LuminareSection("Window") {
             LuminareToggle("Move window to cursor's screen", isOn: $useScreenWithCursor)
 
@@ -82,7 +104,9 @@ struct BehaviorConfigurationView: View {
                 }
             }
         }
+    }
 
+    private var cursorSection: some View {
         LuminareSection("Cursor") {
             // This can only be enabled when the preview is visible.
             // Because when the preview is disabled, the window moves live with cursor movement,
@@ -97,7 +121,9 @@ struct BehaviorConfigurationView: View {
                 LuminareToggle("Focus window on resize", isOn: $focusWindowOnResize)
             }
         }
+    }
 
+    private var windowSnappingSection: some View {
         LuminareSection("Window Snapping") {
             if #available(macOS 15, *) {
                 LuminareToggle(isOn: $windowSnapping) {
@@ -127,7 +153,9 @@ struct BehaviorConfigurationView: View {
                 }
             }
         }
+    }
 
+    private var stageManagerSection: some View {
         LuminareSection("Stage Manager") {
             LuminareToggle("Respect Stage Manager", isOn: $respectStageManager)
 
@@ -142,7 +170,9 @@ struct BehaviorConfigurationView: View {
                 )
             }
         }
+    }
 
+    private var stashSection: some View {
         LuminareSection("Stash") {
             LuminareToggle("Animated", isOn: $animateStashedWindows)
 

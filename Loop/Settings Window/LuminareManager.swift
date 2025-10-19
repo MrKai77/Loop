@@ -11,10 +11,6 @@ import Luminare
 import OSLog
 import SwiftUI
 
-extension String: @retroactive Identifiable {
-    public var id: String { self }
-}
-
 enum Tab: LuminareTabItem, CaseIterable {
     var id: String { title }
 
@@ -79,9 +75,9 @@ enum Tab: LuminareTabItem, CaseIterable {
         }
     }
 
-    static let theming: [Tab] = [.icon, .accentColor, .radialMenu, .preview]
-    static let settings: [Tab] = [.behavior, .keybinds]
-    static let loop: [Tab] = [.advanced, .excludedApps, .about]
+    static let themingTabs: [Tab] = [.icon, .accentColor, .radialMenu, .preview]
+    static let settingsTabs: [Tab] = [.behavior, .keybinds]
+    static let loopTabs: [Tab] = [.advanced, .excludedApps, .about]
 }
 
 final class LuminareManager: NSWindowController, ObservableObject {
@@ -133,7 +129,7 @@ final class LuminareManager: NSWindowController, ObservableObject {
 
         let window = LuminareWindow {
             LuminareContentView(model: self)
-                .frame(height: 570) // Does not include titlebar height
+                .frame(height: 620)
         }
 
         self.window = window
@@ -195,72 +191,6 @@ final class LuminareManager: NSWindowController, ObservableObject {
     func stopTimer() {
         previewActionTimerTask?.cancel()
         previewActionTimerTask = nil
-    }
-}
-
-struct LuminareContentView: View {
-    @ObservedObject var model: LuminareManager
-    @ObservedObject private var accentColorController: AccentColorController = .shared
-
-    @Environment(\.luminareAnimation) private var animation
-    @Environment(\.luminareTitleBarHeight) private var titleBarHeight
-
-    var body: some View {
-        LuminareDividedStack {
-            LuminareSidebar {
-                LuminareSidebarSection("Theming", selection: $model.currentTab, items: Tab.theming)
-                LuminareSidebarSection("Settings", selection: $model.currentTab, items: Tab.settings)
-                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: Tab.loop)
-            }
-            .frame(width: 260)
-            .padding(.top, titleBarHeight)
-            .luminareBackground()
-
-            LuminarePane {
-                model.currentTab.view()
-            } header: {
-                HStack {
-                    model.currentTab.decoratedImageView
-
-                    Text(model.currentTab.title)
-                        .font(.title2)
-
-                    Spacer()
-
-                    Button {
-                        model.showInspector.toggle()
-                    } label: {
-                        Image(model.showInspector ? .sidebarLeftHide : .sidebarLeft3)
-                    }
-                }
-            }
-            .frame(width: 390)
-
-            if model.showInspector {
-                ZStack {
-                    if model.showPreview {
-                        LuminarePreviewView()
-                    }
-
-                    if model.showRadialMenu {
-                        VStack {
-                            RadialMenuView(viewModel: model.radialMenuViewModel)
-                        }
-                        .frame(maxHeight: .infinity, alignment: .center)
-                    }
-                }
-                .animation(animation, value: [model.showRadialMenu, model.showPreview])
-                .frame(width: 520)
-            }
-        }
-        .onAppear {
-            DispatchQueue.main.async {
-                model.showPreview = true
-                model.showRadialMenu = true
-            }
-        }
-        .luminareTint(overridingWith: accentColorController.color1)
-        .ignoresSafeArea()
     }
 }
 
