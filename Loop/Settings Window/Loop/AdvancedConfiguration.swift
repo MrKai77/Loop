@@ -53,6 +53,10 @@ final class AdvancedConfigurationModel: ObservableObject {
     private func trackAccessibilityStatus() {
         accessibilityCheckerTask = Task(priority: .background) {
             for await status in AccessibilityManager.shared.stream(initial: true) {
+                guard !Task.isCancelled else {
+                    return
+                }
+
                 await MainActor.run {
                     isAccessibilityAccessGranted = status
                 }
