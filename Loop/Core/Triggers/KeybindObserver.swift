@@ -64,7 +64,8 @@ final class KeybindObserver {
 
             LoopManager.shared.isShiftKeyPressed = flags.contains(.maskShift)
 
-            let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode)).baseKey(flags: .init(rawValue: UInt(flags.rawValue)))
+            let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
+                .baseKey(flags: .init(rawValue: UInt(flags.rawValue)))
 
             if event.type == .keyUp {
                 pressedKeys.remove(keyCode)

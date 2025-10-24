@@ -40,7 +40,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             }
 
             if let error {
-                Self.logger.error("Failed to requesst notification authorization: \(error.localizedDescription)")
+                Self.logger.error("Failed to request notification authorization: \(error.localizedDescription)")
             }
         }
     }

@@ -101,7 +101,6 @@ final class WindowDragManager {
                let initialFrame = initialWindowFrame,
                hasWindowMoved(window.frame, initialFrame) {
                 if Defaults[.windowSnapping] {
-                    self.attemptWindowSnap(window)
                     attemptWindowSnap(window)
                 }
             }
