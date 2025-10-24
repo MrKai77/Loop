@@ -84,6 +84,18 @@ extension WindowDirection {
             .init(localized: .init("Window Direction/Name: Bottom Third", defaultValue: "Bottom Third"))
         case .bottomTwoThirds:
             .init(localized: .init("Window Direction/Name: Bottom Two Thirds", defaultValue: "Bottom Two Thirds"))
+        case .firstFourth:
+            .init(localized: .init("Window Direction/Name: First Fourth", defaultValue: "First Fourth"))
+        case .secondFourth:
+            .init(localized: .init("Window Direction/Name: Second Fourth", defaultValue: "Second Fourth"))
+        case .thirdFourth:
+            .init(localized: .init("Window Direction/Name: Third Fourth", defaultValue: "Third Fourth"))
+        case .fourthFourth:
+            .init(localized: .init("Window Direction/Name: Fourth Fourth", defaultValue: "Fourth Fourth"))
+        case .leftThreeFourths:
+            .init(localized: .init("Window Direction/Name: Left Three Fourths", defaultValue: "Left Three Fourths"))
+        case .rightThreeFourths:
+            .init(localized: .init("Window Direction/Name: Right Three Fourths", defaultValue: "Right Three Fourths"))
         case .nextScreen:
             .init(localized: .init("Window Direction/Name: Next Screen", defaultValue: "Next Screen"))
         case .previousScreen:

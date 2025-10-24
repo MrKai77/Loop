@@ -21,6 +21,7 @@ struct DirectionPickerView: View {
         .init(.init(localized: "Halves"), WindowDirection.halves),
         .init(.init(localized: "Quarters"), WindowDirection.quarters),
         .init(.init(localized: "Horizontal Thirds"), WindowDirection.horizontalThirds),
+        .init(.init(localized: "Horizontal Fourths"), WindowDirection.horizontalFourths),
         .init(.init(localized: "Vertical Thirds"), WindowDirection.verticalThirds),
         .init(.init(localized: "Screen Switching"), WindowDirection.screenSwitching),
         .init(.init(localized: "Size Adjustment"), WindowDirection.sizeAdjustment),
