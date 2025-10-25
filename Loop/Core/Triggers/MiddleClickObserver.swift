@@ -58,20 +58,22 @@ final class MiddleClickObserver {
     // MARK: Private
 
     private func handleOtherMouseKeypress(_ event: CGEvent) {
-        guard middleClickTriggersLoop else {
-            return
-        }
-
-        if event.type == .otherMouseDown,
-           event.getIntegerValueField(.mouseEventButtonNumber) == 2 {
-            if useTriggerDelay {
-                startTriggerDelayTimer()
-            } else {
-                openCallback()
+        Task { @MainActor in
+            guard middleClickTriggersLoop else {
+                return
             }
-        } else {
-            triggerDelayTimer?.cancel()
-            closeCallback()
+
+            if event.type == .otherMouseDown,
+               event.getIntegerValueField(.mouseEventButtonNumber) == 2 {
+                if useTriggerDelay {
+                    startTriggerDelayTimer()
+                } else {
+                    openCallback()
+                }
+            } else {
+                triggerDelayTimer?.cancel()
+                closeCallback()
+            }
         }
     }
 
