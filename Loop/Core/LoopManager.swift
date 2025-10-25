@@ -35,8 +35,16 @@ final class LoopManager: ObservableObject {
         closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
     )
 
-    private var mouseMovedEventMonitor: PassiveEventMonitor?
-    private var leftClickMonitor: PassiveEventMonitor?
+    private(set) lazy var mouseMovedEventMonitor = PassiveEventMonitor(
+        events: [.mouseMoved],
+        callback: mouseMoved
+    )
+
+    private(set) lazy var leftClickMonitor = PassiveEventMonitor(
+        events: [.leftMouseDown],
+        callback: leftMouseDown
+    )
+
     private var accessibilityCheckerTask: Task<(), Never>?
 
     private(set) var isLoopActive: Bool = false
@@ -51,11 +59,6 @@ final class LoopManager: ObservableObject {
     private var distanceToMouse: CGFloat = 0
 
     func start() {
-        mouseMovedEventMonitor = PassiveEventMonitor(
-            events: [.mouseMoved, .otherMouseDragged],
-            callback: mouseMoved
-        )
-
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
             for await status in AccessibilityManager.shared.stream(initial: true) {
                 guard let self, !Task.isCancelled else {
@@ -121,30 +124,9 @@ extension LoopManager {
         screenToResizeOn = Defaults[.useScreenWithCursor] ? NSScreen.screenWithMouse : NSScreen.main
         isShiftKeyPressed = false
 
-        leftClickMonitor = PassiveEventMonitor(
-            events: [.leftMouseDown],
-            callback: { [weak self] event in
-                /// Ensure that the source originates from the HID state ID.
-                /// Otherwise, this event was likely sent from Loop to focus the frontmost click (see `Window.focus` which sends a `SLSEvent` to the window)
-                let sourceID = CGEventSourceStateID(rawValue: Int32(event.getIntegerValueField(.eventSourceStateID)))
-                guard sourceID == .hidSystemState else {
-                    return
-                }
-
-                Task { @MainActor [weak self] in
-                    guard let self, isLoopActive, currentAction.direction != .noAction else {
-                        return
-                    }
-
-                    if let parentCycleAction {
-                        changeAction(parentCycleAction, disableHapticFeedback: true)
-                    }
-                }
-            }
-        )
-
         if !Defaults[.disableCursorInteraction] {
-            mouseMovedEventMonitor?.start()
+            mouseMovedEventMonitor.start()
+            leftClickMonitor.start()
         }
 
         if !Defaults[.hideUntilDirectionIsChosen] {
@@ -172,8 +154,8 @@ extension LoopManager {
 
         closeWindows()
 
-        mouseMovedEventMonitor?.stop()
-        leftClickMonitor?.stop()
+        mouseMovedEventMonitor.stop()
+        leftClickMonitor.stop()
 
         if let targetWindow,
            let screenToResizeOn,
@@ -453,8 +435,8 @@ extension LoopManager {
 
 // MARK: - Radial Menu
 
-private extension LoopManager {
-    func mouseMoved(cgEvent _: CGEvent) {
+extension LoopManager {
+    private func mouseMoved(cgEvent _: CGEvent) {
         Task { @MainActor in
             guard isLoopActive else { return }
             keybindObserver.canPassthroughSpecialEvents = false
@@ -494,6 +476,25 @@ private extension LoopManager {
             }
 
             changeAction(resizeDirection, canAdvanceCycle: false)
+        }
+    }
+
+    private func leftMouseDown(cgEvent event: CGEvent) {
+        /// Ensure that the source originates from the HID state ID.
+        /// Otherwise, this event was likely sent from Loop to focus the frontmost click (see `Window.focus` which sends a `SLSEvent` to the window)
+        let sourceID = CGEventSourceStateID(rawValue: Int32(event.getIntegerValueField(.eventSourceStateID)))
+        guard sourceID == .hidSystemState else {
+            return
+        }
+
+        Task { @MainActor [weak self] in
+            guard let self, isLoopActive, currentAction.direction != .noAction else {
+                return
+            }
+
+            if let parentCycleAction {
+                changeAction(parentCycleAction, disableHapticFeedback: true)
+            }
         }
     }
 }
