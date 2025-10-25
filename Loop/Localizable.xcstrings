@@ -4948,6 +4948,9 @@
         }
       }
     },
+    "Horizontal Fourths" : {
+
+    },
     "Horizontal Thirds" : {
       "localizations" : {
         "ar" : {
@@ -21707,6 +21710,28 @@
         }
       }
     },
+    "Window Direction/Name: First Fourth" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "First Fourth"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Fourth Fourth" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Fourth Fourth"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Fullscreen" : {
       "localizations" : {
         "ar" : {
@@ -22648,6 +22673,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "左三分之一屏"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Left Three Fourths" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Left Three Fourths"
           }
         }
       }
@@ -23814,6 +23850,17 @@
         }
       }
     },
+    "Window Direction/Name: Right Three Fourths" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Right Three Fourths"
+          }
+        }
+      }
+    },
     "Window Direction/Name: Right Two Thirds" : {
       "localizations" : {
         "ar" : {
@@ -23886,6 +23933,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "右三分之二屏"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Second Fourth" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Second Fourth"
           }
         }
       }
@@ -24364,6 +24422,17 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "Stash"
+          }
+        }
+      }
+    },
+    "Window Direction/Name: Third Fourth" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Third Fourth"
           }
         }
       }
