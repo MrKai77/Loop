@@ -32,8 +32,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case leftThird = "LeftThird", leftTwoThirds = "LeftTwoThirds"
 
     // Horizontal Fourths
-    case firstFourth = "FirstFourth", secondFourth = "SecondFourth"
-    case thirdFourth = "ThirdFourth", fourthFourth = "FourthFourth"
+    case firstFourth = "FirstFourth", secondFourth = "SecondFourth", thirdFourth = "ThirdFourth", fourthFourth = "FourthFourth"
     case leftThreeFourths = "LeftThreeFourths", rightThreeFourths = "RightThreeFourths"
 
     // Vertical Thirds
