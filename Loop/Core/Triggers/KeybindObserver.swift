@@ -73,8 +73,6 @@ final class KeybindObserver {
                 pressedKeys.insert(keyCode)
             }
 
-            print("KBD", pressedKeys, filteredFlags.keyCodes)
-
             // Special events such as the emoji key
             if specialEvents.contains(keyCode) {
                 return canPassthroughSpecialEvents ? .forward : .ignore
