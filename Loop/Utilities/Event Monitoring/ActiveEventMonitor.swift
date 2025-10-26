@@ -23,7 +23,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
     ///   - events: the events to capture within this event monitor.
     ///   - callback: a callback to process received events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
     convenience init(
-        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> EventHandling
@@ -43,7 +43,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
     ///   - events: the events to capture within this event monitor.
     ///   - callback: a callback to process and potentially alter received events.
     init(
-        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> Unmanaged<CGEvent>?

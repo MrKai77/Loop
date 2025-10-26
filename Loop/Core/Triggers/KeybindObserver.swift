@@ -18,6 +18,8 @@ final class KeybindObserver {
 
     // State-tracking
     private var pressedKeys: Set<CGKeyCode> = []
+    private var previousEventFlags: CGEventFlags = []
+
     private var lastKeyReleaseTime: Date = .now
     private var eventMonitor: ActiveEventMonitor?
 
@@ -52,26 +54,26 @@ final class KeybindObserver {
         let eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
 
-            /// When Command + arrow keys are pressed simultaneously, we've observed that the CGEvent
-            /// incorrectly has the function key flag along with `CGEventFlags(rawValue: 1 << 21)` added to the modifier flags.
-            /// This is inconsistent behavior as function keys should only be set when actual function keys are pressed.
-            /// The following code detects this specific scenario and removes the set function flag.
-            var flags = event.flags
-            let commandArrowKeyFlag = CGEventFlags(rawValue: 1 << 21)
-            if flags.contains(commandArrowKeyFlag) {
-                flags.remove(.maskSecondaryFn)
+            let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
+                .baseKey(flags: .init(rawValue: UInt(event.flags.rawValue)))
+
+            LoopManager.shared.isShiftKeyPressed = event.flags.contains(.maskShift)
+
+            var filteredFlags = event.flags
+
+            if keyCode.isArrowKey || keyCode.isFKey, !previousEventFlags.contains(.maskSecondaryFn) {
+                filteredFlags.remove(.maskSecondaryFn)
             }
 
-            LoopManager.shared.isShiftKeyPressed = flags.contains(.maskShift)
-
-            let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
-                .baseKey(flags: .init(rawValue: UInt(flags.rawValue)))
+            previousEventFlags = filteredFlags
 
             if event.type == .keyUp {
                 pressedKeys.remove(keyCode)
             } else if event.type == .keyDown {
                 pressedKeys.insert(keyCode)
             }
+
+            print("KBD", pressedKeys, filteredFlags.keyCodes)
 
             // Special events such as the emoji key
             if specialEvents.contains(keyCode) {
@@ -82,7 +84,7 @@ final class KeybindObserver {
             if performKeybind(
                 type: event.type,
                 isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
-                flags: flags
+                flags: filteredFlags
             ) {
                 return .ignore
             }
@@ -91,7 +93,6 @@ final class KeybindObserver {
             // in that case, passthrough and force-close Loop
             if CGKeyCode.systemKeybinds.contains(pressedKeys) {
                 closeCallback(true)
-                return .forward
             }
 
             return .forward
@@ -119,13 +120,13 @@ final class KeybindObserver {
     private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags) -> Bool {
         let triggerKey: Set<CGKeyCode> = Defaults[.triggerKey]
 
-        let pressedKeys: Set<CGKeyCode> = pressedKeys.union(flags.keyCodes)
-        let actionKeys: Set<CGKeyCode> = pressedKeys.subtracting(triggerKey)
-        let containsTrigger = pressedKeys.isSuperset(of: triggerKey)
+        let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flags.keyCodes)
+        let actionKeys: Set<CGKeyCode> = allPressedKeys.subtracting(triggerKey)
+        let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
 
         if checkIfLoopOpen() {
             if pressedKeys.contains(.kVK_Escape) {
-                self.pressedKeys = []
+                pressedKeys = []
                 canPassthroughSpecialEvents = true
 
                 closeCallback(true)

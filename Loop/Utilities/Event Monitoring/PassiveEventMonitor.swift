@@ -19,7 +19,7 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
     ///   - events:  the events to capture within this event monitor.
     ///   - callback:  a callback to process the received event.
     init(
-        tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap,
+        tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> ()

@@ -184,7 +184,7 @@ struct KeybindItemView: View {
     private func keycorderSection(hasConflicts: Bool) -> some View {
         HStack(spacing: 6) {
             HStack {
-                ForEach(triggerKey.sorted().compactMap(\.systemImage), id: \.self) { image in
+                ForEach(triggerKey.sorted().compactMap(\.modifierSystemImage), id: \.self) { image in
                     Text("\(Image(systemName: image))")
                 }
             }

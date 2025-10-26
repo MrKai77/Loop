@@ -58,7 +58,7 @@ struct Keycorder: View {
                     }
 
                     ForEach(sortedKeys, id: \.self) { key in
-                        if let systemImage = key.systemImage {
+                        if let systemImage = key.modifierSystemImage {
                             Text("\(Image(systemName: systemImage))")
                         } else if let humanReadable = key.humanReadable {
                             Text(humanReadable)
