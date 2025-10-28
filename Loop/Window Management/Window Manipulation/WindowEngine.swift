@@ -37,6 +37,13 @@ enum WindowEngine {
             WindowRecords.record(window, action)
         }
 
+        // Calculate proportional frame when moving between screens
+        // This ensures windows maintain their relative size across different screen resolutions
+        var proportionalFrame: CGRect? = nil
+        if willChangeScreens, let currentScreen, action.direction.frameMultiplyValues != nil {
+            proportionalFrame = calculateProportionalFrame(window: window, fromScreen: currentScreen, action: action)
+        }
+
         // If the action is to hide, minimize or fullscreen perform the action then return
         if action.direction == .hide {
             window.toggleHidden()
@@ -86,7 +93,8 @@ enum WindowEngine {
         let targetFrame: CGRect = action.getFrame(
             window: window,
             bounds: screen.safeScreenFrame,
-            screen: screen
+            screen: screen,
+            proportionalFrame: proportionalFrame
         )
         logger.info("Target window frame: \(targetFrame.debugDescription)")
 
@@ -281,5 +289,65 @@ enum WindowEngine {
         for window in windowsToMinimize {
             window.minimized = true
         }
+    }
+
+    /// Calculates the proportional frame of a window relative to its current screen.
+    /// This is used when moving windows between screens to maintain their relative size.
+    /// - Parameters:
+    ///   - window: The window to calculate proportions for
+    ///   - fromScreen: The screen the window is currently on
+    ///   - action: The window action being performed
+    /// - Returns: A CGRect representing the proportional frame (values between 0.0 and 1.0) or nil if not applicable
+    private static func calculateProportionalFrame(window: Window, fromScreen: NSScreen, action: WindowAction) -> CGRect? {
+        // Only calculate proportions for actions with frame multiply values (halves, quarters, thirds, etc.)
+        guard action.direction.frameMultiplyValues != nil else {
+            return nil
+        }
+
+        let currentFrame = window.frame
+        let currentBounds = fromScreen.safeScreenFrame
+
+        let usePadding = PaddingSettings.enablePadding &&
+            (Defaults[.paddingMinimumScreenSize] == 0 || fromScreen.diagonalSize > Defaults[.paddingMinimumScreenSize])
+
+        let adjustedBounds = if usePadding {
+            PaddingSettings.padding.apply(on: currentBounds)
+        } else {
+            currentBounds
+        }
+
+        guard currentFrame.intersects(adjustedBounds) else {
+            print("Window frame doesn't intersect with source screen bounds - skipping proportional calculation")
+            return nil
+        }
+
+        // Calculate proportional position and size relative to the adjusted bounds
+        let proportionalX = (currentFrame.minX - adjustedBounds.minX) / adjustedBounds.width
+        let proportionalY = (currentFrame.minY - adjustedBounds.minY) / adjustedBounds.height
+        let proportionalWidth = currentFrame.width / adjustedBounds.width
+        let proportionalHeight = currentFrame.height / adjustedBounds.height
+
+        // Validate proportional values are reasonable
+        let tolerance: CGFloat = 0.1
+        guard proportionalX > -tolerance,
+              proportionalY > -tolerance,
+              proportionalWidth > 0,
+              proportionalWidth <= 1.0 + tolerance,
+              proportionalHeight > 0,
+              proportionalHeight <= 1.0 + tolerance else {
+            print("Invalid proportional frame calculated (x=\(proportionalX), y=\(proportionalY), w=\(proportionalWidth), h=\(proportionalHeight)) - skipping")
+            return nil
+        }
+
+        let proportions = CGRect(
+            x: proportionalX,
+            y: proportionalY,
+            width: proportionalWidth,
+            height: proportionalHeight
+        )
+
+        print("Calculated proportional frame: x=\(proportionalX), y=\(proportionalY), w=\(proportionalWidth), h=\(proportionalHeight)")
+
+        return proportions
     }
 }

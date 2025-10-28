@@ -222,8 +222,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     ///   - disablePadding: whether to disable padding. `true` when calculating non-AX-usage frames, such as for angle calculations in radial menu or in config UI.
     ///   - screen: the screen on which the bounds are located. Only used to determine if padding should be applied (see `getBounds()`).
     ///   - isPreview: ensures that when manipulating the preview window, the last target frame does not affect the actual resizing of the window.
+    ///   - proportionalFrame: optional proportional frame when moving between screens. Values should be between 0.0 and 1.0.
     /// - Returns: the calculated frame for the specified window action.
-    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil, isPreview: Bool = false) -> CGRect {
+    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil, isPreview: Bool = false, proportionalFrame: CGRect? = nil) -> CGRect {
         let noFrameActions: [WindowDirection] = [.noAction, .cycle, .minimize, .hide]
         guard !noFrameActions.contains(direction) else {
             return NSRect(origin: bounds.center, size: .zero)
@@ -234,7 +235,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         }
 
         var bounds: CGRect = getBounds(from: bounds, disablePadding: disablePadding, screen: screen)
-        var result: CGRect = calculateTargetFrame(direction, window, bounds, isPreview)
+        var result: CGRect = calculateTargetFrame(direction, window, bounds, isPreview, proportionalFrame: proportionalFrame)
 
         if !disablePadding {
             if !willManipulateExistingWindowFrame {
@@ -293,12 +294,18 @@ extension WindowAction {
     ///   - window: the window to be manipulated.
     ///   - bounds: the bounds within which the window should be manipulated.
     ///   - isPreview: whether the action is being performed on a preview window.
+    ///   - proportionalFrame: optional proportional frame when moving between screens.
     /// - Returns: the calculated target frame for the specified window action.
-    private func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect, _ isPreview: Bool) -> CGRect {
+    private func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect, _ isPreview: Bool, proportionalFrame: CGRect? = nil) -> CGRect {
         var result: CGRect = .zero
 
         if direction.frameMultiplyValues != nil {
-            result = applyFrameMultiplyValues(bounds)
+            // When moving between screens with a proportional frame, use proportional sizing
+            if let proportionalFrame {
+                result = applyProportionalFrame(proportionalFrame, bounds)
+            } else {
+                result = applyFrameMultiplyValues(bounds)
+            }
 
         } else if direction.willAdjustSize {
             // Can't grow or shrink a window that is not resizable
@@ -406,6 +413,21 @@ extension WindowAction {
             y: bounds.origin.y + (bounds.height * frameMultiplyValues.minY),
             width: bounds.width * frameMultiplyValues.width,
             height: bounds.height * frameMultiplyValues.height
+        )
+    }
+
+    /// Applies a proportional frame (from a previous screen) to new bounds.
+    /// This is used when moving windows between screens to maintain their relative size.
+    /// - Parameters:
+    ///   - proportionalFrame: The proportional frame with values between 0.0 and 1.0
+    ///   - bounds: The new screen bounds to apply the proportions to
+    /// - Returns: A new `CGRect` with the proportional frame applied to the new bounds
+    private func applyProportionalFrame(_ proportionalFrame: CGRect, _ bounds: CGRect) -> CGRect {
+        CGRect(
+            x: bounds.origin.x + (bounds.width * proportionalFrame.minX),
+            y: bounds.origin.y + (bounds.height * proportionalFrame.minY),
+            width: bounds.width * proportionalFrame.width,
+            height: bounds.height * proportionalFrame.height
         )
     }
 
