@@ -86,7 +86,7 @@ final class WindowTransformAnimation: NSAnimation {
                 window.size = newFrame.size
             }
 
-            lastWindowFrame = window.frame
+            lastWindowFrame = newFrame
 
             if currentProgress >= 1.0 {
                 WindowTransformAnimation.currentAnimations[window.cgWindowID] = nil
