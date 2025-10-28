@@ -32,7 +32,7 @@ final class LoopManager: ObservableObject {
 
     private(set) lazy var middleClickObserver = MiddleClickObserver(
         openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
-        closeCallback: { [weak self] in self?.closeLoop(forceClose: false) }
+        closeCallback: { [weak self] in self?.closeLoop(forceClose: $0) }
     )
 
     private(set) lazy var mouseMovedEventMonitor = PassiveEventMonitor(

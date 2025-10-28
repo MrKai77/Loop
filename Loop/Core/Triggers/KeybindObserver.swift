@@ -19,7 +19,6 @@ final class KeybindObserver {
     // State-tracking
     private var pressedKeys: Set<CGKeyCode> = []
     private var previousEventFlags: CGEventFlags = []
-
     private var lastKeyReleaseTime: Date = .now
     private var eventMonitor: ActiveEventMonitor?
 
@@ -28,6 +27,9 @@ final class KeybindObserver {
     var canPassthroughSpecialEvents = true // If mouse has been moved
 
     private let actionsByKeybindCache = WindowActionCache()
+
+    private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
+    private var triggerDelayTimer: TriggerDelayTimer?
 
     /// Initializes a ``KeybindObserver``.
     /// - Parameters:
@@ -124,10 +126,7 @@ final class KeybindObserver {
 
         if checkIfLoopOpen() {
             if pressedKeys.contains(.kVK_Escape) {
-                pressedKeys = []
-                canPassthroughSpecialEvents = true
-
-                closeCallback(true)
+                closeLoop(forceClose: true)
                 return true
             }
 
@@ -142,22 +141,58 @@ final class KeybindObserver {
             }
 
             if type != .keyDown, !containsTrigger {
-                closeCallback(false)
+                closeLoop(forceClose: false)
                 return true
             }
         }
 
         if type != .keyUp, containsTrigger {
-            if let action = actionsByKeybindCache[actionKeys], !isARepeat || action.willManipulateExistingWindowFrame {
-                openCallback(action)
+            if let action = actionsByKeybindCache[actionKeys] {
+                if !isARepeat || action.willManipulateExistingWindowFrame {
+                    openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
+                }
                 return true
             } else {
-                openCallback(nil)
+                openLoop(startingAction: nil, overrideExistingTriggerDelayTimerAction: !isARepeat)
                 return false
             }
+        } else {
+            closeLoop(forceClose: false)
         }
 
         // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
         return false
+    }
+
+    private func openLoop(startingAction: WindowAction?, overrideExistingTriggerDelayTimerAction: Bool) {
+        if checkIfLoopOpen() {
+            openCallback(startingAction)
+        } else {
+            if useTriggerDelay {
+                // If a trigger delay timer is already active, only update its startingAction when
+                // overrideExistingTriggerDelayTimerAction is true. If it's false, keep the existing
+                // timer and its startingAction (do not create a new timer with nil).
+                if triggerDelayTimer?.isActive ?? false {
+                    if overrideExistingTriggerDelayTimerAction {
+                        triggerDelayTimer?.updateStartingAction(with: startingAction)
+                    }
+                } else {
+                    // No active timer, create one with the provided startingAction.
+                    triggerDelayTimer = TriggerDelayTimer(
+                        startingAction: startingAction,
+                        openCallback: openCallback
+                    )
+                }
+            } else {
+                openCallback(startingAction)
+            }
+        }
+    }
+
+    private func closeLoop(forceClose: Bool) {
+        pressedKeys = []
+        canPassthroughSpecialEvents = true
+        triggerDelayTimer?.cancel()
+        closeCallback(forceClose)
     }
 }
