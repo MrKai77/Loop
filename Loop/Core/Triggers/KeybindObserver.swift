@@ -159,18 +159,20 @@ final class KeybindObserver {
             }
         }
 
-        if type != .keyUp, containsTrigger {
-            if let action = actionsByKeybindCache[actionKeys] {
-                if !isARepeat || action.willManipulateExistingWindowFrame {
-                    openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
+        if type != .keyUp {
+            if containsTrigger {
+                if let action = actionsByKeybindCache[actionKeys] {
+                    if !isARepeat || action.willManipulateExistingWindowFrame {
+                        openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
+                    }
+                    return true
+                } else {
+                    openLoop(startingAction: nil, overrideExistingTriggerDelayTimerAction: !isARepeat)
+                    return false
                 }
-                return true
             } else {
-                openLoop(startingAction: nil, overrideExistingTriggerDelayTimerAction: !isARepeat)
-                return false
+                closeLoop(forceClose: false)
             }
-        } else {
-            closeLoop(forceClose: false)
         }
 
         // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
