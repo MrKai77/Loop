@@ -20,7 +20,17 @@ final class MiddleClickObserver {
     // Defaults
     private var middleClickTriggersLoop: Bool { Defaults[.middleClickTriggersLoop] }
     private var useTriggerDelay: Bool { Defaults[.enableTriggerDelayOnMiddleClick] && Defaults[.triggerDelay] > 0.1 }
-    private var triggerDelayTimer: TriggerDelayTimer?
+    private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
+    private lazy var triggerDelayTimer = TriggerDelayTimer(openCallback: openCallback)
+    private lazy var doubleClickTimer = DoubleClickTimer { [weak self] action in
+        guard let self else { return }
+
+        if useTriggerDelay {
+            triggerDelayTimer.handleTrigger(startingAction: nil)
+        } else {
+            openCallback(action)
+        }
+    }
 
     /// Initializes a ``MiddleClickObserver``.
     /// - Parameters:
@@ -64,16 +74,15 @@ final class MiddleClickObserver {
 
             if event.type == .otherMouseDown,
                event.getIntegerValueField(.mouseEventButtonNumber) == 2 {
-                if useTriggerDelay {
-                    triggerDelayTimer = TriggerDelayTimer(
-                        startingAction: nil,
-                        openCallback: openCallback
-                    )
+                if doubleClickToTrigger {
+                    doubleClickTimer.handleTrigger(startingAction: nil)
+                } else if useTriggerDelay {
+                    triggerDelayTimer.handleTrigger(startingAction: nil)
                 } else {
                     openCallback(nil)
                 }
             } else {
-                triggerDelayTimer?.cancel()
+                triggerDelayTimer.cancel()
                 closeCallback(false)
             }
         }

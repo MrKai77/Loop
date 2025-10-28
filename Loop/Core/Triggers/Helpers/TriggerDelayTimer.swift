@@ -11,23 +11,25 @@ import Foundation
 final class TriggerDelayTimer {
     private var triggerDelayTimer: Task<(), Never>?
     private var startingAction: WindowAction?
+    private let openCallback: (WindowAction?) -> ()
     private var triggerDelay: CGFloat { Defaults[.triggerDelay] }
 
     var isActive: Bool {
         triggerDelayTimer != nil
     }
 
-    init(
-        startingAction action: WindowAction?,
-        openCallback: @escaping (WindowAction?) -> ()
-    ) {
-        self.startingAction = action
+    init(openCallback: @escaping (WindowAction?) -> ()) {
+        self.openCallback = openCallback
+    }
 
-        self.triggerDelayTimer = Task { @MainActor in
+    func handleTrigger(startingAction: WindowAction?) {
+        self.startingAction = startingAction
+        cancel() // Ensure no previous timer is active
+        triggerDelayTimer = Task { @MainActor in
             try? await Task.sleep(for: .seconds(triggerDelay))
             guard !Task.isCancelled else { return }
 
-            openCallback(startingAction)
+            openCallback(self.startingAction)
             cancel()
         }
     }

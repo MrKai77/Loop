@@ -29,7 +29,20 @@ final class KeybindObserver {
     private let actionsByKeybindCache = WindowActionCache()
 
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
-    private var triggerDelayTimer: TriggerDelayTimer?
+    private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
+    private lazy var triggerDelayTimer = TriggerDelayTimer(openCallback: openCallback)
+    private lazy var doubleClickTimer = DoubleClickTimer { [weak self] action in
+        guard let self else { return }
+
+        if useTriggerDelay {
+            startTriggerDelayTimer(
+                startingAction: action,
+                overrideExistingTriggerDelayTimerAction: true
+            )
+        } else {
+            openCallback(action)
+        }
+    }
 
     /// Initializes a ``KeybindObserver``.
     /// - Parameters:
@@ -166,23 +179,15 @@ final class KeybindObserver {
 
     private func openLoop(startingAction: WindowAction?, overrideExistingTriggerDelayTimerAction: Bool) {
         if checkIfLoopOpen() {
-            openCallback(startingAction)
+            openCallback(startingAction) // Only update Loop to the latest WindowAction
         } else {
-            if useTriggerDelay {
-                // If a trigger delay timer is already active, only update its startingAction when
-                // overrideExistingTriggerDelayTimerAction is true. If it's false, keep the existing
-                // timer and its startingAction (do not create a new timer with nil).
-                if triggerDelayTimer?.isActive ?? false {
-                    if overrideExistingTriggerDelayTimerAction {
-                        triggerDelayTimer?.updateStartingAction(with: startingAction)
-                    }
-                } else {
-                    // No active timer, create one with the provided startingAction.
-                    triggerDelayTimer = TriggerDelayTimer(
-                        startingAction: startingAction,
-                        openCallback: openCallback
-                    )
-                }
+            if doubleClickToTrigger {
+                doubleClickTimer.handleTrigger(startingAction: startingAction)
+            } else if useTriggerDelay {
+                startTriggerDelayTimer(
+                    startingAction: startingAction,
+                    overrideExistingTriggerDelayTimerAction: overrideExistingTriggerDelayTimerAction
+                )
             } else {
                 openCallback(startingAction)
             }
@@ -192,7 +197,24 @@ final class KeybindObserver {
     private func closeLoop(forceClose: Bool) {
         pressedKeys = []
         canPassthroughSpecialEvents = true
-        triggerDelayTimer?.cancel()
+        triggerDelayTimer.cancel()
         closeCallback(forceClose)
+    }
+
+    private func startTriggerDelayTimer(
+        startingAction: WindowAction?,
+        overrideExistingTriggerDelayTimerAction: Bool
+    ) {
+        // If a trigger delay timer is already active, only update its startingAction when
+        // overrideExistingTriggerDelayTimerAction is true. If it's false, keep the existing
+        // timer and its startingAction (do not create a new timer with nil).
+        if triggerDelayTimer.isActive {
+            if overrideExistingTriggerDelayTimerAction {
+                triggerDelayTimer.updateStartingAction(with: startingAction)
+            }
+        } else {
+            // No active timer, create one with the provided startingAction.
+            triggerDelayTimer.handleTrigger(startingAction: startingAction)
+        }
     }
 }
