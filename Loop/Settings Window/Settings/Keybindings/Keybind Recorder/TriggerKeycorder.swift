@@ -26,7 +26,8 @@ struct TriggerKeycorder: View {
     @State private var tooManyKeysPopup: Bool = false
 
     private var sortedKeys: [CGKeyCode] {
-        selectionKey.sorted()
+        let selectionKey: Set<CGKeyCode> = sideDependentTriggerKey ? selectionKey : selectionKey.baseModifiers
+        return selectionKey.sorted()
     }
 
     init(_ key: Binding<Set<CGKeyCode>>) {

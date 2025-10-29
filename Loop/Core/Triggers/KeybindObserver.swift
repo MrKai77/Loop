@@ -30,6 +30,11 @@ final class KeybindObserver {
 
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
+    private var sideDependentTriggerKey: Bool { Defaults[.sideDependentTriggerKey] }
+    private var triggerKey: Set<CGKeyCode> {
+        sideDependentTriggerKey ? Defaults[.triggerKey] : Defaults[.triggerKey].baseModifiers
+    }
+
     private lazy var triggerDelayTimer = TriggerDelayTimer(openCallback: openCallback)
     private lazy var doubleClickTimer = DoubleClickTimer { [weak self] action in
         guard let self else { return }
@@ -131,9 +136,8 @@ final class KeybindObserver {
     ///   - flags: modifier flags associated with this event.
     /// - Returns: whether this event was processed by Loop.
     private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags) -> Bool {
-        let triggerKey: Set<CGKeyCode> = Defaults[.triggerKey]
-
-        let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flags.keyCodes)
+        let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
+        let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
         let actionKeys: Set<CGKeyCode> = allPressedKeys.subtracting(triggerKey)
         let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
 

@@ -367,3 +367,10 @@ extension CGKeyCode {
         }
     }
 }
+
+extension Set<CGKeyCode> {
+    /// Maps all modifier keys to their base variant. Used on trigger key when the user has disabled side-dependent trigger keys.
+    var baseModifiers: Set<CGKeyCode> {
+        Set(map(\.baseModifier))
+    }
+}

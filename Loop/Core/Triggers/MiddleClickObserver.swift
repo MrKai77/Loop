@@ -21,6 +21,7 @@ final class MiddleClickObserver {
     private var middleClickTriggersLoop: Bool { Defaults[.middleClickTriggersLoop] }
     private var useTriggerDelay: Bool { Defaults[.enableTriggerDelayOnMiddleClick] && Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
+
     private lazy var triggerDelayTimer = TriggerDelayTimer(openCallback: openCallback)
     private lazy var doubleClickTimer = DoubleClickTimer { [weak self] action in
         guard let self else { return }
