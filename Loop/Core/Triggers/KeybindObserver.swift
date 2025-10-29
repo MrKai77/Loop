@@ -170,7 +170,9 @@ final class KeybindObserver {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
                     return true
-                } else {
+                }
+
+                if allPressedKeys == triggerKey {
                     openLoop(startingAction: nil, overrideExistingTriggerDelayTimerAction: !isARepeat)
                     return false
                 }

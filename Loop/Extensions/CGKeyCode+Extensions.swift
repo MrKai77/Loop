@@ -277,7 +277,7 @@ extension CGKeyCode {
     ]
 
     // Make sure to use baseModifier before using this!
-    private static let modifierToImage: [CGKeyCode: String] = [
+    private static let modifierToSystemImage: [CGKeyCode: String] = [
         .kVK_Function: "globe",
         .kVK_Shift: "shift",
         .kVK_Command: "command",
@@ -286,7 +286,7 @@ extension CGKeyCode {
     ]
 
     var modifierSystemImage: String? {
-        if let systemName = CGKeyCode.modifierToImage[baseModifier] {
+        if let systemName = CGKeyCode.modifierToSystemImage[baseModifier] {
             systemName
         } else {
             nil
