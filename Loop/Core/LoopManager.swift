@@ -36,7 +36,7 @@ final class LoopManager: ObservableObject {
     )
 
     private(set) lazy var mouseMovedEventMonitor = PassiveEventMonitor(
-        events: [.mouseMoved],
+        events: [.mouseMoved, .otherMouseDragged],
         callback: mouseMoved
     )
 
