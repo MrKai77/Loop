@@ -321,7 +321,7 @@ private extension StashManager {
         logger.info("Listening for mouse moved events…")
 
         mouseMonitor = PassiveEventMonitor(
-            events: [.mouseMoved],
+            events: [.mouseMoved, .leftMouseDragged],
             callback: handleMouseMoved
         )
 
