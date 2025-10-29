@@ -3044,7 +3044,7 @@
       }
     },
     "Cycles" : {
-
+      "comment" : "Section header for cycle-related options in the “Keybinds” tab"
     },
     "Design" : {
       "localizations" : {
@@ -19953,7 +19953,7 @@
       }
     },
     "Treat left and right keys differently" : {
-
+      "comment" : "Setting label in the “Keybinds” tab for enabling separate behavior for left and right keys."
     },
     "Trigger delay" : {
       "localizations" : {

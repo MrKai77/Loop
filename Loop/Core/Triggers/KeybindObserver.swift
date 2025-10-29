@@ -172,6 +172,7 @@ final class KeybindObserver {
                     return true
                 }
 
+                // Only trigger Loop without an action if the only pressed keys perfectly matches the trigger key.
                 if allPressedKeys == triggerKey {
                     openLoop(startingAction: nil, overrideExistingTriggerDelayTimerAction: !isARepeat)
                     return false
