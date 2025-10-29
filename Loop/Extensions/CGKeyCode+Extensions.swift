@@ -183,20 +183,32 @@ extension CGKeyCode {
         return rightModifiers.contains(self)
     }
 
-    var isArrowKey: Bool {
-        let arrowKeys: Set<CGKeyCode> = [.kVK_LeftArrow, .kVK_RightArrow, .kVK_DownArrow, .kVK_UpArrow]
-        return arrowKeys.contains(self)
+    var isFnSpecialKey: Bool {
+        /// See: https://github.com/koekeishiya/skhd/issues/1
+        let specialKeys: Set<CGKeyCode> = [
+            .kVK_Delete, /// Usually `kVK_ForwardDelete`, but `baseKey(flags:)` converts that back into `kVK_Delete` if the fn key is also being pressed.
+            .kVK_Help
+        ]
+        let allKeys = specialKeys
+            .union(Self.arrowKeys)
+            .union(Self.fKeys)
+
+        return allKeys.contains(self)
     }
 
-    var isFKey: Bool {
-        let fKeys: Set<CGKeyCode> = [
-            .kVK_F1, .kVK_F2, .kVK_F3, .kVK_F4, .kVK_F5,
-            .kVK_F6, .kVK_F7, .kVK_F8, .kVK_F9, .kVK_F10,
-            .kVK_F11, .kVK_F12, .kVK_F13, .kVK_F14, .kVK_F15,
-            .kVK_F16, .kVK_F17, .kVK_F18, .kVK_F19, .kVK_F20
-        ]
-        return fKeys.contains(self)
-    }
+    private static let arrowKeys: Set<CGKeyCode> = [
+        .kVK_LeftArrow,
+        .kVK_RightArrow,
+        .kVK_DownArrow,
+        .kVK_UpArrow
+    ]
+
+    private static let fKeys: Set<CGKeyCode> = [
+        .kVK_F1, .kVK_F2, .kVK_F3, .kVK_F4, .kVK_F5,
+        .kVK_F6, .kVK_F7, .kVK_F8, .kVK_F9, .kVK_F10,
+        .kVK_F11, .kVK_F12, .kVK_F13, .kVK_F14, .kVK_F15,
+        .kVK_F16, .kVK_F17, .kVK_F18, .kVK_F19, .kVK_F20
+    ]
 }
 
 // MARK: Stringification of keycodes

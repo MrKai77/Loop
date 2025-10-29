@@ -76,7 +76,7 @@ final class KeybindObserver {
 
             var filteredFlags = event.flags
 
-            if keyCode.isArrowKey || keyCode.isFKey, !previousEventFlags.contains(.maskSecondaryFn) {
+            if keyCode.isFnSpecialKey, !previousEventFlags.contains(.maskSecondaryFn) {
                 filteredFlags.remove(.maskSecondaryFn)
             }
 
