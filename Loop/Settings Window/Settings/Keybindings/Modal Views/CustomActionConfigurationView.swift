@@ -174,7 +174,11 @@ struct CustomActionConfigurationView: View {
                 )
                 .disabled(action.sizeMode != .custom)
 
-            Button("Close") { isPresented = false }
+            Button {
+                isPresented = false
+            } label: {
+                Text("Close", comment: "Label for a button that closes a modal window")
+            }
         }
         .luminareAspectRatio(contentMode: .fill)
         .buttonStyle(.luminareCompact)
@@ -233,17 +237,21 @@ struct CustomActionConfigurationView: View {
                             }
                         )
                     ) {
-                        Text("Use macOS center")
-                            .padding(.trailing, 4)
-                            .luminarePopover(attachedTo: .topTrailing) {
-                                Text("macOS center places windows slightly above the absolute center,\nwhich can be found more ergonomic.")
-                                    .padding(6)
-                            }
+                        if let infoText = action.direction.infoText {
+                            Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
+                                .padding(.trailing, 4)
+                                .luminarePopover(attachedTo: .topTrailing) {
+                                    Text(infoText)
+                                        .padding(6)
+                                }
+                        } else {
+                            Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
+                        }
                     }
                 }
             } else {
                 LuminareSlider(
-                    "X",
+                    String(localized: "X", comment: "X axis label"),
                     value: Binding(
                         get: {
                             action.xPoint ?? 0
@@ -259,7 +267,7 @@ struct CustomActionConfigurationView: View {
                 )
 
                 LuminareSlider(
-                    "Y",
+                    String(localized: "Y", comment: "Y axis label"),
                     value: Binding(
                         get: {
                             action.yPoint ?? 0

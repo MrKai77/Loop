@@ -73,7 +73,7 @@ struct KeybindsConfigurationView: View {
     }
 
     private var triggerKeySection: some View {
-        LuminareSection("Trigger Key") {
+        LuminareSection(String(localized: "Trigger Key", comment: "Section header shown in settings")) {
             TriggerKeycorder($triggerKey)
                 .environmentObject(model)
                 .luminareBordered(true)
@@ -83,7 +83,7 @@ struct KeybindsConfigurationView: View {
 
     private var settingsSection: some View {
         Group {
-            LuminareSection("Settings") {
+            LuminareSection(String(localized: "Settings", comment: "Section header shown in settings")) {
                 LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
 
                 LuminareSlider(
@@ -93,7 +93,7 @@ struct KeybindsConfigurationView: View {
                     step: 0.1,
                     format: .number.precision(.fractionLength(1...1)),
                     clampsUpper: false,
-                    suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s"))
+                    suffix: Text("s", comment: "Unit symbol: seconds")
                 )
 
                 LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
@@ -105,7 +105,7 @@ struct KeybindsConfigurationView: View {
             }
 
             if showCycleRestartOption || showCycleBackwardsOption {
-                LuminareSection("Cycles") {
+                LuminareSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
                     if showCycleRestartOption {
                         LuminareToggle(isOn: $cycleModeRestartEnabled) {
                             Text("Always start cycles from first item")
@@ -126,7 +126,7 @@ struct KeybindsConfigurationView: View {
     }
 
     private var keybindsSection: some View {
-        LuminareSection("Keybinds") {
+        LuminareSection(String(localized: "Keybinds", comment: "Section header shown in settings")) {
             HStack(spacing: 2) {
                 Button("Add") {
                     keybinds.insert(.init(.noAction), at: 0)

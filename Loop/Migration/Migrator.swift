@@ -120,13 +120,13 @@ enum Migrator {
         // Check if there are any keybinds to export.
         guard !Defaults[.keybinds].isEmpty else {
             await showAlert(
-                .init(
-                    localized: "Export empty keybinds alert title",
-                    defaultValue: "No Keybinds Have Been Set"
+                String(
+                    localized: "No Keybinds Have Been Set",
+                    comment: "Title for an alert shown when the user tries to export keybinds but none exist."
                 ),
-                informativeText: .init(
-                    localized: "Export empty keybinds alert description",
-                    defaultValue: "You can't export something that doesn't exist!"
+                informativeText: String(
+                    localized: "You can't export something that doesn't exist!",
+                    comment: "Description for an alert shown when the user tries to export keybinds but none exist."
                 )
             )
 

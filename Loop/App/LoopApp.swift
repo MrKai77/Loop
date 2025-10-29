@@ -29,7 +29,7 @@ struct LoopApp: App {
             } label: {
                 HStack {
                     Image(systemName: "heart")
-                    Text("Donate…")
+                    Text("Donate")
                 }
             }
 

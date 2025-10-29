@@ -57,7 +57,7 @@ struct BehaviorConfigurationView: View {
     }
 
     private var generalSection: some View {
-        LuminareSection("General") {
+        LuminareSection(String(localized: "General", comment: "Section header shown in settings")) {
             LuminareToggle("Launch at login", isOn: $launchAtLogin)
                 .onChange(of: launchAtLogin) { _ in
                     do {
@@ -85,7 +85,7 @@ struct BehaviorConfigurationView: View {
     }
 
     private var windowSection: some View {
-        LuminareSection("Window") {
+        LuminareSection(String(localized: "Window", comment: "Section header shown in settings")) {
             LuminareToggle("Move window to cursor's screen", isOn: $useScreenWithCursor)
 
             // Enabling the system window manager will override these options.
@@ -107,7 +107,7 @@ struct BehaviorConfigurationView: View {
     }
 
     private var cursorSection: some View {
-        LuminareSection("Cursor") {
+        LuminareSection(String(localized: "Cursor", comment: "Section header shown in settings")) {
             // This can only be enabled when the preview is visible.
             // Because when the preview is disabled, the window moves live with cursor movement,
             // so moving the cursor would be unusable.
@@ -124,7 +124,7 @@ struct BehaviorConfigurationView: View {
     }
 
     private var windowSnappingSection: some View {
-        LuminareSection("Window Snapping") {
+        LuminareSection(String(localized: "Window Snapping", comment: "Section header shown in settings")) {
             if #available(macOS 15, *) {
                 LuminareToggle(isOn: $windowSnapping) {
                     if SystemWindowManager.MoveAndResize.snappingEnabled {
@@ -156,7 +156,7 @@ struct BehaviorConfigurationView: View {
     }
 
     private var stageManagerSection: some View {
-        LuminareSection("Stage Manager") {
+        LuminareSection(String(localized: "Stage Manager", comment: "Section header shown in settings")) {
             LuminareToggle("Respect Stage Manager", isOn: $respectStageManager)
 
             if respectStageManager {
@@ -166,23 +166,23 @@ struct BehaviorConfigurationView: View {
                     in: 50...250,
                     format: .number.precision(.fractionLength(0...0)),
                     clampsUpper: false,
-                    suffix: Text("px")
+                    suffix: Text("px", comment: "Unit symbol: pixels")
                 )
             }
         }
     }
 
     private var stashSection: some View {
-        LuminareSection("Stash") {
+        LuminareSection(String(localized: "Stash", comment: "Section header shown in settings")) {
             LuminareToggle("Animated", isOn: $animateStashedWindows)
 
             LuminareSlider(
-                "Peek size",
+                String(localized: "Peek size", comment: "Thickness of the visible portion of the window when stashed"),
                 value: $stashedWindowVisiblePadding.doubleBinding,
                 in: 1...200,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
 
             LuminareToggle("Shift focus when stashed", isOn: $shiftFocusWhenStashed)

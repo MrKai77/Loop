@@ -165,12 +165,18 @@ struct TriggerKeycorderKeyView: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            if sideDependentTriggerKey {
-                Text(key.isModifierOnRightSide ? "Right" : "Left")
-                    .transition(.move(edge: .leading).combined(with: .opacity))
-            }
+            let keyImage = Image(systemName: key.modifierSystemImage ?? Self.defaultIconName)
 
-            Text("\(Image(systemName: key.modifierSystemImage ?? Self.defaultIconName))")
+            if sideDependentTriggerKey {
+                let side: String = key.isModifierOnRightSide
+                    ? String(localized: "Right", comment: "Side of a trigger key")
+                    : String(localized: "Left", comment: "Side of a trigger key")
+
+                Text("\(side) \(keyImage)", comment: "Format for modifier key + side; %1$@ is the key (e.g. command), %2$@ is the side (left/right)")
+                    .transition(.move(edge: .leading).combined(with: .opacity))
+            } else {
+                keyImage
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .fixedSize(horizontal: true, vertical: false)

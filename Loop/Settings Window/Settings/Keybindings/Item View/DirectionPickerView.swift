@@ -16,34 +16,35 @@ struct DirectionPickerView: View {
     @Binding private var direction: WindowDirection
     private let isInCycle: Bool
 
-    private let sections: [PickerSection] = [
-        .init(.init(localized: "General"), WindowDirection.general),
-        .init(.init(localized: "Halves"), WindowDirection.halves),
-        .init(.init(localized: "Quarters"), WindowDirection.quarters),
-        .init(.init(localized: "Horizontal Thirds"), WindowDirection.horizontalThirds),
-        .init(.init(localized: "Vertical Thirds"), WindowDirection.verticalThirds),
-        .init(.init(localized: "Horizontal Fourths"), WindowDirection.horizontalFourths),
-        .init(.init(localized: "Screen Switching"), WindowDirection.screenSwitching),
-        .init(.init(localized: "Size Adjustment"), WindowDirection.sizeAdjustment),
-        .init(.init(localized: "Shrink"), WindowDirection.shrink),
-        .init(.init(localized: "Grow"), WindowDirection.grow),
-        .init(.init(localized: "Move"), WindowDirection.move),
-        .init(.init(localized: "Stash"), [WindowDirection.stash, WindowDirection.unstash]),
-        .init(.init(localized: "Go Back"), [WindowDirection.initialFrame, WindowDirection.undo])
+    private static let sections: [PickerSection] = [
+        .init(String(localized: "General", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.general),
+        .init(String(localized: "Halves", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.halves),
+        .init(String(localized: "Quarters", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.quarters),
+        .init(String(localized: "Horizontal Thirds", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.horizontalThirds),
+        .init(String(localized: "Vertical Thirds", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.verticalThirds),
+        .init(String(localized: "Horizontal Fourths", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.horizontalFourths),
+        .init(String(localized: "Screen Switching", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.screenSwitching),
+        .init(String(localized: "Size Adjustment", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.sizeAdjustment),
+        .init(String(localized: "Shrink", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.shrink),
+        .init(String(localized: "Grow", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.grow),
+        .init(String(localized: "Move", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.move),
+        .init(String(localized: "Stash", comment: "Section header in the action picker of the Keybinds tab"), [WindowDirection.stash, WindowDirection.unstash]),
+        .init(String(localized: "Go Back", comment: "Section header in the action picker of the Keybinds tab"), [WindowDirection.initialFrame, WindowDirection.undo])
     ]
 
     private var moreSection: PickerSection<WindowDirection> {
+        let title = String(localized: "More", comment: "Section header in the action picker of the Keybinds tab")
         if isInCycle {
-            .init(.init(localized: "More"), [WindowDirection.custom])
+            return .init(title, [WindowDirection.custom])
         } else {
-            .init(.init(localized: "More"), [WindowDirection.custom, WindowDirection.cycle])
+            return .init(title, [WindowDirection.custom, WindowDirection.cycle])
         }
     }
 
     private var sectionItems: [WindowDirection] {
         var result: [WindowDirection] = []
 
-        for sectionItems in sections.map(\.items) {
+        for sectionItems in Self.sections.map(\.items) {
             result.append(contentsOf: sectionItems)
         }
 
@@ -65,7 +66,7 @@ struct DirectionPickerView: View {
             PickerList(
                 $direction,
                 $searchResults,
-                sections + [moreSection]
+                Self.sections + [moreSection]
             ) { item in
                 HStack(spacing: 8) {
                     IconView(action: .init(item))

@@ -23,9 +23,9 @@ enum AccentColorOption: Int, Codable, Defaults.Serializable, CaseIterable {
 
     var text: String {
         switch self {
-        case .system: .init(localized: "Accent color option: System", defaultValue: "System")
-        case .wallpaper: .init(localized: "Accent color option: Wallpaper", defaultValue: "Wallpaper")
-        case .custom: .init(localized: "Accent color option: Custom", defaultValue: "Custom")
+        case .system: String(localized: "System", comment: "Accent color option")
+        case .wallpaper: String(localized: "Wallpaper", comment: "Accent color option")
+        case .custom: String(localized: "Custom", comment: "Accent color option")
         }
     }
 }

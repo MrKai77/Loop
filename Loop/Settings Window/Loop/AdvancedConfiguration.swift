@@ -164,7 +164,7 @@ struct AdvancedConfigurationView: View {
     }
 
     private var generalSection: some View {
-        LuminareSection("General") {
+        LuminareSection(String(localized: "General", comment: "Section header shown in settings")) {
             if #available(macOS 15.0, *) {
                 LuminareToggle("Use macOS window manager when available", isOn: $useSystemWindowManagerWhenAvailable)
             }
@@ -206,13 +206,13 @@ struct AdvancedConfigurationView: View {
                 step: 4.5,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
         }
     }
 
     private var keybindsSection: some View {
-        LuminareSection("Keybinds") {
+        LuminareSection(String(localized: "Keybinds", comment: "Section header shown in settings")) {
             HStack(spacing: 2) {
                 Button(action: model.importPrompt) {
                     HStack {
@@ -255,7 +255,7 @@ struct AdvancedConfigurationView: View {
     }
 
     private var permissionsSection: some View {
-        LuminareSection("Permissions") {
+        LuminareSection(String(localized: "Permissions", comment: "Section header shown in settings")) {
             accessibilityComponent()
         }
         .animation(luminareAnimation, value: model.isAccessibilityAccessGranted)
@@ -266,7 +266,7 @@ struct AdvancedConfigurationView: View {
             Button {
                 AccessibilityManager.requestAccess()
             } label: {
-                Text("Request…")
+                Text("Request…", comment: "Button to request accessibility access")
             }
             .buttonStyle(.luminareCompact)
             .luminareComposeIgnoreSafeArea(edges: .trailing)

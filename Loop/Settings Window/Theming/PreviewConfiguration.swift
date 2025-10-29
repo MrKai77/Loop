@@ -50,7 +50,7 @@ struct PreviewConfigurationView: View {
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
                 clampsLower: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
 
             LuminareSlider(
@@ -60,7 +60,7 @@ struct PreviewConfigurationView: View {
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
                 clampsLower: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
 
             LuminareSlider(
@@ -70,7 +70,7 @@ struct PreviewConfigurationView: View {
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
                 clampsLower: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
         }
     }

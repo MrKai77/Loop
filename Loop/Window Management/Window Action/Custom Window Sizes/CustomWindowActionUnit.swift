@@ -16,9 +16,9 @@ enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
     var suffix: String {
         switch self {
         case .pixels:
-            .init(localized: "Measurement unit: pixels", defaultValue: "px")
+            String(localized: "px", comment: "Unit symbol: pixels")
         case .percentage:
-            .init(localized: "Measurement unit: percentage", defaultValue: "%")
+            String(localized: "%", comment: "Unit symbol: percentage")
         }
     }
 }

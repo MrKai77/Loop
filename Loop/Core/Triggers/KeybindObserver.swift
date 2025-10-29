@@ -154,7 +154,7 @@ final class KeybindObserver {
                     lastKeyReleaseTime = Date.now
                 }
 
-                return true
+                return false
             }
 
             if type != .keyDown, !containsTrigger {

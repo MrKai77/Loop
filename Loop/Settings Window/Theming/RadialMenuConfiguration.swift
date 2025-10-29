@@ -26,7 +26,7 @@ struct RadialMenuConfigurationView: View {
                     format: .number.precision(.fractionLength(0...0)),
                     clampsUpper: false,
                     clampsLower: false,
-                    suffix: Text("px")
+                    suffix: Text("px", comment: "Unit symbol: pixels")
                 )
                 .onChange(of: radialMenuCornerRadius) { _ in
                     if radialMenuCornerRadius - 1 < radialMenuThickness {
@@ -41,7 +41,7 @@ struct RadialMenuConfigurationView: View {
                     format: .number.precision(.fractionLength(0...0)),
                     clampsUpper: false,
                     clampsLower: false,
-                    suffix: Text("px")
+                    suffix: Text("px", comment: "Unit symbol: pixels")
                 )
                 .onChange(of: radialMenuThickness) { _ in
                     if radialMenuThickness + 1 > radialMenuCornerRadius {

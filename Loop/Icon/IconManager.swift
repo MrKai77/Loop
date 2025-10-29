@@ -66,11 +66,10 @@ enum IconManager {
             if let message = icon.unlockMessage {
                 content.body = message
             } else {
-                content.body = .init(
-                    localized: .init(
-                        "Icon Unlock Message",
-                        defaultValue: "You've unlocked a new icon: \(icon.name)!"
-                    )
+                content.body = String(
+                    localized: "Icon Unlock Message",
+                    defaultValue: "You've unlocked a new icon: \(icon.name)!",
+                    comment: "Default message shown when a new icon is unlocked"
                 )
             }
 

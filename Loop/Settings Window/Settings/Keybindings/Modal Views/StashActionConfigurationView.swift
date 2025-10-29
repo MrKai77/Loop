@@ -174,7 +174,11 @@ struct StashActionConfigurationView: View {
                 )
                 .disabled(action.sizeMode != .custom)
 
-            Button("Close") { isPresented = false }
+            Button {
+                isPresented = false
+            } label: {
+                Text("Close", comment: "Label for a button that closes a modal window")
+            }
         }
         .luminareAspectRatio(contentMode: .fill)
         .buttonStyle(.luminareCompact)
@@ -204,7 +208,7 @@ struct StashActionConfigurationView: View {
                 .luminarePickerRoundedCorner(top: .always, bottom: .always)
             } else {
                 LuminareSlider(
-                    "X",
+                    String(localized: "X", comment: "X axis label"),
                     value: Binding(
                         get: {
                             action.xPoint ?? 0
@@ -220,7 +224,7 @@ struct StashActionConfigurationView: View {
                 )
 
                 LuminareSlider(
-                    "Y",
+                    String(localized: "Y", comment: "Y axis label"),
                     value: Binding(
                         get: {
                             action.yPoint ?? 0

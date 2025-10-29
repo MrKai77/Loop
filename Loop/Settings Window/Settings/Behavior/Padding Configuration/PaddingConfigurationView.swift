@@ -39,8 +39,10 @@ struct PaddingConfigurationView: View {
                 }
             }
 
-            Button("Close") {
+            Button {
                 isPresented = false
+            } label: {
+                Text("Close", comment: "Label for a button that closes a modal window")
             }
             .luminareAspectRatio(contentMode: .fill)
             .buttonStyle(.luminareCompact)
@@ -114,49 +116,49 @@ struct PaddingConfigurationView: View {
             in: range,
             format: .number.precision(.fractionLength(0...0)),
             clampsUpper: false,
-            suffix: Text("px")
+            suffix: Text("px", comment: "Unit symbol: pixels")
         )
     }
 
     func screenSidesPaddingConfiguration() -> some View {
         Group {
             LuminareSlider(
-                "Top",
+                String(localized: "Top", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.top.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
             .luminareComposeStyle(.inline)
 
             LuminareSlider(
-                "Bottom",
+                String(localized: "Bottom", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.bottom.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
             .luminareComposeStyle(.inline)
 
             LuminareSlider(
-                "Right",
+                String(localized: "Right", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.right.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
             .luminareComposeStyle(.inline)
 
             LuminareSlider(
-                "Left",
+                String(localized: "Left", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.left.doubleBinding,
                 in: range,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
             .luminareComposeStyle(.inline)
         }
@@ -165,21 +167,21 @@ struct PaddingConfigurationView: View {
     func screenInsetsPaddingConfiguration() -> some View {
         Group {
             LuminareSlider(
-                "Window gaps",
+                String(localized: "Window gaps", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.window.doubleBinding,
                 in: 0...100,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                suffix: Text("px")
+                suffix: Text("px", comment: "Unit symbol: pixels")
             )
 
             LuminareSlider(
                 value: $paddingModel.externalBar.doubleBinding,
                 in: 0...100,
-                format: .number.precision(.fractionLength(0...3)),
-                suffix: Text("px")
+                format: .number.precision(.fractionLength(0...0)),
+                suffix: Text("px", comment: "Unit symbol: pixels")
             ) {
-                Text("External bar")
+                Text("External bar", comment: "Label for a slider in Loop’s padding settings")
                     .padding(.trailing, 4)
                     .luminarePopover(attachedTo: .topTrailing) {
                         Text("Use this if you are using a custom menubar.")

@@ -90,8 +90,10 @@ struct CycleActionConfigurationView: View {
                 windowAction = action
             }
 
-            Button("Close") {
+            Button {
                 isPresented = false
+            } label: {
+                Text("Close", comment: "Label for a button that closes a modal window")
             }
             .luminareAspectRatio(contentMode: .fill)
             .buttonStyle(.luminareCompact)

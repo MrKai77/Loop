@@ -48,7 +48,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     private static func registerNotificationCategories() {
         let setIconAction = UNNotificationAction(
             identifier: "setIconAction",
-            title: .init(localized: .init("Notification/Set Icon: Action", defaultValue: "Set Current Icon")),
+            title: String(localized: "Set Current Icon", comment: "Label for a button that lets the user set their icon for Loop"),
             options: .destructive
         )
         let notificationCategory = UNNotificationCategory(

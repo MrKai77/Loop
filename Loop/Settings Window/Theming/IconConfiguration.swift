@@ -126,7 +126,7 @@ struct IconConfigurationView: View {
             .luminarePickerRoundedCorner(.always)
         }
 
-        LuminareSection("Options") {
+        LuminareSection(String(localized: "Options", comment: "Section header shown in settings")) {
             LuminareToggle("Show in dock", isOn: $showDockIcon)
             LuminareToggle(
                 "Notify when unlocking new icons",

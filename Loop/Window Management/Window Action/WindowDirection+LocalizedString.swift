@@ -19,139 +19,139 @@ extension WindowDirection {
     var name: String {
         switch self {
         case .noAction:
-            .init(localized: .init("Window Direction/Name: No Action", defaultValue: "No Action"))
+            String(localized: "No Action", comment: "Window action: no selection")
         case .maximize:
-            .init(localized: .init("Window Direction/Name: Maximize", defaultValue: "Maximize"))
+            String(localized: "Maximize", comment: "Window action")
         case .almostMaximize:
-            .init(localized: .init("Window Direction/Name: Almost Maximize", defaultValue: "Almost Maximize"))
+            String(localized: "Almost Maximize", comment: "Window action")
         case .maximizeHeight:
-            .init(localized: .init("Window Direction/Name: Maximize Height", defaultValue: "Maximize Height"))
+            String(localized: "Maximize Height", comment: "Window action")
         case .maximizeWidth:
-            .init(localized: .init("Window Direction/Name: Maximize Width", defaultValue: "Maximize Width"))
+            String(localized: "Maximize Width", comment: "Window action")
         case .fullscreen:
-            .init(localized: .init("Window Direction/Name: Fullscreen", defaultValue: "Fullscreen"))
+            String(localized: "Fullscreen", comment: "Window action")
         case .undo:
-            .init(localized: .init("Window Direction/Name: Undo", defaultValue: "Undo"))
+            String(localized: "Undo", comment: "Window action")
         case .initialFrame:
-            .init(localized: .init("Window Direction/Name: Initial Frame", defaultValue: "Initial Frame"))
+            String(localized: "Initial Frame", comment: "Window action")
         case .hide:
-            .init(localized: .init("Window Direction/Name: Hide", defaultValue: "Hide"))
+            String(localized: "Hide", comment: "Window action")
         case .minimize:
-            .init(localized: .init("Window Direction/Name: Minimize", defaultValue: "Minimize"))
+            String(localized: "Minimize", comment: "Window action")
         case .minimizeOthers:
-            .init(localized: .init("Window Direction/Name: Minimize Others", defaultValue: "Minimize Others"))
+            String(localized: "Minimize Others", comment: "Window action")
         case .macOSCenter:
-            .init(localized: .init("Window Direction/Name: macOS Center", defaultValue: "macOS Center"))
+            String(localized: "macOS Center", comment: "Window action")
         case .center:
-            .init(localized: .init("Window Direction/Name: Center", defaultValue: "Center"))
+            String(localized: "Center", comment: "Window action")
         case .topHalf:
-            .init(localized: .init("Window Direction/Name: Top Half", defaultValue: "Top Half"))
+            String(localized: "Top Half", comment: "Window action")
         case .rightHalf:
-            .init(localized: .init("Window Direction/Name: Right Half", defaultValue: "Right Half"))
+            String(localized: "Right Half", comment: "Window action")
         case .bottomHalf:
-            .init(localized: .init("Window Direction/Name: Bottom Half", defaultValue: "Bottom Half"))
+            String(localized: "Bottom Half", comment: "Window action")
         case .leftHalf:
-            .init(localized: .init("Window Direction/Name: Left Half", defaultValue: "Left Half"))
+            String(localized: "Left Half", comment: "Window action")
         case .horizontalCenterHalf:
-            .init(localized: .init("Window Direction/Name: Horizontal Center Half", defaultValue: "Horizontal Center Half"))
+            String(localized: "Horizontal Center Half", comment: "Window action")
         case .verticalCenterHalf:
-            .init(localized: .init("Window Direction/Name: Vertical Center Half", defaultValue: "Vertical Center Half"))
+            String(localized: "Vertical Center Half", comment: "Window action")
         case .topLeftQuarter:
-            .init(localized: .init("Window Direction/Name: Top Left Quarter", defaultValue: "Top Left Quarter"))
+            String(localized: "Top Left Quarter", comment: "Window action")
         case .topRightQuarter:
-            .init(localized: .init("Window Direction/Name: Top Right Quarter", defaultValue: "Top Right Quarter"))
+            String(localized: "Top Right Quarter", comment: "Window action")
         case .bottomRightQuarter:
-            .init(localized: .init("Window Direction/Name: Bottom Right Quarter", defaultValue: "Bottom Right Quarter"))
+            String(localized: "Bottom Right Quarter", comment: "Window action")
         case .bottomLeftQuarter:
-            .init(localized: .init("Window Direction/Name: Bottom Left Quarter", defaultValue: "Bottom Left Quarter"))
+            String(localized: "Bottom Left Quarter", comment: "Window action")
         case .rightThird:
-            .init(localized: .init("Window Direction/Name: Right Third", defaultValue: "Right Third"))
+            String(localized: "Right Third", comment: "Window action")
         case .rightTwoThirds:
-            .init(localized: .init("Window Direction/Name: Right Two Thirds", defaultValue: "Right Two Thirds"))
+            String(localized: "Right Two Thirds", comment: "Window action")
         case .horizontalCenterThird:
-            .init(localized: .init("Window Direction/Name: Horizontal Center Third", defaultValue: "Horizontal Center Third"))
+            String(localized: "Horizontal Center Third", comment: "Window action")
         case .leftThird:
-            .init(localized: .init("Window Direction/Name: Left Third", defaultValue: "Left Third"))
+            String(localized: "Left Third", comment: "Window action")
         case .leftTwoThirds:
-            .init(localized: .init("Window Direction/Name: Left Two Thirds", defaultValue: "Left Two Thirds"))
+            String(localized: "Left Two Thirds", comment: "Window action")
         case .topThird:
-            .init(localized: .init("Window Direction/Name: Top Third", defaultValue: "Top Third"))
+            String(localized: "Top Third", comment: "Window action")
         case .topTwoThirds:
-            .init(localized: .init("Window Direction/Name: Top Two Thirds", defaultValue: "Top Two Thirds"))
+            String(localized: "Top Two Thirds", comment: "Window action")
         case .verticalCenterThird:
-            .init(localized: .init("Window Direction/Name: Vertical Center Third", defaultValue: "Vertical Center Third"))
+            String(localized: "Vertical Center Third", comment: "Window action")
         case .bottomThird:
-            .init(localized: .init("Window Direction/Name: Bottom Third", defaultValue: "Bottom Third"))
+            String(localized: "Bottom Third", comment: "Window action")
         case .bottomTwoThirds:
-            .init(localized: .init("Window Direction/Name: Bottom Two Thirds", defaultValue: "Bottom Two Thirds"))
+            String(localized: "Bottom Two Thirds", comment: "Window action")
         case .firstFourth:
-            .init(localized: .init("Window Direction/Name: First Fourth", defaultValue: "First Fourth"))
+            String(localized: "First Fourth", comment: "Window action")
         case .secondFourth:
-            .init(localized: .init("Window Direction/Name: Second Fourth", defaultValue: "Second Fourth"))
+            String(localized: "Second Fourth", comment: "Window action")
         case .thirdFourth:
-            .init(localized: .init("Window Direction/Name: Third Fourth", defaultValue: "Third Fourth"))
+            String(localized: "Third Fourth", comment: "Window action")
         case .fourthFourth:
-            .init(localized: .init("Window Direction/Name: Fourth Fourth", defaultValue: "Fourth Fourth"))
+            String(localized: "Fourth Fourth", comment: "Window action")
         case .leftThreeFourths:
-            .init(localized: .init("Window Direction/Name: Left Three Fourths", defaultValue: "Left Three Fourths"))
+            String(localized: "Left Three Fourths", comment: "Window action")
         case .rightThreeFourths:
-            .init(localized: .init("Window Direction/Name: Right Three Fourths", defaultValue: "Right Three Fourths"))
+            String(localized: "Right Three Fourths", comment: "Window action")
         case .nextScreen:
-            .init(localized: .init("Window Direction/Name: Next Screen", defaultValue: "Next Screen"))
+            String(localized: "Next Screen", comment: "Window action")
         case .previousScreen:
-            .init(localized: .init("Window Direction/Name: Previous Screen", defaultValue: "Previous Screen"))
+            String(localized: "Previous Screen", comment: "Window action")
         case .leftScreen:
-            .init(localized: .init("Window Direction/Name: Left Screen", defaultValue: "Left Screen"))
+            String(localized: "Left Screen", comment: "Window action")
         case .rightScreen:
-            .init(localized: .init("Window Direction/Name: Right Screen", defaultValue: "Right Screen"))
+            String(localized: "Right Screen", comment: "Window action")
         case .topScreen:
-            .init(localized: .init("Window Direction/Name: Top Screen", defaultValue: "Top Screen"))
+            String(localized: "Top Screen", comment: "Window action")
         case .bottomScreen:
-            .init(localized: .init("Window Direction/Name: Bottom Screen", defaultValue: "Bottom Screen"))
+            String(localized: "Bottom Screen", comment: "Window action")
         case .larger:
-            .init(localized: .init("Window Direction/Name: Larger", defaultValue: "Larger"))
+            String(localized: "Larger", comment: "Window action")
         case .smaller:
-            .init(localized: .init("Window Direction/Name: Smaller", defaultValue: "Smaller"))
+            String(localized: "Smaller", comment: "Window action")
         case .shrinkTop:
-            .init(localized: .init("Window Direction/Name: Shrink Top", defaultValue: "Shrink Top"))
+            String(localized: "Shrink Top", comment: "Window action")
         case .shrinkBottom:
-            .init(localized: .init("Window Direction/Name: Shrink Bottom", defaultValue: "Shrink Bottom"))
+            String(localized: "Shrink Bottom", comment: "Window action")
         case .shrinkRight:
-            .init(localized: .init("Window Direction/Name: Shrink Right", defaultValue: "Shrink Right"))
+            String(localized: "Shrink Right", comment: "Window action")
         case .shrinkLeft:
-            .init(localized: .init("Window Direction/Name: Shrink Left", defaultValue: "Shrink Left"))
+            String(localized: "Shrink Left", comment: "Window action")
         case .shrinkHorizontal:
-            .init(localized: .init("Window Direction/Name: Shrink Horizontally", defaultValue: "Shrink Horizontally"))
+            String(localized: "Shrink Horizontally", comment: "Window action")
         case .shrinkVertical:
-            .init(localized: .init("Window Direction/Name: Shrink Vertically", defaultValue: "Shrink Vertically"))
+            String(localized: "Shrink Vertically", comment: "Window action")
         case .growTop:
-            .init(localized: .init("Window Direction/Name: Grow Top", defaultValue: "Grow Top"))
+            String(localized: "Grow Top", comment: "Window action")
         case .growBottom:
-            .init(localized: .init("Window Direction/Name: Grow Bottom", defaultValue: "Grow Bottom"))
+            String(localized: "Grow Bottom", comment: "Window action")
         case .growRight:
-            .init(localized: .init("Window Direction/Name: Grow Right", defaultValue: "Grow Right"))
+            String(localized: "Grow Right", comment: "Window action")
         case .growLeft:
-            .init(localized: .init("Window Direction/Name: Grow Left", defaultValue: "Grow Left"))
+            String(localized: "Grow Left", comment: "Window action")
         case .growHorizontal:
-            .init(localized: .init("Window Direction/Name: Grow Horizontally", defaultValue: "Grow Horizontally"))
+            String(localized: "Grow Horizontally", comment: "Window action")
         case .growVertical:
-            .init(localized: .init("Window Direction/Name: Grow Vertically", defaultValue: "Grow Vertically"))
+            String(localized: "Grow Vertically", comment: "Window action")
         case .moveUp:
-            .init(localized: .init("Window Direction/Name: Move Up", defaultValue: "Move Up"))
+            String(localized: "Move Up", comment: "Window action")
         case .moveDown:
-            .init(localized: .init("Window Direction/Name: Move Down", defaultValue: "Move Down"))
+            String(localized: "Move Down", comment: "Window action")
         case .moveRight:
-            .init(localized: .init("Window Direction/Name: Move Right", defaultValue: "Move Right"))
+            String(localized: "Move Right", comment: "Window action")
         case .moveLeft:
-            .init(localized: .init("Window Direction/Name: Move Left", defaultValue: "Move Left"))
+            String(localized: "Move Left", comment: "Window action")
         case .stash:
-            .init(localized: .init("Window Direction/Name: Stash", defaultValue: "Stash"))
+            String(localized: "Stash", comment: "Window action")
         case .unstash:
-            .init(localized: .init("Window Direction/Name: Unstash", defaultValue: "Unstash"))
+            String(localized: "Unstash", comment: "Window action")
         case .custom:
-            .init(localized: .init("Window Direction/Name: Custom", defaultValue: "Custom"))
+            String(localized: "Custom", comment: "Window action")
         case .cycle:
-            .init(localized: .init("Window Direction/Name: Cycle", defaultValue: "Cycle"))
+            String(localized: "Cycle", comment: "Window action")
         }
     }
 }

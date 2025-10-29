@@ -86,13 +86,12 @@ extension Icon {
         name: .init(localized: .init("Icon Name: Holo", defaultValue: "Holo")),
         assetName: "AppIcon-Holo",
         unlockTime: 25,
-        unlockMessage: .init(
-            localized: .init(
-                "Icon Unlock Message: Holo",
-                defaultValue: """
-                You've already looped 25 times! As a reward, here's new icon: \(.init(localized: .init("Icon Name: Holo", defaultValue: "Holo"))). Continue to loop more to unlock new icons!
-                """
-            )
+        unlockMessage: String(
+            localized: "Icon Unlock Message: Holo",
+            defaultValue: """
+            You've already looped 25 times! As a reward, here's new icon: \(.init(localized: .init("Icon Name: Holo", defaultValue: "Holo"))). Continue to loop more to unlock new icons!
+            """,
+            comment: "Message that is shown when a new icon is unlocked"
         )
     )
     static let rosePine = Icon(
@@ -124,11 +123,10 @@ extension Icon {
         name: .init(localized: .init("Icon Name: Loop Master", defaultValue: "Loop Master")),
         assetName: "AppIcon-Loop Master",
         unlockTime: 5000,
-        unlockMessage: .init(
-            localized: .init(
-                "Icon Unlock Message: Loop Master",
-                defaultValue: "5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!"
-            )
+        unlockMessage: String(
+            localized: "Icon Unlock Message: Loop Master",
+            defaultValue: "5000 loops conquered! The universe has witnessed the birth of a Loop master! Enjoy your well-deserved reward: a brand-new icon!",
+            comment: "Message that is shown when a new icon is unlocked"
         )
     )
 }

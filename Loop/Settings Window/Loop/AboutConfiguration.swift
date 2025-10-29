@@ -20,25 +20,25 @@ final class AboutConfigurationModel: ObservableObject {
     let credits: [CreditItem] = [
         .init(
             "Kai",
-            "Development",
+            Text("Development", comment: "Role title shown in Loop’s credits section."),
             url: .init(string: "https://github.com/mrkai77")!,
             avatar: Image(.kai)
         ),
         .init(
-            "Jace",
-            "Design",
-            url: .init(string: "https://x.com/jacethings")!,
-            avatar: Image(.jace)
-        ),
-        .init(
             "Kami",
-            "Development",
+            Text("Development", comment: "Role title shown in Loop’s credits section."),
             url: .init(string: "https://github.com/senpaihunters")!,
             avatar: Image(.kami)
         ),
         .init(
+            "Jace",
+            Text("Design", comment: "Role title shown in Loop’s credits section."),
+            url: .init(string: "https://x.com/jacethings")!,
+            avatar: Image(.jace)
+        ),
+        .init(
             .init(localized: "Contributors on GitHub"),
-            "Some features, ideas, and bug fixes",
+            Text("Some features, ideas, and bug fixes", comment: "Role title for contributors on GitHub shown in Loop’s credits section."),
             url: .init(string: "https://github.com/MrKai77/Loop/graphs/contributors")!,
             avatar: Image(.github)
         )
@@ -123,11 +123,11 @@ struct CreditItem: Identifiable {
     var id: String { name }
 
     let name: String
-    let description: LocalizedStringKey?
+    let description: Text?
     let url: URL
     let avatar: Image
 
-    init(_ name: String, _ description: LocalizedStringKey? = nil, url: URL, avatar: Image) {
+    init(_ name: String, _ description: Text? = nil, url: URL, avatar: Image) {
         self.name = name
         self.description = description
         self.avatar = avatar
@@ -295,7 +295,7 @@ struct AboutConfigurationView: View {
     }
 
     private var creditsSection: some View {
-        LuminareSection("Credits") {
+        LuminareSection(String(localized: "Credits", comment: "Section header shown in settings")) {
             ForEach(model.credits) { credit in
                 creditView(credit)
             }
@@ -321,7 +321,7 @@ struct AboutConfigurationView: View {
                     Text(credit.name)
 
                     if let description = credit.description {
-                        Text(description)
+                        description
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
