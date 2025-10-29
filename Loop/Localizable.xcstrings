@@ -3043,6 +3043,9 @@
         }
       }
     },
+    "Cycles" : {
+
+    },
     "Design" : {
       "localizations" : {
         "ar" : {
@@ -7461,6 +7464,7 @@
     },
     "Left %@" : {
       "comment" : "Trigger Key: Left side",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -16746,6 +16750,7 @@
     },
     "Right %@" : {
       "comment" : "Trigger Key: Right side",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -19946,6 +19951,9 @@
           }
         }
       }
+    },
+    "Treat left and right keys differently" : {
+
     },
     "Trigger delay" : {
       "localizations" : {

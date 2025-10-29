@@ -20,6 +20,7 @@ struct KeybindsConfigurationView: View {
     @StateObject private var model = KeybindsConfigurationModel()
 
     @Default(.triggerKey) private var triggerKey
+    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
     @Default(.triggerDelay) private var triggerDelay
     @Default(.cycleModeRestartEnabled) private var cycleModeRestartEnabled
     @Default(.cycleBackwardsOnShiftPressed) private var cycleBackwardsOnShiftPressed
@@ -81,37 +82,45 @@ struct KeybindsConfigurationView: View {
     }
 
     private var settingsSection: some View {
-        LuminareSection("Settings") {
-            LuminareSlider(
-                "Trigger delay",
-                value: $triggerDelay,
-                in: 0...1,
-                step: 0.1,
-                format: .number.precision(.fractionLength(1...1)),
-                clampsUpper: false,
-                suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s"))
-            )
+        Group {
+            LuminareSection("Settings") {
+                LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
 
-            LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
-            LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
+                LuminareSlider(
+                    "Trigger delay",
+                    value: $triggerDelay,
+                    in: 0...1,
+                    step: 0.1,
+                    format: .number.precision(.fractionLength(1...1)),
+                    clampsUpper: false,
+                    suffix: .init(.init(localized: "Measurement unit: seconds", defaultValue: "s"))
+                )
 
-            if showMiddleClickTriggerDelayOption {
-                LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
-            }
+                LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
+                LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
 
-            if showCycleRestartOption {
-                LuminareToggle(isOn: $cycleModeRestartEnabled) {
-                    Text("Always start cycles from first item")
-                        .padding(.trailing, 4)
-                        .luminarePopover(attachedTo: .topTrailing) {
-                            Text("By default, Loop resumes cycles from where you last left off in each window.")
-                                .padding(6)
-                        }
+                if showMiddleClickTriggerDelayOption {
+                    LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
                 }
             }
 
-            if showCycleBackwardsOption {
-                LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
+            if showCycleRestartOption || showCycleBackwardsOption {
+                LuminareSection("Cycles") {
+                    if showCycleRestartOption {
+                        LuminareToggle(isOn: $cycleModeRestartEnabled) {
+                            Text("Always start cycles from first item")
+                                .padding(.trailing, 4)
+                                .luminarePopover(attachedTo: .topTrailing) {
+                                    Text("By default, Loop resumes cycles from where you last left off in each window.")
+                                        .padding(6)
+                                }
+                        }
+                    }
+
+                    if showCycleBackwardsOption {
+                        LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
+                    }
+                }
             }
         }
     }

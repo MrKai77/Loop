@@ -11,6 +11,8 @@ import SwiftUI
 
 struct TriggerKeycorder: View {
     @EnvironmentObject private var model: KeybindsConfigurationModel
+    @Environment(\.luminareAnimation) private var luminareAnimation
+    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
 
     let keyLimit: Int = 5
 
@@ -22,6 +24,10 @@ struct TriggerKeycorder: View {
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
     @State private var tooManyKeysPopup: Bool = false
+
+    private var sortedKeys: [CGKeyCode] {
+        selectionKey.sorted()
+    }
 
     init(_ key: Binding<Set<CGKeyCode>>) {
         self._validCurrentKey = key
@@ -40,16 +46,10 @@ struct TriggerKeycorder: View {
                         .fixedSize(horizontal: true, vertical: false)
                 } else {
                     HStack(spacing: 12) {
-                        ForEach(selectionKey.sorted(), id: \.self) { key in
-                            let keyText: LocalizedStringKey = key.isModifierOnRightSide ?
-                                "Right \(Image(systemName: key.modifierSystemImage ?? "exclamationmark.circle.fill"))" :
-                                "Left \(Image(systemName: key.modifierSystemImage ?? "exclamationmark.circle.fill"))"
+                        ForEach(sortedKeys, id: \.self) { key in
+                            TriggerKeycorderKeyView(key: key)
 
-                            Text(keyText)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .fixedSize(horizontal: true, vertical: false)
-
-                            if key != selectionKey.sorted().last {
+                            if key != sortedKeys.last {
                                 Divider()
                                     .padding(1)
                             }
@@ -59,6 +59,7 @@ struct TriggerKeycorder: View {
                 }
             }
             .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))
+            .animation(luminareAnimation, value: sideDependentTriggerKey)
             .animation(Animation.default, value: shouldShake)
             .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
                 Text("You can only use up to \(keyLimit) keys in your trigger key.")
@@ -153,5 +154,24 @@ struct TriggerKeycorder: View {
         eventMonitor = nil
 
         LoopManager.shared.keybindObserver.start()
+    }
+}
+
+struct TriggerKeycorderKeyView: View {
+    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
+    private static let defaultIconName = "exclamationmark.circle.fill"
+    let key: CGKeyCode
+
+    var body: some View {
+        HStack(spacing: 4) {
+            if sideDependentTriggerKey {
+                Text(key.isModifierOnRightSide ? "Right" : "Left")
+                    .transition(.move(edge: .leading).combined(with: .opacity))
+            }
+
+            Text("\(Image(systemName: key.modifierSystemImage ?? Self.defaultIconName))")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .fixedSize(horizontal: true, vertical: false)
     }
 }
