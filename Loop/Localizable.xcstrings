@@ -4481,6 +4481,21 @@
         }
       }
     },
+    "Focus" : {
+      "comment" : "Section header in the action picker of the Keybinds tab"
+    },
+    "Focus Down" : {
+      "comment" : "Window action"
+    },
+    "Focus Left" : {
+      "comment" : "Window action"
+    },
+    "Focus Right" : {
+      "comment" : "Window action"
+    },
+    "Focus Up" : {
+      "comment" : "Window action"
+    },
     "Focus window on resize" : {
       "localizations" : {
         "ar" : {

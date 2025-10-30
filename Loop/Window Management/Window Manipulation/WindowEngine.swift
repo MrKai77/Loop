@@ -60,6 +60,12 @@ enum WindowEngine {
             return
         }
 
+        // If the action is to focus a window in a specific direction, find and activate that window
+        if action.direction.willFocusWindow {
+            focusWindow(from: window, in: action.direction)
+            return
+        }
+
         // Note that this is only really useful when "Resize window under cursor" is enabled
         if Defaults[.focusWindowOnResize] {
             window.activate()
@@ -281,5 +287,21 @@ enum WindowEngine {
         for window in windowsToMinimize {
             window.minimized = true
         }
+    }
+
+    /// Focuses the next window in the specified direction.
+    /// - Parameters:
+    ///   - currentWindow: The currently focused window to navigate from
+    ///   - direction: The direction to search for the next window (focusUp, focusDown, focusLeft, focusRight)
+    private static func focusWindow(from currentWindow: Window, in direction: WindowDirection) {
+        guard let nextWindow = WindowUtility.nextWindow(from: currentWindow, in: direction) else {
+            logger.info("No window found to focus in direction \(direction.debugDescription)")
+            return
+        }
+
+        let nextWindowTitle = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
+        logger.info("Focusing window: \(nextWindowTitle)")
+
+        nextWindow.activate()
     }
 }

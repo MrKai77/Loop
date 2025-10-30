@@ -57,6 +57,14 @@ extension WindowAction {
             Image(systemName: "arrow.down.and.line.horizontal.and.arrow.up")
         case .growVertical:
             Image(systemName: "arrow.up.and.line.horizontal.and.arrow.down")
+        case .focusLeft:
+            Image(systemName: "chevron.left")
+        case .focusRight:
+            Image(systemName: "chevron.right")
+        case .focusUp:
+            Image(systemName: "chevron.up")
+        case .focusDown:
+            Image(systemName: "chevron.down")
         default:
             nil
         }
