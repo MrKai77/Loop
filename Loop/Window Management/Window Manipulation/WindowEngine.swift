@@ -15,17 +15,31 @@ enum WindowEngine {
 
     /// Resize a Window
     /// - Parameters:
-    ///   - window: Window to be resized
+    ///   - window: Window to be resized, or nil for focus navigation from screen center
     ///   - action: WindowAction to resize the window to
     ///   - screen: Screen the window should be resized on
     ///   - shouldRecord: only set to false when preview window is disabled (so live preview)
     static func resize(
-        _ window: Window,
+        _ window: Window?,
         to action: WindowAction,
         on screen: NSScreen,
         shouldRecord: Bool = true
     ) {
         guard action.direction != .noAction else { return }
+
+        // If the action is to focus a window in a specific direction, find and activate that window
+        // This can work even without a current window (navigates from screen center)
+        if action.direction.willFocusWindow {
+            focusWindow(from: window, in: action.direction)
+            return
+        }
+
+        // All other actions require a window
+        guard let window else {
+            logger.info("No window available for action \(action.direction.debugDescription)")
+            return
+        }
+
         let willChangeScreens = ScreenUtility.screenContaining(window) != screen
 
         let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
@@ -57,12 +71,6 @@ enum WindowEngine {
         // So after minimizing other windows, we should simply return.
         if action.direction == .minimizeOthers {
             minimizeOtherWindows(exceptWindow: window)
-            return
-        }
-
-        // If the action is to focus a window in a specific direction, find and activate that window
-        if action.direction.willFocusWindow {
-            focusWindow(from: window, in: action.direction)
             return
         }
 
@@ -291,9 +299,9 @@ enum WindowEngine {
 
     /// Focuses the next window in the specified direction.
     /// - Parameters:
-    ///   - currentWindow: The currently focused window to navigate from
+    ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
     ///   - direction: The direction to search for the next window (focusUp, focusDown, focusLeft, focusRight)
-    private static func focusWindow(from currentWindow: Window, in direction: WindowDirection) {
+    private static func focusWindow(from currentWindow: Window?, in direction: WindowDirection) {
         guard let nextWindow = WindowUtility.nextWindow(from: currentWindow, in: direction) else {
             logger.info("No window found to focus in direction \(direction.debugDescription)")
             return

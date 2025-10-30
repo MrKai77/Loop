@@ -157,6 +157,25 @@ extension LoopManager {
         mouseMovedEventMonitor.stop()
         leftClickMonitor.stop()
 
+        // Handle focus navigation even without a target window (navigates from screen center)
+        if targetWindow == nil,
+           currentAction.direction.willFocusWindow,
+           !forceClose,
+           currentAction.direction != .noAction,
+           isLoopActive,
+           let screenToResizeOn {
+            WindowEngine.resize(
+                nil,
+                to: currentAction,
+                on: screenToResizeOn
+            )
+
+            // Icon stuff
+            Defaults[.timesLooped] += 1
+            IconManager.checkIfUnlockedNewIcon()
+        }
+
+        // Handle normal actions with a target window
         if let targetWindow,
            let screenToResizeOn,
            forceClose == false,
