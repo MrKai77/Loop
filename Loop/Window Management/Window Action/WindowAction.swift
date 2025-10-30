@@ -423,7 +423,7 @@ extension WindowAction {
     ///   - bounds: The new screen bounds to apply the proportions to
     /// - Returns: A new `CGRect` with the proportional frame applied to the new bounds
     private func applyProportionalFrame(_ proportionalFrame: CGRect, _ bounds: CGRect) -> CGRect {
-        CGRect(
+        return CGRect(
             x: bounds.origin.x + (bounds.width * proportionalFrame.minX),
             y: bounds.origin.y + (bounds.height * proportionalFrame.minY),
             width: bounds.width * proportionalFrame.width,

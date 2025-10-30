@@ -318,7 +318,7 @@ enum WindowEngine {
         }
 
         guard currentFrame.intersects(adjustedBounds) else {
-            print("Window frame doesn't intersect with source screen bounds - skipping proportional calculation")
+            logger.debug("Window frame doesn't intersect with source screen bounds - skipping proportional calculation")
             return nil
         }
 
@@ -336,7 +336,7 @@ enum WindowEngine {
               proportionalWidth <= 1.0 + tolerance,
               proportionalHeight > 0,
               proportionalHeight <= 1.0 + tolerance else {
-            print("Invalid proportional frame calculated (x=\(proportionalX), y=\(proportionalY), w=\(proportionalWidth), h=\(proportionalHeight)) - skipping")
+            logger.debug("Invalid proportional frame calculated (x=\(proportionalX), y=\(proportionalY), w=\(proportionalWidth), h=\(proportionalHeight)) - skipping")
             return nil
         }
 
@@ -347,7 +347,7 @@ enum WindowEngine {
             height: proportionalHeight
         )
 
-        print("Calculated proportional frame: x=\(proportionalX), y=\(proportionalY), w=\(proportionalWidth), h=\(proportionalHeight)")
+        logger.debug("Calculated proportional frame: x=\(proportionalX), y=\(proportionalY), w=\(proportionalWidth), h=\(proportionalHeight)")
 
         return proportions
     }
