@@ -138,7 +138,7 @@ struct Keycorder: View {
         if event.keyCode.isFnSpecialKey {
             flags.remove(.maskSecondaryFn)
         }
-        
+
         // Filter out trigger keys from flags
         let validModifiers = flags.keyCodes.filter {
             !Defaults[.triggerKey]
