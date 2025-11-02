@@ -69,27 +69,27 @@ final class WindowDragManager {
                 setCurrentDraggingWindow()
             }
 
-            if let window = draggingWindow,
-               let initialFrame = initialWindowFrame,
-               hasWindowMoved(window.frame, initialFrame) {
-                if Defaults[.restoreWindowFrameOnDrag] {
-                    restoreInitialWindowSize(window)
-                } else {
-                    StashManager.shared.onWindowDragged(window.cgWindowID)
-                    WindowRecords.eraseRecords(for: window)
-                }
+            if let window = draggingWindow, let initialFrame = initialWindowFrame, hasWindowResized(window.frame, initialFrame) {
+                StashManager.shared.onWindowDragged(window.cgWindowID)
+                WindowRecords.eraseRecords(for: window)
 
-                if Defaults[.windowSnapping] {
-                    // Only warp cursor away from top edge if top snap area is enabled
-                    if Defaults[.suppressMissionControlOnTopDrag],
-                       let frame = NSScreen.main?.displayBounds,
-                       let mouseLocation = CGEvent.mouseLocation,
-                       mouseLocation.y == frame.minY {
-                        let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
-                        CGWarpMouseCursorPosition(newOrigin)
+                if hasWindowMoved(window.frame, initialFrame) {
+                    if Defaults[.restoreWindowFrameOnDrag] {
+                        restoreInitialWindowSize(window)
                     }
 
-                    processSnapAction()
+                    if Defaults[.windowSnapping] {
+                        // Only warp cursor away from top edge if top snap area is enabled
+                        if Defaults[.suppressMissionControlOnTopDrag],
+                           let frame = NSScreen.main?.displayBounds,
+                           let mouseLocation = CGEvent.mouseLocation,
+                           mouseLocation.y == frame.minY {
+                            let newOrigin = CGPoint(x: mouseLocation.x, y: frame.minY + 1)
+                            CGWarpMouseCursorPosition(newOrigin)
+                        }
+
+                        processSnapAction()
+                    }
                 }
             }
         }
@@ -138,6 +138,13 @@ final class WindowDragManager {
         !initialFrame.topLeftPoint.approximatelyEqual(to: windowFrame.topLeftPoint) &&
             !initialFrame.topRightPoint.approximatelyEqual(to: windowFrame.topRightPoint) &&
             !initialFrame.bottomLeftPoint.approximatelyEqual(to: windowFrame.bottomLeftPoint) &&
+            !initialFrame.bottomRightPoint.approximatelyEqual(to: windowFrame.bottomRightPoint)
+    }
+
+    private func hasWindowResized(_ windowFrame: CGRect, _ initialFrame: CGRect) -> Bool {
+        !initialFrame.topLeftPoint.approximatelyEqual(to: windowFrame.topLeftPoint) ||
+            !initialFrame.topRightPoint.approximatelyEqual(to: windowFrame.topRightPoint) ||
+            !initialFrame.bottomLeftPoint.approximatelyEqual(to: windowFrame.bottomLeftPoint) ||
             !initialFrame.bottomRightPoint.approximatelyEqual(to: windowFrame.bottomRightPoint)
     }
 

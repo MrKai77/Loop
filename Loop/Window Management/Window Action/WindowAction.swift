@@ -173,6 +173,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return false
     }
 
+    var forceProportionalFrameOnScreenChange: Bool {
+        direction.willCenter || willManipulateExistingWindowFrame
+    }
+
     /// Determines if padding can be applied to the action.
     var isPaddingApplicable: Bool {
         if direction == .undo || direction == .initialFrame {
