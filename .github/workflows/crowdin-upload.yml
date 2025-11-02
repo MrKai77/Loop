@@ -2,7 +2,9 @@ name: Crowdin Upload
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
+    branches:
+      - develop
     paths:
       - "Loop/Localizable.xcstrings"
 
