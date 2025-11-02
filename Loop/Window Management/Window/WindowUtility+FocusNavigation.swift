@@ -80,8 +80,8 @@ extension WindowUtility {
             return nil
         }
 
-        // Use the generic directional navigation from ScreenUtility
-        if let nextWindow = ScreenUtility.directionalItem(
+        // Use the generic directional navigation from DirectionalNavigationUtility
+        if let nextWindow = DirectionalNavigationUtility.directionalItem(
             from: currentWindow!,
             in: otherWindows,
             edge: edge,
