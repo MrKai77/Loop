@@ -133,8 +133,12 @@ struct Keycorder: View {
         let currentKeys = selectionKeybind + [event.keyCode]
             .map { $0.baseKey(flags: event.modifierFlags) }
 
-        let flags = CGEventFlags(cocoaFlags: event.modifierFlags)
+        var flags = CGEventFlags(cocoaFlags: event.modifierFlags)
 
+        if event.keyCode.isFnSpecialKey {
+            flags.remove(.maskSecondaryFn)
+        }
+        
         // Filter out trigger keys from flags
         let validModifiers = flags.keyCodes.filter {
             !Defaults[.triggerKey]
