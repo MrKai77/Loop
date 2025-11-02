@@ -1,0 +1,109 @@
+name: Crowdin Download
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "Loop/Localizable.xcstrings"
+
+jobs:
+  crowdin-download:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v5
+
+      - name: 🌎 Crowdin InfoPlist.strings Download
+        uses: crowdin/github-action@v2
+        with:
+          config: .github/crowdin.yml
+
+          # Download/Upload Settings
+          upload_sources: false
+          download_translations: false
+          download_bundle: 8 # *.lproj/InfoPlist.strings
+          skip_untranslated_strings: true
+
+          # PR Settings
+          localization_branch_name: l10n
+          commit_message: "🌐 Update InfoPlist.strings from Crowdin"
+          create_pull_request: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+      - name: 🌍 Crowdin Localizable.xcstrings Download
+        uses: crowdin/github-action@v2
+        with:
+          config: .github/crowdin.yml
+
+          # Download/Upload Settings
+          upload_sources: false
+          download_translations: false
+          download_bundle: 10 # Localizable.xcstrings
+          skip_untranslated_strings: true
+
+          # PR Settings
+          localization_branch_name: l10n
+          commit_message: "🌐 Update Localizable.xcstrings from Crowdin"
+          create_pull_request: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+  # Not too sure why, but if this is run on the same machine on which the downloads were done, the commit fails, and it becomes unable to open a PR.
+  format-and-pr:
+    needs: crowdin-download
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: l10n
+
+      - name: 🎨 Format Localizable.xcstrings
+        run: |
+          swift ./.github/LocalizationSorter.swift Loop/Localizable.xcstrings Loop/Localizable.xcstrings
+
+      - name: ⚙️ Commit & Create Pull Request
+        run: |
+          # Set up git committer
+          git config user.name GitHub Actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+          # Commit the formatted file
+          git add Loop/Localizable.xcstrings
+          git commit -m "🌐 Format translations"
+          git push origin l10n
+
+          # First check if there are any changes to commit
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes detected. Skipping PR creation."
+
+            # Delete the l10n branch since there are no changes
+            git push origin --delete l10n || true
+            exit 0
+          fi
+
+          # Check if a PR already exists from l10n branch to main
+          existing_pr=$(gh pr list --base main --head l10n --state open --limit 1 --json number --jq '.[]? | .number')
+
+          if [ -z "$existing_pr" ]; then
+            echo "No existing PR found. Creating a new one..."
+            gh pr create \
+              --title "🌐 Update translations from Crowdin" \
+              --body "This PR updates translations in Loop from provided translations on [Crowdin](https://crowdin.com/project/loop-i18n) :)" \
+              --base main
+          else
+            echo "PR #$existing_pr already exists. Skipping PR creation."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

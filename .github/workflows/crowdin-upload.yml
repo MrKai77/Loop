@@ -1,0 +1,23 @@
+name: Crowdin Upload
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "Loop/Localizable.xcstrings"
+
+jobs:
+  crowdin-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v5
+
+      - name: ⬆️ Upload sources
+        uses: crowdin/github-action@v2
+        with:
+          config: .github/crowdin.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
