@@ -1,4 +1,4 @@
-name: Loop Development Build
+name: Development Build
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
       pull-requests: read
     steps:
       - name: ⬇️ Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 

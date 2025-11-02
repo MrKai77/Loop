@@ -9,9 +9,11 @@ on:
       - '**/*.swift'
 
 jobs:
-  Lint:
+  lint:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: SwiftFormat
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v5
+
+      - name: 🎨 SwiftFormat
         run: swiftformat --lint . --reporter github-actions-log

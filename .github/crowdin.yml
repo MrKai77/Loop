@@ -1,0 +1,12 @@
+project_id_env: "CROWDIN_PROJECT_ID"
+api_token_env: "CROWDIN_PERSONAL_TOKEN"
+base_path: ..
+preserve_hierarchy: false
+
+files:
+  - source: "Loop/Localizable.xcstrings"
+    translation: "Loop/Localizable.xcstrings"
+    multilingual: true
+
+  - source: "Loop/en.lproj/InfoPlist.strings"
+    translation: "Loop/%osx_code%/%original_file_name%"
