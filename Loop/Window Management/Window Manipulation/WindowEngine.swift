@@ -30,7 +30,11 @@ enum WindowEngine {
         // If the action is to focus a window in a specific direction, find and activate that window
         // This can work even without a current window (navigates from screen center)
         if action.direction.willFocusWindow {
-            focusWindow(from: window, in: action.direction)
+            guard let focusEdge = action.direction.focusEdge else {
+                logger.warning("willFocusWindow is true but focusEdge is nil for \(action.direction.debugDescription)")
+                return
+            }
+            focusWindow(from: window, edge: focusEdge)
             return
         }
 
@@ -301,15 +305,15 @@ enum WindowEngine {
     /// - Parameters:
     ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
     ///   - direction: The direction to search for the next window (focusUp, focusDown, focusLeft, focusRight)
-    private static func focusWindow(from currentWindow: Window?, in direction: WindowDirection) {
-        guard let nextWindow = WindowUtility.nextWindow(from: currentWindow, in: direction) else {
-            logger.info("No window found to focus in direction \(direction.debugDescription)")
+    private static func focusWindow(from currentWindow: Window?, edge: Edge) {
+        guard let directionalWindow = WindowUtility.directionalWindow(from: currentWindow, edge: edge) else {
+            logger.info("No window found to focus in direction \(String(describing: edge))")
             return
         }
 
-        let nextWindowTitle = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
+        let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
         logger.info("Focusing window: \(nextWindowTitle)")
 
-        nextWindow.activate()
+        directionalWindow.activate()
     }
 }

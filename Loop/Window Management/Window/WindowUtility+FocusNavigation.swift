@@ -13,15 +13,9 @@ extension WindowUtility {
     /// Finds the next window to focus in the specified direction.
     /// - Parameters:
     ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
-    ///   - direction: The direction to search for the next window (focusUp, focusDown, focusLeft, focusRight)
+    ///   - edge: The direction to search for the next window (leading, trailing, top, bottom)
     /// - Returns: The next window in the specified direction, or `nil` if no suitable window is found
-    static func nextWindow(from currentWindow: Window?, in direction: WindowDirection) -> Window? {
-        // Get the edge direction for focus navigation
-        guard let edge = direction.focusEdge else {
-            logger.error("[FocusNavigation] Invalid direction for focus navigation: \(direction.debugDescription)")
-            return nil
-        }
-
+    static func directionalWindow(from currentWindow: Window?, edge: Edge) -> Window? {
         let allWindows = windowList()
 
         // If no current window, navigate from screen center
@@ -57,9 +51,9 @@ extension WindowUtility {
 
             if let nextWindow {
                 let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
-                logger.info("[FocusNavigation] Found window to focus in direction \(direction.debugDescription): \(nextWindowName)")
+                logger.info("[FocusNavigation] Found window to focus in direction \(String(describing: edge)): \(nextWindowName)")
             } else {
-                logger.info("[FocusNavigation] No window found in direction \(direction.debugDescription) from screen center")
+                logger.info("[FocusNavigation] No window found in direction \(String(describing: edge)) from screen center")
             }
 
             return nextWindow
@@ -87,10 +81,10 @@ extension WindowUtility {
             frameProvider: { $0.frame }
         ) {
             let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
-            logger.info("[FocusNavigation] Found window to focus in direction \(direction.debugDescription): \(nextWindowName)")
+            logger.info("[FocusNavigation] Found window to focus in direction \(String(describing: edge)): \(nextWindowName)")
             return nextWindow
         } else {
-            logger.info("[FocusNavigation] No window found in direction \(direction.debugDescription)")
+            logger.info("[FocusNavigation] No window found in direction \(String(describing: edge))")
             return nil
         }
     }
