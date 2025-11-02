@@ -10,8 +10,6 @@ import OSLog
 import SwiftUI
 
 extension WindowUtility {
-    private static let focusLogger = Logger(category: "WindowUtility+FocusNavigation")
-
     /// Finds the next window to focus in the specified direction.
     /// - Parameters:
     ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
@@ -20,7 +18,7 @@ extension WindowUtility {
     static func nextWindow(from currentWindow: Window?, in direction: WindowDirection) -> Window? {
         // Get the edge direction for focus navigation
         guard let edge = direction.focusEdge else {
-            focusLogger.error("Invalid direction for focus navigation: \(direction.debugDescription)")
+            logger.error("[FocusNavigation] Invalid direction for focus navigation: \(direction.debugDescription)")
             return nil
         }
 
@@ -29,12 +27,12 @@ extension WindowUtility {
         // If no current window, navigate from screen center
         if currentWindow == nil {
             guard let screen = NSScreen.screenWithMouse ?? NSScreen.main else {
-                focusLogger.error("Could not determine active screen")
+                logger.error("[FocusNavigation] Could not determine active screen")
                 return nil
             }
 
             let screenCenter = screen.frame.center
-            focusLogger.info("Navigating from screen center: (\(screenCenter.x), \(screenCenter.y))")
+            logger.info("[FocusNavigation] Navigating from screen center: (\(screenCenter.x), \(screenCenter.y))")
 
             // Filter to get only visible, non-minimized, non-excluded windows
             let availableWindows = allWindows.filter { window in
@@ -44,7 +42,7 @@ extension WindowUtility {
             }
 
             guard !availableWindows.isEmpty else {
-                focusLogger.info("No windows available to focus")
+                logger.info("[FocusNavigation] No windows available to focus")
                 return nil
             }
 
@@ -59,9 +57,9 @@ extension WindowUtility {
 
             if let nextWindow {
                 let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
-                focusLogger.info("Found window to focus in direction \(direction.debugDescription): \(nextWindowName)")
+                logger.info("[FocusNavigation] Found window to focus in direction \(direction.debugDescription): \(nextWindowName)")
             } else {
-                focusLogger.info("No window found in direction \(direction.debugDescription) from screen center")
+                logger.info("[FocusNavigation] No window found in direction \(direction.debugDescription) from screen center")
             }
 
             return nextWindow
@@ -76,7 +74,7 @@ extension WindowUtility {
         }
 
         guard !otherWindows.isEmpty else {
-            focusLogger.info("No other windows available to focus")
+            logger.info("[FocusNavigation] No other windows available to focus")
             return nil
         }
 
@@ -89,10 +87,10 @@ extension WindowUtility {
             frameProvider: { $0.frame }
         ) {
             let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
-            focusLogger.info("Found window to focus in direction \(direction.debugDescription): \(nextWindowName)")
+            logger.info("[FocusNavigation] Found window to focus in direction \(direction.debugDescription): \(nextWindowName)")
             return nextWindow
         } else {
-            focusLogger.info("No window found in direction \(direction.debugDescription)")
+            logger.info("[FocusNavigation] No window found in direction \(direction.debugDescription)")
             return nil
         }
     }
