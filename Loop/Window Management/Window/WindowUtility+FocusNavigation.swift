@@ -41,73 +41,105 @@ extension WindowUtility {
     ) -> Window? {
         let allWindows = windowList()
 
-        // If no current window, navigate from screen center
-        if currentWindow == nil {
-            guard let screen = NSScreen.screenWithMouse ?? NSScreen.main else {
-                logger.error("[FocusNavigation] Could not determine active screen")
-                return nil
-            }
+//        // If no current window, navigate from screen center
+//        if currentWindow == nil {
+//            guard let screen = NSScreen.screenWithMouse ?? NSScreen.main else {
+//                logger.error("[FocusNavigation] Could not determine active screen")
+//                return nil
+//            }
+//
+//            let screenCenter = screen.frame.center
+//            logger.info("[FocusNavigation] Navigating from screen center: (\(screenCenter.x), \(screenCenter.y))")
+//
+//            // Filter to get only visible, non-minimized, non-excluded windows
+//            let availableWindows = allWindows.filter { window in
+//                !window.minimized &&
+//                    !window.isWindowHidden &&
+//                    !window.isAppExcluded
+//            }
+//
+//            guard !availableWindows.isEmpty else {
+//                logger.info("[FocusNavigation] No windows available to focus")
+//                return nil
+//            }
+//
+//            // Find the closest window in the specified direction from screen center
+//            let nextWindow = availableWindows
+//                .filter { window in
+//                    isInDirection(window.frame, from: screenCenter, edge: edge)
+//                }
+//                .min { window1, window2 in
+//                    screenCenter.distance(to: window1.frame.center) < screenCenter.distance(to: window2.frame.center)
+//                }
+//
+//            if let nextWindow {
+//                let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
+//                logger.info("[FocusNavigation] Found window to focus in direction \(String(describing: edge)): \(nextWindowName)")
+//            } else {
+//                logger.info("[FocusNavigation] No window found in direction \(String(describing: edge)) from screen center")
+//            }
+//
+//            return nextWindow
+//        }
 
-            let screenCenter = screen.frame.center
-            logger.info("[FocusNavigation] Navigating from screen center: (\(screenCenter.x), \(screenCenter.y))")
-
-            // Filter to get only visible, non-minimized, non-excluded windows
-            let availableWindows = allWindows.filter { window in
+        let availableWindows = allWindows
+            .filter { window in
                 !window.minimized &&
                     !window.isWindowHidden &&
                     !window.isAppExcluded
             }
 
-            guard !availableWindows.isEmpty else {
-                logger.info("[FocusNavigation] No windows available to focus")
+        guard !availableWindows.isEmpty else {
+            logger.info("[FocusNavigation] No windows available to focus")
+            return nil
+        }
+
+        let edgeString = String(describing: edge)
+
+        if let currentWindow {
+            // Filter out the current window and get only visible, non-minimized, non-excluded windows
+            let otherWindows = availableWindows
+                .filter { $0.cgWindowID != currentWindow.cgWindowID }
+
+            guard !otherWindows.isEmpty else {
+                logger.info("[FocusNavigation] No other windows available to focus")
                 return nil
             }
 
+            // Use the generic directional navigation from DirectionalNavigationUtility
+            if let nextWindow = navigationUtility.directionalItem(
+                from: currentWindow,
+                in: otherWindows,
+                edge: edge,
+                canWrap: true
+            ) {
+                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.debugDescription)")
+                return nextWindow
+            } else {
+                logger.info("[FocusNavigation] No window found in direction \(edgeString)")
+                return nil
+            }
+        } else {
+            guard let screen = NSScreen.screenWithMouse ?? NSScreen.main else {
+                logger.error("[FocusNavigation] Could not determine active screen")
+                return nil
+            }
+
+            let screenCenter = screen.safeScreenFrame.center
+            logger.info("[FocusNavigation] Navigating from screen center: \(screenCenter.debugDescription)")
+
             // Find the closest window in the specified direction from screen center
             let nextWindow = availableWindows
-                .filter { window in
-                    isInDirection(window.frame, from: screenCenter, edge: edge)
-                }
-                .min { window1, window2 in
-                    screenCenter.distance(to: window1.frame.center) < screenCenter.distance(to: window2.frame.center)
-                }
+                .filter { isInDirection($0.frame, from: screenCenter, edge: edge) }
+                .min { screenCenter.distance(to: $0.frame.center) < screenCenter.distance(to: $1.frame.center) }
 
             if let nextWindow {
-                let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
-                logger.info("[FocusNavigation] Found window to focus in direction \(String(describing: edge)): \(nextWindowName)")
+                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.debugDescription)")
             } else {
-                logger.info("[FocusNavigation] No window found in direction \(String(describing: edge)) from screen center")
+                logger.info("[FocusNavigation] No window found in direction \(edgeString) from screen center")
             }
 
             return nextWindow
-        }
-
-        // Filter out the current window and get only visible, non-minimized, non-excluded windows
-        let otherWindows = allWindows.filter { window in
-            window.cgWindowID != currentWindow?.cgWindowID &&
-                !window.minimized &&
-                !window.isWindowHidden &&
-                !window.isAppExcluded
-        }
-
-        guard !otherWindows.isEmpty else {
-            logger.info("[FocusNavigation] No other windows available to focus")
-            return nil
-        }
-
-        // Use the generic directional navigation from DirectionalNavigationUtility
-        if let nextWindow = navigationUtility.directionalItem(
-            from: currentWindow!,
-            in: otherWindows,
-            edge: edge,
-            canWrap: true
-        ) {
-            let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
-            logger.info("[FocusNavigation] Found window to focus in direction \(String(describing: edge)): \(nextWindowName)")
-            return nextWindow
-        } else {
-            logger.info("[FocusNavigation] No window found in direction \(String(describing: edge))")
-            return nil
         }
     }
 

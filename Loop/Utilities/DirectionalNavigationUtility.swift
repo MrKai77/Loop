@@ -13,7 +13,7 @@ import SwiftUI
 final class DirectionalNavigationUtility<T> {
     let minimumSharedSpan: CGFloat
     let frameProvider: (T) -> CGRect
-    
+
     /// Initializes a new instance of `DirectionalNavigationUtility`.
     /// - Parameters:
     ///   - minimumSharedSpan: The minimum percentage (from 0 to 1) of axis span that two items must share for the candidate to be considered aligned with the current item.
@@ -101,8 +101,6 @@ final class DirectionalNavigationUtility<T> {
 
                 let consideredAxisPixelLength: CGFloat = axis == .horizontal ? currentFrame.height : currentFrame.width
                 let sharedSpanPercent = max(0, sharedAxisPixelSpan / consideredAxisPixelLength)
-
-                print(sharedSpanPercent)
 
                 return sharedSpanPercent > minimumSharedSpan
             }
