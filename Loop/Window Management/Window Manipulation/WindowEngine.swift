@@ -15,7 +15,7 @@ enum WindowEngine {
 
     /// Resize a Window
     /// - Parameters:
-    ///   - window: Window to be resized, or nil for focus navigation from screen center
+    ///   - window: Window to be resized
     ///   - action: WindowAction to resize the window to
     ///   - screen: Screen the window should be resized on
     ///   - shouldRecord: only set to false when preview window is disabled (so live preview)

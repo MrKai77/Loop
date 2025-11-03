@@ -98,6 +98,8 @@ extension LoopManager {
             return
         }
 
+        logger.info("Opening Loop with starting action: \(startingAction?.debugDescription ?? "none")")
+
         targetWindow = WindowUtility.userDefinedTargetWindow()
         guard
             targetWindow?.isAppExcluded != true,
@@ -151,6 +153,7 @@ extension LoopManager {
 
     private func closeLoop(forceClose: Bool) {
         guard isLoopActive == true else { return }
+        logger.info("Closing Loop (force closed: \(forceClose))")
 
         closeWindows()
 

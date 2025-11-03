@@ -109,8 +109,8 @@ final class KeybindObserver {
 
             // If this wasn't, check if it was a system keybind (ex. screenshot), and
             // in that case, passthrough and force-close Loop
-            if CGKeyCode.systemKeybinds.contains(pressedKeys) {
-                closeCallback(true)
+            if event.type == .keyDown, CGKeyCode.systemKeybinds.contains(pressedKeys) {
+                closeLoop(forceClose: true)
             }
 
             return .forward

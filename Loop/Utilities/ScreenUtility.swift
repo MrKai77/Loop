@@ -103,7 +103,10 @@ enum ScreenUtility {
 
     // MARK: Directional Screens
 
-    private static var navigationUtility = DirectionalNavigationUtility<NSScreen>(frameProvider: \.frame)
+    private static var navigationUtility = DirectionalNavigationUtility<NSScreen>(
+        minimumSharedSpan: .percentage(0.1),
+        frameProvider: \.frame
+    )
 
     /// Finds a screen to a set edge from the screen of reference.
     /// - Parameters:

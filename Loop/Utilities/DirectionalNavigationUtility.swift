@@ -11,14 +11,19 @@ import SwiftUI
 /// This utility provides reusable logic for navigating between items (windows, screens, etc.)
 /// in a specific direction based on their geometric frames.
 final class DirectionalNavigationUtility<T> {
-    let minimumSharedSpan: CGFloat
+    let minimumSharedSpan: SharedSpan
     let frameProvider: (T) -> CGRect
+
+    enum SharedSpan {
+        case percentage(CGFloat)
+        case pixels(CGFloat)
+    }
 
     /// Initializes a new instance of `DirectionalNavigationUtility`.
     /// - Parameters:
-    ///   - minimumSharedSpan: The minimum percentage (from 0 to 1) of axis span that two items must share for the candidate to be considered aligned with the current item.
+    ///   - minimumSharedSpan: The minimum amount of axis span that two items must share for the candidate to be considered aligned with the current item.
     ///   - frameProvider: Closure mapping an item to its CGRect frame.
-    init(minimumSharedSpan: CGFloat = 0.1, frameProvider: @escaping (T) -> CGRect) {
+    init(minimumSharedSpan: SharedSpan, frameProvider: @escaping (T) -> CGRect) {
         self.minimumSharedSpan = minimumSharedSpan
         self.frameProvider = frameProvider
     }
@@ -100,9 +105,14 @@ final class DirectionalNavigationUtility<T> {
                 }
 
                 let consideredAxisPixelLength: CGFloat = axis == .horizontal ? currentFrame.height : currentFrame.width
-                let sharedSpanPercent = max(0, sharedAxisPixelSpan / consideredAxisPixelLength)
 
-                return sharedSpanPercent > minimumSharedSpan
+                switch minimumSharedSpan {
+                case let .percentage(minPercentage):
+                    let sharedSpanPercent = consideredAxisPixelLength > 0 ? max(0, sharedAxisPixelSpan / consideredAxisPixelLength) : 0
+                    return sharedSpanPercent > minPercentage
+                case let .pixels(minPixels):
+                    return sharedAxisPixelSpan > minPixels
+                }
             }
     }
 
