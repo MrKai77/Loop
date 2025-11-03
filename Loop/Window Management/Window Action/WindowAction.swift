@@ -173,6 +173,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return false
     }
 
+    var shouldImmediatelyExecuteAction: Bool {
+        willManipulateExistingWindowFrame || direction.willFocusWindow
+    }
+
     var forceProportionalFrameOnScreenChange: Bool {
         direction.willCenter || willManipulateExistingWindowFrame
     }

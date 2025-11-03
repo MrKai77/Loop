@@ -157,29 +157,11 @@ extension LoopManager {
         mouseMovedEventMonitor.stop()
         leftClickMonitor.stop()
 
-        // Handle focus navigation even without a target window (navigates from screen center)
-        if targetWindow == nil,
-           currentAction.direction.willFocusWindow,
-           !forceClose,
-           currentAction.direction != .noAction,
-           isLoopActive,
-           let screenToResizeOn {
-            WindowEngine.resize(
-                nil,
-                to: currentAction,
-                on: screenToResizeOn
-            )
-
-            // Icon stuff
-            Defaults[.timesLooped] += 1
-            IconManager.checkIfUnlockedNewIcon()
-        }
-
         // Handle normal actions with a target window
         if let targetWindow,
            let screenToResizeOn,
            forceClose == false,
-           currentAction.direction != .noAction,
+           currentAction.direction != .noAction, !currentAction.direction.willFocusWindow,
            isLoopActive {
             if Defaults[.previewVisibility] {
                 WindowEngine.resize(
@@ -205,9 +187,9 @@ extension LoopManager {
     }
 
     private func openWindows(startingAction: WindowAction?) {
-        if Defaults[.previewVisibility], targetWindow != nil {
+        if Defaults[.previewVisibility], let targetWindow, let screenToResizeOn {
             previewController.open(
-                screen: screenToResizeOn!,
+                screen: screenToResizeOn,
                 window: targetWindow,
                 startingAction: startingAction
             )
@@ -244,7 +226,7 @@ extension LoopManager {
         canAdvanceCycle: Bool = true
     ) {
         guard
-            !currentAction.isSameManipulation(as: newAction) || newAction.willManipulateExistingWindowFrame,
+            !currentAction.isSameManipulation(as: newAction) || newAction.shouldImmediatelyExecuteAction,
             isLoopActive,
             let currentScreen = screenToResizeOn
         else {
@@ -398,7 +380,7 @@ extension LoopManager {
             performHapticFeedback()
         }
 
-        if newAction != currentAction || newAction.willManipulateExistingWindowFrame {
+        if newAction != currentAction || newAction.shouldImmediatelyExecuteAction {
             currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
@@ -416,6 +398,20 @@ extension LoopManager {
                         on: screenToResizeOn,
                         shouldRecord: false
                     )
+                }
+
+                // If the action is to focus a window in a specific direction, find and activate that window
+                // This can work even without a current window (navigates from screen center)
+                if newAction.direction.willFocusWindow {
+                    guard let focusEdge = newAction.direction.focusEdge else {
+                        self.logger.error("willFocusWindow is true but focusEdge is nil for \(newAction.direction.debugDescription)")
+                        return
+                    }
+
+                    if let newWindow = WindowUtility.focusWindow(from: self.targetWindow, edge: focusEdge) {
+                        self.targetWindow = newWindow
+                        self.previewController.setWindow(to: newWindow)
+                    }
                 }
             }
 

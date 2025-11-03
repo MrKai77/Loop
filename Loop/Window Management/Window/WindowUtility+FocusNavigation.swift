@@ -10,12 +10,35 @@ import OSLog
 import SwiftUI
 
 extension WindowUtility {
+    private static var navigationUtility = DirectionalNavigationUtility<Window>(frameProvider: \.frame)
+
+    /// Focuses the next window in the specified direction.
+    /// - Parameters:
+    ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
+    ///   - direction: The direction to search for the next window (focusUp, focusDown, focusLeft, focusRight)
+    static func focusWindow(from currentWindow: Window?, edge: Edge) -> Window? {
+        guard let directionalWindow = WindowUtility.directionalWindow(from: currentWindow, edge: edge) else {
+            logger.info("[FocusNavigation] No window found to focus in direction \(String(describing: edge))")
+            return nil
+        }
+
+        let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
+        logger.info("[FocusNavigation] Focusing window: \(nextWindowTitle)")
+
+        directionalWindow.activate()
+
+        return directionalWindow
+    }
+
     /// Finds the next window to focus in the specified direction.
     /// - Parameters:
     ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
     ///   - edge: The direction to search for the next window (leading, trailing, top, bottom)
     /// - Returns: The next window in the specified direction, or `nil` if no suitable window is found
-    static func directionalWindow(from currentWindow: Window?, edge: Edge) -> Window? {
+    private static func directionalWindow(
+        from currentWindow: Window?,
+        edge: Edge
+    ) -> Window? {
         let allWindows = windowList()
 
         // If no current window, navigate from screen center
@@ -73,12 +96,11 @@ extension WindowUtility {
         }
 
         // Use the generic directional navigation from DirectionalNavigationUtility
-        if let nextWindow = DirectionalNavigationUtility.directionalItem(
+        if let nextWindow = navigationUtility.directionalItem(
             from: currentWindow!,
             in: otherWindows,
             edge: edge,
-            canRestartCycle: true,
-            frameProvider: { $0.frame }
+            canWrap: true
         ) {
             let nextWindowName = nextWindow.nsRunningApplication?.localizedName ?? nextWindow.title ?? "<unknown>"
             logger.info("[FocusNavigation] Found window to focus in direction \(String(describing: edge)): \(nextWindowName)")

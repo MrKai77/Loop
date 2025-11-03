@@ -51,7 +51,7 @@ final class RadialMenuViewModel: ObservableObject {
     }
 
     var radialMenuImage: Image? {
-        currentAction?.radialMenuImage
+        currentAction?.icon
     }
 
     func setAction(to action: WindowAction) {

@@ -69,19 +69,6 @@ extension WindowAction {
             nil
         }
     }
-
-    var radialMenuImage: Image? {
-        switch direction {
-        case .hide:
-            Image(systemName: "eye.slash")
-        case .minimize:
-            Image(systemName: "arrow.down.right.and.arrow.up.left")
-        case .minimizeOthers:
-            Image(systemName: "arrow.down.right.and.arrow.up.left")
-        default:
-            nil
-        }
-    }
 }
 
 /// An icon to represent a `WindowAction`.
