@@ -387,13 +387,13 @@ extension LoopManager {
                 openWindows(startingAction: newAction)
             }
 
-            DispatchQueue.main.async {
-                self.previewController.setAction(to: newAction)
-                self.radialMenuController.setAction(to: newAction)
+            Task { @MainActor in
+                previewController.setAction(to: newAction)
+                radialMenuController.setAction(to: newAction)
 
-                if !Defaults[.previewVisibility], let screenToResizeOn = self.screenToResizeOn, let window = self.targetWindow {
+                if !Defaults[.previewVisibility], let screenToResizeOn, let targetWindow {
                     WindowEngine.resize(
-                        window,
+                        targetWindow,
                         to: newAction,
                         on: screenToResizeOn,
                         shouldRecord: false
@@ -404,13 +404,18 @@ extension LoopManager {
                 // This can work even without a current window (navigates from screen center)
                 if newAction.direction.willFocusWindow {
                     guard let focusEdge = newAction.direction.focusEdge else {
-                        self.logger.error("willFocusWindow is true but focusEdge is nil for \(newAction.direction.debugDescription)")
+                        logger.error("willFocusWindow is true but focusEdge is nil for \(newAction.direction.debugDescription)")
                         return
                     }
 
-                    if let newWindow = WindowUtility.focusWindow(from: self.targetWindow, edge: focusEdge) {
-                        self.targetWindow = newWindow
-                        self.previewController.setWindow(to: newWindow)
+                    if let newWindow = WindowUtility.focusWindow(from: targetWindow, edge: focusEdge) {
+                        targetWindow = newWindow
+                        previewController.setWindow(to: newWindow)
+                        radialMenuController.setWindow(to: newWindow)
+
+                        // If the previous window was nil, then the preview may have not opened.
+                        // So open them here just in case.
+                        openWindows(startingAction: newAction)
                     }
                 }
             }

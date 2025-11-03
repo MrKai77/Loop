@@ -93,6 +93,10 @@ final class RadialMenuController {
         }
     }
 
+    func setWindow(to newWindow: Window) {
+        viewModel?.setWindow(to: newWindow)
+    }
+
     func setAction(to newAction: WindowAction) {
         viewModel?.setAction(to: newAction)
 

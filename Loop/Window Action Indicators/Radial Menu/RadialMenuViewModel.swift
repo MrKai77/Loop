@@ -15,7 +15,7 @@ final class RadialMenuViewModel: ObservableObject {
     @Published private(set) var currentAction: WindowAction?
 
     private var previousAction: WindowAction?
-    private let window: Window?
+    private var window: Window?
     let previewMode: Bool
 
     init(
@@ -52,6 +52,10 @@ final class RadialMenuViewModel: ObservableObject {
 
     var radialMenuImage: Image? {
         currentAction?.icon
+    }
+
+    func setWindow(to newWindow: Window) {
+        window = newWindow
     }
 
     func setAction(to action: WindowAction) {
