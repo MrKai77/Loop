@@ -8,6 +8,11 @@
 import SwiftUI
 
 enum ScreenUtility {
+    private static var navigationUtility = DirectionalNavigationUtility<NSScreen>(
+        minimumSharedSpan: .pixels(0.1),
+        frameProvider: \.frame
+    )
+
     /// Returns a screen containing a window, if found.
     /// - Parameter window: the window whose screen we want to find.
     /// - Returns: the screen containing the window.
@@ -102,11 +107,6 @@ enum ScreenUtility {
     }
 
     // MARK: Directional Screens
-
-    private static var navigationUtility = DirectionalNavigationUtility<NSScreen>(
-        minimumSharedSpan: .percentage(0.1),
-        frameProvider: \.frame
-    )
 
     /// Finds a screen to a set edge from the screen of reference.
     /// - Parameters:

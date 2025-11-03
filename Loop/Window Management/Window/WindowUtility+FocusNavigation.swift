@@ -11,7 +11,7 @@ import SwiftUI
 
 extension WindowUtility {
     private static var navigationUtility = DirectionalNavigationUtility<Window>(
-        minimumSharedSpan: .pixels(10),
+        minimumSharedSpan: .percentage(10),
         frameProvider: \.frame
     )
 
