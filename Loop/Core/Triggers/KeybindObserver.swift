@@ -177,7 +177,7 @@ final class KeybindObserver {
                     if !isARepeat || action.willManipulateExistingWindowFrame {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
-                    
+
                     /// Only consume the event if the last command actually opened Loop.
                     /// The main reason Loop *wouldn't* open after an `openLoop` call would be because the user has enabled a trigger delay.
                     return checkIfLoopOpen() ? .consume : .opening
