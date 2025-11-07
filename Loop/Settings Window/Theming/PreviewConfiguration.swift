@@ -56,7 +56,7 @@ struct PreviewConfigurationView: View {
             LuminareSlider(
                 "Corner radius",
                 value: $previewCornerRadius.doubleBinding,
-                in: 0...20,
+                in: 0...25,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
                 clampsLower: false,
