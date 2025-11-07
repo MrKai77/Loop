@@ -49,7 +49,7 @@ struct PreviewConfigurationView: View {
                 in: 0...20,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                clampsLower: false,
+                clampsLower: true,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
 
@@ -59,7 +59,7 @@ struct PreviewConfigurationView: View {
                 in: 0...25,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                clampsLower: false,
+                clampsLower: true,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
 
@@ -69,7 +69,7 @@ struct PreviewConfigurationView: View {
                 in: 0...10,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
-                clampsLower: false,
+                clampsLower: true,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
         }

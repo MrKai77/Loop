@@ -55,6 +55,9 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // Move
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
 
+    // Focus
+    case focusUp = "FocusUp", focusDown = "FocusDown", focusRight = "FocusRight", focusLeft = "FocusLeft"
+
     // Stash
     case stash = "Stash"
     case unstash = "Unstash"
@@ -74,6 +77,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var shrink: [WindowDirection] { [.shrinkTop, .shrinkBottom, .shrinkRight, .shrinkLeft, .shrinkHorizontal, .shrinkVertical] }
     static var grow: [WindowDirection] { [.growTop, .growBottom, .growRight, .growLeft, .growHorizontal, .growVertical] }
     static var move: [WindowDirection] { [.moveUp, .moveDown, .moveRight, .moveLeft] }
+    static var focus: [WindowDirection] { [.focusUp, .focusDown, .focusRight, .focusLeft] }
     static var more: [WindowDirection] { [.initialFrame, .undo, .custom, .cycle] }
 
     // Computed properties for checking conditions
@@ -82,13 +86,14 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var willShrink: Bool { WindowDirection.shrink.contains(self) }
     var willGrow: Bool { WindowDirection.grow.contains(self) }
     var willMove: Bool { WindowDirection.move.contains(self) }
+    var willFocusWindow: Bool { WindowDirection.focus.contains(self) }
     var willMaximize: Bool { [.fullscreen, .maximize, .almostMaximize, .maximizeHeight, .maximizeWidth].contains(self) }
     var willCenter: Bool { [.center, .macOSCenter, .verticalCenterHalf, .horizontalCenterHalf].contains(self) }
     var isCustomizable: Bool { [.custom, .stash].contains(self) }
 
     var hasRadialMenuAngle: Bool {
         let noAngleActions: [WindowDirection] = [.noAction, .minimize, .minimizeOthers, .hide, .initialFrame, .undo, .cycle]
-        return !(noAngleActions.contains(self) || willChangeScreen || willAdjustSize || willShrink || willGrow || willMove || willMaximize || willCenter)
+        return !(noAngleActions.contains(self) || willChangeScreen || willAdjustSize || willShrink || willGrow || willMove || willFocusWindow || willMaximize || willCenter)
     }
 
     var shouldFillRadialMenu: Bool { willMaximize || willCenter }
@@ -144,6 +149,16 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .leftHalf: .topLeftQuarter
         case .topLeftQuarter: .maximize
         default: .topHalf
+        }
+    }
+
+    var focusEdge: Edge? {
+        switch self {
+        case .focusLeft: .leading
+        case .focusRight: .trailing
+        case .focusUp: .top
+        case .focusDown: .bottom
+        default: nil
         }
     }
 }

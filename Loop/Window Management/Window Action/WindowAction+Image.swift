@@ -57,19 +57,14 @@ extension WindowAction {
             Image(systemName: "arrow.down.and.line.horizontal.and.arrow.up")
         case .growVertical:
             Image(systemName: "arrow.up.and.line.horizontal.and.arrow.down")
-        default:
-            nil
-        }
-    }
-
-    var radialMenuImage: Image? {
-        switch direction {
-        case .hide:
-            Image(systemName: "eye.slash")
-        case .minimize:
-            Image(systemName: "arrow.down.right.and.arrow.up.left")
-        case .minimizeOthers:
-            Image(systemName: "arrow.down.right.and.arrow.up.left")
+        case .focusLeft:
+            Image(systemName: "chevron.left")
+        case .focusRight:
+            Image(systemName: "chevron.right")
+        case .focusUp:
+            Image(systemName: "chevron.up")
+        case .focusDown:
+            Image(systemName: "chevron.down")
         default:
             nil
         }

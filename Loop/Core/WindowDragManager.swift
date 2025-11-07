@@ -115,9 +115,15 @@ final class WindowDragManager {
 
     @MainActor
     private func setCurrentDraggingWindow() {
-        if determineDraggedWindowTask != nil { return }
+        guard determineDraggedWindowTask == nil else {
+            return
+        }
 
         determineDraggedWindowTask = Task {
+            defer {
+                determineDraggedWindowTask = nil
+            }
+
             guard
                 let draggingWindow = try? WindowUtility.windowAtPosition(currentMousePosition),
                 !draggingWindow.isAppExcluded
@@ -129,8 +135,6 @@ final class WindowDragManager {
             initialWindowFrame = draggingWindow.frame
 
             logger.info("Determined window being dragged: \(draggingWindow.debugDescription)")
-
-            determineDraggedWindowTask = nil
         }
     }
 

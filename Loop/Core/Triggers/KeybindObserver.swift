@@ -99,18 +99,20 @@ final class KeybindObserver {
             }
 
             // If this is a valid event, don't passthrough
-            if performKeybind(
+            let result = performKeybind(
                 type: event.type,
                 isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
                 flags: filteredFlags
-            ) {
+            )
+
+            if result == .consume {
                 return .ignore
             }
 
-            // If this wasn't, check if it was a system keybind (ex. screenshot), and
-            // in that case, passthrough and force-close Loop
-            if CGKeyCode.systemKeybinds.contains(pressedKeys) {
-                closeCallback(true)
+            // If this shouldn't consume the event, and Loop isn't in the process of opening (possibly due to trigger delays),
+            // check if it was a system keybind (ex. screenshot), and in that case, passthrough and force-close Loop
+            if result != .opening, event.type == .keyDown, CGKeyCode.systemKeybinds.contains(pressedKeys) {
+                closeLoop(forceClose: true)
             }
 
             return .forward
@@ -129,13 +131,19 @@ final class KeybindObserver {
         eventMonitor = nil
     }
 
+    enum PerformKeybindResult {
+        case consume
+        case forward
+        case opening
+    }
+
     /// Determines if an event corresponds to a valid Loop action.
     /// - Parameters:
     ///   - type: the type of this event.
     ///   - isARepeat: whether this event is a repeat event.
     ///   - flags: modifier flags associated with this event.
     /// - Returns: whether this event was processed by Loop.
-    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags) -> Bool {
+    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags) -> PerformKeybindResult {
         let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
         let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
         let actionKeys: Set<CGKeyCode> = allPressedKeys.subtracting(triggerKey)
@@ -144,7 +152,7 @@ final class KeybindObserver {
         if checkIfLoopOpen() {
             if pressedKeys.contains(.kVK_Escape) {
                 closeLoop(forceClose: true)
-                return true
+                return .consume
             }
 
             if type == .keyUp {
@@ -154,12 +162,12 @@ final class KeybindObserver {
                     lastKeyReleaseTime = Date.now
                 }
 
-                return false
+                return .forward
             }
 
             if type != .keyDown, !containsTrigger {
                 closeLoop(forceClose: false)
-                return true
+                return .consume
             }
         }
 
@@ -169,13 +177,16 @@ final class KeybindObserver {
                     if !isARepeat || action.willManipulateExistingWindowFrame {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
-                    return true
+
+                    /// Only consume the event if the last command actually opened Loop.
+                    /// The main reason Loop *wouldn't* open after an `openLoop` call would be because the user has enabled a trigger delay.
+                    return checkIfLoopOpen() ? .consume : .opening
                 }
 
                 // Only trigger Loop without an action if the only pressed keys perfectly matches the trigger key.
                 if allPressedKeys == triggerKey {
                     openLoop(startingAction: nil, overrideExistingTriggerDelayTimerAction: !isARepeat)
-                    return false
+                    return .opening
                 }
             } else {
                 closeLoop(forceClose: false)
@@ -183,7 +194,7 @@ final class KeybindObserver {
         }
 
         // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
-        return false
+        return .forward
     }
 
     private func openLoop(startingAction: WindowAction?, overrideExistingTriggerDelayTimerAction: Bool) {

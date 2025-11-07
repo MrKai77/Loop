@@ -24,8 +24,8 @@ struct RadialMenuConfigurationView: View {
                     value: $radialMenuCornerRadius.doubleBinding,
                     in: 30...50,
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsUpper: false,
-                    clampsLower: false,
+                    clampsUpper: true,
+                    clampsLower: true,
                     suffix: Text("px", comment: "Unit symbol: pixels")
                 )
                 .onChange(of: radialMenuCornerRadius) { _ in
@@ -39,8 +39,8 @@ struct RadialMenuConfigurationView: View {
                     value: $radialMenuThickness.doubleBinding,
                     in: 10...35,
                     format: .number.precision(.fractionLength(0...0)),
-                    clampsUpper: false,
-                    clampsLower: false,
+                    clampsUpper: true,
+                    clampsLower: true,
                     suffix: Text("px", comment: "Unit symbol: pixels")
                 )
                 .onChange(of: radialMenuThickness) { _ in

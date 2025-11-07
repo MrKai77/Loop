@@ -95,7 +95,7 @@ struct PaddingConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminarePickerRoundedCorner(bottom: .always)
+        .luminarePickerRoundedCorner(top: .always)
     }
 
     func nonScreenPaddingConfiguration() -> some View {
@@ -130,7 +130,7 @@ struct PaddingConfigurationView: View {
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareComposeStyle(.inline)
+            .luminareSliderLayout(.compact(textBoxWidth: 64))
 
             LuminareSlider(
                 String(localized: "Bottom", comment: "Label for a slider in Loop’s padding settings"),
@@ -140,7 +140,7 @@ struct PaddingConfigurationView: View {
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareComposeStyle(.inline)
+            .luminareSliderLayout(.compact(textBoxWidth: 64))
 
             LuminareSlider(
                 String(localized: "Right", comment: "Label for a slider in Loop’s padding settings"),
@@ -150,7 +150,7 @@ struct PaddingConfigurationView: View {
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareComposeStyle(.inline)
+            .luminareSliderLayout(.compact(textBoxWidth: 64))
 
             LuminareSlider(
                 String(localized: "Left", comment: "Label for a slider in Loop’s padding settings"),
@@ -160,7 +160,7 @@ struct PaddingConfigurationView: View {
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareComposeStyle(.inline)
+            .luminareSliderLayout(.compact(textBoxWidth: 64))
         }
     }
 
@@ -174,6 +174,7 @@ struct PaddingConfigurationView: View {
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
+            .luminareSliderLayout(.compact(textBoxWidth: 64))
 
             LuminareSlider(
                 value: $paddingModel.externalBar.doubleBinding,
@@ -188,6 +189,7 @@ struct PaddingConfigurationView: View {
                             .padding(6)
                     }
             }
+            .luminareSliderLayout(.compact(textBoxWidth: 64))
         }
     }
 }

@@ -173,6 +173,10 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         return false
     }
 
+    var shouldImmediatelyExecuteAction: Bool {
+        willManipulateExistingWindowFrame || direction.willFocusWindow
+    }
+
     var forceProportionalFrameOnScreenChange: Bool {
         direction.willCenter || willManipulateExistingWindowFrame
     }
@@ -229,7 +233,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     /// - Returns: the calculated frame for the specified window action.
     func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil, isPreview: Bool = false) -> CGRect {
         let noFrameActions: [WindowDirection] = [.noAction, .cycle, .minimize, .hide]
-        guard !noFrameActions.contains(direction) else {
+        guard !noFrameActions.contains(direction), !direction.willFocusWindow else {
             return NSRect(origin: bounds.center, size: .zero)
         }
 

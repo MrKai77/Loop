@@ -63,6 +63,10 @@ final class PreviewController {
         }
     }
 
+    func setWindow(to newWindow: Window) {
+        window = newWindow
+    }
+
     func setScreen(to newScreen: NSScreen) {
         guard
             controller != nil, // Ensures that the preview window is open

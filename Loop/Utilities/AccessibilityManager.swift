@@ -96,17 +96,20 @@ final class AccessibilityManager {
 
         let alert = NSAlert()
         alert.messageText = .init(
-            localized: .init(
-                "Accessibility Request: Title",
-                defaultValue: "\(Bundle.main.appName) Needs Accessibility Permissions"
-            )
+            localized: "Accessibility Request: Title",
+            defaultValue: "\(Bundle.main.appName) Needs Accessibility Permissions"
         )
-        alert.informativeText = .init(
-            localized: .init(
-                "Accessibility Request: Content",
-                defaultValue: "Please grant access to be able to resize windows."
-            )
+        alert.informativeText = String(
+            localized: "Accessibility Request: Content",
+            defaultValue: "Please grant access to be able to resize windows."
         )
+
+        // Reference: https://x.com/leoshimo/status/1975642593569738755
+        let button = alert.addButton(withTitle: .init(localized: "OK"))
+        if #available(macOS 26.0, *) {
+            button.tintProminence = .primary
+        }
+
         alert.runModal()
 
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true]

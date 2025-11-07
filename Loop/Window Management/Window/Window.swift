@@ -461,3 +461,9 @@ extension Window: CustomDebugStringConvertible {
         return "Window(id: \(cgWindowID), title: \(name))"
     }
 }
+
+extension Window: Equatable {
+    static func == (lhs: Window, rhs: Window) -> Bool {
+        lhs.cgWindowID == rhs.cgWindowID
+    }
+}

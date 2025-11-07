@@ -25,7 +25,8 @@ enum WindowEngine {
         on screen: NSScreen,
         shouldRecord: Bool = true
     ) {
-        guard action.direction != .noAction else { return }
+        guard action.direction != .noAction, !action.direction.willFocusWindow else { return }
+
         let willChangeScreens = ScreenUtility.screenContaining(window) != screen
 
         let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"

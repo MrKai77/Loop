@@ -11,7 +11,7 @@ import OSLog
 
 /// This enum is in charge of fetching windows in the user's workspace, which will be used by Loop.
 enum WindowUtility {
-    private static let logger = Logger(category: "WindowUtility")
+    static let logger = Logger(category: "WindowUtility")
 
     /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
     /// - Returns: The target window

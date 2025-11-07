@@ -446,6 +446,11 @@ private extension Migrator {
         alert.informativeText = informativeText
         buttons.forEach { alert.addButton(withTitle: $0) }
 
+        // Reference: https://x.com/leoshimo/status/1975642593569738755
+        if #available(macOS 26.0, *) {
+            alert.buttons.first?.tintProminence = .primary
+        }
+
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             return await alert.beginSheetModal(for: window)
         } else {

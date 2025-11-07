@@ -73,7 +73,14 @@ final class IconConfigurationModel: ObservableObject {
             let alert = NSAlert()
             alert.messageText = .init(localized: "Notification permits: info", defaultValue: "\(Bundle.main.appName)'s notification permissions are currently disabled.")
             alert.informativeText = .init(localized: "Notification permits: request", defaultValue: "Please turn them on in System Settings.")
-            alert.addButton(withTitle: .init(localized: "Notification permits: open notification settings", defaultValue: "Open Settings"))
+
+            let button = alert.addButton(withTitle: .init(localized: "Notification permits: open notification settings", defaultValue: "Open Settings"))
+
+            // Reference: https://x.com/leoshimo/status/1975642593569738755
+            if #available(macOS 26.0, *) {
+                button.tintProminence = .primary
+            }
+
             alert.alertStyle = .warning
             let modalResponse = await alert.beginSheetModal(for: window)
 
