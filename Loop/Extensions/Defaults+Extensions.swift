@@ -67,54 +67,7 @@ extension Defaults.Keys {
     static let middleClickTriggersLoop = Key<Bool>("middleClickTriggersLoop", default: false, iCloud: true)
     static let enableTriggerDelayOnMiddleClick = Key<Bool>("enableTriggerDelayOnMiddleClick", default: false, iCloud: true)
     static let cycleBackwardsOnShiftPressed = Key<Bool>("cycleBackwardsOnShiftPressed", default: true, iCloud: true)
-    static let keybinds = Key<[WindowAction]>(
-        "keybinds",
-        default: [
-            WindowAction(.maximize, keybind: [.kVK_Space]),
-            WindowAction(.center, keybind: [.kVK_Return]),
-            WindowAction(
-                .init(localized: "Top Cycle"),
-                cycle: [
-                    .init(.topHalf),
-                    .init(.topThird),
-                    .init(.topTwoThirds)
-                ],
-                keybind: [.kVK_UpArrow]
-            ),
-            WindowAction(
-                .init(localized: "Bottom Cycle"),
-                cycle: [
-                    .init(.bottomHalf),
-                    .init(.bottomThird),
-                    .init(.bottomTwoThirds)
-                ],
-                keybind: [.kVK_DownArrow]
-            ),
-            WindowAction(
-                .init(localized: "Right Cycle"),
-                cycle: [
-                    .init(.rightHalf),
-                    .init(.rightThird),
-                    .init(.rightTwoThirds)
-                ],
-                keybind: [.kVK_RightArrow]
-            ),
-            WindowAction(
-                .init(localized: "Left Cycle"),
-                cycle: [
-                    .init(.leftHalf),
-                    .init(.leftThird),
-                    .init(.leftTwoThirds)
-                ],
-                keybind: [.kVK_LeftArrow]
-            ),
-            WindowAction(.topLeftQuarter, keybind: [.kVK_UpArrow, .kVK_LeftArrow]),
-            WindowAction(.topRightQuarter, keybind: [.kVK_UpArrow, .kVK_RightArrow]),
-            WindowAction(.bottomRightQuarter, keybind: [.kVK_DownArrow, .kVK_RightArrow]),
-            WindowAction(.bottomLeftQuarter, keybind: [.kVK_DownArrow, .kVK_LeftArrow])
-        ],
-        iCloud: true
-    )
+    static let keybinds = Key<[WindowAction]>("keybinds", default: WindowAction.defaultKeybinds, iCloud: true)
 
     // Advanced
     static let useSystemWindowManagerWhenAvailable = Key<Bool>("useSystemWindowManagerWhenAvailable", default: false, iCloud: true)
@@ -162,54 +115,14 @@ extension Defaults.Keys {
     static let previewStartingPosition = Key<PreviewStartingPosition>("previewStartingPosition", default: .screenCenter, iCloud: true)
 
     // Radial Menu
-    // It is not recommended to manually edit these entries yet, as it has not been tested.
-    static let radialMenuTop = Key<WindowAction>(
-        "radialMenuTop",
-        default: .init([
-            .init(.topHalf),
-            .init(.topThird),
-            .init(.topTwoThirds)
-        ]),
-        iCloud: true
+    static let radialMenuDirectionalActions = Key<[RadialMenuWindowAction]>(
+        "radialMenuDirectionalActions",
+        default: RadialMenuWindowAction.defaultRadialMenuDirectionalActions
     )
-    static let radialMenuTopRight = Key<WindowAction>("radialMenuTopRight", default: .init(.topRightQuarter), iCloud: true)
-    static let radialMenuRight = Key<WindowAction>(
-        "radialMenuRight",
-        default: .init([
-            .init(.rightHalf),
-            .init(.rightThird),
-            .init(.rightTwoThirds)
-        ]),
-        iCloud: true
-    )
-    static let radialMenuBottomRight = Key<WindowAction>("radialMenuBottomRight", default: .init(.bottomRightQuarter), iCloud: true)
-    static let radialMenuBottom = Key<WindowAction>(
-        "radialMenuBottom",
-        default: .init([
-            .init(.bottomHalf),
-            .init(.bottomThird),
-            .init(.bottomTwoThirds)
-        ]),
-        iCloud: true
-    )
-    static let radialMenuBottomLeft = Key<WindowAction>("radialMenuBottomLeft", default: .init(.bottomLeftQuarter), iCloud: true)
-    static let radialMenuLeft = Key<WindowAction>(
-        "radialMenuLeft",
-        default: .init([
-            .init(.leftHalf),
-            .init(.leftThird),
-            .init(.leftTwoThirds)
-        ]),
-        iCloud: true
-    )
-    static let radialMenuTopLeft = Key<WindowAction>("radialMenuTopLeft", default: .init(.topLeftQuarter), iCloud: true)
-    static let radialMenuCenter = Key<WindowAction>(
-        "radialMenuCenter",
-        default: .init([
-            .init(.maximize),
-            .init(.macOSCenter)
-        ]),
-        iCloud: true
+
+    static let radialMenuCenterAction = Key<RadialMenuWindowAction>(
+        "radialMenuDirectionalActions",
+        default: RadialMenuWindowAction.defaultRadialMenuCenterAction
     )
 
     // Migrator

@@ -12,7 +12,8 @@ import SwiftUI
 final class MouseInteractionObserver {
     private let logger = Logger(category: "MouseInteractionObserver")
 
-    // Callbacks
+    // Parameters
+    private let windowActionCache: WindowActionCache
     private let changeAction: (WindowAction) -> ()
     private let selectNextCycleItem: () -> ()
     private let getInitialMousePosition: () -> CGPoint
@@ -24,12 +25,22 @@ final class MouseInteractionObserver {
     private var previousAngleToMouse: Angle = .zero
     private var previousDistanceToMouse: CGFloat = .zero
 
+    private var radialMenuDirectionalActions: [RadialMenuWindowAction] {
+        Defaults[.radialMenuDirectionalActions]
+    }
+
+    private var radialMenuCenterAction: RadialMenuWindowAction {
+        Defaults[.radialMenuCenterAction]
+    }
+
     init(
+        windowActionCache: WindowActionCache,
         changeAction: @escaping (WindowAction) -> (),
         selectNextCycleItem: @escaping () -> (),
         getInitialMousePosition: @escaping () -> CGPoint,
         checkIfLoopOpen: @escaping () -> Bool
     ) {
+        self.windowActionCache = windowActionCache
         self.changeAction = changeAction
         self.selectNextCycleItem = selectNextCycleItem
         self.getInitialMousePosition = getInitialMousePosition
@@ -97,26 +108,27 @@ final class MouseInteractionObserver {
             previousAngleToMouse = angleToMouse
             previousDistanceToMouse = distanceToMouse
 
-            var newAction: WindowAction = .init(.noAction)
+            var newAction: RadialMenuWindowAction? = nil
 
             // If mouse over 50 points away, select half or quarter positions
             if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
-                switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-                case 0, 8: newAction = Defaults[.radialMenuRight]
-                case 1: newAction = Defaults[.radialMenuBottomRight]
-                case 2: newAction = Defaults[.radialMenuBottom]
-                case 3: newAction = Defaults[.radialMenuBottomLeft]
-                case 4: newAction = Defaults[.radialMenuLeft]
-                case 5: newAction = Defaults[.radialMenuTopLeft]
-                case 6: newAction = Defaults[.radialMenuTop]
-                case 7: newAction = Defaults[.radialMenuTopRight]
-                default: break
-                }
+                let actions = radialMenuDirectionalActions
+                let actionAngleSpan = 360.0 / CGFloat(actions.count)
+                let halfAngleSpan = actionAngleSpan / 2.0
+                let index = Int((angleToMouse.normalized().degrees + halfAngleSpan) / actionAngleSpan) % actions.count
+                newAction = actions[index]
             } else if distanceToMouse > noActionDistance {
-                newAction = Defaults[.radialMenuCenter]
+                newAction = radialMenuCenterAction
             }
 
-            changeAction(newAction)
+            switch newAction {
+            case let .custom(windowAction):
+                changeAction(windowAction)
+            case let .keybindReference(id):
+                if let action = windowActionCache.actionsByIdentifier[id] { changeAction(action) }
+            case nil:
+                changeAction(.init(.noAction))
+            }
         }
     }
 

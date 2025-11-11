@@ -12,7 +12,9 @@ import OSLog
 /// Caches the user's actions in a dictionary keyed by its keybind.
 /// This is called from `KeybindObserver`, to retrieve the user's actions in an efficient manner.
 final class WindowActionCache {
-    private var actionsByKeybind: [Set<CGKeyCode>: WindowAction] = [:]
+    private(set) var actionsByKeybind: [Set<CGKeyCode>: WindowAction] = [:]
+    private(set) var actionsByIdentifier: [UUID: WindowAction] = [:]
+
     private var observationTask: Task<(), Never>?
     private let logger = Logger(category: "WindowActionCache")
 
@@ -38,13 +40,15 @@ final class WindowActionCache {
         }
     }
 
-    subscript(_ keybind: Set<CGKeyCode>) -> WindowAction? {
-        actionsByKeybind[keybind]
-    }
-
     /// Rebuilds the cache and includes extra entries for cycle actions with shift keys if the user has enabled `cycleBackwardsOnShiftPressed`.
     private func regenerateCache() {
         let keybinds: [WindowAction] = Defaults[.keybinds].filter { !$0.keybind.isEmpty }
+
+        regenerateActionsByKeybind(from: keybinds)
+        regenerateActionsByIdentifier(from: keybinds)
+    }
+
+    private func regenerateActionsByKeybind(from keybinds: [WindowAction]) {
         let cycleBackwardsOnShiftPressed: Bool = Defaults[.cycleBackwardsOnShiftPressed]
 
         actionsByKeybind = Dictionary(
@@ -61,6 +65,15 @@ final class WindowActionCache {
             )
         }
 
-        logger.info("Finished regenerating keybinds -> action dictionary")
+        logger.info("Finished regenerating actionsByKeybind")
+    }
+
+    private func regenerateActionsByIdentifier(from keybinds: [WindowAction]) {
+        actionsByIdentifier = Dictionary(
+            keybinds.map { ($0.id, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+
+        logger.info("Finished regenerating actionsByIdentifier")
     }
 }

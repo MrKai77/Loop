@@ -21,10 +21,12 @@ final class LoopManager: ObservableObject {
     static var sidesToAdjust: Edge.Set?
     static var lastTargetFrame: CGRect = .zero
 
+    private let windowActionCache = WindowActionCache()
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
     private(set) lazy var keybindTrigger = KeybindTrigger(
+        windowActionCache: windowActionCache,
         openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: $0) },
         checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
@@ -36,6 +38,7 @@ final class LoopManager: ObservableObject {
     )
 
     private(set) lazy var mouseInteractionObserver = MouseInteractionObserver(
+        windowActionCache: windowActionCache,
         changeAction: { [weak self] newAction in
             /// If the mouse moved, that means that the keybind trigger should no longer passthrough special events such as the emoji key.
             self?.keybindTrigger.canPassthroughSpecialEvents = false

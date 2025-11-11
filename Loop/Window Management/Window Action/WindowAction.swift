@@ -15,7 +15,7 @@ import SwiftUI
 struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
     private static let logger = Logger(category: "WindowAction")
 
-    var id: UUID = .init()
+    private(set) var id: UUID = .init()
 
     /// Initializes a `WindowAction` with the specified parameters. Only to be used when decoding from JSON.
     /// - Parameters:

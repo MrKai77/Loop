@@ -11,7 +11,8 @@ import Defaults
 /// Monitors `keyDown`, `keyUp`, and `flagsChanged` events using an ActiveEventMonitor, invoking Loop’s open and close callbacks as needed.
 /// Additionally, this class manages keybind action retrieval and updates Loop based on those actions.
 final class KeybindTrigger {
-    // Callbacks
+    // Parameters
+    private let windowActionCache: WindowActionCache
     private let openCallback: (WindowAction?) -> ()
     private let closeCallback: (Bool) -> ()
     private let checkIfLoopOpen: () -> Bool
@@ -25,8 +26,6 @@ final class KeybindTrigger {
     // Special events only contain the globe key, as it can also be used as an emoji key.
     private let specialEvents: [CGKeyCode] = [.kVK_Globe_Emoji]
     var canPassthroughSpecialEvents = true // If mouse has been moved
-
-    private let actionsByKeybindCache = WindowActionCache()
 
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
@@ -54,10 +53,12 @@ final class KeybindTrigger {
     ///   - openCallback: what to do when the trigger key is pressed, and Loop should be activated.
     ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
     init(
+        windowActionCache: WindowActionCache,
         openCallback: @escaping (WindowAction?) -> (),
         closeCallback: @escaping (Bool) -> (),
         checkIfLoopOpen: @escaping () -> Bool
     ) {
+        self.windowActionCache = windowActionCache
         self.openCallback = openCallback
         self.closeCallback = closeCallback
         self.checkIfLoopOpen = checkIfLoopOpen
@@ -173,7 +174,7 @@ final class KeybindTrigger {
 
         if type != .keyUp {
             if containsTrigger {
-                if let action = actionsByKeybindCache[actionKeys] {
+                if let action = windowActionCache.actionsByKeybind[actionKeys] {
                     if !isARepeat || action.willManipulateExistingWindowFrame {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
