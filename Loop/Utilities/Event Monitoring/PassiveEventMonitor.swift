@@ -9,6 +9,7 @@ import CoreGraphics
 
 /// Passive monitor that only listens to events.
 /// Callback will be called on a separate thread to keep the CFMachPort's callback fast.
+@MainActor
 final class PassiveEventMonitor: BaseEventTapMonitor {
     private let eventCallback: (CGEvent) -> ()
 

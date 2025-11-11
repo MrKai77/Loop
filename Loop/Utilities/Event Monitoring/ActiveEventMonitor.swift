@@ -8,6 +8,7 @@
 import CoreGraphics
 
 /// Active event monitor that can process and alter events when needed.
+@MainActor
 final class ActiveEventMonitor: BaseEventTapMonitor {
     private let eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
 

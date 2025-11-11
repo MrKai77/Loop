@@ -1,5 +1,5 @@
 //
-//  MiddleClickObserver.swift
+//  MiddleClickTrigger.swift
 //  Loop
 //
 //  Created by Kai Azim on 2025-08-29.
@@ -9,7 +9,7 @@ import AppKit
 import Defaults
 
 /// Reads middle-click events using a PassiveEventMonitor, and triggers Loop open/close callbacks, when appropriate.
-final class MiddleClickObserver {
+final class MiddleClickTrigger {
     // Callbacks
     private let openCallback: (WindowAction?) -> ()
     private let closeCallback: (Bool) -> ()

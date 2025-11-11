@@ -104,7 +104,7 @@ struct TriggerKeycorder: View {
         isActive = true
 
         // So that if doesn't interfere with the key detection here
-        LoopManager.shared.keybindObserver.stop()
+        LoopManager.shared.keybindTrigger.stop()
 
         eventMonitor = LocalEventMonitor(events: [.keyDown, .flagsChanged]) { event in
             // keyDown event is only used to track escape key
@@ -154,7 +154,7 @@ struct TriggerKeycorder: View {
         eventMonitor?.stop()
         eventMonitor = nil
 
-        LoopManager.shared.keybindObserver.start()
+        LoopManager.shared.keybindTrigger.start()
     }
 }
 

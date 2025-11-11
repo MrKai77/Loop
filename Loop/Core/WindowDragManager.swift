@@ -34,6 +34,7 @@ final class WindowDragManager {
         NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
     }
 
+    @MainActor
     func addObservers() {
         leftMouseDraggedMonitor = PassiveEventMonitor(
             events: [.leftMouseDragged],

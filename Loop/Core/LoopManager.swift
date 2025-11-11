@@ -24,25 +24,30 @@ final class LoopManager: ObservableObject {
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
-    private(set) lazy var keybindObserver = KeybindObserver(
+    private(set) lazy var keybindTrigger = KeybindTrigger(
         openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: $0) },
         checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
     )
 
-    private(set) lazy var middleClickObserver = MiddleClickObserver(
+    private(set) lazy var middleClickTrigger = MiddleClickTrigger(
         openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
         closeCallback: { [weak self] in self?.closeLoop(forceClose: $0) }
     )
 
-    private(set) lazy var mouseMovedEventMonitor = PassiveEventMonitor(
-        events: [.mouseMoved, .otherMouseDragged],
-        callback: mouseMoved
-    )
-
-    private(set) lazy var leftClickMonitor = PassiveEventMonitor(
-        events: [.leftMouseDown],
-        callback: leftMouseDown
+    private(set) lazy var mouseInteractionObserver = MouseInteractionObserver(
+        changeAction: { [weak self] newAction in
+            /// If the mouse moved, that means that the keybind trigger should no longer passthrough special events such as the emoji key.
+            self?.keybindTrigger.canPassthroughSpecialEvents = false
+            self?.changeAction(newAction, canAdvanceCycle: false)
+        },
+        selectNextCycleItem: { [weak self] in
+            if let parentCycleAction = self?.parentCycleAction {
+                self?.changeAction(parentCycleAction, disableHapticFeedback: true)
+            }
+        },
+        getInitialMousePosition: { [weak self] in self?.initialMousePosition ?? .zero },
+        checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
     )
 
     private var accessibilityCheckerTask: Task<(), Never>?
@@ -54,9 +59,7 @@ final class LoopManager: ObservableObject {
 
     @Published var currentAction: WindowAction = .init(.noAction)
     private var parentCycleAction: WindowAction?
-    private(set) var initialMousePosition: CGPoint = .init()
-    private var angleToMouse: Angle = .init(degrees: 0)
-    private var distanceToMouse: CGFloat = 0
+    private(set) var initialMousePosition: CGPoint = .zero
 
     func start() {
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
@@ -66,11 +69,11 @@ final class LoopManager: ObservableObject {
                 }
 
                 if status {
-                    await keybindObserver.start()
-                    await middleClickObserver.start()
+                    await keybindTrigger.start()
+                    await middleClickTrigger.start()
                 } else {
-                    await keybindObserver.stop()
-                    await middleClickObserver.stop()
+                    await keybindTrigger.stop()
+                    await middleClickTrigger.stop()
                 }
             }
         }
@@ -127,8 +130,9 @@ extension LoopManager {
         isShiftKeyPressed = false
 
         if !Defaults[.disableCursorInteraction] {
-            mouseMovedEventMonitor.start()
-            leftClickMonitor.start()
+            Task { @MainActor in
+                mouseInteractionObserver.start(initialMousePosition: initialMousePosition)
+            }
         }
 
         if !Defaults[.hideUntilDirectionIsChosen] {
@@ -157,8 +161,9 @@ extension LoopManager {
 
         closeWindows()
 
-        mouseMovedEventMonitor.stop()
-        leftClickMonitor.stop()
+        Task { @MainActor in
+            mouseInteractionObserver.stop()
+        }
 
         // Handle normal actions with a target window
         if let targetWindow,
@@ -484,72 +489,6 @@ extension LoopManager {
                 NSHapticFeedbackManager.FeedbackPattern.alignment,
                 performanceTime: NSHapticFeedbackManager.PerformanceTime.now
             )
-        }
-    }
-}
-
-// MARK: - Radial Menu
-
-extension LoopManager {
-    private func mouseMoved(cgEvent _: CGEvent) {
-        Task { @MainActor in
-            guard isLoopActive else { return }
-            keybindObserver.canPassthroughSpecialEvents = false
-
-            let noActionDistance: CGFloat = 10
-
-            let currentMouseLocation = NSEvent.mouseLocation
-            let mouseAngle = Angle(radians: initialMousePosition.angle(to: currentMouseLocation))
-            let mouseDistance = initialMousePosition.distance(to: currentMouseLocation)
-
-            // Return if the mouse didn't move
-            if mouseAngle == angleToMouse, mouseDistance == distanceToMouse {
-                return
-            }
-
-            // Get angle & distance to mouse
-            angleToMouse = mouseAngle
-            distanceToMouse = mouseDistance
-
-            var resizeDirection: WindowAction = .init(.noAction)
-
-            // If mouse over 50 points away, select half or quarter positions
-            if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
-                switch Int((angleToMouse.normalized().degrees + 22.5) / 45) {
-                case 0, 8: resizeDirection = Defaults[.radialMenuRight]
-                case 1: resizeDirection = Defaults[.radialMenuBottomRight]
-                case 2: resizeDirection = Defaults[.radialMenuBottom]
-                case 3: resizeDirection = Defaults[.radialMenuBottomLeft]
-                case 4: resizeDirection = Defaults[.radialMenuLeft]
-                case 5: resizeDirection = Defaults[.radialMenuTopLeft]
-                case 6: resizeDirection = Defaults[.radialMenuTop]
-                case 7: resizeDirection = Defaults[.radialMenuTopRight]
-                default: break
-                }
-            } else if distanceToMouse > noActionDistance {
-                resizeDirection = Defaults[.radialMenuCenter]
-            }
-
-            changeAction(resizeDirection, canAdvanceCycle: false)
-        }
-    }
-
-    private func leftMouseDown(cgEvent event: CGEvent) {
-        /// Ensure that the source originates from the HID state ID.
-        /// Otherwise, this event was likely sent from Loop to focus the frontmost click (see `Window.focus` which sends a `SLSEvent` to the window)
-        let sourceID = CGEventSourceStateID(rawValue: Int32(event.getIntegerValueField(.eventSourceStateID)))
-        guard sourceID == .hidSystemState else {
-            return
-        }
-
-        Task { @MainActor [weak self] in
-            guard let self, isLoopActive, currentAction.direction != .noAction else {
-                return
-            }
-
-            if let parentCycleAction {
-                changeAction(parentCycleAction, disableHapticFeedback: true)
-            }
         }
     }
 }
