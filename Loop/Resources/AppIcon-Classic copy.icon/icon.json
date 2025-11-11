@@ -64,6 +64,7 @@
     {
       "layers" : [
         {
+          "glass" : true,
           "image-name" : "1 – Layer 2.png",
           "name" : "1 – Layer 2"
         }
@@ -74,7 +75,7 @@
       },
       "specular" : false,
       "translucency" : {
-        "enabled" : true,
+        "enabled" : false,
         "value" : 0.5
       }
     }

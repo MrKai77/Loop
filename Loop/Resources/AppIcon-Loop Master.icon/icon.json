@@ -43,7 +43,7 @@
           "value" : "normal"
         }
       ],
-      "blur-material" : null,
+      "blur-material" : 0.2,
       "layers" : [
         {
           "blend-mode" : "lighten",

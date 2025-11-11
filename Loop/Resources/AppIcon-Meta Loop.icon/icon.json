@@ -1,0 +1,160 @@
+{
+  "color-space-for-untagged-svg-colors" : "display-p3",
+  "fill" : {
+    "linear-gradient" : [
+      "display-p3:0.14771,0.13599,0.22546,0.00000",
+      "display-p3:0.10004,0.09235,0.14624,0.00000"
+    ]
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "Selected Resize.png",
+          "name" : "Selected Resize",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              188,
+              -20.07819817845612
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0
+      },
+      "specular" : false,
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    },
+    {
+      "blur-material" : 0.5,
+      "layers" : [
+        {
+          "image-name" : "Radial Menu.png",
+          "name" : "Radial Menu"
+        }
+      ],
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          188,
+          188
+        ]
+      },
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.9
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "hidden" : false,
+          "image-name" : "Buttons 2.png",
+          "name" : "Buttons 2",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -91.81002193033083,
+              -245.83504277448247
+            ]
+          }
+        },
+        {
+          "hidden" : false,
+          "image-name" : "Frame 2.png",
+          "name" : "Frame 2",
+          "opacity" : 0.35
+        }
+      ],
+      "lighting" : "individual",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.85
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "glass-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : false
+            }
+          ],
+          "hidden" : false,
+          "image-name" : "Rectangle 41.png",
+          "name" : "Rectangle 41",
+          "opacity-specializations" : [
+            {
+              "value" : 0.9
+            },
+            {
+              "appearance" : "dark",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "image-name" : "Dark 2.png",
+          "name" : "Dark 2",
+          "opacity-specializations" : [
+            {
+              "value" : 0
+            },
+            {
+              "appearance" : "dark",
+              "value" : 1
+            }
+          ]
+        },
+        {
+          "image-name" : "Light 2.png",
+          "name" : "Light 2",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 0
+            }
+          ]
+        }
+      ],
+      "opacity-specializations" : [
+        {
+          "appearance" : "tinted",
+          "value" : 0
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : "shared"
+  }
+}
