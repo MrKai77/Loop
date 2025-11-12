@@ -10,7 +10,11 @@
     {
       "blur-material-specializations" : [
         {
-          "value" : 0.5
+          "value" : null
+        },
+        {
+          "appearance" : "dark",
+          "value" : null
         },
         {
           "appearance" : "tinted",
@@ -86,7 +90,7 @@
         },
         {
           "appearance" : "tinted",
-          "value" : "hard-light"
+          "value" : "normal"
         }
       ],
       "blur-material-specializations" : [
@@ -101,8 +105,27 @@
       "hidden" : false,
       "layers" : [
         {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "normal"
+            }
+          ],
           "image-name" : "1 – Layer 2.png",
-          "name" : "1 – Layer 2"
+          "name" : "1 – Layer 2",
+          "opacity-specializations" : [
+            {
+              "value" : 1
+            },
+            {
+              "appearance" : "dark",
+              "value" : 0.8
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 0.5
+            }
+          ]
         }
       ],
       "lighting" : "individual",
@@ -122,7 +145,7 @@
           "appearance" : "dark",
           "value" : {
             "enabled" : true,
-            "value" : 0.5
+            "value" : 0.35
           }
         },
         {

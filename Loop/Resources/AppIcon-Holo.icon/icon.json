@@ -30,7 +30,17 @@
       "layers" : [
         {
           "image-name" : "1 – Layer.png",
-          "name" : "1 – Layer"
+          "name" : "1 – Layer",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0.75
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 1
+            }
+          ]
         }
       ],
       "lighting-specializations" : [
@@ -53,14 +63,14 @@
         {
           "value" : {
             "enabled" : true,
-            "value" : 0.35
+            "value" : 0.25
           }
         },
         {
           "appearance" : "dark",
           "value" : {
             "enabled" : true,
-            "value" : 0.5
+            "value" : 0.25
           }
         },
         {

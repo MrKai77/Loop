@@ -49,7 +49,17 @@
           "blend-mode" : "lighten",
           "glass" : true,
           "image-name" : "1 – Layer.svg",
-          "name" : "1 – Layer"
+          "name" : "1 – Layer",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0.5
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 0.75
+            }
+          ]
         }
       ],
       "lighting" : "individual",

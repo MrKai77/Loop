@@ -64,9 +64,21 @@
     {
       "layers" : [
         {
+          "blend-mode-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : "normal"
+            }
+          ],
           "glass" : true,
           "image-name" : "1 – Layer 2.png",
-          "name" : "1 – Layer 2"
+          "name" : "1 – Layer 2",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0.75
+            }
+          ]
         }
       ],
       "shadow" : {

@@ -75,7 +75,7 @@
           "hidden" : false,
           "image-name" : "Frame 2.png",
           "name" : "Frame 2",
-          "opacity" : 0.35
+          "opacity" : 0.5
         }
       ],
       "lighting" : "individual",
@@ -111,29 +111,38 @@
           ]
         },
         {
-          "image-name" : "Dark 2.png",
-          "name" : "Dark 2",
-          "opacity-specializations" : [
+          "glass-specializations" : [
             {
-              "value" : 0
+              "value" : false
             },
             {
               "appearance" : "dark",
-              "value" : 1
+              "value" : false
+            }
+          ],
+          "hidden" : false,
+          "image-name" : "Blur.png",
+          "name" : "Blur",
+          "opacity-specializations" : [
+            {
+              "value" : 0.5
+            },
+            {
+              "appearance" : "dark",
+              "value" : 0
             }
           ]
         },
         {
-          "image-name" : "Light 2.png",
-          "name" : "Light 2",
+          "image-name" : "Dark 2.png",
+          "name" : "Dark",
           "opacity-specializations" : [
             {
-              "appearance" : "dark",
-              "value" : 0
+              "value" : 1
             },
             {
-              "appearance" : "tinted",
-              "value" : 0
+              "appearance" : "dark",
+              "value" : 1
             }
           ]
         }

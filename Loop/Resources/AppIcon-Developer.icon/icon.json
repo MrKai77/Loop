@@ -35,7 +35,11 @@
           "opacity-specializations" : [
             {
               "appearance" : "dark",
-              "value" : 1
+              "value" : 0.5
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 0.75
             }
           ]
         }
@@ -44,10 +48,21 @@
         "kind" : "neutral",
         "opacity" : 0.75
       },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
+      "translucency-specializations" : [
+        {
+          "value" : {
+            "enabled" : true,
+            "value" : 0.5
+          }
+        },
+        {
+          "appearance" : "dark",
+          "value" : {
+            "enabled" : true,
+            "value" : 0.5
+          }
+        }
+      ]
     },
     {
       "hidden" : false,

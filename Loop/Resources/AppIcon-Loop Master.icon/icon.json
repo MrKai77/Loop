@@ -49,7 +49,17 @@
           "blend-mode" : "lighten",
           "glass" : true,
           "image-name" : "1 – Layer.svg",
-          "name" : "1 – Layer"
+          "name" : "1 – Layer",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0.5
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 0.5
+            }
+          ]
         }
       ],
       "lighting" : "individual",
@@ -59,7 +69,11 @@
         },
         {
           "appearance" : "dark",
-          "value" : 0.8
+          "value" : 1
+        },
+        {
+          "appearance" : "tinted",
+          "value" : 1
         }
       ],
       "shadow" : {
@@ -86,11 +100,11 @@
           "name" : "1 – Layer",
           "opacity-specializations" : [
             {
-              "value" : 0.2
+              "value" : 0.25
             },
             {
               "appearance" : "dark",
-              "value" : 0.2
+              "value" : 0.3
             },
             {
               "appearance" : "tinted",
