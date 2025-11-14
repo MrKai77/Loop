@@ -12,7 +12,8 @@ enum RadialMenuWindowAction: Codable, Defaults.Serializable {
     case custom(WindowAction)
     case keybindReference(UUID)
 
-    static let defaultRadialMenuDirectionalActions: [RadialMenuWindowAction] = [
+    static let defaultRadialMenuActions: [RadialMenuWindowAction] = [
+        .custom(.init([.init(.maximize), .init(.macOSCenter)])),
         .custom(.init([.init(.rightHalf), .init(.rightThird), .init(.rightTwoThirds)])),
         .custom(.init(.bottomRightQuarter)),
         .custom(.init([.init(.bottomHalf), .init(.bottomThird), .init(.bottomTwoThirds)])),
@@ -22,8 +23,4 @@ enum RadialMenuWindowAction: Codable, Defaults.Serializable {
         .custom(.init([.init(.topHalf), .init(.topThird), .init(.topTwoThirds)])),
         .custom(.init(.topRightQuarter))
     ]
-
-    static let defaultRadialMenuCenterAction: RadialMenuWindowAction = .custom(
-        .init([.init(.maximize), .init(.macOSCenter)])
-    )
 }
