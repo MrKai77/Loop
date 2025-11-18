@@ -9,62 +9,62 @@ import Luminare
 import SwiftUI
 
 extension WindowAction {
-    var icon: Image? {
+    var image: NSImage? {
         switch direction {
         case .undo:
-            Image(systemName: "arrow.uturn.backward")
+            NSImage(systemSymbolName: "arrow.uturn.backward", accessibilityDescription: nil)
         case .initialFrame:
-            Image(systemName: "backward.end.alt.fill")
+            NSImage(systemSymbolName: "backward.end.alt.fill", accessibilityDescription: nil)
         case .hide:
-            Image(systemName: "eye.slash.fill")
+            NSImage(systemSymbolName: "eye.slash.fill", accessibilityDescription: nil)
         case .minimize:
-            Image(systemName: "arrow.down.right.and.arrow.up.left")
+            NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)
         case .minimizeOthers:
-            Image(systemName: "arrow.down.right.and.arrow.up.left")
+            NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)
         case .maximizeHeight:
-            Image(systemName: "arrow.up.and.down")
+            NSImage(systemSymbolName: "arrow.up.and.down", accessibilityDescription: nil)
         case .maximizeWidth:
-            Image(systemName: "arrow.left.and.right")
+            NSImage(systemSymbolName: "arrow.left.and.right", accessibilityDescription: nil)
         case .nextScreen:
-            Image(systemName: "forward.fill")
+            NSImage(systemSymbolName: "forward.fill", accessibilityDescription: nil)
         case .previousScreen:
-            Image(systemName: "backward.fill")
+            NSImage(systemSymbolName: "backward.fill", accessibilityDescription: nil)
         case .leftScreen:
-            Image(systemName: "arrow.left.to.line")
+            NSImage(systemSymbolName: "arrow.left.to.line", accessibilityDescription: nil)
         case .rightScreen:
-            Image(systemName: "arrow.right.to.line")
+            NSImage(systemSymbolName: "arrow.right.to.line", accessibilityDescription: nil)
         case .topScreen:
-            Image(systemName: "arrow.up.to.line")
+            NSImage(systemSymbolName: "arrow.up.to.line", accessibilityDescription: nil)
         case .bottomScreen:
-            Image(systemName: "arrow.down.to.line")
+            NSImage(systemSymbolName: "arrow.down.to.line", accessibilityDescription: nil)
         case .larger:
-            Image(systemName: "arrow.up.left.and.arrow.down.right")
+            NSImage(systemSymbolName: "arrow.up.left.and.arrow.down.right", accessibilityDescription: nil)
         case .smaller:
-            Image(systemName: "arrow.down.right.and.arrow.up.left")
+            NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)
         case .shrinkTop, .growBottom, .moveDown:
-            Image(systemName: "arrow.down")
+            NSImage(systemSymbolName: "arrow.down", accessibilityDescription: nil)
         case .shrinkBottom, .growTop, .moveUp:
-            Image(systemName: "arrow.up")
+            NSImage(systemSymbolName: "arrow.up", accessibilityDescription: nil)
         case .shrinkRight, .growLeft, .moveLeft:
-            Image(systemName: "arrow.left")
+            NSImage(systemSymbolName: "arrow.left", accessibilityDescription: nil)
         case .shrinkLeft, .growRight, .moveRight:
-            Image(systemName: "arrow.right")
+            NSImage(systemSymbolName: "arrow.right", accessibilityDescription: nil)
         case .shrinkHorizontal:
-            Image(systemName: "arrow.right.and.line.vertical.and.arrow.left")
+            NSImage(systemSymbolName: "arrow.right.and.line.vertical.and.arrow.left", accessibilityDescription: nil)
         case .growHorizontal:
-            Image(systemName: "arrow.left.and.line.vertical.and.arrow.right")
+            NSImage(systemSymbolName: "arrow.left.and.line.vertical.and.arrow.right", accessibilityDescription: nil)
         case .shrinkVertical:
-            Image(systemName: "arrow.down.and.line.horizontal.and.arrow.up")
+            NSImage(systemSymbolName: "arrow.down.and.line.horizontal.and.arrow.up", accessibilityDescription: nil)
         case .growVertical:
-            Image(systemName: "arrow.up.and.line.horizontal.and.arrow.down")
+            NSImage(systemSymbolName: "arrow.up.and.line.horizontal.and.arrow.down", accessibilityDescription: nil)
         case .focusLeft:
-            Image(systemName: "chevron.left")
+            NSImage(systemSymbolName: "chevron.left", accessibilityDescription: nil)
         case .focusRight:
-            Image(systemName: "chevron.right")
+            NSImage(systemSymbolName: "chevron.right", accessibilityDescription: nil)
         case .focusUp:
-            Image(systemName: "chevron.up")
+            NSImage(systemSymbolName: "chevron.up", accessibilityDescription: nil)
         case .focusDown:
-            Image(systemName: "chevron.down")
+            NSImage(systemSymbolName: "chevron.down", accessibilityDescription: nil)
         default:
             nil
         }
@@ -77,78 +77,257 @@ extension WindowAction {
 /// - the `icon` property is used for common actions like hide, minimize, growing and shrinking, which cannot be easily represented by a frame.
 /// - a simple frame preview is used for more general actions such as right half, maximize, and center, as well as custom keybinds when available.
 /// - finally, a default icon is used for cycle actions and actions without a specific icon or frame representation as backup (just in case, they shouldn't be needed in practice).
-///
-/// It is also important to note that this view conforms to `Equatable` to prevent accidental re-renders when used in lists or other dynamic views.
-/// Please ensure that the `.equatable()` modifier is applied when using this view in such contexts.
-struct IconView: View, Equatable {
-    @Environment(\.luminareAnimationFast) private var luminareAnimationFast
-
+struct IconView: NSViewRepresentable {
     private let action: WindowAction
-    private let size = CGSize(width: 14, height: 10)
-    private let inset: CGFloat = 2
-    private let outerCornerRadius: CGFloat = 3
-    private var frame: CGRect {
-        action.getFrame(
-            window: nil,
-            bounds: .init(origin: .zero, size: size),
-            disablePadding: true
+    private let size: CGSize
+
+    init(
+        action: WindowAction,
+        size: CGSize = .init(
+            width: 18,
+            height: 14
         )
-    }
-
-    /// Creates an icon view for a given window action.
-    /// - Parameter action: The window action to represent.
-    init(action: WindowAction) {
+    ) {
         self.action = action
+        self.size = size
     }
 
-    var body: some View {
+    func makeNSView(context _: Context) -> IconRenderView {
+        let view = IconRenderView()
+
         if action.direction == .cycle, let first = action.cycle?.first {
-            IconView(action: first)
-                .id(first.id)
-                .animation(luminareAnimationFast, value: first)
+            view.setAction(to: first, animated: false)
         } else {
-            Group {
-                if let icon = action.icon {
-                    icon
-                        .font(.system(size: 8))
-                        .fontWeight(.bold)
-                        .frame(width: size.width, height: size.height, alignment: .center)
-                } else if frame.size.area != 0 {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: outerCornerRadius - inset)
-                            .frame(
-                                width: frame.width,
-                                height: frame.height
-                            )
-                            .offset(
-                                x: frame.origin.x,
-                                y: frame.origin.y
-                            )
-                    }
-                    .frame(width: size.width, height: size.height, alignment: .topLeading)
-                } else if action.direction == .cycle {
-                    Image(.repeat4)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: size.width, height: size.height, alignment: .center)
-                } else {
-                    Image(.ruler)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: size.width, height: size.height, alignment: .center)
-                }
-            }
-            .clipShape(.rect(cornerRadius: outerCornerRadius - inset))
-            .background {
-                RoundedRectangle(cornerRadius: outerCornerRadius)
-                    .stroke(lineWidth: 1)
-                    .padding(-inset)
-            }
-            .padding(.horizontal, 4)
+            view.setAction(to: action, animated: false)
+        }
+
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.widthAnchor.constraint(equalToConstant: size.width),
+            view.heightAnchor.constraint(equalToConstant: size.height)
+        ])
+
+        return view
+    }
+
+    func updateNSView(_ view: IconRenderView, context _: Context) {
+        if action.direction == .cycle, let first = action.cycle?.first {
+            view.setAction(to: first, animated: true)
+        } else {
+            view.setAction(to: action, animated: true)
+        }
+    }
+}
+
+final class IconRenderView: NSView {
+    private var currentAction: WindowAction = .init(.noAction)
+
+    private let strokeLayer = CAShapeLayer()
+    private let fillLayer = CAShapeLayer()
+    private let imageLayer = CALayer()
+
+    private let cornerRadius: CGFloat = 3
+    private let inset: CGFloat = 2
+    private let strokeWidth: CGFloat = 1.5
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    func setAction(
+        to action: WindowAction,
+        animated: Bool,
+        duration: CFTimeInterval = 0.1
+    ) {
+        guard !action.isSameManipulation(as: currentAction) else { return }
+        currentAction = action
+        updatePath(animated: animated, duration: duration)
+    }
+
+    override func layout() {
+        super.layout()
+        updatePath(animated: false)
+    }
+
+    // MARK: - Private
+
+    private func setup() {
+        wantsLayer = true
+        clipsToBounds = true
+
+        layer?.addSublayer(strokeLayer)
+        layer?.addSublayer(fillLayer)
+        layer?.addSublayer(imageLayer)
+
+        strokeLayer.fillColor = NSColor.clear.cgColor
+        strokeLayer.strokeColor = NSColor.textColor.cgColor
+        strokeLayer.lineWidth = 1
+        strokeLayer.cornerCurve = .continuous
+
+        fillLayer.fillColor = NSColor.textColor.cgColor
+        fillLayer.cornerCurve = .continuous
+
+        imageLayer.contentsGravity = .resizeAspect
+    }
+
+    private func processStrokeLayer(strokeInset: CGFloat) {
+        let strokeRect = bounds.insetBy(dx: strokeInset, dy: strokeInset)
+        let strokePath = CGPath(
+            roundedRect: strokeRect,
+            cornerWidth: cornerRadius,
+            cornerHeight: cornerRadius,
+            transform: nil
+        )
+        strokeLayer.path = strokePath
+    }
+
+    enum DisplayMode {
+        case frame(CGRect)
+        case image(NSImage)
+    }
+
+    private func determineDisplayMode(fillBounds: CGRect) -> DisplayMode? {
+        if let image = currentAction.image {
+            return .image(image)
+        }
+
+        let frame = currentAction.getFrame(
+            window: nil,
+            bounds: .init(origin: .zero, size: .init(width: 1, height: 1)),
+            disablePadding: true
+        ).flipY(maxY: 1)
+
+        if frame.size.area != 0 {
+            let fillFrame = CGRect(
+                x: fillBounds.minX + fillBounds.width * frame.minX,
+                y: fillBounds.minY + fillBounds.height * frame.minY,
+                width: fillBounds.width * frame.width,
+                height: fillBounds.height * frame.height
+            )
+
+            return .frame(fillFrame)
+        }
+
+        // And if all else fails...
+
+        if currentAction.direction == .custom {
+            return .image(NSImage(resource: .ruler))
+        }
+
+        if currentAction.direction == .cycle {
+            return .image(NSImage(resource: .repeat4))
+        }
+
+        return nil
+    }
+
+    private func updatePath(
+        animated: Bool = true,
+        duration: CFTimeInterval = 0.1
+    ) {
+        strokeLayer.frame = bounds
+        fillLayer.frame = bounds
+
+        let strokeInset = strokeWidth / 2
+        processStrokeLayer(strokeInset: strokeInset)
+
+        let fillInset = strokeInset + inset
+        let fillBounds = bounds.insetBy(dx: fillInset, dy: fillInset)
+
+        guard let displayMode = determineDisplayMode(fillBounds: fillBounds) else {
+            fillLayer.opacity = 0
+            imageLayer.opacity = 0
+            return
+        }
+
+        switch displayMode {
+        case let .frame(fillRect):
+            let newFillPath = CGPath(
+                roundedRect: fillRect,
+                cornerWidth: cornerRadius - inset,
+                cornerHeight: cornerRadius - inset,
+                transform: nil
+            )
+            animatePathChange(layer: fillLayer, to: newFillPath, animated: animated, duration: duration)
+            animateAlpha(layer: fillLayer, to: 1, animated: animated, duration: duration)
+            animateAlpha(layer: imageLayer, to: 0, animated: animated, duration: duration)
+
+        case let .image(image):
+            imageLayer.contents = processImage(image)
+            imageLayer.frame = getImageBounds()
+
+            animateAlpha(layer: fillLayer, to: 0, animated: animated, duration: duration)
+            animateAlpha(layer: imageLayer, to: 1, animated: animated, duration: duration)
         }
     }
 
-    static func == (lhs: IconView, rhs: IconView) -> Bool {
-        lhs.action == rhs.action
+    private func animatePathChange(
+        layer: CAShapeLayer,
+        to new: CGPath?,
+        animated: Bool,
+        duration: CFTimeInterval
+    ) {
+        guard let new else { return }
+
+        if animated {
+            let animation = CABasicAnimation(keyPath: "path")
+            animation.fromValue = layer.path
+            animation.toValue = new
+            animation.duration = duration
+            animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            layer.add(animation, forKey: "path")
+        }
+
+        layer.path = new
+    }
+
+    private func animateAlpha(
+        layer: CALayer,
+        to target: Float,
+        animated: Bool,
+        duration: CFTimeInterval
+    ) {
+        if animated {
+            let anim = CABasicAnimation(keyPath: "opacity")
+            anim.fromValue = layer.opacity
+            anim.toValue = target
+            anim.duration = duration
+            layer.add(anim, forKey: "opacity")
+        }
+
+        layer.opacity = target
+    }
+
+    private func processImage(_ image: NSImage, color: NSColor = .textColor) -> NSImage? {
+        let image = image.withSymbolConfiguration(.init(pointSize: 12, weight: .bold)) ?? image
+
+        if image.isTemplate {
+            return NSImage(size: image.size, flipped: false) { destinationRect in
+                image.draw(in: destinationRect)
+                color.setFill()
+                destinationRect.fill(using: .sourceIn)
+                return true
+            }
+        } else {
+            return image
+        }
+    }
+
+    private func getImageBounds() -> NSRect {
+        let insetBounds = bounds.insetBy(dx: strokeWidth, dy: strokeWidth)
+        let side = min(insetBounds.width, insetBounds.height)
+        let squareRect = CGRect(
+            x: insetBounds.midX - side / 2,
+            y: insetBounds.midY - side / 2,
+            width: side,
+            height: side
+        )
+        return squareRect
     }
 }

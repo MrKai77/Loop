@@ -222,7 +222,6 @@ struct CustomActionConfigurationView: View {
                     columns: 3
                 ) { anchor in
                     IconView(action: anchor.iconAction)
-                        .equatable()
                 }
                 .luminarePickerRoundedCorner(bottom: .always)
 

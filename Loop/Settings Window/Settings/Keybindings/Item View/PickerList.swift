@@ -11,7 +11,6 @@ import SwiftUI
 
 struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
     @EnvironmentObject private var popover: LuminarePopupPanel
-    @Environment(\.luminarePopupPadding) private var luminarePopupPadding
 
     private let logger = Logger(category: "PickerView")
 
@@ -22,28 +21,31 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
     @State private var eventMonitor: LocalEventMonitor?
     @State private var isInitialRender = true
 
+    private let padding: CGFloat
     private let sections: [PickerSection<V>]
     private let content: (V) -> Content
 
     init(
         _ selection: Binding<V>,
         _ searchResults: Binding<[V]>,
+        _ padding: CGFloat,
         _ sections: [PickerSection<V>],
         @ViewBuilder content: @escaping (V) -> Content
     ) {
         self._selection = selection
         self._searchResults = searchResults
         self.sections = sections
+        self.padding = padding
         self.content = content
     }
 
     var body: some View {
         ScrollViewReader { reader in
             ScrollView(showsIndicators: false) {
-                LazyVStack(spacing: luminarePopupPadding) {
+                LazyVStack(spacing: padding) {
                     contentStack(reader: reader)
                 }
-                .padding(luminarePopupPadding / 2)
+                .padding(padding / 2)
             }
         }
     }
@@ -80,15 +82,16 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
                         selection: $selection,
                         arrowSelection: arrowSelection,
                         item: item,
-                        content: content
+                        content: content,
+                        padding: padding / 2
                     )
                     .id(item)
                 }
             } header: {
                 Text(section.title)
                     .foregroundStyle(.secondary)
-                    .padding(.leading, luminarePopupPadding / 2)
-                    .padding(.top, luminarePopupPadding / 2)
+                    .padding(.leading, padding / 2)
+                    .padding(.top, padding / 2)
             }
         }
     }
@@ -99,7 +102,8 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
                 selection: $selection,
                 arrowSelection: arrowSelection,
                 item: item,
-                content: content
+                content: content,
+                padding: padding / 2
             )
             .id(item)
         }
@@ -154,7 +158,6 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
 
 struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
     @EnvironmentObject private var popover: LuminarePopupPanel
-    @Environment(\.luminarePopupPadding) private var luminarePopupPadding
     @Environment(\.luminareAnimationFast) private var animationFast
 
     @State private var isHovering = false
@@ -162,6 +165,7 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
     let arrowSelection: V?
     let item: V
     let content: (V) -> Content
+    let padding: CGFloat
 
     private var isActive: Bool {
         selection == item
@@ -177,7 +181,7 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
             popover.resignKey()
         } label: {
             content(item)
-                .padding(luminarePopupPadding / 2)
+                .padding(padding)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(

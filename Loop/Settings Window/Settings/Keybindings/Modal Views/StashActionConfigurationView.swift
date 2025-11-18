@@ -203,7 +203,6 @@ struct StashActionConfigurationView: View {
                     columns: 2
                 ) { anchor in
                     IconView(action: anchor.iconAction)
-                        .equatable()
                 }
                 .luminarePickerRoundedCorner(top: .always, bottom: .always)
             } else {

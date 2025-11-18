@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DirectionPickerView: View {
-    @Environment(\.luminarePopupPadding) private var luminarePopupPadding
+    private let padding: CGFloat = 12
 
     @State private var searchText = ""
     @State private var searchResults: [WindowDirection] = []
@@ -60,18 +60,18 @@ struct DirectionPickerView: View {
     var body: some View {
         VStack(spacing: 0) {
             CustomTextField($searchText)
-                .padding(luminarePopupPadding)
+                .padding(padding)
 
             Divider()
 
             PickerList(
                 $direction,
                 $searchResults,
+                padding,
                 Self.sections + [moreSection]
             ) { item in
                 HStack(spacing: 8) {
                     IconView(action: .init(item))
-                        .equatable()
 
                     Text(item.name)
                 }

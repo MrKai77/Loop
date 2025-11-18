@@ -144,7 +144,6 @@ struct KeybindItemView: View {
         } label: {
             HStack(spacing: 8) {
                 IconView(action: action)
-                    .equatable()
 
                 if let info = action.direction.infoText {
                     Text(action.getName())
