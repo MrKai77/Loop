@@ -148,17 +148,16 @@ final class IconRenderView: NSView {
 
     func setAction(
         to action: WindowAction,
-        animated: Bool,
-        duration: CFTimeInterval = 0.1
+        animated: Bool
     ) {
         guard !action.isSameManipulation(as: currentAction) else { return }
         currentAction = action
-        updatePath(animated: animated, duration: duration)
+        updatePath(duration: animated ? 0.2 : 0.0)
     }
 
     override func layout() {
         super.layout()
-        updatePath(animated: false)
+        updatePath(duration: 0.0)
     }
 
     override func viewDidChangeEffectiveAppearance() {
@@ -194,15 +193,12 @@ final class IconRenderView: NSView {
         }
     }
 
-    private func updatePath(
-        animated: Bool = true,
-        duration: CFTimeInterval = 0.1
-    ) {
+    private func updatePath(duration: CFTimeInterval) {
         strokeLayer.frame = bounds
         fillLayer.frame = bounds
 
         let strokeInset = strokeWidth / 2
-        processStrokeLayer(strokeInset: strokeInset)
+        processStrokeLayerPath(strokeInset: strokeInset)
 
         let fillInset = strokeInset + inset
         let fillBounds = bounds.insetBy(dx: fillInset, dy: fillInset)
@@ -215,28 +211,26 @@ final class IconRenderView: NSView {
 
         switch displayMode {
         case let .frame(fillRect):
-            let newFillPath = CGPath(
+            let newPath = CGPath(
                 roundedRect: fillRect,
                 cornerWidth: cornerRadius - inset,
                 cornerHeight: cornerRadius - inset,
                 transform: nil
             )
-            animatePathChange(layer: fillLayer, to: newFillPath, animated: animated, duration: duration)
-            animateAlpha(layer: fillLayer, to: 1, animated: animated, duration: duration)
-            animateAlpha(layer: imageLayer, to: 0, animated: animated, duration: duration)
-
+            animateAlpha(layer: fillLayer, to: 1, duration: duration)
+            animateAlpha(layer: imageLayer, to: 0, duration: duration)
+            animatePath(layer: fillLayer, to: newPath, duration: duration)
         case let .image(image):
             imageLayer.contents = processImage(image, color: .textColor)
             imageLayer.frame = getImageBounds()
-
-            animateAlpha(layer: fillLayer, to: 0, animated: animated, duration: duration)
-            animateAlpha(layer: imageLayer, to: 1, animated: animated, duration: duration)
+            animateAlpha(layer: fillLayer, to: 0, duration: duration)
+            animateAlpha(layer: imageLayer, to: 1, duration: duration)
         }
 
         lastDisplayMode = displayMode
     }
 
-    private func processStrokeLayer(strokeInset: CGFloat) {
+    private func processStrokeLayerPath(strokeInset: CGFloat) {
         let strokeRect = bounds.insetBy(dx: strokeInset, dy: strokeInset)
         let strokePath = CGPath(
             roundedRect: strokeRect,
@@ -282,44 +276,41 @@ final class IconRenderView: NSView {
         return nil
     }
 
-    private func animatePathChange(
+    private func animatePath(
         layer: CAShapeLayer,
-        to new: CGPath?,
-        animated: Bool,
+        to target: CGPath,
         duration: CFTimeInterval
     ) {
-        guard let new else { return }
-
-        if animated {
+        if duration > 0 {
             let animation = CABasicAnimation(keyPath: "path")
             animation.fromValue = layer.path
-            animation.toValue = new
+            animation.toValue = target
             animation.duration = duration
             animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
             layer.add(animation, forKey: "path")
         }
 
-        layer.path = new
+        layer.path = target
     }
 
     private func animateAlpha(
         layer: CALayer,
         to target: Float,
-        animated: Bool,
         duration: CFTimeInterval
     ) {
-        if animated {
-            let anim = CABasicAnimation(keyPath: "opacity")
-            anim.fromValue = layer.opacity
-            anim.toValue = target
-            anim.duration = duration
-            layer.add(anim, forKey: "opacity")
+        if duration > 0 {
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = layer.opacity
+            animation.toValue = target
+            animation.duration = duration
+            animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            layer.add(animation, forKey: "opacity")
         }
 
         layer.opacity = target
     }
 
-    private func processImage(_ image: NSImage, color: NSColor = .textColor) -> NSImage? {
+    private func processImage(_ image: NSImage, color: NSColor) -> NSImage? {
         guard image.isTemplate else { return image }
         let image = image.withSymbolConfiguration(.init(pointSize: 12, weight: .bold)) ?? image
 
