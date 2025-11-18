@@ -133,15 +133,12 @@ struct RadialMenuView: View {
         }
     }
 
+    @ViewBuilder
     private func overlayImage() -> some View {
-        Group {
-            if viewModel.invalidWindowSelected {
-                Image(systemName: "exclamationmark.triangle")
-            } else if let image = viewModel.radialMenuImage {
-                image
-            }
+        if let image = viewModel.radialMenuImage {
+            image
+                .foregroundStyle(accentColorController.color1)
+                .font(.system(size: 20, weight: .bold))
         }
-        .foregroundStyle(accentColorController.color1)
-        .font(.system(size: 20, weight: .bold))
     }
 }

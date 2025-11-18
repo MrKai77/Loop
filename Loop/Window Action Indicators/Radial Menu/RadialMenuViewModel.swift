@@ -34,10 +34,6 @@ final class RadialMenuViewModel: ObservableObject {
         recomputeAngle()
     }
 
-    var invalidWindowSelected: Bool {
-        window == nil && !previewMode
-    }
-
     var shouldFillRadialMenu: Bool {
         currentAction?.direction.shouldFillRadialMenu ?? false
     }
@@ -51,7 +47,14 @@ final class RadialMenuViewModel: ObservableObject {
     }
 
     var radialMenuImage: Image? {
-        currentAction?.icon
+        if window == nil, !previewMode {
+            return Image(systemName: "exclamationmark.triangle")
+        } else if let image = currentAction?.image {
+            let image = image.withSymbolConfiguration(.init(pointSize: 20, weight: .bold)) ?? image
+            return Image(nsImage: image)
+        } else {
+            return nil
+        }
     }
 
     func setWindow(to newWindow: Window) {
