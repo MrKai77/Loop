@@ -121,6 +121,7 @@ struct IconView: NSViewRepresentable {
 
 final class IconRenderView: NSView {
     private var currentAction: WindowAction = .init(.noAction)
+    private var lastDisplayMode: DisplayMode?
 
     private let strokeLayer = CAShapeLayer()
     private let fillLayer = CAShapeLayer()
@@ -129,6 +130,11 @@ final class IconRenderView: NSView {
     private let cornerRadius: CGFloat = 3
     private let inset: CGFloat = 2
     private let strokeWidth: CGFloat = 1.5
+
+    enum DisplayMode {
+        case frame(CGRect)
+        case image(NSImage)
+    }
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -155,6 +161,11 @@ final class IconRenderView: NSView {
         updatePath(animated: false)
     }
 
+    override func viewDidChangeEffectiveAppearance() {
+        super.viewDidChangeEffectiveAppearance()
+        updateColors()
+    }
+
     // MARK: - Private
 
     private func setup() {
@@ -165,15 +176,64 @@ final class IconRenderView: NSView {
         layer?.addSublayer(fillLayer)
         layer?.addSublayer(imageLayer)
 
-        strokeLayer.fillColor = NSColor.clear.cgColor
-        strokeLayer.strokeColor = NSColor.textColor.cgColor
         strokeLayer.lineWidth = 1
         strokeLayer.cornerCurve = .continuous
-
-        fillLayer.fillColor = NSColor.textColor.cgColor
         fillLayer.cornerCurve = .continuous
-
         imageLayer.contentsGravity = .resizeAspect
+
+        updateColors()
+    }
+
+    private func updateColors() {
+        strokeLayer.fillColor = .clear
+        strokeLayer.strokeColor = NSColor.textColor.cgColor
+        fillLayer.fillColor = NSColor.textColor.cgColor
+
+        if case let .image(image) = lastDisplayMode {
+            imageLayer.contents = processImage(image, color: .textColor)
+        }
+    }
+
+    private func updatePath(
+        animated: Bool = true,
+        duration: CFTimeInterval = 0.1
+    ) {
+        strokeLayer.frame = bounds
+        fillLayer.frame = bounds
+
+        let strokeInset = strokeWidth / 2
+        processStrokeLayer(strokeInset: strokeInset)
+
+        let fillInset = strokeInset + inset
+        let fillBounds = bounds.insetBy(dx: fillInset, dy: fillInset)
+
+        guard let displayMode = determineDisplayMode(fillBounds: fillBounds) else {
+            fillLayer.opacity = 0
+            imageLayer.opacity = 0
+            return
+        }
+
+        switch displayMode {
+        case let .frame(fillRect):
+            let newFillPath = CGPath(
+                roundedRect: fillRect,
+                cornerWidth: cornerRadius - inset,
+                cornerHeight: cornerRadius - inset,
+                transform: nil
+            )
+            animatePathChange(layer: fillLayer, to: newFillPath, animated: animated, duration: duration)
+            animateAlpha(layer: fillLayer, to: 1, animated: animated, duration: duration)
+            animateAlpha(layer: imageLayer, to: 0, animated: animated, duration: duration)
+
+        case let .image(image):
+            imageLayer.contents = processImage(image, color: .textColor)
+            imageLayer.frame = getImageBounds()
+
+            animateAlpha(layer: fillLayer, to: 0, animated: animated, duration: duration)
+            animateAlpha(layer: imageLayer, to: 1, animated: animated, duration: duration)
+        }
+
+        lastDisplayMode = displayMode
     }
 
     private func processStrokeLayer(strokeInset: CGFloat) {
@@ -185,11 +245,6 @@ final class IconRenderView: NSView {
             transform: nil
         )
         strokeLayer.path = strokePath
-    }
-
-    enum DisplayMode {
-        case frame(CGRect)
-        case image(NSImage)
     }
 
     private func determineDisplayMode(fillBounds: CGRect) -> DisplayMode? {
@@ -225,46 +280,6 @@ final class IconRenderView: NSView {
         }
 
         return nil
-    }
-
-    private func updatePath(
-        animated: Bool = true,
-        duration: CFTimeInterval = 0.1
-    ) {
-        strokeLayer.frame = bounds
-        fillLayer.frame = bounds
-
-        let strokeInset = strokeWidth / 2
-        processStrokeLayer(strokeInset: strokeInset)
-
-        let fillInset = strokeInset + inset
-        let fillBounds = bounds.insetBy(dx: fillInset, dy: fillInset)
-
-        guard let displayMode = determineDisplayMode(fillBounds: fillBounds) else {
-            fillLayer.opacity = 0
-            imageLayer.opacity = 0
-            return
-        }
-
-        switch displayMode {
-        case let .frame(fillRect):
-            let newFillPath = CGPath(
-                roundedRect: fillRect,
-                cornerWidth: cornerRadius - inset,
-                cornerHeight: cornerRadius - inset,
-                transform: nil
-            )
-            animatePathChange(layer: fillLayer, to: newFillPath, animated: animated, duration: duration)
-            animateAlpha(layer: fillLayer, to: 1, animated: animated, duration: duration)
-            animateAlpha(layer: imageLayer, to: 0, animated: animated, duration: duration)
-
-        case let .image(image):
-            imageLayer.contents = processImage(image)
-            imageLayer.frame = getImageBounds()
-
-            animateAlpha(layer: fillLayer, to: 0, animated: animated, duration: duration)
-            animateAlpha(layer: imageLayer, to: 1, animated: animated, duration: duration)
-        }
     }
 
     private func animatePathChange(
@@ -305,18 +320,19 @@ final class IconRenderView: NSView {
     }
 
     private func processImage(_ image: NSImage, color: NSColor = .textColor) -> NSImage? {
+        guard image.isTemplate else { return image }
         let image = image.withSymbolConfiguration(.init(pointSize: 12, weight: .bold)) ?? image
 
-        if image.isTemplate {
-            return NSImage(size: image.size, flipped: false) { destinationRect in
-                image.draw(in: destinationRect)
-                color.setFill()
-                destinationRect.fill(using: .sourceIn)
-                return true
-            }
-        } else {
-            return image
-        }
+        let sizedImage = NSImage(size: image.size)
+        sizedImage.lockFocus()
+        defer { sizedImage.unlockFocus() }
+
+        image.draw(at: .zero, from: .zero, operation: .sourceOver, fraction: 1)
+        color.setFill()
+        let rect = NSRect(origin: .zero, size: image.size)
+        rect.fill(using: .sourceIn)
+
+        return sizedImage
     }
 
     private func getImageBounds() -> NSRect {
