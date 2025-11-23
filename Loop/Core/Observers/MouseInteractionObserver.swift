@@ -93,7 +93,7 @@ final class MouseInteractionObserver {
 
         // Return if the mouse didn't move
         guard
-            angleToMouse != previousAngleToMouse,
+            angleToMouse != previousAngleToMouse ||
             distanceToMouse != previousDistanceToMouse
         else {
             return
@@ -107,6 +107,11 @@ final class MouseInteractionObserver {
 
         // If mouse over 50 points away, select half or quarter positions
         if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
+            guard radialMenuActions.count > 1 else {
+                newAction = radialMenuActions.first
+                return
+            }
+
             let actions = Array(radialMenuActions[1...])
             let actionAngleSpan = 360.0 / CGFloat(actions.count)
             let halfAngleSpan = actionAngleSpan / 2.0
