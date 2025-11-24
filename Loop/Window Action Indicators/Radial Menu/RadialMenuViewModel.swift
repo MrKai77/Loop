@@ -75,7 +75,7 @@ final class RadialMenuViewModel: ObservableObject {
             let previousActionHadAngle = previousAction?.direction.hasRadialMenuAngle ?? false
             let animate: Bool = abs(closestAngle.degrees) < 179 && previousActionHadAngle
 
-            let defaultAnimation = AnimationConfiguration.fast.radialMenuAngle
+            let defaultAnimation = AnimationConfiguration.radialMenuAngle
             let noAnimation = Animation.linear(duration: 0)
 
             withAnimation(animate ? defaultAnimation : noAnimation) {

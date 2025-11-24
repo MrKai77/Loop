@@ -53,12 +53,21 @@ final class PreviewController {
 
     func close() {
         guard let windowController = controller else { return }
+        let window = windowController.window
         controller = nil
 
-        windowController.window?.animator().alphaValue = 1
-        NSAnimationContext.runAnimationGroup { _ in
-            windowController.window?.animator().alphaValue = 0
-        } completionHandler: {
+        let animationConfiguration = Defaults[.animationConfiguration]
+        if let timingFunction = animationConfiguration.previewTimingFunction {
+            window?.alphaValue = 1
+
+            NSAnimationContext.runAnimationGroup { context in
+                context.timingFunction = timingFunction
+                context.duration = animationConfiguration.previewTimingDuration * 2
+                window?.animator().alphaValue = 0
+            } completionHandler: {
+                windowController.close()
+            }
+        } else {
             windowController.close()
         }
     }
@@ -161,9 +170,11 @@ final class PreviewController {
             )
         }
 
-        if let animation = Defaults[.animationConfiguration].previewTimingFunction {
+        let animationConfiguration = Defaults[.animationConfiguration]
+        if let timingFunction = animationConfiguration.previewTimingFunction {
             NSAnimationContext.runAnimationGroup { context in
-                context.timingFunction = animation
+                context.timingFunction = timingFunction
+                context.duration = animationConfiguration.previewTimingDuration
                 windowController.window?.animator().setFrame(targetWindowFrame, display: true)
                 windowController.window?.animator().alphaValue = shouldBecomeTransparent ? 0 : 1
             }
