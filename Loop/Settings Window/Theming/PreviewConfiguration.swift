@@ -17,6 +17,7 @@ struct PreviewConfigurationView: View {
     @Default(.previewPadding) private var previewPadding
     @Default(.previewCornerRadius) private var previewCornerRadius
     @Default(.previewBorderThickness) private var previewBorderThickness
+    @Default(.previewUseWindowCornerRadius) private var previewUseWindowCornerRadius
 
     var body: some View {
         LuminareSection {
@@ -54,16 +55,6 @@ struct PreviewConfigurationView: View {
             )
 
             LuminareSlider(
-                "Corner radius",
-                value: $previewCornerRadius.doubleBinding,
-                in: 0...25,
-                format: .number.precision(.fractionLength(0...0)),
-                clampsUpper: false,
-                clampsLower: true,
-                suffix: Text("px", comment: "Unit symbol: pixels")
-            )
-
-            LuminareSlider(
                 "Border thickness",
                 value: $previewBorderThickness.doubleBinding,
                 in: 0...10,
@@ -73,5 +64,23 @@ struct PreviewConfigurationView: View {
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
         }
+
+        LuminareSection("Corner Radius") {
+            LuminareToggle(
+                "Prioritize selected window’s corner radius",
+                isOn: $previewUseWindowCornerRadius
+            )
+
+            LuminareSlider(
+                previewUseWindowCornerRadius ? "Default corner radius" : "Corner radius",
+                value: $previewCornerRadius.doubleBinding,
+                in: 0...25,
+                format: .number.precision(.fractionLength(0...0)),
+                clampsUpper: false,
+                clampsLower: true,
+                suffix: Text("px", comment: "Unit symbol: pixels")
+            )
+        }
+        .animation(luminareAnimation, value: previewUseWindowCornerRadius)
     }
 }

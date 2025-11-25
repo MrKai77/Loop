@@ -25,6 +25,9 @@ final class PreviewController {
             return
         }
 
+        self.screen = screen
+        self.window = window
+
         let panel = ActivePanel(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -37,14 +40,11 @@ final class PreviewController {
         panel.setFrame(NSRect(origin: screen.stageStripFreeFrame.center, size: .zero), display: true)
         // This ensures that this is below the radial menu
         panel.level = NSWindow.Level(NSWindow.Level.screenSaver.rawValue - 1)
-        panel.contentView = NSHostingView(rootView: PreviewView())
+        panel.contentView = makePreviewView()
         panel.collectionBehavior = .canJoinAllSpaces
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
         controller = .init(window: panel)
-
-        self.screen = screen
-        self.window = window
 
         if let action = startingAction {
             setAction(to: action)
@@ -183,6 +183,30 @@ final class PreviewController {
             windowController.window?.alphaValue = shouldBecomeTransparent ? 0 : 1
         }
 
-        logger.log("PreviewController: Set action to '\(newAction.debugDescription)'")
+        logger.log("PreviewController: Set action to '\(newAction.description)'")
+    }
+
+    private func makePreviewView() -> NSView {
+        var overrideCornerRadii: RectangleCornerRadii? = nil
+
+        if Defaults[.previewUseWindowCornerRadius],
+           let window,
+           let radii = SkyLightToolBelt.getCornerRadii(windowID: window.cgWindowID) {
+            overrideCornerRadii = radii.inset(by: Defaults[.previewPadding])
+            logger.log("Using corner radii for \(window.description): \(radii.topLeading)")
+        }
+
+        return NSHostingView(rootView: PreviewView(overrideCornerRadii: overrideCornerRadii))
+    }
+}
+
+private extension RectangleCornerRadii {
+    func inset(by amount: CGFloat, minRadius: CGFloat = 0) -> RectangleCornerRadii {
+        RectangleCornerRadii(
+            topLeading: max(topLeading - amount, minRadius),
+            bottomLeading: max(bottomLeading - amount, minRadius),
+            bottomTrailing: max(bottomTrailing - amount, minRadius),
+            topTrailing: max(topTrailing - amount, minRadius)
+        )
     }
 }
