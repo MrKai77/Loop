@@ -135,7 +135,7 @@ final class WindowDragManager {
             self.draggingWindow = draggingWindow
             initialWindowFrame = draggingWindow.frame
 
-            logger.info("Determined window being dragged: \(draggingWindow.debugDescription)")
+            logger.info("Determined window being dragged: \(draggingWindow.description)")
         }
     }
 

@@ -75,7 +75,7 @@ extension WindowUtility {
                 edge: edge,
                 canWrap: true
             ) {
-                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.debugDescription)")
+                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.description)")
                 return nextWindow
             } else {
                 logger.info("[FocusNavigation] No window found in direction \(edgeString)")
@@ -96,7 +96,7 @@ extension WindowUtility {
                 .min { screenCenter.distance(to: $0.frame.center) < screenCenter.distance(to: $1.frame.center) }
 
             if let nextWindow {
-                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.debugDescription)")
+                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.description)")
             } else {
                 logger.info("[FocusNavigation] No window found in direction \(edgeString) from screen center")
             }

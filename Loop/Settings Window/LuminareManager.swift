@@ -142,7 +142,10 @@ final class LuminareManager: NSWindowController, ObservableObject {
 
     override func showWindow(_ sender: Any?) {
         super.showWindow(sender)
-        window?.orderFrontRegardless()
+
+        guard let window else { return }
+
+        window.orderFrontRegardless()
 
         if #available(macOS 14.0, *) {
             NSApp.activate()
@@ -150,13 +153,13 @@ final class LuminareManager: NSWindowController, ObservableObject {
             NSApp.activate(ignoringOtherApps: true)
         }
 
-        do {
-            try window?.setBackgroundBlur(radius: 20)
-            window?.backgroundColor = .white.withAlphaComponent(0.001)
-            window?.ignoresMouseEvents = false
-        } catch {
-            logger.error("\(error.localizedDescription)")
-        }
+        SkyLightToolBelt.setBackgroundBlur(
+            windowID: CGWindowID(window.windowNumber),
+            radius: 20
+        )
+
+        window.backgroundColor = .white.withAlphaComponent(0.001)
+        window.ignoresMouseEvents = false
 
         startTimer()
         NSApp.setActivationPolicy(.regular)
@@ -193,37 +196,3 @@ final class LuminareManager: NSWindowController, ObservableObject {
         previewActionTimerTask = nil
     }
 }
-
-// MARK: LuminareWindow.setBackgroundBlur(radius:)
-
-extension NSWindow {
-    func setBackgroundBlur(radius: Int) throws {
-        guard let connection = SLSDefaultConnectionForThread() else {
-            throw NSError(
-                domain: "com.Luminare.NSWindow",
-                code: 0,
-                userInfo: [NSLocalizedDescriptionKey: "Error getting default connection"]
-            )
-        }
-
-        let status = SLSSetWindowBackgroundBlurRadius(connection, windowNumber, radius)
-
-        if status != noErr {
-            throw NSError(
-                domain: "com.Luminare.NSWindow",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Error setting blur radius: \(status)"]
-            )
-        }
-    }
-}
-
-@_silgen_name("SLSDefaultConnectionForThread")
-func SLSDefaultConnectionForThread() -> SLSConnectionID?
-
-@_silgen_name("SLSSetWindowBackgroundBlurRadius") @discardableResult
-func SLSSetWindowBackgroundBlurRadius(
-    _ connection: SLSConnectionID,
-    _ windowNum: NSInteger,
-    _ radius: Int
-) -> OSStatus

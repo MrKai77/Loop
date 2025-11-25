@@ -584,7 +584,7 @@ extension WindowAction {
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
     private func getLastActionFrame(_ window: Window, _ bounds: CGRect) -> CGRect {
         if let previousAction = WindowRecords.getLastAction(for: window) {
-            Self.logger.info("Last action was \(previousAction.direction.debugDescription) (name: \(previousAction.name ?? "nil"))")
+            Self.logger.info("Last action was \(previousAction.description)")
             return previousAction.getFrame(window: window, bounds: bounds)
         } else {
             Self.logger.info("Didn't find frame to undo; using current frame")
@@ -751,8 +751,8 @@ extension WindowAction {
     }
 }
 
-extension WindowAction: CustomDebugStringConvertible {
-    var debugDescription: String {
+extension WindowAction: CustomStringConvertible {
+    var description: String {
         "WindowAction(direction: \(direction), name: \(getName()))"
     }
 }
