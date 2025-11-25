@@ -11,6 +11,8 @@ import SwiftUI
 
 final class PreviewController {
     private var controller: NSWindowController?
+    private var viewModel: PreviewViewModel?
+
     private var screen: NSScreen?
     private var window: Window?
     private let logger = Logger(category: "PreviewController")
@@ -24,6 +26,9 @@ final class PreviewController {
             windowController.window?.orderFrontRegardless()
             return
         }
+
+        let viewModel = PreviewViewModel(window: window)
+        self.viewModel = viewModel
 
         self.screen = screen
         self.window = window
@@ -40,7 +45,7 @@ final class PreviewController {
         panel.setFrame(NSRect(origin: screen.stageStripFreeFrame.center, size: .zero), display: true)
         // This ensures that this is below the radial menu
         panel.level = NSWindow.Level(NSWindow.Level.screenSaver.rawValue - 1)
-        panel.contentView = makePreviewView()
+        panel.contentView = NSHostingView(rootView: PreviewView(viewModel: viewModel))
         panel.collectionBehavior = .canJoinAllSpaces
         panel.ignoresMouseEvents = true
         panel.orderFrontRegardless()
@@ -74,6 +79,7 @@ final class PreviewController {
 
     func setWindow(to newWindow: Window) {
         window = newWindow
+        viewModel?.setWindow(to: newWindow)
     }
 
     func setScreen(to newScreen: NSScreen) {
@@ -184,29 +190,5 @@ final class PreviewController {
         }
 
         logger.log("PreviewController: Set action to '\(newAction.description)'")
-    }
-
-    private func makePreviewView() -> NSView {
-        var overrideCornerRadii: RectangleCornerRadii? = nil
-
-        if Defaults[.previewUseWindowCornerRadius],
-           let window,
-           let radii = SkyLightToolBelt.getCornerRadii(windowID: window.cgWindowID) {
-            overrideCornerRadii = radii.inset(by: Defaults[.previewPadding])
-            logger.log("Using corner radii for \(window.description): \(radii.topLeading)")
-        }
-
-        return NSHostingView(rootView: PreviewView(overrideCornerRadii: overrideCornerRadii))
-    }
-}
-
-private extension RectangleCornerRadii {
-    func inset(by amount: CGFloat, minRadius: CGFloat = 0) -> RectangleCornerRadii {
-        RectangleCornerRadii(
-            topLeading: max(topLeading - amount, minRadius),
-            bottomLeading: max(bottomLeading - amount, minRadius),
-            bottomTrailing: max(bottomTrailing - amount, minRadius),
-            topTrailing: max(topTrailing - amount, minRadius)
-        )
     }
 }

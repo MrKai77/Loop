@@ -11,6 +11,7 @@ import SwiftUI
 struct PreviewView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
     @ObservedObject private var accentColorController: AccentColorController = .shared
+    @ObservedObject private var viewModel: PreviewViewModel
 
     @Default(.previewPadding) private var previewPadding
     @Default(.padding) private var padding
@@ -18,14 +19,12 @@ struct PreviewView: View {
     @Default(.previewBorderThickness) private var previewBorderThickness
     @Default(.animationConfiguration) private var animationConfiguration
 
-    private let overrideCornerRadii: RectangleCornerRadii?
-
-    init(overrideCornerRadii: RectangleCornerRadii?) {
-        self.overrideCornerRadii = overrideCornerRadii
+    init(viewModel: PreviewViewModel) {
+        self.viewModel = viewModel
     }
 
     private var cornerRadii: RectangleCornerRadii {
-        overrideCornerRadii ?? RectangleCornerRadii(
+        viewModel.overrideCornerRadii?.inset(by: previewPadding) ?? RectangleCornerRadii(
             topLeading: previewCornerRadius,
             bottomLeading: previewCornerRadius,
             bottomTrailing: previewCornerRadius,
