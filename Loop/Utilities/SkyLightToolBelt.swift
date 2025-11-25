@@ -14,6 +14,11 @@ enum SkyLightToolBelt {
     ///
     /// This method uses a private API to focus the window.
     /// The code for this method is derived from the Amethyst source code. Details of its implementation can be found [here](https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468)
+    ///
+    /// - Parameters:
+    ///   - windowID: The `CGWindowID` of the window to focus.
+    ///   - pid: The PID of the target window's owner process.
+    /// - Returns: Whether this operation was successful.
     @discardableResult
     static func focusWindow(windowID: CGWindowID, pid: pid_t) -> OSStatus {
         var wid = windowID
@@ -59,6 +64,11 @@ enum SkyLightToolBelt {
         return cgStatus.rawValue
     }
 
+    /// Sets the background blur radius of a window.
+    /// - Parameters:
+    ///   - windowID: The `CGWindowID` of the window to manipulate.
+    ///   - radius: The desired blur radius.
+    /// - Returns: Whether this operation was successful.
     @discardableResult
     static func setBackgroundBlur(windowID: CGWindowID, radius: Int) -> OSStatus {
         let cid = SLSDefaultConnectionForThread()
@@ -71,6 +81,9 @@ enum SkyLightToolBelt {
         return status
     }
 
+    /// Captures images for each of the windows that are passed in.
+    /// - Parameter windowIDs: The `CGWindowID`s for each of the windows to capture.
+    /// - Returns: An array of `CGImage`s for each window, in the same order as the windows that were passed in.
     static func captureWindowList(windowIDs: [CGWindowID]) -> [CGImage] {
         var captureWindowIDs = windowIDs
 
@@ -85,6 +98,9 @@ enum SkyLightToolBelt {
         return images
     }
 
+    /// Retrieves the corner radii for a specific window.
+    /// - Parameter windowID: The `CGWindowID` of the window
+    /// - Returns: The corner radii of the window if the operation was successful, or `nil` otherwise.
     static func getCornerRadii(windowID: CGWindowID) -> RectangleCornerRadii? {
         let windowIDsCFArray: CFArray = [windowID] as CFArray
 
@@ -94,7 +110,7 @@ enum SkyLightToolBelt {
 
         while SLSWindowIteratorAdvance(iterator) {
             guard checkIfWindowIsValid(iterator), SLSWindowIteratorGetWindowID(iterator) == windowID else {
-                return nil
+                continue
             }
 
             guard let cornerRadii = SLSWindowIteratorGetResolvedCornerRadii(iterator, windowID) as? [CGFloat],
@@ -114,6 +130,9 @@ enum SkyLightToolBelt {
         return nil
     }
 
+    /// Checks if the current window in a `SLSWindowIterator` is valid for Loop to use.
+    /// - Parameter iterator: The `SLSWindowIterator` object
+    /// - Returns: Whether this window is valid.
     private static func checkIfWindowIsValid(_ iterator: CFTypeRef) -> Bool {
         let parentWindowID: CGWindowID = SLSWindowIteratorGetParentID(iterator)
 
@@ -124,6 +143,7 @@ enum SkyLightToolBelt {
         let tags: SLSWindowTags = SLSWindowIteratorGetTags(iterator)
         let attributes: UInt64 = SLSWindowIteratorGetAttributes(iterator)
 
+        // Currently known what 0x2 and 0x400_0000_0000_0000 are.
         if (attributes & 0x2) != 0 || (tags.rawValue & 0x400_0000_0000_0000) != 0,
            tags.contains(.document) || (tags.contains(.floating) && tags.contains(.modal)) {
             return true
@@ -182,7 +202,7 @@ struct SLSWindowTags: OptionSet {
 @_silgen_name("SLSWindowIteratorGetAttributes")
 func SLSWindowIteratorGetAttributes(_ iterator: CFTypeRef) -> UInt64
 
-/// Returned values will all be identical as seen in: https://gist.github.com/MrKai77/654975cc2a35cfa5328a7c0a90a01fde
+/// All four corner radii values returned in the array will be identical to each other, as seen in: https://gist.github.com/MrKai77/654975cc2a35cfa5328a7c0a90a01fde
 @_silgen_name("SLSWindowIteratorGetResolvedCornerRadii")
 func SLSWindowIteratorGetResolvedCornerRadii(_ iterator: CFTypeRef, _ wid: UInt32) -> CFArray
 
@@ -212,7 +232,7 @@ struct SLSWindowCaptureOptions: OptionSet {
     // Captures at 1 pt : 1px
     static let bestResolution = Self(rawValue: 1 << 8)
 
-    // when Stage Manager is enabled, screenshots can become skewed. This param gets us full-size screenshots regardless
+    // When Stage Manager is enabled, screenshots can become skewed. This param gets us full-size screenshots regardless
     static let fullSize = Self(rawValue: 1 << 19)
 }
 

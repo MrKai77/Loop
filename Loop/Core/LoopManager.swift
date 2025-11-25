@@ -113,7 +113,7 @@ extension LoopManager {
             return
         }
 
-        logger.info("Opening Loop with starting action: \(startingAction?.description ?? "(none)") and target window: \(window?.description ?? "(none)"))")
+        logger.info("Opening Loop with starting action: \(startingAction?.description ?? "(none)") and target window: \(window?.description ?? "(none)")")
 
         // Record the first frame in advance if the preview window is disabled
         if let window,
