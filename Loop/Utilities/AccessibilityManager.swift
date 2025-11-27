@@ -92,7 +92,10 @@ final class AccessibilityManager {
         if getStatus() {
             return true
         }
-        resetAccessibility() // In case Loop is actually in the list, but the signature is different
+
+        // In case Loop is actually in the list, but the signature is different
+        resetAccessibility()
+        resetInputMonitoring()
 
         let alert = NSAlert()
         alert.messageText = .init(
@@ -125,9 +128,15 @@ final class AccessibilityManager {
     }
 
     /// Executes `/usr/bin/tccutil reset Accessibility <Bundle ID>`.
-    /// This fully removes any accessibility permissions the user may have previously granted to Loop.
+    /// This fully removes any accessibility permissions the user may have previously granted to anything with Loop's bundle ID.
     private static func resetAccessibility() {
         _ = try? Process.run(URL(filePath: "/usr/bin/tccutil"), arguments: ["reset", "Accessibility", Bundle.main.bundleID])
+    }
+
+    /// Executes `/usr/bin/tccutil reset ListenEvent <Bundle ID>`.
+    /// This fully removes any input monitoring permissions the user may have previously granted to anything with Loop's bundle ID.
+    private static func resetInputMonitoring() {
+        _ = try? Process.run(URL(filePath: "/usr/bin/tccutil"), arguments: ["reset", "ListenEvent", Bundle.main.bundleID])
     }
 }
 

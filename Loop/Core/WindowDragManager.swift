@@ -29,6 +29,7 @@ final class WindowDragManager {
     private var leftMouseUpMonitor: PassiveEventMonitor?
 
     private var determineDraggedWindowTask: Task<(), Never>?
+    private var accessibilityCheckerTask: Task<(), Never>?
 
     private var currentMousePosition: CGPoint {
         NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
@@ -36,18 +37,48 @@ final class WindowDragManager {
 
     @MainActor
     func addObservers() {
-        leftMouseDraggedMonitor = PassiveEventMonitor(
+        accessibilityCheckerTask = Task(priority: .background) { [weak self] in
+            for await status in AccessibilityManager.shared.stream(initial: true) {
+                guard let self, !Task.isCancelled else {
+                    return
+                }
+
+                if status {
+                    setupListeners()
+                } else {
+                    removeListeners()
+                }
+            }
+        }
+    }
+
+    private func setupListeners() {
+        let leftMouseDraggedMonitor = PassiveEventMonitor(
             events: [.leftMouseDragged],
             callback: leftMouseDragged
         )
 
-        leftMouseUpMonitor = PassiveEventMonitor(
+        let leftMouseUpMonitor = PassiveEventMonitor(
             events: [.leftMouseUp],
             callback: leftMouseUp
         )
 
-        leftMouseDraggedMonitor!.start()
-        leftMouseUpMonitor!.start()
+        leftMouseDraggedMonitor.start()
+        leftMouseUpMonitor.start()
+
+        leftMouseDraggedMonitor.start()
+        leftMouseUpMonitor.start()
+
+        self.leftMouseDraggedMonitor = leftMouseDraggedMonitor
+        self.leftMouseUpMonitor = leftMouseUpMonitor
+    }
+
+    private func removeListeners() {
+        leftMouseUpMonitor?.stop()
+        leftMouseDraggedMonitor?.stop()
+
+        leftMouseUpMonitor = nil
+        leftMouseDraggedMonitor = nil
     }
 
     private func leftMouseDragged(event _: CGEvent) {
