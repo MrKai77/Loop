@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2025-11-24.
 //
 
-import SwiftUI
 import OSLog
+import SwiftUI
 
 /// A wrapper for functions defined in `SkyLightSymbolLoader`
 enum SkyLightToolBelt {
