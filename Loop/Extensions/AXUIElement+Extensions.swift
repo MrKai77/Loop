@@ -139,7 +139,7 @@ extension AXUIElement {
 
     func getWindowID() throws -> CGWindowID {
         var id: CGWindowID = 0
-        let error = _AXUIElementGetWindow(self, &id)
+        let error = AXUIElementGetWindow(self, &id)
 
         guard error == .success else {
             throw error

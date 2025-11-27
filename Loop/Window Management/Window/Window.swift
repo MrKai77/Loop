@@ -9,12 +9,6 @@ import Defaults
 import OSLog
 import SwiftUI
 
-@_silgen_name("_AXUIElementGetWindow") @discardableResult
-func _AXUIElementGetWindow(
-    _ axUiElement: AXUIElement,
-    _ wid: inout CGWindowID
-) -> AXError
-
 enum WindowError: LocalizedError {
     case invalidWindow
 
@@ -192,12 +186,10 @@ final class Window {
     @discardableResult
     private func focus() -> Bool {
         guard let pid = try? axWindow.getPID() else { return false }
-        let status = SkyLightToolBelt.focusWindow(
+        return SkyLightToolBelt.focusWindow(
             windowID: cgWindowID,
             pid: pid
         )
-
-        return status == noErr
     }
 
     var isAppExcluded: Bool {

@@ -12,7 +12,7 @@ final class PreviewViewModel: ObservableObject {
     @Published var overrideCornerRadii: RectangleCornerRadii?
 
     init(window: Window?) {
-        if let window {
+        if #available(macOS 26.0, *), let window {
             self.overrideCornerRadii = Self.getCornerRadius(for: window)
         } else {
             self.overrideCornerRadii = nil
@@ -20,13 +20,14 @@ final class PreviewViewModel: ObservableObject {
     }
 
     func setWindow(to newWindow: Window?) {
-        if let newWindow {
+        if #available(macOS 26.0, *), let newWindow {
             overrideCornerRadii = Self.getCornerRadius(for: newWindow)
         } else {
             overrideCornerRadii = nil
         }
     }
 
+    @available(macOS 26.0, *)
     private static func getCornerRadius(for window: Window) -> RectangleCornerRadii? {
         var cornerRadii: RectangleCornerRadii? = nil
 
