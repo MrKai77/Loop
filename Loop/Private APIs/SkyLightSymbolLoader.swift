@@ -5,33 +5,32 @@
 //  Created by Kai Azim on 2025-11-27.
 //
 
-import Darwin
 import CoreGraphics
+import Darwin
 import OSLog
 
 enum SkyLightSymbolLoader {
     private static let logger = Logger(category: "SkyLightSymbolLoader")
 
     private static let frameworkPath = "/System/Library/PrivateFrameworks/SkyLight.framework/SkyLight"
-    
+
     private static let handle: UnsafeMutableRawPointer? = {
-        guard let handle =  dlopen(frameworkPath, RTLD_LAZY) else {
+        guard let handle = dlopen(frameworkPath, RTLD_LAZY) else {
             logger.error("SkyLightSymbolLoader: failed to open \(frameworkPath)")
             return nil
         }
         return handle
     }()
-    
-    
+
     private static func loadSymbol<T>(_ name: StaticString) -> T? {
         guard let handle else {
             logger.error("SkyLightSymbolLoader: no handle; cannot load symbol \(name)")
             return nil
         }
-        
+
         // Clear any prior error
         dlerror()
-        
+
         guard let sym = dlsym(handle, name.description) else {
             if let err = dlerror() {
                 logger.error("SkyLightSymbolLoader: failed to load symbol \(name): \(String(cString: err))")
@@ -40,118 +39,69 @@ enum SkyLightSymbolLoader {
             }
             return nil
         }
-        
+
         return unsafeBitCast(sym, to: T.self)
     }
 }
 
 extension SkyLightSymbolLoader {
-    static let SLSMainConnectionID: (@convention(c) () -> SLSConnectionID)? = {
-        loadSymbol("SLSMainConnectionID")
-    }()
-    
-    static let SLSDefaultConnectionForThread: (@convention(c) () -> SLSConnectionID)? = {
-        loadSymbol("SLSDefaultConnectionForThread")
-    }()
-    
-    static let SLSWindowQueryWindows: (
-        @convention(c) (
-            _ cid: SLSConnectionID,
-            _ windows: CFArray?,
-            _ count: UInt32
-        ) -> CFTypeRef
-    )? = {
-        loadSymbol("SLSWindowQueryWindows")
-    }()
+    typealias SLSMainConnectionIDFunc = @convention(c) () -> SLSConnectionID
+    static let SLSMainConnectionID: SLSMainConnectionIDFunc? = loadSymbol("SLSMainConnectionID")
 
-    static let SLSWindowQueryResultCopyWindows: (@convention(c) (_ query: CFTypeRef) -> CFTypeRef)? = {
-        loadSymbol("SLSWindowQueryResultCopyWindows")
-    }()
+    typealias SLSDefaultConnectionForThreadFunc = @convention(c) () -> SLSConnectionID
+    static let SLSDefaultConnectionForThread: SLSDefaultConnectionForThreadFunc? = loadSymbol("SLSDefaultConnectionForThread")
 
-    static let SLSWindowIteratorGetCount: (@convention(c) (_ iterator: CFTypeRef) -> UInt32)? = {
-        loadSymbol("SLSWindowIteratorGetCount")
-    }()
-    
-    static let SLSWindowIteratorAdvance: (@convention(c) (_ iterator: CFTypeRef) -> Bool)? = {
-        loadSymbol("SLSWindowIteratorAdvance")
-    }()
-    
-    static let SLSWindowIteratorGetWindowID: (@convention(c) (_ iterator: CFTypeRef) -> CGWindowID)? = {
-        loadSymbol("SLSWindowIteratorGetWindowID")
-    }()
-    
-    static let SLSWindowIteratorGetParentID: (@convention(c) (_ iterator: CFTypeRef) -> CGWindowID)? = {
-        loadSymbol("SLSWindowIteratorGetParentID")
-    }()
+    typealias SLSWindowQueryWindowsFunc = @convention(c) (_ cid: SLSConnectionID, _ windows: CFArray?, _ count: UInt32) -> CFTypeRef
+    static let SLSWindowQueryWindows: SLSWindowQueryWindowsFunc? = loadSymbol("SLSWindowQueryWindows")
+
+    typealias SLSWindowQueryResultCopyWindowsFunc = @convention(c) (_ query: CFTypeRef) -> CFTypeRef
+    static let SLSWindowQueryResultCopyWindows: SLSWindowQueryResultCopyWindowsFunc? = loadSymbol("SLSWindowQueryResultCopyWindows")
+
+    typealias SLSWindowIteratorGetCountFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt32
+    static let SLSWindowIteratorGetCount: SLSWindowIteratorGetCountFunc? = loadSymbol("SLSWindowIteratorGetCount")
+
+    typealias SLSWindowIteratorAdvanceFunc = @convention(c) (_ iterator: CFTypeRef) -> Bool
+    static let SLSWindowIteratorAdvance: SLSWindowIteratorAdvanceFunc? = loadSymbol("SLSWindowIteratorAdvance")
+
+    typealias SLSWindowIteratorGetWindowIDFunc = @convention(c) (_ iterator: CFTypeRef) -> CGWindowID
+    static let SLSWindowIteratorGetWindowID: SLSWindowIteratorGetWindowIDFunc? = loadSymbol("SLSWindowIteratorGetWindowID")
+
+    typealias SLSWindowIteratorGetParentIDFunc = @convention(c) (_ iterator: CFTypeRef) -> CGWindowID
+    static let SLSWindowIteratorGetParentID: SLSWindowIteratorGetParentIDFunc? = loadSymbol("SLSWindowIteratorGetParentID")
 
     /// Returned value can be converted into `SLSWindowTags`.
-    static let SLSWindowIteratorGetTags: (@convention(c) (_ iterator: CFTypeRef) -> UInt64)? = {
-        loadSymbol("SLSWindowIteratorGetTags")
-    }()
-    
-    static let SLSWindowIteratorGetAttributes: (@convention(c) (_ iterator: CFTypeRef) -> UInt32)? = {
-        loadSymbol("SLSWindowIteratorGetAttributes")
-    }()
-    
+    typealias SLSWindowIteratorGetTagsFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt64
+    static let SLSWindowIteratorGetTags: SLSWindowIteratorGetTagsFunc? = loadSymbol("SLSWindowIteratorGetTags")
+
+    typealias SLSWindowIteratorGetAttributesFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt32
+    static let SLSWindowIteratorGetAttributes: SLSWindowIteratorGetAttributesFunc? = loadSymbol("SLSWindowIteratorGetAttributes")
+
     /// All four corner radii values returned in the array will be identical to each other, as seen in: https://gist.github.com/MrKai77/654975cc2a35cfa5328a7c0a90a01fde
     @available(macOS 26.0, *)
-    static let SLSWindowIteratorGetResolvedCornerRadii: (
-        @convention(c) (
-            _ iterator: CFTypeRef,
-            _ wid: UInt32
-        ) -> Unmanaged<CFArray>
-    )? = {
-        loadSymbol("SLSWindowIteratorGetResolvedCornerRadii")
-    }()
-    
-    static let SLSSetWindowBackgroundBlurRadius: (
-        @convention(c) (
-            _ connection: SLSConnectionID,
-            _ wid: CGWindowID,
-            _ radius: Int
-        ) -> OSStatus
-    )? = {
-        loadSymbol("SLSSetWindowBackgroundBlurRadius")
-    }()
-    
+    typealias SLSWindowIteratorGetResolvedCornerRadiiFunc = @convention(c) (_ iterator: CFTypeRef, _ wid: UInt32) -> Unmanaged<CFArray>
+    @available(macOS 26.0, *)
+    static let SLSWindowIteratorGetResolvedCornerRadii: SLSWindowIteratorGetResolvedCornerRadiiFunc? = loadSymbol("SLSWindowIteratorGetResolvedCornerRadii")
+
+    typealias SLSSetWindowBackgroundBlurRadiusFunc = @convention(c) (_ connection: SLSConnectionID, _ wid: CGWindowID, _ radius: Int) -> OSStatus
+    static let SLSSetWindowBackgroundBlurRadius: SLSSetWindowBackgroundBlurRadiusFunc? = loadSymbol("SLSSetWindowBackgroundBlurRadius")
+
     /// Options are described by `SLSWindowCaptureOptions`
-    static let SLSHWCaptureWindowList: (
-        @convention(c) (
-            _ cid: SLSConnectionID,
-            _ windowList: UnsafeMutablePointer<CGWindowID>,
-            _ windowCount: Int,
-            _ options: UInt32
-        ) -> Unmanaged<CFArray>
-    )? = {
-       loadSymbol("SLSHWCaptureWindowList")
-    }()
-    
+    typealias SLSHWCaptureWindowListFunc = @convention(c) (_ cid: SLSConnectionID, _ windowList: UnsafeMutablePointer<CGWindowID>, _ windowCount: Int, _ options: UInt32) -> Unmanaged<CFArray>
+    static let SLSHWCaptureWindowList: SLSHWCaptureWindowListFunc? = loadSymbol("SLSHWCaptureWindowList")
+
     /// For mode, pass in `kCPSUserGenerated` (defined further down).
-    static let SLPSSetFrontProcessWithOptions: (
-        @convention(c) (
-            _ psn: UnsafeMutablePointer<ProcessSerialNumber>,
-            _ wid: UInt32,
-            _ mode: UInt32
-        ) -> CGError
-    )? = {
-        loadSymbol("_SLPSSetFrontProcessWithOptions")
-    }()
-    
-    static let SLPSPostEventRecordTo: (
-        @convention(c) (
-            _ psn: UnsafeMutablePointer<ProcessSerialNumber>,
-            _ bytes: UnsafeMutablePointer<UInt8>
-        ) -> CGError
-    )? = {
-        loadSymbol("SLPSPostEventRecordTo")
-    }()
+    typealias SLPSSetFrontProcessWithOptionsFunc = @convention(c) (_ psn: UnsafeMutablePointer<ProcessSerialNumber>, _ wid: UInt32, _ mode: UInt32) -> CGError
+    static let SLPSSetFrontProcessWithOptions: SLPSSetFrontProcessWithOptionsFunc? = loadSymbol("_SLPSSetFrontProcessWithOptions")
+
+    typealias SLPSPostEventRecordToFunc = @convention(c) (_ psn: UnsafeMutablePointer<ProcessSerialNumber>, _ bytes: UnsafeMutablePointer<UInt8>) -> CGError
+    static let SLPSPostEventRecordTo: SLPSPostEventRecordToFunc? = loadSymbol("SLPSPostEventRecordTo")
 }
 
 typealias SLSConnectionID = UInt32
 
 struct SLSWindowTags: OptionSet {
     let rawValue: UInt64
-    
+
     static let document = Self(rawValue: 1 << 0)
     static let floating = Self(rawValue: 1 << 1)
     static let attached = Self(rawValue: 1 << 7)
@@ -160,7 +110,7 @@ struct SLSWindowTags: OptionSet {
     static let modal = Self(rawValue: 1 << 31)
 }
 
- struct SLSWindowCaptureOptions: OptionSet {
+struct SLSWindowCaptureOptions: OptionSet {
     let rawValue: UInt32
 
     static let ignoreGlobalClipShape = Self(rawValue: 1 << 11)
@@ -175,4 +125,4 @@ struct SLSWindowTags: OptionSet {
     static let fullSize = Self(rawValue: 1 << 19)
 }
 
- let kCPSUserGenerated: UInt32 = 0x200
+let kCPSUserGenerated: UInt32 = 0x200

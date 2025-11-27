@@ -39,8 +39,8 @@ final class Window {
 
         self.cgWindowID = try axWindow.getWindowID()
 
-        if self.role != .window,
-           self.subrole != .standardWindow {
+        if role != .window,
+           subrole != .standardWindow {
             throw WindowError.invalidWindow
         }
 
@@ -108,7 +108,7 @@ final class Window {
 
     var role: NSAccessibility.Role? {
         do {
-            guard let value: String = try self.axWindow.getValue(.role) else {
+            guard let value: String = try axWindow.getValue(.role) else {
                 return nil
             }
             return NSAccessibility.Role(rawValue: value)
@@ -120,7 +120,7 @@ final class Window {
 
     var subrole: NSAccessibility.Subrole? {
         do {
-            guard let value: String = try self.axWindow.getValue(.subrole) else {
+            guard let value: String = try axWindow.getValue(.subrole) else {
                 return nil
             }
             return NSAccessibility.Subrole(rawValue: value)
@@ -132,7 +132,7 @@ final class Window {
 
     var title: String? {
         do {
-            return try self.axWindow.getValue(.title)
+            return try axWindow.getValue(.title)
         } catch {
             logger.error("Failed to get title: \(error.localizedDescription)")
             return nil
@@ -169,7 +169,7 @@ final class Window {
     /// Activate the window. This will bring it to the front and focus it if possible
     func activate() {
         // First activate the application to ensure proper window management context
-        if let runningApplication = self.nsRunningApplication {
+        if let runningApplication = nsRunningApplication {
             runningApplication.activate(options: .activateIgnoringOtherApps)
         }
 
@@ -203,7 +203,7 @@ final class Window {
     var fullscreen: Bool {
         get {
             do {
-                let result: NSNumber? = try self.axWindow.getValue(.fullScreen)
+                let result: NSNumber? = try axWindow.getValue(.fullScreen)
                 return result?.boolValue ?? false
             } catch {
                 logger.error("Failed to get fullscreen: \(error.localizedDescription)")
@@ -212,7 +212,7 @@ final class Window {
         }
         set {
             do {
-                try self.axWindow.setValue(.fullScreen, value: newValue)
+                try axWindow.setValue(.fullScreen, value: newValue)
             } catch {
                 logger.error("Failed to set fullscreen: \(error.localizedDescription)")
             }
@@ -225,7 +225,7 @@ final class Window {
 
     /// Check with the `NSRunningApplication` if the app is hidden (⌘H).
     var isApplicationHidden: Bool {
-        self.nsRunningApplication?.isHidden ?? false
+        nsRunningApplication?.isHidden ?? false
     }
 
     /// Checks if the app has any visible windows using the `CGWindow` API.
@@ -260,25 +260,25 @@ final class Window {
     func setHidden(_ state: Bool) -> Bool {
         var result = false
         if state {
-            result = self.nsRunningApplication?.hide() ?? false
+            result = nsRunningApplication?.hide() ?? false
         } else {
-            result = self.nsRunningApplication?.unhide() ?? false
+            result = nsRunningApplication?.unhide() ?? false
         }
         return result
     }
 
     @discardableResult
     func toggleHidden() -> Bool {
-        if !self.isApplicationHidden {
-            return self.setHidden(true)
+        if !isApplicationHidden {
+            return setHidden(true)
         }
-        return self.setHidden(false)
+        return setHidden(false)
     }
 
     var minimized: Bool {
         get {
             do {
-                let result: NSNumber? = try self.axWindow.getValue(.minimized)
+                let result: NSNumber? = try axWindow.getValue(.minimized)
                 return result?.boolValue ?? false
             } catch {
                 logger.error("Failed to get minimized: \(error.localizedDescription)")
@@ -287,7 +287,7 @@ final class Window {
         }
         set {
             do {
-                try self.axWindow.setValue(.minimized, value: newValue)
+                try axWindow.setValue(.minimized, value: newValue)
             } catch {
                 logger.error("Failed to set minimized: \(error.localizedDescription)")
             }
@@ -301,7 +301,7 @@ final class Window {
     var position: CGPoint {
         get {
             do {
-                guard let result: CGPoint = try self.axWindow.getValue(.position) else {
+                guard let result: CGPoint = try axWindow.getValue(.position) else {
                     return .zero
                 }
                 return result
@@ -312,7 +312,7 @@ final class Window {
         }
         set {
             do {
-                try self.axWindow.setValue(.position, value: newValue)
+                try axWindow.setValue(.position, value: newValue)
             } catch {
                 logger.error("Failed to set position: \(error.localizedDescription)")
             }
@@ -322,7 +322,7 @@ final class Window {
     var size: CGSize {
         get {
             do {
-                guard let result: CGSize = try self.axWindow.getValue(.size) else {
+                guard let result: CGSize = try axWindow.getValue(.size) else {
                     return .zero
                 }
                 return result
@@ -333,7 +333,7 @@ final class Window {
         }
         set {
             do {
-                try self.axWindow.setValue(.size, value: newValue)
+                try axWindow.setValue(.size, value: newValue)
             } catch {
                 logger.error("Failed to set size: \(error.localizedDescription)")
             }
@@ -342,7 +342,7 @@ final class Window {
 
     var isResizable: Bool {
         do {
-            let result: Bool = try self.axWindow.canSetValue(.size)
+            let result: Bool = try axWindow.canSetValue(.size)
             return result
         } catch {
             logger.error("Failed to determine if window size can be set: \(error.localizedDescription)")
@@ -351,7 +351,7 @@ final class Window {
     }
 
     var frame: CGRect {
-        CGRect(origin: self.position, size: self.size)
+        CGRect(origin: position, size: size)
     }
 
     /// Set the frame of this Window.
@@ -368,12 +368,12 @@ final class Window {
         bounds: CGRect = .zero,
         completionHandler: @escaping (() -> ()) = {}
     ) {
-        let enhancedUI = self.enhancedUserInterface
+        let enhancedUI = enhancedUserInterface
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
             logger.info("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.")
-            self.enhancedUserInterface = false
+            enhancedUserInterface = false
         }
 
         if animate {
@@ -386,16 +386,16 @@ final class Window {
             animation.startInBackground()
         } else {
             if sizeFirst {
-                self.size = rect.size
+                size = rect.size
             }
-            self.position = rect.origin
-            self.size = rect.size
+            position = rect.origin
+            size = rect.size
 
             completionHandler()
         }
 
         if enhancedUI {
-            self.enhancedUserInterface = true
+            enhancedUserInterface = true
         }
     }
 }

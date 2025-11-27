@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// A wrapper for functions defined in `SkyLightSymbolLoader`
 enum SkyLightToolBelt {
     ///
     /// Focuses a window. This will attempt to bring the window to the front and make it the active window.
@@ -25,7 +26,7 @@ enum SkyLightToolBelt {
         else {
             return false
         }
-        
+
         var wid = windowID
         var psn = ProcessSerialNumber()
         let status = GetProcessForPID(pid, &psn)
@@ -91,7 +92,6 @@ enum SkyLightToolBelt {
             radius
         )
 
-
         if status != noErr {
             print("Failed to set window background blur radius")
         }
@@ -109,7 +109,7 @@ enum SkyLightToolBelt {
 
         var captureWindowIDs = windowIDs
         let options: SLSWindowCaptureOptions = [.ignoreGlobalClipShape, .bestResolution, .fullSize]
-        
+
         let cid = SLSMainConnectionID()
         let images = SLSHWCaptureWindowList(
             cid,
@@ -135,8 +135,7 @@ enum SkyLightToolBelt {
         else {
             return nil
         }
-                
-                
+
         let windowIDsCFArray: CFArray = [windowID] as CFArray
 
         let cid = SLSMainConnectionID()
@@ -182,7 +181,7 @@ enum SkyLightToolBelt {
             return false
         }
 
-        let tags: SLSWindowTags = SLSWindowTags(rawValue: SLSWindowIteratorGetTags(iterator))
+        let tags = SLSWindowTags(rawValue: SLSWindowIteratorGetTags(iterator))
         let attributes: UInt32 = SLSWindowIteratorGetAttributes(iterator)
 
         // Currently known what 0x2 and 0x400_0000_0000_0000 are.
