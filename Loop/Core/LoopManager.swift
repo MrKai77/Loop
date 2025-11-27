@@ -199,7 +199,7 @@ extension LoopManager {
     }
 
     private func openWindows(startingAction: WindowAction?, window: Window?) {
-        if Defaults[.previewVisibility], let targetWindow, let screenToResizeOn {
+        if Defaults[.previewVisibility], let screenToResizeOn {
             previewController.open(
                 screen: screenToResizeOn,
                 window: window,
