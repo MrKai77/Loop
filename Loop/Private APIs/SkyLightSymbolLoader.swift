@@ -16,7 +16,7 @@ enum SkyLightSymbolLoader {
 
     private static let handle: UnsafeMutableRawPointer? = {
         guard let handle = dlopen(frameworkPath, RTLD_LAZY) else {
-            logger.error("SkyLightSymbolLoader: failed to open \(frameworkPath)")
+            logger.error("failed to open \(frameworkPath)")
             return nil
         }
         return handle
@@ -24,7 +24,7 @@ enum SkyLightSymbolLoader {
 
     private static func loadSymbol<T>(_ name: StaticString) -> T? {
         guard let handle else {
-            logger.error("SkyLightSymbolLoader: no handle; cannot load symbol \(name)")
+            logger.error("no handle; cannot load symbol \(name)")
             return nil
         }
 
@@ -33,9 +33,9 @@ enum SkyLightSymbolLoader {
 
         guard let sym = dlsym(handle, name.description) else {
             if let err = dlerror() {
-                logger.error("SkyLightSymbolLoader: failed to load symbol \(name): \(String(cString: err))")
+                logger.error("failed to load symbol \(name): \(String(cString: err))")
             } else {
-                logger.error("SkyLightSymbolLoader: failed to load symbol \(name)")
+                logger.error("failed to load symbol \(name)")
             }
             return nil
         }
