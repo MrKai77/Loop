@@ -1,5 +1,5 @@
 //
-//  Private.swift
+//  PrivateApis.swift
 //  Loop
 //
 //  Created by Kai Azim on 2025-11-27.
