@@ -172,8 +172,10 @@ struct TriggerKeycorderKeyView: View {
                     ? String(localized: "Right", comment: "Side of a trigger key")
                     : String(localized: "Left", comment: "Side of a trigger key")
 
-                Text("\(side) \(keyImage)", comment: "Format for modifier key + side; %1$@ is the key (e.g. command), %2$@ is the side (left/right)")
-                    .transition(.move(edge: .leading).combined(with: .opacity))
+                Text(
+                    "\(side) \(keyImage)",
+                    comment: "Format for modifier key + side; %1$@ is the key (e.g. command), %2$@ is the side (left/right)"
+                )
             } else {
                 keyImage
             }

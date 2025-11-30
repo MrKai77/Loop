@@ -200,6 +200,8 @@ struct UpdateView: View {
 
 struct ChangelogSectionView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.luminareCornerRadii) var luminareCornerRadii
+
     @State var isExpanded = false
     let item: (title: String, body: [Updater.ChangelogNote])
 

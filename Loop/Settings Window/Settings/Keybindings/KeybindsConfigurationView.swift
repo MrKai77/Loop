@@ -76,9 +76,9 @@ struct KeybindsConfigurationView: View {
         LuminareSection(String(localized: "Trigger Key", comment: "Section header shown in settings")) {
             TriggerKeycorder($triggerKey)
                 .environmentObject(model)
-                .luminareBordered(true)
+                .luminareBorderedStates(.normal)
         }
-        .luminareBordered(false)
+        .luminareBorderedStates(.none)
     }
 
     private var settingsSection: some View {
@@ -136,7 +136,6 @@ struct KeybindsConfigurationView: View {
                     keybinds.removeAll(where: model.selectedKeybinds.contains)
                 }
                 .disabled(model.selectedKeybinds.isEmpty)
-                .buttonStyle(.luminareProminent)
                 .keyboardShortcut(.delete)
             }
 

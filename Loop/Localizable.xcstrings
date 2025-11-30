@@ -2644,6 +2644,7 @@
       }
     },
     "Color" : {
+      "comment" : "Section header shown in settings",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

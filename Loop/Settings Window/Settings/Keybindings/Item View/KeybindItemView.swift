@@ -182,7 +182,7 @@ struct KeybindItemView: View {
 
     private func keycorderSection(hasConflicts: Bool) -> some View {
         HStack(spacing: 6) {
-            HStack {
+            HStack(spacing: 6) {
                 ForEach(triggerKey.sorted().compactMap(\.modifierSystemImage), id: \.self) { image in
                     Text("\(Image(systemName: image))")
                 }
@@ -190,12 +190,14 @@ struct KeybindItemView: View {
             .font(.callout)
             .padding(6)
             .frame(height: 27)
-            .modifier(LuminareBorderedModifier())
+            .modifier(LuminarePlateauModifier())
 
             Image(systemName: "plus")
+                .foregroundStyle(.secondary)
 
             Keycorder($action)
                 .opacity(hasConflicts ? 0.5 : 1)
         }
+        .luminareCornerRadius(8)
     }
 }

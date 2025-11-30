@@ -47,9 +47,9 @@ struct Keycorder: View {
                     .fixedSize(horizontal: true, vertical: false)
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .modifier(LuminareBorderedModifier())
+                    .modifier(LuminarePlateauModifier())
             } else {
-                HStack(spacing: 5) {
+                HStack(spacing: 4) {
                     // First show modifiers in order
                     let sortedKeys = selectionKeybind.sorted { (a: CGKeyCode, b: CGKeyCode) in
                         if a.isModifier, !b.isModifier { return true }
@@ -66,7 +66,7 @@ struct Keycorder: View {
                     }
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .modifier(LuminareBorderedModifier(isHovering: isHovering))
+                    .modifier(LuminarePlateauModifier(isHovering: isHovering))
                 }
                 .contentShape(.rect)
             }

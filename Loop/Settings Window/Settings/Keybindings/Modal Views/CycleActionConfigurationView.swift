@@ -27,8 +27,8 @@ struct CycleActionConfigurationView: View {
         VStack(spacing: 12) {
             LuminareSection(outerPadding: 0) {
                 LuminareTextField("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
-                    .luminareHasBackground(false)
-                    .luminareBordered(false)
+                    .luminareFilledStates(.none)
+                    .luminareBorderedStates(.none)
                     .luminareAspectRatio(contentMode: .fill)
             }
 
@@ -46,7 +46,6 @@ struct CycleActionConfigurationView: View {
                         action.cycle?.removeAll(where: { selectedKeybinds.contains($0) })
                     }
                     .disabled(selectedKeybinds.isEmpty)
-                    .buttonStyle(.luminareProminent)
                 }
 
                 LuminareList(

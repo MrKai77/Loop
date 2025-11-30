@@ -49,30 +49,26 @@ struct AccentColorConfigurationView: View {
             }
         }
 
-        VStack {
-            if accentColorMode == .custom {
-                HStack {
-                    Text("Color")
-                    Spacer()
-                }
-                .foregroundStyle(.secondary)
-
-                LuminareColorPicker(
-                    color: $customAccentColor,
-                    style: .textFieldWithColorWell()
-                )
-                .luminareAspectRatio(contentMode: .fill)
-                .luminareSheetClosesOnDefocus()
-
-                if useGradient {
+        if accentColorMode == .custom {
+            LuminareSection(String(localized: "Color", comment: "Section header shown in settings")) {
+                Group {
                     LuminareColorPicker(
-                        color: $gradientColor,
+                        color: $customAccentColor,
                         style: .textFieldWithColorWell()
                     )
-                    .luminareAspectRatio(contentMode: .fill)
-                    .luminareSheetClosesOnDefocus()
+
+                    if useGradient {
+                        LuminareColorPicker(
+                            color: $gradientColor,
+                            style: .textFieldWithColorWell()
+                        )
+                    }
                 }
+                .luminareBorderedStates(.normal)
             }
+            .luminareAspectRatio(contentMode: .fill)
+            .luminareSheetClosesOnDefocus()
+            .luminareBorderedStates(.none)
         }
     }
 

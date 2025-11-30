@@ -26,7 +26,6 @@ struct ExcludedAppsConfigurationView: View {
                     excludedApps.removeAll { selectedApps.contains($0) }
                 }
                 .disabled(selectedApps.isEmpty)
-                .buttonStyle(.luminareProminent)
                 .keyboardShortcut(.delete)
             }
 

@@ -83,8 +83,8 @@ struct CustomActionConfigurationView: View {
                     set: { action.name = $0 }
                 )
             )
-            .luminareHasBackground(false)
-            .luminareBordered(false)
+            .luminareFilledStates(.none)
+            .luminareBorderedStates(.none)
             .luminareAspectRatio(contentMode: .fill)
         }
 

@@ -249,7 +249,6 @@ struct AdvancedConfigurationView: View {
                         }
                     }
                 }
-                .buttonStyle(.luminareProminent)
             }
         }
     }
