@@ -183,13 +183,11 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
             content(item)
                 .padding(padding)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(.rect)
         }
-        .buttonStyle(
-            SearchablePickerButtonStyle(
-                isHovering: isSelected,
-                isActive: isActive
-            )
-        )
+        .buttonStyle(.luminare)
+        .luminareFilledStates([.hovering, .pressed])
+        .luminareBorderedStates(.hovering)
         .onHover { hover in
             withAnimation(animationFast) {
                 isHovering = hover
@@ -207,43 +205,5 @@ struct PickerSection<V>: Identifiable, Hashable where V: Hashable, V: Identifiab
     init(_ title: String, _ items: [V]) {
         self.title = title
         self.items = items
-    }
-}
-
-struct SearchablePickerButtonStyle: ButtonStyle {
-    @Environment(\.luminareAnimationFast) private var animationFast
-    @Environment(\.luminarePopupPadding) private var luminarePopupPadding
-    @Environment(\.luminarePopupCornerRadii) private var luminarePopupCornerRadii
-
-    private var cornerRadius: CGFloat {
-        luminarePopupCornerRadii.topLeading - luminarePopupPadding / 2
-    }
-
-    let isHovering: Bool
-    let isActive: Bool
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background {
-                if configuration.isPressed {
-                    Rectangle()
-                        .foregroundStyle(.quaternary)
-                } else if isActive {
-                    Rectangle()
-                        .foregroundStyle(.quaternary.opacity(0.7))
-                }
-
-                if isHovering {
-                    Rectangle()
-                        .foregroundStyle(.quaternary.opacity(0.7))
-                }
-
-                if isActive {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .strokeBorder(.quaternary, lineWidth: 1)
-                }
-            }
-            .animation(animationFast, value: [isActive, configuration.isPressed])
-            .clipShape(.rect(cornerRadius: cornerRadius))
     }
 }

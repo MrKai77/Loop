@@ -75,7 +75,6 @@ struct DirectionPickerView: View {
 
                     Text(item.name)
                 }
-                .compositingGroup()
             }
         }
         .frame(width: 300, height: 300)
@@ -92,12 +91,48 @@ struct DirectionPickerView: View {
     }
 
     private func computeSearchResults() {
-        withAnimation {
-            if searchText.isEmpty {
-                searchResults = []
-            } else {
-                searchResults = sectionItems.filter { $0.name.localizedCaseInsensitiveContains(searchText) } + moreSection.items
-            }
+        guard !searchText.isEmpty else {
+            searchResults = []
+            return
         }
+
+        let key = searchText.lowercased()
+
+        let matches = sectionItems
+            .compactMap { item -> (WindowDirection, Int)? in
+                if let score = fuzzyScore(item.name, key) {
+                    return (item, score)
+                }
+                return nil
+            }
+            .sorted { $0.1 < $1.1 }
+            .map(\.0)
+
+        searchResults = matches + moreSection.items
+    }
+
+    private func fuzzyScore(_ text: String, _ pattern: String) -> Int? {
+        let text = text.lowercased()
+        let pattern = pattern.lowercased()
+
+        // Strong prefix match
+        if text.hasPrefix(pattern) { return 0 }
+
+        // Contains substring
+        if text.contains(pattern) { return 1 }
+
+        // Subsequence fuzzy match (letters appear in order)
+        var tIndex = text.startIndex
+        var pIndex = pattern.startIndex
+        while tIndex < text.endIndex, pIndex < pattern.endIndex {
+            if text[tIndex] == pattern[pIndex] {
+                pIndex = text.index(after: pIndex)
+            }
+            tIndex = text.index(after: tIndex)
+        }
+
+        if pIndex == pattern.endIndex { return 2 }
+
+        return nil
     }
 }
