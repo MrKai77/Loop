@@ -38,7 +38,7 @@ struct AccentColorConfigurationView: View {
                 .font(.title3)
                 .frame(height: 90)
             }
-            .luminarePickerRoundedCorner(top: .always)
+            .luminareRoundingBehavior(top: true)
 
             LuminareToggle("Gradient", isOn: $useGradient.animation(luminareAnimation))
 
@@ -66,7 +66,6 @@ struct AccentColorConfigurationView: View {
                 }
                 .luminareBorderedStates(.normal)
             }
-            .luminareAspectRatio(contentMode: .fill)
             .luminareSheetClosesOnDefocus()
             .luminareBorderedStates(.none)
         }

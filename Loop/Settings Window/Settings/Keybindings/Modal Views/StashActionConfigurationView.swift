@@ -86,7 +86,6 @@ struct StashActionConfigurationView: View {
             LuminareTextField("Stash", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
                 .luminareFilledStates(.none)
                 .luminareBorderedStates(.none)
-                .luminareAspectRatio(contentMode: .fill)
         }
 
         LuminareSection(outerPadding: 0) {
@@ -141,7 +140,6 @@ struct StashActionConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminarePickerRoundedCorner(top: .always, bottom: .always)
         .frame(height: 40)
     }
 
@@ -180,8 +178,6 @@ struct StashActionConfigurationView: View {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
         }
-        .luminareAspectRatio(contentMode: .fill)
-        .buttonStyle(.luminareCompact)
     }
 
     @ViewBuilder
@@ -204,7 +200,7 @@ struct StashActionConfigurationView: View {
                 ) { anchor in
                     IconView(action: anchor.iconAction)
                 }
-                .luminarePickerRoundedCorner(top: .always, bottom: .always)
+                .luminareRoundingBehavior(top: true, bottom: true)
             } else {
                 LuminareSlider(
                     String(localized: "X", comment: "X axis label"),
@@ -265,7 +261,7 @@ struct StashActionConfigurationView: View {
                 .padding(.vertical, 15)
                 .compositingGroup()
             }
-            .luminarePickerRoundedCorner(top: .always, bottom: action.sizeMode == .custom ? .never : .always)
+            .luminareRoundingBehavior(top: true, bottom: action.sizeMode != .custom)
 
             if action.sizeMode ?? .custom == .custom {
                 LuminareSlider(

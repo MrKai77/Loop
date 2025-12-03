@@ -57,6 +57,7 @@ struct TriggerKeycorder: View {
                         }
                     }
                     .frame(height: 32)
+                    .padding(.horizontal, 12)
                 }
             }
             .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))
@@ -82,7 +83,6 @@ struct TriggerKeycorder: View {
             }
 
             .fixedSize()
-            .buttonStyle(.luminareCompact)
 
             Spacer()
 
@@ -92,11 +92,10 @@ struct TriggerKeycorder: View {
             } label: {
                 Text("Change")
                     .frame(height: 32)
+                    .padding(.horizontal, 12)
             }
-            .buttonStyle(.luminareCompact)
             .fixedSize()
         }
-        .luminareHorizontalPadding(12)
     }
 
     func startObservingKeys() {

@@ -29,7 +29,6 @@ struct CycleActionConfigurationView: View {
                 LuminareTextField("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
                     .luminareFilledStates(.none)
                     .luminareBorderedStates(.none)
-                    .luminareAspectRatio(contentMode: .fill)
             }
 
             LuminareSection(outerPadding: 0) {
@@ -82,7 +81,7 @@ struct CycleActionConfigurationView: View {
                     .foregroundStyle(.secondary)
                     .padding()
                 }
-                .luminareListRoundedCorner(bottom: .always)
+                .luminareRoundingBehavior(bottom: true)
                 .luminareListFixedHeight(until: .infinity)
             }
             .onChange(of: action) { _ in
@@ -94,8 +93,6 @@ struct CycleActionConfigurationView: View {
             } label: {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
-            .luminareAspectRatio(contentMode: .fill)
-            .buttonStyle(.luminareCompact)
         }
     }
 }

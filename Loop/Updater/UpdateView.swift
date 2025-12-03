@@ -93,8 +93,6 @@ struct UpdateView: View {
                 }
                 .allowsHitTesting(!isInstalling)
             }
-            .luminareAspectRatio(contentMode: .fill)
-            .buttonStyle(.luminareCompact)
             .padding(12)
             .background(VisualEffectView(material: .menu, blendingMode: .behindWindow))
             .overlay {

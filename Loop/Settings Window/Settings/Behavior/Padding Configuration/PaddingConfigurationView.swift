@@ -10,7 +10,8 @@ import Luminare
 import SwiftUI
 
 struct PaddingConfigurationView: View {
-    @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.luminareAnimation) private var luminareAnimation
+    @Default(.enablePadding) private var enablePadding
 
     @State var paddingModel = Defaults[.padding]
     @Binding var isPresented: Bool
@@ -24,28 +25,33 @@ struct PaddingConfigurationView: View {
             }
 
             LuminareSection {
-                paddingMode()
-
-                if !paddingModel.configureScreenPadding {
-                    nonScreenPaddingConfiguration()
-                } else {
-                    screenSidesPaddingConfiguration()
-                }
+                LuminareToggle("Apply padding", isOn: $enablePadding)
             }
 
-            if paddingModel.configureScreenPadding {
+            Group {
                 LuminareSection {
-                    screenInsetsPaddingConfiguration()
+                    paddingMode()
+
+                    if !paddingModel.configureScreenPadding {
+                        nonScreenPaddingConfiguration()
+                    } else {
+                        screenSidesPaddingConfiguration()
+                    }
+                }
+
+                if paddingModel.configureScreenPadding {
+                    LuminareSection {
+                        screenInsetsPaddingConfiguration()
+                    }
                 }
             }
+            .disabled(!enablePadding)
 
             Button {
                 isPresented = false
             } label: {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
-            .luminareAspectRatio(contentMode: .fill)
-            .buttonStyle(.luminareCompact)
         }
         .onChange(of: paddingModel) { _ in
             // This fixes some weird animations.
@@ -95,7 +101,7 @@ struct PaddingConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminarePickerRoundedCorner(top: .always)
+        .luminareRoundingBehavior(top: true)
     }
 
     func nonScreenPaddingConfiguration() -> some View {

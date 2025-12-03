@@ -85,7 +85,6 @@ struct CustomActionConfigurationView: View {
             )
             .luminareFilledStates(.none)
             .luminareBorderedStates(.none)
-            .luminareAspectRatio(contentMode: .fill)
         }
 
         LuminareSection(outerPadding: 0) {
@@ -141,7 +140,6 @@ struct CustomActionConfigurationView: View {
             }
             .fixedSize()
         }
-        .luminarePickerRoundedCorner(top: .always)
         .frame(height: 40)
     }
 
@@ -180,8 +178,6 @@ struct CustomActionConfigurationView: View {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
         }
-        .luminareAspectRatio(contentMode: .fill)
-        .buttonStyle(.luminareCompact)
     }
 
     @ViewBuilder
@@ -223,7 +219,7 @@ struct CustomActionConfigurationView: View {
                 ) { anchor in
                     IconView(action: anchor.iconAction)
                 }
-                .luminarePickerRoundedCorner(bottom: .always)
+                .luminareRoundingBehavior(bottom: true)
 
                 if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
                     LuminareToggle(
@@ -308,7 +304,10 @@ struct CustomActionConfigurationView: View {
                 .padding(.vertical, 15)
                 .compositingGroup()
             }
-            .luminarePickerRoundedCorner(top: .always, bottom: action.sizeMode == .custom ? .never : .always)
+            .luminareRoundingBehavior(
+                top: true,
+                bottom: action.sizeMode != .custom
+            )
 
             if action.sizeMode ?? .custom == .custom {
                 LuminareSlider(

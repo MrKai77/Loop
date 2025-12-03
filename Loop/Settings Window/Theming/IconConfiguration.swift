@@ -130,7 +130,7 @@ struct IconConfigurationView: View {
                         )
                     }
             }
-            .luminarePickerRoundedCorner(.always)
+            .luminareRoundingBehavior(top: true, bottom: true)
         }
 
         LuminareSection(String(localized: "Options", comment: "Section header shown in settings")) {

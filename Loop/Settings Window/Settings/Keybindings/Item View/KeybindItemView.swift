@@ -118,7 +118,7 @@ struct KeybindItemView: View {
             if let cycleIndex {
                 Text("\(cycleIndex)")
                     .frame(width: 27, height: 27)
-                    .modifier(LuminareBorderedModifier())
+                    .modifier(LuminarePlateauModifier())
             } else {
                 HStack(spacing: 6) {
                     if hasDuplicateKeybinds {
@@ -136,6 +136,7 @@ struct KeybindItemView: View {
                 .fixedSize()
             }
         }
+        .luminareCornerRadius(8)
     }
 
     private func label() -> some View {
@@ -198,6 +199,5 @@ struct KeybindItemView: View {
             Keycorder($action)
                 .opacity(hasConflicts ? 0.5 : 1)
         }
-        .luminareCornerRadius(8)
     }
 }
