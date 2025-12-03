@@ -93,6 +93,7 @@ struct UpdateView: View {
                 }
                 .allowsHitTesting(!isInstalling)
             }
+            .luminareCornerRadius(8)
             .padding(12)
             .background(VisualEffectView(material: .menu, blendingMode: .behindWindow))
             .overlay {

@@ -51,23 +51,21 @@ struct AccentColorConfigurationView: View {
 
         if accentColorMode == .custom {
             LuminareSection(String(localized: "Color", comment: "Section header shown in settings")) {
-                Group {
+                LuminareColorPicker(
+                    color: $customAccentColor,
+                    style: .textFieldWithColorWell()
+                )
+                .luminareRoundingBehavior(top: true, bottom: true)
+
+                if useGradient {
                     LuminareColorPicker(
-                        color: $customAccentColor,
+                        color: $gradientColor,
                         style: .textFieldWithColorWell()
                     )
-
-                    if useGradient {
-                        LuminareColorPicker(
-                            color: $gradientColor,
-                            style: .textFieldWithColorWell()
-                        )
-                    }
+                    .luminareRoundingBehavior(top: true, bottom: true)
                 }
-                .luminareBorderedStates(.normal)
             }
             .luminareSheetClosesOnDefocus()
-            .luminareBorderedStates(.none)
         }
     }
 

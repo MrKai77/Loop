@@ -140,7 +140,8 @@ struct CustomActionConfigurationView: View {
             }
             .fixedSize()
         }
-        .frame(height: 40)
+        .luminareContentSize(hasFixedHeight: true)
+        .luminareRoundingBehavior(top: true)
     }
 
     @ViewBuilder
@@ -178,6 +179,7 @@ struct CustomActionConfigurationView: View {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
         }
+        .luminareCornerRadius(8)
     }
 
     @ViewBuilder
@@ -304,6 +306,7 @@ struct CustomActionConfigurationView: View {
                 .padding(.vertical, 15)
                 .compositingGroup()
             }
+            .luminareContentSize(hasFixedHeight: true)
             .luminareRoundingBehavior(
                 top: true,
                 bottom: action.sizeMode != .custom

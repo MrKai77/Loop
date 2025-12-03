@@ -93,6 +93,7 @@ struct CycleActionConfigurationView: View {
             } label: {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
+            .luminareCornerRadius(8)
         }
     }
 }
