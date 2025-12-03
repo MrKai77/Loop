@@ -41,8 +41,11 @@ struct LuminareContentView: View {
                         model.showInspector.toggle()
                     } label: {
                         Image(model.showInspector ? .sidebarLeftHide : .sidebarLeft3)
+                            .animation(animation, value: model.showInspector)
                     }
+                    .luminareContentSize(aspectRatio: 1, contentMode: .fit, hasFixedHeight: true)
                 }
+                .drawingGroup()
             }
             .frame(width: 390)
 

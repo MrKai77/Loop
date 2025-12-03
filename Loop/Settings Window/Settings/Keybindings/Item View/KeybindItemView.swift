@@ -118,7 +118,7 @@ struct KeybindItemView: View {
             if let cycleIndex {
                 Text("\(cycleIndex)")
                     .frame(width: 27, height: 27)
-                    .modifier(LuminarePlateauModifier())
+                    .luminarePlateau()
             } else {
                 HStack(spacing: 6) {
                     if hasDuplicateKeybinds {
@@ -160,10 +160,18 @@ struct KeybindItemView: View {
                         .lineLimit(1)
                 }
             }
-            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 4)
         }
-        .buttonStyle(OpenDirectionPickerButtonStyle())
+        .luminareContentSize(
+            contentMode: .fit,
+            hasFixedHeight: true
+        )
+        .luminareRoundingBehavior(top: true, bottom: true)
+        .luminareFilledStates([.hovering, .pressed])
+        .luminareBorderedStates(.hovering)
+        .luminareMinHeight(24)
         .help("Customize this keybind's action.")
+        .padding(.leading, -4)
     }
 
     private func directionPicker() -> some View {
@@ -191,7 +199,7 @@ struct KeybindItemView: View {
             .font(.callout)
             .padding(6)
             .frame(height: 27)
-            .modifier(LuminarePlateauModifier())
+            .luminarePlateau()
 
             Image(systemName: "plus")
                 .foregroundStyle(.secondary)

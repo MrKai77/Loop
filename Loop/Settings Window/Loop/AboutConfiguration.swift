@@ -193,12 +193,10 @@ struct AboutConfigurationView: View {
                             .padding(4)
                             .contentShape(.rect)
                     }
-                    .modifier(
-                        LuminareContentSizeModifier(
-                            aspectRatio: 1.0,
-                            contentMode: .fit,
-                            hasFixedHeight: true
-                        )
+                    .luminareContentSize(
+                        aspectRatio: 1.0,
+                        contentMode: .fit,
+                        hasFixedHeight: true
                     )
                     .luminareRoundingBehavior(top: true, bottom: true)
                     .popover(isPresented: $model.didCompleteCopyToClipboard) {
@@ -348,12 +346,10 @@ struct AboutConfigurationView: View {
                     .padding(4)
                     .contentShape(.rect)
             }
-            .modifier(
-                LuminareContentSizeModifier(
-                    aspectRatio: 1.0,
-                    contentMode: .fit,
-                    hasFixedHeight: true
-                )
+            .luminareContentSize(
+                aspectRatio: 1.0,
+                contentMode: .fit,
+                hasFixedHeight: true
             )
             .luminareRoundingBehavior(top: true, bottom: true)
         }
