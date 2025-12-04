@@ -80,11 +80,10 @@ enum Tab: LuminareTabItem, CaseIterable {
     static let loopTabs: [Tab] = [.advanced, .excludedApps, .about]
 }
 
-final class LuminareManager: NSWindowController, ObservableObject {
-    static let shared = LuminareManager()
-    private let logger = Logger(category: "LuminareManager")
-
-    var luminare: LuminareWindow?
+final class SettingsWindowManager: ObservableObject {
+    static let shared = SettingsWindowManager()
+    private let logger = Logger(category: "SettingsWindowManager")
+    private var controller: NSWindowController?
     private var previewActionTimerTask: Task<(), Error>?
 
     @Published private(set) var previewedAction: WindowAction
@@ -119,33 +118,37 @@ final class LuminareManager: NSWindowController, ObservableObject {
 
     let radialMenuViewModel: RadialMenuViewModel
 
+    var window: NSWindow? {
+        controller?.window
+    }
+
     private init() {
         let startingAction: WindowAction = .init(.topHalf)
 
         self.previewedAction = startingAction
         self.radialMenuViewModel = .init(startingAction: startingAction, window: nil, previewMode: true)
+    }
 
-        super.init(window: nil)
+    func show() {
+        if let controller, let window = controller.window {
+            window.orderFrontRegardless()
+        } else {
+            let window = LuminareWindow {
+                LuminareContentView(model: self)
+                    .frame(height: 620)
+            }
 
-        let window = LuminareWindow {
-            LuminareContentView(model: self)
-                .frame(height: 620)
+            controller = NSWindowController(window: window)
+
+            SkyLightToolBelt.setBackgroundBlur(
+                windowID: CGWindowID(window.windowNumber),
+                radius: 20
+            )
+
+            window.backgroundColor = .white.withAlphaComponent(0.001)
+            window.ignoresMouseEvents = false
+            window.orderFrontRegardless()
         }
-
-        self.window = window
-    }
-
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func showWindow(_ sender: Any?) {
-        super.showWindow(sender)
-
-        guard let window else { return }
-
-        window.orderFrontRegardless()
 
         if #available(macOS 14.0, *) {
             NSApp.activate()
@@ -153,35 +156,34 @@ final class LuminareManager: NSWindowController, ObservableObject {
             NSApp.activate(ignoringOtherApps: true)
         }
 
-        SkyLightToolBelt.setBackgroundBlur(
-            windowID: CGWindowID(window.windowNumber),
-            radius: 20
-        )
-
-        window.backgroundColor = .white.withAlphaComponent(0.001)
-        window.ignoresMouseEvents = false
-
         startTimer()
         NSApp.setActivationPolicy(.regular)
+
+        logger.log("Settings window opened")
     }
 
-    override func close() {
-        super.close()
+    func close() {
+        if let controller {
+            controller.close()
+            self.controller = nil
+        }
 
         stopTimer()
 
         if !Defaults[.showDockIcon] {
             NSApp.setActivationPolicy(.accessory)
         }
+
+        logger.log("Settings window closed")
     }
 
-    func startTimer() {
+    private func startTimer() {
         previewActionTimerTask?.cancel()
         previewActionTimerTask = Task(priority: .utility) {
             while true {
                 try await Task.sleep(for: .seconds(1))
 
-                if window?.isKeyWindow == true, !Task.isCancelled {
+                if await controller?.window?.isKeyWindow == true, !Task.isCancelled {
                     await MainActor.run {
                         previewedAction.direction = previewedAction.direction.nextPreviewDirection
                         radialMenuViewModel.setAction(to: previewedAction)
@@ -191,7 +193,7 @@ final class LuminareManager: NSWindowController, ObservableObject {
         }
     }
 
-    func stopTimer() {
+    private func stopTimer() {
         previewActionTimerTask?.cancel()
         previewActionTimerTask = nil
     }

@@ -9,7 +9,7 @@ import Luminare
 import SwiftUI
 
 struct LuminareContentView: View {
-    @ObservedObject var model: LuminareManager
+    @ObservedObject var model: SettingsWindowManager
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @Environment(\.luminareAnimation) private var animation

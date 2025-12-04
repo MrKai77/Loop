@@ -27,7 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         if !launchedAsLoginItem {
-            LuminareManager.shared.showWindow(nil)
+            SettingsWindowManager.shared.show()
         } else {
             // Dock icon is usually handled by LuminareManager, but in this case, it is manually set
             if !Defaults[.showDockIcon] {
@@ -74,12 +74,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
-        LuminareManager.shared.close()
+        SettingsWindowManager.shared.close()
         return false
     }
 
     func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
-        LuminareManager.shared.showWindow(self)
+        SettingsWindowManager.shared.show()
         return true
     }
 
