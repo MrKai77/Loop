@@ -12,6 +12,7 @@ import SwiftUI
 // MARK: - View
 
 struct AccentColorConfigurationView: View {
+    @Environment(\.luminareTintColor) var tint
     @Environment(\.luminareAnimation) private var luminareAnimation
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
@@ -19,6 +20,9 @@ struct AccentColorConfigurationView: View {
     @Default(.useGradient) private var useGradient
     @Default(.customAccentColor) private var customAccentColor
     @Default(.gradientColor) private var gradientColor
+
+    @State private var didSyncWallpaper: Bool = false
+    @State private var syncWallpaperTask: Task<(), Never>?
 
     var body: some View {
         LuminareSection {
@@ -43,9 +47,21 @@ struct AccentColorConfigurationView: View {
             LuminareToggle("Gradient", isOn: $useGradient.animation(luminareAnimation))
 
             if accentColorMode == .wallpaper {
-                Button("Sync Wallpaper") {
-                    syncWallpaper()
+//                Button("Sync Wallpaper") {
+//                    syncWallpaper()
+//                }
+                Button(action: syncWallpaper) {
+                    HStack {
+                        Text("Sync Wallpaper")
+
+                        if didSyncWallpaper {
+                            Image(systemName: "checkmark")
+                                .foregroundStyle(tint)
+                                .bold()
+                        }
+                    }
                 }
+                .luminareRoundingBehavior(bottom: true)
             }
         }
 
@@ -70,13 +86,29 @@ struct AccentColorConfigurationView: View {
     }
 
     func syncWallpaper() {
-        Task {
+        if syncWallpaperTask != nil {
+            return
+        }
+
+        syncWallpaperTask = Task {
             await accentColorController.refresh()
 
             // Force-rerender accent colors
             let window = LuminareManager.shared.window
             window?.resignMain()
             window?.makeKeyAndOrderFront(self)
+
+            withAnimation(.smooth(duration: 0.5)) {
+                didSyncWallpaper = true
+            }
+
+            try? await Task.sleep(for: .seconds(2))
+
+            withAnimation(.smooth(duration: 0.5)) {
+                didSyncWallpaper = false
+            }
+
+            syncWallpaperTask = nil
         }
     }
 }
