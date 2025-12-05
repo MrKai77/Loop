@@ -19,20 +19,24 @@ enum WindowUtility {
         var result: Window?
 
         do {
+            logger.info("Getting window at cursor...")
+
             if Defaults[.resizeWindowUnderCursor],
                let mouseLocation = CGEvent.mouseLocation,
                let window = try windowAtPosition(mouseLocation) {
                 result = window
             }
         } catch {
-            logger.info("Failed to get window at cursor: \(error.localizedDescription)")
+            logger.warning("Failed to get window at cursor: \(error.localizedDescription)")
         }
 
         if result == nil {
             do {
+                logger.info("Getting frontmost window...")
+
                 result = try frontmostWindow()
             } catch {
-                logger.info("Failed to get frontmost window: \(error.localizedDescription)")
+                logger.warning("Failed to get frontmost window: \(error.localizedDescription)")
             }
         }
 
