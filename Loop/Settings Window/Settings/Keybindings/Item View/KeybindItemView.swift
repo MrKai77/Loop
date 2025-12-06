@@ -59,10 +59,10 @@ struct KeybindItemView: View {
     }
 
     private var titleAndButtons: some View {
-        HStack {
+        HStack(spacing: 2) {
             label()
 
-            HStack {
+            Group {
                 if action.direction.isCustomizable {
                     Button(action: {
                         isConfiguringCustom = true

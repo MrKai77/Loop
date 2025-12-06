@@ -342,7 +342,7 @@ struct AboutConfigurationView: View {
             Button {
                 openURL(credit.url)
             } label: {
-                Image(systemName: "arrow.up.forward")
+                Image(systemName: "link")
                     .padding(4)
                     .contentShape(.rect)
             }

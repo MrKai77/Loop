@@ -25,9 +25,9 @@ struct CustomActionConfigurationView: View {
         var image: Image {
             switch self {
             case .position:
-                Image(systemName: "grid")
+                Image(systemName: "viewfinder")
             case .size:
-                Image(systemName: "square.resize")
+                Image(systemName: "rectangle.expand.diagonal")
             }
         }
     }

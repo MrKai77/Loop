@@ -1,10 +1,11 @@
 //
-//  Tab.swift
+//  SettingsTab.swift
 //  Loop
 //
 //  Created by Kai Azim on 2025-12-05.
 //
 
+import AppKit
 import Luminare
 import SwiftUI
 
@@ -24,8 +25,38 @@ enum SettingsTab: LuminareTabItem, CaseIterable {
     case about
 
     var icon: some View {
-        HStack {
-            image
+        RoundedRectangle(cornerRadius: 6)
+            .frame(width: 22, height: 22)
+            .foregroundStyle(color.gradient)
+            .overlay {
+                image
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.4), radius: 2)
+            }
+            .drawingGroup()
+    }
+
+    var color: Color {
+        switch self {
+        case .icon:
+            Color(#colorLiteral(red: 0.2235294118, green: 0.3843137255, blue: 0.6274509804, alpha: 1))
+        case .accentColor:
+            Color(#colorLiteral(red: 0.8235294118, green: 0.3529411765, blue: 0.337254902, alpha: 1))
+        case .radialMenu:
+            Color(#colorLiteral(red: 0.8078431373, green: 0.6235294118, blue: 0.3254901961, alpha: 1))
+        case .preview:
+            Color(#colorLiteral(red: 0.2901960784, green: 0.5647058824, blue: 0.7882352941, alpha: 1))
+        case .behavior:
+            Color(#colorLiteral(red: 0.8078431373, green: 0.6235294118, blue: 0.3254901961, alpha: 1))
+        case .keybinds:
+            Color(#colorLiteral(red: 0.3882352941, green: 0.2823529412, blue: 0.1960784314, alpha: 1))
+        case .advanced:
+            Color(#colorLiteral(red: 0.4823529412, green: 0.4745098039, blue: 0.6588235294, alpha: 1))
+        case .excludedApps:
+            Color(#colorLiteral(red: 0.5882352941, green: 0.3137254902, blue: 0.3019607843, alpha: 1))
+        case .about:
+            Color(#colorLiteral(red: 0.4509803922, green: 0.4509803922, blue: 0.4509803922, alpha: 1))
         }
     }
 
@@ -48,11 +79,11 @@ enum SettingsTab: LuminareTabItem, CaseIterable {
         case .icon: Image(systemName: "sparkles.2")
         case .accentColor: Image(systemName: "paintbrush.pointed.fill")
         case .radialMenu: Image(.loop)
-        case .preview: Image(systemName: "rectangle.3.group.fill")
+        case .preview: Image(systemName: "inset.filled.center.rectangle")
         case .behavior: Image(systemName: "gearshape.fill")
         case .keybinds: Image(systemName: "keyboard.fill")
-        case .advanced: Image(systemName: "screwdriver.fill")
-        case .excludedApps: Image(systemName: "lock.fill")
+        case .advanced: Image(systemName: "wrench.adjustable.fill")
+        case .excludedApps: Image(systemName: "xmark.octagon.fill")
         case .about: Image(systemName: "info.circle.fill")
         }
     }

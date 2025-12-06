@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct ScreenView<Content>: View where Content: View {
+    @Environment(\.isEnabled) private var isEnabled
     @Environment(\.luminareTintColor) private var tintColor
     @Environment(\.luminareAnimationFast) private var animationFast
 
@@ -47,6 +48,7 @@ public struct ScreenView<Content>: View where Content: View {
                 }
             }
             .allowsHitTesting(false)
+            .opacity(isEnabled ? 1.0 : 0.5)
             .overlay {
                 content()
                     .padding(5)

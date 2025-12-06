@@ -26,9 +26,9 @@ struct StashActionConfigurationView: View {
         var image: Image {
             switch self {
             case .position:
-                Image(systemName: "grid")
+                Image(systemName: "viewfinder")
             case .size:
-                Image(systemName: "square.resize")
+                Image(systemName: "rectangle.expand.diagonal")
             }
         }
     }
@@ -140,12 +140,8 @@ struct StashActionConfigurationView: View {
             }
             .fixedSize()
         }
-        .frame(height: 40)
-    }
-
-    @ViewBuilder
-    private func unitToggle() -> some View {
-        LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
+        .luminareContentSize(hasFixedHeight: true)
+        .luminareRoundingBehavior(top: true, bottom: true)
     }
 
     @ViewBuilder
@@ -242,7 +238,7 @@ struct StashActionConfigurationView: View {
     private func sizeConfiguration() -> some View {
         LuminareSection(outerPadding: 0) {
             LuminarePicker(
-                elements: CustomWindowActionSizeMode.allCases,
+                elements: sizeModes,
                 selection: Binding(
                     get: {
                         action.sizeMode ?? .custom
@@ -253,7 +249,7 @@ struct StashActionConfigurationView: View {
                         }
                     }
                 ),
-                columns: 3
+                columns: 2
             ) { mode in
                 VStack(spacing: 4) {
                     mode.image
@@ -262,7 +258,11 @@ struct StashActionConfigurationView: View {
                 .padding(.vertical, 15)
                 .compositingGroup()
             }
-            .luminareRoundingBehavior(top: true, bottom: action.sizeMode != .custom)
+            .luminareContentSize(hasFixedHeight: true)
+            .luminareRoundingBehavior(
+                top: true,
+                bottom: action.sizeMode != .custom
+            )
 
             if action.sizeMode ?? .custom == .custom {
                 LuminareSlider(

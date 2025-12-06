@@ -47,9 +47,6 @@ struct AccentColorConfigurationView: View {
             LuminareToggle("Gradient", isOn: $useGradient.animation(luminareAnimation))
 
             if accentColorMode == .wallpaper {
-//                Button("Sync Wallpaper") {
-//                    syncWallpaper()
-//                }
                 Button(action: syncWallpaper) {
                     HStack {
                         Text("Sync Wallpaper")

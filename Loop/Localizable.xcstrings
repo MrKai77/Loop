@@ -27537,6 +27537,7 @@
       }
     },
     "Unstashed Size" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

@@ -212,7 +212,7 @@ struct ChangelogSectionView: View {
                 }
             } label: {
                 HStack {
-                    Image(.chevronRight)
+                    Image(systemName: "chevron.forward")
                         .bold()
                         .rotationEffect(isExpanded ? .degrees(90) : .zero)
 

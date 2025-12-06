@@ -11,6 +11,7 @@ import SwiftUI
 
 struct PaddingConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.luminareAnimationFast) private var luminareAnimationFast
     @Default(.enablePadding) private var enablePadding
 
     @State var paddingModel = Defaults[.padding]
@@ -23,6 +24,8 @@ struct PaddingConfigurationView: View {
             ScreenView {
                 PaddingPreviewView($paddingModel)
             }
+            .disabled(!enablePadding)
+            .animation(luminareAnimationFast, value: enablePadding)
 
             LuminareSection {
                 LuminareToggle("Apply padding", isOn: $enablePadding)
@@ -46,6 +49,7 @@ struct PaddingConfigurationView: View {
                 }
             }
             .disabled(!enablePadding)
+            .animation(luminareAnimationFast, value: enablePadding)
 
             Button {
                 isPresented = false
