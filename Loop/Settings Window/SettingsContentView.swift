@@ -1,5 +1,5 @@
 //
-//  LuminareContentView.swift
+//  SettingsContentView.swift
 //  Loop
 //
 //  Created by Kai Azim on 2025-10-18.
@@ -8,7 +8,7 @@
 import Luminare
 import SwiftUI
 
-struct LuminareContentView: View {
+struct SettingsContentView: View {
     @ObservedObject var model: SettingsWindowManager
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
@@ -18,9 +18,9 @@ struct LuminareContentView: View {
     var body: some View {
         LuminareDividedStack {
             LuminareSidebar {
-                LuminareSidebarSection("Theming", selection: $model.currentTab, items: Tab.themingTabs)
-                LuminareSidebarSection("Settings", selection: $model.currentTab, items: Tab.settingsTabs)
-                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: Tab.loopTabs)
+                LuminareSidebarSection("Theming", selection: $model.currentTab, items: SettingsTab.themingTabs)
+                LuminareSidebarSection("Settings", selection: $model.currentTab, items: SettingsTab.settingsTabs)
+                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: SettingsTab.loopTabs)
             }
             .frame(width: 260)
             .padding(.top, titleBarHeight)
