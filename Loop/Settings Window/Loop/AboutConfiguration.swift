@@ -189,7 +189,7 @@ struct AboutConfigurationView: View {
                     Button {
                         model.copyVersionToClipboard()
                     } label: {
-                        Image(.clipboard)
+                        Image(systemName: "document.on.clipboard")
                             .padding(4)
                             .contentShape(.rect)
                     }
@@ -342,7 +342,7 @@ struct AboutConfigurationView: View {
             Button {
                 openURL(credit.url)
             } label: {
-                Image(.shareUpRight)
+                Image(systemName: "arrow.up.forward")
                     .padding(4)
                     .contentShape(.rect)
             }

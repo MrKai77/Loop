@@ -117,9 +117,15 @@ struct ExcludedListAppView: View, Equatable {
             Button {
                 NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: app.path)])
             } label: {
-                Image(.finder)
-                    .padding(4)
-                    .contentShape(.rect)
+                Group {
+                    if #available(macOS 26, *) {
+                        Image(systemName: "finder")
+                    } else {
+                        Image(systemName: "arrow.up.forward")
+                    }
+                }
+                .padding(4)
+                .contentShape(.rect)
             }
             .luminareContentSize(
                 aspectRatio: 1.0,

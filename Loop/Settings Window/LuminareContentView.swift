@@ -18,9 +18,9 @@ struct LuminareContentView: View {
     var body: some View {
         LuminareDividedStack {
             LuminareSidebar {
-                LuminareSidebarSection("Theming", selection: $model.currentTab, items: Tab.themingTabs)
-                LuminareSidebarSection("Settings", selection: $model.currentTab, items: Tab.settingsTabs)
-                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: Tab.loopTabs)
+                LuminareSidebarSection("Theming", selection: $model.currentTab, items: SettingsTab.themingTabs)
+                LuminareSidebarSection("Settings", selection: $model.currentTab, items: SettingsTab.settingsTabs)
+                LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: SettingsTab.loopTabs)
             }
             .frame(width: 260)
             .padding(.top, titleBarHeight)
@@ -30,7 +30,7 @@ struct LuminareContentView: View {
                 model.currentTab.view()
             } header: {
                 HStack {
-                    model.currentTab.decoratedImageView
+                    model.currentTab.icon
 
                     Text(model.currentTab.title)
                         .font(.title2)
@@ -40,7 +40,7 @@ struct LuminareContentView: View {
                     Button {
                         model.showInspector.toggle()
                     } label: {
-                        Image(model.showInspector ? .sidebarLeftHide : .sidebarLeft3)
+                        Image(systemName: "sidebar.right")
                             .animation(animation, value: model.showInspector)
                     }
                     .luminareContentSize(aspectRatio: 1, contentMode: .fit, hasFixedHeight: true)

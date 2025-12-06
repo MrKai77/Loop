@@ -218,7 +218,7 @@ struct IconVew: View {
         VStack(alignment: .center) {
             Spacer()
 
-            Image(.lock)
+            Image(systemName: "lock")
                 .foregroundStyle(.secondary)
 
             Text(nextUnlockCount == icon.unlockTime ?

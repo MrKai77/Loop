@@ -20,7 +20,7 @@ struct KeybindItemView: View {
     @State private var isConfiguringCustom: Bool = false
     @State private var isConfiguringCycle: Bool = false
     private let cycleIndex: Int?
-    @State private var isPickerPresented = false
+    @State private var isDirectionPickerPresented = false
 
     init(_ keybind: Binding<WindowAction>, cycleIndex: Int? = nil) {
         self._action = keybind
@@ -45,7 +45,7 @@ struct KeybindItemView: View {
         .padding(.horizontal, 12)
         .onChange(of: isHovering) { _ in
             if !isHovering {
-                isPickerPresented = false
+                isDirectionPickerPresented = false
             }
         }
         .onChange(of: action.direction) { _ in
@@ -67,7 +67,7 @@ struct KeybindItemView: View {
                     Button(action: {
                         isConfiguringCustom = true
                     }, label: {
-                        Image(.ruler)
+                        Image(systemName: "slider.horizontal.3")
                     })
                     .buttonStyle(.plain)
                     .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCustom, isCompact: false) {
@@ -86,7 +86,7 @@ struct KeybindItemView: View {
                     Button(action: {
                         isConfiguringCycle = true
                     }, label: {
-                        Image(.repeat4)
+                        Image(systemName: "repeat")
                     })
                     .buttonStyle(.plain)
                     .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCycle, isCompact: false) {
@@ -102,7 +102,7 @@ struct KeybindItemView: View {
         .background {
             if isHovering {
                 Color.clear
-                    .luminarePopup(isPresented: $isPickerPresented, alignment: .leadingLastTextBaseline) {
+                    .luminarePopup(isPresented: $isDirectionPickerPresented, alignment: .leadingLastTextBaseline) {
                         DirectionPickerView(
                             direction: $action.direction,
                             isInCycle: cycleIndex != nil
@@ -141,7 +141,7 @@ struct KeybindItemView: View {
 
     private func label() -> some View {
         Button {
-            isPickerPresented.toggle()
+            isDirectionPickerPresented.toggle()
         } label: {
             HStack(spacing: 8) {
                 IconView(action: action)
@@ -172,21 +172,6 @@ struct KeybindItemView: View {
         .luminareMinHeight(24)
         .help("Customize this keybind's action.")
         .padding(.leading, -4)
-    }
-
-    private func directionPicker() -> some View {
-        VStack {
-            Button {
-                isPickerPresented.toggle()
-            } label: {
-                Image(.pen2)
-                    .padding(.vertical, 5) // Increase hitbox size
-                    .contentShape(.rect)
-                    .padding(.vertical, -5) // So that the picker dropdown doesn't get offsetted by the hitbox
-                    .contentShape(.rect)
-            }
-            .buttonStyle(.plain)
-        }
     }
 
     private func keycorderSection(hasConflicts: Bool) -> some View {

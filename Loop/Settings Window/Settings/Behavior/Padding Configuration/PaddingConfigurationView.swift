@@ -92,10 +92,10 @@ struct PaddingConfigurationView: View {
         ) { custom in
             HStack(spacing: 6) {
                 if custom {
-                    Image(.sliders)
+                    Image(systemName: "slider.horizontal.3")
                     Text("Custom")
                 } else {
-                    Image(.shapeSquare)
+                    Image(systemName: "square")
                     Text("Simple")
                 }
             }

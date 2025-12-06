@@ -181,7 +181,7 @@ struct AdvancedConfigurationView: View {
                                 Button {
                                     openURL(url)
                                 } label: {
-                                    Image(.shareUpRight)
+                                    Image(systemName: "arrow.up.forward")
                                         .foregroundStyle(.secondary)
                                         .padding(4)
                                 }
@@ -266,7 +266,7 @@ struct AdvancedConfigurationView: View {
         LuminareButton {
             HStack {
                 if model.isAccessibilityAccessGranted {
-                    Image(.badgeCheck2)
+                    Image(systemName: "checkmark.seal.fill")
                         .foregroundStyle(tint)
                 }
 
