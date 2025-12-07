@@ -7,6 +7,7 @@
 
 import Defaults
 import OSLog
+import Playgrounds
 import SwiftUI
 import UserNotifications
 
@@ -27,12 +28,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         if !launchedAsLoginItem {
-            LuminareManager.shared.showWindow(nil)
+            SettingsWindowManager.shared.show()
         } else {
-            // Dock icon is usually handled by LuminareManager, but in this case, it is manually set
-            if !Defaults[.showDockIcon] {
-                NSApp.setActivationPolicy(.accessory)
-            }
+            // Closing also hides the dock icon if needed.
+            SettingsWindowManager.shared.close()
         }
 
         DataPatcher.run()
@@ -43,8 +42,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         Task {
             // Wait to let the app settle and to prevent overwhelming the user
-            try? await Task.sleep(for: .seconds(2))
-            await Updater.shared.fetchLatestInfo()
+//            try? await Task.sleep(for: .seconds(10))
+//            await Updater.shared.fetchLatestInfo()
         }
 
         UNUserNotificationCenter.current().delegate = self
@@ -74,12 +73,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
-        LuminareManager.shared.close()
+        SettingsWindowManager.shared.close()
         return false
     }
 
     func applicationShouldHandleReopen(_: NSApplication, hasVisibleWindows _: Bool) -> Bool {
-        LuminareManager.shared.showWindow(self)
+        SettingsWindowManager.shared.show()
         return true
     }
 

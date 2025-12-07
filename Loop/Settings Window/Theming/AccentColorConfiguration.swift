@@ -91,7 +91,7 @@ struct AccentColorConfigurationView: View {
             await accentColorController.refresh()
 
             // Force-rerender accent colors
-            let window = LuminareManager.shared.window
+            let window = SettingsWindowManager.shared.window
             window?.resignMain()
             window?.makeKeyAndOrderFront(self)
 

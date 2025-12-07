@@ -66,14 +66,14 @@ final class Updater: ObservableObject {
     private func makeUpdateCheckerTask() -> Task<(), Never>? {
         Task {
             while !Task.isCancelled {
+                // 6 hours
+                try? await Task.sleep(for: .seconds(21600))
+
                 await self.fetchLatestInfo()
 
                 if self.updateState == .available {
                     await self.showUpdateWindow()
                 }
-
-                // 6 hours
-                try? await Task.sleep(for: .seconds(21600))
             }
         }
     }

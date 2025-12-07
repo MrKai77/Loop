@@ -44,9 +44,13 @@ final class Window {
             throw WindowError.invalidWindow
         }
 
-        // Check if this is a widget
-        if let title = nsRunningApplication?.localizedName,
-           title == "Notification Center" {
+        let invalidBundleIdentifiers: [String] = [
+            "com.apple.PIPAgent", // PIP windows
+            "com.apple.notificationcenterui" // Widgets & Notification Center
+        ]
+
+        if let bundleIdentifier = nsRunningApplication?.bundleIdentifier,
+           invalidBundleIdentifiers.contains(bundleIdentifier) {
             throw WindowError.invalidWindow
         }
     }

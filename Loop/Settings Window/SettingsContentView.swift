@@ -1,5 +1,5 @@
 //
-//  LuminareContentView.swift
+//  SettingsContentView.swift
 //  Loop
 //
 //  Created by Kai Azim on 2025-10-18.
@@ -8,8 +8,8 @@
 import Luminare
 import SwiftUI
 
-struct LuminareContentView: View {
-    @ObservedObject var model: LuminareManager
+struct SettingsContentView: View {
+    @ObservedObject var model: SettingsWindowManager
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @Environment(\.luminareAnimation) private var animation

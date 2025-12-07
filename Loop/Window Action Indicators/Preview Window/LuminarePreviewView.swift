@@ -12,7 +12,7 @@ import SwiftUI
 struct LuminarePreviewView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
     @Environment(\.appearsActive) private var appearsActive
-    @ObservedObject var model: LuminareManager = .shared
+    @ObservedObject var model: SettingsWindowManager = .shared
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @State var actionRect: CGRect = .zero
