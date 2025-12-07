@@ -159,14 +159,14 @@ struct UpdateView: View {
                 let targetIsDevBuild = targetRelease.prerelease
                 let devBuildEmoji = "🧪 "
 
-                let currentVersionBase = Bundle.main.appVersion?.replacingOccurrences(of: devBuildEmoji, with: "") ?? "Unknown"
+                let currentVersionBase = Bundle.main.appVersion?.replacing(devBuildEmoji, with: "") ?? "Unknown"
                 // Apply devBuildEmoji based on UserDefaults setting
                 let currentVersion = "\(isDevBuild ? devBuildEmoji : "")\(currentVersionBase) (\(Bundle.main.appBuild ?? 0))"
                 Text(currentVersion)
 
                 Image(systemName: "arrow.right")
 
-                let newVersionBase = targetRelease.tagName.replacingOccurrences(of: devBuildEmoji, with: "")
+                let newVersionBase = targetRelease.tagName.replacing(devBuildEmoji, with: "")
                 // Apply devBuildEmoji to the new version if it's a dev build and the setting is enabled
                 let newVersion = "\(targetIsDevBuild && isDevBuild ? devBuildEmoji : "")\(newVersionBase) (\(targetRelease.buildNumber ?? 0))"
                 Text(newVersion)

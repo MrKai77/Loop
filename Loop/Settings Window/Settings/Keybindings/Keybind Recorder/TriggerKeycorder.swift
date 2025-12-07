@@ -25,9 +25,18 @@ struct TriggerKeycorder: View {
     @State private var isActive: Bool = false
     @State private var tooManyKeysPopup: Bool = false
 
+    @State private var totalWidth: CGFloat = 0
+    @State private var triggerKeyIndicatorWidth: CGFloat = 0
+    @State private var changeButtonWidth: CGFloat = 0
+
     private var sortedKeys: [CGKeyCode] {
         let selectionKey: Set<CGKeyCode> = sideDependentTriggerKey ? selectionKey : selectionKey.baseModifiers
         return selectionKey.sorted()
+    }
+
+    private var shouldShowChangeButton: Bool {
+        let totalLeadingWidth = triggerKeyIndicatorWidth + 4.0
+        return (totalWidth - totalLeadingWidth) < changeButtonWidth
     }
 
     init(_ key: Binding<Set<CGKeyCode>>) {
@@ -36,69 +45,80 @@ struct TriggerKeycorder: View {
     }
 
     var body: some View {
-        HStack {
-            Button {
-                guard !isActive else { return }
-                startObservingKeys()
-            } label: {
-                if selectionKey.isEmpty {
-                    Text(isActive ? "Set a trigger key…" : "None")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .fixedSize(horizontal: true, vertical: false)
-                } else {
-                    HStack(spacing: 12) {
-                        ForEach(sortedKeys, id: \.self) { key in
-                            TriggerKeycorderKeyView(key: key)
+        ZStack {
+            triggerKeyIndicator
+                .onGeometryChange(for: CGFloat.self, of: \.size.width) { triggerKeyIndicatorWidth = $0 }
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                            if key != sortedKeys.last {
-                                Divider()
-                                    .padding(1)
-                            }
-                        }
-                    }
-                    .frame(height: 32)
-                    .padding(.horizontal, 12)
-                }
-            }
-            .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))
-            .animation(luminareAnimation, value: sideDependentTriggerKey)
-            .animation(Animation.default, value: shouldShake)
-            .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
-                Text("You can only use up to \(keyLimit) keys in your trigger key.")
-                    .multilineTextAlignment(.center)
-                    .padding(8)
-            }
-            .onHover { hovering in
-                isHovering = hovering
-            }
-            .onChange(of: model.currentEventMonitor) { _ in
-                if model.currentEventMonitor != eventMonitor {
-                    finishedObservingKeys(wasForced: true)
-                }
-            }
-            .onChange(of: validCurrentKey) { _ in
-                if selectionKey != validCurrentKey {
-                    selectionKey = validCurrentKey
-                }
-            }
-
-            .fixedSize()
-
-            Spacer()
-
-            Button {
-                guard !isActive else { return }
-                startObservingKeys()
-            } label: {
-                Text("Change")
-                    .frame(height: 32)
-                    .padding(.horizontal, 12)
-            }
-            .fixedSize()
+            changeButton
+                .onGeometryChange(for: CGFloat.self, of: \.size.width) { changeButtonWidth = $0 }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .opacity(shouldShowChangeButton ? 0 : 1)
         }
+        .onGeometryChange(for: CGFloat.self, of: \.size.width) { totalWidth = $0 }
     }
 
-    func startObservingKeys() {
+    private var triggerKeyIndicator: some View {
+        Button {
+            guard !isActive else { return }
+            startObservingKeys()
+        } label: {
+            if selectionKey.isEmpty {
+                Text(isActive ? "Set a trigger key…" : "None")
+                    .frame(height: 32)
+                    .padding(.horizontal, 12)
+            } else {
+                HStack(spacing: 12) {
+                    ForEach(sortedKeys, id: \.self) { key in
+                        TriggerKeycorderKeyView(key: key)
+
+                        if key != sortedKeys.last {
+                            Divider()
+                                .padding(.vertical, 1)
+                        }
+                    }
+                }
+                .frame(height: 32)
+                .padding(.horizontal, 12)
+            }
+        }
+        .modifier(ShakeEffect(shakes: shouldShake ? 2 : 0))
+        .animation(luminareAnimation, value: sideDependentTriggerKey)
+        .animation(Animation.default, value: shouldShake)
+        .popover(isPresented: $tooManyKeysPopup, arrowEdge: .bottom) {
+            Text("You can only use up to \(keyLimit) keys in your trigger key.")
+                .multilineTextAlignment(.center)
+                .padding(8)
+        }
+        .onHover { hovering in
+            isHovering = hovering
+        }
+        .onChange(of: model.currentEventMonitor) { _ in
+            if model.currentEventMonitor != eventMonitor {
+                finishedObservingKeys(wasForced: true)
+            }
+        }
+        .onChange(of: validCurrentKey) { _ in
+            if selectionKey != validCurrentKey {
+                selectionKey = validCurrentKey
+            }
+        }
+        .fixedSize()
+    }
+
+    private var changeButton: some View {
+        Button {
+            guard !isActive else { return }
+            startObservingKeys()
+        } label: {
+            Text("Change")
+                .frame(height: 32)
+                .padding(.horizontal, 12)
+        }
+        .fixedSize()
+    }
+
+    private func startObservingKeys() {
         selectionKey = []
         isActive = true
 
@@ -131,7 +151,7 @@ struct TriggerKeycorder: View {
         model.currentEventMonitor = eventMonitor
     }
 
-    func finishedObservingKeys(wasForced: Bool = false) {
+    private func finishedObservingKeys(wasForced: Bool = false) {
         var willSet = !wasForced
 
         if selectionKey.count > keyLimit {
