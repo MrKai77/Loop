@@ -89,7 +89,7 @@ final class SettingsWindowManager: ObservableObject {
         startTimer()
         NSApp.setActivationPolicy(.regular)
 
-        Log.info("Settings window opened", category: .settingsWindowManager)
+        Log.success("Settings window opened", category: .settingsWindowManager)
     }
 
     func close() {
@@ -104,7 +104,7 @@ final class SettingsWindowManager: ObservableObject {
             NSApp.setActivationPolicy(.accessory)
         }
 
-        Log.info("Settings window closed", category: .settingsWindowManager)
+        Log.success("Settings window closed", category: .settingsWindowManager)
     }
 
     private func startTimer() {

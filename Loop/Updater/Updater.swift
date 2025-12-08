@@ -206,7 +206,7 @@ final class Updater: ObservableObject {
             updateState = isUpdateAvailable ? .available : .unavailable
 
             if isUpdateAvailable {
-                Log.info("Update available: \(release.name)", category: .updater)
+                Log.notice("Update available: \(release.name)", category: .updater)
 
                 targetRelease = release
                 processChangelog(release.body)

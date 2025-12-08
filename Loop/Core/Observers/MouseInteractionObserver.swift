@@ -64,7 +64,7 @@ final class MouseInteractionObserver {
         previousAngleToMouse = .zero
         previousDistanceToMouse = .zero
 
-        Log.info("Stopped, all stored states cleared.", category: .mouseInteractionObserver)
+        Log.success("Stopped, all stored states cleared.", category: .mouseInteractionObserver)
     }
 
     private func mouseEvent(_ event: CGEvent) {

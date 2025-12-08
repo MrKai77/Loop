@@ -99,6 +99,6 @@ final class RadialMenuController {
     func setAction(to newAction: WindowAction) {
         viewModel?.setAction(to: newAction)
 
-        Log.info("Set action to '\(newAction.description)'", category: .radialMenuController)
+        Log.ui("Set action to '\(newAction.description)'", category: .radialMenuController)
     }
 }

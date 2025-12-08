@@ -66,7 +66,7 @@ struct BehaviorConfigurationView: View {
                             try SMAppService().unregister()
                         }
                     } catch {
-                        Log.error("Failed to \(newValue ? "register" : "unregister") login item: \(error.localizedDescription)", category: .behaviorConfigurationView)
+                        Log.error("Failed to \(launchAtLogin ? "register" : "unregister") login item: \(error.localizedDescription)", category: .behaviorConfigurationView)
                     }
                 }
 

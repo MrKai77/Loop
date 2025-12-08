@@ -188,6 +188,6 @@ final class PreviewController {
             windowController.window?.alphaValue = shouldBecomeTransparent ? 0 : 1
         }
 
-        Log.info("Set action to '\(newAction.description)'", category: .previewController)
+        Log.ui("Set action to '\(newAction.description)'", category: .previewController)
     }
 }

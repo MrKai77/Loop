@@ -96,7 +96,7 @@ final class WallpaperProcessor {
             // Use the second dominant color if possible, otherwise return the primary color.
             let secondaryColor = colors.count > 1 ? Color(colors[1]) : primaryColor
 
-            Log.info("Successfully calculated dominant colors from wallpaper", category: .wallpaperProcessor)
+            Log.success("Successfully calculated dominant colors from wallpaper", category: .wallpaperProcessor)
 
             return (primaryColor, secondaryColor)
         } catch {

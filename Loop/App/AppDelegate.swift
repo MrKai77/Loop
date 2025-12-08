@@ -66,7 +66,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     /// Applies baseline logging configuration for Scribe.
     private func configureLogging() {
-        LogManager.shared.minimumLevel = .info
+        LogManager.shared.configuration.includeFileAndLineNumber = false
     }
 
     @objc func handleGetURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent _: NSAppleEventDescriptor) {
