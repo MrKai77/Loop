@@ -164,6 +164,10 @@ final class Updater: ObservableObject {
                 logger.error("Error fetching release info: \(error.localizedDescription)")
             }
         }
+
+        if let task = updateFetcherTask {
+            return await task.value
+        }
     }
 
     private func processFetchedData(_ data: Data) async throws {
