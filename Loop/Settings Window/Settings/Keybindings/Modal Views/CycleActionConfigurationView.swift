@@ -86,9 +86,7 @@ struct CycleActionConfigurationView: View {
                 .luminareListRoundedCorner(bottom: .always)
                 .luminareListFixedHeight(until: .infinity)
             }
-            .onChange(of: action) { newAction in
-                windowAction = newAction
-            }
+            .onChange(of: action) { windowAction = $0 }
 
             Button {
                 isPresented = false

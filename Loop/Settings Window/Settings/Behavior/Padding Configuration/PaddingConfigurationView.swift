@@ -47,9 +47,9 @@ struct PaddingConfigurationView: View {
             .luminareAspectRatio(contentMode: .fill)
             .buttonStyle(.luminareCompact)
         }
-        .onChange(of: paddingModel) { newValue in
+        .onChange(of: paddingModel) { _ in
             // This fixes some weird animations.
-            Defaults[.padding] = newValue
+            Defaults[.padding] = paddingModel
         }
     }
 

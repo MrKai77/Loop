@@ -28,9 +28,9 @@ struct RadialMenuConfigurationView: View {
                     clampsLower: true,
                     suffix: Text("px", comment: "Unit symbol: pixels")
                 )
-                .onChange(of: radialMenuCornerRadius) { newValue in
-                    if newValue - 1 < radialMenuThickness {
-                        radialMenuThickness = newValue - 1
+                .onChange(of: radialMenuCornerRadius) { _ in
+                    if radialMenuCornerRadius - 1 < radialMenuThickness {
+                        radialMenuThickness = radialMenuCornerRadius - 1
                     }
                 }
 
@@ -43,9 +43,9 @@ struct RadialMenuConfigurationView: View {
                     clampsLower: true,
                     suffix: Text("px", comment: "Unit symbol: pixels")
                 )
-                .onChange(of: radialMenuThickness) { newValue in
-                    if newValue + 1 > radialMenuCornerRadius {
-                        radialMenuCornerRadius = newValue + 1
+                .onChange(of: radialMenuThickness) { _ in
+                    if radialMenuThickness + 1 > radialMenuCornerRadius {
+                        radialMenuCornerRadius = radialMenuThickness + 1
                     }
                 }
             }

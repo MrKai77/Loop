@@ -73,9 +73,7 @@ struct StashActionConfigurationView: View {
                     .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
                 }
             }
-            .onChange(of: action) { newAction in
-                windowAction = newAction
-            }
+            .onChange(of: action) { windowAction = $0 }
 
             configurationSections()
             actionButtons()

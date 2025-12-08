@@ -81,19 +81,19 @@ struct Keycorder: View {
         .onHover { hovering in
             isHovering = hovering
         }
-        .onChange(of: model.currentEventMonitor) { newMonitor in
-            if newMonitor != eventMonitor {
+        .onChange(of: model.currentEventMonitor) { _ in
+            if model.currentEventMonitor != eventMonitor {
                 finishedObservingKeys(wasForced: true)
             }
         }
-        .onChange(of: appearsActive) { newValue in
-            if newValue {
+        .onChange(of: appearsActive) { _ in
+            if appearsActive {
                 finishedObservingKeys(wasForced: true)
             }
         }
-        .onChange(of: validCurrentKeybind) { newValue in
-            if selectionKeybind != newValue {
-                selectionKeybind = newValue
+        .onChange(of: validCurrentKeybind) { _ in
+            if selectionKeybind != validCurrentKeybind {
+                selectionKeybind = validCurrentKeybind
             }
         }
         .buttonStyle(.plain)

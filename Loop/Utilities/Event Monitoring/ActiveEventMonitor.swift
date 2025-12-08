@@ -6,7 +6,6 @@
 //
 
 import CoreGraphics
-
 import Scribe
 
 /// Active event monitor that can process and alter events when needed.

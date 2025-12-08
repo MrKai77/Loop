@@ -58,9 +58,9 @@ struct BehaviorConfigurationView: View {
     private var generalSection: some View {
         LuminareSection(String(localized: "General", comment: "Section header shown in settings")) {
             LuminareToggle("Launch at login", isOn: $launchAtLogin)
-                .onChange(of: launchAtLogin) { newValue in
+                .onChange(of: launchAtLogin) { _ in
                     do {
-                        if newValue {
+                        if launchAtLogin {
                             try SMAppService().register()
                         } else {
                             try SMAppService().unregister()

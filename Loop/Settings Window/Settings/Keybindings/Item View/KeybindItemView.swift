@@ -43,16 +43,16 @@ struct KeybindItemView: View {
         }
         .animation(luminareAnimation, value: action)
         .padding(.horizontal, 12)
-        .onChange(of: isHovering) { hovering in
-            if !hovering {
+        .onChange(of: isHovering) { _ in
+            if !isHovering {
                 isPickerPresented = false
             }
         }
-        .onChange(of: action.direction) { newDirection in
-            if newDirection.isCustomizable {
+        .onChange(of: action.direction) { _ in
+            if action.direction.isCustomizable {
                 isConfiguringCustom = true
             }
-            if newDirection == .cycle {
+            if action.direction == .cycle {
                 isConfiguringCycle = true
             }
         }

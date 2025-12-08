@@ -70,17 +70,16 @@ struct TriggerKeycorder: View {
             .onHover { hovering in
                 isHovering = hovering
             }
-            .onChange(of: model.currentEventMonitor) { newMonitor in
-                if newMonitor != eventMonitor {
+            .onChange(of: model.currentEventMonitor) { _ in
+                if model.currentEventMonitor != eventMonitor {
                     finishedObservingKeys(wasForced: true)
                 }
             }
-            .onChange(of: validCurrentKey) { newValue in
-                if selectionKey != newValue {
-                    selectionKey = newValue
+            .onChange(of: validCurrentKey) { _ in
+                if selectionKey != validCurrentKey {
+                    selectionKey = validCurrentKey
                 }
             }
-
             .fixedSize()
             .buttonStyle(.luminareCompact)
 

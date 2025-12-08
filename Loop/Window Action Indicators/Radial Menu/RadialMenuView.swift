@@ -34,15 +34,15 @@ struct RadialMenuView: View {
                 // NSVisualEffect on background
                 /// If building on macOS 15 and below, comment out the following if statement
                 /// Remember to uncomment before committing the PR
-//                if #available(macOS 26.0, *) {
-//                    Color.clear
-//                        .glassEffect(
-//                            .regular,
-//                            in: .rect(cornerRadius: radialMenuCornerRadius)
-//                        )
-//                } else {
-                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-//                }
+                if #available(macOS 26.0, *) {
+                    Color.clear
+                        .glassEffect(
+                            .regular,
+                            in: .rect(cornerRadius: radialMenuCornerRadius)
+                        )
+                } else {
+                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                }
 
                 // This rectangle with a gradient is masked with the current direction radial menu view
                 Rectangle()

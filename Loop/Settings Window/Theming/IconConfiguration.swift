@@ -79,9 +79,9 @@ final class IconConfigurationModel: ObservableObject {
             // Reference: https://x.com/leoshimo/status/1975642593569738755
             /// If building on macOS 15 and below, comment out the following if statement
             /// Remember to uncomment before committing the PR
-//            if #available(macOS 26.0, *) {
-//                button.tintProminence = .primary
-//            }
+            if #available(macOS 26.0, *) {
+                button.tintProminence = .primary
+            }
 
             alert.alertStyle = .warning
             let modalResponse = await alert.beginSheetModal(for: window)
@@ -196,13 +196,13 @@ struct IconVew: View {
                 loopsLeft = nextUnlockCount - timesLooped
             }
         }
-        .onChange(of: timesLooped) { newValue in
+        .onChange(of: timesLooped) { _ in
             withAnimation(luminareAnimation) {
                 hasBeenUnlocked = icon.isSelectable
 
                 if !hasBeenUnlocked {
-                    nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: newValue)
-                    loopsLeft = nextUnlockCount - newValue
+                    nextUnlockCount = model.nextIconUnlockLoopCount(timesLooped: timesLooped)
+                    loopsLeft = nextUnlockCount - timesLooped
                 }
             }
         }

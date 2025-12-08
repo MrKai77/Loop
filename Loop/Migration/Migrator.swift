@@ -447,9 +447,9 @@ private extension Migrator {
         // Reference: https://x.com/leoshimo/status/1975642593569738755
         /// If building on macOS 15 and below, comment out the following if statement
         /// Remember to uncomment before committing the PR
-//        if #available(macOS 26.0, *) {
-//            alert.buttons.first?.tintProminence = .primary
-//        }
+        if #available(macOS 26.0, *) {
+            alert.buttons.first?.tintProminence = .primary
+        }
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             return await alert.beginSheetModal(for: window)
