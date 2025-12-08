@@ -21,7 +21,7 @@ struct StashActionConfigurationView: View {
     @State private var currentTab: Tab = .position
 
     private enum Tab: LocalizedStringKey, CaseIterable {
-        case position = "Position", size = "Size"
+        case position = "Position", size = "Unstashed Size"
 
         var image: Image {
             switch self {
