@@ -80,7 +80,7 @@ final class Updater: ObservableObject {
 
     private func makeIncludeDevelopmentVersionsObserver() -> Task<(), Never>? {
         Task {
-            for await _ in Defaults.updates(.includeDevelopmentVersions) {
+            for await _ in Defaults.updates(.includeDevelopmentVersions, initial: false) {
                 guard !Task.isCancelled else { break }
                 await fetchLatestInfo()
             }
