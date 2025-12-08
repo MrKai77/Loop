@@ -109,9 +109,11 @@ final class AccessibilityManager {
 
         // Reference: https://x.com/leoshimo/status/1975642593569738755
         let button = alert.addButton(withTitle: .init(localized: "OK"))
-        if #available(macOS 26.0, *) {
-            button.tintProminence = .primary
-        }
+        /// If building on macOS 15 and below, comment out the following if statement
+        /// Remember to uncomment before committing the PR
+//        if #available(macOS 26.0, *) {
+//            button.tintProminence = .primary
+//        }
 
         alert.runModal()
 

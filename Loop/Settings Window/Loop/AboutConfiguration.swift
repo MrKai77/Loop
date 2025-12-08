@@ -254,8 +254,8 @@ struct AboutConfigurationView: View {
                     model.updateButtonTitle = .init(localized: "Updates are disabled")
                 }
             }
-            .onChange(of: updater.updateState) { _ in
-                if updater.updateState == .available {
+            .onChange(of: updater.updateState) { newState in
+                if newState == .available {
                     model.updateButtonTitle = .init(localized: "Update…")
                 }
             }

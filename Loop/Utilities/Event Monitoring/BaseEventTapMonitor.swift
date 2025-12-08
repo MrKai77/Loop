@@ -6,12 +6,12 @@
 //
 
 import CoreGraphics
-import OSLog
+import Foundation
+import Scribe
 
 /// Base class to share common functionality. DO NOT USE DIRECTLY!
 class BaseEventTapMonitor: Identifiable, Equatable {
     let id = UUID()
-    let logger = Logger(category: "BaseEventTapMonitor")
 
     private var eventTap: CFMachPort?
     private var runLoop: CFRunLoop?
@@ -48,7 +48,7 @@ class BaseEventTapMonitor: Identifiable, Equatable {
         guard let eventTap else { return }
 
         // swiftformat:disable:next redundantSelf
-        logger.info("Starting BaseEventTapMonitor with ID \(self.id)")
+        Log.info("Starting BaseEventTapMonitor with ID \(self.id)", category: .baseEventTapMonitor)
 
         CGEvent.tapEnable(tap: eventTap, enable: true)
         isEnabled = true
@@ -58,7 +58,7 @@ class BaseEventTapMonitor: Identifiable, Equatable {
         guard let eventTap else { return }
 
         // swiftformat:disable:next redundantSelf
-        logger.info("Stopping BaseEventTapMonitor with ID \(self.id)")
+        Log.info("Stopping BaseEventTapMonitor with ID \(self.id)", category: .baseEventTapMonitor)
 
         CGEvent.tapEnable(tap: eventTap, enable: false)
         isEnabled = false

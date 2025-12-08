@@ -7,27 +7,28 @@
 
 import Defaults
 import Foundation
-import OSLog
+import Scribe
 
 enum DataPatcher {
-    private static let logger = Logger(category: "DataPatcher")
-
     static func run() {
         let initialPatches = Defaults[.patchesApplied]
 
         if !initialPatches.contains(.accentColorMode) {
             // Migrate to accent color mode
             // We need to migrate `useSystemAccentColor` and `processWallpaper` over to `accentColorMode`
-            if Defaults[.useSystemAccentColor] {
+            let useSystemAccentColor: Bool = Defaults[.useSystemAccentColor]
+            let processWallpaper: Bool = Defaults[.processWallpaper]
+
+            if useSystemAccentColor {
                 Defaults[.accentColorMode] = .system
-            } else if Defaults[.processWallpaper] {
+            } else if processWallpaper {
                 Defaults[.accentColorMode] = .wallpaper
             } else {
                 Defaults[.accentColorMode] = .custom
             }
 
             Defaults[.patchesApplied].formUnion(.accentColorMode)
-            logger.info("DataPatcher: Ran patch accentColorMode")
+            Log.info("Ran patch accentColorMode", category: .dataPatcher)
         }
     }
 

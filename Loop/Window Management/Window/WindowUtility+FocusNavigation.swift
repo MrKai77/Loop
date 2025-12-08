@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import OSLog
+import Scribe
 import SwiftUI
 
 extension WindowUtility {
@@ -21,12 +21,12 @@ extension WindowUtility {
     ///   - direction: The direction to search for the next window (focusUp, focusDown, focusLeft, focusRight)
     static func focusWindow(from currentWindow: Window?, edge: Edge) -> Window? {
         guard let directionalWindow = WindowUtility.directionalWindow(from: currentWindow, edge: edge) else {
-            logger.info("[FocusNavigation] No window found to focus in direction \(String(describing: edge))")
+            Log.info("No window found to focus in direction \(String(describing: edge))", category: .windowUtility)
             return nil
         }
 
         let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
-        logger.info("[FocusNavigation] Focusing window: \(nextWindowTitle)")
+        Log.info("Focusing window: \(nextWindowTitle)", category: .windowUtility)
 
         directionalWindow.activate()
 
@@ -52,7 +52,7 @@ extension WindowUtility {
             }
 
         guard !availableWindows.isEmpty else {
-            logger.info("[FocusNavigation] No windows available to focus")
+            Log.info("No windows available to focus", category: .windowUtility)
             return nil
         }
 
@@ -64,7 +64,7 @@ extension WindowUtility {
                 .filter { $0.cgWindowID != currentWindow.cgWindowID }
 
             guard !otherWindows.isEmpty else {
-                logger.info("[FocusNavigation] No other windows available to focus")
+                Log.info("No other windows available to focus", category: .windowUtility)
                 return nil
             }
 
@@ -75,20 +75,20 @@ extension WindowUtility {
                 edge: edge,
                 canWrap: true
             ) {
-                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.description)")
+                Log.info("Found window to focus in direction \(edgeString): \(nextWindow.description)", category: .windowUtility)
                 return nextWindow
             } else {
-                logger.info("[FocusNavigation] No window found in direction \(edgeString)")
+                Log.info("No window found in direction \(edgeString)", category: .windowUtility)
                 return nil
             }
         } else {
             guard let screen = NSScreen.screenWithMouse ?? NSScreen.main else {
-                logger.error("[FocusNavigation] Could not determine active screen")
+                Log.error("Could not determine active screen", category: .windowUtility)
                 return nil
             }
 
             let screenCenter = screen.safeScreenFrame.center
-            logger.info("[FocusNavigation] Navigating from screen center: \(screenCenter.debugDescription)")
+            Log.info("Navigating from screen center: \(screenCenter.debugDescription)", category: .windowUtility)
 
             // Find the closest window in the specified direction from screen center
             let nextWindow = availableWindows
@@ -96,9 +96,9 @@ extension WindowUtility {
                 .min { screenCenter.distance(to: $0.frame.center) < screenCenter.distance(to: $1.frame.center) }
 
             if let nextWindow {
-                logger.info("[FocusNavigation] Found window to focus in direction \(edgeString): \(nextWindow.description)")
+                Log.info("Found window to focus in direction \(edgeString): \(nextWindow.description)", category: .windowUtility)
             } else {
-                logger.info("[FocusNavigation] No window found in direction \(edgeString) from screen center")
+                Log.info("No window found in direction \(edgeString) from screen center", category: .windowUtility)
             }
 
             return nextWindow

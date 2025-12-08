@@ -6,14 +6,12 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 final class WindowDragManager {
     static let shared = WindowDragManager()
     private init() {}
-
-    private let logger = Logger(category: "WindowDragManager")
 
     private var initialMousePosition: CGPoint?
     private var didPassDragDistanceThreshold: Bool = false
@@ -166,7 +164,7 @@ final class WindowDragManager {
             self.draggingWindow = draggingWindow
             initialWindowFrame = draggingWindow.frame
 
-            logger.info("Determined window being dragged: \(draggingWindow.description)")
+            Log.info("Determined window being dragged: \(draggingWindow.description)", category: .windowDragManager)
         }
     }
 
@@ -252,7 +250,7 @@ final class WindowDragManager {
             )
 
             // swiftformat:disable:next redundantSelf
-            logger.info("Window snapping direction changed: \(self.direction.debugDescription)")
+            Log.info("Window snapping direction changed: \(self.direction.debugDescription)", category: .windowDragManager)
 
             previewController.open(screen: screen, window: draggingWindow, startingAction: nil)
             previewController.setAction(to: WindowAction(direction))

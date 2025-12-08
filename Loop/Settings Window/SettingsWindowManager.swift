@@ -8,12 +8,11 @@
 import Combine
 import Defaults
 import Luminare
-import OSLog
+import Scribe
 import SwiftUI
 
 final class SettingsWindowManager: ObservableObject {
     static let shared = SettingsWindowManager()
-    private let logger = Logger(category: "SettingsWindowManager")
     private var controller: NSWindowController?
     private var previewActionTimerTask: Task<(), Error>?
 
@@ -90,7 +89,7 @@ final class SettingsWindowManager: ObservableObject {
         startTimer()
         NSApp.setActivationPolicy(.regular)
 
-        logger.log("Settings window opened")
+        Log.info("Settings window opened", category: .settingsWindowManager)
     }
 
     func close() {
@@ -105,7 +104,7 @@ final class SettingsWindowManager: ObservableObject {
             NSApp.setActivationPolicy(.accessory)
         }
 
-        logger.log("Settings window closed")
+        Log.info("Settings window closed", category: .settingsWindowManager)
     }
 
     private func startTimer() {

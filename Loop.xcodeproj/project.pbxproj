@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
+		3EFD33252EE6DFA4007D9601 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 3EFD33242EE6DFA4007D9601 /* Scribe */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06D76892DFF7A77007EEDA9 /* SkyLight.framework */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EFD33252EE6DFA4007D9601 /* Scribe in Frameworks */,
 				2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */,
 				2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */,
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
@@ -108,6 +110,7 @@
 			packageProductDependencies = (
 				2A28B6282EE5050C00A1E26B /* Defaults */,
 				2A28B62B2EE5057C00A1E26B /* Luminare */,
+				3EFD33242EE6DFA4007D9601 /* Scribe */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -151,6 +154,7 @@
 			packageReferences = (
 				2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */,
 				2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */,
+				3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -449,6 +453,14 @@
 				minimumVersion = 0.2.0;
 			};
 		};
+		3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SenpaiHunters/Scribe";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -461,6 +473,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */;
 			productName = Luminare;
+		};
+		3EFD33242EE6DFA4007D9601 /* Scribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */;
+			productName = Scribe;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

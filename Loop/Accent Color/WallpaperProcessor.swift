@@ -7,7 +7,7 @@
 
 import AppKit
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 // MARK: - Wallpaper processor errors
@@ -47,7 +47,6 @@ public enum WallpaperProcessorError: LocalizedError {
 final class WallpaperProcessor {
     private var lastProcessedDate: Date = .distantPast
     private var lastResult: (primary: Color, secondary: Color) = (.black, .black)
-    private let logger = Logger(category: "WallpaperProcessor")
 
     /// Fetches the latest wallpaper colors, respecting a throttle period.
     /// This helps prevent excessive processing if called frequently, when the wallpaper is most likely unchanged.
@@ -97,12 +96,12 @@ final class WallpaperProcessor {
             // Use the second dominant color if possible, otherwise return the primary color.
             let secondaryColor = colors.count > 1 ? Color(colors[1]) : primaryColor
 
-            logger.info("Successfully calculated dominant colors from wallpaper")
+            Log.info("Successfully calculated dominant colors from wallpaper", category: .wallpaperProcessor)
 
             return (primaryColor, secondaryColor)
         } catch {
             // If an error occurs, print the error description.
-            logger.error("Failed to fetch wallpaper colors: \(error.localizedDescription)")
+            Log.error("Failed to fetch wallpaper colors: \(error.localizedDescription)", category: .wallpaperProcessor)
             return nil
         }
     }
@@ -175,7 +174,7 @@ extension NSImage {
             let dataProvider = resizedCGImage.dataProvider,
             let data = CFDataGetBytePtr(dataProvider.data)
         else {
-            NSLog("Error: \(WallpaperProcessorError.imageResizeFailed)")
+            Log.error("Error: \(WallpaperProcessorError.imageResizeFailed)", category: .wallpaperProcessor)
             return nil
         }
 
@@ -298,7 +297,7 @@ extension NSImage {
             samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
             colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
         ) else {
-            NSLog("Error: \(WallpaperProcessorError.bitmapCreationFailed)")
+            Log.error("Error: \(WallpaperProcessorError.bitmapCreationFailed)", category: .wallpaperProcessor)
             return nil
         }
         bitmapRep.size = newSize

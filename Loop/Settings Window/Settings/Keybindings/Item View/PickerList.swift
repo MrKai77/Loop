@@ -6,13 +6,11 @@
 //
 
 import Luminare
-import OSLog
+import Scribe
 import SwiftUI
 
 struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
     @EnvironmentObject private var popover: LuminarePopupPanel
-
-    private let logger = Logger(category: "PickerView")
 
     @Binding var selection: V
     @Binding var searchResults: [V]
@@ -68,7 +66,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
             }
         }
         .onDisappear {
-            logger.info("Stopping event monitor")
+            Log.info("Stopping event monitor", category: .pickerView)
             eventMonitor?.stop()
             eventMonitor = nil
         }
@@ -139,7 +137,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
 
         /// Ensure nextIndex is valid
         guard nextIndex >= 0, nextIndex < items.count else {
-            logger.error("Invalid nextIndex: \(nextIndex), items count: \(items.count)")
+            Log.error("Invalid nextIndex: \(nextIndex), items count: \(items.count)", category: .pickerView)
             return
         }
 
@@ -148,7 +146,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
 
         /// Only scroll if the selection is valid and not nil
         guard let validSelection = arrowSelection else {
-            logger.info("arrowSelection is nil, skipping scroll")
+            Log.info("arrowSelection is nil, skipping scroll", category: .pickerView)
             return
         }
 

@@ -7,19 +7,17 @@
 
 import AppKit
 import Defaults
-import OSLog
+import Scribe
 
 /// This enum is in charge of fetching windows in the user's workspace, which will be used by Loop.
 enum WindowUtility {
-    static let logger = Logger(category: "WindowUtility")
-
     /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
     /// - Returns: The target window
     static func userDefinedTargetWindow() -> Window? {
         var result: Window?
 
         do {
-            logger.info("Getting window at cursor...")
+            Log.info("Getting window at cursor...", category: .windowUtility)
 
             if Defaults[.resizeWindowUnderCursor],
                let mouseLocation = CGEvent.mouseLocation,
@@ -27,16 +25,16 @@ enum WindowUtility {
                 result = window
             }
         } catch {
-            logger.warning("Failed to get window at cursor: \(error.localizedDescription)")
+            Log.warn("Failed to get window at cursor: \(error.localizedDescription)", category: .windowUtility)
         }
 
         if result == nil {
             do {
-                logger.info("Getting frontmost window...")
+                Log.info("Getting frontmost window...", category: .windowUtility)
 
                 result = try frontmostWindow()
             } catch {
-                logger.warning("Failed to get frontmost window: \(error.localizedDescription)")
+                Log.warn("Failed to get frontmost window: \(error.localizedDescription)", category: .windowUtility)
             }
         }
 

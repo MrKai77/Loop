@@ -7,16 +7,14 @@
 
 import CoreGraphics
 import Darwin
-import OSLog
+import Scribe
 
 enum SkyLightSymbolLoader {
-    private static let logger = Logger(category: "SkyLightSymbolLoader")
-
     private static let frameworkPath = "/System/Library/PrivateFrameworks/SkyLight.framework/SkyLight"
 
     private static let handle: UnsafeMutableRawPointer? = {
         guard let handle = dlopen(frameworkPath, RTLD_LAZY) else {
-            logger.error("failed to open \(frameworkPath)")
+            Log.error("failed to open \(frameworkPath)", category: .skyLightSymbolLoader)
             return nil
         }
         return handle
@@ -24,7 +22,7 @@ enum SkyLightSymbolLoader {
 
     private static func loadSymbol<T>(_ name: StaticString) -> T? {
         guard let handle else {
-            logger.error("no handle; cannot load symbol \(name)")
+            Log.error("no handle; cannot load symbol \(name)", category: .skyLightSymbolLoader)
             return nil
         }
 
@@ -33,9 +31,9 @@ enum SkyLightSymbolLoader {
 
         guard let sym = dlsym(handle, name.description) else {
             if let err = dlerror() {
-                logger.error("failed to load symbol \(name): \(String(cString: err))")
+                Log.error("failed to load symbol \(name): \(String(cString: err))", category: .skyLightSymbolLoader)
             } else {
-                logger.error("failed to load symbol \(name)")
+                Log.error("failed to load symbol \(name)", category: .skyLightSymbolLoader)
             }
             return nil
         }

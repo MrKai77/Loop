@@ -6,12 +6,10 @@
 //
 
 import Foundation
-import OSLog
+import Scribe
 import SwiftUI
 
 struct StashedWindow: Identifiable {
-    private let logger = Logger(category: "StashedWindow")
-
     var id: CGWindowID {
         window.cgWindowID
     }
@@ -37,7 +35,7 @@ struct StashedWindow: Identifiable {
         case .right:
             frame.origin.x = bounds.maxX - clampedPeekSize
         case .none:
-            logger.warning("Trying to compute the stash frame for a non-stash related action.")
+            Log.warn("Trying to compute the stash frame for a non-stash related action.", category: .stashedWindow)
         }
 
         return frame

@@ -5,6 +5,7 @@
 //  Created by Kai Azim on 2024-06-03.
 //
 
+import Scribe
 import SwiftUI
 import UserNotifications
 
@@ -36,11 +37,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             options: [.alert]
         ) { accepted, error in
             if !accepted {
-                Self.logger.warning("Notification access denied.")
+                Log.warn("Notification access denied.", category: .appDelegate)
             }
 
             if let error {
-                Self.logger.error("Failed to request notification authorization: \(error.localizedDescription)")
+                Log.error("Failed to request notification authorization: \(error.localizedDescription)", category: .appDelegate)
             }
         }
     }

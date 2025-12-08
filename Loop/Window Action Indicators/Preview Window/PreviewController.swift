@@ -6,7 +6,7 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 final class PreviewController {
@@ -15,7 +15,6 @@ final class PreviewController {
 
     private var screen: NSScreen?
     private var window: Window?
-    private let logger = Logger(category: "PreviewController")
 
     func open(
         screen: NSScreen,
@@ -93,7 +92,7 @@ final class PreviewController {
         close()
         open(screen: newScreen, window: window, startingAction: nil)
 
-        logger.info("Changed preview window's screen")
+        Log.info("Changed preview window's screen", category: .previewController)
     }
 
     func setAction(to newAction: WindowAction) {
@@ -107,12 +106,12 @@ final class PreviewController {
         }
 
         /// Check screen bounds
-        logger.info("Screen frame: \(screen.frame.debugDescription)")
-        logger.info("Screen safeScreenFrame: \(screen.safeScreenFrame.debugDescription)")
+        Log.info("Screen frame: \(screen.frame.debugDescription)", category: .previewController)
+        Log.info("Screen safeScreenFrame: \(screen.safeScreenFrame.debugDescription)", category: .previewController)
 
         // Validate screen bounds before proceeding
         guard screen.safeScreenFrame.isFinite else {
-            logger.error("Invalid screen bounds detected")
+            Log.error("Invalid screen bounds detected", category: .previewController)
             return
         }
 
@@ -125,11 +124,11 @@ final class PreviewController {
         .flipY(maxY: NSScreen.screens[0].frame.maxY)
 
         // What is the screen's frame
-        logger.info("Target frame: \(targetWindowFrame.debugDescription)")
+        Log.info("Target frame: \(targetWindowFrame.debugDescription)", category: .previewController)
 
         // Validate target frame before setting
         guard targetWindowFrame.isFinite else {
-            logger.info("Invalid target frame calculated")
+            Log.info("Invalid target frame calculated", category: .previewController)
             return
         }
 
@@ -189,6 +188,6 @@ final class PreviewController {
             windowController.window?.alphaValue = shouldBecomeTransparent ? 0 : 1
         }
 
-        logger.log("PreviewController: Set action to '\(newAction.description)'")
+        Log.info("Set action to '\(newAction.description)'", category: .previewController)
     }
 }

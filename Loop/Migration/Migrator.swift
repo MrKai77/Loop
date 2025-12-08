@@ -6,7 +6,7 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 // MARK: - Saved Keybinds Format
@@ -109,8 +109,6 @@ enum MigratorError: LocalizedError {
 
 // Adds functionality for saving, loading, and managing window actions.
 enum Migrator {
-    private static let logger = Logger(category: "Migrator")
-
     private static var documentsDirectory: URL? {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     }
@@ -332,7 +330,7 @@ private extension Migrator {
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
-            logger.error("Error importing Loop keybinds: \(error)")
+            Log.error("Error importing Loop keybinds: \(error)", category: .migrator)
         }
 
         /// If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
@@ -341,7 +339,7 @@ private extension Migrator {
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
-            logger.error("Error importing Loop (pre 1.2.0) keybinds: \(error)")
+            Log.error("Error importing Loop (pre 1.2.0) keybinds: \(error)", category: .migrator)
         }
 
         /// If that fails, try to import the Rectangle keybinds format.
@@ -350,7 +348,7 @@ private extension Migrator {
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
-            logger.error("Error importing Rectangle keybinds: \(error)")
+            Log.error("Error importing Rectangle keybinds: \(error)", category: .migrator)
         }
 
         // If all attempts fail, show an error alert.
@@ -447,9 +445,11 @@ private extension Migrator {
         buttons.forEach { alert.addButton(withTitle: $0) }
 
         // Reference: https://x.com/leoshimo/status/1975642593569738755
-        if #available(macOS 26.0, *) {
-            alert.buttons.first?.tintProminence = .primary
-        }
+        /// If building on macOS 15 and below, comment out the following if statement
+        /// Remember to uncomment before committing the PR
+//        if #available(macOS 26.0, *) {
+//            alert.buttons.first?.tintProminence = .primary
+//        }
 
         if let window = NSApp.keyWindow ?? NSApp.mainWindow {
             return await alert.beginSheetModal(for: window)

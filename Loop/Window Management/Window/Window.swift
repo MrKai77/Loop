@@ -6,7 +6,7 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 enum WindowError: LocalizedError {
@@ -24,8 +24,6 @@ final class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
     let nsRunningApplication: NSRunningApplication?
-
-    private let logger = Logger(category: "Window")
 
     /// Initialize a window from an AXUIElement
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
@@ -117,7 +115,7 @@ final class Window {
             }
             return NSAccessibility.Role(rawValue: value)
         } catch {
-            logger.error("Failed to get role: \(error.localizedDescription)")
+            Log.error("Failed to get role: \(error.localizedDescription)", category: .window)
             return nil
         }
     }
@@ -129,7 +127,7 @@ final class Window {
             }
             return NSAccessibility.Subrole(rawValue: value)
         } catch {
-            logger.error("Failed to get subrole: \(error.localizedDescription)")
+            Log.error("Failed to get subrole: \(error.localizedDescription)", category: .window)
             return nil
         }
     }
@@ -138,7 +136,7 @@ final class Window {
         do {
             return try axWindow.getValue(.title)
         } catch {
-            logger.error("Failed to get title: \(error.localizedDescription)")
+            Log.error("Failed to get title: \(error.localizedDescription)", category: .window)
             return nil
         }
     }
@@ -153,7 +151,7 @@ final class Window {
                 let result: Bool? = try appWindow.getValue(.enhancedUserInterface)
                 return result ?? false
             } catch {
-                logger.error("Failed to get enhancedUserInterface: \(error.localizedDescription)")
+                Log.error("Failed to get enhancedUserInterface: \(error.localizedDescription)", category: .window)
                 return false
             }
         }
@@ -165,7 +163,7 @@ final class Window {
                 let appWindow = AXUIElementCreateApplication(pid)
                 try appWindow.setValue(.enhancedUserInterface, value: newValue)
             } catch {
-                logger.error("Failed to set enhancedUserInterface: \(error.localizedDescription)")
+                Log.error("Failed to set enhancedUserInterface: \(error.localizedDescription)", category: .window)
             }
         }
     }
@@ -210,7 +208,7 @@ final class Window {
                 let result: NSNumber? = try axWindow.getValue(.fullScreen)
                 return result?.boolValue ?? false
             } catch {
-                logger.error("Failed to get fullscreen: \(error.localizedDescription)")
+                Log.error("Failed to get fullscreen: \(error.localizedDescription)", category: .window)
                 return false
             }
         }
@@ -218,7 +216,7 @@ final class Window {
             do {
                 try axWindow.setValue(.fullScreen, value: newValue)
             } catch {
-                logger.error("Failed to set fullscreen: \(error.localizedDescription)")
+                Log.error("Failed to set fullscreen: \(error.localizedDescription)", category: .window)
             }
         }
     }
@@ -285,7 +283,7 @@ final class Window {
                 let result: NSNumber? = try axWindow.getValue(.minimized)
                 return result?.boolValue ?? false
             } catch {
-                logger.error("Failed to get minimized: \(error.localizedDescription)")
+                Log.error("Failed to get minimized: \(error.localizedDescription)", category: .window)
                 return false
             }
         }
@@ -293,7 +291,7 @@ final class Window {
             do {
                 try axWindow.setValue(.minimized, value: newValue)
             } catch {
-                logger.error("Failed to set minimized: \(error.localizedDescription)")
+                Log.error("Failed to set minimized: \(error.localizedDescription)", category: .window)
             }
         }
     }
@@ -310,7 +308,7 @@ final class Window {
                 }
                 return result
             } catch {
-                logger.error("Failed to get position: \(error.localizedDescription)")
+                Log.error("Failed to get position: \(error.localizedDescription)", category: .window)
                 return .zero
             }
         }
@@ -318,7 +316,7 @@ final class Window {
             do {
                 try axWindow.setValue(.position, value: newValue)
             } catch {
-                logger.error("Failed to set position: \(error.localizedDescription)")
+                Log.error("Failed to set position: \(error.localizedDescription)", category: .window)
             }
         }
     }
@@ -331,7 +329,7 @@ final class Window {
                 }
                 return result
             } catch {
-                logger.error("Failed to get size: \(error.localizedDescription)")
+                Log.error("Failed to get size: \(error.localizedDescription)", category: .window)
                 return .zero
             }
         }
@@ -339,7 +337,7 @@ final class Window {
             do {
                 try axWindow.setValue(.size, value: newValue)
             } catch {
-                logger.error("Failed to set size: \(error.localizedDescription)")
+                Log.error("Failed to set size: \(error.localizedDescription)", category: .window)
             }
         }
     }
@@ -349,7 +347,7 @@ final class Window {
             let result: Bool = try axWindow.canSetValue(.size)
             return result
         } catch {
-            logger.error("Failed to determine if window size can be set: \(error.localizedDescription)")
+            Log.error("Failed to determine if window size can be set: \(error.localizedDescription)", category: .window)
             return true
         }
     }
@@ -376,7 +374,7 @@ final class Window {
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
-            logger.info("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.")
+            Log.info("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.", category: .window)
             enhancedUserInterface = false
         }
 

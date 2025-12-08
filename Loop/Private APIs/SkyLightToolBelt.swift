@@ -5,13 +5,11 @@
 //  Created by Kai Azim on 2025-11-24.
 //
 
-import OSLog
+import Scribe
 import SwiftUI
 
 /// A wrapper for functions defined in `SkyLightSymbolLoader`
 enum SkyLightToolBelt {
-    private static let logger = Logger(category: "SkyLightToolBelt")
-
     ///
     /// Focuses a window. This will attempt to bring the window to the front and make it the active window.
     /// Note that this first sets the process as frontmost, *then* sends a left click event to the window itself.
@@ -27,7 +25,7 @@ enum SkyLightToolBelt {
         guard let SLPSSetFrontProcessWithOptions = SkyLightSymbolLoader.SLPSSetFrontProcessWithOptions,
               let SLPSPostEventRecordTo = SkyLightSymbolLoader.SLPSPostEventRecordTo
         else {
-            logger.error("Failed to load SkyLight symbols in \(#function)")
+            Log.error("Failed to load SkyLight symbols in \(#function)", category: .skyLightToolBelt)
             return false
         }
 
@@ -36,7 +34,7 @@ enum SkyLightToolBelt {
         let status = GetProcessForPID(pid, &psn)
 
         guard status == noErr else {
-            logger.error("Failed to get PSN: \(status)")
+            Log.error("Failed to get PSN: \(status)", category: .skyLightToolBelt)
             return false
         }
 
@@ -47,7 +45,7 @@ enum SkyLightToolBelt {
         )
 
         guard cgStatus == .success else {
-            logger.error("Failed to set frontmost process with status: \(cgStatus.rawValue)")
+            Log.error("Failed to set frontmost process with status: \(cgStatus.rawValue)", category: .skyLightToolBelt)
             return false
         }
 
@@ -69,7 +67,7 @@ enum SkyLightToolBelt {
             }
 
             guard cgStatus == .success else {
-                logger.error("Failed to click frontmost process with status: \(cgStatus.rawValue)")
+                Log.error("Failed to click frontmost process with status: \(cgStatus.rawValue)", category: .skyLightToolBelt)
                 return false
             }
         }
@@ -86,7 +84,7 @@ enum SkyLightToolBelt {
         guard let SLSDefaultConnectionForThread = SkyLightSymbolLoader.SLSDefaultConnectionForThread,
               let SLSSetWindowBackgroundBlurRadius = SkyLightSymbolLoader.SLSSetWindowBackgroundBlurRadius
         else {
-            logger.error("Failed to load SkyLight symbols in \(#function)")
+            Log.error("Failed to load SkyLight symbols in \(#function)", category: .skyLightToolBelt)
             return
         }
 
@@ -98,7 +96,7 @@ enum SkyLightToolBelt {
         )
 
         if status != noErr {
-            logger.error("Failed to set window background blur radius")
+            Log.error("Failed to set window background blur radius", category: .skyLightToolBelt)
         }
     }
 
@@ -109,7 +107,7 @@ enum SkyLightToolBelt {
         guard let SLSMainConnectionID = SkyLightSymbolLoader.SLSMainConnectionID,
               let SLSHWCaptureWindowList = SkyLightSymbolLoader.SLSHWCaptureWindowList
         else {
-            logger.error("Failed to load SkyLight symbols in \(#function)")
+            Log.error("Failed to load SkyLight symbols in \(#function)", category: .skyLightToolBelt)
             return []
         }
 
@@ -139,7 +137,7 @@ enum SkyLightToolBelt {
               let SLSWindowIteratorGetWindowID = SkyLightSymbolLoader.SLSWindowIteratorGetWindowID,
               let SLSWindowIteratorGetResolvedCornerRadii = SkyLightSymbolLoader.SLSWindowIteratorGetResolvedCornerRadii
         else {
-            logger.error("Failed to load SkyLight symbols in \(#function)")
+            Log.error("Failed to load SkyLight symbols in \(#function)", category: .skyLightToolBelt)
             return nil
         }
 
@@ -179,7 +177,7 @@ enum SkyLightToolBelt {
               let SLSWindowIteratorGetTags = SkyLightSymbolLoader.SLSWindowIteratorGetTags,
               let SLSWindowIteratorGetAttributes = SkyLightSymbolLoader.SLSWindowIteratorGetAttributes
         else {
-            logger.error("Failed to load SkyLight symbols in \(#function)")
+            Log.error("Failed to load SkyLight symbols in \(#function)", category: .skyLightToolBelt)
             return false
         }
 

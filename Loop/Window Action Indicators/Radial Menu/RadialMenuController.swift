@@ -6,13 +6,12 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 final class RadialMenuController {
     private var controller: NSWindowController?
     private var viewModel: RadialMenuViewModel?
-    private let logger = Logger(category: "RadialMenuController")
 
     func open(
         position: CGPoint,
@@ -100,6 +99,6 @@ final class RadialMenuController {
     func setAction(to newAction: WindowAction) {
         viewModel?.setAction(to: newAction)
 
-        logger.log("RadialMenuController: Set action to '\(newAction.description)'")
+        Log.info("Set action to '\(newAction.description)'", category: .radialMenuController)
     }
 }

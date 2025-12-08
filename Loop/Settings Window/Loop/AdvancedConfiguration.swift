@@ -8,12 +8,10 @@
 import Combine
 import Defaults
 import Luminare
-import OSLog
+import Scribe
 import SwiftUI
 
 final class AdvancedConfigurationModel: ObservableObject {
-    private let logger = Logger(category: "AdvancedConfigurationModel")
-
     @Published private(set) var didImportSuccessfullyAlert = false
     @Published private(set) var didExportSuccessfullyAlert = false
     @Published private(set) var didResetSuccessfullyAlert = false
@@ -70,7 +68,7 @@ final class AdvancedConfigurationModel: ObservableObject {
             do {
                 try await Migrator.importPrompt(onSuccess: importedSuccessfully)
             } catch {
-                logger.error("Error importing keybinds: \(error)")
+                Log.error("Error importing keybinds: \(error)", category: .advancedConfigurationModel)
             }
         }
     }
@@ -81,7 +79,7 @@ final class AdvancedConfigurationModel: ObservableObject {
             do {
                 try await Migrator.exportPrompt(onSuccess: exportedSuccessfully)
             } catch {
-                logger.error("Error exporting keybinds: \(error)")
+                Log.error("Error exporting keybinds: \(error)", category: .advancedConfigurationModel)
             }
         }
     }

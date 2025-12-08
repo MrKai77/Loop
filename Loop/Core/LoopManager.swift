@@ -6,7 +6,7 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 // MARK: - LoopManager
@@ -14,8 +14,6 @@ import SwiftUI
 final class LoopManager: ObservableObject {
     static let shared = LoopManager()
     private init() {}
-
-    private let logger = Logger(category: "LoopManager")
 
     // Size Adjustment
     static var sidesToAdjust: Edge.Set?
@@ -113,7 +111,7 @@ extension LoopManager {
             return
         }
 
-        logger.info("Opening Loop with starting action: \(startingAction?.description ?? "(none)") and target window: \(window?.description ?? "(none)")")
+        Log.info("Opening Loop with starting action: \(startingAction?.description ?? "(none)") and target window: \(window?.description ?? "(none)")", category: .loopManager)
 
         // Record the first frame in advance if the preview window is disabled
         if let window,
@@ -162,7 +160,7 @@ extension LoopManager {
 
     private func closeLoop(forceClose: Bool) {
         guard isLoopActive == true else { return }
-        logger.info("Closing Loop (force closed: \(forceClose))")
+        Log.info("Closing Loop (force closed: \(forceClose))", category: .loopManager)
 
         closeWindows()
         isLoopActive = false
@@ -383,7 +381,7 @@ extension LoopManager {
                 }
             }
 
-            logger.info("Screen changed: \(newScreen.localizedName)")
+            Log.info("Screen changed: \(newScreen.localizedName)", category: .loopManager)
 
             return
         }
@@ -416,7 +414,7 @@ extension LoopManager {
                 // This can work even without a current window (navigates from screen center)
                 if newAction.direction.willFocusWindow {
                     guard let focusEdge = newAction.direction.focusEdge else {
-                        logger.error("willFocusWindow is true but focusEdge is nil for \(newAction.direction.debugDescription)")
+                        Log.error("willFocusWindow is true but focusEdge is nil for \(newAction.direction.debugDescription)", category: .loopManager)
                         return
                     }
 
@@ -432,7 +430,7 @@ extension LoopManager {
                 }
             }
 
-            logger.info("Window action changed: \(newAction.description)")
+            Log.info("Window action changed: \(newAction.description)", category: .loopManager)
         }
     }
 

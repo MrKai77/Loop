@@ -6,13 +6,12 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 import UserNotifications
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let urlCommandHandler = URLCommandHandler()
-    static let logger = Logger(category: "AppDelegate")
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -22,6 +21,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_: Notification) {
+        configureLogging()
+
         Task {
             await Defaults.iCloud.waitForSyncCompletion()
         }
@@ -63,13 +64,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         )
     }
 
+    /// Applies baseline logging configuration for Scribe.
+    private func configureLogging() {
+        LogManager.shared.minimumLevel = .info
+    }
+
     @objc func handleGetURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent _: NSAppleEventDescriptor) {
         guard let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
               let url = URL(string: urlString) else {
-            Self.logger.info("Failed to get URL from event")
+            Log.info("Failed to get URL from event", category: .appDelegate)
             return
         }
-        Self.logger.info("Received URL: \(url)")
+        Log.info("Received URL: \(url)", category: .appDelegate)
         urlCommandHandler.handle(url)
     }
 

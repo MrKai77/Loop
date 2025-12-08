@@ -7,7 +7,7 @@
 
 import AppKit
 import Defaults
-import OSLog
+import Scribe
 
 /// Caches the user's actions in a dictionary keyed by its keybind.
 /// This is called from `KeybindObserver`, to retrieve the user's actions in an efficient manner.
@@ -16,7 +16,6 @@ final class WindowActionCache {
     private(set) var actionsByIdentifier: [UUID: WindowAction] = [:]
 
     private var observationTask: Task<(), Never>?
-    private let logger = Logger(category: "WindowActionCache")
 
     /// Initializes a new instance of `WindowActionCache`.
     /// Will automatically build cache, and update according to changes the user makes to Loop's keybinds.
@@ -65,7 +64,7 @@ final class WindowActionCache {
             )
         }
 
-        logger.info("Finished regenerating actionsByKeybind")
+        Log.info("Finished regenerating actionsByKeybind", category: .windowActionCache)
     }
 
     private func regenerateActionsByIdentifier(from keybinds: [WindowAction]) {
@@ -74,6 +73,6 @@ final class WindowActionCache {
             uniquingKeysWith: { first, _ in first }
         )
 
-        logger.info("Finished regenerating actionsByIdentifier")
+        Log.info("Finished regenerating actionsByIdentifier", category: .windowActionCache)
     }
 }

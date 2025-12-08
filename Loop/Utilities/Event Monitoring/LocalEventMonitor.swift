@@ -6,11 +6,10 @@
 //
 
 import Cocoa
-import OSLog
+import Scribe
 
 final class LocalEventMonitor: Identifiable, Equatable {
     let id = UUID()
-    private let logger = Logger(category: "LocalEventMonitor")
 
     private var localEventMonitor: Any?
     private let eventTypeMask: NSEvent.EventTypeMask
@@ -43,7 +42,7 @@ final class LocalEventMonitor: Identifiable, Equatable {
         guard !isEnabled else { return }
 
         // swiftformat:disable:next redundantSelf
-        logger.info("Starting LocalEventMonitor with ID \(self.id)")
+        Log.info("Starting LocalEventMonitor with ID \(self.id)", category: .localEventMonitor)
 
         localEventMonitor = NSEvent.addLocalMonitorForEvents(
             matching: eventTypeMask,
@@ -59,7 +58,7 @@ final class LocalEventMonitor: Identifiable, Equatable {
         guard isEnabled else { return }
 
         // swiftformat:disable:next redundantSelf
-        logger.info("Stopping LocalEventMonitor with ID \(self.id)")
+        Log.info("Stopping LocalEventMonitor with ID \(self.id)", category: .localEventMonitor)
 
         if let localEventMonitor {
             NSEvent.removeMonitor(localEventMonitor)

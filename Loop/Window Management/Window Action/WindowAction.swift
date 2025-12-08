@@ -6,15 +6,13 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 /// The window action struct represents a single action that can be performed on a window, such as resizing, moving, or cycling through actions.
 ///
 /// Common actions, such as right half, or bottom right quarter, are represented by `WindowDirection` enum, while user-made actions, such as custom frames and cycles are speciied by this struct.
 struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
-    private static let logger = Logger(category: "WindowAction")
-
     private(set) var id: UUID = .init()
 
     /// Initializes a `WindowAction` with the specified parameters. Only to be used when decoding from JSON.
@@ -584,10 +582,10 @@ extension WindowAction {
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
     private func getLastActionFrame(_ window: Window, _ bounds: CGRect) -> CGRect {
         if let previousAction = WindowRecords.getLastAction(for: window) {
-            Self.logger.info("Last action was \(previousAction.description)")
+            Log.info("Last action was \(previousAction.description)", category: .windowAction)
             return previousAction.getFrame(window: window, bounds: bounds)
         } else {
-            Self.logger.info("Didn't find frame to undo; using current frame")
+            Log.info("Didn't find frame to undo; using current frame", category: .windowAction)
             return window.frame
         }
     }
@@ -599,7 +597,7 @@ extension WindowAction {
         if let initialFrame = WindowRecords.getInitialFrame(for: window) {
             return initialFrame
         } else {
-            Self.logger.info("Didn't find initial frame; using current frame")
+            Log.info("Didn't find initial frame; using current frame", category: .windowAction)
             return window.frame
         }
     }

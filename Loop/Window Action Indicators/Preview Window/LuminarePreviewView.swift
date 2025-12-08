@@ -66,9 +66,9 @@ struct LuminarePreviewView: View {
                     scale = 1
                 }
             }
-            .onChange(of: model.previewedAction) { _ in
+            .onChange(of: model.previewedAction) { newAction in
                 withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
-                    actionRect = model.previewedAction.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
+                    actionRect = newAction.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
                 }
             }
         }

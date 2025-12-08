@@ -6,6 +6,7 @@
 //
 
 import CoreGraphics
+import Scribe
 
 /// Passive monitor that only listens to events.
 /// Callback will be called on a separate thread to keep the CFMachPort's callback fast.
@@ -57,7 +58,7 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
         ) {
             setupRunLoopSource(eventTap: eventTap, runLoop: CFRunLoopGetCurrent())
         } else {
-            super.logger.info("Failed to create event tap")
+            Log.info("Failed to create event tap", category: .passiveEventMonitor)
         }
     }
 

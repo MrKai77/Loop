@@ -6,12 +6,10 @@
 //
 
 import Defaults
-import OSLog
+import Scribe
 import SwiftUI
 
 final class MouseInteractionObserver {
-    private let logger = Logger(category: "MouseInteractionObserver")
-
     // Parameters
     private let windowActionCache: WindowActionCache
     private let changeAction: (WindowAction) -> ()
@@ -55,7 +53,7 @@ final class MouseInteractionObserver {
         )
 
         // swiftformat:disable:next redundantSelf
-        logger.info("Started with initial mouse position: \(self.getInitialMousePosition().debugDescription)")
+        Log.info("Started with initial mouse position: \(self.getInitialMousePosition().debugDescription)", category: .mouseInteractionObserver)
     }
 
     @MainActor
@@ -66,7 +64,7 @@ final class MouseInteractionObserver {
         previousAngleToMouse = .zero
         previousDistanceToMouse = .zero
 
-        logger.info("Stopped, all stored states cleared.")
+        Log.info("Stopped, all stored states cleared.", category: .mouseInteractionObserver)
     }
 
     private func mouseEvent(_ event: CGEvent) {

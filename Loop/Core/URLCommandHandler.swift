@@ -99,7 +99,7 @@
 
 import Defaults
 import Foundation
-import OSLog
+import Scribe
 import SwiftUI
 
 /// Handles URL scheme commands for the Loop application
@@ -139,9 +139,6 @@ final class URLCommandHandler {
 
     // MARK: - Properties
 
-    /// Logger for debugging and error tracking
-    private let logger = Logger(category: "URLHandler")
-
     /// Tracks the last active window for context preservation
     private var lastActiveWindow: Window?
 
@@ -167,7 +164,7 @@ final class URLCommandHandler {
             cleanMessage.hasPrefix("Found") ||
             cleanMessage.hasPrefix("Window:") ||
             (cleanMessage.hasPrefix("Processing") && !cleanMessage.contains("command:")) {
-            logger.debug("\(message, privacy: .public)")
+            Log.info(cleanMessage, category: .urlHandler)
             return
         }
 
@@ -175,9 +172,9 @@ final class URLCommandHandler {
         if currentCommand?.contains("/list") == true {
             outputBuffer.append(output)
         } else {
-            logger.info("\(output)")
+            Log.info("\(output)", category: .urlHandler)
         }
-        logger.debug("\(message, privacy: .public)")
+        Log.info(cleanMessage, category: .urlHandler)
     }
 
     /// Writes a titled list of items to output
@@ -196,8 +193,8 @@ final class URLCommandHandler {
             outputBuffer.append(title)
             outputBuffer.append(contentsOf: formattedItems)
         } else {
-            logger.info("\n\(title)")
-            formattedItems.forEach { logger.info("\($0)") }
+            Log.info("\n\(title)", category: .urlHandler)
+            formattedItems.forEach { Log.info("\($0)", category: .urlHandler) }
         }
     }
 
@@ -227,17 +224,17 @@ final class URLCommandHandler {
             DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [tempFile] in
                 do {
                     try FileManager.default.removeItem(at: tempFile)
-                    self.logger.debug("Cleaned up temporary file: \(tempFile.lastPathComponent)")
+                    Log.info("Cleaned up temporary file: \(tempFile.lastPathComponent)", category: .urlHandler)
                 } catch {
-                    self.logger.error("Failed to clean up temporary file: \(error.localizedDescription)")
+                    Log.error("Failed to clean up temporary file: \(error.localizedDescription)", category: .urlHandler)
                 }
             }
         } catch {
-            logger.error("Failed to write output: \(error.localizedDescription)")
+            Log.error("Failed to write output: \(error.localizedDescription)", category: .urlHandler)
 
             // Fallback to direct console output if file operations fail
             // swiftformat:disable:next redundantSelf
-            logger.info("\(self.outputBuffer.joined(separator: "\n"))")
+            Log.info("\(self.outputBuffer.joined(separator: "\n"))", category: .urlHandler)
         }
 
         outputBuffer.removeAll()
@@ -278,8 +275,8 @@ final class URLCommandHandler {
     ///   - command: The command to process
     ///   - parameters: Array of command parameters
     private func processCommand(_ command: Command, _ parameters: [String]) {
-        logger.debug("\(command.rawValue, privacy: .public)")
-        logger.debug("\(parameters, privacy: .public)")
+        Log.info(command.rawValue, category: .urlHandler)
+        Log.info(parameters.description, category: .urlHandler)
 
         switch command {
         case .direction: handleDirectionCommand(parameters)
