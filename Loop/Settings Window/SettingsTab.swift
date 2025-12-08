@@ -32,7 +32,7 @@ enum SettingsTab: LuminareTabItem, CaseIterable {
                 image
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.white)
-                    .shadow(color: .black.opacity(0.4), radius: 2)
+                    .shadow(color: .black.opacity(0.4), radius: 1)
             }
             .drawingGroup()
     }

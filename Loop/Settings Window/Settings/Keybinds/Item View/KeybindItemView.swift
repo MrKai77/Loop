@@ -148,6 +148,7 @@ struct KeybindItemView: View {
 
                 if let info = action.direction.infoText {
                     Text(action.getName())
+                        .fontWeight(.regular)
                         .lineLimit(1)
                         .padding(.trailing, 4)
                         .luminarePopover(attachedTo: .topTrailing) {
@@ -157,6 +158,7 @@ struct KeybindItemView: View {
                         .luminareTint(overridingWith: .yellow)
                 } else {
                     Text(action.getName())
+                        .fontWeight(.regular)
                         .lineLimit(1)
                 }
             }
