@@ -41,8 +41,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         Task {
             // Wait to let the app settle and to prevent overwhelming the user
-//            try? await Task.sleep(for: .seconds(10))
-//            await Updater.shared.fetchLatestInfo()
+            try? await Task.sleep(for: .seconds(5))
+
+            await Updater.shared.fetchLatestInfo()
+            if Updater.shared.updateState == .available {
+                await Updater.shared.showUpdateWindow()
+            }
         }
 
         UNUserNotificationCenter.current().delegate = self
