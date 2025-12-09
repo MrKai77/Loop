@@ -76,7 +76,7 @@ enum SettingsTab: LuminareTabItem, CaseIterable {
 
     var image: Image {
         switch self {
-        case .icon: Image(systemName: "sparkles.2")
+        case .icon: Image(systemName: "sparkles")
         case .accentColor: Image(systemName: "paintbrush.pointed.fill")
         case .radialMenu: Image(.loop)
         case .preview: Image(systemName: "inset.filled.center.rectangle")
