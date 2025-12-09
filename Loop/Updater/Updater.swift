@@ -65,21 +65,21 @@ final class Updater: ObservableObject {
     private func makeUpdateCheckerTask() -> Task<(), Never>? {
         Task {
             while !Task.isCancelled {
+                // 6 hours
+                try? await Task.sleep(for: .seconds(21600))
+
                 await self.fetchLatestInfo()
 
                 if self.updateState == .available {
                     await self.showUpdateWindow()
                 }
-
-                // 6 hours
-                try? await Task.sleep(for: .seconds(21600))
             }
         }
     }
 
     private func makeIncludeDevelopmentVersionsObserver() -> Task<(), Never>? {
         Task {
-            for await _ in Defaults.updates(.includeDevelopmentVersions) {
+            for await _ in Defaults.updates(.includeDevelopmentVersions, initial: false) {
                 guard !Task.isCancelled else { break }
                 await fetchLatestInfo()
             }
@@ -163,6 +163,10 @@ final class Updater: ObservableObject {
                 Log.error("Error fetching release info: \(error.localizedDescription)", category: .updater)
             }
         }
+
+        if let task = updateFetcherTask {
+            return await task.value
+        }
     }
 
     private func processFetchedData(_ data: Data) async throws {
@@ -188,7 +192,7 @@ final class Updater: ObservableObject {
             var release = release
 
             if release.prerelease,
-               let versionDetails = release.extractVersionFromTitle() {
+               let versionDetails = release.extractPrereleaseVersionFromTitle() {
                 release.tagName = versionDetails.preRelease
                 release.buildNumber = versionDetails.buildNumber
             }
@@ -218,21 +222,19 @@ final class Updater: ObservableObject {
         changelog = .init()
 
         let lines = body
-            .replacingOccurrences(of: "\r", with: "")
-            .split(separator: "\n")
+            .split(whereSeparator: \.isNewline)
 
         var currentSection: String?
 
-        for line in lines {
+        for line in lines where !line.isEmpty {
             if line.starts(with: "#") {
                 currentSection = line
-                    .replacingOccurrences(of: "#", with: "")
+                    .replacing(/#/, with: "")
                     .trimmingCharacters(in: .whitespacesAndNewlines)
 
                 if changelog.first(where: { $0.title == currentSection }) == nil {
                     changelog.append((title: currentSection!, body: []))
                 }
-
             } else {
                 guard
                     line.hasPrefix("- "),
@@ -241,25 +243,32 @@ final class Updater: ObservableObject {
                     continue
                 }
 
-                let cleanedLine = String(line)
-                    .replacingOccurrences(of: "- ", with: "")
+                let cleanedLine = line
+                    .replacing(#/- /#, with: "")
                     .trimmingCharacters(in: .whitespaces)
 
-                let user = try? NSRegularExpression(pattern: #"\(@(.*?)\)"#)
-                    .firstMatch(in: cleanedLine, range: NSRange(cleanedLine.startIndex..., in: cleanedLine))
-                    .flatMap { Range($0.range(at: 1), in: cleanedLine).map { String(cleanedLine[$0]) } }
+                let user: String?
+                let reference: Int?
 
-                let reference = try? NSRegularExpression(pattern: #"#(\d+)"#)
-                    .firstMatch(in: cleanedLine, range: NSRange(cleanedLine.startIndex..., in: cleanedLine))
-                    .flatMap { Range($0.range(at: 1), in: cleanedLine).flatMap { Int(cleanedLine[$0]) } }
+                if let match = cleanedLine.firstMatch(of: /(@(?<user>\w+))/) {
+                    user = String(match.user)
+                } else {
+                    user = nil
+                }
 
-                /// we should use `isEmojiPresentation` instead of `isEmoji` to ensure that `#`s are excluded.
+                if let match = cleanedLine.firstMatch(of: /#(?<reference>\d+)/) {
+                    reference = Int(String(match.reference))
+                } else {
+                    reference = nil
+                }
+
+                /// Use `isEmojiPresentation` instead of `isEmoji` to ensure that `#`s are excluded.
                 let emoji = cleanedLine.unicodeScalars.first(where: \.properties.isEmojiPresentation) ?? currentSection?.unicodeScalars.first(where: \.properties.isEmojiPresentation) ?? "🔄"
 
                 let text = cleanedLine
-                    .drop(while: { $0.unicodeScalars.first?.properties.isEmojiPresentation == true }) // remove any emojis
-                    .replacingOccurrences(of: #"#\d+"#, with: "", options: .regularExpression)
-                    .replacingOccurrences(of: #"\(@.*?\)"#, with: "", options: .regularExpression)
+                    .drop(while: { $0.unicodeScalars.first?.properties.isEmojiPresentation == true }) // Emojis
+                    .replacing(#/#\d+/#, with: "") // Issue #
+                    .replacing(#/(@.*?)/#, with: "") // Mentions
                     .trimmingCharacters(in: .whitespacesAndNewlines)
 
                 changelog[index].body.append(.init(
@@ -408,18 +417,15 @@ struct Release: Codable {
 
 // Extension to Release to extract version details from the title
 extension Release {
-    func extractVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
-        let pattern = #"🧪 (.*?) \((\d+)\)"#
-        guard
-            let regex = try? NSRegularExpression(pattern: pattern),
-            let match = regex.firstMatch(in: name, range: NSRange(name.startIndex..., in: name))
-        else {
+    func extractPrereleaseVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
+        let regex = /🧪 (?<version>.*?) \((?<build>\d+)\)/
+        guard let match = name.firstMatch(of: regex) else {
             return nil
         }
 
-        let preRelease = Range(match.range(at: 1), in: name).flatMap { String(self.name[$0]) } ?? "0.0.0"
-        let buildNumber = Int(Range(match.range(at: 2), in: name).flatMap { self.name[$0] } ?? "") ?? 0
+        let release = String(match.version)
+        let buildNumber = Int(String(match.build)) ?? 0
 
-        return (preRelease, buildNumber)
+        return (release, buildNumber)
     }
 }

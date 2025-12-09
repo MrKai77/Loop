@@ -10,7 +10,9 @@ import Luminare
 import SwiftUI
 
 struct PaddingConfigurationView: View {
-    @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.luminareAnimationFast) private var luminareAnimationFast
+    @Default(.enablePadding) private var enablePadding
 
     @State var paddingModel = Defaults[.padding]
     @Binding var isPresented: Bool
@@ -22,30 +24,38 @@ struct PaddingConfigurationView: View {
             ScreenView {
                 PaddingPreviewView($paddingModel)
             }
+            .disabled(!enablePadding)
+            .animation(luminareAnimationFast, value: enablePadding)
 
             LuminareSection {
-                paddingMode()
-
-                if !paddingModel.configureScreenPadding {
-                    nonScreenPaddingConfiguration()
-                } else {
-                    screenSidesPaddingConfiguration()
-                }
+                LuminareToggle("Apply padding", isOn: $enablePadding)
             }
 
-            if paddingModel.configureScreenPadding {
+            Group {
                 LuminareSection {
-                    screenInsetsPaddingConfiguration()
+                    paddingMode()
+
+                    if !paddingModel.configureScreenPadding {
+                        nonScreenPaddingConfiguration()
+                    } else {
+                        screenSidesPaddingConfiguration()
+                    }
+                }
+
+                if paddingModel.configureScreenPadding {
+                    LuminareSection {
+                        screenInsetsPaddingConfiguration()
+                    }
                 }
             }
+            .disabled(!enablePadding)
+            .animation(luminareAnimationFast, value: enablePadding)
 
             Button {
                 isPresented = false
             } label: {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
-            .luminareAspectRatio(contentMode: .fill)
-            .buttonStyle(.luminareCompact)
         }
         .onChange(of: paddingModel) { _ in
             // This fixes some weird animations.
@@ -86,16 +96,16 @@ struct PaddingConfigurationView: View {
         ) { custom in
             HStack(spacing: 6) {
                 if custom {
-                    Image(.sliders)
+                    Image(systemName: "slider.horizontal.3")
                     Text("Custom")
                 } else {
-                    Image(.shapeSquare)
+                    Image(systemName: "square")
                     Text("Simple")
                 }
             }
             .fixedSize()
         }
-        .luminarePickerRoundedCorner(top: .always)
+        .luminareRoundingBehavior(top: true)
     }
 
     func nonScreenPaddingConfiguration() -> some View {

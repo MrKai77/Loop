@@ -17,16 +17,17 @@ struct ExcludedAppsConfigurationView: View {
 
     var body: some View {
         LuminareSection {
-            HStack(spacing: 2) {
+            HStack(spacing: 4) {
                 Button("Add") {
                     showAppChooser()
                 }
+                .luminareRoundingBehavior(topLeading: true)
 
                 Button("Remove", role: .destructive) {
                     excludedApps.removeAll { selectedApps.contains($0) }
                 }
+                .luminareRoundingBehavior(topTrailing: true)
                 .disabled(selectedApps.isEmpty)
-                .buttonStyle(.luminareProminent)
                 .keyboardShortcut(.delete)
             }
 
@@ -51,7 +52,7 @@ struct ExcludedAppsConfigurationView: View {
                 .foregroundStyle(.secondary)
                 .padding()
             }
-            .luminareListRoundedCorner(bottom: .always)
+            .luminareRoundingBehavior(bottom: true)
         }
     }
 
@@ -116,11 +117,22 @@ struct ExcludedListAppView: View, Equatable {
             Button {
                 NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: app.path)])
             } label: {
-                Image(.finder)
-                    .foregroundStyle(.tertiary)
+                Group {
+                    if #available(macOS 26, *) {
+                        Image(systemName: "finder")
+                    } else {
+                        Image(systemName: "arrow.up.forward")
+                    }
+                }
+                .padding(4)
+                .contentShape(.rect)
             }
-            .buttonStyle(PlainButtonStyle())
-            .padding(4)
+            .luminareContentSize(
+                aspectRatio: 1.0,
+                contentMode: .fit,
+                hasFixedHeight: true
+            )
+            .luminareRoundingBehavior(top: true, bottom: true)
         }
         .padding(.horizontal, 12)
         .task {

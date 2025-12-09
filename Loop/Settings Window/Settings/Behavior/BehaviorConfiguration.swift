@@ -21,7 +21,6 @@ struct BehaviorConfigurationView: View {
     @Default(.suppressMissionControlOnTopDrag) var suppressMissionControlOnTopDrag
     @Default(.restoreWindowFrameOnDrag) var restoreWindowFrameOnDrag
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
-    @Default(.enablePadding) var enablePadding
     @Default(.useScreenWithCursor) var useScreenWithCursor
     @Default(.moveCursorWithWindow) var moveCursorWithWindow
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
@@ -47,7 +46,6 @@ struct BehaviorConfigurationView: View {
         .animation(
             luminareAnimation,
             value: [
-                enablePadding,
                 resizeWindowUnderCursor,
                 windowSnapping,
                 respectStageManager
@@ -90,16 +88,12 @@ struct BehaviorConfigurationView: View {
             // Enabling the system window manager will override these options.
             if !useSystemWindowManagerWhenAvailable {
                 LuminareToggle("Restore window frame on drag", isOn: $restoreWindowFrameOnDrag)
-                LuminareToggle("Apply padding", isOn: $enablePadding)
-
-                if enablePadding {
-                    Button("Configure padding…") {
-                        isPaddingConfigurationViewPresented = true
-                    }
-                    .luminareModalWithPredefinedSheetStyle(isPresented: $isPaddingConfigurationViewPresented, isCompact: false) {
-                        PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
-                            .frame(width: 400)
-                    }
+                LuminareButton("Padding", "Configure…") {
+                    isPaddingConfigurationViewPresented = true
+                }
+                .luminareModalWithPredefinedSheetStyle(isPresented: $isPaddingConfigurationViewPresented, isCompact: false) {
+                    PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
+                        .frame(width: 400)
                 }
             }
         }

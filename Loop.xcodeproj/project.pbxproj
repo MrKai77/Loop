@@ -449,8 +449,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mrkai77/luminare";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */ = {

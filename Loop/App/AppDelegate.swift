@@ -30,10 +30,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if !launchedAsLoginItem {
             SettingsWindowManager.shared.show()
         } else {
-            // Dock icon is usually handled by LuminareManager, but in this case, it is manually set
-            if !Defaults[.showDockIcon] {
-                NSApp.setActivationPolicy(.accessory)
-            }
+            // Closing also hides the dock icon if needed.
+            SettingsWindowManager.shared.close()
         }
 
         DataPatcher.run()
@@ -44,8 +42,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         Task {
             // Wait to let the app settle and to prevent overwhelming the user
-            try? await Task.sleep(for: .seconds(2))
+            try? await Task.sleep(for: .seconds(5))
+
             await Updater.shared.fetchLatestInfo()
+            if Updater.shared.updateState == .available {
+                await Updater.shared.showUpdateWindow()
+            }
         }
 
         UNUserNotificationCenter.current().delegate = self

@@ -54,6 +54,19 @@ struct PreviewConfigurationView: View {
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
 
+            // On macOS Sequoia and below, simply show the corner radius slider.
+            if #unavailable(macOS 26) {
+                LuminareSlider(
+                    "Corner radius",
+                    value: $previewCornerRadius.doubleBinding,
+                    in: 0...25,
+                    format: .number.precision(.fractionLength(0...0)),
+                    clampsUpper: false,
+                    clampsLower: true,
+                    suffix: Text("px", comment: "Unit symbol: pixels")
+                )
+            }
+
             LuminareSlider(
                 "Border thickness",
                 value: $previewBorderThickness.doubleBinding,
@@ -65,22 +78,26 @@ struct PreviewConfigurationView: View {
             )
         }
 
-        LuminareSection("Corner Radius") {
-            LuminareToggle(
-                "Prioritize selected window’s corner radius",
-                isOn: $previewUseWindowCornerRadius
-            )
+        // On macOS Tahoe and above, Loop has the ability to read the selected window's corner radius.
+        // So display it in a separate section, with the option to configure this functionality.
+        if #available(macOS 26, *) {
+            LuminareSection("Corner Radius") {
+                LuminareToggle(
+                    "Prioritize selected window’s corner radius",
+                    isOn: $previewUseWindowCornerRadius
+                )
 
-            LuminareSlider(
-                previewUseWindowCornerRadius ? "Default corner radius" : "Corner radius",
-                value: $previewCornerRadius.doubleBinding,
-                in: 0...25,
-                format: .number.precision(.fractionLength(0...0)),
-                clampsUpper: false,
-                clampsLower: true,
-                suffix: Text("px", comment: "Unit symbol: pixels")
-            )
+                LuminareSlider(
+                    previewUseWindowCornerRadius ? "Default corner radius" : "Corner radius",
+                    value: $previewCornerRadius.doubleBinding,
+                    in: 0...25,
+                    format: .number.precision(.fractionLength(0...0)),
+                    clampsUpper: false,
+                    clampsLower: true,
+                    suffix: Text("px", comment: "Unit symbol: pixels")
+                )
+            }
+            .animation(luminareAnimation, value: previewUseWindowCornerRadius)
         }
-        .animation(luminareAnimation, value: previewUseWindowCornerRadius)
     }
 }

@@ -93,8 +93,7 @@ struct UpdateView: View {
                 }
                 .allowsHitTesting(!isInstalling)
             }
-            .luminareAspectRatio(contentMode: .fill)
-            .buttonStyle(.luminareCompact)
+            .luminareCornerRadius(8)
             .padding(12)
             .background(VisualEffectView(material: .menu, blendingMode: .behindWindow))
             .overlay {
@@ -160,14 +159,14 @@ struct UpdateView: View {
                 let targetIsDevBuild = targetRelease.prerelease
                 let devBuildEmoji = "🧪 "
 
-                let currentVersionBase = Bundle.main.appVersion?.replacingOccurrences(of: devBuildEmoji, with: "") ?? "Unknown"
+                let currentVersionBase = Bundle.main.appVersion?.replacing(devBuildEmoji, with: "") ?? "Unknown"
                 // Apply devBuildEmoji based on UserDefaults setting
                 let currentVersion = "\(isDevBuild ? devBuildEmoji : "")\(currentVersionBase) (\(Bundle.main.appBuild ?? 0))"
                 Text(currentVersion)
 
                 Image(systemName: "arrow.right")
 
-                let newVersionBase = targetRelease.tagName.replacingOccurrences(of: devBuildEmoji, with: "")
+                let newVersionBase = targetRelease.tagName.replacing(devBuildEmoji, with: "")
                 // Apply devBuildEmoji to the new version if it's a dev build and the setting is enabled
                 let newVersion = "\(targetIsDevBuild && isDevBuild ? devBuildEmoji : "")\(newVersionBase) (\(targetRelease.buildNumber ?? 0))"
                 Text(newVersion)
@@ -200,6 +199,8 @@ struct UpdateView: View {
 
 struct ChangelogSectionView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
+    @Environment(\.luminareCornerRadii) var luminareCornerRadii
+
     @State var isExpanded = false
     let item: (title: String, body: [Updater.ChangelogNote])
 
@@ -211,7 +212,7 @@ struct ChangelogSectionView: View {
                 }
             } label: {
                 HStack {
-                    Image(.chevronRight)
+                    Image(systemName: "chevron.forward")
                         .bold()
                         .rotationEffect(isExpanded ? .degrees(90) : .zero)
 

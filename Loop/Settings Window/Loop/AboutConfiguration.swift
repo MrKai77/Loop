@@ -13,9 +13,7 @@ import SwiftUI
 final class AboutConfigurationModel: ObservableObject {
     @Published var isHoveringOverVersionCopier = false
     @Published var updateButtonTitle: String = .init(localized: "Check for updates…")
-
     @Published var didCompleteCopyToClipboard: Bool = false
-    @Published var didCompleteCopyToClipboardDebounced: Bool = false
 
     let credits: [CreditItem] = [
         .init(
@@ -119,7 +117,7 @@ final class AboutConfigurationModel: ObservableObject {
     }
 }
 
-struct CreditItem: Identifiable {
+struct CreditItem: Identifiable, Equatable {
     var id: String { name }
 
     let name: String
@@ -137,6 +135,7 @@ struct CreditItem: Identifiable {
 
 struct AboutConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
+    @Environment(\.luminareAnimationFast) private var luminareAnimationFast
     @Environment(\.openURL) private var openURL
 
     @StateObject private var model = AboutConfigurationModel()
@@ -161,48 +160,55 @@ struct AboutConfigurationView: View {
 
     private var iconHeader: some View {
         LuminareSection {
-            Button {
-                model.copyVersionToClipboard()
-            } label: {
-                HStack {
-                    if let image = NSImage(named: currentIcon) {
-                        Image(nsImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 60)
-                    }
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(Bundle.main.appName)
-                            .fontWeight(.medium)
-
-                        Text(
-                            model.isHoveringOverVersionCopier
-                                ? "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
-                                : (timesLooped >= 1_000_000 ? "You've looped… uhh… I… lost count…" : "You've looped \(timesLooped) times!")
-                        )
-                        .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
-                        .animation(luminareAnimation, value: model.isHoveringOverVersionCopier)
-                        .animation(luminareAnimation, value: timesLooped)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    }
-
-                    Spacer()
+            HStack {
+                if let image = NSImage(named: currentIcon) {
+                    Image(nsImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 60)
                 }
-                .padding(4)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(Bundle.main.appName)
+                        .fontWeight(.medium)
+
+                    Text(
+                        model.isHoveringOverVersionCopier
+                            ? "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
+                            : (timesLooped >= 1_000_000 ? "You've looped… uhh… I… lost count…" : "You've looped \(timesLooped) times!")
+                    )
+                    .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
+                    .animation(luminareAnimation, value: timesLooped)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                if model.isHoveringOverVersionCopier {
+                    Button {
+                        model.copyVersionToClipboard()
+                    } label: {
+                        Image(systemName: "document.on.clipboard")
+                            .padding(4)
+                            .contentShape(.rect)
+                    }
+                    .luminareContentSize(
+                        aspectRatio: 1.0,
+                        contentMode: .fit,
+                        hasFixedHeight: true
+                    )
+                    .luminareRoundingBehavior(top: true, bottom: true)
+                    .popover(isPresented: $model.didCompleteCopyToClipboard) {
+                        Text("Copied!")
+                            .padding(4)
+                    }
+                }
             }
-            .buttonStyle(.luminareCosmetic(icon: Image(.clipboard)))
-            .onHover {
-                model.isHoveringOverVersionCopier = $0
-            }
-            .booleanThrottleDebounced(model.didCompleteCopyToClipboard) {
-                model.didCompleteCopyToClipboardDebounced = $0
-            }
-            .popover(isPresented: $model.didCompleteCopyToClipboardDebounced) {
-                Text("Copied!")
-                    .padding(4)
-            }
+            .padding(.trailing, 8)
+            .padding(4)
+            .onHover { model.isHoveringOverVersionCopier = $0 }
+            .animation(luminareAnimationFast, value: model.isHoveringOverVersionCopier)
         }
     }
 
@@ -235,6 +241,7 @@ struct AboutConfigurationView: View {
                     .contentTransition(.numericText())
                     .animation(luminareAnimation, value: model.updateButtonTitle)
             }
+            .luminareRoundingBehavior(top: true)
             .disabled(!updateButtonEnabled)
             .onHover { hovering in
                 isHoveringOverUpdateButton = hovering
@@ -278,10 +285,11 @@ struct AboutConfigurationView: View {
             )
             .padding(8)
 
-            HStack(spacing: 2) {
+            HStack(spacing: 4) {
                 Button("Send Feedback") {
                     openURL(URL(string: "https://github.com/MrKai77/Loop")!)
                 }
+                .luminareRoundingBehavior(bottomLeading: true)
 
                 Button("Join Discord") {
                     openURL(URL(string: "https://discord.gg/2CZ2N6PKjq")!)
@@ -290,6 +298,7 @@ struct AboutConfigurationView: View {
                 Button("Donate") {
                     openURL(URL(string: "https://github.com/sponsors/MrKai77")!)
                 }
+                .luminareRoundingBehavior(bottomTrailing: true)
             }
         }
     }
@@ -298,39 +307,52 @@ struct AboutConfigurationView: View {
         LuminareSection(String(localized: "Credits", comment: "Section header shown in settings")) {
             ForEach(model.credits) { credit in
                 creditView(credit)
+                    .luminareRoundingBehavior(
+                        top: (credit == model.credits.first) == true,
+                        bottom: (credit == model.credits.last) == true
+                    )
             }
         }
     }
 
     private func creditView(_ credit: CreditItem) -> some View {
-        Button {
-            openURL(credit.url)
-        } label: {
-            HStack(spacing: 12) {
-                credit.avatar
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 40)
-                    .overlay {
-                        Circle()
-                            .strokeBorder(.white.opacity(0.1), lineWidth: 1)
-                    }
-                    .clipShape(.circle)
-
-                VStack(alignment: .leading) {
-                    Text(credit.name)
-
-                    if let description = credit.description {
-                        description
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+        HStack(spacing: 12) {
+            credit.avatar
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 40)
+                .overlay {
+                    Circle()
+                        .strokeBorder(.white.opacity(0.1), lineWidth: 1)
                 }
+                .clipShape(.circle)
 
-                Spacer()
+            VStack(alignment: .leading) {
+                Text(credit.name)
+
+                if let description = credit.description {
+                    description
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
-            .padding(12)
+
+            Spacer()
+
+            Button {
+                openURL(credit.url)
+            } label: {
+                Image(systemName: "link")
+                    .padding(4)
+                    .contentShape(.rect)
+            }
+            .luminareContentSize(
+                aspectRatio: 1.0,
+                contentMode: .fit,
+                hasFixedHeight: true
+            )
+            .luminareRoundingBehavior(top: true, bottom: true)
         }
-        .buttonStyle(.luminareCosmetic(icon: Image(.shareUpRight)))
+        .padding(12)
     }
 }

@@ -30,7 +30,7 @@ struct SettingsContentView: View {
                 model.currentTab.view()
             } header: {
                 HStack {
-                    model.currentTab.decoratedImageView
+                    model.currentTab.icon
 
                     Text(model.currentTab.title)
                         .font(.title2)
@@ -40,9 +40,12 @@ struct SettingsContentView: View {
                     Button {
                         model.showInspector.toggle()
                     } label: {
-                        Image(model.showInspector ? .sidebarLeftHide : .sidebarLeft3)
+                        Image(systemName: "sidebar.right")
+                            .animation(animation, value: model.showInspector)
                     }
+                    .luminareContentSize(aspectRatio: 1, contentMode: .fit, hasFixedHeight: true)
                 }
+                .drawingGroup()
             }
             .frame(width: 390)
 

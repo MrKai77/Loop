@@ -265,12 +265,12 @@ final class IconRenderView: NSView {
 
         // And if all else fails...
 
-        if currentAction.direction == .custom {
-            return .image(NSImage(resource: .ruler))
+        if currentAction.direction == .custom, let image = NSImage(systemSymbolName: "slider.horizontal.3", accessibilityDescription: nil) {
+            return .image(image)
         }
 
-        if currentAction.direction == .cycle {
-            return .image(NSImage(resource: .repeat4))
+        if currentAction.direction == .cycle, let image = NSImage(systemSymbolName: "repeat", accessibilityDescription: nil) {
+            return .image(image)
         }
 
         return nil

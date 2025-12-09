@@ -16,8 +16,8 @@ enum AccentColorOption: Int, Codable, Defaults.Serializable, CaseIterable {
     var image: Image {
         switch self {
         case .system: Image(systemName: "apple.logo")
-        case .wallpaper: Image(.imageDepth)
-        case .custom: Image(.colorPalette)
+        case .wallpaper: Image(systemName: "photo")
+        case .custom: Image(systemName: "eyedropper.halffull")
         }
     }
 

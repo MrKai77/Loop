@@ -11,6 +11,7 @@ import Luminare
 import Scribe
 import SwiftUI
 
+@MainActor
 final class SettingsWindowManager: ObservableObject {
     static let shared = SettingsWindowManager()
     private var controller: NSWindowController?
@@ -60,15 +61,11 @@ final class SettingsWindowManager: ObservableObject {
     }
 
     func show() {
-        if let controller, let window = controller.window {
-            window.orderFrontRegardless()
-        } else {
+        if controller == nil {
             let window = LuminareWindow {
                 SettingsContentView(model: self)
                     .frame(height: 620)
             }
-
-            controller = NSWindowController(window: window)
 
             SkyLightToolBelt.setBackgroundBlur(
                 windowID: CGWindowID(window.windowNumber),
@@ -77,17 +74,21 @@ final class SettingsWindowManager: ObservableObject {
 
             window.backgroundColor = .white.withAlphaComponent(0.001)
             window.ignoresMouseEvents = false
-            window.orderFrontRegardless()
+
+            controller = NSWindowController(window: window)
         }
+
+        startTimer()
+        NSApp.setActivationPolicy(.regular)
+
+        controller?.showWindow(self)
+        window?.orderFrontRegardless()
 
         if #available(macOS 14.0, *) {
             NSApp.activate()
         } else {
             NSApp.activate(ignoringOtherApps: true)
         }
-
-        startTimer()
-        NSApp.setActivationPolicy(.regular)
 
         Log.success("Settings window opened", category: .settingsWindowManager)
     }
