@@ -86,7 +86,7 @@ final class MouseInteractionObserver {
         let initialMousePosition = getInitialMousePosition()
         let currentMousePosition = NSEvent.mouseLocation
 
-        let angleToMouse = Angle(radians: initialMousePosition.angle(to: currentMousePosition))
+        let angleToMouse =  initialMousePosition.angle(to: currentMousePosition) + .radians(.pi / 2)
         let distanceToMouse = initialMousePosition.distance(to: currentMousePosition)
 
         // Return if the mouse didn't move
@@ -110,13 +110,13 @@ final class MouseInteractionObserver {
                 return
             }
 
-            let actions = Array(radialMenuActions[1...])
+            let actions = radialMenuActions.dropLast()
             let actionAngleSpan = 360.0 / CGFloat(actions.count)
             let halfAngleSpan = actionAngleSpan / 2.0
             let index = Int((angleToMouse.normalized().degrees + halfAngleSpan) / actionAngleSpan) % actions.count
             newAction = actions[index]
         } else if distanceToMouse > noActionDistance {
-            newAction = radialMenuActions.first
+            newAction = radialMenuActions.last
         }
 
         Task { @MainActor in

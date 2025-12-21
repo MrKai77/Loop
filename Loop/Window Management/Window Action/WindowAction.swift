@@ -216,7 +216,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         let frame = CGRect(origin: .zero, size: .init(width: 1, height: 1))
         let targetWindowFrame = getFrame(window: window, bounds: frame, disablePadding: true)
         let angle = frame.center.angle(to: targetWindowFrame.center)
-        let result: Angle = .radians(angle) * -1
+        let result: Angle = angle * -1
 
         return result.normalized()
     }

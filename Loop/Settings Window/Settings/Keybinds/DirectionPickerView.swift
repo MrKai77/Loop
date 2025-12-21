@@ -16,22 +16,9 @@ struct DirectionPickerView: View {
     @Binding private var direction: WindowDirection
     private let isInCycle: Bool
 
-    private static let sections: [PickerSection] = [
-        .init(String(localized: "General", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.general),
-        .init(String(localized: "Halves", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.halves),
-        .init(String(localized: "Quarters", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.quarters),
-        .init(String(localized: "Horizontal Thirds", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.horizontalThirds),
-        .init(String(localized: "Vertical Thirds", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.verticalThirds),
-        .init(String(localized: "Horizontal Fourths", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.horizontalFourths),
-        .init(String(localized: "Screen Switching", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.screenSwitching),
-        .init(String(localized: "Size Adjustment", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.sizeAdjustment),
-        .init(String(localized: "Shrink", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.shrink),
-        .init(String(localized: "Grow", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.grow),
-        .init(String(localized: "Move", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.move),
-        .init(String(localized: "Focus", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.focus),
-        .init(String(localized: "Stash", comment: "Section header in the action picker of the Keybinds tab"), [WindowDirection.stash, WindowDirection.unstash]),
-        .init(String(localized: "Go Back", comment: "Section header in the action picker of the Keybinds tab"), [WindowDirection.initialFrame, WindowDirection.undo])
-    ]
+    private var sections: [PickerSection<WindowDirection>] {
+        PickerSection.windowDirections
+    }
 
     private var moreSection: PickerSection<WindowDirection> {
         let title = String(localized: "More", comment: "Section header in the action picker of the Keybinds tab")
@@ -43,13 +30,9 @@ struct DirectionPickerView: View {
     }
 
     private var sectionItems: [WindowDirection] {
-        var result: [WindowDirection] = []
-
-        for sectionItems in Self.sections.map(\.items) {
-            result.append(contentsOf: sectionItems)
-        }
-
-        return result
+        sections
+            .map(\.items)
+            .flatMap(\.self)
     }
 
     init(direction: Binding<WindowDirection>, isInCycle: Bool) {
@@ -59,8 +42,11 @@ struct DirectionPickerView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            CustomTextField($searchText)
-                .padding(padding)
+            CustomTextField(
+                $searchText,
+                placeholder: .init(localized: "Search for a window action", defaultValue: "Search…")
+            )
+            .padding(padding)
 
             Divider()
 
@@ -68,7 +54,7 @@ struct DirectionPickerView: View {
                 $direction,
                 $searchResults,
                 padding,
-                Self.sections + [moreSection]
+                sections + [moreSection]
             ) { item in
                 HStack(spacing: 8) {
                     IconView(action: .init(item))

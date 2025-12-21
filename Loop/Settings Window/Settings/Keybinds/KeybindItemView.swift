@@ -79,7 +79,7 @@ struct KeybindItemView: View {
                                 .frame(width: 400)
                         }
                     }
-                    .help("Customize this keybind's custom frame.")
+                    .help("Customize this action's custom frame.")
                 }
 
                 if action.direction == .cycle {
@@ -93,7 +93,7 @@ struct KeybindItemView: View {
                         CycleActionConfigurationView(action: $action, isPresented: $isConfiguringCycle)
                             .frame(width: 400)
                     }
-                    .help("Customize what this keybind cycles through.")
+                    .help("Customize what this action cycles through.")
                 }
             }
             .font(.title3)
@@ -164,10 +164,7 @@ struct KeybindItemView: View {
             }
             .padding(.horizontal, 4)
         }
-        .luminareContentSize(
-            contentMode: .fit,
-            hasFixedHeight: true
-        )
+        .luminareContentSize(contentMode: .fit, hasFixedHeight: true)
         .luminareRoundingBehavior(top: true, bottom: true)
         .luminareFilledStates([.hovering, .pressed])
         .luminareBorderedStates(.hovering)

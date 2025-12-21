@@ -12,7 +12,7 @@ struct CustomTextField: NSViewRepresentable {
     @Binding var text: String
     let placeholder: String
 
-    init(_ text: Binding<String>, _ placeholder: String = .init(localized: "Search for a window action", defaultValue: "Search…")) {
+    init(_ text: Binding<String>, placeholder: String) {
         self._text = text
         self.placeholder = placeholder
     }

@@ -14,12 +14,11 @@ extension CGFloat {
 }
 
 extension CGPoint {
-    func angle(to comparisonPoint: CGPoint) -> CGFloat {
+    func angle(to comparisonPoint: CGPoint) -> Angle {
         let originX = comparisonPoint.x - x
         let originY = comparisonPoint.y - y
         let bearingRadians = -atan2f(Float(originY), Float(originX))
-
-        return CGFloat(bearingRadians)
+        return .radians(Double(bearingRadians))
     }
 
     func distance(to comparisonPoint: CGPoint) -> CGFloat {
