@@ -21,6 +21,7 @@ final class KeybindTrigger {
     private var pressedKeys: Set<CGKeyCode> = []
     private var previousEventFlags: CGEventFlags = []
     private var lastKeyReleaseTime: Date = .now
+    private var cachedSystemKeybinds: Set<Set<CGKeyCode>> = []
     private var eventMonitor: ActiveEventMonitor?
 
     // Special events only contain the globe key, as it can also be used as an emoji key.
@@ -71,6 +72,7 @@ final class KeybindTrigger {
         }
 
         eventMonitor?.stop()
+        cachedSystemKeybinds = CGKeyCode.systemKeybinds
 
         let eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
@@ -81,11 +83,11 @@ final class KeybindTrigger {
             LoopManager.shared.isShiftKeyPressed = event.flags.contains(.maskShift)
 
             var filteredFlags = event.flags
-
             if keyCode.isFnSpecialKey, !previousEventFlags.contains(.maskSecondaryFn) {
                 filteredFlags.remove(.maskSecondaryFn)
             }
 
+            let isLoopOpen = checkIfLoopOpen()
             previousEventFlags = filteredFlags
 
             if event.type == .keyUp {
@@ -103,7 +105,8 @@ final class KeybindTrigger {
             let result = performKeybind(
                 type: event.type,
                 isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
-                flags: filteredFlags
+                flags: filteredFlags,
+                isLoopOpen: isLoopOpen
             )
 
             if result == .consume {
@@ -112,7 +115,7 @@ final class KeybindTrigger {
 
             // If this shouldn't consume the event, and Loop isn't in the process of opening (possibly due to trigger delays),
             // check if it was a system keybind (ex. screenshot), and in that case, passthrough and force-close Loop
-            if result != .opening, event.type == .keyDown, CGKeyCode.systemKeybinds.contains(pressedKeys) {
+            if result != .opening, event.type == .keyDown, cachedSystemKeybinds.contains(pressedKeys) {
                 closeLoop(forceClose: true)
             }
 
@@ -143,14 +146,15 @@ final class KeybindTrigger {
     ///   - type: the type of this event.
     ///   - isARepeat: whether this event is a repeat event.
     ///   - flags: modifier flags associated with this event.
+    ///   - isLoopOpen: whether Loop is currently open.
     /// - Returns: whether this event was processed by Loop.
-    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags) -> PerformKeybindResult {
+    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
         let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
         let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
         let actionKeys: Set<CGKeyCode> = allPressedKeys.subtracting(triggerKey)
         let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
 
-        if checkIfLoopOpen() {
+        if isLoopOpen {
             if pressedKeys.contains(.kVK_Escape) {
                 closeLoop(forceClose: true)
                 return .consume

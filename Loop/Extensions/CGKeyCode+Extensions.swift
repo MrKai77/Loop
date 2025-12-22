@@ -343,7 +343,7 @@ extension CGKeyCode {
 // MARK: System Keybinds
 
 extension CGKeyCode {
-    static var systemKeybinds: [Set<CGKeyCode>] {
+    static var systemKeybinds: Set<Set<CGKeyCode>> {
         var shortcutsUnmanaged: Unmanaged<CFArray>?
         guard
             CopySymbolicHotKeys(&shortcutsUnmanaged) == noErr,
@@ -353,7 +353,7 @@ extension CGKeyCode {
             return []
         }
 
-        return shortcuts.compactMap { shortcut -> Set<CGKeyCode>? in
+        let processedShortcuts = shortcuts.compactMap { shortcut -> Set<CGKeyCode>? in
             guard
                 (shortcut[kHISymbolicHotKeyEnabled] as? Bool) == true,
                 let carbonKeyCode = shortcut[kHISymbolicHotKeyCode] as? CGKeyCode,
@@ -365,6 +365,8 @@ extension CGKeyCode {
             let modifiers = CGEventFlags(rawValue: carbonModifiers).keyCodes
             return modifiers.union([carbonKeyCode])
         }
+
+        return Set(processedShortcuts)
     }
 }
 
