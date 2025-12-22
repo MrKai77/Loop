@@ -152,6 +152,8 @@ extension WindowDirection {
             String(localized: "Focus Right", comment: "Window action")
         case .focusLeft:
             String(localized: "Focus Left", comment: "Window action")
+        case .focusNextInStack:
+            String(localized: "Focus Next In Stack", comment: "Window action")
         case .stash:
             String(localized: "Stash", comment: "Window action")
         case .unstash:

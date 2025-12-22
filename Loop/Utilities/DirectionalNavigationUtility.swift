@@ -7,24 +7,54 @@
 
 import SwiftUI
 
+enum NavigationDirection {
+    case top
+    case bottom
+    case right
+    case left
+
+    var flipped: NavigationDirection {
+        switch self {
+        case .top: .bottom
+        case .bottom: .top
+        case .right: .left
+        case .left: .right
+        }
+    }
+
+    var axis: Axis {
+        switch self {
+        case .left, .right: .horizontal
+        default: .vertical
+        }
+    }
+}
+
 /// A utility for generic directional navigation between items with frames.
 /// This utility provides reusable logic for navigating between items (windows, screens, etc.)
 /// in a specific direction based on their geometric frames.
 final class DirectionalNavigationUtility<T> {
-    let minimumSharedSpan: SharedSpan
+    let minDirectionalSpan: SharedUnit
+    let minStackedArea: SharedUnit
     let frameProvider: (T) -> CGRect
 
-    enum SharedSpan {
+    enum SharedUnit {
         case percentage(CGFloat)
-        case pixels(CGFloat)
+        case points(CGFloat)
     }
 
     /// Initializes a new instance of `DirectionalNavigationUtility`.
     /// - Parameters:
-    ///   - minimumSharedSpan: The minimum amount of axis span that two items must share for the candidate to be considered aligned with the current item.
+    ///   - minDirectionalSpan: The minimum amount of axis span that two items must share for the candidate to be considered aligned with the current item.
+    ///   - minStackedArea: The minimum area two items must share to be considered "stacked.
     ///   - frameProvider: Closure mapping an item to its CGRect frame.
-    init(minimumSharedSpan: SharedSpan, frameProvider: @escaping (T) -> CGRect) {
-        self.minimumSharedSpan = minimumSharedSpan
+    init(
+        minDirectionalSpan: SharedUnit,
+        minStackedArea: SharedUnit,
+        frameProvider: @escaping (T) -> CGRect
+    ) {
+        self.minDirectionalSpan = minDirectionalSpan
+        self.minStackedArea = minStackedArea
         self.frameProvider = frameProvider
     }
 
@@ -32,29 +62,28 @@ final class DirectionalNavigationUtility<T> {
     /// - Parameters:
     ///   - current: The current item
     ///   - items: All available items to search through
-    ///   - edge: The direction to search
+    ///   - direction: The direction to search
     ///   - canRestartCycle: Whether to wrap around when no items found in direction
-    ///   - frameProvider: Closure that extracts the CGRect frame from an item
+    ///   - frameProvider:  Closure that extracts the CGRect frame from an item
     /// - Returns: The next item in the specified direction, or nil
     func directionalItem(
         from current: T,
         in items: [T],
-        edge: Edge,
+        direction: NavigationDirection,
         canWrap: Bool = true
     ) -> T? {
         let currentFrame = frameProvider(current)
-        let axis: Axis = (edge == .leading || edge == .trailing) ? .horizontal : .vertical
 
         let itemsInSpan = filterItemsBySharedSpan(
             in: items,
-            axis: axis,
+            axis: direction.axis,
             currentFrame: currentFrame
         )
 
         // Try to find direct neighbor first
         if let neighbor = directDirectionalItem(
             in: itemsInSpan,
-            edge: edge,
+            direction: direction,
             currentFrame: currentFrame
         ) {
             return neighbor
@@ -66,8 +95,32 @@ final class DirectionalNavigationUtility<T> {
         // Wrap around to the furthest item in the opposite direction
         return furthestItemInDirection(
             in: itemsInSpan.isEmpty ? items : itemsInSpan,
-            edge: edge.flipped
+            direction: direction.flipped
         )
+    }
+
+    /// Cycles through items in a stack order based on their position in the array.
+    /// Only considers items that meet the minimumSharedSpan threshold with the current item.
+    /// - Parameters:
+    ///   - current: The current item
+    ///   - items: All available items in stack order
+    ///   - canWrap: Whether to wrap around when reaching the end/beginning
+    /// - Returns: The next item in the stack cycle, or nil if not found or wrapping is disabled
+    func cycleInStack(
+        from current: T,
+        in items: [T],
+        canWrap _: Bool = true
+    ) -> T? {
+        guard !items.isEmpty else { return nil }
+
+        let currentFrame = frameProvider(current)
+
+        let overlappingItems = filterItemsBySharedArea(
+            in: items,
+            currentFrame: currentFrame
+        )
+
+        return overlappingItems.last
     }
 
     /// Filters items down to those that share enough configured axis span with the current frame to be considered adjacent.
@@ -86,7 +139,7 @@ final class DirectionalNavigationUtility<T> {
                 let otherFrame = frameProvider(other)
                 guard otherFrame != currentFrame else { return false }
 
-                let sharedAxisPixelSpan = switch axis {
+                let sharedAxisPointSpan = switch axis {
                 case .horizontal:
                     min(currentFrame.maxY, otherFrame.maxY) - max(currentFrame.minY, otherFrame.minY)
                 case .vertical:
@@ -95,23 +148,55 @@ final class DirectionalNavigationUtility<T> {
 
                 let fullSpanOverlaps = switch axis {
                 case .horizontal:
-                    sharedAxisPixelSpan == otherFrame.height
+                    sharedAxisPointSpan == otherFrame.height
                 case .vertical:
-                    sharedAxisPixelSpan == otherFrame.width
+                    sharedAxisPointSpan == otherFrame.width
                 }
 
                 if fullSpanOverlaps {
                     return true
                 }
 
-                let consideredAxisPixelLength: CGFloat = axis == .horizontal ? currentFrame.height : currentFrame.width
+                let consideredAxisPointLength: CGFloat = axis == .horizontal ? currentFrame.height : currentFrame.width
 
-                switch minimumSharedSpan {
+                switch minDirectionalSpan {
                 case let .percentage(minPercentage):
-                    let sharedSpanPercent = consideredAxisPixelLength > 0 ? max(0, sharedAxisPixelSpan / consideredAxisPixelLength) : 0
-                    return sharedSpanPercent > minPercentage
-                case let .pixels(minPixels):
-                    return sharedAxisPixelSpan > minPixels
+                    let sharedSpanPercent = consideredAxisPointLength > 0 ? max(0, sharedAxisPointSpan / consideredAxisPointLength) : 0
+                    return (sharedSpanPercent * 100) > minPercentage
+                case let .points(minPoints):
+                    return sharedAxisPointSpan > minPoints
+                }
+            }
+    }
+
+    /// Filters items down to those that share enough configured area with the current frame to be considered stacked.
+    /// - Parameters:
+    ///   - items: List of all candidate items.
+    ///   - currentFrame: The frame of the current item.
+    /// - Returns: Array of items whose overlapping area passes the minStackedArea threshold, measured as either a percentage of either frame's total area or as absolute points.
+    private func filterItemsBySharedArea(
+        in items: [T],
+        currentFrame: CGRect
+    ) -> [T] {
+        let currentArea = currentFrame.size.area
+
+        return items
+            .filter { other in
+                let otherFrame = frameProvider(other)
+                guard otherFrame != currentFrame else { return false }
+
+                let intersect = otherFrame.intersection(currentFrame)
+                let sharedArea = intersect.size.area
+                let otherArea = otherFrame.size.area
+
+                switch minStackedArea {
+                case let .percentage(minPercentage):
+                    let overlaps1 = 100 * (sharedArea / currentArea) > minPercentage
+                    let overlaps2 = 100 * (sharedArea / otherArea) > minPercentage
+
+                    return overlaps1 || overlaps2
+                case let .points(minPoints):
+                    return sharedArea > minPoints
                 }
             }
     }
@@ -119,12 +204,12 @@ final class DirectionalNavigationUtility<T> {
     /// Returns item that is the closest neighbor in a given direction
     /// - Parameters:
     ///   - items: Candidates filtered to be axis-aligned with the current window.
-    ///   - edge: Direction to search for the neighbor.
-    ///   - currentFrame: The frame of the current item.
+    ///   - direction:  Direction to search for the neighbor.
+    ///   - currentFrame:  The frame of the current item.
     /// - Returns: The item whose center is nearest and lies strictly in the given direction, or nil if none are eligible.
     private func directDirectionalItem(
         in items: [T],
-        edge: Edge,
+        direction: NavigationDirection,
         currentFrame: CGRect
     ) -> T? {
         items
@@ -135,9 +220,9 @@ final class DirectionalNavigationUtility<T> {
                 // Directional check: consider center as well
                 let currentCenter = currentFrame.center
                 let otherCenter = otherFrame.center
-                let isInDirection: Bool = switch edge {
-                case .leading: otherCenter.x < currentCenter.x
-                case .trailing: otherCenter.x > currentCenter.x
+                let isInDirection: Bool = switch direction {
+                case .right: otherCenter.x < currentCenter.x
+                case .left: otherCenter.x > currentCenter.x
                 case .top: otherCenter.y < currentCenter.y
                 case .bottom: otherCenter.y > currentCenter.y
                 }
@@ -159,37 +244,21 @@ final class DirectionalNavigationUtility<T> {
     /// Selects the furthest item in the provided direction, useful for wrapping.
     /// - Parameters:
     ///   - items: List of candidate items.
-    ///   - edge: Direction in which we want the furthest item.
+    ///   - direction: Direction in which we want the furthest item.
     /// - Returns: The item with the greatest extent in the specified direction, or nil if none are available.
     private func furthestItemInDirection(
         in items: [T],
-        edge: Edge
+        direction: NavigationDirection
     ) -> T? {
-        switch edge {
-        case .leading:
+        switch direction {
+        case .right:
             items.min(by: { frameProvider($0).minX < frameProvider($1).minX })
-        case .trailing:
+        case .left:
             items.max(by: { frameProvider($0).maxX < frameProvider($1).maxX })
         case .top:
             items.min(by: { frameProvider($0).minY < frameProvider($1).minY })
         case .bottom:
             items.max(by: { frameProvider($0).maxY < frameProvider($1).maxY })
-        }
-    }
-}
-
-private extension Edge {
-    /// Returns the opposite direction of the current Edge.
-    var flipped: Edge {
-        switch self {
-        case .top:
-            .bottom
-        case .leading:
-            .trailing
-        case .bottom:
-            .top
-        case .trailing:
-            .leading
         }
     }
 }
