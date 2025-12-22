@@ -21,8 +21,11 @@ final class KeybindTrigger {
     private var pressedKeys: Set<CGKeyCode> = []
     private var previousEventFlags: CGEventFlags = []
     private var lastKeyReleaseTime: Date = .now
-    private var cachedSystemKeybinds: Set<Set<CGKeyCode>> = []
     private var eventMonitor: ActiveEventMonitor?
+
+    private var systemKeybindCache: Set<Set<CGKeyCode>> = []
+    private var keybindCacheUpdatedAt: ContinuousClock.Instant?
+    private let keybindCacheLifetime: ContinuousClock.Duration = .seconds(30)
 
     // Special events only contain the globe key, as it can also be used as an emoji key.
     private let specialEvents: [CGKeyCode] = [.kVK_Globe_Emoji]
@@ -72,7 +75,6 @@ final class KeybindTrigger {
         }
 
         eventMonitor?.stop()
-        cachedSystemKeybinds = CGKeyCode.systemKeybinds
 
         let eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
@@ -115,7 +117,8 @@ final class KeybindTrigger {
 
             // If this shouldn't consume the event, and Loop isn't in the process of opening (possibly due to trigger delays),
             // check if it was a system keybind (ex. screenshot), and in that case, passthrough and force-close Loop
-            if result != .opening, event.type == .keyDown, cachedSystemKeybinds.contains(pressedKeys) {
+            refreshSystemKeybindCacheIfNeeded()
+            if result != .opening, event.type == .keyDown, systemKeybindCache.contains(pressedKeys) {
                 closeLoop(forceClose: true)
             }
 
@@ -241,5 +244,20 @@ final class KeybindTrigger {
             // No active timer, create one with the provided startingAction.
             triggerDelayTimer.handleTrigger(startingAction: startingAction)
         }
+    }
+
+    private func refreshSystemKeybindCacheIfNeeded() {
+        let shouldRefresh: Bool = if let keybindCacheUpdatedAt {
+            keybindCacheUpdatedAt.duration(to: .now) > keybindCacheLifetime
+        } else {
+            true
+        }
+
+        guard shouldRefresh else {
+            return
+        }
+
+        systemKeybindCache = CGKeyCode.systemKeybinds
+        keybindCacheUpdatedAt = .now
     }
 }
