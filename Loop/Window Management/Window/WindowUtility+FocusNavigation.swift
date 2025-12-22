@@ -163,8 +163,7 @@ extension WindowUtility {
         // Use the generic stack cycling from DirectionalNavigationUtility
         if let nextWindow = navigationUtility.cycleInStack(
             from: currentWindow,
-            in: otherWindows,
-            canWrap: true
+            in: otherWindows
         ) {
             // Verify the returned window is actually available (not minimized, hidden, or excluded)
             if availableWindows.contains(where: { $0.cgWindowID == nextWindow.cgWindowID }) {
