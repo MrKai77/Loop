@@ -156,27 +156,19 @@ extension WindowUtility {
             .filter { $0.cgWindowID != currentWindow.cgWindowID }
 
         guard !otherWindows.isEmpty else {
-            Log.info("No other windows available to cycle", category: .windowUtility)
+            Log.info("No other windows available to focus in stack", category: .windowUtility)
             return nil
         }
 
         // Use the generic stack cycling from DirectionalNavigationUtility
         if let nextWindow = navigationUtility.cycleInStack(
             from: currentWindow,
-            in: otherWindows,
-            canWrap: true
+            in: otherWindows
         ) {
-            // Verify the returned window is actually available (not minimized, hidden, or excluded)
-            if availableWindows.contains(where: { $0.cgWindowID == nextWindow.cgWindowID }) {
-                Log.info("Found window to cycle stack: \(nextWindow.description)", category: .windowUtility)
-                return nextWindow
-            } else {
-                Log.info("Cycled window is not available (minimized/hidden/excluded), trying next", category: .windowUtility)
-                // Recursively try to find the next available window in the stack
-                return nextStackedWindow(from: nextWindow)
-            }
+            Log.info("Found window to focus in stack: \(nextWindow.description)", category: .windowUtility)
+            return nextWindow
         } else {
-            Log.info("No window found in stack cycle", category: .windowUtility)
+            Log.info("No window found in stack", category: .windowUtility)
             return nil
         }
     }

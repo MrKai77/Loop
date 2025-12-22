@@ -46,7 +46,7 @@ final class DirectionalNavigationUtility<T> {
     /// Initializes a new instance of `DirectionalNavigationUtility`.
     /// - Parameters:
     ///   - minDirectionalSpan: The minimum amount of axis span that two items must share for the candidate to be considered aligned with the current item.
-    ///   - minStackedArea: The minimum area two items must share to be considered "stacked.
+    ///   - minStackedArea: The minimum area two items must share to be considered stacked.
     ///   - frameProvider: Closure mapping an item to its CGRect frame.
     init(
         minDirectionalSpan: SharedUnit,
@@ -100,16 +100,14 @@ final class DirectionalNavigationUtility<T> {
     }
 
     /// Cycles through items in a stack order based on their position in the array.
-    /// Only considers items that meet the minimumSharedSpan threshold with the current item.
+    /// Only considers items that meet the minStackedArea threshold with the current item.
     /// - Parameters:
     ///   - current: The current item
     ///   - items: All available items in stack order
-    ///   - canWrap: Whether to wrap around when reaching the end/beginning
     /// - Returns: The next item in the stack cycle, or nil if not found or wrapping is disabled
     func cycleInStack(
         from current: T,
-        in items: [T],
-        canWrap _: Bool = true
+        in items: [T]
     ) -> T? {
         guard !items.isEmpty else { return nil }
 
@@ -128,7 +126,7 @@ final class DirectionalNavigationUtility<T> {
     ///   - items: List of all candidate items.
     ///   - axis: The axis along which to measure shared span (horizontal or vertical).
     ///   - currentFrame: The frame of the current item.
-    /// - Returns: Array of items whose overlap along the relevant axis passes the minimumSharedSpan threshold, or are fully contained within the axis span of the current frame.
+    /// - Returns: Array of items whose overlap along the relevant axis passes the minDirectionalSpan threshold, or are fully contained within the axis span of the current frame.
     private func filterItemsBySharedSpan(
         in items: [T],
         axis: Axis,
@@ -204,8 +202,8 @@ final class DirectionalNavigationUtility<T> {
     /// Returns item that is the closest neighbor in a given direction
     /// - Parameters:
     ///   - items: Candidates filtered to be axis-aligned with the current window.
-    ///   - direction:  Direction to search for the neighbor.
-    ///   - currentFrame:  The frame of the current item.
+    ///   - direction: Direction to search for the neighbor.
+    ///   - currentFrame: The frame of the current item.
     /// - Returns: The item whose center is nearest and lies strictly in the given direction, or nil if none are eligible.
     private func directDirectionalItem(
         in items: [T],
@@ -221,8 +219,8 @@ final class DirectionalNavigationUtility<T> {
                 let currentCenter = currentFrame.center
                 let otherCenter = otherFrame.center
                 let isInDirection: Bool = switch direction {
-                case .right: otherCenter.x < currentCenter.x
-                case .left: otherCenter.x > currentCenter.x
+                case .left: otherCenter.x < currentCenter.x
+                case .right: otherCenter.x > currentCenter.x
                 case .top: otherCenter.y < currentCenter.y
                 case .bottom: otherCenter.y > currentCenter.y
                 }
@@ -251,9 +249,9 @@ final class DirectionalNavigationUtility<T> {
         direction: NavigationDirection
     ) -> T? {
         switch direction {
-        case .right:
-            items.min(by: { frameProvider($0).minX < frameProvider($1).minX })
         case .left:
+            items.min(by: { frameProvider($0).minX < frameProvider($1).minX })
+        case .right:
             items.max(by: { frameProvider($0).maxX < frameProvider($1).maxX })
         case .top:
             items.min(by: { frameProvider($0).minY < frameProvider($1).minY })
