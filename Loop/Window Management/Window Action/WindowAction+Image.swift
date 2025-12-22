@@ -65,6 +65,8 @@ extension WindowAction {
             NSImage(systemSymbolName: "chevron.up", accessibilityDescription: nil)
         case .focusDown:
             NSImage(systemSymbolName: "chevron.down", accessibilityDescription: nil)
+        case .focusNextInStack:
+            NSImage(systemSymbolName: "rectangle.stack", accessibilityDescription: nil)
         default:
             nil
         }

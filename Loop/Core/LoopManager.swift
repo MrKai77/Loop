@@ -294,22 +294,22 @@ extension LoopManager {
             }
 
             if newAction.direction == .leftScreen,
-               let leftScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .leading) {
+               let leftScreen = ScreenUtility.directionalScreen(from: currentScreen, direction: .left) {
                 newScreen = leftScreen
             }
 
             if newAction.direction == .rightScreen,
-               let rightScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .trailing) {
+               let rightScreen = ScreenUtility.directionalScreen(from: currentScreen, direction: .right) {
                 newScreen = rightScreen
             }
 
             if newAction.direction == .topScreen,
-               let topScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .top) {
+               let topScreen = ScreenUtility.directionalScreen(from: currentScreen, direction: .top) {
                 newScreen = topScreen
             }
 
             if newAction.direction == .bottomScreen,
-               let bottomScreen = ScreenUtility.directionalScreen(from: currentScreen, edge: .bottom) {
+               let bottomScreen = ScreenUtility.directionalScreen(from: currentScreen, direction: .bottom) {
                 newScreen = bottomScreen
             }
 
@@ -413,19 +413,26 @@ extension LoopManager {
                 // If the action is to focus a window in a specific direction, find and activate that window
                 // This can work even without a current window (navigates from screen center)
                 if newAction.direction.willFocusWindow {
-                    guard let focusEdge = newAction.direction.focusEdge else {
-                        Log.error("willFocusWindow is true but focusEdge is nil for \(newAction.direction.debugDescription)", category: .loopManager)
-                        return
+                    var newTargetWindow: Window?
+
+                    if newAction.direction == .focusNextInStack,
+                       let newWindow = WindowUtility.focusNextWindowInStack(from: targetWindow) {
+                        newTargetWindow = newWindow
                     }
 
-                    if let newWindow = WindowUtility.focusWindow(from: targetWindow, edge: focusEdge) {
-                        targetWindow = newWindow
-                        previewController.setWindow(to: newWindow)
-                        radialMenuController.setWindow(to: newWindow)
+                    if let focusDirection = newAction.direction.focusDirection,
+                       let newWindow = WindowUtility.focusWindow(from: targetWindow, direction: focusDirection) {
+                        newTargetWindow = newWindow
+                    }
+
+                    if let newTargetWindow {
+                        targetWindow = newTargetWindow
+                        previewController.setWindow(to: newTargetWindow)
+                        radialMenuController.setWindow(to: newTargetWindow)
 
                         // If the previous window was nil, then the preview may have not opened.
                         // So open them here just in case.
-                        openWindows(startingAction: newAction, window: newWindow)
+                        openWindows(startingAction: newAction, window: newTargetWindow)
                     }
                 }
             }

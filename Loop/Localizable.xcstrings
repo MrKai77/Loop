@@ -5776,6 +5776,9 @@
         }
       }
     },
+    "Focus Next In Stack" : {
+      "comment" : "Window action"
+    },
     "Focus Right" : {
       "comment" : "Window action",
       "localizations" : {

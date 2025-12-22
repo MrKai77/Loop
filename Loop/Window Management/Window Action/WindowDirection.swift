@@ -56,7 +56,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
 
     // Focus
-    case focusUp = "FocusUp", focusDown = "FocusDown", focusRight = "FocusRight", focusLeft = "FocusLeft"
+    case focusUp = "FocusUp", focusDown = "FocusDown", focusRight = "FocusRight", focusLeft = "FocusLeft", focusNextInStack = "FocusNextInStack"
 
     // Stash
     case stash = "Stash"
@@ -77,7 +77,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var shrink: [WindowDirection] { [.shrinkTop, .shrinkBottom, .shrinkRight, .shrinkLeft, .shrinkHorizontal, .shrinkVertical] }
     static var grow: [WindowDirection] { [.growTop, .growBottom, .growRight, .growLeft, .growHorizontal, .growVertical] }
     static var move: [WindowDirection] { [.moveUp, .moveDown, .moveRight, .moveLeft] }
-    static var focus: [WindowDirection] { [.focusUp, .focusDown, .focusRight, .focusLeft] }
+    static var focus: [WindowDirection] { [.focusUp, .focusDown, .focusRight, .focusLeft, .focusNextInStack] }
     static var more: [WindowDirection] { [.initialFrame, .undo, .custom, .cycle] }
 
     // Computed properties for checking conditions
@@ -152,10 +152,10 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         }
     }
 
-    var focusEdge: Edge? {
+    var focusDirection: NavigationDirection? {
         switch self {
-        case .focusLeft: .leading
-        case .focusRight: .trailing
+        case .focusLeft: .left
+        case .focusRight: .right
         case .focusUp: .top
         case .focusDown: .bottom
         default: nil

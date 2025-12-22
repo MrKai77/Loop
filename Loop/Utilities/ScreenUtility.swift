@@ -9,7 +9,8 @@ import SwiftUI
 
 enum ScreenUtility {
     private static var navigationUtility = DirectionalNavigationUtility<NSScreen>(
-        minimumSharedSpan: .pixels(0.1),
+        minDirectionalSpan: .points(1),
+        minStackedArea: .percentage(100), // Won't be used since screens cannot be stacked
         frameProvider: \.frame
     )
 
@@ -111,16 +112,20 @@ enum ScreenUtility {
     /// Finds a screen to a set edge from the screen of reference.
     /// - Parameters:
     ///   - currentScreen: the screen of reference, i.e. the current screen.
-    ///   - edge: the direction of the screen we want to find.
+    ///   - direction: the direction of the screen we want to find.
     ///   - canRestartCycle: whether this should continuously loop through all screens, rather than returning `nil` at the end.
     /// - Returns: the screen at the respective edge, or the first screen in the row/column if `canRestartCycle` is enabled. Otherwise, it will return `nil`.
-    static func directionalScreen(from currentScreen: NSScreen, edge: Edge, canWrap: Bool = true) -> NSScreen? {
+    static func directionalScreen(
+        from currentScreen: NSScreen,
+        direction: NavigationDirection,
+        canWrap: Bool = true
+    ) -> NSScreen? {
         let screens = NSScreen.screens
 
         return navigationUtility.directionalItem(
             from: currentScreen,
             in: screens,
-            edge: edge,
+            direction: direction,
             canWrap: canWrap
         )
     }
