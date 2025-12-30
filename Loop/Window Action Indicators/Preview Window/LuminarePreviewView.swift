@@ -12,11 +12,10 @@ import SwiftUI
 struct LuminarePreviewView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
     @Environment(\.appearsActive) private var appearsActive
-    @ObservedObject var model: SettingsWindowManager = .shared
+    @EnvironmentObject private var windowModel: SettingsWindowManager
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @State var actionRect: CGRect = .zero
-    @State private var scale: CGFloat = 1
 
     @Default(.previewPadding) var previewPadding
     @Default(.padding) var padding
@@ -52,24 +51,62 @@ struct LuminarePreviewView: View {
             .padding(previewPadding + previewBorderThickness / 2)
             .frame(width: actionRect.width, height: actionRect.height)
             .offset(x: actionRect.minX, y: actionRect.minY)
-            .scaleEffect(CGSize(width: scale, height: scale))
-            .onAppear {
-                actionRect = model.previewedAction.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size), isPreview: true)
+            .opacity(actionRect.size.area == .zero ? 0 : 1)
+            .onChange(
+                of: windowModel.preferredPreviewedAction ?? windowModel.previewedAction,
+                initial: true
+            ) { newAction in
+                var newActionRect: CGRect
 
-                withAnimation(
-                    .interpolatingSpring(
-                        duration: 0.2,
-                        bounce: 0.1,
-                        initialVelocity: 1 / 2
+                if newAction.willManipulateExistingWindowFrame {
+                    newActionRect = .zero
+                } else {
+                    newActionRect = newAction.getFrame(
+                        window: nil,
+                        bounds: .init(origin: .zero, size: geo.size),
+                        isPreview: true
                     )
-                ) {
-                    scale = 1
+                }
+                
+                withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
+                    if newActionRect.size.area == .zero {
+                        actionRect = .init(
+                            x: geo.size.width / 2,
+                            y: geo.size.height / 2,
+                            width: 0,
+                            height: 0
+                        )
+                    } else {
+                        actionRect = newActionRect
+                    }
                 }
             }
-            .onChange(of: model.previewedAction) { _ in
-                withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
-                    actionRect = model.previewedAction.getFrame(window: nil, bounds: .init(origin: .zero, size: geo.size))
-                }
+        }
+    }
+    
+    private func processNewRect(animate: Bool) {
+        var newActionRect: CGRect
+        
+        if newAction.willManipulateExistingWindowFrame {
+            newActionRect = .zero
+        } else {
+            newActionRect = newAction.getFrame(
+                window: nil,
+                bounds: .init(origin: .zero, size: geo.size),
+                isPreview: true
+            )
+        }
+        
+        withAnimation(animate ? animationConfiguration.previewTimingFunctionSwiftUI : .none) {
+            if newActionRect.size.area == .zero {
+                actionRect = .init(
+                    x: geo.size.width / 2,
+                    y: geo.size.height / 2,
+                    width: 0,
+                    height: 0
+                )
+            } else {
+                actionRect = newActionRect
             }
         }
     }

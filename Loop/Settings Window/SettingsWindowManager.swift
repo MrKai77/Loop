@@ -17,7 +17,16 @@ final class SettingsWindowManager: ObservableObject {
     private var controller: NSWindowController?
     private var previewActionTimerTask: Task<(), Error>?
 
-    @Published private(set) var previewedAction: WindowAction
+    @Published private(set) var previewedAction: WindowAction {
+        didSet {
+            radialMenuViewModel.setAction(to: preferredPreviewedAction ?? previewedAction)
+        }
+    }
+    @Published var preferredPreviewedAction: WindowAction? {
+        didSet {
+            radialMenuViewModel.setAction(to: preferredPreviewedAction ?? previewedAction)
+        }
+    }
 
     @Published var showRadialMenu: Bool = false
     @Published var showPreview: Bool = false
@@ -111,14 +120,11 @@ final class SettingsWindowManager: ObservableObject {
     private func startTimer() {
         previewActionTimerTask?.cancel()
         previewActionTimerTask = Task(priority: .utility) {
-            while true {
+            while !Task.isCancelled {
                 try await Task.sleep(for: .seconds(1))
 
-                if await controller?.window?.isKeyWindow == true, !Task.isCancelled {
-                    await MainActor.run {
-                        previewedAction.direction = previewedAction.direction.nextPreviewDirection
-                        radialMenuViewModel.setAction(to: previewedAction)
-                    }
+                if controller?.window?.isKeyWindow == true {
+                    previewedAction.direction = previewedAction.direction.nextPreviewDirection
                 }
             }
         }

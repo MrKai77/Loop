@@ -16,7 +16,7 @@ final class KeybindsConfigurationModel: ObservableObject {
 
 struct KeybindsConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
-
+    @EnvironmentObject private var windowModel: SettingsWindowManager
     @StateObject private var model = KeybindsConfigurationModel()
 
     @Default(.triggerKey) private var triggerKey
@@ -163,6 +163,20 @@ struct KeybindsConfigurationView: View {
                 .padding()
             }
             .luminareRoundingBehavior(bottom: true)
+            .onChange(of: model.selectedKeybinds, initial: true) {
+                if model.selectedKeybinds.count == 1, let action = model.selectedKeybinds.first {
+                    if action.direction == .cycle {
+                        windowModel.preferredPreviewedAction = action.cycle?.first
+                    } else {
+                        windowModel.preferredPreviewedAction = action
+                    }
+                } else {
+                    windowModel.preferredPreviewedAction = nil
+                }
+            }
+            .onDisappear {
+                windowModel.preferredPreviewedAction = nil
+            }
         }
     }
 }

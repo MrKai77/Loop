@@ -1,5 +1,5 @@
 //
-//  RadialMenuConfiguration.swift
+//  RadialMenuConfigurationView.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-04-19.
@@ -10,6 +10,8 @@ import Luminare
 import SwiftUI
 
 struct RadialMenuConfigurationView: View {
+    @EnvironmentObject private var windowModel: SettingsWindowManager
+
     @Default(.radialMenuVisibility) private var radialMenuVisibility
     @Default(.radialMenuCornerRadius) private var radialMenuCornerRadius
     @Default(.radialMenuThickness) private var radialMenuThickness
@@ -90,6 +92,21 @@ struct RadialMenuConfigurationView: View {
                 .padding()
             }
             .luminareRoundingBehavior(bottom: true)
+            .onChange(of: selectedRadialMenuActions, initial: true) {
+                if selectedRadialMenuActions.count == 1,
+                    let resolved = selectedRadialMenuActions.first?.resolvedAction {
+                    if resolved.direction == .cycle {
+                        windowModel.preferredPreviewedAction = resolved.cycle?.first
+                    } else {
+                        windowModel.preferredPreviewedAction = resolved
+                    }
+                } else {
+                    windowModel.preferredPreviewedAction = nil
+                }
+            }
+            .onDisappear {
+                windowModel.preferredPreviewedAction = nil
+            }
         }
     }
 }

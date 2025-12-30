@@ -74,5 +74,6 @@ struct SettingsContentView: View {
         }
         .luminareTint(overridingWith: accentColorController.color1)
         .ignoresSafeArea()
+        .environmentObject(model)
     }
 }
