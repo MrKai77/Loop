@@ -11,7 +11,7 @@ import Defaults
 /// Reads middle-click events using a PassiveEventMonitor, and triggers Loop open/close callbacks, when appropriate.
 final class MiddleClickTrigger {
     // Callbacks
-    private let openCallback: (WindowAction?) -> ()
+    private let openCallback: (WindowAction) -> ()
     private let closeCallback: (Bool) -> ()
 
     // State-tracking
@@ -27,7 +27,7 @@ final class MiddleClickTrigger {
         guard let self else { return }
 
         if useTriggerDelay {
-            triggerDelayTimer.handleTrigger(startingAction: nil)
+            triggerDelayTimer.handleTrigger(startingAction: .init(.noAction))
         } else {
             openCallback(action)
         }
@@ -38,7 +38,7 @@ final class MiddleClickTrigger {
     ///   - openCallback: what to do when the middle mouse button is pressed, and Loop should be activated.
     ///   - closeCallback: what to do when the middle mouse button is released, and Loop should be closed.
     init(
-        openCallback: @escaping (WindowAction?) -> (),
+        openCallback: @escaping (WindowAction) -> (),
         closeCallback: @escaping (Bool) -> ()
     ) {
         // We will never start off with an action from this trigger, so pass in nil
@@ -76,11 +76,11 @@ final class MiddleClickTrigger {
             if event.type == .otherMouseDown,
                event.getIntegerValueField(.mouseEventButtonNumber) == 2 {
                 if doubleClickToTrigger {
-                    doubleClickTimer.handleTrigger(startingAction: nil)
+                    doubleClickTimer.handleTrigger(startingAction: .init(.noAction))
                 } else if useTriggerDelay {
-                    triggerDelayTimer.handleTrigger(startingAction: nil)
+                    triggerDelayTimer.handleTrigger(startingAction: .init(.noAction))
                 } else {
-                    openCallback(nil)
+                    openCallback(.init(.noAction))
                 }
             } else {
                 triggerDelayTimer.cancel()

@@ -70,7 +70,7 @@ struct RadialMenuView: View {
         .shadow(radius: 10)
         .padding(20)
         .fixedSize()
-        .scaleEffect(viewModel.radialMenuScale)
+        .scaleEffect(viewModel.shouldFillRadialMenu ? 0.85 : 1.0)
         .animation(animationConfiguration.radialMenuSize, value: viewModel.currentAction)
         .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
     }

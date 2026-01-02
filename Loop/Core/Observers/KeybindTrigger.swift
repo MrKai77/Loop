@@ -13,7 +13,7 @@ import Defaults
 final class KeybindTrigger {
     // Parameters
     private let windowActionCache: WindowActionCache
-    private let openCallback: (WindowAction?) -> ()
+    private let openCallback: (WindowAction) -> ()
     private let closeCallback: (Bool) -> ()
     private let checkIfLoopOpen: () -> Bool
 
@@ -58,7 +58,7 @@ final class KeybindTrigger {
     ///   - closeCallback: what to do when the trigger key is released, and Loop should be closed.
     init(
         windowActionCache: WindowActionCache,
-        openCallback: @escaping (WindowAction?) -> (),
+        openCallback: @escaping (WindowAction) -> (),
         closeCallback: @escaping (Bool) -> (),
         checkIfLoopOpen: @escaping () -> Bool
     ) {
@@ -193,7 +193,10 @@ final class KeybindTrigger {
 
                 // Only trigger Loop without an action if the only pressed keys perfectly matches the trigger key.
                 if allPressedKeys == triggerKey {
-                    openLoop(startingAction: nil, overrideExistingTriggerDelayTimerAction: !isARepeat)
+                    openLoop(
+                        startingAction: .init(.noAction),
+                        overrideExistingTriggerDelayTimerAction: !isARepeat
+                    )
                     return .opening
                 }
             } else {
@@ -205,7 +208,7 @@ final class KeybindTrigger {
         return .forward
     }
 
-    private func openLoop(startingAction: WindowAction?, overrideExistingTriggerDelayTimerAction: Bool) {
+    private func openLoop(startingAction: WindowAction, overrideExistingTriggerDelayTimerAction: Bool) {
         if checkIfLoopOpen() {
             openCallback(startingAction) // Only update Loop to the latest WindowAction
         } else {
@@ -230,7 +233,7 @@ final class KeybindTrigger {
     }
 
     private func startTriggerDelayTimer(
-        startingAction: WindowAction?,
+        startingAction: WindowAction,
         overrideExistingTriggerDelayTimerAction: Bool
     ) {
         // If a trigger delay timer is already active, only update its startingAction when

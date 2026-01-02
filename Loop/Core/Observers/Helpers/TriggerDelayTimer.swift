@@ -16,8 +16,8 @@ import Foundation
 /// In that case, use the `updateStartingAction` method.
 final class TriggerDelayTimer {
     private var triggerDelayTimer: Task<(), Never>?
-    private var startingAction: WindowAction?
-    private let openCallback: (WindowAction?) -> ()
+    private var startingAction: WindowAction = .init(.noAction)
+    private let openCallback: (WindowAction) -> ()
     private var triggerDelay: CGFloat { Defaults[.triggerDelay] }
 
     /// Indicates whether the delay timer is currently active.
@@ -25,7 +25,7 @@ final class TriggerDelayTimer {
 
     /// Creates a new `TriggerDelayTimer` instance with the specified callback to invoke after a user-configured delay has elapsed.
     /// - Parameter openCallback: A closure that is called once the trigger delay completes successfully. The closure receives the latest `WindowAction` depending on what has been set.
-    init(openCallback: @escaping (WindowAction?) -> ()) {
+    init(openCallback: @escaping (WindowAction) -> ()) {
         self.openCallback = openCallback
     }
 
@@ -38,7 +38,7 @@ final class TriggerDelayTimer {
     /// If another trigger is received before the delay elapses, the previous timer is canceled and restarted.
     /// Once the configured delay duration passes without interruption, the provided callback is invoked, with the latest inputted starting action.
     /// - Parameter startingAction: The `WindowAction` associated with the trigger.
-    func handleTrigger(startingAction action: WindowAction?) {
+    func handleTrigger(startingAction action: WindowAction) {
         startingAction = action
         cancel() // Ensure no previous timer is active
 
@@ -53,7 +53,7 @@ final class TriggerDelayTimer {
 
     /// Updates the stored `startingAction` value without restarting the timer. To be used with keybinds.
     /// - Parameter newAction: The new `WindowAction` to associate with the current trigger delay.
-    func updateStartingAction(with newAction: WindowAction?) {
+    func updateStartingAction(with newAction: WindowAction) {
         startingAction = newAction
     }
 
@@ -61,6 +61,6 @@ final class TriggerDelayTimer {
     func cancel() {
         triggerDelayTimer?.cancel()
         triggerDelayTimer = nil
-        startingAction = nil
+        startingAction = .init(.noAction)
     }
 }

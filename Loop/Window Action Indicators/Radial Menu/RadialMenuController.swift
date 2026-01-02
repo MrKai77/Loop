@@ -16,7 +16,7 @@ final class RadialMenuController {
     func open(
         position: CGPoint,
         window: Window?,
-        startingAction: WindowAction?
+        startingAction: WindowAction
     ) {
         if let windowController = controller {
             windowController.window?.orderFrontRegardless()

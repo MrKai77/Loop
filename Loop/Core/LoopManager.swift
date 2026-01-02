@@ -84,7 +84,7 @@ final class LoopManager: ObservableObject {
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    private func openLoop(startingAction: WindowAction?) {
+    private func openLoop(startingAction: WindowAction) {
         guard AccessibilityManager.shared.isGranted else {
             return
         }
@@ -96,9 +96,7 @@ extension LoopManager {
             /// In these cases, we can simply update the action instead of reopening the Loop.
             /// Enabling keybindObserver was considered as a workaround, but it doesn't start quickly enough.
             /// Although Karabiner-Elements sends key events separately, they arrive in quick succession.
-            if let startingAction {
-                changeAction(startingAction, disableHapticFeedback: true)
-            }
+            changeAction(startingAction, disableHapticFeedback: true)
             return
         }
 
@@ -111,7 +109,7 @@ extension LoopManager {
             return
         }
 
-        Log.info("Opening Loop with starting action: \(startingAction?.description ?? "(none)") and target window: \(window?.description ?? "(none)")", category: .loopManager)
+        Log.info("Opening Loop with starting action: \(startingAction.description) and target window: \(window?.description ?? "(none)")", category: .loopManager)
 
         // Record the first frame in advance if the preview window is disabled
         if let window,
@@ -152,10 +150,7 @@ extension LoopManager {
         }
 
         isLoopActive = true
-
-        if let startingAction {
-            changeAction(startingAction, disableHapticFeedback: true)
-        }
+        changeAction(startingAction, disableHapticFeedback: true)
     }
 
     private func closeLoop(forceClose: Bool) {
@@ -196,7 +191,7 @@ extension LoopManager {
         LoopManager.lastTargetFrame = .zero
     }
 
-    private func openWindows(startingAction: WindowAction?, window: Window?) {
+    private func openWindows(startingAction: WindowAction, window: Window?) {
         if Defaults[.previewVisibility], let screenToResizeOn {
             previewController.open(
                 screen: screenToResizeOn,
