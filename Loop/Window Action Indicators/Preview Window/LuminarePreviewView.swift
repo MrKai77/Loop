@@ -53,7 +53,7 @@ struct LuminarePreviewView: View {
             .offset(x: actionRect.minX, y: actionRect.minY)
             .opacity(actionRect.size.area == .zero ? 0 : 1)
             .onChange(
-                of: windowModel.preferredPreviewedAction ?? windowModel.previewedAction,
+                of: windowModel.previewedAction,
                 initial: true
             ) { newAction in
                 var newActionRect: CGRect
@@ -80,33 +80,6 @@ struct LuminarePreviewView: View {
                         actionRect = newActionRect
                     }
                 }
-            }
-        }
-    }
-    
-    private func processNewRect(animate: Bool) {
-        var newActionRect: CGRect
-        
-        if newAction.willManipulateExistingWindowFrame {
-            newActionRect = .zero
-        } else {
-            newActionRect = newAction.getFrame(
-                window: nil,
-                bounds: .init(origin: .zero, size: geo.size),
-                isPreview: true
-            )
-        }
-        
-        withAnimation(animate ? animationConfiguration.previewTimingFunctionSwiftUI : .none) {
-            if newActionRect.size.area == .zero {
-                actionRect = .init(
-                    x: geo.size.width / 2,
-                    y: geo.size.height / 2,
-                    width: 0,
-                    height: 0
-                )
-            } else {
-                actionRect = newActionRect
             }
         }
     }

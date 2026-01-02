@@ -13,6 +13,9 @@ import SwiftUI
 final class RadialMenuViewModel: ObservableObject {
     @Published private(set) var angle: Double
     @Published private(set) var currentAction: WindowAction?
+    
+    /// If a cycling action is chosen, this will represent the enclosing cycle action
+    @Published private(set) var parentAction: WindowAction?
 
     private var previousAction: WindowAction?
     private var window: Window?
@@ -61,9 +64,10 @@ final class RadialMenuViewModel: ObservableObject {
         window = newWindow
     }
 
-    func setAction(to action: WindowAction) {
+    func setAction(to action: WindowAction, parent: WindowAction? = nil) {
         previousAction = currentAction
         currentAction = action
+        parentAction = parent
 
         recomputeAngle()
     }

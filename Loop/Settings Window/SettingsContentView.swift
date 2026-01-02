@@ -51,18 +51,21 @@ struct SettingsContentView: View {
 
             if model.showInspector {
                 ZStack {
-                    if model.showPreview {
-                        LuminarePreviewView()
-                    }
+                    LuminarePreviewView()
+                        .allowsHitTesting(false)
 
                     if model.showRadialMenu {
-                        VStack {
-                            RadialMenuView(viewModel: model.radialMenuViewModel)
+                        if model.currentTab == .radialMenu {
+                            RadialMenuActionsGuide()
                         }
-                        .frame(maxHeight: .infinity, alignment: .center)
+
+                        RadialMenuView(viewModel: model.radialMenuViewModel)
+                            .allowsHitTesting(false)
                     }
                 }
+                .compositingGroup()
                 .animation(animation, value: [model.showRadialMenu, model.showPreview])
+                .padding(12)
                 .frame(width: 520)
             }
         }

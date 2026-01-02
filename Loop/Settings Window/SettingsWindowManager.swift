@@ -17,15 +17,12 @@ final class SettingsWindowManager: ObservableObject {
     private var controller: NSWindowController?
     private var previewActionTimerTask: Task<(), Error>?
 
-    @Published private(set) var previewedAction: WindowAction {
-        didSet {
-            radialMenuViewModel.setAction(to: preferredPreviewedAction ?? previewedAction)
-        }
+    @Published var isPreviewingUserSelection: Bool = false {
+        didSet { restartTimer() }
     }
-    @Published var preferredPreviewedAction: WindowAction? {
-        didSet {
-            radialMenuViewModel.setAction(to: preferredPreviewedAction ?? previewedAction)
-        }
+    @Published private(set) var previewedParentAction: WindowAction? = nil
+    @Published private(set) var previewedAction: WindowAction {
+        didSet { radialMenuViewModel.setAction(to: previewedAction, parent: previewedParentAction) }
     }
 
     @Published var showRadialMenu: Bool = false
@@ -63,7 +60,7 @@ final class SettingsWindowManager: ObservableObject {
     }
 
     private init() {
-        let startingAction: WindowAction = .init(.topHalf)
+        let startingAction: WindowAction = .init(.noAction)
 
         self.previewedAction = startingAction
         self.radialMenuViewModel = .init(startingAction: startingAction, window: nil, previewMode: true)
@@ -116,16 +113,23 @@ final class SettingsWindowManager: ObservableObject {
 
         Log.success("Settings window closed", category: .settingsWindowManager)
     }
+    
+    private func restartTimer() {
+        stopTimer()
+        startTimer()
+    }
 
     private func startTimer() {
         previewActionTimerTask?.cancel()
         previewActionTimerTask = Task(priority: .utility) {
-            while !Task.isCancelled {
-                try await Task.sleep(for: .seconds(1))
+            try await Task.sleep(for: .seconds(1))
 
+            while !Task.isCancelled {
                 if controller?.window?.isKeyWindow == true {
-                    previewedAction.direction = previewedAction.direction.nextPreviewDirection
+                    setNextPreviewedAction()
                 }
+                
+                try await Task.sleep(for: .seconds(1))
             }
         }
     }
@@ -133,5 +137,41 @@ final class SettingsWindowManager: ObservableObject {
     private func stopTimer() {
         previewActionTimerTask?.cancel()
         previewActionTimerTask = nil
+    }
+    
+    private func setNextPreviewedAction() {
+        if isPreviewingUserSelection {
+            guard let parent = previewedParentAction,
+                  parent.direction == .cycle,
+                  let cycle = parent.cycle,
+                  let index = cycle.firstIndex(of: previewedAction)
+            else {
+                return
+            }
+            
+            let nextIndex = (index + 1) % cycle.count
+            setPreviewedAction(to: parent, cycleAction: cycle[nextIndex])
+        } else {
+            let radialMenuActions: [WindowAction] = Defaults[.radialMenuActions]
+                .map { $0.resolvedAction ?? .init(.noAction) }
+            
+            let nextAction = if let index = radialMenuActions.firstIndex(of: previewedParentAction ?? previewedAction) {
+                radialMenuActions[(index + 1) % radialMenuActions.count]
+            } else {
+                radialMenuActions.first ?? .init(.noAction)
+            }
+            
+            setPreviewedAction(to: nextAction)
+        }
+    }
+    
+    func setPreviewedAction(to newAction: WindowAction, cycleAction: WindowAction? = nil) {
+        if newAction.direction == .cycle {
+            previewedParentAction = newAction
+            previewedAction = cycleAction ?? newAction.cycle?.first ?? .init(.noAction)
+        } else {
+            previewedParentAction = nil
+            previewedAction = newAction
+        }
     }
 }

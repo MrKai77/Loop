@@ -92,21 +92,34 @@ struct RadialMenuConfigurationView: View {
                 .padding()
             }
             .luminareRoundingBehavior(bottom: true)
-            .onChange(of: selectedRadialMenuActions, initial: true) {
-                if selectedRadialMenuActions.count == 1,
-                    let resolved = selectedRadialMenuActions.first?.resolvedAction {
-                    if resolved.direction == .cycle {
-                        windowModel.preferredPreviewedAction = resolved.cycle?.first
-                    } else {
-                        windowModel.preferredPreviewedAction = resolved
-                    }
-                } else {
-                    windowModel.preferredPreviewedAction = nil
-                }
-            }
+            .onChange(of: selectedRadialMenuActions, perform: userSelectionChanged)
+            .onChange(of: windowModel.previewedParentAction ?? windowModel.previewedAction, perform: previewedActionChanged)
             .onDisappear {
-                windowModel.preferredPreviewedAction = nil
+                windowModel.isPreviewingUserSelection = false
             }
+        }
+    }
+    
+    private func userSelectionChanged(_ newValue: Set<RadialMenuWindowAction>) {
+        if newValue.count == 1, let resolved = newValue.first?.resolvedAction {
+            windowModel.isPreviewingUserSelection = true
+            windowModel.setPreviewedAction(to: resolved)
+        } else {
+            windowModel.isPreviewingUserSelection = false
+        }
+    }
+    
+    private func previewedActionChanged(_ newValue: WindowAction) {
+        guard windowModel.isPreviewingUserSelection else {
+            return
+        }
+
+        let selectedAction = windowModel.previewedParentAction ?? windowModel.previewedAction
+        
+        if let match = radialMenuActions.first(where: { $0.id == selectedAction.id }) {
+            selectedRadialMenuActions = [match]
+        } else {
+            selectedRadialMenuActions = []
         }
     }
 }

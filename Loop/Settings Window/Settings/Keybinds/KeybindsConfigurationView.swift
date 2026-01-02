@@ -165,17 +165,14 @@ struct KeybindsConfigurationView: View {
             .luminareRoundingBehavior(bottom: true)
             .onChange(of: model.selectedKeybinds, initial: true) {
                 if model.selectedKeybinds.count == 1, let action = model.selectedKeybinds.first {
-                    if action.direction == .cycle {
-                        windowModel.preferredPreviewedAction = action.cycle?.first
-                    } else {
-                        windowModel.preferredPreviewedAction = action
-                    }
+                    windowModel.isPreviewingUserSelection = true
+                    windowModel.setPreviewedAction(to: action)
                 } else {
-                    windowModel.preferredPreviewedAction = nil
+                    windowModel.isPreviewingUserSelection = false
                 }
             }
             .onDisappear {
-                windowModel.preferredPreviewedAction = nil
+                windowModel.isPreviewingUserSelection = false
             }
         }
     }

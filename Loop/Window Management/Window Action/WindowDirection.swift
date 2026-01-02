@@ -138,20 +138,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         }
     }
 
-    var nextPreviewDirection: WindowDirection {
-        switch self {
-        case .topHalf: .topRightQuarter
-        case .topRightQuarter: .rightHalf
-        case .rightHalf: .bottomRightQuarter
-        case .bottomRightQuarter: .bottomHalf
-        case .bottomHalf: .bottomLeftQuarter
-        case .bottomLeftQuarter: .leftHalf
-        case .leftHalf: .topLeftQuarter
-        case .topLeftQuarter: .maximize
-        default: .topHalf
-        }
-    }
-
     var focusDirection: NavigationDirection? {
         switch self {
         case .focusLeft: .left

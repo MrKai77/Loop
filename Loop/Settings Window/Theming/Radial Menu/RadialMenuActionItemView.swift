@@ -10,6 +10,7 @@ import Luminare
 import SwiftUI
 
 struct RadialMenuActionItemView: View {
+    @EnvironmentObject private var windowModel: SettingsWindowManager
     @Environment(\.luminareItemBeingHovered) private var isHovering
     @Environment(\.luminareAnimation) var luminareAnimation
     @Default(.radialMenuActions) private var radialMenuActions
@@ -30,16 +31,11 @@ struct RadialMenuActionItemView: View {
             label
             
             Spacer()
-            
+
             if radialMenuAction.isKeybindReference {
                 Image(systemName: "link")
                     .foregroundStyle(.secondary)
             }
-
-//            RadialMenuIconView(
-//                totalItems: radialMenuActions.count,
-//                index: radialMenuActions.firstIndex(of: radialMenuAction) ?? 0
-//            )
         }
         .padding(.horizontal, 12)
         .onChange(of: isHovering) { _ in
@@ -84,22 +80,14 @@ struct RadialMenuActionItemView: View {
             } label: {
                 HStack(spacing: 8) {
                     if let action = radialMenuAction.resolvedAction {
-//                        IconView(action: action)
-                        RadialMenuIconView(
-                            totalItems: radialMenuActions.count,
-                            index: radialMenuActions.firstIndex(of: radialMenuAction) ?? 0
-                        )
+                        IconView(action: action)
 
                         Text(action.getName())
                             .fontWeight(.regular)
                             .lineLimit(1)
                     } else {
-//                        Image(systemName: "bolt.horizontal.fill")
-//                            .foregroundStyle(.secondary)
-                        RadialMenuIconView(
-                            totalItems: radialMenuActions.count,
-                            index: radialMenuActions.firstIndex(of: radialMenuAction) ?? 0
-                        )
+                        Image(systemName: "bolt.horizontal.fill")
+                            .foregroundStyle(.secondary)
 
                         Text("Failed to resolve keybind")
                             .foregroundStyle(.secondary)
