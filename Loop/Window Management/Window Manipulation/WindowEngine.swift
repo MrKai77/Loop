@@ -23,7 +23,7 @@ enum WindowEngine {
         on screen: NSScreen,
         shouldRecord: Bool = true
     ) {
-        guard action.direction != .noAction, !action.direction.willFocusWindow else { return }
+        guard action.direction != .noAction, action.direction != .noSelection, !action.direction.willFocusWindow else { return }
 
         let willChangeScreens = ScreenUtility.screenContaining(window) != screen
 

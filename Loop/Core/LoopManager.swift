@@ -231,7 +231,7 @@ extension LoopManager {
         canAdvanceCycle: Bool = true
     ) {
         guard
-            !currentAction.isSameManipulation(as: newAction) || newAction.shouldImmediatelyExecuteAction,
+            currentAction.id != newAction.id || newAction.shouldImmediatelyExecuteAction,
             isLoopActive,
             let currentScreen = screenToResizeOn
         else {

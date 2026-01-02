@@ -415,7 +415,7 @@ private extension StashManager {
 
             // Trying to store windowToStash in the same place as stashedWindow.
             // No need for frame comparaison, it will always overlap.
-            if stashedWindow.action.isSameManipulation(as: windowToStash.action), stashedWindow.screen.isSameScreen(windowToStash.screen) {
+            if stashedWindow.action.id == windowToStash.action.id, stashedWindow.screen.isSameScreen(windowToStash.screen) {
                 Log.info("Trying to stash a window in the same place as another one. Replacing…", category: .stashManager)
                 unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
             } else {

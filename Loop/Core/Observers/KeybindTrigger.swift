@@ -194,7 +194,7 @@ final class KeybindTrigger {
                 // Only trigger Loop without an action if the only pressed keys perfectly matches the trigger key.
                 if allPressedKeys == triggerKey {
                     openLoop(
-                        startingAction: .init(.noAction),
+                        startingAction: .init(.noSelection),
                         overrideExistingTriggerDelayTimerAction: !isARepeat
                     )
                     return .opening

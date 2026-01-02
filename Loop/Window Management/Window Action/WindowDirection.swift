@@ -12,8 +12,13 @@ import SwiftUI
 enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var id: Self { self }
 
+    // "Empty" actions.
+    /// `noAction` is explicitly chosen or user-bound.
+    /// `noSelection` is the default state before any radial menu selection is made.
+    case noAction = "NoAction", noSelection = "NoSelection"
+    
     // General Actions
-    case noAction = "NoAction", maximize = "Maximize", almostMaximize = "AlmostMaximize", fullscreen = "Fullscreen"
+    case maximize = "Maximize", almostMaximize = "AlmostMaximize", fullscreen = "Fullscreen"
     case maximizeHeight = "MaximizeHeight", maximizeWidth = "MaximizeWidth"
     case undo = "Undo", initialFrame = "InitialFrame", hide = "Hide", minimize = "Minimize", minimizeOthers = "MinimizeOthers"
     case macOSCenter = "MacOSCenter", center = "Center"
@@ -92,7 +97,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var isCustomizable: Bool { [.custom, .stash].contains(self) }
 
     var hasRadialMenuAngle: Bool {
-        let noAngleActions: [WindowDirection] = [.noAction, .minimize, .minimizeOthers, .hide, .initialFrame, .undo, .cycle]
+        let noAngleActions: [WindowDirection] = [.noAction, .noSelection, .minimize, .minimizeOthers, .hide, .initialFrame, .undo, .cycle]
         return !(noAngleActions.contains(self) || willChangeScreen || willAdjustSize || willShrink || willGrow || willMove || willFocusWindow || willMaximize || willCenter)
     }
 

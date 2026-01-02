@@ -53,7 +53,7 @@ final class StashedWindowsStore {
     /// Return the stashed window that match the given `action` and `screen`
     func stashedWindow(for action: WindowAction, on screen: NSScreen) -> StashedWindow? {
         for stashedWindow in stashed.values {
-            if stashedWindow.action.isSameManipulation(as: action), stashedWindow.screen.isSameScreen(screen) {
+            if stashedWindow.action.id == action.id, stashedWindow.screen.isSameScreen(screen) {
                 return stashedWindow
             }
         }

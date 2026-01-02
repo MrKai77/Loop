@@ -123,7 +123,12 @@ final class RadialMenuViewModel: ObservableObject {
     }
     
     private func shouldAnimateTransition(closestAngle: Angle) -> Bool {
-        let previousActionHadAngle = previousAction?.direction.hasRadialMenuAngle ?? false
-        return abs(closestAngle.degrees) < 179 && previousActionHadAngle
+        guard abs(closestAngle.degrees) < 179 else { return false }
+        
+        if let previousAction {
+            return directionalRadialMenuActions.contains(where: { $0.id == previousAction.id }) || previousAction.direction.hasRadialMenuAngle
+        }
+        
+        return false
     }
 }

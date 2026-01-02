@@ -55,12 +55,12 @@ struct SettingsContentView: View {
                         .allowsHitTesting(false)
 
                     if model.showRadialMenu {
+                        RadialMenuView(viewModel: model.radialMenuViewModel)
+                            .allowsHitTesting(false)
+
                         if model.currentTab == .radialMenu {
                             RadialMenuActionsGuide()
                         }
-
-                        RadialMenuView(viewModel: model.radialMenuViewModel)
-                            .allowsHitTesting(false)
                     }
                 }
                 .compositingGroup()

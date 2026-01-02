@@ -11,6 +11,8 @@ import SwiftUI
 extension WindowAction {
     var image: NSImage? {
         switch direction {
+        case .noAction:
+            NSImage(systemSymbolName: "questionmark", accessibilityDescription: nil)
         case .undo:
             NSImage(systemSymbolName: "arrow.uturn.backward", accessibilityDescription: nil)
         case .initialFrame:
@@ -152,7 +154,7 @@ final class IconRenderView: NSView {
         to action: WindowAction,
         animated: Bool
     ) {
-        guard !action.isSameManipulation(as: currentAction) else { return }
+        guard action.id != currentAction.id else { return }
         currentAction = action
         updatePath(duration: animated ? 0.2 : 0.0)
     }
@@ -274,7 +276,7 @@ final class IconRenderView: NSView {
         if currentAction.direction == .cycle, let image = NSImage(systemSymbolName: "repeat", accessibilityDescription: nil) {
             return .image(image)
         }
-
+        
         return nil
     }
 

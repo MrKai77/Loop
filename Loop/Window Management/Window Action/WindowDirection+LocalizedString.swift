@@ -18,7 +18,7 @@ extension WindowDirection {
 
     var name: String {
         switch self {
-        case .noAction:
+        case .noAction, .noSelection:
             String(localized: "No Action", comment: "Window action: no selection")
         case .maximize:
             String(localized: "Maximize", comment: "Window action")

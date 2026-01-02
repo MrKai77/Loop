@@ -126,7 +126,7 @@ final class MouseInteractionObserver {
             case let .keybindReference(id):
                 if let action = windowActionCache.actionsByIdentifier[id] { changeAction(action) }
             case nil:
-                changeAction(.init(.noAction))
+                changeAction(.init(.noSelection))
             }
         }
     }
