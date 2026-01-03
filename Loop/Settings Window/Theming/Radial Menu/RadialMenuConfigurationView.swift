@@ -78,7 +78,11 @@ struct RadialMenuConfigurationView: View {
                     selection: $selectedRadialMenuActions,
                     id: \.id
                 ) { action in
-                    RadialMenuActionItemView(action)
+                    RadialMenuActionItemView(
+                        action,
+                        moveUp: { moveAction(action.wrappedValue, down: false) },
+                        moveDown: { moveAction(action.wrappedValue, down: true) }
+                    )
                 } emptyView: {
                     HStack {
                         Spacer()
@@ -101,6 +105,20 @@ struct RadialMenuConfigurationView: View {
                 }
             }
         }
+    }
+    
+    private func moveAction(_ action: RadialMenuWindowAction, down: Bool) {
+        guard
+            let index = radialMenuActions.firstIndex(where: { $0.id == action.id })
+        else { return }
+        
+        let newIndex = index + (down ? 1 : -1)
+        guard radialMenuActions.indices.contains(newIndex) else { return }
+        
+        radialMenuActions.move(
+            fromOffsets: IndexSet(integer: index),
+            toOffset: newIndex > index ? newIndex + 1 : newIndex
+        )
     }
 
     private func userSelectionChanged(_ newValue: Set<RadialMenuWindowAction>) {

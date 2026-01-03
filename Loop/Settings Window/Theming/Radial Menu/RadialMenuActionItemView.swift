@@ -17,17 +17,25 @@ struct RadialMenuActionItemView: View {
     @Default(.keybinds) private var keybinds
 
     @Binding private var radialMenuAction: RadialMenuWindowAction
+    private let moveUp: () -> Void
+    private let moveDown: () -> Void
 
     @State private var isPickerPresented = false
     @State private var isConfiguringCustom: Bool = false
     @State private var isConfiguringCycle: Bool = false
 
-    init(_ action: Binding<RadialMenuWindowAction>) {
+    init(
+        _ action: Binding<RadialMenuWindowAction>,
+        moveUp: @escaping () -> Void,
+        moveDown: @escaping () -> Void
+    ) {
         self._radialMenuAction = action
+        self.moveUp = moveUp
+        self.moveDown = moveDown
     }
 
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
             label
 
             Spacer()
@@ -35,6 +43,26 @@ struct RadialMenuActionItemView: View {
             if radialMenuAction.isKeybindReference {
                 Image(systemName: "keyboard")
                     .foregroundStyle(.secondary)
+            }
+            
+            HStack(spacing: 8) {
+                Button(action: moveUp) {
+                    Image(systemName: "arrow.up")
+                        .frame(width: 27, height: 27)
+                        .font(.callout)
+                        .contentShape(.rect)
+                }
+                .luminareContentSize(aspectRatio: 1.0, contentMode: .fit, hasFixedHeight: true)
+                .luminareRoundingBehavior(top: true, bottom: true)
+
+                Button(action: moveDown) {
+                    Image(systemName: "arrow.down")
+                        .frame(width: 27, height: 27)
+                        .font(.callout)
+                        .contentShape(.rect)
+                }
+                .luminareContentSize(aspectRatio: 1.0, contentMode: .fit, hasFixedHeight: true)
+                .luminareRoundingBehavior(top: true, bottom: true)
             }
         }
         .padding(.horizontal, 12)

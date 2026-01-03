@@ -12,7 +12,6 @@ import SwiftUI
 // MARK: - View
 
 struct AccentColorConfigurationView: View {
-    @Environment(\.luminareTintColor) var tint
     @Environment(\.luminareAnimation) private var luminareAnimation
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
@@ -53,7 +52,7 @@ struct AccentColorConfigurationView: View {
 
                         if didSyncWallpaper {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(tint)
+                                .foregroundStyle(.green)
                                 .bold()
                         }
                     }

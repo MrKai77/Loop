@@ -118,8 +118,6 @@ final class AdvancedConfigurationModel: ObservableObject {
 
 struct AdvancedConfigurationView: View {
     @EnvironmentObject private var windowModel: SettingsWindowManager
-
-    @Environment(\.luminareTintColor) var tint
     @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.openURL) private var openURL
 
@@ -230,7 +228,7 @@ struct AdvancedConfigurationView: View {
 
                         if model.showResetRadialMenuActionsSuccessIndicator {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(tint)
+                                .foregroundStyle(.green)
                                 .bold()
                         }
                     }
@@ -255,7 +253,7 @@ struct AdvancedConfigurationView: View {
 
                         if model.showImportKeybindsSuccessIndicator {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(tint)
+                                .foregroundStyle(.green)
                                 .bold()
                         }
                     }
@@ -268,7 +266,7 @@ struct AdvancedConfigurationView: View {
 
                         if model.showExportKeybindsSuccessIndicator {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(tint)
+                                .foregroundStyle(.green)
                                 .bold()
                         }
                     }
@@ -282,7 +280,7 @@ struct AdvancedConfigurationView: View {
 
                         if model.showResetKeybindsSuccessIndicator {
                             Image(systemName: "checkmark")
-                                .foregroundStyle(tint)
+                                .foregroundStyle(.green)
                                 .bold()
                         }
                     }
@@ -310,7 +308,7 @@ struct AdvancedConfigurationView: View {
             HStack {
                 if model.isAccessibilityAccessGranted {
                     Image(systemName: "checkmark.seal.fill")
-                        .foregroundStyle(tint)
+                        .foregroundStyle(.green)
                 }
 
                 Text("Accessibility access")
