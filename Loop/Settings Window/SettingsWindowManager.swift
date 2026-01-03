@@ -114,7 +114,7 @@ final class SettingsWindowManager: ObservableObject {
             while true {
                 try await Task.sleep(for: .seconds(1))
 
-                if await controller?.window?.isKeyWindow == true, !Task.isCancelled {
+                if controller?.window?.isKeyWindow == true, !Task.isCancelled {
                     await MainActor.run {
                         previewedAction.direction = previewedAction.direction.nextPreviewDirection
                         radialMenuViewModel.setAction(to: previewedAction)

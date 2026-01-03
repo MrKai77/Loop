@@ -10,18 +10,6 @@ import AppKit
 // MARK: - Extension for wallpaper coloring
 
 extension NSColor {
-    /// Converts NSColor to a hexadecimal string representation.
-    /// If the color is not in the device RGB color space, it defaults to black.
-    var toHexString: String {
-        // Attempt to convert the color to the RGB color space.
-        guard let rgbColor = usingColorSpace(.deviceRGB) else { return "#000000" }
-        // Format the RGB components into a hexadecimal string.
-        return String(format: "#%02X%02X%02X",
-                      Int(rgbColor.redComponent * 0xFF),
-                      Int(rgbColor.greenComponent * 0xFF),
-                      Int(rgbColor.blueComponent * 0xFF))
-    }
-
     /// Calculates the brightness of the color based on luminance.
     /// Brightness is calculated using the luminance formula, which considers the different contributions
     /// of the red, green, and blue components of the color. This property can be used to determine

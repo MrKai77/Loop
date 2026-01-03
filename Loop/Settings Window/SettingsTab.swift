@@ -25,16 +25,7 @@ enum SettingsTab: LuminareTabItem, CaseIterable {
     case about
 
     var icon: some View {
-        RoundedRectangle(cornerRadius: 6)
-            .frame(width: 22, height: 22)
-            .foregroundStyle(color.gradient)
-            .overlay {
-                image
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.white)
-                    .shadow(color: .black.opacity(0.4), radius: 1)
-            }
-            .drawingGroup()
+        SettingsTabIconView(tab: self)
     }
 
     var color: Color {
@@ -112,4 +103,43 @@ enum SettingsTab: LuminareTabItem, CaseIterable {
     static let themingTabs: [Self] = [.icon, .accentColor, .radialMenu, .preview]
     static let settingsTabs: [Self] = [.behavior, .keybinds]
     static let loopTabs: [Self] = [.advanced, .excludedApps, .about]
+}
+
+struct SettingsTabIconView: View {
+    let tab: SettingsTab
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 6)
+            .foregroundStyle(tab.color.gradient)
+            .opacity(0.8)
+            .overlay {
+                if #available(macOS 26.0, *) {
+                    borderShine(in: .rect(cornerRadius: 6))
+                }
+
+                tab.image
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.4), radius: 1)
+            }
+            .frame(width: 22, height: 22)
+    }
+
+    // Mimics macOS Tahoe's icon shine
+    private func borderShine(in shape: some InsettableShape) -> some View {
+        shape
+            .strokeBorder(.white, lineWidth: 1)
+            .mask {
+                LinearGradient(
+                    colors: [
+                        .white,
+                        .clear,
+                        .white.opacity(0.5)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
+            .opacity(0.4)
+    }
 }

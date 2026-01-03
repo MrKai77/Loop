@@ -41,7 +41,7 @@ struct RadialMenuView: View {
                             in: .rect(cornerRadius: radialMenuCornerRadius)
                         )
                 } else {
-                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow, state: .active)
                 }
 
                 // This rectangle with a gradient is masked with the current direction radial menu view
