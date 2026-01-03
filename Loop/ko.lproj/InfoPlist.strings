@@ -1,4 +1,5 @@
 /* Bundle display name */
 "CFBundleDisplayName" = "Loop";
-/* Copyright (human-readable) */
-"NSHumanReadableCopyright" = "저작권 © 2026 Loop";
+/* NSHumanReadableCopyright
+Copyright (human-readable) */
+"NSHumanReadableCopyright" = "Copyright © 2026 Loop";

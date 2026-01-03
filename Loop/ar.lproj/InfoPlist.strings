@@ -1,4 +1,5 @@
 /* Bundle display name */
 "CFBundleDisplayName" = "لوب";
-/* Copyright (human-readable) */
-"NSHumanReadableCopyright" = "حقوق النشر © 2026 لوب";
+/* NSHumanReadableCopyright
+Copyright (human-readable) */
+"NSHumanReadableCopyright" = "Copyright © 2026 Loop";
