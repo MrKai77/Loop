@@ -124,7 +124,7 @@ extension Defaults.Keys {
 
     // StashManager
     static let stashManagerStashedWindows = Key<[CGWindowID: WindowAction]>("stashManagerStashed", default: [:])
-    
+
     @available(*, deprecated, message: "Revealed stash windows are no longer tracked.")
     static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>())
 

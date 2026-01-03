@@ -77,7 +77,7 @@ enum WindowEngine {
         } else {
             // Otherwise, we obviously need to disable fullscreen to resize the window
             window.fullscreen = false
-            
+
             // Calculate the target frame
             let targetFrame: CGRect = action.getFrame(
                 window: window,
@@ -85,12 +85,12 @@ enum WindowEngine {
                 screen: screen
             )
             Log.info("Target window frame: \(targetFrame.debugDescription)", category: .windowEngine)
-            
+
             // If the action is undo, remove the last action from the window records.
             if action.direction == .undo {
                 WindowRecords.removeLastAction(for: window)
             }
-            
+
             // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
             if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
                 resizeOwnWindow(targetFrame: targetFrame)
