@@ -35,7 +35,7 @@ struct PreviewView: View {
     var body: some View {
         GeometryReader { _ in
             ZStack {
-                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
+                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow, state: .active)
                     .clipShape(.rect(cornerRadii: cornerRadii))
 
                 UnevenRoundedRectangle(cornerRadii: cornerRadii)

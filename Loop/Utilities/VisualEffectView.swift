@@ -11,13 +11,27 @@ import SwiftUI
 struct VisualEffectView: NSViewRepresentable {
     let material: NSVisualEffectView.Material
     let blendingMode: NSVisualEffectView.BlendingMode
+    let state: NSVisualEffectView.State?
+
+    init(
+        material: NSVisualEffectView.Material,
+        blendingMode: NSVisualEffectView.BlendingMode,
+        state: NSVisualEffectView.State? = nil
+    ) {
+        self.material = material
+        self.blendingMode = blendingMode
+        self.state = state
+    }
 
     func makeNSView(context _: Context) -> NSVisualEffectView {
         let visualEffectView = NSVisualEffectView()
         visualEffectView.material = material
         visualEffectView.blendingMode = blendingMode
-        visualEffectView.state = .active
-        visualEffectView.isEmphasized = true
+
+        if let state {
+            visualEffectView.state = state
+        }
+
         return visualEffectView
     }
 
