@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2026-01-02.
 //
 
-import SwiftUI
 import Defaults
+import SwiftUI
 
 struct RadialMenuActionPickerView: View {
     @Default(.keybinds) private var keybinds

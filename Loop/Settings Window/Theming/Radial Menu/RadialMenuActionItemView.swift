@@ -17,8 +17,8 @@ struct RadialMenuActionItemView: View {
     @Default(.keybinds) private var keybinds
 
     @Binding private var radialMenuAction: RadialMenuWindowAction
-    private let moveUp: () -> Void
-    private let moveDown: () -> Void
+    private let moveUp: () -> ()
+    private let moveDown: () -> ()
 
     @State private var isPickerPresented = false
     @State private var isConfiguringCustom: Bool = false
@@ -26,8 +26,8 @@ struct RadialMenuActionItemView: View {
 
     init(
         _ action: Binding<RadialMenuWindowAction>,
-        moveUp: @escaping () -> Void,
-        moveDown: @escaping () -> Void
+        moveUp: @escaping () -> (),
+        moveDown: @escaping () -> ()
     ) {
         self._radialMenuAction = action
         self.moveUp = moveUp
@@ -44,7 +44,7 @@ struct RadialMenuActionItemView: View {
                 Image(systemName: "keyboard")
                     .foregroundStyle(.secondary)
             }
-            
+
             HStack(spacing: 8) {
                 Button(action: moveUp) {
                     Image(systemName: "arrow.up")

@@ -106,15 +106,15 @@ struct RadialMenuConfigurationView: View {
             }
         }
     }
-    
+
     private func moveAction(_ action: RadialMenuWindowAction, down: Bool) {
         guard
             let index = radialMenuActions.firstIndex(where: { $0.id == action.id })
         else { return }
-        
+
         let newIndex = index + (down ? 1 : -1)
         guard radialMenuActions.indices.contains(newIndex) else { return }
-        
+
         radialMenuActions.move(
             fromOffsets: IndexSet(integer: index),
             toOffset: newIndex > index ? newIndex + 1 : newIndex
