@@ -2,8 +2,8 @@
   "color-space-for-untagged-svg-colors" : "display-p3",
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.14771,0.13599,0.22546,0.00000",
-      "display-p3:0.10004,0.09235,0.14624,0.00000"
+      "display-p3:0.26376,0.21141,0.83135,1.00000",
+      "display-p3:0.18173,0.13958,0.32404,1.00000"
     ]
   },
   "groups" : [
@@ -91,7 +91,11 @@
     {
       "layers" : [
         {
+          "blend-mode" : "multiply",
           "glass-specializations" : [
+            {
+              "value" : true
+            },
             {
               "appearance" : "dark",
               "value" : false
@@ -102,47 +106,11 @@
           "name" : "Rectangle 41",
           "opacity-specializations" : [
             {
-              "value" : 0.9
+              "value" : 0.75
             },
             {
               "appearance" : "dark",
               "value" : 0
-            }
-          ]
-        },
-        {
-          "glass-specializations" : [
-            {
-              "value" : false
-            },
-            {
-              "appearance" : "dark",
-              "value" : false
-            }
-          ],
-          "hidden" : false,
-          "image-name" : "Blur.png",
-          "name" : "Blur",
-          "opacity-specializations" : [
-            {
-              "value" : 0.5
-            },
-            {
-              "appearance" : "dark",
-              "value" : 0
-            }
-          ]
-        },
-        {
-          "image-name" : "Dark 2.png",
-          "name" : "Dark",
-          "opacity-specializations" : [
-            {
-              "value" : 1
-            },
-            {
-              "appearance" : "dark",
-              "value" : 1
             }
           ]
         }

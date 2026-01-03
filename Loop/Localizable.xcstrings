@@ -660,7 +660,7 @@
       }
     },
     "Actions" : {
-      "comment" : "Header for radial menu section shown in settings",
+      "comment" : "Section header shown in settings",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -3055,6 +3055,7 @@
       }
     },
     "Configure padding…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -3964,6 +3965,7 @@
       }
     },
     "Custom Keybind" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4211,6 +4213,7 @@
       }
     },
     "Customize this keybind's custom frame." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -4376,6 +4379,7 @@
       }
     },
     "Customize what this keybind cycles through." : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -21753,6 +21757,7 @@
       }
     },
     "Quit" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
