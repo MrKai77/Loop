@@ -16,11 +16,11 @@ struct RadialMenuActionsGuide: View {
 
     @Default(.radialMenuActions) private var radialMenuActions
 
-    private var radialActions: [RadialMenuWindowAction] {
+    private var radialActions: [RadialMenuAction] {
         Array(radialMenuActions.dropLast())
     }
 
-    private var centerAction: RadialMenuWindowAction {
+    private var centerAction: RadialMenuAction {
         radialMenuActions.last ?? .custom(.init(.noAction))
     }
 

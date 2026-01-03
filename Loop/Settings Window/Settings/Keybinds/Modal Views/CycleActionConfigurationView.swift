@@ -52,11 +52,7 @@ struct CycleActionConfigurationView: View {
                 LuminareList(
                     items: Binding(
                         get: {
-                            if action.cycle == nil {
-                                action.cycle = []
-                            }
-
-                            return action.cycle ?? []
+                            action.cycle ?? []
                         }, set: { newValue in
                             action.cycle = newValue
                         }
@@ -94,6 +90,11 @@ struct CycleActionConfigurationView: View {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
             .luminareCornerRadius(8)
+        }
+        .onAppear {
+            if action.cycle == nil {
+                action.cycle = []
+            }
         }
     }
 }

@@ -14,40 +14,45 @@ struct RadialMenuActionPickerView: View {
     private let padding: CGFloat = 12
 
     @State private var searchText = ""
-    @State private var searchResults: [RadialMenuWindowAction] = []
+    @State private var searchResults: [RadialMenuAction.ActionType] = []
 
-    @Binding private var selection: RadialMenuWindowAction
+    @Binding private var selection: RadialMenuAction.ActionType
 
-    private static let directionSections: [PickerSection<RadialMenuWindowAction>] = {
+    private static let directionSections: [PickerSection<RadialMenuAction.ActionType>] = {
         let windowDirections = PickerSection.windowDirections
             .map { section in
                 PickerSection(
                     section.title,
-                    section.items.map { RadialMenuWindowAction.custom(.init($0)) }
+                    section.items.map { RadialMenuAction.ActionType.custom(.init($0)) }
                 )
             }
 
-        return windowDirections
+        let moreSection = PickerSection(
+            String(localized: "More", comment: "Section header in the action picker of the Keybinds tab"),
+            [WindowDirection.custom, WindowDirection.cycle].map { RadialMenuAction.ActionType.custom(.init($0)) }
+        )
+
+        return windowDirections + [moreSection]
     }()
 
-    private var keybindsSection: PickerSection<RadialMenuWindowAction> {
+    private var keybindsSection: PickerSection<RadialMenuAction.ActionType> {
         PickerSection(
             "Your Keybinds",
-            keybinds.map { RadialMenuWindowAction.keybindReference($0.id) }
+            keybinds.map { RadialMenuAction.ActionType.keybindReference($0.id) }
         )
     }
 
-    private var allSections: [PickerSection<RadialMenuWindowAction>] {
+    private var allSections: [PickerSection<RadialMenuAction.ActionType>] {
         Self.directionSections + [keybindsSection]
     }
 
-    private var allSectionItems: [RadialMenuWindowAction] {
+    private var allSectionItems: [RadialMenuAction.ActionType] {
         allSections
             .map(\.items)
             .flatMap(\.self)
     }
 
-    init(selection: Binding<RadialMenuWindowAction>) {
+    init(selection: Binding<RadialMenuAction.ActionType>) {
         self._selection = selection
     }
 
@@ -68,7 +73,7 @@ struct RadialMenuActionPickerView: View {
                 allSections
             ) { item in
                 HStack(spacing: 8) {
-                    if let action = item.resolved {
+                    if let action = item.resolvedAction {
                         HStack(spacing: 8) {
                             IconView(action: action)
 
@@ -111,8 +116,8 @@ struct RadialMenuActionPickerView: View {
         let key = searchText.lowercased()
 
         let matches = allSectionItems
-            .compactMap { item -> (RadialMenuWindowAction, Int)? in
-                guard let action = item.resolved else { return nil }
+            .compactMap { item -> (RadialMenuAction.ActionType, Int)? in
+                guard let action = item.resolvedAction else { return nil }
 
                 if let score = fuzzyScore(action.getName(), key) {
                     return (item, score)

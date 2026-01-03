@@ -17,7 +17,7 @@ struct RadialMenuConfigurationView: View {
     @Default(.radialMenuThickness) private var radialMenuThickness
     @Default(.enableRadialMenuCustomization) var enableRadialMenuCustomization
     @Default(.radialMenuActions) private var radialMenuActions
-    @State private var selectedRadialMenuActions: Set<RadialMenuWindowAction> = []
+    @State private var selectedRadialMenuActions: Set<RadialMenuAction> = []
 
     var body: some View {
         LuminareSection {
@@ -107,7 +107,7 @@ struct RadialMenuConfigurationView: View {
         }
     }
 
-    private func moveAction(_ action: RadialMenuWindowAction, down: Bool) {
+    private func moveAction(_ action: RadialMenuAction, down: Bool) {
         guard
             let index = radialMenuActions.firstIndex(where: { $0.id == action.id })
         else { return }
@@ -121,7 +121,7 @@ struct RadialMenuConfigurationView: View {
         )
     }
 
-    private func userSelectionChanged(_ newValue: Set<RadialMenuWindowAction>) {
+    private func userSelectionChanged(_ newValue: Set<RadialMenuAction>) {
         if newValue.count == 1, let resolved = newValue.first?.resolved {
             windowModel.isPreviewingUserSelection = true
             windowModel.setPreviewedAction(to: resolved)
@@ -137,7 +137,7 @@ struct RadialMenuConfigurationView: View {
 
         let selectedAction = windowModel.previewedParentAction ?? windowModel.previewedAction
 
-        if let match = radialMenuActions.first(where: { $0.id == selectedAction.id }) {
+        if let match = radialMenuActions.first(where: { $0.associatedActionId == selectedAction.id }) {
             selectedRadialMenuActions = [match]
         } else {
             selectedRadialMenuActions = []

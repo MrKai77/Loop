@@ -39,6 +39,10 @@ struct CustomActionConfigurationView: View {
     private let previewController = PreviewController()
     private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
 
+    private var showMacOSCenterToggle: Bool {
+        action.anchor ?? .center == .center || action.anchor == .macOSCenter
+    }
+
     init(action: Binding<WindowAction>, isPresented: Binding<Bool>) {
         _windowAction = action
         _isPresented = isPresented
@@ -77,7 +81,7 @@ struct CustomActionConfigurationView: View {
     private func configurationSections() -> some View {
         LuminareSection(outerPadding: 0) {
             LuminareTextField(
-                "Custom Keybind",
+                "Custom Action",
                 text: Binding(
                     get: { action.name ?? "" },
                     set: { action.name = $0 }
@@ -221,9 +225,9 @@ struct CustomActionConfigurationView: View {
                 ) { anchor in
                     IconView(action: anchor.iconAction)
                 }
-                .luminareRoundingBehavior(bottom: true)
+                .luminareRoundingBehavior(bottom: !showMacOSCenterToggle)
 
-                if action.anchor ?? .center == .center || action.anchor == .macOSCenter {
+                if showMacOSCenterToggle {
                     LuminareToggle(
                         isOn: Binding(
                             get: {

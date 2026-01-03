@@ -120,7 +120,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             result = if let name, !name.isEmpty {
                 name
             } else {
-                .init(localized: .init("Custom Keybind", defaultValue: "Custom Keybind"))
+                .init(localized: .init("Custom Action", defaultValue: "Custom Action"))
             }
         } else if direction == .stash {
             result = if let name, !name.isEmpty {

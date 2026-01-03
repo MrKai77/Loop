@@ -9,27 +9,58 @@ import Defaults
 import Luminare
 import SwiftUI
 
+@MainActor
+final class RadialMenuWindowActionWrapper: ObservableObject {
+    @Published var isConfiguringCustom: Bool = false
+    @Published var isConfiguringCycle: Bool = false
+    @Published var action: RadialMenuAction {
+        didSet { updateBindingAction() }
+    }
+
+    private let bindingAction: Binding<RadialMenuAction>
+
+    init(binding action: Binding<RadialMenuAction>) {
+        self.action = action.wrappedValue
+        self.bindingAction = action
+    }
+
+    private func updateBindingAction() {
+        guard bindingAction.wrappedValue != action else { return }
+        bindingAction.wrappedValue = action
+
+        guard let resolvedAction = action.resolved else {
+            isConfiguringCustom = false
+            isConfiguringCycle = false
+            return
+        }
+
+        Task {
+            isConfiguringCustom = resolvedAction.direction.isCustomizable
+            isConfiguringCycle = resolvedAction.direction == .cycle
+        }
+    }
+}
+
 struct RadialMenuActionItemView: View {
     @EnvironmentObject private var windowModel: SettingsWindowManager
     @Environment(\.luminareItemBeingHovered) private var isHovering
     @Environment(\.luminareAnimation) var luminareAnimation
+    @StateObject private var wrapper: RadialMenuWindowActionWrapper
+
     @Default(.radialMenuActions) private var radialMenuActions
     @Default(.keybinds) private var keybinds
 
-    @Binding private var radialMenuAction: RadialMenuWindowAction
     private let moveUp: () -> ()
     private let moveDown: () -> ()
 
     @State private var isPickerPresented = false
-    @State private var isConfiguringCustom: Bool = false
-    @State private var isConfiguringCycle: Bool = false
 
     init(
-        _ action: Binding<RadialMenuWindowAction>,
+        _ action: Binding<RadialMenuAction>,
         moveUp: @escaping () -> (),
         moveDown: @escaping () -> ()
     ) {
-        self._radialMenuAction = action
+        self._wrapper = StateObject(wrappedValue: RadialMenuWindowActionWrapper(binding: action))
         self.moveUp = moveUp
         self.moveDown = moveDown
     }
@@ -40,7 +71,7 @@ struct RadialMenuActionItemView: View {
 
             Spacer()
 
-            if radialMenuAction.isKeybindReference {
+            if wrapper.action.type.isKeybindReference {
                 Image(systemName: "keyboard")
                     .foregroundStyle(.secondary)
                     .help("This action is linked to a keybind. Changes made to this action will affect both.")
@@ -72,16 +103,6 @@ struct RadialMenuActionItemView: View {
                 isPickerPresented = false
             }
         }
-        .onChange(of: radialMenuAction.resolved) { _ in
-            if let resolvedAction = radialMenuAction.resolved {
-                if resolvedAction.direction.isCustomizable {
-                    isConfiguringCustom = true
-                }
-                if resolvedAction.direction == .cycle {
-                    isConfiguringCycle = true
-                }
-            }
-        }
     }
 
     @ViewBuilder
@@ -94,7 +115,7 @@ struct RadialMenuActionItemView: View {
                             isPresented: $isPickerPresented,
                             alignment: .leadingLastTextBaseline
                         ) {
-                            RadialMenuActionPickerView(selection: $radialMenuAction)
+                            RadialMenuActionPickerView(selection: $wrapper.action.type)
                         }
                         .luminareSheetClosesOnDefocus(true)
                 }
@@ -108,7 +129,7 @@ struct RadialMenuActionItemView: View {
                 isPickerPresented = true
             } label: {
                 HStack(spacing: 8) {
-                    if let action = radialMenuAction.resolved {
+                    if let action = wrapper.action.resolved {
                         IconView(action: action)
 
                         Text(action.getName())
@@ -132,38 +153,48 @@ struct RadialMenuActionItemView: View {
             .padding(.leading, -4)
 
             Group {
-                if let resolvedAction = radialMenuAction.resolved {
+                if let resolvedAction = wrapper.action.resolved {
                     let actionBinding = Binding<WindowAction>(
                         get: {
                             resolvedAction
                         },
                         set: { newAction in
-                            if radialMenuAction.isKeybindReference {
-                                guard let index = radialMenuAction.keybindIndex else {
+                            switch wrapper.action.type {
+                            case .custom:
+                                wrapper.action.type = .custom(newAction)
+                            case .keybindReference:
+                                guard let index = Defaults[.keybinds].firstIndex(where: { $0.id == wrapper.action.associatedActionId }) else {
                                     return
                                 }
 
                                 keybinds[index] = newAction
-                            } else {
-                                radialMenuAction = .custom(newAction)
                             }
                         }
                     )
 
                     if resolvedAction.direction.isCustomizable {
                         Button {
-                            isConfiguringCustom = true
+                            wrapper.isConfiguringCustom = true
                         } label: {
                             Image(systemName: "slider.horizontal.3")
                         }
                         .buttonStyle(.plain)
-                        .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCustom, isCompact: false) {
+                        .luminareModalWithPredefinedSheetStyle(
+                            isPresented: $wrapper.isConfiguringCustom,
+                            isCompact: false
+                        ) {
                             if resolvedAction.direction == .custom {
-                                CustomActionConfigurationView(action: actionBinding, isPresented: $isConfiguringCustom)
-                                    .frame(width: 400)
+                                CustomActionConfigurationView(
+                                    action: actionBinding,
+                                    isPresented: $wrapper.isConfiguringCustom
+                                )
+                                .frame(width: 400)
                             } else {
-                                StashActionConfigurationView(action: actionBinding, isPresented: $isConfiguringCustom)
-                                    .frame(width: 400)
+                                StashActionConfigurationView(
+                                    action: actionBinding,
+                                    isPresented: $wrapper.isConfiguringCustom
+                                )
+                                .frame(width: 400)
                             }
                         }
                         .help("Customize this action's custom frame.")
@@ -171,14 +202,20 @@ struct RadialMenuActionItemView: View {
 
                     if resolvedAction.direction == .cycle {
                         Button {
-                            isConfiguringCycle = true
+                            wrapper.isConfiguringCycle = true
                         } label: {
                             Image(systemName: "repeat")
                         }
                         .buttonStyle(.plain)
-                        .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCycle, isCompact: false) {
-                            CycleActionConfigurationView(action: actionBinding, isPresented: $isConfiguringCycle)
-                                .frame(width: 400)
+                        .luminareModalWithPredefinedSheetStyle(
+                            isPresented: $wrapper.isConfiguringCycle,
+                            isCompact: false
+                        ) {
+                            CycleActionConfigurationView(
+                                action: actionBinding,
+                                isPresented: $wrapper.isConfiguringCycle
+                            )
+                            .frame(width: 400)
                         }
                         .help("Customize what this action cycles through.")
                     }

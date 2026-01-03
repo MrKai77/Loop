@@ -23,8 +23,8 @@ final class MouseInteractionObserver {
     private var previousAngleToMouse: Angle = .zero
     private var previousDistanceToMouse: CGFloat = .zero
 
-    private var radialMenuActions: [RadialMenuWindowAction] {
-        RadialMenuWindowAction.userConfiguredActions
+    private var radialMenuActions: [RadialMenuAction] {
+        RadialMenuAction.userConfiguredActions
     }
 
     private static let failedToResolveKeybindAction: WindowAction = .init(.noAction) // This helps to keep a stable ID
@@ -103,7 +103,7 @@ final class MouseInteractionObserver {
         previousAngleToMouse = angleToMouse
         previousDistanceToMouse = distanceToMouse
 
-        var newAction: RadialMenuWindowAction? = nil
+        var newAction: RadialMenuAction? = nil
 
         // If mouse over 50 points away, select half or quarter positions
         if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
@@ -122,7 +122,7 @@ final class MouseInteractionObserver {
         }
 
         Task { @MainActor in
-            switch newAction {
+            switch newAction?.type {
             case let .custom(windowAction):
                 changeAction(windowAction)
             case let .keybindReference(id):

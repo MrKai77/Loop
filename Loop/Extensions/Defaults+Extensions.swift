@@ -117,10 +117,7 @@ extension Defaults.Keys {
     static let previewStartingPosition = Key<PreviewStartingPosition>("previewStartingPosition", default: .screenCenter, iCloud: true)
 
     // Radial Menu
-    static let radialMenuActions = Key<[RadialMenuWindowAction]>(
-        "radialMenuActions",
-        default: RadialMenuWindowAction.defaultRadialMenuActions
-    )
+    static let radialMenuActions = Key<[RadialMenuAction]>("radialMenuActions", default: RadialMenuAction.defaultRadialMenuActions)
 
     // Migrator
     static let lastMigratorURL = Key<URL?>("lastMigratorURL", default: nil)

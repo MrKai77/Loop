@@ -41,25 +41,25 @@ final class RadialMenuViewModel: ObservableObject {
         parentAction ?? currentAction
     }
 
-    private var radialMenuActions: [RadialMenuWindowAction] {
-        RadialMenuWindowAction.userConfiguredActions
+    private var radialMenuActions: [RadialMenuAction] {
+        RadialMenuAction.userConfiguredActions
     }
 
-    private var directionalRadialMenuActions: [RadialMenuWindowAction] {
+    private var directionalRadialMenuActions: [RadialMenuAction] {
         radialMenuActions.dropLast()
     }
 
-    private var centerRadialMenuAction: RadialMenuWindowAction? {
+    private var centerRadialMenuAction: RadialMenuAction? {
         radialMenuActions.last
     }
 
     var shouldFillRadialMenu: Bool {
         // If the user has the center action selected, then fill the radial menu
-        if effectiveWindowAction.id == centerRadialMenuAction?.id {
+        if effectiveWindowAction.id == centerRadialMenuAction?.associatedActionId {
             return true
         }
 
-        guard !directionalRadialMenuActions.contains(where: { $0.id == effectiveWindowAction.id }) else {
+        guard !directionalRadialMenuActions.contains(where: { $0.associatedActionId == effectiveWindowAction.id }) else {
             return false
         }
 
@@ -69,7 +69,7 @@ final class RadialMenuViewModel: ObservableObject {
 
     var shouldHideDirectionSelector: Bool {
         // If the current action is a user-set radial menu action, always show the direction selector
-        if radialMenuActions.contains(where: { $0.id == effectiveWindowAction.id }) {
+        if radialMenuActions.contains(where: { $0.associatedActionId == effectiveWindowAction.id }) {
             return false
         }
 
@@ -113,7 +113,7 @@ final class RadialMenuViewModel: ObservableObject {
 
     private func calculateTargetAngle() -> Angle? {
         // Check directional radial menu actions first
-        if let index = directionalRadialMenuActions.firstIndex(where: { $0.id == effectiveWindowAction.id }) {
+        if let index = directionalRadialMenuActions.firstIndex(where: { $0.associatedActionId == effectiveWindowAction.id }) {
             let actionAngleSpan = 360.0 / CGFloat(directionalRadialMenuActions.count)
             return Angle(degrees: CGFloat(index) * actionAngleSpan - 90)
         }
@@ -126,7 +126,7 @@ final class RadialMenuViewModel: ObservableObject {
         guard abs(closestAngle.degrees) < 179 else { return false }
 
         if let previousAction {
-            return directionalRadialMenuActions.contains(where: { $0.id == previousAction.id }) || previousAction.direction.hasRadialMenuAngle
+            return directionalRadialMenuActions.contains(where: { $0.associatedActionId == previousAction.id }) || previousAction.direction.hasRadialMenuAngle
         }
 
         return false
