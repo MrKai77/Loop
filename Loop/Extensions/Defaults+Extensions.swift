@@ -123,8 +123,10 @@ extension Defaults.Keys {
     static let lastMigratorURL = Key<URL?>("lastMigratorURL", default: nil)
 
     // StashManager
-    static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>())
     static let stashManagerStashedWindows = Key<[CGWindowID: WindowAction]>("stashManagerStashed", default: [:])
+    
+    @available(*, deprecated, message: "Revealed stash windows are no longer tracked.")
+    static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>())
 
     // AccentColorController
     static let lastUsedAccentColor1 = Key<Color>("lastUsedAccentColor1", default: .black)
@@ -137,5 +139,5 @@ extension Defaults.Keys {
     static let processWallpaper = Key<Bool>("processWallpaper", default: false, iCloud: true)
 
     // DataPatcher
-    static let patchesApplied = Key<DataPatcher.Patch>("patchesApplied", default: [], iCloud: true)
+    static let patchesApplied = Key<DataPatcher.Patches>("patchesApplied", default: [], iCloud: true)
 }

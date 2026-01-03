@@ -74,47 +74,45 @@ enum WindowEngine {
             if !Defaults[.previewVisibility] {
                 LoopManager.lastTargetFrame = window.frame
             }
-
-            return
-        }
-
-        // Otherwise, we obviously need to disable fullscreen to resize the window
-        window.fullscreen = false
-
-        // Calculate the target frame
-        let targetFrame: CGRect = action.getFrame(
-            window: window,
-            bounds: screen.safeScreenFrame,
-            screen: screen
-        )
-        Log.info("Target window frame: \(targetFrame.debugDescription)", category: .windowEngine)
-
-        // If the action is undo, remove the last action from the window records.
-        if action.direction == .undo {
-            WindowRecords.removeLastAction(for: window)
-        }
-
-        // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
-        if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
-            resizeOwnWindow(targetFrame: targetFrame)
         } else {
-            let shouldAnimate = shouldAnimateResize(
-                for: window,
-                willChangeScreens: willChangeScreens
+            // Otherwise, we obviously need to disable fullscreen to resize the window
+            window.fullscreen = false
+            
+            // Calculate the target frame
+            let targetFrame: CGRect = action.getFrame(
+                window: window,
+                bounds: screen.safeScreenFrame,
+                screen: screen
             )
-            resizeWindow(
-                window,
-                targetFrame: targetFrame,
-                screen: screen,
-                willChangeScreens: willChangeScreens,
-                ignorePadding: action.direction.willMove,
-                animate: shouldAnimate
-            )
-        }
+            Log.info("Target window frame: \(targetFrame.debugDescription)", category: .windowEngine)
+            
+            // If the action is undo, remove the last action from the window records.
+            if action.direction == .undo {
+                WindowRecords.removeLastAction(for: window)
+            }
+            
+            // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
+            if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
+                resizeOwnWindow(targetFrame: targetFrame)
+            } else {
+                let shouldAnimate = shouldAnimateResize(
+                    for: window,
+                    willChangeScreens: willChangeScreens
+                )
+                resizeWindow(
+                    window,
+                    targetFrame: targetFrame,
+                    screen: screen,
+                    willChangeScreens: willChangeScreens,
+                    ignorePadding: action.direction.willMove,
+                    animate: shouldAnimate
+                )
+            }
 
-        // Move cursor to center of window if user has enabled it
-        if Defaults[.moveCursorWithWindow] {
-            CGWarpMouseCursorPosition(targetFrame.center)
+            // Move cursor to center of window if user has enabled it
+            if Defaults[.moveCursorWithWindow] {
+                CGWarpMouseCursorPosition(targetFrame.center)
+            }
         }
 
         StashManager.shared.onWindowResized(

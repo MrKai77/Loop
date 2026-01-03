@@ -133,14 +133,12 @@ struct RadialMenuConfigurationView: View {
         }
     }
 
-    private func previewedActionChanged(_: WindowAction) {
+    private func previewedActionChanged(_ newAction: WindowAction) {
         guard windowModel.isPreviewingUserSelection else {
             return
         }
 
-        let selectedAction = windowModel.previewedParentAction ?? windowModel.previewedAction
-
-        if let match = radialMenuActions.first(where: { $0.associatedActionId == selectedAction.id }) {
+        if let match = radialMenuActions.first(where: { $0.associatedActionId == newAction.id }) {
             selectedRadialMenuActions = [match]
         } else {
             selectedRadialMenuActions = []
