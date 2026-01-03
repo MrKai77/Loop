@@ -15,6 +15,7 @@ struct RadialMenuConfigurationView: View {
     @Default(.radialMenuVisibility) private var radialMenuVisibility
     @Default(.radialMenuCornerRadius) private var radialMenuCornerRadius
     @Default(.radialMenuThickness) private var radialMenuThickness
+    @Default(.enableRadialMenuCustomization) var enableRadialMenuCustomization
     @Default(.radialMenuActions) private var radialMenuActions
     @State private var selectedRadialMenuActions: Set<RadialMenuWindowAction> = []
 
@@ -56,46 +57,48 @@ struct RadialMenuConfigurationView: View {
         }
         .animation(.smooth(duration: 0.25), value: radialMenuVisibility)
 
-        LuminareSection(String(localized: "Actions", comment: "Section header shown in settings")) {
-            HStack(spacing: 4) {
-                Button("Add") {
-                    radialMenuActions.insert(.custom(.init(.noAction)), at: 0)
-                }
-                .luminareRoundingBehavior(topLeading: true)
-
-                Button("Remove", role: .destructive) {
-                    radialMenuActions.removeAll(where: selectedRadialMenuActions.contains)
-                }
-                .luminareRoundingBehavior(topTrailing: true)
-                .disabled(selectedRadialMenuActions.isEmpty)
-                .keyboardShortcut(.delete)
-            }
-
-            LuminareList(
-                items: $radialMenuActions,
-                selection: $selectedRadialMenuActions,
-                id: \.id
-            ) { action in
-                RadialMenuActionItemView(action)
-            } emptyView: {
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text("No radial menu actions")
-                            .font(.title3)
-                        Text("Press \"Add\" to add an action")
-                            .font(.caption)
+        if enableRadialMenuCustomization {
+            LuminareSection(String(localized: "Actions", comment: "Section header shown in settings")) {
+                HStack(spacing: 4) {
+                    Button("Add") {
+                        radialMenuActions.insert(.custom(.init(.noAction)), at: 0)
                     }
-                    Spacer()
+                    .luminareRoundingBehavior(topLeading: true)
+
+                    Button("Remove", role: .destructive) {
+                        radialMenuActions.removeAll(where: selectedRadialMenuActions.contains)
+                    }
+                    .luminareRoundingBehavior(topTrailing: true)
+                    .disabled(selectedRadialMenuActions.isEmpty)
+                    .keyboardShortcut(.delete)
                 }
-                .foregroundStyle(.secondary)
-                .padding()
-            }
-            .luminareRoundingBehavior(bottom: true)
-            .onChange(of: selectedRadialMenuActions, perform: userSelectionChanged)
-            .onChange(of: windowModel.previewedParentAction ?? windowModel.previewedAction, perform: previewedActionChanged)
-            .onDisappear {
-                windowModel.isPreviewingUserSelection = false
+
+                LuminareList(
+                    items: $radialMenuActions,
+                    selection: $selectedRadialMenuActions,
+                    id: \.id
+                ) { action in
+                    RadialMenuActionItemView(action)
+                } emptyView: {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text("No radial menu actions")
+                                .font(.title3)
+                            Text("Press \"Add\" to add an action")
+                                .font(.caption)
+                        }
+                        Spacer()
+                    }
+                    .foregroundStyle(.secondary)
+                    .padding()
+                }
+                .luminareRoundingBehavior(bottom: true)
+                .onChange(of: selectedRadialMenuActions, perform: userSelectionChanged)
+                .onChange(of: windowModel.previewedParentAction ?? windowModel.previewedAction, perform: previewedActionChanged)
+                .onDisappear {
+                    windowModel.isPreviewingUserSelection = false
+                }
             }
         }
     }

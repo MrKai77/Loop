@@ -33,7 +33,7 @@ struct RadialMenuActionItemView: View {
             Spacer()
 
             if radialMenuAction.isKeybindReference {
-                Image(systemName: "link")
+                Image(systemName: "keyboard")
                     .foregroundStyle(.secondary)
             }
         }
@@ -236,7 +236,7 @@ struct RadialMenuActionPickerView: View {
                     Spacer()
 
                     if item.isKeybindReference {
-                        Image(systemName: "link")
+                        Image(systemName: "keyboard")
                             .foregroundStyle(.secondary)
                     }
                 }

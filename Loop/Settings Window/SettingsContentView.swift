@@ -5,6 +5,7 @@
 //  Created by Kai Azim on 2025-10-18.
 //
 
+import Defaults
 import Luminare
 import SwiftUI
 
@@ -14,6 +15,7 @@ struct SettingsContentView: View {
 
     @Environment(\.luminareAnimation) private var animation
     @Environment(\.luminareTitleBarHeight) private var titleBarHeight
+    @Default(.enableRadialMenuCustomization) var enableRadialMenuCustomization
 
     var body: some View {
         LuminareDividedStack {
@@ -58,7 +60,7 @@ struct SettingsContentView: View {
                         RadialMenuView(viewModel: model.radialMenuViewModel)
                             .allowsHitTesting(false)
 
-                        if model.currentTab == .radialMenu {
+                        if enableRadialMenuCustomization, model.currentTab == .radialMenu {
                             RadialMenuActionsGuide()
                         }
                     }

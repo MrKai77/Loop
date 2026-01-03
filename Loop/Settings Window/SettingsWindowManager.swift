@@ -157,7 +157,7 @@ final class SettingsWindowManager: ObservableObject {
             setPreviewedAction(to: parent, cycleAction: cycle[nextIndex])
         } else {
             let radialMenuActions: [WindowAction] = RadialMenuWindowAction.userConfiguredActions
-                .map { $0.resolvedAction ?? .init(.noAction) }
+                .compactMap(\.resolvedAction)
 
             let nextAction = if let index = radialMenuActions.firstIndex(of: previewedParentAction ?? previewedAction) {
                 radialMenuActions[(index + 1) % radialMenuActions.count]
