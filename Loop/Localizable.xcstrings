@@ -11251,6 +11251,9 @@
         }
       }
     },
+    "Left-click to step through cycle actions." : {
+      "comment" : "Section footer shown in settings"
+    },
     "Locked icon alert title" : {
       "localizations" : {
         "ar" : {

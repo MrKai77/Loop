@@ -58,7 +58,10 @@ struct RadialMenuConfigurationView: View {
         .animation(.smooth(duration: 0.25), value: radialMenuVisibility)
 
         if enableRadialMenuCustomization {
-            LuminareSection(String(localized: "Actions", comment: "Section header shown in settings")) {
+            LuminareSection(
+                String(localized: "Actions", comment: "Section header shown in settings"),
+                String(localized: "Left-click to step through cycle actions.", comment: "Section footer shown in settings")
+            ) {
                 HStack(spacing: 4) {
                     Button("Add") {
                         radialMenuActions.insert(.custom(.init(.noAction)), at: 0)
