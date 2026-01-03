@@ -591,7 +591,6 @@ extension WindowAction {
     /// - Returns: the adjusted frame after applying the size adjustment based on the direction and bounds.
     private func calculateSizeAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
         var result = frameToResizeFrom
-        let totalBounds: Edge.Set = [.top, .bottom, .leading, .trailing]
         let step = Defaults[.sizeIncrement] * ((direction == .larger || direction.willGrow) ? -1 : 1)
 
         let padding = PaddingSettings.padding
@@ -603,20 +602,24 @@ extension WindowAction {
 
         if LoopManager.sidesToAdjust == nil {
             let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
-            LoopManager.sidesToAdjust = totalBounds.subtracting(edgesTouchingBounds)
+            LoopManager.sidesToAdjust = .all.subtracting(edgesTouchingBounds)
         }
 
         if let edgesToInset = LoopManager.sidesToAdjust {
-            if edgesToInset.isEmpty || edgesToInset.contains(totalBounds) {
-                result = result.inset(
-                    by: step,
-                    minSize: .init(
-                        width: minWidth,
-                        height: minHeight
+            if edgesToInset.isEmpty || edgesToInset.contains(.all) {
+                result = result
+                    .inset(
+                        by: step,
+                        minSize: .init(
+                            width: minWidth,
+                            height: minHeight
+                        )
                     )
-                )
+                    .intersection(bounds)
             } else {
-                result = result.padding(edgesToInset, step)
+                result = result
+                    .padding(edgesToInset, step)
+                    .intersection(bounds)
 
                 if result.width < minWidth {
                     result.size.width = minWidth
