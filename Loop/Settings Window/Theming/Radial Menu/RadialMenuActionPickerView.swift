@@ -68,7 +68,7 @@ struct RadialMenuActionPickerView: View {
                 allSections
             ) { item in
                 HStack(spacing: 8) {
-                    if let action = item.resolvedAction {
+                    if let action = item.resolved {
                         HStack(spacing: 8) {
                             IconView(action: action)
 
@@ -112,7 +112,7 @@ struct RadialMenuActionPickerView: View {
 
         let matches = allSectionItems
             .compactMap { item -> (RadialMenuWindowAction, Int)? in
-                guard let action = item.resolvedAction else { return nil }
+                guard let action = item.resolved else { return nil }
 
                 if let score = fuzzyScore(action.getName(), key) {
                     return (item, score)

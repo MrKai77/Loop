@@ -56,7 +56,7 @@ struct LuminarePreviewView: View {
                 of: windowModel.previewedAction,
                 initial: true
             ) { newAction in
-                var newActionRect: CGRect = if newAction.willManipulateExistingWindowFrame {
+                let newActionRect: CGRect = if newAction.willManipulateExistingWindowFrame {
                     .zero
                 } else {
                     newAction.getFrame(

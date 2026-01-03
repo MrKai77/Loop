@@ -43,6 +43,7 @@ struct RadialMenuActionItemView: View {
             if radialMenuAction.isKeybindReference {
                 Image(systemName: "keyboard")
                     .foregroundStyle(.secondary)
+                    .help("This action is linked to a keybind. Changes made to this action will affect both.")
             }
 
             HStack(spacing: 8) {
@@ -71,8 +72,8 @@ struct RadialMenuActionItemView: View {
                 isPickerPresented = false
             }
         }
-        .onChange(of: radialMenuAction.resolvedAction) { _ in
-            if let resolvedAction = radialMenuAction.resolvedAction {
+        .onChange(of: radialMenuAction.resolved) { _ in
+            if let resolvedAction = radialMenuAction.resolved {
                 if resolvedAction.direction.isCustomizable {
                     isConfiguringCustom = true
                 }
@@ -107,7 +108,7 @@ struct RadialMenuActionItemView: View {
                 isPickerPresented = true
             } label: {
                 HStack(spacing: 8) {
-                    if let action = radialMenuAction.resolvedAction {
+                    if let action = radialMenuAction.resolved {
                         IconView(action: action)
 
                         Text(action.getName())
@@ -131,7 +132,7 @@ struct RadialMenuActionItemView: View {
             .padding(.leading, -4)
 
             Group {
-                if let resolvedAction = radialMenuAction.resolvedAction {
+                if let resolvedAction = radialMenuAction.resolved {
                     let actionBinding = Binding<WindowAction>(
                         get: {
                             resolvedAction
@@ -165,7 +166,7 @@ struct RadialMenuActionItemView: View {
                                     .frame(width: 400)
                             }
                         }
-                        .help("Customize this keybind's custom frame.")
+                        .help("Customize this action's custom frame.")
                     }
 
                     if resolvedAction.direction == .cycle {

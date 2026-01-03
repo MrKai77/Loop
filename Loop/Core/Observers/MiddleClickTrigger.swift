@@ -27,7 +27,7 @@ final class MiddleClickTrigger {
         guard let self else { return }
 
         if useTriggerDelay {
-            triggerDelayTimer.handleTrigger(startingAction: .init(.noAction))
+            triggerDelayTimer.handleTrigger(startingAction: .init(.noSelection))
         } else {
             openCallback(action)
         }
@@ -76,11 +76,11 @@ final class MiddleClickTrigger {
             if event.type == .otherMouseDown,
                event.getIntegerValueField(.mouseEventButtonNumber) == 2 {
                 if doubleClickToTrigger {
-                    doubleClickTimer.handleTrigger(startingAction: .init(.noAction))
+                    doubleClickTimer.handleTrigger(startingAction: .init(.noSelection))
                 } else if useTriggerDelay {
-                    triggerDelayTimer.handleTrigger(startingAction: .init(.noAction))
+                    triggerDelayTimer.handleTrigger(startingAction: .init(.noSelection))
                 } else {
-                    openCallback(.init(.noAction))
+                    openCallback(.init(.noSelection))
                 }
             } else {
                 triggerDelayTimer.cancel()

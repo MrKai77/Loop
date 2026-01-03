@@ -16,7 +16,7 @@ import Foundation
 /// In that case, use the `updateStartingAction` method.
 final class TriggerDelayTimer {
     private var triggerDelayTimer: Task<(), Never>?
-    private var startingAction: WindowAction = .init(.noAction)
+    private var startingAction: WindowAction = .init(.noSelection)
     private let openCallback: (WindowAction) -> ()
     private var triggerDelay: CGFloat { Defaults[.triggerDelay] }
 
@@ -61,6 +61,6 @@ final class TriggerDelayTimer {
     func cancel() {
         triggerDelayTimer?.cancel()
         triggerDelayTimer = nil
-        startingAction = .init(.noAction)
+        startingAction = .init(.noSelection)
     }
 }

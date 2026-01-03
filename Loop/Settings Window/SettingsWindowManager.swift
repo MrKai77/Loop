@@ -65,7 +65,7 @@ final class SettingsWindowManager: ObservableObject {
 
         self.radialMenuViewModel = .init(startingAction: startingAction, window: nil, previewMode: true)
 
-        if let firstAction = RadialMenuWindowAction.userConfiguredActions.first?.resolvedAction {
+        if let firstAction = RadialMenuWindowAction.userConfiguredActions.first?.resolved {
             setPreviewedAction(to: firstAction)
         }
     }
@@ -157,7 +157,7 @@ final class SettingsWindowManager: ObservableObject {
             setPreviewedAction(to: parent, cycleAction: cycle[nextIndex])
         } else {
             let radialMenuActions: [WindowAction] = RadialMenuWindowAction.userConfiguredActions
-                .compactMap(\.resolvedAction)
+                .compactMap(\.resolved)
 
             let nextAction = if let index = radialMenuActions.firstIndex(of: previewedParentAction ?? previewedAction) {
                 radialMenuActions[(index + 1) % radialMenuActions.count]

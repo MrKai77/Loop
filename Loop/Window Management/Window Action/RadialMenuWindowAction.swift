@@ -21,7 +21,7 @@ enum RadialMenuWindowAction: Identifiable, Codable, Hashable, Defaults.Serializa
         }
     }
 
-    var resolvedAction: WindowAction? {
+    var resolved: WindowAction? {
         switch self {
         case let .custom(windowAction):
             windowAction

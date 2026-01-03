@@ -38,7 +38,7 @@ struct RadialMenuActionsGuide: View {
 
     var body: some View {
         ZStack {
-            if let centerResolved = centerAction.resolvedAction {
+            if let centerResolved = centerAction.resolved {
                 actionButton(
                     action: centerResolved,
                     isActive: centerResolved == activeAction
@@ -54,7 +54,7 @@ struct RadialMenuActionsGuide: View {
 
             RadialLayout {
                 ForEach(Array(radialMenuActions.dropLast()), id: \.id) { action in
-                    if let resolved = action.resolvedAction {
+                    if let resolved = action.resolved {
                         actionButton(
                             action: resolved,
                             isActive: resolved == activeAction

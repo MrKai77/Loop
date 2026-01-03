@@ -60,6 +60,11 @@ final class PreviewController {
         let window = windowController.window
         controller = nil
 
+        if window?.alphaValue == 0 {
+            windowController.close()
+            return
+        }
+
         let animationConfiguration = Defaults[.animationConfiguration]
         if let timingFunction = animationConfiguration.previewTimingFunction {
             window?.alphaValue = 1

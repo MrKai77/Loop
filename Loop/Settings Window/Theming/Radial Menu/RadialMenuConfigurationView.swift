@@ -122,7 +122,7 @@ struct RadialMenuConfigurationView: View {
     }
 
     private func userSelectionChanged(_ newValue: Set<RadialMenuWindowAction>) {
-        if newValue.count == 1, let resolved = newValue.first?.resolvedAction {
+        if newValue.count == 1, let resolved = newValue.first?.resolved {
             windowModel.isPreviewingUserSelection = true
             windowModel.setPreviewedAction(to: resolved)
         } else {
