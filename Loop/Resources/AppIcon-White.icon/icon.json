@@ -2,22 +2,44 @@
   "color-space-for-untagged-svg-colors" : "display-p3",
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.12549,0.61961,0.90588,1.00000",
-      "srgb:0.09804,0.39216,0.70196,1.00000"
-    ]
+      "gray:0.76109,1.00000",
+      "gray:0.61382,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
   },
   "groups" : [
     {
       "layers" : [
         {
+          "glass" : true,
           "image-name" : "2 – Layer.png",
           "name" : "2 – Layer"
         }
       ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
+      "shadow-specializations" : [
+        {
+          "value" : {
+            "kind" : "layer-color",
+            "opacity" : 0.5
+          }
+        },
+        {
+          "appearance" : "light",
+          "value" : {
+            "kind" : "layer-color",
+            "opacity" : 0.5
+          }
+        }
+      ],
       "specular" : false,
       "translucency" : {
         "enabled" : false,
@@ -25,11 +47,17 @@
       }
     },
     {
-      "blur-material" : 0.2,
-      "hidden" : false,
+      "blend-mode-specializations" : [
+        {
+          "appearance" : "dark",
+          "value" : "normal"
+        }
+      ],
+      "blur-material" : null,
       "layers" : [
         {
           "blend-mode" : "lighten",
+          "glass" : true,
           "image-name" : "1 – Layer.svg",
           "name" : "1 – Layer",
           "opacity-specializations" : [
@@ -44,44 +72,15 @@
           ]
         }
       ],
+      "lighting" : "individual",
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 0.75
       },
-      "translucency-specializations" : [
-        {
-          "value" : {
-            "enabled" : true,
-            "value" : 0.5
-          }
-        },
-        {
-          "appearance" : "dark",
-          "value" : {
-            "enabled" : true,
-            "value" : 0.5
-          }
-        }
-      ]
-    },
-    {
-      "blur-material" : null,
-      "layers" : [
-        {
-          "glass" : true,
-          "image-name" : "1 – Layer 4.svg",
-          "name" : "1 – Layer 4",
-          "opacity" : 0.75
-        }
-      ],
-      "shadow" : {
-        "kind" : "none",
-        "opacity" : 0.5
-      },
-      "specular" : false,
+      "specular" : true,
       "translucency" : {
         "enabled" : true,
-        "value" : 0.75
+        "value" : 0.5
       }
     }
   ],
