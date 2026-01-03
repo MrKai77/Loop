@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct RadialLayout: Layout {
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) -> CGSize {
+    func sizeThatFits(proposal: ProposedViewSize, subviews _: Subviews, cache _: inout ()) -> CGSize {
         proposal.replacingUnspecifiedDimensions()
     }
 
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) {
+    func placeSubviews(in bounds: CGRect, proposal _: ProposedViewSize, subviews: Subviews, cache _: inout ()) {
         let radius = min(bounds.size.width, bounds.size.height) / 2
         let angle = Angle.degrees(360 / Double(subviews.count)).radians
 

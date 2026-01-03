@@ -5,9 +5,9 @@
 //  Created by Kai Azim on 2026-01-01.
 //
 
-import SwiftUI
-import Luminare
 import Defaults
+import Luminare
+import SwiftUI
 
 struct RadialMenuActionsGuide: View {
     @EnvironmentObject private var windowModel: SettingsWindowManager
@@ -15,23 +15,23 @@ struct RadialMenuActionsGuide: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
 
     @Default(.radialMenuActions) private var radialMenuActions
-    
+
     private var radialActions: [RadialMenuWindowAction] {
         Array(radialMenuActions.dropLast())
     }
-    
+
     private var centerAction: RadialMenuWindowAction {
         radialMenuActions.last ?? .custom(.init(.noAction))
     }
-    
+
     private var activeAction: WindowAction {
         windowModel.previewedParentAction ?? windowModel.previewedAction
     }
-    
+
     private var selectedColor: Color {
         windowModel.isPreviewingUserSelection ? accentColorController.color1.opacity(0.6) : accentColorController.color2.opacity(0.3)
     }
-    
+
     private var buttonShape: RoundedRectangle {
         RoundedRectangle(cornerRadius: 12)
     }
@@ -75,7 +75,7 @@ struct RadialMenuActionsGuide: View {
         .frame(width: 200, height: 200)
         .animation(luminareAnimation, value: radialMenuActions)
     }
-    
+
     @ViewBuilder
     private func actionButton(
         action: WindowAction? = nil,
@@ -92,7 +92,7 @@ struct RadialMenuActionsGuide: View {
             } else {
                 windowModel.isPreviewingUserSelection = true
             }
-            
+
             if windowModel.isPreviewingUserSelection {
                 windowModel.setPreviewedAction(to: action)
             }

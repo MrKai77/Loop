@@ -64,11 +64,11 @@ struct KeybindItemView: View {
 
             Group {
                 if action.direction.isCustomizable {
-                    Button(action: {
+                    Button {
                         isConfiguringCustom = true
-                    }, label: {
+                    } label: {
                         Image(systemName: "slider.horizontal.3")
-                    })
+                    }
                     .buttonStyle(.plain)
                     .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCustom, isCompact: false) {
                         if action.direction == .custom {
@@ -83,11 +83,11 @@ struct KeybindItemView: View {
                 }
 
                 if action.direction == .cycle {
-                    Button(action: {
+                    Button {
                         isConfiguringCycle = true
-                    }, label: {
+                    } label: {
                         Image(systemName: "repeat")
-                    })
+                    }
                     .buttonStyle(.plain)
                     .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCycle, isCompact: false) {
                         CycleActionConfigurationView(action: $action, isPresented: $isConfiguringCycle)

@@ -276,7 +276,7 @@ final class IconRenderView: NSView {
         if currentAction.direction == .cycle, let image = NSImage(systemSymbolName: "repeat", accessibilityDescription: nil) {
             return .image(image)
         }
-        
+
         return nil
     }
 

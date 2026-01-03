@@ -99,7 +99,7 @@ struct RadialMenuConfigurationView: View {
             }
         }
     }
-    
+
     private func userSelectionChanged(_ newValue: Set<RadialMenuWindowAction>) {
         if newValue.count == 1, let resolved = newValue.first?.resolvedAction {
             windowModel.isPreviewingUserSelection = true
@@ -108,14 +108,14 @@ struct RadialMenuConfigurationView: View {
             windowModel.isPreviewingUserSelection = false
         }
     }
-    
-    private func previewedActionChanged(_ newValue: WindowAction) {
+
+    private func previewedActionChanged(_: WindowAction) {
         guard windowModel.isPreviewingUserSelection else {
             return
         }
 
         let selectedAction = windowModel.previewedParentAction ?? windowModel.previewedAction
-        
+
         if let match = radialMenuActions.first(where: { $0.id == selectedAction.id }) {
             selectedRadialMenuActions = [match]
         } else {

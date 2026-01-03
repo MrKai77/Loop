@@ -92,3 +92,9 @@ enum RadialMenuWindowAction: Identifiable, Codable, Hashable, Defaults.Serializa
         )
     ]
 }
+
+extension RadialMenuWindowAction {
+    static var userConfiguredActions: [RadialMenuWindowAction] {
+        Defaults[.enableRadialMenuCustomization] ? Defaults[.radialMenuActions] : defaultRadialMenuActions
+    }
+}

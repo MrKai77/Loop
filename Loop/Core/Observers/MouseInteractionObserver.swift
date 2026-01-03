@@ -24,8 +24,10 @@ final class MouseInteractionObserver {
     private var previousDistanceToMouse: CGFloat = .zero
 
     private var radialMenuActions: [RadialMenuWindowAction] {
-        Defaults[.radialMenuActions]
+        RadialMenuWindowAction.userConfiguredActions
     }
+
+    private static let failedToResolveKeybindAction: WindowAction = .init(.noAction) // This helps to keep a stable ID
 
     init(
         windowActionCache: WindowActionCache,
@@ -86,7 +88,7 @@ final class MouseInteractionObserver {
         let initialMousePosition = getInitialMousePosition()
         let currentMousePosition = NSEvent.mouseLocation
 
-        let angleToMouse =  initialMousePosition.angle(to: currentMousePosition) + .radians(.pi / 2)
+        let angleToMouse = initialMousePosition.angle(to: currentMousePosition) + .radians(.pi / 2)
         let distanceToMouse = initialMousePosition.distance(to: currentMousePosition)
 
         // Return if the mouse didn't move
@@ -124,7 +126,11 @@ final class MouseInteractionObserver {
             case let .custom(windowAction):
                 changeAction(windowAction)
             case let .keybindReference(id):
-                if let action = windowActionCache.actionsByIdentifier[id] { changeAction(action) }
+                if let action = windowActionCache.actionsByIdentifier[id] {
+                    changeAction(action)
+                } else {
+                    changeAction(Self.failedToResolveKeybindAction)
+                }
             case nil:
                 changeAction(.init(.noSelection))
             }

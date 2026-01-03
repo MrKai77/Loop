@@ -56,18 +56,16 @@ struct LuminarePreviewView: View {
                 of: windowModel.previewedAction,
                 initial: true
             ) { newAction in
-                var newActionRect: CGRect
-
-                if newAction.willManipulateExistingWindowFrame {
-                    newActionRect = .zero
+                var newActionRect: CGRect = if newAction.willManipulateExistingWindowFrame {
+                    .zero
                 } else {
-                    newActionRect = newAction.getFrame(
+                    newAction.getFrame(
                         window: nil,
                         bounds: .init(origin: .zero, size: geo.size),
                         isPreview: true
                     )
                 }
-                
+
                 withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
                     if newActionRect.size.area == .zero {
                         actionRect = .init(

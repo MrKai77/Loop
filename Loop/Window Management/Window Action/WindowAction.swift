@@ -15,7 +15,7 @@ import SwiftUI
 struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serializable {
     private(set) var id: UUID
     private static var sharedNoSelectionId: UUID = .init()
-    
+
     /// Initializes a `WindowAction` with the specified parameters. Only to be used when decoding from JSON.
     /// - Parameters:
     ///   - direction: the direction of the window action. If custom or cycle, use those and further specify the action with the parameters below.
@@ -67,7 +67,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         } else {
             self.id = UUID()
         }
-        
+
         self.direction = direction
         self.keybind = keybind
     }

@@ -13,7 +13,7 @@ import SwiftUI
 final class RadialMenuViewModel: ObservableObject {
     @Published private(set) var angle: Double
     @Published private(set) var currentAction: WindowAction
-    
+
     /// If a cycling action is chosen, this will represent the enclosing cycle action
     @Published private(set) var parentAction: WindowAction?
 
@@ -36,19 +36,19 @@ final class RadialMenuViewModel: ObservableObject {
 
         recomputeAngle()
     }
-    
+
     private var effectiveWindowAction: WindowAction {
         parentAction ?? currentAction
     }
-    
+
     private var radialMenuActions: [RadialMenuWindowAction] {
-        Defaults[.radialMenuActions]
+        RadialMenuWindowAction.userConfiguredActions
     }
 
     private var directionalRadialMenuActions: [RadialMenuWindowAction] {
         radialMenuActions.dropLast()
     }
-    
+
     private var centerRadialMenuAction: RadialMenuWindowAction? {
         radialMenuActions.last
     }
@@ -58,11 +58,11 @@ final class RadialMenuViewModel: ObservableObject {
         if effectiveWindowAction.id == centerRadialMenuAction?.id {
             return true
         }
-        
+
         guard !directionalRadialMenuActions.contains(where: { $0.id == effectiveWindowAction.id }) else {
             return false
         }
-        
+
         // Otherwise, default to the action's settings
         return effectiveWindowAction.direction.shouldFillRadialMenu
     }
@@ -72,7 +72,7 @@ final class RadialMenuViewModel: ObservableObject {
         if radialMenuActions.contains(where: { $0.id == effectiveWindowAction.id }) {
             return false
         }
-        
+
         // Otherwise, default to the action's settings
         return currentAction.direction.hasRadialMenuAngle != true || currentAction.direction.isCustomizable == true
     }
@@ -102,33 +102,33 @@ final class RadialMenuViewModel: ObservableObject {
 
     func recomputeAngle() {
         guard let targetAngle = calculateTargetAngle() else { return }
-        
+
         let closestAngle = Angle.degrees(angle).angleDifference(to: targetAngle)
         let shouldAnimate = shouldAnimateTransition(closestAngle: closestAngle)
-        
-        withAnimation(shouldAnimate ? AnimationConfiguration.radialMenuAngle :  . linear(duration: 0)) {
+
+        withAnimation(shouldAnimate ? AnimationConfiguration.radialMenuAngle : .linear(duration: 0)) {
             angle += closestAngle.degrees
         }
     }
-    
+
     private func calculateTargetAngle() -> Angle? {
         // Check directional radial menu actions first
         if let index = directionalRadialMenuActions.firstIndex(where: { $0.id == effectiveWindowAction.id }) {
             let actionAngleSpan = 360.0 / CGFloat(directionalRadialMenuActions.count)
             return Angle(degrees: CGFloat(index) * actionAngleSpan - 90)
         }
-        
+
         // Otherwise, default to the current action's radial menu angle
         return currentAction.radialMenuAngle(window: window)
     }
-    
+
     private func shouldAnimateTransition(closestAngle: Angle) -> Bool {
         guard abs(closestAngle.degrees) < 179 else { return false }
-        
+
         if let previousAction {
             return directionalRadialMenuActions.contains(where: { $0.id == previousAction.id }) || previousAction.direction.hasRadialMenuAngle
         }
-        
+
         return false
     }
 }

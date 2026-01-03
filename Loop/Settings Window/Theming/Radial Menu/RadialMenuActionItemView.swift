@@ -29,7 +29,7 @@ struct RadialMenuActionItemView: View {
     var body: some View {
         HStack {
             label
-            
+
             Spacer()
 
             if radialMenuAction.isKeybindReference {
@@ -89,7 +89,7 @@ struct RadialMenuActionItemView: View {
                         Image(systemName: "bolt.horizontal.fill")
                             .foregroundStyle(.secondary)
 
-                        Text("Failed to resolve keybind")
+                        Text("Failed to resolve linked keybind")
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -122,11 +122,11 @@ struct RadialMenuActionItemView: View {
                     )
 
                     if resolvedAction.direction.isCustomizable {
-                        Button(action: {
+                        Button {
                             isConfiguringCustom = true
-                        }, label: {
+                        } label: {
                             Image(systemName: "slider.horizontal.3")
-                        })
+                        }
                         .buttonStyle(.plain)
                         .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCustom, isCompact: false) {
                             if resolvedAction.direction == .custom {
@@ -141,11 +141,11 @@ struct RadialMenuActionItemView: View {
                     }
 
                     if resolvedAction.direction == .cycle {
-                        Button(action: {
+                        Button {
                             isConfiguringCycle = true
-                        }, label: {
+                        } label: {
                             Image(systemName: "repeat")
-                        })
+                        }
                         .buttonStyle(.plain)
                         .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCycle, isCompact: false) {
                             CycleActionConfigurationView(action: actionBinding, isPresented: $isConfiguringCycle)

@@ -16,7 +16,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     /// `noAction` is explicitly chosen or user-bound.
     /// `noSelection` is the default state before any radial menu selection is made.
     case noAction = "NoAction", noSelection = "NoSelection"
-    
+
     // General Actions
     case maximize = "Maximize", almostMaximize = "AlmostMaximize", fullscreen = "Fullscreen"
     case maximizeHeight = "MaximizeHeight", maximizeWidth = "MaximizeWidth"

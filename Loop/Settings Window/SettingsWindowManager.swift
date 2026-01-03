@@ -20,8 +20,9 @@ final class SettingsWindowManager: ObservableObject {
     @Published var isPreviewingUserSelection: Bool = false {
         didSet { restartTimer() }
     }
+
     @Published private(set) var previewedParentAction: WindowAction? = nil
-    @Published private(set) var previewedAction: WindowAction {
+    @Published private(set) var previewedAction: WindowAction = .init(.noSelection) {
         didSet { radialMenuViewModel.setAction(to: previewedAction, parent: previewedParentAction) }
     }
 
@@ -62,8 +63,11 @@ final class SettingsWindowManager: ObservableObject {
     private init() {
         let startingAction: WindowAction = .init(.noAction)
 
-        self.previewedAction = startingAction
         self.radialMenuViewModel = .init(startingAction: startingAction, window: nil, previewMode: true)
+
+        if let firstAction = RadialMenuWindowAction.userConfiguredActions.first?.resolvedAction {
+            setPreviewedAction(to: firstAction)
+        }
     }
 
     func show() {
@@ -113,7 +117,7 @@ final class SettingsWindowManager: ObservableObject {
 
         Log.success("Settings window closed", category: .settingsWindowManager)
     }
-    
+
     private func restartTimer() {
         stopTimer()
         startTimer()
@@ -128,7 +132,7 @@ final class SettingsWindowManager: ObservableObject {
                 if controller?.window?.isKeyWindow == true {
                     setNextPreviewedAction()
                 }
-                
+
                 try await Task.sleep(for: .seconds(1))
             }
         }
@@ -138,7 +142,7 @@ final class SettingsWindowManager: ObservableObject {
         previewActionTimerTask?.cancel()
         previewActionTimerTask = nil
     }
-    
+
     private func setNextPreviewedAction() {
         if isPreviewingUserSelection {
             guard let parent = previewedParentAction,
@@ -148,23 +152,23 @@ final class SettingsWindowManager: ObservableObject {
             else {
                 return
             }
-            
+
             let nextIndex = (index + 1) % cycle.count
             setPreviewedAction(to: parent, cycleAction: cycle[nextIndex])
         } else {
-            let radialMenuActions: [WindowAction] = Defaults[.radialMenuActions]
+            let radialMenuActions: [WindowAction] = RadialMenuWindowAction.userConfiguredActions
                 .map { $0.resolvedAction ?? .init(.noAction) }
-            
+
             let nextAction = if let index = radialMenuActions.firstIndex(of: previewedParentAction ?? previewedAction) {
                 radialMenuActions[(index + 1) % radialMenuActions.count]
             } else {
                 radialMenuActions.first ?? .init(.noAction)
             }
-            
+
             setPreviewedAction(to: nextAction)
         }
     }
-    
+
     func setPreviewedAction(to newAction: WindowAction, cycleAction: WindowAction? = nil) {
         if newAction.direction == .cycle {
             previewedParentAction = newAction
