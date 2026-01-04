@@ -12,9 +12,11 @@ import SwiftUI
 struct TriggerKeycorder: View {
     @EnvironmentObject private var model: KeybindsConfigurationModel
     @Environment(\.luminareAnimation) private var luminareAnimation
-    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
+    @Environment(\.appearsActive) private var appearsActive
 
     let keyLimit: Int = 5
+
+    @Default(.sideDependentTriggerKey) private var sideDependentTriggerKey
 
     @Binding private var validCurrentKey: Set<CGKeyCode>
     @State private var selectionKey: Set<CGKeyCode>
@@ -95,6 +97,11 @@ struct TriggerKeycorder: View {
         }
         .onChange(of: model.currentEventMonitor) { _ in
             if model.currentEventMonitor != eventMonitor {
+                finishedObservingKeys(wasForced: true)
+            }
+        }
+        .onChange(of: appearsActive) { _ in
+            if appearsActive {
                 finishedObservingKeys(wasForced: true)
             }
         }
