@@ -34,9 +34,9 @@ struct Icon: Hashable, LuminareSelectionData {
         IconManager.returnUnlockedIcons().contains(self)
     }
 
-    #if DEBUG
+    #if RELEASE
+        // Remove developer icon in release builds
         static let all: [Icon] = [
-            .developer,
             .classic,
             .holo,
             .rosePine,
@@ -55,6 +55,7 @@ struct Icon: Hashable, LuminareSelectionData {
         static let `default` = Icon.developer
     #else
         static let all: [Icon] = [
+            .developer,
             .classic,
             .holo,
             .rosePine,
