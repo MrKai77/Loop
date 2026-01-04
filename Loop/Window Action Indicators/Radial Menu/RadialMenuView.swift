@@ -32,8 +32,6 @@ struct RadialMenuView: View {
         ZStack {
             ZStack {
                 // NSVisualEffect on background
-                /// If building on macOS 15 and below, comment out the following if statement
-                /// Remember to uncomment before committing the PR
                 if #available(macOS 26.0, *) {
                     Color.clear
                         .glassEffect(

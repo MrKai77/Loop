@@ -174,12 +174,15 @@ private extension Migrator {
         savePanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
         savePanel.title = .init(localized: "Export keybinds")
         savePanel.nameFieldStringValue = "Loop Keybinds.json"
+        savePanel.canCreateDirectories = true
+        savePanel.showsTagField = false
 
-        guard let window = NSApplication.shared.mainWindow else {
-            throw MigratorError.mainWindowNotAvailableForPanel
+        let result = await withCheckedContinuation { continuation in
+            DispatchQueue.main.async {
+                let response = savePanel.runModal()
+                continuation.resume(returning: response)
+            }
         }
-
-        let result = await savePanel.beginSheetModal(for: window)
 
         guard result == .OK, let selectedFileURL = savePanel.url else {
             throw MigratorError.directorySelectionCancelled
@@ -301,12 +304,16 @@ private extension Migrator {
         openPanel.directoryURL = Defaults[.lastMigratorURL] ?? documentsDirectory
         openPanel.title = .init(localized: "Select a keybinds file")
         openPanel.allowedContentTypes = [.json]
+        openPanel.canChooseFiles = true
+        openPanel.canChooseDirectories = false
+        openPanel.allowsMultipleSelection = false
 
-        guard let window = NSApplication.shared.mainWindow else {
-            throw MigratorError.mainWindowNotAvailableForPanel
+        let result = await withCheckedContinuation { continuation in
+            DispatchQueue.main.async {
+                let response = openPanel.runModal()
+                continuation.resume(returning: response)
+            }
         }
-
-        let result = await openPanel.beginSheetModal(for: window)
 
         guard result == .OK, let selectedFileURL = openPanel.url else {
             throw MigratorError.fileSelectionCancelled
@@ -445,8 +452,6 @@ private extension Migrator {
         buttons.forEach { alert.addButton(withTitle: $0) }
 
         // Reference: https://x.com/leoshimo/status/1975642593569738755
-        /// If building on macOS 15 and below, comment out the following if statement
-        /// Remember to uncomment before committing the PR
         if #available(macOS 26.0, *) {
             alert.buttons.first?.tintProminence = .primary
         }
