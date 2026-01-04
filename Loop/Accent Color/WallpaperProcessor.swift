@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: - Wallpaper processor errors
 
 /// Represents errors that can occur during wallpaper processing.
-public enum WallpaperProcessorError: LocalizedError {
+enum WallpaperProcessorError: LocalizedError {
     case screenshotFailed
     case dominantColorsCalculationFailed
     case noWallpaperWindowsFound
@@ -21,7 +21,7 @@ public enum WallpaperProcessorError: LocalizedError {
     case imageResizeFailed
     case bitmapCreationFailed
 
-    var errorDescription: String {
+    var errorDescription: String? {
         switch self {
         case .screenshotFailed:
             "Screenshot failed."

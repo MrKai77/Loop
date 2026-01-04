@@ -10,12 +10,21 @@ import Scribe
 import SwiftUI
 
 enum WindowError: LocalizedError {
-    case invalidWindow
+    case sheetWindow
+    case blockedBundleID
+    case cannotGetWindow
+    case filteredOutFromWindowInfo
 
-    var errorDescription: String {
+    var errorDescription: String? {
         switch self {
-        case .invalidWindow:
-            "Invalid window"
+        case .sheetWindow:
+            "Invalid window: sheet"
+        case .blockedBundleID:
+            "Invalid window: blocked bundle ID"
+        case .cannotGetWindow:
+            "Could not get the element's window"
+        case .filteredOutFromWindowInfo:
+            "Filtered out from window info"
         }
     }
 }
@@ -29,17 +38,12 @@ final class Window {
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
     init(element: AXUIElement) throws {
         self.axWindow = element
-
+        self.cgWindowID = try element.getWindowID()
         let pid = try axWindow.getPID()
-        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first {
-            $0.processIdentifier == pid
-        }
+        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first { $0.processIdentifier == pid }
 
-        self.cgWindowID = try axWindow.getWindowID()
-
-        if role != .window,
-           subrole != .standardWindow {
-            throw WindowError.invalidWindow
+        guard role != .sheet else {
+            throw WindowError.sheetWindow
         }
 
         let invalidBundleIdentifiers: [String] = [
@@ -49,7 +53,7 @@ final class Window {
 
         if let bundleIdentifier = nsRunningApplication?.bundleIdentifier,
            invalidBundleIdentifiers.contains(bundleIdentifier) {
-            throw WindowError.invalidWindow
+            throw WindowError.blockedBundleID
         }
     }
 
@@ -58,7 +62,7 @@ final class Window {
     convenience init(pid: pid_t) throws {
         let element = AXUIElementCreateApplication(pid)
         guard let window: AXUIElement = try element.getValue(.focusedWindow) else {
-            throw WindowError.invalidWindow
+            throw WindowError.cannotGetWindow
         }
         try self.init(element: window)
     }
@@ -71,19 +75,19 @@ final class Window {
             let alpha = windowInfo[kCGWindowAlpha as String] as? Double, alpha > 0.01, // Ignore invisible windows
             let pid = windowInfo[kCGWindowOwnerPID as String] as? pid_t
         else {
-            throw WindowError.invalidWindow
+            throw WindowError.filteredOutFromWindowInfo
         }
 
         if let level = windowInfo[kCGWindowLayer as String] as? Int,
            level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
-            throw WindowError.invalidWindow
+            throw WindowError.filteredOutFromWindowInfo
         }
 
         let element = AXUIElementCreateApplication(pid)
         guard let windows: [AXUIElement] = try element.getValue(.windows),
               !windows.isEmpty
         else {
-            throw WindowError.invalidWindow
+            throw WindowError.cannotGetWindow
         }
 
         // If there’s only one window, use that as there's no need to grab its frame

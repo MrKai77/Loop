@@ -89,7 +89,7 @@ enum MigratorError: LocalizedError {
     case directorySelectionCancelled
     case failedToReadFile
 
-    var errorDescription: String {
+    var errorDescription: String? {
         switch self {
         case .keybindsEmpty:
             "Keybinds are empty."
