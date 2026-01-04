@@ -112,6 +112,10 @@ extension WindowDirection {
             String(localized: "Larger", comment: "Window action")
         case .smaller:
             String(localized: "Smaller", comment: "Window action")
+        case .scaleUp:
+            String(localized: "Scale Up", comment: "Window action")
+        case .scaleDown:
+            String(localized: "Scale Down", comment: "Window action")
         case .shrinkTop:
             String(localized: "Shrink Top", comment: "Window action")
         case .shrinkBottom:

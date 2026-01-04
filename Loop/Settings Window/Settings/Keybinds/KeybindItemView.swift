@@ -15,15 +15,18 @@ struct KeybindItemView: View {
 
     @Default(.triggerKey) private var triggerKey
     @Default(.keybinds) private var keybinds
-    @Binding private var action: WindowAction
+
+    @State private var action: WindowAction
+    @Binding private var boundAction: WindowAction
 
     @State private var isConfiguringCustom: Bool = false
     @State private var isConfiguringCycle: Bool = false
     private let cycleIndex: Int?
     @State private var isDirectionPickerPresented = false
 
-    init(_ keybind: Binding<WindowAction>, cycleIndex: Int? = nil) {
-        self._action = keybind
+    init(_ action: Binding<WindowAction>, cycleIndex: Int? = nil) {
+        self.action = action.wrappedValue
+        self._boundAction = action
         self.cycleIndex = cycleIndex
     }
 
@@ -41,7 +44,7 @@ struct KeybindItemView: View {
             keybindCombination
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .animation(luminareAnimation, value: action)
+
         .padding(.horizontal, 12)
         .onChange(of: isHovering) { _ in
             if !isHovering {
@@ -56,6 +59,7 @@ struct KeybindItemView: View {
                 isConfiguringCycle = true
             }
         }
+        .onChange(of: action) { boundAction = $0 }
     }
 
     private var titleAndButtons: some View {
@@ -70,13 +74,22 @@ struct KeybindItemView: View {
                         Image(systemName: "slider.horizontal.3")
                     }
                     .buttonStyle(.plain)
-                    .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCustom, isCompact: false) {
+                    .luminareModalWithPredefinedSheetStyle(
+                        isPresented: $isConfiguringCustom,
+                        isCompact: false
+                    ) {
                         if action.direction == .custom {
-                            CustomActionConfigurationView(action: $action, isPresented: $isConfiguringCustom)
-                                .frame(width: 400)
+                            CustomActionConfigurationView(
+                                action: $action,
+                                isPresented: $isConfiguringCustom
+                            )
+                            .frame(width: 400)
                         } else {
-                            StashActionConfigurationView(action: $action, isPresented: $isConfiguringCustom)
-                                .frame(width: 400)
+                            StashActionConfigurationView(
+                                action: $action,
+                                isPresented: $isConfiguringCustom
+                            )
+                            .frame(width: 400)
                         }
                     }
                     .help("Customize this action's custom frame.")
@@ -89,9 +102,15 @@ struct KeybindItemView: View {
                         Image(systemName: "repeat")
                     }
                     .buttonStyle(.plain)
-                    .luminareModalWithPredefinedSheetStyle(isPresented: $isConfiguringCycle, isCompact: false) {
-                        CycleActionConfigurationView(action: $action, isPresented: $isConfiguringCycle)
-                            .frame(width: 400)
+                    .luminareModalWithPredefinedSheetStyle(
+                        isPresented: $isConfiguringCycle,
+                        isCompact: false
+                    ) {
+                        CycleActionConfigurationView(
+                            action: $action,
+                            isPresented: $isConfiguringCycle
+                        )
+                        .frame(width: 400)
                     }
                     .help("Customize what this action cycles through.")
                 }
@@ -102,7 +121,10 @@ struct KeybindItemView: View {
         .background {
             if isHovering {
                 Color.clear
-                    .luminarePopup(isPresented: $isDirectionPickerPresented, alignment: .leadingLastTextBaseline) {
+                    .luminarePopup(
+                        isPresented: $isDirectionPickerPresented,
+                        alignment: .leadingLastTextBaseline
+                    ) {
                         DirectionPickerView(
                             direction: $action.direction,
                             isInCycle: cycleIndex != nil

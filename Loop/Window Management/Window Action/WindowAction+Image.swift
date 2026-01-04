@@ -39,9 +39,9 @@ extension WindowAction {
             NSImage(systemSymbolName: "arrow.up.to.line", accessibilityDescription: nil)
         case .bottomScreen:
             NSImage(systemSymbolName: "arrow.down.to.line", accessibilityDescription: nil)
-        case .larger:
+        case .larger, .scaleUp:
             NSImage(systemSymbolName: "arrow.up.left.and.arrow.down.right", accessibilityDescription: nil)
-        case .smaller:
+        case .smaller, .scaleDown:
             NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)
         case .shrinkTop, .growBottom, .moveDown:
             NSImage(systemSymbolName: "arrow.down", accessibilityDescription: nil)
@@ -154,7 +154,7 @@ final class IconRenderView: NSView {
         to action: WindowAction,
         animated: Bool
     ) {
-        guard action.id != currentAction.id else { return }
+        guard action != currentAction else { return }
         currentAction = action
         updatePath(duration: animated ? 0.2 : 0.0)
     }

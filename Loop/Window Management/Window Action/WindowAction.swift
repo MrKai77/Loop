@@ -301,8 +301,12 @@ extension WindowAction {
 
             let frameToResizeFrom = LoopManager.lastTargetFrame
 
-            result = calculateSizeAdjustment(frameToResizeFrom, bounds)
+            // calculateSizeAdjustment() will read LoopManager.sidesToAdjust, but we compute them here
+            let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
+            LoopManager.sidesToAdjust = .all.subtracting(edgesTouchingBounds)
 
+            let proportional: [WindowDirection] = [.scaleUp, .scaleDown]
+            result = calculateSizeAdjustment(frameToResizeFrom, bounds, proportionalIfPossible: proportional.contains(direction))
         } else if direction.willShrink || direction.willGrow {
             // Can't grow or shrink a window that is not resizable
             if let window, !window.isResizable {
@@ -588,50 +592,82 @@ extension WindowAction {
     /// - Parameters:
     ///   - frameToResizeFrom: the frame to apply the size adjustment to.
     ///   - bounds: the bounds within which the frame should be resized.
+    ///   - proportionalIfPossible: if true and all edges are resized, scales proportionally about the center instead of insetting each side.
     /// - Returns: the adjusted frame after applying the size adjustment based on the direction and bounds.
-    private func calculateSizeAdjustment(_ frameToResizeFrom: CGRect, _ bounds: CGRect) -> CGRect {
-        var result = frameToResizeFrom
-        let step = Defaults[.sizeIncrement] * ((direction == .larger || direction.willGrow) ? -1 : 1)
+    private func calculateSizeAdjustment(
+        _ frameToResizeFrom: CGRect,
+        _ bounds: CGRect,
+        proportionalIfPossible: Bool = false
+    ) -> CGRect {
+        let step = Defaults[.sizeIncrement] * ((direction == .larger || direction == .scaleUp || direction.willGrow) ? -1 : 1)
 
         let padding = PaddingSettings.padding
         let previewPadding = Defaults[.previewPadding]
-        let totalHorizontalPadding = padding.left + padding.right
-        let totalVerticalPadding = padding.totalTopPadding + padding.bottom
-        let minWidth = totalHorizontalPadding + previewPadding + 100
-        let minHeight = totalVerticalPadding + previewPadding + 100
+        let minSize = CGSize(
+            width: padding.left + padding.right + previewPadding + 100,
+            height: padding.totalTopPadding + padding.bottom + previewPadding + 100
+        )
 
-        if LoopManager.sidesToAdjust == nil {
-            let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
-            LoopManager.sidesToAdjust = .all.subtracting(edgesTouchingBounds)
+        func insetAllEdges(_ rect: CGRect) -> CGRect {
+            rect.inset(by: step, minSize: minSize)
         }
 
-        if let edgesToInset = LoopManager.sidesToAdjust {
-            if edgesToInset.isEmpty || edgesToInset.contains(.all) {
-                result = result
-                    .inset(
-                        by: step,
-                        minSize: .init(
-                            width: minWidth,
-                            height: minHeight
-                        )
-                    )
-                    .intersection(bounds)
+        func scaleAllEdgesIfPossible(_ rect: CGRect) -> CGRect? {
+            guard proportionalIfPossible, rect.width > 0, rect.height > 0 else { return nil }
+
+            let sx = (rect.width - 2 * step) / rect.width
+            let sy = (rect.height - 2 * step) / rect.height
+            var targetUniformScale = min(sx, sy)
+
+            guard targetUniformScale.isFinite, targetUniformScale > 0 else { return nil }
+            let minScaleToSatisfyMinWidth = minSize.width / rect.width
+            let minScaleToSatisfyMinHeight = minSize.height / rect.height
+            let minUniformScale = max(minScaleToSatisfyMinWidth, minScaleToSatisfyMinHeight)
+            targetUniformScale = max(targetUniformScale, minUniformScale)
+
+            let rectCenter = CGPoint(
+                x: rect.midX,
+                y: rect.midY
+            )
+
+            let scaledSize = CGSize(
+                width: rect.width * targetUniformScale,
+                height: rect.height * targetUniformScale
+            )
+
+            let scaledRect = CGRect(
+                x: rectCenter.x - scaledSize.width / 2,
+                y: rectCenter.y - scaledSize.height / 2,
+                width: scaledSize.width,
+                height: scaledSize.height
+            )
+
+            return scaledRect
+        }
+
+        var result = frameToResizeFrom
+
+        if let edges = LoopManager.sidesToAdjust {
+            let resizeAllEdges = edges.isEmpty || edges.contains(.all)
+
+            if resizeAllEdges {
+                result = scaleAllEdgesIfPossible(result) ?? insetAllEdges(result)
             } else {
-                result = result
-                    .padding(edgesToInset, step)
-                    .intersection(bounds)
+                result = result.padding(edges, step)
 
-                if result.width < minWidth {
-                    result.size.width = minWidth
-                    result.origin.x = frameToResizeFrom.midX - minWidth / 2
+                if result.width < minSize.width {
+                    result.size.width = minSize.width
+                    result.origin.x = frameToResizeFrom.midX - minSize.width / 2
                 }
-
-                if result.height < minHeight {
-                    result.size.height = minHeight
-                    result.origin.y = frameToResizeFrom.midY - minHeight / 2
+                if result.height < minSize.height {
+                    result.size.height = minSize.height
+                    result.origin.y = frameToResizeFrom.midY - minSize.height / 2
                 }
             }
         }
+
+        result = result
+            .intersection(bounds)
 
         if result.size.approximatelyEqual(to: LoopManager.lastTargetFrame.size, tolerance: 2) {
             result = LoopManager.lastTargetFrame

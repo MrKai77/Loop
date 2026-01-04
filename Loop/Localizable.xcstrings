@@ -23739,6 +23739,12 @@
         }
       }
     },
+    "Scale Down" : {
+      "comment" : "Window action"
+    },
+    "Scale Up" : {
+      "comment" : "Window action"
+    },
     "Screen Switching" : {
       "comment" : "Section header in the action picker of the Keybinds tab",
       "localizations" : {
