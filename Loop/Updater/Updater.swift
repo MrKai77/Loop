@@ -234,7 +234,7 @@ final class Updater: ObservableObject {
                 targetRelease = release
                 processChangelog(release.body)
             } else {
-                Log.info("No update available.")
+                Log.info("No update available.", category: .updater)
             }
         }
     }
