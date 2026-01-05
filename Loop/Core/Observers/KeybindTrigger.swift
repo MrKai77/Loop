@@ -200,6 +200,9 @@ final class KeybindTrigger {
                     return .opening
                 }
             } else {
+                if allPressedKeys.isEmpty {
+                    doubleClickTimer.handleKeyUp()
+                }
                 closeLoop(forceClose: false)
             }
         }
@@ -213,7 +216,7 @@ final class KeybindTrigger {
             openCallback(startingAction) // Only update Loop to the latest WindowAction
         } else {
             if doubleClickToTrigger {
-                doubleClickTimer.handleTrigger(startingAction: startingAction)
+                doubleClickTimer.handleKeyDown(startingAction: startingAction)
             } else if useTriggerDelay {
                 startTriggerDelayTimer(
                     startingAction: startingAction,

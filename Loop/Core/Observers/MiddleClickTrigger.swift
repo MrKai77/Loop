@@ -76,13 +76,14 @@ final class MiddleClickTrigger {
             if event.type == .otherMouseDown,
                event.getIntegerValueField(.mouseEventButtonNumber) == 2 {
                 if doubleClickToTrigger {
-                    doubleClickTimer.handleTrigger(startingAction: .init(.noSelection))
+                    doubleClickTimer.handleKeyDown(startingAction: .init(.noSelection))
                 } else if useTriggerDelay {
                     triggerDelayTimer.handleTrigger(startingAction: .init(.noSelection))
                 } else {
                     openCallback(.init(.noSelection))
                 }
             } else {
+                doubleClickTimer.handleKeyUp()
                 triggerDelayTimer.cancel()
                 closeCallback(false)
             }
