@@ -282,6 +282,7 @@ extension WindowAction {
     ///   - direction: the direction of the window action.
     ///   - window: the window to be manipulated.
     ///   - bounds: the bounds within which the window should be manipulated.
+    ///   - padding: the padding which will be applied to the computed frame.
     ///   - isPreview: whether the action is being performed on a preview window.
     /// - Returns: the calculated target frame for the specified window action.
     private func calculateTargetFrame(
@@ -598,6 +599,13 @@ extension WindowAction {
         }
     }
     
+    /// Computes a new window frame with the maximum height that fits within the given bounds.
+    /// The provided padding is factored in to account for later adjustments.
+    /// - Parameters:
+    ///   - window: the window whose current frame is used as a reference.
+    ///   - bounds: the area within which the window should be resized.
+    ///   - padding: the padding to be applied to the window.
+    /// - Returns: a CGRect representing a frame that maximizes the window's height.
     private func getMaximizeHeightFrame(window: Window, bounds: CGRect, padding: PaddingModel) -> CGRect {
         CGRect(
             x: window.frame.minX - padding.window / 2,
@@ -607,6 +615,13 @@ extension WindowAction {
         )
     }
     
+    /// Computes a new window frame with the maximum width that fits within the given bounds.
+    /// The provided padding is factored in to account for later adjustments.
+    /// - Parameters:
+    ///   - window: the window whose current frame is used as a reference.
+    ///   - bounds: the area within which the window should be resized.
+    ///   - padding: the padding to be applied to the window.
+    /// - Returns: a CGRect representing a frame that maximizes the window's width.
     private func getMaximizeWidthFrame(window: Window, bounds: CGRect, padding: PaddingModel) -> CGRect {
         CGRect(
             x: bounds.minX,
