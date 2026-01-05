@@ -59,7 +59,7 @@ struct RadialMenuConfigurationView: View {
 
         if enableRadialMenuCustomization {
             LuminareSection(
-                String(localized: "Actions", comment: "Section header shown in settings"),
+                String(localized: "Actions", comment: "Header for radial menu section shown in settings"),
                 String(localized: "Left-click to step through cycle actions.", comment: "Section footer shown in settings")
             ) {
                 HStack(spacing: 4) {

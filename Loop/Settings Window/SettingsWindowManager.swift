@@ -26,8 +26,8 @@ final class SettingsWindowManager: ObservableObject {
         didSet { radialMenuViewModel.setAction(to: previewedAction, parent: previewedParentAction) }
     }
 
-    @Published var showRadialMenu: Bool = false
-    @Published var showPreview: Bool = false
+    @Published var showRadialMenu: Bool = true
+    @Published var showPreview: Bool = true
 
     @Published var currentTab: SettingsTab = .icon {
         didSet {

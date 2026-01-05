@@ -20,24 +20,21 @@ extension Defaults.Keys {
 
     // Accent Color
     static let accentColorMode: Key<AccentColorOption> = Key("accentColorMode", default: .system, iCloud: true)
-    static let customAccentColor = Key<Color>("customAccentColor", default: Color(.white), iCloud: true)
-    static let useGradient = Key<Bool>("useGradient", default: true, iCloud: true)
-    static let gradientColor = Key<Color>("gradientColor", default: Color(.black), iCloud: true)
+    static let customAccentColor = Key<Color>("customAccentColor", default: .teal, iCloud: true)
+    static let useGradient = Key<Bool>("useGradient", default: false, iCloud: true)
+    static let gradientColor = Key<Color>("gradientColor", default: .blue, iCloud: true)
 
     // Radial Menu
     static let radialMenuVisibility = Key<Bool>("radialMenuVisibility", default: true, iCloud: true)
     static let radialMenuCornerRadius = Key<CGFloat>("radialMenuCornerRadius", default: 50, iCloud: true)
     static let radialMenuThickness = Key<CGFloat>("radialMenuThickness", default: 22, iCloud: true)
-    /// Lock radial menu to the center of the screen
-    /// Adjust with `defaults write com.MrKai77.Loop lockRadialMenuToCenter -bool true`
-    /// Reset with `defaults delete com.MrKai77.Loop lockRadialMenuToCenter`
-    static let lockRadialMenuToCenter = Key<Bool>("lockRadialMenuToCenter", default: false, iCloud: true)
+    static let radialMenuActions = Key<[RadialMenuAction]>("radialMenuActions", default: RadialMenuAction.defaultRadialMenuActions, iCloud: true)
 
     // Preview
     static let previewVisibility = Key<Bool>("previewVisibility", default: true, iCloud: true)
     static let previewPadding = Key<CGFloat>("previewPadding", default: 10, iCloud: true)
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10, iCloud: true)
-    static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 5, iCloud: true)
+    static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 4, iCloud: true)
     static let previewUseWindowCornerRadius = Key<Bool>("previewUseWindowCornerRadius", default: true, iCloud: true)
 
     // Behavior
@@ -78,20 +75,23 @@ extension Defaults.Keys {
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false, iCloud: true)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true, iCloud: true)
     static let enableRadialMenuCustomization = Defaults.Key<Bool>("enableRadialMenuCustomization", default: false, iCloud: true)
+    static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20, iCloud: true)
+
+    // Excluded apps
+    static let excludedApps = Key<[URL]>("excludedApps", default: [], iCloud: true)
 
     // About
     static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false, iCloud: true)
-    /// Disable automatic updates with `defaults write com.MrKai77.Loop updatesEnabled -bool false`
-    /// Reset with `defaults delete com.MrKai77.Loop updatesEnabled`
-    static let updatesEnabled = Key<Bool>("updatesEnabled", default: true, iCloud: true)
-
-    static let excludedApps = Key<[URL]>("excludedApps", default: [], iCloud: true)
-    static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20, iCloud: true)
 }
 
 // MARK: - Hidden Settings
 
 extension Defaults.Keys {
+    /// Lock radial menu to the center of the screen
+    /// Adjust with `defaults write com.MrKai77.Loop lockRadialMenuToCenter -bool true`
+    /// Reset with `defaults delete com.MrKai77.Loop lockRadialMenuToCenter`
+    static let lockRadialMenuToCenter = Key<Bool>("lockRadialMenuToCenter", default: false, iCloud: true)
+
     /// Minimum screen size, defined in inches on the diagonal, for which padding will be applied on windows.
     /// Adjust with `defaults write com.MrKai77.Loop paddingMinimumScreenSize -float x`
     /// Reset with `defaults delete com.MrKai77.Loop paddingMinimumScreenSize`
@@ -116,8 +116,9 @@ extension Defaults.Keys {
     /// - `actionCenter`: Center of the selected action (e.g. for left half, it will grow from the center of that left half)
     static let previewStartingPosition = Key<PreviewStartingPosition>("previewStartingPosition", default: .screenCenter, iCloud: true)
 
-    // Radial Menu
-    static let radialMenuActions = Key<[RadialMenuAction]>("radialMenuActions", default: RadialMenuAction.defaultRadialMenuActions)
+    /// Disable automatic updates with `defaults write com.MrKai77.Loop updatesEnabled -bool false`
+    /// Reset with `defaults delete com.MrKai77.Loop updatesEnabled`
+    static let updatesEnabled = Key<Bool>("updatesEnabled", default: true, iCloud: true)
 
     // Migrator
     static let lastMigratorURL = Key<URL?>("lastMigratorURL", default: nil)

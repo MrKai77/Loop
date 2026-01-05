@@ -42,8 +42,9 @@ struct AccentColorConfigurationView: View {
                 .frame(height: 90)
             }
             .luminareRoundingBehavior(top: true)
+            .environment(\.appearsActive, true) // Keep on active state to show accent color
 
-            LuminareToggle("Gradient", isOn: $useGradient.animation(luminareAnimation))
+            LuminareToggle("Gradient", isOn: $useGradient)
 
             if accentColorMode == .wallpaper {
                 Button(action: syncWallpaper) {
@@ -88,12 +89,7 @@ struct AccentColorConfigurationView: View {
         }
 
         syncWallpaperTask = Task {
-            await accentColorController.refresh()
-
-            // Force-rerender accent colors
-            let window = SettingsWindowManager.shared.window
-            window?.resignMain()
-            window?.makeKeyAndOrderFront(self)
+            await accentColorController.refresh(ignoreThrottle: true)
 
             withAnimation(.smooth(duration: 0.5)) {
                 didSyncWallpaper = true

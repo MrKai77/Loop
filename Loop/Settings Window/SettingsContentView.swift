@@ -71,12 +71,6 @@ struct SettingsContentView: View {
                 .frame(width: 520)
             }
         }
-        .onAppear {
-            DispatchQueue.main.async {
-                model.showPreview = true
-                model.showRadialMenu = true
-            }
-        }
         .luminareTint(overridingWith: accentColorController.color1)
         .ignoresSafeArea()
         .environmentObject(model)

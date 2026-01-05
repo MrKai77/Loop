@@ -17,7 +17,7 @@ struct PaddingConfigurationView: View {
     @State var paddingModel = Defaults[.padding]
     @Binding var isPresented: Bool
 
-    let range: ClosedRange<Double> = 0...200
+    let range: ClosedRange<Double> = 0...100
 
     var body: some View {
         VStack(spacing: 12) {
@@ -177,7 +177,7 @@ struct PaddingConfigurationView: View {
             LuminareSlider(
                 String(localized: "Window gaps", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.window.doubleBinding,
-                in: 0...100,
+                in: range,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
@@ -186,7 +186,7 @@ struct PaddingConfigurationView: View {
 
             LuminareSlider(
                 value: $paddingModel.externalBar.doubleBinding,
-                in: 0...100,
+                in: range,
                 format: .number.precision(.fractionLength(0...0)),
                 suffix: Text("px", comment: "Unit symbol: pixels")
             ) {

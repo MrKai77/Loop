@@ -46,7 +46,7 @@ final class AccentColorController: ObservableObject {
         observationTask?.cancel()
     }
 
-    func refresh() async {
+    func refresh(ignoreThrottle: Bool = false) async {
         switch Defaults[.accentColorMode] {
         case .system:
             Log.info("Refreshing accent color based on system accent setting", category: .accentColorController)
@@ -54,7 +54,7 @@ final class AccentColorController: ObservableObject {
             color2 = Defaults[.useGradient] ? Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) : Color.accentColor
         case .wallpaper:
             Log.info("Refreshing accent color based on wallpaper analysis", category: .accentColorController)
-            let colors = await wallpaperProcessor.fetchLatest()
+            let colors = await wallpaperProcessor.fetchLatest(ignoreThrottle: ignoreThrottle)
             color1 = colors.primary
             color2 = Defaults[.useGradient] ? colors.secondary : colors.primary
         case .custom:
