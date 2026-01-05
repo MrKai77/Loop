@@ -81,7 +81,12 @@ extension Defaults.Keys {
     static let excludedApps = Key<[URL]>("excludedApps", default: [], iCloud: true)
 
     // About
-    static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false, iCloud: true)
+    #if RELEASE
+        static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false, iCloud: true)
+    #else
+        // Development versions should check for development updates by default.
+        static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: true, iCloud: true)
+    #endif
 }
 
 // MARK: - Hidden Settings
