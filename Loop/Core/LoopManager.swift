@@ -91,13 +91,14 @@ extension LoopManager {
         }
 
         guard !isLoopActive else {
-            /// If using Karabiner-Elements, TriggerKeybindObserver may call openLoop twice.
+            /// If using Karabiner-Elements, TriggerKeybindObserver may call openLoop twice, as key events arrive in quick succession.
             /// This happens because Karabiner-Elements sends modifier keys and other keys as separate, rapid events.
             /// As a result, Loop might be opened before the full keybind is pressed.
             /// In these cases, we can simply update the action instead of reopening the Loop.
-            /// Enabling keybindObserver was considered as a workaround, but it doesn't start quickly enough.
-            /// Although Karabiner-Elements sends key events separately, they arrive in quick succession.
-            changeAction(startingAction, disableHapticFeedback: true)
+            if startingAction.direction != .noSelection {
+                changeAction(startingAction, disableHapticFeedback: true)
+            }
+
             return
         }
 
