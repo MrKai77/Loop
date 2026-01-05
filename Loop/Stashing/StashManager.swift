@@ -106,10 +106,12 @@ final class StashManager {
     /// - Returns: `true` if the action is handled by the StashManager and the normal flow should be bypassed; otherwise, `false`.
     @discardableResult
     func handleIfStashed(_ action: WindowAction, screen: NSScreen) -> Bool {
-        guard action.direction == .stash else { return false }
-        guard let stashedWindow = store.stashedWindow(for: action, on: screen) else { return false }
-        guard !stashedWindow.window.isWindowHidden, !stashedWindow.window.isApplicationHidden else { return false }
-        guard stashedWindow.screen.isSameScreen(screen) else { return false }
+        guard action.direction == .stash,
+              let stashedWindow = store.stashedWindow(for: action, on: screen),
+              !stashedWindow.window.isWindowHidden, !stashedWindow.window.isApplicationHidden
+        else {
+            return false
+        }
 
         Log.info("Intercepting window action for stashed window \(stashedWindow.window.description)", category: .stashManager)
 
