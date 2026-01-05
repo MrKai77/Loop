@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DeveloperName</key>
+	<string>MrKai77</string>
+	<key>ApplicationDescription</key>
+	<string>Loop is a macOS window management utility with a radial menu and configurable keybinds for moving, resizing, and arranging windows.</string>
+	<key>Website</key>
+	<string>https://github.com/MrKai77/Loop</string>
+	<key>Connections</key>
+	<array>
+		<dict>
+			<key>IsIncoming</key>
+			<false/>
+			<key>Host</key>
+			<string>*.github.com</string>
+			<key>NetworkProtocol</key>
+			<string>TCP</string>
+			<key>Port</key>
+			<string>443</string>
+			<key>Relevance</key>
+			<string>Default</string>
+			<key>Purpose</key>
+			<string>Loop periodically checks if a newer version of the app is available. You can disable these automatic software update checks in the About tab of Loop&apos;s settings.</string>
+			<key>DenyConsequences</key>
+			<string>If you deny these connections, you will not be notified about new versions of Loop.</string>
+		</dict>
+	</array>
+</dict>
+</plist>
