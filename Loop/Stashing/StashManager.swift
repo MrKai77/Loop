@@ -220,7 +220,11 @@ extension StashManager {
 
         if resetFrame {
             let action = WindowAction(.initialFrame)
-            let center = action.getFrame(window: window.window, bounds: window.screen.safeScreenFrame)
+            let center = action.getFrame(
+                window: window.window,
+                bounds: window.screen.safeScreenFrame,
+                screen: window.screen
+            )
 
             window.window.setFrame(center, animate: resetFrameAnimated)
         }

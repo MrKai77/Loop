@@ -198,9 +198,6 @@ enum WindowEngine {
         ignorePadding: Bool,
         animate: Bool
     ) {
-        let respectsPaddingThreshold = Defaults[.paddingMinimumScreenSize] == 0 || screen.diagonalSize > Defaults[.paddingMinimumScreenSize]
-        let usePadding = PaddingSettings.enablePadding && respectsPaddingThreshold
-
         // Grab the bounds of the screen, with padding applied. This is generally not needed, except for:
         // - when window animations are enabled, we use the bounds to keep the window on-screen
         // - when the window finishes resizing, we move the window into the bounds if needed
@@ -208,10 +205,10 @@ enum WindowEngine {
             // If the window is being moved via shortcuts (move right, move left etc.), then the bounds will be zero.
             // This is because the window *can* be moved off-screen in this case.
             CGRect.zero
-        } else if usePadding {
-            PaddingSettings.padding.apply(on: screen.safeScreenFrame)
         } else {
-            screen.safeScreenFrame
+            PaddingSettings
+                .configuredPadding(for: screen)
+                .apply(onScreenFrame: screen.safeScreenFrame)
         }
 
         window.setFrame(

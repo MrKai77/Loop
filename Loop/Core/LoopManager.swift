@@ -318,10 +318,10 @@ extension LoopManager {
                         currentAction = lastAction
                     } else {
                         let currentFrame = targetWindow.frame
-                        let currentBounds = currentScreen.safeScreenFrame
 
-                        let usePadding = PaddingSettings.enablePadding && (Defaults[.paddingMinimumScreenSize] == 0 || currentScreen.diagonalSize > Defaults[.paddingMinimumScreenSize])
-                        let adjustedBounds = usePadding ? PaddingSettings.padding.apply(on: currentBounds) : currentBounds
+                        let adjustedBounds = PaddingSettings
+                            .configuredPadding(for: currentScreen)
+                            .apply(onScreenFrame: currentScreen.safeScreenFrame)
 
                         let proportionalSize = CGRect(
                             x: (currentFrame.minX - adjustedBounds.minX) / adjustedBounds.width,

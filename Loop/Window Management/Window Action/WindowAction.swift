@@ -211,7 +211,13 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     ///   - screen: the screen on which the bounds are located. Only used to determine if padding should be applied (see `getBounds()`).
     ///   - isPreview: ensures that when manipulating the preview window, the last target frame does not affect the actual resizing of the window.
     /// - Returns: the calculated frame for the specified window action.
-    func getFrame(window: Window?, bounds: CGRect, disablePadding: Bool = false, screen: NSScreen? = nil, isPreview: Bool = false) -> CGRect {
+    func getFrame(
+        window: Window?,
+        bounds: CGRect,
+        disablePadding: Bool = false,
+        screen: NSScreen? = nil,
+        isPreview: Bool = false
+    ) -> CGRect {
         let noFrameActions: [WindowDirection] = [.noAction, .noSelection, .cycle, .minimize, .hide]
         guard !noFrameActions.contains(direction), !direction.willFocusWindow else {
             return NSRect(origin: bounds.center, size: .zero)
@@ -221,12 +227,20 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             LoopManager.sidesToAdjust = nil
         }
 
-        var bounds: CGRect = getBounds(from: bounds, disablePadding: disablePadding, screen: screen)
-        var result: CGRect = calculateTargetFrame(direction, window, bounds, isPreview)
+        let padding = disablePadding ? .zero : PaddingSettings.configuredPadding(for: screen)
+        var bounds = padding.apply(onScreenFrame: bounds)
+        var result: CGRect = calculateTargetFrame(
+            direction: direction,
+            window: window,
+            bounds: bounds,
+            padding: padding,
+            isPreview: isPreview
+        )
 
         if !disablePadding {
             if !willManipulateExistingWindowFrame {
-                // Convert rects to integers as that's what the AX API works with to move windows
+                /// Convert rects to integers as that's what the AX API works with to move windows
+                /// Only do this when `!willManipulateExistingWindowFrame`, as otherwise, the window will drift with consecutive calls.
                 bounds = bounds.integerRect()
                 result = result.integerRect()
             }
@@ -239,7 +253,11 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             } else {
                 // Apply padding between windows
                 if isPaddingApplicable {
-                    result = applyInnerPadding(result, bounds)
+                    result = applyInnerPadding(
+                        windowFrame: result,
+                        bounds: bounds,
+                        screen: screen
+                    )
                 }
             }
 
@@ -259,22 +277,6 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 // MARK: - Window Frame Calculations
 
 extension WindowAction {
-    /// Retrieves the bounds for the action based on: the original bounds, whether padding should be applied, and the screen size.
-    /// - Parameters:
-    ///   - originalBounds: the bounds of the screen/frame to resize on.
-    ///   - disablePadding: whether to disable padding. If `true`, the bounds will not be padded. This is useful when calculating frames for the radial menu.
-    ///   - screen: the screen on which the bounds are located. This is used to determine if padding should be applied based on the screen size (if applicable).
-    /// - Returns: the padded bounds if padding can be applied, otherwise the original bounds.
-    private func getBounds(from originalBounds: CGRect, disablePadding: Bool, screen: NSScreen?) -> CGRect {
-        // Get padded bounds only if padding can be applied
-        if !disablePadding, PaddingSettings.enablePadding,
-           Defaults[.paddingMinimumScreenSize] == .zero || screen?.diagonalSize ?? .zero > Defaults[.paddingMinimumScreenSize] {
-            getPaddedBounds(originalBounds)
-        } else {
-            originalBounds
-        }
-    }
-
     /// Calculates the target frame for the specified window action based on the direction, window, bounds, and whether it is a preview.
     /// - Parameters:
     ///   - direction: the direction of the window action.
@@ -282,11 +284,17 @@ extension WindowAction {
     ///   - bounds: the bounds within which the window should be manipulated.
     ///   - isPreview: whether the action is being performed on a preview window.
     /// - Returns: the calculated target frame for the specified window action.
-    private func calculateTargetFrame(_ direction: WindowDirection, _ window: Window?, _ bounds: CGRect, _ isPreview: Bool) -> CGRect {
+    private func calculateTargetFrame(
+        direction: WindowDirection,
+        window: Window?,
+        bounds: CGRect,
+        padding: PaddingModel,
+        isPreview: Bool
+    ) -> CGRect {
         var result: CGRect = .zero
 
         if direction.frameMultiplyValues != nil {
-            result = applyFrameMultiplyValues(bounds)
+            result = applyFrameMultiplyValues(to: bounds)
 
         } else if direction.willAdjustSize {
             // Can't grow or shrink a window that is not resizable
@@ -306,7 +314,13 @@ extension WindowAction {
             LoopManager.sidesToAdjust = .all.subtracting(edgesTouchingBounds)
 
             let proportional: [WindowDirection] = [.scaleUp, .scaleDown]
-            result = calculateSizeAdjustment(frameToResizeFrom, bounds, proportionalIfPossible: proportional.contains(direction))
+            result = calculateSizeAdjustment(
+                frameToResizeFrom: frameToResizeFrom,
+                bounds: bounds,
+                proportionalIfPossible: proportional.contains(direction),
+                padding: padding
+            )
+        
         } else if direction.willShrink || direction.willGrow {
             // Can't grow or shrink a window that is not resizable
             if let window, !window.isResizable {
@@ -337,7 +351,11 @@ extension WindowAction {
                 LoopManager.sidesToAdjust = .trailing
             }
 
-            result = calculateSizeAdjustment(frameToResizeFrom, bounds)
+            result = calculateSizeAdjustment(
+                frameToResizeFrom: frameToResizeFrom,
+                bounds: bounds,
+                padding: padding
+            )
 
         } else if direction.willMove {
             // Return final frame of preview
@@ -347,39 +365,31 @@ extension WindowAction {
 
             let frameToResizeFrom = LoopManager.lastTargetFrame
 
-            result = calculatePositionAdjustment(frameToResizeFrom)
+            result = calculatePositionAdjustment(frameToResizeFrom: frameToResizeFrom)
 
         } else if direction.isCustomizable {
-            result = calculateCustomFrame(window, bounds)
+            result = calculateCustomFrame(window: window, bounds: bounds)
 
         } else if direction == .center {
-            result = calculateCenterFrame(window, bounds)
+            result = calculateCenterFrame(window: window, bounds: bounds)
 
         } else if direction == .macOSCenter {
-            result = calculateMacOSCenterFrame(window, bounds)
+            result = calculateMacOSCenterFrame(window: window, bounds: bounds)
 
         } else if direction == .undo, let window {
-            result = getLastActionFrame(window, bounds)
+            result = getLastActionFrame(window: window, bounds: bounds)
 
         } else if direction == .initialFrame, let window {
-            result = getInitialFrame(window)
+            result = getInitialFrame(window: window)
 
         } else if direction == .maximizeHeight, let window {
-            result = CGRect(
-                x: window.frame.minX,
-                y: bounds.minY,
-                width: window.frame.width,
-                height: bounds.height
-            )
+            result = getMaximizeHeightFrame(window: window, bounds: bounds, padding: padding)
+
         } else if direction == .maximizeWidth, let window {
-            result = CGRect(
-                x: bounds.minX,
-                y: window.frame.minY,
-                width: bounds.width,
-                height: window.frame.height
-            )
+            result = getMaximizeWidthFrame(window: window, bounds: bounds, padding: padding)
+
         } else if direction == .unstash, let window {
-            result = getInitialFrame(window)
+            result = getInitialFrame(window: window)
         }
 
         return result
@@ -388,7 +398,7 @@ extension WindowAction {
     /// Applies the window direction's frame multiply values to the given bounds.
     /// - Parameter bounds: the bounds to which the frame multiply values will be applied on.
     /// - Returns: a new `CGRect` with the frame multiply values applied.
-    private func applyFrameMultiplyValues(_ bounds: CGRect) -> CGRect {
+    private func applyFrameMultiplyValues(to bounds: CGRect) -> CGRect {
         guard let frameMultiplyValues = direction.frameMultiplyValues else {
             return .zero
         }
@@ -406,7 +416,7 @@ extension WindowAction {
     ///   - window: the window to be manipulated.
     ///   - bounds: the bounds within which the window should be manipulated.
     /// - Returns: the calculated custom frame based on the specified parameters.
-    private func calculateCustomFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
+    private func calculateCustomFrame(window: Window?, bounds: CGRect) -> CGRect {
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         // Size Calculation
@@ -487,7 +497,7 @@ extension WindowAction {
                 result.origin.x = bounds.midX - result.width / 2
                 result.origin.y = bounds.midY - result.height / 2
             case .macOSCenter:
-                let yOffset = getMacOSCenterYOffset(result.height, screenHeight: bounds.height)
+                let yOffset = getMacOSCenterYOffset(windowHeight: result.height, screenHeight: bounds.height)
                 result.origin.x = bounds.midX - result.width / 2
                 result.origin.y = (bounds.midY - result.height / 2) + yOffset
             default:
@@ -503,7 +513,7 @@ extension WindowAction {
     ///   - window: the window to be centered. If `nil`, the center frame will be calculated based on the bounds (and therefore resized)
     ///   - bounds: the bounds within which the window should be centered.
     /// - Returns: the calculated center frame for the window.
-    private func calculateCenterFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
+    private func calculateCenterFrame(window: Window?, bounds: CGRect) -> CGRect {
         let windowSize: CGSize = if let window {
             window.size
         } else {
@@ -528,7 +538,7 @@ extension WindowAction {
     ///   - window: the window to be centered. If `nil`, the center frame will be calculated based on the bounds (and therefore resized)
     ///   - bounds: the bounds within which the window should be centered.
     /// - Returns: the calculated "macOS center" frame for the window.
-    private func calculateMacOSCenterFrame(_ window: Window?, _ bounds: CGRect) -> CGRect {
+    private func calculateMacOSCenterFrame(window: Window?, bounds: CGRect) -> CGRect {
         let windowSize: CGSize = if let window {
             window.size
         } else {
@@ -536,7 +546,7 @@ extension WindowAction {
         }
 
         let yOffset = getMacOSCenterYOffset(
-            windowSize.height,
+            windowHeight: windowSize.height,
             screenHeight: bounds.height
         )
 
@@ -555,7 +565,7 @@ extension WindowAction {
     ///   - windowHeight: Height of the window to be resized
     ///   - screenHeight: Height of the screen the window will be resized on
     /// - Returns: The Y offset of the window, to be added onto the screen's midY point.
-    private func getMacOSCenterYOffset(_ windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
+    private func getMacOSCenterYOffset(windowHeight: CGFloat, screenHeight: CGFloat) -> CGFloat {
         let halfScreenHeight = screenHeight / 2
         let windowHeightPercent = windowHeight / screenHeight
         return (0.5 * windowHeightPercent - 0.5) * halfScreenHeight
@@ -566,7 +576,7 @@ extension WindowAction {
     ///   - window: the window for which the last action frame is to be retrieved.
     ///   - bounds: the bounds within which the window should be manipulated.
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
-    private func getLastActionFrame(_ window: Window, _ bounds: CGRect) -> CGRect {
+    private func getLastActionFrame(window: Window, bounds: CGRect) -> CGRect {
         if let previousAction = WindowRecords.getLastAction(for: window) {
             Log.info("Last action was \(previousAction.description)", category: .windowAction)
             return previousAction.getFrame(window: window, bounds: bounds)
@@ -579,7 +589,7 @@ extension WindowAction {
     /// Retrieves the initial frame for the specified window, based on the initial frame recorded in `WindowRecords`.
     /// - Parameter window: the window for which the initial frame is to be retrieved.
     /// - Returns: the initial frame of the window, or the current frame if no initial frame is found.
-    private func getInitialFrame(_ window: Window) -> CGRect {
+    private func getInitialFrame(window: Window) -> CGRect {
         if let initialFrame = WindowRecords.getInitialFrame(for: window) {
             return initialFrame
         } else {
@@ -587,6 +597,25 @@ extension WindowAction {
             return window.frame
         }
     }
+    
+    private func getMaximizeHeightFrame(window: Window, bounds: CGRect, padding: PaddingModel) -> CGRect {
+        CGRect(
+            x: window.frame.minX - padding.window / 2,
+            y: bounds.minY,
+            width: window.frame.width + padding.window,
+            height: bounds.height
+        )
+    }
+    
+    private func getMaximizeWidthFrame(window: Window, bounds: CGRect, padding: PaddingModel) -> CGRect {
+        CGRect(
+            x: bounds.minX,
+            y: window.frame.minY - padding.window / 2,
+            width: bounds.width,
+            height: window.frame.height + padding.window
+        )
+    }
+
 
     /// Calculates the size adjustment for the specified frame based on the bounds and the direction of the action.
     /// - Parameters:
@@ -595,13 +624,13 @@ extension WindowAction {
     ///   - proportionalIfPossible: if true and all edges are resized, scales proportionally about the center instead of insetting each side.
     /// - Returns: the adjusted frame after applying the size adjustment based on the direction and bounds.
     private func calculateSizeAdjustment(
-        _ frameToResizeFrom: CGRect,
-        _ bounds: CGRect,
-        proportionalIfPossible: Bool = false
+        frameToResizeFrom: CGRect,
+        bounds: CGRect,
+        proportionalIfPossible: Bool = false,
+        padding: PaddingModel
     ) -> CGRect {
         let step = Defaults[.sizeIncrement] * ((direction == .larger || direction == .scaleUp || direction.willGrow) ? -1 : 1)
 
-        let padding = PaddingSettings.padding
         let previewPadding = Defaults[.previewPadding]
         let minSize = CGSize(
             width: padding.left + padding.right + previewPadding + 100,
@@ -679,7 +708,7 @@ extension WindowAction {
     /// Calculates the position adjustment for the specified frame based on the direction of the action.
     /// - Parameter frameToResizeFrom: the frame to apply the position adjustment to.
     /// - Returns: the adjusted frame after applying the position adjustment based on the direction.
-    private func calculatePositionAdjustment(_ frameToResizeFrom: CGRect) -> CGRect {
+    private func calculatePositionAdjustment(frameToResizeFrom: CGRect) -> CGRect {
         var result = frameToResizeFrom
 
         if direction == .moveUp {
@@ -695,21 +724,6 @@ extension WindowAction {
         return result
     }
 
-    /// Retrieves the padded bounds for the specified bounds, based on user preferences.
-    /// - Parameter bounds: the bounds to be padded.
-    /// - Returns: the padded bounds with the specified padding applied.
-    private func getPaddedBounds(_ bounds: CGRect) -> CGRect {
-        let padding = PaddingSettings.padding
-
-        var bounds = bounds
-        bounds = bounds.padding(.top, padding.totalTopPadding)
-        bounds = bounds.padding(.bottom, padding.bottom)
-        bounds = bounds.padding(.leading, padding.left)
-        bounds = bounds.padding(.trailing, padding.right)
-
-        return bounds
-    }
-
     /// Applies inner padding to the specified window frame based on the direction and bounds.
     /// "Inner padding" is the padding applied to the sides of the window frame, which aren't touching the side of the screen.
     /// - Parameters:
@@ -717,8 +731,8 @@ extension WindowAction {
     ///   - bounds: the bounds within which the window should be padded.
     ///   - screen: the screen on which the bounds are located. This is used to determine if padding should be applied based on the screen size (if applicable).
     /// - Returns: the window frame with the specified padding applied.
-    private func applyInnerPadding(_ windowFrame: CGRect, _ bounds: CGRect, _ screen: NSScreen? = nil) -> CGRect {
-        guard PaddingSettings.enablePadding, !direction.willMove else {
+    private func applyInnerPadding(windowFrame: CGRect, bounds: CGRect, screen: NSScreen?) -> CGRect {
+        guard !direction.willMove else {
             return windowFrame
         }
 
@@ -737,7 +751,7 @@ extension WindowAction {
             return croppedWindowFrame
         }
 
-        let padding = PaddingSettings.padding
+        let padding = PaddingSettings.configuredPadding(for: screen)
         let halfPadding = padding.window / 2
 
         if direction == .macOSCenter,

@@ -36,7 +36,7 @@ struct PaddingModel: Codable, Defaults.Serializable, Hashable {
         window == top && window == bottom && window == right && window == left
     }
 
-    func apply(on initial: CGRect) -> CGRect {
+    func apply(onScreenFrame initial: CGRect) -> CGRect {
         initial
             .padding(.leading, left)
             .padding(.trailing, right)
