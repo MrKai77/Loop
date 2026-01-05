@@ -16,8 +16,9 @@ final class Updater: ObservableObject {
     @Published private(set) var targetRelease: Release?
     @Published private(set) var progressBar: Double = 0
     @Published private(set) var updateState: UpdateAvailability = .notChecked
-    @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
     @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
+    @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
+    @Published var expandedChangelogSections: Set<String> = [] // By title
 
     private var windowController: NSWindowController?
     private var includeDevelopmentVersions: Bool { Defaults[.includeDevelopmentVersions] }
@@ -317,6 +318,10 @@ final class Updater: ObservableObject {
                     reference: reference
                 ))
             }
+        }
+
+        if let firstSection = changelog.first {
+            expandedChangelogSections = [firstSection.title]
         }
     }
 

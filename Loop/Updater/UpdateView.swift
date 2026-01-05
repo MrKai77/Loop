@@ -184,10 +184,24 @@ struct UpdateView: View {
 
     func changelogView() -> some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack {
+            VStack { // Using LazyVStack seems to cause visual glitches
                 ForEach(updater.changelog, id: \.title) { item in
                     if !item.body.isEmpty {
-                        ChangelogSectionView(item: item)
+                        ChangelogSectionView(
+                            isExpanded: Binding(
+                                get: {
+                                    updater.expandedChangelogSections.contains(item.title)
+                                },
+                                set: { newValue in
+                                    if newValue {
+                                        updater.expandedChangelogSections.insert(item.title)
+                                    } else {
+                                        updater.expandedChangelogSections.remove(item.title)
+                                    }
+                                }
+                            ),
+                            item: item
+                        )
                     }
                 }
             }
@@ -201,7 +215,7 @@ struct ChangelogSectionView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
     @Environment(\.luminareCornerRadii) var luminareCornerRadii
 
-    @State var isExpanded = false
+    @Binding var isExpanded: Bool
     let item: (title: String, body: [Updater.ChangelogNote])
 
     var body: some View {
