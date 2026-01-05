@@ -77,7 +77,7 @@ extension Defaults.Keys {
     static let ignoreFullscreen = Key<Bool>("ignoreFullscreen", default: false, iCloud: true)
     static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false, iCloud: true)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true, iCloud: true)
-    static let enableRadialMenuCustomization = Defaults.Key<Bool>("enableRadialMenuCustomization", default: true, iCloud: true)
+    static let enableRadialMenuCustomization = Defaults.Key<Bool>("enableRadialMenuCustomization", default: false, iCloud: true)
 
     // About
     static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false, iCloud: true)

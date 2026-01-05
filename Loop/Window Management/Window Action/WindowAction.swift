@@ -321,7 +321,7 @@ extension WindowAction {
                 proportionalIfPossible: proportional.contains(direction),
                 padding: padding
             )
-        
+
         } else if direction.willShrink || direction.willGrow {
             // Can't grow or shrink a window that is not resizable
             if let window, !window.isResizable {
@@ -598,7 +598,7 @@ extension WindowAction {
             return window.frame
         }
     }
-    
+
     /// Computes a new window frame with the maximum height that fits within the given bounds.
     /// The provided padding is factored in to account for later adjustments.
     /// - Parameters:
@@ -614,7 +614,7 @@ extension WindowAction {
             height: bounds.height
         )
     }
-    
+
     /// Computes a new window frame with the maximum width that fits within the given bounds.
     /// The provided padding is factored in to account for later adjustments.
     /// - Parameters:
@@ -630,7 +630,6 @@ extension WindowAction {
             height: window.frame.height + padding.window
         )
     }
-
 
     /// Calculates the size adjustment for the specified frame based on the bounds and the direction of the action.
     /// - Parameters:

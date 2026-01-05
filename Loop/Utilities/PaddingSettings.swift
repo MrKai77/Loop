@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2025-08-29.
 //
 
-import Defaults
 import AppKit
+import Defaults
 
 enum PaddingSettings {
     static func configuredPadding(for screen: NSScreen?) -> PaddingModel {
@@ -14,7 +14,7 @@ enum PaddingSettings {
             guard SystemWindowManager.MoveAndResize.enablePadding else {
                 return .zero
             }
-            
+
             let padding = SystemWindowManager.MoveAndResize.padding
 
             return PaddingModel(
