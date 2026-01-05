@@ -32,7 +32,7 @@ final class DoubleClickTimer {
         if let last = lastTriggerKeyReleaseTime, now.timeIntervalSince(last) < doubleClickInterval {
             openCallback(startingAction)
         }
-        
+
         lastTriggerKeyReleaseTime = nil
     }
 
