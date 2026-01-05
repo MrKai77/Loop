@@ -496,7 +496,7 @@ extension LoopManager {
             )
         }
     }
-    
+
     /// Resolves the target screen for `screenToResizeOn`.
     ///
     /// By default, this uses the user's `useScreenWithCursor` setting.
@@ -513,7 +513,7 @@ extension LoopManager {
            let screen = ScreenUtility.screenContaining(window) {
             targetScreen = screen
         }
-        
+
         screenToResizeOn = targetScreen
         return targetScreen
     }
