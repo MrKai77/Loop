@@ -105,8 +105,9 @@ final class RadialMenuViewModel: ObservableObject {
 
         let closestAngle = Angle.degrees(angle).angleDifference(to: targetAngle)
         let shouldAnimate = shouldAnimateTransition(closestAngle: closestAngle)
+        let animation = Defaults[.animationConfiguration].radialMenuAngle
 
-        withAnimation(shouldAnimate ? AnimationConfiguration.radialMenuAngle : .linear(duration: 0)) {
+        withAnimation(shouldAnimate ? animation : .linear(duration: 0)) {
             angle += closestAngle.degrees
         }
     }

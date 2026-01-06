@@ -10,11 +10,13 @@ import Scribe
 import SwiftUI
 
 final class MouseInteractionObserver {
+    private static let directionalActionDistance: CGFloat = 50
+    private static let noActionDistance: CGFloat = 10
+
     // Parameters
     private let windowActionCache: WindowActionCache
     private let changeAction: (WindowAction) -> ()
     private let selectNextCycleItem: () -> ()
-    private let getInitialMousePosition: () -> CGPoint
     private let checkIfLoopOpen: () -> Bool
 
     private var mouseEventMonitor: PassiveEventMonitor?
@@ -22,6 +24,11 @@ final class MouseInteractionObserver {
     // State-keeping for previous calculations
     private var previousAngleToMouse: Angle = .zero
     private var previousDistanceToMouse: CGFloat = .zero
+
+    private var screenBounds: CGRect?
+    private var shouldAccountForAbsoluteMousePosition: Bool = false
+    private var initialMousePosition: CGPoint = .zero
+    private var latestMousePosition: CGPoint = .zero
 
     private var radialMenuActions: [RadialMenuAction] {
         RadialMenuAction.userConfiguredActions
@@ -33,18 +40,33 @@ final class MouseInteractionObserver {
         windowActionCache: WindowActionCache,
         changeAction: @escaping (WindowAction) -> (),
         selectNextCycleItem: @escaping () -> (),
-        getInitialMousePosition: @escaping () -> CGPoint,
         checkIfLoopOpen: @escaping () -> Bool
     ) {
         self.windowActionCache = windowActionCache
         self.changeAction = changeAction
         self.selectNextCycleItem = selectNextCycleItem
-        self.getInitialMousePosition = getInitialMousePosition
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
     @MainActor
-    func start(initialMousePosition _: CGPoint) {
+    func start(initialMousePosition: CGPoint) {
+        screenBounds = NSScreen.screens.first(where: { $0.frame.contains(initialMousePosition) })?.frame
+
+        if let screenBounds {
+            /// If the current mouse position isn't sufficient for accessing direcitonal actions due to being close to the screen's edge, then enable `shouldAccountForAbsoluteMousePosition`
+            let closeToMinX = abs(initialMousePosition.x - screenBounds.minX) < Self.directionalActionDistance
+            let closeToMaxX = abs(initialMousePosition.x - screenBounds.maxX) < Self.directionalActionDistance
+            let closeToMinY = abs(initialMousePosition.y - screenBounds.minY) < Self.directionalActionDistance
+            let closeToMaxY = abs(initialMousePosition.y - screenBounds.maxY) < Self.directionalActionDistance
+
+            if closeToMinX || closeToMaxX || closeToMinY || closeToMaxY {
+                shouldAccountForAbsoluteMousePosition = true
+            }
+        }
+
+        self.initialMousePosition = initialMousePosition
+        latestMousePosition = initialMousePosition
+
         mouseEventMonitor = PassiveEventMonitor(
             events: [
                 .mouseMoved, // switch action when mouse is moved
@@ -55,7 +77,7 @@ final class MouseInteractionObserver {
         )
 
         // swiftformat:disable:next redundantSelf
-        Log.info("Started with initial mouse position: \(self.getInitialMousePosition().debugDescription)", category: .mouseInteractionObserver)
+        Log.info("Started with initial mouse position: \(latestMousePosition.debugDescription)", category: .mouseInteractionObserver)
     }
 
     @MainActor
@@ -66,13 +88,18 @@ final class MouseInteractionObserver {
         previousAngleToMouse = .zero
         previousDistanceToMouse = .zero
 
+        screenBounds = nil
+        shouldAccountForAbsoluteMousePosition = false
+        initialMousePosition = .zero
+        latestMousePosition = .zero
+
         Log.success("Stopped, all stored states cleared.", category: .mouseInteractionObserver)
     }
 
     private func mouseEvent(_ event: CGEvent) {
         switch event.type {
         case .mouseMoved, .otherMouseDragged:
-            processNewMouseLocation(event.location)
+            processNewMouseLocation(event)
         case .leftMouseDown:
             activateNextCycleAction(event)
         default:
@@ -80,14 +107,10 @@ final class MouseInteractionObserver {
         }
     }
 
-    private func processNewMouseLocation(_: CGPoint) {
+    private func processNewMouseLocation(_ event: CGEvent) {
         guard checkIfLoopOpen() else { return }
 
-        let noActionDistance: CGFloat = 10
-
-        let initialMousePosition = getInitialMousePosition()
-        let currentMousePosition = NSEvent.mouseLocation
-
+        let currentMousePosition = computeLatestMousePosition(event)
         let angleToMouse = initialMousePosition.angle(to: currentMousePosition) + .radians(.pi / 2)
         let distanceToMouse = initialMousePosition.distance(to: currentMousePosition)
 
@@ -106,7 +129,7 @@ final class MouseInteractionObserver {
         var newAction: RadialMenuAction? = nil
 
         // If mouse over 50 points away, select half or quarter positions
-        if distanceToMouse > 50 - Defaults[.radialMenuThickness] {
+        if distanceToMouse > Self.directionalActionDistance - Defaults[.radialMenuThickness] {
             guard radialMenuActions.count > 1 else {
                 newAction = radialMenuActions.first
                 return
@@ -117,7 +140,7 @@ final class MouseInteractionObserver {
             let halfAngleSpan = actionAngleSpan / 2.0
             let index = Int((angleToMouse.normalized().degrees + halfAngleSpan) / actionAngleSpan) % actions.count
             newAction = actions[index]
-        } else if distanceToMouse > noActionDistance {
+        } else if distanceToMouse > Self.noActionDistance {
             newAction = radialMenuActions.last
         }
 
@@ -135,6 +158,53 @@ final class MouseInteractionObserver {
                 changeAction(.init(.noSelection))
             }
         }
+    }
+
+    /// Computes a resolved mouse position, compensating for macOS cursor clamping at screen edges.
+    ///
+    /// When enabled, this method continues tracking movement along an axis even after the system
+    /// cursor becomes pinned to a screen edge by applying the event’s delta to the last known position,
+    /// while clamping the result to a limited distance from the edge, just enough to access directional actions.
+    ///
+    /// - Parameter event: the CGEvent associated with this mouse movement
+    /// - Returns: the computed absolute mouse position
+    private func computeLatestMousePosition(_ event: CGEvent) -> CGPoint {
+        let current = NSEvent.mouseLocation
+
+        guard shouldAccountForAbsoluteMousePosition, let bounds = screenBounds else {
+            latestMousePosition = current
+            return latestMousePosition
+        }
+
+        let edgeThreshold: CGFloat = 1
+        let deltaX = event.getDoubleValueField(.mouseEventDeltaX)
+        let deltaY = event.getDoubleValueField(.mouseEventDeltaY)
+        let maxOffset = Self.directionalActionDistance
+
+        let atMinX = abs(current.x - bounds.minX) < edgeThreshold
+        let atMaxX = abs(current.x - bounds.maxX) < edgeThreshold
+        let atMinY = abs(current.y - bounds.minY) < edgeThreshold
+        let atMaxY = abs(current.y - bounds.maxY) < edgeThreshold
+
+        var resolved = current
+
+        if atMinX || atMaxX {
+            let unclampedX = latestMousePosition.x + deltaX
+            let minX = bounds.minX - maxOffset
+            let maxX = bounds.maxX + maxOffset
+
+            resolved.x = min(max(unclampedX, minX), maxX)
+
+        } else if atMinY || atMaxY {
+            let unclampedY = latestMousePosition.y + deltaY
+            let minY = bounds.minY - maxOffset
+            let maxY = bounds.maxY + maxOffset
+
+            resolved.y = min(max(unclampedY, minY), maxY)
+        }
+
+        latestMousePosition = resolved
+        return resolved
     }
 
     private func activateNextCycleAction(_ event: CGEvent) {

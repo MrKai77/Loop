@@ -94,8 +94,12 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
         }
     }
 
-    static var radialMenuAngle: Animation {
-        Animation.timingCurve(0.22, 1, 0.36, 1, duration: 0.2)
+    var radialMenuAngle: Animation {
+        if self == .instant {
+            .linear(duration: 0)
+        } else {
+            .timingCurve(0.22, 1, 0.36, 1, duration: 0.2)
+        }
     }
 }
 

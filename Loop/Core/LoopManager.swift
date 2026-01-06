@@ -52,7 +52,6 @@ final class LoopManager: ObservableObject {
                 self?.changeAction(parentCycleAction, disableHapticFeedback: true)
             }
         },
-        getInitialMousePosition: { [weak self] in self?.initialMousePosition ?? .zero },
         checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
     )
 
