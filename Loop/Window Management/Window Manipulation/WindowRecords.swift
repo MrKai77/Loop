@@ -21,32 +21,14 @@ enum WindowRecords {
         }
     }
 
-    /// Has the window has been previously recorded?
-    /// - Parameter window: The window to check
-    /// - Returns: true or false
-    static func hasBeenRecorded(_ window: Window) -> Bool {
-        recordsByWindowID[window.cgWindowID] != nil
-    }
-
-    /// This will erase ALL previous records of the window, and start a fresh new record for the selected window.
-    /// - Parameter window: Window to record
-    static func recordFirst(for window: Window, ignoreIfRecordAlreadyExists: Bool) {
-        guard !ignoreIfRecordAlreadyExists || recordsByWindowID[window.cgWindowID] == nil else {
-            Log.info("Not erasing existing records for window: \(window)", category: .windowRecords)
-            return
-        }
-
-        eraseRecords(for: window)
-
-        let frame = window.frame
-        recordsByWindowID[window.cgWindowID] = Record(initialFrame: frame)
-
-        Log.info("Recorded first for: \(window)", category: .windowRecords)
-    }
-
     /// Erase all previous records for a window
     /// - Parameter window: Window to erase
     static func eraseRecords(for window: Window) {
+        guard recordsByWindowID[window.cgWindowID] != nil else {
+            // Records don't exist
+            return
+        }
+
         recordsByWindowID[window.cgWindowID] = nil
         Log.success("Erased records for: \(window)", category: .windowRecords)
     }
@@ -57,7 +39,7 @@ enum WindowRecords {
     ///   - action: WindowAction to record
     static func record(_ window: Window, _ action: WindowAction) {
         /// If the window has not been recorded, record it
-        recordFirst(for: window, ignoreIfRecordAlreadyExists: true)
+        recordFirstIfNeeded(for: window)
 
         // There is no point in recording undo
         guard action.direction != .undo else {
@@ -67,6 +49,12 @@ enum WindowRecords {
         recordsByWindowID[window.cgWindowID]?.actions.insert(action, at: 0)
 
         Log.info("Recorded: \(action) for: \(window)", category: .windowRecords)
+    }
+
+    private static func recordFirstIfNeeded(for window: Window) {
+        guard recordsByWindowID[window.cgWindowID] == nil else { return }
+        recordsByWindowID[window.cgWindowID] = Record(initialFrame: window.frame)
+        Log.info("Recorded first for: \(window)", category: .windowRecords)
     }
 
     /// Removes the last action performed on the specified window. This will NOT remove the first action for the specified window.
