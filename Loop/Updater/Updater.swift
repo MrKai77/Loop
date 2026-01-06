@@ -166,12 +166,14 @@ final class Updater: ObservableObject {
 
             await MainActor.run {
                 targetRelease = nil
-                updateState = .unavailable
                 progressBar = 0
             }
 
             // Early return if updates are disabled and not forcing
             guard updatesEnabled || force else {
+                await MainActor.run {
+                    updateState = .unavailable
+                }
                 return
             }
 
@@ -192,6 +194,9 @@ final class Updater: ObservableObject {
                 // Process data immediately after fetching, reducing the number of async suspension points.
                 try await processFetchedData(data)
             } catch {
+                await MainActor.run {
+                    updateState = .unavailable
+                }
                 Log.error("Error fetching release info: \(error.localizedDescription)", category: .updater)
             }
         }
@@ -208,16 +213,16 @@ final class Updater: ObservableObject {
             let releases = try decoder.decode([Release].self, from: data)
 
             if let latestPreRelease = releases.compactMap({ $0.prerelease ? $0 : nil }).first {
-                try await processRelease(latestPreRelease)
+                await processRelease(latestPreRelease)
             }
         } else {
             // This would need to parse a single release
             let release = try decoder.decode(Release.self, from: data)
-            try await processRelease(release)
+            await processRelease(release)
         }
     }
 
-    private func processRelease(_ release: Release) async throws {
+    private func processRelease(_ release: Release) async {
         let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
 
         await MainActor.run {
