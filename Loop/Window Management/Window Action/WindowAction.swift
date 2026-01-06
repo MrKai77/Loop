@@ -152,9 +152,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         return false
     }
-
-    var shouldImmediatelyExecuteAction: Bool {
-        willManipulateExistingWindowFrame || direction.willFocusWindow
+    
+    var canRepeat: Bool {
+        willManipulateExistingWindowFrame || direction.willFocusWindow || direction == .undo
     }
 
     var forceProportionalFrameOnScreenChange: Bool {
@@ -579,8 +579,16 @@ extension WindowAction {
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
     private func getLastActionFrame(window: Window, bounds: CGRect) -> CGRect {
         if let previousAction = WindowRecords.getLastAction(for: window) {
-            Log.info("Last action was \(previousAction.description)", category: .windowAction)
-            return previousAction.getFrame(window: window, bounds: bounds)
+            var undoAction = previousAction
+            undoAction.direction = previousAction.direction.undoDirection
+
+            Log.info("Last action was \(previousAction.description), using \(undoAction.description) to undo", category: .windowAction)
+            
+            return undoAction.getFrame(
+                window: window,
+                bounds: bounds,
+                disablePadding: true
+            )
         } else {
             Log.info("Didn't find frame to undo; using current frame", category: .windowAction)
             return window.frame

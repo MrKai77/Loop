@@ -117,13 +117,6 @@ extension LoopManager {
 
         Log.info("Opening Loop with starting action: \(startingAction.description) and target window: \(window?.description ?? "(none)")", category: .loopManager)
 
-        // Record the first frame in advance if the preview window is disabled
-        if let window,
-           !WindowRecords.hasBeenRecorded(window),
-           !Defaults[.previewVisibility] {
-            WindowRecords.recordFirst(for: window)
-        }
-
         // Refresh accent colors in case user has enabled the wallpaper processor
         Task {
             await AccentColorController.shared.refresh()
@@ -179,16 +172,14 @@ extension LoopManager {
            let screenToResizeOn,
            forceClose == false,
            !currentAction.direction.willFocusWindow {
+            
+            // If the preview was disabled, the window will already be in the specified action's frame.
+            // So only resize the window if the preview is enabled.
             if Defaults[.previewVisibility] {
                 WindowEngine.resize(
                     targetWindow,
                     to: currentAction,
                     on: screenToResizeOn
-                )
-            } else {
-                WindowRecords.record(
-                    targetWindow,
-                    currentAction
                 )
             }
 
@@ -242,7 +233,7 @@ extension LoopManager {
     ) {
         guard
             isLoopActive,
-            currentAction.id != newAction.id || newAction.shouldImmediatelyExecuteAction,
+            currentAction.id != newAction.id || newAction.canRepeat,
             let currentScreen = screenToResizeOn ?? resolveAndStoreTargetScreen(
                 action: newAction,
                 window: targetWindow
@@ -385,8 +376,7 @@ extension LoopManager {
                     WindowEngine.resize(
                         window,
                         to: currentAction,
-                        on: newScreen,
-                        shouldRecord: false
+                        on: newScreen
                     )
                 }
             }
@@ -400,7 +390,7 @@ extension LoopManager {
             performHapticFeedback()
         }
 
-        if newAction != currentAction || newAction.shouldImmediatelyExecuteAction {
+        if newAction != currentAction || newAction.canRepeat {
             currentAction = newAction
 
             if Defaults[.hideUntilDirectionIsChosen] {
@@ -415,8 +405,7 @@ extension LoopManager {
                     WindowEngine.resize(
                         targetWindow,
                         to: newAction,
-                        on: screenToResizeOn,
-                        shouldRecord: false
+                        on: screenToResizeOn
                     )
                 }
 

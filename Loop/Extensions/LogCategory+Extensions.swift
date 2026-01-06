@@ -31,6 +31,7 @@ extension LogCategory {
     static let windowUtility = LogCategory("WindowUtility")
     static let window = LogCategory("Window")
     static let windowEngine = LogCategory("WindowEngine")
+    static let windowRecords = LogCategory("WindowRecords")
     static let windowAction = LogCategory("WindowAction")
     static let windowActionCache = LogCategory("WindowActionCache")
     static let windowDragManager = LogCategory("WindowDragManager")

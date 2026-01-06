@@ -182,7 +182,7 @@ final class KeybindTrigger {
         if type != .keyUp {
             if containsTrigger {
                 if let action = windowActionCache.actionsByKeybind[actionKeys] {
-                    if !isARepeat || action.willManipulateExistingWindowFrame {
+                    if !isARepeat || action.canRepeat {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
 

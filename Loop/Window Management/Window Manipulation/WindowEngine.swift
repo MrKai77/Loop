@@ -20,8 +20,7 @@ enum WindowEngine {
     static func resize(
         _ window: Window,
         to action: WindowAction,
-        on screen: NSScreen,
-        shouldRecord: Bool = true
+        on screen: NSScreen
     ) {
         guard action.direction != .noAction, action.direction != .noSelection, !action.direction.willFocusWindow else { return }
 
@@ -32,9 +31,7 @@ enum WindowEngine {
 
         // Before commiting to anything, we should record the action.
         // This allows the user to undo any one of their actions.
-        if shouldRecord {
-            WindowRecords.record(window, action)
-        }
+        WindowRecords.record(window, action)
 
         // If the action is to hide, minimize or fullscreen perform the action then return
         if action.direction == .hide {
