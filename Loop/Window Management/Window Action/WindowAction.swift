@@ -579,12 +579,9 @@ extension WindowAction {
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
     private func getLastActionFrame(window: Window, bounds: CGRect) -> CGRect {
         if let previousAction = WindowRecords.getLastAction(for: window) {
-            var undoAction = previousAction
-            undoAction.direction = previousAction.direction.undoDirection
+            Log.info("Last action was \(previousAction.description)", category: .windowAction)
 
-            Log.info("Last action was \(previousAction.description), using \(undoAction.description) to undo", category: .windowAction)
-
-            return undoAction.getFrame(
+            return previousAction.getFrame(
                 window: window,
                 bounds: bounds,
                 disablePadding: true

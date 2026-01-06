@@ -29,9 +29,19 @@ enum WindowEngine {
         let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
         Log.info("Resizing \(windowTitle) to \(action.direction.debugDescription) on \(screen.localizedName)", category: .windowEngine)
 
-        // Before commiting to anything, we should record the action.
-        // This allows the user to undo any one of their actions.
-        WindowRecords.record(window, action)
+        // Record window's first frame if needed
+        WindowRecords.recordFirstIfNeeded(for: window)
+
+        /// Set a defer block so that the user will be able to undo this action.
+        /// This needs to be deferred since `WindowRecords.record` may want to account for the
+        /// window's final frame.
+        defer {
+            if action.direction == .undo {
+                WindowRecords.removeLastAction(for: window)
+            } else {
+                WindowRecords.record(window, action)
+            }
+        }
 
         // If the action is to hide, minimize or fullscreen perform the action then return
         if action.direction == .hide {
@@ -82,11 +92,6 @@ enum WindowEngine {
                 screen: screen
             )
             Log.info("Target window frame: \(targetFrame.debugDescription)", category: .windowEngine)
-
-            // If the action is undo, remove the last action from the window records.
-            if action.direction == .undo {
-                WindowRecords.removeLastAction(for: window)
-            }
 
             // If the window is one of Loop's windows, resize it using the actual NSWindow, preventing crashes
             if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {

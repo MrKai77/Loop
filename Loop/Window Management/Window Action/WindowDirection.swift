@@ -153,42 +153,6 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         default: nil
         }
     }
-
-    var undoDirection: WindowDirection {
-        switch self {
-        case .nextScreen: .previousScreen
-        case .previousScreen: .nextScreen
-        case .leftScreen: .rightScreen
-        case .rightScreen: .leftScreen
-        case .topScreen: .bottomScreen
-        case .bottomScreen: .topScreen
-        case .larger: .smaller
-        case .smaller: .larger
-        case .scaleUp: .scaleDown
-        case .scaleDown: .scaleUp
-        case .shrinkTop: .growTop
-        case .growTop: .shrinkTop
-        case .shrinkBottom: .growBottom
-        case .growBottom: .shrinkBottom
-        case .shrinkLeft: .growLeft
-        case .growLeft: .shrinkLeft
-        case .shrinkRight: .growRight
-        case .growRight: .shrinkRight
-        case .shrinkHorizontal: .growHorizontal
-        case .growHorizontal: .shrinkHorizontal
-        case .shrinkVertical: .growVertical
-        case .growVertical: .shrinkVertical
-        case .moveUp: .moveDown
-        case .moveDown: .moveUp
-        case .moveLeft: .moveRight
-        case .moveRight: .moveLeft
-        case .focusUp: .focusDown
-        case .focusDown: .focusUp
-        case .focusLeft: .focusRight
-        case .focusRight: .focusLeft
-        default: self
-        }
-    }
 }
 
 extension WindowDirection: CustomDebugStringConvertible {
