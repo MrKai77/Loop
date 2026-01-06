@@ -153,6 +153,7 @@ final class Updater: ObservableObject {
     @MainActor
     func dismissWindow() {
         windowController?.close()
+        windowController = nil
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
