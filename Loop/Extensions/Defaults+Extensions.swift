@@ -125,6 +125,12 @@ extension Defaults.Keys {
     /// Reset with `defaults delete com.MrKai77.Loop updatesEnabled`
     static let updatesEnabled = Key<Bool>("updatesEnabled", default: true, iCloud: true)
 
+    /// Trigger key timeout, defined in seconds. Automatically closes Loop if no action is taken within the specified time.
+    /// When set to 0 (default: disabled), the feature is disabled and Loop stays open until manually closed.
+    /// Adjust with `defaults write com.MrKai77.Loop triggerKeyTimeout -float x`
+    /// Reset with `defaults delete com.MrKai77.Loop triggerKeyTimeout`
+    static let triggerKeyTimeout = Key<Double>("triggerKeyTimeout", default: 0, iCloud: true)
+
     // Migrator
     static let lastMigratorURL = Key<URL?>("lastMigratorURL", default: nil)
 

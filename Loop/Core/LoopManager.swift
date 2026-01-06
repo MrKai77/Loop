@@ -23,6 +23,10 @@ final class LoopManager: ObservableObject {
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
+    private lazy var triggerKeyTimeoutTimer = TriggerKeyTimeoutTimer(
+        closeCallback: { [weak self] in self?.closeLoop(forceClose: $0) }
+    )
+
     private(set) lazy var keybindTrigger = KeybindTrigger(
         windowActionCache: windowActionCache,
         openCallback: { [weak self] in self?.openLoop(startingAction: $0) },
@@ -153,6 +157,8 @@ extension LoopManager {
 
         isLoopActive = true
         changeAction(startingAction, disableHapticFeedback: true)
+
+        triggerKeyTimeoutTimer.start()
     }
 
     private func closeLoop(forceClose: Bool) {
@@ -161,6 +167,8 @@ extension LoopManager {
 
         closeWindows()
         isLoopActive = false
+
+        triggerKeyTimeoutTimer.cancel()
 
         Task { @MainActor in
             mouseInteractionObserver.stop()
@@ -244,6 +252,9 @@ extension LoopManager {
         }
 
         var newAction = newAction
+
+        triggerKeyTimeoutTimer.cancel()
+        triggerKeyTimeoutTimer.start()
 
         if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
             return
