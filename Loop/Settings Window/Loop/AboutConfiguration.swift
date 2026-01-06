@@ -10,10 +10,12 @@ import Defaults
 import Luminare
 import SwiftUI
 
+@MainActor
 final class AboutConfigurationModel: ObservableObject {
     @Published var isHoveringOverVersionCopier = false
-    @Published var updateButtonTitle: String = .init(localized: "Check for updates…")
+    @Published var isHoveringOverUpdateButton = false
     @Published var didCompleteCopyToClipboard: Bool = false
+    @Published private(set) var updateButtonMessage: String?
 
     let credits: [CreditItem] = [
         .init(
@@ -43,7 +45,7 @@ final class AboutConfigurationModel: ObservableObject {
     ]
 
     // A max of 28 W's can fit in here :)
-    var upToDateText: [String] = [
+    private let upToDateText: [String] = [
         .init(localized: "No updates available message 01", defaultValue: "Engage! …in the current version, it's the latest."),
         .init(localized: "No updates available message 02", defaultValue: "This app is more up to date than my diary entries!"),
         .init(localized: "No updates available message 03", defaultValue: "You're in the clear, no updates in the atmosphere!"),
@@ -91,13 +93,24 @@ final class AboutConfigurationModel: ObservableObject {
     ]
     private var shuffledTexts: [String] = []
 
-    func getNextUpToDateText() -> String {
+    private func getNextUpToDateText() -> String {
         // If shuffledTexts is empty, fill it with a shuffled version of upToDateText
         if shuffledTexts.isEmpty {
             shuffledTexts = upToDateText.filter { $0 != "-" }.shuffled()
         }
         // Pop the last element to ensure it's not repeated until all have been shown
         return shuffledTexts.popLast() ?? upToDateText[0] // Fallback string
+    }
+
+    func showUpdatesUnavailableText() async {
+        updateButtonMessage = getNextUpToDateText()
+        let currentTitle = updateButtonMessage
+
+        try? await Task.sleep(for: .seconds(2))
+
+        if updateButtonMessage == currentTitle {
+            updateButtonMessage = nil
+        }
     }
 
     func copyVersionToClipboard() {
@@ -145,10 +158,20 @@ struct AboutConfigurationView: View {
     @Default(.currentIcon) private var currentIcon
     @Default(.includeDevelopmentVersions) private var includeDevelopmentVersions
 
-    @State private var isHoveringOverUpdateButton = false
-
     private var updateButtonEnabled: Bool {
-        isHoveringOverUpdateButton || updater.updatesEnabled
+        updater.updatesEnabled || model.isHoveringOverUpdateButton
+    }
+
+    private var updateButtonDefaultText: String {
+        if updater.updatesEnabled {
+            updater.updateState.text
+        } else {
+            model.isHoveringOverUpdateButton ? "`sudo upgrade loop`" : String(localized: "Updates are disabled")
+        }
+    }
+
+    private var updateButtonText: String {
+        model.updateButtonMessage ?? updateButtonDefaultText
     }
 
     var body: some View {
@@ -219,60 +242,23 @@ struct AboutConfigurationView: View {
                     // Pass force=true to bypass the guard check
                     await updater.fetchLatestInfo(force: true)
 
-                    if updater.updateState == .available {
-                        await updater.showUpdateWindow()
-                    } else {
-                        model.updateButtonTitle = model.getNextUpToDateText()
-
-                        let currentTitle = model.updateButtonTitle
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            if model.updateButtonTitle == currentTitle {
-                                if updater.updatesEnabled {
-                                    model.updateButtonTitle = .init(localized: "Check for updates…")
-                                } else {
-                                    model.updateButtonTitle = .init(localized: "Updates are disabled")
-                                }
-                            }
-                        }
+                    switch updater.updateState {
+                    case .available:
+                        await updater.showUpdateWindowIfEligible()
+                    case .unavailable:
+                        await model.showUpdatesUnavailableText()
+                    case .osNotSupported:
+                        break
                     }
                 }
             } label: {
-                Text(.init(model.updateButtonTitle))
+                Text(.init(updateButtonText))
                     .contentTransition(.numericText())
-                    .animation(luminareAnimation, value: model.updateButtonTitle)
+                    .animation(luminareAnimation, value: updateButtonText)
             }
             .luminareRoundingBehavior(top: true)
             .disabled(!updateButtonEnabled)
-            .onHover { hovering in
-                isHoveringOverUpdateButton = hovering
-
-                if !updater.updatesEnabled {
-                    if hovering {
-                        model.updateButtonTitle = "`sudo upgrade loop`"
-                    } else {
-                        model.updateButtonTitle = .init(localized: "Updates are disabled")
-                    }
-                }
-            }
-            .onAppear {
-                if updater.updateState == .available {
-                    model.updateButtonTitle = .init(localized: "Update…")
-                } else if !updater.updatesEnabled {
-                    model.updateButtonTitle = .init(localized: "Updates are disabled")
-                }
-            }
-            .onChange(of: updater.updateState) { newState in
-                if newState == .available {
-                    model.updateButtonTitle = .init(localized: "Update…")
-                }
-            }
-            .onChange(of: updater.updatesEnabled) { enabled in
-                if !enabled {
-                    model.updateButtonTitle = .init(localized: "Updates are disabled")
-                } else {
-                    model.updateButtonTitle = .init(localized: "Check for updates…")
-                }
-            }
+            .onHover { model.isHoveringOverUpdateButton = $0 }
 
             LuminareToggle("Include development versions", isOn: $includeDevelopmentVersions)
         }

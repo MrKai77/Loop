@@ -35,10 +35,7 @@ struct LoopApp: App {
             Button {
                 Task {
                     await updater.fetchLatestInfo()
-
-                    if updater.updateState == .available {
-                        await updater.showUpdateWindow()
-                    }
+                    await updater.showUpdateWindowIfEligible()
                 }
             } label: {
                 if updater.updateState == .available {

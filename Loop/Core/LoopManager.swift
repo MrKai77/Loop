@@ -11,7 +11,7 @@ import SwiftUI
 
 // MARK: - LoopManager
 
-final class LoopManager: ObservableObject {
+final class LoopManager {
     static let shared = LoopManager()
     private init() {}
 
@@ -22,6 +22,7 @@ final class LoopManager: ObservableObject {
     private let windowActionCache = WindowActionCache()
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
+    private let updater = Updater.shared
 
     private lazy var triggerKeyTimeoutTimer = TriggerKeyTimeoutTimer(
         closeCallback: { [weak self] in self?.closeLoop(forceClose: $0) }
@@ -62,9 +63,11 @@ final class LoopManager: ObservableObject {
     private var screenToResizeOn: NSScreen?
     var isShiftKeyPressed: Bool = false
 
-    @Published var currentAction: WindowAction = .init(.noSelection)
+    private var currentAction: WindowAction = .init(.noSelection)
     private var parentCycleAction: WindowAction?
     private(set) var initialMousePosition: CGPoint = .zero
+
+    private var lastLoopTime: Date = .now
 
     func start() {
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
@@ -167,9 +170,9 @@ extension LoopManager {
         }
 
         // Handle normal actions with a target window
-        if let targetWindow,
+        if forceClose == false,
+           let targetWindow,
            let screenToResizeOn,
-           forceClose == false,
            !currentAction.direction.willFocusWindow {
             // If the preview was disabled, the window will already be in the specified action's frame.
             // So only resize the window if the preview is enabled.
@@ -188,6 +191,12 @@ extension LoopManager {
 
         LoopManager.sidesToAdjust = nil
         LoopManager.lastTargetFrame = .zero
+
+        Task {
+            if updater.shouldAutoPresentUpdateWindow {
+                await updater.showUpdateWindowIfEligible()
+            }
+        }
     }
 
     private func openWindows(startingAction: WindowAction, window: Window?) {
