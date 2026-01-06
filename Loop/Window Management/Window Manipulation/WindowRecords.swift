@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2023-09-23.
 //
 
-import SwiftUI
 import Scribe
+import SwiftUI
 
 enum WindowRecords {
     private static var recordsByWindowID: [CGWindowID: WindowRecords.Record] = [:]
@@ -14,7 +14,7 @@ enum WindowRecords {
     struct Record {
         let initialFrame: CGRect
         var actions: [WindowAction]
-        
+
         init(initialFrame: CGRect) {
             self.initialFrame = initialFrame
             self.actions = [.init(.initialFrame)]
@@ -35,12 +35,12 @@ enum WindowRecords {
             Log.info("Not erasing existing records for window: \(window)", category: .windowRecords)
             return
         }
-        
+
         eraseRecords(for: window)
 
         let frame = window.frame
         recordsByWindowID[window.cgWindowID] = Record(initialFrame: frame)
-        
+
         Log.info("Recorded first for: \(window)", category: .windowRecords)
     }
 
@@ -65,10 +65,10 @@ enum WindowRecords {
         }
 
         recordsByWindowID[window.cgWindowID]?.actions.insert(action, at: 0)
-        
+
         Log.info("Recorded: \(action) for: \(window)", category: .windowRecords)
     }
-    
+
     /// Removes the last action performed on the specified window. This will NOT remove the first action for the specified window.
     static func removeLastAction(for window: Window) {
         guard let record = recordsByWindowID[window.cgWindowID],
@@ -79,7 +79,7 @@ enum WindowRecords {
         }
 
         recordsByWindowID[window.cgWindowID]?.actions.removeFirst()
-        
+
         Log.info("Removed last record for: \(window)", category: .windowRecords)
     }
 
@@ -107,7 +107,7 @@ enum WindowRecords {
         else {
             return nil
         }
-        
+
         return record.actions[0]
     }
 

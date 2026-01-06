@@ -172,7 +172,6 @@ extension LoopManager {
            let screenToResizeOn,
            forceClose == false,
            !currentAction.direction.willFocusWindow {
-            
             // If the preview was disabled, the window will already be in the specified action's frame.
             // So only resize the window if the preview is enabled.
             if Defaults[.previewVisibility] {

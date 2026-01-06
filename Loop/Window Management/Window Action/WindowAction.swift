@@ -152,7 +152,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
         return false
     }
-    
+
     var canRepeat: Bool {
         willManipulateExistingWindowFrame || direction.willFocusWindow || direction == .undo
     }
@@ -583,7 +583,7 @@ extension WindowAction {
             undoAction.direction = previousAction.direction.undoDirection
 
             Log.info("Last action was \(previousAction.description), using \(undoAction.description) to undo", category: .windowAction)
-            
+
             return undoAction.getFrame(
                 window: window,
                 bounds: bounds,

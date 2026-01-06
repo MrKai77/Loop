@@ -153,7 +153,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         default: nil
         }
     }
-    
+
     var undoDirection: WindowDirection {
         switch self {
         case .nextScreen: .previousScreen
