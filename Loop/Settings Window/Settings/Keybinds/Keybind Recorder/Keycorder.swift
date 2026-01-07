@@ -187,7 +187,7 @@ struct Keycorder: View {
             // Validate keybind requirements when in bypass mode
             if bypassTriggerKey == true {
                 let normalizedKeys = selectionKeybind.map(\.baseModifier)
-                let modifierKeys = normalizedKeys.filter { $0.isModifier }
+                let modifierKeys = normalizedKeys.filter(\.isModifier)
                 let nonModifierKeys = normalizedKeys.filter { !$0.isModifier }
 
                 // Check: at least one modifier key
