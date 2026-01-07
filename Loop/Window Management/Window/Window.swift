@@ -396,14 +396,14 @@ final class Window {
             enhancedUserInterface = false
         }
 
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(), Error>) in
             Task {
                 let animation = WindowTransformAnimation(
                     rect,
                     window: self,
                     bounds: bounds
                 ) { error in
-                    if let error = error {
+                    if let error {
                         continuation.resume(throwing: error)
                     } else {
                         continuation.resume(returning: ())
