@@ -21,6 +21,7 @@ struct Keycorder: View {
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
     @State private var selectionKeybind: Set<CGKeyCode>
     @Binding private var direction: WindowDirection
+    @Binding private var bypassTriggerKey: Bool
 
     @State private var eventMonitor: LocalEventMonitor?
     @State private var shouldShake: Bool = false
@@ -30,10 +31,14 @@ struct Keycorder: View {
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
 
-    init(_ keybind: Binding<WindowAction>) {
+    private var autoStartTrigger: Binding<Bool>?
+
+    init(_ keybind: Binding<WindowAction>, autoStart: Binding<Bool>? = nil) {
         self._validCurrentKeybind = keybind.keybind
         self._direction = keybind.direction
+        self._bypassTriggerKey = keybind.bypassTriggerKey
         self._selectionKeybind = State(initialValue: keybind.wrappedValue.keybind)
+        self.autoStartTrigger = autoStart
     }
 
     var body: some View {
@@ -96,6 +101,11 @@ struct Keycorder: View {
                 selectionKeybind = validCurrentKeybind
             }
         }
+        .onChange(of: autoStartTrigger?.wrappedValue) { shouldStart in
+            guard let shouldStart, shouldStart, !isActive else { return }
+            defer { autoStartTrigger?.wrappedValue = false }
+            startObservingKeys()
+        }
         .buttonStyle(.plain)
         // Don't allow the button to be pressed if more than one keybind is selected in the list
         .allowsHitTesting(model.selectedKeybinds.count <= 1)
@@ -139,14 +149,19 @@ struct Keycorder: View {
             flags.remove(.maskSecondaryFn)
         }
 
-        // Filter out trigger keys from flags
-        let validModifiers = flags.keyCodes.map(\.baseModifier).filter {
-            !Defaults[.triggerKey]
-                .map(\.baseModifier)
-                .contains($0)
+        let validModifiers = if bypassTriggerKey {
+            flags.keyCodes
+        } else {
+            flags.keyCodes.filter {
+                !Defaults[.triggerKey]
+                    .map(\.baseModifier)
+                    .contains($0)
+            }
         }
 
         let finalKeys = Set(currentKeys + validModifiers)
+
+        shouldError = false
 
         /// Make sure we don't go over the key limit
         guard finalKeys.count < keyLimit else {
@@ -156,7 +171,15 @@ struct Keycorder: View {
             return
         }
 
-        shouldError = false
+        if bypassTriggerKey {
+            let systemKeybinds = CGKeyCode.systemKeybinds
+            if systemKeybinds.contains(finalKeys) {
+                errorMessage = "This shortcut is used by macOS and may not work as expected."
+                shouldShake.toggle()
+                shouldError = true
+            }
+        }
+
         selectionKeybind = finalKeys
     }
 
@@ -169,8 +192,17 @@ struct Keycorder: View {
         }
 
         if willSet {
-            for keybind in Defaults[.keybinds] where
-                keybind.keybind == selectionKeybind {
+            let effectiveSelection = bypassTriggerKey
+                ? selectionKeybind
+                : triggerKey.union(selectionKeybind)
+
+            for keybind in Defaults[.keybinds] {
+                let effectiveExisting = keybind.bypassTriggerKey
+                    ? keybind.keybind
+                    : triggerKey.union(keybind.keybind)
+
+                guard effectiveSelection == effectiveExisting else { continue }
+
                 willSet = false
 
                 if let name = keybind.name, !name.isEmpty {

@@ -13,6 +13,7 @@ import Scribe
 /// This is called from `KeybindObserver`, to retrieve the user's actions in an efficient manner.
 final class WindowActionCache {
     private(set) var actionsByKeybind: [Set<CGKeyCode>: WindowAction] = [:]
+    private(set) var bypassedActionsByKeybind: [Set<CGKeyCode>: WindowAction] = [:]
     private(set) var actionsByIdentifier: [UUID: WindowAction] = [:]
 
     private var observationTask: Task<(), Never>?
@@ -50,21 +51,31 @@ final class WindowActionCache {
     private func regenerateActionsByKeybind(from keybinds: [WindowAction]) {
         let cycleBackwardsOnShiftPressed: Bool = Defaults[.cycleBackwardsOnShiftPressed]
 
+        let normalActions = keybinds.filter { !$0.bypassTriggerKey }
+        let bypassedActions = keybinds.filter { $0.bypassTriggerKey }
+
+        // Normal actions: keybind is action-key only (without trigger key)
         actionsByKeybind = Dictionary(
-            keybinds.map { ($0.keybind, $0) },
+            normalActions.map { ($0.keybind, $0) },
             uniquingKeysWith: { first, _ in first }
         )
 
         if cycleBackwardsOnShiftPressed {
             actionsByKeybind.merge(
-                keybinds
+                normalActions
                     .filter { $0.direction == .cycle }
                     .map { ($0.keybind.union([.kVK_Shift]), $0) },
                 uniquingKeysWith: { first, _ in first }
             )
         }
 
+        bypassedActionsByKeybind = Dictionary(
+            bypassedActions.map { ($0.keybind, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+
         Log.info("Finished regenerating actionsByKeybind", category: .windowActionCache)
+        Log.info("Finished regenerating bypassedActionsByKeybind", category: .windowActionCache)
     }
 
     private func regenerateActionsByIdentifier(from keybinds: [WindowAction]) {

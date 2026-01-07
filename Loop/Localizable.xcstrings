@@ -3303,6 +3303,9 @@
         }
       }
     },
+    "Clear Keybind" : {
+
+    },
     "Close" : {
       "comment" : "Label for a button that closes a modal window",
       "localizations" : {
@@ -22999,6 +23002,9 @@
         }
       }
     },
+    "Remove Trigger Key" : {
+
+    },
     "Request…" : {
       "comment" : "Button to request accessibility access",
       "localizations" : {
@@ -23575,6 +23581,91 @@
           }
         }
       }
+    },
+    "Restart to complete" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Restart to complete"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neustarten, um abzuschließen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart to complete"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar para completar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrer pour terminer"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riavvia per completare"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再起動して完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료하려면 다시 시작하세요"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herstarten om te voltooien"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar para concluir"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Перезагрузить"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重启以完成更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新啟動以完成"
+          }
+        }
+      }
+    },
+    "Restore Trigger Key" : {
+
     },
     "Restore window frame on drag" : {
       "localizations" : {
@@ -28691,6 +28782,9 @@
         }
       }
     },
+    "This shortcut is used by macOS and may not work as expected." : {
+
+    },
     "This will reset all keybinds to their original defaults." : {
       "comment" : "A message displayed in an alert when the user confirms resetting all keybinds.",
       "localizations" : {
@@ -30594,6 +30688,9 @@
         }
       }
     },
+    "Use Custom Shortcut" : {
+
+    },
     "Use macOS center" : {
       "comment" : "Toggle to enable macOS-style centering in custom actions",
       "localizations" : {
@@ -32412,5 +32509,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.1"
 }

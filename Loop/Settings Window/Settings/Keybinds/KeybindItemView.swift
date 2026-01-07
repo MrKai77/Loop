@@ -23,6 +23,7 @@ struct KeybindItemView: View {
     @State private var isConfiguringCycle: Bool = false
     private let cycleIndex: Int?
     @State private var isDirectionPickerPresented = false
+    @State private var shouldAutoStartKeycorder = false
 
     init(_ action: Binding<WindowAction>, cycleIndex: Int? = nil) {
         self.action = action.wrappedValue
@@ -32,8 +33,16 @@ struct KeybindItemView: View {
 
     /// Checks if there are any existing keybinds with the same key combination
     private var hasDuplicateKeybinds: Bool {
-        keybinds
-            .count { $0.keybind == action.keybind } > 1
+        let effectiveKeybind = action.bypassTriggerKey
+            ? action.keybind
+            : triggerKey.union(action.keybind)
+
+        return keybinds.filter { otherAction in
+            let otherEffectiveKeybind = otherAction.bypassTriggerKey
+                ? otherAction.keybind
+                : triggerKey.union(otherAction.keybind)
+            return effectiveKeybind == otherEffectiveKeybind && otherAction.id != action.id
+        }.count > 0
     }
 
     var body: some View {
@@ -57,6 +66,20 @@ struct KeybindItemView: View {
             }
             if action.direction == .cycle {
                 isConfiguringCycle = true
+            }
+        }
+        .onChange(of: action.bypassTriggerKey) { isBypassing in
+            if isBypassing {
+                shouldAutoStartKeycorder = true
+            }
+        }
+        .onChange(of: action.keybind) { newKeybind in
+            if action.bypassTriggerKey {
+                let triggerKeysInKeybind = newKeybind.intersection(triggerKey)
+                if !triggerKeysInKeybind.isEmpty {
+                    action.keybind = newKeybind.subtracting(triggerKey)
+                    action.bypassTriggerKey = false
+                }
             }
         }
         .onChange(of: action) { boundAction = $0 }
@@ -166,6 +189,32 @@ struct KeybindItemView: View {
         .luminareCornerRadius(8)
     }
 
+    // MARK: - Helper Methods
+
+    /// Clears the keybind and switches to standard mode
+    private func clearKeybind() {
+        action.keybind = []
+        action.bypassTriggerKey = false
+    }
+
+    /// Switches to standard mode (keeps the keybind)
+    private func restoreStandardMode() {
+        action.bypassTriggerKey = false
+    }
+
+    /// Switches to custom shortcut mode (clears keybind and auto-starts recording)
+    private func switchToCustomShortcut() {
+        action.keybind = []
+        action.bypassTriggerKey = true
+        shouldAutoStartKeycorder = true
+    }
+
+    /// Merges trigger key into action key and switches to bypass mode
+    private func mergeAndSwitchToBypassMode() {
+        action.keybind = triggerKey.union(action.keybind)
+        action.bypassTriggerKey = true
+    }
+
     private func label() -> some View {
         Button {
             isDirectionPickerPresented.toggle()
@@ -200,22 +249,46 @@ struct KeybindItemView: View {
     }
 
     private func keycorderSection(hasConflicts: Bool) -> some View {
-        HStack(spacing: 6) {
-            HStack(spacing: 6) {
-                ForEach(triggerKey.sorted().compactMap(\.modifierSystemImage), id: \.self) { image in
-                    Text("\(Image(systemName: image))")
+        Group {
+            if action.bypassTriggerKey {
+                Keycorder($action, autoStart: $shouldAutoStartKeycorder)
+                    .opacity(hasConflicts ? 0.5 : 1)
+                    .contextMenu {
+                        Button("Restore Trigger Key") { restoreStandardMode() }
+                        Button("Clear Keybind") { clearKeybind() }
+                    }
+            } else {
+                HStack(spacing: 6) {
+                    Menu {
+                        Button("Use Custom Shortcut") { switchToCustomShortcut() }
+                        Divider()
+                        Button("Clear Keybind") { clearKeybind() }
+                    } label: {
+                        HStack(spacing: 6) {
+                            ForEach(triggerKey.sorted().compactMap(\.modifierSystemImage), id: \.self) { image in
+                                Text("\(Image(systemName: image))")
+                            }
+                        }
+                    }
+                    .menuStyle(.borderlessButton)
+                    .buttonStyle(.plain)
+                    .font(.callout)
+                    .padding(6)
+                    .frame(height: 27)
+                    .luminarePlateau()
+                    .fixedSize()
+
+                    Image(systemName: "plus")
+                        .foregroundStyle(.secondary)
+
+                    Keycorder($action)
+                        .opacity(hasConflicts ? 0.5 : 1)
+                        .contextMenu {
+                            Button("Remove Trigger Key") { mergeAndSwitchToBypassMode() }
+                            Button("Clear Keybind") { clearKeybind() }
+                        }
                 }
             }
-            .font(.callout)
-            .padding(6)
-            .frame(height: 27)
-            .luminarePlateau()
-
-            Image(systemName: "plus")
-                .foregroundStyle(.secondary)
-
-            Keycorder($action)
-                .opacity(hasConflicts ? 0.5 : 1)
         }
     }
 }
