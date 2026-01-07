@@ -23,7 +23,7 @@ final class PickerListEventMonitorManager {
             handler: handler
         )
         monitor.start()
-        
+
         monitors[id] = monitor
     }
 

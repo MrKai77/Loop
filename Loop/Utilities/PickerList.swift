@@ -105,7 +105,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
         eventMonitorManager.addMonitor(
             for: "pickerList",
             matching: [.keyDown]
-        ) {  event in
+        ) { event in
             switch event.keyCode {
             case .kVK_DownArrow:
                 updateArrowSelection(increment: true, reader: reader)
