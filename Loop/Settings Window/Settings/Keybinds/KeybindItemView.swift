@@ -131,6 +131,11 @@ struct KeybindItemView: View {
                         )
                     }
                     .luminareSheetClosesOnDefocus(true)
+                    .onChange(of: isDirectionPickerPresented) { _ in
+                        if !isDirectionPickerPresented {
+                            PickerListEventMonitorManager.shared.removeAllMonitors()
+                        }
+                    }
             }
         }
     }

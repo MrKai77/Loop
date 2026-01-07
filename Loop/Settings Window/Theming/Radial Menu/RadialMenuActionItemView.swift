@@ -118,6 +118,11 @@ struct RadialMenuActionItemView: View {
                             RadialMenuActionPickerView(selection: $wrapper.action.type)
                         }
                         .luminareSheetClosesOnDefocus(true)
+                        .onChange(of: isPickerPresented) { _ in
+                            if !isPickerPresented {
+                                PickerListEventMonitorManager.shared.removeAllMonitors()
+                            }
+                        }
                 }
             }
     }

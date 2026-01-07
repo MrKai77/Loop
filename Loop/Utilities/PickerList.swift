@@ -11,12 +11,12 @@ import SwiftUI
 
 struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
     @EnvironmentObject private var popover: LuminarePopupPanel
+    private let eventMonitorManager: PickerListEventMonitorManager = .shared
 
     @Binding var selection: V
     @Binding var searchResults: [V]
 
     @State private var arrowSelection: V?
-    @State private var eventMonitor: LocalEventMonitor?
     @State private var isInitialRender = true
 
     private let padding: CGFloat
@@ -61,14 +61,8 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
         .onAppear {
             Task { @MainActor in
                 setupEventMonitor(reader: reader)
-                eventMonitor?.start()
                 isInitialRender = false
             }
-        }
-        .onDisappear {
-            Log.info("Stopping event monitor", category: .pickerView)
-            eventMonitor?.stop()
-            eventMonitor = nil
         }
     }
 
@@ -108,7 +102,10 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
     }
 
     private func setupEventMonitor(reader: ScrollViewProxy) {
-        eventMonitor = LocalEventMonitor(events: [.keyDown]) { event in
+        eventMonitorManager.addMonitor(
+            for: "pickerList",
+            matching: [.keyDown]
+        ) {  event in
             switch event.keyCode {
             case .kVK_DownArrow:
                 updateArrowSelection(increment: true, reader: reader)
@@ -165,12 +162,8 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
     let content: (V) -> Content
     let padding: CGFloat
 
-    private var isActive: Bool {
-        selection == item
-    }
-
     private var isSelected: Bool {
-        isHovering || arrowSelection == item
+        selection == item || arrowSelection == item
     }
 
     var body: some View {
@@ -183,14 +176,9 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(.rect)
         }
-        .buttonStyle(.luminare)
+        .buttonStyle(.luminare(overrideIsHovering: isSelected))
         .luminareFilledStates([.hovering, .pressed])
         .luminareBorderedStates(.hovering)
-        .onHover { hover in
-            withAnimation(animationFast) {
-                isHovering = hover
-            }
-        }
     }
 }
 
