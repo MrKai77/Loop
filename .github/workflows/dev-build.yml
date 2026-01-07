@@ -168,29 +168,20 @@ jobs:
         if: "${{ inputs.release-new-build }}"
         with:
           script: |
-            try {
-              await github.rest.git.createRef({
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/prerelease',
+              sha: context.sha
+            }).catch(err => {
+              if (err.status !== 422) throw err;
+              github.rest.git.updateRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/prerelease',
+                ref: 'tags/prerelease',
                 sha: context.sha
               });
-              console.log('Tag created: prerelease');
-            } catch (err) {
-              if (err.status === 422) {
-                // Tag already exists, so update it instead
-                await github.rest.git.updateRef({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  ref: 'refs/tags/prerelease',
-                  sha: context.sha,
-                  force: true // ensures it moves to the new commit
-                });
-                console.log('Tag updated: prerelease');
-              } else {
-                throw err; // rethrow other errors
-              }
-            }
+            })
 
       - name: 📰 Build Changelog
         uses: mikepenz/release-changelog-builder-action@v4
