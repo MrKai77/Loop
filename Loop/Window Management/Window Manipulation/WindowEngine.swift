@@ -154,10 +154,8 @@ enum WindowEngine {
             return false
         }
 
-        return await MainActor.run {
-            try? axMenuItem.performAction(.press)
-            return true
-        }
+        try? axMenuItem.performAction(.press)
+        return true
     }
 
     // MARK: - Animation Checks
