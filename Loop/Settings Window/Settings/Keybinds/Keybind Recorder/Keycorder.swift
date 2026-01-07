@@ -31,14 +31,11 @@ struct Keycorder: View {
     @State private var isHovering: Bool = false
     @State private var isActive: Bool = false
 
-    private var autoStartTrigger: Binding<Bool>?
-
-    init(_ keybind: Binding<WindowAction>, autoStart: Binding<Bool>? = nil) {
+    init(_ keybind: Binding<WindowAction>) {
         self._validCurrentKeybind = keybind.keybind
         self._direction = keybind.direction
         self._bypassTriggerKey = keybind.bypassTriggerKey
         self._selectionKeybind = State(initialValue: keybind.wrappedValue.keybind)
-        self.autoStartTrigger = autoStart
     }
 
     var body: some View {
@@ -100,11 +97,6 @@ struct Keycorder: View {
             if selectionKeybind != validCurrentKeybind {
                 selectionKeybind = validCurrentKeybind
             }
-        }
-        .onChange(of: autoStartTrigger?.wrappedValue) { shouldStart in
-            guard let shouldStart, shouldStart, !isActive else { return }
-            defer { autoStartTrigger?.wrappedValue = false }
-            startObservingKeys()
         }
         .buttonStyle(.plain)
         // Don't allow the button to be pressed if more than one keybind is selected in the list
