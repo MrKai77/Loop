@@ -5,38 +5,83 @@ labels: ["Feature"]
 body:
   - type: textarea
     attributes:
-      label: Feature Request Description
-      description: Provide a clear and concise description of this feature request with any problems and solutions.
+      label: Feature Request Summary
+      description: Provide a concise description of the feature.
+      placeholder: Briefly describe what you want to achieve.
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Screenshots
-      description: Add screenshots to help explain this feature request, if applicable.
+      label: Problem / Opportunity & Desired Solution
+      description: Describe the pain point, why it matters now, and how the feature should work from the user's perspective.
+      placeholder: |
+        Problem or Opportunity:
+        - Current behavior
+        - Why it matters now
+        Desired Solution / Implementation:
+        - How it should work
+        - What should happen
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Alternatives Considered
+      description: List any alternatives you considered.
+      placeholder: |
+        1. Alternative A — why it falls short
+        2. Alternative B — why it falls short
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Visuals or References
+      description: Add mockups, screenshots, or links to inspiration.
+      placeholder: Drag and drop files or paste URLs.
     validations:
       required: false
 
   - type: textarea
     attributes:
       label: Additional Context
-      description: Provide any additional information about this feature request.
+      description: Share any other relevant notes (logs, related issues, documentation).
+      placeholder: |
+        - Related issues: #123, #456
+        - Other relevant information
     validations:
       required: false
 
+  - type: dropdown
+    attributes:
+      label: Priority
+      description: How urgent or valuable is this request?
+      options:
+        - High (mission critical)
+        - Medium (important but not blocking)
+        - Low (nice to have)
+    validations:
+      required: true
+
   - type: checkboxes
     attributes:
-      label: Final Checks
+      label: Final checks
       options:
-        - label: My issue is written in English
+        - label: My issue is written in English.
           required: true
-        - label: My issue title is descriptive
+        - label: My issue title is descriptive.
           required: true
-        - label: This is a single feature request (multiple feature requests should be reported individually)
+        - label: This is a single feature request (multiple feature requests should be reported individually).
           required: true
-        - label: I can help with the improvement or development of this feature (tick if you can help)
+        - label: I have looked to see if this is a duplicate of another feature request.
+          required: true
+        - label: I can help with research or testing.
+          required: false
+        - label: I can help build this feature.
           required: false
 
   - type: markdown
     attributes:
-      value: Thank you for taking the time to report this feature request!
+      value: |
+        Thank you for taking the time to propose this feature!

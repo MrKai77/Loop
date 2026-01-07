@@ -1,33 +1,64 @@
 name: Suggest New Icon
 description: Add your icon to Loop.
-title: "🍱 Add [icon names]"
+title: "🍱 Add [icon name]"
 labels: ["Feature"]
 body:
   - type: textarea
     attributes:
-      label: Icons
-      description: Drag your icons here.
+      label: Icon files
+      description: Drag and drop SVG/PNG assets directly into this field, or paste the URL of the icon. Also, attach the link or file used to create the icon (Figma, Sketch, etc.).
+      placeholder: Attach one icon per row or bundle them in a ZIP. Ensure your upload also includes the link or file used to create the icon (Figma, Sketch, etc.)..
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Icon names
+      description: Provide the exact names that should appear in Loop.
+      placeholder: Blackhole, Summer, Mosaic
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Comments
-      description: Describe the significance of your icons. (what does it represent?)
+      label: Concept & meaning
+      description: Explain what each icon represents and why it is valuable.
+      placeholder: |
+        - Blackhole: Represents...
+        - Summer: Represents...
+        - Mosaic: Represents...
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Social Media handle
+      description: Input your username AND social media name to be attributed in the contribution list. If none is provided, the GitHub account that created the icon form will be used instead.
     validations:
       required: true
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add references, mockups in situ, or related discussions.
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: Final checks
+      options:
+        - label: My suggestion is written in English.
+          required: true
+        - label: I am submitting an icon (this is not for icon requests).
+          required: true
+        - label: I own the rights to these assets or have permission to share them.
+          required: true
+        - label: I can iterate on the design if feedback is provided.
+          required: false
 
   - type: markdown
     attributes:
       value: |
-        Please keep in mind that not all icons may be approved, as they do take up quite a bit of space in the app itself :)
+        Please keep in mind that not all icons may be approved, as they do take up quite a bit of space in the app itself.
         Thank you for taking the time to make icons for Loop!
-
-  - type: checkboxes
-    attributes:
-      label: Final Checks
-      options:
-        - label: My suggestion is written in English
-          required: true
-        - label: I am submitting an icon (this is not for icon requests)
-          required: true

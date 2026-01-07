@@ -5,81 +5,139 @@ labels: ["Bug"]
 body:
   - type: textarea
     attributes:
-      label: Bug Description
-      description: Provide a clear and concise description of this bug.
+      label: Bug description
+      description: Provide a clear and concise description of the bug.
+      placeholder: A brief summary of the problem and where it occurs.
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Affected scope
+      description: What area is impacted?
+      options:
+        - UI
+        - Performance
+        - Crash / Freeze
+        - Data loss / Corruption
+        - Documentation
+        - Other
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Steps To Reproduce
-      description: Provide steps to reproduce this bug.
+      label: Steps to reproduce
+      description: List the exact steps to reproduce the issue.
       placeholder: |
-        1. [First Step]
-        2. [Second Step]
+        1. [First step]
+        2. [Second step]
         3. [and so on...]
     validations:
       required: true
 
-  - type: textarea
+  - type: dropdown
     attributes:
-      label: Expected Behavior
-      description: Provide a clear and concise description of what you expected to happen.
+      label: Reproducibility
+      description: How often does the issue occur?
+      options:
+        - Always
+        - Often (≥70%)
+        - Sometimes (30–70%)
+        - Rarely (<30%)
+        - Unable to reproduce again
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Actual Behavior
-      description: Provide a clear and concise description of what happened.
+      label: Expected vs Actual behavior
+      description: |
+        Expected: I expected my icon to unlock when reaching the target number of Loops.
+
+        Actual: The icon did not unlock when reaching the target number of Loops, I think it's because...
     validations:
       required: true
 
   - type: textarea
     attributes:
       label: Screenshots
-      description: Add screenshots to help explain this bug, if applicable.
+      description: Add screenshots to help explain the issue (if applicable).
     validations:
       required: false
 
-  - type: input
+  - type: dropdown
     attributes:
-      label: macOS Version
-      description: Apple Logo -> About This Mac
-      placeholder: |
-        [ex. Ventura 13.1]
+      label: Severity
+      description: How severely does this affect you?
+      options:
+        - Blocker (cannot proceed)
+        - Critical (major functionality broken)
+        - Major (workaround exists)
+        - Minor (limited impact)
+        - Trivial (cosmetic)
     validations:
       required: true
 
   - type: input
     attributes:
-      label: Loop Version
-      description: You can find this in Loop\'s about window!
-      placeholder: |
-        [ex. Version 1.0.0 (246)]
+      label: macOS version
+      description: Apple Logo → About This Mac
+      placeholder: Sequoia 15.5
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Loop version
+      description: You can find this in Loop’s About window
+      placeholder: Version 1.4.0 (1581)
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Did you try the development build?
+      description: In About, enable “Include development version,” then click “Check for updates.”
+      options:
+        - "Yes"
+        - "No"
+        - "There was a developer build? Let's try that."
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Additional Context
+      label: Additional context
       description: Provide any additional information about this bug.
+      placeholder: |
+        - Logs or crash report (redact sensitive data)
+        - Related issues: #123, #456
+        - Network/proxy/VPN details
+        - External display/monitor/usb-c dock etc.
+        - Keyboard layout/language
+        - Other relevant information
     validations:
       required: false
 
   - type: checkboxes
     attributes:
-      label: Final Checks
+      label: Final checks
       options:
-        - label: My issue is written in English
+        - label: My issue is written in English.
           required: true
-        - label: My issue title is descriptive
+        - label: My issue title is descriptive.
           required: true
-        - label: This is a single bug (multiple bugs should be reported individually)
+        - label: This is a single bug (multiple bugs should be reported individually).
           required: true
-        - label: I can help with fixing or developing this issue (tick if you can help).
+        - label: I have looked to see if this is a duplicate of another bug report.
+          required: true
+        - label: I can help with further investigation.
+          required: false
+        - label: I can help with developing a fix for this issue.
           required: false
 
   - type: markdown
     attributes:
-      value: Thank you for taking the time to report this bug!
+      value: |
+        Thank you for taking the time to report this bug!
