@@ -32,12 +32,12 @@ struct KeybindItemView: View {
 
     /// Checks if there are any existing keybinds with the same key combination
     private var hasDuplicateKeybinds: Bool {
-        let effectiveKeybind = action.bypassTriggerKey
+        let effectiveKeybind = action.bypassTriggerKey == true
             ? action.keybind
             : triggerKey.union(action.keybind)
 
         return !keybinds.filter { otherAction in
-            let otherEffectiveKeybind = otherAction.bypassTriggerKey
+            let otherEffectiveKeybind = otherAction.bypassTriggerKey == true
                 ? otherAction.keybind
                 : triggerKey.union(otherAction.keybind)
             return effectiveKeybind == otherEffectiveKeybind && otherAction.id != action.id
@@ -68,7 +68,7 @@ struct KeybindItemView: View {
             }
         }
         .onChange(of: action.keybind) { newKeybind in
-            if action.bypassTriggerKey {
+            if action.bypassTriggerKey == true {
                 let triggerKeysInKeybind = newKeybind.intersection(triggerKey)
                 if !triggerKeysInKeybind.isEmpty {
                     action.keybind = newKeybind.subtracting(triggerKey)
@@ -243,7 +243,7 @@ struct KeybindItemView: View {
 
     private func keycorderSection(hasConflicts: Bool) -> some View {
         HStack(spacing: 6) {
-            if !action.bypassTriggerKey {
+            if action.bypassTriggerKey != true {
                 HStack(spacing: 6) {
                     ForEach(triggerKey.sorted().compactMap(\.modifierSystemImage), id: \.self) { image in
                         Text("\(Image(systemName: image))")
@@ -262,7 +262,7 @@ struct KeybindItemView: View {
                 .opacity(hasConflicts ? 0.5 : 1)
         }
         .contextMenu {
-            if action.bypassTriggerKey {
+            if action.bypassTriggerKey == true {
                 Button("Restore Trigger Key") { restoreStandardMode() }
             } else {
                 Button("Use Custom Shortcut") { switchToCustomShortcut() }

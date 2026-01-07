@@ -43,7 +43,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         positionMode: CustomWindowActionPositionMode? = nil,
         sizeMode: CustomWindowActionSizeMode? = nil,
         cycle: [WindowAction]? = nil,
-        bypassTriggerKey: Bool = false
+        bypassTriggerKey: Bool? = nil
     ) {
         self.id = UUID()
         self.direction = direction
@@ -96,7 +96,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     // Generic Properties
     var direction: WindowDirection
     var keybind: Set<CGKeyCode>
-    var bypassTriggerKey: Bool = false
+    var bypassTriggerKey: Bool?
 
     // Custom Keybind Properties
     var name: String?

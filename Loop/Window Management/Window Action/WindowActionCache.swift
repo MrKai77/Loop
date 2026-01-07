@@ -51,8 +51,8 @@ final class WindowActionCache {
     private func regenerateActionsByKeybind(from keybinds: [WindowAction]) {
         let cycleBackwardsOnShiftPressed: Bool = Defaults[.cycleBackwardsOnShiftPressed]
 
-        let normalActions = keybinds.filter { !$0.bypassTriggerKey }
-        let bypassedActions = keybinds.filter(\.bypassTriggerKey)
+        let normalActions = keybinds.filter { $0.bypassTriggerKey != true }
+        let bypassedActions = keybinds.filter { $0.bypassTriggerKey == true }
 
         // Normal actions: keybind is action-key only (without trigger key)
         actionsByKeybind = Dictionary(

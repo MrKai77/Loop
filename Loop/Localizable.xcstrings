@@ -32261,6 +32261,9 @@
         }
       }
     },
+    "You can use a maximum of 5 keys in a custom shortcut." : {
+
+    },
     "You can't export something that doesn't exist!" : {
       "comment" : "Description for an alert shown when the user tries to export keybinds but none exist.",
       "localizations" : {
@@ -32343,6 +32346,12 @@
           }
         }
       }
+    },
+    "You must include at least one modifier key (⌘, ⌃, ⌥, ⇧, or %@)." : {
+
+    },
+    "You must include at least one non-modifier key." : {
+
     },
     "You've looped %lld times!" : {
       "localizations" : {

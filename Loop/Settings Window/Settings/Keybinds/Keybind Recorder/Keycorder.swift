@@ -14,14 +14,14 @@ struct Keycorder: View {
     @EnvironmentObject private var model: KeybindsConfigurationModel
     @Environment(\.appearsActive) private var appearsActive
 
-    let keyLimit: Int = 6
+    let keyLimit: Int = 5
 
     @Default(.triggerKey) var triggerKey
 
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
     @State private var selectionKeybind: Set<CGKeyCode>
     @Binding private var direction: WindowDirection
-    @Binding private var bypassTriggerKey: Bool
+    @Binding private var bypassTriggerKey: Bool?
 
     @State private var eventMonitor: LocalEventMonitor?
     @State private var shouldShake: Bool = false
@@ -141,7 +141,7 @@ struct Keycorder: View {
             flags.remove(.maskSecondaryFn)
         }
 
-        let validModifiers = if bypassTriggerKey {
+        let validModifiers = if bypassTriggerKey == true {
             flags.keyCodes
         } else {
             flags.keyCodes.filter {
@@ -156,14 +156,14 @@ struct Keycorder: View {
         shouldError = false
 
         /// Make sure we don't go over the key limit
-        guard finalKeys.count < keyLimit else {
+        guard finalKeys.count <= keyLimit else {
             errorMessage = "You can only use up to \(keyLimit) keys in a keybind, including the trigger key."
             shouldShake.toggle()
             shouldError = true
             return
         }
 
-        if bypassTriggerKey {
+        if bypassTriggerKey == true {
             let systemKeybinds = CGKeyCode.systemKeybinds
             if systemKeybinds.contains(finalKeys) {
                 errorMessage = "This shortcut is used by macOS and may not work as expected."
@@ -184,12 +184,41 @@ struct Keycorder: View {
         }
 
         if willSet {
-            let effectiveSelection = bypassTriggerKey
+            // Validate keybind requirements when in bypass mode
+            if bypassTriggerKey == true {
+                let normalizedKeys = selectionKeybind.map(\.baseModifier)
+                let modifierKeys = normalizedKeys.filter { $0.isModifier }
+                let nonModifierKeys = normalizedKeys.filter { !$0.isModifier }
+
+                // Check: at least one modifier key
+                if modifierKeys.isEmpty {
+                    errorMessage = "You must include at least one modifier key (⌘, ⌃, ⌥, ⇧, or \(Image(systemName: "globe")))."
+                    shouldShake.toggle()
+                    shouldError = true
+                    willSet = false
+                }
+                // Check: at least one non-modifier key
+                else if nonModifierKeys.isEmpty {
+                    errorMessage = "You must include at least one non-modifier key."
+                    shouldShake.toggle()
+                    shouldError = true
+                    willSet = false
+                }
+                // Check: maximum of 5 keys total
+                else if selectionKeybind.count > 5 {
+                    errorMessage = "You can use a maximum of 5 keys in a custom shortcut."
+                    shouldShake.toggle()
+                    shouldError = true
+                    willSet = false
+                }
+            }
+
+            let effectiveSelection = bypassTriggerKey == true
                 ? selectionKeybind
                 : triggerKey.union(selectionKeybind)
 
             for keybind in Defaults[.keybinds] {
-                let effectiveExisting = keybind.bypassTriggerKey
+                let effectiveExisting = keybind.bypassTriggerKey == true
                     ? keybind.keybind
                     : triggerKey.union(keybind.keybind)
 
