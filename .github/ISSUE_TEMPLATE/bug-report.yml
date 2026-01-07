@@ -5,7 +5,7 @@ labels: ["Bug"]
 body:
   - type: textarea
     attributes:
-      label: Bug description
+      label: Bug Description
       description: Provide a clear and concise description of the bug.
       placeholder: A brief summary of the problem and where it occurs.
     validations:
@@ -13,10 +13,10 @@ body:
 
   - type: dropdown
     attributes:
-      label: Affected scope
+      label: Affected Scope
       description: What area is impacted?
       options:
-        - UI
+        - User interface
         - Performance
         - Crash / Freeze
         - Data loss / Corruption
@@ -27,7 +27,7 @@ body:
 
   - type: textarea
     attributes:
-      label: Steps to reproduce
+      label: Steps to Reproduce
       description: List the exact steps to reproduce the issue.
       placeholder: |
         1. [First step]
@@ -51,7 +51,7 @@ body:
 
   - type: textarea
     attributes:
-      label: Expected vs Actual behavior
+      label: Expected vs Actual Behavior
       description: |
         Expected: I expected my icon to unlock when reaching the target number of Loops.
 
@@ -61,8 +61,8 @@ body:
 
   - type: textarea
     attributes:
-      label: Screenshots
-      description: Add screenshots to help explain the issue (if applicable).
+      label: Screen Recordings / Screenshots
+      description: Add screen recordings or screenshots to help explain the issue (if applicable).
     validations:
       required: false
 
@@ -81,7 +81,7 @@ body:
 
   - type: input
     attributes:
-      label: macOS version
+      label: macOS Version
       description: Apple Logo → About This Mac
       placeholder: Sequoia 15.5
     validations:
@@ -89,7 +89,7 @@ body:
 
   - type: input
     attributes:
-      label: Loop version
+      label: Loop Version
       description: You can find this in Loop’s About window
       placeholder: Version 1.4.0 (1581)
     validations:
@@ -97,7 +97,7 @@ body:
 
   - type: dropdown
     attributes:
-      label: Did you try the development build?
+      label: Did You Try the Development Build?
       description: In About, enable “Include development version,” then click “Check for updates.”
       options:
         - "Yes"
@@ -108,7 +108,7 @@ body:
 
   - type: textarea
     attributes:
-      label: Additional context
+      label: Additional Context
       description: Provide any additional information about this bug.
       placeholder: |
         - Logs or crash report (redact sensitive data)
@@ -122,7 +122,7 @@ body:
 
   - type: checkboxes
     attributes:
-      label: Final checks
+      label: Final Checks
       options:
         - label: My issue is written in English.
           required: true

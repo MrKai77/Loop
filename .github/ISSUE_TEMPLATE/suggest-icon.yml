@@ -5,41 +5,37 @@ labels: ["Feature"]
 body:
   - type: textarea
     attributes:
-      label: Icon files
-      description: Drag and drop SVG/PNG assets directly into this field, or paste the URL of the icon. Also, attach the link or file used to create the icon (Figma, Sketch, etc.).
-      placeholder: Attach one icon per row or bundle them in a ZIP. Ensure your upload also includes the link or file used to create the icon (Figma, Sketch, etc.)..
+      label: Icon Files
+      description: Drag and drop `.icon`/`.svg`/`.png` assets directly into this field, or paste the URL of the icon. Also, attach the link or file used to create the icon (Figma, Sketch, etc.).
+      placeholder: Attach one file per row or bundle them in a ZIP. Ensure you include the link or file used to create the icon (Figma, Sketch, etc.)..
     validations:
       required: true
 
   - type: input
     attributes:
-      label: Icon names
-      description: Provide the exact names that should appear in Loop.
-      placeholder: Blackhole, Summer, Mosaic
+      label: Icon Name
+      description: Provide the exact name of the icon that should appear in Loop.
+      placeholder: Black Hole
     validations:
       required: true
 
   - type: textarea
     attributes:
-      label: Concept & meaning
-      description: Explain what each icon represents and why it is valuable.
-      placeholder: |
-        - Blackhole: Represents...
-        - Summer: Represents...
-        - Mosaic: Represents...
+      label: Concept & Meaning
+      description: Explain what this icon represents and why it is valuable.
     validations:
       required: false
 
   - type: textarea
     attributes:
-      label: Social Media handle
-      description: Input your username AND social media name to be attributed in the contribution list. If none is provided, the GitHub account that created the icon form will be used instead.
+      label: Preferred Social Media Handle
+      description: Input your social media link to be attributed in the contribution list. If none is provided, the GitHub account associateed with this issue will be used instead.
     validations:
-      required: true
+      required: false
 
   - type: textarea
     attributes:
-      label: Additional context
+      label: Additional Context
       description: Add references, mockups in situ, or related discussions.
     validations:
       required: false
@@ -55,7 +51,7 @@ body:
         - label: I own the rights to these assets or have permission to share them.
           required: true
         - label: I can iterate on the design if feedback is provided.
-          required: false
+          required: true
 
   - type: markdown
     attributes:

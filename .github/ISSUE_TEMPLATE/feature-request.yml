@@ -78,7 +78,7 @@ body:
           required: true
         - label: I can help with research or testing.
           required: false
-        - label: I can help build this feature.
+        - label: I can help code this feature.
           required: false
 
   - type: markdown
