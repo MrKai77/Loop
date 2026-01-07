@@ -173,6 +173,7 @@ final class Window {
     }
 
     /// Activate the window. This will bring it to the front and focus it if possible
+    @MainActor
     func activate() {
         // First activate the application to ensure proper window management context
         if let runningApplication = nsRunningApplication {
@@ -360,19 +361,9 @@ final class Window {
         CGRect(origin: position, size: size)
     }
 
-    /// Set the frame of this Window.
-    /// - Parameters:
-    ///   - rect: The new frame for the window
-    ///   - animate: Whether or not to animate the window resizing
-    ///   - sizeFirst: This will set the size first, which is useful when switching screens. Only does something when window animations are off
-    ///   - bounds: This will prevent the window from going outside the bounds. Only does something when window animations are on
-    ///   - completionHandler: Something to run after the window has been resized. This can include things like moving the cursor to the center of the window
     func setFrame(
         _ rect: CGRect,
-        animate: Bool = false,
-        sizeFirst: Bool = false,
-        bounds: CGRect = .zero,
-        completionHandler: @escaping (() -> ()) = {}
+        sizeFirst: Bool = false
     ) {
         let enhancedUI = enhancedUserInterface
 
@@ -382,22 +373,44 @@ final class Window {
             enhancedUserInterface = false
         }
 
-        if animate {
-            let animation = WindowTransformAnimation(
-                rect,
-                window: self,
-                bounds: bounds,
-                completionHandler: completionHandler
-            )
-            animation.startInBackground()
-        } else {
-            if sizeFirst {
-                size = rect.size
-            }
-            position = rect.origin
+        if sizeFirst {
             size = rect.size
+        }
+        position = rect.origin
+        size = rect.size
 
-            completionHandler()
+        if enhancedUI {
+            enhancedUserInterface = true
+        }
+    }
+
+    func setFrameAnimated(
+        _ rect: CGRect,
+        bounds: CGRect
+    ) async throws {
+        let enhancedUI = enhancedUserInterface
+
+        if enhancedUI {
+            let appName = nsRunningApplication?.localizedName
+            Log.info("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.", category: .window)
+            enhancedUserInterface = false
+        }
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            Task {
+                let animation = WindowTransformAnimation(
+                    rect,
+                    window: self,
+                    bounds: bounds
+                ) { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: ())
+                    }
+                }
+                await animation.start()
+            }
         }
 
         if enhancedUI {

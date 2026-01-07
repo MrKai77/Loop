@@ -32,7 +32,9 @@ extension WindowUtility {
         let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
         Log.info("Focusing window: \(nextWindowTitle)", category: .windowUtility)
 
-        directionalWindow.activate()
+        Task { @MainActor in
+            directionalWindow.activate()
+        }
 
         return directionalWindow
     }
@@ -46,7 +48,9 @@ extension WindowUtility {
         let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
         Log.info("Focusing window: \(nextWindowTitle)", category: .windowUtility)
 
-        directionalWindow.activate()
+        Task { @MainActor in
+            directionalWindow.activate()
+        }
 
         return directionalWindow
     }

@@ -13,15 +13,20 @@ final class WindowTransformAnimation: NSAnimation {
     private let originalFrame: CGRect
     private let window: Window
     private let bounds: CGRect
-    private let completionHandler: () -> ()
+    private let completionHandler: (Error?) -> ()
 
     private var lastWindowFrame: CGRect = .zero
 
     // Using ids for each ongoing animation, we can cancel as a new window animation is started for that specific window
     private var id: UUID = .init()
-    static var currentAnimations: [CGWindowID: UUID] = [:]
+    static var activeAnimationByWindow: [CGWindowID: WindowTransformAnimation] = [:]
 
-    init(_ newRect: CGRect, window: Window, bounds: CGRect, completionHandler: @escaping () -> ()) {
+    init(
+        _ newRect: CGRect,
+        window: Window,
+        bounds: CGRect,
+        completionHandler: @escaping (Error?) -> ()
+    ) {
         self.targetFrame = newRect
         self.originalFrame = window.frame
         self.window = window
@@ -32,66 +37,78 @@ final class WindowTransformAnimation: NSAnimation {
         self.animationBlockingMode = .nonblocking
         self.lastWindowFrame = originalFrame
 
-        WindowTransformAnimation.currentAnimations[window.cgWindowID] = id
+        if let existing = Self.activeAnimationByWindow[window.cgWindowID] {
+            existing.cancel()
+        }
+        
+        Self.activeAnimationByWindow[window.cgWindowID] = self
     }
 
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    func startInBackground() {
-        DispatchQueue.global().async { [self] in
-            start()
-            RunLoop.current.run()
-        }
+    
+    @MainActor
+    override func start() {
+        super.start()
+    }
+    
+    override func stop() {
+        super.stop()
+        Self.activeAnimationByWindow[window.cgWindowID] = nil
+        completionHandler(nil)
+    }
+    
+    func cancel() {
+        super.stop()
+        Self.activeAnimationByWindow[window.cgWindowID] = nil
+        completionHandler(CancellationError())
     }
 
     override var currentProgress: NSAnimation.Progress {
         didSet {
-            guard WindowTransformAnimation.currentAnimations.contains(where: { $0.value == self.id }) else {
+            apply(progress: currentValue)
+
+            if currentValue >= 1.0 {
                 stop()
-                return
-            }
-
-            let value = CGFloat(1.0 - pow(1.0 - currentValue, 3))
-
-            var newFrame = CGRect(
-                x: round(originalFrame.origin.x + value * (targetFrame.origin.x - originalFrame.origin.x)),
-                y: round(originalFrame.origin.y + value * (targetFrame.origin.y - originalFrame.origin.y)),
-                width: round(originalFrame.size.width + value * (targetFrame.size.width - originalFrame.size.width)),
-                height: round(originalFrame.size.height + value * (targetFrame.size.height - originalFrame.size.height))
-            )
-
-            // Keep the window inside the bounds
-            if bounds != .zero {
-                let xDiff = lastWindowFrame.width - newFrame.width
-                if newFrame.maxX + xDiff > lastWindowFrame.maxX || currentValue >= 0.5,
-                   newFrame.maxX + xDiff > bounds.maxX {
-                    newFrame.origin.x = bounds.maxX - lastWindowFrame.width
-                }
-
-                let yDiff = lastWindowFrame.height - newFrame.height
-                if newFrame.maxY + yDiff > lastWindowFrame.maxY || currentValue >= 0.5,
-                   newFrame.maxY + yDiff > bounds.maxY {
-                    newFrame.origin.y = bounds.maxY - lastWindowFrame.height
-                }
-            }
-
-            if lastWindowFrame.origin != newFrame.origin {
-                window.position = newFrame.origin
-            }
-
-            if lastWindowFrame.size != newFrame.size {
-                window.size = newFrame.size
-            }
-
-            lastWindowFrame = window.frame
-
-            if currentProgress >= 1.0 {
-                WindowTransformAnimation.currentAnimations[window.cgWindowID] = nil
-                completionHandler()
             }
         }
+    }
+    
+    private func apply(progress: Float) {
+        let value = CGFloat(1.0 - pow(1.0 - progress, 3))
+        
+        var newFrame = CGRect(
+            x: round(originalFrame.origin.x + value * (targetFrame.origin.x - originalFrame.origin.x)),
+            y: round(originalFrame.origin.y + value * (targetFrame.origin.y - originalFrame.origin.y)),
+            width: round(originalFrame.size.width + value * (targetFrame.size.width - originalFrame.size.width)),
+            height: round(originalFrame.size.height + value * (targetFrame.size.height - originalFrame.size.height))
+        )
+        
+        // Keep the window inside the bounds
+        if bounds != .zero {
+            let xDiff = lastWindowFrame.width - newFrame.width
+            if newFrame.maxX + xDiff > lastWindowFrame.maxX || currentValue >= 0.5,
+               newFrame.maxX + xDiff > bounds.maxX {
+                newFrame.origin.x = bounds.maxX - lastWindowFrame.width
+            }
+            
+            let yDiff = lastWindowFrame.height - newFrame.height
+            if newFrame.maxY + yDiff > lastWindowFrame.maxY || currentValue >= 0.5,
+               newFrame.maxY + yDiff > bounds.maxY {
+                newFrame.origin.y = bounds.maxY - lastWindowFrame.height
+            }
+        }
+        
+        if lastWindowFrame.origin != newFrame.origin {
+            window.position = newFrame.origin
+        }
+        
+        if lastWindowFrame.size != newFrame.size {
+            window.size = newFrame.size
+        }
+        
+        lastWindowFrame = window.frame
     }
 }

@@ -91,7 +91,17 @@ final class StashManager {
     func onConfigurationChanged() {
         for stashedWindow in store.stashed.values {
             let frame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-            stashedWindow.window.setFrame(frame, animate: animate)
+
+            if animate {
+                Task {
+                    try? await stashedWindow.window.setFrameAnimated(
+                        frame,
+                        bounds: .zero
+                    )
+                }
+            } else {
+                stashedWindow.window.setFrame(frame)
+            }
         }
     }
 
@@ -222,13 +232,22 @@ extension StashManager {
 
         if resetFrame {
             let action = WindowAction(.initialFrame)
-            let center = action.getFrame(
+            let initialFrame = action.getFrame(
                 window: window.window,
                 bounds: window.screen.safeScreenFrame,
                 screen: window.screen
             )
 
-            window.window.setFrame(center, animate: resetFrameAnimated)
+            if resetFrameAnimated {
+                Task {
+                    try? await window.window.setFrameAnimated(
+                        initialFrame,
+                        bounds: .zero
+                    )
+                }
+            } else {
+                window.window.setFrame(initialFrame)
+            }
         }
 
         unmanage(windowID: window.id)
@@ -258,11 +277,23 @@ private extension StashManager {
         let frame = window.computeRevealedFrame()
 
         if shiftFocusWhenStashed {
-            window.window.activate()
+            Task { @MainActor in
+                window.window.activate()
+            }
         }
 
         store.markWindowAsRevealed(window.id)
-        window.window.setFrame(frame, animate: animate)
+
+        if animate {
+            Task {
+                try? await window.window.setFrameAnimated(
+                    frame,
+                    bounds: .zero
+                )
+            }
+        } else {
+            window.window.setFrame(frame)
+        }
 
         Log.info("revealWindow \(window.window.description)", category: .stashManager)
     }
@@ -274,7 +305,18 @@ private extension StashManager {
         let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
 
         unfocus(window.id)
-        window.window.setFrame(frame, animate: animate)
+
+        if animate {
+            Task {
+                try? await window.window.setFrameAnimated(
+                    frame,
+                    bounds: .zero
+                )
+            }
+        } else {
+            window.window.setFrame(frame)
+        }
+
         store.markWindowAsHidden(window.id)
 
         Log.info("hideWindow \(window.window.description)", category: .stashManager)
@@ -311,7 +353,9 @@ private extension StashManager {
 
         if let focusWindow {
             Log.info("Focusing another window on the same screen: \(focusWindow.description).", category: .stashManager)
-            focusWindow.activate()
+            Task { @MainActor in
+                focusWindow.activate()
+            }
         }
     }
 }
