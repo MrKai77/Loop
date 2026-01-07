@@ -36,12 +36,12 @@ struct KeybindItemView: View {
             ? action.keybind
             : triggerKey.union(action.keybind)
 
-        return keybinds.filter { otherAction in
+        return !keybinds.filter { otherAction in
             let otherEffectiveKeybind = otherAction.bypassTriggerKey
                 ? otherAction.keybind
                 : triggerKey.union(otherAction.keybind)
             return effectiveKeybind == otherEffectiveKeybind && otherAction.id != action.id
-        }.count > 0
+        }.isEmpty
     }
 
     var body: some View {
