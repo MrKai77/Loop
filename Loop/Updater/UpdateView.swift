@@ -86,7 +86,7 @@ struct UpdateView: View {
                         }
 
                         let tenSpaces = "          " // This helps with alignment for the animation once the update finishes
-                        Text(isInstalling ? tenSpaces : readyToRestart ? NSLocalizedString("Restart to complete", comment: "") : NSLocalizedString("Install", comment: ""))
+                        Text(isInstalling ? tenSpaces : readyToRestart ? NSLocalizedString("Relaunch Loop to complete", comment: "") : NSLocalizedString("Install", comment: ""))
                             .contentTransition(.numericText())
                             .opacity(isInstalling ? 0 : 1)
                     }
