@@ -12,6 +12,7 @@ extension WindowDirection {
     var infoText: LocalizedStringKey? {
         switch self {
         case .macOSCenter: "\(name) places windows slightly above the absolute center,\nwhich can be found more ergonomic."
+        case .stash: "A single \(name) action can only track one window. To stash\nmultiple windows, add additional \(name) actions."
         default: nil
         }
     }

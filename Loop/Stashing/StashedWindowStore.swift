@@ -120,5 +120,6 @@ final class StashedWindowsStore {
 
     func persistStashedWindows() {
         Defaults[.stashManagerStashedWindows] = stashed.mapValues(\.action)
+        Log.info("Persisted new stashed windows", category: .stashManager)
     }
 }

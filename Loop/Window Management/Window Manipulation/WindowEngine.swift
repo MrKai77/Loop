@@ -47,8 +47,7 @@ enum WindowEngine {
         else { return }
 
         let willChangeScreens = ScreenUtility.screenContaining(window) != screen
-        let windowTitle = window.nsRunningApplication?.localizedName ?? window.title ?? "<unknown>"
-        Log.info("Resizing \(windowTitle) to \(action.direction.debugDescription) on \(screen.localizedName)", category: .windowEngine)
+        Log.info("Resizing \(window) to \(action.direction) on \(screen.localizedName)", category: .windowEngine)
 
         // Record first frame if needed
         WindowRecords.recordFirstIfNeeded(for: window)
@@ -97,6 +96,9 @@ enum WindowEngine {
                 LoopManager.lastTargetFrame = window.frame
             }
         } else {
+            // Otherwise, we obviously need to disable fullscreen to resize the window
+            window.fullscreen = false
+
             let targetFrame = action.getFrame(
                 window: window,
                 bounds: screen.safeScreenFrame,

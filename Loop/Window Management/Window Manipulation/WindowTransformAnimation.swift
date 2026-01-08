@@ -13,6 +13,7 @@ final class WindowTransformAnimation: NSAnimation {
     private let originalFrame: CGRect
     private let window: Window
     private let bounds: CGRect
+    private var didCallCompletionHandler: Bool = false
     private let completionHandler: (Error?) -> ()
 
     private var lastWindowFrame: CGRect = .zero
@@ -57,13 +58,23 @@ final class WindowTransformAnimation: NSAnimation {
     override func stop() {
         super.stop()
         Self.activeAnimationByWindow[window.cgWindowID] = nil
-        completionHandler(nil)
+
+        if !didCallCompletionHandler {
+            completionHandler(nil)
+        }
+
+        didCallCompletionHandler = true
     }
 
     func cancel() {
         super.stop()
         Self.activeAnimationByWindow[window.cgWindowID] = nil
-        completionHandler(CancellationError())
+
+        if !didCallCompletionHandler {
+            completionHandler(CancellationError())
+        }
+
+        didCallCompletionHandler = true
     }
 
     override var currentProgress: NSAnimation.Progress {
