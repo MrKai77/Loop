@@ -56,7 +56,7 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
             callback: callback,
             userInfo: userInfo
         ) {
-            setupRunLoopSource(eventTap: eventTap, runLoop: CFRunLoopGetCurrent())
+            setupRunLoopSource(eventTap: eventTap)
         } else {
             Log.info("Failed to create event tap", category: .passiveEventMonitor)
         }

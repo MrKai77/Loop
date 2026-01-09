@@ -249,8 +249,7 @@ final class WindowDragManager {
                 ignoredFrame: ignoredFrame
             )
 
-            // swiftformat:disable:next redundantSelf
-            Log.info("Window snapping direction changed: \(self.direction.debugDescription)", category: .windowDragManager)
+            Log.info("Window snapping direction changed: \(direction.debugDescription)", category: .windowDragManager)
 
             previewController.open(screen: screen, window: draggingWindow, startingAction: nil)
             previewController.setAction(to: WindowAction(direction))

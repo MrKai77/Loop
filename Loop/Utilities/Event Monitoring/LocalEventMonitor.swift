@@ -41,8 +41,7 @@ final class LocalEventMonitor: Identifiable, Equatable {
     func start() {
         guard !isEnabled else { return }
 
-        // swiftformat:disable:next redundantSelf
-        Log.info("Starting LocalEventMonitor with ID \(self.id)", category: .localEventMonitor)
+        Log.info("Starting LocalEventMonitor with ID \(id)", category: .localEventMonitor)
 
         localEventMonitor = NSEvent.addLocalMonitorForEvents(
             matching: eventTypeMask,
@@ -57,8 +56,7 @@ final class LocalEventMonitor: Identifiable, Equatable {
     func stop() {
         guard isEnabled else { return }
 
-        // swiftformat:disable:next redundantSelf
-        Log.info("Stopping LocalEventMonitor with ID \(self.id)", category: .localEventMonitor)
+        Log.info("Stopping LocalEventMonitor with ID \(id)", category: .localEventMonitor)
 
         if let localEventMonitor {
             NSEvent.removeMonitor(localEventMonitor)

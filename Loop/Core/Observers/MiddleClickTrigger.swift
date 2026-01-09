@@ -49,7 +49,6 @@ final class MiddleClickTrigger {
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
-    @MainActor
     func start() {
         stop()
 
@@ -62,7 +61,6 @@ final class MiddleClickTrigger {
         self.monitor = monitor
     }
 
-    @MainActor
     func stop() {
         monitor?.stop()
         monitor = nil

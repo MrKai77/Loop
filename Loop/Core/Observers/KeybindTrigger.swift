@@ -68,7 +68,6 @@ final class KeybindTrigger {
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
-    @MainActor
     func start() {
         guard AccessibilityManager.shared.isGranted else {
             return
@@ -129,7 +128,6 @@ final class KeybindTrigger {
         self.eventMonitor = eventMonitor
     }
 
-    @MainActor
     func stop() {
         pressedKeys = []
         canPassthroughSpecialEvents = true

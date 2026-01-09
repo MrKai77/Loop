@@ -233,8 +233,7 @@ final class URLCommandHandler {
             Log.error("Failed to write output: \(error.localizedDescription)", category: .urlHandler)
 
             // Fallback to direct console output if file operations fail
-            // swiftformat:disable:next redundantSelf
-            Log.info("\(self.outputBuffer.joined(separator: "\n"))", category: .urlHandler)
+            Log.info("\(outputBuffer.joined(separator: "\n"))", category: .urlHandler)
         }
 
         outputBuffer.removeAll()

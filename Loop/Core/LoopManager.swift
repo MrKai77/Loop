@@ -77,11 +77,11 @@ final class LoopManager {
                 }
 
                 if status {
-                    await keybindTrigger.start()
-                    await middleClickTrigger.start()
+                    keybindTrigger.start()
+                    middleClickTrigger.start()
                 } else {
-                    await keybindTrigger.stop()
-                    await middleClickTrigger.stop()
+                    keybindTrigger.stop()
+                    middleClickTrigger.stop()
                 }
             }
         }
@@ -132,9 +132,7 @@ extension LoopManager {
         isShiftKeyPressed = false
 
         if !Defaults[.disableCursorInteraction] {
-            Task { @MainActor in
-                mouseInteractionObserver.start(initialMousePosition: initialMousePosition)
-            }
+            mouseInteractionObserver.start(initialMousePosition: initialMousePosition)
         }
 
         if !Defaults[.hideUntilDirectionIsChosen] {
@@ -164,10 +162,7 @@ extension LoopManager {
         isLoopActive = false
 
         triggerKeyTimeoutTimer.cancel()
-
-        Task { @MainActor in
-            mouseInteractionObserver.stop()
-        }
+        mouseInteractionObserver.stop()
 
         // Handle normal actions with a target window
         if forceClose == false,

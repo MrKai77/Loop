@@ -19,10 +19,7 @@ protocol StashedWindowsStoreDelegate: AnyObject {
 final class StashedWindowsStore {
     weak var delegate: StashedWindowsStoreDelegate?
 
-    var stashed: [CGWindowID: StashedWindow] = [:] {
-        didSet { persistStashedWindows() }
-    }
-
+    private(set) var stashed: [CGWindowID: StashedWindowInfo] = [:]
     private(set) var revealed: Set<CGWindowID> = []
 
     /// Hold data from `Defaults[.stashManagerStashedWindows]` for windows that failed to be restored.
@@ -48,16 +45,27 @@ final class StashedWindowsStore {
     }
 
     /// Return the stashed window that match the given `action` and `screen`
-    func stashedWindow(for action: WindowAction, on screen: NSScreen) -> StashedWindow? {
+    func stashedWindow(for action: WindowAction, on screen: NSScreen) -> StashedWindowInfo? {
         stashed.values.first { $0.action.id == action.id && $0.screen.isSameScreen(screen) }
+    }
+
+    func setStashedWindow(cgWindowID: CGWindowID, to window: StashedWindowInfo?) {
+        guard stashed[cgWindowID] != window else {
+            return
+        }
+
+        stashed[cgWindowID] = window
+
+        Defaults[.stashManagerStashedWindows] = stashed.mapValues(\.action)
+        Log.info("Persisted stashed windows (count: \(stashed.count))", category: .stashManager)
     }
 
     // MARK: Private methods
 
-    func restoreStashedWindows() {
+    private func restoreStashedWindows() {
         let windows = WindowUtility.windowList()
         let defaultStashedWindows = Defaults[.stashManagerStashedWindows]
-        var restoredStashedWindows: [CGWindowID: StashedWindow] = [:]
+        var restoredStashedWindows: [CGWindowID: StashedWindowInfo] = [:]
 
         for (windowId, direction) in defaultStashedWindows {
             guard let stashedWindow = getStashedWindow(for: windowId, in: windows, action: direction) else {
@@ -75,8 +83,7 @@ final class StashedWindowsStore {
         }
 
         if !failedToRestore.isEmpty {
-            // swiftformat:disable:next redundantSelf
-            Log.error("Failed to restore \(self.failedToRestore.count) window(s).", category: .stashedWindowsStore)
+            Log.error("Failed to restore \(failedToRestore.count) window(s).", category: .stashedWindowsStore)
 
             // Window restoration usually fail because the window is on another space and will
             // not be returned by WindowEngine.windowList until the user goes to that space.
@@ -86,7 +93,7 @@ final class StashedWindowsStore {
         }
     }
 
-    func onSpaceChanged(_: Notification) {
+    private func onSpaceChanged(_: Notification) {
         let windows = WindowUtility.windowList()
         var restored = 0
 
@@ -111,15 +118,10 @@ final class StashedWindowsStore {
         }
     }
 
-    func getStashedWindow(for windowId: CGWindowID, in windows: [Window], action: WindowAction) -> StashedWindow? {
+    private func getStashedWindow(for windowId: CGWindowID, in windows: [Window], action: WindowAction) -> StashedWindowInfo? {
         guard let window = windows.first(where: { $0.cgWindowID == windowId }) else { return nil }
         guard let screen = ScreenUtility.screenContaining(window) ?? NSScreen.main else { return nil }
 
-        return StashedWindow(window: window, screen: screen, action: action)
-    }
-
-    func persistStashedWindows() {
-        Defaults[.stashManagerStashedWindows] = stashed.mapValues(\.action)
-        Log.info("Persisted new stashed windows", category: .stashManager)
+        return StashedWindowInfo(window: window, screen: screen, action: action)
     }
 }

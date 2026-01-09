@@ -1,5 +1,5 @@
 //
-//  StashedWindow.swift
+//  StashedWindowInfo.swift
 //  Loop
 //
 //  Created by Guillaume Clédat on 28/05/2025.
@@ -9,11 +9,7 @@ import Foundation
 import Scribe
 import SwiftUI
 
-struct StashedWindow: Identifiable {
-    var id: CGWindowID {
-        window.cgWindowID
-    }
-
+struct StashedWindowInfo: Equatable {
     let window: Window
     let screen: NSScreen
     let action: WindowAction

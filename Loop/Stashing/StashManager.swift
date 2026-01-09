@@ -118,7 +118,7 @@ final class StashManager {
         Log.info("Intercepting window action for stashed window \(stashedWindow.window.description)", category: .stashManager)
 
         Task {
-            if store.isWindowRevealed(stashedWindow.id) {
+            if store.isWindowRevealed(stashedWindow.window.cgWindowID) {
                 await hideWindow(stashedWindow)
             } else {
                 await revealWindow(stashedWindow)
@@ -162,7 +162,7 @@ extension StashManager {
                 Log.info("Attempting to stash window on the \(edge.debugDescription) edge, but \(screen.localizedName) is not the \(edge.debugDescription)most screen. Redirecting to the correct screen.", category: .stashManager)
                 onWindowResized(action: action, window: window, screen: screenForEdge)
             } else {
-                let windowToStash = StashedWindow(window: window, screen: screen, action: action)
+                let windowToStash = StashedWindowInfo(window: window, screen: screen, action: action)
                 Task {
                     await stash(windowToStash)
                 }
@@ -203,12 +203,12 @@ extension StashManager {
 
     /// Add the given `StashWindow` to the list of monitored windows, move the window to the stashed area
     /// and start mouse moved listener if needed.
-    private func stash(_ windowToStash: StashedWindow) async {
+    private func stash(_ windowToStash: StashedWindowInfo) async {
         Log.info("stash \(windowToStash.window.description)", category: .stashManager)
 
         unstashOverlappingWindows(windowToStash)
 
-        store.stashed[windowToStash.window.cgWindowID] = windowToStash
+        store.setStashedWindow(cgWindowID: windowToStash.window.cgWindowID, to: windowToStash)
         await hideWindow(windowToStash)
         startListeningToRevealTriggers()
     }
@@ -223,7 +223,7 @@ extension StashManager {
     }
 
     /// Stop monitoring the window. If `resetFrame` is true, the window will be moved to its initial frame.
-    private func unstash(_ window: StashedWindow, resetFrame: Bool, resetFrameAnimated: Bool) {
+    private func unstash(_ window: StashedWindowInfo, resetFrame: Bool, resetFrameAnimated: Bool) {
         Log.info("unstash \(window.window.description)", category: .stashManager)
 
         if resetFrame {
@@ -246,7 +246,7 @@ extension StashManager {
             }
         }
 
-        unmanage(windowID: window.id)
+        unmanage(windowID: window.window.cgWindowID)
     }
 
     func restoreAllStashedWindows(animate: Bool) {
@@ -260,9 +260,9 @@ extension StashManager {
 
 private extension StashManager {
     /// Reveals a stashed window by moving it to its reveal frame.
-    func revealWindow(_ window: StashedWindow) async {
-        guard !store.isWindowRevealed(window.id) else { return }
-        guard !shouldThrottle(windowID: window.id) else { return }
+    func revealWindow(_ window: StashedWindowInfo) async {
+        guard !store.isWindowRevealed(window.window.cgWindowID) else { return }
+        guard !shouldThrottle(windowID: window.window.cgWindowID) else { return }
 
         // Keep only one window as revealed
         for revealedWindowId in store.revealed {
@@ -292,18 +292,18 @@ private extension StashManager {
             window.window.setFrame(frame)
         }
 
-        store.markWindowAsRevealed(window.id)
+        store.markWindowAsRevealed(window.window.cgWindowID)
         Log.info("revealWindow \(window.window.description)", category: .stashManager)
     }
 
     /// Hides a stashed window by moving it to its stashed frame.
-    func hideWindow(_ window: StashedWindow, shouldUnfocus: Bool = true) async {
-        guard !shouldThrottle(windowID: window.id) else { return }
+    func hideWindow(_ window: StashedWindowInfo, shouldUnfocus: Bool = true) async {
+        guard !shouldThrottle(windowID: window.window.cgWindowID) else { return }
 
         let frame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
 
         if shouldUnfocus {
-            unfocus(window.id)
+            unfocus(window.window.cgWindowID)
         }
 
         if animate {
@@ -315,7 +315,7 @@ private extension StashManager {
             window.window.setFrame(frame)
         }
 
-        store.markWindowAsHidden(window.id)
+        store.markWindowAsHidden(window.window.cgWindowID)
         Log.info("hideWindow \(window.window.description)", category: .stashManager)
     }
 
@@ -366,10 +366,16 @@ private extension StashManager {
 
         Log.info("Listening for reveal triggers…", category: .stashManager)
 
-        mouseMonitor = PassiveEventMonitor(
-            events: [.mouseMoved, .leftMouseDragged],
-            callback: handleMouseMoved
-        )
+        let monitor = PassiveEventMonitor(
+            events: [
+                .mouseMoved, // Normal mouse movement
+                .leftMouseDragged // Dragging items to stashed windows
+            ]
+        ) { [weak self] _ in
+            self?.handleMouseMoved()
+        }
+        monitor.start()
+        mouseMonitor = monitor
 
         frontmostAppMonitor = Task { @MainActor in
             let notifications = NSWorkspace.shared.notificationCenter.notifications(
@@ -381,8 +387,6 @@ private extension StashManager {
                 processFrontmostAppChange(with: notification)
             }
         }
-
-        mouseMonitor?.start()
     }
 
     func stopListeningToRevealTriggers() {
@@ -397,7 +401,7 @@ private extension StashManager {
     }
 
     /// Handles mouse movement events with a debounce to avoid excessive processing.
-    private func handleMouseMoved(cgEvent _: CGEvent) {
+    private func handleMouseMoved() {
         Task { @MainActor in
             mouseMoveWorkItem?.cancel()
             let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
@@ -413,7 +417,7 @@ private extension StashManager {
             let windows = getZSortedStashedWindows()
 
             for window in windows {
-                if store.isWindowRevealed(window.id) {
+                if store.isWindowRevealed(window.window.cgWindowID) {
                     if shouldHide(window: window, for: mouseLocation) {
                         await hideWindow(window)
                     } else {
@@ -442,7 +446,7 @@ private extension StashManager {
             let windows = getZSortedStashedWindows()
 
             for window in windows {
-                if store.isWindowRevealed(window.id) {
+                if store.isWindowRevealed(window.window.cgWindowID) {
                     if appWindow.cgWindowID != window.window.cgWindowID,
                        !isMouseOverStashed(window: window, location: mouseLocation) {
                         await hideWindow(window, shouldUnfocus: false) // No need to unfocus, since the user already did that
@@ -465,7 +469,7 @@ private extension StashManager {
     /// Returns the list of stashed windows sorted by their z-index (front to back).
     /// This sorting is essential because if multiple stashed windows overlap and the cursor
     /// is over their shared area, we should only reveal the topmost window.
-    private func getZSortedStashedWindows() -> [StashedWindow] {
+    private func getZSortedStashedWindows() -> [StashedWindowInfo] {
         // Leverage the fact that WindowEngine returns windows sorted by z-index.
         // Map WindowEngine.windowList to store.stashed to retrieve the stashed windows in z-index order.
         WindowUtility.windowList().compactMap { store.stashed[$0.cgWindowID] }
@@ -473,7 +477,7 @@ private extension StashManager {
 
     /// Determines whether a revealed window should be hidden based on the mouse location.
     /// Adds a tolerance to the revealed frame to avoid hiding the window during minor cursor movement and on resize.
-    private func shouldHide(window: StashedWindow, for location: CGPoint) -> Bool {
+    private func shouldHide(window: StashedWindowInfo, for location: CGPoint) -> Bool {
         // Hide the window if the cursor is neither over the revealedFrame nor the stashedFrame.
         let tolerance: CGFloat = 15
         let revealedFrame = window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
@@ -482,7 +486,7 @@ private extension StashManager {
     }
 
     /// Checks if the mouse is currently hovering over the stashed frame of a window.
-    private func isMouseOverStashed(window: StashedWindow, location: CGPoint) -> Bool {
+    private func isMouseOverStashed(window: StashedWindowInfo, location: CGPoint) -> Bool {
         let stashedFrame = window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
         return stashedFrame.contains(location)
     }
@@ -499,7 +503,7 @@ private extension StashManager {
     ///
     /// If there is not enough space, the stashed window will be unstashed (i.e., made fully visible and removed from the stash)
     /// and replaced by `windowToStash`
-    func unstashOverlappingWindows(_ windowToStash: StashedWindow) {
+    func unstashOverlappingWindows(_ windowToStash: StashedWindowInfo) {
         let newFrame = windowToStash.computeRevealedFrame()
 
         for (id, stashedWindow) in store.stashed {
@@ -596,7 +600,7 @@ private extension StashManager {
 
     /// Cleanup references of the given window ID from the stash manager.
     func unmanage(windowID: CGWindowID) {
-        store.stashed.removeValue(forKey: windowID)
+        store.setStashedWindow(cgWindowID: windowID, to: nil)
         store.markWindowAsRevealed(windowID)
         lastRevealTime.removeValue(forKey: windowID)
 

@@ -9,7 +9,6 @@ import CoreGraphics
 import Scribe
 
 /// Active event monitor that can process and alter events when needed.
-@MainActor
 final class ActiveEventMonitor: BaseEventTapMonitor {
     private let eventCallback: (CGEvent) -> Unmanaged<CGEvent>?
 
@@ -79,7 +78,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
             callback: callback,
             userInfo: userInfo
         ) {
-            setupRunLoopSource(eventTap: eventTap, runLoop: CFRunLoopGetCurrent())
+            setupRunLoopSource(eventTap: eventTap)
         } else {
             Log.info("Failed to create event tap", category: .activeEventMonitor)
         }

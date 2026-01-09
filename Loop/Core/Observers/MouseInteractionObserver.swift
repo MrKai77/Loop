@@ -48,7 +48,6 @@ final class MouseInteractionObserver {
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
-    @MainActor
     func start(initialMousePosition: CGPoint) {
         screenBounds = NSScreen.screens.first(where: { $0.frame.contains(initialMousePosition) })?.frame
 
@@ -76,11 +75,9 @@ final class MouseInteractionObserver {
             callback: mouseEvent
         )
 
-        // swiftformat:disable:next redundantSelf
         Log.info("Started with initial mouse position: \(latestMousePosition.debugDescription)", category: .mouseInteractionObserver)
     }
 
-    @MainActor
     func stop() {
         mouseEventMonitor?.stop()
         mouseEventMonitor = nil
