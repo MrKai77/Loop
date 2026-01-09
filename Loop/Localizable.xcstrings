@@ -5624,6 +5624,9 @@
         }
       }
     },
+    "Fill Available Space" : {
+      "comment" : "Window action"
+    },
     "First Fourth" : {
       "comment" : "Window action",
       "localizations" : {

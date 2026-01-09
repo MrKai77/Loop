@@ -391,6 +391,9 @@ extension WindowAction {
 
         } else if direction == .unstash, let window {
             result = getInitialFrame(window: window)
+
+        } else if direction == .fillAvailableSpace, let window {
+            result = getFillAvailableSpaceFrame(window: window)
         }
 
         return result
@@ -634,6 +637,84 @@ extension WindowAction {
             width: bounds.width,
             height: window.frame.height + padding.window
         )
+    }
+
+    /// Computes a new window frame that takes up the most area, without overlapping with other windows.
+    /// Other windows that already overlap with the current window will be ignored.
+    /// - Parameter window: the window whose current frame is used as a reference.
+    /// - Returns: a CGRect representing a frame that makes a window fill the most available space.
+    private func getFillAvailableSpaceFrame(window: Window) -> CGRect {
+        let currentFrame = window.frame
+
+        guard let screen = ScreenUtility.screenContaining(window) ?? NSScreen.main else { return currentFrame }
+        let screenFrame = screen.safeScreenFrame
+
+        let nonIntersectingWindowFrames = WindowUtility.windowList()
+            .map(\.frame)
+            .filter { !$0.intersects(currentFrame) } // Ensure it doesn't intersect with the current window
+            .map { $0.intersection(screenFrame) } // Crop it to the screen frame
+
+        /// Computes the closest window obstacle in each of the four cardinal directions
+        /// (left, right, top, bottom) relative to the current window, and returns the boundaries
+        /// formed by these obstacles, constrained to the screen frame.
+        func computeBoundaries() -> (minX: CGFloat, minY: CGFloat, maxX: CGFloat, maxY: CGFloat) {
+            var minX = screenFrame.minX
+            var minY = screenFrame.minY
+            var maxX = screenFrame.maxX
+            var maxY = screenFrame.maxY
+
+            for frame in nonIntersectingWindowFrames {
+                if frame.maxX <= currentFrame.minX { minX = max(minX, frame.maxX) }
+                if frame.maxY <= currentFrame.minY { minY = max(minY, frame.maxY) }
+                if frame.minX >= currentFrame.maxX { maxX = min(maxX, frame.minX) }
+                if frame.minY >= currentFrame.maxY { maxY = min(maxY, frame.minY) }
+            }
+
+            return (minX, minY, maxX, maxY)
+        }
+
+        let (minX, minY, maxX, maxY) = computeBoundaries()
+
+        // Needed for Hashable conformance
+        struct Boundary: Hashable {
+            let min: CGFloat
+            let max: CGFloat
+        }
+
+        let uniqueXBoundaries: Set<Boundary> = [
+            Boundary(min: minX, max: maxX), // Respect obstacles in both directions
+            Boundary(min: currentFrame.minX, max: maxX), // Keep left, expand right
+            Boundary(min: minX, max: currentFrame.maxX), // Expand left, keep right
+            Boundary(min: currentFrame.minX, max: screenFrame.maxX), // Keep left, expand right to screen edge
+            Boundary(min: screenFrame.minX, max: currentFrame.maxX), // Expand left to screen edge, keep right
+            Boundary(min: screenFrame.minX, max: screenFrame.maxX) // Full screen width
+        ]
+
+        let uniqueYBoundaries: Set<Boundary> = [
+            Boundary(min: minY, max: maxY), // Respect obstacles in both directions
+            Boundary(min: currentFrame.minY, max: maxY), // Keep bottom, expand top
+            Boundary(min: minY, max: currentFrame.maxY), // Expand bottom, keep top
+            Boundary(min: currentFrame.minY, max: screenFrame.maxY), // Keep bottom, expand top to screen edge
+            Boundary(min: screenFrame.minY, max: currentFrame.maxY), // Expand bottom to screen edge, keep top
+            Boundary(min: screenFrame.minY, max: screenFrame.maxY) // Full screen height
+        ]
+
+        // Generate all possible combinations of x/y boundaries and filter it to valid candidates.
+        // A candidate is valid if it doesn't overlap with any other window.
+        let validCandidates = uniqueXBoundaries.flatMap { xBound in
+            uniqueYBoundaries.compactMap { yBound in
+                let combination = CGRect(
+                    x: xBound.min,
+                    y: yBound.min,
+                    width: xBound.max - xBound.min,
+                    height: yBound.max - yBound.min
+                )
+
+                return nonIntersectingWindowFrames.allSatisfy { !$0.intersects(combination) } ? combination : nil
+            }
+        }
+
+        return validCandidates.max { $0.size.area < $1.size.area } ?? currentFrame
     }
 
     /// Calculates the size adjustment for the specified frame based on the bounds and the direction of the action.

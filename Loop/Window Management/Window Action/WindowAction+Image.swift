@@ -39,7 +39,7 @@ extension WindowAction {
             NSImage(systemSymbolName: "arrow.up.to.line", accessibilityDescription: nil)
         case .bottomScreen:
             NSImage(systemSymbolName: "arrow.down.to.line", accessibilityDescription: nil)
-        case .larger, .scaleUp:
+        case .fillAvailableSpace, .larger, .scaleUp:
             NSImage(systemSymbolName: "arrow.up.left.and.arrow.down.right", accessibilityDescription: nil)
         case .smaller, .scaleDown:
             NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)

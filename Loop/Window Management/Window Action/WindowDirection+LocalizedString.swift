@@ -29,6 +29,8 @@ extension WindowDirection {
             String(localized: "Maximize Height", comment: "Window action")
         case .maximizeWidth:
             String(localized: "Maximize Width", comment: "Window action")
+        case .fillAvailableSpace:
+            String(localized: "Fill Available Space", comment: "Window action")
         case .fullscreen:
             String(localized: "Fullscreen", comment: "Window action")
         case .undo:
