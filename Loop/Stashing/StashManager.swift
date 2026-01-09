@@ -370,10 +370,9 @@ private extension StashManager {
             events: [
                 .mouseMoved, // Normal mouse movement
                 .leftMouseDragged // Dragging items to stashed windows
-            ]
-        ) { [weak self] _ in
-            self?.handleMouseMoved()
-        }
+            ],
+            callback: handleMouseMoved
+        )
         monitor.start()
         mouseMonitor = monitor
 
@@ -401,7 +400,7 @@ private extension StashManager {
     }
 
     /// Handles mouse movement events with a debounce to avoid excessive processing.
-    private func handleMouseMoved() {
+    private func handleMouseMoved(cgEvent _: CGEvent) {
         Task { @MainActor in
             mouseMoveWorkItem?.cancel()
             let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
