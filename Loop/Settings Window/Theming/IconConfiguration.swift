@@ -183,7 +183,6 @@ struct IconVew: View {
                     Text("Supports macOS Tahoe’s Liquid Glass effects")
                         .padding(6)
                 }
-                .luminareTint(overridingWith: .blue)
                 .padding(8)
         }
         .onAppear {

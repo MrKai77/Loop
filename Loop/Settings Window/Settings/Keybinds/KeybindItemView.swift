@@ -182,7 +182,6 @@ struct KeybindItemView: View {
                             Text(info)
                                 .padding(6)
                         }
-                        .luminareTint(overridingWith: .yellow)
                 } else {
                     Text(action.getName())
                         .fontWeight(.regular)

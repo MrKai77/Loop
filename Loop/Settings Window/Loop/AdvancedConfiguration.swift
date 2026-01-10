@@ -179,7 +179,6 @@ struct AdvancedConfigurationView: View {
                         }
                         .padding(6)
                     }
-                    .luminareTint(overridingWith: .yellow)
                     .animation(luminareAnimation, value: showLowPowerModeWarning)
             }
 
