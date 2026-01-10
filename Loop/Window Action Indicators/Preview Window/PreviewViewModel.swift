@@ -32,7 +32,8 @@ final class PreviewViewModel: ObservableObject {
         var cornerRadii: RectangleCornerRadii? = nil
 
         if Defaults[.previewUseWindowCornerRadius],
-           let radii = SkyLightToolBelt.getCornerRadii(windowID: window.cgWindowID) {
+           let radii = SkyLightToolBelt.getCornerRadii(windowID: window.cgWindowID),
+           radii != .init(topLeading: 0, bottomLeading: 0, bottomTrailing: 0, topTrailing: 0) {
             cornerRadii = radii
         }
 

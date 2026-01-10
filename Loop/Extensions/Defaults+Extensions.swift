@@ -36,6 +36,8 @@ extension Defaults.Keys {
     static let previewCornerRadius = Key<CGFloat>("previewCornerRadius", default: 10, iCloud: true)
     static let previewBorderThickness = Key<CGFloat>("previewBorderThickness", default: 4, iCloud: true)
     static let previewUseWindowCornerRadius = Key<Bool>("previewUseWindowCornerRadius", default: true, iCloud: true)
+    static let previewBackgroundEnableBlur = Key<Bool>("previewBackgroundEnableBlur", default: true, iCloud: true)
+    static let previewBackgroundAccentOpacity = Key<CGFloat>("previewBackgroundAccentOpacity", default: 0.1, iCloud: true)
 
     // Behavior
     static let launchAtLogin = Key<Bool>("launchAtLogin", default: false, iCloud: true)

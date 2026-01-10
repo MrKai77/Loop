@@ -25,60 +25,37 @@ struct LuminarePreviewView: View {
 
     var body: some View {
         GeometryReader { geo in
-            ZStack {
-                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow)
-                    .clipShape(.rect(cornerRadius: previewCornerRadius))
+            PreviewView(viewModel: PreviewViewModel(window: nil))
+                .frame(width: actionRect.width, height: actionRect.height)
+                .offset(x: actionRect.minX, y: actionRect.minY)
+                .opacity(actionRect.size.area == .zero ? 0 : 1)
+                .onChange(
+                    of: windowModel.previewedAction,
+                    initial: true
+                ) { newAction in
+                    let newActionRect: CGRect = if newAction.willManipulateExistingWindowFrame {
+                        .init(
+                            x: geo.size.width / 2,
+                            y: geo.size.height / 2,
+                            width: 0,
+                            height: 0
+                        )
+                    } else {
+                        newAction.getFrame(
+                            window: nil,
+                            bounds: .init(origin: .zero, size: geo.size),
+                            isPreview: true
+                        )
+                    }
 
-                RoundedRectangle(cornerRadius: previewCornerRadius)
-                    .strokeBorder(.quinary, lineWidth: 1)
-
-                RoundedRectangle(cornerRadius: previewCornerRadius)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(
-                                colors: [
-                                    appearsActive ? accentColorController.color1 : .systemGray,
-                                    appearsActive ? accentColorController.color2 : .systemGray
-                                ]
-                            ),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: previewBorderThickness
-                    )
-            }
-            .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
-            .padding(previewPadding + previewBorderThickness / 2)
-            .frame(width: actionRect.width, height: actionRect.height)
-            .offset(x: actionRect.minX, y: actionRect.minY)
-            .opacity(actionRect.size.area == .zero ? 0 : 1)
-            .onChange(
-                of: windowModel.previewedAction,
-                initial: true
-            ) { newAction in
-                let newActionRect: CGRect = if newAction.willManipulateExistingWindowFrame {
-                    .init(
-                        x: geo.size.width / 2,
-                        y: geo.size.height / 2,
-                        width: 0,
-                        height: 0
-                    )
-                } else {
-                    newAction.getFrame(
-                        window: nil,
-                        bounds: .init(origin: .zero, size: geo.size),
-                        isPreview: true
-                    )
-                }
-
-                if actionRect == .zero {
-                    actionRect = newActionRect
-                } else {
-                    withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
+                    if actionRect == .zero {
                         actionRect = newActionRect
+                    } else {
+                        withAnimation(animationConfiguration.previewTimingFunctionSwiftUI) {
+                            actionRect = newActionRect
+                        }
                     }
                 }
-            }
         }
     }
 }

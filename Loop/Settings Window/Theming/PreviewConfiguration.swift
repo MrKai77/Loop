@@ -18,6 +18,8 @@ struct PreviewConfigurationView: View {
     @Default(.previewCornerRadius) private var previewCornerRadius
     @Default(.previewBorderThickness) private var previewBorderThickness
     @Default(.previewUseWindowCornerRadius) private var previewUseWindowCornerRadius
+    @Default(.previewBackgroundEnableBlur) private var previewBackgroundEnableBlur
+    @Default(.previewBackgroundAccentOpacity) private var previewBackgroundAccentOpacity
 
     var body: some View {
         LuminareSection {
@@ -98,6 +100,21 @@ struct PreviewConfigurationView: View {
                 )
             }
             .animation(luminareAnimation, value: previewUseWindowCornerRadius)
+        }
+
+        LuminareSection("Background") {
+            LuminareToggle("Enable blur", isOn: $previewBackgroundEnableBlur)
+
+            LuminareSlider(
+                "Tint opacity",
+                value: $previewBackgroundAccentOpacity.doubleBinding,
+                in: 0...1,
+                step: 0.1,
+                format: .percent.precision(.fractionLength(0...0)),
+                clampsUpper: true,
+                clampsLower: true,
+                suffix: Text("%", comment: "Unit symbol: percentage")
+            )
         }
     }
 }

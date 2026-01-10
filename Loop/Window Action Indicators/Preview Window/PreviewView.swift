@@ -17,7 +17,8 @@ struct PreviewView: View {
     @Default(.padding) private var padding
     @Default(.previewCornerRadius) private var previewCornerRadius
     @Default(.previewBorderThickness) private var previewBorderThickness
-    @Default(.animationConfiguration) private var animationConfiguration
+    @Default(.previewBackgroundEnableBlur) private var previewEnableBlur
+    @Default(.previewBackgroundAccentOpacity) private var previewBackgroundAccentOpacity
 
     init(viewModel: PreviewViewModel) {
         self.viewModel = viewModel
@@ -33,31 +34,46 @@ struct PreviewView: View {
     }
 
     var body: some View {
-        GeometryReader { _ in
+        ZStack {
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow, state: .active)
-                    .clipShape(.rect(cornerRadii: cornerRadii))
+                    .opacity(previewEnableBlur ? 1 : 0)
+                    .animation(luminareAnimation, value: previewEnableBlur)
 
-                UnevenRoundedRectangle(cornerRadii: cornerRadii)
-                    .strokeBorder(.quinary, lineWidth: 1)
-
-                UnevenRoundedRectangle(cornerRadii: cornerRadii)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(
-                                colors: [
-                                    accentColorController.color1,
-                                    accentColorController.color2
-                                ]
-                            ),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: previewBorderThickness
-                    )
+                LinearGradient(
+                    gradient: Gradient(
+                        colors: [
+                            accentColorController.color1,
+                            accentColorController.color2
+                        ]
+                    ),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .opacity(previewBackgroundAccentOpacity)
+                .animation(luminareAnimation, value: previewBackgroundAccentOpacity)
             }
-            .padding(previewPadding + previewBorderThickness / 2)
-            .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
+            .clipShape(.rect(cornerRadii: cornerRadii))
+
+            UnevenRoundedRectangle(cornerRadii: cornerRadii)
+                .strokeBorder(.quinary, lineWidth: 1)
+
+            UnevenRoundedRectangle(cornerRadii: cornerRadii)
+                .stroke(
+                    LinearGradient(
+                        gradient: Gradient(
+                            colors: [
+                                accentColorController.color1,
+                                accentColorController.color2
+                            ]
+                        ),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: previewBorderThickness
+                )
         }
+        .padding(previewPadding + previewBorderThickness / 2)
+        .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
     }
 }
