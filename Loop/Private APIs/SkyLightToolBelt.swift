@@ -10,6 +10,35 @@ import SwiftUI
 
 /// A wrapper for functions defined in `SkyLightSymbolLoader`
 enum SkyLightToolBelt {
+    /// Brings the window’s owning process to the front using SkyLight APIs.
+    /// - Parameters:
+    ///   - windowID: The `CGWindowID` of the window to make the frontmost process.
+    ///   - pid: The PID of the target window's owner process.
+    /// - Returns: Whether this operation was successful.
+    static func makeFrontProcess(windowID: CGWindowID, pid: pid_t) -> Bool {
+        guard let SLPSSetFrontProcessWithOptions = SkyLightSymbolLoader.SLPSSetFrontProcessWithOptions else {
+            Log.error("Failed to load SkyLight symbols in \(#function)", category: .skyLightToolBelt)
+            return false
+        }
+
+        var wid = windowID
+        var psn = ProcessSerialNumber()
+        let status = GetProcessForPID(pid, &psn)
+
+        var cgStatus = SLPSSetFrontProcessWithOptions(
+            &psn,
+            wid,
+            kCPSUserGenerated
+        )
+
+        guard cgStatus == .success else {
+            Log.error("Failed to set frontmost process with status: \(cgStatus.rawValue)", category: .skyLightToolBelt)
+            return false
+        }
+
+        return true
+    }
+
     ///
     /// Focuses a window. This will attempt to bring the window to the front and make it the active window.
     /// Note that this first sets the process as frontmost, *then* sends a left click event to the window itself.
@@ -21,10 +50,8 @@ enum SkyLightToolBelt {
     ///   - windowID: The `CGWindowID` of the window to focus.
     ///   - pid: The PID of the target window's owner process.
     /// - Returns: Whether this operation was successful.
-    static func focusWindow(windowID: CGWindowID, pid: pid_t) -> Bool {
-        guard let SLPSSetFrontProcessWithOptions = SkyLightSymbolLoader.SLPSSetFrontProcessWithOptions,
-              let SLPSPostEventRecordTo = SkyLightSymbolLoader.SLPSPostEventRecordTo
-        else {
+    static func makeKeyWindow(windowID: CGWindowID, pid: pid_t) -> Bool {
+        guard let SLPSPostEventRecordTo = SkyLightSymbolLoader.SLPSPostEventRecordTo else {
             Log.error("Failed to load SkyLight symbols in \(#function)", category: .skyLightToolBelt)
             return false
         }
@@ -35,17 +62,6 @@ enum SkyLightToolBelt {
 
         guard status == noErr else {
             Log.error("Failed to get PSN: \(status)", category: .skyLightToolBelt)
-            return false
-        }
-
-        var cgStatus = SLPSSetFrontProcessWithOptions(
-            &psn,
-            wid,
-            kCPSUserGenerated
-        )
-
-        guard cgStatus == .success else {
-            Log.error("Failed to set frontmost process with status: \(cgStatus.rawValue)", category: .skyLightToolBelt)
             return false
         }
 
@@ -62,7 +78,7 @@ enum SkyLightToolBelt {
             bytes[0x3A] = 0x10
             memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
             memset(&bytes[0x20], 0xFF, 0x10)
-            cgStatus = bytes.withUnsafeMutableBufferPointer { pointer in
+            let cgStatus = bytes.withUnsafeMutableBufferPointer { pointer in
                 SLPSPostEventRecordTo(&psn, &pointer.baseAddress!.pointee)
             }
 

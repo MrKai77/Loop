@@ -172,31 +172,35 @@ final class Window {
         }
     }
 
-    /// Activate the window. This will bring it to the front and focus it if possible
+    /// Focus the window.
     @MainActor
-    func activate() {
+    func focus() {
         // First activate the application to ensure proper window management context
         if let runningApplication = nsRunningApplication {
             runningApplication.activate(options: .activateIgnoringOtherApps)
         }
 
-        // Then set the window as main after a brief delay to ensure proper ordering
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            try? self.axWindow.setValue(.main, value: true)
+        try? axWindow.performAction(.raise)
+
+        /// See:  https://github.com/yresk/alt-tab-macos/blob/5b8a9110dbdb9b4802a8a85ee1469427fbc192e8/alt-tab-macos/api-wrappers/AXUIElement.swift#L60
+        if let pid = try? axWindow.getPID() {
+            _ = SkyLightToolBelt.makeKeyWindow(
+                windowID: cgWindowID,
+                pid: pid
+            )
+
+            _ = SkyLightToolBelt.makeFrontProcess(
+                windowID: cgWindowID,
+                pid: pid
+            )
+
+            _ = SkyLightToolBelt.makeKeyWindow(
+                windowID: cgWindowID,
+                pid: pid
+            )
         }
 
-        focus()
-    }
-
-    /// - Returns:
-    /// `true` if the window was successfully focused; `false` otherwise.
-    @discardableResult
-    private func focus() -> Bool {
-        guard let pid = try? axWindow.getPID() else { return false }
-        return SkyLightToolBelt.focusWindow(
-            windowID: cgWindowID,
-            pid: pid
-        )
+        try? axWindow.performAction(.raise)
     }
 
     var isAppExcluded: Bool {

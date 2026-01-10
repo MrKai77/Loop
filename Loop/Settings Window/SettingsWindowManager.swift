@@ -107,6 +107,8 @@ final class SettingsWindowManager: ObservableObject {
         if let controller {
             controller.close()
             self.controller = nil
+
+            Log.success("Settings window closed", category: .settingsWindowManager)
         }
 
         stopTimer()
@@ -114,8 +116,6 @@ final class SettingsWindowManager: ObservableObject {
         if !Defaults[.showDockIcon] {
             NSApp.setActivationPolicy(.accessory)
         }
-
-        Log.success("Settings window closed", category: .settingsWindowManager)
     }
 
     private func restartTimer() {

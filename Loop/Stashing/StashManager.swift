@@ -279,7 +279,7 @@ private extension StashManager {
 
         if shiftFocusWhenStashed {
             Task { @MainActor in
-                window.window.activate()
+                window.window.focus()
             }
         }
 
@@ -352,7 +352,7 @@ private extension StashManager {
         if let focusWindow {
             Log.info("Focusing another window on the same screen: \(focusWindow.description).", category: .stashManager)
             Task { @MainActor in
-                focusWindow.activate()
+                focusWindow.focus()
             }
         }
     }

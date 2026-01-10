@@ -110,7 +110,8 @@ struct BehaviorConfigurationView: View {
 
             LuminareToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)
 
-            if resizeWindowUnderCursor {
+            // If the system WM is enabled, the window under the cursor requires focus.
+            if resizeWindowUnderCursor, !useSystemWindowManagerWhenAvailable {
                 LuminareToggle("Focus window on resize", isOn: $focusWindowOnResize)
             }
         }

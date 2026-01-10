@@ -20,7 +20,6 @@ final class KeybindTrigger {
     // State-tracking
     private var pressedKeys: Set<CGKeyCode> = []
     private var previousEventFlags: CGEventFlags = []
-    private var lastKeyReleaseTime: Date = .now
     private var eventMonitor: ActiveEventMonitor?
 
     private var systemKeybindCache: Set<Set<CGKeyCode>> = []
@@ -162,12 +161,6 @@ final class KeybindTrigger {
             }
 
             if type == .keyUp {
-                // Ignore key-up events occurring within 100ms of each other.
-                // Prevents direction changes when rapidly (normally) releasing multiple pressed keys.
-                if abs(lastKeyReleaseTime.timeIntervalSinceNow) > 0.1 {
-                    lastKeyReleaseTime = Date.now
-                }
-
                 return .forward
             }
 
@@ -177,7 +170,7 @@ final class KeybindTrigger {
             }
         }
 
-        if type != .keyUp {
+        if type != .keyUp { // keyDown for flagsChanged
             if containsTrigger {
                 if let action = windowActionCache.actionsByKeybind[actionKeys] {
                     if !isARepeat || action.canRepeat {
@@ -186,7 +179,7 @@ final class KeybindTrigger {
 
                     /// Only consume the event if the last command actually opened Loop.
                     /// The main reason Loop *wouldn't* open after an `openLoop` call would be because the user has enabled a trigger delay.
-                    return checkIfLoopOpen() ? .consume : .opening
+                    return isLoopOpen ? .consume : .opening
                 }
 
                 // Only trigger Loop without an action if the only pressed keys perfectly matches the trigger key.

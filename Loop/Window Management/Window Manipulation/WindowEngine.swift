@@ -82,14 +82,14 @@ enum WindowEngine {
         default: break
         }
 
-        if Defaults[.focusWindowOnResize] {
-            await window.activate()
-        }
-
         let useSystemWM: Bool = if #available(macOS 15, *) {
             Defaults[.useSystemWindowManagerWhenAvailable]
         } else {
             false
+        }
+
+        if Defaults[.focusWindowOnResize] || useSystemWM {
+            await window.focus()
         }
 
         // Attempt system window manager if possible

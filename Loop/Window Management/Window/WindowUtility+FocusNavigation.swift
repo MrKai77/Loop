@@ -33,7 +33,7 @@ extension WindowUtility {
         Log.info("Focusing window: \(nextWindowTitle)", category: .windowUtility)
 
         Task { @MainActor in
-            directionalWindow.activate()
+            directionalWindow.focus()
         }
 
         return directionalWindow
@@ -49,7 +49,7 @@ extension WindowUtility {
         Log.info("Focusing window: \(nextWindowTitle)", category: .windowUtility)
 
         Task { @MainActor in
-            directionalWindow.activate()
+            directionalWindow.focus()
         }
 
         return directionalWindow
