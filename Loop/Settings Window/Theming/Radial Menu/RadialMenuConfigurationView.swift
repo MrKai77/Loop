@@ -107,7 +107,6 @@ struct RadialMenuConfigurationView: View {
                     windowModel.isPreviewingUserSelection = false
                 }
             }
-            .disabled(!radialMenuVisibility)
         }
     }
 

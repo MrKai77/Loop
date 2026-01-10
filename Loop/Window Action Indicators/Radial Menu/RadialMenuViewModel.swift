@@ -17,6 +17,9 @@ final class RadialMenuViewModel: ObservableObject {
     /// If a cycling action is chosen, this will represent the enclosing cycle action
     @Published private(set) var parentAction: WindowAction?
 
+    @Published private(set) var isShown: Bool = false
+    @Published private(set) var isShadowShown: Bool = false
+
     private var previousAction: WindowAction?
     private var window: Window?
     let previewMode: Bool
@@ -85,6 +88,26 @@ final class RadialMenuViewModel: ObservableObject {
             return Image(nsImage: image)
         } else {
             return nil
+        }
+    }
+
+    func setIsShown(_ newState: Bool, animationDuration: TimeInterval) {
+        let animationDuration = Defaults[.animationConfiguration].animateRadialMenuAppearance ? animationDuration : 0.0
+
+        guard animationDuration != 0 else {
+            isShown = newState
+            isShadowShown = newState
+            return
+        }
+
+        withAnimation(.smooth(duration: animationDuration)) {
+            isShown = newState
+        }
+
+        let shadowAnimationTrimFactor = 0.05
+        let shadowDelayOffset = newState ? shadowAnimationTrimFactor : 0.0
+        withAnimation(.smooth(duration: animationDuration - shadowAnimationTrimFactor).delay(shadowDelayOffset)) {
+            isShadowShown = newState
         }
     }
 

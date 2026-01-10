@@ -101,6 +101,10 @@ enum AnimationConfiguration: Int, Defaults.Serializable, CaseIterable, Identifia
             .timingCurve(0.22, 1, 0.36, 1, duration: 0.2)
         }
     }
+
+    var animateRadialMenuAppearance: Bool {
+        self != .instant
+    }
 }
 
 private extension CAMediaTimingFunction {

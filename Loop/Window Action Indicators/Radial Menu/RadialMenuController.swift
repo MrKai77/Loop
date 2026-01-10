@@ -32,7 +32,7 @@ final class RadialMenuController {
 
         let mouseX: CGFloat = position.x
         let mouseY: CGFloat = position.y
-        let windowSize: CGFloat = 100 + 40
+        let windowSize: CGFloat = 100 + 80
 
         let panel = ActivePanel(
             contentRect: .zero,
@@ -47,7 +47,6 @@ final class RadialMenuController {
         panel.backgroundColor = .clear
         panel.level = .screenSaver
         panel.contentView = NSHostingView(rootView: RadialMenuView(viewModel: viewModel))
-        panel.alphaValue = 0
 
         // Position the panel
         if Defaults[.lockRadialMenuToCenter], let screen = NSApp.keyWindow?.screen ?? NSScreen.main {
@@ -72,22 +71,16 @@ final class RadialMenuController {
         panel.orderFrontRegardless()
 
         controller = .init(window: panel)
-
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.15
-            panel.animator().alphaValue = 1
-        }
     }
 
     func close() {
         guard let windowController = controller else { return }
         controller = nil
 
-        windowController.window?.animator().alphaValue = 1
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.15
-            windowController.window?.animator().alphaValue = 0
-        } completionHandler: {
+        viewModel?.setIsShown(false, animationDuration: 0.15)
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.15))
             windowController.close()
         }
     }

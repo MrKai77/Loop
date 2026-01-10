@@ -30,32 +30,59 @@ struct RadialMenuView: View {
 
     var body: some View {
         ZStack {
-            ZStack {
-                // NSVisualEffect on background
-                if #available(macOS 26.0, *) {
+            if #available(macOS 26.0, *) {
+                postTahoeView()
+            } else {
+                preTahoeView()
+            }
+        }
+        .padding(40)
+        .fixedSize()
+        .animation(animationConfiguration.radialMenuSize, value: viewModel.currentAction)
+        .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
+        .onAppear {
+            viewModel.setIsShown(true, animationDuration: viewModel.previewMode ? 0.0 : 0.1)
+        }
+    }
+
+    @available(macOS 26.0, *)
+    private func postTahoeView() -> some View {
+        ZStack {
+            GlassEffectContainer {
+                if viewModel.isShown {
                     Color.clear
                         .glassEffect(
-                            .regular,
+                            .regular.tint(accentColorController.color1.opacity(0.025)),
                             in: .rect(cornerRadius: radialMenuCornerRadius)
+                                .inset(by: radialMenuThickness / 2)
+                                .stroke(lineWidth: radialMenuThickness)
                         )
-                } else {
-                    VisualEffectView(material: .hudWindow, blendingMode: .behindWindow, state: .active)
+                        .glassEffectTransition(.materialize)
                 }
+            }
 
-                // This rectangle with a gradient is masked with the current direction radial menu view
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(
-                                colors: [
-                                    shouldAppearActive ? accentColorController.color1 : .systemGray,
-                                    shouldAppearActive ? accentColorController.color2 : .systemGray
-                                ]
-                            ),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+            if viewModel.isShown {
+                ZStack {
+                    radialMenuFill()
+                        .mask(directionSelectorMask)
+                        .mask(radialMenuMask)
+
+                    overlayImage()
+                }
+                .transition(.scale(scale: 1.25).combined(with: .opacity))
+            }
+        }
+        .frame(width: radialMenuSize, height: radialMenuSize)
+        .shadow(color: .black.opacity(viewModel.isShadowShown ? 0.2 : 0), radius: 10)
+        .scaleEffect(viewModel.shouldFillRadialMenu ? 0.85 : 1.0)
+    }
+
+    private func preTahoeView() -> some View {
+        ZStack {
+            ZStack {
+                VisualEffectView(material: .hudWindow, blendingMode: .behindWindow, state: .active)
+
+                radialMenuFill()
                     .mask(directionSelectorMask)
 
                 radialMenuBorder()
@@ -66,11 +93,25 @@ struct RadialMenuView: View {
         }
         .frame(width: radialMenuSize, height: radialMenuSize)
         .shadow(radius: 10)
-        .padding(20)
-        .fixedSize()
+        .compositingGroup()
+        .opacity(viewModel.isShown ? 1 : 0)
         .scaleEffect(viewModel.shouldFillRadialMenu ? 0.85 : 1.0)
-        .animation(animationConfiguration.radialMenuSize, value: viewModel.currentAction)
-        .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
+    }
+
+    private func radialMenuFill() -> some View {
+        Rectangle()
+            .fill(
+                LinearGradient(
+                    gradient: Gradient(
+                        colors: [
+                            shouldAppearActive ? accentColorController.color1 : .systemGray,
+                            shouldAppearActive ? accentColorController.color2 : .systemGray
+                        ]
+                    ),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
     }
 
     private func directionSelectorMask() -> some View {
