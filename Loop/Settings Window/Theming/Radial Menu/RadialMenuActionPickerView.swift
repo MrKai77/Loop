@@ -18,7 +18,7 @@ struct RadialMenuActionPickerView: View {
 
     @Binding private var selection: RadialMenuAction.ActionType
 
-    private static let directionSections: [PickerSection<RadialMenuAction.ActionType>] = {
+    private let directionSections: [PickerSection<RadialMenuAction.ActionType>] = {
         let windowDirections = PickerSection.windowDirections
             .map { section in
                 PickerSection(
@@ -43,7 +43,7 @@ struct RadialMenuActionPickerView: View {
     }
 
     private var allSections: [PickerSection<RadialMenuAction.ActionType>] {
-        Self.directionSections + [keybindsSection]
+        directionSections + [keybindsSection]
     }
 
     private var allSectionItems: [RadialMenuAction.ActionType] {
