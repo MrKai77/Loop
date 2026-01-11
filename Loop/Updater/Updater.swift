@@ -209,6 +209,8 @@ final class Updater: ObservableObject {
 
     private func processFetchedData(_ data: Data) async throws {
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
         if includeDevelopmentVersions {
             // This would need to parse a list of releases
             let releases = try decoder.decode([Release].self, from: data)
@@ -481,11 +483,13 @@ struct Release: Codable {
     var body: String
     var assets: [Asset]
     var prerelease: Bool
+    var creationDate: Date
+    var updateDate: Date
 
     var buildNumber: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id, tagName = "tag_name", name, body, assets, prerelease
+        case id, tagName = "tag_name", name, body, assets, prerelease, creationDate = "created_at", updateDate = "updated_at"
     }
 
     struct Asset: Codable {
