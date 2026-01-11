@@ -140,7 +140,7 @@ struct Keycorder: View {
         }
 
         // Filter out trigger keys from flags
-        let validModifiers = flags.keyCodes.filter {
+        let validModifiers = flags.keyCodes.map(\.baseModifier).filter {
             !Defaults[.triggerKey]
                 .map(\.baseModifier)
                 .contains($0)

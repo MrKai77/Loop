@@ -151,7 +151,7 @@ final class KeybindTrigger {
     private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
         let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
         let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
-        let actionKeys: Set<CGKeyCode> = allPressedKeys.subtracting(triggerKey)
+        let actionKeys: Set<CGKeyCode> = Set(allPressedKeys.subtracting(triggerKey).map(\.baseModifier))
         let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
 
         if isLoopOpen {
