@@ -36,12 +36,16 @@ struct CustomActionConfigurationView: View {
         .topLeft, .top, .topRight, .left, .center, .right, .bottomLeft, .bottom, .bottomRight
     ]
 
-    private let previewController = PreviewController()
-    private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
+    private var actionUnit: CustomWindowActionUnit {
+        action.unit ?? .percentage
+    }
 
     private var showMacOSCenterToggle: Bool {
         action.anchor ?? .center == .center || action.anchor == .macOSCenter
     }
+
+    private let previewController = PreviewController()
+    private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
 
     init(action: Binding<WindowAction>, isPresented: Binding<Bool>) {
         _windowAction = action
@@ -151,6 +155,14 @@ struct CustomActionConfigurationView: View {
     @ViewBuilder
     private func unitToggle() -> some View {
         LuminareToggle("Use pixels", isOn: Binding(get: { action.unit == .pixels }, set: { action.unit = $0 ? .pixels : .percentage }))
+            .onChange(of: actionUnit) { unit in
+                if unit == .percentage {
+                    if let xPoint = action.xPoint { action.xPoint = max(0, min(100, xPoint)) }
+                    if let yPoint = action.yPoint { action.yPoint = max(0, min(100, yPoint)) }
+                    if let width = action.width { action.width = max(0, min(100, width)) }
+                    if let height = action.height { action.height = max(0, min(100, height)) }
+                }
+            }
     }
 
     @ViewBuilder
@@ -258,11 +270,11 @@ struct CustomActionConfigurationView: View {
                             action.xPoint ?? 0
                         },
                         set: {
-                            action.xPoint = $0
+                            action.xPoint = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
@@ -274,11 +286,11 @@ struct CustomActionConfigurationView: View {
                             action.yPoint ?? 0
                         },
                         set: {
-                            action.yPoint = $0
+                            action.yPoint = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
@@ -324,11 +336,11 @@ struct CustomActionConfigurationView: View {
                             action.width ?? 100
                         },
                         set: {
-                            action.width = $0
+                            action.width = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
@@ -340,11 +352,11 @@ struct CustomActionConfigurationView: View {
                             action.height ?? 100
                         },
                         set: {
-                            action.height = $0
+                            action.height = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )

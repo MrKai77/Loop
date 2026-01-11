@@ -43,6 +43,10 @@ struct StashActionConfigurationView: View {
         [.custom, .preserveSize]
     }
 
+    private var actionUnit: CustomWindowActionUnit {
+        action.unit ?? .percentage
+    }
+
     private let previewController = PreviewController()
     private let screenSize: CGSize = NSScreen.main?.frame.size ?? NSScreen.screens[0].frame.size
 
@@ -206,11 +210,11 @@ struct StashActionConfigurationView: View {
                             action.xPoint ?? 0
                         },
                         set: {
-                            action.xPoint = $0
+                            action.xPoint = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
@@ -222,11 +226,11 @@ struct StashActionConfigurationView: View {
                             action.yPoint ?? 0
                         },
                         set: {
-                            action.yPoint = $0
+                            action.yPoint = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
@@ -272,11 +276,11 @@ struct StashActionConfigurationView: View {
                             action.width ?? 100
                         },
                         set: {
-                            action.width = $0
+                            action.width = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.width),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )
@@ -288,11 +292,11 @@ struct StashActionConfigurationView: View {
                             action.height ?? 100
                         },
                         set: {
-                            action.height = $0
+                            action.height = actionUnit.roundIfNeeded($0)
                         }
                     ),
-                    in: action.unit == .percentage ? 0...100 : 0...Double(screenSize.height),
-                    format: .number.precision(.fractionLength(0...0)),
+                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                    format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
                     suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
                 )

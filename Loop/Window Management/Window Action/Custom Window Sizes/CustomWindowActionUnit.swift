@@ -21,4 +21,22 @@ enum CustomWindowActionUnit: Int, Codable, CaseIterable, Identifiable {
             String(localized: "%", comment: "Unit symbol: percentage")
         }
     }
+
+    var fractionLength: NumberFormatStyleConfiguration.Precision {
+        switch self {
+        case .pixels:
+            .fractionLength(0)
+        case .percentage:
+            .fractionLength(2)
+        }
+    }
+
+    func roundIfNeeded(_ value: Double) -> Double {
+        switch self {
+        case .pixels:
+            value.rounded()
+        case .percentage:
+            (value * 100.0).rounded() / 100.0
+        }
+    }
 }
