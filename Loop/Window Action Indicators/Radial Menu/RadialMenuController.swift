@@ -89,8 +89,8 @@ final class RadialMenuController {
         viewModel?.setWindow(to: newWindow)
     }
 
-    func setAction(to newAction: WindowAction) {
-        viewModel?.setAction(to: newAction)
+    func setAction(to newAction: WindowAction, parent: WindowAction?) {
+        viewModel?.setAction(to: newAction, parent: parent)
 
         Log.ui("Set action to '\(newAction.description)'", category: .radialMenuController)
     }

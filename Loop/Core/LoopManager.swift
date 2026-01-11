@@ -363,7 +363,7 @@ extension LoopManager {
             // This is only needed because if preview window is moved
             // onto a new screen, it needs to receive a window action
             previewController.setAction(to: currentAction)
-            radialMenuController.setAction(to: currentAction)
+            radialMenuController.setAction(to: currentAction, parent: parentCycleAction)
 
             if let parentCycleAction {
                 currentAction = newAction
@@ -401,7 +401,7 @@ extension LoopManager {
 
             Task { @MainActor in
                 previewController.setAction(to: newAction)
-                radialMenuController.setAction(to: newAction)
+                radialMenuController.setAction(to: newAction, parent: parentCycleAction)
 
                 if !Defaults[.previewVisibility], let screenToResizeOn, let targetWindow {
                     WindowEngine.resize(
