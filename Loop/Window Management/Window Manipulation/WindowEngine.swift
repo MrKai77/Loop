@@ -149,6 +149,12 @@ enum WindowEngine {
         window: Window,
         to action: WindowAction
     ) async -> Bool {
+        var action = action
+
+        if action.direction == .undo, let lastAction = WindowRecords.getLastAction(for: window) {
+            action = lastAction
+        }
+
         guard
             let systemAction = action.direction.systemEquivalent,
             let app = window.nsRunningApplication,
