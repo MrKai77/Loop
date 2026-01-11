@@ -19,7 +19,8 @@ final class MouseInteractionObserver {
     private let selectNextCycleItem: () -> ()
     private let checkIfLoopOpen: () -> Bool
 
-    private var mouseEventMonitor: PassiveEventMonitor?
+    private var mouseMovementMonitor: PassiveEventMonitor?
+    private var leftClickMonitor: ActiveEventMonitor?
 
     // State-keeping for previous calculations
     private var previousAngleToMouse: Angle = .zero
@@ -66,21 +67,32 @@ final class MouseInteractionObserver {
         self.initialMousePosition = initialMousePosition
         latestMousePosition = initialMousePosition
 
-        mouseEventMonitor = PassiveEventMonitor(
+        let mouseMovementMonitor = PassiveEventMonitor(
             events: [
                 .mouseMoved, // switch action when mouse is moved
-                .otherMouseDragged, // switch action when mouse is moved with the middle mouse button clicked
-                .leftMouseDown // Increment a cycle action on a left click
+                .otherMouseDragged // switch action when mouse is moved with the middle mouse button clicked
             ],
-            callback: mouseEvent
+            callback: processNewMouseLocation
         )
+        mouseMovementMonitor.start()
+        self.mouseMovementMonitor = mouseMovementMonitor
+
+        let leftClickMonitor = ActiveEventMonitor(
+            events: [.leftMouseDown], // Increment a cycle action on a left click
+            callback: activateNextCycleAction
+        )
+        leftClickMonitor.start()
+        self.leftClickMonitor = leftClickMonitor
 
         Log.info("Started with initial mouse position: \(latestMousePosition.debugDescription)", category: .mouseInteractionObserver)
     }
 
     func stop() {
-        mouseEventMonitor?.stop()
-        mouseEventMonitor = nil
+        mouseMovementMonitor?.stop()
+        mouseMovementMonitor = nil
+
+        leftClickMonitor?.stop()
+        leftClickMonitor = nil
 
         previousAngleToMouse = .zero
         previousDistanceToMouse = .zero
@@ -91,17 +103,6 @@ final class MouseInteractionObserver {
         latestMousePosition = .zero
 
         Log.success("Stopped, all stored states cleared.", category: .mouseInteractionObserver)
-    }
-
-    private func mouseEvent(_ event: CGEvent) {
-        switch event.type {
-        case .mouseMoved, .otherMouseDragged:
-            processNewMouseLocation(event)
-        case .leftMouseDown:
-            activateNextCycleAction(event)
-        default:
-            break
-        }
     }
 
     private func processNewMouseLocation(_ event: CGEvent) {
@@ -204,12 +205,12 @@ final class MouseInteractionObserver {
         return resolved
     }
 
-    private func activateNextCycleAction(_ event: CGEvent) {
+    private func activateNextCycleAction(_ event: CGEvent) -> ActiveEventMonitor.EventHandling {
         /// Ensure that the source originates from the HID state ID.
         /// Otherwise, this event was likely sent from Loop to focus the frontmost click (see `Window.focus` which sends a `SLSEvent` to the window)
         let sourceID = CGEventSourceStateID(rawValue: Int32(event.getIntegerValueField(.eventSourceStateID)))
         guard sourceID == .hidSystemState else {
-            return
+            return .forward
         }
 
         Task { @MainActor in
@@ -219,5 +220,7 @@ final class MouseInteractionObserver {
 
             selectNextCycleItem()
         }
+
+        return .ignore
     }
 }
