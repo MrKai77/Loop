@@ -13,6 +13,8 @@ final class AccessibilityManager {
     static let shared: AccessibilityManager = .init()
 
     private var permissionCheckerTask: Task<(), Never>!
+
+    @MainActor
     private var continuations: [UUID: AsyncStream<Bool>.Continuation] = [:]
     private(set) var isGranted: Bool
 
@@ -32,7 +34,7 @@ final class AccessibilityManager {
                 try? await Task.sleep(for: .milliseconds(250))
 
                 let status = Self.getStatus()
-                self.yield(status)
+                await self.yield(status)
             }
         }
     }
@@ -53,6 +55,7 @@ final class AccessibilityManager {
     /// Stream new changes to Loop's accessibility permissions.
     /// - Parameter initial: whether to send an initial value corresponding to Loop's current permissions
     /// - Returns: an AsyncStream.
+    @MainActor
     func stream(initial: Bool = true) -> AsyncStream<Bool> {
         AsyncStream<Bool> { continuation in
             let id = UUID()
@@ -63,14 +66,17 @@ final class AccessibilityManager {
             }
 
             continuation.onTermination = { [weak self] _ in
-                guard let self else { return }
-                continuations[id] = nil
+                Task { @MainActor in
+                    guard let self else { return }
+                    self.continuations[id] = nil
+                }
             }
         }
     }
 
     /// This will yield a new value to all streams if the provided value differs from the previous value.
     /// - Parameter value: the provided value.
+    @MainActor
     private func yield(_ value: Bool) {
         guard value != isGranted else { return }
 

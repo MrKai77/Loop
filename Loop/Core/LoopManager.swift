@@ -72,7 +72,7 @@ final class LoopManager {
 
     func start() {
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
-            for await status in AccessibilityManager.shared.stream(initial: true) {
+            for await status in await AccessibilityManager.shared.stream(initial: true) {
                 guard let self, !Task.isCancelled else {
                     return
                 }

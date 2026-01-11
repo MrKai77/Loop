@@ -77,9 +77,8 @@ final class RadialMenuController {
         guard let windowController = controller else { return }
         controller = nil
 
-        viewModel?.setIsShown(false, animationDuration: 0.15)
-
         Task { @MainActor in
+            viewModel?.setIsShown(false, animationDuration: 0.15)
             try? await Task.sleep(for: .seconds(0.15))
             windowController.close()
         }
