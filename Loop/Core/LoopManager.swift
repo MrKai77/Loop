@@ -53,6 +53,7 @@ final class LoopManager {
                 self?.changeAction(parentCycleAction, disableHapticFeedback: true)
             }
         },
+        canSelectNextCycleitem: { [weak self] in self?.parentCycleAction != nil },
         checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
     )
 

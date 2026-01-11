@@ -17,6 +17,7 @@ final class MouseInteractionObserver {
     private let windowActionCache: WindowActionCache
     private let changeAction: (WindowAction) -> ()
     private let selectNextCycleItem: () -> ()
+    private let canSelectNextCycleitem: () -> Bool
     private let checkIfLoopOpen: () -> Bool
 
     private var mouseMovementMonitor: PassiveEventMonitor?
@@ -41,11 +42,13 @@ final class MouseInteractionObserver {
         windowActionCache: WindowActionCache,
         changeAction: @escaping (WindowAction) -> (),
         selectNextCycleItem: @escaping () -> (),
+        canSelectNextCycleitem: @escaping () -> Bool,
         checkIfLoopOpen: @escaping () -> Bool
     ) {
         self.windowActionCache = windowActionCache
         self.changeAction = changeAction
         self.selectNextCycleItem = selectNextCycleItem
+        self.canSelectNextCycleitem = canSelectNextCycleitem
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
@@ -213,13 +216,11 @@ final class MouseInteractionObserver {
             return .forward
         }
 
-        Task { @MainActor in
-            guard checkIfLoopOpen() else {
-                return
-            }
-
-            selectNextCycleItem()
+        guard checkIfLoopOpen(), canSelectNextCycleitem() else {
+            return .forward
         }
+
+        selectNextCycleItem()
 
         return .ignore
     }
