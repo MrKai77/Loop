@@ -38,7 +38,7 @@ enum WindowRecords {
         recordsByWindowID[window.cgWindowID] = Record(initialFrame: window.frame)
         Log.info("Recorded first for: \(window)", category: .windowRecords)
     }
-    
+
     /// Determines if an action should be recorded using its frame instead of the action applied onto it.
     /// - Parameter action: the action to apply onto the window.
     /// - Returns: Whether this action should be recorded with its final frame instead of using the action.
