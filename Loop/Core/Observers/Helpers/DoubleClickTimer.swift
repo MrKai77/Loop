@@ -12,7 +12,10 @@ import Defaults
 ///
 /// It tracks the timing of successive trigger actions (such as key presses) and determines whether
 /// two occur within the system-defined (and user-customizable) `NSEvent.doubleClickInterval`.
+/// Both the press duration and the interval between presses must be within the threshold for a
+/// double-click to register.
 final class DoubleClickTimer {
+    private var lastTriggerKeyPressTime: Date?
     private var lastTriggerKeyReleaseTime: Date?
     private let openCallback: (WindowAction) -> ()
     private var doubleClickInterval: TimeInterval {
@@ -35,12 +38,24 @@ final class DoubleClickTimer {
             openCallback(startingAction)
         }
 
+        lastTriggerKeyPressTime = now
         lastTriggerKeyReleaseTime = nil
     }
 
     /// Handles a key up event.
-    /// Updates the last trigger time without firing the callback.
+    /// Only records the release time if the press was quick (within doubleClickInterval).
+    /// A long press cancels the double-click sequence.
     func handleKeyUp() {
-        lastTriggerKeyReleaseTime = Date()
+        let now = Date()
+
+        // Only consider this a valid "click" if the key was pressed quickly.
+        // If the key was held for too long, don't start/continue the double-click timer.
+        if let pressTime = lastTriggerKeyPressTime, now.timeIntervalSince(pressTime) < doubleClickInterval {
+            lastTriggerKeyReleaseTime = now
+        } else {
+            lastTriggerKeyReleaseTime = nil
+        }
+
+        lastTriggerKeyPressTime = nil
     }
 }
