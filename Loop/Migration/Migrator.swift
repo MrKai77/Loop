@@ -114,6 +114,7 @@ enum Migrator {
     }
 
     /// Presents a prompt to export current keybinds to a JSON file.
+    @concurrent
     static func exportPrompt(onSuccess: () -> ()) async throws {
         // Check if there are any keybinds to export.
         guard !Defaults[.keybinds].isEmpty else {
@@ -139,6 +140,7 @@ enum Migrator {
     }
 
     /// Presents a prompt to import keybinds from a JSON file.
+    @concurrent
     static func importPrompt(onSuccess: () -> ()) async throws {
         let fileURL = try await getKeybindsFileURL()
         let jsonString = try String(contentsOf: fileURL)
@@ -190,6 +192,7 @@ private extension Migrator {
     }
 
     /// Saves the keybinds in the specified directory URL.
+    @concurrent
     static func saveKeybinds(_: SavedKeybindsFormat, in directoryURL: URL) async throws {
         let keybinds = SavedKeybindsFormat.generateFromDefaults()
 
@@ -316,6 +319,7 @@ private extension Migrator {
     }
 
     /// Imports keybinds from a JSON string.
+    @concurrent
     static func importKeybinds(from jsonString: String, onSuccess: () -> ()) async throws {
         guard let data = jsonString.data(using: .utf8) else {
             throw MigratorError.failedToReadFile
@@ -323,7 +327,7 @@ private extension Migrator {
 
         /// First, try to import the general Loop keybinds format.
         do {
-            let savedData = try await importLoopKeybinds(from: data)
+            let savedData = try importLoopKeybinds(from: data)
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
@@ -332,7 +336,7 @@ private extension Migrator {
 
         /// If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
         do {
-            let savedData = try await importLoopLegacyKeybinds(from: data)
+            let savedData = try importLoopLegacyKeybinds(from: data)
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
@@ -341,7 +345,7 @@ private extension Migrator {
 
         /// If that fails, try to import the Rectangle keybinds format.
         do {
-            let savedData = try await importRectangleKeybinds(from: data)
+            let savedData = try importRectangleKeybinds(from: data)
             await updateDefaults(with: savedData, onSuccess: onSuccess)
             return
         } catch {
@@ -353,21 +357,21 @@ private extension Migrator {
     }
 
     /// Tries to import Loop's keybinds format.
-    static func importLoopKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
+    static func importLoopKeybinds(from data: Data) throws -> SavedKeybindsFormat {
         let decoder = JSONDecoder()
         let keybinds = try decoder.decode(SavedKeybindsFormat.self, from: data)
         return keybinds
     }
 
     /// Tries to import Loop's old (pre 1.2.0) keybinds format.
-    static func importLoopLegacyKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
+    static func importLoopLegacyKeybinds(from data: Data) throws -> SavedKeybindsFormat {
         let decoder = JSONDecoder()
         let keybinds = try decoder.decode([SavedWindowActionFormat].self, from: data)
         return SavedKeybindsFormat(version: nil, triggerKey: nil, actions: keybinds)
     }
 
     /// Tries to import Rectangle's keybinds format.
-    static func importRectangleKeybinds(from data: Data) async throws -> SavedKeybindsFormat {
+    static func importRectangleKeybinds(from data: Data) throws -> SavedKeybindsFormat {
         let keybinds = try RectangleTranslationLayer.importKeybinds(from: data)
         return SavedKeybindsFormat(version: nil, triggerKey: nil, actions: keybinds)
     }
@@ -375,6 +379,7 @@ private extension Migrator {
     // MARK: Saving Imports
 
     /// Updates the app's defaults with the imported keybinds.
+    @concurrent
     static func updateDefaults(with savedData: SavedKeybindsFormat, onSuccess: () -> ()) async {
         if let triggerKey = savedData.triggerKey {
             Defaults[.triggerKey] = triggerKey
@@ -407,6 +412,7 @@ private extension Migrator {
     }
 
     /// Presents a decision alert for how to handle imported keybinds.
+    @concurrent
     static func showAlertForImportDecision() async -> ImportDecision {
         let response = await showAlert(
             .init(localized: "Import Keybinds"),

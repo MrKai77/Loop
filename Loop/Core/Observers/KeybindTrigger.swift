@@ -19,7 +19,7 @@ final class KeybindTrigger {
 
     // State-tracking
     private var pressedKeys: Set<CGKeyCode> = []
-    private var previousEventFlags: CGEventFlags = []
+    private(set) var effectiveEventFlags: CGEventFlags = []
     private var eventMonitor: ActiveEventMonitor?
 
     private var systemKeybindCache: Set<Set<CGKeyCode>> = []
@@ -67,8 +67,8 @@ final class KeybindTrigger {
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
-    func start() {
-        guard AccessibilityManager.shared.isGranted else {
+    func start() async {
+        guard await AccessibilityManager.shared.isGranted else {
             return
         }
 
@@ -80,15 +80,13 @@ final class KeybindTrigger {
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
                 .baseKey(flags: .init(rawValue: UInt(event.flags.rawValue)))
 
-            LoopManager.shared.isShiftKeyPressed = event.flags.contains(.maskShift)
-
             var filteredFlags = event.flags
-            if keyCode.isFnSpecialKey, !previousEventFlags.contains(.maskSecondaryFn) {
+            if keyCode.isFnSpecialKey, !effectiveEventFlags.contains(.maskSecondaryFn) {
                 filteredFlags.remove(.maskSecondaryFn)
             }
 
             let isLoopOpen = checkIfLoopOpen()
-            previousEventFlags = filteredFlags
+            effectiveEventFlags = filteredFlags
 
             if event.type == .keyUp {
                 pressedKeys.remove(keyCode)

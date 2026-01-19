@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@MainActor
 final class WindowDragManager {
     static let shared = WindowDragManager()
     private init() {}
@@ -273,8 +274,8 @@ final class WindowDragManager {
             return
         }
 
-        DispatchQueue.main.async {
-            WindowEngine.resize(window, to: .init(self.direction), on: screen)
+        Task {
+            await WindowEngine.resize(window, to: .init(self.direction), on: screen)
             self.direction = .noAction
         }
     }

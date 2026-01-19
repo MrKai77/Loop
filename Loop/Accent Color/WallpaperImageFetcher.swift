@@ -19,6 +19,7 @@ final class WallpaperImageFetcher {
     /// The direct wallpaper capture is preferred as it gets only the wallpaper without desktop icons,
     /// but requires accessibility permissions (this is accepted required for Loop, so it's fine).
     /// The fallback ensures we still get colors even if permissions aren't granted.
+    @concurrent
     func takeScreenshot() async throws -> NSImage? {
         let screen = NSScreen.screenWithMouse ?? NSScreen.main ?? NSScreen.screens[0]
         let screenFrame = screen.displayBounds
@@ -50,6 +51,7 @@ final class WallpaperImageFetcher {
     /// This approach uses window capturing APIs to specifically target the Dock's wallpaper window.
     /// It requires appropriate permissions, but provides the cleanest capture of just the wallpaper.
     /// The method identifies the wallpaper window by filtering window properties from the Dock process.
+    @concurrent
     private func captureWallpaperFromDock(screenFrame: CGRect, matchFrame: Bool) async throws -> NSImage? {
         // Get all windows and filter for the Dock's wallpaper windows
         let windows = CGWindowListCopyWindowInfo(.optionAll, kCGNullWindowID) as! [[CFString: Any]]
@@ -96,6 +98,7 @@ final class WallpaperImageFetcher {
     /// While this will include desktop icons and potentially other UI elements, it's a reliable
     /// fallback when we can't access the wallpaper window directly, and still provides
     /// useful color information in most cases.
+    @concurrent
     private func captureFullScreen() async throws -> NSImage? {
         let screen = NSScreen.screenWithMouse ?? NSScreen.main ?? NSScreen.screens[0]
         let rect = screen.frame

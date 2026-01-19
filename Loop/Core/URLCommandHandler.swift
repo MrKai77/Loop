@@ -564,7 +564,9 @@ final class URLCommandHandler {
             writeToOutput("[URLHandler] Executing keybind: \(keybind.name ?? "unnamed")")
             if let window = WindowUtility.userDefinedTargetWindow(),
                let screen = NSScreen.main {
-                WindowEngine.resize(window, to: keybind, on: screen)
+                Task {
+                    await WindowEngine.resize(window, to: keybind, on: screen)
+                }
             }
         } else {
             writeToOutput("[URLHandler] Keybind not found: \(keybindName)")
@@ -731,7 +733,9 @@ final class URLCommandHandler {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.writeToOutput("[URLHandler] Executing resize operation")
-            WindowEngine.resize(window, to: action, on: screen)
+            Task {
+                await WindowEngine.resize(window, to: action, on: screen)
+            }
             self?.writeToOutput("[URLHandler] New window frame: \(window.frame)")
         }
     }
@@ -743,8 +747,8 @@ final class URLCommandHandler {
            ScreenUtility.nextScreen(from: currentScreen) :
            ScreenUtility.previousScreen(from: currentScreen) {
             writeToOutput("[URLHandler] Moving window to screen: \(targetScreen.localizedName)")
-            DispatchQueue.main.async {
-                WindowEngine.resize(window, to: .init(direction), on: targetScreen)
+            Task {
+                await WindowEngine.resize(window, to: .init(direction), on: targetScreen)
             }
         } else {
             writeToOutput("[URLHandler] Failed to find target screen")

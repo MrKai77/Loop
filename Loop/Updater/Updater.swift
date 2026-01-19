@@ -157,6 +157,7 @@ final class Updater: ObservableObject {
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
+    @concurrent
     func fetchLatestInfo(force: Bool = false) async {
         if let updateFetcherTask {
             return await updateFetcherTask.value // If already fetching, wait for it to finish
@@ -207,6 +208,7 @@ final class Updater: ObservableObject {
         }
     }
 
+    @concurrent
     private func processFetchedData(_ data: Data) async throws {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -225,6 +227,7 @@ final class Updater: ObservableObject {
         }
     }
 
+    @concurrent
     private func processRelease(_ release: Release) async {
         let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
 
@@ -364,6 +367,7 @@ final class Updater: ObservableObject {
         }
     }
 
+    @concurrent
     func showUpdateWindowIfEligible() async {
         shouldAutoPresentUpdateWindow = false
         guard updateState == .available else { return }
@@ -380,6 +384,7 @@ final class Updater: ObservableObject {
     }
 
     // Downloads the update from GitHub and installs it
+    @concurrent
     func installUpdate() async {
         guard
             let latestRelease = targetRelease,
@@ -419,6 +424,7 @@ final class Updater: ObservableObject {
         Log.info("Update installed successfully", category: .updater)
     }
 
+    @concurrent
     private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {
         Log.info("Downloading update asset: \(asset.name) to \(destinationURL.path)", category: .updater)
 
@@ -430,6 +436,7 @@ final class Updater: ObservableObject {
         }
     }
 
+    @concurrent
     private func unzipAndSwap(downloadedFileURL fileURL: String) async {
         Log.info("Unzipping and swapping app bundle at \(fileURL)", category: .updater)
 

@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@MainActor
 final class PreviewController {
     private var controller: NSWindowController?
     private var viewModel: PreviewViewModel?

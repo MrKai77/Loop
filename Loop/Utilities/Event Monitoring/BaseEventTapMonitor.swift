@@ -10,7 +10,7 @@ import Foundation
 import Scribe
 
 /// Base class to share common functionality. DO NOT USE DIRECTLY!
-class BaseEventTapMonitor: Identifiable, Equatable {
+class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     let id = UUID()
 
     private var eventTap: CFMachPort?

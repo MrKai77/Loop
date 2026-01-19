@@ -51,6 +51,7 @@ final class WallpaperProcessor {
     /// Fetches the latest wallpaper colors, respecting a throttle period.
     /// This helps prevent excessive processing if called frequently, when the wallpaper is most likely unchanged.
     /// - Parameter ignoreThrottle: If true, the method will ignore the throttle and fetch colors immediately. This is useful when called from settings or manual triggers.
+    @concurrent
     func fetchLatest(ignoreThrottle: Bool = false) async -> (primary: Color, secondary: Color) {
         // Only proceed if the caller has chosen to ignore the throttle, or over 5 seconds have passed since the last refresh
         guard ignoreThrottle || lastProcessedDate.distance(to: .now) > 5.0 else {
@@ -80,6 +81,7 @@ final class WallpaperProcessor {
     /// a cohesive theme that matches the user's desktop environment.
     ///
     /// Note that you shouldn't call this method directly, but rather, call ``AccentColorController.refresh``.
+    @concurrent
     private func fetchLatestWallpaperColors() async -> (primary: Color, secondary: Color)? {
         do {
             // Attempt to process the current wallpaper to get the dominant colors.
@@ -114,6 +116,7 @@ final class WallpaperProcessor {
     /// It first attempts to capture a screenshot of the desktop wallpaper, then
     /// passes that image to the color analysis algorithm to extract vibrant,
     /// visually distinct colors suitable for UI accents.
+    @concurrent
     private func processCurrentWallpaper() async throws -> [NSColor] {
         let wallpaperImageFetcher = WallpaperImageFetcher()
 
@@ -164,6 +167,7 @@ extension NSImage {
     /// The scoring system is designed to favor vibrant colors over dull ones, even if the
     /// dull colors appear more frequently in the image. This approach works well for extracting
     /// accent colors from wallpapers, which often have subtle variation in dominant colors.
+    @concurrent
     func calculateDominantColors() async -> [NSColor]? {
         // Resize the image to a smaller size to improve performance
         let aspectRatio = size.width / size.height

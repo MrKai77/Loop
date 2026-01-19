@@ -8,7 +8,7 @@
 import Cocoa
 import Scribe
 
-final class LocalEventMonitor: Identifiable, Equatable {
+final class LocalEventMonitor: EventMonitorProtocol, Identifiable, Equatable {
     let id = UUID()
 
     private var localEventMonitor: Any?

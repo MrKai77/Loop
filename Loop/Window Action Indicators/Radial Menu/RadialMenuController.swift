@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@MainActor
 final class RadialMenuController {
     private var controller: NSWindowController?
     private var viewModel: RadialMenuViewModel?

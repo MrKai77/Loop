@@ -20,7 +20,7 @@ final class WindowActionCache {
     /// Initializes a new instance of `WindowActionCache`.
     /// Will automatically build cache, and update according to changes the user makes to Loop's keybinds.
     init() {
-        self.observationTask = Task { [weak self] in
+        self.observationTask = Task { @concurrent [weak self] in
             let updates = Defaults.updates(
                 .keybinds,
                 .cycleBackwardsOnShiftPressed

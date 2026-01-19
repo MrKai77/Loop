@@ -11,35 +11,13 @@ import SwiftUI
 
 /// Handles execution of `WindowAction`s on windows within the user's workspace
 enum WindowEngine {
-    /// Resize a Window
-    /// - Parameters:
-    ///   - window: Window to be resized
-    ///   - action: WindowAction to resize the window to
-    ///   - screen: Screen the window should be resized on
-    ///   - completion: A completion handler. To be removed once we add proper Swift Concurrency support to LoopManager.
-    static func resize(
-        _ window: Window,
-        to action: WindowAction,
-        on screen: NSScreen,
-        completion: @escaping () -> () = {}
-    ) {
-        Task.detached(priority: .userInitiated) {
-            await resize(
-                window,
-                to: action,
-                on: screen
-            )
-
-            completion()
-        }
-    }
-
     /// Resize a Window asynchronously
     /// - Parameters:
     ///   - window: Window to resize
     ///   - action: WindowAction describing the target layout
     ///   - screen: Screen the window should be resized on
-    private static func resize(
+    @concurrent
+    static func resize(
         _ window: Window,
         to action: WindowAction,
         on screen: NSScreen
@@ -151,6 +129,7 @@ enum WindowEngine {
 
     // MARK: - System Window Manager
 
+    @concurrent
     @available(macOS 15, *)
     private static func resizeWithSystemWindowManager(
         window: Window,
@@ -206,6 +185,7 @@ enum WindowEngine {
         }
     }
 
+    @concurrent
     private static func resizeWindow(
         _ window: Window,
         targetFrame: CGRect,

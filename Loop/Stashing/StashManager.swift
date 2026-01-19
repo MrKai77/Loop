@@ -163,6 +163,7 @@ extension StashManager {
                 onWindowResized(action: action, window: window, screen: screenForEdge)
             } else {
                 let windowToStash = StashedWindowInfo(window: window, screen: screen, action: action)
+                
                 Task {
                     await stash(windowToStash)
                 }
@@ -203,6 +204,7 @@ extension StashManager {
 
     /// Add the given `StashWindow` to the list of monitored windows, move the window to the stashed area
     /// and start mouse moved listener if needed.
+    @concurrent
     private func stash(_ windowToStash: StashedWindowInfo) async {
         Log.info("stash \(windowToStash.window.description)", category: .stashManager)
 
@@ -260,6 +262,7 @@ extension StashManager {
 
 private extension StashManager {
     /// Reveals a stashed window by moving it to its reveal frame.
+    @concurrent
     func revealWindow(_ window: StashedWindowInfo) async {
         guard !store.isWindowRevealed(window.window.cgWindowID) else { return }
         guard !shouldThrottle(windowID: window.window.cgWindowID) else { return }
@@ -297,6 +300,7 @@ private extension StashManager {
     }
 
     /// Hides a stashed window by moving it to its stashed frame.
+    @concurrent
     func hideWindow(_ window: StashedWindowInfo, shouldUnfocus: Bool = true) async {
         guard !shouldThrottle(windowID: window.window.cgWindowID) else { return }
 

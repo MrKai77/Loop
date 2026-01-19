@@ -388,6 +388,7 @@ final class Window {
         }
     }
 
+    @concurrent
     func setFrameAnimated(
         _ rect: CGRect,
         bounds: CGRect

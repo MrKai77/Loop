@@ -180,7 +180,9 @@ struct TriggerKeycorder: View {
         eventMonitor?.stop()
         eventMonitor = nil
 
-        LoopManager.shared.keybindTrigger.start()
+        Task {
+            await LoopManager.shared.keybindTrigger.start()
+        }
     }
 }
 

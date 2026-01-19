@@ -11,6 +11,7 @@ import SwiftUI
 
 // MARK: - LoopManager
 
+@MainActor
 final class LoopManager {
     static let shared = LoopManager()
     private init() {}
@@ -62,7 +63,6 @@ final class LoopManager {
     private(set) var isLoopActive: Bool = false
     private var targetWindow: Window?
     private var screenToResizeOn: NSScreen?
-    var isShiftKeyPressed: Bool = false
 
     private var currentAction: WindowAction = .init(.noSelection)
     private var parentCycleAction: WindowAction?
@@ -72,13 +72,13 @@ final class LoopManager {
 
     func start() {
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
-            for await status in await AccessibilityManager.shared.stream(initial: true) {
+            for await status in AccessibilityManager.shared.stream(initial: true) {
                 guard let self, !Task.isCancelled else {
                     return
                 }
 
                 if status {
-                    keybindTrigger.start()
+                    await keybindTrigger.start()
                     middleClickTrigger.start()
                 } else {
                     keybindTrigger.stop()
@@ -130,7 +130,6 @@ extension LoopManager {
         parentCycleAction = nil
         initialMousePosition = NSEvent.mouseLocation
         screenToResizeOn = nil // Screen to resize on will be determined by the first action.
-        isShiftKeyPressed = false
 
         if !Defaults[.disableCursorInteraction] {
             mouseInteractionObserver.start(initialMousePosition: initialMousePosition)
@@ -173,11 +172,13 @@ extension LoopManager {
             // If the preview was disabled, the window will already be in the specified action's frame.
             // So only resize the window if the preview is enabled.
             if Defaults[.previewVisibility] {
-                WindowEngine.resize(
-                    targetWindow,
-                    to: currentAction,
-                    on: screenToResizeOn
-                ) {
+                Task {
+                    await WindowEngine.resize(
+                        targetWindow,
+                        to: currentAction,
+                        on: screenToResizeOn
+                    )
+                    
                     LoopManager.sidesToAdjust = nil
                     LoopManager.lastTargetFrame = .zero
                 }
@@ -375,12 +376,14 @@ extension LoopManager {
                     if !disableHapticFeedback {
                         performHapticFeedback()
                     }
-
-                    WindowEngine.resize(
-                        window,
-                        to: currentAction,
-                        on: newScreen
-                    )
+                    
+                    Task {
+                        await WindowEngine.resize(
+                            window,
+                            to: currentAction,
+                            on: newScreen
+                        )
+                    }
                 }
             }
 
@@ -405,11 +408,13 @@ extension LoopManager {
                 radialMenuController.setAction(to: newAction, parent: parentCycleAction)
 
                 if !Defaults[.previewVisibility], let screenToResizeOn, let targetWindow {
-                    WindowEngine.resize(
-                        targetWindow,
-                        to: newAction,
-                        on: screenToResizeOn
-                    )
+                    Task {
+                        await WindowEngine.resize(
+                            targetWindow,
+                            to: newAction,
+                            on: screenToResizeOn
+                        )
+                    }
                 }
 
                 // If the action is to focus a window in a specific direction, find and activate that window
@@ -456,7 +461,7 @@ extension LoopManager {
             && Defaults[.triggerKey].contains(.kVK_Shift) == false
             && Defaults[.cycleBackwardsOnShiftPressed]
 
-        let shouldCycleBackwards = allowReverseCycle && isShiftKeyPressed
+        let shouldCycleBackwards = allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift)
         var currentIndex: Int? = nil
 
         if Defaults[.cycleModeRestartEnabled],

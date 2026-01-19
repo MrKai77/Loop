@@ -111,41 +111,41 @@ final class MouseInteractionObserver {
     private func processNewMouseLocation(_ event: CGEvent) {
         guard checkIfLoopOpen() else { return }
 
-        let currentMousePosition = computeLatestMousePosition(event)
-        let angleToMouse = initialMousePosition.angle(to: currentMousePosition) + .radians(.pi / 2)
-        let distanceToMouse = initialMousePosition.distance(to: currentMousePosition)
+        Task {
+            let currentMousePosition = computeLatestMousePosition(event)
+            let angleToMouse = initialMousePosition.angle(to: currentMousePosition) + .radians(.pi / 2)
+            let distanceToMouse = initialMousePosition.distance(to: currentMousePosition)
 
-        // Return if the mouse didn't move
-        guard
-            angleToMouse != previousAngleToMouse ||
-            distanceToMouse != previousDistanceToMouse
-        else {
-            return
-        }
-
-        // Get angle & distance to mouse
-        previousAngleToMouse = angleToMouse
-        previousDistanceToMouse = distanceToMouse
-
-        var newAction: RadialMenuAction? = nil
-
-        // If mouse over 50 points away, select half or quarter positions
-        if distanceToMouse > Self.directionalActionDistance - Defaults[.radialMenuThickness] {
-            guard radialMenuActions.count > 1 else {
-                newAction = radialMenuActions.first
+            // Return if the mouse didn't move
+            guard
+                angleToMouse != previousAngleToMouse ||
+                distanceToMouse != previousDistanceToMouse
+            else {
                 return
             }
 
-            let actions = radialMenuActions.dropLast()
-            let actionAngleSpan = 360.0 / CGFloat(actions.count)
-            let halfAngleSpan = actionAngleSpan / 2.0
-            let index = Int((angleToMouse.normalized().degrees + halfAngleSpan) / actionAngleSpan) % actions.count
-            newAction = actions[index]
-        } else if distanceToMouse > Self.noActionDistance {
-            newAction = radialMenuActions.last
-        }
+            // Get angle & distance to mouse
+            previousAngleToMouse = angleToMouse
+            previousDistanceToMouse = distanceToMouse
 
-        Task { @MainActor in
+            var newAction: RadialMenuAction? = nil
+
+            // If mouse over 50 points away, select half or quarter positions
+            if distanceToMouse > Self.directionalActionDistance - Defaults[.radialMenuThickness] {
+                guard radialMenuActions.count > 1 else {
+                    newAction = radialMenuActions.first
+                    return
+                }
+
+                let actions = radialMenuActions.dropLast()
+                let actionAngleSpan = 360.0 / CGFloat(actions.count)
+                let halfAngleSpan = actionAngleSpan / 2.0
+                let index = Int((angleToMouse.normalized().degrees + halfAngleSpan) / actionAngleSpan) % actions.count
+                newAction = actions[index]
+            } else if distanceToMouse > Self.noActionDistance {
+                newAction = radialMenuActions.last
+            }
+
             switch newAction?.type {
             case let .custom(windowAction):
                 changeAction(windowAction)
