@@ -36,10 +36,6 @@ extension LogCategory {
     static let windowActionCache = LogCategory("WindowActionCache")
     static let windowDragManager = LogCategory("WindowDragManager")
 
-    // Window action indicators
-    static let radialMenuController = LogCategory("RadialMenuController")
-    static let previewController = LogCategory("PreviewController")
-
     // Stashing
     static let stashManager = LogCategory("StashManager")
     static let stashedWindowsStore = LogCategory("StashedWindowsStore")

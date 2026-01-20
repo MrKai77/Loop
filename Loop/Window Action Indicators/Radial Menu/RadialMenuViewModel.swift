@@ -112,19 +112,17 @@ final class RadialMenuViewModel: ObservableObject {
         }
     }
 
-    func setWindow(to newWindow: Window) {
-        window = newWindow
-    }
+    func updateContext(with context: ResizeContext) {
+        window = context.window
 
-    func setAction(to action: WindowAction, parent: WindowAction? = nil) {
         previousAction = currentAction
-        currentAction = action
-        parentAction = parent
+        currentAction = context.action
+        parentAction = context.parentAction
 
         recomputeAngle()
     }
 
-    func recomputeAngle() {
+    private func recomputeAngle() {
         guard let targetAngle = calculateTargetAngle() else { return }
 
         let closestAngle = Angle.degrees(angle).angleDifference(to: targetAngle)

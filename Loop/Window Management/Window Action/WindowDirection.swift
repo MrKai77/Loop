@@ -87,6 +87,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var more: [WindowDirection] { [.initialFrame, .undo, .custom, .cycle] }
 
     // Computed properties for checking conditions
+    var isNoOp: Bool { [.noSelection, .noAction].contains(self) }
     var willChangeScreen: Bool { WindowDirection.screenSwitching.contains(self) }
     var willAdjustSize: Bool { WindowDirection.sizeAdjustment.contains(self) }
     var willShrink: Bool { WindowDirection.shrink.contains(self) }

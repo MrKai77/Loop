@@ -11,9 +11,9 @@ import SwiftUI
 struct PaddingPreviewView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
 
-    @Binding var model: PaddingModel
+    @Binding var model: PaddingConfiguration
 
-    init(_ paddingModel: Binding<PaddingModel>) {
+    init(_ paddingModel: Binding<PaddingConfiguration>) {
         self._model = paddingModel
     }
 

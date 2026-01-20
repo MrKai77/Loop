@@ -565,7 +565,7 @@ final class URLCommandHandler {
             if let window = WindowUtility.userDefinedTargetWindow(),
                let screen = NSScreen.main {
                 Task {
-                    await WindowEngine.resize(window, to: keybind, on: screen)
+                    _ = await WindowActionEngine.apply(keybind, window: window, screen: screen)
                 }
             }
         } else {
@@ -734,7 +734,7 @@ final class URLCommandHandler {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.writeToOutput("[URLHandler] Executing resize operation")
             Task {
-                await WindowEngine.resize(window, to: action, on: screen)
+                _ = await WindowActionEngine.apply(action, window: window, screen: screen)
             }
             self?.writeToOutput("[URLHandler] New window frame: \(window.frame)")
         }
@@ -748,7 +748,7 @@ final class URLCommandHandler {
            ScreenUtility.previousScreen(from: currentScreen) {
             writeToOutput("[URLHandler] Moving window to screen: \(targetScreen.localizedName)")
             Task {
-                await WindowEngine.resize(window, to: .init(direction), on: targetScreen)
+                _ = await WindowActionEngine.apply(.init(direction), window: window, screen: targetScreen)
             }
         } else {
             writeToOutput("[URLHandler] Failed to find target screen")

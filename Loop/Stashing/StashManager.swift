@@ -163,7 +163,7 @@ extension StashManager {
                 onWindowResized(action: action, window: window, screen: screenForEdge)
             } else {
                 let windowToStash = StashedWindowInfo(window: window, screen: screen, action: action)
-                
+
                 Task {
                     await stash(windowToStash)
                 }
@@ -186,7 +186,7 @@ extension StashManager {
             // without adding its id to `store.revealed`. Whe need to add it back so the hide animation can be triggered.
             if isManaged(window.cgWindowID) {
                 // If the window frame is fully on screen while the window ID is not in the `store.reveal` set, we add it.
-                let isWindowFullyOnScreen = screen.safeScreenFrame.contains(window.frame)
+                let isWindowFullyOnScreen = screen.cgSafeScreenFrame.contains(window.frame)
 
                 if isWindowFullyOnScreen, !store.isWindowRevealed(window.cgWindowID) {
                     store.markWindowAsRevealed(window.cgWindowID)
@@ -232,9 +232,8 @@ extension StashManager {
             let action = WindowAction(.initialFrame)
             let initialFrame = action.getFrame(
                 window: window.window,
-                bounds: window.screen.safeScreenFrame,
-                screen: window.screen
-            )
+                bounds: window.screen.cgSafeScreenFrame
+            ).targetFrame
 
             if resetFrameAnimated {
                 Task {

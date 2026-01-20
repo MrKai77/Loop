@@ -66,7 +66,7 @@ struct StashActionConfigurationView: View {
                                 window: nil,
                                 bounds: CGRect(origin: .zero, size: geo.size),
                                 disablePadding: true
-                            )
+                            ).targetFrame
 
                             blurredWindow()
                                 .frame(width: frame.width, height: frame.height)
@@ -159,11 +159,13 @@ struct StashActionConfigurationView: View {
                     pressing: { pressing in
                         if pressing {
                             guard let screen = NSScreen.main else { return }
-                            previewController.open(
-                                screen: screen,
+                            var context = ResizeContext.blank(
                                 window: nil,
-                                startingAction: action
+                                initialFrame: .zero, initialMousePosition: .zero
                             )
+                            context.setScreen(to: screen)
+                            context.setAction(to: action, parent: nil)
+                            previewController.open(context: context)
                         } else {
                             previewController.close()
                         }

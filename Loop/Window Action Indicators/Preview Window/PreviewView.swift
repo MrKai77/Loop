@@ -34,6 +34,19 @@ struct PreviewView: View {
     }
 
     var body: some View {
+        windowView()
+            .compositingGroup()
+            .frame(width: viewModel.computedFrame.width, height: viewModel.computedFrame.height)
+            .offset(x: viewModel.computedFrame.minX, y: viewModel.computedFrame.minY)
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity,
+                alignment: .topLeading
+            )
+            .opacity(viewModel.isShown ? 1 : 0)
+    }
+
+    private func windowView() -> some View {
         ZStack {
             ZStack {
                 VisualEffectView(material: .hudWindow, blendingMode: .behindWindow, state: .active)

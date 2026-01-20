@@ -107,7 +107,7 @@ extension WindowUtility {
                 return nil
             }
 
-            let screenCenter = screen.safeScreenFrame.center
+            let screenCenter = screen.cgSafeScreenFrame.center
             Log.info("Navigating from screen center: \(screenCenter.debugDescription)", category: .windowUtility)
 
             // Find the closest window in the specified direction from screen center

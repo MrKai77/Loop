@@ -7,6 +7,7 @@
 
 import AppKit
 
+@MainActor
 final class ActivePanel: NSPanel {
     @objc dynamic var hasKeyAppearance: Bool {
         true

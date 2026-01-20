@@ -9,6 +9,4 @@ import AppKit
 
 final class EventMonitorRegistry {
     private let eventMonitorsByID: [UUID: any EventMonitorProtocol] = [:]
-    
-    
 }

@@ -47,7 +47,7 @@ extension Defaults.Keys {
     static let suppressMissionControlOnTopDrag = Key<Bool>("suppressMissionControlOnTopDrag", default: true, iCloud: true)
     static let restoreWindowFrameOnDrag = Key<Bool>("restoreWindowFrameOnDrag", default: false, iCloud: true)
     static let enablePadding = Key<Bool>("enablePadding", default: false, iCloud: true)
-    static let padding = Key<PaddingModel>("padding", default: .zero, iCloud: true)
+    static let padding = Key<PaddingConfiguration>("padding", default: .zero, iCloud: true)
     static let useScreenWithCursor = Key<Bool>("useScreenWithCursor", default: true, iCloud: true)
     static let moveCursorWithWindow = Key<Bool>("moveCursorWithWindow", default: false, iCloud: true)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false, iCloud: true)

@@ -23,8 +23,10 @@ final class SettingsWindowManager: ObservableObject {
 
     @Published private(set) var previewedParentAction: WindowAction? = nil
     @Published private(set) var previewedAction: WindowAction = .init(.noSelection) {
-        didSet { radialMenuViewModel.setAction(to: previewedAction, parent: previewedParentAction) }
+        didSet { updatePreviewContexts() }
     }
+
+    private(set) var previewBounds: CGRect = .zero
 
     @Published var showRadialMenu: Bool = true
     @Published var showPreview: Bool = true
@@ -55,6 +57,7 @@ final class SettingsWindowManager: ObservableObject {
     }
 
     let radialMenuViewModel: RadialMenuViewModel
+    let previewViewModel: PreviewViewModel
 
     var window: NSWindow? {
         controller?.window
@@ -64,6 +67,7 @@ final class SettingsWindowManager: ObservableObject {
         let startingAction: WindowAction = .init(.noAction)
 
         self.radialMenuViewModel = .init(startingAction: startingAction, window: nil, previewMode: true)
+        self.previewViewModel = .init(isSettingsPreview: true)
 
         if let firstAction = RadialMenuAction.userConfiguredActions.first?.resolved {
             setPreviewedAction(to: firstAction)
@@ -177,5 +181,20 @@ final class SettingsWindowManager: ObservableObject {
             previewedParentAction = nil
             previewedAction = newAction
         }
+    }
+
+    func setPreviewBounds(_ bounds: CGRect) {
+        previewBounds = bounds
+        updatePreviewContexts()
+    }
+
+    private func updatePreviewContexts() {
+        let context = ResizeContext.forSettingsPreview(
+            action: previewedAction,
+            parentAction: previewedParentAction,
+            bounds: previewBounds
+        )
+        radialMenuViewModel.updateContext(with: context)
+        previewViewModel.updateContext(with: context)
     }
 }

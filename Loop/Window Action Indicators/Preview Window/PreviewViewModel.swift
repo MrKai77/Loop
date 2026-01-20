@@ -6,24 +6,104 @@
 //
 
 import Defaults
+import Scribe
 import SwiftUI
 
+@Loggable
+@MainActor
 final class PreviewViewModel: ObservableObject {
-    @Published var overrideCornerRadii: RectangleCornerRadii?
+    @Published private(set) var computedFrame: CGRect = .zero
+    @Published private(set) var isShown: Bool = false
+    @Published private(set) var overrideCornerRadii: RectangleCornerRadii?
 
-    init(window: Window?) {
-        if #available(macOS 26.0, *), let window {
-            self.overrideCornerRadii = Self.getCornerRadius(for: window)
-        } else {
-            self.overrideCornerRadii = nil
+    init(isSettingsPreview: Bool) {
+        if isSettingsPreview {
+            self.isShown = true
         }
     }
 
-    func setWindow(to newWindow: Window?) {
-        if #available(macOS 26.0, *), let newWindow {
-            overrideCornerRadii = Self.getCornerRadius(for: newWindow)
+    func setIsShown(_ newState: Bool) {
+        withAnimation(Defaults[.animationConfiguration].previewWindow) {
+            isShown = newState
+        }
+    }
+
+    func updateContext(with context: ResizeContext) {
+        if #available(macOS 26.0, *), let window = context.window {
+            overrideCornerRadii = Self.getCornerRadius(for: window)
         } else {
             overrideCornerRadii = nil
+        }
+
+        let isCurrentlyHidden = !isShown
+        let shouldBecomeVisible = context.targetFrame.size.area > 0
+
+        var newShownState: Bool = isShown
+        var newComputedFrame: CGRect = computedFrame
+
+        // If the window is currently shown, but needs to be hidden
+        if !isCurrentlyHidden, !shouldBecomeVisible {
+            newShownState = false
+        }
+
+        // If the window is currently hidden, but it needs to be shown.
+        else if isCurrentlyHidden, shouldBecomeVisible {
+            let startingFrame = computeStartingFrame(
+                for: Defaults[.previewStartingPosition],
+                targetFrame: context.targetFrame,
+                context: context
+            )
+
+            // Set starting position without animation
+            computedFrame = startingFrame
+
+            newShownState = true
+            newComputedFrame = context.targetFrame
+        }
+
+        // Window is already visible and should stay visible - update frame
+        else if !isCurrentlyHidden, shouldBecomeVisible {
+            newComputedFrame = context.targetFrame
+        }
+
+        withAnimation(Defaults[.animationConfiguration].previewWindow) {
+            computedFrame = newComputedFrame
+            isShown = newShownState
+        }
+
+        log.ui("Current previewed frame: \(computedFrame) for \(context.action)")
+    }
+
+    private func computeStartingFrame(
+        for position: PreviewStartingPosition,
+        targetFrame: CGRect,
+        context: ResizeContext
+    ) -> CGRect {
+        switch position {
+        case .screenCenter:
+            // Default behavior - animate from zero at center (no-op, use current .zero)
+            return computedFrame
+
+        case .radialMenu:
+            // Center the preview window on the initial mouse position
+            var mousePosition = context.initialMousePosition
+            if let screenFrame = context.screen?.frame {
+                mousePosition.x -= screenFrame.minX
+                mousePosition.y -= screenFrame.minY
+            }
+            return CGRect(origin: mousePosition, size: .zero)
+
+        case .actionCenter:
+            // Center the preview window on the action's target frame (at 80% size)
+            let previewWidth = targetFrame.width * 0.8
+            let previewHeight = targetFrame.height * 0.8
+
+            return CGRect(
+                x: targetFrame.midX - previewWidth / 2,
+                y: targetFrame.midY - previewHeight / 2,
+                width: previewWidth,
+                height: previewHeight
+            )
         }
     }
 

@@ -35,16 +35,14 @@ extension NSScreen {
         return screenWithMouse
     }
 
-    var safeScreenFrame: CGRect {
-        guard
-            let displayID
-        else {
-            NSLog("Error: Failed to get NSScreen.displayID in NSScreen.safeScreenFrame")
+    var cgSafeScreenFrame: CGRect {
+        guard let displayID else {
+            NSLog("Error: Failed to get NSScreen.displayID in NSScreen.cgSafeScreenFrame")
             return frame.flipY(screen: self)
         }
 
         let screenFrame = CGDisplayBounds(displayID)
-        let visibleFrame = stageStripFreeFrame.flipY(screen: self)
+        let visibleFrame = safeScreenFrame.flipY(screen: NSScreen.screens[0])
 
         // By setting safeScreenFrame to visibleFrame, we won't need to adjust its size.
         var safeScreenFrame = visibleFrame
@@ -59,7 +57,7 @@ extension NSScreen {
         return safeScreenFrame
     }
 
-    var stageStripFreeFrame: NSRect {
+    var safeScreenFrame: NSRect {
         var frame = visibleFrame
 
         if Defaults[.respectStageManager],
