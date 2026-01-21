@@ -20,6 +20,8 @@ final class WindowDragManager {
 
     private var resizeContext: ResizeContext?
     private var initialWindowFrame: CGRect?
+    // Avoid repeated window resolution attempts during a non-window drag (e.g. in games).
+    private var didFailToResolveDraggedWindow: Bool = false
 
     private let previewController = PreviewController()
 
@@ -33,6 +35,14 @@ final class WindowDragManager {
         NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
     }
 
+    // Avoid running global drag logic unless a feature actually depends on it.
+    private var shouldMonitorDragActions: Bool {
+        Defaults[.windowSnapping] ||
+            Defaults[.restoreWindowFrameOnDrag] ||
+            !Defaults[.stashManagerStashedWindows].isEmpty
+    }
+
+    @MainActor
     func addObservers() {
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
             for await status in AccessibilityManager.shared.stream(initial: true) {
@@ -76,6 +86,10 @@ final class WindowDragManager {
     }
 
     private func leftMouseDragged(event _: CGEvent) {
+        guard shouldMonitorDragActions else {
+            return
+        }
+
         Task { @MainActor in
             guard let initialMousePosition else {
                 initialMousePosition = currentMousePosition
@@ -91,7 +105,7 @@ final class WindowDragManager {
             }
 
             // Process window (only ONCE during a window drag)
-            if resizeContext == nil {
+            if resizeContext == nil, !didFailToResolveDraggedWindow {
                 setCurrentDraggingWindow()
             }
 
@@ -139,13 +153,6 @@ final class WindowDragManager {
         }
     }
 
-    private func resetDragState() {
-        resizeContext = nil
-        initialWindowFrame = nil
-        initialMousePosition = nil
-        didPassDragDistanceThreshold = false
-    }
-
     private func setCurrentDraggingWindow() {
         guard determineDraggedWindowTask == nil else {
             return
@@ -160,6 +167,7 @@ final class WindowDragManager {
                 let window = try? WindowUtility.windowAtPosition(currentMousePosition),
                 !window.isAppExcluded
             else {
+                didFailToResolveDraggedWindow = true
                 return
             }
 
@@ -171,6 +179,16 @@ final class WindowDragManager {
 
             Log.info("Determined window being dragged: \(window.description)", category: .windowDragManager)
         }
+    }
+
+    private func resetDragState() {
+        resizeContext = nil
+        initialMousePosition = nil
+        didPassDragDistanceThreshold = false
+        didFailToResolveDraggedWindow = false
+        initialWindowFrame = nil
+        determineDraggedWindowTask?.cancel()
+        determineDraggedWindowTask = nil
     }
 
     private func hasWindowMoved(_ windowFrame: CGRect, _ initialFrame: CGRect) -> Bool {
