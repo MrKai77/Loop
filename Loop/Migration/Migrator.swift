@@ -192,10 +192,7 @@ private extension Migrator {
     }
 
     /// Saves the keybinds in the specified directory URL.
-    @concurrent
-    static func saveKeybinds(_: SavedKeybindsFormat, in directoryURL: URL) async throws {
-        let keybinds = SavedKeybindsFormat.generateFromDefaults()
-
+    private static func saveKeybinds(_ keybinds: SavedKeybindsFormat, in directoryURL: URL) async throws {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 
@@ -319,8 +316,7 @@ private extension Migrator {
     }
 
     /// Imports keybinds from a JSON string.
-    @concurrent
-    static func importKeybinds(from jsonString: String, onSuccess: () -> ()) async throws {
+    private static func importKeybinds(from jsonString: String, onSuccess: () -> ()) async throws {
         guard let data = jsonString.data(using: .utf8) else {
             throw MigratorError.failedToReadFile
         }
@@ -379,7 +375,6 @@ private extension Migrator {
     // MARK: Saving Imports
 
     /// Updates the app's defaults with the imported keybinds.
-    @concurrent
     static func updateDefaults(with savedData: SavedKeybindsFormat, onSuccess: () -> ()) async {
         if let triggerKey = savedData.triggerKey {
             Defaults[.triggerKey] = triggerKey
@@ -412,7 +407,6 @@ private extension Migrator {
     }
 
     /// Presents a decision alert for how to handle imported keybinds.
-    @concurrent
     static func showAlertForImportDecision() async -> ImportDecision {
         let response = await showAlert(
             .init(localized: "Import Keybinds"),

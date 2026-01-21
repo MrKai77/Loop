@@ -64,8 +64,6 @@ final class SettingsWindowManager: ObservableObject {
     }
 
     private init() {
-        let startingAction: WindowAction = .init(.noAction)
-
         self.radialMenuViewModel = .init(isSettingsPreview: true)
         self.previewViewModel = .init(isSettingsPreview: true)
 
@@ -189,7 +187,7 @@ final class SettingsWindowManager: ObservableObject {
     }
 
     private func updatePreviewContexts() {
-        var context = ResizeContext(bounds: previewBounds)
+        let context = ResizeContext(bounds: previewBounds)
         context.setAction(to: previewedAction, parent: previewedParentAction)
         radialMenuViewModel.updateContext(with: context)
         previewViewModel.updateContext(with: context)

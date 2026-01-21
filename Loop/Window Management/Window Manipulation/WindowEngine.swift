@@ -111,7 +111,6 @@ enum WindowEngine {
 
     // MARK: - System Window Manager
 
-    @concurrent
     @available(macOS 15, *)
     private static func resizeWithSystemWindowManager(
         window: Window,
@@ -167,7 +166,6 @@ enum WindowEngine {
         }
     }
 
-    @concurrent
     private static func resizeWindow(
         _ window: Window,
         targetFrame: CGRect,

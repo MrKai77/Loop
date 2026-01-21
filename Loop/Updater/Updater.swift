@@ -208,7 +208,6 @@ final class Updater: ObservableObject {
         }
     }
 
-    @concurrent
     private func processFetchedData(_ data: Data) async throws {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -227,7 +226,6 @@ final class Updater: ObservableObject {
         }
     }
 
-    @concurrent
     private func processRelease(_ release: Release) async {
         let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
 
@@ -367,18 +365,16 @@ final class Updater: ObservableObject {
         }
     }
 
-    @concurrent
+    @MainActor
     func showUpdateWindowIfEligible() async {
         shouldAutoPresentUpdateWindow = false
         guard updateState == .available else { return }
 
-        await MainActor.run {
-            if windowController?.window == nil {
-                windowController = .init(window: LuminareTrafficLightedWindow { UpdateView() })
-            }
-            windowController?.window?.makeKeyAndOrderFront(self)
-            windowController?.window?.orderFrontRegardless()
+        if windowController?.window == nil {
+            windowController = .init(window: LuminareTrafficLightedWindow { UpdateView() })
         }
+        windowController?.window?.makeKeyAndOrderFront(self)
+        windowController?.window?.orderFrontRegardless()
 
         Log.ui("Update window shown", category: .updater)
     }
@@ -424,7 +420,6 @@ final class Updater: ObservableObject {
         Log.info("Update installed successfully", category: .updater)
     }
 
-    @concurrent
     private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {
         Log.info("Downloading update asset: \(asset.name) to \(destinationURL.path)", category: .updater)
 
@@ -436,7 +431,6 @@ final class Updater: ObservableObject {
         }
     }
 
-    @concurrent
     private func unzipAndSwap(downloadedFileURL fileURL: String) async {
         Log.info("Unzipping and swapping app bundle at \(fileURL)", category: .updater)
 
