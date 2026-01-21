@@ -73,12 +73,11 @@ final class RadialMenuViewModel: ObservableObject {
 
     var radialMenuImage: Image? {
         if window == nil, !isSettingsPreview {
-            return Image(systemName: "exclamationmark.triangle")
+            Image(systemName: "exclamationmark.triangle")
         } else if let image = currentAction.image {
-            let image = image.withSymbolConfiguration(.init(pointSize: 20, weight: .bold)) ?? image
-            return Image(nsImage: image)
+            image.image
         } else {
-            return nil
+            nil
         }
     }
 

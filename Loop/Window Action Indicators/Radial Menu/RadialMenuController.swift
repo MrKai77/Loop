@@ -64,6 +64,8 @@ final class RadialMenuController: WindowActionIndicator {
         panel.orderFrontRegardless()
 
         controller = .init(window: panel)
+
+        log.ui("Initialized controller")
     }
 
     func close() {
@@ -74,6 +76,8 @@ final class RadialMenuController: WindowActionIndicator {
             viewModel.setIsShown(false, animationDuration: 0.15)
             try? await Task.sleep(for: .seconds(0.15))
             windowController.close()
+
+            log.ui("Controller closed")
         }
     }
 }

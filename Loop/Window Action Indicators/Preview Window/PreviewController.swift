@@ -46,7 +46,8 @@ final class PreviewController: WindowActionIndicator {
         panel.orderFrontRegardless()
 
         controller = .init(window: panel)
-        log.info("Initialized controller")
+
+        log.ui("Initialized controller")
     }
 
     func close() {
@@ -55,8 +56,10 @@ final class PreviewController: WindowActionIndicator {
 
         Task { @MainActor in
             viewModel.setIsShown(false)
-            try? await Task.sleep(for: .seconds(0.15))
+            try? await Task.sleep(for: .seconds(0.4))
             windowController.close()
+
+            log.ui("Controller closed")
         }
     }
 }

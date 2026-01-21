@@ -8,67 +8,91 @@
 import Luminare
 import SwiftUI
 
+enum WindowActionImage {
+    case systemImage(String)
+    case resource(ImageResource)
+
+    var image: Image {
+        switch self {
+        case let .systemImage(string):
+            Image(systemName: string)
+        case let .resource(resource):
+            Image(resource)
+        }
+    }
+
+    var nsImage: NSImage {
+        switch self {
+        case let .systemImage(string):
+            let image = NSImage(systemSymbolName: string, accessibilityDescription: nil)
+            return image?.withSymbolConfiguration(.init(pointSize: 20, weight: .bold)) ?? image ?? NSImage()
+        case let .resource(resource):
+            return NSImage(resource: resource)
+        }
+    }
+}
+
 extension WindowAction {
-    var image: NSImage? {
+    var image: WindowActionImage? {
         switch direction {
         case .noAction:
-            NSImage(systemSymbolName: "questionmark", accessibilityDescription: nil)
+            .systemImage("questionmark")
         case .undo:
-            NSImage(systemSymbolName: "arrow.uturn.backward", accessibilityDescription: nil)
+            .systemImage("arrow.uturn.backward")
         case .initialFrame:
-            NSImage(systemSymbolName: "backward.end.alt.fill", accessibilityDescription: nil)
+            .systemImage("backward.end.fill")
         case .hide:
-            NSImage(systemSymbolName: "eye.slash.fill", accessibilityDescription: nil)
+            .systemImage("eye.slash")
         case .minimize:
-            NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)
+            .systemImage("arrow.down.right.and.arrow.up.left")
         case .minimizeOthers:
-            NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)
+            .systemImage("arrow.down.right.and.arrow.up.left")
         case .maximizeHeight:
-            NSImage(systemSymbolName: "arrow.up.and.down", accessibilityDescription: nil)
+            .systemImage("arrow.up.and.down")
         case .maximizeWidth:
-            NSImage(systemSymbolName: "arrow.left.and.right", accessibilityDescription: nil)
+            .systemImage("arrow.left.and.right")
         case .nextScreen:
-            NSImage(systemSymbolName: "forward.fill", accessibilityDescription: nil)
+            .systemImage("arrow.forward")
         case .previousScreen:
-            NSImage(systemSymbolName: "backward.fill", accessibilityDescription: nil)
+            .systemImage("arrow.backward")
         case .leftScreen:
-            NSImage(systemSymbolName: "arrow.left.to.line", accessibilityDescription: nil)
+            .systemImage("arrow.left.to.line")
         case .rightScreen:
-            NSImage(systemSymbolName: "arrow.right.to.line", accessibilityDescription: nil)
+            .systemImage("arrow.right.to.line")
         case .topScreen:
-            NSImage(systemSymbolName: "arrow.up.to.line", accessibilityDescription: nil)
+            .systemImage("arrow.up.to.line")
         case .bottomScreen:
-            NSImage(systemSymbolName: "arrow.down.to.line", accessibilityDescription: nil)
+            .systemImage("arrow.down.to.line")
         case .fillAvailableSpace, .larger, .scaleUp:
-            NSImage(systemSymbolName: "arrow.up.left.and.arrow.down.right", accessibilityDescription: nil)
+            .systemImage("arrow.up.left.and.arrow.down.right")
         case .smaller, .scaleDown:
-            NSImage(systemSymbolName: "arrow.down.right.and.arrow.up.left", accessibilityDescription: nil)
+            .systemImage("arrow.down.right.and.arrow.up.left")
         case .shrinkTop, .growBottom, .moveDown:
-            NSImage(systemSymbolName: "arrow.down", accessibilityDescription: nil)
+            .systemImage("arrow.down")
         case .shrinkBottom, .growTop, .moveUp:
-            NSImage(systemSymbolName: "arrow.up", accessibilityDescription: nil)
+            .systemImage("arrow.up")
         case .shrinkRight, .growLeft, .moveLeft:
-            NSImage(systemSymbolName: "arrow.left", accessibilityDescription: nil)
+            .systemImage("arrow.left")
         case .shrinkLeft, .growRight, .moveRight:
-            NSImage(systemSymbolName: "arrow.right", accessibilityDescription: nil)
+            .systemImage("arrow.right")
         case .shrinkHorizontal:
-            NSImage(systemSymbolName: "arrow.right.and.line.vertical.and.arrow.left", accessibilityDescription: nil)
+            .systemImage("arrow.right.and.line.vertical.and.arrow.left")
         case .growHorizontal:
-            NSImage(systemSymbolName: "arrow.left.and.line.vertical.and.arrow.right", accessibilityDescription: nil)
+            .systemImage("arrow.left.and.line.vertical.and.arrow.right")
         case .shrinkVertical:
-            NSImage(systemSymbolName: "arrow.down.and.line.horizontal.and.arrow.up", accessibilityDescription: nil)
+            .systemImage("arrow.down.and.line.horizontal.and.arrow.up")
         case .growVertical:
-            NSImage(systemSymbolName: "arrow.up.and.line.horizontal.and.arrow.down", accessibilityDescription: nil)
+            .systemImage("arrow.up.and.line.horizontal.and.arrow.down")
         case .focusLeft:
-            NSImage(systemSymbolName: "chevron.left", accessibilityDescription: nil)
+            .systemImage("chevron.left")
         case .focusRight:
-            NSImage(systemSymbolName: "chevron.right", accessibilityDescription: nil)
+            .systemImage("chevron.right")
         case .focusUp:
-            NSImage(systemSymbolName: "chevron.up", accessibilityDescription: nil)
+            .systemImage("chevron.up")
         case .focusDown:
-            NSImage(systemSymbolName: "chevron.down", accessibilityDescription: nil)
+            .systemImage("chevron.down")
         case .focusNextInStack:
-            NSImage(systemSymbolName: "rectangle.stack", accessibilityDescription: nil)
+            .systemImage("rectangle.stack")
         default:
             nil
         }
@@ -247,7 +271,7 @@ final class IconRenderView: NSView {
 
     private func determineDisplayMode(fillBounds: CGRect) -> DisplayMode? {
         if let image = currentAction.image {
-            return .image(image)
+            return .image(image.nsImage)
         }
 
         let frame = currentAction.getFrame(

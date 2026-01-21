@@ -196,10 +196,19 @@ struct RadialMenuView: View {
 
     @ViewBuilder
     private func overlayImage() -> some View {
-        if let image = viewModel.radialMenuImage {
-            image
-                .foregroundStyle(accentColorController.color1)
-                .font(.system(size: 20, weight: .bold))
+        ZStack {
+            if let image = viewModel.radialMenuImage {
+                if #available(macOS 26.0, *) {
+                    image
+                        .transition(.symbolEffect(.drawOn, options: .speed(2)))
+                        .contentTransition(.symbolEffect(.replace, options: .speed(2)))
+                } else {
+                    image
+                }
+            }
         }
+        .foregroundStyle(accentColorController.color1)
+        .font(.system(size: 20, weight: .bold))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

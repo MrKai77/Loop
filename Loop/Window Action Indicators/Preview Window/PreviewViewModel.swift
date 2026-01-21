@@ -16,7 +16,10 @@ final class PreviewViewModel: ObservableObject {
     @Published private(set) var isShown: Bool = false
     @Published private(set) var overrideCornerRadii: RectangleCornerRadii?
 
+    private let isSettingsPreview: Bool
+
     init(isSettingsPreview: Bool) {
+        self.isSettingsPreview = isSettingsPreview
         if isSettingsPreview {
             self.isShown = true
         }
@@ -37,7 +40,14 @@ final class PreviewViewModel: ObservableObject {
 
         let isCurrentlyHidden = !isShown
         let paddedFrame = context.targetFrame.padded
-        let shouldBecomeVisible = paddedFrame.size.area > 0
+
+        // In settings preview, actions that manipulate existing window frames (larger/smaller,
+        // grow/shrink, move) cannot be previewed without a real window.
+        let shouldBecomeVisible = if isSettingsPreview, context.action.willManipulateExistingWindowFrame {
+            false
+        } else {
+            paddedFrame.size.area > 0
+        }
 
         var newShownState: Bool = isShown
         var newComputedFrame: CGRect = computedFrame
