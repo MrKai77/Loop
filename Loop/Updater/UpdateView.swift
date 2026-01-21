@@ -212,13 +212,11 @@ struct UpdateView: View {
                 Task {
                     await Updater.shared.installUpdate()
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation(luminareAnimation) {
-                            isInstalling = false
-                        }
-                        withAnimation(luminareAnimation) {
-                            readyToRestart = true
-                        }
+                    try? await Task.sleep(for: .seconds(1))
+                    
+                    withAnimation(luminareAnimation) {
+                        isInstalling = false
+                        readyToRestart = true
                     }
                 }
             } label: {

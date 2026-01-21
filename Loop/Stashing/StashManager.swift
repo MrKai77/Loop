@@ -72,7 +72,7 @@ final class StashManager {
     private var lastRevealTime: [CGWindowID: Date] = [:]
     private var mouseMonitor: PassiveEventMonitor?
     private var frontmostAppMonitor: Task<(), Never>?
-    private var mouseMoveWorkItem: DispatchWorkItem?
+    private var mouseMovedTask: Task<(), Never>?
 
     // MARK: - Public methods
 
@@ -133,7 +133,7 @@ final class StashManager {
     }
 
     deinit {
-        mouseMoveWorkItem?.cancel()
+        mouseMovedTask?.cancel()
         stopListeningToRevealTriggers()
         restoreAllStashedWindows(animate: false)
     }
@@ -405,34 +405,37 @@ private extension StashManager {
 
     /// Handles mouse movement events with a debounce to avoid excessive processing.
     private func handleMouseMoved(cgEvent _: CGEvent) {
-        Task { @MainActor in
-            mouseMoveWorkItem?.cancel()
-            let workItem = DispatchWorkItem { [weak self] in self?.processMouseMovement() }
-            mouseMoveWorkItem = workItem
-            DispatchQueue.main.asyncAfter(deadline: .now() + mouseMovedDebounceInterval, execute: workItem)
+        mouseMovedTask?.cancel()
+        
+        mouseMovedTask = Task {
+            try? await Task.sleep(for: .seconds(mouseMovedDebounceInterval))
+            
+            guard !Task.isCancelled else {
+                return
+            }
+            
+            await processMouseMovement()
         }
     }
 
     /// Handles mouse movement events to reveal or hide stashed windows.
-    private func processMouseMovement() {
-        Task {
-            let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
-            let windows = getZSortedStashedWindows()
+    private func processMouseMovement() async {
+        let mouseLocation = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+        let windows = getZSortedStashedWindows()
 
-            for window in windows {
-                if store.isWindowRevealed(window.window.cgWindowID) {
-                    if shouldHide(window: window, for: mouseLocation) {
-                        await hideWindow(window)
-                    } else {
-                        break
-                    }
-                } else if isMouseOverStashed(window: window, location: mouseLocation) {
-                    // The cursor is over the topmost stashed window that should be revealed
-                    // revealWindow will move it on screen and hide any other revealed window.
-                    await revealWindow(window)
-                    // Only one window can be revealed at a time, so stop processing.
+        for window in windows {
+            if store.isWindowRevealed(window.window.cgWindowID) {
+                if shouldHide(window: window, for: mouseLocation) {
+                    await hideWindow(window)
+                } else {
                     break
                 }
+            } else if isMouseOverStashed(window: window, location: mouseLocation) {
+                // The cursor is over the topmost stashed window that should be revealed
+                // revealWindow will move it on screen and hide any other revealed window.
+                await revealWindow(window)
+                // Only one window can be revealed at a time, so stop processing.
+                break
             }
         }
     }

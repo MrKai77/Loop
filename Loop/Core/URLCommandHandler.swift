@@ -221,7 +221,9 @@ final class URLCommandHandler {
 
             // Schedule file deletion after a delay
             // We use a longer delay (60s) to ensure the user has time to read the content
-            DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [tempFile] in
+            Task {
+                try? await Task.sleep(for: .seconds(60))
+
                 do {
                     try FileManager.default.removeItem(at: tempFile)
                     Log.info("Cleaned up temporary file: \(tempFile.lastPathComponent)", category: .urlHandler)
@@ -433,17 +435,15 @@ final class URLCommandHandler {
         let script = parameters.joined(separator: " ")
         writeToOutput("[URLHandler] Executing AppleScript: \(script)")
 
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        Task { @concurrent in
             var error: NSDictionary?
             let result = NSAppleScript(source: script)?.executeAndReturnError(&error)
 
-            DispatchQueue.main.async {
-                if let error {
-                    self?.writeToOutput("[URLHandler] Error executing AppleScript: \(error)")
-                } else if let result {
-                    self?.writeToOutput("[URLHandler] AppleScript executed successfully")
-                    self?.writeToOutput("[URLHandler] Result: \(result.stringValue ?? "no output")")
-                }
+            if let error {
+                writeToOutput("[URLHandler] Error executing AppleScript: \(error)")
+            } else if let result {
+                writeToOutput("[URLHandler] AppleScript executed successfully")
+                writeToOutput("[URLHandler] Result: \(result.stringValue ?? "no output")")
             }
         }
     }
@@ -731,12 +731,12 @@ final class URLCommandHandler {
             app.activate(options: .activateIgnoringOtherApps)
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.writeToOutput("[URLHandler] Executing resize operation")
-            Task {
-                _ = await WindowActionEngine.apply(action, window: window, screen: screen)
-            }
-            self?.writeToOutput("[URLHandler] New window frame: \(window.frame)")
+        Task {
+            try? await Task.sleep(for: .seconds(0.1))
+
+            writeToOutput("[URLHandler] Executing resize operation")
+            _ = await WindowActionEngine.apply(action, window: window, screen: screen)
+            writeToOutput("[URLHandler] New window frame: \(window.frame)")
         }
     }
 

@@ -51,7 +51,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
         AppDelegate.requestNotificationAuthorization()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        Task {
+            try? await Task.sleep(for: .seconds(0.5))
             AccessibilityManager.requestAccess()
         }
 
