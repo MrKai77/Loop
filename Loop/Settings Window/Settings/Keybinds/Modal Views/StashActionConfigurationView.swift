@@ -66,7 +66,7 @@ struct StashActionConfigurationView: View {
                                 for: action,
                                 window: nil,
                                 bounds: CGRect(origin: .zero, size: geo.size)
-                            ).raw
+                            )
 
                             blurredWindow()
                                 .frame(width: frame.width, height: frame.height)

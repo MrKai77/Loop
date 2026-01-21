@@ -36,7 +36,9 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
         window == top && window == bottom && window == right && window == left
     }
 
-    func applyTo(bounds: CGRect) -> CGRect {
+    func applyToBounds(
+        _ bounds: CGRect
+    ) -> CGRect {
         bounds
             .padding(.leading, left)
             .padding(.trailing, right)
@@ -52,14 +54,15 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
     ///   - action: The window action, used to determine padding behavior.
     ///   - window: The window being resized, if any.
     /// - Returns: The frame with padding applied.
-    func apply(to frame: CGRect, bounds: CGRect, action: WindowAction, window: Window?) -> CGRect {
+    func applyToWindow(
+        frame: CGRect,
+        paddedBounds bounds: CGRect,
+        action: WindowAction,
+        window: Window?
+    ) -> CGRect {
         guard bounds.width > 0, bounds.height > 0 else { return frame }
 
-        // Calculate padded working area
-        let paddedBounds = applyTo(bounds: bounds)
-
-        // Scale the frame proportionally from non-padded bounds to padded bounds
-        var result = frame.scale(inside: paddedBounds, from: bounds).integral
+        var result = frame
         
         // Handle non-resizable windows by centering within the frame (no size changes)
         if let window, window.isResizable == false {
@@ -72,9 +75,13 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
         }
 
         // Apply inner padding if applicable
-        guard action.isPaddingApplicable else { return result }
+        guard action.isInnerPaddingApplicable else { return result }
 
-        result = applyInnerPadding(to: result, paddedBounds: paddedBounds, action: action)
+        result = applyInnerPadding(
+            to: result,
+            paddedBounds: bounds,
+            action: action
+        )
 
         return result
     }

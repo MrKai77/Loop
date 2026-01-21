@@ -162,7 +162,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     }
 
     /// Determines if padding can be applied to the action.
-    var isPaddingApplicable: Bool {
+    var isInnerPaddingApplicable: Bool {
         if direction == .undo || direction == .initialFrame {
             return false
         }

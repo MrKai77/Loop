@@ -234,7 +234,7 @@ extension StashManager {
                 for: action,
                 window: window.window,
                 bounds: window.screen.cgSafeScreenFrame
-            ).raw
+            )
 
             if resetFrameAnimated {
                 Task {

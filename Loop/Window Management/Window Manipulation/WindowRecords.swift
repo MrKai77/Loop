@@ -67,7 +67,7 @@ enum WindowRecords {
             let windowFrame = window.frame
             let adjustedBounds = PaddingConfiguration
                 .getConfiguredPadding(for: screen)
-                .applyTo(bounds: screen.cgSafeScreenFrame)
+                .applyToBounds(screen.cgSafeScreenFrame)
 
             let proportionalSize = CGRect(
                 x: (windowFrame.minX - adjustedBounds.minX) / adjustedBounds.width,

@@ -278,7 +278,7 @@ final class IconRenderView: NSView {
             for: currentAction,
             window: nil,
             bounds: .init(origin: .zero, size: .init(width: 1, height: 1))
-        ).raw.flipY(maxY: 1)
+        ).flipY(maxY: 1)
 
         if frame.size.area != 0 {
             let fillFrame = CGRect(

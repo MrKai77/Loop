@@ -10,7 +10,7 @@ import Scribe
 import SwiftUI
 
 enum WindowFrameResolver {
-    typealias FrameResult = (frame: ResizeContext.ComputedFrame, sidesToAdjust: Edge.Set?)
+    typealias FrameResult = (frame: CGRect, sidesToAdjust: Edge.Set?)
 
     /// Convenience method that calculates a frame without requiring an external resize context.
     /// Use this for UI previews, icon generation, and other cases that don't need to track resize state.
@@ -23,7 +23,7 @@ enum WindowFrameResolver {
         for action: WindowAction,
         window: Window?,
         bounds: CGRect
-    ) -> ResizeContext.ComputedFrame {
+    ) -> CGRect {
         let context = ResizeContext(window: window, bounds: bounds, action: action)
         return getFrame(resizeContext: context).frame
     }
@@ -35,13 +35,13 @@ enum WindowFrameResolver {
     static func getFrame(resizeContext: ResizeContext) -> FrameResult {
         let action = resizeContext.action
         let window = resizeContext.window
-        let bounds = resizeContext.bounds
+        let bounds = resizeContext.paddedBounds
         let direction = action.direction
 
         let noFrameActions: [WindowDirection] = [.noAction, .noSelection, .cycle, .minimize, .hide]
         guard !noFrameActions.contains(direction), !direction.willFocusWindow else {
             let zeroFrame = CGRect(origin: bounds.center, size: .zero)
-            return (ResizeContext.ComputedFrame(zeroFrame), nil)
+            return (zeroFrame, nil)
         }
 
         var sidesToAdjust: Edge.Set? = if action.willManipulateExistingWindowFrame {
@@ -62,7 +62,7 @@ enum WindowFrameResolver {
             result = CGRect(origin: bounds.center, size: .zero)
         }
 
-        return (ResizeContext.ComputedFrame(result), sidesToAdjust)
+        return (result, sidesToAdjust)
     }
 }
 
@@ -371,7 +371,7 @@ extension WindowFrameResolver {
                 for: previousAction,
                 window: window,
                 bounds: bounds
-            ).raw
+            )
         } else {
             Log.info("Didn't find frame to undo; using current frame", category: .windowAction)
             return window.frame

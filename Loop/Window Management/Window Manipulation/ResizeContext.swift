@@ -19,7 +19,9 @@ final class ResizeContext {
 
     private(set) var screen: NSScreen?
     private(set) var bounds: CGRect
+
     private(set) var padding: PaddingConfiguration = .zero
+    private(set) var paddedBounds: CGRect
 
     private(set) var action: WindowAction = .init(.noSelection)
     private(set) var parentAction: WindowAction?
@@ -40,10 +42,14 @@ final class ResizeContext {
         initialMousePosition: CGPoint = .zero
     ) {
         self.window = window
-        self.cachedTargetFrame = ComputedFrame(initialFrame ?? window?.frame ?? .zero)
+        let frame = initialFrame ?? window?.frame ?? .zero
+        self.cachedTargetFrame = ComputedFrame(raw: frame, padded: frame)
         self.screen = screen
-        self.bounds = bounds ?? screen?.cgSafeScreenFrame ?? .zero
-        self.padding = PaddingConfiguration.getConfiguredPadding(for: screen)
+        let bounds = bounds ?? screen?.cgSafeScreenFrame ?? .zero
+        self.bounds = bounds
+        let padding = PaddingConfiguration.getConfiguredPadding(for: screen)
+        self.padding = padding
+        self.paddedBounds = padding.applyToBounds(bounds)
         self.action = action
         self.parentAction = parentAction
         self.initialMousePosition = initialMousePosition
@@ -54,6 +60,7 @@ final class ResizeContext {
         self.screen = screen
         bounds = screen?.cgSafeScreenFrame ?? .zero
         padding = PaddingConfiguration.getConfiguredPadding(for: screen)
+        paddedBounds = padding.applyToBounds(bounds)
         needsRecompute = true
     }
 
@@ -80,13 +87,14 @@ final class ResizeContext {
 
     private func recomputeTargetFrame() {
         let result = WindowFrameResolver.getFrame(resizeContext: self)
-        let rawFrame = result.frame.raw
-
-        // Apply padding if configured
-        let paddedFrame = padding.apply(to: rawFrame, bounds: bounds, action: action, window: window)
-//        } else {
-//            rawFrame
-//        }
+        
+        let rawFrame = result.frame
+        let paddedFrame = padding.applyToWindow(
+            frame: rawFrame,
+            paddedBounds: paddedBounds,
+            action: action,
+            window: window
+        )
 
         cachedTargetFrame = ComputedFrame(raw: rawFrame, padded: paddedFrame)
         needsRecompute = false
@@ -100,7 +108,7 @@ extension ResizeContext {
     /// Holds both the raw (non-padded) and padded target frames for a resize operation.
     struct ComputedFrame: Equatable {
         /// The frame calculated without any padding applied.
-        var raw: CGRect
+        let raw: CGRect
 
         /// The frame with padding applied (outer bounds padding + inner window padding).
         /// When no padding is configured, this equals `raw`.
@@ -111,12 +119,6 @@ extension ResizeContext {
         init(raw: CGRect, padded: CGRect) {
             self.raw = raw
             self.padded = padded
-        }
-
-        /// Creates a ComputedFrame where both raw and padded are the same (no padding case).
-        init(_ frame: CGRect) {
-            self.raw = frame
-            self.padded = frame
         }
     }
 }
