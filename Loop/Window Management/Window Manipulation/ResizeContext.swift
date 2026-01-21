@@ -60,6 +60,8 @@ final class ResizeContext {
     func setWindow(to window: Window?) {
         self.window = window
         needsRecompute = true
+        
+        log.info("Set window to \(window?.description ?? "nil")")
     }
 
     func setAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
@@ -81,11 +83,10 @@ final class ResizeContext {
         let rawFrame = result.frame.raw
 
         // Apply padding if configured
-        let paddedFrame = if padding != .zero {
-            padding.apply(to: rawFrame, bounds: bounds, action: action, window: window)
-        } else {
-            rawFrame
-        }
+        let paddedFrame = padding.apply(to: rawFrame, bounds: bounds, action: action, window: window)
+//        } else {
+//            rawFrame
+//        }
 
         cachedTargetFrame = ComputedFrame(raw: rawFrame, padded: paddedFrame)
         needsRecompute = false

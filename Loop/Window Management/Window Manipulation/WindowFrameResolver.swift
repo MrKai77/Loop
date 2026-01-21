@@ -56,7 +56,7 @@ enum WindowFrameResolver {
             bounds: bounds,
             sidesToAdjust: &sidesToAdjust,
             resizeContext: resizeContext
-        )
+        ).integral
 
         if result.size.width < 0 || result.size.height < 0 || !result.isFinite {
             result = CGRect(origin: bounds.center, size: .zero)

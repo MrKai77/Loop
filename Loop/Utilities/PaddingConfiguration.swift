@@ -59,29 +59,16 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
         let paddedBounds = applyTo(bounds: bounds)
 
         // Scale the frame proportionally from non-padded bounds to padded bounds
-        let relativeX = (frame.minX - bounds.minX) / bounds.width
-        let relativeY = (frame.minY - bounds.minY) / bounds.height
-        let relativeWidth = frame.width / bounds.width
-        let relativeHeight = frame.height / bounds.height
-
-        var result = CGRect(
-            x: paddedBounds.minX + paddedBounds.width * relativeX,
-            y: paddedBounds.minY + paddedBounds.height * relativeY,
-            width: paddedBounds.width * relativeWidth,
-            height: paddedBounds.height * relativeHeight
-        )
-
-        // Convert to integer rects for AX API (only for non-manipulating actions)
-        if !action.willManipulateExistingWindowFrame {
-            let integerPaddedBounds = paddedBounds.integerRect()
-            result = result.integerRect()
-
-            // Handle non-resizable windows by centering within the frame
-            if let window, window.isResizable == false {
-                return window.frame.size
-                    .center(inside: result)
-                    .pushInside(integerPaddedBounds)
-            }
+        var result = frame.scale(inside: paddedBounds, from: bounds).integral
+        
+        // Handle non-resizable windows by centering within the frame (no size changes)
+        if let window, window.isResizable == false {
+            let centeredFrame = window.frame.size
+                .center(inside: result)
+            
+            print(window.frame, centeredFrame)
+            
+            return centeredFrame
         }
 
         // Apply inner padding if applicable

@@ -188,15 +188,23 @@ extension CGRect {
 
         return result
     }
-
-    /// Returns a new rectangle with integer values for the origin and size.
-    /// - Returns: A new rectangle with integer values for the origin and size.
-    func integerRect() -> CGRect {
-        CGRect(
-            x: floor(minX),
-            y: floor(minY),
-            width: floor(width),
-            height: floor(height)
+    
+    func scale(
+        inside targetBounds: CGRect,
+        from originalBounds: CGRect
+    ) -> CGRect {
+        guard originalBounds.width > 0, originalBounds.height > 0 else { return self }
+        
+        let relativeWidth = self.width / originalBounds.width
+        let relativeHeight = self.height / originalBounds.height
+        let relativeMinX = (self.minX - originalBounds.minX) / originalBounds.width
+        let relativeMinY = (self.minY - originalBounds.minY) / originalBounds.height
+        
+        return CGRect(
+            x: targetBounds.minX + targetBounds.width * relativeMinX,
+            y: targetBounds.minY + targetBounds.height * relativeMinY,
+            width: targetBounds.width * relativeWidth,
+            height: targetBounds.height * relativeHeight
         )
     }
 
