@@ -233,7 +233,7 @@ extension StashManager {
             let initialFrame = action.getFrame(
                 window: window.window,
                 bounds: window.screen.cgSafeScreenFrame
-            ).targetFrame
+            ).raw
 
             if resetFrameAnimated {
                 Task {

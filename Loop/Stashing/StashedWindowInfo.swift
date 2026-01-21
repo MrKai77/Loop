@@ -19,7 +19,7 @@ struct StashedWindowInfo: Equatable {
     /// Computes the frame for a stashed window.
     func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) -> CGRect {
         let bounds = screen.cgSafeScreenFrame
-        var frame = action.getFrame(window: window, bounds: bounds).targetFrame
+        var frame = action.getFrame(window: window, bounds: bounds).raw
 
         let minPeekSize: CGFloat = 1
         let maxPeekSize = frame.width * maxPeekPercent
@@ -38,6 +38,8 @@ struct StashedWindowInfo: Equatable {
     }
 
     func computeRevealedFrame() -> CGRect {
-        action.getFrame(window: window, bounds: screen.cgSafeScreenFrame).targetFrame
+        var context = ResizeContext.forDirectResize(window: window, screen: screen)
+        context.setAction(to: action, parent: nil)
+        return context.targetFrame.padded
     }
 }

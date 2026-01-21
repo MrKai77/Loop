@@ -29,7 +29,8 @@ enum WindowEngine {
         guard !quickActions.contains(context.action.direction) else { return nil }
 
         let willChangeScreens = ScreenUtility.screenContaining(window) != context.screen
-        Log.info("Resizing \(window) to \(context.targetFrame)", category: .windowEngine)
+        let targetFrame = context.targetFrame.padded
+        Log.info("Resizing \(window) to \(targetFrame)", category: .windowEngine)
 
         // Record first frame if needed
         WindowRecords.recordFirstIfNeeded(for: window)
@@ -74,14 +75,14 @@ enum WindowEngine {
             window.fullscreen = false
 
             if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
-                await resizeOwnWindow(targetFrame: context.targetFrame)
+                await resizeOwnWindow(targetFrame: targetFrame)
             } else {
                 let shouldAnimate = shouldAnimateResize(for: window, willChangeScreens: willChangeScreens)
 
                 do {
                     try await resizeWindow(
                         window,
-                        targetFrame: context.targetFrame,
+                        targetFrame: targetFrame,
                         bounds: context.bounds,
                         willChangeScreens: willChangeScreens,
                         ignorePadding: context.action.direction.willMove,
@@ -92,7 +93,7 @@ enum WindowEngine {
                 }
 
                 if Defaults[.moveCursorWithWindow] {
-                    CGWarpMouseCursorPosition(context.targetFrame.center)
+                    CGWarpMouseCursorPosition(targetFrame.center)
                 }
             }
         }

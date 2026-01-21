@@ -319,11 +319,12 @@ extension LoopManager {
                     if let lastAction = WindowRecords.getCurrentAction(for: targetWindow),
                        lastAction.getName() != screenSwitchingCustomActionName,
                        !lastAction.forceProportionalFrameOnScreenChange {
-                        resizeContext.setAction(to: lastAction, parent: nil)
+                        await resizeContext.setAction(to: lastAction, parent: nil)
                     } else {
                         let currentFrame = targetWindow.frame
 
-                        let adjustedBounds = resizeContext.padding
+                        let adjustedBounds = PaddingConfiguration
+                            .getConfiguredPadding(for: currentScreen)
                             .applyTo(bounds: currentScreen.cgSafeScreenFrame)
 
                         let proportionalSize = CGRect(

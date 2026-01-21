@@ -12,12 +12,7 @@ import SwiftUI
 @Loggable
 @MainActor
 final class RadialMenuController: WindowActionIndicator {
-    private var viewModel: RadialMenuViewModel = .init(
-        startingAction: .init(.noSelection),
-        window: nil,
-        previewMode: false
-    )
-
+    private var viewModel: RadialMenuViewModel = .init(isSettingsPreview: false)
     private var controller: NSWindowController?
 
     func open(context: ResizeContext) {

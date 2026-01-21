@@ -26,7 +26,7 @@ struct RadialMenuView: View {
     }
 
     private var shouldAppearActive: Bool {
-        !viewModel.previewMode || (viewModel.previewMode && appearsActive)
+        !viewModel.isSettingsPreview || (viewModel.isSettingsPreview && appearsActive)
     }
 
     var body: some View {
@@ -42,7 +42,7 @@ struct RadialMenuView: View {
         .animation(animationConfiguration.radialMenuSize, value: viewModel.currentAction)
         .animation(luminareAnimation, value: [accentColorController.color1, accentColorController.color2])
         .onAppear {
-            viewModel.setIsShown(true, animationDuration: viewModel.previewMode ? 0.0 : 0.1)
+            viewModel.setIsShown(true, animationDuration: viewModel.isSettingsPreview ? 0.0 : 0.1)
         }
     }
 

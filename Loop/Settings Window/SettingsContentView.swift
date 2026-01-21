@@ -75,7 +75,6 @@ struct SettingsContentView: View {
                         RadialMenuActionsGuide()
                     }
                 }
-                .compositingGroup()
                 .animation(animation, value: [model.showRadialMenu, model.showPreview])
                 .padding(12)
                 .frame(width: 520)

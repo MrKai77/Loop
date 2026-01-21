@@ -36,7 +36,8 @@ final class PreviewViewModel: ObservableObject {
         }
 
         let isCurrentlyHidden = !isShown
-        let shouldBecomeVisible = context.targetFrame.size.area > 0
+        let paddedFrame = context.targetFrame.padded
+        let shouldBecomeVisible = paddedFrame.size.area > 0
 
         var newShownState: Bool = isShown
         var newComputedFrame: CGRect = computedFrame
@@ -50,7 +51,7 @@ final class PreviewViewModel: ObservableObject {
         else if isCurrentlyHidden, shouldBecomeVisible {
             let startingFrame = computeStartingFrame(
                 for: Defaults[.previewStartingPosition],
-                targetFrame: context.targetFrame,
+                targetFrame: paddedFrame,
                 context: context
             )
 
@@ -58,12 +59,12 @@ final class PreviewViewModel: ObservableObject {
             computedFrame = startingFrame
 
             newShownState = true
-            newComputedFrame = context.targetFrame
+            newComputedFrame = paddedFrame
         }
 
         // Window is already visible and should stay visible - update frame
         else if !isCurrentlyHidden, shouldBecomeVisible {
-            newComputedFrame = context.targetFrame
+            newComputedFrame = paddedFrame
         }
 
         withAnimation(Defaults[.animationConfiguration].previewWindow) {

@@ -185,9 +185,9 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     /// - Minimizing the window (minimize)
     /// - Cycling through actions (cycle) - the selected action's angle will be used instead within the radial menu's selected action logic.
     ///
-    /// - Parameter window: the window to be manipulated. If `nil`, the angle will be calculated based on the screen center.
+    /// - Parameter context: the resize context containing the pre-computed target frame.
     /// - Returns: the angle to show in the radial menu, or `nil` if the action does not have a radial menu angle.
-    func radialMenuAngle(window: Window?) -> Angle? {
+    func radialMenuAngle(context: ResizeContext) -> Angle? {
         guard
             direction.frameMultiplyValues != nil,
             direction.hasRadialMenuAngle
@@ -195,102 +195,63 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             return nil
         }
 
-        let frame = CGRect(origin: .zero, size: .init(width: 1, height: 1))
-        let targetWindowFrame = getFrame(
-            window: window,
-            bounds: frame,
-            disablePadding: true
-        ).targetFrame
-        let angle = frame.center.angle(to: targetWindowFrame.center)
+        let bounds = context.bounds
+        let targetFrame = context.targetFrame.raw
+        let angle = bounds.center.angle(to: targetFrame.center)
         let result: Angle = angle * -1
 
         return result.normalized()
     }
+
+    typealias FrameResult = (frame: ResizeContext.ComputedFrame, sidesToAdjust: Edge.Set?)
 
     /// Convenience method that calculates a frame without requiring an external resize context.
     /// Use this for UI previews, icon generation, and other cases that don't need to track resize state.
     /// - Parameters:
     ///   - window: the window to be manipulated (can be nil for UI previews).
     ///   - bounds: the boundary within which the window should be manipulated.
-    ///   - disablePadding: whether to disable padding. `true` when calculating non-AX-usage frames.
-    /// - Returns: the calculated frame for the specified window action.
+    /// - Returns: the computed frame (raw, without padding).
     func getFrame(
         window: Window?,
-        bounds: CGRect,
-        disablePadding: Bool = false
-    ) -> ResizeContext {
+        bounds: CGRect
+    ) -> ResizeContext.ComputedFrame {
         let tempContext = ResizeContext.forPreview(window: window, bounds: bounds)
-        return getFrame(
-            disablePadding: disablePadding,
-            resizeContext: tempContext
-        )
+        return getFrame(resizeContext: tempContext).frame
     }
 
     /// Returns the frame for the specified window action using the provided resize context.
-    /// - Parameters:
-    ///   - disablePadding: whether to disable padding. `true` when calculating non-AX-usage frames, such as for angle calculations in radial menu or in config UI.
-    ///   - resizeContext: the context containing window, screen, bounds, and tracking frame/edge adjustment state.
-    /// - Returns: the calculated frame for the specified window action.
-    func getFrame(
-        disablePadding: Bool = false,
-        resizeContext: ResizeContext
-    ) -> ResizeContext {
-        var newContext = resizeContext
+    /// The returned frame is non-padded. Use `PaddingConfiguration.apply(to:bounds:action:window:)` to apply padding.
+    /// - Parameter resizeContext: the context containing window, screen, bounds, and tracking frame/edge adjustment state.
+    /// - Returns: a tuple containing the computed frame and the sides to adjust for grow/shrink actions.
+    func getFrame(resizeContext: ResizeContext) -> FrameResult {
         let window = resizeContext.window
-        let screen = resizeContext.screen
+        let bounds = resizeContext.bounds
 
         let noFrameActions: [WindowDirection] = [.noAction, .noSelection, .cycle, .minimize, .hide]
         guard !noFrameActions.contains(direction), !direction.willFocusWindow else {
-            newContext.targetFrame = CGRect(origin: resizeContext.bounds.center, size: .zero)
-            return newContext
+            let zeroFrame = CGRect(origin: bounds.center, size: .zero)
+            return (ResizeContext.ComputedFrame(zeroFrame), nil)
         }
 
-        if !willManipulateExistingWindowFrame {
-            newContext.sidesToAdjust = nil
+        var sidesToAdjust: Edge.Set? = if willManipulateExistingWindowFrame {
+            resizeContext.sidesToAdjust
+        } else {
+            nil
         }
 
-        let padding = disablePadding ? .zero : resizeContext.padding
-        var bounds = padding.applyTo(bounds: resizeContext.bounds)
         var result: CGRect = calculateTargetFrame(
             direction: direction,
             window: window,
             bounds: bounds,
-            padding: padding,
-            resizeContext: &newContext
+            sidesToAdjust: &sidesToAdjust,
+            resizeContext: resizeContext
         )
-
-        if !disablePadding {
-            if !willManipulateExistingWindowFrame {
-                /// Convert rects to integers as that's what the AX API works with to move windows
-                /// Only do this when `!willManipulateExistingWindowFrame`, as otherwise, the window will drift with consecutive calls.
-                bounds = bounds.integerRect()
-                result = result.integerRect()
-            }
-
-            // If window can't be resized, center it within the already-resized frame.
-            if let window, window.isResizable == false {
-                result = window.frame.size
-                    .center(inside: result)
-                    .pushInside(bounds)
-            } else {
-                // Apply padding between windows
-                if isPaddingApplicable {
-                    result = applyInnerPadding(
-                        windowFrame: result,
-                        bounds: bounds,
-                        screen: screen
-                    )
-                }
-            }
-        }
 
         if result.size.width < 0 || result.size.height < 0 || !result.isFinite {
             result = CGRect(origin: bounds.center, size: .zero)
         }
 
-        newContext.targetFrame = result
-
-        return newContext
+        return (ResizeContext.ComputedFrame(result), sidesToAdjust)
     }
 }
 
@@ -302,16 +263,15 @@ extension WindowAction {
     ///   - direction: the direction of the window action.
     ///   - window: the window to be manipulated.
     ///   - bounds: the bounds within which the window should be manipulated.
-    ///   - padding: the padding which will be applied to the computed frame.
-    ///   - isPreview: whether the action is being performed on a preview window.
+    ///   - sidesToAdjust: inout parameter for tracking which edges to adjust during grow/shrink actions.
     ///   - resizeContext: the context tracking frame and edge adjustment state.
     /// - Returns: the calculated target frame for the specified window action.
     private func calculateTargetFrame(
         direction: WindowDirection,
         window: Window?,
         bounds: CGRect,
-        padding: PaddingConfiguration,
-        resizeContext: inout ResizeContext
+        sidesToAdjust: inout Edge.Set?,
+        resizeContext: ResizeContext
     ) -> CGRect {
         var result: CGRect = .zero
 
@@ -324,19 +284,18 @@ extension WindowAction {
                 return window.frame
             }
 
-            let frameToResizeFrom = resizeContext.targetFrame
+            let frameToResizeFrom = resizeContext.targetFrame.raw
 
-            // calculateSizeAdjustment() will read resizeContext.sidesToAdjust, but we compute them here
+            // Compute which edges to adjust based on edges touching bounds
             let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
-            resizeContext.sidesToAdjust = .all.subtracting(edgesTouchingBounds)
+            sidesToAdjust = .all.subtracting(edgesTouchingBounds)
 
             let proportional: [WindowDirection] = [.scaleUp, .scaleDown]
             result = calculateSizeAdjustment(
                 frameToResizeFrom: frameToResizeFrom,
                 bounds: bounds,
                 proportionalIfPossible: proportional.contains(direction),
-                padding: padding,
-                resizeContext: resizeContext
+                sidesToAdjust: sidesToAdjust
             )
 
         } else if direction.willShrink || direction.willGrow {
@@ -346,33 +305,32 @@ extension WindowAction {
             }
 
             // This allows for control over each side
-            let frameToResizeFrom = resizeContext.targetFrame
+            let frameToResizeFrom = resizeContext.targetFrame.raw
 
-            // calculateSizeAdjustment() will read resizeContext.sidesToAdjust, but we compute them here
+            // Compute which edges to adjust based on direction
             switch direction {
             case .shrinkTop, .growTop:
-                resizeContext.sidesToAdjust = .top
+                sidesToAdjust = .top
             case .shrinkBottom, .growBottom:
-                resizeContext.sidesToAdjust = .bottom
+                sidesToAdjust = .bottom
             case .shrinkLeft, .growLeft:
-                resizeContext.sidesToAdjust = .leading
+                sidesToAdjust = .leading
             case .shrinkHorizontal, .growHorizontal:
-                resizeContext.sidesToAdjust = [.leading, .trailing]
+                sidesToAdjust = [.leading, .trailing]
             case .shrinkVertical, .growVertical:
-                resizeContext.sidesToAdjust = [.top, .bottom]
+                sidesToAdjust = [.top, .bottom]
             default:
-                resizeContext.sidesToAdjust = .trailing
+                sidesToAdjust = .trailing
             }
 
             result = calculateSizeAdjustment(
                 frameToResizeFrom: frameToResizeFrom,
                 bounds: bounds,
-                padding: padding,
-                resizeContext: resizeContext
+                sidesToAdjust: sidesToAdjust
             )
 
         } else if direction.willMove {
-            let frameToResizeFrom = resizeContext.targetFrame
+            let frameToResizeFrom = resizeContext.targetFrame.raw
 
             result = calculatePositionAdjustment(frameToResizeFrom: frameToResizeFrom)
 
@@ -392,10 +350,10 @@ extension WindowAction {
             result = getInitialFrame(window: window)
 
         } else if direction == .maximizeHeight, let window {
-            result = getMaximizeHeightFrame(window: window, bounds: bounds, padding: padding)
+            result = getMaximizeHeightFrame(window: window, bounds: bounds)
 
         } else if direction == .maximizeWidth, let window {
-            result = getMaximizeWidthFrame(window: window, bounds: bounds, padding: padding)
+            result = getMaximizeWidthFrame(window: window, bounds: bounds)
 
         } else if direction == .unstash, let window {
             result = getInitialFrame(window: window)
@@ -594,9 +552,8 @@ extension WindowAction {
 
             return previousAction.getFrame(
                 window: window,
-                bounds: bounds,
-                disablePadding: true
-            ).targetFrame
+                bounds: bounds
+            ).raw
         } else {
             Log.info("Didn't find frame to undo; using current frame", category: .windowAction)
             return window.frame
@@ -616,34 +573,30 @@ extension WindowAction {
     }
 
     /// Computes a new window frame with the maximum height that fits within the given bounds.
-    /// The provided padding is factored in to account for later adjustments.
     /// - Parameters:
     ///   - window: the window whose current frame is used as a reference.
     ///   - bounds: the area within which the window should be resized.
-    ///   - padding: the padding to be applied to the window.
     /// - Returns: a CGRect representing a frame that maximizes the window's height.
-    private func getMaximizeHeightFrame(window: Window, bounds: CGRect, padding: PaddingConfiguration) -> CGRect {
+    private func getMaximizeHeightFrame(window: Window, bounds: CGRect) -> CGRect {
         CGRect(
-            x: window.frame.minX - padding.window / 2,
+            x: window.frame.minX,
             y: bounds.minY,
-            width: window.frame.width + padding.window,
+            width: window.frame.width,
             height: bounds.height
         )
     }
 
     /// Computes a new window frame with the maximum width that fits within the given bounds.
-    /// The provided padding is factored in to account for later adjustments.
     /// - Parameters:
     ///   - window: the window whose current frame is used as a reference.
     ///   - bounds: the area within which the window should be resized.
-    ///   - padding: the padding to be applied to the window.
     /// - Returns: a CGRect representing a frame that maximizes the window's width.
-    private func getMaximizeWidthFrame(window: Window, bounds: CGRect, padding: PaddingConfiguration) -> CGRect {
+    private func getMaximizeWidthFrame(window: Window, bounds: CGRect) -> CGRect {
         CGRect(
             x: bounds.minX,
-            y: window.frame.minY - padding.window / 2,
+            y: window.frame.minY,
             width: bounds.width,
-            height: window.frame.height + padding.window
+            height: window.frame.height
         )
     }
 
@@ -730,21 +683,20 @@ extension WindowAction {
     ///   - frameToResizeFrom: the frame to apply the size adjustment to.
     ///   - bounds: the bounds within which the frame should be resized.
     ///   - proportionalIfPossible: if true and all edges are resized, scales proportionally about the center instead of insetting each side.
-    ///   - resizeContext: the context tracking frame and edge adjustment state.
+    ///   - sidesToAdjust: which edges to adjust during the resize.
     /// - Returns: the adjusted frame after applying the size adjustment based on the direction and bounds.
     private func calculateSizeAdjustment(
         frameToResizeFrom: CGRect,
         bounds: CGRect,
         proportionalIfPossible: Bool = false,
-        padding: PaddingConfiguration,
-        resizeContext: ResizeContext
+        sidesToAdjust: Edge.Set?
     ) -> CGRect {
         let step = Defaults[.sizeIncrement] * ((direction == .larger || direction == .scaleUp || direction.willGrow) ? -1 : 1)
 
         let previewPadding = Defaults[.previewPadding]
         let minSize = CGSize(
-            width: padding.left + padding.right + previewPadding + 100,
-            height: padding.totalTopPadding + padding.bottom + previewPadding + 100
+            width: previewPadding + 100,
+            height: previewPadding + 100
         )
 
         func insetAllEdges(_ rect: CGRect) -> CGRect {
@@ -786,7 +738,7 @@ extension WindowAction {
 
         var result = frameToResizeFrom
 
-        if let edges = resizeContext.sidesToAdjust {
+        if let edges = sidesToAdjust {
             let resizeAllEdges = edges.isEmpty || edges.contains(.all)
 
             if resizeAllEdges {
@@ -808,8 +760,8 @@ extension WindowAction {
         result = result
             .intersection(bounds)
 
-        if result.size.approximatelyEqual(to: resizeContext.targetFrame.size, tolerance: 2) {
-            result = resizeContext.targetFrame
+        if result.size.approximatelyEqual(to: frameToResizeFrom.size, tolerance: 2) {
+            result = frameToResizeFrom
         }
 
         return result
@@ -832,66 +784,6 @@ extension WindowAction {
         }
 
         return result
-    }
-
-    /// Applies inner padding to the specified window frame based on the direction and bounds.
-    /// "Inner padding" is the padding applied to the sides of the window frame, which aren't touching the side of the screen.
-    /// - Parameters:
-    ///   - windowFrame: the frame of the window to which padding will be applied.
-    ///   - bounds: the bounds within which the window should be padded.
-    ///   - screen: the screen on which the bounds are located. This is used to determine if padding should be applied based on the screen size (if applicable).
-    /// - Returns: the window frame with the specified padding applied.
-    private func applyInnerPadding(windowFrame: CGRect, bounds: CGRect, screen: NSScreen?) -> CGRect {
-        guard !direction.willMove else {
-            return windowFrame
-        }
-
-        var croppedWindowFrame = windowFrame.intersection(bounds)
-
-        let paddingMinimumScreenSize = Defaults[.paddingMinimumScreenSize]
-        if paddingMinimumScreenSize != .zero,
-           screen?.diagonalSize ?? .zero < paddingMinimumScreenSize {
-            return windowFrame
-        }
-
-        guard
-            !willManipulateExistingWindowFrame,
-            Defaults[.enablePadding]
-        else {
-            return croppedWindowFrame
-        }
-
-        let padding = PaddingConfiguration
-            .getConfiguredPadding(for: screen)
-        let halfPadding = padding.window / 2
-
-        if direction == .macOSCenter,
-           windowFrame.height >= bounds.height {
-            croppedWindowFrame.origin.y = bounds.minY
-            croppedWindowFrame.size.height = bounds.height
-        }
-
-        if direction == .center || direction == .macOSCenter {
-            return croppedWindowFrame
-        }
-
-        if abs(croppedWindowFrame.minX - bounds.minX) > 1 {
-            croppedWindowFrame = croppedWindowFrame.padding(.leading, halfPadding)
-        }
-
-        if abs(croppedWindowFrame.maxX - bounds.maxX) > 1 {
-            croppedWindowFrame = croppedWindowFrame.padding(.trailing, halfPadding)
-        }
-
-        if abs(croppedWindowFrame.minY - bounds.minY) > 1 {
-            croppedWindowFrame = croppedWindowFrame.padding(.top, halfPadding)
-        }
-
-        if abs(croppedWindowFrame.maxY - bounds.maxY) > 1 {
-            croppedWindowFrame = croppedWindowFrame.padding(.bottom, halfPadding)
-        }
-
-        return croppedWindowFrame
     }
 }
 

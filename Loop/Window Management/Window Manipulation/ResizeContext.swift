@@ -8,6 +8,33 @@
 import Scribe
 import SwiftUI
 
+// MARK: - ComputedFrame
+
+extension ResizeContext {
+    /// Holds both the raw (non-padded) and padded target frames for a resize operation.
+    struct ComputedFrame: Equatable {
+        /// The frame calculated without any padding applied.
+        var raw: CGRect
+
+        /// The frame with padding applied (outer bounds padding + inner window padding).
+        /// When no padding is configured, this equals `raw`.
+        var padded: CGRect
+
+        static let zero = ComputedFrame(raw: .zero, padded: .zero)
+
+        init(raw: CGRect, padded: CGRect) {
+            self.raw = raw
+            self.padded = padded
+        }
+
+        /// Creates a ComputedFrame where both raw and padded are the same (no padding case).
+        init(_ frame: CGRect) {
+            self.raw = frame
+            self.padded = frame
+        }
+    }
+}
+
 // MARK: - ResizeContext
 
 /// Holds transient state for a window resize operation.
@@ -16,7 +43,7 @@ import SwiftUI
 @Loggable
 struct ResizeContext {
     private(set) var window: Window?
-    var targetFrame: CGRect = .zero
+    var targetFrame: ComputedFrame = .zero
 
     private(set) var screen: NSScreen?
     private(set) var bounds: CGRect
@@ -30,7 +57,7 @@ struct ResizeContext {
 
     private init(
         window: Window?,
-        targetFrame: CGRect,
+        targetFrame: ComputedFrame,
         screen: NSScreen?,
         bounds: CGRect,
         padding: PaddingConfiguration,
@@ -56,7 +83,7 @@ struct ResizeContext {
     ) -> ResizeContext {
         ResizeContext(
             window: window,
-            targetFrame: initialFrame,
+            targetFrame: ComputedFrame(initialFrame),
             screen: nil,
             bounds: .zero,
             padding: .zero,
@@ -72,9 +99,10 @@ struct ResizeContext {
         screen: NSScreen
     ) -> ResizeContext {
         let padding = PaddingConfiguration.getConfiguredPadding(for: screen)
+        let initialFrame = window?.frame ?? .zero
         return ResizeContext(
             window: window,
-            targetFrame: window?.frame ?? .zero,
+            targetFrame: ComputedFrame(initialFrame),
             screen: screen,
             bounds: screen.cgSafeScreenFrame,
             padding: padding,
@@ -89,9 +117,10 @@ struct ResizeContext {
         window: Window?,
         bounds: CGRect
     ) -> ResizeContext {
-        ResizeContext(
+        let initialFrame = window?.frame ?? .zero
+        return ResizeContext(
             window: window,
-            targetFrame: window?.frame ?? .zero,
+            targetFrame: ComputedFrame(initialFrame),
             screen: nil,
             bounds: bounds,
             padding: .zero,
@@ -107,9 +136,14 @@ struct ResizeContext {
         parentAction: WindowAction?,
         bounds: CGRect
     ) -> ResizeContext {
-        var context = ResizeContext(
+        let rawFrame = action.getFrame(
             window: nil,
-            targetFrame: .zero,
+            bounds: bounds
+        ).raw
+
+        return ResizeContext(
+            window: nil,
+            targetFrame: ComputedFrame(rawFrame),
             screen: nil,
             bounds: bounds,
             padding: .zero,
@@ -117,13 +151,6 @@ struct ResizeContext {
             parentAction: parentAction,
             initialMousePosition: .zero
         )
-        // Compute target frame based on bounds
-        context.targetFrame = action.getFrame(
-            window: nil,
-            bounds: bounds,
-            disablePadding: true
-        ).targetFrame
-        return context
     }
 
     mutating func setScreen(to screen: NSScreen?) {
@@ -140,7 +167,18 @@ struct ResizeContext {
         action = newAction
         parentAction = newParentAction
 
-        targetFrame = action.getFrame(resizeContext: self).targetFrame
-        log.info("Cached new target frame: \(targetFrame) for action: \(action)")
+        let result = action.getFrame(resizeContext: self)
+        let rawFrame = result.frame.raw
+        sidesToAdjust = result.sidesToAdjust
+
+        // Apply padding if configured
+        let paddedFrame = if padding != .zero {
+            padding.apply(to: rawFrame, bounds: bounds, action: action, window: window)
+        } else {
+            rawFrame
+        }
+
+        targetFrame = ComputedFrame(raw: rawFrame, padded: paddedFrame)
+        log.info("Cached target frame - padded: \(targetFrame.padded), raw: \(targetFrame.raw) for action: \(action)")
     }
 }

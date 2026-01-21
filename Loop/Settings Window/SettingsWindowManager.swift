@@ -66,7 +66,7 @@ final class SettingsWindowManager: ObservableObject {
     private init() {
         let startingAction: WindowAction = .init(.noAction)
 
-        self.radialMenuViewModel = .init(startingAction: startingAction, window: nil, previewMode: true)
+        self.radialMenuViewModel = .init(isSettingsPreview: true)
         self.previewViewModel = .init(isSettingsPreview: true)
 
         if let firstAction = RadialMenuAction.userConfiguredActions.first?.resolved {
@@ -133,7 +133,7 @@ final class SettingsWindowManager: ObservableObject {
             try await Task.sleep(for: .seconds(1))
 
             while !Task.isCancelled {
-                if controller?.window?.isKeyWindow == true {
+                if NSApp.isActive {
                     setNextPreviewedAction()
                 }
 

@@ -64,9 +64,8 @@ struct StashActionConfigurationView: View {
                         if action.sizeMode == .custom {
                             let frame = action.getFrame(
                                 window: nil,
-                                bounds: CGRect(origin: .zero, size: geo.size),
-                                disablePadding: true
-                            ).targetFrame
+                                bounds: CGRect(origin: .zero, size: geo.size)
+                            ).raw
 
                             blurredWindow()
                                 .frame(width: frame.width, height: frame.height)
