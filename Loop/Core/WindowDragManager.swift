@@ -20,6 +20,8 @@ final class WindowDragManager {
     private var draggingWindow: Window?
     private var initialWindowFrame: CGRect?
     private var direction: WindowDirection = .noAction
+    // Avoid repeated window resolution attempts during a non-window drag (e.g. in games).
+    private var didFailToResolveDraggedWindow: Bool = false
 
     private let previewController = PreviewController()
 
@@ -31,6 +33,13 @@ final class WindowDragManager {
 
     private var currentMousePosition: CGPoint {
         NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+    }
+
+    // Avoid running global drag logic unless a feature actually depends on it.
+    private var shouldMonitorDragActions: Bool {
+        Defaults[.windowSnapping] ||
+            Defaults[.restoreWindowFrameOnDrag] ||
+            !Defaults[.stashManagerStashedWindows].isEmpty
     }
 
     @MainActor
@@ -64,9 +73,6 @@ final class WindowDragManager {
         leftMouseDraggedMonitor.start()
         leftMouseUpMonitor.start()
 
-        leftMouseDraggedMonitor.start()
-        leftMouseUpMonitor.start()
-
         self.leftMouseDraggedMonitor = leftMouseDraggedMonitor
         self.leftMouseUpMonitor = leftMouseUpMonitor
     }
@@ -80,6 +86,10 @@ final class WindowDragManager {
     }
 
     private func leftMouseDragged(event _: CGEvent) {
+        guard shouldMonitorDragActions else {
+            return
+        }
+
         Task { @MainActor in
             guard let initialMousePosition else {
                 initialMousePosition = currentMousePosition
@@ -95,7 +105,7 @@ final class WindowDragManager {
             }
 
             // Process window (only ONCE during a window drag)
-            if draggingWindow == nil {
+            if draggingWindow == nil, !didFailToResolveDraggedWindow {
                 setCurrentDraggingWindow()
             }
 
@@ -135,11 +145,10 @@ final class WindowDragManager {
                 }
             }
 
-            self.previewController.close()
-            self.draggingWindow = nil
-
             previewController.close()
             draggingWindow = nil
+
+            resetDragState()
         }
     }
 
@@ -158,14 +167,26 @@ final class WindowDragManager {
                 let draggingWindow = try? WindowUtility.windowAtPosition(currentMousePosition),
                 !draggingWindow.isAppExcluded
             else {
+                didFailToResolveDraggedWindow = true
                 return
             }
 
             self.draggingWindow = draggingWindow
             initialWindowFrame = draggingWindow.frame
+            didFailToResolveDraggedWindow = false
 
             Log.info("Determined window being dragged: \(draggingWindow.description)", category: .windowDragManager)
         }
+    }
+
+    private func resetDragState() {
+        initialMousePosition = nil
+        didPassDragDistanceThreshold = false
+        didFailToResolveDraggedWindow = false
+        initialWindowFrame = nil
+        direction = .noAction
+        determineDraggedWindowTask?.cancel()
+        determineDraggedWindowTask = nil
     }
 
     private func hasWindowMoved(_ windowFrame: CGRect, _ initialFrame: CGRect) -> Bool {
