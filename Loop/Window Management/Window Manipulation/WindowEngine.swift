@@ -11,7 +11,7 @@ import SwiftUI
 
 /// Handles execution of `WindowAction`s on windows within the user's workspace
 enum WindowEngine {
-    static var currentTask: Task<Void, any Error>?
+    static var currentTask: Task<(), any Error>?
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized
