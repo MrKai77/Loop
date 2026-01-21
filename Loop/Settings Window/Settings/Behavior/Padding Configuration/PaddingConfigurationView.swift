@@ -122,7 +122,7 @@ struct PaddingConfigurationView: View {
                 }
             ),
             in: range,
-            format: .number.precision(.fractionLength(0...0)),
+            format: .number.precision(.fractionLength(0...1)),
             clampsUpper: false,
             suffix: Text("px", comment: "Unit symbol: pixels")
         )
@@ -134,41 +134,41 @@ struct PaddingConfigurationView: View {
                 String(localized: "Top", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.top.doubleBinding,
                 in: range,
-                format: .number.precision(.fractionLength(0...0)),
+                format: .number.precision(.fractionLength(0...1)),
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 64))
+            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
             LuminareSlider(
                 String(localized: "Bottom", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.bottom.doubleBinding,
                 in: range,
-                format: .number.precision(.fractionLength(0...0)),
+                format: .number.precision(.fractionLength(0...1)),
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 64))
+            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
             LuminareSlider(
                 String(localized: "Right", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.right.doubleBinding,
                 in: range,
-                format: .number.precision(.fractionLength(0...0)),
+                format: .number.precision(.fractionLength(0...1)),
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 64))
+            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
             LuminareSlider(
                 String(localized: "Left", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.left.doubleBinding,
                 in: range,
-                format: .number.precision(.fractionLength(0...0)),
+                format: .number.precision(.fractionLength(0...1)),
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 64))
+            .luminareSliderLayout(.compact(textBoxWidth: 76))
         }
     }
 
@@ -178,16 +178,16 @@ struct PaddingConfigurationView: View {
                 String(localized: "Window gaps", comment: "Label for a slider in Loop’s padding settings"),
                 value: $paddingModel.window.doubleBinding,
                 in: range,
-                format: .number.precision(.fractionLength(0...0)),
+                format: .number.precision(.fractionLength(0...1)),
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
             )
-            .luminareSliderLayout(.compact(textBoxWidth: 64))
+            .luminareSliderLayout(.compact(textBoxWidth: 76))
 
             LuminareSlider(
                 value: $paddingModel.externalBar.doubleBinding,
                 in: range,
-                format: .number.precision(.fractionLength(0...0)),
+                format: .number.precision(.fractionLength(0...1)),
                 suffix: Text("px", comment: "Unit symbol: pixels")
             ) {
                 Text("External bar", comment: "Label for a slider in Loop’s padding settings")
@@ -197,7 +197,7 @@ struct PaddingConfigurationView: View {
                             .padding(6)
                     }
             }
-            .luminareSliderLayout(.compact(textBoxWidth: 64))
+            .luminareSliderLayout(.compact(textBoxWidth: 76))
         }
     }
 }

@@ -274,7 +274,8 @@ final class IconRenderView: NSView {
             return .image(image.nsImage)
         }
 
-        let frame = currentAction.getFrame(
+        let frame = WindowFrameResolver.getFrame(
+            for: currentAction,
             window: nil,
             bounds: .init(origin: .zero, size: .init(width: 1, height: 1))
         ).raw.flipY(maxY: 1)

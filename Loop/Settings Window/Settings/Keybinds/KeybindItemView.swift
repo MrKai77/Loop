@@ -32,7 +32,11 @@ struct KeybindItemView: View {
 
     /// Checks if there are any existing keybinds with the same key combination
     private var hasDuplicateKeybinds: Bool {
-        keybinds
+        if action.keybind.isEmpty {
+            return false
+        }
+
+        return keybinds
             .count { $0.keybind == action.keybind } > 1
     }
 

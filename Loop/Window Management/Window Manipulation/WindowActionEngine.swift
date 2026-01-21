@@ -73,7 +73,7 @@ enum WindowActionEngine {
         let appliedFrame = await WindowEngine.performResize(context: context)
 
         // Return the frame that should be stored (either from system WM or from calculation)
-        return .resized(frame: appliedFrame ?? context.targetFrame.padded)
+        return .resized(frame: appliedFrame ?? context.getTargetFrame().padded)
     }
 
     /// Simplified apply for callers that don't need resize context tracking (URL commands, drag snap, etc.)
@@ -89,7 +89,7 @@ enum WindowActionEngine {
         window: Window?,
         screen: NSScreen
     ) async -> Result {
-        var context = ResizeContext.forDirectResize(window: window, screen: screen)
+        var context = ResizeContext(window: window, screen: screen)
         context.setAction(to: action, parent: nil)
         return await apply(context: context)
     }

@@ -230,7 +230,8 @@ extension StashManager {
 
         if resetFrame {
             let action = WindowAction(.initialFrame)
-            let initialFrame = action.getFrame(
+            let initialFrame = WindowFrameResolver.getFrame(
+                for: action,
                 window: window.window,
                 bounds: window.screen.cgSafeScreenFrame
             ).raw

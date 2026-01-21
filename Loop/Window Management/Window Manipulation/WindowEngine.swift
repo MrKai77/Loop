@@ -29,7 +29,7 @@ enum WindowEngine {
         guard !quickActions.contains(context.action.direction) else { return nil }
 
         let willChangeScreens = ScreenUtility.screenContaining(window) != context.screen
-        let targetFrame = context.targetFrame.padded
+        let targetFrame = context.getTargetFrame().padded
         Log.info("Resizing \(window) to \(targetFrame)", category: .windowEngine)
 
         // Record first frame if needed

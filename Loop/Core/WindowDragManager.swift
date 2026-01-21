@@ -164,9 +164,8 @@ final class WindowDragManager {
             }
 
             initialWindowFrame = window.frame
-            resizeContext = .blank(
+            resizeContext = ResizeContext(
                 window: window,
-                initialFrame: window.frame,
                 initialMousePosition: currentMousePosition
             )
 

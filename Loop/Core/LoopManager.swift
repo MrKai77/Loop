@@ -16,11 +16,7 @@ final class LoopManager {
 
     /// Context for the current resize operation, tracking frame and edge adjustment state.
     /// Initialized when Loop opens with a target window and screen.
-    private(set) var resizeContext: ResizeContext = .blank(
-        window: nil,
-        initialFrame: .zero,
-        initialMousePosition: .zero
-    )
+    private(set) var resizeContext: ResizeContext = .init()
 
     private let windowActionCache = WindowActionCache()
     private let indicatorService = WindowActionIndicatorService()
@@ -155,7 +151,7 @@ extension LoopManager {
             .zero
         }
 
-        resizeContext = .blank(
+        resizeContext = ResizeContext(
             window: window,
             initialFrame: initialFrame,
             initialMousePosition: NSEvent.mouseLocation
