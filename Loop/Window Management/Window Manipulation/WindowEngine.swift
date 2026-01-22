@@ -11,6 +11,7 @@ import SwiftUI
 
 /// Handles execution of `WindowAction`s on windows within the user's workspace
 enum WindowEngine {
+    static var currentTask: Task<(), any Error>?
     /// Resize a Window
     /// - Parameters:
     ///   - window: Window to be resized
@@ -23,12 +24,15 @@ enum WindowEngine {
         on screen: NSScreen,
         completion: @escaping () -> () = {}
     ) {
-        Task.detached(priority: .userInitiated) {
+        currentTask?.cancel()
+        currentTask = Task.detached(priority: .userInitiated) {
             await resize(
                 window,
                 to: action,
                 on: screen
             )
+
+            try Task.checkCancellation()
 
             completion()
         }
@@ -222,10 +226,12 @@ enum WindowEngine {
             try await window.setFrameAnimated(targetFrame, bounds: bounds)
         } else {
             window.setFrame(targetFrame, sizeFirst: willChangeScreens)
+            try Task.checkCancellation()
         }
 
         if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
             window.setFrame(targetFrame)
+            try Task.checkCancellation()
         }
 
         handleSizeConstrainedWindow(window: window, bounds: bounds)

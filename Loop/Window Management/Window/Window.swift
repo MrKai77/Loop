@@ -402,6 +402,7 @@ final class Window {
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(), Error>) in
             Task {
+                try Task.checkCancellation()
                 let animation = WindowTransformAnimation(
                     rect,
                     window: self,

@@ -88,6 +88,9 @@ jobs:
             -destination 'generic/platform=macOS' \
             -archivePath dist/Loop.xcarchive \
             -allowProvisioningUpdates \
+            -skipMacroValidation \
+            -skipPackagePluginValidation \
+            -showBuildTimingSummary \
             | xcbeautify
 
       - name: 🥡 Export Loop.app

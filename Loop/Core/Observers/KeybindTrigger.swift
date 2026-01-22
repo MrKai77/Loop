@@ -103,6 +103,7 @@ final class KeybindTrigger {
 
             // If this is a valid event, don't passthrough
             let result = performKeybind(
+                keyCode: keyCode,
                 type: event.type,
                 isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
                 flags: filteredFlags,
@@ -148,7 +149,7 @@ final class KeybindTrigger {
     ///   - flags: modifier flags associated with this event.
     ///   - isLoopOpen: whether Loop is currently open.
     /// - Returns: whether this event was processed by Loop.
-    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
+    private func performKeybind(keyCode: CGKeyCode, type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
         let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
         let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
         let actionKeys: Set<CGKeyCode> = Set(allPressedKeys.subtracting(triggerKey).map(\.baseModifier))
@@ -172,7 +173,12 @@ final class KeybindTrigger {
 
         if type != .keyUp { // keyDown for flagsChanged
             if containsTrigger {
-                if let action = windowActionCache.actionsByKeybind[actionKeys] {
+                // Try an match directly with the action keys first, then fallback to just the key code.
+                // This prevents failures when the user is tapping the keys in rapid succession.
+                let initalMatch = windowActionCache.actionsByKeybind[actionKeys]
+                let fallbackMatch = windowActionCache.actionsByKeybind[[keyCode]]
+
+                if let action = initalMatch ?? fallbackMatch {
                     if !isARepeat || action.canRepeat {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
