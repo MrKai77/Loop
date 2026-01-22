@@ -23,8 +23,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         configureLogging()
 
+        // Check for and terminate other running Loop instances to prevent accessibility conflicts
+        terminateOtherLoopInstances()
+
         Task {
             await Defaults.iCloud.waitForSyncCompletion()
+        }
+
+        // Wait for other instances to terminate before proceeding with TCC operations
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            AccessibilityManager.setupPermissions()
         }
 
         if !launchedAsLoginItem {
@@ -51,10 +59,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
         AppDelegate.requestNotificationAuthorization()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            AccessibilityManager.requestAccess()
-        }
-
         // Register for URL handling
         NSAppleEventManager.shared().setEventHandler(
             self,
@@ -62,6 +66,46 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             forEventClass: AEEventClass(kInternetEventClass),
             andEventID: AEEventID(kAEGetURL)
         )
+    }
+
+    /// Terminates any other running instances of Loop to prevent accessibility permission conflicts.
+    private func terminateOtherLoopInstances() {
+        let currentProcessId = ProcessInfo.processInfo.processIdentifier
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop"
+
+        let runningApps = NSWorkspace.shared.runningApplications
+        let otherLoopInstances = runningApps.filter { app in
+            guard let appBundleId = app.bundleIdentifier,
+                  appBundleId == bundleId else {
+                return false
+            }
+
+            // Don't terminate ourselves
+            return app.processIdentifier != currentProcessId
+        }
+
+        guard !otherLoopInstances.isEmpty else {
+            Log.info("No other Loop instances found", category: .appDelegate)
+            return
+        }
+
+        Log.info("Found \(otherLoopInstances.count) other Loop instance(s), terminating them to prevent accessibility conflicts. TCC operations will be delayed.", category: .appDelegate)
+
+        for instance in otherLoopInstances {
+            Log.info("Terminating Loop instance (PID: \(instance.processIdentifier))", category: .appDelegate)
+            instance.terminate()
+
+            // If the instance doesn't terminate within 2 seconds, force terminate
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                if instance.isTerminated == false {
+                    Log.warn("Force terminating Loop instance (PID: \(instance.processIdentifier))", category: .appDelegate)
+                    instance.forceTerminate()
+                }
+            }
+        }
+
+        // Give the other instances time to terminate cleanly
+        Thread.sleep(forTimeInterval: 1.0)
     }
 
     /// Applies baseline logging configuration for Scribe.

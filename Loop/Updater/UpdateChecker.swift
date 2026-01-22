@@ -51,7 +51,7 @@ public class UpdateChecker: @unchecked Sendable {
 
         } catch {
             Log.error("Update check failed: \(error)")
-            throw UpdateError.networkError(error)
+            throw UpdateError.network(error)
         }
     }
 
@@ -110,42 +110,32 @@ public class UpdateChecker: @unchecked Sendable {
             // Parse from name field like "🧪 1.4.1 (1683)"
             let regex = /🧪\s+(\d+\.\d+\.\d+)\s+\((\d+)\)/
             if let match = release.name.firstMatch(of: regex) {
-                let cleanVersion = String(match.1)
-                let buildNumber = Int(String(match.2)) ?? 0
-                let plistVersion = cleanVersion
-                Log.debug("Parsed prerelease: comparison=\(cleanVersion), plist=\(plistVersion), build=\(buildNumber) from name='\(release.name)'")
-                return (cleanVersion, plistVersion, buildNumber)
+                let version = String(match.1)
+                let build = Int(String(match.2)) ?? 0
+                Log.debug("Parsed prerelease: version=\(version), build=\(build)")
+                return (version, version, build)
             }
-            // Fallback: try to extract version from tagName if it looks like a version
-            if release.tagName.contains(".") {
-                Log.debug("Using tagName as version for prerelease: \(release.tagName)")
-                return (release.tagName, release.tagName, 0)
-            }
-            Log.warn("Could not parse version from prerelease name: '\(release.name)'")
+            Log.warn("Could not parse prerelease version from: '\(release.name)'")
             return ("0.0.0", "0.0.0", 0)
         } else {
             // Stable release: tagName is the version
-            Log.debug("Stable release version: \(release.tagName)")
             return (release.tagName, release.tagName, 0)
         }
     }
 
     private func isNewerVersion(_ newVersion: String, buildNumber: Int, than currentVersion: String, currentBuild: Int) -> Bool {
-        // First compare versions
         let versionComparison = newVersion.compare(currentVersion, options: .numeric)
-        Log.debug("Version comparison: '\(newVersion)' vs '\(currentVersion)' = \(versionComparison.rawValue), builds: \(buildNumber) vs \(currentBuild)")
 
         if versionComparison == .orderedDescending {
-            Log.debug("Newer version: version is higher")
             return true
         } else if versionComparison == .orderedSame {
-            // Same version, compare build numbers
-            let isNewerBuild = buildNumber > currentBuild
-            Log.debug("Same version, build comparison: \(buildNumber) > \(currentBuild) = \(isNewerBuild)")
-            return isNewerBuild
+            // For same version, only consider it newer if:
+            // 1. The release has a meaningful build number (> 0), AND
+            // 2. That build number is actually higher than current
+            // This prevents stable releases with build=0 from triggering updates for dev builds
+            return buildNumber > 0 && buildNumber > currentBuild
         }
 
-        Log.debug("Older version")
         return false
     }
 }

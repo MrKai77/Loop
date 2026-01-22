@@ -27,11 +27,7 @@ public class UpdateInstaller: @unchecked Sendable {
     private var installationState: InstallationState = .idle
 
     private static let extractionQueue: DispatchQueue = .init(label: "com.loop.extraction", qos: .userInitiated)
-    private static let verificationQueue: DispatchQueue = .init(
-        label: "com.loop.verification",
-        qos: .userInitiated
-    )
-    private static let installationSteps: InstallationSteps = .init()
+    private static let verificationQueue: DispatchQueue = .init(label: "com.loop.verification", qos: .userInitiated)
 
     public init(config: UpdaterConfig, fileManager: FileManager = .default) {
         self.config = config
@@ -43,7 +39,6 @@ public class UpdateInstaller: @unchecked Sendable {
     public func installUpdate(from downloadURL: URL, manifest: UpdateManifest) async throws {
         Log.info("Starting installation of update: \(manifest.version)")
 
-        // Pre-installation safety checks
         try await performPreInstallationChecks(manifest: manifest)
 
         do {
@@ -54,7 +49,7 @@ public class UpdateInstaller: @unchecked Sendable {
         } catch {
             installationState = .failed
             Log.error("Installation failed: \(error)")
-            throw UpdateError.installationFailed(error)
+            throw UpdateError.installationError(error.localizedDescription)
         }
     }
 
@@ -65,38 +60,42 @@ public class UpdateInstaller: @unchecked Sendable {
     ) async throws {
         Log.info("Starting installation with progress tracking")
 
-        try await performPreInstallationChecks(manifest: manifest)
+        let steps: [(phase: UpdateProgress.UpdatePhase, progress: Double, operation: () async throws -> ())] = [
+            (.checking, 0.1, { try await self.performPreInstallationChecks(manifest: manifest) }),
+            (.downloading, 0.3, { try await self.verifyDownloadIntegrity(downloadURL, manifest: manifest) }),
+            (.extracting, 0.6, {}),
+            (.verifying, 0.8, {}),
+            (.installing, 0.9, {}),
+            (.verifying, 0.95, {})
+        ]
 
-        let steps = Self.installationSteps
         var extractedURL: URL?
 
         do {
             installationState = .inProgress
 
-            for step in steps.all {
+            for (index, step) in steps.enumerated() {
                 try checkCancellation()
                 progressHandler?(UpdateProgress(phase: step.phase, percentage: step.progress))
 
-                switch step.type {
-                case .preCheck:
-                    try await performPreInstallationChecks(manifest: manifest)
-                case .verifyDownload:
-                    try await verifyDownloadIntegrity(downloadURL, manifest: manifest)
-                case .extract:
+                if index == 2 { // Extract step
                     extractedURL = try await extractAndVerifyUpdate(downloadURL)
-                case .verifyExtraction:
+                } else if index == 3 { // Verify extraction step
                     guard let url = extractedURL else { throw createSafetyError("No extracted URL available") }
                     try await verifyExtractionIntegrity(url, manifest: manifest)
-                case .install:
+                } else if index == 4 { // Install step
                     guard let url = extractedURL else { throw createSafetyError("No extracted URL available") }
                     try await performSafeInstallation(from: url, manifest: manifest)
-                case .verify:
+                } else if index == 5 { // Final verification step
                     try await performComprehensiveVerification(manifest: manifest)
-                case .cleanup:
-                    if let url = extractedURL {
-                        try await performSafeCleanup(url, downloadURL)
-                    }
+                } else {
+                    try await step.operation()
                 }
+            }
+
+            // Cleanup
+            if let url = extractedURL {
+                try await performSafeCleanup(url, downloadURL)
             }
 
             installationState = .completed
@@ -111,7 +110,7 @@ public class UpdateInstaller: @unchecked Sendable {
                 try await performSafeCleanup(url, downloadURL)
             }
 
-            throw UpdateError.installationFailed(error)
+            throw UpdateError.installationError(error.localizedDescription)
         }
     }
 
@@ -127,7 +126,7 @@ public class UpdateInstaller: @unchecked Sendable {
             return
         }
 
-        let appURL = URL(fileURLWithPath: Bundle.main.bundlePath)
+        let appURL = Bundle.main.bundleURL
 
         // Verify the app exists before attempting restart
         guard fileManager.fileExists(atPath: appURL.path) else {
@@ -186,20 +185,23 @@ public class UpdateInstaller: @unchecked Sendable {
 
         try checkCancellation()
 
-        // Check disk space
-        try await verifyDiskSpace(manifest: manifest)
+        let checks: [(String, () async throws -> ())] = [
+            ("disk space", { try await self.verifyDiskSpace(manifest: manifest) }),
+            ("current app integrity", { try await self.verifyCurrentAppIntegrity() }),
+            ("installation permissions", { try await self.verifyInstallationPermissions() }),
+            ("system requirements", { try self.verifySystemRequirements(manifest: manifest) }),
+            ("conflicting processes", { try await self.checkForConflictingRunningProcesses() })
+        ]
 
-        // Check current app integrity
-        try await verifyCurrentAppIntegrity()
-
-        // Check permissions
-        try await verifyInstallationPermissions()
-
-        // Check system requirements
-        try verifySystemRequirements(manifest: manifest)
-
-        // Check for running processes that might interfere
-        try await checkForConflictingRunningProcesses()
+        for (checkName, check) in checks {
+            do {
+                try await check()
+                Log.debug("\(checkName) check passed")
+            } catch {
+                Log.error("\(checkName) check failed: \(error)")
+                throw error
+            }
+        }
 
         Log.success("All pre-installation safety checks passed")
     }
@@ -223,26 +225,7 @@ public class UpdateInstaller: @unchecked Sendable {
     }
 
     private func verifyCurrentAppIntegrity() async throws {
-        Log.info("Verifying current application integrity")
-
-        let currentAppURL = Bundle.main.bundleURL
-
-        // Check bundle structure
-        try verifyAppBundleStructureAndContents(currentAppURL)
-
-        // Check executable
-        guard let executablePath = Bundle.main.executablePath,
-              fileManager.fileExists(atPath: executablePath) else {
-            throw createSafetyError("Current application executable not found")
-        }
-
-        // Check permissions
-        let attributes = try fileManager.attributesOfItem(atPath: executablePath)
-        let permissions = attributes[.posixPermissions] as? NSNumber
-        guard let permissions, permissions.intValue & 0o111 != 0 else {
-            throw createSafetyError("Current application executable lacks execute permissions")
-        }
-
+        try validateAppBundle(Bundle.main.bundleURL, isCurrentApp: true)
         Log.success("Current application integrity verified")
     }
 
@@ -448,115 +431,82 @@ public class UpdateInstaller: @unchecked Sendable {
     private func performPostExtractionSafetyChecks(_ appBundle: URL, manifest: UpdateManifest) async throws {
         Log.info("Performing additional extraction safety checks")
 
-        // Verify Info.plist content
-        try verifyExtractedAppInfoPlistContent(appBundle, manifest: manifest)
+        // Comprehensive bundle validation
+        try validateAppBundle(appBundle, manifest: manifest)
 
-        // Verify executable integrity
-        try verifyExtractedAppExecutableIntegrity(appBundle)
-
-        // Validate app bundle signature/code signature
-        try await validateExtractedAppBundleSignature(appBundle)
-
-        // Validate app launch capability
-        try validateExtractedAppLaunchCapability(appBundle)
-
-        // Validate app system compatibility
-        try validateExtractedAppSystemCompatibility(appBundle, manifest: manifest)
+        // Code signature validation
+        try await validateAppCodeSignature(appBundle)
 
         Log.success("Additional extraction checks completed")
     }
 
-    private func verifyExtractedAppInfoPlistContent(_ appBundle: URL, manifest: UpdateManifest) throws {
+    private func validateAppBundle(_ appBundle: URL, isCurrentApp: Bool = false, manifest: UpdateManifest? = nil) throws {
+        Log.info("Validating app bundle: \(appBundle.lastPathComponent)")
+
+        // Check bundle structure
+        try verifyAppBundleStructureAndContents(appBundle)
+
+        // Check Info.plist
         let infoPlistURL = appBundle.appendingPathComponent("Contents/Info.plist")
-
         guard let plist = NSDictionary(contentsOf: infoPlistURL) else {
-            throw createSafetyError("Could not read Info.plist from extracted app")
+            throw createSafetyError("Could not read Info.plist")
         }
 
-        // Verify version information
-        guard let version = plist["CFBundleShortVersionString"] as? String,
-              let buildString = plist["CFBundleVersion"] as? String,
-              let build = Int(buildString) else {
-            throw createSafetyError("Invalid version information in extracted app's Info.plist")
+        // Validate basic bundle properties
+        guard let bundleIdentifier = plist["CFBundleIdentifier"] as? String, !bundleIdentifier.isEmpty else {
+            throw createSafetyError("Invalid CFBundleIdentifier")
         }
 
-        // Normalize version strings for comparison (remove emoji prefixes)
-        let normalizedAppVersion = version.replacingOccurrences(of: "🧪 ", with: "")
-        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
-
-        Log.debug("Version validation: app='\(version)' normalized='\(normalizedAppVersion)', manifest='\(manifest.version)' normalized='\(normalizedManifestVersion)', build=\(build) vs \(manifest.buildNumber)")
-
-        guard normalizedAppVersion == normalizedManifestVersion, build == manifest.buildNumber else {
-            Log.error("Version validation failed: normalized app='\(normalizedAppVersion)' != manifest='\(normalizedManifestVersion)' or build \(build) != \(manifest.buildNumber)")
-            throw createSafetyError(
-                "Version mismatch in extracted app. Expected: \(manifest.version)(\(manifest.buildNumber)), Got: \(version)(\(build))"
-            )
-        }
-    }
-
-    private func validateExtractedAppLaunchCapability(_ appBundle: URL) throws {
-        Log.info("Validating extracted app launch capability")
-
-        let infoPlistURL = appBundle.appendingPathComponent("Contents/Info.plist")
-
-        guard let plist = NSDictionary(contentsOf: infoPlistURL) else {
-            throw createSafetyError("Could not read Info.plist for launch capability validation")
+        guard let packageType = plist["CFBundlePackageType"] as? String, packageType == "APPL" else {
+            throw createSafetyError("Invalid CFBundlePackageType")
         }
 
-        // Check for required launch properties
-        guard let bundleIdentifier = plist["CFBundleIdentifier"] as? String,
-              !bundleIdentifier.isEmpty else {
-            throw createSafetyError("App bundle missing or invalid CFBundleIdentifier")
-        }
-
-        guard let bundleName = plist["CFBundleName"] as? String,
-              !bundleName.isEmpty else {
-            throw createSafetyError("App bundle missing or invalid CFBundleName")
-        }
-
-        // Check that it's a proper application bundle
-        guard let packageType = plist["CFBundlePackageType"] as? String,
-              packageType == "APPL" else {
-            throw createSafetyError("App bundle has invalid CFBundlePackageType (expected 'APPL')")
-        }
-
-        // Verify the main executable exists and is executable
-        guard let executableName = plist["CFBundleExecutable"] as? String,
-              !executableName.isEmpty else {
-            throw createSafetyError("App bundle missing CFBundleExecutable")
+        // Validate executable
+        guard let executableName = plist["CFBundleExecutable"] as? String, !executableName.isEmpty else {
+            throw createSafetyError("Missing CFBundleExecutable")
         }
 
         let executablePath = appBundle.appendingPathComponent("Contents/MacOS/\(executableName)")
         guard fileManager.fileExists(atPath: executablePath.path) else {
-            throw createSafetyError("Main executable not found: \(executableName)")
+            throw createSafetyError("Executable not found: \(executableName)")
         }
 
-        // Check executable permissions
         let executableAttributes = try fileManager.attributesOfItem(atPath: executablePath.path)
-        guard let permissions = executableAttributes[.posixPermissions] as? NSNumber else {
-            throw createSafetyError("Could not read executable permissions")
+        guard let permissions = executableAttributes[.posixPermissions] as? NSNumber,
+              permissions.intValue & 0o111 != 0 else {
+            throw createSafetyError("Executable lacks execute permissions")
         }
 
-        // Check if executable bit is set (at least one of owner/group/other execute bits)
-        let perms = permissions.intValue
-        guard perms & 0o111 != 0 else {
-            throw createSafetyError("Main executable does not have execute permissions")
+        // Version validation for extracted apps
+        if !isCurrentApp, let manifest {
+            try validateAppVersion(plist, manifest: manifest)
         }
 
-        Log.success("App launch capability validation passed")
+        // System compatibility check
+        try validateSystemCompatibility(plist, manifest: manifest)
+
+        Log.success("App bundle validation completed")
     }
 
-    private func validateExtractedAppSystemCompatibility(_ appBundle: URL, manifest: UpdateManifest) throws {
-        Log.info("Validating extracted app system compatibility")
-
-        let currentOS = ProcessInfo.processInfo.operatingSystemVersion
-        let infoPlistURL = appBundle.appendingPathComponent("Contents/Info.plist")
-
-        guard let plist = NSDictionary(contentsOf: infoPlistURL) else {
-            throw createSafetyError("Could not read Info.plist for system compatibility validation")
+    private func validateAppVersion(_ plist: NSDictionary, manifest: UpdateManifest) throws {
+        guard let version = plist["CFBundleShortVersionString"] as? String,
+              let buildString = plist["CFBundleVersion"] as? String,
+              let build = Int(buildString) else {
+            throw createSafetyError("Invalid version information in app's Info.plist")
         }
 
-        // Check minimum OS version
+        let normalizedAppVersion = version.replacingOccurrences(of: "🧪 ", with: "")
+        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+
+        guard normalizedAppVersion == normalizedManifestVersion, build == manifest.buildNumber else {
+            throw createSafetyError(
+                "Version mismatch. Expected: \(manifest.version)(\(manifest.buildNumber)), Got: \(version)(\(build))"
+            )
+        }
+    }
+
+    private func validateSystemCompatibility(_ plist: NSDictionary, manifest: UpdateManifest?) throws {
+        // Check minimum OS version from plist
         if let minOSString = plist["LSMinimumSystemVersion"] as? String {
             let components = minOSString.split(separator: ".").compactMap { Int($0) }
             if components.count >= 2 {
@@ -567,98 +517,55 @@ public class UpdateInstaller: @unchecked Sendable {
                 )
 
                 guard ProcessInfo.processInfo.isOperatingSystemAtLeast(minOSVersion) else {
-                    throw createSafetyError("App requires macOS \(minOSString) or later, current: \(currentOS.majorVersion).\(currentOS.minorVersion).\(currentOS.patchVersion)")
+                    throw createSafetyError("App requires macOS \(minOSString) or later")
                 }
             }
         }
 
         // Check supported architectures
         if let supportedArchitectures = plist["LSArchitecturePriority"] as? [String] {
-            let currentArchitecture = SystemInfo.architecture
-            guard supportedArchitectures.contains(currentArchitecture) else {
-                throw createSafetyError("App does not support current architecture: \(currentArchitecture)")
+            guard supportedArchitectures.contains(SystemInfo.architecture) else {
+                throw createSafetyError("App does not support current architecture")
             }
         }
 
-        // Validate against manifest requirements
-        let manifestMinOS = manifest.minimumOS
-        let manifestComponents = manifestMinOS.split(separator: ".").compactMap { Int($0) }
-        if manifestComponents.count >= 2 {
-            let manifestMinVersion = OperatingSystemVersion(
-                majorVersion: manifestComponents[0],
-                minorVersion: manifestComponents[1],
-                patchVersion: manifestComponents.count > 2 ? manifestComponents[2] : 0
-            )
+        // Check against manifest requirements
+        if let manifest {
+            let components = manifest.minimumOS.split(separator: ".").compactMap { Int($0) }
+            if components.count >= 2 {
+                let manifestMinVersion = OperatingSystemVersion(
+                    majorVersion: components[0],
+                    minorVersion: components[1],
+                    patchVersion: components.count > 2 ? components[2] : 0
+                )
 
-            guard ProcessInfo.processInfo.isOperatingSystemAtLeast(manifestMinVersion) else {
-                throw createSafetyError("Update requires macOS \(manifestMinOS) or later")
+                guard ProcessInfo.processInfo.isOperatingSystemAtLeast(manifestMinVersion) else {
+                    throw createSafetyError("Update requires macOS \(manifest.minimumOS) or later")
+                }
             }
         }
-
-        Log.success("App system compatibility validation passed")
     }
 
-    private func validateExtractedAppBundleSignature(_ appBundle: URL) async throws {
-        Log.info("Validating extracted app bundle signature")
+    private func validateAppCodeSignature(_ appBundle: URL) async throws {
+        Log.info("Validating app code signature")
 
-        // Use the codesign command to verify the signature
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
         process.arguments = ["--verify", "--verbose", appBundle.path]
 
-        let outputPipe = Pipe()
         let errorPipe = Pipe()
-        process.standardOutput = outputPipe
         process.standardError = errorPipe
 
-        do {
-            try process.run()
-            process.waitUntilExit()
+        try process.run()
+        process.waitUntilExit()
 
-            if process.terminationStatus == 0 {
-                Log.success("App bundle signature validation passed")
-            } else {
-                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-                let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown codesign error"
-                Log.error("App bundle signature validation failed: \(errorOutput)")
-                throw createSafetyError("App bundle signature validation failed: \(errorOutput)")
-            }
-        } catch {
-            Log.error("Failed to run codesign verification: \(error)")
-            throw createSafetyError("Could not verify app bundle signature: \(error.localizedDescription)")
-        }
-    }
-
-    private func verifyExtractedAppExecutableIntegrity(_ appBundle: URL) throws {
-        Log.info("Verifying executable integrity")
-
-        let macOSDirectory = appBundle.appendingPathComponent("Contents/MacOS")
-
-        guard fileManager.fileExists(atPath: macOSDirectory.path) else {
-            throw createSafetyError("MacOS directory not found in app bundle")
+        if process.terminationStatus != 0 {
+            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+            let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown codesign error"
+            throw createSafetyError("Code signature validation failed: \(errorOutput)")
         }
 
-        let executables = try fileManager.contentsOfDirectory(at: macOSDirectory, includingPropertiesForKeys: nil)
-
-        guard !executables.isEmpty else {
-            throw createSafetyError("No executables found in MacOS directory")
-        }
-
-        for executable in executables {
-            let attributes = try fileManager.attributesOfItem(atPath: executable.path)
-            let permissions = attributes[.posixPermissions] as? NSNumber
-
-            if permissions == nil || permissions!.intValue & 0o111 == 0 {
-                Log.warn("Executable lacks execute permissions: \(executable.path)")
-            }
-
-            let fileSize = attributes[.size] as? Int64 ?? 0
-            guard fileSize > 0 else {
-                throw createSafetyError("Executable file is empty: \(executable.path)")
-            }
-        }
-
-        Log.success("Executable integrity verified")
+        Log.success("Code signature validation passed")
     }
 
     // MARK: - Safe Installation
@@ -683,14 +590,11 @@ public class UpdateInstaller: @unchecked Sendable {
         Log.info("Verifying pre-installation state")
 
         let currentAppURL = Bundle.main.bundleURL
-
-        // Ensure current app still exists and is valid
         guard fileManager.fileExists(atPath: currentAppURL.path) else {
             throw createSafetyError("Current application no longer exists before installation")
         }
 
-        try verifyAppBundleStructureAndContents(currentAppURL)
-
+        try validateAppBundle(currentAppURL, isCurrentApp: true)
         Log.success("Pre-installation state verified")
     }
 
@@ -698,32 +602,11 @@ public class UpdateInstaller: @unchecked Sendable {
         Log.info("Verifying post-installation state")
 
         let currentAppURL = Bundle.main.bundleURL
-
-        // Ensure app still exists after installation
         guard fileManager.fileExists(atPath: currentAppURL.path) else {
             throw createSafetyError("Application missing after installation - CRITICAL ERROR")
         }
 
-        // Verify structure
-        try verifyAppBundleStructureAndContents(currentAppURL)
-
-        // Verify it's the correct version
-        let infoPlistURL = currentAppURL.appendingPathComponent("Contents/Info.plist")
-        guard let plist = NSDictionary(contentsOf: infoPlistURL),
-              let version = plist["CFBundleShortVersionString"] as? String else {
-            throw createSafetyError("Cannot read version from installed application")
-        }
-
-        // Normalize version strings for comparison (remove emoji prefixes)
-        let normalizedInstalledVersion = version.replacingOccurrences(of: "🧪 ", with: "")
-        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
-
-        guard normalizedInstalledVersion == normalizedManifestVersion else {
-            throw createSafetyError(
-                "Installed version (\(version)) does not match expected version (\(manifest.version))"
-            )
-        }
-
+        try validateAppBundle(currentAppURL, isCurrentApp: true, manifest: manifest)
         Log.success("Post-installation state verified")
     }
 
@@ -752,58 +635,10 @@ public class UpdateInstaller: @unchecked Sendable {
             throw createSafetyError("Installed application is not readable")
         }
 
-        // Verify essential components
-        try verifyAppBundleEssentialComponents(currentAppURL)
-
-        // Verify permissions
-        try verifyAppPermissions(currentAppURL)
+        // Comprehensive bundle validation
+        try validateAppBundle(currentAppURL, isCurrentApp: true)
 
         Log.success("Additional verification checks completed")
-    }
-
-    private func verifyAppBundleEssentialComponents(_ appURL: URL) throws {
-        Log.info("Verifying essential app components")
-
-        let essentialPaths = [
-            "Contents/Info.plist",
-            "Contents/MacOS",
-            "Contents/Resources"
-        ]
-
-        for path in essentialPaths {
-            let componentURL = appURL.appendingPathComponent(path)
-            guard fileManager.fileExists(atPath: componentURL.path) else {
-                throw createSafetyError("Essential component missing: \(path)")
-            }
-        }
-
-        // Verify MacOS directory has executables
-        let macOSURL = appURL.appendingPathComponent("Contents/MacOS")
-        let executables = try fileManager.contentsOfDirectory(at: macOSURL, includingPropertiesForKeys: nil)
-
-        guard !executables.isEmpty else {
-            throw createSafetyError("No executables found in MacOS directory")
-        }
-
-        Log.success("Essential components verified")
-    }
-
-    private func verifyAppPermissions(_ appURL: URL) throws {
-        Log.info("Verifying app permissions")
-
-        let macOSURL = appURL.appendingPathComponent("Contents/MacOS")
-        let executables = try fileManager.contentsOfDirectory(at: macOSURL, includingPropertiesForKeys: nil)
-
-        for executable in executables {
-            let attributes = try fileManager.attributesOfItem(atPath: executable.path)
-            let permissions = attributes[.posixPermissions] as? NSNumber
-
-            guard let permissions, permissions.intValue & 0o111 != 0 else {
-                throw createSafetyError("Executable lacks execute permissions: \(executable.lastPathComponent)")
-            }
-        }
-
-        Log.success("App permissions verified")
     }
 
     // MARK: - Pre-Restart Verification
@@ -878,35 +713,52 @@ public class UpdateInstaller: @unchecked Sendable {
         let installedVersion = try getInstalledVersion()
         Log.info("Currently installed version: \(installedVersion)")
 
-        // Normalize version strings for comparison (remove emoji prefixes)
-        let normalizedInstalledVersion = installedVersion.replacingOccurrences(of: "🧪 ", with: "")
-        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+        // Extract version components for comparison (format: "🧪 1.4.1 (1683)" or "1.4.1 (1683)")
+        let versionComponents = installedVersion.split(separator: " ")
+        guard versionComponents.count >= 1 else {
+            let errorMessage = "Invalid installed version format: \(installedVersion)"
+            Log.error("Version format error: \(errorMessage)")
+            throw UpdateError.installationError(errorMessage)
+        }
 
-        guard normalizedInstalledVersion == normalizedManifestVersion else {
-            let errorMessage = "Installed version \(installedVersion) doesn't match expected \(manifest.version)"
-            Log.error("Version mismatch: installed=\(installedVersion), expected=\(manifest.version)")
-            throw UpdateError.installationFailed(NSError(
-                domain: "VersionMismatch",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: errorMessage]
-            ))
+        // Handle emoji prefix - if present, version starts at index 1, otherwise at index 0
+        let versionStartIndex = versionComponents[0].hasPrefix("🧪") ? 1 : 0
+        let installedVersionOnly = String(versionComponents[versionStartIndex])
+        let installedBuildOnly = versionComponents.count > versionStartIndex + 1 ?
+            String(versionComponents[versionStartIndex + 1].replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")) : "0"
+        let installedBuildInt = Int(installedBuildOnly) ?? 0
+
+        // Compare version and build separately
+        guard installedVersionOnly == manifest.version, installedBuildInt == manifest.buildNumber else {
+            let errorMessage = "Installed version \(installedVersionOnly) (\(installedBuildInt)) doesn't match expected \(manifest.version) (\(manifest.buildNumber))"
+            Log.error("Version mismatch: installed=\(installedVersionOnly) (\(installedBuildInt)), expected=\(manifest.version) (\(manifest.buildNumber))")
+            throw UpdateError.installationError(errorMessage)
         }
 
         Log.success("Installation verification completed successfully")
     }
 
     private func getInstalledVersion() throws -> String {
-        let bundlePath = Bundle.main.bundlePath
-        let infoPlistPath = "\(bundlePath)/Contents/Info.plist"
+        let bundleURL = Bundle.main.bundleURL
 
-        guard let plist = NSDictionary(contentsOfFile: infoPlistPath),
-              let version = plist["CFBundleShortVersionString"] as? String else {
-            throw UpdateError.installationFailed(NSError(domain: "VersionRead", code: -1, userInfo: [
-                NSLocalizedDescriptionKey: "Could not read version from installed application"
-            ]))
+        guard let (version, build) = readVersionInfo(from: bundleURL) else {
+            throw UpdateError.installationError("Could not read version from installed application")
         }
 
-        return version
+        return "\(version) (\(build))"
+    }
+
+    private func readVersionInfo(from bundleURL: URL) -> (version: String, build: Int)? {
+        let infoPlistURL = bundleURL.appendingPathComponent("Contents/Info.plist")
+
+        guard let plist = NSDictionary(contentsOf: infoPlistURL),
+              let version = plist["CFBundleShortVersionString"] as? String,
+              let buildString = plist["CFBundleVersion"] as? String,
+              let build = Int(buildString) else {
+            return nil
+        }
+
+        return (version, build)
     }
 
     private func performSafeCleanup(_ extractedURL: URL, _ downloadURL: URL) async throws {
@@ -936,11 +788,7 @@ public class UpdateInstaller: @unchecked Sendable {
 
     private func checkCancellation() throws {
         guard !isCancelled else {
-            throw UpdateError.installationFailed(NSError(
-                domain: "Installation",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "Installation cancelled"]
-            ))
+            throw UpdateError.installationError("Installation cancelled")
         }
     }
 
@@ -997,19 +845,13 @@ public class UpdateInstaller: @unchecked Sendable {
         let fileList = contents.map(\.lastPathComponent).joined(separator: ", ")
         Log.error("No .app bundle found in extracted files. Available files: \(fileList)")
 
-        throw UpdateError.installationFailed(
-            NSError(
-                domain: "AppBundleNotFound",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "No .app bundle found in update package. Found files: \(fileList)"]
-            )
-        )
+        throw UpdateError.installationError("No .app bundle found in update package. Found files: \(fileList)")
     }
 
     private func verifyAppBundleStructureAndContents(_ bundleURL: URL) throws {
         Log.debug("Verifying bundle structure for: \(bundleURL.lastPathComponent)")
 
-        let requiredPaths = ["Contents/Info.plist", "Contents/MacOS"]
+        let requiredPaths = AppBundleConstants.requiredPaths
 
         for path in requiredPaths {
             let fullPath = bundleURL.appendingPathComponent(path)
@@ -1045,58 +887,29 @@ public class UpdateInstaller: @unchecked Sendable {
     }
 
     private func createSafetyError(_ message: String) -> UpdateError {
-        UpdateError.installationFailed(NSError(
-            domain: "SafetyCheck",
-            code: -1,
-            userInfo: [NSLocalizedDescriptionKey: message]
-        ))
+        .installationError(message)
     }
 
-    private func createExtractionError(_ message: String, code: Int, zipURL: URL? = nil) -> UpdateError {
-        var userInfo = [NSLocalizedDescriptionKey: message]
+    private func createExtractionError(_ message: String, code _: Int, zipURL: URL? = nil) -> UpdateError {
+        var fullMessage = message
         if let zipURL {
             let fileSize = try? fileManager.attributesOfItem(atPath: zipURL.path)[.size] as? Int64
             let fileSizeString = fileSize?.formattedBytes ?? "unknown size"
-            userInfo[NSLocalizedDescriptionKey] = "\(message) at \(zipURL.path) (Size: \(fileSizeString))"
+            fullMessage = "\(message) at \(zipURL.path) (Size: \(fileSizeString))"
         }
 
-        return UpdateError.installationFailed(NSError(
-            domain: "ZipExtraction",
-            code: code,
-            userInfo: userInfo
-        ))
+        return .installationError(fullMessage)
     }
+}
+
+// MARK: - Constants
+
+private enum AppBundleConstants {
+    static let requiredPaths = ["Contents/Info.plist", "Contents/MacOS"]
 }
 
 // MARK: - InstallationState
 
 private enum InstallationState {
     case idle, inProgress, completed, failed, cancelled
-}
-
-// MARK: - InstallationSteps
-
-private struct InstallationSteps {
-    let all: [InstallationStep] = [
-        InstallationStep(type: .preCheck, progress: 0.05, phase: .checking),
-        InstallationStep(type: .verifyDownload, progress: 0.25, phase: .downloading),
-        InstallationStep(type: .extract, progress: 0.45, phase: .extracting),
-        InstallationStep(type: .verifyExtraction, progress: 0.65, phase: .verifying),
-        InstallationStep(type: .install, progress: 0.80, phase: .installing),
-        InstallationStep(type: .verify, progress: 0.90, phase: .verifying)
-    ]
-}
-
-// MARK: - InstallationStep
-
-private struct InstallationStep {
-    let type: InstallationStepType
-    let progress: Double
-    let phase: UpdateProgress.UpdatePhase
-}
-
-// MARK: - InstallationStepType
-
-private enum InstallationStepType {
-    case preCheck, verifyDownload, extract, verifyExtraction, install, verify, cleanup
 }

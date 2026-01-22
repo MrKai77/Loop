@@ -47,7 +47,7 @@ public class InstallationCoordinator {
         try checkCancellation()
 
         let appBundle = try findAppBundle(in: extractedURL)
-        let currentAppURL = URL(fileURLWithPath: Bundle.main.bundlePath)
+        let currentAppURL = Bundle.main.bundleURL
 
         try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
     }
@@ -281,13 +281,7 @@ public class InstallationCoordinator {
 
         // Final check for collision
         guard !fileManager.fileExists(atPath: backupURL.path) else {
-            throw UpdateError.installationFailed(NSError(
-                domain: "InstallBackupNaming",
-                code: -1,
-                userInfo: [
-                    NSLocalizedDescriptionKey: "Could not generate unique install backup name after \(attempt) attempts"
-                ]
-            ))
+            throw UpdateError.installationError("Could not generate unique install backup name after \(attempt) attempts")
         }
 
         return backupURL
@@ -317,13 +311,7 @@ public class InstallationCoordinator {
         let fileList = contents.map(\.lastPathComponent).joined(separator: ", ")
         Log.error("No .app bundle found in extracted files. Available files: \(fileList)")
 
-        throw UpdateError.installationFailed(
-            NSError(
-                domain: "AppBundleNotFound",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "No .app bundle found in update package. Found files: \(fileList)"]
-            )
-        )
+        throw UpdateError.installationError("No .app bundle found in update package. Found files: \(fileList)")
     }
 
     private func verifyBundleStructure(_ bundleURL: URL) throws {
@@ -335,13 +323,7 @@ public class InstallationCoordinator {
             let fullPath = bundleURL.appendingPathComponent(path)
             guard fileManager.fileExists(atPath: fullPath.path) else {
                 Log.error("Missing required path: \(path)")
-                throw UpdateError.installationFailed(
-                    NSError(
-                        domain: "InvalidBundle",
-                        code: -1,
-                        userInfo: [NSLocalizedDescriptionKey: "Invalid app bundle: missing \(path)"]
-                    )
-                )
+                throw UpdateError.installationError("Invalid app bundle: missing \(path)")
             }
         }
 
@@ -365,13 +347,7 @@ public class InstallationCoordinator {
             let errorMessage =
                 "Version mismatch: expected \(manifest.version)(\(manifest.buildNumber)), got \(version)(\(build)) [normalized: \(normalizedManifestVersion) vs \(normalizedBundleVersion)]"
             Log.error(errorMessage)
-            throw UpdateError.installationFailed(
-                NSError(
-                    domain: "VersionMismatch",
-                    code: -1,
-                    userInfo: [NSLocalizedDescriptionKey: errorMessage]
-                )
-            )
+            throw UpdateError.installationError(errorMessage)
         }
 
         Log.debug("Version verification passed")
@@ -383,11 +359,7 @@ public class InstallationCoordinator {
               let buildString = plist["CFBundleVersion"] as? String,
               let build = Int(buildString) else {
             Log.error("Could not read version info from Info.plist")
-            throw UpdateError.installationFailed(
-                NSError(domain: "VersionInfo", code: -1, userInfo: [
-                    NSLocalizedDescriptionKey: "Could not read version info from Info.plist"
-                ])
-            )
+            throw UpdateError.installationError("Could not read version info from Info.plist")
         }
         return (version, build)
     }
@@ -403,13 +375,7 @@ public class InstallationCoordinator {
 
         guard !contents.isEmpty else {
             Log.error("No executable found in MacOS directory")
-            throw UpdateError.installationFailed(
-                NSError(
-                    domain: "NoExecutable",
-                    code: -1,
-                    userInfo: [NSLocalizedDescriptionKey: "No executable found in app bundle"]
-                )
-            )
+            throw UpdateError.installationError("No executable found in app bundle")
         }
 
         Log.debug("Application testing passed")
@@ -419,11 +385,7 @@ public class InstallationCoordinator {
 
     private func checkCancellation() throws {
         guard !isCancelled else {
-            throw UpdateError.installationFailed(
-                NSError(domain: "Installation", code: -1, userInfo: [
-                    NSLocalizedDescriptionKey: "Installation was cancelled"
-                ])
-            )
+            throw UpdateError.installationError("Installation was cancelled")
         }
     }
 

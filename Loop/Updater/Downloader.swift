@@ -10,8 +10,7 @@ import Foundation
 import Scribe
 
 @Loggable(style: .static)
-@MainActor
-public final class Downloader: NSObject, Sendable {
+public final class Downloader: NSObject {
     // MARK: - Types
 
     public typealias RelocationHandler = @MainActor () async -> Bool
@@ -28,8 +27,10 @@ public final class Downloader: NSObject, Sendable {
 
     private var urlSession: URLSession?
     private var downloadTask: URLSessionDownloadTask?
-    private var progressHandler: ((UpdateProgress) -> ())?
-    private var completionHandler: ((Result<URL, Error>) -> ())?
+    private weak var progressHandler: AnyObject?
+    private weak var completionHandler: AnyObject?
+    private var progressClosure: ((UpdateProgress) -> ())?
+    private var completionClosure: ((Result<URL, Error>) -> ())?
     private var downloadState: DownloadState = .idle
     private var performanceTracker: PerformanceTracker = .init()
 
@@ -94,7 +95,10 @@ public final class Downloader: NSObject, Sendable {
         Log.info("Cancelling download")
         downloadState = .cancelled
         downloadTask?.cancel()
-        Task { await cleanup() }
+        // Cancel any pending operations and clean up immediately
+        Task { @MainActor in
+            await cleanup()
+        }
     }
 
     public func checkAndHandleAppLocation() async {
@@ -116,8 +120,8 @@ public final class Downloader: NSObject, Sendable {
         completion: @escaping (Result<URL, Error>) -> ()
     ) {
         downloadState = .downloading
-        progressHandler = progress
-        completionHandler = completion
+        progressClosure = progress
+        completionClosure = completion
         performanceTracker.reset()
 
         let sessionConfig = SessionConfigurationFactory.create(from: config.networkConfig)
@@ -150,13 +154,13 @@ public final class Downloader: NSObject, Sendable {
     private func handleAppLocationAndComplete(with url: URL) async {
         await checkAndHandleAppLocation()
         downloadState = .completed
-        completionHandler?(.success(url))
+        completionClosure?(.success(url))
         await cleanup()
     }
 
     private func handleError(_ error: Error) {
         downloadState = .failed
-        completionHandler?(.failure(error))
+        completionClosure?(.failure(error))
         Task { await cleanup() }
     }
 
@@ -165,8 +169,8 @@ public final class Downloader: NSObject, Sendable {
         downloadTask = nil
         urlSession?.invalidateAndCancel()
         urlSession = nil
-        progressHandler = nil
-        completionHandler = nil
+        progressClosure = nil
+        completionClosure = nil
         performanceTracker.reset()
     }
 }
@@ -196,15 +200,15 @@ extension Downloader: URLSessionDownloadDelegate {
         totalBytesExpectedToWrite: Int64
     ) {
         Task { @MainActor in
-            guard downloadState == .downloading else { return }
+            guard self.downloadState == .downloading else { return }
 
-            let progress = performanceTracker.updateProgress(
+            let progress = self.performanceTracker.updateProgress(
                 bytesWritten: bytesWritten,
                 totalBytesWritten: totalBytesWritten,
                 totalBytesExpectedToWrite: totalBytesExpectedToWrite
             )
 
-            progressHandler?(progress)
+            self.progressClosure?(progress)
         }
     }
 
@@ -216,12 +220,12 @@ extension Downloader: URLSessionDownloadDelegate {
         guard let error else { return }
 
         Task { @MainActor in
-            guard downloadState == .downloading else { return }
+            guard self.downloadState == .downloading else { return }
 
             Log.error("Download failed: \(error.localizedDescription)")
 
             let downloadError: DownloadError = (error as? URLError).map(DownloadError.networkError) ?? .unknown(error)
-            handleError(downloadError)
+            self.handleError(downloadError)
         }
     }
 }
@@ -247,12 +251,10 @@ private struct SystemPaths {
 // MARK: - PerformanceTracker
 
 private struct PerformanceTracker {
-    private var startTime: Date?
     private var lastProgressUpdate: Date?
-    private var speedSamples: CircularBuffer<SpeedSample> = .init(capacity: 10)
+    private var speedSamples: CircularBuffer<Double> = .init(capacity: 5)
 
     mutating func reset() {
-        startTime = Date()
         lastProgressUpdate = Date()
         speedSamples.clear()
     }
@@ -265,13 +267,20 @@ private struct PerformanceTracker {
         let now = Date()
         let percentage = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
 
-        updateSpeedSamples(bytesWritten: bytesWritten, now: now)
+        // Update speed calculation
+        if let lastUpdate = lastProgressUpdate {
+            let timeDelta = now.timeIntervalSince(lastUpdate)
+            if timeDelta > 0.5 { // Update every 500ms
+                let speed = Double(bytesWritten) / timeDelta / 1_048_576 // MB/s
+                speedSamples.append(speed)
+                lastProgressUpdate = now
+            }
+        } else {
+            lastProgressUpdate = now
+        }
 
-        let downloadSpeed = calculateSmoothedSpeed()
-        let estimatedTimeRemaining = calculateETA(
-            speed: downloadSpeed,
-            remainingBytes: totalBytesExpectedToWrite - totalBytesWritten
-        )
+        let downloadSpeed = calculateAverageSpeed()
+        let estimatedTimeRemaining = calculateETA(speed: downloadSpeed, remainingBytes: totalBytesExpectedToWrite - totalBytesWritten)
 
         return UpdateProgress(
             phase: .downloading,
@@ -283,29 +292,10 @@ private struct PerformanceTracker {
         )
     }
 
-    private mutating func updateSpeedSamples(bytesWritten: Int64, now: Date) {
-        guard let lastUpdate = lastProgressUpdate else { return }
-
-        let timeDelta = now.timeIntervalSince(lastUpdate)
-        if timeDelta > 0.1 {
-            let speed = Double(bytesWritten) / timeDelta / 1_048_576
-            speedSamples.append(SpeedSample(timestamp: now, speed: speed))
-            lastProgressUpdate = now
-        }
-    }
-
-    private func calculateSmoothedSpeed() -> Double? {
-        guard speedSamples.count >= 2 else { return nil }
-
+    private func calculateAverageSpeed() -> Double? {
         let samples = speedSamples.elements
-        let weights = (0 ..< samples.count).map { Double($0 + 1) }
-        let totalWeight = weights.reduce(0, +)
-
-        let weightedSum = zip(samples, weights).reduce(0.0) { sum, pair in
-            sum + (pair.0.speed * pair.1)
-        }
-
-        return weightedSum / totalWeight
+        guard !samples.isEmpty else { return nil }
+        return samples.reduce(0, +) / Double(samples.count)
     }
 
     private func calculateETA(speed: Double?, remainingBytes: Int64) -> TimeInterval? {
@@ -336,19 +326,11 @@ private enum SessionConfigurationFactory {
         let config = URLSessionConfiguration.default
 
         config.timeoutIntervalForRequest = networkConfig.timeout
-        config.timeoutIntervalForResource = networkConfig.timeout * 3
+        config.timeoutIntervalForResource = networkConfig.timeout * 2
         config.allowsCellularAccess = networkConfig.allowsCellularAccess
-        config.allowsConstrainedNetworkAccess = true
-        config.allowsExpensiveNetworkAccess = true
 
-        config.urlCache = nil
-        config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
         config.httpMaximumConnectionsPerHost = 1
-        config.httpShouldUsePipelining = false
-
-        config.tlsMinimumSupportedProtocolVersion = .TLSv12
-        config.httpShouldSetCookies = false
-        config.httpCookieAcceptPolicy = .never
 
         return config
     }
@@ -430,13 +412,13 @@ private enum AppLocationManager {
         relocationHandler: Downloader.RelocationHandler?,
         relocationErrorHandler: Downloader.RelocationErrorHandler?
     ) async {
-        do {
-            let shouldMove = await askUserForRelocation(relocationHandler: relocationHandler)
-            guard shouldMove else {
-                Log.info("User declined app relocation")
-                return
-            }
+        let shouldMove = await askUserForRelocation(relocationHandler: relocationHandler)
+        guard shouldMove else {
+            Log.info("User declined app relocation - proceeding with installation anyway")
+            return
+        }
 
+        do {
             try await relocateApplication()
         } catch {
             Log.error("Failed to relocate application: \(error.localizedDescription)")
@@ -448,27 +430,23 @@ private enum AppLocationManager {
         if let customHandler = relocationHandler {
             return await customHandler()
         }
-        return await defaultAskUserForRelocation()
-    }
 
-    @MainActor
-    private static func defaultAskUserForRelocation() async -> Bool {
-        let alert = NSAlert()
-        alert.messageText = "Move to Applications Folder?"
-        alert.informativeText = """
-        For automatic updates to work properly, this application should be in your Applications folder.
-
-        Would you like to move it now? The app will restart from the new location.
-        """
-        alert.alertStyle = .informational
-        alert.addButton(withTitle: "Move to Applications")
-        alert.addButton(withTitle: "Keep Current Location")
-
-        return alert.runModal() == .alertFirstButtonReturn
+        // Simple default implementation
+        ///! I am unsure if there is a Luminare popup declare
+        ///! for us to use, so for now, it's the native UI.
+        return await MainActor.run {
+            let alert = NSAlert()
+            alert.messageText = "Move to Applications Folder?"
+            alert.informativeText = "For automatic updates to work properly, this application should be in your Applications folder. Would you like to move it now?"
+            alert.alertStyle = .informational
+            alert.addButton(withTitle: "Move to Applications")
+            alert.addButton(withTitle: "Keep Current Location")
+            return alert.runModal() == .alertFirstButtonReturn
+        }
     }
 
     private static func relocateApplication() async throws {
-        let currentURL = URL(fileURLWithPath: Bundle.main.bundlePath)
+        let currentURL = Bundle.main.bundleURL
         let userAppsURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications")
         let destinationURL = userAppsURL.appendingPathComponent(currentURL.lastPathComponent)
 
@@ -492,24 +470,15 @@ private enum AppLocationManager {
         if let customErrorHandler = relocationErrorHandler {
             await customErrorHandler(error)
         } else {
-            await defaultShowRelocationError(error)
+            await MainActor.run {
+                let alert = NSAlert()
+                alert.messageText = "Failed to Move Application"
+                alert.informativeText = "Could not move the application to the Applications folder. Please do so manually for automatic updates to work."
+                alert.alertStyle = .warning
+                alert.addButton(withTitle: "OK")
+                alert.runModal()
+            }
         }
-    }
-
-    @MainActor
-    private static func defaultShowRelocationError(_ error: Error) async {
-        let alert = NSAlert()
-        alert.messageText = "Failed to Move Application"
-        alert.informativeText = """
-        Could not automatically move the application to the Applications folder.
-
-        Please manually drag the app to your Applications folder for automatic updates to work.
-
-        Error: \(error.localizedDescription)
-        """
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
     }
 }
 
@@ -571,50 +540,23 @@ public enum DownloadError: LocalizedError, Sendable {
 // MARK: - CircularBuffer
 
 private struct CircularBuffer<T> {
-    private var buffer: [T?]
-    private var head = 0
-    private var tail = 0
-    private var _count = 0
+    private var buffer: [T] = []
     private let capacity: Int
 
     init(capacity: Int) {
         self.capacity = capacity
-        self.buffer = Array(repeating: nil, count: capacity)
     }
 
-    var count: Int { _count }
-
-    var elements: [T] {
-        guard !isEmpty else { return [] }
-
-        var result: [T] = []
-        var index = head
-        for _ in 0 ..< _count {
-            if let element = buffer[index] {
-                result.append(element)
-            }
-            index = (index + 1) % capacity
-        }
-        return result
-    }
-
-    var isEmpty: Bool { _count == 0 }
+    var elements: [T] { buffer }
 
     mutating func append(_ element: T) {
-        buffer[tail] = element
-        tail = (tail + 1) % capacity
-
-        if _count < capacity {
-            _count += 1
-        } else {
-            head = (head + 1) % capacity
+        buffer.append(element)
+        if buffer.count > capacity {
+            buffer.removeFirst()
         }
     }
 
     mutating func clear() {
-        head = 0
-        tail = 0
-        _count = 0
-        buffer = Array(repeating: nil, count: capacity)
+        buffer.removeAll()
     }
 }

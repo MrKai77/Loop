@@ -41,12 +41,19 @@ final class Updater: ObservableObject {
     @Published private(set) var updateManifest: UpdateManifest?
     @Published private(set) var downloadProgress: UpdateProgress?
 
-    struct ChangelogNote: Identifiable {
+    struct ChangelogNote: Identifiable, Equatable {
         var id: UUID = .init()
         var emoji: String
         var text: String
         var user: String?
         var reference: Int?
+
+        static func == (lhs: ChangelogNote, rhs: ChangelogNote) -> Bool {
+            lhs.emoji == rhs.emoji &&
+                lhs.text == rhs.text &&
+                lhs.user == rhs.user &&
+                lhs.reference == rhs.reference
+        }
     }
 
     enum UpdateAvailability {
@@ -195,7 +202,6 @@ final class Updater: ObservableObject {
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
-    @concurrent
     func fetchLatestInfo(force: Bool = false) async {
         let isDownloading = await (downloader?.currentDownloadState ?? .idle) == .downloading
 
@@ -384,7 +390,6 @@ final class Updater: ObservableObject {
     }
 
     // Downloads the update from GitHub and installs it
-    @concurrent
     func installUpdate() async {
         guard let manifest = updateManifest else {
             await MainActor.run {
@@ -420,7 +425,7 @@ final class Updater: ObservableObject {
 
     private func downloadUpdate(_ manifest: UpdateManifest) async throws -> URL {
         guard let downloader else {
-            throw UpdateError.networkError(NSError(domain: "Updater", code: -1, userInfo: [NSLocalizedDescriptionKey: "Downloader not initialized"]))
+            throw UpdateError.network(NSError(domain: "Updater", code: -1, userInfo: [NSLocalizedDescriptionKey: "Downloader not initialized"]))
         }
 
         return try await withCheckedThrowingContinuation { continuation in

@@ -135,41 +135,33 @@ struct UpdateView: View {
     }
 
     private func versionChangeText() -> some View {
-        HStack {
-            if let targetRelease = updater.targetRelease {
-                let devBuildEmoji = "🧪"
-                let currentIsDevBuild: Bool = Bundle.main.appVersion?.contains(devBuildEmoji) ?? false
-                let targetIsDevBuild = targetRelease.prerelease
+        let currentVersion = VersionDisplay.formatCurrentAppVersion()
 
-                // After successful update, Bundle.main.appVersion might be nil due to atomic swap
-                // In that case, use the target version since the update just succeeded
-                let actualCurrentVersion = Bundle.main.appVersion
-                let effectiveCurrentVersion = actualCurrentVersion ?? targetRelease.tagName
-                let effectiveCurrentBuild = actualCurrentVersion != nil ? Bundle.main.appBuild ?? 0 : targetRelease.buildNumber ?? 0
-
-                let currentVersionBase = effectiveCurrentVersion.replacing(devBuildEmoji, with: "").trimmingCharacters(in: .whitespaces)
-                let targetVersionBase = targetRelease.tagName.replacing(devBuildEmoji, with: "").trimmingCharacters(in: .whitespaces)
-
-                let currentVersionBuild = (effectiveCurrentVersion.contains(devBuildEmoji) ? " (\(effectiveCurrentBuild))" : "")
-                let targetVersionBuild = targetIsDevBuild ? " (\(targetRelease.buildNumber ?? 0))" : ""
-
-                let currentVersion = "\(effectiveCurrentVersion.contains(devBuildEmoji) ? devBuildEmoji : "")\(currentVersionBase)\(currentVersionBuild)"
-                Text(currentVersion)
-
-                Image(systemName: "arrow.right")
-
-                let targetVersion = "\(targetIsDevBuild ? devBuildEmoji : "")\(targetVersionBase)\(targetVersionBuild)"
-                Text(targetVersion)
-            } else {
-                let currentVersion = Bundle.main.appVersion ?? "Unknown"
-                Text(currentVersion)
-
-                Image(systemName: "arrow.right")
-
-                let targetVersion = "Unknown"
-                Text(targetVersion)
-            }
+        // If no target release (after installation), just show current version (without emoji)
+        guard let targetRelease = updater.targetRelease else {
+            let cleanVersion = currentVersion.displayString.replacingOccurrences(of: "🧪 ", with: "")
+            return AnyView(
+                HStack {
+                    Text("Installed:")
+                    Spacer()
+                    Text(cleanVersion)
+                        .fontWeight(.semibold)
+                }
+            )
         }
+
+        let targetVersion = targetRelease.formattedVersion(current: nil, build: nil)
+
+        // Strip emoji from current version display for cleaner UI
+        let cleanCurrentVersion = currentVersion.displayString.replacingOccurrences(of: "🧪 ", with: "")
+
+        return AnyView(
+            HStack {
+                Text(cleanCurrentVersion)
+                Image(systemName: "arrow.right")
+                Text(targetVersion.displayString)
+            }
+        )
     }
 
     private func changelogView() -> some View {
@@ -177,20 +169,20 @@ struct UpdateView: View {
             VStack { // Using LazyVStack seems to cause visual glitches
                 ForEach(updater.changelog, id: \.title) { item in
                     if !item.body.isEmpty {
+                        let isExpanded = updater.expandedChangelogSections.contains(item.title)
                         ChangelogSectionView(
-                            isExpanded: Binding(
-                                get: {
-                                    updater.expandedChangelogSections.contains(item.title)
-                                },
-                                set: { newValue in
-                                    if newValue {
-                                        updater.expandedChangelogSections.insert(item.title)
-                                    } else {
+                            isExpanded: isExpanded,
+                            title: item.title,
+                            notes: item.body,
+                            onToggle: {
+                                withAnimation(.smooth(duration: 0.25)) {
+                                    if isExpanded {
                                         updater.expandedChangelogSections.remove(item.title)
+                                    } else {
+                                        updater.expandedChangelogSections.insert(item.title)
                                     }
                                 }
-                            ),
-                            item: item
+                            }
                         )
                     }
                 }
@@ -266,75 +258,196 @@ struct UpdateView: View {
     }
 }
 
-struct ChangelogSectionView: View {
+struct ChangelogSectionView: View, Equatable {
     @Environment(\.luminareAnimation) var luminareAnimation
-    @Environment(\.luminareCornerRadii) var luminareCornerRadii
 
-    @Binding var isExpanded: Bool
-    let item: (title: String, body: [Updater.ChangelogNote])
+    let isExpanded: Bool
+    let title: String
+    let notes: [Updater.ChangelogNote]
+    let onToggle: () -> ()
 
     var body: some View {
         LuminareSection {
-            Button {
-                withAnimation(luminareAnimation) {
-                    isExpanded.toggle()
-                }
-            } label: {
-                HStack {
-                    Image(systemName: "chevron.forward")
-                        .bold()
-                        .rotationEffect(isExpanded ? .degrees(90) : .zero)
-
-                    Text(LocalizedStringKey(item.title))
-                        .font(.headline)
-                        .lineLimit(1)
-
-                    Spacer()
-                }
-                .padding(.horizontal, 8)
-                .frame(height: 34)
-                .contentShape(.rect)
-            }
-            .buttonStyle(.plain)
+            SectionHeader(isExpanded: isExpanded, title: title, animation: luminareAnimation, onToggle: onToggle)
 
             if isExpanded {
-                ForEach(item.body, id: \.id) { note in
-                    HStack(spacing: 8) {
-                        Text(note.emoji)
-                        Text(LocalizedStringKey(note.text))
-                            .lineSpacing(1.1)
-
-                        Spacer(minLength: 0)
-
-                        HStack(spacing: 0) {
-                            if let user = note.user {
-                                let text = "@\(user)"
-                                Link(text, destination: URL(string: "https://github.com/\(user)")!)
-                                    .frame(width: 105, alignment: .trailing)
-                            }
-
-                            if note.user != nil, note.user != nil {
-                                let text = "•" // Prevents unnecessary localization entries
-                                Text(text)
-                                    .padding(.horizontal, 4)
-                            }
-
-                            if let reference = note.reference {
-                                let text = "#\(reference)"
-                                Link(text, destination: URL(string: "https://github.com/MrKai77/Loop/issues/\(reference)")!)
-                                    .frame(width: 35, alignment: .leading)
-                                    .monospaced()
-                            }
-                        }
-                        .foregroundStyle(.secondary)
-                        .buttonStyle(.plain)
-                        .fixedSize()
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .frame(minHeight: 34)
+                ForEach(notes, id: \.id) { note in
+                    ChangelogItemView(note: note)
                 }
             }
         }
+    }
+
+    static func == (lhs: ChangelogSectionView, rhs: ChangelogSectionView) -> Bool {
+        lhs.isExpanded == rhs.isExpanded &&
+            lhs.title == rhs.title &&
+            lhs.notes == rhs.notes
+    }
+}
+
+private struct SectionHeader: View, Equatable {
+    let isExpanded: Bool
+    let title: String
+    let animation: Animation?
+    let onToggle: () -> ()
+
+    var body: some View {
+        Button {
+            onToggle()
+        } label: {
+            HStack {
+                Image(systemName: "chevron.forward")
+                    .bold()
+                    .rotationEffect(isExpanded ? .degrees(90) : .zero)
+
+                Text(LocalizedStringKey(title))
+                    .font(.headline)
+                    .lineLimit(1)
+
+                Spacer()
+            }
+            .padding(.horizontal, 8)
+            .frame(height: 34)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+    }
+
+    static func == (lhs: SectionHeader, rhs: SectionHeader) -> Bool {
+        lhs.isExpanded == rhs.isExpanded && lhs.title == rhs.title
+    }
+}
+
+private struct ChangelogItemView: View, Equatable {
+    let note: Updater.ChangelogNote
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(note.emoji)
+            Text(LocalizedStringKey(note.text))
+                .lineSpacing(1.1)
+
+            Spacer(minLength: 0)
+
+            ChangelogMetadataView(note: note)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .frame(minHeight: 34)
+    }
+
+    static func == (lhs: ChangelogItemView, rhs: ChangelogItemView) -> Bool {
+        lhs.note == rhs.note
+    }
+}
+
+private struct ChangelogMetadataView: View, Equatable {
+    let note: Updater.ChangelogNote
+
+    var body: some View {
+        HStack(spacing: 0) {
+            if let user = note.user {
+                Link("@\(user)", destination: URL(string: "https://github.com/\(user)")!)
+                    .frame(width: 105, alignment: .trailing)
+            }
+
+            if note.user != nil, note.reference != nil {
+                Text("•")
+                    .padding(.horizontal, 4)
+            }
+
+            if let reference = note.reference {
+                Link("#\(reference)", destination: URL(string: "https://github.com/MrKai77/Loop/issues/\(reference)")!)
+                    .monospaced()
+                    .fixedSize()
+            }
+        }
+        .foregroundStyle(.secondary)
+        .buttonStyle(.plain)
+        .fixedSize()
+    }
+
+    static func == (lhs: ChangelogMetadataView, rhs: ChangelogMetadataView) -> Bool {
+        lhs.note.user == rhs.note.user && lhs.note.reference == rhs.note.reference
+    }
+}
+
+// MARK: - Bundle Info Helpers
+
+private enum BundleInfoReader {
+    static func readVersionInfo(from bundleURL: URL) -> (version: String, build: Int)? {
+        let infoPlistURL = bundleURL.appendingPathComponent("Contents/Info.plist")
+
+        guard let plist = NSDictionary(contentsOf: infoPlistURL),
+              let version = plist["CFBundleShortVersionString"] as? String,
+              let buildString = plist["CFBundleVersion"] as? String,
+              let build = Int(buildString) else {
+            return nil
+        }
+
+        return (version, build)
+    }
+}
+
+// MARK: - Version Display Helpers
+
+private struct VersionDisplay {
+    let displayString: String
+
+    static let unknown = VersionDisplay(displayString: "Unknown")
+
+    static func formatCurrentAppVersion() -> VersionDisplay {
+        // Read from the actual installed app's Info.plist, not the in-memory bundle
+        let bundleURL = Bundle.main.bundleURL
+
+        guard let (version, build) = BundleInfoReader.readVersionInfo(from: bundleURL) else {
+            return .unknown
+        }
+
+        // Display version with emoji stripped for cleaner UI
+        let cleanVersion = version.replacingOccurrences(of: "🧪 ", with: "")
+        return VersionDisplay(displayString: "\(cleanVersion) (\(build))")
+    }
+
+    static func format(version: String?, build: Int?, isPrerelease: Bool) -> VersionDisplay {
+        guard let version else {
+            return .unknown
+        }
+
+        let devBuildEmoji = "🧪"
+        let hasEmoji = version.contains(devBuildEmoji)
+        let baseVersion = version.replacingOccurrences(of: devBuildEmoji, with: "").trimmingCharacters(in: .whitespaces)
+
+        var displayString = baseVersion
+        if isPrerelease || hasEmoji {
+            displayString = "\(devBuildEmoji)\(baseVersion)"
+        }
+
+        if let build, hasEmoji || isPrerelease {
+            displayString += " (\(build))"
+        }
+
+        return VersionDisplay(displayString: displayString)
+    }
+}
+
+private extension Release {
+    func formattedVersion(current: String?, build: Int?) -> VersionDisplay {
+        let effectiveVersion: String
+        let effectiveBuild: Int?
+
+        if let current {
+            effectiveVersion = current
+            effectiveBuild = build
+        } else {
+            effectiveVersion = tagName
+            effectiveBuild = buildNumber
+        }
+
+        return VersionDisplay.format(
+            version: effectiveVersion,
+            build: effectiveBuild,
+            isPrerelease: prerelease
+        )
     }
 }

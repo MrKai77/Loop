@@ -133,53 +133,64 @@ public struct UpdateProgress: Sendable {
 // MARK: - UpdateError
 
 public enum UpdateError: LocalizedError, Sendable {
-    case networkError(Error)
-    case invalidManifest
+    case network(Error)
+    case invalidManifest(String? = nil)
     case checksumMismatch
-    case installationFailed(Error)
-    case securityViolation(String)
+    case installationFailed(String)
+    case security(String)
     case timeout
-    case clientError(Int)
-    case serverError(Int)
+    case http(Int)
 
     public var errorDescription: String? {
         switch self {
-        case let .networkError(error):
+        case let .network(error):
             "Network error: \(error.localizedDescription)"
-        case .invalidManifest:
-            "Invalid update manifest"
+        case let .invalidManifest(details):
+            details.map { "Invalid update manifest: \($0)" } ?? "Invalid update manifest"
         case .checksumMismatch:
             "File integrity check failed"
-        case let .installationFailed(error):
-            "Installation failed: \(error.localizedDescription)"
-        case let .securityViolation(reason):
-            "Security violation: \(reason)"
+        case let .installationFailed(reason):
+            "Installation failed: \(reason)"
+        case let .security(reason):
+            "Security error: \(reason)"
         case .timeout:
             "Request timed out"
-        case let .clientError(code):
-            "Client error (\(code))"
-        case let .serverError(code):
-            "Server error (\(code))"
+        case let .http(code):
+            "HTTP error (\(code))"
         }
     }
 
     public var isRetryable: Bool {
         switch self {
-        case let .networkError(error):
+        case let .network(error):
             if let urlError = error as? URLError {
-                switch urlError.code {
-                case .timedOut, .cannotConnectToHost, .networkConnectionLost, .notConnectedToInternet, .dnsLookupFailed:
-                    return true
-                default:
-                    return false
-                }
+                return [.timedOut, .cannotConnectToHost, .networkConnectionLost, .notConnectedToInternet, .dnsLookupFailed].contains(urlError.code)
             }
             return false
-        case .timeout, .serverError:
+        case .timeout:
+            return true
+        case let .http(code) where code >= 500:
             return true
         default:
             return false
         }
+    }
+
+    // Convenience constructors
+    static func httpError(_ response: HTTPURLResponse) -> UpdateError {
+        .http(response.statusCode)
+    }
+
+    static func installationError(_ message: String) -> UpdateError {
+        .installationFailed(message)
+    }
+
+    static func securityError(_ reason: String) -> UpdateError {
+        .security(reason)
+    }
+
+    static func manifestError(_ details: String? = nil) -> UpdateError {
+        .invalidManifest(details)
     }
 }
 

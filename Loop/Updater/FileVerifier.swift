@@ -141,11 +141,7 @@ public class FileVerifier {
             }
         }
 
-        throw UpdateError.installationFailed(NSError(
-            domain: "AppBundleNotFound",
-            code: -1,
-            userInfo: [NSLocalizedDescriptionKey: "Could not find .app bundle in extracted files"]
-        ))
+        throw UpdateError.installationError("Could not find .app bundle in extracted files")
     }
 
     private func verifyBundleStructure(_ appBundle: URL) throws {
@@ -154,11 +150,7 @@ public class FileVerifier {
         for path in requiredPaths {
             let fullPath = appBundle.appendingPathComponent(path)
             guard FileManager.default.fileExists(atPath: fullPath.path) else {
-                throw UpdateError.installationFailed(NSError(
-                    domain: "InvalidBundleStructure",
-                    code: -1,
-                    userInfo: [NSLocalizedDescriptionKey: "Missing required bundle component: \(path)"]
-                ))
+                throw UpdateError.installationError("Missing required bundle component: \(path)")
             }
         }
 
