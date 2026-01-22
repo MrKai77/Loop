@@ -294,8 +294,9 @@ final class WindowDragManager {
             return
         }
 
+        let snapDirection = direction
         DispatchQueue.main.async {
-            WindowEngine.resize(window, to: .init(self.direction), on: screen)
+            WindowEngine.resize(window, to: .init(snapDirection), on: screen)
             self.direction = .noAction
         }
     }
