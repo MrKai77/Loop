@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@Loggable()
 @MainActor
 final class WindowDragManager {
     static let shared = WindowDragManager()
@@ -177,7 +178,7 @@ final class WindowDragManager {
                 initialMousePosition: currentMousePosition
             )
 
-            Log.info("Determined window being dragged: \(window.description)", category: .windowDragManager)
+            log.info("Determined window being dragged: \(window.description)")
         }
     }
 
@@ -270,7 +271,7 @@ final class WindowDragManager {
                 ignoredFrame: ignoredFrame
             )
 
-            Log.info("Window snapping direction changed: \(newDirection.debugDescription)", category: .windowDragManager)
+            log.info("Window snapping direction changed: \(newDirection.debugDescription)")
 
             resizeContext?.setScreen(to: screen)
             resizeContext?.setAction(to: .init(newDirection), parent: nil)

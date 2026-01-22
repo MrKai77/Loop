@@ -80,7 +80,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
         ) {
             setupRunLoopSource(eventTap: eventTap)
         } else {
-            Log.info("Failed to create event tap", category: .activeEventMonitor)
+            log.info("Failed to create event tap")
         }
     }
 

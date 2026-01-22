@@ -58,7 +58,7 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
         ) {
             setupRunLoopSource(eventTap: eventTap)
         } else {
-            Log.info("Failed to create event tap", category: .passiveEventMonitor)
+            log.info("Failed to create event tap")
         }
     }
 }

@@ -10,6 +10,7 @@ import Scribe
 import SwiftUI
 import UserNotifications
 
+@Loggable
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let urlCommandHandler = URLCommandHandler()
 
@@ -73,10 +74,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func handleGetURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent _: NSAppleEventDescriptor) {
         guard let urlString = event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue,
               let url = URL(string: urlString) else {
-            Log.info("Failed to get URL from event", category: .appDelegate)
+            log.info("Failed to get URL from event")
             return
         }
-        Log.info("Received URL: \(url)", category: .appDelegate)
+
+        log.info("Received URL: \(url)")
         urlCommandHandler.handle(url)
     }
 

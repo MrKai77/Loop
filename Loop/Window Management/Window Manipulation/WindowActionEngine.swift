@@ -143,7 +143,7 @@ final class WindowActionEngine {
         guard let window else {
             // Quick actions require a window
             if [.hide, .minimize, .fullscreen, .minimizeOthers].contains(action.direction) {
-                Log.info("Cannot apply quick action without a target window", category: .windowEngine)
+                log.info("Cannot apply quick action without a target window")
                 return .failed
             }
             return nil
@@ -175,7 +175,7 @@ final class WindowActionEngine {
             $0.cgWindowID != exceptWindow.cgWindowID && !$0.minimized && !$0.isWindowHidden
         }
 
-        Log.info("Minimizing \(windowsToMinimize.count) other windows", category: .windowEngine)
+        log.info("Minimizing \(windowsToMinimize.count) other windows")
 
         for window in windowsToMinimize {
             window.minimized = true

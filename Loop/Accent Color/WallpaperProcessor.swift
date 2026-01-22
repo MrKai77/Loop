@@ -44,6 +44,7 @@ enum WallpaperProcessorError: LocalizedError {
 /// Processes desktop wallpapers to extract colors for theming Loop.
 /// This class provides methods to capture the current desktop wallpaper and extract
 /// vibrant, visually appealing colors that can be used as accent colors in the UI.
+@Loggable
 final class WallpaperProcessor {
     private var lastProcessedDate: Date = .distantPast
     private var lastResult: (primary: Color, secondary: Color) = (.black, .black)
@@ -97,12 +98,12 @@ final class WallpaperProcessor {
             // Use the second dominant color if possible, otherwise return the primary color.
             let secondaryColor = colors.count > 1 ? Color(colors[1]) : primaryColor
 
-            Log.success("Successfully calculated dominant colors from wallpaper", category: .wallpaperProcessor)
+            log.success("Successfully calculated dominant colors from wallpaper")
 
             return (primaryColor, secondaryColor)
         } catch {
             // If an error occurs, print the error description.
-            Log.error("Failed to fetch wallpaper colors: \(error.localizedDescription)", category: .wallpaperProcessor)
+            log.error("Failed to fetch wallpaper colors: \(error.localizedDescription)")
             return nil
         }
     }
@@ -176,7 +177,7 @@ extension NSImage {
             let dataProvider = resizedCGImage.dataProvider,
             let data = CFDataGetBytePtr(dataProvider.data)
         else {
-            Log.error("Error: \(WallpaperProcessorError.imageResizeFailed)", category: .wallpaperProcessor)
+            Log.error("Error: \(WallpaperProcessorError.imageResizeFailed)", category: WallpaperProcessor.logCategory)
             return nil
         }
 
@@ -299,7 +300,7 @@ extension NSImage {
             samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
             colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
         ) else {
-            Log.error("Error: \(WallpaperProcessorError.bitmapCreationFailed)", category: .wallpaperProcessor)
+            Log.error("Error: \(WallpaperProcessorError.bitmapCreationFailed)", category: WallpaperProcessor.logCategory)
             return nil
         }
         bitmapRep.size = newSize

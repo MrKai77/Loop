@@ -11,6 +11,7 @@ import Luminare
 import Scribe
 import SwiftUI
 
+@Loggable
 @MainActor
 final class SettingsWindowManager: ObservableObject {
     static let shared = SettingsWindowManager()
@@ -102,7 +103,7 @@ final class SettingsWindowManager: ObservableObject {
             NSApp.activate(ignoringOtherApps: true)
         }
 
-        Log.success("Settings window opened", category: .settingsWindowManager)
+        log.success("Settings window opened")
     }
 
     func close() {
@@ -110,7 +111,7 @@ final class SettingsWindowManager: ObservableObject {
             controller.close()
             self.controller = nil
 
-            Log.success("Settings window closed", category: .settingsWindowManager)
+            log.success("Settings window closed")
         }
 
         stopTimer()

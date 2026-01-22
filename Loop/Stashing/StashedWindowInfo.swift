@@ -9,6 +9,7 @@ import Foundation
 import Scribe
 import SwiftUI
 
+@Loggable
 struct StashedWindowInfo: Equatable {
     let window: Window
     let screen: NSScreen
@@ -31,14 +32,14 @@ struct StashedWindowInfo: Equatable {
         case .right:
             frame.origin.x = bounds.maxX - clampedPeekSize
         case .none:
-            Log.warn("Trying to compute the stash frame for a non-stash related action.", category: .stashedWindow)
+            log.warn("Trying to compute the stash frame for a non-stash related action.")
         }
 
         return frame
     }
 
     func computeRevealedFrame() -> CGRect {
-        var context = ResizeContext(window: window, screen: screen)
+        let context = ResizeContext(window: window, screen: screen)
         context.setAction(to: action, parent: nil)
         return context.getTargetFrame().padded
     }

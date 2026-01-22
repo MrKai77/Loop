@@ -11,6 +11,7 @@ import SwiftUI
 
 /// In charge of processing and storing an up-to-date version of the user's accent color(s), according to their settings.
 /// Automatically refreshes when the user updates the following preferences: `accentColorMode`, `customAccentColor`, `useGradient` and `gradientColor`.
+@Loggable
 @MainActor
 final class AccentColorController: ObservableObject {
     static let shared = AccentColorController()
@@ -49,16 +50,16 @@ final class AccentColorController: ObservableObject {
     func refresh(ignoreThrottle: Bool = false) async {
         switch Defaults[.accentColorMode] {
         case .system:
-            Log.info("Refreshing accent color based on system accent setting", category: .accentColorController)
+            log.info("Refreshing accent color based on system accent setting")
             color1 = Color.accentColor
             color2 = Defaults[.useGradient] ? Color(nsColor: NSColor.controlAccentColor.blended(withFraction: 0.5, of: .black)!) : Color.accentColor
         case .wallpaper:
-            Log.info("Refreshing accent color based on wallpaper analysis", category: .accentColorController)
+            log.info("Refreshing accent color based on wallpaper analysis")
             let colors = await wallpaperProcessor.fetchLatest(ignoreThrottle: ignoreThrottle)
             color1 = colors.primary
             color2 = Defaults[.useGradient] ? colors.secondary : colors.primary
         case .custom:
-            Log.info("Refreshing accent color based on custom selection", category: .accentColorController)
+            log.info("Refreshing accent color based on custom selection")
             color1 = Defaults[.customAccentColor]
             color2 = Defaults[.useGradient] ? Defaults[.gradientColor] : Defaults[.customAccentColor]
         }

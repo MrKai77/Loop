@@ -11,6 +11,7 @@ import Luminare
 import Scribe
 import SwiftUI
 
+@Loggable
 @MainActor
 final class AdvancedConfigurationModel: ObservableObject {
     @Published private(set) var showResetRadialMenuActionsSuccessIndicator = false
@@ -72,7 +73,7 @@ final class AdvancedConfigurationModel: ObservableObject {
                     showSuccessIndicator(\.showImportKeybindsSuccessIndicator)
                 }
             } catch {
-                Log.error("Error importing keybinds: \(error)", category: .advancedConfigurationModel)
+                log.error("Error importing keybinds: \(error)")
             }
         }
     }
@@ -85,7 +86,7 @@ final class AdvancedConfigurationModel: ObservableObject {
                     showSuccessIndicator(\.showExportKeybindsSuccessIndicator)
                 }
             } catch {
-                Log.error("Error exporting keybinds: \(error)", category: .advancedConfigurationModel)
+                log.error("Error exporting keybinds: \(error)")
             }
         }
     }

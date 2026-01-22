@@ -11,6 +11,7 @@ import Scribe
 import ServiceManagement
 import SwiftUI
 
+@Loggable
 struct BehaviorConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
 
@@ -64,7 +65,7 @@ struct BehaviorConfigurationView: View {
                             try SMAppService().unregister()
                         }
                     } catch {
-                        Log.error("Failed to \(launchAtLogin ? "register" : "unregister") login item: \(error.localizedDescription)", category: .behaviorConfigurationView)
+                        log.error("Failed to \(launchAtLogin ? "register" : "unregister") login item: \(error.localizedDescription)")
                     }
                 }
 

@@ -8,6 +8,7 @@
 import Scribe
 import SwiftUI
 
+@Loggable(style: .static)
 enum WindowRecords {
     private static var recordsByWindowID: [CGWindowID: WindowRecords.Record] = [:]
 
@@ -30,13 +31,13 @@ enum WindowRecords {
         }
 
         recordsByWindowID[window.cgWindowID] = nil
-        Log.success("Erased records for: \(window)", category: .windowRecords)
+        log.success("Erased records for: \(window)")
     }
 
     static func recordFirstIfNeeded(for window: Window) {
         guard recordsByWindowID[window.cgWindowID] == nil else { return }
         recordsByWindowID[window.cgWindowID] = Record(initialFrame: window.frame)
-        Log.info("Recorded first for: \(window)", category: .windowRecords)
+        log.info("Recorded first for: \(window)")
     }
 
     /// Determines if an action should be recorded using its frame instead of the action applied onto it.
@@ -95,7 +96,7 @@ enum WindowRecords {
             recordsByWindowID[window.cgWindowID]?.actions.insert(action, at: 0)
         }
 
-        Log.info("Recorded: \(action) for: \(window)", category: .windowRecords)
+        log.info("Recorded: \(action) for: \(window)")
     }
 
     /// Removes the last action performed on the specified window. This will NOT remove the first action for the specified window.
@@ -103,13 +104,13 @@ enum WindowRecords {
         guard let record = recordsByWindowID[window.cgWindowID],
               record.actions.count > 1
         else {
-            Log.info("Skipped removing last record for: \(window)", category: .windowRecords)
+            log.info("Skipped removing last record for: \(window)")
             return
         }
 
         recordsByWindowID[window.cgWindowID]?.actions.removeFirst()
 
-        Log.info("Removed last record for: \(window)", category: .windowRecords)
+        log.info("Removed last record for: \(window)")
     }
 
     /// This window's last action

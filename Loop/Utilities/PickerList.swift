@@ -134,7 +134,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
 
         /// Ensure nextIndex is valid
         guard nextIndex >= 0, nextIndex < items.count else {
-            Log.error("Invalid nextIndex: \(nextIndex), items count: \(items.count)", category: .pickerView)
+            Log.error("Invalid nextIndex: \(nextIndex), items count: \(items.count)", category: .pickerList)
             return
         }
 
@@ -143,12 +143,16 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
 
         /// Only scroll if the selection is valid and not nil
         guard let validSelection = arrowSelection else {
-            Log.info("arrowSelection is nil, skipping scroll", category: .pickerView)
+            Log.info("arrowSelection is nil, skipping scroll", category: .pickerList)
             return
         }
 
         reader.scrollTo(validSelection, anchor: .center)
     }
+}
+
+extension LogCategory {
+    static let pickerList = LogCategory("PickerList")
 }
 
 struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {

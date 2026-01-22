@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@Loggable
 @MainActor
 final class LoopManager {
     static let shared = LoopManager()
@@ -135,7 +136,7 @@ extension LoopManager {
             return
         }
 
-        Log.info("Opening Loop with starting action: \(startingAction.description) and target window: \(window?.description ?? "(none)")", category: .loopManager)
+        log.info("Opening Loop with starting action: \(startingAction.description) and target window: \(window?.description ?? "(none)")")
 
         // Refresh accent colors in case user has enabled the wallpaper processor
         Task {
@@ -171,7 +172,7 @@ extension LoopManager {
 
     private func closeLoop(forceClose: Bool) async {
         guard isLoopActive == true else { return }
-        Log.info("Closing Loop (force closed: \(forceClose))", category: .loopManager)
+        log.info("Closing Loop (force closed: \(forceClose))")
 
         indicatorService.closeAll()
         isLoopActive = false
@@ -310,7 +311,7 @@ extension LoopManager {
                     if let lastAction = WindowRecords.getCurrentAction(for: targetWindow),
                        lastAction.getName() != screenSwitchingCustomActionName,
                        !lastAction.forceProportionalFrameOnScreenChange {
-                        await resizeContext.setAction(to: lastAction, parent: nil)
+                        resizeContext.setAction(to: lastAction, parent: nil)
                     } else {
                         let currentFrame = targetWindow.frame
 
@@ -368,7 +369,7 @@ extension LoopManager {
                 }
             }
 
-            Log.info("Screen changed: \(newScreen.localizedName)", category: .loopManager)
+            log.info("Screen changed: \(newScreen.localizedName)")
 
             return
         }
@@ -397,7 +398,7 @@ extension LoopManager {
                 }
             }
 
-            Log.info("Window action changed: \(newAction.description)", category: .loopManager)
+            log.info("Window action changed: \(newAction.description)")
         }
     }
 

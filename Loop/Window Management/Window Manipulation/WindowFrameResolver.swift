@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@Loggable(style: .static)
 enum WindowFrameResolver {
     typealias FrameResult = (frame: CGRect, sidesToAdjust: Edge.Set?)
 
@@ -365,7 +366,7 @@ extension WindowFrameResolver {
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
     private static func getLastActionFrame(window: Window, bounds: CGRect) -> CGRect {
         if let previousAction = WindowRecords.getLastAction(for: window) {
-            Log.info("Last action was \(previousAction.description)", category: .windowAction)
+            log.info("Last action was \(previousAction.description)")
 
             return WindowFrameResolver.getFrame(
                 for: previousAction,
@@ -373,7 +374,7 @@ extension WindowFrameResolver {
                 bounds: bounds
             )
         } else {
-            Log.info("Didn't find frame to undo; using current frame", category: .windowAction)
+            log.info("Didn't find frame to undo; using current frame")
             return window.frame
         }
     }
@@ -385,7 +386,7 @@ extension WindowFrameResolver {
         if let initialFrame = WindowRecords.getInitialFrame(for: window) {
             return initialFrame
         } else {
-            Log.info("Didn't find initial frame; using current frame", category: .windowAction)
+            log.info("Didn't find initial frame; using current frame")
             return window.frame
         }
     }

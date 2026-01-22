@@ -10,6 +10,7 @@ import Defaults
 import Scribe
 
 /// This enum is in charge of fetching windows in the user's workspace, which will be used by Loop.
+@Loggable(style: .static)
 enum WindowUtility {
     /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
     /// - Returns: The target window
@@ -17,7 +18,7 @@ enum WindowUtility {
         var result: Window?
 
         do {
-            Log.info("Getting window at cursor...", category: .windowUtility)
+            log.info("Getting window at cursor...")
 
             if Defaults[.resizeWindowUnderCursor],
                let mouseLocation = CGEvent.mouseLocation,
@@ -25,16 +26,16 @@ enum WindowUtility {
                 result = window
             }
         } catch {
-            Log.warn("Failed to get window at cursor: \(error.localizedDescription)", category: .windowUtility)
+            log.warn("Failed to get window at cursor: \(error.localizedDescription)")
         }
 
         if result == nil {
             do {
-                Log.info("Getting frontmost window...", category: .windowUtility)
+                log.info("Getting frontmost window...")
 
                 result = try frontmostWindow()
             } catch {
-                Log.warn("Failed to get frontmost window: \(error.localizedDescription)", category: .windowUtility)
+                log.warn("Failed to get frontmost window: \(error.localizedDescription)")
             }
         }
 

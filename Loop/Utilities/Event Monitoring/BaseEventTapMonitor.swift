@@ -10,6 +10,7 @@ import Foundation
 import Scribe
 
 /// Base class to share common functionality. DO NOT USE DIRECTLY!
+@Loggable
 class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     let id = UUID()
 
@@ -50,7 +51,7 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     func start() {
         guard let eventTap else { return }
 
-        Log.info("Starting BaseEventTapMonitor with ID \(id)", category: .baseEventTapMonitor)
+        log.info("Starting BaseEventTapMonitor with ID \(id)")
 
         CGEvent.tapEnable(tap: eventTap, enable: true)
         isEnabled = true
@@ -59,7 +60,7 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     func stop() {
         guard let eventTap else { return }
 
-        Log.info("Stopping BaseEventTapMonitor with ID \(id)", category: .baseEventTapMonitor)
+        log.info("Stopping BaseEventTapMonitor with ID \(id)")
 
         CGEvent.tapEnable(tap: eventTap, enable: false)
         isEnabled = false

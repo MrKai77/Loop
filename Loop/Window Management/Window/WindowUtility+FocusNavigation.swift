@@ -25,12 +25,12 @@ extension WindowUtility {
             from: currentWindow,
             direction: direction
         ) else {
-            Log.info("No window found to focus in direction \(direction)", category: .windowUtility)
+            log.info("No window found to focus in direction \(direction)")
             return nil
         }
 
         let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
-        Log.info("Focusing window: \(nextWindowTitle)", category: .windowUtility)
+        log.info("Focusing window: \(nextWindowTitle)")
 
         Task { @MainActor in
             directionalWindow.focus()
@@ -41,12 +41,12 @@ extension WindowUtility {
 
     static func focusNextWindowInStack(from currentWindow: Window?) -> Window? {
         guard let directionalWindow = WindowUtility.nextStackedWindow(from: currentWindow) else {
-            Log.info("No window found to focus in stack", category: .windowUtility)
+            log.info("No window found to focus in stack")
             return nil
         }
 
         let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
-        Log.info("Focusing window: \(nextWindowTitle)", category: .windowUtility)
+        log.info("Focusing window: \(nextWindowTitle)")
 
         Task { @MainActor in
             directionalWindow.focus()
@@ -74,7 +74,7 @@ extension WindowUtility {
             }
 
         guard !availableWindows.isEmpty else {
-            Log.info("No windows available to focus", category: .windowUtility)
+            log.info("No windows available to focus")
             return nil
         }
 
@@ -84,7 +84,7 @@ extension WindowUtility {
                 .filter { $0.cgWindowID != currentWindow.cgWindowID }
 
             guard !otherWindows.isEmpty else {
-                Log.info("No other windows available to focus", category: .windowUtility)
+                log.info("No other windows available to focus")
                 return nil
             }
 
@@ -95,20 +95,20 @@ extension WindowUtility {
                 direction: direction,
                 canWrap: true
             ) {
-                Log.info("Found window to focus in direction \(direction): \(nextWindow.description)", category: .windowUtility)
+                log.info("Found window to focus in direction \(direction): \(nextWindow.description)")
                 return nextWindow
             } else {
-                Log.info("No window found in direction \(direction)", category: .windowUtility)
+                log.info("No window found in direction \(direction)")
                 return nil
             }
         } else {
             guard let screen = NSScreen.screenWithMouse ?? NSScreen.main else {
-                Log.error("Could not determine active screen", category: .windowUtility)
+                log.error("Could not determine active screen")
                 return nil
             }
 
             let screenCenter = screen.cgSafeScreenFrame.center
-            Log.info("Navigating from screen center: \(screenCenter.debugDescription)", category: .windowUtility)
+            log.info("Navigating from screen center: \(screenCenter.debugDescription)")
 
             // Find the closest window in the specified direction from screen center
             let nextWindow = availableWindows
@@ -116,9 +116,9 @@ extension WindowUtility {
                 .min { screenCenter.distance(to: $0.frame.center) < screenCenter.distance(to: $1.frame.center) }
 
             if let nextWindow {
-                Log.info("Found window to focus in direction \(direction): \(nextWindow.description)", category: .windowUtility)
+                log.info("Found window to focus in direction \(direction): \(nextWindow.description)")
             } else {
-                Log.info("No window found in direction \(direction) from screen center", category: .windowUtility)
+                log.info("No window found in direction \(direction) from screen center")
             }
 
             return nextWindow
@@ -142,7 +142,7 @@ extension WindowUtility {
             }
 
         guard !availableWindows.isEmpty else {
-            Log.info("No windows available to focus", category: .windowUtility)
+            log.info("No windows available to focus")
             return nil
         }
 
@@ -150,7 +150,7 @@ extension WindowUtility {
             // If no current window, return the last available window
             let targetWindow = availableWindows.last
             if let targetWindow {
-                Log.info("No current window, selecting last window: \(targetWindow.description)", category: .windowUtility)
+                log.info("No current window, selecting last window: \(targetWindow.description)")
             }
             return targetWindow
         }
@@ -160,7 +160,7 @@ extension WindowUtility {
             .filter { $0.cgWindowID != currentWindow.cgWindowID }
 
         guard !otherWindows.isEmpty else {
-            Log.info("No other windows available to focus in stack", category: .windowUtility)
+            log.info("No other windows available to focus in stack")
             return nil
         }
 
@@ -169,10 +169,10 @@ extension WindowUtility {
             from: currentWindow,
             in: otherWindows
         ) {
-            Log.info("Found window to focus in stack: \(nextWindow.description)", category: .windowUtility)
+            log.info("Found window to focus in stack: \(nextWindow.description)")
             return nextWindow
         } else {
-            Log.info("No window found in stack", category: .windowUtility)
+            log.info("No window found in stack")
             return nil
         }
     }

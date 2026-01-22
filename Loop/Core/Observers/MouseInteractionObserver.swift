@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@Loggable
 final class MouseInteractionObserver {
     private static let directionalActionDistance: CGFloat = 50
     private static let noActionDistance: CGFloat = 10
@@ -87,7 +88,7 @@ final class MouseInteractionObserver {
         leftClickMonitor.start()
         self.leftClickMonitor = leftClickMonitor
 
-        Log.info("Started with initial mouse position: \(latestMousePosition.debugDescription)", category: .mouseInteractionObserver)
+        log.info("Started with initial mouse position: \(latestMousePosition.debugDescription)")
     }
 
     func stop() {
@@ -105,7 +106,7 @@ final class MouseInteractionObserver {
         initialMousePosition = .zero
         latestMousePosition = .zero
 
-        Log.success("Stopped, all stored states cleared.", category: .mouseInteractionObserver)
+        log.success("Stopped, all stored states cleared.")
     }
 
     private func processNewMouseLocation(_ event: CGEvent) {

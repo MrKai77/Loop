@@ -103,6 +103,7 @@ import Scribe
 import SwiftUI
 
 /// Handles URL scheme commands for the Loop application
+@Loggable
 final class URLCommandHandler {
     // MARK: - Types
 
@@ -164,7 +165,7 @@ final class URLCommandHandler {
             cleanMessage.hasPrefix("Found") ||
             cleanMessage.hasPrefix("Window:") ||
             (cleanMessage.hasPrefix("Processing") && !cleanMessage.contains("command:")) {
-            Log.info(cleanMessage, category: .urlHandler)
+            log.info(cleanMessage)
             return
         }
 
@@ -172,9 +173,9 @@ final class URLCommandHandler {
         if currentCommand?.contains("/list") == true {
             outputBuffer.append(output)
         } else {
-            Log.info("\(output)", category: .urlHandler)
+            log.info("\(output)")
         }
-        Log.info(cleanMessage, category: .urlHandler)
+        log.info(cleanMessage)
     }
 
     /// Writes a titled list of items to output
@@ -193,8 +194,8 @@ final class URLCommandHandler {
             outputBuffer.append(title)
             outputBuffer.append(contentsOf: formattedItems)
         } else {
-            Log.info("\n\(title)", category: .urlHandler)
-            formattedItems.forEach { Log.info("\($0)", category: .urlHandler) }
+            log.info("\n\(title)")
+            formattedItems.forEach { log.info("\($0)") }
         }
     }
 
@@ -226,16 +227,16 @@ final class URLCommandHandler {
 
                 do {
                     try FileManager.default.removeItem(at: tempFile)
-                    Log.info("Cleaned up temporary file: \(tempFile.lastPathComponent)", category: .urlHandler)
+                    log.info("Cleaned up temporary file: \(tempFile.lastPathComponent)")
                 } catch {
-                    Log.error("Failed to clean up temporary file: \(error.localizedDescription)", category: .urlHandler)
+                    log.error("Failed to clean up temporary file: \(error.localizedDescription)")
                 }
             }
         } catch {
-            Log.error("Failed to write output: \(error.localizedDescription)", category: .urlHandler)
+            log.error("Failed to write output: \(error.localizedDescription)")
 
             // Fallback to direct console output if file operations fail
-            Log.info("\(outputBuffer.joined(separator: "\n"))", category: .urlHandler)
+            log.info("\(outputBuffer.joined(separator: "\n"))")
         }
 
         outputBuffer.removeAll()
@@ -276,8 +277,8 @@ final class URLCommandHandler {
     ///   - command: The command to process
     ///   - parameters: Array of command parameters
     private func processCommand(_ command: Command, _ parameters: [String]) {
-        Log.info(command.rawValue, category: .urlHandler)
-        Log.info(parameters.description, category: .urlHandler)
+        log.info(command.rawValue)
+        log.info(parameters.description)
 
         switch command {
         case .direction: handleDirectionCommand(parameters)

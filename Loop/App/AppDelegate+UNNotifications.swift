@@ -37,11 +37,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             options: [.alert]
         ) { accepted, error in
             if !accepted {
-                Log.warn("Notification access denied.", category: .appDelegate)
+                Log.warn("Notification access denied.", category: AppDelegate.logCategory)
             }
 
             if let error {
-                Log.error("Failed to request notification authorization: \(error.localizedDescription)", category: .appDelegate)
+                Log.error("Failed to request notification authorization: \(error.localizedDescription)", category: AppDelegate.logCategory)
             }
         }
     }

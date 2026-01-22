@@ -35,6 +35,7 @@ import SwiftUI
 ///
 /// ## Considerations:
 /// - Currently supports only one revealed window at a time.
+@Loggable
 final class StashManager {
     static let shared = StashManager()
     private init() {}
@@ -115,7 +116,7 @@ final class StashManager {
             return false
         }
 
-        Log.info("Intercepting window action for stashed window \(stashedWindow.window.description)", category: .stashManager)
+        log.info("Intercepting window action for stashed window \(stashedWindow.window.description)")
 
         Task {
             if store.isWindowRevealed(stashedWindow.window.cgWindowID) {
@@ -159,7 +160,7 @@ extension StashManager {
             // the leftmost screen for `.left` or the rightmost screen for `.right`. If the window's current screen differs from the target screen,
             // the function recursively adjusts the window's position to ensure it is stashed on the correct screen.
             if let screenForEdge = getScreenForEdge(currentScreen: screen, edge: edge), screen != screenForEdge {
-                Log.info("Attempting to stash window on the \(edge.debugDescription) edge, but \(screen.localizedName) is not the \(edge.debugDescription)most screen. Redirecting to the correct screen.", category: .stashManager)
+                log.info("Attempting to stash window on the \(edge.debugDescription) edge, but \(screen.localizedName) is not the \(edge.debugDescription)most screen. Redirecting to the correct screen.")
                 onWindowResized(action: action, window: window, screen: screenForEdge)
             } else {
                 let windowToStash = StashedWindowInfo(window: window, screen: screen, action: action)
@@ -205,7 +206,7 @@ extension StashManager {
     /// Add the given `StashWindow` to the list of monitored windows, move the window to the stashed area
     /// and start mouse moved listener if needed.
     private func stash(_ windowToStash: StashedWindowInfo) async {
-        Log.info("stash \(windowToStash.window.description)", category: .stashManager)
+        log.info("stash \(windowToStash.window.description)")
 
         unstashOverlappingWindows(windowToStash)
 
@@ -225,7 +226,7 @@ extension StashManager {
 
     /// Stop monitoring the window. If `resetFrame` is true, the window will be moved to its initial frame.
     private func unstash(_ window: StashedWindowInfo, resetFrame: Bool, resetFrameAnimated: Bool) {
-        Log.info("unstash \(window.window.description)", category: .stashManager)
+        log.info("unstash \(window.window.description)")
 
         if resetFrame {
             let action = WindowAction(.initialFrame)
@@ -294,7 +295,7 @@ private extension StashManager {
         }
 
         store.markWindowAsRevealed(window.window.cgWindowID)
-        Log.info("revealWindow \(window.window.description)", category: .stashManager)
+        log.info("revealWindow \(window.window.description)")
     }
 
     /// Hides a stashed window by moving it to its stashed frame.
@@ -317,7 +318,7 @@ private extension StashManager {
         }
 
         store.markWindowAsHidden(window.window.cgWindowID)
-        Log.info("hideWindow \(window.window.description)", category: .stashManager)
+        log.info("hideWindow \(window.window.description)")
     }
 
     /// Checks if the window reveal / hide should be throttled based on the last reveal time.
@@ -351,7 +352,7 @@ private extension StashManager {
         }
 
         if let focusWindow {
-            Log.info("Focusing another window on the same screen: \(focusWindow.description).", category: .stashManager)
+            log.info("Focusing another window on the same screen: \(focusWindow.description).")
             Task { @MainActor in
                 focusWindow.focus()
             }
@@ -365,7 +366,7 @@ private extension StashManager {
     func startListeningToRevealTriggers() {
         guard mouseMonitor == nil else { return }
 
-        Log.info("Listening for reveal triggers…", category: .stashManager)
+        log.info("Listening for reveal triggers…")
 
         let monitor = PassiveEventMonitor(
             events: [
@@ -392,7 +393,7 @@ private extension StashManager {
     func stopListeningToRevealTriggers() {
         guard mouseMonitor != nil else { return }
 
-        Log.info("Stopping listening for reveal triggers…", category: .stashManager)
+        log.info("Stopping listening for reveal triggers…")
 
         mouseMonitor?.stop()
         mouseMonitor = nil
@@ -518,14 +519,14 @@ private extension StashManager {
             // Trying to store windowToStash in the same place as stashedWindow.
             // No need for frame comparaison, it will always overlap.
             if stashedWindow.action.id == windowToStash.action.id, stashedWindow.screen.isSameScreen(windowToStash.screen) {
-                Log.info("Trying to stash a window in the same place as another one. Replacing…", category: .stashManager)
+                log.info("Trying to stash a window in the same place as another one. Replacing…")
                 unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
             } else {
                 let currentFrame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
                 let tolerance = minimumVisibleHeightToKeepWindowStacked
 
                 if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
-                    Log.info("Trying to stash a window overlapping another one. Replacing…", category: .stashManager)
+                    log.info("Trying to stash a window overlapping another one. Replacing…")
                     unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
                 }
             }

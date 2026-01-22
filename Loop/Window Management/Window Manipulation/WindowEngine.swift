@@ -11,6 +11,7 @@ import SwiftUI
 
 /// Handles the low-level resize operations for windows.
 /// Use `WindowActionEngine.apply()` as the main entry point for executing window actions.
+@Loggable(style: .static)
 enum WindowEngine {
     /// Performs the actual resize operation on a window.
     /// This is an internal method - callers should use `WindowActionEngine.apply()` instead.
@@ -30,7 +31,7 @@ enum WindowEngine {
 
         let willChangeScreens = ScreenUtility.screenContaining(window) != context.screen
         let targetFrame = context.getTargetFrame().padded
-        Log.info("Resizing \(window) to \(targetFrame)", category: .windowEngine)
+        log.info("Resizing \(window) to \(targetFrame)")
 
         // Record first frame if needed
         WindowRecords.recordFirstIfNeeded(for: window)
@@ -129,7 +130,7 @@ enum WindowEngine {
             let axMenuItem = try? systemAction.getItem(for: app),
             (try? axMenuItem.getValue(.enabled)) == true
         else {
-            Log.info("System action not available for \(action.direction.debugDescription) on \(window.title ?? "<unknown>")", category: .windowEngine)
+            log.info("System action not available for \(action.direction.debugDescription) on \(window.title ?? "<unknown>")")
             return false
         }
 
@@ -156,7 +157,7 @@ enum WindowEngine {
         guard let window = NSApp.keyWindow ?? NSApp.windows.first(where: {
             $0.level.rawValue <= NSWindow.Level.floating.rawValue
         }) else {
-            Log.info("Failed to get own main window to resize", category: .windowEngine)
+            log.info("Failed to get own main window to resize")
             return
         }
 

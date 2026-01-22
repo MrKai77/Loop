@@ -9,6 +9,7 @@ import Defaults
 import Foundation
 import Scribe
 
+@Loggable(style: .static)
 enum DataPatcher {
     static func run() {
         let initialPatches: Patches = Defaults[.patchesApplied]
@@ -41,7 +42,7 @@ enum DataPatcher {
             callback()
 
             Defaults[.patchesApplied].formUnion(patch)
-            Log.info("Ran patch \(patch)", category: .dataPatcher)
+            log.info("Ran patch \(patch)")
         }
     }
 

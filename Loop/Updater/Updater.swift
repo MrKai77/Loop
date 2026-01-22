@@ -10,6 +10,7 @@ import Luminare
 import Scribe
 import SwiftUI
 
+@Loggable
 final class Updater: ObservableObject {
     static let shared = Updater()
 
@@ -85,7 +86,7 @@ final class Updater: ObservableObject {
 
             /// If the updater has requested that the update window be presented for over 6 hours, automatically present it.
             autoPresentUpdateWindowTask = Task {
-                Log.info("Will automatically present update window in 6 hours if there is no activity", category: .updater)
+                log.info("Will automatically present update window in 6 hours if there is no activity")
 
                 try? await Task.sleep(for: .seconds(21600))
 
@@ -129,7 +130,7 @@ final class Updater: ObservableObject {
                     updatesEnabled = Updater.checkIfUpdatesEnabled()
                 }
 
-                Log.info("Updates enabled status changed to: \(updatesEnabled)", category: .updater)
+                log.info("Updates enabled status changed to: \(updatesEnabled)")
 
                 if updatesEnabled {
                     self.updateCheckerTask = makeUpdateCheckerTask()
@@ -179,14 +180,14 @@ final class Updater: ObservableObject {
                 return
             }
 
-            Log.info("Fetching latest release info...", category: .updater)
+            log.info("Fetching latest release info...")
 
             let urlString = includeDevelopmentVersions ?
                 "https://api.github.com/repos/MrKai77/Loop/releases" : // Developmental branch
                 "https://api.github.com/repos/MrKai77/Loop/releases/latest" // Stable branch
 
             guard let url = URL(string: urlString) else {
-                Log.error("Invalid URL: \(urlString)", category: .updater)
+                log.error("Invalid URL: \(urlString)")
                 return
             }
 
@@ -199,7 +200,7 @@ final class Updater: ObservableObject {
                 await MainActor.run {
                     updateState = .unavailable
                 }
-                Log.error("Error fetching release info: \(error.localizedDescription)", category: .updater)
+                log.error("Error fetching release info: \(error.localizedDescription)")
             }
         }
 
@@ -257,10 +258,10 @@ final class Updater: ObservableObject {
                 for line in lines {
                     if let minimumMacOSVersion = extractMinimumMacOSVersion(from: String(line)) {
                         if !ProcessInfo.processInfo.isOperatingSystemAtLeast(minimumMacOSVersion) {
-                            Log.warn("Minimum macOS version requirement for next update not met (required: \(minimumMacOSVersion))", category: .updater)
+                            log.warn("Minimum macOS version requirement for next update not met (required: \(minimumMacOSVersion))")
                             newUpdateState = .osNotSupported
                         } else {
-                            Log.success("Minimum macOS version requirement for next update is met", category: .updater)
+                            log.success("Minimum macOS version requirement for next update is met")
                         }
                     }
                 }
@@ -269,12 +270,12 @@ final class Updater: ObservableObject {
             updateState = newUpdateState
 
             if newUpdateState == .available {
-                Log.notice("Update available: \(release.name)", category: .updater)
+                log.notice("Update available: \(release.name)")
 
                 targetRelease = release
                 processChangelog(release.body)
             } else {
-                Log.info("No update available.", category: .updater)
+                log.info("No update available.")
             }
         }
     }
@@ -376,7 +377,7 @@ final class Updater: ObservableObject {
         windowController?.window?.makeKeyAndOrderFront(self)
         windowController?.window?.orderFrontRegardless()
 
-        Log.ui("Update window shown", category: .updater)
+        log.ui("Update window shown")
     }
 
     // Downloads the update from GitHub and installs it
@@ -392,7 +393,7 @@ final class Updater: ObservableObject {
             return
         }
 
-        Log.info("Installing update: \(latestRelease.name)", category: .updater)
+        log.info("Installing update: \(latestRelease.name)")
 
         let tempUrl = FileManager.default.temporaryDirectory.appendingPathComponent("\(asset.name)_\(latestRelease.tagName)")
 
@@ -417,22 +418,22 @@ final class Updater: ObservableObject {
             self.updateState = .unavailable
         }
 
-        Log.info("Update installed successfully", category: .updater)
+        log.info("Update installed successfully")
     }
 
     private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {
-        Log.info("Downloading update asset: \(asset.name) to \(destinationURL.path)", category: .updater)
+        log.info("Downloading update asset: \(asset.name) to \(destinationURL.path)")
 
         do {
             let (fileURL, _) = try await URLSession.shared.download(from: asset.browserDownloadURL)
             try FileManager.default.moveItem(at: fileURL, to: destinationURL)
         } catch {
-            Log.error("Failed to download update: \(error.localizedDescription)", category: .updater)
+            log.error("Failed to download update: \(error.localizedDescription)")
         }
     }
 
     private func unzipAndSwap(downloadedFileURL fileURL: String) async {
-        Log.info("Unzipping and swapping app bundle at \(fileURL)", category: .updater)
+        log.info("Unzipping and swapping app bundle at \(fileURL)")
 
         let appBundle = Bundle.main.bundleURL
         let fileManager = FileManager.default
@@ -454,7 +455,7 @@ final class Updater: ObservableObject {
             // Find the unzipped app bundle
             let contents = try fileManager.contentsOfDirectory(at: tempDir, includingPropertiesForKeys: nil)
             guard let newAppBundle = contents.first(where: { $0.pathExtension == "app" }) else {
-                Log.error("No app bundle found in extracted contents", category: .updater)
+                log.error("No app bundle found in extracted contents")
                 return
             }
 
@@ -469,7 +470,7 @@ final class Updater: ObservableObject {
             // Clean up
             try fileManager.removeItem(at: tempDir)
         } catch {
-            Log.error("Error updating the app: \(error.localizedDescription)", category: .updater)
+            log.error("Error updating the app: \(error.localizedDescription)")
         }
     }
 }

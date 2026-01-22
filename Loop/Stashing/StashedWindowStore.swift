@@ -16,6 +16,7 @@ protocol StashedWindowsStoreDelegate: AnyObject {
 
 /// Keep the stashed windows and the revealed window ids both in memory and in Defaults.
 /// Restore windows stashed from a previous session.
+@Loggable
 final class StashedWindowsStore {
     weak var delegate: StashedWindowsStoreDelegate?
 
@@ -57,7 +58,7 @@ final class StashedWindowsStore {
         stashed[cgWindowID] = window
 
         Defaults[.stashManagerStashedWindows] = stashed.mapValues(\.action)
-        Log.info("Persisted stashed windows (count: \(stashed.count))", category: .stashManager)
+        log.info("Persisted stashed windows (count: \(stashed.count))")
     }
 
     // MARK: Private methods
@@ -78,12 +79,12 @@ final class StashedWindowsStore {
 
         if !restoredStashedWindows.isEmpty {
             stashed = restoredStashedWindows
-            Log.info("\(restoredStashedWindows.count) stashed window restored.", category: .stashedWindowsStore)
+            log.info("\(restoredStashedWindows.count) stashed window restored.")
             delegate?.onStashedWindowsRestored()
         }
 
         if !failedToRestore.isEmpty {
-            Log.error("Failed to restore \(failedToRestore.count) window(s).", category: .stashedWindowsStore)
+            log.error("Failed to restore \(failedToRestore.count) window(s).")
 
             // Window restoration usually fail because the window is on another space and will
             // not be returned by WindowEngine.windowList until the user goes to that space.
@@ -97,7 +98,7 @@ final class StashedWindowsStore {
         let windows = WindowUtility.windowList()
         var restored = 0
 
-        Log.info("Space changed. Attempting to restore windows.", category: .stashedWindowsStore)
+        log.info("Space changed. Attempting to restore windows.")
 
         for (windowId, direction) in failedToRestore {
             guard let stashedWindow = getStashedWindow(for: windowId, in: windows, action: direction) else {
