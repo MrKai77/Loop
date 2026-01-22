@@ -348,11 +348,7 @@ extension LoopManager {
             }
 
             resizeContext.setScreen(to: newScreen)
-
-            // This is only needed because if preview window is moved
-            // onto a new screen, it needs to receive a window action
-//            previewController.setAction(to: currentAction, context: resizeContext)
-//            radialMenuController.setAction(to: currentAction, parent: parentCycleAction)
+            indicatorService.openAndUpdate(context: resizeContext)
 
             if let parent = newParentAction {
                 resizeContext.setAction(to: newAction, parent: newParentAction)

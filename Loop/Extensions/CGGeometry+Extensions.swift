@@ -189,25 +189,6 @@ extension CGRect {
         return result
     }
 
-    func scale(
-        inside targetBounds: CGRect,
-        from originalBounds: CGRect
-    ) -> CGRect {
-        guard originalBounds.width > 0, originalBounds.height > 0 else { return self }
-
-        let relativeWidth = width / originalBounds.width
-        let relativeHeight = height / originalBounds.height
-        let relativeMinX = (minX - originalBounds.minX) / originalBounds.width
-        let relativeMinY = (minY - originalBounds.minY) / originalBounds.height
-
-        return CGRect(
-            x: targetBounds.minX + targetBounds.width * relativeMinX,
-            y: targetBounds.minY + targetBounds.height * relativeMinY,
-            width: targetBounds.width * relativeWidth,
-            height: targetBounds.height * relativeHeight
-        )
-    }
-
     /// Returns true if the rectangle is finite, false otherwise.
     var isFinite: Bool {
         origin.x.isFinite &&

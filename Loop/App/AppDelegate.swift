@@ -37,6 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         DataPatcher.run()
         IconManager.refreshCurrentAppIcon()
+        LaunchAtLoginManager.shared.start()
         LoopManager.shared.start()
         WindowDragManager.shared.addObservers()
         StashManager.shared.start()

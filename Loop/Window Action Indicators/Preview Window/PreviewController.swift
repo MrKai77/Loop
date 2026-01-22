@@ -24,6 +24,10 @@ final class PreviewController: WindowActionIndicator {
         defer { viewModel.updateContext(with: context) }
 
         if let windowController = controller {
+            // Move panel to new screen if screen changed
+            if windowController.window?.screen != screen {
+                windowController.window?.setFrame(screen.frame, display: true)
+            }
             windowController.window?.orderFrontRegardless()
             return
         }
