@@ -185,12 +185,7 @@ extension LoopManager {
             // So only resize the window if the preview is enabled.
             if Defaults[.previewVisibility] {
                 Task {
-                    _ = await WindowActionEngine.apply(context: resizeContext)
-//                    if let updatedFrame = result.updatedFrame {
-//                        await MainActor.run {
-//                            resizeContext.targetFrame = updatedFrame
-//                        }
-//                    }
+                    _ = try? await WindowActionEngine.shared.apply(context: resizeContext )
                 }
             }
 
@@ -368,7 +363,7 @@ extension LoopManager {
                     }
 
                     Task {
-                        _ = await WindowActionEngine.apply(context: resizeContext)
+                        _ = try await WindowActionEngine.shared.apply(context: resizeContext)
                     }
                 }
             }
@@ -388,13 +383,13 @@ extension LoopManager {
 
             Task {
                 if !Defaults[.previewVisibility] {
-                    _ = await WindowActionEngine.apply(context: resizeContext)
+                    _ = try await WindowActionEngine.shared.apply(context: resizeContext)
                 }
 
                 // If the action is to focus a window in a specific direction, find and activate that window
                 // This can work even without a current window (navigates from screen center)
                 if newAction.direction.willFocusWindow {
-                    let result = await WindowActionEngine.apply(context: resizeContext)
+                    let result = try await WindowActionEngine.shared.apply(context: resizeContext)
 
                     if let newTargetWindow = result.newTargetWindow {
                         resizeContext.setWindow(to: newTargetWindow)

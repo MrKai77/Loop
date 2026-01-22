@@ -300,7 +300,7 @@ final class WindowDragManager {
         }
 
         Task {
-            _ = await WindowActionEngine.apply(context: context)
+            _ = try await WindowActionEngine.shared.apply(context: context)
         }
     }
 }

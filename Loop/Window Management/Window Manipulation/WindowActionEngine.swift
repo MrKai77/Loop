@@ -17,8 +17,12 @@ import SwiftUI
 ///
 /// **Note:** Screen change actions (`nextScreen`, `previousScreen`, etc.) are NOT handled here.
 /// They are resolved by `LoopManager` which updates `resizeContext.screen` before calling `apply()`.
-@Loggable(style: .static)
-enum WindowActionEngine {
+@Loggable
+final class WindowActionEngine {
+    static let shared = WindowActionEngine()
+    
+    private var actionTasks: [CGWindowID: Task<Result, any Error>] = [:]
+    
     /// Result of applying a window action
     struct Result {
         /// Whether the action was successfully applied
@@ -40,6 +44,23 @@ enum WindowActionEngine {
         }
     }
 
+    /// Simplified apply for callers that don't need resize context tracking (URL commands, drag snap, etc.)
+    ///
+    /// - Parameters:
+    ///   - action: The action to apply
+    ///   - window: The target window
+    ///   - screen: The screen to perform the action on
+    /// - Returns: Result indicating success and any state changes
+    func apply(
+        _ action: WindowAction,
+        window: Window?,
+        screen: NSScreen
+    ) async throws -> Result {
+        let context = ResizeContext(window: window, screen: screen)
+        context.setAction(to: action, parent: nil)
+        return try await apply(context: context)
+    }
+
     /// Apply a window action with explicit resize context tracking.
     /// The context should be updated by the caller before calling this function.
     ///
@@ -48,8 +69,31 @@ enum WindowActionEngine {
     ///   - window: The target window (can be nil for some actions like focus navigation from screen center)
     ///   - resizeContext: Context containing tracking state for grow/shrink actions (passed by value, caller updates)
     /// - Returns: Result indicating success and any state changes
-    @MainActor
-    static func apply(context: ResizeContext) async -> Result {
+    /// - Throws: `CancellationError` if a new action is applied to the same window
+    func apply(context: ResizeContext) async throws -> Result {
+        guard let windowID = context.window?.cgWindowID else {
+            return try await performApply(context: context)
+        }
+
+        // Cancel any existing action on this window
+        actionTasks[windowID]?.cancel()
+
+        // Create a task for this action
+        let task = Task<Result, any Error> { @concurrent in
+            let result = try await performApply(context: context)
+            try Task.checkCancellation()
+            return result
+        }
+        actionTasks[windowID] = task
+
+        // Await the task and clean up
+        let result = try await task.value
+        actionTasks.removeValue(forKey: windowID)
+
+        return result
+    }
+
+    private func performApply(context: ResizeContext) async throws -> Result {
         log.info("Applying context: \(context)")
 
         let direction = context.action.direction
@@ -70,33 +114,15 @@ enum WindowActionEngine {
         }
 
         // Perform the resize
-        let appliedFrame = await WindowEngine.performResize(context: context)
+        let appliedFrame = try await WindowEngine.performResize(context: context)
 
         // Return the frame that should be stored (either from system WM or from calculation)
         return .resized(frame: appliedFrame ?? context.getTargetFrame().padded)
     }
 
-    /// Simplified apply for callers that don't need resize context tracking (URL commands, drag snap, etc.)
-    ///
-    /// - Parameters:
-    ///   - action: The action to apply
-    ///   - window: The target window
-    ///   - screen: The screen to perform the action on
-    /// - Returns: Result indicating success and any state changes
-    @MainActor
-    static func apply(
-        _ action: WindowAction,
-        window: Window?,
-        screen: NSScreen
-    ) async -> Result {
-        var context = ResizeContext(window: window, screen: screen)
-        context.setAction(to: action, parent: nil)
-        return await apply(context: context)
-    }
-
     // MARK: - Focus Actions
 
-    private static func handleFocusAction(_ action: WindowAction, currentWindow: Window?) -> Result {
+    private func handleFocusAction(_ action: WindowAction, currentWindow: Window?) -> Result {
         let direction = action.direction
         var newTargetWindow: Window?
 
@@ -113,7 +139,7 @@ enum WindowActionEngine {
 
     /// Handles quick actions that don't require the full resize flow.
     /// Returns nil if the action is not a quick action.
-    private static func handleQuickAction(_ action: WindowAction, window: Window?) -> Result? {
+    private func handleQuickAction(_ action: WindowAction, window: Window?) -> Result? {
         guard let window else {
             // Quick actions require a window
             if [.hide, .minimize, .fullscreen, .minimizeOthers].contains(action.direction) {
@@ -143,7 +169,7 @@ enum WindowActionEngine {
 
     // MARK: - Helpers
 
-    private static func minimizeOtherWindows(exceptWindow: Window) {
+    private func minimizeOtherWindows(exceptWindow: Window) {
         let allWindows = WindowUtility.windowList()
         let windowsToMinimize = allWindows.filter {
             $0.cgWindowID != exceptWindow.cgWindowID && !$0.minimized && !$0.isWindowHidden

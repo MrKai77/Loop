@@ -15,7 +15,7 @@ enum WindowEngine {
     /// Performs the actual resize operation on a window.
     /// This is an internal method - callers should use `WindowActionEngine.apply()` instead.
     @concurrent
-    static func performResize(context: ResizeContext) async -> CGRect? {
+    static func performResize(context: ResizeContext) async throws -> CGRect? {
         // Immediately return for no-op or focus-only actions
         guard let window = context.window,
               !context.action.direction.isNoOp,
@@ -178,10 +178,12 @@ enum WindowEngine {
             try await window.setFrameAnimated(targetFrame, bounds: bounds)
         } else {
             window.setFrame(targetFrame, sizeFirst: willChangeScreens)
+            try Task.checkCancellation()
         }
 
         if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
             window.setFrame(targetFrame)
+            try Task.checkCancellation()
         }
 
         handleSizeConstrainedWindow(window: window, bounds: bounds)
