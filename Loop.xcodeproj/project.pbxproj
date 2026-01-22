@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
+		3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED0A7B82F21DF6800A58629 /* ZIPFoundation */; };
 		3EFD33252EE6DFA4007D9601 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 3EFD33242EE6DFA4007D9601 /* Scribe */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06D76892DFF7A77007EEDA9 /* SkyLight.framework */; };
@@ -60,6 +61,7 @@
 				2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */,
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
+				3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +122,7 @@
 				2A28B6282EE5050C00A1E26B /* Defaults */,
 				2A28B62B2EE5057C00A1E26B /* Luminare */,
 				3EFD33242EE6DFA4007D9601 /* Scribe */,
+				3ED0A7B82F21DF6800A58629 /* ZIPFoundation */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -164,6 +167,7 @@
 				2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */,
 				2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */,
 				3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */,
+				3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -543,6 +547,14 @@
 				kind = branch;
 			};
 		};
+		3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.20;
+			};
+		};
 		3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SenpaiHunters/Scribe";
@@ -563,6 +575,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */;
 			productName = Luminare;
+		};
+		3ED0A7B82F21DF6800A58629 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
 		};
 		3EFD33242EE6DFA4007D9601 /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;

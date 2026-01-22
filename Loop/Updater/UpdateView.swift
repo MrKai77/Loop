@@ -115,7 +115,7 @@ struct UpdateView: View {
 
     private func updateDateView() -> some View {
         ZStack {
-            if let updateDate = updater.targetRelease?.updateDate {
+            if let updateDate = updater.targetRelease?.updatedAt {
                 Text(updateDate.formatted(date: .complete, time: .shortened))
                     .fontDesign(.serif)
                     .foregroundStyle(.tertiary)
@@ -212,13 +212,11 @@ struct UpdateView: View {
                 Task {
                     await Updater.shared.installUpdate()
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation(luminareAnimation) {
-                            isInstalling = false
-                        }
-                        withAnimation(luminareAnimation) {
-                            readyToRestart = true
-                        }
+                    try? await Task.sleep(for: .seconds(1))
+
+                    withAnimation(luminareAnimation) {
+                        isInstalling = false
+                        readyToRestart = true
                     }
                 }
             } label: {
