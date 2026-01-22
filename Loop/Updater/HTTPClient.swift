@@ -21,7 +21,7 @@ public final class HTTPClient: Sendable {
         sessionConfig.timeoutIntervalForRequest = config.networkConfig.timeout
         sessionConfig.allowsCellularAccess = config.networkConfig.allowsCellularAccess
         sessionConfig.httpAdditionalHeaders = [
-            "User-Agent": "Loop/1.4.1 (\(SystemInfo.deviceModel); \(SystemInfo.osVersion))",
+            "User-Agent": "Loop/1.4.1 (\(SystemInfo.deviceModel); \(ProcessInfo.processInfo.operatingSystemVersion))",
             "Accept": "application/json",
             "Accept-Encoding": "gzip, deflate"
         ]

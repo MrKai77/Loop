@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28492A2F22B4B700F6CE42 /* Scribe */; };
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
 		3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED0A7B82F21DF6800A58629 /* ZIPFoundation */; };
-		3EFD33252EE6DFA4007D9601 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 3EFD33242EE6DFA4007D9601 /* Scribe */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
 		F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06D76892DFF7A77007EEDA9 /* SkyLight.framework */; };
 /* End PBXBuildFile section */
@@ -56,9 +56,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3EFD33252EE6DFA4007D9601 /* Scribe in Frameworks */,
 				2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */,
 				2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */,
+				2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */,
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
 				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 				3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */,
@@ -121,8 +121,8 @@
 			packageProductDependencies = (
 				2A28B6282EE5050C00A1E26B /* Defaults */,
 				2A28B62B2EE5057C00A1E26B /* Luminare */,
-				3EFD33242EE6DFA4007D9601 /* Scribe */,
 				3ED0A7B82F21DF6800A58629 /* ZIPFoundation */,
+				2A28492A2F22B4B700F6CE42 /* Scribe */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -166,8 +166,8 @@
 			packageReferences = (
 				2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */,
 				2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */,
-				3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */,
 				3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				2A2849292F22B4B700F6CE42 /* XCLocalSwiftPackageReference "../Scribe" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -530,6 +530,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		2A2849292F22B4B700F6CE42 /* XCLocalSwiftPackageReference "../Scribe" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Scribe;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -555,17 +562,13 @@
 				minimumVersion = 0.9.20;
 			};
 		};
-		3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SenpaiHunters/Scribe";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2A28492A2F22B4B700F6CE42 /* Scribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Scribe;
+		};
 		2A28B6282EE5050C00A1E26B /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */;
@@ -580,11 +583,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;
-		};
-		3EFD33242EE6DFA4007D9601 /* Scribe */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3EFD33232EE6DFA4007D9601 /* XCRemoteSwiftPackageReference "Scribe" */;
-			productName = Scribe;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

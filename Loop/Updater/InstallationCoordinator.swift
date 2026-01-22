@@ -34,7 +34,12 @@ public class InstallationCoordinator {
         label: "com.loop.installation",
         qos: .userInitiated
     )
-    private static let dateFormatter = DateFormatter().configured { $0.dateFormat = "yyyyMMdd_HHmmss" }
+
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd_HHmmss"
+        return formatter
+    }()
 
     public init(config: UpdaterConfig, fileManager: FileManager = .default) {
         self.config = config

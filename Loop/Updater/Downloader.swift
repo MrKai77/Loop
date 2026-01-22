@@ -9,7 +9,7 @@ import AppKit
 import Foundation
 import Scribe
 
-@Loggable(style: .static)
+@Loggable
 public final class Downloader: NSObject {
     // MARK: - Types
 
@@ -81,7 +81,7 @@ public final class Downloader: NSObject {
             return
         }
 
-        Log.info("Starting download - URL: \(manifest.downloadUrl), Version: \(manifest.version)")
+        log.info("Starting download - URL: \(manifest.downloadUrl), Version: \(manifest.version)")
 
         do {
             try EnvironmentValidator.validate(at: paths.patchworkDirectory)
@@ -92,7 +92,7 @@ public final class Downloader: NSObject {
     }
 
     public func cancel() {
-        Log.info("Cancelling download")
+        log.info("Cancelling download")
         downloadState = .cancelled
         downloadTask?.cancel()
         // Cancel any pending operations and clean up immediately
@@ -131,7 +131,7 @@ public final class Downloader: NSObject {
     }
 
     private nonisolated func handleDownloadCompletion(at location: URL, originalURL: URL) {
-        Log.info("Download completed - Temp Location: \(location.path)")
+        log.info("Download completed - Temp Location: \(location.path)")
 
         do {
             let finalURL = try FileOperations.moveDownloadedFile(
@@ -222,7 +222,7 @@ extension Downloader: URLSessionDownloadDelegate {
         Task { @MainActor in
             guard self.downloadState == .downloading else { return }
 
-            Log.error("Download failed: \(error.localizedDescription)")
+            log.error("Download failed: \(error.localizedDescription)")
 
             let downloadError: DownloadError = (error as? URLError).map(DownloadError.networkError) ?? .unknown(error)
             self.handleError(downloadError)
@@ -338,6 +338,7 @@ private enum SessionConfigurationFactory {
 
 // MARK: - FileOperations
 
+@Loggable(style: .static)
 private enum FileOperations {
     static func moveDownloadedFile(from tempLocation: URL, originalURL: URL, to loopDir: URL) throws -> URL {
         // Preserve original filename instead of renaming to "LoopUpdate.zip"
@@ -345,17 +346,16 @@ private enum FileOperations {
         let finalURL = loopDir.appendingPathComponent(originalFilename)
         let tempFinalURL = loopDir.appendingPathComponent("\(originalFilename).tmp")
 
-        Log
-            .info(
-                "Moving downloaded file - From: \(tempLocation.path), To: \(finalURL.path), Original: \(originalURL.absoluteString)"
-            )
+        log.info(
+            "Moving downloaded file - From: \(tempLocation.path), To: \(finalURL.path), Original: \(originalURL.absoluteString)"
+        )
 
         try? FileManager.default.removeItem(at: tempFinalURL)
         try FileManager.default.moveItem(at: tempLocation, to: tempFinalURL)
         try? FileManager.default.removeItem(at: finalURL)
         try FileManager.default.moveItem(at: tempFinalURL, to: finalURL)
 
-        Log.info("File moved successfully - Final Location: \(finalURL.path), Filename: \(finalURL.lastPathComponent)")
+        log.info("File moved successfully - Final Location: \(finalURL.path), Filename: \(finalURL.lastPathComponent)")
 
         return finalURL
     }
@@ -378,6 +378,7 @@ private enum FileValidator {
 
 // MARK: - AppLocationManager
 
+@Loggable(style: .static)
 private enum AppLocationManager {
     static func determineLocation() -> AppLocation {
         let bundlePath = Bundle.main.bundlePath
@@ -401,9 +402,9 @@ private enum AppLocationManager {
         switch currentLocation {
         case .systemApplications,
              .userApplications:
-            Log.info("App is in Applications folder - Location: \(currentLocation)")
+            log.info("App is in Applications folder - Location: \(currentLocation)")
         case let .other(path):
-            Log.warn("App is not in Applications folder - Current Path: \(path)")
+            log.warn("App is not in Applications folder - Current Path: \(path)")
             await handleRelocation(relocationHandler: relocationHandler, relocationErrorHandler: relocationErrorHandler)
         }
     }
@@ -414,14 +415,14 @@ private enum AppLocationManager {
     ) async {
         let shouldMove = await askUserForRelocation(relocationHandler: relocationHandler)
         guard shouldMove else {
-            Log.info("User declined app relocation - proceeding with installation anyway")
+            log.info("User declined app relocation - proceeding with installation anyway")
             return
         }
 
         do {
             try await relocateApplication()
         } catch {
-            Log.error("Failed to relocate application: \(error.localizedDescription)")
+            log.error("Failed to relocate application: \(error.localizedDescription)")
             await showRelocationError(error, relocationErrorHandler: relocationErrorHandler)
         }
     }
@@ -457,9 +458,12 @@ private enum AppLocationManager {
         }
 
         try FileManager.default.copyItem(at: currentURL, to: destinationURL)
-        try NSWorkspace.shared.launchApplication(at: destinationURL, options: [.newInstance], configuration: [:])
+        
+        let config = NSWorkspace.OpenConfiguration()
+        config.createsNewApplicationInstance = true
+        try await NSWorkspace.shared.open(destinationURL, configuration: config)
 
-        try await Task.sleep(nanoseconds: 2_000_000_000)
+        try await Task.sleep(for: .seconds(2))
         await NSApplication.shared.terminate(nil)
     }
 

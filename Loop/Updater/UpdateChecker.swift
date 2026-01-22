@@ -8,7 +8,7 @@
 import Foundation
 import Scribe
 
-@Loggable(style: .static)
+@Loggable
 public class UpdateChecker: @unchecked Sendable {
     private let config: UpdaterConfig
     private let httpClient: HTTPClient
@@ -25,7 +25,7 @@ public class UpdateChecker: @unchecked Sendable {
         channel: UpdateChannel,
         force: Bool = false
     ) async throws -> UpdateManifest? {
-        Log.info("Checking for updates: \(bundleId) v\(currentVersion) build \(currentBuild) [\(channel.rawValue)]")
+        log.info("Checking for updates: \(bundleId) v\(currentVersion) build \(currentBuild) [\(channel.rawValue)]")
 
         let endpoint = URL(string: channel.githubReleasesEndpoint)!
 
@@ -46,37 +46,37 @@ public class UpdateChecker: @unchecked Sendable {
                 }
             }
 
-            Log.info("No update available")
+            log.info("No update available")
             return nil
 
         } catch {
-            Log.error("Update check failed: \(error)")
+            log.error("Update check failed: \(error)")
             throw UpdateError.network(error)
         }
     }
 
     private func processRelease(_ release: Release, currentVersion: String, currentBuild: Int, force: Bool) throws -> UpdateManifest? {
-        Log.debug("Processing release: tagName='\(release.tagName)', name='\(release.name)', prerelease=\(release.prerelease)")
+        log.debug("Processing release: tagName='\(release.tagName)', name='\(release.name)', prerelease=\(release.prerelease)")
 
         // Extract version and build number from release
         let (comparisonVersion, plistVersion, buildNumber) = extractVersionInfo(from: release)
-        Log.debug("Extracted comparison version: \(comparisonVersion), plist version: \(plistVersion), build: \(buildNumber)")
+        log.debug("Extracted comparison version: \(comparisonVersion), plist version: \(plistVersion), build: \(buildNumber)")
 
         // Check if this is actually a newer version
-        Log.debug("Checking version: force=\(force), current=\(currentVersion) build \(currentBuild), available=\(comparisonVersion) build \(buildNumber)")
+        log.debug("Checking version: force=\(force), current=\(currentVersion) build \(currentBuild), available=\(comparisonVersion) build \(buildNumber)")
         if !force, !isNewerVersion(comparisonVersion, buildNumber: buildNumber, than: currentVersion, currentBuild: currentBuild) {
-            Log.info("No newer version available (current: \(currentVersion) build \(currentBuild), available: \(comparisonVersion) build \(buildNumber))")
+            log.info("No newer version available (current: \(currentVersion) build \(currentBuild), available: \(comparisonVersion) build \(buildNumber))")
             return nil
         }
 
         guard let asset = release.assets.first(where: { $0.name.hasSuffix(".zip") }) else {
-            Log.error("No ZIP asset found in release")
+            log.error("No ZIP asset found in release")
             return nil
         }
 
         // Extract checksum from asset digest (format: "sha256:checksum")
         let zipChecksum = asset.digest?.replacingOccurrences(of: "sha256:", with: "") ?? ""
-        Log.debug("Asset digest: \(asset.digest ?? "none"), extracted checksum: \(zipChecksum)")
+        log.debug("Asset digest: \(asset.digest ?? "none"), extracted checksum: \(zipChecksum)")
 
         let manifest = UpdateManifest(
             version: plistVersion,
@@ -101,7 +101,7 @@ public class UpdateChecker: @unchecked Sendable {
             size: Int64(asset.size)
         )
 
-        Log.info("Found update: v\(manifest.version) (build \(manifest.buildNumber))")
+        log.info("Found update: v\(manifest.version) (build \(manifest.buildNumber))")
         return manifest
     }
 
@@ -112,10 +112,10 @@ public class UpdateChecker: @unchecked Sendable {
             if let match = release.name.firstMatch(of: regex) {
                 let version = String(match.1)
                 let build = Int(String(match.2)) ?? 0
-                Log.debug("Parsed prerelease: version=\(version), build=\(build)")
+                log.debug("Parsed prerelease: version=\(version), build=\(build)")
                 return (version, version, build)
             }
-            Log.warn("Could not parse prerelease version from: '\(release.name)'")
+            log.warn("Could not parse prerelease version from: '\(release.name)'")
             return ("0.0.0", "0.0.0", 0)
         } else {
             // Stable release: tagName is the version

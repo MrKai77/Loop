@@ -32,7 +32,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Wait for other instances to terminate before proceeding with TCC operations
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            AccessibilityManager.setupPermissions()
+            AccessibilityManager.requestAccess()
         }
 
         if !launchedAsLoginItem {
@@ -74,14 +74,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let bundleId = Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop"
 
         let runningApps = NSWorkspace.shared.runningApplications
-        let otherLoopInstances = runningApps.filter { app in
-            guard let appBundleId = app.bundleIdentifier,
-                  appBundleId == bundleId else {
-                return false
-            }
-
-            // Don't terminate ourselves
-            return app.processIdentifier != currentProcessId
+        let otherLoopInstances = runningApps.filter {
+            $0.bundleIdentifier == bundleId && $0.processIdentifier != currentProcessId
         }
 
         guard !otherLoopInstances.isEmpty else {
@@ -96,7 +90,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             instance.terminate()
 
             // If the instance doesn't terminate within 2 seconds, force terminate
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+
                 if instance.isTerminated == false {
                     Log.warn("Force terminating Loop instance (PID: \(instance.processIdentifier))", category: .appDelegate)
                     instance.forceTerminate()

@@ -12,13 +12,12 @@ import Scribe
 @Loggable(style: .static)
 public class FileVerifier {
     private let config: UpdaterConfig
-    private static let sha256Queue: DispatchQueue = .init(label: "com.loop.sha256", qos: .utility)
 
     public init(config: UpdaterConfig) {
         self.config = config
     }
 
-    // MARK: - Public Async Methods
+    // MARK: - Public Methods
 
     public func verifyDownloadedFile(_ fileURL: URL, manifest: UpdateManifest) async throws {
         try await performVerification(
@@ -33,18 +32,6 @@ public class FileVerifier {
     public func verifyFileIntegrity(_ fileURL: URL, expectedChecksum: String) async throws -> Bool {
         let actualChecksum = try await calculateSHA256(fileURL)
         return actualChecksum.lowercased() == expectedChecksum.lowercased()
-    }
-
-    // MARK: - Public Sync Methods
-
-    public func verifyDownloadedFileSync(_ fileURL: URL, manifest: UpdateManifest) throws {
-        try performVerificationSync(
-            operation: "downloaded file",
-            fileURL: fileURL,
-            expectedChecksum: manifest.checksums.zip,
-            checksumType: "ZIP",
-            calculator: { try self.calculateSHA256Sync($0) }
-        )
     }
 
     // MARK: - Private Verification Helpers
@@ -71,44 +58,10 @@ public class FileVerifier {
         Log.debug("\(operation.capitalized) verification completed successfully")
     }
 
-    private func performVerificationSync(
-        operation: String,
-        fileURL: URL,
-        expectedChecksum: String,
-        checksumType: String,
-        calculator: (URL) throws -> String
-    ) throws {
-        Log.debug("Verifying \(operation) integrity (sync) - File URL: \(fileURL.path), File Name: \(fileURL.lastPathComponent), Expected \(checksumType) Checksum: \(expectedChecksum)")
-        Log.debug("Starting \(checksumType) checksum calculation")
-        let actualChecksum = try calculator(fileURL)
-        let isMatch = actualChecksum == expectedChecksum
-
-        Log.debug("\(checksumType) checksum calculated - Calculated: \(actualChecksum), Expected: \(expectedChecksum), Match: \(isMatch)")
-
-        guard isMatch else {
-            Log.error("\(checksumType) checksum mismatch - Expected: \(expectedChecksum), Got: \(actualChecksum), File: \(fileURL.path)")
-            throw UpdateError.checksumMismatch
-        }
-
-        Log.debug("\(operation.capitalized) verification completed successfully")
-    }
-
     // MARK: - Checksum Calculation
 
+    @concurrent
     private func calculateSHA256(_ fileURL: URL) async throws -> String {
-        try await withCheckedThrowingContinuation { continuation in
-            Self.sha256Queue.async {
-                do {
-                    let checksum = try self.calculateSHA256Sync(fileURL)
-                    continuation.resume(returning: checksum)
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-    }
-
-    private func calculateSHA256Sync(_ fileURL: URL) throws -> String {
         Log.debug("Calculating SHA256 for file - File: \(fileURL.path), Exists: \(FileManager.default.fileExists(atPath: fileURL.path))")
 
         let data = try Data(contentsOf: fileURL)

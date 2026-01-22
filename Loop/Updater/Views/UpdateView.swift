@@ -347,17 +347,17 @@ private struct ChangelogMetadataView: View, Equatable {
     var body: some View {
         HStack(spacing: 0) {
             if let user = note.user {
-                Link("@\(user)", destination: URL(string: "https://github.com/\(user)")!)
+                Link(String("@\(user)"), destination: URL(string: "https://github.com/\(user)")!)
                     .frame(width: 105, alignment: .trailing)
             }
 
             if note.user != nil, note.reference != nil {
-                Text("•")
+                Text(verbatim: "•")
                     .padding(.horizontal, 4)
             }
 
             if let reference = note.reference {
-                Link("#\(reference)", destination: URL(string: "https://github.com/MrKai77/Loop/issues/\(reference)")!)
+                Link(String("#\(reference)"), destination: URL(string: "https://github.com/MrKai77/Loop/issues/\(reference)")!)
                     .monospaced()
                     .fixedSize()
             }
