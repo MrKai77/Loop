@@ -404,14 +404,14 @@ private extension StashManager {
     /// Handles mouse movement events with a debounce to avoid excessive processing.
     private func handleMouseMoved(cgEvent _: CGEvent) {
         mouseMovedTask?.cancel()
-        
+
         mouseMovedTask = Task {
             try? await Task.sleep(for: .seconds(mouseMovedDebounceInterval))
-            
+
             guard !Task.isCancelled else {
                 return
             }
-            
+
             await processMouseMovement()
         }
     }

@@ -213,7 +213,7 @@ struct UpdateView: View {
                     await Updater.shared.installUpdate()
 
                     try? await Task.sleep(for: .seconds(1))
-                    
+
                     withAnimation(luminareAnimation) {
                         isInstalling = false
                         readyToRestart = true

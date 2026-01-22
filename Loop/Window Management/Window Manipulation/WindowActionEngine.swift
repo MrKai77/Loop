@@ -20,9 +20,9 @@ import SwiftUI
 @Loggable
 final class WindowActionEngine {
     static let shared = WindowActionEngine()
-    
+
     private var actionTasks: [CGWindowID: Task<Result, any Error>] = [:]
-    
+
     /// Result of applying a window action
     struct Result {
         /// Whether the action was successfully applied

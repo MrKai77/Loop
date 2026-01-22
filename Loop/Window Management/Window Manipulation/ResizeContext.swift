@@ -67,7 +67,7 @@ final class ResizeContext {
     func setWindow(to window: Window?) {
         self.window = window
         needsRecompute = true
-        
+
         log.info("Set window to \(window?.description ?? "nil")")
     }
 
@@ -87,7 +87,7 @@ final class ResizeContext {
 
     private func recomputeTargetFrame() {
         let result = WindowFrameResolver.getFrame(resizeContext: self)
-        
+
         let rawFrame = result.frame
         let paddedFrame = padding.applyToWindow(
             frame: rawFrame,

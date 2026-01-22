@@ -186,7 +186,7 @@ extension LoopManager {
             // So only resize the window if the preview is enabled.
             if Defaults[.previewVisibility] {
                 Task {
-                    _ = try? await WindowActionEngine.shared.apply(context: resizeContext )
+                    _ = try? await WindowActionEngine.shared.apply(context: resizeContext)
                 }
             }
 

@@ -28,6 +28,7 @@ final class SettingsWindowManager: ObservableObject {
     }
 
     private(set) var previewBounds: CGRect = .zero
+    private(set) var didSetBounds: Bool = false
 
     @Published var showRadialMenu: Bool = true
     @Published var showPreview: Bool = true
@@ -184,10 +185,16 @@ final class SettingsWindowManager: ObservableObject {
 
     func setPreviewBounds(_ bounds: CGRect) {
         previewBounds = bounds
+        didSetBounds = true
+
         updatePreviewContexts()
     }
 
     private func updatePreviewContexts() {
+        guard didSetBounds else {
+            return
+        }
+
         let context = ResizeContext(bounds: previewBounds)
         context.setAction(to: previewedAction, parent: previewedParentAction)
         radialMenuViewModel.updateContext(with: context)

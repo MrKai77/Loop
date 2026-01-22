@@ -63,14 +63,14 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
         guard bounds.width > 0, bounds.height > 0 else { return frame }
 
         var result = frame
-        
+
         // Handle non-resizable windows by centering within the frame (no size changes)
         if let window, window.isResizable == false {
             let centeredFrame = window.frame.size
                 .center(inside: result)
-            
+
             print(window.frame, centeredFrame)
-            
+
             return centeredFrame
         }
 

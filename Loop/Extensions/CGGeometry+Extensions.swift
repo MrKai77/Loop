@@ -188,18 +188,18 @@ extension CGRect {
 
         return result
     }
-    
+
     func scale(
         inside targetBounds: CGRect,
         from originalBounds: CGRect
     ) -> CGRect {
         guard originalBounds.width > 0, originalBounds.height > 0 else { return self }
-        
-        let relativeWidth = self.width / originalBounds.width
-        let relativeHeight = self.height / originalBounds.height
-        let relativeMinX = (self.minX - originalBounds.minX) / originalBounds.width
-        let relativeMinY = (self.minY - originalBounds.minY) / originalBounds.height
-        
+
+        let relativeWidth = width / originalBounds.width
+        let relativeHeight = height / originalBounds.height
+        let relativeMinX = (minX - originalBounds.minX) / originalBounds.width
+        let relativeMinY = (minY - originalBounds.minY) / originalBounds.height
+
         return CGRect(
             x: targetBounds.minX + targetBounds.width * relativeMinX,
             y: targetBounds.minY + targetBounds.height * relativeMinY,

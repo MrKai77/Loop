@@ -20,9 +20,6 @@ final class PreviewViewModel: ObservableObject {
 
     init(isSettingsPreview: Bool) {
         self.isSettingsPreview = isSettingsPreview
-        if isSettingsPreview {
-            self.isShown = true
-        }
     }
 
     func setIsShown(_ newState: Bool) {
