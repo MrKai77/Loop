@@ -100,9 +100,9 @@ final class WindowDragManager {
                     if Defaults[.restoreWindowFrameOnDrag] {
                         restoreInitialWindowSize(window)
                     }
-                    
+
                     StashManager.shared.onWindowDragged(window.cgWindowID)
-                    
+
                     // Erase records *after* restoring frame if needed
                     WindowRecords.eraseRecords(for: window)
 
