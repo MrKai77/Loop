@@ -93,8 +93,7 @@ public class UpdateChecker: @unchecked Sendable {
                 )
             ),
             checksums: UpdateManifest.Checksums(
-                zip: zipChecksum,
-                app: ""
+                zip: zipChecksum
             ),
             minimumOS: "13.0",
             channel: release.prerelease ? .beta : .stable,
@@ -113,7 +112,7 @@ public class UpdateChecker: @unchecked Sendable {
             if let match = release.name.firstMatch(of: regex) {
                 let cleanVersion = String(match.1)
                 let buildNumber = Int(String(match.2)) ?? 0
-                let plistVersion = cleanVersion // Clean version string for the bundle's Info.plist
+                let plistVersion = cleanVersion
                 Log.debug("Parsed prerelease: comparison=\(cleanVersion), plist=\(plistVersion), build=\(buildNumber) from name='\(release.name)'")
                 return (cleanVersion, plistVersion, buildNumber)
             }

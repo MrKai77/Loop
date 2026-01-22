@@ -141,13 +141,19 @@ struct UpdateView: View {
                 let currentIsDevBuild: Bool = Bundle.main.appVersion?.contains(devBuildEmoji) ?? false
                 let targetIsDevBuild = targetRelease.prerelease
 
-                let currentVersionBase = Bundle.main.appVersion?.replacing(devBuildEmoji, with: "").trimmingCharacters(in: .whitespaces)
+                // After successful update, Bundle.main.appVersion might be nil due to atomic swap
+                // In that case, use the target version since the update just succeeded
+                let actualCurrentVersion = Bundle.main.appVersion
+                let effectiveCurrentVersion = actualCurrentVersion ?? targetRelease.tagName
+                let effectiveCurrentBuild = actualCurrentVersion != nil ? Bundle.main.appBuild ?? 0 : targetRelease.buildNumber ?? 0
+
+                let currentVersionBase = effectiveCurrentVersion.replacing(devBuildEmoji, with: "").trimmingCharacters(in: .whitespaces)
                 let targetVersionBase = targetRelease.tagName.replacing(devBuildEmoji, with: "").trimmingCharacters(in: .whitespaces)
 
-                let currentVersionBuild = currentIsDevBuild ? " (\(Bundle.main.appBuild ?? 0))" : ""
+                let currentVersionBuild = (effectiveCurrentVersion.contains(devBuildEmoji) ? " (\(effectiveCurrentBuild))" : "")
                 let targetVersionBuild = targetIsDevBuild ? " (\(targetRelease.buildNumber ?? 0))" : ""
 
-                let currentVersion = "\(currentIsDevBuild ? devBuildEmoji : "")\(currentVersionBase ?? "Unknown")\(currentVersionBuild)"
+                let currentVersion = "\(effectiveCurrentVersion.contains(devBuildEmoji) ? devBuildEmoji : "")\(currentVersionBase)\(currentVersionBuild)"
                 Text(currentVersion)
 
                 Image(systemName: "arrow.right")

@@ -185,11 +185,25 @@ final class Updater: ObservableObject {
     func dismissWindow() {
         windowController?.close()
         windowController = nil
+
+        // Clear update state when window is dismissed
+        targetRelease = nil
+        updateManifest = nil
+        progressBar = 0
+        downloadProgress = nil
+        shouldAutoPresentUpdateWindow = false
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     @concurrent
     func fetchLatestInfo(force: Bool = false) async {
+        let isDownloading = await (downloader?.currentDownloadState ?? .idle) == .downloading
+
+        // Don't run update checks while actively downloading
+        if isDownloading {
+            return
+        }
+
         if let updateFetcherTask {
             await updateFetcherTask.value // If already fetching, wait for it to finish
             return
@@ -199,10 +213,13 @@ final class Updater: ObservableObject {
             defer { updateFetcherTask = nil }
 
             await MainActor.run {
-                targetRelease = nil
-                updateManifest = nil
-                progressBar = 0
-                downloadProgress = nil
+                // Don't clear update state if window is currently showing (user is interacting)
+                if windowController?.window?.isVisible != true {
+                    targetRelease = nil
+                    updateManifest = nil
+                    progressBar = 0
+                    downloadProgress = nil
+                }
             }
 
             // Early return if updates are disabled and not forcing
@@ -387,6 +404,7 @@ final class Updater: ObservableObject {
                 self.progressBar = 1.0
                 self.updateState = .unavailable
                 self.updateManifest = nil
+                self.downloader = nil // Reset downloader for next installation attempt
             }
 
             log.success("Update installed successfully")
@@ -395,6 +413,7 @@ final class Updater: ObservableObject {
             log.error("Update installation failed: \(error)")
             await MainActor.run {
                 self.progressBar = 0
+                self.downloader = nil // Reset downloader on failure
             }
         }
     }
@@ -421,45 +440,5 @@ final class Updater: ObservableObject {
                 }
             }
         }
-    }
-}
-
-// MARK: - Models
-
-// Extension to Release to extract version details from the title
-extension Release {
-    func extractPrereleaseVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
-        let regex = /🧪 (?<version>.*?) \((?<build>\d+)\)/
-        guard let match = name.firstMatch(of: regex) else {
-            return nil
-        }
-
-        let release = String(match.version)
-        let buildNumber = Int(String(match.build)) ?? 0
-
-        return (release, buildNumber)
-    }
-
-    // Convert UpdateManifest to Release for UI compatibility
-    static func from(manifest: UpdateManifest) -> Release {
-        let asset = Release.Asset(
-            name: "Loop-\(manifest.version).zip",
-            browserDownloadURL: URL(string: manifest.downloadUrl)!,
-            size: Int(manifest.size),
-            digest: manifest.checksums.zip.isEmpty ? nil : "sha256:\(manifest.checksums.zip)"
-        )
-
-        return Release(
-            id: 0, // Not used in UI
-            tagName: manifest.version,
-            name: manifest.releaseNotes.title,
-            body: manifest.releaseNotes.body,
-            assets: [asset],
-            prerelease: manifest.channel != .stable,
-            createdAt: manifest.publishedAt,
-            updatedAt: manifest.publishedAt,
-            publishedAt: manifest.publishedAt,
-            buildNumber: manifest.buildNumber
-        )
     }
 }

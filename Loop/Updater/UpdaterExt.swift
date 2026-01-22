@@ -61,3 +61,43 @@ public extension DateFormatter {
         return self
     }
 }
+
+// MARK: - Models
+
+// Extension to Release to extract version details from the title
+extension Release {
+    func extractPrereleaseVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
+        let regex = /🧪 (?<version>.*?) \((?<build>\d+)\)/
+        guard let match = name.firstMatch(of: regex) else {
+            return nil
+        }
+
+        let release = String(match.version)
+        let buildNumber = Int(String(match.build)) ?? 0
+
+        return (release, buildNumber)
+    }
+
+    // Convert UpdateManifest to Release for UI compatibility
+    static func from(manifest: UpdateManifest) -> Release {
+        let asset = Release.Asset(
+            name: "Loop-\(manifest.version).zip",
+            browserDownloadURL: URL(string: manifest.downloadUrl)!,
+            size: Int(manifest.size),
+            digest: manifest.checksums.zip.isEmpty ? nil : "sha256:\(manifest.checksums.zip)"
+        )
+
+        return Release(
+            id: 0, // Not used in UI
+            tagName: manifest.version,
+            name: manifest.releaseNotes.title,
+            body: manifest.releaseNotes.body,
+            assets: [asset],
+            prerelease: manifest.channel != .stable,
+            createdAt: manifest.publishedAt,
+            updatedAt: manifest.publishedAt,
+            publishedAt: manifest.publishedAt,
+            buildNumber: manifest.buildNumber
+        )
+    }
+}

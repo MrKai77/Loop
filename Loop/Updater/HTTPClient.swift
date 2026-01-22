@@ -14,14 +14,12 @@ public actor HTTPClient {
     public struct SecurityConfig: Sendable {
         let maxRequestLifetime: TimeInterval
         let allowedHosts: Set<String>
-        let certificatePinning: [String: Data]
         let maxResponseSize: Int
         let enableRequestSigning: Bool
 
         public static let `default`: SecurityConfig = .init(
             maxRequestLifetime: 30.0,
             allowedHosts: [],
-            certificatePinning: [:],
             maxResponseSize: 104_857_600,
             enableRequestSigning: true
         )
@@ -104,7 +102,7 @@ public actor HTTPClient {
 
         self.session = URLSession(
             configuration: sessionConfig,
-            delegate: SecurityDelegate(securityConfig: securityConfig),
+            delegate: SecurityDelegate(),
             delegateQueue: nil
         )
 
@@ -295,7 +293,6 @@ public actor HTTPClient {
             try validateJSONResponse(data: data, context: context)
         }
 
-        logResponseMetrics(httpResponse, data: data, context: context)
         return data
     }
 
@@ -331,20 +328,6 @@ public actor HTTPClient {
         }
     }
 
-    private func logResponseMetrics(_ response: HTTPURLResponse, data: Data, context: RequestContext) {
-        let duration = Date().timeIntervalSince(context.startTime)
-        let headers = ["Content-Type", "Content-Length", "Cache-Control"]
-            .compactMap { key in
-                response.value(forHTTPHeaderField: key).map { "\(key): \($0)" }
-            }
-            .joined(separator: ", ")
-
-        Log
-            .debug(
-                "Response metrics [ID: \(context.id)]: \(String(format: "%.3f", duration))s, \(data.count) bytes, \(headers)"
-            )
-    }
-
     private func calculateBackoffDelay(attempt: Int) -> Double {
         let baseDelay = config.networkConfig.retryDelay
         let exponentialBackoff = baseDelay * pow(2.0, Double(attempt - 1))
@@ -374,49 +357,15 @@ public actor HTTPClient {
 // MARK: - SecurityDelegate
 
 private final class SecurityDelegate: NSObject, URLSessionDelegate, @unchecked Sendable {
-    private let securityConfig: HTTPClient.SecurityConfig
-
-    init(securityConfig: HTTPClient.SecurityConfig) {
-        self.securityConfig = securityConfig
+    override init() {
         super.init()
     }
 
     func urlSession(
         _: URLSession,
-        didReceive challenge: URLAuthenticationChallenge,
+        didReceive _: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> ()
     ) {
-        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust else {
-            completionHandler(.performDefaultHandling, nil)
-            return
-        }
-
-        if let serverTrust = challenge.protectionSpace.serverTrust,
-           let pinnedCert = securityConfig.certificatePinning[challenge.protectionSpace.host] {
-            if validateCertificatePinning(serverTrust: serverTrust, pinnedCertificate: pinnedCert) {
-                let credential = URLCredential(trust: serverTrust)
-                completionHandler(.useCredential, credential)
-            } else {
-                Log.error("Certificate pinning validation failed for host: \(challenge.protectionSpace.host)")
-                completionHandler(.cancelAuthenticationChallenge, nil)
-            }
-        } else {
-            completionHandler(.performDefaultHandling, nil)
-        }
-    }
-
-    private func validateCertificatePinning(serverTrust: SecTrust, pinnedCertificate: Data) -> Bool {
-        guard let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0) else {
-            return false
-        }
-
-        let serverCertData = SecCertificateCopyData(serverCertificate)
-        let serverCertBytes = CFDataGetBytePtr(serverCertData)
-        let serverCertLength = CFDataGetLength(serverCertData)
-
-        guard let serverBytes = serverCertBytes else { return false }
-
-        let serverData = Data(bytes: serverBytes, count: serverCertLength)
-        return serverData == pinnedCertificate
+        completionHandler(.performDefaultHandling, nil)
     }
 }

@@ -120,12 +120,8 @@ public class InstallationCoordinator {
 
         try verifyBundleStructure(stagingURL)
 
-        if config.securityConfig.checksumValidationEnabled {
-            try verifyVersionInfo(stagingURL, manifest: manifest)
-            try await testStagedApplication(stagingURL)
-        } else {
-            Log.info("Version verification and application testing skipped for testing")
-        }
+        try verifyVersionInfo(stagingURL, manifest: manifest)
+        try await testStagedApplication(stagingURL)
     }
 
     private func atomicSwap(staged stagingURL: URL, current currentURL: URL) async throws {
@@ -156,7 +152,7 @@ public class InstallationCoordinator {
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) throws {
         do {
-            Log.info("1️⃣ Moving current app to backup...")
+            Log.info("Moving current app to backup...")
 
             // Ensure the backup directory exists
             let backupParent = backup.deletingLastPathComponent()
@@ -361,9 +357,13 @@ public class InstallationCoordinator {
         Log.info("Bundle version: \(version), build: \(build)")
         Log.info("Expected version: \(manifest.version), build: \(manifest.buildNumber)")
 
-        guard version == manifest.version, build == manifest.buildNumber else {
+        // Normalize version strings for comparison (remove emoji prefixes)
+        let normalizedBundleVersion = version.replacingOccurrences(of: "🧪 ", with: "")
+        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+
+        guard normalizedBundleVersion == normalizedManifestVersion, build == manifest.buildNumber else {
             let errorMessage =
-                "Version mismatch: expected \(manifest.version)(\(manifest.buildNumber)), got \(version)(\(build))"
+                "Version mismatch: expected \(manifest.version)(\(manifest.buildNumber)), got \(version)(\(build)) [normalized: \(normalizedManifestVersion) vs \(normalizedBundleVersion)]"
             Log.error(errorMessage)
             throw UpdateError.installationFailed(
                 NSError(

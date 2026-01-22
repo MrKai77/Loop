@@ -61,6 +61,10 @@ public final class Downloader: NSObject, Sendable {
 
     // MARK: - Public Interface
 
+    public var currentDownloadState: DownloadState {
+        downloadState
+    }
+
     public func downloadUpdate(
         manifest: UpdateManifest,
         progress: @escaping (UpdateProgress) -> (),
@@ -224,7 +228,7 @@ extension Downloader: URLSessionDownloadDelegate {
 
 // MARK: - DownloadState
 
-private enum DownloadState {
+public enum DownloadState {
     case idle, downloading, completed, failed, cancelled
 }
 

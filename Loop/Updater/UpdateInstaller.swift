@@ -440,10 +440,6 @@ public class UpdateInstaller: @unchecked Sendable {
         // Find and verify app bundle
         let appBundle = try findAppBundle(in: extractedURL)
 
-        // Verify using FileVerifier
-        try await fileVerifier.verifyExtractedApplication(extractedURL, manifest: manifest)
-
-        // Additional safety checks
         try await performPostExtractionSafetyChecks(appBundle, manifest: manifest)
 
         Log.success("Extraction integrity verification completed")
@@ -457,6 +453,15 @@ public class UpdateInstaller: @unchecked Sendable {
 
         // Verify executable integrity
         try verifyExtractedAppExecutableIntegrity(appBundle)
+
+        // Validate app bundle signature/code signature
+        try await validateExtractedAppBundleSignature(appBundle)
+
+        // Validate app launch capability
+        try validateExtractedAppLaunchCapability(appBundle)
+
+        // Validate app system compatibility
+        try validateExtractedAppSystemCompatibility(appBundle, manifest: manifest)
 
         Log.success("Additional extraction checks completed")
     }
@@ -475,10 +480,152 @@ public class UpdateInstaller: @unchecked Sendable {
             throw createSafetyError("Invalid version information in extracted app's Info.plist")
         }
 
-        guard version == manifest.version, build == manifest.buildNumber else {
+        // Normalize version strings for comparison (remove emoji prefixes)
+        let normalizedAppVersion = version.replacingOccurrences(of: "🧪 ", with: "")
+        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+
+        Log.debug("Version validation: app='\(version)' normalized='\(normalizedAppVersion)', manifest='\(manifest.version)' normalized='\(normalizedManifestVersion)', build=\(build) vs \(manifest.buildNumber)")
+
+        guard normalizedAppVersion == normalizedManifestVersion, build == manifest.buildNumber else {
+            Log.error("Version validation failed: normalized app='\(normalizedAppVersion)' != manifest='\(normalizedManifestVersion)' or build \(build) != \(manifest.buildNumber)")
             throw createSafetyError(
                 "Version mismatch in extracted app. Expected: \(manifest.version)(\(manifest.buildNumber)), Got: \(version)(\(build))"
             )
+        }
+    }
+
+    private func validateExtractedAppLaunchCapability(_ appBundle: URL) throws {
+        Log.info("Validating extracted app launch capability")
+
+        let infoPlistURL = appBundle.appendingPathComponent("Contents/Info.plist")
+
+        guard let plist = NSDictionary(contentsOf: infoPlistURL) else {
+            throw createSafetyError("Could not read Info.plist for launch capability validation")
+        }
+
+        // Check for required launch properties
+        guard let bundleIdentifier = plist["CFBundleIdentifier"] as? String,
+              !bundleIdentifier.isEmpty else {
+            throw createSafetyError("App bundle missing or invalid CFBundleIdentifier")
+        }
+
+        guard let bundleName = plist["CFBundleName"] as? String,
+              !bundleName.isEmpty else {
+            throw createSafetyError("App bundle missing or invalid CFBundleName")
+        }
+
+        // Check that it's a proper application bundle
+        guard let packageType = plist["CFBundlePackageType"] as? String,
+              packageType == "APPL" else {
+            throw createSafetyError("App bundle has invalid CFBundlePackageType (expected 'APPL')")
+        }
+
+        // Verify the main executable exists and is executable
+        guard let executableName = plist["CFBundleExecutable"] as? String,
+              !executableName.isEmpty else {
+            throw createSafetyError("App bundle missing CFBundleExecutable")
+        }
+
+        let executablePath = appBundle.appendingPathComponent("Contents/MacOS/\(executableName)")
+        guard fileManager.fileExists(atPath: executablePath.path) else {
+            throw createSafetyError("Main executable not found: \(executableName)")
+        }
+
+        // Check executable permissions
+        let executableAttributes = try fileManager.attributesOfItem(atPath: executablePath.path)
+        guard let permissions = executableAttributes[.posixPermissions] as? NSNumber else {
+            throw createSafetyError("Could not read executable permissions")
+        }
+
+        // Check if executable bit is set (at least one of owner/group/other execute bits)
+        let perms = permissions.intValue
+        guard perms & 0o111 != 0 else {
+            throw createSafetyError("Main executable does not have execute permissions")
+        }
+
+        Log.success("App launch capability validation passed")
+    }
+
+    private func validateExtractedAppSystemCompatibility(_ appBundle: URL, manifest: UpdateManifest) throws {
+        Log.info("Validating extracted app system compatibility")
+
+        let currentOS = ProcessInfo.processInfo.operatingSystemVersion
+        let infoPlistURL = appBundle.appendingPathComponent("Contents/Info.plist")
+
+        guard let plist = NSDictionary(contentsOf: infoPlistURL) else {
+            throw createSafetyError("Could not read Info.plist for system compatibility validation")
+        }
+
+        // Check minimum OS version
+        if let minOSString = plist["LSMinimumSystemVersion"] as? String {
+            let components = minOSString.split(separator: ".").compactMap { Int($0) }
+            if components.count >= 2 {
+                let minOSVersion = OperatingSystemVersion(
+                    majorVersion: components[0],
+                    minorVersion: components[1],
+                    patchVersion: components.count > 2 ? components[2] : 0
+                )
+
+                guard ProcessInfo.processInfo.isOperatingSystemAtLeast(minOSVersion) else {
+                    throw createSafetyError("App requires macOS \(minOSString) or later, current: \(currentOS.majorVersion).\(currentOS.minorVersion).\(currentOS.patchVersion)")
+                }
+            }
+        }
+
+        // Check supported architectures
+        if let supportedArchitectures = plist["LSArchitecturePriority"] as? [String] {
+            let currentArchitecture = SystemInfo.architecture
+            guard supportedArchitectures.contains(currentArchitecture) else {
+                throw createSafetyError("App does not support current architecture: \(currentArchitecture)")
+            }
+        }
+
+        // Validate against manifest requirements
+        let manifestMinOS = manifest.minimumOS
+        let manifestComponents = manifestMinOS.split(separator: ".").compactMap { Int($0) }
+        if manifestComponents.count >= 2 {
+            let manifestMinVersion = OperatingSystemVersion(
+                majorVersion: manifestComponents[0],
+                minorVersion: manifestComponents[1],
+                patchVersion: manifestComponents.count > 2 ? manifestComponents[2] : 0
+            )
+
+            guard ProcessInfo.processInfo.isOperatingSystemAtLeast(manifestMinVersion) else {
+                throw createSafetyError("Update requires macOS \(manifestMinOS) or later")
+            }
+        }
+
+        Log.success("App system compatibility validation passed")
+    }
+
+    private func validateExtractedAppBundleSignature(_ appBundle: URL) async throws {
+        Log.info("Validating extracted app bundle signature")
+
+        // Use the codesign command to verify the signature
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
+        process.arguments = ["--verify", "--verbose", appBundle.path]
+
+        let outputPipe = Pipe()
+        let errorPipe = Pipe()
+        process.standardOutput = outputPipe
+        process.standardError = errorPipe
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+
+            if process.terminationStatus == 0 {
+                Log.success("App bundle signature validation passed")
+            } else {
+                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+                let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown codesign error"
+                Log.error("App bundle signature validation failed: \(errorOutput)")
+                throw createSafetyError("App bundle signature validation failed: \(errorOutput)")
+            }
+        } catch {
+            Log.error("Failed to run codesign verification: \(error)")
+            throw createSafetyError("Could not verify app bundle signature: \(error.localizedDescription)")
         }
     }
 
@@ -567,7 +714,11 @@ public class UpdateInstaller: @unchecked Sendable {
             throw createSafetyError("Cannot read version from installed application")
         }
 
-        guard version == manifest.version else {
+        // Normalize version strings for comparison (remove emoji prefixes)
+        let normalizedInstalledVersion = version.replacingOccurrences(of: "🧪 ", with: "")
+        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+
+        guard normalizedInstalledVersion == normalizedManifestVersion else {
             throw createSafetyError(
                 "Installed version (\(version)) does not match expected version (\(manifest.version))"
             )
@@ -721,19 +872,17 @@ public class UpdateInstaller: @unchecked Sendable {
         try checkCancellation()
 
         Log.info("Verifying installation success")
-        Log.info("Testing mode enabled: \(!config.securityConfig.checksumValidationEnabled)")
         Log.info("Expected version: \(manifest.version)")
         Log.info("Expected build: \(manifest.buildNumber)")
-
-        guard config.securityConfig.checksumValidationEnabled else {
-            Log.info("Installation verification skipped for testing mode - simulation successful")
-            return
-        }
 
         let installedVersion = try getInstalledVersion()
         Log.info("Currently installed version: \(installedVersion)")
 
-        guard installedVersion == manifest.version else {
+        // Normalize version strings for comparison (remove emoji prefixes)
+        let normalizedInstalledVersion = installedVersion.replacingOccurrences(of: "🧪 ", with: "")
+        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+
+        guard normalizedInstalledVersion == normalizedManifestVersion else {
             let errorMessage = "Installed version \(installedVersion) doesn't match expected \(manifest.version)"
             Log.error("Version mismatch: installed=\(installedVersion), expected=\(manifest.version)")
             throw UpdateError.installationFailed(NSError(

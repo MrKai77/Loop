@@ -17,7 +17,6 @@ enum UpdaterConfigProvider {
             updateEndpoint: URL(string: "https://api.github.com")!, // Base GitHub API URL
             currentBuildNumber: Bundle.main.appBuild ?? 0,
             userGroup: nil, // Can be set for A/B testing if needed
-            securityConfig: .default,
             networkConfig: .default
         )
     }

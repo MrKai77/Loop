@@ -63,7 +63,6 @@ public struct UpdateManifest: Sendable {
 
     public struct Checksums: Sendable {
         public let zip: String
-        public let app: String
     }
 
     // Create UpdateManifest from GitHub Release
@@ -90,8 +89,7 @@ public struct UpdateManifest: Sendable {
                 )
             ),
             checksums: Checksums(
-                zip: zipChecksum,
-                app: "" // Will be calculated during verification
+                zip: zipChecksum
             ),
             minimumOS: "13.0",
             channel: release.prerelease ? .beta : .stable,
@@ -191,7 +189,6 @@ public struct UpdaterConfig: Sendable {
     public let updateEndpoint: URL
     public let currentBuildNumber: Int
     public let userGroup: String?
-    public let securityConfig: SecurityConfig
     public let networkConfig: NetworkConfig
 
     public struct SecurityConfig: Sendable {
@@ -199,11 +196,6 @@ public struct UpdaterConfig: Sendable {
         public let codeSignatureValidationEnabled: Bool
 
         public static let `default`: SecurityConfig = .init(
-            checksumValidationEnabled: true,
-            codeSignatureValidationEnabled: false
-        )
-
-        public static let disabled: SecurityConfig = .init(
             checksumValidationEnabled: true,
             codeSignatureValidationEnabled: false
         )
@@ -227,13 +219,11 @@ public struct UpdaterConfig: Sendable {
         updateEndpoint: URL,
         currentBuildNumber: Int,
         userGroup: String? = nil,
-        securityConfig: SecurityConfig = .default,
         networkConfig: NetworkConfig = .default
     ) {
         self.updateEndpoint = updateEndpoint
         self.currentBuildNumber = currentBuildNumber
         self.userGroup = userGroup
-        self.securityConfig = securityConfig
         self.networkConfig = networkConfig
     }
 }
