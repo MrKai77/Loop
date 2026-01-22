@@ -89,8 +89,15 @@ final class PreviewViewModel: ObservableObject {
     ) -> CGRect {
         switch position {
         case .screenCenter:
-            // Default behavior - animate from zero at center (no-op, use current .zero)
-            return computedFrame
+            // Animate from zero at center of screen
+            guard var centerPosition = context.screen?.frame.center else {
+                return targetFrame
+            }
+            if let screenFrame = context.screen?.frame {
+                centerPosition.x -= screenFrame.minX
+                centerPosition.y -= screenFrame.minY
+            }
+            return CGRect(origin: centerPosition, size: .zero)
 
         case .radialMenu:
             // Center the preview window on the initial mouse position

@@ -15,10 +15,6 @@ final class WindowDragManager {
     static let shared = WindowDragManager()
     private init() {}
 
-    private var initialMousePosition: CGPoint?
-    private var didPassDragDistanceThreshold: Bool = false
-    private var dragDistanceThreshold: CGFloat = 5
-
     private var resizeContext: ResizeContext?
     private var initialWindowFrame: CGRect?
     // Avoid repeated window resolution attempts during a non-window drag (e.g. in games).
@@ -91,20 +87,7 @@ final class WindowDragManager {
             return
         }
 
-        Task { @MainActor in
-            guard let initialMousePosition else {
-                initialMousePosition = currentMousePosition
-                return
-            }
-
-            if !didPassDragDistanceThreshold {
-                didPassDragDistanceThreshold = currentMousePosition.distance(to: initialMousePosition) > dragDistanceThreshold
-
-                guard didPassDragDistanceThreshold else {
-                    return
-                }
-            }
-
+        Task {
             // Process window (only ONCE during a window drag)
             if resizeContext == nil, !didFailToResolveDraggedWindow {
                 setCurrentDraggingWindow()
@@ -164,9 +147,8 @@ final class WindowDragManager {
                 determineDraggedWindowTask = nil
             }
 
-            guard
-                let window = try? WindowUtility.windowAtPosition(currentMousePosition),
-                !window.isAppExcluded
+            guard let window = WindowUtility.windowAtPosition(currentMousePosition),
+                  !window.isAppExcluded
             else {
                 didFailToResolveDraggedWindow = true
                 return
@@ -184,8 +166,6 @@ final class WindowDragManager {
 
     private func resetDragState() {
         resizeContext = nil
-        initialMousePosition = nil
-        didPassDragDistanceThreshold = false
         didFailToResolveDraggedWindow = false
         initialWindowFrame = nil
         determineDraggedWindowTask?.cancel()

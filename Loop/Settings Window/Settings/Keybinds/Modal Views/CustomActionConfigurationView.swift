@@ -176,7 +176,7 @@ struct CustomActionConfigurationView: View {
                     pressing: { pressing in
                         if pressing {
                             guard let screen = NSScreen.main else { return }
-                            var context = ResizeContext(screen: screen)
+                            let context = ResizeContext(screen: screen)
                             context.setAction(to: action, parent: nil)
                             previewController.open(context: context)
                         } else {

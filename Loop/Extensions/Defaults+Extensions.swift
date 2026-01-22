@@ -118,10 +118,10 @@ extension Defaults.Keys {
     /// Reset with `defaults delete com.MrKai77.Loop previewStartingPosition`
     ///
     /// Available options:
-    /// - `screenCenter`: Center of the screen (default behavior)
+    /// - `screenCenter`: Center of the screen
     /// - `radialMenu`: Center of radial menu
     /// - `actionCenter`: Center of the selected action (e.g. for left half, it will grow from the center of that left half)
-    static let previewStartingPosition = Key<PreviewStartingPosition>("previewStartingPosition", default: .screenCenter, iCloud: true)
+    static let previewStartingPosition = Key<PreviewStartingPosition>("previewStartingPosition", default: .actionCenter, iCloud: true)
 
     /// Disable automatic updates with `defaults write com.MrKai77.Loop updatesEnabled -bool false`
     /// Reset with `defaults delete com.MrKai77.Loop updatesEnabled`

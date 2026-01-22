@@ -17,16 +17,12 @@ enum WindowUtility {
     static func userDefinedTargetWindow() -> Window? {
         var result: Window?
 
-        do {
-            log.info("Getting window at cursor...")
+        log.info("Getting window at cursor...")
 
-            if Defaults[.resizeWindowUnderCursor],
-               let mouseLocation = CGEvent.mouseLocation,
-               let window = try windowAtPosition(mouseLocation) {
-                result = window
-            }
-        } catch {
-            log.warn("Failed to get window at cursor: \(error.localizedDescription)")
+        if Defaults[.resizeWindowUnderCursor],
+           let mouseLocation = CGEvent.mouseLocation,
+           let window = windowAtPosition(mouseLocation) {
+            result = window
         }
 
         if result == nil {
@@ -54,11 +50,15 @@ enum WindowUtility {
     /// Get the Window at a given position.
     /// - Parameter position: The position to check for
     /// - Returns: The window at the given position, if any
-    static func windowAtPosition(_ position: CGPoint) throws -> Window? {
-        // If we can find the window at a point using the Accessibility API, return it
-        if let element = try AXUIElement.systemWide.getElementAtPosition(position),
-           let windowElement: AXUIElement = try element.getValue(.window) {
-            return try Window(element: windowElement)
+    static func windowAtPosition(_ position: CGPoint) -> Window? {
+        do {
+            // If we can find the window at a point using the Accessibility API, return it
+            if let element = try AXUIElement.systemWide.getElementAtPosition(position),
+               let windowElement: AXUIElement = try element.getValue(.window) {
+                return try Window(element: windowElement)
+            }
+        } catch {
+            log.warn("Failed to determine element at position: \(error.localizedDescription)")
         }
 
         // If the previous method didn't work, loop through all windows on-screen and return the first one that contains the desired point
