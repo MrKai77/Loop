@@ -24,7 +24,6 @@ enum IconManager {
     static func setAppIcon(to icon: Icon) {
         Defaults[.currentIcon] = icon.assetName
         refreshCurrentAppIcon()
-        Log.info("Setting app icon to: \(icon.name)", category: .iconManager)
     }
 
     static func setAppIcon(to assetName: String) {
@@ -35,8 +34,10 @@ enum IconManager {
 
     // This function is run at startup to set the current icon to the user's set icon.
     static func refreshCurrentAppIcon() {
-        guard let image = NSImage(named: Defaults[.currentIcon]) else {
-            Log.error("Failed to load icon: \(Defaults[.currentIcon])", category: .iconManager)
+        let iconName = Defaults[.currentIcon]
+
+        guard let image = NSImage(named: iconName) else {
+            Log.error("Failed to load icon: \(iconName)", category: .iconManager)
             return
         }
 
@@ -51,6 +52,8 @@ enum IconManager {
         } else {
             NSApp.applicationIconImage = image
         }
+
+        Log.info("Set app icon to: \(iconName)", category: .iconManager)
     }
 
     static func checkIfUnlockedNewIcon() {

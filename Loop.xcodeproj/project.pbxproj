@@ -31,6 +31,16 @@
 			membershipExceptions = (
 				Config.xcconfig,
 				Info.plist,
+				"Resources/AppIcon-Black Hole.icon",
+				"Resources/AppIcon-Black.icon",
+				"Resources/AppIcon-Holo.icon",
+				"Resources/AppIcon-Keycap.icon",
+				"Resources/AppIcon-Loop Master.icon",
+				"Resources/AppIcon-Meta Loop.icon",
+				"Resources/AppIcon-Rose Pine.icon",
+				"Resources/AppIcon-Summer.icon",
+				"Resources/AppIcon-Synthwave Sunset.icon",
+				"Resources/AppIcon-White.icon",
 			);
 			target = A8E59C34297F5E9A0064D4BA /* Loop */;
 		};
