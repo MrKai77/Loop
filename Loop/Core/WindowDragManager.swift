@@ -96,13 +96,15 @@ final class WindowDragManager {
             if let window = resizeContext?.window,
                let initialFrame = initialWindowFrame,
                hasWindowResized(window.frame, initialFrame) {
-                StashManager.shared.onWindowDragged(window.cgWindowID)
-                WindowRecords.eraseRecords(for: window)
-
                 if hasWindowMoved(window.frame, initialFrame) {
                     if Defaults[.restoreWindowFrameOnDrag] {
                         restoreInitialWindowSize(window)
                     }
+                    
+                    StashManager.shared.onWindowDragged(window.cgWindowID)
+                    
+                    // Erase records *after* restoring frame if needed
+                    WindowRecords.eraseRecords(for: window)
 
                     if Defaults[.windowSnapping] {
                         // Only warp cursor away from top edge if top snap area is enabled
