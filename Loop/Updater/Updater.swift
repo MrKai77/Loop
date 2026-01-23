@@ -203,10 +203,8 @@ final class Updater: ObservableObject {
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func fetchLatestInfo(force: Bool = false) async {
-        let isDownloading = (downloader?.downloadState ?? .idle) == .downloading
-
         // Don't run update checks while actively downloading
-        if isDownloading {
+        if downloader?.downloadState == .downloading {
             return
         }
 
@@ -241,9 +239,11 @@ final class Updater: ObservableObject {
             do {
                 // Use GitHub releases API
                 let channel: UpdateChannel = includeDevelopmentVersions ? .beta : .stable
-                let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
 
+                let currentVersion = Bundle.main.appVersion?.filter(\.isASCII)
+                    .trimmingCharacters(in: .whitespaces) ?? "0.0.0"
                 let currentBuild = Bundle.main.appBuild ?? 0
+
                 if let manifest = try await updateChecker.checkForUpdate(
                     bundleId: Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop",
                     currentVersion: currentVersion,
@@ -258,9 +258,16 @@ final class Updater: ObservableObject {
                     }
                 }
             } catch {
-                await MainActor.run {
-                    updateState = .unavailable
+                if case .incompatibleSystem? = error as? UpdateError {
+                    await MainActor.run {
+                        updateState = .osNotSupported
+                    }
+                } else {
+                    await MainActor.run {
+                        updateState = .unavailable
+                    }
                 }
+
                 log.error("Error fetching release info: \(error.localizedDescription)")
             }
         }

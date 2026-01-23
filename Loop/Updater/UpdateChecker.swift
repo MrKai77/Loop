@@ -13,6 +13,11 @@ final class UpdateChecker: @unchecked Sendable {
     private let config: UpdaterConfig
     private let httpClient: HTTPClient
 
+    private static let minimumOSRegex = /Minimum macOS version:\s*(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/
+        .ignoresCase()
+    private static let maximumOSRegex = /Maximum macOS version:\s*(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/
+        .ignoresCase()
+
     init(config: UpdaterConfig) {
         self.config = config
         self.httpClient = HTTPClient(config: config)
@@ -28,44 +33,40 @@ final class UpdateChecker: @unchecked Sendable {
         log.info("Checking for updates: \(bundleId) v\(currentVersion) build \(currentBuild) [\(channel.rawValue)]")
 
         let endpoint = URL(string: channel.githubReleasesEndpoint)!
+        var candidateRelease: Release?
 
-        do {
-            let manifestData = try await httpClient.fetchData(from: endpoint)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
+        let manifestData = try await httpClient.fetchData(from: endpoint)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
 
-            if channel == .stable {
-                // Single release
-                let release = try decoder.decode(Release.self, from: manifestData)
-                return try processRelease(release, currentVersion: currentVersion, currentBuild: currentBuild, force: force)
-            } else {
-                // Multiple releases for beta channel
-                let releases = try decoder.decode([Release].self, from: manifestData)
-                if let latestBetaRelease = releases.first(where: { $0.prerelease }) {
-                    return try processRelease(latestBetaRelease, currentVersion: currentVersion, currentBuild: currentBuild, force: force)
-                }
-            }
-
-            log.info("No update available")
-            return nil
-
-        } catch {
-            log.error("Update check failed: \(error)")
-            throw UpdateError.network(error)
+        if channel == .stable {
+            // Single release
+            candidateRelease = try decoder.decode(Release.self, from: manifestData)
+        } else {
+            // Multiple releases for beta channel
+            let releases = try decoder.decode([Release].self, from: manifestData)
+            candidateRelease = releases.first(where: { $0.prerelease })
         }
+
+        if let candidateRelease {
+            return try processRelease(candidateRelease, currentVersion: currentVersion, currentBuild: currentBuild, force: force)
+        }
+
+        log.info("No update available")
+        return nil
     }
 
     private func processRelease(_ release: Release, currentVersion: String, currentBuild: Int, force: Bool) throws -> UpdateManifest? {
         log.debug("Processing release: tagName='\(release.tagName)', name='\(release.name)', prerelease=\(release.prerelease)")
 
         // Extract version and build number from release
-        let (comparisonVersion, plistVersion, buildNumber) = extractVersionInfo(from: release)
-        log.debug("Extracted comparison version: \(comparisonVersion), plist version: \(plistVersion), build: \(buildNumber)")
+        let (version, buildNumber) = extractVersionInfo(from: release)
+        log.debug("Extracted comparison version: \(version), build: \(buildNumber)")
 
         // Check if this is actually a newer version
-        log.debug("Checking version: force=\(force), current=\(currentVersion) build \(currentBuild), available=\(comparisonVersion) build \(buildNumber)")
-        if !force, !isNewerVersion(comparisonVersion, buildNumber: buildNumber, than: currentVersion, currentBuild: currentBuild) {
-            log.info("No newer version available (current: \(currentVersion) build \(currentBuild), available: \(comparisonVersion) build \(buildNumber))")
+        log.debug("Checking version: force=\(force), current=\(currentVersion) build \(currentBuild), available=\(version) build \(buildNumber)")
+        if !force, !isNewerVersion(version, buildNumber: buildNumber, than: currentVersion, currentBuild: currentBuild) {
+            log.info("No newer version available (current: \(currentVersion) build \(currentBuild), available: \(version) build \(buildNumber))")
             return nil
         }
 
@@ -78,34 +79,38 @@ final class UpdateChecker: @unchecked Sendable {
         let zipChecksum = asset.digest?.replacingOccurrences(of: "sha256:", with: "") ?? ""
         log.debug("Asset digest: \(asset.digest ?? "none"), extracted checksum: \(zipChecksum)")
 
+        let (minimumOS, maximumOS) = extractOSRequirements(from: release.body)
+
         let manifest = UpdateManifest(
-            version: plistVersion,
+            version: version,
             buildNumber: buildNumber,
             downloadUrl: asset.browserDownloadURL.absoluteString,
             releaseNotes: UpdateManifest.ReleaseNotes(
                 title: release.name,
-                body: release.body,
-                compatibility: UpdateManifest.ReleaseNotes.Compatibility(
-                    downloadSize: Int64(asset.size),
-                    minimumOS: "13.0",
-                    maximumOS: nil,
-                    supportedArchitectures: ["arm64", "x86_64"]
-                )
+                body: release.body
             ),
             checksums: UpdateManifest.Checksums(
                 zip: zipChecksum
             ),
-            minimumOS: "13.0",
+            compatibility: UpdateManifest.Compatibility(
+                downloadSize: Int64(asset.size),
+                minimumOS: minimumOS,
+                maximumOS: maximumOS,
+                supportedArchitectures: ["arm64", "x86_64"]
+            ),
             channel: release.prerelease ? .beta : .stable,
             publishedAt: release.createdAt,
             size: Int64(asset.size)
         )
 
+        // Verify system requirements before returning the manifest
+        try verifySystemRequirements(manifest: manifest)
+
         log.info("Found update: v\(manifest.version) (build \(manifest.buildNumber))")
         return manifest
     }
 
-    private func extractVersionInfo(from release: Release) -> (comparisonVersion: String, plistVersion: String, buildNumber: Int) {
+    private func extractVersionInfo(from release: Release) -> (version: String, buildNumber: Int) {
         if release.prerelease {
             // Parse from name field like "🧪 1.4.1 (1683)"
             let regex = /🧪\s+(\d+\.\d+\.\d+)\s+\((\d+)\)/
@@ -113,13 +118,14 @@ final class UpdateChecker: @unchecked Sendable {
                 let version = String(match.1)
                 let build = Int(String(match.2)) ?? 0
                 log.debug("Parsed prerelease: version=\(version), build=\(build)")
-                return (version, version, build)
+                return (version, build)
             }
+
             log.warn("Could not parse prerelease version from: '\(release.name)'")
-            return ("0.0.0", "0.0.0", 0)
+            return ("0.0.0", 0)
         } else {
             // Stable release: tagName is the version
-            return (release.tagName, release.tagName, 0)
+            return (release.tagName, 0)
         }
     }
 
@@ -137,5 +143,67 @@ final class UpdateChecker: @unchecked Sendable {
         }
 
         return false
+    }
+
+    private func extractOSRequirements(from body: String) -> (minimum: OperatingSystemVersion?, maximum: OperatingSystemVersion?) {
+        var minimumOS: OperatingSystemVersion?
+        var maximumOS: OperatingSystemVersion?
+
+        for line in body.split(whereSeparator: \.isNewline).reversed() {
+            let (minimum, maximum) = extractMacOSVersionRequirements(from: String(line))
+
+            if minimumOS == nil { minimumOS = minimum }
+            if maximumOS == nil { maximumOS = maximum }
+
+            if minimumOS != nil, maximumOS != nil { break }
+        }
+
+        log.debug("Extracted OS requirements: minimum=\(minimumOS?.description ?? "none"), maximum=\(maximumOS?.description ?? "none")")
+        return (minimumOS, maximumOS)
+    }
+
+    private func extractMacOSVersionRequirements(from line: String) -> (minimum: OperatingSystemVersion?, maximum: OperatingSystemVersion?) {
+        var minimum: OperatingSystemVersion?
+        var maximum: OperatingSystemVersion?
+
+        if let match = line.firstMatch(of: Self.minimumOSRegex), let major = Int(match.major) {
+            let minor = match.minor.flatMap { Int($0) } ?? 0
+            let patch = match.patch.flatMap { Int($0) } ?? 0
+            minimum = OperatingSystemVersion(majorVersion: major, minorVersion: minor, patchVersion: patch)
+        }
+
+        if let match = line.firstMatch(of: Self.maximumOSRegex), let major = Int(match.major) {
+            let minor = match.minor.flatMap { Int($0) } ?? 0
+            let patch = match.patch.flatMap { Int($0) } ?? 0
+            maximum = OperatingSystemVersion(majorVersion: major, minorVersion: minor, patchVersion: patch)
+        }
+
+        return (minimum, maximum)
+    }
+
+    private func verifySystemRequirements(manifest: UpdateManifest) throws {
+        log.info("Verifying system requirements")
+
+        if let minimumOS = manifest.compatibility.minimumOS {
+            guard ProcessInfo.processInfo.isOperatingSystemAtLeast(minimumOS) else {
+                throw UpdateError.incompatibleSystem("Update requires macOS \(minimumOS.description) or later")
+            }
+        }
+
+        if let maximumOS = manifest.compatibility.maximumOS {
+            // Maximum OS is inclusive
+            // e.g. a max OS of 15.6.1 should allow Loop to be installed on 15.6.1, but not on 15.6.2
+            let actualMaximumOS = OperatingSystemVersion(
+                majorVersion: maximumOS.majorVersion,
+                minorVersion: maximumOS.minorVersion,
+                patchVersion: maximumOS.patchVersion + 1
+            )
+
+            guard !ProcessInfo.processInfo.isOperatingSystemAtLeast(actualMaximumOS) else {
+                throw UpdateError.incompatibleSystem("Update requires macOS \(maximumOS.description) or earlier")
+            }
+        }
+
+        log.success("System requirements verified")
     }
 }

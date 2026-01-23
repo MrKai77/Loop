@@ -192,7 +192,6 @@ actor UpdateInstaller {
             ("disk space", { try await self.verifyDiskSpace(manifest: manifest) }),
             ("current app integrity", { try await self.verifyCurrentAppIntegrity() }),
             ("installation permissions", { try await self.verifyInstallationPermissions() }),
-            ("system requirements", { try self.verifySystemRequirements(manifest: manifest) }),
             ("conflicting processes", { try await self.checkForConflictingRunningProcesses() })
         ]
 
@@ -254,33 +253,6 @@ actor UpdateInstaller {
         }
 
         log.success("Installation permissions verified")
-    }
-
-    private func verifySystemRequirements(manifest: UpdateManifest) throws {
-        log.info("Verifying system requirements")
-
-        let currentOS = ProcessInfo.processInfo.operatingSystemVersion
-        let minimumOS = manifest.minimumOS
-
-        // Parse minimum OS version (assuming format like "13.0")
-        let components = minimumOS.split(separator: ".").compactMap { Int($0) }
-        guard components.count >= 2 else {
-            log.warn("Could not parse minimum OS version: \(minimumOS)")
-            return
-        }
-
-        let requiredMajor = components[0]
-        let requiredMinor = components[1]
-
-        if currentOS.majorVersion < requiredMajor ||
-            (currentOS.majorVersion == requiredMajor && currentOS.minorVersion < requiredMinor) {
-            let currentOSString = "\(currentOS.majorVersion).\(currentOS.minorVersion).\(currentOS.patchVersion)"
-            throw createSafetyError(
-                "System does not meet minimum OS requirement. Current: \(currentOSString), Required: \(minimumOS)"
-            )
-        }
-
-        log.success("System requirements verified")
     }
 
     private func checkForConflictingRunningProcesses() async throws {
@@ -498,7 +470,7 @@ actor UpdateInstaller {
         }
     }
 
-    private func validateSystemCompatibility(_ plist: NSDictionary, manifest: UpdateManifest?) throws {
+    private func validateSystemCompatibility(_ plist: NSDictionary) throws {
         // Check minimum OS version from plist
         if let minOSString = plist["LSMinimumSystemVersion"] as? String {
             let components = minOSString.split(separator: ".").compactMap { Int($0) }
@@ -510,7 +482,7 @@ actor UpdateInstaller {
                 )
 
                 guard ProcessInfo.processInfo.isOperatingSystemAtLeast(minOSVersion) else {
-                    throw createSafetyError("App requires macOS \(minOSString) or later")
+                    throw createSafetyError("App manifest inconsistency: app actually requires macOS \(minOSString) or later.")
                 }
             }
         }
@@ -519,22 +491,6 @@ actor UpdateInstaller {
         if let supportedArchitectures = plist["LSArchitecturePriority"] as? [String] {
             guard supportedArchitectures.contains(SystemInfo.architecture) else {
                 throw createSafetyError("App does not support current architecture")
-            }
-        }
-
-        // Check against manifest requirements
-        if let manifest {
-            let components = manifest.minimumOS.split(separator: ".").compactMap { Int($0) }
-            if components.count >= 2 {
-                let manifestMinVersion = OperatingSystemVersion(
-                    majorVersion: components[0],
-                    minorVersion: components[1],
-                    patchVersion: components.count > 2 ? components[2] : 0
-                )
-
-                guard ProcessInfo.processInfo.isOperatingSystemAtLeast(manifestMinVersion) else {
-                    throw createSafetyError("Update requires macOS \(manifest.minimumOS) or later")
-                }
             }
         }
     }

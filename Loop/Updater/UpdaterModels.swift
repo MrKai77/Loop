@@ -43,7 +43,7 @@ struct UpdateManifest: Sendable {
     let downloadUrl: String
     let releaseNotes: ReleaseNotes
     let checksums: Checksums
-    let minimumOS: String
+    let compatibility: Compatibility
     let channel: UpdateChannel
     let publishedAt: Date
     let size: Int64
@@ -51,51 +51,17 @@ struct UpdateManifest: Sendable {
     struct ReleaseNotes: Sendable {
         let title: String
         let body: String
-        let compatibility: Compatibility
+    }
 
-        struct Compatibility: Sendable {
-            let downloadSize: Int64
-            let minimumOS: String
-            let maximumOS: String?
-            let supportedArchitectures: [String]
-        }
+    struct Compatibility: Sendable {
+        let downloadSize: Int64
+        let minimumOS: OperatingSystemVersion?
+        let maximumOS: OperatingSystemVersion?
+        let supportedArchitectures: [String]
     }
 
     struct Checksums: Sendable {
         let zip: String
-    }
-
-    // Create UpdateManifest from GitHub Release
-    static func from(release: Release) -> UpdateManifest? {
-        guard let asset = release.assets.first(where: { $0.name.hasSuffix(".zip") }) else {
-            return nil
-        }
-
-        // Extract checksum from asset digest (format: "sha256:checksum")
-        let zipChecksum = asset.digest?.replacingOccurrences(of: "sha256:", with: "") ?? ""
-
-        return UpdateManifest(
-            version: release.tagName,
-            buildNumber: release.buildNumber ?? 0,
-            downloadUrl: asset.browserDownloadURL.absoluteString,
-            releaseNotes: ReleaseNotes(
-                title: release.name,
-                body: release.body,
-                compatibility: ReleaseNotes.Compatibility(
-                    downloadSize: Int64(asset.size),
-                    minimumOS: "13.0",
-                    maximumOS: nil,
-                    supportedArchitectures: ["arm64", "x86_64"]
-                )
-            ),
-            checksums: Checksums(
-                zip: zipChecksum
-            ),
-            minimumOS: "13.0",
-            channel: release.prerelease ? .beta : .stable,
-            publishedAt: release.publishedAt,
-            size: Int64(asset.size)
-        )
     }
 }
 
@@ -137,6 +103,7 @@ enum UpdateError: LocalizedError, Sendable {
     case invalidManifest(String? = nil)
     case checksumMismatch
     case installationFailed(String)
+    case incompatibleSystem(String)
     case security(String)
     case timeout
     case http(Int)
@@ -151,6 +118,8 @@ enum UpdateError: LocalizedError, Sendable {
             "File integrity check failed"
         case let .installationFailed(reason):
             "Installation failed: \(reason)"
+        case let .incompatibleSystem(reason):
+            reason
         case let .security(reason):
             "Security error: \(reason)"
         case .timeout:
