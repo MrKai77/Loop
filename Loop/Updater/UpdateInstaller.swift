@@ -448,7 +448,7 @@ actor UpdateInstaller {
         }
 
         // System compatibility check
-        try validateSystemCompatibility(plist, manifest: manifest)
+        try validateSystemCompatibility(plist)
 
         log.success("App bundle validation completed")
     }

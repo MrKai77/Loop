@@ -23,9 +23,10 @@ struct VersionDisplay {
 
     static func formatCurrentAppVersion() -> VersionDisplay {
         // Read from the actual installed app's Info.plist, not the in-memory bundle
-        let bundleURL = Bundle.main.bundleURL
-
-        guard let (version, build) = BundleInfoReader.readVersionInfo(from: bundleURL) else {
+        
+        guard let version = Bundle.main.appVersion,
+              let build = Bundle.main.appBuild
+        else {
             return .unknown
         }
 
@@ -67,20 +68,5 @@ extension Release {
             build: buildNumber,
             isPrerelease: prerelease
         )
-    }
-}
-
-private enum BundleInfoReader {
-    static func readVersionInfo(from bundleURL: URL) -> (version: String, build: Int)? {
-        let infoPlistURL = bundleURL.appendingPathComponent("Contents/Info.plist")
-
-        guard let plist = NSDictionary(contentsOf: infoPlistURL),
-              let version = plist["CFBundleShortVersionString"] as? String,
-              let buildString = plist["CFBundleVersion"] as? String,
-              let build = Int(buildString) else {
-            return nil
-        }
-
-        return (version, build)
     }
 }
