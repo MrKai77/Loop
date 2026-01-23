@@ -126,7 +126,7 @@ final class Updater: ObservableObject {
                         await installUpdate()
                     }
                 }
-                
+
                 log.info("Automatic updates enabled, but Loop is active. Skipping installation.")
                 return
             }

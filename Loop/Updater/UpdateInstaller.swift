@@ -8,7 +8,6 @@
 import AppKit
 import Foundation
 import Scribe
-import ZIPFoundation
 
 // MARK: - Installation Errors
 
@@ -33,24 +32,18 @@ actor UpdateInstaller {
 
     private let config: UpdaterConfig
     private let fileVerifier: FileVerifier
+    private let backupManager: BackupManager
     private let fileManager: FileManager
 
     private var isCancelled = false
     private var installationState: InstallationState = .idle
-
-    private lazy var backupDirectory: URL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("Loop/Backups", isDirectory: true)
-
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd_HHmmss"
-        return formatter
-    }()
+    private var relocateToApplications = false
 
     init(config: UpdaterConfig, fileManager: FileManager = .default) {
         self.config = config
         self.fileManager = fileManager
         self.fileVerifier = FileVerifier(config: config)
+        self.backupManager = BackupManager(fileManager: fileManager)
     }
 
     func installUpdate(from downloadURL: URL, manifest: UpdateManifest) async throws {
@@ -224,7 +217,43 @@ actor UpdateInstaller {
             }
         }
 
+        // Check location and offer relocation if needed
+        try await checkAppLocationAndOfferRelocation()
+
         log.success("All pre-installation safety checks passed")
+    }
+
+    private func checkAppLocationAndOfferRelocation() async throws {
+        let location = AppLocation.current
+
+        switch location {
+        case .systemApplications, .userApplications:
+            log.info("App is in Applications folder: \(location)")
+            relocateToApplications = false
+        case let .other(path):
+            log.warn("App is not in Applications folder: \(path)")
+
+            let shouldRelocate = await askUserForRelocation()
+
+            if shouldRelocate {
+                log.info("User chose to install to Applications folder")
+                relocateToApplications = true
+            } else {
+                log.info("User chose to keep current location. Update will install to: \(path)")
+                relocateToApplications = false
+            }
+        }
+    }
+
+    @MainActor
+    private func askUserForRelocation() async -> Bool {
+        let alert = NSAlert()
+        alert.messageText = String(localized: "Move to Applications Folder?")
+        alert.informativeText = String(localized: "Loop is not in your Applications folder. Would you like to install the update to your Applications folder instead?")
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: String(localized: "Install to Applications"))
+        alert.addButton(withTitle: String(localized: "Keep in Current Location"))
+        return alert.runModal() == .alertFirstButtonReturn
     }
 
     private func verifyDiskSpace(manifest _: UpdateManifest) async throws {
@@ -328,61 +357,11 @@ actor UpdateInstaller {
         log.success("Download integrity verification completed")
     }
 
-    // MARK: - Extraction with Verification
+    // MARK: - Extraction
 
     private func extractAndVerifyUpdate(_ downloadURL: URL) async throws -> URL {
         try checkCancellation()
-        log.info("Extracting update with comprehensive verification")
-
-        let tempDir = createTemporaryExtractionDirectory()
-
-        do {
-            try fileManager.createDirectory(at: tempDir, withIntermediateDirectories: true)
-
-            // Extract with safety checks
-            try extractZipFile(downloadURL, to: tempDir)
-
-            // Verify extraction completed successfully
-            try await verifyExtractionCompleteness(tempDir)
-
-            return tempDir
-        } catch {
-            // Clean up on failure
-            try? fileManager.removeItem(at: tempDir)
-            throw error
-        }
-    }
-
-    private func extractZipFile(_ zipURL: URL, to destinationURL: URL) throws {
-        try validateZipFile(zipURL)
-        try performSafeZipExtraction(zipURL: zipURL, destinationURL: destinationURL)
-    }
-
-    private func performSafeZipExtraction(zipURL: URL, destinationURL: URL) throws {
-        log.info("Extracting ZIP archive: \(zipURL.lastPathComponent)")
-
-        guard let archive = try Archive(url: zipURL, accessMode: .read) else {
-            throw createExtractionError("Could not open ZIP archive", code: -1, zipURL: zipURL)
-        }
-
-        for entry in archive where !entry.path.contains(/__MACOSX/) {
-            try checkCancellation()
-            _ = try archive.extract(entry, to: destinationURL.appendingPathComponent(entry.path))
-        }
-
-        log.success("Successfully extracted ZIP archive")
-    }
-
-    private func verifyExtractionCompleteness(_ extractedURL: URL) async throws {
-        log.info("Verifying extraction completeness")
-
-        // Check that we have at least one .app bundle
-        let appBundle = try BundleUtilities.findAppBundle(in: extractedURL)
-
-        // Verify the app bundle structure
-        try BundleUtilities.verifyBundleStructure(appBundle)
-
-        log.success("Extraction completeness verified")
+        return try ZipExtractor.extract(from: downloadURL, cancellationCheck: checkCancellation)
     }
 
     // MARK: - Extraction Integrity Verification
@@ -450,7 +429,7 @@ actor UpdateInstaller {
 
         // Version validation for extracted apps
         if !isCurrentApp, let manifest {
-            try BundleVersionMatcher.verifyVersionMatches(bundleURL: appBundle, manifest: manifest)
+            try BundleUtilities.verifyVersionMatches(bundleURL: appBundle, manifest: manifest)
         }
 
         // System compatibility check
@@ -512,18 +491,78 @@ actor UpdateInstaller {
         try checkCancellation()
         log.info("Performing safe installation")
 
-        // Pre-installation verification
-        try await verifyPreInstallationState()
-
-        // Perform atomic installation
         let appBundle = try BundleUtilities.findAppBundle(in: extractedURL)
-        let currentAppURL = Bundle.main.bundleURL
-        try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
 
-        // Post-installation verification
-        try await verifyPostInstallationState(manifest: manifest)
+        if relocateToApplications {
+            try await performRelocationInstall(from: appBundle, manifest: manifest)
+        } else {
+            // Pre-installation verification
+            try await verifyPreInstallationState()
+
+            // Perform atomic installation to current location
+            let currentAppURL = Bundle.main.bundleURL
+            try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
+
+            // Post-installation verification
+            try await verifyPostInstallationState(manifest: manifest)
+        }
 
         log.success("Safe installation completed")
+    }
+
+    private func performRelocationInstall(from appBundle: URL, manifest: UpdateManifest) async throws {
+        log.info("Installing to Applications folder")
+
+        let userAppsURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications")
+        let destinationURL = userAppsURL.appendingPathComponent("Loop.app")
+
+        // Create ~/Applications if needed
+        try fileManager.createDirectory(at: userAppsURL, withIntermediateDirectories: true)
+
+        // Remove existing app at destination if present
+        if fileManager.fileExists(atPath: destinationURL.path) {
+            log.info("Removing existing app at destination: \(destinationURL.path)")
+            try fileManager.removeItem(at: destinationURL)
+        }
+
+        // Copy new app to Applications
+        log.info("Copying new version to: \(destinationURL.path)")
+        try fileManager.copyItem(at: appBundle, to: destinationURL)
+
+        // Verify the installation
+        try BundleUtilities.verifyBundleStructure(destinationURL)
+        try BundleUtilities.verifyVersionMatches(bundleURL: destinationURL, manifest: manifest)
+
+        // Remove old app from original location
+        let oldAppURL = Bundle.main.bundleURL
+        log.info("Removing old app from: \(oldAppURL.path)")
+        do {
+            try fileManager.removeItem(at: oldAppURL)
+        } catch {
+            log.warn("Could not remove old app (non-fatal): \(error.localizedDescription)")
+        }
+
+        log.success("Successfully installed to Applications folder")
+
+        // Launch from new location and quit current instance
+        try await launchAndTerminate(appURL: destinationURL)
+    }
+
+    private func launchAndTerminate(appURL: URL) async throws {
+        log.info("Launching app from: \(appURL.path)")
+
+        let config = NSWorkspace.OpenConfiguration()
+        config.createsNewApplicationInstance = true
+        try await NSWorkspace.shared.openApplication(at: appURL, configuration: config)
+
+        // Give the new instance time to start
+        try await Task.sleep(for: .seconds(1))
+
+        // Terminate current instance
+        log.info("Terminating current instance")
+        await MainActor.run {
+            NSApplication.shared.terminate(nil)
+        }
     }
 
     private func verifyPreInstallationState() async throws {
@@ -603,7 +642,7 @@ actor UpdateInstaller {
         log.debug("Verifying staged application")
 
         try BundleUtilities.verifyBundleStructure(stagingURL)
-        try BundleVersionMatcher.verifyVersionMatches(bundleURL: stagingURL, manifest: manifest)
+        try BundleUtilities.verifyVersionMatches(bundleURL: stagingURL, manifest: manifest)
         try await testStagedApplication(stagingURL)
     }
 
@@ -631,17 +670,17 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        try await manageBackups()
-        let backupURL = try createBackup(from: currentURL)
+        try await backupManager.prepareForBackup()
+        let backupURL = try await backupManager.createBackupURL()
 
-        try performSwapOperation(
+        try await performSwapOperation(
             current: currentURL,
             staged: stagingURL,
             backup: backupURL
         )
     }
 
-    private func performSwapOperation(current: URL, staged: URL, backup: URL) throws {
+    private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {
         do {
             log.info("Moving current app to backup...")
 
@@ -664,7 +703,7 @@ actor UpdateInstaller {
 
             // Verify the atomic swap was successful
             try verifySwapSuccess(current: current, backup: backup, staged: staged)
-            log.info("Atomic swap completed and verified successfully!")
+            log.success("Atomic swap completed and verified successfully!")
         } catch {
             log.error("Atomic swap failed: \(error)")
             log.error("Current: \(current.path), Staged: \(staged.path), Backup: \(backup.path)")
@@ -672,18 +711,9 @@ actor UpdateInstaller {
             log.error("Staged exists: \(fileManager.fileExists(atPath: staged.path))")
             log.error("Backup exists: \(fileManager.fileExists(atPath: backup.path))")
 
-            try restoreFromBackup(current: current, backup: backup)
+            try await backupManager.restoreFromBackup(currentURL: current, backupURL: backup)
             throw error
         }
-    }
-
-    private func restoreFromBackup(current: URL, backup: URL) throws {
-        guard fileManager.fileExists(atPath: backup.path) else { return }
-
-        log.info("Attempting to restore from backup...")
-        try? fileManager.removeItem(at: current)
-        try? fileManager.moveItem(at: backup, to: current)
-        log.info("Restored from backup")
     }
 
     private func verifySwapSuccess(current: URL, backup: URL, staged: URL) throws {
@@ -753,103 +783,11 @@ actor UpdateInstaller {
         }
 
         log.debug("File sizes verified - Backup: \(backupSize.formattedBytes), New: \(currentSize.formattedBytes)")
-        log.debug("Atomic swap verification completed successfully")
+        log.debug("Atomic swap verification completed")
     }
 
     private func cleanupStaging(_ stagingURL: URL) async {
         try? fileManager.removeItem(at: stagingURL)
-    }
-
-    // MARK: - Backup Management
-
-    private func manageBackups() async throws {
-        try fileManager.createDirectory(at: backupDirectory, withIntermediateDirectories: true)
-
-        let backupSize = try calculateDirectorySize(backupDirectory)
-        let maxBackupSize: Int64 = 104_857_600 // 100MB
-
-        guard backupSize > maxBackupSize else { return }
-
-        log.info("Backup directory exceeds 100MB (\(backupSize.formattedBytes)), cleaning up old backups")
-
-        try await cleanupOldBackups(currentSize: backupSize, maxSize: maxBackupSize)
-    }
-
-    private func cleanupOldBackups(currentSize: Int64, maxSize: Int64) async throws {
-        let backups = try getBackupsSortedByDate()
-        var remainingSize = currentSize
-
-        for (backupURL, _) in backups {
-            guard remainingSize > maxSize else { break }
-
-            let backupItemSize = try calculateDirectorySize(backupURL)
-            try fileManager.removeItem(at: backupURL)
-            remainingSize -= backupItemSize
-
-            log.info("Removed old backup: \(backupURL.lastPathComponent) (\(backupItemSize.formattedBytes))")
-        }
-
-        log.info("Backup cleanup completed, new size: \(remainingSize.formattedBytes)")
-    }
-
-    private func getBackupsSortedByDate() throws -> [(URL, Date)] {
-        try fileManager.contentsOfDirectory(
-            at: backupDirectory,
-            includingPropertiesForKeys: [.creationDateKey],
-            options: [.skipsHiddenFiles]
-        )
-        .compactMap { url -> (URL, Date)? in
-            guard let date = try? url.resourceValues(forKeys: [.creationDateKey]).creationDate else { return nil }
-            return (url, date)
-        }
-        .sorted { $0.1 < $1.1 }
-    }
-
-    private func createBackup(from _: URL) throws -> URL {
-        let baseTimestamp = Self.dateFormatter.string(from: Date())
-        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
-
-        // Use "install" prefix to differentiate from RollbackManager backups
-        var backupName = "install_backup_\(currentVersion)_\(baseTimestamp)"
-        var backupURL = backupDirectory.appendingPathComponent(backupName)
-
-        // If collision detected, add microseconds and retry up to 10 times
-        var attempt = 0
-        while fileManager.fileExists(atPath: backupURL.path), attempt < 10 {
-            attempt += 1
-            let microTimestamp = String(format: "%06d", Int(Date().timeIntervalSince1970 * 1_000_000) % 1_000_000)
-            backupName = "install_backup_\(currentVersion)_\(baseTimestamp)_\(microTimestamp)"
-            backupURL = backupDirectory.appendingPathComponent(backupName)
-        }
-
-        // Final check for collision
-        guard !fileManager.fileExists(atPath: backupURL.path) else {
-            throw UpdateError.installationError("Could not generate unique install backup name after \(attempt) attempts")
-        }
-
-        return backupURL
-    }
-
-    private func calculateDirectorySize(_ url: URL) throws -> Int64 {
-        var isDirectory: ObjCBool = false
-        guard fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory) else { return 0 }
-
-        if !isDirectory.boolValue {
-            let attributes = try fileManager.attributesOfItem(atPath: url.path)
-            return (attributes[.size] as? Int64) ?? 0
-        }
-
-        guard let enumerator = fileManager.enumerator(
-            at: url,
-            includingPropertiesForKeys: [.fileSizeKey],
-            options: [.skipsHiddenFiles]
-        ) else { return 0 }
-
-        return Int64(enumerator
-            .compactMap { $0 as? URL }
-            .compactMap { try? $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
-            .reduce(0, +)
-        )
     }
 
     // MARK: - Comprehensive Verification
@@ -913,43 +851,13 @@ actor UpdateInstaller {
         log.success("Pre-restart verification passed")
     }
 
-    // MARK: - Enhanced Validation Methods
-
-    private func validateZipFile(_ zipURL: URL) throws {
-        log.info("Validating ZIP file: \(zipURL.path)")
-
-        guard fileManager.fileExists(atPath: zipURL.path) else {
-            throw createExtractionError("ZIP file not found", code: -3, zipURL: zipURL)
-        }
-
-        guard fileManager.isReadableFile(atPath: zipURL.path) else {
-            throw createExtractionError("ZIP file is not readable", code: -4, zipURL: zipURL)
-        }
-
-        // Basic ZIP signature check
-        let fileHandle = try FileHandle(forReadingFrom: zipURL)
-        defer { fileHandle.closeFile() }
-
-        let headerData = fileHandle.readData(ofLength: 4)
-        guard headerData.count >= 2 else {
-            throw createExtractionError("File is too small to be a valid ZIP archive", code: -6)
-        }
-
-        let (pk1, pk2) = (headerData[0], headerData[1])
-        guard pk1 == 0x50, pk2 == 0x4B else {
-            throw createExtractionError("File is not a valid ZIP archive (invalid signature)", code: -5)
-        }
-
-        log.success("ZIP file validation passed")
-    }
-
-    // MARK: - Standard Methods (Enhanced)
+    // MARK: - Standard Methods
 
     private func verifyInstallation(manifest: UpdateManifest) async throws {
         try checkCancellation()
 
         log.info("Verifying installation success")
-        try BundleVersionMatcher.verifyVersionMatches(bundleURL: Bundle.main.bundleURL, manifest: manifest)
+        try BundleUtilities.verifyVersionMatches(bundleURL: Bundle.main.bundleURL, manifest: manifest)
         log.success("Installation verification completed successfully")
     }
 
@@ -999,10 +907,6 @@ actor UpdateInstaller {
         }
     }
 
-    private func createTemporaryExtractionDirectory() -> URL {
-        fileManager.temporaryDirectory.appendingPathComponent("LoopExtraction_\(UUID().uuidString)")
-    }
-
     private func calculateAppSize(_ appURL: URL) throws -> Int64 {
         var totalSize: Int64 = 0
 
@@ -1028,21 +932,47 @@ actor UpdateInstaller {
     private func createSafetyError(_ message: String) -> UpdateError {
         .installationError(message)
     }
-
-    private func createExtractionError(_ message: String, code _: Int, zipURL: URL? = nil) -> UpdateError {
-        var fullMessage = message
-        if let zipURL {
-            let fileSize = try? fileManager.attributesOfItem(atPath: zipURL.path)[.size] as? Int64
-            let fileSizeString = fileSize?.formattedBytes ?? "unknown size"
-            fullMessage = "\(message) at \(zipURL.path) (Size: \(fileSizeString))"
-        }
-
-        return .installationError(fullMessage)
-    }
 }
 
 // MARK: - InstallationState
 
 private enum InstallationState {
     case idle, inProgress, completed, failed, cancelled
+}
+
+// MARK: - AppLocation
+
+enum AppLocation: CustomStringConvertible, Sendable {
+    case systemApplications
+    case userApplications
+    case other(String)
+
+    static var current: AppLocation {
+        let bundlePath = Bundle.main.bundlePath
+        let userAppsPath = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications").path
+        let systemAppsPath = "/Applications"
+
+        if bundlePath.hasPrefix(systemAppsPath) {
+            return .systemApplications
+        } else if bundlePath.hasPrefix(userAppsPath) {
+            return .userApplications
+        } else {
+            return .other(bundlePath)
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .systemApplications: "/Applications"
+        case .userApplications: "~/Applications"
+        case let .other(path): path
+        }
+    }
+
+    var isInApplicationsFolder: Bool {
+        switch self {
+        case .systemApplications, .userApplications: true
+        case .other: false
+        }
+    }
 }

@@ -11,17 +11,9 @@ import Scribe
 
 @Loggable
 final class Downloader: NSObject {
-    // MARK: - Types
-
-    typealias RelocationHandler = @MainActor () async -> Bool
-    typealias RelocationErrorHandler = @MainActor (Error) async -> ()
-
     // MARK: - Properties
 
     private let config: UpdaterConfig
-
-    private let relocationHandler: RelocationHandler?
-    private let relocationErrorHandler: RelocationErrorHandler?
 
     private var urlSession: URLSession?
     private var downloadTask: URLSessionDownloadTask?
@@ -32,20 +24,12 @@ final class Downloader: NSObject {
     private(set) var downloadState: DownloadState = .idle
     private var performanceTracker: PerformanceTracker = .init()
 
-    // Computed once and cached
     private lazy var paths: SystemPaths = .init()
-    private lazy var currentAppLocation: AppLocation = AppLocationManager.determineLocation()
 
     // MARK: - Initialization
 
-    init(
-        config: UpdaterConfig,
-        relocationHandler: RelocationHandler? = nil,
-        relocationErrorHandler: RelocationErrorHandler? = nil
-    ) {
+    init(config: UpdaterConfig) {
         self.config = config
-        self.relocationHandler = relocationHandler
-        self.relocationErrorHandler = relocationErrorHandler
         super.init()
     }
 
@@ -93,9 +77,6 @@ final class Downloader: NSObject {
         }
     }
 
-    var appLocation: AppLocation { currentAppLocation }
-    var isInSuitableLocation: Bool { currentAppLocation.isInApplicationsFolder }
-
     // MARK: - Private Implementation
 
     private func setupDownload(
@@ -130,9 +111,9 @@ final class Downloader: NSObject {
             handleError(error)
             return
         }
-        
+
         // Now that the file has been moved synchronously, we can launch a task to complete the update.
-        
+
         Task {
             do {
                 try await handleCompletion(with: finalURL)
@@ -143,7 +124,6 @@ final class Downloader: NSObject {
     }
 
     private func handleCompletion(with url: URL) async throws {
-//        try await AppLocationManager.handleLocationIfNeeded(currentLocation: currentAppLocation)
         downloadState = .completed
         completionClosure?(.success(url))
         await cleanup()
@@ -175,12 +155,12 @@ extension Downloader: URLSessionDownloadDelegate {
         didFinishDownloadingTo location: URL
     ) {
         if let httpResponse = downloadTask.response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-            self.handleError(DownloadError.networkError(.init(URLError.Code(rawValue: httpResponse.statusCode))))
+            handleError(DownloadError.networkError(.init(URLError.Code(rawValue: httpResponse.statusCode))))
             return
         }
 
         guard let originalURL = downloadTask.originalRequest?.url else {
-            self.handleError(DownloadError.unknown(NSError(domain: "MissingOriginalURL", code: -1)))
+            handleError(DownloadError.unknown(NSError(domain: "MissingOriginalURL", code: -1)))
             return
         }
 
@@ -332,7 +312,7 @@ private enum FileOperations {
             log.error("Downloaded file does not exist at \(tempLocation.path)")
             throw DownloadError.fileValidationFailed("File doesn't exist at temporary download directory")
         }
-        
+
         // Preserve original filename instead of renaming to "LoopUpdate.zip"
         let originalFilename = originalURL.lastPathComponent
         let finalURL = loopDir.appendingPathComponent(originalFilename)
@@ -365,109 +345,6 @@ private enum FileValidator {
         let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
         guard let fileSize = attributes[.size] as? Int64, fileSize > 0 else {
             throw DownloadError.fileValidationFailed("Downloaded file is empty")
-        }
-    }
-}
-
-// MARK: - AppLocationManager
-
-@Loggable(style: .static)
-private enum AppLocationManager {
-    static func determineLocation() -> AppLocation {
-        let bundlePath = Bundle.main.bundlePath
-        let userAppsPath = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications").path
-        let systemAppsPath = "/Applications"
-
-        if bundlePath.hasPrefix(systemAppsPath) {
-            return .systemApplications
-        } else if bundlePath.hasPrefix(userAppsPath) {
-            return .userApplications
-        } else {
-            return .other(bundlePath)
-        }
-    }
-
-    static func handleLocationIfNeeded(currentLocation: AppLocation) async throws {
-        switch currentLocation {
-        case .systemApplications, .userApplications:
-            log.info("App is in Applications folder - Location: \(currentLocation)")
-        case let .other(path):
-            log.warn("App is not in Applications folder - Current Path: \(path)")
-            
-//            let shouldMoveToApplications = await askUserForRelocation()
-//            
-//            do {
-//                try await relocateApplication(to: shouldMoveToApplications ? AppLocation.systemApplications.)
-//            } catch {
-//                log.error("Failed to relocate application: \(error.localizedDescription)")
-//                await showRelocationError(error)
-//            }
-        }
-    }
-
-    private static func askUserForRelocation() async -> Bool {
-        return await MainActor.run {
-            let alert = NSAlert()
-            alert.messageText = .init(localized: "Move to Applications Folder?")
-            alert.informativeText = .init(localized: "For automatic updates to work properly, this application should be in your Applications folder. Would you like to move it now?")
-            alert.alertStyle = .informational
-            alert.addButton(withTitle: "Move to Applications")
-            alert.addButton(withTitle: "Keep Current Location")
-            return alert.runModal() == .alertFirstButtonReturn
-        }
-    }
-
-    private static func relocateApplication(to newPath: String) async throws {
-        let currentURL = Bundle.main.bundleURL
-        let userAppsURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications")
-        let destinationURL = userAppsURL.appendingPathComponent(currentURL.lastPathComponent)
-
-        try FileManager.default.createDirectory(at: userAppsURL, withIntermediateDirectories: true)
-
-        if FileManager.default.fileExists(atPath: destinationURL.path) {
-            try FileManager.default.removeItem(at: destinationURL)
-        }
-
-        try FileManager.default.copyItem(at: currentURL, to: destinationURL)
-
-        let config = NSWorkspace.OpenConfiguration()
-        config.createsNewApplicationInstance = true
-        try await NSWorkspace.shared.open(destinationURL, configuration: config)
-
-        try await Task.sleep(for: .seconds(2))
-        await NSApplication.shared.terminate(nil)
-    }
-
-    private static func showRelocationError(_ error: Error) async {
-        await MainActor.run {
-            let alert = NSAlert()
-            alert.messageText = .init(localized: "Failed to Move Application")
-            alert.informativeText = .init(localized: "Could not move the application to the Applications folder. Please do so manually for automatic updates to work.")
-            alert.alertStyle = .warning
-            alert.addButton(withTitle: "OK")
-            alert.runModal()
-        }
-    }
-}
-
-// MARK: - AppLocation
-
-enum AppLocation: CustomStringConvertible, Sendable {
-    case systemApplications, userApplications, other(String)
-
-    var description: String {
-        switch self {
-        case .systemApplications: "/Applications"
-        case .userApplications: "~/Applications"
-        case let .other(path): path
-        }
-    }
-
-    var isInApplicationsFolder: Bool {
-        switch self {
-        case .systemApplications,
-             .userApplications: true
-        case .other: false
         }
     }
 }

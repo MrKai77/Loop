@@ -12,7 +12,7 @@ struct VersionDisplay {
     let fullDisplay: String
     let isPrerelease: Bool
 
-    static let unknown: VersionDisplay = VersionDisplay(shortDisplay: "Unknown", fullDisplay: "Unknown", isPrerelease: false)
+    static let unknown: VersionDisplay = .init(shortDisplay: "Unknown", fullDisplay: "Unknown", isPrerelease: false)
 
     static let current: VersionDisplay = {
         guard let version = Bundle.main.appVersion,
@@ -20,12 +20,12 @@ struct VersionDisplay {
         else {
             return .unknown
         }
-        
-#if !RELEASE
-        return .format(version: version, build: build, isPrerelease: true)
-#else
-        return .format(version: version, build: build, isPrerelease: false)
-#endif
+
+        #if !RELEASE
+            return .format(version: version, build: build, isPrerelease: true)
+        #else
+            return .format(version: version, build: build, isPrerelease: false)
+        #endif
     }()
 
     static func format(version: String?, build: Int?, isPrerelease: Bool) -> VersionDisplay {
@@ -48,12 +48,12 @@ struct VersionDisplay {
             baseVersion
         }
 
-        let fullDisplay: String = if shouldTreatAsPrerelease {
+        let fullDisplay = if shouldTreatAsPrerelease {
             "🧪 \(baseVersion) \(buildString)"
         } else {
             "\(baseVersion) \(buildString)" // Always show build number
         }
-        
+
         return VersionDisplay(
             shortDisplay: shortDisplay,
             fullDisplay: fullDisplay,
