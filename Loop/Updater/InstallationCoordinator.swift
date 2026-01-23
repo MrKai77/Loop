@@ -22,18 +22,13 @@ enum InstallationError: LocalizedError {
 }
 
 @Loggable(style: .static)
-class InstallationCoordinator {
+actor InstallationCoordinator {
     private let config: UpdaterConfig
     private let fileManager: FileManager
     private var isCancelled = false
 
     private lazy var backupDirectory: URL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         .appendingPathComponent("Loop/Backups", isDirectory: true)
-
-    private static let installationQueue: DispatchQueue = .init(
-        label: "com.loop.installation",
-        qos: .userInitiated
-    )
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -93,29 +88,20 @@ class InstallationCoordinator {
         destination: URL,
         manifest: UpdateManifest
     ) async throws {
-        try await copyToStaging(from: source, to: staging)
+        try copyToStaging(from: source, to: staging)
         try await verifyStaged(staging, manifest: manifest)
         try await atomicSwap(staged: staging, current: destination)
     }
 
-    private func copyToStaging(from sourceURL: URL, to stagingURL: URL) async throws {
+    private func copyToStaging(from sourceURL: URL, to stagingURL: URL) throws {
         try checkCancellation()
 
         Log.debug("Copying application to staging area")
 
-        try await withCheckedThrowingContinuation { continuation in
-            Self.installationQueue.async {
-                do {
-                    if self.fileManager.fileExists(atPath: stagingURL.path) {
-                        try self.fileManager.removeItem(at: stagingURL)
-                    }
-                    try self.fileManager.copyItem(at: sourceURL, to: stagingURL)
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
+        if fileManager.fileExists(atPath: stagingURL.path) {
+            try fileManager.removeItem(at: stagingURL)
         }
+        try fileManager.copyItem(at: sourceURL, to: stagingURL)
     }
 
     private func verifyStaged(_ stagingURL: URL, manifest: UpdateManifest) async throws {
@@ -139,20 +125,11 @@ class InstallationCoordinator {
         try await manageBackups()
         let backupURL = try createBackup(from: currentURL)
 
-        try await withCheckedThrowingContinuation { continuation in
-            Self.installationQueue.async {
-                do {
-                    try self.performSwapOperation(
-                        current: currentURL,
-                        staged: stagingURL,
-                        backup: backupURL
-                    )
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        try performSwapOperation(
+            current: currentURL,
+            staged: stagingURL,
+            backup: backupURL
+        )
     }
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) throws {

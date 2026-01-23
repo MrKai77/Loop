@@ -148,11 +148,11 @@ actor UpdateInstaller {
         }
     }
 
-    func cancel() {
+    func cancel() async {
         log.warn("Cancelling installation")
         isCancelled = true
         installationState = .cancelled
-        coordinator.cancel()
+        await coordinator.cancel()
     }
 
     // MARK: - Installation Methods
