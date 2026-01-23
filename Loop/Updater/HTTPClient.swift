@@ -9,19 +9,19 @@ import Foundation
 import Scribe
 
 @Loggable(style: .static)
-public final class HTTPClient: Sendable {
+final class HTTPClient: Sendable {
     private let config: UpdaterConfig
     private let session: URLSession
     private let jsonDecoder: JSONDecoder
 
-    public init(config: UpdaterConfig) {
+    init(config: UpdaterConfig) {
         self.config = config
 
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = config.networkConfig.timeout
         sessionConfig.allowsCellularAccess = config.networkConfig.allowsCellularAccess
         sessionConfig.httpAdditionalHeaders = [
-            "User-Agent": "Loop/1.4.1 (\(SystemInfo.deviceModel); \(ProcessInfo.processInfo.operatingSystemVersion))",
+            "User-Agent": "Loop/\(Bundle.main.appVersion ?? "1.0.0") (\(SystemInfo.deviceModel); \(ProcessInfo.processInfo.operatingSystemVersion))",
             "Accept": "application/json",
             "Accept-Encoding": "gzip, deflate"
         ]
@@ -35,12 +35,7 @@ public final class HTTPClient: Sendable {
         session.invalidateAndCancel()
     }
 
-    public func fetchJSON<T: Decodable>(from url: URL) async throws -> T {
-        let data = try await fetchData(from: url)
-        return try jsonDecoder.decode(T.self, from: data)
-    }
-
-    public func fetchData(from url: URL) async throws -> Data {
+    func fetchData(from url: URL) async throws -> Data {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 

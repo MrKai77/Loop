@@ -22,7 +22,7 @@ enum InstallationError: LocalizedError {
 }
 
 @Loggable(style: .static)
-public class InstallationCoordinator {
+class InstallationCoordinator {
     private let config: UpdaterConfig
     private let fileManager: FileManager
     private var isCancelled = false
@@ -41,12 +41,12 @@ public class InstallationCoordinator {
         return formatter
     }()
 
-    public init(config: UpdaterConfig, fileManager: FileManager = .default) {
+    init(config: UpdaterConfig, fileManager: FileManager = .default) {
         self.config = config
         self.fileManager = fileManager
     }
 
-    public func performInstallation(from extractedURL: URL, manifest: UpdateManifest) async throws {
+    func performInstallation(from extractedURL: URL, manifest: UpdateManifest) async throws {
         Log.info("Coordinating installation process")
 
         try checkCancellation()
@@ -57,7 +57,7 @@ public class InstallationCoordinator {
         try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
     }
 
-    public func cancel() {
+    func cancel() {
         Log.info("Cancelling installation coordination")
         isCancelled = true
     }

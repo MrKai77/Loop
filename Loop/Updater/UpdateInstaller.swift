@@ -11,10 +11,10 @@ import Scribe
 import ZIPFoundation
 
 @Loggable
-public actor UpdateInstaller {
+actor UpdateInstaller {
     // MARK: - Types
 
-    public typealias ProgressHandler = @Sendable (UpdateProgress) -> ()
+    typealias ProgressHandler = @Sendable (UpdateProgress) -> ()
 
     // MARK: - Properties
 
@@ -26,14 +26,14 @@ public actor UpdateInstaller {
     private var isCancelled = false
     private var installationState: InstallationState = .idle
 
-    public init(config: UpdaterConfig, fileManager: FileManager = .default) {
+    init(config: UpdaterConfig, fileManager: FileManager = .default) {
         self.config = config
         self.fileManager = fileManager
         self.fileVerifier = FileVerifier(config: config)
         self.coordinator = InstallationCoordinator(config: config, fileManager: fileManager)
     }
 
-    public func installUpdate(from downloadURL: URL, manifest: UpdateManifest) async throws {
+    func installUpdate(from downloadURL: URL, manifest: UpdateManifest) async throws {
         log.info("Starting installation of update: \(manifest.version)")
 
         try await performPreInstallationChecks(manifest: manifest)
@@ -50,7 +50,7 @@ public actor UpdateInstaller {
         }
     }
 
-    public func installUpdateWithProgress(
+    func installUpdateWithProgress(
         from downloadURL: URL,
         manifest: UpdateManifest,
         progressHandler: ProgressHandler? = nil
@@ -111,7 +111,7 @@ public actor UpdateInstaller {
         }
     }
 
-    public func restartApplication() {
+    func restartApplication() {
         log.info("Preparing application restart")
 
         // Final verification before restart
@@ -148,7 +148,7 @@ public actor UpdateInstaller {
         }
     }
 
-    public func cancel() {
+    func cancel() {
         log.warn("Cancelling installation")
         isCancelled = true
         installationState = .cancelled

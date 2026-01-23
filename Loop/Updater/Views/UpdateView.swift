@@ -134,34 +134,22 @@ struct UpdateView: View {
         }
     }
 
+    @ViewBuilder
     private func versionChangeText() -> some View {
-        let currentVersion = VersionDisplay.formatCurrentAppVersion()
+        HStack {
+            let currentVersion = VersionDisplay.formatCurrentAppVersion()
 
-        // If no target release (after installation), just show current version (without emoji)
-        guard let targetRelease = updater.targetRelease else {
-            let cleanVersion = currentVersion.displayString.replacingOccurrences(of: "🧪 ", with: "")
-            return AnyView(
-                HStack {
-                    Text("Installed:")
-                    Spacer()
-                    Text(cleanVersion)
-                        .fontWeight(.semibold)
-                }
-            )
-        }
+            if let targetRelease = updater.targetRelease {
+                let targetVersion = targetRelease.versionDisplay()
 
-        let targetVersion = targetRelease.formattedVersion(current: nil, build: nil)
-
-        // Strip emoji from current version display for cleaner UI
-        let cleanCurrentVersion = currentVersion.displayString.replacingOccurrences(of: "🧪 ", with: "")
-
-        return AnyView(
-            HStack {
-                Text(cleanCurrentVersion)
+                Text(currentVersion.display)
                 Image(systemName: "arrow.right")
-                Text(targetVersion.displayString)
+                Text(targetVersion.display)
+            } else {
+                Text("Update from: \(Text(currentVersion.display))")
+                    .fontWeight(.semibold)
             }
-        )
+        }
     }
 
     private func changelogView() -> some View {
@@ -369,85 +357,5 @@ private struct ChangelogMetadataView: View, Equatable {
 
     static func == (lhs: ChangelogMetadataView, rhs: ChangelogMetadataView) -> Bool {
         lhs.note.user == rhs.note.user && lhs.note.reference == rhs.note.reference
-    }
-}
-
-// MARK: - Bundle Info Helpers
-
-private enum BundleInfoReader {
-    static func readVersionInfo(from bundleURL: URL) -> (version: String, build: Int)? {
-        let infoPlistURL = bundleURL.appendingPathComponent("Contents/Info.plist")
-
-        guard let plist = NSDictionary(contentsOf: infoPlistURL),
-              let version = plist["CFBundleShortVersionString"] as? String,
-              let buildString = plist["CFBundleVersion"] as? String,
-              let build = Int(buildString) else {
-            return nil
-        }
-
-        return (version, build)
-    }
-}
-
-// MARK: - Version Display Helpers
-
-private struct VersionDisplay {
-    let displayString: String
-
-    static let unknown = VersionDisplay(displayString: "Unknown")
-
-    static func formatCurrentAppVersion() -> VersionDisplay {
-        // Read from the actual installed app's Info.plist, not the in-memory bundle
-        let bundleURL = Bundle.main.bundleURL
-
-        guard let (version, build) = BundleInfoReader.readVersionInfo(from: bundleURL) else {
-            return .unknown
-        }
-
-        // Display version with emoji stripped for cleaner UI
-        let cleanVersion = version.replacingOccurrences(of: "🧪 ", with: "")
-        return VersionDisplay(displayString: "\(cleanVersion) (\(build))")
-    }
-
-    static func format(version: String?, build: Int?, isPrerelease: Bool) -> VersionDisplay {
-        guard let version else {
-            return .unknown
-        }
-
-        let devBuildEmoji = "🧪"
-        let hasEmoji = version.contains(devBuildEmoji)
-        let baseVersion = version.replacingOccurrences(of: devBuildEmoji, with: "").trimmingCharacters(in: .whitespaces)
-
-        var displayString = baseVersion
-        if isPrerelease || hasEmoji {
-            displayString = "\(devBuildEmoji)\(baseVersion)"
-        }
-
-        if let build, hasEmoji || isPrerelease {
-            displayString += " (\(build))"
-        }
-
-        return VersionDisplay(displayString: displayString)
-    }
-}
-
-private extension Release {
-    func formattedVersion(current: String?, build: Int?) -> VersionDisplay {
-        let effectiveVersion: String
-        let effectiveBuild: Int?
-
-        if let current {
-            effectiveVersion = current
-            effectiveBuild = build
-        } else {
-            effectiveVersion = tagName
-            effectiveBuild = buildNumber
-        }
-
-        return VersionDisplay.format(
-            version: effectiveVersion,
-            build: effectiveBuild,
-            isPrerelease: prerelease
-        )
     }
 }

@@ -203,7 +203,7 @@ final class Updater: ObservableObject {
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func fetchLatestInfo(force: Bool = false) async {
-        let isDownloading = (downloader?.currentDownloadState ?? .idle) == .downloading
+        let isDownloading = (downloader?.downloadState ?? .idle) == .downloading
 
         // Don't run update checks while actively downloading
         if isDownloading {

@@ -10,17 +10,15 @@ import Foundation
 import Scribe
 
 @Loggable
-public final class Downloader: NSObject {
+final class Downloader: NSObject {
     // MARK: - Types
 
-    public typealias RelocationHandler = @MainActor () async -> Bool
-    public typealias RelocationErrorHandler = @MainActor (Error) async -> ()
+    typealias RelocationHandler = @MainActor () async -> Bool
+    typealias RelocationErrorHandler = @MainActor (Error) async -> ()
 
     // MARK: - Properties
 
     private let config: UpdaterConfig
-    private let fileManager: FileManager
-    private let workspace: NSWorkspace
 
     private let relocationHandler: RelocationHandler?
     private let relocationErrorHandler: RelocationErrorHandler?
@@ -31,7 +29,7 @@ public final class Downloader: NSObject {
     private weak var completionHandler: AnyObject?
     private var progressClosure: ((UpdateProgress) -> ())?
     private var completionClosure: ((Result<URL, Error>) -> ())?
-    private var downloadState: DownloadState = .idle
+    private(set) var downloadState: DownloadState = .idle
     private var performanceTracker: PerformanceTracker = .init()
 
     // Computed once and cached
@@ -40,14 +38,12 @@ public final class Downloader: NSObject {
 
     // MARK: - Initialization
 
-    public init(
+    init(
         config: UpdaterConfig,
         relocationHandler: RelocationHandler? = nil,
         relocationErrorHandler: RelocationErrorHandler? = nil
     ) {
         self.config = config
-        self.fileManager = .default
-        self.workspace = .shared
         self.relocationHandler = relocationHandler
         self.relocationErrorHandler = relocationErrorHandler
         super.init()
@@ -62,11 +58,7 @@ public final class Downloader: NSObject {
 
     // MARK: - Public Interface
 
-    public var currentDownloadState: DownloadState {
-        downloadState
-    }
-
-    public func downloadUpdate(
+    func downloadUpdate(
         manifest: UpdateManifest,
         progress: @escaping (UpdateProgress) -> (),
         completion: @escaping (Result<URL, Error>) -> ()
@@ -84,14 +76,14 @@ public final class Downloader: NSObject {
         log.info("Starting download - URL: \(manifest.downloadUrl), Version: \(manifest.version)")
 
         do {
-            try EnvironmentValidator.validate(at: paths.patchworkDirectory)
+            try FileManager.default.createDirectory(at: paths.patchworkDirectory, withIntermediateDirectories: true)
             setupDownload(url: downloadURL, progress: progress, completion: completion)
         } catch {
             completion(.failure(error))
         }
     }
 
-    public func cancel() {
+    func cancel() {
         log.info("Cancelling download")
         downloadState = .cancelled
         downloadTask?.cancel()
@@ -101,7 +93,7 @@ public final class Downloader: NSObject {
         }
     }
 
-    public func checkAndHandleAppLocation() async {
+    func checkAndHandleAppLocation() async {
         await AppLocationManager.handleLocationIfNeeded(
             currentLocation: currentAppLocation,
             relocationHandler: relocationHandler,
@@ -109,8 +101,8 @@ public final class Downloader: NSObject {
         )
     }
 
-    public var appLocation: AppLocation { currentAppLocation }
-    public var isInSuitableLocation: Bool { currentAppLocation.isInApplicationsFolder }
+    var appLocation: AppLocation { currentAppLocation }
+    var isInSuitableLocation: Bool { currentAppLocation.isInApplicationsFolder }
 
     // MARK: - Private Implementation
 
@@ -178,7 +170,7 @@ public final class Downloader: NSObject {
 // MARK: URLSessionDownloadDelegate
 
 extension Downloader: URLSessionDownloadDelegate {
-    public nonisolated func urlSession(
+    nonisolated func urlSession(
         _: URLSession,
         downloadTask: URLSessionDownloadTask,
         didFinishDownloadingTo location: URL
@@ -192,7 +184,7 @@ extension Downloader: URLSessionDownloadDelegate {
         handleDownloadCompletion(at: location, originalURL: originalURL)
     }
 
-    public nonisolated func urlSession(
+    nonisolated func urlSession(
         _: URLSession,
         downloadTask _: URLSessionDownloadTask,
         didWriteData bytesWritten: Int64,
@@ -212,7 +204,7 @@ extension Downloader: URLSessionDownloadDelegate {
         }
     }
 
-    public nonisolated func urlSession(
+    nonisolated func urlSession(
         _: URLSession,
         task _: URLSessionTask,
         didCompleteWithError error: Error?
@@ -232,7 +224,7 @@ extension Downloader: URLSessionDownloadDelegate {
 
 // MARK: - DownloadState
 
-public enum DownloadState {
+enum DownloadState {
     case idle, downloading, completed, failed, cancelled
 }
 
@@ -309,14 +301,6 @@ private struct PerformanceTracker {
 private struct SpeedSample {
     let timestamp: Date
     let speed: Double
-}
-
-// MARK: - EnvironmentValidator
-
-private enum EnvironmentValidator {
-    static func validate(at directory: URL) throws {
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-    }
 }
 
 // MARK: - SessionConfigurationFactory
@@ -400,8 +384,7 @@ private enum AppLocationManager {
         relocationErrorHandler: Downloader.RelocationErrorHandler?
     ) async {
         switch currentLocation {
-        case .systemApplications,
-             .userApplications:
+        case .systemApplications, .userApplications:
             log.info("App is in Applications folder - Location: \(currentLocation)")
         case let .other(path):
             log.warn("App is not in Applications folder - Current Path: \(path)")
@@ -415,7 +398,7 @@ private enum AppLocationManager {
     ) async {
         let shouldMove = await askUserForRelocation(relocationHandler: relocationHandler)
         guard shouldMove else {
-            log.info("User declined app relocation - proceeding with installation anyway")
+            log.info("User declined app relocation; proceeding with installation at current bundle path")
             return
         }
 
@@ -432,13 +415,10 @@ private enum AppLocationManager {
             return await customHandler()
         }
 
-        // Simple default implementation
-        ///! I am unsure if there is a Luminare popup declare
-        ///! for us to use, so for now, it's the native UI.
         return await MainActor.run {
             let alert = NSAlert()
-            alert.messageText = "Move to Applications Folder?"
-            alert.informativeText = "For automatic updates to work properly, this application should be in your Applications folder. Would you like to move it now?"
+            alert.messageText = .init(localized: "Move to Applications Folder?")
+            alert.informativeText = .init(localized: "For automatic updates to work properly, this application should be in your Applications folder. Would you like to move it now?")
             alert.alertStyle = .informational
             alert.addButton(withTitle: "Move to Applications")
             alert.addButton(withTitle: "Keep Current Location")
@@ -458,7 +438,7 @@ private enum AppLocationManager {
         }
 
         try FileManager.default.copyItem(at: currentURL, to: destinationURL)
-        
+
         let config = NSWorkspace.OpenConfiguration()
         config.createsNewApplicationInstance = true
         try await NSWorkspace.shared.open(destinationURL, configuration: config)
@@ -476,8 +456,8 @@ private enum AppLocationManager {
         } else {
             await MainActor.run {
                 let alert = NSAlert()
-                alert.messageText = "Failed to Move Application"
-                alert.informativeText = "Could not move the application to the Applications folder. Please do so manually for automatic updates to work."
+                alert.messageText = .init(localized: "Failed to Move Application")
+                alert.informativeText = .init(localized: "Could not move the application to the Applications folder. Please do so manually for automatic updates to work.")
                 alert.alertStyle = .warning
                 alert.addButton(withTitle: "OK")
                 alert.runModal()
@@ -488,10 +468,10 @@ private enum AppLocationManager {
 
 // MARK: - AppLocation
 
-public enum AppLocation: CustomStringConvertible, Sendable {
+enum AppLocation: CustomStringConvertible, Sendable {
     case systemApplications, userApplications, other(String)
 
-    public var description: String {
+    var description: String {
         switch self {
         case .systemApplications: "/Applications"
         case .userApplications: "~/Applications"
@@ -499,7 +479,7 @@ public enum AppLocation: CustomStringConvertible, Sendable {
         }
     }
 
-    public var isInApplicationsFolder: Bool {
+    var isInApplicationsFolder: Bool {
         switch self {
         case .systemApplications,
              .userApplications: true
@@ -510,7 +490,7 @@ public enum AppLocation: CustomStringConvertible, Sendable {
 
 // MARK: - DownloadError
 
-public enum DownloadError: LocalizedError, Sendable {
+enum DownloadError: LocalizedError, Sendable {
     case downloadInProgress
     case invalidURL(String)
     case environmentError(String)
@@ -519,7 +499,7 @@ public enum DownloadError: LocalizedError, Sendable {
     case networkError(URLError)
     case unknown(Error)
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .downloadInProgress:
             return "A download is already in progress"

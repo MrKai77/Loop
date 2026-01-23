@@ -9,16 +9,16 @@ import Foundation
 import Scribe
 
 @Loggable
-public class UpdateChecker: @unchecked Sendable {
+final class UpdateChecker: @unchecked Sendable {
     private let config: UpdaterConfig
     private let httpClient: HTTPClient
 
-    public init(config: UpdaterConfig) {
+    init(config: UpdaterConfig) {
         self.config = config
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func checkForUpdate(
+    func checkForUpdate(
         bundleId: String,
         currentVersion: String,
         currentBuild: Int = 0,

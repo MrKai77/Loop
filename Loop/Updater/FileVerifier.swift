@@ -10,16 +10,16 @@ import Foundation
 import Scribe
 
 @Loggable(style: .static)
-public class FileVerifier {
+class FileVerifier {
     private let config: UpdaterConfig
 
-    public init(config: UpdaterConfig) {
+    init(config: UpdaterConfig) {
         self.config = config
     }
 
     // MARK: - Public Methods
 
-    public func verifyDownloadedFile(_ fileURL: URL, manifest: UpdateManifest) async throws {
+    func verifyDownloadedFile(_ fileURL: URL, manifest: UpdateManifest) async throws {
         try await performVerification(
             operation: "downloaded file",
             fileURL: fileURL,
@@ -29,7 +29,7 @@ public class FileVerifier {
         )
     }
 
-    public func verifyFileIntegrity(_ fileURL: URL, expectedChecksum: String) async throws -> Bool {
+    func verifyFileIntegrity(_ fileURL: URL, expectedChecksum: String) async throws -> Bool {
         let actualChecksum = try await calculateSHA256(fileURL)
         return actualChecksum.lowercased() == expectedChecksum.lowercased()
     }

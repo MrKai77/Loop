@@ -8,7 +8,7 @@
 import Foundation
 
 enum SystemInfo {
-    public static var deviceModel: String {
+    static var deviceModel: String {
         var size = 0
         sysctlbyname("hw.model", nil, &size, nil, 0)
         var model = [CChar](repeating: 0, count: size)
@@ -16,7 +16,7 @@ enum SystemInfo {
         return String(cString: model)
     }
 
-    public static var architecture: String {
+    static var architecture: String {
         #if arch(x86_64)
             return "x86_64"
         #elseif arch(arm64)

@@ -9,25 +9,25 @@ import Foundation
 
 // MARK: - UpdateChannel
 
-public enum UpdateChannel: String, Sendable, CaseIterable {
+enum UpdateChannel: String, Sendable, CaseIterable {
     case stable
     case beta
 
-    public var displayName: String {
+    var displayName: String {
         switch self {
         case .stable: "Stable"
         case .beta: "Beta"
         }
     }
 
-    public var isDevelopmentChannel: Bool {
+    var isDevelopmentChannel: Bool {
         switch self {
         case .stable: false
         case .beta: true
         }
     }
 
-    public var githubReleasesEndpoint: String {
+    var githubReleasesEndpoint: String {
         switch self {
         case .stable: "https://api.github.com/repos/MrKai77/Loop/releases/latest"
         case .beta: "https://api.github.com/repos/MrKai77/Loop/releases"
@@ -37,32 +37,32 @@ public enum UpdateChannel: String, Sendable, CaseIterable {
 
 // MARK: - UpdateManifest
 
-public struct UpdateManifest: Sendable {
-    public let version: String
-    public let buildNumber: Int
-    public let downloadUrl: String
-    public let releaseNotes: ReleaseNotes
-    public let checksums: Checksums
-    public let minimumOS: String
-    public let channel: UpdateChannel
-    public let publishedAt: Date
-    public let size: Int64
+struct UpdateManifest: Sendable {
+    let version: String
+    let buildNumber: Int
+    let downloadUrl: String
+    let releaseNotes: ReleaseNotes
+    let checksums: Checksums
+    let minimumOS: String
+    let channel: UpdateChannel
+    let publishedAt: Date
+    let size: Int64
 
-    public struct ReleaseNotes: Sendable {
-        public let title: String
-        public let body: String
-        public let compatibility: Compatibility
+    struct ReleaseNotes: Sendable {
+        let title: String
+        let body: String
+        let compatibility: Compatibility
 
-        public struct Compatibility: Sendable {
-            public let downloadSize: Int64
-            public let minimumOS: String
-            public let maximumOS: String?
-            public let supportedArchitectures: [String]
+        struct Compatibility: Sendable {
+            let downloadSize: Int64
+            let minimumOS: String
+            let maximumOS: String?
+            let supportedArchitectures: [String]
         }
     }
 
-    public struct Checksums: Sendable {
-        public let zip: String
+    struct Checksums: Sendable {
+        let zip: String
     }
 
     // Create UpdateManifest from GitHub Release
@@ -101,19 +101,19 @@ public struct UpdateManifest: Sendable {
 
 // MARK: - UpdateProgress
 
-public struct UpdateProgress: Sendable {
-    public let phase: UpdatePhase
-    public let percentage: Double
-    public let bytesDownloaded: Int64
-    public let totalBytes: Int64
-    public let estimatedTimeRemaining: TimeInterval?
-    public let downloadSpeed: Double?
+struct UpdateProgress: Sendable {
+    let phase: UpdatePhase
+    let percentage: Double
+    let bytesDownloaded: Int64
+    let totalBytes: Int64
+    let estimatedTimeRemaining: TimeInterval?
+    let downloadSpeed: Double?
 
-    public enum UpdatePhase: String, Sendable {
+    enum UpdatePhase: String, Sendable {
         case checking, downloading, extracting, verifying, installing, completed, failed
     }
 
-    public init(
+    init(
         phase: UpdatePhase,
         percentage: Double,
         bytesDownloaded: Int64 = 0,
@@ -132,7 +132,7 @@ public struct UpdateProgress: Sendable {
 
 // MARK: - UpdateError
 
-public enum UpdateError: LocalizedError, Sendable {
+enum UpdateError: LocalizedError, Sendable {
     case network(Error)
     case invalidManifest(String? = nil)
     case checksumMismatch
@@ -141,7 +141,7 @@ public enum UpdateError: LocalizedError, Sendable {
     case timeout
     case http(Int)
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case let .network(error):
             "Network error: \(error.localizedDescription)"
@@ -160,7 +160,7 @@ public enum UpdateError: LocalizedError, Sendable {
         }
     }
 
-    public var isRetryable: Bool {
+    var isRetryable: Bool {
         switch self {
         case let .network(error):
             if let urlError = error as? URLError {
@@ -196,29 +196,29 @@ public enum UpdateError: LocalizedError, Sendable {
 
 // MARK: - UpdaterConfig
 
-public struct UpdaterConfig: Sendable {
-    public let updateEndpoint: URL
-    public let currentBuildNumber: Int
-    public let userGroup: String?
-    public let networkConfig: NetworkConfig
+struct UpdaterConfig: Sendable {
+    let updateEndpoint: URL
+    let currentBuildNumber: Int
+    let userGroup: String?
+    let networkConfig: NetworkConfig
 
-    public struct SecurityConfig: Sendable {
-        public let checksumValidationEnabled: Bool
-        public let codeSignatureValidationEnabled: Bool
+    struct SecurityConfig: Sendable {
+        let checksumValidationEnabled: Bool
+        let codeSignatureValidationEnabled: Bool
 
-        public static let `default`: SecurityConfig = .init(
+        static let `default`: SecurityConfig = .init(
             checksumValidationEnabled: true,
             codeSignatureValidationEnabled: false
         )
     }
 
-    public struct NetworkConfig: Sendable {
-        public let timeout: TimeInterval
-        public let retryCount: Int
-        public let retryDelay: TimeInterval
-        public let allowsCellularAccess: Bool
+    struct NetworkConfig: Sendable {
+        let timeout: TimeInterval
+        let retryCount: Int
+        let retryDelay: TimeInterval
+        let allowsCellularAccess: Bool
 
-        public static let `default`: NetworkConfig = .init(
+        static let `default`: NetworkConfig = .init(
             timeout: 30.0,
             retryCount: 3,
             retryDelay: 2.0,
@@ -226,7 +226,7 @@ public struct UpdaterConfig: Sendable {
         )
     }
 
-    public init(
+    init(
         updateEndpoint: URL,
         currentBuildNumber: Int,
         userGroup: String? = nil,

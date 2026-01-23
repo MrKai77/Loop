@@ -117,7 +117,7 @@ final class AboutConfigurationModel: ObservableObject {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(
-            "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))",
+            "Version \(VersionDisplay.formatCurrentAppVersion().display)",
             forType: NSPasteboard.PasteboardType.string
         )
 
@@ -197,7 +197,7 @@ struct AboutConfigurationView: View {
 
                     Text(
                         model.isHoveringOverVersionCopier
-                            ? "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))"
+                            ? "Version \(Text(VersionDisplay.formatCurrentAppVersion().display))"
                             : (timesLooped >= 1_000_000 ? "You've looped… uhh… I… lost count…" : "You've looped \(timesLooped) times!")
                     )
                     .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
