@@ -115,7 +115,7 @@ struct UpdateView: View {
 
     private func updateDateView() -> some View {
         ZStack {
-            if let updateDate = updater.targetRelease?.updatedAt {
+            if let updateDate = updater.updateManifest?.publishedAt {
                 Text(updateDate.formatted(date: .complete, time: .shortened))
                     .fontDesign(.serif)
                     .foregroundStyle(.tertiary)
@@ -139,7 +139,7 @@ struct UpdateView: View {
         HStack {
             let currentVersion = VersionDisplay.formatCurrentAppVersion()
 
-            if let targetRelease = updater.targetRelease {
+            if let targetRelease = updater.updateManifest {
                 let targetVersion = targetRelease.versionDisplay()
 
                 Text(currentVersion.display)

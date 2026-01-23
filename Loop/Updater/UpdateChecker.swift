@@ -49,14 +49,24 @@ final class UpdateChecker: @unchecked Sendable {
         }
 
         if let candidateRelease {
-            return try processRelease(candidateRelease, currentVersion: currentVersion, currentBuild: currentBuild, force: force)
+            return try processRelease(
+                candidateRelease,
+                currentVersion: currentVersion,
+                currentBuild: currentBuild,
+                force: force
+            )
         }
 
         log.info("No update available")
         return nil
     }
 
-    private func processRelease(_ release: Release, currentVersion: String, currentBuild: Int, force: Bool) throws -> UpdateManifest? {
+    private func processRelease(
+        _ release: Release,
+        currentVersion: String,
+        currentBuild: Int,
+        force: Bool
+    ) throws -> UpdateManifest? {
         log.debug("Processing release: tagName='\(release.tagName)', name='\(release.name)', prerelease=\(release.prerelease)")
 
         // Extract version and build number from release
@@ -65,7 +75,12 @@ final class UpdateChecker: @unchecked Sendable {
 
         // Check if this is actually a newer version
         log.debug("Checking version: force=\(force), current=\(currentVersion) build \(currentBuild), available=\(version) build \(buildNumber)")
-        if !force, !isNewerVersion(version, buildNumber: buildNumber, than: currentVersion, currentBuild: currentBuild) {
+        if !force, !isNewerVersion(
+            version,
+            buildNumber: buildNumber,
+            than: currentVersion,
+            currentBuild: currentBuild
+        ) {
             log.info("No newer version available (current: \(currentVersion) build \(currentBuild), available: \(version) build \(buildNumber))")
             return nil
         }

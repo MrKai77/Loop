@@ -23,7 +23,7 @@ struct VersionDisplay {
 
     static func formatCurrentAppVersion() -> VersionDisplay {
         // Read from the actual installed app's Info.plist, not the in-memory bundle
-        
+
         guard let version = Bundle.main.appVersion,
               let build = Bundle.main.appBuild
         else {
@@ -37,7 +37,11 @@ struct VersionDisplay {
             .replacingOccurrences(of: devBuildEmoji, with: "")
             .trimmingCharacters(in: .whitespaces)
 
-        return VersionDisplay(string: "\(cleanVersion) (\(build))", isPrerelease: hasEmoji)
+        if hasEmoji {
+            return VersionDisplay(string: "\(cleanVersion) (\(build))", isPrerelease: hasEmoji)
+        } else {
+            return VersionDisplay(string: cleanVersion, isPrerelease: hasEmoji)
+        }
     }
 
     static func format(version: String?, build: Int?, isPrerelease: Bool) -> VersionDisplay {
@@ -61,12 +65,12 @@ struct VersionDisplay {
     }
 }
 
-extension Release {
+extension UpdateManifest {
     func versionDisplay() -> VersionDisplay {
         VersionDisplay.format(
-            version: tagName,
+            version: version,
             build: buildNumber,
-            isPrerelease: prerelease
+            isPrerelease: channel != .stable
         )
     }
 }

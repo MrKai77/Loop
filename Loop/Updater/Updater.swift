@@ -18,7 +18,6 @@ final class Updater: ObservableObject {
         didSet { updateStateChanged() }
     }
 
-    @Published private(set) var targetRelease: Release?
     @Published private(set) var progressBar: Double = 0
     @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
     @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
@@ -177,7 +176,6 @@ final class Updater: ObservableObject {
                     self.includeDevelopmentVersionsObserver = nil
 
                     await MainActor.run {
-                        targetRelease = nil
                         updateManifest = nil
                         updateState = .unavailable
                         progressBar = 0
@@ -194,7 +192,6 @@ final class Updater: ObservableObject {
         windowController = nil
 
         // Clear update state when window is dismissed
-        targetRelease = nil
         updateManifest = nil
         progressBar = 0
         downloadProgress = nil
@@ -219,7 +216,6 @@ final class Updater: ObservableObject {
             await MainActor.run {
                 // Don't clear update state if window is currently showing (user is interacting)
                 if windowController?.window?.isVisible != true {
-                    targetRelease = nil
                     updateManifest = nil
                     progressBar = 0
                     downloadProgress = nil
@@ -251,11 +247,19 @@ final class Updater: ObservableObject {
                     channel: channel,
                     force: force
                 ) {
-                    await processUpdateManifest(manifest, force: force)
+                    await MainActor.run {
+                        updateManifest = manifest
+                        updateState = .available
+                        processChangelog(manifest.releaseNotes.body)
+                    }
+
+                    log.notice("Update available: \(manifest.version) build \(manifest.buildNumber)")
                 } else {
                     await MainActor.run {
                         updateState = .unavailable
                     }
+
+                    log.info("No updates available")
                 }
             } catch {
                 if case .incompatibleSystem? = error as? UpdateError {
@@ -273,46 +277,6 @@ final class Updater: ObservableObject {
         }
 
         await updateFetcherTask?.value
-    }
-
-    private func processUpdateManifest(_ manifest: UpdateManifest, force: Bool = false) async {
-        await MainActor.run {
-            updateManifest = manifest
-
-            // Convert new manifest to old Release format for UI compatibility
-            targetRelease = Release.from(manifest: manifest)
-
-            let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
-            let currentBuild = Bundle.main.appBuild ?? 0
-
-            // Check version and build numbers
-            var newUpdateState: UpdateAvailability = .unavailable
-
-            let versionComparison = manifest.version.compare(currentVersion, options: .numeric)
-            if versionComparison == .orderedDescending {
-                newUpdateState = .available
-            } else if versionComparison == .orderedSame {
-                // Same version, check build numbers
-                if manifest.buildNumber > currentBuild {
-                    newUpdateState = .available
-                }
-            }
-
-            // For forced checks, show update info even if not newer
-            if force, newUpdateState == .unavailable {
-                log.info("Forced update check - showing update info for: \(manifest.version) (\(manifest.buildNumber))")
-                newUpdateState = .available // Show update UI for forced checks
-            }
-
-            updateState = newUpdateState
-
-            if newUpdateState == .available {
-                log.notice("Update available: \(manifest.version) build \(manifest.buildNumber)")
-                processChangelog(manifest.releaseNotes.body)
-            } else {
-                log.info("No update available.")
-            }
-        }
     }
 
     private func processChangelog(_ body: String) {
