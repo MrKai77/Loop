@@ -27,8 +27,7 @@ final class UpdateChecker: @unchecked Sendable {
         bundleId: String,
         currentVersion: String,
         currentBuild: Int = 0,
-        channel: UpdateChannel,
-        force: Bool = false
+        channel: UpdateChannel
     ) async throws -> UpdateManifest? {
         log.info("Checking for updates: \(bundleId) v\(currentVersion) build \(currentBuild) [\(channel.rawValue)]")
 
@@ -52,8 +51,7 @@ final class UpdateChecker: @unchecked Sendable {
             return try processRelease(
                 candidateRelease,
                 currentVersion: currentVersion,
-                currentBuild: currentBuild,
-                force: force
+                currentBuild: currentBuild
             )
         }
 
@@ -64,24 +62,22 @@ final class UpdateChecker: @unchecked Sendable {
     private func processRelease(
         _ release: Release,
         currentVersion: String,
-        currentBuild: Int,
-        force: Bool
+        currentBuild: Int
     ) throws -> UpdateManifest? {
         log.debug("Processing release: tagName='\(release.tagName)', name='\(release.name)', prerelease=\(release.prerelease)")
 
         // Extract version and build number from release
         let (version, buildNumber) = extractVersionInfo(from: release)
-        log.debug("Extracted comparison version: \(version), build: \(buildNumber)")
 
         // Check if this is actually a newer version
-        log.debug("Checking version: force=\(force), current=\(currentVersion) build \(currentBuild), available=\(version) build \(buildNumber)")
-        if !force, !isNewerVersion(
+        log.debug("Checking version: current='\(currentVersion) (\(currentBuild))', available='\(version) (\(buildNumber))'")
+        guard isNewerVersion(
             version,
             buildNumber: buildNumber,
             than: currentVersion,
             currentBuild: currentBuild
-        ) {
-            log.info("No newer version available (current: \(currentVersion) build \(currentBuild), available: \(version) build \(buildNumber))")
+        ) else {
+            log.info("No newer version available")
             return nil
         }
 

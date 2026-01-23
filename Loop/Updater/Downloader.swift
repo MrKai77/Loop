@@ -93,14 +93,6 @@ final class Downloader: NSObject {
         }
     }
 
-    func checkAndHandleAppLocation() async {
-        await AppLocationManager.handleLocationIfNeeded(
-            currentLocation: currentAppLocation,
-            relocationHandler: relocationHandler,
-            relocationErrorHandler: relocationErrorHandler
-        )
-    }
-
     var appLocation: AppLocation { currentAppLocation }
     var isInSuitableLocation: Bool { currentAppLocation.isInApplicationsFolder }
 
@@ -125,26 +117,33 @@ final class Downloader: NSObject {
     private nonisolated func handleDownloadCompletion(at location: URL, originalURL: URL) {
         log.info("Download completed - Temp Location: \(location.path)")
 
+        var finalURL: URL
+
         do {
-            let finalURL = try FileOperations.moveDownloadedFile(
+            finalURL = try FileOperations.moveDownloadedFile(
                 from: location,
                 originalURL: originalURL,
                 to: SystemPaths().patchworkDirectory
             )
             try FileValidator.validateDownloadedFile(at: finalURL)
-
-            Task { @MainActor in
-                await self.handleAppLocationAndComplete(with: finalURL)
-            }
         } catch {
-            Task { @MainActor in
-                self.handleError(error)
+            handleError(error)
+            return
+        }
+        
+        // Now that the file has been moved synchronously, we can launch a task to complete the update.
+        
+        Task {
+            do {
+                try await handleCompletion(with: finalURL)
+            } catch {
+                handleError(error)
             }
         }
     }
 
-    private func handleAppLocationAndComplete(with url: URL) async {
-        await checkAndHandleAppLocation()
+    private func handleCompletion(with url: URL) async throws {
+//        try await AppLocationManager.handleLocationIfNeeded(currentLocation: currentAppLocation)
         downloadState = .completed
         completionClosure?(.success(url))
         await cleanup()
@@ -175,12 +174,16 @@ extension Downloader: URLSessionDownloadDelegate {
         downloadTask: URLSessionDownloadTask,
         didFinishDownloadingTo location: URL
     ) {
-        guard let originalURL = downloadTask.originalRequest?.url else {
-            Task { @MainActor in
-                self.handleError(DownloadError.unknown(NSError(domain: "MissingOriginalURL", code: -1)))
-            }
+        if let httpResponse = downloadTask.response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            self.handleError(DownloadError.networkError(.init(URLError.Code(rawValue: httpResponse.statusCode))))
             return
         }
+
+        guard let originalURL = downloadTask.originalRequest?.url else {
+            self.handleError(DownloadError.unknown(NSError(domain: "MissingOriginalURL", code: -1)))
+            return
+        }
+
         handleDownloadCompletion(at: location, originalURL: originalURL)
     }
 
@@ -325,17 +328,23 @@ private enum SessionConfigurationFactory {
 @Loggable(style: .static)
 private enum FileOperations {
     static func moveDownloadedFile(from tempLocation: URL, originalURL: URL, to loopDir: URL) throws -> URL {
+        guard FileManager.default.fileExists(atPath: tempLocation.path) else {
+            log.error("Downloaded file does not exist at \(tempLocation.path)")
+            throw DownloadError.fileValidationFailed("File doesn't exist at temporary download directory")
+        }
+        
         // Preserve original filename instead of renaming to "LoopUpdate.zip"
         let originalFilename = originalURL.lastPathComponent
         let finalURL = loopDir.appendingPathComponent(originalFilename)
         let tempFinalURL = loopDir.appendingPathComponent("\(originalFilename).tmp")
 
-        log.info(
-            "Moving downloaded file - From: \(tempLocation.path), To: \(finalURL.path), Original: \(originalURL.absoluteString)"
-        )
+        log.info("Moving downloaded file - From: \(tempLocation.path), To: \(finalURL.path), Original: \(originalURL.absoluteString)")
 
+        // Move to Application Support/Loop/Loop.zip.tmp
         try? FileManager.default.removeItem(at: tempFinalURL)
         try FileManager.default.moveItem(at: tempLocation, to: tempFinalURL)
+
+        // Rename to to Application Support/Loop/Loop.zip
         try? FileManager.default.removeItem(at: finalURL)
         try FileManager.default.moveItem(at: tempFinalURL, to: finalURL)
 
@@ -378,43 +387,25 @@ private enum AppLocationManager {
         }
     }
 
-    static func handleLocationIfNeeded(
-        currentLocation: AppLocation,
-        relocationHandler: Downloader.RelocationHandler?,
-        relocationErrorHandler: Downloader.RelocationErrorHandler?
-    ) async {
+    static func handleLocationIfNeeded(currentLocation: AppLocation) async throws {
         switch currentLocation {
         case .systemApplications, .userApplications:
             log.info("App is in Applications folder - Location: \(currentLocation)")
         case let .other(path):
             log.warn("App is not in Applications folder - Current Path: \(path)")
-            await handleRelocation(relocationHandler: relocationHandler, relocationErrorHandler: relocationErrorHandler)
+            
+//            let shouldMoveToApplications = await askUserForRelocation()
+//            
+//            do {
+//                try await relocateApplication(to: shouldMoveToApplications ? AppLocation.systemApplications.)
+//            } catch {
+//                log.error("Failed to relocate application: \(error.localizedDescription)")
+//                await showRelocationError(error)
+//            }
         }
     }
 
-    private static func handleRelocation(
-        relocationHandler: Downloader.RelocationHandler?,
-        relocationErrorHandler: Downloader.RelocationErrorHandler?
-    ) async {
-        let shouldMove = await askUserForRelocation(relocationHandler: relocationHandler)
-        guard shouldMove else {
-            log.info("User declined app relocation; proceeding with installation at current bundle path")
-            return
-        }
-
-        do {
-            try await relocateApplication()
-        } catch {
-            log.error("Failed to relocate application: \(error.localizedDescription)")
-            await showRelocationError(error, relocationErrorHandler: relocationErrorHandler)
-        }
-    }
-
-    private static func askUserForRelocation(relocationHandler: Downloader.RelocationHandler?) async -> Bool {
-        if let customHandler = relocationHandler {
-            return await customHandler()
-        }
-
+    private static func askUserForRelocation() async -> Bool {
         return await MainActor.run {
             let alert = NSAlert()
             alert.messageText = .init(localized: "Move to Applications Folder?")
@@ -426,7 +417,7 @@ private enum AppLocationManager {
         }
     }
 
-    private static func relocateApplication() async throws {
+    private static func relocateApplication(to newPath: String) async throws {
         let currentURL = Bundle.main.bundleURL
         let userAppsURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Applications")
         let destinationURL = userAppsURL.appendingPathComponent(currentURL.lastPathComponent)
@@ -447,21 +438,14 @@ private enum AppLocationManager {
         await NSApplication.shared.terminate(nil)
     }
 
-    private static func showRelocationError(
-        _ error: Error,
-        relocationErrorHandler: Downloader.RelocationErrorHandler?
-    ) async {
-        if let customErrorHandler = relocationErrorHandler {
-            await customErrorHandler(error)
-        } else {
-            await MainActor.run {
-                let alert = NSAlert()
-                alert.messageText = .init(localized: "Failed to Move Application")
-                alert.informativeText = .init(localized: "Could not move the application to the Applications folder. Please do so manually for automatic updates to work.")
-                alert.alertStyle = .warning
-                alert.addButton(withTitle: "OK")
-                alert.runModal()
-            }
+    private static func showRelocationError(_ error: Error) async {
+        await MainActor.run {
+            let alert = NSAlert()
+            alert.messageText = .init(localized: "Failed to Move Application")
+            alert.informativeText = .init(localized: "Could not move the application to the Applications folder. Please do so manually for automatic updates to work.")
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
         }
     }
 }

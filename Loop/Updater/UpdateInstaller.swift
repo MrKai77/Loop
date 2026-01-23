@@ -346,7 +346,7 @@ actor UpdateInstaller {
             throw createExtractionError("Could not open ZIP archive", code: -1, zipURL: zipURL)
         }
 
-        for entry in archive {
+        for entry in archive where !entry.path.contains(/__MACOSX/) {
             try checkCancellation()
             _ = try archive.extract(entry, to: destinationURL.appendingPathComponent(entry.path))
         }
@@ -362,19 +362,6 @@ actor UpdateInstaller {
 
         // Verify the app bundle structure
         try verifyAppBundleStructureAndContents(appBundle)
-
-        // Check that essential files exist
-        let requiredFiles = [
-            "Contents/Info.plist",
-            "Contents/MacOS"
-        ]
-
-        for requiredFile in requiredFiles {
-            let filePath = appBundle.appendingPathComponent(requiredFile)
-            guard fileManager.fileExists(atPath: filePath.path) else {
-                throw createSafetyError("Missing required file after extraction: \(requiredFile)")
-            }
-        }
 
         log.success("Extraction completeness verified")
     }
@@ -460,13 +447,18 @@ actor UpdateInstaller {
             throw createSafetyError("Invalid version information in app's Info.plist")
         }
 
-        let normalizedAppVersion = version.replacingOccurrences(of: "🧪 ", with: "")
-        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+        let normalizedAppVersion = version
+            .replacing(/🧪/, with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard normalizedAppVersion == normalizedManifestVersion, build == manifest.buildNumber else {
-            throw createSafetyError(
-                "Version mismatch. Expected: \(manifest.version)(\(manifest.buildNumber)), Got: \(version)(\(build))"
-            )
+        guard normalizedAppVersion == manifest.version else {
+            throw createSafetyError("Version mismatch: expected: \(manifest.version), got \(version)")
+        }
+        
+        if manifest.channel != .stable {
+            guard build == manifest.buildNumber else {
+                throw createSafetyError("Build number mismatch: expected \(manifest.buildNumber), got: \(build)")
+            }
         }
     }
 
@@ -656,45 +648,29 @@ actor UpdateInstaller {
         try checkCancellation()
 
         log.info("Verifying installation success")
-        log.info("Expected version: \(manifest.version)")
-        log.info("Expected build: \(manifest.buildNumber)")
+        log.info("Expected version: \(manifest.version) (\(manifest.buildNumber)")
 
-        let installedVersion = try getInstalledVersion()
-        log.info("Currently installed version: \(installedVersion)")
-
-        // Extract version components for comparison (format: "🧪 1.4.1 (1683)" or "1.4.1 (1683)")
-        let versionComponents = installedVersion.split(separator: " ")
-        guard versionComponents.count >= 1 else {
-            let errorMessage = "Invalid installed version format: \(installedVersion)"
-            log.error("Version format error: \(errorMessage)")
-            throw UpdateError.installationError(errorMessage)
-        }
-
-        // Handle emoji prefix - if present, version starts at index 1, otherwise at index 0
-        let versionStartIndex = versionComponents[0].hasPrefix("🧪") ? 1 : 0
-        let installedVersionOnly = String(versionComponents[versionStartIndex])
-        let installedBuildOnly = versionComponents.count > versionStartIndex + 1 ?
-            String(versionComponents[versionStartIndex + 1].replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")) : "0"
-        let installedBuildInt = Int(installedBuildOnly) ?? 0
-
-        // Compare version and build separately
-        guard installedVersionOnly == manifest.version, installedBuildInt == manifest.buildNumber else {
-            let errorMessage = "Installed version \(installedVersionOnly) (\(installedBuildInt)) doesn't match expected \(manifest.version) (\(manifest.buildNumber))"
-            log.error("Version mismatch: installed=\(installedVersionOnly) (\(installedBuildInt)), expected=\(manifest.version) (\(manifest.buildNumber))")
-            throw UpdateError.installationError(errorMessage)
-        }
-
-        log.success("Installation verification completed successfully")
-    }
-
-    private func getInstalledVersion() throws -> String {
-        let bundleURL = Bundle.main.bundleURL
-
-        guard let (version, build) = readVersionInfo(from: bundleURL) else {
+        guard let (installedVersion, installedBuild) = readVersionInfo(from: Bundle.main.bundleURL) else {
             throw UpdateError.installationError("Could not read version from installed application")
         }
 
-        return "\(version) (\(build))"
+        log.info("Currently installed version: \(installedVersion)")
+
+        let normalizedInstalledVersion = installedVersion
+            .replacing(/🧪/, with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard normalizedInstalledVersion == manifest.version else {
+            throw createSafetyError("Version mismatch: expected: \(manifest.version), got \(normalizedInstalledVersion)")
+        }
+        
+        if manifest.channel != .stable {
+            guard installedBuild == manifest.buildNumber else {
+                throw createSafetyError("Build number mismatch: expected \(manifest.buildNumber), got: \(installedBuild)")
+            }
+        }
+
+        log.success("Installation verification completed successfully")
     }
 
     private func readVersionInfo(from bundleURL: URL) -> (version: String, build: Int)? {
@@ -793,7 +769,7 @@ actor UpdateInstaller {
         for path in requiredPaths {
             let fullPath = bundleURL.appendingPathComponent(path)
             guard fileManager.fileExists(atPath: fullPath.path) else {
-                log.error("Missing required path: \(path)")
+                log.error("Missing required path: \(fullPath)")
                 throw createSafetyError("Invalid app bundle: missing \(path)")
             }
         }

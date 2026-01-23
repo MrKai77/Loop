@@ -27,7 +27,7 @@ struct LoopApp: App {
             Divider()
 
             Text(
-                "Version \(VersionDisplay.formatCurrentAppVersion().display)",
+                "Version \(VersionDisplay.current.fullDisplay)",
                 comment: "Format: Version [version, e.g. 1.3.0] ([build number, e.g. 1500])"
             )
             .font(.system(size: 11, weight: .semibold))

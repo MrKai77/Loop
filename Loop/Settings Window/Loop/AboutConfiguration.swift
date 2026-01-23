@@ -117,7 +117,7 @@ final class AboutConfigurationModel: ObservableObject {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(
-            "Version \(VersionDisplay.formatCurrentAppVersion().display)",
+            "Version \(VersionDisplay.current.fullDisplay)",
             forType: NSPasteboard.PasteboardType.string
         )
 
@@ -157,6 +157,7 @@ struct AboutConfigurationView: View {
     @Default(.timesLooped) private var timesLooped
     @Default(.currentIcon) private var currentIcon
     @Default(.includeDevelopmentVersions) private var includeDevelopmentVersions
+    @Default(.automaticallyUpdate) private var automaticallyUpdate
 
     private var updateButtonEnabled: Bool {
         updater.updatesEnabled || model.isHoveringOverUpdateButton
@@ -197,7 +198,7 @@ struct AboutConfigurationView: View {
 
                     Text(
                         model.isHoveringOverVersionCopier
-                            ? "Version \(Text(VersionDisplay.formatCurrentAppVersion().display))"
+                            ? "Version \(Text(VersionDisplay.current.fullDisplay))"
                             : (timesLooped >= 1_000_000 ? "You've looped… uhh… I… lost count…" : "You've looped \(timesLooped) times!")
                     )
                     .contentTransition(.numericText(countsDown: !model.isHoveringOverVersionCopier))
@@ -261,6 +262,16 @@ struct AboutConfigurationView: View {
             .onHover { model.isHoveringOverUpdateButton = $0 }
 
             LuminareToggle("Include development versions", isOn: $includeDevelopmentVersions)
+
+            LuminareToggle(isOn: $automaticallyUpdate) {
+                Text("Automatically install updates")
+                    .padding(.trailing, automaticallyUpdate ? 4 : 0)
+                    .luminarePopover(attachedTo: .topTrailing, hidden: !automaticallyUpdate) {
+                        Text("Updates will only be installed when \(Bundle.main.appName) is in the background.")
+                            .padding(6)
+                    }
+                    .animation(luminareAnimation, value: automaticallyUpdate)
+            }
         }
     }
 

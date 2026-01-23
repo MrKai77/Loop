@@ -26,6 +26,7 @@ final class Updater: ObservableObject {
     private(set) var shouldAutoPresentUpdateWindow: Bool = false
     private var windowController: NSWindowController?
     private var includeDevelopmentVersions: Bool { Defaults[.includeDevelopmentVersions] }
+    private var automaticallyUpdate: Bool { Defaults[.automaticallyUpdate] }
 
     private var updateFetcherTask: Task<(), Never>?
     private var updateCheckerTask: Task<(), Never>?
@@ -116,6 +117,20 @@ final class Updater: ObservableObject {
         autoPresentUpdateWindowTask = nil
 
         if updateState == .available {
+            // If automatic updates are enabled, never auto-present the update window
+            if automaticallyUpdate {
+                // Only install if Loop is not in use
+                if !NSApp.isActive, NSApp.windows.allSatisfy({ !$0.isVisible }) {
+                    log.info("Automatic updates enabled, installing update...")
+                    Task {
+                        await installUpdate()
+                    }
+                }
+                
+                log.info("Automatic updates enabled, but Loop is active. Skipping installation.")
+                return
+            }
+
             shouldAutoPresentUpdateWindow = true
 
             /// If the updater has requested that the update window be presented for over 6 hours, automatically present it.
@@ -244,8 +259,7 @@ final class Updater: ObservableObject {
                     bundleId: Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop",
                     currentVersion: currentVersion,
                     currentBuild: currentBuild,
-                    channel: channel,
-                    force: force
+                    channel: channel
                 ) {
                     await MainActor.run {
                         updateManifest = manifest
@@ -373,13 +387,12 @@ final class Updater: ObservableObject {
 
         do {
             // Use new installer system
-            let downloadURL = try await downloadUpdate(manifest)
-            try await installer.installUpdate(from: downloadURL, manifest: manifest)
+            let downloadedFileURL = try await downloadUpdate(manifest)
+            try await installer.installUpdate(from: downloadedFileURL, manifest: manifest)
 
             await MainActor.run {
                 self.progressBar = 1.0
                 self.updateState = .unavailable
-                self.updateManifest = nil
                 self.downloader = nil // Reset downloader for next installation attempt
             }
 

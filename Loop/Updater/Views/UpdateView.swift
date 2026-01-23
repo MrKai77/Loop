@@ -137,16 +137,16 @@ struct UpdateView: View {
     @ViewBuilder
     private func versionChangeText() -> some View {
         HStack {
-            let currentVersion = VersionDisplay.formatCurrentAppVersion()
+            let currentVersion = VersionDisplay.current
 
             if let targetRelease = updater.updateManifest {
                 let targetVersion = targetRelease.versionDisplay()
 
-                Text(currentVersion.display)
+                Text(currentVersion.shortDisplay)
                 Image(systemName: "arrow.right")
-                Text(targetVersion.display)
+                Text(targetVersion.shortDisplay)
             } else {
-                Text("Update from: \(Text(currentVersion.display))")
+                Text("Update from: \(Text(currentVersion.shortDisplay))")
                     .fontWeight(.semibold)
             }
         }

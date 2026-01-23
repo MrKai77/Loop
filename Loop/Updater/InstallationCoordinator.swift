@@ -21,7 +21,7 @@ enum InstallationError: LocalizedError {
     }
 }
 
-@Loggable(style: .static)
+@Loggable
 actor InstallationCoordinator {
     private let config: UpdaterConfig
     private let fileManager: FileManager
@@ -42,7 +42,7 @@ actor InstallationCoordinator {
     }
 
     func performInstallation(from extractedURL: URL, manifest: UpdateManifest) async throws {
-        Log.info("Coordinating installation process")
+        log.info("Coordinating installation process")
 
         try checkCancellation()
 
@@ -53,7 +53,7 @@ actor InstallationCoordinator {
     }
 
     func cancel() {
-        Log.info("Cancelling installation coordination")
+        log.info("Cancelling installation coordination")
         isCancelled = true
     }
 
@@ -64,7 +64,7 @@ actor InstallationCoordinator {
         to destinationURL: URL,
         manifest: UpdateManifest
     ) async throws {
-        Log.info("Performing atomic installation")
+        log.info("Performing atomic installation")
 
         let stagingURL = destinationURL.appendingPathExtension("staging")
 
@@ -75,7 +75,7 @@ actor InstallationCoordinator {
                 destination: destinationURL,
                 manifest: manifest
             )
-            Log.info("Atomic installation completed successfully")
+            log.info("Atomic installation completed successfully")
         } catch {
             await cleanupStaging(stagingURL)
             throw error
@@ -96,7 +96,7 @@ actor InstallationCoordinator {
     private func copyToStaging(from sourceURL: URL, to stagingURL: URL) throws {
         try checkCancellation()
 
-        Log.debug("Copying application to staging area")
+        log.debug("Copying application to staging area")
 
         if fileManager.fileExists(atPath: stagingURL.path) {
             try fileManager.removeItem(at: stagingURL)
@@ -107,7 +107,7 @@ actor InstallationCoordinator {
     private func verifyStaged(_ stagingURL: URL, manifest: UpdateManifest) async throws {
         try checkCancellation()
 
-        Log.debug("Verifying staged application")
+        log.debug("Verifying staged application")
 
         try verifyBundleStructure(stagingURL)
 
@@ -118,9 +118,9 @@ actor InstallationCoordinator {
     private func atomicSwap(staged stagingURL: URL, current currentURL: URL) async throws {
         try checkCancellation()
 
-        Log.info("Starting atomic swap")
-        Log.info("Current app: \(currentURL.path)")
-        Log.info("Staged app: \(stagingURL.path)")
+        log.info("Starting atomic swap")
+        log.info("Current app: \(currentURL.path)")
+        log.info("Staged app: \(stagingURL.path)")
 
         try await manageBackups()
         let backupURL = try createBackup(from: currentURL)
@@ -134,7 +134,7 @@ actor InstallationCoordinator {
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) throws {
         do {
-            Log.info("Moving current app to backup...")
+            log.info("Moving current app to backup...")
 
             // Ensure the backup directory exists
             let backupParent = backup.deletingLastPathComponent()
@@ -142,26 +142,26 @@ actor InstallationCoordinator {
 
             // Check if backup already exists and remove it if necessary
             if fileManager.fileExists(atPath: backup.path) {
-                Log.warn("Backup already exists at \(backup.path), removing it first")
+                log.warn("Backup already exists at \(backup.path), removing it first")
                 try fileManager.removeItem(at: backup)
             }
 
             try fileManager.moveItem(at: current, to: backup)
-            Log.info("Current app backed up to: \(backup.path)")
+            log.info("Current app backed up to: \(backup.path)")
 
-            Log.info("Moving staged app to current location...")
+            log.info("Moving staged app to current location...")
             try fileManager.moveItem(at: staged, to: current)
-            Log.info("New app installed at: \(current.path)")
+            log.info("New app installed at: \(current.path)")
 
             // Verify the atomic swap was successful
             try verifySwapSuccess(current: current, backup: backup, staged: staged)
-            Log.info("Atomic swap completed and verified successfully!")
+            log.info("Atomic swap completed and verified successfully!")
         } catch {
-            Log.error("Atomic swap failed: \(error)")
-            Log.error("Current: \(current.path), Staged: \(staged.path), Backup: \(backup.path)")
-            Log.error("Current exists: \(fileManager.fileExists(atPath: current.path))")
-            Log.error("Staged exists: \(fileManager.fileExists(atPath: staged.path))")
-            Log.error("Backup exists: \(fileManager.fileExists(atPath: backup.path))")
+            log.error("Atomic swap failed: \(error)")
+            log.error("Current: \(current.path), Staged: \(staged.path), Backup: \(backup.path)")
+            log.error("Current exists: \(fileManager.fileExists(atPath: current.path))")
+            log.error("Staged exists: \(fileManager.fileExists(atPath: staged.path))")
+            log.error("Backup exists: \(fileManager.fileExists(atPath: backup.path))")
 
             try restoreFromBackup(current: current, backup: backup)
             throw error
@@ -171,10 +171,10 @@ actor InstallationCoordinator {
     private func restoreFromBackup(current: URL, backup: URL) throws {
         guard fileManager.fileExists(atPath: backup.path) else { return }
 
-        Log.info("Attempting to restore from backup...")
+        log.info("Attempting to restore from backup...")
         try? fileManager.removeItem(at: current)
         try? fileManager.moveItem(at: backup, to: current)
-        Log.info("Restored from backup")
+        log.info("Restored from backup")
     }
 
     // MARK: - Backup Management
@@ -187,7 +187,7 @@ actor InstallationCoordinator {
 
         guard backupSize > maxBackupSize else { return }
 
-        Log.info("Backup directory exceeds 100MB (\(backupSize.formattedBytes)), cleaning up old backups")
+        log.info("Backup directory exceeds 100MB (\(backupSize.formattedBytes)), cleaning up old backups")
 
         try await cleanupOldBackups(currentSize: backupSize, maxSize: maxBackupSize)
     }
@@ -203,10 +203,10 @@ actor InstallationCoordinator {
             try fileManager.removeItem(at: backupURL)
             remainingSize -= backupItemSize
 
-            Log.info("Removed old backup: \(backupURL.lastPathComponent) (\(backupItemSize.formattedBytes))")
+            log.info("Removed old backup: \(backupURL.lastPathComponent) (\(backupItemSize.formattedBytes))")
         }
 
-        Log.info("Backup cleanup completed, new size: \(remainingSize.formattedBytes)")
+        log.info("Backup cleanup completed, new size: \(remainingSize.formattedBytes)")
     }
 
     private func getBackupsSortedByDate() throws -> [(URL, Date)] {
@@ -279,7 +279,7 @@ actor InstallationCoordinator {
 
         for item in contents {
             if item.pathExtension == "app" {
-                Log.info("Found app bundle: \(item.lastPathComponent)")
+                log.info("Found app bundle: \(item.lastPathComponent)")
                 return item
             }
 
@@ -291,48 +291,51 @@ actor InstallationCoordinator {
         }
 
         let fileList = contents.map(\.lastPathComponent).joined(separator: ", ")
-        Log.error("No .app bundle found in extracted files. Available files: \(fileList)")
+        log.error("No .app bundle found in extracted files. Available files: \(fileList)")
 
         throw UpdateError.installationError("No .app bundle found in update package. Found files: \(fileList)")
     }
 
     private func verifyBundleStructure(_ bundleURL: URL) throws {
-        Log.debug("Verifying bundle structure for: \(bundleURL.lastPathComponent)")
+        log.debug("Verifying bundle structure for: \(bundleURL.lastPathComponent)")
 
         let requiredPaths = ["Contents/Info.plist", "Contents/MacOS"]
 
         for path in requiredPaths {
             let fullPath = bundleURL.appendingPathComponent(path)
             guard fileManager.fileExists(atPath: fullPath.path) else {
-                Log.error("Missing required path: \(path)")
+                log.error("Missing required path: \(path)")
                 throw UpdateError.installationError("Invalid app bundle: missing \(path)")
             }
         }
 
-        Log.debug("Bundle structure verification passed")
+        log.debug("Bundle structure verification passed")
     }
 
     private func verifyVersionInfo(_ bundleURL: URL, manifest: UpdateManifest) throws {
-        Log.debug("Verifying version info")
+        log.debug("Verifying version info")
 
         let infoPlistURL = bundleURL.appendingPathComponent("Contents/Info.plist")
         let (version, build) = try extractVersionInfo(from: infoPlistURL)
 
-        Log.info("Bundle version: \(version), build: \(build)")
-        Log.info("Expected version: \(manifest.version), build: \(manifest.buildNumber)")
+        log.info("Bundle version: \(version), build: \(build)")
+        log.info("Expected version: \(manifest.version), build: \(manifest.buildNumber)")
 
-        // Normalize version strings for comparison (remove emoji prefixes)
-        let normalizedBundleVersion = version.replacingOccurrences(of: "🧪 ", with: "")
-        let normalizedManifestVersion = manifest.version.replacingOccurrences(of: "🧪 ", with: "")
+        let normalizedAppVersion = version
+            .replacing(/🧪/, with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard normalizedBundleVersion == normalizedManifestVersion, build == manifest.buildNumber else {
-            let errorMessage =
-                "Version mismatch: expected \(manifest.version)(\(manifest.buildNumber)), got \(version)(\(build)) [normalized: \(normalizedManifestVersion) vs \(normalizedBundleVersion)]"
-            Log.error(errorMessage)
-            throw UpdateError.installationError(errorMessage)
+        guard normalizedAppVersion == manifest.version else {
+            throw UpdateError.installationError("Version mismatch: expected: \(manifest.version), got \(version)")
+        }
+        
+        if manifest.channel != .stable {
+            guard build == manifest.buildNumber else {
+                throw UpdateError.installationError("Build number mismatch: expected \(manifest.buildNumber), got: \(build)")
+            }
         }
 
-        Log.debug("Version verification passed")
+        log.debug("Version verification passed")
     }
 
     private func extractVersionInfo(from plistURL: URL) throws -> (version: String, build: Int) {
@@ -340,14 +343,14 @@ actor InstallationCoordinator {
               let version = plist["CFBundleShortVersionString"] as? String,
               let buildString = plist["CFBundleVersion"] as? String,
               let build = Int(buildString) else {
-            Log.error("Could not read version info from Info.plist")
+            log.error("Could not read version info from Info.plist")
             throw UpdateError.installationError("Could not read version info from Info.plist")
         }
         return (version, build)
     }
 
     private func testStagedApplication(_ bundleURL: URL) async throws {
-        Log.debug("Testing staged application")
+        log.debug("Testing staged application")
 
         let executablePath = bundleURL.appendingPathComponent("Contents/MacOS")
         let contents = try fileManager.contentsOfDirectory(
@@ -356,11 +359,11 @@ actor InstallationCoordinator {
         )
 
         guard !contents.isEmpty else {
-            Log.error("No executable found in MacOS directory")
+            log.error("No executable found in MacOS directory")
             throw UpdateError.installationError("No executable found in app bundle")
         }
 
-        Log.debug("Application testing passed")
+        log.debug("Application testing passed")
     }
 
     // MARK: - Utility Methods
@@ -374,7 +377,7 @@ actor InstallationCoordinator {
     // MARK: - Swap Verification
 
     private func verifySwapSuccess(current: URL, backup: URL, staged: URL) throws {
-        Log.debug("Verifying atomic swap success...")
+        log.debug("Verifying atomic swap success...")
 
         // 1. Verify backup was created successfully
         guard fileManager.fileExists(atPath: backup.path) else {
@@ -383,7 +386,7 @@ actor InstallationCoordinator {
 
         // Verify backup has correct bundle structure
         try verifyBundleStructure(backup)
-        Log.debug("Backup bundle structure verified")
+        log.debug("Backup bundle structure verified")
 
         // Verify backup has a valid Info.plist and version
         let backupInfoPlistURL = backup.appendingPathComponent("Contents/Info.plist")
@@ -397,7 +400,7 @@ actor InstallationCoordinator {
             throw InstallationError.swapVerificationFailed("Backup app version information is invalid")
         }
 
-        Log.debug("Backup version verified: \(backupVersion)")
+        log.debug("Backup version verified: \(backupVersion)")
 
         // 2. Verify new app was installed successfully
         guard fileManager.fileExists(atPath: current.path) else {
@@ -406,7 +409,7 @@ actor InstallationCoordinator {
 
         // Verify new app has correct bundle structure
         try verifyBundleStructure(current)
-        Log.debug("New app bundle structure verified")
+        log.debug("New app bundle structure verified")
 
         // Verify new app has a valid Info.plist and version
         let infoPlistURL = current.appendingPathComponent("Contents/Info.plist")
@@ -420,11 +423,11 @@ actor InstallationCoordinator {
             throw InstallationError.swapVerificationFailed("New app version information is invalid")
         }
 
-        Log.debug("New app version verified: \(version)")
+        log.debug("New app version verified: \(version)")
 
         // 3. Verify staging area is clean (should be empty after move)
         if fileManager.fileExists(atPath: staged.path) {
-            Log.warn("Staging area still exists (this is usually fine): \(staged.path)")
+            log.warn("Staging area still exists (this is usually fine): \(staged.path)")
         }
 
         // 4. Verify file sizes are reasonable (basic sanity check)
@@ -439,8 +442,8 @@ actor InstallationCoordinator {
             throw InstallationError.swapVerificationFailed("New app appears to be empty or invalid")
         }
 
-        Log.debug("File sizes verified - Backup: \(backupSize.formattedBytes), New: \(currentSize.formattedBytes)")
-        Log.debug("Atomic swap verification completed successfully")
+        log.debug("File sizes verified - Backup: \(backupSize.formattedBytes), New: \(currentSize.formattedBytes)")
+        log.debug("Atomic swap verification completed successfully")
     }
 
     private func cleanupStaging(_ stagingURL: URL) async {

@@ -8,41 +8,25 @@
 import SwiftUI
 
 struct VersionDisplay {
-    let string: String
+    let shortDisplay: String
+    let fullDisplay: String
     let isPrerelease: Bool
 
-    var display: String {
-        if isPrerelease {
-            "🧪 \(string)"
-        } else {
-            "\(string)"
-        }
-    }
+    static let unknown: VersionDisplay = VersionDisplay(shortDisplay: "Unknown", fullDisplay: "Unknown", isPrerelease: false)
 
-    static let unknown = VersionDisplay(string: "Unknown", isPrerelease: false)
-
-    static func formatCurrentAppVersion() -> VersionDisplay {
-        // Read from the actual installed app's Info.plist, not the in-memory bundle
-
+    static let current: VersionDisplay = {
         guard let version = Bundle.main.appVersion,
               let build = Bundle.main.appBuild
         else {
             return .unknown
         }
-
-        // Display version with emoji stripped for cleaner UI
-        let devBuildEmoji = "🧪"
-        let hasEmoji = version.contains(devBuildEmoji)
-        let cleanVersion = version
-            .replacingOccurrences(of: devBuildEmoji, with: "")
-            .trimmingCharacters(in: .whitespaces)
-
-        if hasEmoji {
-            return VersionDisplay(string: "\(cleanVersion) (\(build))", isPrerelease: hasEmoji)
-        } else {
-            return VersionDisplay(string: cleanVersion, isPrerelease: hasEmoji)
-        }
-    }
+        
+#if !RELEASE
+        return .format(version: version, build: build, isPrerelease: true)
+#else
+        return .format(version: version, build: build, isPrerelease: false)
+#endif
+    }()
 
     static func format(version: String?, build: Int?, isPrerelease: Bool) -> VersionDisplay {
         guard let version else {
@@ -50,18 +34,31 @@ struct VersionDisplay {
         }
 
         let devBuildEmoji = "🧪"
-        let hasEmoji = version.contains(devBuildEmoji)
+        let shouldTreatAsPrerelease = isPrerelease || version.contains(devBuildEmoji)
+
+        let buildString = if let build { "(\(build))" } else { "" }
+
         let baseVersion = version
             .replacingOccurrences(of: devBuildEmoji, with: "")
             .trimmingCharacters(in: .whitespaces)
 
-        var displayString = baseVersion
-
-        if let build, hasEmoji || isPrerelease {
-            displayString += " (\(build))"
+        let shortDisplay: String = if shouldTreatAsPrerelease {
+            "🧪 \(baseVersion) \(buildString)"
+        } else {
+            baseVersion
         }
 
-        return VersionDisplay(string: displayString, isPrerelease: hasEmoji || isPrerelease)
+        let fullDisplay: String = if shouldTreatAsPrerelease {
+            "🧪 \(baseVersion) \(buildString)"
+        } else {
+            "\(baseVersion) \(buildString)" // Always show build number
+        }
+        
+        return VersionDisplay(
+            shortDisplay: shortDisplay,
+            fullDisplay: fullDisplay,
+            isPrerelease: shouldTreatAsPrerelease
+        )
     }
 }
 
