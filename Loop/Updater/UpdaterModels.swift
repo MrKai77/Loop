@@ -254,20 +254,3 @@ enum UpdateAvailability {
         }
     }
 }
-
-// MARK: - ChangelogNote
-
-struct ChangelogNote: Identifiable, Equatable {
-    var id: UUID = .init()
-    var emoji: String
-    var text: String
-    var user: String?
-    var reference: Int?
-
-    static func == (lhs: ChangelogNote, rhs: ChangelogNote) -> Bool {
-        lhs.emoji == rhs.emoji &&
-            lhs.text == rhs.text &&
-            lhs.user == rhs.user &&
-            lhs.reference == rhs.reference
-    }
-}

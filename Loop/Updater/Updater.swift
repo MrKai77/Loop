@@ -22,8 +22,9 @@ final class Updater: ObservableObject {
     @Published private(set) var installState: InstallState = .ready
     @Published private(set) var progressBar: Double = 0
     @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
-    @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
-    @Published var expandedChangelogSections: Set<String> = [] // By title
+    @Published private(set) var changelog: [ChangelogSection] = []
+    @Published var expandedChangelogSections: Set<String> = [] // By ID
+    @Published private(set) var updateManifest: UpdateManifest?
 
     private(set) var shouldAutoPresentUpdateWindow: Bool = false
     private var windowController: NSWindowController?
@@ -35,12 +36,10 @@ final class Updater: ObservableObject {
     private var autoPresentUpdateWindowTask: Task<(), Never>?
     private var includeDevelopmentVersionsObserver: Task<(), Never>?
     private var updatesEnabledObserver: Task<(), Never>?
+
     private let updateChecker: UpdateChecker
     private let downloader: UpdateDownloader
     private let installer: UpdateInstaller
-
-    @Published private(set) var updateManifest: UpdateManifest?
-    @Published private(set) var downloadProgress: UpdateProgress?
 
     private init() {
         // Initialize new updater system components
@@ -157,7 +156,6 @@ final class Updater: ObservableObject {
                     updateManifest = nil
                     updateState = .unavailable
                     progressBar = 0
-                    downloadProgress = nil
                 }
             }
         }
@@ -170,7 +168,6 @@ final class Updater: ObservableObject {
         // Clear update state when window is dismissed
         updateManifest = nil
         progressBar = 0
-        downloadProgress = nil
         installState = .ready
         shouldAutoPresentUpdateWindow = false
     }
@@ -194,7 +191,6 @@ final class Updater: ObservableObject {
             if windowController?.window?.isVisible != true {
                 updateManifest = nil
                 progressBar = 0
-                downloadProgress = nil
             }
 
             // Early return if updates are disabled and not forcing
@@ -219,9 +215,13 @@ final class Updater: ObservableObject {
                     currentBuild: currentBuild,
                     channel: channel
                 ) {
+                    changelog = ChangelogParser.parse(manifest.releaseNotes.body)
+                    if let firstSection = changelog.first {
+                        expandedChangelogSections = [firstSection.id]
+                    }
+
                     updateManifest = manifest
                     updateState = .available
-                    processChangelog(manifest.releaseNotes.body)
 
                     log.notice("Update available: \(manifest.version) build \(manifest.buildNumber)")
                 } else {
@@ -241,73 +241,6 @@ final class Updater: ObservableObject {
         }
 
         await updateFetcherTask?.value
-    }
-
-    private func processChangelog(_ body: String) {
-        changelog = .init()
-
-        let lines = body
-            .split(whereSeparator: \.isNewline)
-
-        var currentSection: String?
-
-        for line in lines where !line.isEmpty {
-            if line.starts(with: "#") {
-                currentSection = line
-                    .replacing(/#/, with: "")
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-
-                if changelog.first(where: { $0.title == currentSection }) == nil {
-                    changelog.append((title: currentSection!, body: []))
-                }
-            } else {
-                guard
-                    line.hasPrefix("- "),
-                    let index = changelog.firstIndex(where: { $0.title == currentSection })
-                else {
-                    continue
-                }
-
-                let cleanedLine = line
-                    .replacing(#/- /#, with: "")
-                    .trimmingCharacters(in: .whitespaces)
-
-                let user: String?
-                let reference: Int?
-
-                if let match = cleanedLine.firstMatch(of: /(@(?<user>\w+))/) {
-                    user = String(match.user)
-                } else {
-                    user = nil
-                }
-
-                if let match = cleanedLine.firstMatch(of: /#(?<reference>\d+)/) {
-                    reference = Int(String(match.reference))
-                } else {
-                    reference = nil
-                }
-
-                /// Use `isEmojiPresentation` instead of `isEmoji` to ensure that `#`s are excluded.
-                let emoji = cleanedLine.unicodeScalars.first(where: \.properties.isEmojiPresentation) ?? currentSection?.unicodeScalars.first(where: \.properties.isEmojiPresentation) ?? "🔄"
-
-                let text = cleanedLine
-                    .drop(while: { $0.unicodeScalars.first?.properties.isEmojiPresentation == true }) // Emojis
-                    .replacing(#/#\d+/#, with: "") // Issue #
-                    .replacing(#/(@.*?)/#, with: "") // Mentions
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-
-                changelog[index].body.append(.init(
-                    emoji: String(emoji),
-                    text: text,
-                    user: user,
-                    reference: reference
-                ))
-            }
-        }
-
-        if let firstSection = changelog.first {
-            expandedChangelogSections = [firstSection.title]
-        }
     }
 
     func showUpdateWindowIfEligible() async {
@@ -337,7 +270,6 @@ final class Updater: ObservableObject {
         do {
             let downloadedFileURL = try await downloader.downloadUpdate(manifest: manifest) { [weak self] progress in
                 self?.progressBar = progress.percentage
-                self?.downloadProgress = progress
             }
 
             try await installer.installUpdate(from: downloadedFileURL, manifest: manifest)

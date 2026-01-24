@@ -153,24 +153,22 @@ struct UpdateView: View {
     private func changelogView() -> some View {
         ScrollView(showsIndicators: false) {
             VStack { // Using LazyVStack seems to cause visual glitches
-                ForEach(updater.changelog, id: \.title) { item in
-                    if !item.body.isEmpty {
-                        let isExpanded = updater.expandedChangelogSections.contains(item.title)
-                        ChangelogSectionView(
-                            isExpanded: isExpanded,
-                            title: item.title,
-                            notes: item.body,
-                            onToggle: {
-                                withAnimation(.smooth(duration: 0.25)) {
-                                    if isExpanded {
-                                        updater.expandedChangelogSections.remove(item.title)
-                                    } else {
-                                        updater.expandedChangelogSections.insert(item.title)
-                                    }
+                ForEach(updater.changelog) { section in
+                    let isExpanded = updater.expandedChangelogSections.contains(section.id)
+
+                    ChangelogSectionView(
+                        section: section,
+                        isExpanded: isExpanded,
+                        onToggle: {
+                            withAnimation(.smooth(duration: 0.25)) {
+                                if isExpanded {
+                                    updater.expandedChangelogSections.remove(section.id)
+                                } else {
+                                    updater.expandedChangelogSections.insert(section.id)
                                 }
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
             .padding(.top, 10)

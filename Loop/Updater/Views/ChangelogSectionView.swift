@@ -8,75 +8,71 @@
 import Luminare
 import SwiftUI
 
-struct ChangelogSectionView: View, Equatable {
+struct ChangelogSectionView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
 
+    let section: ChangelogSection
     let isExpanded: Bool
-    let title: String
-    let notes: [ChangelogNote]
     let onToggle: () -> ()
 
     var body: some View {
         LuminareSection {
             ChangelogSectionHeader(
+                section: section,
                 isExpanded: isExpanded,
-                title: title,
                 onToggle: onToggle
             )
-            .equatable()
 
             if isExpanded {
-                ForEach(notes, id: \.id) { note in
-                    ChangelogItemView(note: note)
-                        .equatable()
+                ForEach(section.notes, id: \.id) { note in
+                    ChangelogItemView(
+                        note: note,
+                        sectionEmoji: section.emoji
+                    )
                 }
             }
         }
     }
-
-    static func == (lhs: ChangelogSectionView, rhs: ChangelogSectionView) -> Bool {
-        lhs.isExpanded == rhs.isExpanded &&
-            lhs.title == rhs.title &&
-            lhs.notes == rhs.notes
-    }
 }
 
-private struct ChangelogSectionHeader: View, Equatable {
+private struct ChangelogSectionHeader: View {
+    let section: ChangelogSection
     let isExpanded: Bool
-    let title: String
     let onToggle: () -> ()
 
     var body: some View {
         Button(action: onToggle) {
-            HStack {
+            HStack(alignment: .top) {
                 Image(systemName: "chevron.forward")
-                    .bold()
                     .rotationEffect(isExpanded ? .degrees(90) : .zero)
+                    .foregroundStyle(.secondary)
 
-                Text(LocalizedStringKey(title))
-                    .font(.headline)
-                    .lineLimit(1)
+                HStack(spacing: 8) {
+                    Text(String(section.emoji))
+                    Text(LocalizedStringKey(section.title))
+                        .lineSpacing(1.1)
+                }
 
                 Spacer()
             }
-            .padding(.horizontal, 8)
+            .padding(8)
             .frame(height: 34)
             .contentShape(.rect)
+            .fontWeight(.medium)
         }
         .buttonStyle(.plain)
     }
-
-    static func == (lhs: ChangelogSectionHeader, rhs: ChangelogSectionHeader) -> Bool {
-        lhs.isExpanded == rhs.isExpanded && lhs.title == rhs.title
-    }
 }
 
-private struct ChangelogItemView: View, Equatable {
+private struct ChangelogItemView: View {
     let note: ChangelogNote
+    let sectionEmoji: Character
 
     var body: some View {
-        HStack(spacing: 8) {
-            Text(note.emoji)
+        HStack(alignment: .top, spacing: 8) {
+            Text(String(note.emoji ?? sectionEmoji))
+                .foregroundStyle(.secondary)
+
             Text(LocalizedStringKey(note.text))
                 .lineSpacing(1.1)
 
@@ -84,17 +80,12 @@ private struct ChangelogItemView: View, Equatable {
 
             ChangelogMetadataView(note: note)
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
+        .padding(8)
         .frame(minHeight: 34)
-    }
-
-    static func == (lhs: ChangelogItemView, rhs: ChangelogItemView) -> Bool {
-        lhs.note == rhs.note
     }
 }
 
-private struct ChangelogMetadataView: View, Equatable {
+private struct ChangelogMetadataView: View {
     let note: ChangelogNote
 
     var body: some View {
@@ -118,9 +109,5 @@ private struct ChangelogMetadataView: View, Equatable {
         .foregroundStyle(.secondary)
         .buttonStyle(.plain)
         .fixedSize()
-    }
-
-    static func == (lhs: ChangelogMetadataView, rhs: ChangelogMetadataView) -> Bool {
-        lhs.note.user == rhs.note.user && lhs.note.reference == rhs.note.reference
     }
 }
