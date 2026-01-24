@@ -16,13 +16,19 @@ enum SystemInfo {
         return String(cString: model)
     }
 
-    static var architecture: String {
+    enum Architecture: String, CaseIterable {
+        case x86_64
+        case arm64
+        case other
+    }
+
+    static var architecture: Architecture {
         #if arch(x86_64)
-            return "x86_64"
+            return .x86_64
         #elseif arch(arm64)
-            return "arm64"
+            return .arm64
         #else
-            return "unknown"
+            return .other
         #endif
     }
 }

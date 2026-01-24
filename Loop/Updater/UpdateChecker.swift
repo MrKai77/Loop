@@ -9,19 +9,15 @@ import Foundation
 import Scribe
 
 @Loggable
-final class UpdateChecker: @unchecked Sendable {
-    private let config: UpdaterConfig
-    private let httpClient: HTTPClient
+actor UpdateChecker {
+    private let httpClient: HTTPClient = .init()
 
     private static let minimumOSRegex = /Minimum macOS version:\s*(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/
         .ignoresCase()
     private static let maximumOSRegex = /Maximum macOS version:\s*(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/
         .ignoresCase()
-
-    init(config: UpdaterConfig) {
-        self.config = config
-        self.httpClient = HTTPClient(config: config)
-    }
+    private static let supportedArchitecturesRegex = /Supported architectures:\s*(?<archs>.+)/
+        .ignoresCase()
 
     func checkForUpdate(
         bundleId: String,
@@ -32,18 +28,19 @@ final class UpdateChecker: @unchecked Sendable {
         log.info("Checking for updates: \(bundleId) v\(currentVersion) build \(currentBuild) [\(channel.rawValue)]")
 
         let endpoint = URL(string: channel.githubReleasesEndpoint)!
-        var candidateRelease: Release?
+        var candidateRelease: GitHubRelease?
 
         let manifestData = try await httpClient.fetchData(from: endpoint)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
 
-        if channel == .stable {
+        switch channel {
+        case .stable:
             // Single release
-            candidateRelease = try decoder.decode(Release.self, from: manifestData)
-        } else {
-            // Multiple releases for beta channel
-            let releases = try decoder.decode([Release].self, from: manifestData)
+            candidateRelease = try decoder.decode(GitHubRelease.self, from: manifestData)
+        case .development:
+            // Multiple releases for dev channel
+            let releases = try decoder.decode([GitHubRelease].self, from: manifestData)
             candidateRelease = releases.first(where: { $0.prerelease })
         }
 
@@ -60,7 +57,7 @@ final class UpdateChecker: @unchecked Sendable {
     }
 
     private func processRelease(
-        _ release: Release,
+        _ release: GitHubRelease,
         currentVersion: String,
         currentBuild: Int
     ) throws -> UpdateManifest? {
@@ -90,7 +87,7 @@ final class UpdateChecker: @unchecked Sendable {
         let zipChecksum = asset.digest?.replacingOccurrences(of: "sha256:", with: "") ?? ""
         log.debug("Asset digest: \(asset.digest ?? "none"), extracted checksum: \(zipChecksum)")
 
-        let (minimumOS, maximumOS) = extractOSRequirements(from: release.body)
+        let compatibility = extractCompatibilityRequirements(from: release.body)
 
         let manifest = UpdateManifest(
             version: version,
@@ -104,12 +101,11 @@ final class UpdateChecker: @unchecked Sendable {
                 zip: zipChecksum
             ),
             compatibility: UpdateManifest.Compatibility(
-                downloadSize: Int64(asset.size),
-                minimumOS: minimumOS,
-                maximumOS: maximumOS,
-                supportedArchitectures: ["arm64", "x86_64"]
+                minimumOS: compatibility.minimumOS,
+                maximumOS: compatibility.maximumOS,
+                supportedArchitectures: compatibility.architectures
             ),
-            channel: release.prerelease ? .beta : .stable,
+            channel: release.prerelease ? .development : .stable,
             publishedAt: release.createdAt,
             size: Int64(asset.size)
         )
@@ -121,7 +117,7 @@ final class UpdateChecker: @unchecked Sendable {
         return manifest
     }
 
-    private func extractVersionInfo(from release: Release) -> (version: String, buildNumber: Int) {
+    private func extractVersionInfo(from release: GitHubRelease) -> (version: String, buildNumber: Int) {
         if release.prerelease {
             // Parse from name field like "🧪 1.4.1 (1683)"
             let regex = /🧪\s+(\d+\.\d+\.\d+)\s+\((\d+)\)/
@@ -156,40 +152,63 @@ final class UpdateChecker: @unchecked Sendable {
         return false
     }
 
-    private func extractOSRequirements(from body: String) -> (minimum: OperatingSystemVersion?, maximum: OperatingSystemVersion?) {
+    private func extractCompatibilityRequirements(
+        from body: String
+    ) -> (minimumOS: OperatingSystemVersion?, maximumOS: OperatingSystemVersion?, architectures: [SystemInfo.Architecture]) {
         var minimumOS: OperatingSystemVersion?
         var maximumOS: OperatingSystemVersion?
+        var architectures: [SystemInfo.Architecture]?
 
         for line in body.split(whereSeparator: \.isNewline).reversed() {
-            let (minimum, maximum) = extractMacOSVersionRequirements(from: String(line))
+            let lineStr = String(line)
 
-            if minimumOS == nil { minimumOS = minimum }
-            if maximumOS == nil { maximumOS = maximum }
+            // Extract minimum OS version
+            if minimumOS == nil,
+               let match = lineStr.firstMatch(of: Self.minimumOSRegex),
+               let major = Int(match.major) {
+                let minor = match.minor.flatMap { Int($0) } ?? 0
+                let patch = match.patch.flatMap { Int($0) } ?? 0
+                minimumOS = OperatingSystemVersion(majorVersion: major, minorVersion: minor, patchVersion: patch)
+            }
 
-            if minimumOS != nil, maximumOS != nil { break }
+            // Extract maximum OS version
+            if maximumOS == nil,
+               let match = lineStr.firstMatch(of: Self.maximumOSRegex),
+               let major = Int(match.major) {
+                let minor = match.minor.flatMap { Int($0) } ?? 0
+                let patch = match.patch.flatMap { Int($0) } ?? 0
+                maximumOS = OperatingSystemVersion(majorVersion: major, minorVersion: minor, patchVersion: patch)
+            }
+
+            // Extract supported architectures
+            if architectures == nil,
+               let match = lineStr.firstMatch(of: Self.supportedArchitecturesRegex) {
+                let archsString = String(match.archs)
+                var archs: [SystemInfo.Architecture] = []
+
+                if archsString.contains("arm64") {
+                    archs.append(.arm64)
+                }
+                if archsString.contains("x86_64") {
+                    archs.append(.x86_64)
+                }
+
+                if !archs.isEmpty {
+                    architectures = archs
+                }
+            }
+
+            // Early exit if all values found
+            if minimumOS != nil, maximumOS != nil, architectures != nil {
+                break
+            }
         }
 
-        log.debug("Extracted OS requirements: minimum=\(minimumOS?.description ?? "none"), maximum=\(maximumOS?.description ?? "none")")
-        return (minimumOS, maximumOS)
-    }
+        let finalArchitectures = architectures ?? SystemInfo.Architecture.allCases
 
-    private func extractMacOSVersionRequirements(from line: String) -> (minimum: OperatingSystemVersion?, maximum: OperatingSystemVersion?) {
-        var minimum: OperatingSystemVersion?
-        var maximum: OperatingSystemVersion?
+        log.debug("Extracted compatibility: minOS=\(minimumOS?.description ?? "none"), maxOS=\(maximumOS?.description ?? "none"), archs=\(finalArchitectures.map(\.rawValue))")
 
-        if let match = line.firstMatch(of: Self.minimumOSRegex), let major = Int(match.major) {
-            let minor = match.minor.flatMap { Int($0) } ?? 0
-            let patch = match.patch.flatMap { Int($0) } ?? 0
-            minimum = OperatingSystemVersion(majorVersion: major, minorVersion: minor, patchVersion: patch)
-        }
-
-        if let match = line.firstMatch(of: Self.maximumOSRegex), let major = Int(match.major) {
-            let minor = match.minor.flatMap { Int($0) } ?? 0
-            let patch = match.patch.flatMap { Int($0) } ?? 0
-            maximum = OperatingSystemVersion(majorVersion: major, minorVersion: minor, patchVersion: patch)
-        }
-
-        return (minimum, maximum)
+        return (minimumOS, maximumOS, finalArchitectures)
     }
 
     private func verifySystemRequirements(manifest: UpdateManifest) throws {
@@ -199,6 +218,7 @@ final class UpdateChecker: @unchecked Sendable {
             guard ProcessInfo.processInfo.isOperatingSystemAtLeast(minimumOS) else {
                 throw UpdateError.incompatibleSystem("Update requires macOS \(minimumOS.description) or later")
             }
+            log.debug("Minimum OS requirement check passed for version: \(minimumOS.description)")
         }
 
         if let maximumOS = manifest.compatibility.maximumOS {
@@ -213,8 +233,17 @@ final class UpdateChecker: @unchecked Sendable {
             guard !ProcessInfo.processInfo.isOperatingSystemAtLeast(actualMaximumOS) else {
                 throw UpdateError.incompatibleSystem("Update requires macOS \(maximumOS.description) or earlier")
             }
+
+            log.debug("Maximum OS requirement check passed for version: \(maximumOS.description)")
         }
 
-        log.success("System requirements verified")
+        let supportedArchitectures = manifest.compatibility.supportedArchitectures
+        guard supportedArchitectures.contains(SystemInfo.architecture) else {
+            let supported = supportedArchitectures.map(\.rawValue).joined(separator: ", ")
+            throw UpdateError.incompatibleSystem("Update requires \(supported) architecture")
+        }
+        log.debug("Supported architectures check passed")
+
+        log.success("All system requirement checks passed")
     }
 }

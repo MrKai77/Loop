@@ -16,7 +16,7 @@ enum BundleUtilities {
     /// Recursively searches for an app bundle (.app) within a directory
     /// - Parameter directory: The directory to search in
     /// - Returns: URL to the found app bundle
-    /// - Throws: `UpdateError.installationError` if no app bundle is found
+    /// - Throws: `UpdateError.installationFailed` if no app bundle is found
     static func findAppBundle(in directory: URL) throws -> URL {
         let contents = try FileManager.default.contentsOfDirectory(
             at: directory,
@@ -39,12 +39,12 @@ enum BundleUtilities {
         let fileList = contents.map(\.lastPathComponent).joined(separator: ", ")
         log.error("No .app bundle found in directory. Available files: \(fileList)")
 
-        throw UpdateError.installationError("No .app bundle found in update package. Found files: \(fileList)")
+        throw UpdateError.installationFailed("No .app bundle found in update package. Found files: \(fileList)")
     }
 
     /// Verifies that a bundle has the required structure (Info.plist and MacOS directory)
     /// - Parameter bundleURL: URL to the app bundle to verify
-    /// - Throws: `UpdateError.installationError` if required paths are missing
+    /// - Throws: `UpdateError.installationFailed` if required paths are missing
     static func verifyBundleStructure(_ bundleURL: URL) throws {
         log.debug("Verifying bundle structure for: \(bundleURL.path)")
 
@@ -52,11 +52,26 @@ enum BundleUtilities {
             let fullPath = bundleURL.appendingPathComponent(path)
             guard FileManager.default.fileExists(atPath: fullPath.path) else {
                 log.error("Missing required path: \(path)")
-                throw UpdateError.installationError("Invalid app bundle: missing \(path)")
+                throw UpdateError.installationFailed("Invalid app bundle: missing \(path)")
             }
         }
 
         log.debug("Bundle structure verification passed")
+    }
+
+    /// Returns the path to the executable for a given bundle
+    /// - Parameter bundleURL: URL to the app bundle
+    /// - Returns: URL to the executable
+    /// - Throws: `UpdateError.installationFailed` if executable name cannot be determined
+    static func executablePath(for bundleURL: URL) throws -> URL {
+        let infoPlistURL = bundleURL.appendingPathComponent("Contents/Info.plist")
+
+        guard let plist = NSDictionary(contentsOf: infoPlistURL),
+              let executableName = plist["CFBundleExecutable"] as? String else {
+            throw UpdateError.installationFailed("Could not determine executable name from Info.plist")
+        }
+
+        return bundleURL.appendingPathComponent("Contents/MacOS/\(executableName)")
     }
 
     // MARK: Version Checking
@@ -78,10 +93,10 @@ enum BundleUtilities {
     /// - Parameters:
     ///   - bundleURL: URL to the app bundle to verify
     ///   - manifest: The update manifest to compare against
-    /// - Throws: `UpdateError.installationError` if versions don't match
+    /// - Throws: `UpdateError.installationFailed` if versions don't match
     static func verifyVersionMatches(bundleURL: URL, manifest: UpdateManifest) throws {
         guard let versionInfo = readVersionInfo(from: bundleURL) else {
-            throw UpdateError.installationError("Could not read version info from bundle at: \(bundleURL.path)")
+            throw UpdateError.installationFailed("Could not read version info from bundle at: \(bundleURL.path)")
         }
 
         try verifyVersionMatches(versionInfo: versionInfo, manifest: manifest)
@@ -108,20 +123,20 @@ enum BundleUtilities {
     /// - Parameters:
     ///   - versionInfo: The version info to verify
     ///   - manifest: The update manifest to compare against
-    /// - Throws: `UpdateError.installationError` if versions don't match
+    /// - Throws: `UpdateError.installationFailed` if versions don't match
     private static func verifyVersionMatches(versionInfo: VersionInfo, manifest: UpdateManifest) throws {
         log.info("Verifying version - Bundle: \(versionInfo.version) (\(versionInfo.build)), Expected: \(manifest.version) (\(manifest.buildNumber))")
 
         guard versionInfo.normalizedVersion == manifest.version else {
             log.error("Version mismatch - Expected: \(manifest.version), Got: \(versionInfo.normalizedVersion)")
-            throw UpdateError.installationError("Version mismatch: expected \(manifest.version), got \(versionInfo.normalizedVersion)")
+            throw UpdateError.installationFailed("Version mismatch: expected \(manifest.version), got \(versionInfo.normalizedVersion)")
         }
 
         // For non-stable channels, also verify build number
         if manifest.channel != .stable {
             guard versionInfo.build == manifest.buildNumber else {
                 log.error("Build number mismatch - Expected: \(manifest.buildNumber), Got: \(versionInfo.build)")
-                throw UpdateError.installationError("Build number mismatch: expected \(manifest.buildNumber), got \(versionInfo.build)")
+                throw UpdateError.installationFailed("Build number mismatch: expected \(manifest.buildNumber), got \(versionInfo.build)")
             }
         }
 

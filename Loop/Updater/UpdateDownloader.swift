@@ -1,5 +1,5 @@
 //
-//  Downloader.swift
+//  UpdateDownloader.swift
 //  Loop
 //
 //  Created by Kami on 2026-01-22.
@@ -10,28 +10,15 @@ import Foundation
 import Scribe
 
 @Loggable
-final class Downloader: NSObject {
+final class UpdateDownloader: NSObject {
     // MARK: - Properties
-
-    private let config: UpdaterConfig
 
     private var urlSession: URLSession?
     private var downloadTask: URLSessionDownloadTask?
-    private weak var progressHandler: AnyObject?
-    private weak var completionHandler: AnyObject?
     private var progressClosure: ((UpdateProgress) -> ())?
     private var completionClosure: ((Result<URL, Error>) -> ())?
-    private(set) var downloadState: DownloadState = .idle
+    private(set) var isDownloading = false
     private var performanceTracker: PerformanceTracker = .init()
-
-    private lazy var paths: SystemPaths = .init()
-
-    // MARK: - Initialization
-
-    init(config: UpdaterConfig) {
-        self.config = config
-        super.init()
-    }
 
     deinit {
         downloadTask?.cancel()
@@ -47,7 +34,7 @@ final class Downloader: NSObject {
         progress: @escaping (UpdateProgress) -> (),
         completion: @escaping (Result<URL, Error>) -> ()
     ) {
-        guard downloadState == .idle else {
+        guard !isDownloading else {
             completion(.failure(DownloadError.downloadInProgress))
             return
         }
@@ -60,7 +47,7 @@ final class Downloader: NSObject {
         log.info("Starting download - URL: \(manifest.downloadUrl), Version: \(manifest.version)")
 
         do {
-            try FileManager.default.createDirectory(at: paths.patchworkDirectory, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: SystemPaths.loopDirectory, withIntermediateDirectories: true)
             setupDownload(url: downloadURL, progress: progress, completion: completion)
         } catch {
             completion(.failure(error))
@@ -69,10 +56,10 @@ final class Downloader: NSObject {
 
     func cancel() {
         log.info("Cancelling download")
-        downloadState = .cancelled
+        isDownloading = false
         downloadTask?.cancel()
-        // Cancel any pending operations and clean up immediately
-        Task { @MainActor in
+
+        Task {
             await cleanup()
         }
     }
@@ -84,13 +71,18 @@ final class Downloader: NSObject {
         progress: @escaping (UpdateProgress) -> (),
         completion: @escaping (Result<URL, Error>) -> ()
     ) {
-        downloadState = .downloading
+        isDownloading = true
         progressClosure = progress
         completionClosure = completion
         performanceTracker.reset()
 
-        let sessionConfig = SessionConfigurationFactory.create(from: config.networkConfig)
-        urlSession = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: nil)
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 30.0
+        config.timeoutIntervalForResource = 30.0 * 2
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.httpMaximumConnectionsPerHost = 1
+
+        urlSession = URLSession(configuration: config, delegate: self, delegateQueue: nil)
         downloadTask = urlSession?.downloadTask(with: url)
         downloadTask?.resume()
     }
@@ -104,7 +96,7 @@ final class Downloader: NSObject {
             finalURL = try FileOperations.moveDownloadedFile(
                 from: location,
                 originalURL: originalURL,
-                to: SystemPaths().patchworkDirectory
+                to: SystemPaths.loopDirectory
             )
             try FileValidator.validateDownloadedFile(at: finalURL)
         } catch {
@@ -124,18 +116,18 @@ final class Downloader: NSObject {
     }
 
     private func handleCompletion(with url: URL) async throws {
-        downloadState = .completed
         completionClosure?(.success(url))
         await cleanup()
     }
 
     private func handleError(_ error: Error) {
-        downloadState = .failed
         completionClosure?(.failure(error))
         Task { await cleanup() }
     }
 
+    @MainActor
     private func cleanup() async {
+        isDownloading = false
         downloadTask?.cancel()
         downloadTask = nil
         urlSession?.invalidateAndCancel()
@@ -148,7 +140,7 @@ final class Downloader: NSObject {
 
 // MARK: URLSessionDownloadDelegate
 
-extension Downloader: URLSessionDownloadDelegate {
+extension UpdateDownloader: URLSessionDownloadDelegate {
     nonisolated func urlSession(
         _: URLSession,
         downloadTask: URLSessionDownloadTask,
@@ -160,7 +152,7 @@ extension Downloader: URLSessionDownloadDelegate {
         }
 
         guard let originalURL = downloadTask.originalRequest?.url else {
-            handleError(DownloadError.unknown(NSError(domain: "MissingOriginalURL", code: -1)))
+            handleError(DownloadError.missingOriginalURL)
             return
         }
 
@@ -175,7 +167,7 @@ extension Downloader: URLSessionDownloadDelegate {
         totalBytesExpectedToWrite: Int64
     ) {
         Task { @MainActor in
-            guard self.downloadState == .downloading else { return }
+            guard self.isDownloading else { return }
 
             let progress = self.performanceTracker.updateProgress(
                 bytesWritten: bytesWritten,
@@ -195,31 +187,13 @@ extension Downloader: URLSessionDownloadDelegate {
         guard let error else { return }
 
         Task { @MainActor in
-            guard self.downloadState == .downloading else { return }
+            guard self.isDownloading else { return }
 
             log.error("Download failed: \(error.localizedDescription)")
 
             let downloadError: DownloadError = (error as? URLError).map(DownloadError.networkError) ?? .unknown(error)
             self.handleError(downloadError)
         }
-    }
-}
-
-// MARK: - DownloadState
-
-enum DownloadState {
-    case idle, downloading, completed, failed, cancelled
-}
-
-// MARK: - SystemPaths
-
-private struct SystemPaths {
-    let appSupportDirectory: URL
-    let patchworkDirectory: URL
-
-    init() {
-        self.appSupportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        self.patchworkDirectory = appSupportDirectory.appendingPathComponent("Loop", isDirectory: true)
     }
 }
 
@@ -279,30 +253,6 @@ private struct PerformanceTracker {
     }
 }
 
-// MARK: - SpeedSample
-
-private struct SpeedSample {
-    let timestamp: Date
-    let speed: Double
-}
-
-// MARK: - SessionConfigurationFactory
-
-private enum SessionConfigurationFactory {
-    static func create(from networkConfig: UpdaterConfig.NetworkConfig) -> URLSessionConfiguration {
-        let config = URLSessionConfiguration.default
-
-        config.timeoutIntervalForRequest = networkConfig.timeout
-        config.timeoutIntervalForResource = networkConfig.timeout * 2
-        config.allowsCellularAccess = networkConfig.allowsCellularAccess
-
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.httpMaximumConnectionsPerHost = 1
-
-        return config
-    }
-}
-
 // MARK: - FileOperations
 
 @Loggable(style: .static)
@@ -358,6 +308,7 @@ enum DownloadError: LocalizedError, Sendable {
     case insufficientDiskSpace(available: Int64, required: Int64)
     case fileValidationFailed(String)
     case networkError(URLError)
+    case missingOriginalURL
     case unknown(Error)
 
     var errorDescription: String? {
@@ -376,6 +327,8 @@ enum DownloadError: LocalizedError, Sendable {
             return "File validation failed: \(reason)"
         case let .networkError(urlError):
             return "Network error: \(urlError.localizedDescription)"
+        case .missingOriginalURL:
+            return "Download task is missing its original URL"
         case let .unknown(error):
             return "Unknown error: \(error.localizedDescription)"
         }

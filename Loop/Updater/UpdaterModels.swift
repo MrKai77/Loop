@@ -11,26 +11,26 @@ import Foundation
 
 enum UpdateChannel: String, Sendable, CaseIterable {
     case stable
-    case beta
+    case development
 
     var displayName: String {
         switch self {
         case .stable: "Stable"
-        case .beta: "Beta"
+        case .development: "Development"
         }
     }
 
     var isDevelopmentChannel: Bool {
         switch self {
         case .stable: false
-        case .beta: true
+        case .development: true
         }
     }
 
     var githubReleasesEndpoint: String {
         switch self {
         case .stable: "https://api.github.com/repos/MrKai77/Loop/releases/latest"
-        case .beta: "https://api.github.com/repos/MrKai77/Loop/releases"
+        case .development: "https://api.github.com/repos/MrKai77/Loop/releases"
         }
     }
 }
@@ -54,10 +54,9 @@ struct UpdateManifest: Sendable {
     }
 
     struct Compatibility: Sendable {
-        let downloadSize: Int64
         let minimumOS: OperatingSystemVersion?
         let maximumOS: OperatingSystemVersion?
-        let supportedArchitectures: [String]
+        let supportedArchitectures: [SystemInfo.Architecture]
     }
 
     struct Checksums: Sendable {
@@ -107,6 +106,7 @@ enum UpdateError: LocalizedError, Sendable {
     case security(String)
     case timeout
     case http(Int)
+    case downloaderNotInitialized
 
     var errorDescription: String? {
         switch self {
@@ -126,6 +126,8 @@ enum UpdateError: LocalizedError, Sendable {
             "Request timed out"
         case let .http(code):
             "HTTP error (\(code))"
+        case .downloaderNotInitialized:
+            "Downloader not initialized"
         }
     }
 
@@ -149,69 +151,11 @@ enum UpdateError: LocalizedError, Sendable {
     static func httpError(_ response: HTTPURLResponse) -> UpdateError {
         .http(response.statusCode)
     }
-
-    static func installationError(_ message: String) -> UpdateError {
-        .installationFailed(message)
-    }
-
-    static func securityError(_ reason: String) -> UpdateError {
-        .security(reason)
-    }
-
-    static func manifestError(_ details: String? = nil) -> UpdateError {
-        .invalidManifest(details)
-    }
 }
 
-// MARK: - UpdaterConfig
+// MARK: - GitHubRelease Model
 
-struct UpdaterConfig: Sendable {
-    let updateEndpoint: URL
-    let currentBuildNumber: Int
-    let userGroup: String?
-    let networkConfig: NetworkConfig
-
-    struct SecurityConfig: Sendable {
-        let checksumValidationEnabled: Bool
-        let codeSignatureValidationEnabled: Bool
-
-        static let `default`: SecurityConfig = .init(
-            checksumValidationEnabled: true,
-            codeSignatureValidationEnabled: false
-        )
-    }
-
-    struct NetworkConfig: Sendable {
-        let timeout: TimeInterval
-        let retryCount: Int
-        let retryDelay: TimeInterval
-        let allowsCellularAccess: Bool
-
-        static let `default`: NetworkConfig = .init(
-            timeout: 30.0,
-            retryCount: 3,
-            retryDelay: 2.0,
-            allowsCellularAccess: true
-        )
-    }
-
-    init(
-        updateEndpoint: URL,
-        currentBuildNumber: Int,
-        userGroup: String? = nil,
-        networkConfig: NetworkConfig = .default
-    ) {
-        self.updateEndpoint = updateEndpoint
-        self.currentBuildNumber = currentBuildNumber
-        self.userGroup = userGroup
-        self.networkConfig = networkConfig
-    }
-}
-
-// MARK: - Release Model
-
-// Release model to parse GitHub API response for releases.
-struct Release: Codable {
+struct GitHubRelease: Codable {
     var id: Int
     var tagName: String
     var name: String
@@ -240,5 +184,93 @@ struct Release: Codable {
             case size
             case digest
         }
+    }
+}
+
+// MARK: - InstallState
+
+enum InstallState: Equatable {
+    case ready
+    case installing
+    case readyToRestart
+    case failed(any Error)
+
+    static func == (lhs: InstallState, rhs: InstallState) -> Bool {
+        switch (lhs, rhs) {
+        case (.ready, .ready),
+             (.installing, .installing),
+             (.readyToRestart, .readyToRestart):
+            true
+        case let (.failed(lhsErr), .failed(rhsErr)):
+            lhsErr.localizedDescription == rhsErr.localizedDescription
+        default:
+            false
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .ready:
+            String(localized: "Install")
+        case .installing:
+            "          " // Helps with alignment for the animation once the update finishes
+        case .readyToRestart:
+            String(localized: "Relaunch to complete")
+        case .failed:
+            String(localized: "Install failed")
+        }
+    }
+
+    var isInteractive: Bool {
+        switch self {
+        case .ready, .readyToRestart, .failed:
+            true
+        case .installing:
+            false
+        }
+    }
+
+    var errorDescription: String? {
+        if case let .failed(error) = self {
+            error.localizedDescription
+        } else {
+            nil
+        }
+    }
+}
+
+// MARK: - UpdateAvailability
+
+enum UpdateAvailability {
+    case available
+    case unavailable
+    case osNotSupported
+
+    var text: String {
+        switch self {
+        case .unavailable:
+            String(localized: "Check for updates…")
+        case .available:
+            String(localized: "Update…")
+        case .osNotSupported:
+            String(localized: "This macOS version is no longer supported.")
+        }
+    }
+}
+
+// MARK: - ChangelogNote
+
+struct ChangelogNote: Identifiable, Equatable {
+    var id: UUID = .init()
+    var emoji: String
+    var text: String
+    var user: String?
+    var reference: Int?
+
+    static func == (lhs: ChangelogNote, rhs: ChangelogNote) -> Bool {
+        lhs.emoji == rhs.emoji &&
+            lhs.text == rhs.text &&
+            lhs.user == rhs.user &&
+            lhs.reference == rhs.reference
     }
 }

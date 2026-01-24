@@ -113,6 +113,6 @@ enum ZipExtractor {
             let fileSizeString = fileSize?.formattedBytes ?? "unknown size"
             fullMessage = "\(message) at \(zipURL.path) (Size: \(fileSizeString))"
         }
-        return .installationError(fullMessage)
+        return .installationFailed(fullMessage)
     }
 }

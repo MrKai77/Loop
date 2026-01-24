@@ -133,15 +133,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         StashManager.shared.onApplicationWillTerminate()
     }
 
-    static func relaunch(after seconds: TimeInterval = 0.5) -> Never {
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", "sleep \(seconds); open \"\(Bundle.main.bundlePath)\""]
-        task.launch()
-        NSApp.terminate(nil)
-        exit(0)
-    }
-
     func application(_: NSApplication, open urls: [URL]) {
         for url in urls {
             urlCommandHandler.handle(url)

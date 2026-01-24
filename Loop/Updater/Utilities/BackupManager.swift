@@ -12,8 +12,7 @@ import Scribe
 actor BackupManager {
     private let fileManager: FileManager
 
-    private lazy var backupDirectory: URL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("Loop/Backups", isDirectory: true)
+    private var backupDirectory: URL { SystemPaths.backupsDirectory }
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -61,7 +60,7 @@ actor BackupManager {
 
         // Final check for collision
         guard !fileManager.fileExists(atPath: backupURL.path) else {
-            throw UpdateError.installationError("Could not generate unique install backup name after \(attempt) attempts")
+            throw UpdateError.installationFailed("Could not generate unique install backup name after \(attempt) attempts")
         }
 
         return backupURL

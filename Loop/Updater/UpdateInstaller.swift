@@ -9,40 +9,19 @@ import AppKit
 import Foundation
 import Scribe
 
-// MARK: - Installation Errors
-
-enum InstallationError: LocalizedError {
-    case swapVerificationFailed(String)
-
-    var errorDescription: String? {
-        switch self {
-        case let .swapVerificationFailed(reason):
-            "Atomic swap verification failed: \(reason)"
-        }
-    }
-}
-
 @Loggable
 actor UpdateInstaller {
-    // MARK: - Types
-
-    typealias ProgressHandler = @Sendable (UpdateProgress) -> ()
-
     // MARK: - Properties
 
-    private let config: UpdaterConfig
-    private let fileVerifier: FileVerifier
     private let backupManager: BackupManager
     private let fileManager: FileManager
 
     private var isCancelled = false
-    private var installationState: InstallationState = .idle
     private var relocateToApplications = false
+    private var installedAppURL: URL = Bundle.main.bundleURL
 
-    init(config: UpdaterConfig, fileManager: FileManager = .default) {
-        self.config = config
+    init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
-        self.fileVerifier = FileVerifier(config: config)
         self.backupManager = BackupManager(fileManager: fileManager)
     }
 
@@ -52,119 +31,47 @@ actor UpdateInstaller {
         try await performPreInstallationChecks(manifest: manifest)
 
         do {
-            installationState = .inProgress
             try await executeInstallationSequence(downloadURL: downloadURL, manifest: manifest)
-            installationState = .completed
             log.success("Installation completed successfully")
         } catch {
-            installationState = .failed
             log.error("Installation failed: \(error)")
-            throw UpdateError.installationError(error.localizedDescription)
+            throw UpdateError.installationFailed(error.localizedDescription)
         }
     }
 
-    func installUpdateWithProgress(
-        from downloadURL: URL,
-        manifest: UpdateManifest,
-        progressHandler: ProgressHandler? = nil
-    ) async throws {
-        log.info("Starting installation with progress tracking")
-
-        let steps: [(phase: UpdateProgress.UpdatePhase, progress: Double, operation: () async throws -> ())] = [
-            (.checking, 0.1, { try await self.performPreInstallationChecks(manifest: manifest) }),
-            (.downloading, 0.3, { try await self.verifyDownloadIntegrity(downloadURL, manifest: manifest) }),
-            (.extracting, 0.6, {}),
-            (.verifying, 0.8, {}),
-            (.installing, 0.9, {}),
-            (.verifying, 0.95, {})
-        ]
-
-        var extractedURL: URL?
-
-        do {
-            installationState = .inProgress
-
-            for (index, step) in steps.enumerated() {
-                try checkCancellation()
-                progressHandler?(UpdateProgress(phase: step.phase, percentage: step.progress))
-
-                if index == 2 { // Extract step
-                    extractedURL = try await extractAndVerifyUpdate(downloadURL)
-                } else if index == 3 { // Verify extraction step
-                    guard let url = extractedURL else { throw createSafetyError("No extracted URL available") }
-                    try await verifyExtractionIntegrity(url, manifest: manifest)
-                } else if index == 4 { // Install step
-                    guard let url = extractedURL else { throw createSafetyError("No extracted URL available") }
-                    try await performSafeInstallation(from: url, manifest: manifest)
-                } else if index == 5 { // Final verification step
-                    try await performComprehensiveVerification(manifest: manifest)
-                } else {
-                    try await step.operation()
-                }
-            }
-
-            // Cleanup
-            if let url = extractedURL {
-                try await performSafeCleanup(url, downloadURL)
-            }
-
-            installationState = .completed
-            progressHandler?(UpdateProgress(phase: .completed, percentage: 1.0))
-            log.success("Installation with progress completed successfully")
-
-        } catch {
-            installationState = .failed
-            log.error("Installation failed during step: \(error)")
-
-            if let url = extractedURL {
-                try await performSafeCleanup(url, downloadURL)
-            }
-
-            throw UpdateError.installationError(error.localizedDescription)
-        }
-    }
-
-    func restartApplication() {
-        log.info("Preparing application restart")
+    func restartApplication() async {
+        log.info("Preparing application restart from: \(installedAppURL.path)")
 
         // Final verification before restart
         do {
             try performPreRestartSafetyChecks()
         } catch {
             log.error("Pre-restart verification failed: \(error)")
-            // Don't restart if verification fails
             return
         }
 
-        let appURL = Bundle.main.bundleURL
-
         // Verify the app exists before attempting restart
-        guard fileManager.fileExists(atPath: appURL.path) else {
-            log.error("Application not found at path before restart: \(appURL.path)")
+        guard fileManager.fileExists(atPath: installedAppURL.path) else {
+            log.error("Application not found at path before restart: \(installedAppURL.path)")
             return
         }
 
         log.info("Pre-restart verification passed, proceeding with restart")
 
-        Task {
-            try? await Task.sleep(for: .seconds(1))
+        let appURL = installedAppURL
+        let process = Process()
+        process.launchPath = "/bin/sh"
+        process.arguments = ["-c", "sleep 0.5; open \"\(appURL.path)\""]
+        process.launch()
 
-            log.info("Attempting application restart")
-            try await NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration())
-        }
-
-        Task {
-            try? await Task.sleep(for: .seconds(0.5))
-
-            log.info("Terminating current process")
-            await NSApplication.shared.terminate(nil)
+        await MainActor.run {
+            NSApp.terminate(nil)
         }
     }
 
     func cancel() async {
         log.warn("Cancelling installation")
         isCancelled = true
-        installationState = .cancelled
     }
 
     // MARK: - Installation Methods
@@ -268,7 +175,7 @@ actor UpdateInstaller {
             let errorMessage =
                 "Insufficient disk space. Required: \(requiredSpace.formattedBytes), Available: \(availableSpace.formattedBytes)"
             log.error("\(errorMessage)")
-            throw createSafetyError(errorMessage)
+            throw UpdateError.installationFailed(errorMessage)
         }
 
         log.success("Disk space verification passed. Available: \(availableSpace.formattedBytes), Required: \(requiredSpace.formattedBytes)")
@@ -287,7 +194,7 @@ actor UpdateInstaller {
 
         // Check write permissions to parent directory
         guard fileManager.isWritableFile(atPath: parentDirectory.path) else {
-            throw createSafetyError("No write permissions to application directory: \(parentDirectory.path)")
+            throw UpdateError.installationFailed("No write permissions to application directory: \(parentDirectory.path)")
         }
 
         // Test by creating a temporary file
@@ -297,7 +204,7 @@ actor UpdateInstaller {
             try "test".write(to: testFile, atomically: true, encoding: .utf8)
             try fileManager.removeItem(at: testFile)
         } catch {
-            throw createSafetyError("Cannot write to application directory: \(error.localizedDescription)")
+            throw UpdateError.installationFailed("Cannot write to application directory: \(error.localizedDescription)")
         }
 
         log.success("Installation permissions verified")
@@ -329,11 +236,11 @@ actor UpdateInstaller {
 
         // Basic file existence and readability
         guard fileManager.fileExists(atPath: downloadURL.path) else {
-            throw createSafetyError("Download file does not exist: \(downloadURL.path)")
+            throw UpdateError.installationFailed("Download file does not exist: \(downloadURL.path)")
         }
 
         guard fileManager.isReadableFile(atPath: downloadURL.path) else {
-            throw createSafetyError("Download file is not readable: \(downloadURL.path)")
+            throw UpdateError.installationFailed("Download file is not readable: \(downloadURL.path)")
         }
 
         // File size verification
@@ -341,18 +248,21 @@ actor UpdateInstaller {
         let fileSize = attributes[.size] as? Int64 ?? 0
 
         guard fileSize > 0 else {
-            throw createSafetyError("Download file is empty")
+            throw UpdateError.installationFailed("Download file is empty")
         }
 
         // Minimum reasonable size check (1KB)
         guard fileSize > 1024 else {
-            throw createSafetyError("Download file is suspiciously small: \(fileSize) bytes")
+            throw UpdateError.installationFailed("Download file is suspiciously small: \(fileSize) bytes")
         }
 
         log.info("Download file size: \(fileSize.formattedBytes)")
 
         // Checksum verification
-        try await fileVerifier.verifyDownloadedFile(downloadURL, manifest: manifest)
+        try await ChecksumVerifier.verifyFile(
+            downloadURL,
+            expectedChecksum: manifest.checksums.zip
+        )
 
         log.success("Download integrity verification completed")
     }
@@ -399,32 +309,32 @@ actor UpdateInstaller {
         // Check Info.plist
         let infoPlistURL = appBundle.appendingPathComponent("Contents/Info.plist")
         guard let plist = NSDictionary(contentsOf: infoPlistURL) else {
-            throw createSafetyError("Could not read Info.plist")
+            throw UpdateError.installationFailed("Could not read Info.plist")
         }
 
         // Validate basic bundle properties
         guard let bundleIdentifier = plist["CFBundleIdentifier"] as? String, !bundleIdentifier.isEmpty else {
-            throw createSafetyError("Invalid CFBundleIdentifier")
+            throw UpdateError.installationFailed("Invalid CFBundleIdentifier")
         }
 
         guard let packageType = plist["CFBundlePackageType"] as? String, packageType == "APPL" else {
-            throw createSafetyError("Invalid CFBundlePackageType")
+            throw UpdateError.installationFailed("Invalid CFBundlePackageType")
         }
 
         // Validate executable
         guard let executableName = plist["CFBundleExecutable"] as? String, !executableName.isEmpty else {
-            throw createSafetyError("Missing CFBundleExecutable")
+            throw UpdateError.installationFailed("Missing CFBundleExecutable")
         }
 
         let executablePath = appBundle.appendingPathComponent("Contents/MacOS/\(executableName)")
         guard fileManager.fileExists(atPath: executablePath.path) else {
-            throw createSafetyError("Executable not found: \(executableName)")
+            throw UpdateError.installationFailed("Executable not found: \(executableName)")
         }
 
         let executableAttributes = try fileManager.attributesOfItem(atPath: executablePath.path)
         guard let permissions = executableAttributes[.posixPermissions] as? NSNumber,
               permissions.intValue & 0o111 != 0 else {
-            throw createSafetyError("Executable lacks execute permissions")
+            throw UpdateError.installationFailed("Executable lacks execute permissions")
         }
 
         // Version validation for extracted apps
@@ -450,15 +360,15 @@ actor UpdateInstaller {
                 )
 
                 guard ProcessInfo.processInfo.isOperatingSystemAtLeast(minOSVersion) else {
-                    throw createSafetyError("App manifest inconsistency: app actually requires macOS \(minOSString) or later.")
+                    throw UpdateError.installationFailed("App manifest inconsistency: app actually requires macOS \(minOSString) or later.")
                 }
             }
         }
 
         // Check supported architectures
-        if let supportedArchitectures = plist["LSArchitecturePriority"] as? [String] {
+        if let supportedArchitectures = plist["LSArchitecturePriority"] as? [SystemInfo.Architecture] {
             guard supportedArchitectures.contains(SystemInfo.architecture) else {
-                throw createSafetyError("App does not support current architecture")
+                throw UpdateError.installationFailed("App does not support current architecture")
             }
         }
     }
@@ -479,7 +389,7 @@ actor UpdateInstaller {
         if process.terminationStatus != 0 {
             let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
             let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown codesign error"
-            throw createSafetyError("Code signature validation failed: \(errorOutput)")
+            throw UpdateError.installationFailed("Code signature validation failed: \(errorOutput)")
         }
 
         log.success("Code signature validation passed")
@@ -533,36 +443,19 @@ actor UpdateInstaller {
         try BundleUtilities.verifyBundleStructure(destinationURL)
         try BundleUtilities.verifyVersionMatches(bundleURL: destinationURL, manifest: manifest)
 
+        // Store the new location for restart
+        installedAppURL = destinationURL
+
         // Remove old app from original location
         let oldAppURL = Bundle.main.bundleURL
         log.info("Removing old app from: \(oldAppURL.path)")
         do {
             try fileManager.removeItem(at: oldAppURL)
         } catch {
-            log.warn("Could not remove old app (non-fatal): \(error.localizedDescription)")
+            log.warn("Could not remove old app: \(error.localizedDescription)")
         }
 
         log.success("Successfully installed to Applications folder")
-
-        // Launch from new location and quit current instance
-        try await launchAndTerminate(appURL: destinationURL)
-    }
-
-    private func launchAndTerminate(appURL: URL) async throws {
-        log.info("Launching app from: \(appURL.path)")
-
-        let config = NSWorkspace.OpenConfiguration()
-        config.createsNewApplicationInstance = true
-        try await NSWorkspace.shared.openApplication(at: appURL, configuration: config)
-
-        // Give the new instance time to start
-        try await Task.sleep(for: .seconds(1))
-
-        // Terminate current instance
-        log.info("Terminating current instance")
-        await MainActor.run {
-            NSApplication.shared.terminate(nil)
-        }
     }
 
     private func verifyPreInstallationState() async throws {
@@ -570,7 +463,7 @@ actor UpdateInstaller {
 
         let currentAppURL = Bundle.main.bundleURL
         guard fileManager.fileExists(atPath: currentAppURL.path) else {
-            throw createSafetyError("Current application no longer exists before installation")
+            throw UpdateError.installationFailed("Current application no longer exists before installation")
         }
 
         try validateAppBundle(currentAppURL, isCurrentApp: true)
@@ -580,12 +473,11 @@ actor UpdateInstaller {
     private func verifyPostInstallationState(manifest: UpdateManifest) async throws {
         log.info("Verifying post-installation state")
 
-        let currentAppURL = Bundle.main.bundleURL
-        guard fileManager.fileExists(atPath: currentAppURL.path) else {
-            throw createSafetyError("Application missing after installation - CRITICAL ERROR")
+        guard fileManager.fileExists(atPath: installedAppURL.path) else {
+            throw UpdateError.installationFailed("Application missing after installation - CRITICAL ERROR")
         }
 
-        try validateAppBundle(currentAppURL, isCurrentApp: true, manifest: manifest)
+        try validateAppBundle(installedAppURL, isCurrentApp: true, manifest: manifest)
         log.success("Post-installation state verified")
     }
 
@@ -657,7 +549,7 @@ actor UpdateInstaller {
 
         guard !contents.isEmpty else {
             log.error("No executable found in MacOS directory")
-            throw UpdateError.installationError("No executable found in app bundle")
+            throw UpdateError.installationFailed("No executable found in app bundle")
         }
 
         log.debug("Application testing passed")
@@ -721,7 +613,7 @@ actor UpdateInstaller {
 
         // 1. Verify backup was created successfully
         guard fileManager.fileExists(atPath: backup.path) else {
-            throw InstallationError.swapVerificationFailed("Backup not found at expected location: \(backup.path)")
+            throw UpdateError.installationFailed("Atomic swap verification failed: Backup not found at expected location: \(backup.path)")
         }
 
         // Verify backup has correct bundle structure
@@ -731,20 +623,20 @@ actor UpdateInstaller {
         // Verify backup has a valid Info.plist and version
         let backupInfoPlistURL = backup.appendingPathComponent("Contents/Info.plist")
         guard fileManager.fileExists(atPath: backupInfoPlistURL.path) else {
-            throw InstallationError.swapVerificationFailed("Backup app Info.plist not found")
+            throw UpdateError.installationFailed("Atomic swap verification failed: Backup app Info.plist not found")
         }
 
         guard let backupPlist = NSDictionary(contentsOf: backupInfoPlistURL),
               let backupVersion = backupPlist["CFBundleShortVersionString"] as? String,
               !backupVersion.isEmpty else {
-            throw InstallationError.swapVerificationFailed("Backup app version information is invalid")
+            throw UpdateError.installationFailed("Atomic swap verification failed: Backup app version information is invalid")
         }
 
         log.debug("Backup version verified: \(backupVersion)")
 
         // 2. Verify new app was installed successfully
         guard fileManager.fileExists(atPath: current.path) else {
-            throw InstallationError.swapVerificationFailed("New app not found at expected location: \(current.path)")
+            throw UpdateError.installationFailed("Atomic swap verification failed: New app not found at expected location: \(current.path)")
         }
 
         // Verify new app has correct bundle structure
@@ -754,13 +646,13 @@ actor UpdateInstaller {
         // Verify new app has a valid Info.plist and version
         let infoPlistURL = current.appendingPathComponent("Contents/Info.plist")
         guard fileManager.fileExists(atPath: infoPlistURL.path) else {
-            throw InstallationError.swapVerificationFailed("New app Info.plist not found")
+            throw UpdateError.installationFailed("Atomic swap verification failed: New app Info.plist not found")
         }
 
         guard let plist = NSDictionary(contentsOf: infoPlistURL),
               let version = plist["CFBundleShortVersionString"] as? String,
               !version.isEmpty else {
-            throw InstallationError.swapVerificationFailed("New app version information is invalid")
+            throw UpdateError.installationFailed("Atomic swap verification failed: New app version information is invalid")
         }
 
         log.debug("New app version verified: \(version)")
@@ -775,11 +667,11 @@ actor UpdateInstaller {
         let currentAttributes = try fileManager.attributesOfItem(atPath: current.path)
 
         guard let backupSize = backupAttributes[.size] as? Int64, backupSize > 0 else {
-            throw InstallationError.swapVerificationFailed("Backup appears to be empty or invalid")
+            throw UpdateError.installationFailed("Atomic swap verification failed: Backup appears to be empty or invalid")
         }
 
         guard let currentSize = currentAttributes[.size] as? Int64, currentSize > 0 else {
-            throw InstallationError.swapVerificationFailed("New app appears to be empty or invalid")
+            throw UpdateError.installationFailed("Atomic swap verification failed: New app appears to be empty or invalid")
         }
 
         log.debug("File sizes verified - Backup: \(backupSize.formattedBytes), New: \(currentSize.formattedBytes)")
@@ -808,15 +700,13 @@ actor UpdateInstaller {
     private func performFinalInstallationVerificationChecks(manifest _: UpdateManifest) async throws {
         log.info("Performing additional verification checks")
 
-        let currentAppURL = Bundle.main.bundleURL
-
         // Verify app can be read
-        guard fileManager.isReadableFile(atPath: currentAppURL.path) else {
-            throw createSafetyError("Installed application is not readable")
+        guard fileManager.isReadableFile(atPath: installedAppURL.path) else {
+            throw UpdateError.installationFailed("Installed application is not readable")
         }
 
         // Comprehensive bundle validation
-        try validateAppBundle(currentAppURL, isCurrentApp: true)
+        try validateAppBundle(installedAppURL, isCurrentApp: true)
 
         log.success("Additional verification checks completed")
     }
@@ -826,26 +716,24 @@ actor UpdateInstaller {
     private func performPreRestartSafetyChecks() throws {
         log.info("Performing pre-restart verification")
 
-        let currentAppURL = Bundle.main.bundleURL
-
         // Final check that app exists
-        guard fileManager.fileExists(atPath: currentAppURL.path) else {
-            throw createSafetyError("Application missing before restart")
+        guard fileManager.fileExists(atPath: installedAppURL.path) else {
+            throw UpdateError.installationFailed("Application missing before restart")
         }
 
         // Final structure check
-        try BundleUtilities.verifyBundleStructure(currentAppURL)
+        try BundleUtilities.verifyBundleStructure(installedAppURL)
 
         // Check executable exists and has permissions
-        guard let executablePath = Bundle.main.executablePath,
-              fileManager.fileExists(atPath: executablePath) else {
-            throw createSafetyError("Application executable missing before restart")
+        let executablePath = try BundleUtilities.executablePath(for: installedAppURL)
+        guard fileManager.fileExists(atPath: executablePath.path) else {
+            throw UpdateError.installationFailed("Application executable missing before restart")
         }
 
-        let attributes = try fileManager.attributesOfItem(atPath: executablePath)
+        let attributes = try fileManager.attributesOfItem(atPath: executablePath.path)
         let permissions = attributes[.posixPermissions] as? NSNumber
         guard let permissions, permissions.intValue & 0o111 != 0 else {
-            throw createSafetyError("Application executable lacks execute permissions before restart")
+            throw UpdateError.installationFailed("Application executable lacks execute permissions before restart")
         }
 
         log.success("Pre-restart verification passed")
@@ -857,7 +745,7 @@ actor UpdateInstaller {
         try checkCancellation()
 
         log.info("Verifying installation success")
-        try BundleUtilities.verifyVersionMatches(bundleURL: Bundle.main.bundleURL, manifest: manifest)
+        try BundleUtilities.verifyVersionMatches(bundleURL: installedAppURL, manifest: manifest)
         log.success("Installation verification completed successfully")
     }
 
@@ -888,22 +776,7 @@ actor UpdateInstaller {
 
     private func checkCancellation() throws {
         guard !isCancelled else {
-            throw UpdateError.installationError("Installation cancelled")
-        }
-    }
-
-    private func fallbackApplicationRestart(appPath: String) {
-        log.info("Attempting fallback application restart")
-
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        task.arguments = [appPath]
-
-        do {
-            try task.run()
-            log.success("Application restart initiated via fallback method")
-        } catch {
-            log.error("Failed to restart application via fallback: \(error)")
+            throw UpdateError.installationFailed("Installation cancelled")
         }
     }
 
@@ -928,16 +801,6 @@ actor UpdateInstaller {
         let attributes = try fileManager.attributesOfFileSystem(forPath: NSHomeDirectory())
         return attributes[.systemFreeSize] as? Int64 ?? 0
     }
-
-    private func createSafetyError(_ message: String) -> UpdateError {
-        .installationError(message)
-    }
-}
-
-// MARK: - InstallationState
-
-private enum InstallationState {
-    case idle, inProgress, completed, failed, cancelled
 }
 
 // MARK: - AppLocation
@@ -966,13 +829,6 @@ enum AppLocation: CustomStringConvertible, Sendable {
         case .systemApplications: "/Applications"
         case .userApplications: "~/Applications"
         case let .other(path): path
-        }
-    }
-
-    var isInApplicationsFolder: Bool {
-        switch self {
-        case .systemApplications, .userApplications: true
-        case .other: false
         }
     }
 }

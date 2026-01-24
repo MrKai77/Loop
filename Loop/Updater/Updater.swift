@@ -18,6 +18,7 @@ final class Updater: ObservableObject {
         didSet { updateStateChanged() }
     }
 
+    @Published private(set) var installState: InstallState = .ready
     @Published private(set) var progressBar: Double = 0
     @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
     @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
@@ -33,50 +34,17 @@ final class Updater: ObservableObject {
     private var autoPresentUpdateWindowTask: Task<(), Never>?
     private var includeDevelopmentVersionsObserver: Task<(), Never>?
     private var updatesEnabledObserver: Task<(), Never>?
-    private let config: UpdaterConfig = UpdaterConfigProvider.shared
     private let updateChecker: UpdateChecker
-    private var downloader: Downloader?
+    private var downloader: UpdateDownloader?
     private let installer: UpdateInstaller
 
     @Published private(set) var updateManifest: UpdateManifest?
     @Published private(set) var downloadProgress: UpdateProgress?
 
-    struct ChangelogNote: Identifiable, Equatable {
-        var id: UUID = .init()
-        var emoji: String
-        var text: String
-        var user: String?
-        var reference: Int?
-
-        static func == (lhs: ChangelogNote, rhs: ChangelogNote) -> Bool {
-            lhs.emoji == rhs.emoji &&
-                lhs.text == rhs.text &&
-                lhs.user == rhs.user &&
-                lhs.reference == rhs.reference
-        }
-    }
-
-    enum UpdateAvailability {
-        case available
-        case unavailable
-        case osNotSupported
-
-        var text: String {
-            switch self {
-            case .unavailable:
-                String(localized: "Check for updates…")
-            case .available:
-                String(localized: "Update…")
-            case .osNotSupported:
-                String(localized: "This macOS version is no longer supported.")
-            }
-        }
-    }
-
     private init() {
         // Initialize new updater system components
-        self.updateChecker = UpdateChecker(config: config)
-        self.installer = UpdateInstaller(config: config)
+        self.updateChecker = UpdateChecker()
+        self.installer = UpdateInstaller()
         self.downloader = nil
 
         // Initialize optional properties to nil - will be set up after init
@@ -90,9 +58,10 @@ final class Updater: ObservableObject {
         }
     }
 
-    @MainActor private func setupObserversAndTasks() {
+    @MainActor
+    private func setupObserversAndTasks() {
         // Initialize downloader on main actor
-        downloader = Downloader(config: config)
+        downloader = UpdateDownloader()
 
         // Set up observers and tasks now that self is fully initialized
         let updatesEnabled = Self.checkIfUpdatesEnabled()
@@ -123,7 +92,7 @@ final class Updater: ObservableObject {
                 if !NSApp.isActive, NSApp.windows.allSatisfy({ !$0.isVisible }) {
                     log.info("Automatic updates enabled, installing update...")
                     Task {
-                        await installUpdate()
+                        try await installUpdate()
                     }
                 }
 
@@ -210,13 +179,14 @@ final class Updater: ObservableObject {
         updateManifest = nil
         progressBar = 0
         downloadProgress = nil
+        installState = .ready
         shouldAutoPresentUpdateWindow = false
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func fetchLatestInfo(force: Bool = false) async {
         // Don't run update checks while actively downloading
-        if downloader?.downloadState == .downloading {
+        if downloader?.isDownloading == true {
             return
         }
 
@@ -249,7 +219,7 @@ final class Updater: ObservableObject {
 
             do {
                 // Use GitHub releases API
-                let channel: UpdateChannel = includeDevelopmentVersions ? .beta : .stable
+                let channel: UpdateChannel = includeDevelopmentVersions ? .development : .stable
 
                 let currentVersion = Bundle.main.appVersion?.filter(\.isASCII)
                     .trimmingCharacters(in: .whitespaces) ?? "0.0.0"
@@ -375,12 +345,16 @@ final class Updater: ObservableObject {
     }
 
     // Downloads the update from GitHub and installs it
-    func installUpdate() async {
+    func installUpdate() async throws {
         guard let manifest = updateManifest else {
             await MainActor.run {
                 self.progressBar = 0
             }
             return
+        }
+
+        await MainActor.run {
+            self.installState = .installing
         }
 
         log.info("Installing update: \(manifest.version)")
@@ -396,20 +370,28 @@ final class Updater: ObservableObject {
                 self.downloader = nil // Reset downloader for next installation attempt
             }
 
-            log.success("Update installed successfully")
+            // Brief delay before showing restart button
+            try? await Task.sleep(for: .seconds(1))
 
+            await MainActor.run {
+                self.installState = .readyToRestart
+            }
+
+            log.success("Update installed successfully")
         } catch {
             log.error("Update installation failed: \(error)")
             await MainActor.run {
                 self.progressBar = 0
+                self.installState = .failed(error)
                 self.downloader = nil // Reset downloader on failure
             }
+            throw error
         }
     }
 
     private func downloadUpdate(_ manifest: UpdateManifest) async throws -> URL {
         guard let downloader else {
-            throw UpdateError.network(NSError(domain: "Updater", code: -1, userInfo: [NSLocalizedDescriptionKey: "Downloader not initialized"]))
+            throw UpdateError.downloaderNotInitialized
         }
 
         return try await withCheckedThrowingContinuation { continuation in
@@ -428,6 +410,12 @@ final class Updater: ObservableObject {
                     }
                 }
             }
+        }
+    }
+
+    func relaunchAfterUpdate() {
+        Task {
+            await installer.restartApplication()
         }
     }
 }

@@ -10,16 +10,12 @@ import Scribe
 
 @Loggable(style: .static)
 final class HTTPClient: Sendable {
-    private let config: UpdaterConfig
     private let session: URLSession
     private let jsonDecoder: JSONDecoder
 
-    init(config: UpdaterConfig) {
-        self.config = config
-
+    init() {
         let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.timeoutIntervalForRequest = config.networkConfig.timeout
-        sessionConfig.allowsCellularAccess = config.networkConfig.allowsCellularAccess
+        sessionConfig.timeoutIntervalForRequest = 30.0
         sessionConfig.httpAdditionalHeaders = [
             "User-Agent": "Loop/\(Bundle.main.appVersion ?? "1.0.0") (\(SystemInfo.deviceModel); \(ProcessInfo.processInfo.operatingSystemVersion))",
             "Accept": "application/json",
