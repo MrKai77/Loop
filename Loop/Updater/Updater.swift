@@ -269,10 +269,12 @@ final class Updater: ObservableObject {
 
         do {
             let downloadedFileURL = try await downloader.downloadUpdate(manifest: manifest) { [weak self] progress in
-                self?.progressBar = progress.percentage
+                self?.progressBar = progress.percentage * 0.75
             }
 
-            try await installer.installUpdate(from: downloadedFileURL, manifest: manifest)
+            try await installer.installUpdate(from: downloadedFileURL, manifest: manifest) { [weak self] progress in
+                self?.progressBar = 0.75 + (progress.percentage * 0.25)
+            }
 
             progressBar = 1.0
             updateState = .unavailable

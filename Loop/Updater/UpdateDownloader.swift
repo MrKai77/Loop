@@ -15,7 +15,7 @@ final class UpdateDownloader: NSObject {
 
     private var urlSession: URLSession?
     private var downloadTask: URLSessionDownloadTask?
-    private var progressClosure: ((UpdateProgress) -> ())?
+    private var progressClosure: ((UpdateProgress) async -> ())?
     private var completionClosure: ((Result<URL, Error>) -> ())?
     private(set) var isDownloading = false
     private var performanceTracker: PerformanceTracker = .init()
@@ -31,7 +31,7 @@ final class UpdateDownloader: NSObject {
 
     func downloadUpdate(
         manifest: UpdateManifest,
-        progress: @escaping (UpdateProgress) -> ()
+        progress: @escaping (UpdateProgress) async -> ()
     ) async throws -> URL {
         guard !isDownloading else {
             throw DownloadError.downloadInProgress
@@ -74,7 +74,7 @@ final class UpdateDownloader: NSObject {
 
     private func setupDownload(
         url: URL,
-        progress: @escaping (UpdateProgress) -> (),
+        progress: @escaping (UpdateProgress) async -> (),
         completion: @escaping (Result<URL, Error>) -> ()
     ) {
         isDownloading = true
@@ -172,7 +172,7 @@ extension UpdateDownloader: URLSessionDownloadDelegate {
         totalBytesWritten: Int64,
         totalBytesExpectedToWrite: Int64
     ) {
-        Task { @MainActor in
+        Task {
             guard self.isDownloading else { return }
 
             let progress = self.performanceTracker.updateProgress(
@@ -181,7 +181,7 @@ extension UpdateDownloader: URLSessionDownloadDelegate {
                 totalBytesExpectedToWrite: totalBytesExpectedToWrite
             )
 
-            self.progressClosure?(progress)
+            await self.progressClosure?(progress)
         }
     }
 
@@ -192,7 +192,7 @@ extension UpdateDownloader: URLSessionDownloadDelegate {
     ) {
         guard let error else { return }
 
-        Task { @MainActor in
+        Task {
             guard self.isDownloading else { return }
 
             log.error("Download failed: \(error.localizedDescription)")

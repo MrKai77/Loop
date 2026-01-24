@@ -75,7 +75,7 @@ struct UpdateProgress: Sendable {
     let downloadSpeed: Double?
 
     enum UpdatePhase: String, Sendable {
-        case checking, downloading, extracting, verifying, installing, completed, failed
+        case checking, downloading, extracting, verifying, installing, cleaning, completed, failed
     }
 
     init(

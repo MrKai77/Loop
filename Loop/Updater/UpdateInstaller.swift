@@ -25,18 +25,42 @@ actor UpdateInstaller {
         self.backupManager = BackupManager(fileManager: fileManager)
     }
 
-    func installUpdate(from downloadURL: URL, manifest: UpdateManifest) async throws {
+    func installUpdate(
+        from downloadURL: URL,
+        manifest: UpdateManifest,
+        progress: @escaping (UpdateProgress) async -> ()
+    ) async throws {
         log.info("Starting installation of update: \(manifest.version)")
 
+        // Step 1: Pre-installation verification
         try await performPreInstallationChecks(manifest: manifest)
+        await progress(UpdateProgress(phase: .checking, percentage: 1.0 / 7.0))
 
-        do {
-            try await executeInstallationSequence(downloadURL: downloadURL, manifest: manifest)
-            log.success("Installation completed successfully")
-        } catch {
-            log.error("Installation failed: \(error)")
-            throw UpdateError.installationFailed(error.localizedDescription)
-        }
+        // Step 2: Verify download integrity
+        try await verifyDownloadIntegrity(downloadURL, manifest: manifest)
+        await progress(UpdateProgress(phase: .downloading, percentage: 2.0 / 7.0))
+
+        // Step 3: Extract and verify
+        let extractedURL = try await extract(downloadURL)
+        await progress(UpdateProgress(phase: .extracting, percentage: 3.0 / 7.0))
+
+        // Step 4: Verify extraction integrity
+        try await verifyExtractionIntegrity(extractedURL, manifest: manifest)
+        await progress(UpdateProgress(phase: .verifying, percentage: 4.0 / 7.0))
+
+        // Step 5: Perform safe installation
+        try await performSafeInstallation(from: extractedURL, manifest: manifest)
+        await progress(UpdateProgress(phase: .installing, percentage: 5.0 / 7.0))
+
+        // Step 6: Comprehensive verification
+        try await performFinalVerification(manifest: manifest)
+        await progress(UpdateProgress(phase: .verifying, percentage: 6.0 / 7.0))
+
+        // Step 7: Cleanup
+        try await performSafeCleanup(extractedURL, downloadURL)
+        await progress(UpdateProgress(phase: .cleaning, percentage: 7.0 / 7.0))
+
+        log.success("Installation completed successfully")
     }
 
     func restartApplication() async {
@@ -74,32 +98,6 @@ actor UpdateInstaller {
         isCancelled = true
     }
 
-    // MARK: - Installation Methods
-
-    private func executeInstallationSequence(downloadURL: URL, manifest: UpdateManifest) async throws {
-        let extractedURL = try await performInstallationSequenceSteps(downloadURL: downloadURL, manifest: manifest)
-        try await performSafeCleanup(extractedURL, downloadURL)
-    }
-
-    private func performInstallationSequenceSteps(downloadURL: URL, manifest: UpdateManifest) async throws -> URL {
-        // Step 1: Verify download integrity
-        try await verifyDownloadIntegrity(downloadURL, manifest: manifest)
-
-        // Step 2: Extract and verify
-        let extractedURL = try await extractAndVerifyUpdate(downloadURL)
-
-        // Step 3: Verify extraction integrity
-        try await verifyExtractionIntegrity(extractedURL, manifest: manifest)
-
-        // Step 4: Perform safe installation
-        try await performSafeInstallation(from: extractedURL, manifest: manifest)
-
-        // Step 5: Comprehensive verification
-        try await performComprehensiveVerification(manifest: manifest)
-
-        return extractedURL
-    }
-
     // MARK: - Pre-Installation Safety Checks
 
     private func performPreInstallationChecks(manifest: UpdateManifest) async throws {
@@ -111,7 +109,8 @@ actor UpdateInstaller {
             ("disk space", { try await self.verifyDiskSpace(manifest: manifest) }),
             ("current app integrity", { try await self.verifyCurrentAppIntegrity() }),
             ("installation permissions", { try await self.verifyInstallationPermissions() }),
-            ("conflicting processes", { try await self.checkForConflictingRunningProcesses() })
+            ("conflicting processes", { try await self.checkForConflictingRunningProcesses() }),
+            ("app location", { try await self.checkAppLocationAndOfferRelocation() })
         ]
 
         for (checkName, check) in checks {
@@ -123,9 +122,6 @@ actor UpdateInstaller {
                 throw error
             }
         }
-
-        // Check location and offer relocation if needed
-        try await checkAppLocationAndOfferRelocation()
 
         log.success("All pre-installation safety checks passed")
     }
@@ -182,7 +178,7 @@ actor UpdateInstaller {
     }
 
     private func verifyCurrentAppIntegrity() async throws {
-        try validateAppBundle(Bundle.main.bundleURL, isCurrentApp: true)
+        try validateAppBundle(Bundle.main.bundleURL, skipVersionCheck: true)
         log.success("Current application integrity verified")
     }
 
@@ -269,7 +265,7 @@ actor UpdateInstaller {
 
     // MARK: - Extraction
 
-    private func extractAndVerifyUpdate(_ downloadURL: URL) async throws -> URL {
+    private func extract(_ downloadURL: URL) async throws -> URL {
         try checkCancellation()
         return try ZipExtractor.extract(from: downloadURL, cancellationCheck: checkCancellation)
     }
@@ -283,24 +279,16 @@ actor UpdateInstaller {
         // Find and verify app bundle
         let appBundle = try BundleUtilities.findAppBundle(in: extractedURL)
 
-        try await performPostExtractionSafetyChecks(appBundle, manifest: manifest)
-
-        log.success("Extraction integrity verification completed")
-    }
-
-    private func performPostExtractionSafetyChecks(_ appBundle: URL, manifest: UpdateManifest) async throws {
-        log.info("Performing additional extraction safety checks")
-
         // Comprehensive bundle validation
         try validateAppBundle(appBundle, manifest: manifest)
 
         // Code signature validation
         try await validateAppCodeSignature(appBundle)
 
-        log.success("Additional extraction checks completed")
+        log.success("Extraction integrity verification completed")
     }
 
-    private func validateAppBundle(_ appBundle: URL, isCurrentApp: Bool = false, manifest: UpdateManifest? = nil) throws {
+    private func validateAppBundle(_ appBundle: URL, skipVersionCheck: Bool = false, manifest: UpdateManifest? = nil) throws {
         log.info("Validating app bundle: \(appBundle.lastPathComponent)")
 
         // Check bundle structure
@@ -338,7 +326,7 @@ actor UpdateInstaller {
         }
 
         // Version validation for extracted apps
-        if !isCurrentApp, let manifest {
+        if !skipVersionCheck, let manifest {
             try BundleUtilities.verifyVersionMatches(bundleURL: appBundle, manifest: manifest)
         }
 
@@ -365,8 +353,22 @@ actor UpdateInstaller {
             }
         }
 
-        // Check supported architectures
-        if let supportedArchitectures = plist["LSArchitecturePriority"] as? [SystemInfo.Architecture] {
+        // Check supported architectures – plist value is an array of strings
+        if let archStrings = plist["LSArchitecturePriority"] as? [String] {
+            // Map string representations to our internal Architecture enum
+            let supportedArchitectures: [SystemInfo.Architecture] = archStrings.compactMap { arch in
+                switch arch.lowercased() {
+                case "arm64": .arm64
+                case "x86_64", "x86-64", "x86": .x86_64
+                default: nil
+                }
+            }
+
+            guard !supportedArchitectures.isEmpty else {
+                // No recognized architectures, assume compatible
+                return
+            }
+
             guard supportedArchitectures.contains(SystemInfo.architecture) else {
                 throw UpdateError.installationFailed("App does not support current architecture")
             }
@@ -406,16 +408,16 @@ actor UpdateInstaller {
         if relocateToApplications {
             try await performRelocationInstall(from: appBundle, manifest: manifest)
         } else {
-            // Pre-installation verification
+            // Pre-installation verification (checks current running app)
             try await verifyPreInstallationState()
 
             // Perform atomic installation to current location
             let currentAppURL = Bundle.main.bundleURL
             try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
-
-            // Post-installation verification
-            try await verifyPostInstallationState(manifest: manifest)
         }
+
+        // Post-installation verification
+        try await verifyPostInstallationState(manifest: manifest)
 
         log.success("Safe installation completed")
     }
@@ -466,7 +468,7 @@ actor UpdateInstaller {
             throw UpdateError.installationFailed("Current application no longer exists before installation")
         }
 
-        try validateAppBundle(currentAppURL, isCurrentApp: true)
+        try validateAppBundle(currentAppURL, skipVersionCheck: true)
         log.success("Pre-installation state verified")
     }
 
@@ -477,7 +479,7 @@ actor UpdateInstaller {
             throw UpdateError.installationFailed("Application missing after installation - CRITICAL ERROR")
         }
 
-        try validateAppBundle(installedAppURL, isCurrentApp: true, manifest: manifest)
+        try validateAppBundle(installedAppURL, manifest: manifest)
         log.success("Post-installation state verified")
     }
 
@@ -682,23 +684,11 @@ actor UpdateInstaller {
         try? fileManager.removeItem(at: stagingURL)
     }
 
-    // MARK: - Comprehensive Verification
+    // MARK: - Final Verification
 
-    private func performComprehensiveVerification(manifest: UpdateManifest) async throws {
+    private func performFinalVerification(manifest: UpdateManifest) async throws {
         try checkCancellation()
         log.info("Performing comprehensive installation verification")
-
-        // Standard verification
-        try await verifyInstallation(manifest: manifest)
-
-        // Additional comprehensive checks
-        try await performFinalInstallationVerificationChecks(manifest: manifest)
-
-        log.success("Comprehensive verification completed")
-    }
-
-    private func performFinalInstallationVerificationChecks(manifest _: UpdateManifest) async throws {
-        log.info("Performing additional verification checks")
 
         // Verify app can be read
         guard fileManager.isReadableFile(atPath: installedAppURL.path) else {
@@ -706,9 +696,9 @@ actor UpdateInstaller {
         }
 
         // Comprehensive bundle validation
-        try validateAppBundle(installedAppURL, isCurrentApp: true)
+        try validateAppBundle(installedAppURL, manifest: manifest)
 
-        log.success("Additional verification checks completed")
+        log.success("Comprehensive verification completed")
     }
 
     // MARK: - Pre-Restart Verification
@@ -740,14 +730,6 @@ actor UpdateInstaller {
     }
 
     // MARK: - Standard Methods
-
-    private func verifyInstallation(manifest: UpdateManifest) async throws {
-        try checkCancellation()
-
-        log.info("Verifying installation success")
-        try BundleUtilities.verifyVersionMatches(bundleURL: installedAppURL, manifest: manifest)
-        log.success("Installation verification completed successfully")
-    }
 
     private func performSafeCleanup(_ extractedURL: URL, _ downloadURL: URL) async throws {
         log.info("Performing safe cleanup of temporary files")
