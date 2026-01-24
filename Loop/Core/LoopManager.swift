@@ -189,7 +189,7 @@ extension LoopManager {
         }
 
         Task {
-            if updater.shouldAutoPresentUpdateWindow {
+            if await updater.shouldAutoPresentUpdateWindow {
                 await updater.showUpdateWindowIfEligible()
             }
         }

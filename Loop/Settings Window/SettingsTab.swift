@@ -9,6 +9,7 @@ import AppKit
 import Luminare
 import SwiftUI
 
+@MainActor
 enum SettingsTab: LuminareTabItem, CaseIterable {
     var id: String { title }
 

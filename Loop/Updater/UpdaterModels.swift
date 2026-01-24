@@ -106,7 +106,6 @@ enum UpdateError: LocalizedError, Sendable {
     case security(String)
     case timeout
     case http(Int)
-    case downloaderNotInitialized
 
     var errorDescription: String? {
         switch self {
@@ -126,8 +125,6 @@ enum UpdateError: LocalizedError, Sendable {
             "Request timed out"
         case let .http(code):
             "HTTP error (\(code))"
-        case .downloaderNotInitialized:
-            "Downloader not initialized"
         }
     }
 

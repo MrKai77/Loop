@@ -11,6 +11,7 @@ import Scribe
 import SwiftUI
 
 @Loggable
+@MainActor
 final class Updater: ObservableObject {
     static let shared = Updater()
 
@@ -35,7 +36,7 @@ final class Updater: ObservableObject {
     private var includeDevelopmentVersionsObserver: Task<(), Never>?
     private var updatesEnabledObserver: Task<(), Never>?
     private let updateChecker: UpdateChecker
-    private var downloader: UpdateDownloader?
+    private let downloader: UpdateDownloader
     private let installer: UpdateInstaller
 
     @Published private(set) var updateManifest: UpdateManifest?
@@ -44,8 +45,8 @@ final class Updater: ObservableObject {
     private init() {
         // Initialize new updater system components
         self.updateChecker = UpdateChecker()
+        self.downloader = UpdateDownloader()
         self.installer = UpdateInstaller()
-        self.downloader = nil
 
         // Initialize optional properties to nil - will be set up after init
         self.updateCheckerTask = nil
@@ -53,16 +54,12 @@ final class Updater: ObservableObject {
         self.updatesEnabledObserver = nil
 
         // Set up observers and tasks after initialization is complete
-        DispatchQueue.main.async { [weak self] in
-            self?.setupObserversAndTasks()
+        Task {
+            setupObserversAndTasks()
         }
     }
 
-    @MainActor
     private func setupObserversAndTasks() {
-        // Initialize downloader on main actor
-        downloader = UpdateDownloader()
-
         // Set up observers and tasks now that self is fully initialized
         let updatesEnabled = Self.checkIfUpdatesEnabled()
         if updatesEnabled {
@@ -144,9 +141,7 @@ final class Updater: ObservableObject {
             for await _ in Defaults.updates(.updatesEnabled) {
                 guard !Task.isCancelled else { break }
 
-                await MainActor.run {
-                    updatesEnabled = Updater.checkIfUpdatesEnabled()
-                }
+                updatesEnabled = Updater.checkIfUpdatesEnabled()
 
                 log.info("Updates enabled status changed to: \(updatesEnabled)")
 
@@ -159,18 +154,15 @@ final class Updater: ObservableObject {
                     self.updateCheckerTask = nil
                     self.includeDevelopmentVersionsObserver = nil
 
-                    await MainActor.run {
-                        updateManifest = nil
-                        updateState = .unavailable
-                        progressBar = 0
-                        downloadProgress = nil
-                    }
+                    updateManifest = nil
+                    updateState = .unavailable
+                    progressBar = 0
+                    downloadProgress = nil
                 }
             }
         }
     }
 
-    @MainActor
     func dismissWindow() {
         windowController?.close()
         windowController = nil
@@ -186,7 +178,7 @@ final class Updater: ObservableObject {
     // Pulls the latest release information from GitHub and updates the app state accordingly.
     func fetchLatestInfo(force: Bool = false) async {
         // Don't run update checks while actively downloading
-        if downloader?.isDownloading == true {
+        if downloader.isDownloading == true {
             return
         }
 
@@ -198,20 +190,16 @@ final class Updater: ObservableObject {
         updateFetcherTask = Task {
             defer { updateFetcherTask = nil }
 
-            await MainActor.run {
-                // Don't clear update state if window is currently showing (user is interacting)
-                if windowController?.window?.isVisible != true {
-                    updateManifest = nil
-                    progressBar = 0
-                    downloadProgress = nil
-                }
+            // Don't clear update state if window is currently showing (user is interacting)
+            if windowController?.window?.isVisible != true {
+                updateManifest = nil
+                progressBar = 0
+                downloadProgress = nil
             }
 
             // Early return if updates are disabled and not forcing
             guard updatesEnabled || force else {
-                await MainActor.run {
-                    updateState = .unavailable
-                }
+                updateState = .unavailable
                 return
             }
 
@@ -231,29 +219,21 @@ final class Updater: ObservableObject {
                     currentBuild: currentBuild,
                     channel: channel
                 ) {
-                    await MainActor.run {
-                        updateManifest = manifest
-                        updateState = .available
-                        processChangelog(manifest.releaseNotes.body)
-                    }
+                    updateManifest = manifest
+                    updateState = .available
+                    processChangelog(manifest.releaseNotes.body)
 
                     log.notice("Update available: \(manifest.version) build \(manifest.buildNumber)")
                 } else {
-                    await MainActor.run {
-                        updateState = .unavailable
-                    }
+                    updateState = .unavailable
 
                     log.info("No updates available")
                 }
             } catch {
                 if case .incompatibleSystem? = error as? UpdateError {
-                    await MainActor.run {
-                        updateState = .osNotSupported
-                    }
+                    updateState = .osNotSupported
                 } else {
-                    await MainActor.run {
-                        updateState = .unavailable
-                    }
+                    updateState = .unavailable
                 }
 
                 log.error("Error fetching release info: \(error.localizedDescription)")
@@ -330,7 +310,6 @@ final class Updater: ObservableObject {
         }
     }
 
-    @MainActor
     func showUpdateWindowIfEligible() async {
         shouldAutoPresentUpdateWindow = false
         guard updateState == .available else { return }
@@ -347,69 +326,36 @@ final class Updater: ObservableObject {
     // Downloads the update from GitHub and installs it
     func installUpdate() async throws {
         guard let manifest = updateManifest else {
-            await MainActor.run {
-                self.progressBar = 0
-            }
+            progressBar = 0
             return
         }
 
-        await MainActor.run {
-            self.installState = .installing
-        }
+        installState = .installing
 
         log.info("Installing update: \(manifest.version)")
 
         do {
-            // Use new installer system
-            let downloadedFileURL = try await downloadUpdate(manifest)
+            let downloadedFileURL = try await downloader.downloadUpdate(manifest: manifest) { [weak self] progress in
+                self?.progressBar = progress.percentage
+                self?.downloadProgress = progress
+            }
+
             try await installer.installUpdate(from: downloadedFileURL, manifest: manifest)
 
-            await MainActor.run {
-                self.progressBar = 1.0
-                self.updateState = .unavailable
-                self.downloader = nil // Reset downloader for next installation attempt
-            }
+            progressBar = 1.0
+            updateState = .unavailable
 
             // Brief delay before showing restart button
             try? await Task.sleep(for: .seconds(1))
 
-            await MainActor.run {
-                self.installState = .readyToRestart
-            }
+            installState = .readyToRestart
 
             log.success("Update installed successfully")
         } catch {
             log.error("Update installation failed: \(error)")
-            await MainActor.run {
-                self.progressBar = 0
-                self.installState = .failed(error)
-                self.downloader = nil // Reset downloader on failure
-            }
+            progressBar = 0
+            installState = .failed(error)
             throw error
-        }
-    }
-
-    private func downloadUpdate(_ manifest: UpdateManifest) async throws -> URL {
-        guard let downloader else {
-            throw UpdateError.downloaderNotInitialized
-        }
-
-        return try await withCheckedThrowingContinuation { continuation in
-            Task { @MainActor in
-                downloader.downloadUpdate(manifest: manifest, progress: { progress in
-                    Task { @MainActor in
-                        self.progressBar = progress.percentage
-                        self.downloadProgress = progress
-                    }
-                }) { result in
-                    switch result {
-                    case let .success(url):
-                        continuation.resume(returning: url)
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-            }
         }
     }
 

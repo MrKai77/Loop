@@ -31,26 +31,32 @@ final class UpdateDownloader: NSObject {
 
     func downloadUpdate(
         manifest: UpdateManifest,
-        progress: @escaping (UpdateProgress) -> (),
-        completion: @escaping (Result<URL, Error>) -> ()
-    ) {
+        progress: @escaping (UpdateProgress) -> ()
+    ) async throws -> URL {
         guard !isDownloading else {
-            completion(.failure(DownloadError.downloadInProgress))
-            return
+            throw DownloadError.downloadInProgress
         }
 
         guard let downloadURL = URL(string: manifest.downloadUrl) else {
-            completion(.failure(DownloadError.invalidURL(manifest.downloadUrl)))
-            return
+            throw DownloadError.invalidURL(manifest.downloadUrl)
         }
 
         log.info("Starting download - URL: \(manifest.downloadUrl), Version: \(manifest.version)")
 
-        do {
-            try FileManager.default.createDirectory(at: SystemPaths.loopDirectory, withIntermediateDirectories: true)
-            setupDownload(url: downloadURL, progress: progress, completion: completion)
-        } catch {
-            completion(.failure(error))
+        try FileManager.default.createDirectory(
+            at: SystemPaths.loopDirectory,
+            withIntermediateDirectories: true
+        )
+
+        return try await withCheckedThrowingContinuation { continuation in
+            setupDownload(url: downloadURL, progress: progress) { result in
+                switch result {
+                case let .success(success):
+                    continuation.resume(returning: success)
+                case let .failure(failure):
+                    continuation.resume(throwing: failure)
+                }
+            }
         }
     }
 
