@@ -450,10 +450,7 @@ extension LoopManager {
 
     private func performHapticFeedback() {
         if Defaults[.hapticFeedback] {
-            NSHapticFeedbackManager.defaultPerformer.perform(
-                NSHapticFeedbackManager.FeedbackPattern.alignment,
-                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-            )
+            NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
         }
     }
 

@@ -9,7 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
-@Loggable()
+@Loggable
 @MainActor
 final class WindowDragManager {
     static let shared = WindowDragManager()
@@ -101,11 +101,6 @@ final class WindowDragManager {
                         restoreInitialWindowSize(window)
                     }
 
-                    StashManager.shared.onWindowDragged(window.cgWindowID)
-
-                    // Erase records *after* restoring frame if needed
-                    WindowRecords.eraseRecords(for: window)
-
                     if Defaults[.windowSnapping] {
                         // Only warp cursor away from top edge if top snap area is enabled
                         if Defaults[.suppressMissionControlOnTopDrag],
@@ -119,22 +114,33 @@ final class WindowDragManager {
                         processSnapAction()
                     }
                 }
+
+                StashManager.shared.onWindowManipulated(window.cgWindowID)
+                WindowRecords.eraseRecords(for: window)
             }
         }
     }
 
     private func leftMouseUp(_: CGEvent) {
-        Task { @MainActor in
+        guard Defaults[.windowSnapping] else {
+            return
+        }
+
+        Task {
+            previewController.close()
+
             if let context = resizeContext,
+               !context.action.direction.isNoOp,
                let window = context.window,
                let initialFrame = initialWindowFrame,
                hasWindowMoved(window.frame, initialFrame) {
-                if Defaults[.windowSnapping] {
-                    attemptWindowSnap()
+                do {
+                    _ = try await WindowActionEngine.shared.apply(context: context)
+                } catch {
+                    log.error("Failed to snap window: \(error.localizedDescription)")
                 }
             }
 
-            previewController.close()
             resetDragState()
         }
     }
@@ -253,37 +259,26 @@ final class WindowDragManager {
                 ignoredFrame: ignoredFrame
             )
 
-            log.info("Window snapping direction changed: \(newDirection.debugDescription)")
+            // Only update if direction actually changed
+            if newDirection != oldDirection {
+                log.info("Window snapping direction changed: \(newDirection.debugDescription)")
 
-            resizeContext?.setScreen(to: screen)
-            resizeContext?.setAction(to: .init(newDirection), parent: nil)
+                resizeContext?.setScreen(to: screen)
+                resizeContext?.setAction(to: .init(newDirection), parent: nil)
 
-            if let context = resizeContext {
-                previewController.open(context: context)
+                if let context = resizeContext {
+                    previewController.open(context: context)
+                }
+
+                // Haptic feedback
+                if newDirection != .noAction, Defaults[.hapticFeedback] {
+                    NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
+                }
             }
-        } else {
+        } else if !oldDirection.isNoOp {
+            // Only close if we were showing something
             resizeContext?.setAction(to: .init(.noAction), parent: nil)
             previewController.close()
-        }
-
-        let newDirection = resizeContext?.action.direction ?? .noAction
-        let enteredValidSnapZone = newDirection != oldDirection && newDirection != .noAction
-        if enteredValidSnapZone, Defaults[.hapticFeedback] {
-            NSHapticFeedbackManager.defaultPerformer.perform(
-                NSHapticFeedbackManager.FeedbackPattern.alignment,
-                performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-            )
-        }
-    }
-
-    private func attemptWindowSnap() {
-        guard let context = resizeContext,
-              !context.action.direction.isNoOp else {
-            return
-        }
-
-        Task {
-            _ = try await WindowActionEngine.shared.apply(context: context)
         }
     }
 }

@@ -33,6 +33,7 @@ final class RadialMenuController: WindowActionIndicator {
             backing: .buffered,
             defer: true
         )
+        controller = .init(window: panel)
 
         panel.ignoresMouseEvents = true
         panel.collectionBehavior = .canJoinAllSpaces
@@ -63,8 +64,6 @@ final class RadialMenuController: WindowActionIndicator {
 
         panel.orderFrontRegardless()
 
-        controller = .init(window: panel)
-
         log.ui("Initialized controller")
     }
 
@@ -72,9 +71,10 @@ final class RadialMenuController: WindowActionIndicator {
         guard let windowController = controller else { return }
         controller = nil
 
-        Task { @MainActor in
+        Task {
             viewModel.setIsShown(false, animationDuration: 0.15)
             try? await Task.sleep(for: .seconds(0.15))
+            windowController.window?.orderOut(nil)
             windowController.close()
 
             log.ui("Controller closed")

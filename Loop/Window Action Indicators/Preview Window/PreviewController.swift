@@ -38,6 +38,7 @@ final class PreviewController: WindowActionIndicator {
             backing: .buffered,
             defer: true
         )
+        controller = .init(window: panel)
 
         panel.ignoresMouseEvents = true
         panel.collectionBehavior = .canJoinAllSpaces
@@ -49,8 +50,6 @@ final class PreviewController: WindowActionIndicator {
 
         panel.orderFrontRegardless()
 
-        controller = .init(window: panel)
-
         log.ui("Initialized controller")
     }
 
@@ -58,9 +57,10 @@ final class PreviewController: WindowActionIndicator {
         guard let windowController = controller else { return }
         controller = nil
 
-        Task { @MainActor in
+        Task {
             viewModel.setIsShown(false)
             try? await Task.sleep(for: .seconds(0.4))
+            windowController.window?.orderOut(nil)
             windowController.close()
 
             log.ui("Controller closed")

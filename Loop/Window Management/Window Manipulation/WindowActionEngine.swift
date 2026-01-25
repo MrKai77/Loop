@@ -70,6 +70,7 @@ final class WindowActionEngine {
     ///   - resizeContext: Context containing tracking state for grow/shrink actions (passed by value, caller updates)
     /// - Returns: Result indicating success and any state changes
     /// - Throws: `CancellationError` if a new action is applied to the same window
+    @concurrent
     func apply(context: ResizeContext) async throws -> Result {
         guard let windowID = context.window?.cgWindowID else {
             return try await performApply(context: context)
@@ -79,7 +80,7 @@ final class WindowActionEngine {
         actionTasks[windowID]?.cancel()
 
         // Create a task for this action
-        let task = Task<Result, any Error> { @concurrent in
+        let task = Task {
             let result = try await performApply(context: context)
             try Task.checkCancellation()
             return result

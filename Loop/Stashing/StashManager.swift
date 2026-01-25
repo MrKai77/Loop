@@ -86,7 +86,7 @@ final class StashManager {
         restoreAllStashedWindows(animate: false)
     }
 
-    func onWindowDragged(_ id: CGWindowID) {
+    func onWindowManipulated(_ id: CGWindowID) {
         unmanage(windowID: id)
     }
 
