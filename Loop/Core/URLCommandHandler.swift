@@ -31,33 +31,20 @@
     - loop://screen/next          (Move window to next screen)
     - loop://screen/previous      (Move window to previous screen)
 
- 3. Shell Commands:
-    Format: loop://shell/<command>
-    Examples:
-    - loop://shell/open%20-a%20Loop    (Activate Loop app)
-    - loop://shell/osascript%20-e%20%22tell%20application%20%5C%22Loop%5C%22%20to%20activate%22
-    Note: Commands must be URL encoded
-
- 4. AppleScript Commands:
-    Format: loop://applescript/<script>
-    Examples:
-    - loop://applescript/tell%20application%20%22Loop%22%20to%20activate
-    Note: Scripts must be URL encoded
-
- 5. Action Commands:
+ 3. Action Commands:
     Format: loop://action/<action>
     Examples:
     - loop://action/maximize      (Maximize window)
     - loop://action/leftHalf      (Move to left half)
     Note: See 'loop://list/actions' for all available actions
 
- 6. Keybind Commands:
+ 4. Keybind Commands:
     Format: loop://keybind/<name>
     Examples:
     - loop://keybind/myCustomLayout
     Note: See 'loop://list/keybinds' for available keybinds
 
- 7. List Commands:
+ 5. List Commands:
     Format: loop://list/<type>
     Types:
     - actions    (List all window actions)
@@ -67,7 +54,7 @@
  Usage Tips:
  ----------
  1. All commands are case-insensitive
- 2. Scripts and commands with spaces must be URL encoded
+ 2. Parameters with spaces must be URL encoded
  3. Window commands operate on the frontmost non-terminal window
  4. Use list commands to discover available options
 
@@ -75,9 +62,6 @@
  --------
  # Move current window to right half
  open "loop://direction/right"
-
- # Activate Loop via shell command
- open "loop://shell/open%20-a%20Loop"
 
  # List all available actions
  open "loop://list/actions"
@@ -112,10 +96,6 @@ final class URLCommandHandler {
         case direction
         /// Multi-screen management commands (next, previous)
         case screen
-        /// Shell command execution with URL encoding
-        case shell
-        /// AppleScript execution with URL encoding
-        case applescript
         /// Predefined window actions
         case action
         /// Custom keybind actions
@@ -128,8 +108,6 @@ final class URLCommandHandler {
             switch self {
             case .direction: "Window direction command"
             case .screen: "Screen management"
-            case .shell: "Execute shell command"
-            case .applescript: "Execute AppleScript"
             case .action: "Execute predefined window action"
             case .keybind: "Execute custom keybind action"
             case .list: "List available commands"
@@ -280,8 +258,6 @@ final class URLCommandHandler {
         switch command {
         case .direction: handleDirectionCommand(parameters)
         case .screen: handleScreenCommand(parameters)
-        case .shell: handleShellCommand(parameters)
-        case .applescript: handleAppleScriptCommand(parameters)
         case .action: handleActionCommand(parameters)
         case .keybind: handleKeybindCommand(parameters)
         case .list: handleListCommand(parameters)
@@ -389,63 +365,6 @@ final class URLCommandHandler {
 
         let direction: WindowDirection = command == "next" ? .nextScreen : .previousScreen
         moveWindowToScreen(window, direction)
-    }
-
-    /// Handles shell command execution
-    /// - Parameter parameters: Shell command parameters
-    private func handleShellCommand(_ parameters: [String]) {
-        guard !parameters.isEmpty else {
-            writeToOutput("[URLHandler] No shell command specified")
-            return
-        }
-
-        let command = parameters.joined(separator: " ")
-        writeToOutput("[URLHandler] Executing shell command: \(command)")
-
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", command]
-
-        let pipe = Pipe()
-        task.standardOutput = pipe
-        task.standardError = pipe
-
-        do {
-            try task.run()
-            if let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
-                writeToOutput("[URLHandler] Shell output: \(output)")
-            }
-            task.waitUntilExit()
-            writeToOutput("[URLHandler] Shell command completed with status: \(task.terminationStatus)")
-        } catch {
-            writeToOutput("[URLHandler] Error executing shell command: \(error)")
-        }
-    }
-
-    /// Handles AppleScript execution
-    /// - Parameter parameters: AppleScript parameters
-    private func handleAppleScriptCommand(_ parameters: [String]) {
-        guard !parameters.isEmpty else {
-            writeToOutput("[URLHandler] No AppleScript specified")
-            return
-        }
-
-        let script = parameters.joined(separator: " ")
-        writeToOutput("[URLHandler] Executing AppleScript: \(script)")
-
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            var error: NSDictionary?
-            let result = NSAppleScript(source: script)?.executeAndReturnError(&error)
-
-            DispatchQueue.main.async {
-                if let error {
-                    self?.writeToOutput("[URLHandler] Error executing AppleScript: \(error)")
-                } else if let result {
-                    self?.writeToOutput("[URLHandler] AppleScript executed successfully")
-                    self?.writeToOutput("[URLHandler] Result: \(result.stringValue ?? "no output")")
-                }
-            }
-        }
     }
 
     /// Handles predefined window actions
