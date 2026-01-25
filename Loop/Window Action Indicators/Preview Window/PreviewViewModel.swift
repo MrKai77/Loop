@@ -36,7 +36,12 @@ final class PreviewViewModel: ObservableObject {
         }
 
         let isCurrentlyHidden = !isShown
-        let paddedFrame = context.getTargetFrame().padded
+        var paddedFrame = context.getTargetFrame().padded
+        
+        if let bounds = context.screen?.displayBounds {
+            paddedFrame.origin.x -= bounds.minX
+            paddedFrame.origin.y -= bounds.minY
+        }
 
         // In settings preview, actions that manipulate existing window frames (larger/smaller,
         // grow/shrink, move) cannot be previewed without a real window.
