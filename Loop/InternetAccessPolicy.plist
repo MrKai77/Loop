@@ -26,6 +26,22 @@
 			<key>DenyConsequences</key>
 			<string>If you deny these connections, you will not be notified about new versions of Loop.</string>
 		</dict>
+		<dict>
+			<key>IsIncoming</key>
+			<false/>
+			<key>Host</key>
+			<string>*.githubusercontent.com</string>
+			<key>NetworkProtocol</key>
+			<string>TCP</string>
+			<key>Port</key>
+			<string>443</string>
+			<key>Relevance</key>
+			<string>Default</string>
+			<key>Purpose</key>
+			<string>Loop downloads software updates from GitHub if a newer version is available.</string>
+			<key>DenyConsequences</key>
+			<string>If you deny these connections, Loop will not be able to install software updates by iteslf.</string>
+		</dict>
 	</array>
 </dict>
 </plist>
