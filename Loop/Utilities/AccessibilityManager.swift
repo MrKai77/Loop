@@ -136,13 +136,29 @@ final class AccessibilityManager {
     /// Executes `/usr/bin/tccutil reset Accessibility <Bundle ID>`.
     /// This fully removes any accessibility permissions the user may have previously granted to anything with Loop's bundle ID.
     private static func resetAccessibility() {
-        _ = try? Process.run(URL(filePath: "/usr/bin/tccutil"), arguments: ["reset", "Accessibility", Bundle.main.bundleID])
+        let process = Process()
+        process.executableURL = URL(filePath: "/usr/bin/tccutil")
+        process.arguments = ["reset", "Accessibility", Bundle.main.bundleID]
+
+        // Redirect output and errors to /dev/null
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+
+        try? process.run()
     }
 
     /// Executes `/usr/bin/tccutil reset ListenEvent <Bundle ID>`.
     /// This fully removes any input monitoring permissions the user may have previously granted to anything with Loop's bundle ID.
     private static func resetInputMonitoring() {
-        _ = try? Process.run(URL(filePath: "/usr/bin/tccutil"), arguments: ["reset", "ListenEvent", Bundle.main.bundleID])
+        let process = Process()
+        process.executableURL = URL(filePath: "/usr/bin/tccutil")
+        process.arguments = ["reset", "ListenEvent", Bundle.main.bundleID]
+
+        // Redirect output and errors to /dev/null
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+
+        try? process.run()
     }
 }
 

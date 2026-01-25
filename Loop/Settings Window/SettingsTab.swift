@@ -9,7 +9,8 @@ import AppKit
 import Luminare
 import SwiftUI
 
-enum SettingsTab: LuminareTabItem, CaseIterable {
+@MainActor
+enum SettingsTab: @MainActor LuminareTabItem, CaseIterable {
     var id: String { title }
 
     case icon

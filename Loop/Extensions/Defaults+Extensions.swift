@@ -89,6 +89,7 @@ extension Defaults.Keys {
         // Development versions should check for development updates by default.
         static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: true, iCloud: true)
     #endif
+    static let automaticallyUpdate = Key<Bool>("automaticallyUpdate", default: false, iCloud: true)
 }
 
 // MARK: - Hidden Settings

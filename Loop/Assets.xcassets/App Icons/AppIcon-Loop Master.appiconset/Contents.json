@@ -1,61 +1,61 @@
 {
   "images" : [
     {
-      "filename" : "Master-16.png",
+      "filename" : "appicon_16.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
-      "filename" : "Master-32.png",
+      "filename" : "appicon_32.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
-      "filename" : "Master-32.png",
+      "filename" : "appicon_32.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
-      "filename" : "Master-64.png",
+      "filename" : "appicon_64.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
-      "filename" : "Master-128.png",
+      "filename" : "appicon_128.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "Master-256.png",
+      "filename" : "appicon_256.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "Master-256.png",
+      "filename" : "appicon_256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
-      "filename" : "Master-512.png",
+      "filename" : "appicon_512.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "Master-512.png",
+      "filename" : "appicon_512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "Master-1024.png",
+      "filename" : "appicon_1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"

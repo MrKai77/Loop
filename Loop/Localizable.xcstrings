@@ -249,6 +249,89 @@
         }
       }
     },
+    "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?" : {
+      "comment" : "Informative text in the alert displayed when the app is not in the user's Applications folder.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ne se trouve pas dans votre dossier Applications. Voulez-vous installer la mise à jour dans le dossier Applications à la place ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ はアプリケーションフォルダにありません。代わりにアプリケーションフォルダにアップデートをインストールしますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+          }
+        }
+      }
+    },
     "%@ places windows slightly above the absolute center,\nwhich can be found more ergonomic." : {
       "localizations" : {
         "ar" : {
@@ -1044,8 +1127,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Allow radial menu customization"
+            "state" : "translated",
+            "value" : "Radiaal menu aanpassen toestaan"
           }
         },
         "pt-BR" : {
@@ -1731,6 +1814,89 @@
         }
       }
     },
+    "Automatically install updates" : {
+      "comment" : "A tooltip displayed when hovering over the toggle.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically install updates"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer les mises à jour automatiquement"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動的にアップデートをインストールする"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Automatically install updates"
+          }
+        }
+      }
+    },
     "Background" : {
       "comment" : "Section header for configuring the background of the preview.",
       "localizations" : {
@@ -1784,8 +1950,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Background"
+            "state" : "translated",
+            "value" : "Achtergrond"
           }
         },
         "pt-BR" : {
@@ -2363,8 +2529,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Bottom Screen"
+            "state" : "translated",
+            "value" : "Onderste scherm"
           }
         },
         "pt-BR" : {
@@ -3356,8 +3522,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Configure…"
+            "state" : "translated",
+            "value" : "Configureren"
           }
         },
         "pt-BR" : {
@@ -3686,8 +3852,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Corner Radius"
+            "state" : "translated",
+            "value" : "Hoekradius"
           }
         },
         "pt-BR" : {
@@ -4761,8 +4927,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Default corner radius"
+            "state" : "translated",
+            "value" : "Standaard hoekradius"
           }
         },
         "pt-BR" : {
@@ -5338,8 +5504,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Enable blur"
+            "state" : "translated",
+            "value" : "Vervaging"
           }
         },
         "pt-BR" : {
@@ -5421,8 +5587,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Enable window snapping"
+            "state" : "translated",
+            "value" : "Venster"
           }
         },
         "pt-BR" : {
@@ -10045,7 +10211,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "5000 loops veroverd! Het universum is een getuige van de geboorte van een Loop meester! Geniet van je wel verdiende cadeau: een nieuwe icoon!"
+            "value" : "5000 Loops veroverd! Het universum is getuige van de geboorte van een Loop-meester! Geniet van je welverdiende cadeau: een nieuwe icoon!"
           }
         },
         "pt-BR" : {
@@ -10895,6 +11061,172 @@
         }
       }
     },
+    "Install failed" : {
+      "comment" : "The text that appears when the update fails to install.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Install failed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec de l’installation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "インストールに失敗しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install failed"
+          }
+        }
+      }
+    },
+    "Install to Applications" : {
+      "comment" : "Title of the first button in an alert that asks if the user wants to install an update to their Applications folder.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Install to Applications"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer dans Applications"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションにインストール"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install to Applications"
+          }
+        }
+      }
+    },
     "Instant" : {
       "comment" : "Animation speed setting",
       "localizations" : {
@@ -11056,6 +11388,89 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加入Discord伺服器"
+          }
+        }
+      }
+    },
+    "Keep in Current Location" : {
+      "comment" : "Button title in an alert that lets the user keep the update installed in its current location.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder dans l'emplacement actuel"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の場所のままにする"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Keep in Current Location"
           }
         }
       }
@@ -15841,6 +16256,89 @@
         }
       }
     },
+    "Move to Applications Folder?" : {
+      "comment" : "Title of an alert that asks the user to move the application to its default location.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer vers le dossier Applications ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションフォルダに移動しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Applications Folder?"
+          }
+        }
+      }
+    },
     "Move Up" : {
       "comment" : "Window action",
       "localizations" : {
@@ -20573,7 +21071,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Waarschuwing bij het ontgrendelen van nieuwe iconen"
+            "value" : "Notificatie bij het ontgrendelen van nieuwe iconen"
           }
         },
         "pt-BR" : {
@@ -21726,8 +22224,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Prioritize selected window’s corner radius"
+            "state" : "translated",
+            "value" : "Hoekradius van geselecteerde venster prioriseren"
           }
         },
         "pt-BR" : {
@@ -22223,7 +22721,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Herstarten om te voltooien"
           }
         },
@@ -28494,8 +28992,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top"
+            "state" : "translated",
+            "value" : "Boven"
           }
         },
         "pt-BR" : {
@@ -29157,8 +29655,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Treat left and right keys differently"
+            "state" : "translated",
+            "value" : "Behandel linker- en rechtertoetsen anders"
           }
         },
         "pt-BR" : {
@@ -29348,6 +29846,89 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "觸發鍵"
+          }
+        }
+      }
+    },
+    "Try again later" : {
+      "comment" : "A button that is shown when an update fails to install.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again later"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer plus tard"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "後で試す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Try again later"
           }
         }
       }
@@ -29600,6 +30181,89 @@
         }
       }
     },
+    "Update from: %@" : {
+      "comment" : "A label at the bottom of the update view that indicates the current app version and a message suggesting an update. The argument is the current app version.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update from: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version actuelle : %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在のバージョン: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update from: %@"
+          }
+        }
+      }
+    },
     "Update…" : {
       "comment" : "Button to update app in menubar dropdown menu",
       "localizations" : {
@@ -29761,6 +30425,89 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新已禁用"
+          }
+        }
+      }
+    },
+    "Updates will only be installed when %@ is in the background." : {
+      "comment" : "A popover explaining that updates will only be installed when the app is in the background.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les mises à jour ne seront installées que lorsque %@ fonctionne en arrière-plan."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ がバックグラウンドで動作しているときのみ、アップデートがインストールされます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Updates will only be installed when %@ is in the background."
           }
         }
       }
@@ -29982,8 +30729,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Use macOS window manager when available"
+            "state" : "translated",
+            "value" : "Gebruik MacOS Window Manager als deze beschikbaar is"
           }
         },
         "pt-BR" : {
@@ -30176,85 +30923,85 @@
         }
       }
     },
-    "Version %@ (%lld)" : {
+    "Version %@" : {
       "comment" : "Format: Version [version, e.g. 1.3.0] ([build number, e.g. 1500])",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "needs_review",
-            "value" : "Version %1$@ (%2$lld)"
+            "value" : "Version %@"
           }
         },
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version %1$@ (%2$lld)"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Version %1$@ (%2$lld)"
+            "value" : "Version %@"
           }
         },
         "es" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versión %1$@ (%2$lld)"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Version %1$@ (%2$lld)"
+            "value" : "Version %@"
           }
         },
         "it" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versione %1$@ (%2$lld)"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "バージョン %1$@ (%2$lld)"
+            "value" : "バージョン：%@"
           }
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "버전 %1$@ (%2$lld)"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versie %1$@ (%2$lld)"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Versão %1$@ (%2$lld)"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Версия %1$@ (%2$lld)"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "版本 %1$@（%2$lld）"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "版本%1$@（%2$lld）"
+            "state" : "needs_review",
+            "value" : "Version %@"
           }
         }
       }

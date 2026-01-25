@@ -27,7 +27,7 @@ struct LoopApp: App {
             Divider()
 
             Text(
-                "Version \(Bundle.main.appVersion ?? "Unknown") (\(Bundle.main.appBuild ?? 0))",
+                "Version \(VersionDisplay.current.fullDisplay)",
                 comment: "Format: Version [version, e.g. 1.3.0] ([build number, e.g. 1500])"
             )
             .font(.system(size: 11, weight: .semibold))

@@ -24,6 +24,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         configureLogging()
 
+        // Check for and terminate other running Loop instances to prevent accessibility conflicts
+        terminateOtherLoopInstances()
+
         Task {
             await Defaults.iCloud.waitForSyncCompletion()
         }
@@ -54,7 +57,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.requestNotificationAuthorization()
 
         Task {
-            try? await Task.sleep(for: .seconds(0.5))
+            try? await Task.sleep(for: .seconds(1.5))
             AccessibilityManager.requestAccess()
         }
 
@@ -65,6 +68,42 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             forEventClass: AEEventClass(kInternetEventClass),
             andEventID: AEEventID(kAEGetURL)
         )
+    }
+
+    /// Terminates any other running instances of Loop to prevent accessibility permission conflicts.
+    private func terminateOtherLoopInstances() {
+        let currentProcessId = ProcessInfo.processInfo.processIdentifier
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop"
+
+        let runningApps = NSWorkspace.shared.runningApplications
+        let otherLoopInstances = runningApps.filter {
+            $0.bundleIdentifier == bundleId && $0.processIdentifier != currentProcessId
+        }
+
+        guard !otherLoopInstances.isEmpty else {
+            log.info("No other Loop instances found")
+            return
+        }
+
+        log.info("Found \(otherLoopInstances.count) other Loop instance(s), terminating them to prevent accessibility conflicts. TCC operations will be delayed.")
+
+        for instance in otherLoopInstances {
+            log.info("Terminating Loop instance (PID: \(instance.processIdentifier))")
+            instance.terminate()
+
+            // If the instance doesn't terminate within 2 seconds, force terminate
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+
+                if instance.isTerminated == false {
+                    log.warn("Force terminating Loop instance (PID: \(instance.processIdentifier))")
+                    instance.forceTerminate()
+                }
+            }
+        }
+
+        // Give the other instances time to terminate cleanly
+        Thread.sleep(forTimeInterval: 1.0)
     }
 
     /// Applies baseline logging configuration for Scribe.
@@ -95,15 +134,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_: Notification) {
         StashManager.shared.onApplicationWillTerminate()
-    }
-
-    static func relaunch(after seconds: TimeInterval = 0.5) -> Never {
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", "sleep \(seconds); open \"\(Bundle.main.bundlePath)\""]
-        task.launch()
-        NSApp.terminate(nil)
-        exit(0)
     }
 
     func application(_: NSApplication, open urls: [URL]) {

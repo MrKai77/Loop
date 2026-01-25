@@ -2,8 +2,8 @@
   "color-space-for-untagged-svg-colors" : "display-p3",
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.26376,0.21141,0.83135,1.00000",
-      "display-p3:0.18173,0.13958,0.32404,1.00000"
+      "display-p3:0.17651,0.35303,0.43530,1.00000",
+      "display-p3:0.01176,0.07452,0.11768,1.00000"
     ]
   },
   "groups" : [
@@ -58,8 +58,10 @@
       }
     },
     {
+      "blur-material" : null,
       "layers" : [
         {
+          "glass" : true,
           "hidden" : false,
           "image-name" : "Buttons 2.png",
           "name" : "Buttons 2",
@@ -70,8 +72,23 @@
               -245.83504277448247
             ]
           }
-        },
+        }
+      ],
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.15
+      }
+    },
+    {
+      "blur-material" : null,
+      "layers" : [
         {
+          "glass" : true,
           "hidden" : false,
           "image-name" : "Frame 2.png",
           "name" : "Frame 2",
@@ -80,53 +97,11 @@
       ],
       "lighting" : "individual",
       "shadow" : {
-        "kind" : "neutral",
+        "kind" : "none",
         "opacity" : 0.85
       },
       "translucency" : {
         "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
-        {
-          "blend-mode" : "multiply",
-          "glass-specializations" : [
-            {
-              "value" : true
-            },
-            {
-              "appearance" : "dark",
-              "value" : false
-            }
-          ],
-          "hidden" : false,
-          "image-name" : "Rectangle 41.png",
-          "name" : "Rectangle 41",
-          "opacity-specializations" : [
-            {
-              "value" : 0.75
-            },
-            {
-              "appearance" : "dark",
-              "value" : 0
-            }
-          ]
-        }
-      ],
-      "opacity-specializations" : [
-        {
-          "appearance" : "tinted",
-          "value" : 0
-        }
-      ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : false,
         "value" : 0.5
       }
     }

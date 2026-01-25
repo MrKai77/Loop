@@ -11,6 +11,7 @@ import Scribe
 import SwiftUI
 
 @Loggable
+@MainActor
 final class Updater: ObservableObject {
     static let shared = Updater()
 
@@ -18,15 +19,17 @@ final class Updater: ObservableObject {
         didSet { updateStateChanged() }
     }
 
-    @Published private(set) var targetRelease: Release?
+    @Published private(set) var installState: InstallState = .ready
     @Published private(set) var progressBar: Double = 0
     @Published private(set) var updatesEnabled: Bool = Updater.checkIfUpdatesEnabled()
-    @Published private(set) var changelog: [(title: String, body: [ChangelogNote])] = .init()
-    @Published var expandedChangelogSections: Set<String> = [] // By title
+    @Published private(set) var changelog: [ChangelogSection] = []
+    @Published var expandedChangelogSections: Set<String> = [] // By ID
+    @Published private(set) var updateManifest: UpdateManifest?
 
     private(set) var shouldAutoPresentUpdateWindow: Bool = false
     private var windowController: NSWindowController?
     private var includeDevelopmentVersions: Bool { Defaults[.includeDevelopmentVersions] }
+    private var automaticallyUpdate: Bool { Defaults[.automaticallyUpdate] }
 
     private var updateFetcherTask: Task<(), Never>?
     private var updateCheckerTask: Task<(), Never>?
@@ -34,39 +37,36 @@ final class Updater: ObservableObject {
     private var includeDevelopmentVersionsObserver: Task<(), Never>?
     private var updatesEnabledObserver: Task<(), Never>?
 
-    struct ChangelogNote: Identifiable {
-        var id: UUID = .init()
-        var emoji: String
-        var text: String
-        var user: String?
-        var reference: Int?
-    }
-
-    enum UpdateAvailability {
-        case available
-        case unavailable
-        case osNotSupported
-
-        var text: String {
-            switch self {
-            case .unavailable:
-                String(localized: "Check for updates…")
-            case .available:
-                String(localized: "Update…")
-            case .osNotSupported:
-                String(localized: "This macOS version is no longer supported.")
-            }
-        }
-    }
+    private let updateChecker: UpdateChecker
+    private let downloader: UpdateDownloader
+    private let installer: UpdateInstaller
 
     private init() {
-        // Only set up the timer if updates are enabled and env var is not set
+        // Initialize new updater system components
+        self.updateChecker = UpdateChecker()
+        self.downloader = UpdateDownloader()
+        self.installer = UpdateInstaller()
+
+        // Initialize optional properties to nil - will be set up after init
+        self.updateCheckerTask = nil
+        self.includeDevelopmentVersionsObserver = nil
+        self.updatesEnabledObserver = nil
+
+        // Set up observers and tasks after initialization is complete
+        Task {
+            setupObserversAndTasks()
+        }
+    }
+
+    private func setupObserversAndTasks() {
+        // Set up observers and tasks now that self is fully initialized
+        let updatesEnabled = Self.checkIfUpdatesEnabled()
         if updatesEnabled {
-            self.updateCheckerTask = makeUpdateCheckerTask()
-            self.includeDevelopmentVersionsObserver = makeIncludeDevelopmentVersionsObserver()
+            updateCheckerTask = makeUpdateCheckerTask()
+            includeDevelopmentVersionsObserver = makeIncludeDevelopmentVersionsObserver()
         }
 
-        self.updatesEnabledObserver = makeUpdatesEnabledObserver()
+        updatesEnabledObserver = makeUpdatesEnabledObserver()
     }
 
     private static func checkIfUpdatesEnabled() -> Bool {
@@ -82,6 +82,21 @@ final class Updater: ObservableObject {
         autoPresentUpdateWindowTask = nil
 
         if updateState == .available {
+            // If automatic updates are enabled, never auto-present the update window
+            if automaticallyUpdate {
+                // Only install if Loop is not in use
+                if !NSApp.isActive, NSApp.windows.allSatisfy({ !$0.isVisible }) {
+                    log.info("Automatic updates enabled, installing update...")
+                    Task {
+                        try await downloadAndInstallUpdate()
+                        await relaunchAfterUpdate()
+                    }
+                }
+
+                log.info("Automatic updates enabled, but Loop is active. Skipping installation.")
+                return
+            }
+
             shouldAutoPresentUpdateWindow = true
 
             /// If the updater has requested that the update window be presented for over 6 hours, automatically present it.
@@ -126,9 +141,7 @@ final class Updater: ObservableObject {
             for await _ in Defaults.updates(.updatesEnabled) {
                 guard !Task.isCancelled else { break }
 
-                await MainActor.run {
-                    updatesEnabled = Updater.checkIfUpdatesEnabled()
-                }
+                updatesEnabled = Updater.checkIfUpdatesEnabled()
 
                 log.info("Updates enabled status changed to: \(updatesEnabled)")
 
@@ -141,232 +154,96 @@ final class Updater: ObservableObject {
                     self.updateCheckerTask = nil
                     self.includeDevelopmentVersionsObserver = nil
 
-                    await MainActor.run {
-                        targetRelease = nil
-                        updateState = .unavailable
-                        progressBar = 0
-                    }
+                    updateManifest = nil
+                    updateState = .unavailable
+                    progressBar = 0
                 }
             }
         }
     }
 
-    @MainActor
     func dismissWindow() {
         windowController?.close()
         windowController = nil
+
+        // Clear update state when window is dismissed
+        updateManifest = nil
+        progressBar = 0
+        installState = .ready
+        shouldAutoPresentUpdateWindow = false
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
-    @concurrent
-    func fetchLatestInfo(force: Bool = false) async {
+    func fetchLatestInfo(bypassUpdatesEnabled: Bool = false) async {
+        // Don't run update checks while actively downloading
+        if downloader.isDownloading == true {
+            return
+        }
+
         if let updateFetcherTask {
-            return await updateFetcherTask.value // If already fetching, wait for it to finish
+            await updateFetcherTask.value // If already fetching, wait for it to finish
+            return
         }
 
         updateFetcherTask = Task {
             defer { updateFetcherTask = nil }
 
-            await MainActor.run {
-                targetRelease = nil
+            // Don't clear update state if window is currently showing (user is interacting)
+            if windowController?.window?.isVisible != true {
+                updateManifest = nil
                 progressBar = 0
             }
 
             // Early return if updates are disabled and not forcing
-            guard updatesEnabled || force else {
-                await MainActor.run {
-                    updateState = .unavailable
-                }
+            guard updatesEnabled || bypassUpdatesEnabled else {
+                updateState = .unavailable
+                log.warn("Updates are disabled. Not fetching latest info.")
                 return
             }
 
             log.info("Fetching latest release info...")
 
-            let urlString = includeDevelopmentVersions ?
-                "https://api.github.com/repos/MrKai77/Loop/releases" : // Developmental branch
-                "https://api.github.com/repos/MrKai77/Loop/releases/latest" // Stable branch
-
-            guard let url = URL(string: urlString) else {
-                log.error("Invalid URL: \(urlString)")
-                return
-            }
-
             do {
-                let (data, _) = try await URLSession.shared.data(from: url)
+                // Use GitHub releases API
+                let channel: UpdateChannel = includeDevelopmentVersions ? .development : .stable
 
-                // Process data immediately after fetching, reducing the number of async suspension points.
-                try await processFetchedData(data)
+                let currentVersion = Bundle.main.appVersion?.filter(\.isASCII)
+                    .trimmingCharacters(in: .whitespaces) ?? "0.0.0"
+                let currentBuild = Bundle.main.appBuild ?? 0
+
+                if let manifest = try await updateChecker.checkForUpdate(
+                    currentVersion: currentVersion,
+                    currentBuild: currentBuild,
+                    channel: channel
+                ) {
+                    changelog = ChangelogParser.parse(manifest.releaseNotes.body)
+                    if let firstSection = changelog.first {
+                        expandedChangelogSections = [firstSection.id]
+                    }
+
+                    updateManifest = manifest
+                    updateState = .available
+
+                    log.notice("Update available: \(manifest.version) build \(manifest.buildNumber)")
+                } else {
+                    updateState = .unavailable
+
+                    log.info("No updates available")
+                }
             } catch {
-                await MainActor.run {
+                if case .incompatibleSystem? = error as? UpdateError {
+                    updateState = .osNotSupported
+                } else {
                     updateState = .unavailable
                 }
+
                 log.error("Error fetching release info: \(error.localizedDescription)")
             }
         }
 
-        if let task = updateFetcherTask {
-            return await task.value
-        }
+        await updateFetcherTask?.value
     }
 
-    private func processFetchedData(_ data: Data) async throws {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-
-        if includeDevelopmentVersions {
-            // This would need to parse a list of releases
-            let releases = try decoder.decode([Release].self, from: data)
-
-            if let latestPreRelease = releases.compactMap({ $0.prerelease ? $0 : nil }).first {
-                await processRelease(latestPreRelease)
-            }
-        } else {
-            // This would need to parse a single release
-            let release = try decoder.decode(Release.self, from: data)
-            await processRelease(release)
-        }
-    }
-
-    private func processRelease(_ release: Release) async {
-        let currentVersion = Bundle.main.appVersion?.filter(\.isASCII).trimmingCharacters(in: .whitespaces) ?? "0.0.0"
-
-        await MainActor.run {
-            var release = release
-
-            if release.prerelease,
-               let versionDetails = release.extractPrereleaseVersionFromTitle() {
-                release.tagName = versionDetails.preRelease
-                release.buildNumber = versionDetails.buildNumber
-            }
-
-            var newUpdateState: UpdateAvailability = release.tagName.compare(currentVersion, options: .numeric) == .orderedDescending ? .available : .unavailable
-
-            // If the development version is chosen, compare the build number
-            if newUpdateState != .available,
-               includeDevelopmentVersions,
-               let versionBuild = release.buildNumber,
-               let currentBuild = Bundle.main.appBuild {
-                newUpdateState = versionBuild > currentBuild ? .available : .unavailable
-            }
-
-            // If the update's tag and build number passes the checks above, check the minimum macOS version
-            if newUpdateState == .available {
-                let lines = release.body
-                    .split(whereSeparator: \.isNewline)
-                    .reversed()
-
-                for line in lines {
-                    if let minimumMacOSVersion = extractMinimumMacOSVersion(from: String(line)) {
-                        if !ProcessInfo.processInfo.isOperatingSystemAtLeast(minimumMacOSVersion) {
-                            log.warn("Minimum macOS version requirement for next update not met (required: \(minimumMacOSVersion))")
-                            newUpdateState = .osNotSupported
-                        } else {
-                            log.success("Minimum macOS version requirement for next update is met")
-                        }
-                    }
-                }
-            }
-
-            updateState = newUpdateState
-
-            if newUpdateState == .available {
-                log.notice("Update available: \(release.name)")
-
-                targetRelease = release
-                processChangelog(release.body)
-            } else {
-                log.info("No update available.")
-            }
-        }
-    }
-
-    func extractMinimumMacOSVersion(from changelog: String) -> OperatingSystemVersion? {
-        let regex = /Minimum macOS version:\s*(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/
-
-        guard let match = changelog.firstMatch(of: regex.ignoresCase()),
-              let major = Int(match.major)
-        else {
-            return nil
-        }
-
-        let minor = match.minor.flatMap { Int($0) } ?? 0
-        let patch = match.patch.flatMap { Int($0) } ?? 0
-
-        return OperatingSystemVersion(
-            majorVersion: major,
-            minorVersion: minor,
-            patchVersion: patch
-        )
-    }
-
-    private func processChangelog(_ body: String) {
-        changelog = .init()
-
-        let lines = body
-            .split(whereSeparator: \.isNewline)
-
-        var currentSection: String?
-
-        for line in lines where !line.isEmpty {
-            if line.starts(with: "#") {
-                currentSection = line
-                    .replacing(/#/, with: "")
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-
-                if changelog.first(where: { $0.title == currentSection }) == nil {
-                    changelog.append((title: currentSection!, body: []))
-                }
-            } else {
-                guard
-                    line.hasPrefix("- "),
-                    let index = changelog.firstIndex(where: { $0.title == currentSection })
-                else {
-                    continue
-                }
-
-                let cleanedLine = line
-                    .replacing(#/- /#, with: "")
-                    .trimmingCharacters(in: .whitespaces)
-
-                let user: String?
-                let reference: Int?
-
-                if let match = cleanedLine.firstMatch(of: /(@(?<user>\w+))/) {
-                    user = String(match.user)
-                } else {
-                    user = nil
-                }
-
-                if let match = cleanedLine.firstMatch(of: /#(?<reference>\d+)/) {
-                    reference = Int(String(match.reference))
-                } else {
-                    reference = nil
-                }
-
-                /// Use `isEmojiPresentation` instead of `isEmoji` to ensure that `#`s are excluded.
-                let emoji = cleanedLine.unicodeScalars.first(where: \.properties.isEmojiPresentation) ?? currentSection?.unicodeScalars.first(where: \.properties.isEmojiPresentation) ?? "🔄"
-
-                let text = cleanedLine
-                    .drop(while: { $0.unicodeScalars.first?.properties.isEmojiPresentation == true }) // Emojis
-                    .replacing(#/#\d+/#, with: "") // Issue #
-                    .replacing(#/(@.*?)/#, with: "") // Mentions
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-
-                changelog[index].body.append(.init(
-                    emoji: String(emoji),
-                    text: text,
-                    user: user,
-                    reference: reference
-                ))
-            }
-        }
-
-        if let firstSection = changelog.first {
-            expandedChangelogSections = [firstSection.title]
-        }
-    }
-
-    @MainActor
     func showUpdateWindowIfEligible() async {
         shouldAutoPresentUpdateWindow = false
         guard updateState == .available else { return }
@@ -381,141 +258,48 @@ final class Updater: ObservableObject {
     }
 
     // Downloads the update from GitHub and installs it
-    @concurrent
-    func installUpdate() async {
-        guard
-            let latestRelease = targetRelease,
-            let asset = latestRelease.assets.first
-        else {
-            await MainActor.run {
-                self.progressBar = 0
-            }
+    func downloadAndInstallUpdate() async throws {
+        guard let manifest = updateManifest else {
+            progressBar = 0
             return
         }
 
-        log.info("Installing update: \(latestRelease.name)")
+        installState = .installing
 
-        let tempUrl = FileManager.default.temporaryDirectory.appendingPathComponent("\(asset.name)_\(latestRelease.tagName)")
-
-        await MainActor.run {
-            self.progressBar = 0.25
-        }
-
-        if !FileManager.default.fileExists(atPath: tempUrl.path) {
-            await downloadUpdate(asset, to: tempUrl)
-        }
-
-        await MainActor.run {
-            self.progressBar = 0.75
-        }
-
-        await unzipAndSwap(downloadedFileURL: tempUrl.path)
-
-        try? FileManager.default.removeItem(at: tempUrl)
-
-        await MainActor.run {
-            self.progressBar = 1.0
-            self.updateState = .unavailable
-        }
-
-        log.info("Update installed successfully")
-    }
-
-    private func downloadUpdate(_ asset: Release.Asset, to destinationURL: URL) async {
-        log.info("Downloading update asset: \(asset.name) to \(destinationURL.path)")
+        log.info("Installing update: \(manifest.version)")
 
         do {
-            let (fileURL, _) = try await URLSession.shared.download(from: asset.browserDownloadURL)
-            try FileManager.default.moveItem(at: fileURL, to: destinationURL)
-        } catch {
-            log.error("Failed to download update: \(error.localizedDescription)")
-        }
-    }
-
-    private func unzipAndSwap(downloadedFileURL fileURL: String) async {
-        log.info("Unzipping and swapping app bundle at \(fileURL)")
-
-        let appBundle = Bundle.main.bundleURL
-        let fileManager = FileManager.default
-
-        do {
-            // Create a temporary directory
-            // It's ideal to keep this separate from the fileURL since this is where the swapping happens, and
-            // if this fails, it can't affect the original downloaded zip file.
-            let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-            try fileManager.createDirectory(at: tempDir, withIntermediateDirectories: true)
-
-            // Unzip to a temp directory
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
-            process.arguments = ["-xk", fileURL, tempDir.path]
-            try process.run()
-            process.waitUntilExit()
-
-            // Find the unzipped app bundle
-            let contents = try fileManager.contentsOfDirectory(at: tempDir, includingPropertiesForKeys: nil)
-            guard let newAppBundle = contents.first(where: { $0.pathExtension == "app" }) else {
-                log.error("No app bundle found in extracted contents")
-                return
+            let downloadedFileURL = try await downloader.downloadUpdate(manifest: manifest) { [weak self] progress in
+                self?.progressBar = progress.percentage * 0.75
             }
 
-            // Atomically swap the old app bundle with the new one
-            _ = try fileManager.replaceItemAt(
-                appBundle,
-                withItemAt: newAppBundle,
-                backupItemName: nil,
-                options: [.usingNewMetadataOnly]
-            )
+            try await installer.installUpdate(from: downloadedFileURL, manifest: manifest) { [weak self] progress in
+                self?.progressBar = 0.75 + (progress.percentage * 0.25)
+            }
 
-            // Clean up
-            try fileManager.removeItem(at: tempDir)
+            progressBar = 1.0
+            updateState = .unavailable
+
+            // Brief delay before showing restart button
+            try? await Task.sleep(for: .seconds(1))
+
+            installState = .readyToRestart
+
+            log.success("Update installed successfully")
         } catch {
-            log.error("Error updating the app: \(error.localizedDescription)")
+            log.error("Update installation failed: \(error)")
+            progressBar = 0
+            installState = .failed(error)
+            throw error
         }
     }
-}
 
-// MARK: - Models
-
-// Release model to parse GitHub API response for releases.
-struct Release: Codable {
-    var id: Int
-    var tagName: String
-    var name: String
-    var body: String
-    var assets: [Asset]
-    var prerelease: Bool
-    var creationDate: Date
-    var updateDate: Date
-
-    var buildNumber: Int?
-
-    enum CodingKeys: String, CodingKey {
-        case id, tagName = "tag_name", name, body, assets, prerelease, creationDate = "created_at", updateDate = "updated_at"
-    }
-
-    struct Asset: Codable {
-        var name: String
-        var browserDownloadURL: URL
-
-        enum CodingKeys: String, CodingKey {
-            case name
-            case browserDownloadURL = "browser_download_url"
-        }
-    }
-}
-
-// Extension to Release to extract version details from the title
-extension Release {
-    func extractPrereleaseVersionFromTitle() -> (preRelease: String, buildNumber: Int)? {
-        let regex = /🧪 (?<version>.*?) \((?<build>\d+)\)/
-        guard let match = name.firstMatch(of: regex) else {
-            return nil
+    func relaunchAfterUpdate() async {
+        guard installState == .readyToRestart else {
+            log.error("Cannot restart as the install state is \(installState)")
+            return
         }
 
-        let release = String(match.version)
-        let buildNumber = Int(String(match.build)) ?? 0
-
-        return (release, buildNumber)
+        await installer.restartApplication()
     }
 }

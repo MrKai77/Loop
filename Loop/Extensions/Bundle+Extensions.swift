@@ -33,6 +33,10 @@ extension Bundle {
         getInfo("CFBundleShortVersionString")
     }
 
+    var bundleURL: URL {
+        URL(fileURLWithPath: bundlePath)
+    }
+
     func getInfo(_ str: String) -> String? {
         infoDictionary?[str] as? String
     }
