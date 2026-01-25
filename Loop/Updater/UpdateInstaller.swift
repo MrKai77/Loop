@@ -75,7 +75,7 @@ actor UpdateInstaller {
             return
         }
 
-        log.info("Pre-restart verification passed, proceeding with restart")
+        log.notice("Application will now restart. New instance will launch in 0.5 seconds.")
 
         let appURL = installedAppURL
         let process = Process()
