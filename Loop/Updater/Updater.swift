@@ -88,7 +88,8 @@ final class Updater: ObservableObject {
                 if !NSApp.isActive, NSApp.windows.allSatisfy({ !$0.isVisible }) {
                     log.info("Automatic updates enabled, installing update...")
                     Task {
-                        try await installUpdate()
+                        try await downloadAndInstallUpdate()
+                        await relaunchAfterUpdate()
                     }
                 }
 
@@ -173,7 +174,7 @@ final class Updater: ObservableObject {
     }
 
     // Pulls the latest release information from GitHub and updates the app state accordingly.
-    func fetchLatestInfo(force: Bool = false) async {
+    func fetchLatestInfo(bypassUpdatesEnabled: Bool = false) async {
         // Don't run update checks while actively downloading
         if downloader.isDownloading == true {
             return
@@ -194,8 +195,9 @@ final class Updater: ObservableObject {
             }
 
             // Early return if updates are disabled and not forcing
-            guard updatesEnabled || force else {
+            guard updatesEnabled || bypassUpdatesEnabled else {
                 updateState = .unavailable
+                log.warn("Updates are disabled. Not fetching latest info.")
                 return
             }
 
@@ -210,7 +212,6 @@ final class Updater: ObservableObject {
                 let currentBuild = Bundle.main.appBuild ?? 0
 
                 if let manifest = try await updateChecker.checkForUpdate(
-                    bundleId: Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop",
                     currentVersion: currentVersion,
                     currentBuild: currentBuild,
                     channel: channel
@@ -257,7 +258,7 @@ final class Updater: ObservableObject {
     }
 
     // Downloads the update from GitHub and installs it
-    func installUpdate() async throws {
+    func downloadAndInstallUpdate() async throws {
         guard let manifest = updateManifest else {
             progressBar = 0
             return
@@ -293,9 +294,12 @@ final class Updater: ObservableObject {
         }
     }
 
-    func relaunchAfterUpdate() {
-        Task {
-            await installer.restartApplication()
+    func relaunchAfterUpdate() async {
+        guard installState == .readyToRestart else {
+            log.error("Cannot restart as the install state is \(installState)")
+            return
         }
+
+        await installer.restartApplication()
     }
 }

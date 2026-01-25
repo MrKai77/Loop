@@ -20,12 +20,11 @@ actor UpdateChecker {
         .ignoresCase()
 
     func checkForUpdate(
-        bundleId: String,
         currentVersion: String,
         currentBuild: Int = 0,
         channel: UpdateChannel
     ) async throws -> UpdateManifest? {
-        log.info("Checking for updates: \(bundleId) v\(currentVersion) build \(currentBuild) [\(channel.rawValue)]")
+        log.info("Checking for updates: \(currentVersion) build \(currentBuild) [\(channel.rawValue)]")
 
         let endpoint = URL(string: channel.githubReleasesEndpoint)!
         var candidateRelease: GitHubRelease?
@@ -84,7 +83,7 @@ actor UpdateChecker {
         }
 
         // Extract checksum from asset digest (format: "sha256:checksum")
-        let zipChecksum = asset.digest?.replacingOccurrences(of: "sha256:", with: "") ?? ""
+        let zipChecksum = asset.digest?.replacing(/sha256:/, with: "") ?? ""
         log.debug("Asset digest: \(asset.digest ?? "none"), extracted checksum: \(zipChecksum)")
 
         let compatibility = extractCompatibilityRequirements(from: release.body)
@@ -113,7 +112,7 @@ actor UpdateChecker {
         // Verify system requirements before returning the manifest
         try verifySystemRequirements(manifest: manifest)
 
-        log.info("Found update: v\(manifest.version) (build \(manifest.buildNumber))")
+        log.info("Found update: \(manifest.version) (\(manifest.buildNumber))")
         return manifest
     }
 

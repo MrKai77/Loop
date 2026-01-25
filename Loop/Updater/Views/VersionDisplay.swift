@@ -39,7 +39,7 @@ struct VersionDisplay {
         let buildString = if let build { "(\(build))" } else { "" }
 
         let baseVersion = version
-            .replacingOccurrences(of: devBuildEmoji, with: "")
+            .replacing(devBuildEmoji, with: "")
             .trimmingCharacters(in: .whitespaces)
 
         let shortDisplay: String = if shouldTreatAsPrerelease {

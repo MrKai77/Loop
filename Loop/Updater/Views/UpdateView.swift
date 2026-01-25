@@ -182,6 +182,7 @@ struct UpdateView: View {
                 Updater.shared.dismissWindow()
             } label: {
                 Text(updater.installState.isFailure ? "Try again later" : "Remind me later")
+                    .contentTransition(.numericText())
                     .padding(.trailing, 4)
                     .luminarePopover(attachedTo: .topTrailing, hidden: updater.installState.errorDescription == nil) {
                         HStack(spacing: 4) {
@@ -197,15 +198,16 @@ struct UpdateView: View {
                         .padding(12)
                     }
             }
+            .disabled(updater.installState == .installing || updater.installState == .readyToRestart)
 
             Button(role: updater.installState.isFailure ? .destructive : nil) {
-                if updater.installState == .readyToRestart {
-                    Updater.shared.relaunchAfterUpdate()
-                    return
-                }
-
                 Task {
-                    try? await Updater.shared.installUpdate()
+                    if updater.installState == .readyToRestart {
+                        await Updater.shared.relaunchAfterUpdate()
+                        return
+                    }
+
+                    try await Updater.shared.downloadAndInstallUpdate()
                 }
             } label: {
                 ZStack {

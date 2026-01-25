@@ -240,8 +240,7 @@ struct AboutConfigurationView: View {
         LuminareSection {
             Button {
                 Task {
-                    // Pass force=true to bypass the guard check
-                    await updater.fetchLatestInfo(force: true)
+                    await updater.fetchLatestInfo(bypassUpdatesEnabled: true)
 
                     switch updater.updateState {
                     case .available:
