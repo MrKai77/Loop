@@ -34,45 +34,40 @@ actor UpdateInstaller {
 
         // Step 1: Pre-installation verification
         try await performPreInstallationChecks(manifest: manifest)
-        await progress(UpdateProgress(phase: .checking, percentage: 1.0 / 7.0))
+        await progress(UpdateProgress(phase: .checking, percentage: 1.0 / 8.0))
 
         // Step 2: Verify download integrity
         try await verifyDownloadIntegrity(downloadURL, manifest: manifest)
-        await progress(UpdateProgress(phase: .downloading, percentage: 2.0 / 7.0))
+        await progress(UpdateProgress(phase: .downloading, percentage: 2.0 / 8.0))
 
         // Step 3: Extract and verify
         let extractedURL = try await extract(downloadURL)
-        await progress(UpdateProgress(phase: .extracting, percentage: 3.0 / 7.0))
+        await progress(UpdateProgress(phase: .extracting, percentage: 3.0 / 8.0))
 
         // Step 4: Verify extraction integrity
         try await verifyExtractionIntegrity(extractedURL, manifest: manifest)
-        await progress(UpdateProgress(phase: .verifying, percentage: 4.0 / 7.0))
+        await progress(UpdateProgress(phase: .verifying, percentage: 4.0 / 8.0))
 
         // Step 5: Perform safe installation
         try await performSafeInstallation(from: extractedURL, manifest: manifest)
-        await progress(UpdateProgress(phase: .installing, percentage: 5.0 / 7.0))
+        await progress(UpdateProgress(phase: .installing, percentage: 5.0 / 8.0))
 
         // Step 6: Comprehensive verification
         try await performFinalVerification(manifest: manifest)
-        await progress(UpdateProgress(phase: .verifying, percentage: 6.0 / 7.0))
+        await progress(UpdateProgress(phase: .verifying, percentage: 6.0 / 8.0))
 
         // Step 7: Cleanup
         try await performSafeCleanup(extractedURL, downloadURL)
-        await progress(UpdateProgress(phase: .cleaning, percentage: 7.0 / 7.0))
+        await progress(UpdateProgress(phase: .cleaning, percentage: 7.0 / 8.0))
+
+        try performPreRestartSafetyChecks()
+        await progress(UpdateProgress(phase: .verifying, percentage: 8.0 / 8.0))
 
         log.success("Installation completed successfully")
     }
 
     func restartApplication() async {
         log.info("Preparing application restart from: \(installedAppURL.path)")
-
-        // Final verification before restart
-        do {
-            try performPreRestartSafetyChecks()
-        } catch {
-            log.error("Pre-restart verification failed: \(error)")
-            return
-        }
 
         // Verify the app exists before attempting restart
         guard fileManager.fileExists(atPath: installedAppURL.path) else {

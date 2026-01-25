@@ -29376,6 +29376,9 @@
         }
       }
     },
+    "Try again later" : {
+      "comment" : "A button that is shown when an update fails to install."
+    },
     "Undo" : {
       "comment" : "Window action",
       "localizations" : {

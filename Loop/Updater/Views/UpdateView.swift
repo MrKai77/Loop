@@ -178,12 +178,27 @@ struct UpdateView: View {
 
     private func footerView() -> some View {
         HStack {
-            Button("Remind me later") {
-                Updater.shared.dismissWindow()
-            }
-            .disabled(updater.installState != .ready)
-
             Button {
+                Updater.shared.dismissWindow()
+            } label: {
+                Text(updater.installState.isFailure ? "Try again later" : "Remind me later")
+                    .padding(.trailing, 4)
+                    .luminarePopover(attachedTo: .topTrailing, hidden: updater.installState.errorDescription == nil) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.secondary)
+                                .padding(4)
+
+                            Text(updater.installState.errorDescription ?? "")
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: 300, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(12)
+                    }
+            }
+
+            Button(role: updater.installState.isFailure ? .destructive : nil) {
                 if updater.installState == .readyToRestart {
                     Updater.shared.relaunchAfterUpdate()
                     return
@@ -216,15 +231,10 @@ struct UpdateView: View {
                     Text(updater.installState.label)
                         .contentTransition(.numericText())
                         .opacity(updater.installState == .installing ? 0 : 1)
-                        .padding(.trailing, 4)
-                        .luminarePopover(attachedTo: .topTrailing, hidden: updater.installState.errorDescription == nil) {
-                            Text(updater.installState.errorDescription ?? "")
-                                .multilineTextAlignment(.leading)
-                                .padding(6)
-                        }
+                        .opacity(updater.installState.isFailure ? 0.5 : 1.0)
                 }
             }
-            .allowsHitTesting(updater.installState.isInteractive)
+            .allowsHitTesting(updater.installState.isUpdateButtonInteractive)
         }
         .luminareCornerRadius(8)
         .padding(12)

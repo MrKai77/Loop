@@ -218,11 +218,20 @@ enum InstallState: Equatable {
         }
     }
 
-    var isInteractive: Bool {
+    var isUpdateButtonInteractive: Bool {
         switch self {
-        case .ready, .readyToRestart, .failed:
+        case .ready, .readyToRestart:
             true
-        case .installing:
+        case .installing, .failed:
+            false
+        }
+    }
+
+    var isCancelButtonInteractive: Bool {
+        switch self {
+        case .ready, .failed:
+            true
+        case .readyToRestart, .installing:
             false
         }
     }
@@ -232,6 +241,14 @@ enum InstallState: Equatable {
             error.localizedDescription
         } else {
             nil
+        }
+    }
+
+    var isFailure: Bool {
+        if case .failed = self {
+            true
+        } else {
+            false
         }
     }
 }
