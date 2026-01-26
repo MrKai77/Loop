@@ -96,7 +96,7 @@ struct TriggerKeycorder: View {
             isHovering = hovering
         }
         .onChange(of: model.currentEventMonitor) { _ in
-            if model.currentEventMonitor != eventMonitor {
+            if let eventMonitor, model.currentEventMonitor != eventMonitor {
                 finishedObservingKeys(wasForced: true)
             }
         }
@@ -129,7 +129,6 @@ struct TriggerKeycorder: View {
         selectionKey = []
         isActive = true
 
-        // So that if doesn't interfere with the key detection here
         LoopManager.shared.keybindTrigger.stop()
 
         eventMonitor = LocalEventMonitor(events: [.keyDown, .flagsChanged]) { event in
@@ -148,7 +147,7 @@ struct TriggerKeycorder: View {
             }
 
             if !keycodes.isEmpty, selectionKey.isEmpty {
-                shouldShake.toggle()
+                shake()
             }
 
             return nil
@@ -163,7 +162,7 @@ struct TriggerKeycorder: View {
 
         if selectionKey.count > keyLimit {
             willSet = false
-            shouldShake.toggle()
+            shake()
             tooManyKeysPopup = true
         }
 
@@ -181,6 +180,12 @@ struct TriggerKeycorder: View {
         eventMonitor = nil
 
         LoopManager.shared.keybindTrigger.start()
+    }
+
+    private func shake() {
+        Task {
+            shouldShake.toggle()
+        }
     }
 }
 

@@ -173,24 +173,20 @@ final class KeybindTrigger {
 
         if type != .keyUp { // keyDown for flagsChanged
             if let bypassedAction = windowActionCache.bypassedActionsByKeybind[allPressedKeys] {
-                refreshSystemKeybindCacheIfNeeded()
-                if systemKeybindCache.contains(allPressedKeys) {
-                    return .forward
-                }
-
                 if !isARepeat || bypassedAction.canRepeat {
                     openLoop(startingAction: bypassedAction, overrideExistingTriggerDelayTimerAction: true)
                 }
 
                 return checkIfLoopOpen() ? .consume : .opening
             }
+
             if containsTrigger {
                 // Try an match directly with the action keys first, then fallback to just the key code.
                 // This prevents failures when the user is tapping the keys in rapid succession.
-                let initalMatch = windowActionCache.actionsByKeybind[actionKeys]
-                let fallbackMatch = windowActionCache.actionsByKeybind[[keyCode]]
+                let match = windowActionCache.actionsByKeybind[actionKeys]
+                    ?? windowActionCache.actionsByKeybind[[keyCode]]
 
-                if let action = initalMatch ?? fallbackMatch {
+                if let action = match {
                     if !isARepeat || action.canRepeat {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
@@ -212,7 +208,10 @@ final class KeybindTrigger {
                 if allPressedKeys.isEmpty {
                     doubleClickTimer.handleKeyUp()
                 }
-                closeLoop(forceClose: false)
+
+                if isLoopOpen {
+                    closeLoop(forceClose: false)
+                }
             }
         }
 

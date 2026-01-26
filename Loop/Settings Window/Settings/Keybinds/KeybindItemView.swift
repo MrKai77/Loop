@@ -52,7 +52,6 @@ struct KeybindItemView: View {
             keybindCombination
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-
         .padding(.horizontal, 12)
         .onChange(of: isHovering) { _ in
             if !isHovering {
@@ -65,15 +64,6 @@ struct KeybindItemView: View {
             }
             if action.direction == .cycle {
                 isConfiguringCycle = true
-            }
-        }
-        .onChange(of: action.keybind) { newKeybind in
-            if action.bypassTriggerKey == true {
-                let triggerKeysInKeybind = newKeybind.intersection(triggerKey)
-                if !triggerKeysInKeybind.isEmpty {
-                    action.keybind = newKeybind.subtracting(triggerKey)
-                    action.bypassTriggerKey = false
-                }
             }
         }
         .onChange(of: action) { boundAction = $0 }
@@ -185,27 +175,22 @@ struct KeybindItemView: View {
 
     // MARK: - Helper Methods
 
+    /// Switches to standard mode (keeps the keybind)
+    private func restoreStandardMode() {
+        action.keybind = action.keybind.subtracting(triggerKey)
+        action.bypassTriggerKey = false
+    }
+
+    /// Merges trigger key into action key and switches to bypass mode
+    private func switchToBypassMode() {
+        action.keybind = triggerKey.union(action.keybind)
+        action.bypassTriggerKey = true
+    }
+
     /// Clears the keybind and switches to standard mode
     private func clearKeybind() {
         action.keybind = []
         action.bypassTriggerKey = false
-    }
-
-    /// Switches to standard mode (keeps the keybind)
-    private func restoreStandardMode() {
-        action.bypassTriggerKey = false
-    }
-
-    /// Switches to custom shortcut mode (clears keybind and auto-starts recording)
-    private func switchToCustomShortcut() {
-        action.keybind = []
-        action.bypassTriggerKey = true
-    }
-
-    /// Merges trigger key into action key and switches to bypass mode
-    private func mergeAndSwitchToBypassMode() {
-        action.keybind = triggerKey.union(action.keybind)
-        action.bypassTriggerKey = true
     }
 
     private func label() -> some View {
@@ -263,12 +248,11 @@ struct KeybindItemView: View {
         }
         .contextMenu {
             if action.bypassTriggerKey == true {
-                Button("Restore Trigger Key") { restoreStandardMode() }
+                Button("Link Trigger Key", action: restoreStandardMode)
             } else {
-                Button("Use Custom Shortcut") { switchToCustomShortcut() }
-                Button("Remove Trigger Key") { mergeAndSwitchToBypassMode() }
+                Button("Unlink Trigger Key", action: switchToBypassMode)
             }
-            Divider()
+
             Button("Clear Keybind") { clearKeybind() }
         }
     }

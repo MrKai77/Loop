@@ -14,7 +14,7 @@ struct Keycorder: View {
     @EnvironmentObject private var model: KeybindsConfigurationModel
     @Environment(\.appearsActive) private var appearsActive
 
-    let keyLimit: Int = 5
+    let keyLimit: Int = 6
 
     @Default(.triggerKey) var triggerKey
 
@@ -84,7 +84,7 @@ struct Keycorder: View {
             isHovering = hovering
         }
         .onChange(of: model.currentEventMonitor) { _ in
-            if model.currentEventMonitor != eventMonitor {
+            if let eventMonitor, model.currentEventMonitor != eventMonitor {
                 finishedObservingKeys(wasForced: true)
             }
         }
@@ -106,6 +106,9 @@ struct Keycorder: View {
     func startObservingKeys() {
         selectionKeybind = []
         isActive = true
+
+        LoopManager.shared.keybindTrigger.stop()
+
         eventMonitor = LocalEventMonitor(events: [.keyDown, .keyUp]) { event in
             // Handle regular key presses first
             if event.type == .keyDown, !event.isARepeat {
@@ -157,19 +160,10 @@ struct Keycorder: View {
 
         /// Make sure we don't go over the key limit
         guard finalKeys.count <= keyLimit else {
-            errorMessage = "You can only use up to \(keyLimit) keys in a keybind, including the trigger key."
-            shouldShake.toggle()
+            errorMessage = "You can only use up to \(keyLimit) keys in a keybind."
+            shake()
             shouldError = true
             return
-        }
-
-        if bypassTriggerKey == true {
-            let systemKeybinds = CGKeyCode.systemKeybinds
-            if systemKeybinds.contains(finalKeys) {
-                errorMessage = "This shortcut is used by macOS and may not work as expected."
-                shouldShake.toggle()
-                shouldError = true
-            }
         }
 
         selectionKeybind = finalKeys
@@ -177,70 +171,7 @@ struct Keycorder: View {
 
     func finishedObservingKeys(wasForced: Bool = false) {
         isActive = false
-        var willSet = !wasForced
-
-        if validCurrentKeybind == selectionKeybind {
-            willSet = false
-        }
-
-        if willSet {
-            // Validate keybind requirements when in bypass mode
-            if bypassTriggerKey == true {
-                let normalizedKeys = selectionKeybind.map(\.baseModifier)
-                let modifierKeys = normalizedKeys.filter(\.isModifier)
-                let nonModifierKeys = normalizedKeys.filter { !$0.isModifier }
-
-                // Check: at least one modifier key
-                if modifierKeys.isEmpty {
-                    errorMessage = "You must include at least one modifier key (⌘, ⌃, ⌥, ⇧, or \(Image(systemName: "globe")))."
-                    shouldShake.toggle()
-                    shouldError = true
-                    willSet = false
-                }
-                // Check: at least one non-modifier key
-                else if nonModifierKeys.isEmpty {
-                    errorMessage = "You must include at least one non-modifier key."
-                    shouldShake.toggle()
-                    shouldError = true
-                    willSet = false
-                }
-                // Check: maximum of 5 keys total
-                else if selectionKeybind.count > 5 {
-                    errorMessage = "You can use a maximum of 5 keys in a custom shortcut."
-                    shouldShake.toggle()
-                    shouldError = true
-                    willSet = false
-                }
-            }
-
-            let effectiveSelection = bypassTriggerKey == true
-                ? selectionKeybind
-                : triggerKey.union(selectionKeybind)
-
-            for keybind in Defaults[.keybinds] {
-                let effectiveExisting = keybind.bypassTriggerKey == true
-                    ? keybind.keybind
-                    : triggerKey.union(keybind.keybind)
-
-                guard effectiveSelection == effectiveExisting else { continue }
-
-                willSet = false
-
-                if let name = keybind.name, !name.isEmpty {
-                    errorMessage = "That keybind is already being used by \(name)."
-                } else if keybind.direction == .custom {
-                    errorMessage = "That keybind is already being used by another custom keybind."
-                } else if keybind.direction == .stash {
-                    errorMessage = "That keybind is already being used by another stash keybind."
-                } else {
-                    errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
-                }
-
-                shouldShake.toggle()
-                shouldError = true
-                break
-            }
-        }
+        let willSet = !wasForced && checkValidKeybindConditions()
 
         if willSet {
             // Set the valid keybind to the current selected one
@@ -252,5 +183,70 @@ struct Keycorder: View {
 
         eventMonitor?.stop()
         eventMonitor = nil
+
+        LoopManager.shared.keybindTrigger.start()
+    }
+
+    private func checkValidKeybindConditions() -> Bool {
+        if validCurrentKeybind == selectionKeybind {
+            return false
+        }
+
+        // Validate keybind requirements when in bypass mode
+        if bypassTriggerKey == true {
+            let normalizedKeys = selectionKeybind.map(\.baseModifier)
+            let modifierKeys = normalizedKeys.filter(\.isModifier)
+            let nonModifierKeys = normalizedKeys.filter { !$0.isModifier }
+
+            // Check: at least one modifier key
+            if modifierKeys.isEmpty {
+                errorMessage = "Please include at least one modifier key."
+                shake()
+                shouldError = true
+                return false
+            }
+
+            // Check: at least one non-modifier key
+            else if nonModifierKeys.isEmpty {
+                errorMessage = "Please include at least one non-modifier key."
+                shake()
+                shouldError = true
+                return false
+            }
+        }
+
+        let effectiveSelection = bypassTriggerKey == true
+            ? selectionKeybind
+            : triggerKey.union(selectionKeybind)
+
+        for keybind in Defaults[.keybinds] {
+            let effectiveExisting = keybind.bypassTriggerKey == true
+                ? keybind.keybind
+                : triggerKey.union(keybind.keybind)
+
+            guard effectiveSelection == effectiveExisting else { continue }
+
+            if let name = keybind.name, !name.isEmpty {
+                errorMessage = "That keybind is already being used by \(name)."
+            } else if keybind.direction == .custom {
+                errorMessage = "That keybind is already being used by another custom keybind."
+            } else if keybind.direction == .stash {
+                errorMessage = "That keybind is already being used by another stash keybind."
+            } else {
+                errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
+            }
+
+            shake()
+            shouldError = true
+            return false
+        }
+
+        return true
+    }
+
+    private func shake() {
+        Task {
+            shouldShake.toggle()
+        }
     }
 }
