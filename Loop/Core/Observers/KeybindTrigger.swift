@@ -207,10 +207,7 @@ final class KeybindTrigger {
                 if allPressedKeys.isEmpty {
                     doubleClickTimer.handleKeyUp()
                 }
-
-                if isLoopOpen {
-                    closeLoop(forceClose: false)
-                }
+                closeLoop(forceClose: false)
             }
         }
 

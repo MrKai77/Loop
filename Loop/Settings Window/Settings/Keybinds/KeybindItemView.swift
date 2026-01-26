@@ -253,7 +253,7 @@ struct KeybindItemView: View {
                 Button("Unlink Trigger Key", action: switchToBypassMode)
             }
 
-            Button("Clear Keybind") { clearKeybind() }
+            Button("Clear Keybind", action: clearKeybind)
         }
     }
 }
