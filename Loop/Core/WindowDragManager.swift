@@ -128,7 +128,7 @@ final class WindowDragManager {
                         processSnapAction()
                     }
                 }
-                
+
                 StashManager.shared.onWindowDragged(window.cgWindowID)
                 WindowRecords.eraseRecords(for: window)
             }
@@ -276,10 +276,10 @@ final class WindowDragManager {
                 direction = newDirection
 
                 Log.info("Window snapping direction changed: \(newDirection.debugDescription)", category: .windowDragManager)
-                
+
                 previewController.open(screen: screen, window: draggingWindow, startingAction: nil)
                 previewController.setAction(to: WindowAction(newDirection))
-                
+
                 if newDirection != .noAction, Defaults[.hapticFeedback] {
                     NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
                 }
