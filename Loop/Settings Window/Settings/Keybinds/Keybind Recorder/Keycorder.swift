@@ -138,7 +138,10 @@ struct Keycorder: View {
         let currentKeys = selectionKeybind + [event.keyCode]
             .map { $0.baseKey(flags: event.modifierFlags) }
 
-        var flags = CGEventFlags(cocoaFlags: event.modifierFlags)
+        var flags = CGEventFlags(
+            cocoaFlags: event.modifierFlags
+                .intersection(.deviceIndependentFlagsMask) // Prevents right/left dependence
+        )
 
         if event.keyCode.isFnSpecialKey {
             flags.remove(.maskSecondaryFn)
@@ -193,26 +196,12 @@ struct Keycorder: View {
         }
 
         // Validate keybind requirements when in bypass mode
-        if bypassTriggerKey == true {
-            let normalizedKeys = selectionKeybind.map(\.baseModifier)
-            let modifierKeys = normalizedKeys.filter(\.isModifier)
-            let nonModifierKeys = normalizedKeys.filter { !$0.isModifier }
-
-            // Check: at least one modifier key
-            if modifierKeys.isEmpty {
-                errorMessage = "Please include at least one modifier key."
-                shake()
-                shouldError = true
-                return false
-            }
-
-            // Check: at least one non-modifier key
-            else if nonModifierKeys.isEmpty {
-                errorMessage = "Please include at least one non-modifier key."
-                shake()
-                shouldError = true
-                return false
-            }
+        if bypassTriggerKey == true,
+           selectionKeybind.filter(\.isModifier).isEmpty {
+            errorMessage = "Please include at least one modifier key."
+            shake()
+            shouldError = true
+            return false
         }
 
         let effectiveSelection = bypassTriggerKey == true
