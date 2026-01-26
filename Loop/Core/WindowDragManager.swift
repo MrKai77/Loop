@@ -9,6 +9,7 @@ import Defaults
 import Scribe
 import SwiftUI
 
+@MainActor
 final class WindowDragManager {
     static let shared = WindowDragManager()
     private init() {}
@@ -42,7 +43,6 @@ final class WindowDragManager {
             !Defaults[.stashManagerStashedWindows].isEmpty
     }
 
-    @MainActor
     func addObservers() {
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
             for await status in AccessibilityManager.shared.stream(initial: true) {
@@ -90,7 +90,7 @@ final class WindowDragManager {
             return
         }
 
-        Task { @MainActor in
+        Task {
             guard let initialMousePosition else {
                 initialMousePosition = currentMousePosition
                 return
@@ -110,9 +110,6 @@ final class WindowDragManager {
             }
 
             if let window = draggingWindow, let initialFrame = initialWindowFrame, hasWindowResized(window.frame, initialFrame) {
-                StashManager.shared.onWindowDragged(window.cgWindowID)
-                WindowRecords.eraseRecords(for: window)
-
                 if hasWindowMoved(window.frame, initialFrame) {
                     if Defaults[.restoreWindowFrameOnDrag] {
                         restoreInitialWindowSize(window)
@@ -131,28 +128,33 @@ final class WindowDragManager {
                         processSnapAction()
                     }
                 }
+                
+                StashManager.shared.onWindowDragged(window.cgWindowID)
+                WindowRecords.eraseRecords(for: window)
             }
         }
     }
 
     private func leftMouseUp(_: CGEvent) {
-        Task { @MainActor in
+        guard Defaults[.windowSnapping] else {
+            return
+        }
+
+        Task {
+            previewController.close()
+
             if let window = draggingWindow,
+               let screen = NSScreen.screenWithMouse,
                let initialFrame = initialWindowFrame,
                hasWindowMoved(window.frame, initialFrame) {
-                if Defaults[.windowSnapping] {
-                    attemptWindowSnap(window)
-                }
+                WindowEngine.resize(window, to: .init(direction), on: screen)
             }
 
-            previewController.close()
             draggingWindow = nil
-
             resetDragState()
         }
     }
 
-    @MainActor
     private func setCurrentDraggingWindow() {
         guard determineDraggedWindowTask == nil else {
             return
@@ -163,9 +165,8 @@ final class WindowDragManager {
                 determineDraggedWindowTask = nil
             }
 
-            guard
-                let draggingWindow = try? WindowUtility.windowAtPosition(currentMousePosition),
-                !draggingWindow.isAppExcluded
+            guard let draggingWindow = try? WindowUtility.windowAtPosition(currentMousePosition),
+                  !draggingWindow.isAppExcluded
             else {
                 didFailToResolveDraggedWindow = true
                 return
@@ -263,41 +264,29 @@ final class WindowDragManager {
                 await AccentColorController.shared.refresh()
             }
 
-            direction = WindowDirection.getSnapDirection(
+            let newDirection = WindowDirection.getSnapDirection(
                 mouseLocation: currentMousePosition,
-                currentDirection: direction,
+                currentDirection: oldDirection,
                 screenFrame: screenFrame,
                 ignoredFrame: ignoredFrame
             )
 
-            Log.info("Window snapping direction changed: \(direction.debugDescription)", category: .windowDragManager)
+            // Only update if direction actually changed
+            if newDirection != oldDirection {
+                direction = newDirection
 
-            previewController.open(screen: screen, window: draggingWindow, startingAction: nil)
-            previewController.setAction(to: WindowAction(direction))
-        } else {
+                Log.info("Window snapping direction changed: \(newDirection.debugDescription)", category: .windowDragManager)
+                
+                previewController.open(screen: screen, window: draggingWindow, startingAction: nil)
+                previewController.setAction(to: WindowAction(newDirection))
+                
+                if newDirection != .noAction, Defaults[.hapticFeedback] {
+                    NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
+                }
+            }
+        } else if !(oldDirection == .noAction || oldDirection == .noSelection) {
             direction = .noAction
             previewController.close()
-        }
-
-        if direction != oldDirection {
-            if Defaults[.hapticFeedback] {
-                NSHapticFeedbackManager.defaultPerformer.perform(
-                    NSHapticFeedbackManager.FeedbackPattern.alignment,
-                    performanceTime: NSHapticFeedbackManager.PerformanceTime.now
-                )
-            }
-        }
-    }
-
-    private func attemptWindowSnap(_ window: Window) {
-        guard let screen = NSScreen.screenWithMouse else {
-            return
-        }
-
-        let snapDirection = direction
-        DispatchQueue.main.async {
-            WindowEngine.resize(window, to: .init(snapDirection), on: screen)
-            self.direction = .noAction
         }
     }
 }
