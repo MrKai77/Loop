@@ -183,9 +183,29 @@ actor UpdateInstaller {
         let currentAppURL = Bundle.main.bundleURL
         let parentDirectory = currentAppURL.deletingLastPathComponent()
 
+        // Skip permission check for Applications folders - macOS will handle admin prompt automatically
+        let parentPath = parentDirectory.path
+        let userAppsPath = fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications").path
+
+        // Check if app is in /Applications or any subfolder (e.g., /Applications/Utilities)
+        let isInSystemApplications = parentPath == "/Applications" || parentPath.hasPrefix("/Applications/")
+        // Check if app is in ~/Applications or any subfolder
+        let isInUserApplications = parentPath == userAppsPath || parentPath.hasPrefix(userAppsPath + "/")
+
+        if isInSystemApplications || isInUserApplications {
+            log.info("App is in Applications folder - admin privileges may be required during installation")
+            return
+        }
+
         // Check write permissions to parent directory
         guard fileManager.isWritableFile(atPath: parentDirectory.path) else {
-            throw UpdateError.installationFailed("No write permissions to application directory: \(parentDirectory.path)")
+            let message = """
+            Cannot write to application directory: \(parentDirectory.path)
+            
+            To update Loop, please move it to your Applications folder (~/Applications or /Applications).
+            The system will prompt for admin password if needed.
+            """
+            throw UpdateError.installationFailed(message)
         }
 
         // Test by creating a temporary file
@@ -409,6 +429,7 @@ actor UpdateInstaller {
             // Perform atomic installation to current location
             let currentAppURL = Bundle.main.bundleURL
             try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
+            installedAppURL = currentAppURL
         }
 
         // Post-installation verification
@@ -571,6 +592,11 @@ actor UpdateInstaller {
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {
         do {
+            // Check if the app is in /Applications and warn about potential admin prompt
+            if current.path.hasPrefix("/Applications/") {
+                log.info("App is located in /Applications - system may prompt for admin password to complete the update")
+            }
+            
             log.info("Moving current app to backup...")
 
             // Ensure the backup directory exists
