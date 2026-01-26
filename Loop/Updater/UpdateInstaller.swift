@@ -201,7 +201,7 @@ actor UpdateInstaller {
         guard fileManager.isWritableFile(atPath: parentDirectory.path) else {
             let message = """
             Cannot write to application directory: \(parentDirectory.path)
-            
+
             To update Loop, please move it to your Applications folder (~/Applications or /Applications).
             The system will prompt for admin password if needed.
             """
@@ -596,7 +596,7 @@ actor UpdateInstaller {
             if current.path.hasPrefix("/Applications/") {
                 log.info("App is located in /Applications - system may prompt for admin password to complete the update")
             }
-            
+
             log.info("Moving current app to backup...")
 
             // Ensure the backup directory exists
