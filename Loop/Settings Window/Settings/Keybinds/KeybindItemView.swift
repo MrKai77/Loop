@@ -32,16 +32,21 @@ struct KeybindItemView: View {
 
     /// Checks if there are any existing keybinds with the same key combination
     private var hasDuplicateKeybinds: Bool {
+        guard !action.keybind.isEmpty else {
+            return false
+        }
+
         let effectiveKeybind = action.bypassTriggerKey == true
             ? action.keybind
             : triggerKey.union(action.keybind)
 
-        return !keybinds.filter { otherAction in
+        return keybinds.contains { otherAction in
+            guard otherAction.id != action.id else { return false }
             let otherEffectiveKeybind = otherAction.bypassTriggerKey == true
                 ? otherAction.keybind
                 : triggerKey.union(otherAction.keybind)
-            return effectiveKeybind == otherEffectiveKeybind && otherAction.id != action.id
-        }.isEmpty
+            return effectiveKeybind == otherEffectiveKeybind
+        }
     }
 
     var body: some View {
@@ -155,17 +160,13 @@ struct KeybindItemView: View {
                     .luminarePlateau()
             } else {
                 HStack(spacing: 6) {
-                    if hasDuplicateKeybinds {
-                        keycorderSection(hasConflicts: true)
-                            .padding(.leading, 4)
-                            .luminarePopover(attachedTo: .topLeading) {
-                                Text("There are other keybinds that conflict with this key combination.")
-                                    .padding(6)
-                            }
-                            .luminareTint(overridingWith: .red)
-                    } else {
-                        keycorderSection(hasConflicts: false)
-                    }
+                    keycorderSection()
+                        .padding(.leading, 4)
+                        .luminarePopover(attachedTo: .topLeading, hidden: !hasDuplicateKeybinds) {
+                            Text("There are other keybinds that conflict with this key combination.")
+                                .padding(6)
+                        }
+                        .luminareTint(overridingWith: .red)
                 }
                 .fixedSize()
             }
@@ -226,7 +227,7 @@ struct KeybindItemView: View {
         .padding(.leading, -4)
     }
 
-    private func keycorderSection(hasConflicts: Bool) -> some View {
+    private func keycorderSection() -> some View {
         HStack(spacing: 6) {
             if action.bypassTriggerKey != true {
                 HStack(spacing: 6) {
@@ -244,7 +245,7 @@ struct KeybindItemView: View {
             }
 
             Keycorder($action)
-                .opacity(hasConflicts ? 0.5 : 1)
+                .opacity(hasDuplicateKeybinds || action.keybind.isEmpty ? 0.5 : 1)
         }
         .contextMenu {
             if action.bypassTriggerKey == true {
