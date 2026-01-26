@@ -10,31 +10,28 @@ import Defaults
 import Scribe
 
 /// This enum is in charge of fetching windows in the user's workspace, which will be used by Loop.
+@Loggable(style: .static)
 enum WindowUtility {
     /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
     /// - Returns: The target window
     static func userDefinedTargetWindow() -> Window? {
         var result: Window?
 
-        do {
-            Log.info("Getting window at cursor...", category: .windowUtility)
+        log.info("Getting window at cursor...")
 
-            if Defaults[.resizeWindowUnderCursor],
-               let mouseLocation = CGEvent.mouseLocation,
-               let window = try windowAtPosition(mouseLocation) {
-                result = window
-            }
-        } catch {
-            Log.warn("Failed to get window at cursor: \(error.localizedDescription)", category: .windowUtility)
+        if Defaults[.resizeWindowUnderCursor],
+           let mouseLocation = CGEvent.mouseLocation,
+           let window = windowAtPosition(mouseLocation) {
+            result = window
         }
 
         if result == nil {
             do {
-                Log.info("Getting frontmost window...", category: .windowUtility)
+                log.info("Getting frontmost window...")
 
                 result = try frontmostWindow()
             } catch {
-                Log.warn("Failed to get frontmost window: \(error.localizedDescription)", category: .windowUtility)
+                log.warn("Failed to get frontmost window: \(error.localizedDescription)")
             }
         }
 
@@ -53,11 +50,15 @@ enum WindowUtility {
     /// Get the Window at a given position.
     /// - Parameter position: The position to check for
     /// - Returns: The window at the given position, if any
-    static func windowAtPosition(_ position: CGPoint) throws -> Window? {
-        // If we can find the window at a point using the Accessibility API, return it
-        if let element = try AXUIElement.systemWide.getElementAtPosition(position),
-           let windowElement: AXUIElement = try element.getValue(.window) {
-            return try Window(element: windowElement)
+    static func windowAtPosition(_ position: CGPoint) -> Window? {
+        do {
+            // If we can find the window at a point using the Accessibility API, return it
+            if let element = try AXUIElement.systemWide.getElementAtPosition(position),
+               let windowElement: AXUIElement = try element.getValue(.window) {
+                return try Window(element: windowElement)
+            }
+        } catch {
+            log.warn("Failed to determine element at position: \(error.localizedDescription)")
         }
 
         // If the previous method didn't work, loop through all windows on-screen and return the first one that contains the desired point
