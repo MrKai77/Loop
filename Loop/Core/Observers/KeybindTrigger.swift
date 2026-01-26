@@ -153,8 +153,10 @@ final class KeybindTrigger {
     private func performKeybind(keyCode: CGKeyCode, type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
         let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
         let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
+
         let actionKeys: Set<CGKeyCode> = Set(allPressedKeys.subtracting(triggerKey).map(\.baseModifier))
         let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
+        let allPressedKeysBaseModifiers: Set<CGKeyCode> = Set(allPressedKeys.map(\.baseModifier))
 
         if isLoopOpen {
             if pressedKeys.contains(.kVK_Escape) {
@@ -176,10 +178,9 @@ final class KeybindTrigger {
             if containsTrigger {
                 // Try an match directly with the action keys first, then fallback to just the key code.
                 // This prevents failures when the user is tapping the keys in rapid succession.
-                let initalMatch = windowActionCache.actionsByKeybind[actionKeys]
-                let fallbackMatch = windowActionCache.actionsByKeybind[[keyCode]]
+                let match = windowActionCache.actionsByKeybind[actionKeys] ?? windowActionCache.actionsByKeybind[[keyCode]]
 
-                if let action = initalMatch ?? fallbackMatch {
+                if let action = match {
                     if !isARepeat || action.canRepeat {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
@@ -197,6 +198,12 @@ final class KeybindTrigger {
                     )
                     return .opening
                 }
+            } else if let bypassedAction = windowActionCache.bypassedActionsByKeybind[allPressedKeysBaseModifiers] {
+                if !isARepeat || bypassedAction.canRepeat {
+                    openLoop(startingAction: bypassedAction, overrideExistingTriggerDelayTimerAction: true)
+                }
+
+                return checkIfLoopOpen() ? .consume : .opening
             } else {
                 if allPressedKeys.isEmpty {
                     doubleClickTimer.handleKeyUp()

@@ -21,6 +21,7 @@ struct Keycorder: View {
     @Binding private var validCurrentKeybind: Set<CGKeyCode>
     @State private var selectionKeybind: Set<CGKeyCode>
     @Binding private var direction: WindowDirection
+    @Binding private var bypassTriggerKey: Bool?
 
     @State private var eventMonitor: LocalEventMonitor?
     @State private var shouldShake: Bool = false
@@ -33,6 +34,7 @@ struct Keycorder: View {
     init(_ keybind: Binding<WindowAction>) {
         self._validCurrentKeybind = keybind.keybind
         self._direction = keybind.direction
+        self._bypassTriggerKey = keybind.bypassTriggerKey
         self._selectionKeybind = State(initialValue: keybind.wrappedValue.keybind)
     }
 
@@ -82,7 +84,7 @@ struct Keycorder: View {
             isHovering = hovering
         }
         .onChange(of: model.currentEventMonitor) { _ in
-            if model.currentEventMonitor != eventMonitor {
+            if let eventMonitor, model.currentEventMonitor != eventMonitor {
                 finishedObservingKeys(wasForced: true)
             }
         }
@@ -104,6 +106,9 @@ struct Keycorder: View {
     func startObservingKeys() {
         selectionKeybind = []
         isActive = true
+
+        LoopManager.shared.keybindTrigger.stop()
+
         eventMonitor = LocalEventMonitor(events: [.keyDown, .keyUp]) { event in
             // Handle regular key presses first
             if event.type == .keyDown, !event.isARepeat {
@@ -133,61 +138,43 @@ struct Keycorder: View {
         let currentKeys = selectionKeybind + [event.keyCode]
             .map { $0.baseKey(flags: event.modifierFlags) }
 
-        var flags = CGEventFlags(cocoaFlags: event.modifierFlags)
+        var flags = CGEventFlags(
+            cocoaFlags: event.modifierFlags
+                .intersection(.deviceIndependentFlagsMask) // Prevents right/left dependence
+        )
 
         if event.keyCode.isFnSpecialKey {
             flags.remove(.maskSecondaryFn)
         }
 
-        // Filter out trigger keys from flags
-        let validModifiers = flags.keyCodes.map(\.baseModifier).filter {
-            !Defaults[.triggerKey]
-                .map(\.baseModifier)
-                .contains($0)
+        let validModifiers = if bypassTriggerKey == true {
+            flags.keyCodes
+        } else {
+            flags.keyCodes.filter {
+                !Defaults[.triggerKey]
+                    .map(\.baseModifier)
+                    .contains($0)
+            }
         }
 
         let finalKeys = Set(currentKeys + validModifiers)
 
+        shouldError = false
+
         /// Make sure we don't go over the key limit
-        guard finalKeys.count < keyLimit else {
-            errorMessage = "You can only use up to \(keyLimit) keys in a keybind, including the trigger key."
-            shouldShake.toggle()
+        guard finalKeys.count <= keyLimit else {
+            errorMessage = "You can only use up to \(keyLimit) keys in a keybind."
+            shake()
             shouldError = true
             return
         }
 
-        shouldError = false
         selectionKeybind = finalKeys
     }
 
     func finishedObservingKeys(wasForced: Bool = false) {
         isActive = false
-        var willSet = !wasForced
-
-        if validCurrentKeybind == selectionKeybind {
-            willSet = false
-        }
-
-        if willSet {
-            for keybind in Defaults[.keybinds] where
-                keybind.keybind == selectionKeybind {
-                willSet = false
-
-                if let name = keybind.name, !name.isEmpty {
-                    self.errorMessage = "That keybind is already being used by \(name)."
-                } else if keybind.direction == .custom {
-                    self.errorMessage = "That keybind is already being used by another custom keybind."
-                } else if keybind.direction == .stash {
-                    self.errorMessage = "That keybind is already being used by another stash keybind."
-                } else {
-                    self.errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
-                }
-
-                self.shouldShake.toggle()
-                self.shouldError = true
-                break
-            }
-        }
+        let willSet = !wasForced && checkValidKeybindConditions()
 
         if willSet {
             // Set the valid keybind to the current selected one
@@ -199,5 +186,56 @@ struct Keycorder: View {
 
         eventMonitor?.stop()
         eventMonitor = nil
+
+        LoopManager.shared.keybindTrigger.start()
+    }
+
+    private func checkValidKeybindConditions() -> Bool {
+        if validCurrentKeybind == selectionKeybind {
+            return false
+        }
+
+        // Validate keybind requirements when in bypass mode
+        if bypassTriggerKey == true,
+           selectionKeybind.filter(\.isModifier).isEmpty {
+            errorMessage = "Please include at least one modifier key."
+            shake()
+            shouldError = true
+            return false
+        }
+
+        let effectiveSelection = bypassTriggerKey == true
+            ? selectionKeybind
+            : triggerKey.union(selectionKeybind)
+
+        for keybind in Defaults[.keybinds] {
+            let effectiveExisting = keybind.bypassTriggerKey == true
+                ? keybind.keybind
+                : triggerKey.union(keybind.keybind)
+
+            guard effectiveSelection == effectiveExisting else { continue }
+
+            if let name = keybind.name, !name.isEmpty {
+                errorMessage = "That keybind is already being used by \(name)."
+            } else if keybind.direction == .custom {
+                errorMessage = "That keybind is already being used by another custom keybind."
+            } else if keybind.direction == .stash {
+                errorMessage = "That keybind is already being used by another stash keybind."
+            } else {
+                errorMessage = "That keybind is already being used by \(keybind.direction.name.lowercased())."
+            }
+
+            shake()
+            shouldError = true
+            return false
+        }
+
+        return true
+    }
+
+    private func shake() {
+        Task {
+            shouldShake.toggle()
+        }
     }
 }

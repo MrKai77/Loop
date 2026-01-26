@@ -32,12 +32,21 @@ struct KeybindItemView: View {
 
     /// Checks if there are any existing keybinds with the same key combination
     private var hasDuplicateKeybinds: Bool {
-        if action.keybind.isEmpty {
+        guard !action.keybind.isEmpty else {
             return false
         }
 
-        return keybinds
-            .count { $0.keybind == action.keybind } > 1
+        let effectiveKeybind = action.bypassTriggerKey == true
+            ? action.keybind
+            : triggerKey.union(action.keybind)
+
+        return keybinds.contains { otherAction in
+            guard otherAction.id != action.id else { return false }
+            let otherEffectiveKeybind = otherAction.bypassTriggerKey == true
+                ? otherAction.keybind
+                : triggerKey.union(otherAction.keybind)
+            return effectiveKeybind == otherEffectiveKeybind
+        }
     }
 
     var body: some View {
@@ -48,7 +57,6 @@ struct KeybindItemView: View {
             keybindCombination
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-
         .padding(.horizontal, 12)
         .onChange(of: isHovering) { _ in
             if !isHovering {
@@ -152,22 +160,38 @@ struct KeybindItemView: View {
                     .luminarePlateau()
             } else {
                 HStack(spacing: 6) {
-                    if hasDuplicateKeybinds {
-                        keycorderSection(hasConflicts: true)
-                            .padding(.leading, 4)
-                            .luminarePopover(attachedTo: .topLeading) {
-                                Text("There are other keybinds that conflict with this key combination.")
-                                    .padding(6)
-                            }
-                            .luminareTint(overridingWith: .red)
-                    } else {
-                        keycorderSection(hasConflicts: false)
-                    }
+                    keycorderSection()
+                        .padding(.leading, 4)
+                        .luminarePopover(attachedTo: .topLeading, hidden: !hasDuplicateKeybinds) {
+                            Text("There are other keybinds that conflict with this key combination.")
+                                .padding(6)
+                        }
+                        .luminareTint(overridingWith: .red)
                 }
                 .fixedSize()
             }
         }
         .luminareCornerRadius(8)
+    }
+
+    // MARK: - Helper Methods
+
+    /// Switches to standard mode (keeps the keybind)
+    private func restoreStandardMode() {
+        action.keybind = action.keybind.subtracting(triggerKey)
+        action.bypassTriggerKey = false
+    }
+
+    /// Merges trigger key into action key and switches to bypass mode
+    private func switchToBypassMode() {
+        action.keybind = triggerKey.union(action.keybind)
+        action.bypassTriggerKey = true
+    }
+
+    /// Clears the keybind and switches to standard mode
+    private func clearKeybind() {
+        action.keybind = []
+        action.bypassTriggerKey = false
     }
 
     private func label() -> some View {
@@ -203,23 +227,34 @@ struct KeybindItemView: View {
         .padding(.leading, -4)
     }
 
-    private func keycorderSection(hasConflicts: Bool) -> some View {
+    private func keycorderSection() -> some View {
         HStack(spacing: 6) {
-            HStack(spacing: 6) {
-                ForEach(triggerKey.sorted().compactMap(\.modifierSystemImage), id: \.self) { image in
-                    Text("\(Image(systemName: image))")
+            if action.bypassTriggerKey != true {
+                HStack(spacing: 6) {
+                    ForEach(triggerKey.sorted().compactMap(\.modifierSystemImage), id: \.self) { image in
+                        Text("\(Image(systemName: image))")
+                    }
                 }
-            }
-            .font(.callout)
-            .padding(6)
-            .frame(height: 27)
-            .luminarePlateau()
+                .font(.callout)
+                .padding(6)
+                .frame(height: 27)
+                .luminarePlateau()
 
-            Image(systemName: "plus")
-                .foregroundStyle(.secondary)
+                Image(systemName: "plus")
+                    .foregroundStyle(.secondary)
+            }
 
             Keycorder($action)
-                .opacity(hasConflicts ? 0.5 : 1)
+                .opacity(hasDuplicateKeybinds || action.keybind.isEmpty ? 0.5 : 1)
+        }
+        .contextMenu {
+            if action.bypassTriggerKey == true {
+                Button("Link Trigger Key", action: restoreStandardMode)
+            } else {
+                Button("Unlink Trigger Key", action: switchToBypassMode)
+            }
+
+            Button("Clear Keybind", action: clearKeybind)
         }
     }
 }

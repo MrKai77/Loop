@@ -42,7 +42,8 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         yPoint: Double? = nil,
         positionMode: CustomWindowActionPositionMode? = nil,
         sizeMode: CustomWindowActionSizeMode? = nil,
-        cycle: [WindowAction]? = nil
+        cycle: [WindowAction]? = nil,
+        bypassTriggerKey: Bool? = nil
     ) {
         self.id = UUID()
         self.direction = direction
@@ -57,6 +58,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
         self.yPoint = yPoint
         self.sizeMode = sizeMode
         self.cycle = cycle
+        self.bypassTriggerKey = bypassTriggerKey
     }
 
     /// Initializes a `WindowAction` with the specified direction and an empty keybind.
@@ -94,6 +96,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     // Generic Properties
     var direction: WindowDirection
     var keybind: Set<CGKeyCode>
+    var bypassTriggerKey: Bool?
 
     // Custom Keybind Properties
     var name: String?
