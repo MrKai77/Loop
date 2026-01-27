@@ -45,7 +45,7 @@ final class LoopManager {
         windowActionCache: windowActionCache,
         changeAction: { [weak self] newAction in
             /// If the mouse moved, that means that the keybind trigger should no longer passthrough special events such as the emoji key.
-            self?.keybindTrigger.canPassthroughSpecialEvents = false
+            self?.keybindTrigger.canPassthroughNextSpecialEvent = false
             self?.changeAction(newAction, canAdvanceCycle: false)
         },
         selectNextCycleItem: { [weak self] in

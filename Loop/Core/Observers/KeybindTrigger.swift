@@ -27,8 +27,10 @@ final class KeybindTrigger {
     private let keybindCacheLifetime: ContinuousClock.Duration = .seconds(30)
 
     // Special events only contain the globe key, as it can also be used as an emoji key.
-    private let specialEvents: [CGKeyCode] = [.kVK_Globe_Emoji]
-    var canPassthroughSpecialEvents = true // If mouse has been moved
+    private let specialEventKeys: [CGKeyCode] = [.kVK_Globe_Emoji]
+
+    // Will be set to `false` if the mouse has been moved by LoopManager.
+    var canPassthroughNextSpecialEvent = true
 
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
@@ -97,13 +99,14 @@ final class KeybindTrigger {
             }
 
             // Special events such as the emoji key
-            if specialEvents.contains(keyCode) {
-                return canPassthroughSpecialEvents ? .forward : .ignore
+            if specialEventKeys.contains(keyCode) {
+                let canPassthrough = canPassthroughNextSpecialEvent
+                canPassthroughNextSpecialEvent = true // reset
+                return canPassthrough ? .forward : .ignore
             }
 
             // If this is a valid event, don't passthrough
             let result = performKeybind(
-                keyCode: keyCode,
                 type: event.type,
                 isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
                 flags: filteredFlags,
@@ -129,11 +132,12 @@ final class KeybindTrigger {
     }
 
     func stop() {
-        pressedKeys = []
-        canPassthroughSpecialEvents = true
-
         eventMonitor?.stop()
         eventMonitor = nil
+
+        // Reset states
+        pressedKeys = []
+        canPassthroughNextSpecialEvent = true
     }
 
     enum PerformKeybindResult {
@@ -233,8 +237,6 @@ final class KeybindTrigger {
     }
 
     private func closeLoop(forceClose: Bool) {
-        pressedKeys = []
-        canPassthroughSpecialEvents = true
         triggerDelayTimer.cancel()
         closeCallback(forceClose)
     }
