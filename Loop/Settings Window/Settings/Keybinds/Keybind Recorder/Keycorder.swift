@@ -187,7 +187,9 @@ struct Keycorder: View {
         eventMonitor?.stop()
         eventMonitor = nil
 
-        LoopManager.shared.keybindTrigger.start()
+        Task {
+            await LoopManager.shared.keybindTrigger.start()
+        }
     }
 
     private func checkValidKeybindConditions() -> Bool {

@@ -48,7 +48,7 @@ final class WindowActionCache {
         regenerateActionsByKeybind(from: keybinds)
         regenerateActionsByIdentifier(from: keybinds)
 
-        Log.info("Regenerated cache; normal: \(actionsByKeybind.count), bypassed: \(bypassedActionsByKeybind.count)", category: .windowActionCache)
+        log.info("Regenerated cache; normal: \(actionsByKeybind.count), bypassed: \(bypassedActionsByKeybind.count)")
     }
 
     private func regenerateActionsByKeybind(from keybinds: [WindowAction]) {
