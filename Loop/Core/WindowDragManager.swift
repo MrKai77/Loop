@@ -39,7 +39,6 @@ final class WindowDragManager {
             !Defaults[.stashManagerStashedWindows].isEmpty
     }
 
-    @MainActor
     func addObservers() {
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
             for await status in AccessibilityManager.shared.stream(initial: true) {

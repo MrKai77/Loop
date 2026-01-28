@@ -71,7 +71,7 @@ final class LoopManager {
         changeAction: { [weak self] newAction in
             Task {
                 /// If the mouse moved, that means that the keybind trigger should no longer passthrough special events such as the emoji key.
-                self?.keybindTrigger.canPassthroughSpecialEvents = false
+                self?.keybindTrigger.canPassthroughNextSpecialEvent = false
                 await self?.changeAction(newAction, canAdvanceCycle: false)
             }
         },

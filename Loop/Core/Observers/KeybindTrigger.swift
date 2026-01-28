@@ -29,8 +29,10 @@ final class KeybindTrigger {
     private let keybindCacheLifetime: ContinuousClock.Duration = .seconds(30)
 
     // Special events only contain the globe key, as it can also be used as an emoji key.
-    private let specialEvents: [CGKeyCode] = [.kVK_Globe_Emoji]
-    var canPassthroughSpecialEvents = true // If mouse has been moved
+    private let specialEventKeys: [CGKeyCode] = [.kVK_Globe_Emoji]
+
+    // Will be set to `false` if the mouse has been moved by LoopManager.
+    var canPassthroughNextSpecialEvent = true
 
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
@@ -97,13 +99,14 @@ final class KeybindTrigger {
             }
 
             // Special events such as the emoji key
-            if specialEvents.contains(keyCode) {
-                return canPassthroughSpecialEvents ? .forward : .ignore
+            if specialEventKeys.contains(keyCode) {
+                let canPassthrough = canPassthroughNextSpecialEvent
+                canPassthroughNextSpecialEvent = true // reset
+                return canPassthrough ? .forward : .ignore
             }
 
             // If this is a valid event, don't passthrough
             let result = performKeybind(
-                keyCode: keyCode,
                 type: event.type,
                 isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
                 flags: filteredFlags,
@@ -130,11 +133,12 @@ final class KeybindTrigger {
     }
 
     func stop() {
-        pressedKeys = []
-        canPassthroughSpecialEvents = true
-
         eventMonitor?.stop()
         eventMonitor = nil
+
+        // Reset states
+        pressedKeys = []
+        canPassthroughNextSpecialEvent = true
     }
 
     enum PerformKeybindResult {
@@ -150,12 +154,12 @@ final class KeybindTrigger {
     ///   - flags: modifier flags associated with this event.
     ///   - isLoopOpen: whether Loop is currently open.
     /// - Returns: whether this event was processed by Loop.
-    private func performKeybind(keyCode: CGKeyCode, type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
+    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
         let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
         let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
 
-        let actionKeys: Set<CGKeyCode> = Set(allPressedKeys.subtracting(triggerKey).map(\.baseModifier))
         let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
+        let actionKeys: Set<CGKeyCode> = Set(allPressedKeys.subtracting(triggerKey).map(\.baseModifier))
         let allPressedKeysBaseModifiers: Set<CGKeyCode> = Set(allPressedKeys.map(\.baseModifier))
 
         if isLoopOpen {
@@ -178,9 +182,7 @@ final class KeybindTrigger {
             if containsTrigger {
                 // Try an match directly with the action keys first, then fallback to just the key code.
                 // This prevents failures when the user is tapping the keys in rapid succession.
-                let match = windowActionCache.actionsByKeybind[actionKeys] ?? windowActionCache.actionsByKeybind[[keyCode]]
-
-                if let action = match {
+                if let action = windowActionCache.actionsByKeybind[actionKeys] {
                     if !isARepeat || action.canRepeat {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
@@ -234,8 +236,6 @@ final class KeybindTrigger {
     }
 
     private func closeLoop(forceClose: Bool) {
-        pressedKeys = []
-        canPassthroughSpecialEvents = true
         triggerDelayTimer.cancel()
         closeCallback(forceClose)
     }

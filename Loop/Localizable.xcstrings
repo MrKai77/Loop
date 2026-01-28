@@ -302,8 +302,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+            "state" : "translated",
+            "value" : "%@ staat niet in je Applications-folder. Wil je de update in je Applications-folder installeren?"
           }
         },
         "pt-BR" : {
@@ -549,8 +549,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "A single %1$@ action can only track one window. To stash\nmultiple windows, add additional %2$@ actions."
+            "state" : "translated",
+            "value" : "Een enkele %1$@-actie kan maar één venster volgen. Om meerdere vensters tijdelijk op te slaan, voeg extra %2$@-acties toe."
           }
         },
         "pt-BR" : {
@@ -632,8 +632,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Accent opacity"
+            "state" : "translated",
+            "value" : "Accentdekking"
           }
         },
         "pt-BR" : {
@@ -961,8 +961,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Actions"
+            "state" : "translated",
+            "value" : "Acties"
           }
         },
         "pt-BR" : {
@@ -1456,8 +1456,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Animated"
+            "state" : "translated",
+            "value" : "Geanimeerd"
           }
         },
         "pt-BR" : {
@@ -1867,8 +1867,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Automatically install updates"
+            "state" : "translated",
+            "value" : "Automatisch updates installeren"
           }
         },
         "pt-BR" : {
@@ -2943,8 +2943,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Annuleren"
           }
         },
         "pt-BR" : {
@@ -3273,8 +3273,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Check for Updates…"
+            "state" : "translated",
+            "value" : "Controleren op updates…"
           }
         },
         "pt-BR" : {
@@ -3304,7 +3304,86 @@
       }
     },
     "Clear Keybind" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Keybind"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer le raccourci"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キー設定をクリア"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Clear Keybind"
+          }
+        }
+      }
     },
     "Close" : {
       "comment" : "Label for a button that closes a modal window",
@@ -3689,8 +3768,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Copied!"
+            "state" : "translated",
+            "value" : "Gekopiëerd!"
           }
         },
         "pt-BR" : {
@@ -6084,8 +6163,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Failed to resolve linked keybind"
+            "state" : "translated",
+            "value" : "Gelinkte toetsverbinding mislukt"
           }
         },
         "pt-BR" : {
@@ -6167,8 +6246,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fill Available Space"
+            "state" : "translated",
+            "value" : "Beschikbare ruimte opvullen"
           }
         },
         "pt-BR" : {
@@ -6250,8 +6329,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "First Fourth"
+            "state" : "translated",
+            "value" : "Eerste kwart"
           }
         },
         "pt-BR" : {
@@ -6333,8 +6412,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fluid"
+            "state" : "translated",
+            "value" : "Vloeiend"
           }
         },
         "pt-BR" : {
@@ -6416,7 +6495,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Focus"
           }
         },
@@ -6499,8 +6578,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus Down"
+            "state" : "translated",
+            "value" : "Focus beneden"
           }
         },
         "pt-BR" : {
@@ -6582,8 +6661,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus Left"
+            "state" : "translated",
+            "value" : "Focus links"
           }
         },
         "pt-BR" : {
@@ -6748,8 +6827,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus Right"
+            "state" : "translated",
+            "value" : "Focus rechts"
           }
         },
         "pt-BR" : {
@@ -6831,8 +6910,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus Up"
+            "state" : "translated",
+            "value" : "Focus omhoog"
           }
         },
         "pt-BR" : {
@@ -6996,8 +7075,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fourth Fourth"
+            "state" : "translated",
+            "value" : "Vierde kwart"
           }
         },
         "pt-BR" : {
@@ -7576,8 +7655,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow Horizontally"
+            "state" : "translated",
+            "value" : "Groei horizontaal"
           }
         },
         "pt-BR" : {
@@ -7908,8 +7987,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Grow Vertically"
+            "state" : "translated",
+            "value" : "Groei verticaal"
           }
         },
         "pt-BR" : {
@@ -8485,8 +8564,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Horizontal Center Half"
+            "state" : "translated",
+            "value" : "Horizontaal halfmidden"
           }
         },
         "pt-BR" : {
@@ -8651,8 +8730,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Horizontal Fourths"
+            "state" : "translated",
+            "value" : "Horizontale vierdes"
           }
         },
         "pt-BR" : {
@@ -9062,8 +9141,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Daylight"
+            "state" : "translated",
+            "value" : "Daglicht"
           }
         },
         "pt-BR" : {
@@ -11117,8 +11196,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install failed"
+            "state" : "translated",
+            "value" : "Installatie mislukt"
           }
         },
         "pt-BR" : {
@@ -11200,8 +11279,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install to Applications"
+            "state" : "translated",
+            "value" : "Installeren in je Applications-folder"
           }
         },
         "pt-BR" : {
@@ -11448,8 +11527,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keep in Current Location"
+            "state" : "translated",
+            "value" : "In huidige locatie houden"
           }
         },
         "pt-BR" : {
@@ -11697,8 +11776,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Larger (Proportional)"
+            "state" : "translated",
+            "value" : "Groter (proportioneel)"
           }
         },
         "pt-BR" : {
@@ -12110,8 +12189,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left Screen"
+            "state" : "translated",
+            "value" : "Linker scherm"
           }
         },
         "pt-BR" : {
@@ -12276,8 +12355,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left Three Fourths"
+            "state" : "translated",
+            "value" : "Linker driekwart"
           }
         },
         "pt-BR" : {
@@ -12442,8 +12521,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left-click to step through cycle actions."
+            "state" : "translated",
+            "value" : "Klik met de linkermuisknop om door cycle-acties te stappen"
           }
         },
         "pt-BR" : {
@@ -12474,7 +12553,86 @@
     },
     "Link Trigger Key" : {
       "comment" : "A button that links a trigger key to an action's keybind.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lier la touche d’activation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トリガーキーをリンク"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Link Trigger Key"
+          }
+        }
+      }
     },
     "Locked icon alert title" : {
       "localizations" : {
@@ -15239,8 +15397,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality."
+            "state" : "translated",
+            "value" : "MacOS' \"Sleep vensters naar de linker- of rechterrand van het scherm om te plaatsen\"-functie is actief, wat conflicteert met de vastgrijpfunctie van Loop"
           }
         },
         "pt-BR" : {
@@ -15405,8 +15563,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Height"
+            "state" : "translated",
+            "value" : "Hoogte maximaliseren"
           }
         },
         "pt-BR" : {
@@ -15488,8 +15646,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Maximize Width"
+            "state" : "translated",
+            "value" : "Breedte maximaliseren"
           }
         },
         "pt-BR" : {
@@ -15736,8 +15894,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Minimize Others"
+            "state" : "translated",
+            "value" : "Andere minimaliseren"
           }
         },
         "pt-BR" : {
@@ -16316,8 +16474,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move to Applications Folder?"
+            "state" : "translated",
+            "value" : "Naar Applications-folder verplaatsen?"
           }
         },
         "pt-BR" : {
@@ -16977,8 +17135,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No radial menu actions"
+            "state" : "translated",
+            "value" : "Geen radiaalmenu-acties"
           }
         },
         "pt-BR" : {
@@ -21522,7 +21680,86 @@
     },
     "Please include at least one modifier key." : {
       "comment" : "An error message displayed when a custom keybind is created but does not include at least one modifier key.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veuillez inclure au moins une touche de modification."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "少なくとも1つの修飾キーを含めてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Please include at least one modifier key."
+          }
+        }
+      }
     },
     "Position" : {
       "localizations" : {
@@ -21905,8 +22142,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Press \"Add\" to add an action"
+            "state" : "translated",
+            "value" : "Klik op \"Toevoegen\" om een actie toe te voegen"
           }
         },
         "pt-BR" : {
@@ -22649,8 +22886,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Radial Menu"
+            "state" : "translated",
+            "value" : "Radiaalmenu"
           }
         },
         "pt-BR" : {
@@ -23311,8 +23548,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset radial menu actions"
+            "state" : "translated",
+            "value" : "Radiaalmenu-acties resetten"
           }
         },
         "pt-BR" : {
@@ -23970,8 +24207,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Right Screen"
+            "state" : "translated",
+            "value" : "Rechter scherm"
           }
         },
         "pt-BR" : {
@@ -27766,8 +28003,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Suppress Mission Control"
+            "state" : "translated",
+            "value" : "Mission Control onderdrukken"
           }
         },
         "pt-BR" : {
@@ -28589,8 +28826,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This action is linked to a keybind. Changes made to this action will affect both."
+            "state" : "translated",
+            "value" : "Deze actie is gekoppeld aan een toets. Aanpassingen aan deze actie zal effect hebben op beide"
           }
         },
         "pt-BR" : {
@@ -28838,8 +29075,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This will reset all radial menu actions to their default configuration."
+            "state" : "translated",
+            "value" : "Dit zal alle radiaalmenu's resetten naar hun standaardinstellingen"
           }
         },
         "pt-BR" : {
@@ -29417,8 +29654,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Top Screen"
+            "state" : "translated",
+            "value" : "Bovenste scherm"
           }
         },
         "pt-BR" : {
@@ -29914,8 +30151,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Try again later"
+            "state" : "translated",
+            "value" : "Probeer later nogmaals"
           }
         },
         "pt-BR" : {
@@ -30029,7 +30266,86 @@
     },
     "Unlink Trigger Key" : {
       "comment" : "A menu item that removes the trigger key from the keybind.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Délier la touche d’activation"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "トリガーキーのリンク解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Unlink Trigger Key"
+          }
+        }
+      }
     },
     "Unstash" : {
       "comment" : "Window action",
@@ -30249,8 +30565,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Update from: %@"
+            "state" : "translated",
+            "value" : "Update van: %@"
           }
         },
         "pt-BR" : {
@@ -30497,8 +30813,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates will only be installed when %@ is in the background."
+            "state" : "translated",
+            "value" : "Updates zullen worden geïnstalleerd wanneer %@ op de achtergrond is"
           }
         },
         "pt-BR" : {
@@ -30991,8 +31307,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Versie %@"
           }
         },
         "pt-BR" : {
@@ -31406,8 +31722,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Whether to allow Mission Control to open when windows\nare dragged to the top of the screen."
+            "state" : "translated",
+            "value" : "Sta Mission Control toe te openen wanneer vensters naar de bovenkant van het scherm worden gesleept"
           }
         },
         "pt-BR" : {
@@ -32017,7 +32333,86 @@
     },
     "You can only use up to %lld keys in a keybind." : {
       "comment" : "An error message displayed when a user tries to create a keybind with more than the maximum number of keys allowed. The placeholder is replaced with the actual number of keys allowed.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous ne pouvez utiliser que %lld touches dans un raccourci."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キー設定には最大で%lld個のキーしか使用できません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "You can only use up to %lld keys in a keybind."
+          }
+        }
+      }
     },
     "You can only use up to %lld keys in your trigger key." : {
       "localizations" : {
@@ -32349,5 +32744,5 @@
       }
     }
   },
-  "version" : "1.1"
+  "version" : "1.0"
 }

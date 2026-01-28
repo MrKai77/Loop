@@ -114,7 +114,9 @@ enum ChangelogParser {
             .trimmingCharacters(in: .whitespacesAndNewlines)
 
         let emoji = detectEmoji(line: noteText)
-        let text = noteText.drop { $0.hasEmojiPresentationAsDefault }
+        let text = noteText
+            .drop { $0.hasEmojiPresentationAsDefault }
+            .trimmingCharacters(in: .whitespacesAndNewlines)
 
         return ChangelogNote(
             emoji: emoji,

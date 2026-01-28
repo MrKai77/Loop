@@ -37,7 +37,7 @@ final class PreviewViewModel: ObservableObject {
 
         let isCurrentlyHidden = !isShown
         var paddedFrame = context.getTargetFrame().padded
-        
+
         if let bounds = context.screen?.displayBounds {
             paddedFrame.origin.x -= bounds.minX
             paddedFrame.origin.y -= bounds.minY
