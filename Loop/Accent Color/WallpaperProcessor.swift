@@ -166,7 +166,6 @@ extension NSImage {
     /// The scoring system is designed to favor vibrant colors over dull ones, even if the
     /// dull colors appear more frequently in the image. This approach works well for extracting
     /// accent colors from wallpapers, which often have subtle variation in dominant colors.
-    @concurrent
     func calculateDominantColors() async -> [NSColor]? {
         // Resize the image to a smaller size to improve performance
         let aspectRatio = size.width / size.height

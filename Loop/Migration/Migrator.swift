@@ -115,7 +115,6 @@ enum Migrator {
     }
 
     /// Presents a prompt to export current keybinds to a JSON file.
-    @concurrent
     static func exportPrompt(onSuccess: () -> ()) async throws {
         // Check if there are any keybinds to export.
         guard !Defaults[.keybinds].isEmpty else {
@@ -141,7 +140,6 @@ enum Migrator {
     }
 
     /// Presents a prompt to import keybinds from a JSON file.
-    @concurrent
     static func importPrompt(onSuccess: () -> ()) async throws {
         let fileURL = try await getKeybindsFileURL()
         let jsonString = try String(contentsOf: fileURL)

@@ -26,7 +26,10 @@ final class ResizeContext {
     private(set) var action: WindowAction = .init(.noSelection)
     private(set) var parentAction: WindowAction?
 
+    /// Used for larger/smaller actions where the sides to adjust need to persist across frame calculations
     var sidesToAdjust: Edge.Set?
+
+    /// Used to open radial menu at the correct position.
     private(set) var initialMousePosition: CGPoint = .zero
 
     private(set) var cachedTargetFrame: ComputedFrame = .zero
@@ -41,19 +44,20 @@ final class ResizeContext {
         parentAction: WindowAction? = nil,
         initialMousePosition: CGPoint = .zero
     ) {
-        self.window = window
         let frame = initialFrame ?? window?.frame ?? .zero
+        let bounds = bounds ?? screen?.cgSafeScreenFrame ?? .zero
+        let padding = PaddingConfiguration.getConfiguredPadding(for: screen)
+
+        self.window = window
         self.cachedTargetFrame = ComputedFrame(raw: frame, padded: frame)
         self.screen = screen
-        let bounds = bounds ?? screen?.cgSafeScreenFrame ?? .zero
         self.bounds = bounds
-        let padding = PaddingConfiguration.getConfiguredPadding(for: screen)
         self.padding = padding
         self.paddedBounds = padding.applyToBounds(bounds)
         self.action = action
         self.parentAction = parentAction
         self.initialMousePosition = initialMousePosition
-        self.needsRecompute = action.direction != .noSelection
+        self.needsRecompute = !action.direction.isNoOp
     }
 
     func setScreen(to screen: NSScreen?) {

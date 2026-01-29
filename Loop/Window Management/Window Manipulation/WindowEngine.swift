@@ -15,7 +15,6 @@ import SwiftUI
 enum WindowEngine {
     /// Performs the actual resize operation on a window.
     /// This is an internal method - callers should use `WindowActionEngine.apply()` instead.
-    @concurrent
     static func performResize(context: ResizeContext) async throws -> CGRect? {
         // Immediately return for no-op or focus-only actions
         guard let window = context.window,

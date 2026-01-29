@@ -74,7 +74,7 @@ extension Defaults.Keys {
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false, iCloud: true)
     static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false, iCloud: true)
     static let ignoreFullscreen = Key<Bool>("ignoreFullscreen", default: false, iCloud: true)
-    static let hideUntilDirectionIsChosen = Key<Bool>("hideUntilDirectionIsChosen", default: false, iCloud: true)
+    static let hideOnNoSelection = Key<Bool>("hideOnNoSelection", default: false, iCloud: true)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true, iCloud: true)
     static let enableRadialMenuCustomization = Defaults.Key<Bool>("enableRadialMenuCustomization", default: false, iCloud: true)
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20, iCloud: true)
@@ -140,18 +140,9 @@ extension Defaults.Keys {
     // StashManager
     static let stashManagerStashedWindows = Key<[CGWindowID: WindowAction]>("stashManagerStashed", default: [:])
 
-    @available(*, deprecated, message: "Revealed stash windows are no longer tracked.")
-    static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>())
-
     // AccentColorController
     static let lastUsedAccentColor1 = Key<Color>("lastUsedAccentColor1", default: .black)
     static let lastUsedAccentColor2 = Key<Color>("lastUsedAccentColor2", default: .black)
-
-    @available(*, deprecated, renamed: "accentColorMode", message: "Use accentColorMode.system")
-    static let useSystemAccentColor = Key<Bool>("useSystemAccentColor", default: true, iCloud: true)
-
-    @available(*, deprecated, renamed: "accentColorMode", message: "Use accentColorMode.wallpaper")
-    static let processWallpaper = Key<Bool>("processWallpaper", default: false, iCloud: true)
 
     // DataPatcher
     static let patchesApplied = Key<DataPatcher.Patches>("patchesApplied", default: [], iCloud: true)

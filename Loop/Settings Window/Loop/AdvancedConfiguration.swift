@@ -127,7 +127,7 @@ struct AdvancedConfigurationView: View {
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
     @Default(.ignoreLowPowerMode) var ignoreLowPowerMode
     @Default(.animateWindowResizes) var animateWindowResizes
-    @Default(.hideUntilDirectionIsChosen) var hideUntilDirectionIsChosen
+    @Default(.hideOnNoSelection) var hideOnNoSelection
     @Default(.disableCursorInteraction) var disableCursorInteraction
     @Default(.ignoreFullscreen) var ignoreFullscreen
     @Default(.hapticFeedback) var hapticFeedback
@@ -201,7 +201,7 @@ struct AdvancedConfigurationView: View {
 
     private var radialMenuSection: some View {
         LuminareSection(String(localized: "Radial Menu", comment: "Section header shown in settings")) {
-            LuminareToggle("Hide until direction is chosen", isOn: $hideUntilDirectionIsChosen)
+            LuminareToggle("Hide when no action is selected", isOn: $hideOnNoSelection)
 
             LuminareToggle(isOn: $enableRadialMenuCustomization) {
                 HStack {

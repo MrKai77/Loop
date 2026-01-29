@@ -177,7 +177,6 @@ struct ExcludedListAppView: View, Equatable {
             self.icon = icon
         }
 
-        @concurrent
         func loadIconIfNeeded() async -> App {
             guard icon == nil else { return self }
 

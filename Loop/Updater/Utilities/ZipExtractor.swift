@@ -78,9 +78,7 @@ enum ZipExtractor {
     ) throws {
         log.info("Extracting ZIP archive: \(zipURL.lastPathComponent)")
 
-        guard let archive = try Archive(url: zipURL, accessMode: .read) else {
-            throw createError("Could not open ZIP archive", zipURL: zipURL)
-        }
+        let archive = try Archive(url: zipURL, accessMode: .read)
 
         for entry in archive where !entry.path.contains(/__MACOSX/) {
             try cancellationCheck?()

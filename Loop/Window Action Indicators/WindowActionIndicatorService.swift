@@ -14,7 +14,7 @@ final class WindowActionIndicatorService {
     private let previewController = PreviewController()
 
     func openAndUpdate(context: ResizeContext) {
-        if Defaults[.hideUntilDirectionIsChosen], context.action.direction == .noSelection {
+        if Defaults[.hideOnNoSelection], context.action.direction == .noSelection {
             closeAll()
             return
         }
