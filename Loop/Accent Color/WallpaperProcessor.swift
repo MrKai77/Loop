@@ -148,8 +148,7 @@ final class WallpaperProcessor {
 /// - Incorporates intelligent filtering to avoid colors that would make poor UI accents
 ///
 /// The algorithm is optimized for performance while maintaining high-quality color results.
-
-// The real beans here (I don't like beans)
+/// The real beans here (I don't like beans)
 extension NSImage {
     /// Calculates the dominant colors of the image asynchronously.
     /// - Returns: An array of NSColor representing the dominant colors, or nil if an error occurs.
@@ -294,10 +293,16 @@ extension NSImage {
     /// - Returns: The resized NSImage or nil if the operation fails.
     func resized(to newSize: NSSize) -> NSImage? {
         guard let bitmapRep = NSBitmapImageRep(
-            bitmapDataPlanes: nil, pixelsWide: Int(newSize.width),
-            pixelsHigh: Int(newSize.height), bitsPerSample: 8,
-            samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-            colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(newSize.width),
+            pixelsHigh: Int(newSize.height),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0
         ) else {
             Log.error("Error: \(WallpaperProcessorError.bitmapCreationFailed)", category: WallpaperProcessor.logCategory)
             return nil
@@ -305,8 +310,14 @@ extension NSImage {
         bitmapRep.size = newSize
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmapRep)
-        draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height),
-             from: NSRect.zero, operation: .copy, fraction: 1.0, respectFlipped: true, hints: [NSImageRep.HintKey.interpolation: NSNumber(value: NSImageInterpolation.high.rawValue)])
+        draw(
+            in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height),
+            from: NSRect.zero,
+            operation: .copy,
+            fraction: 1.0,
+            respectFlipped: true,
+            hints: [NSImageRep.HintKey.interpolation: NSNumber(value: NSImageInterpolation.high.rawValue)]
+        )
         NSGraphicsContext.restoreGraphicsState()
         let resizedImage = NSImage(size: newSize)
         resizedImage.addRepresentation(bitmapRep)

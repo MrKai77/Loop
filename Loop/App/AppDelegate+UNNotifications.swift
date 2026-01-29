@@ -23,7 +23,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         completionHandler()
     }
 
-    // Implementation is necessary to show notifications even when the app has focus!
+    /// Implementation is necessary to show notifications even when the app has focus!
     func userNotificationCenter(
         _: UNUserNotificationCenter,
         willPresent _: UNNotification,

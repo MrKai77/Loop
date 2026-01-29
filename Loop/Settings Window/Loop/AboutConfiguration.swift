@@ -44,7 +44,7 @@ final class AboutConfigurationModel: ObservableObject {
         )
     ]
 
-    // A max of 28 W's can fit in here :)
+    /// A max of 28 W's can fit in here :)
     private let upToDateText: [String] = [
         .init(localized: "No updates available message 01", defaultValue: "Engage! …in the current version, it's the latest."),
         .init(localized: "No updates available message 02", defaultValue: "This app is more up to date than my diary entries!"),

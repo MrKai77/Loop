@@ -37,8 +37,8 @@ enum WindowEngine {
 
         let storeAsFrame = WindowRecords.shouldStoreAsFinalFrame(context.action)
 
-        /// If this action doesn't require storage as a frame, then record it beforehand.
-        /// Otherwise, this action will be recorded *after* resizing, such that its final frame is considered if undoing.
+        // If this action doesn't require storage as a frame, then record it beforehand.
+        // Otherwise, this action will be recorded *after* resizing, such that its final frame is considered if undoing.
         if !storeAsFrame {
             WindowRecords.record(window, context.action)
         }

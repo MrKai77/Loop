@@ -48,10 +48,10 @@ struct RadialMenuView: View {
 
     @available(macOS 26.0, *)
     private func postTahoeView() -> some View {
-        /// GlassEffectContainer w/ the materialize glass effect transition causes an exception:
-        ///   "The window has been marked as needing another Update Constraints..."
-        /// This bug can be reproduced on macOS 26.0.0 and 26.0.1. We have yet to find the macOS version where it starts working correctly and reliably,
-        /// but for now, we have disabled the materialization Liquid Glass transition.
+        // GlassEffectContainer with the materialize glass effect transition causes an exception:
+        //   "The window has been marked as needing another Update Constraints..."
+        // This bug can be reproduced on macOS 26.0.0 and 26.0.1. We have yet to find the macOS version where it starts working correctly and reliably,
+        // but for now, we have disabled the materialization Liquid Glass transition.
         ZStack {
             if viewModel.isShown {
                 ZStack {
@@ -160,7 +160,6 @@ struct RadialMenuView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    @ViewBuilder
     private func radialMenuBorder() -> some View {
         ZStack {
             if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
@@ -181,7 +180,6 @@ struct RadialMenuView: View {
         }
     }
 
-    @ViewBuilder
     private func radialMenuMask() -> some View {
         ZStack {
             if radialMenuCornerRadius >= radialMenuSize / 2 - 2 {
@@ -194,7 +192,6 @@ struct RadialMenuView: View {
         }
     }
 
-    @ViewBuilder
     private func overlayImage() -> some View {
         ZStack {
             if let image = viewModel.radialMenuImage {

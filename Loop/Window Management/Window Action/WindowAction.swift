@@ -109,7 +109,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     var xPoint: Double?
     var yPoint: Double?
 
-    // Custom Cycle Properties
+    /// Custom Cycle Properties
     var cycle: [WindowAction]?
 
     // MARK: - Methods

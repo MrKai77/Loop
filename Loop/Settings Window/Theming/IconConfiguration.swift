@@ -220,9 +220,10 @@ struct IconVew: View {
             Image(systemName: "lock")
                 .foregroundStyle(.secondary)
 
-            Text(nextUnlockCount == icon.unlockTime ?
-                .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
-                .init(localized: "App icon is locked", defaultValue: "Locked")
+            Text(
+                nextUnlockCount == icon.unlockTime ?
+                    .init(localized: "Loops left to unlock new icon", defaultValue: "\(loopsLeft) Loops left") :
+                    .init(localized: "App icon is locked", defaultValue: "Locked")
             )
             .font(.caption)
             .foregroundColor(.secondary)

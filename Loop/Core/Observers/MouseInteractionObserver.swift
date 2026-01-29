@@ -57,7 +57,7 @@ final class MouseInteractionObserver {
         screenBounds = NSScreen.screens.first(where: { $0.frame.contains(initialMousePosition) })?.frame
 
         if let screenBounds {
-            /// If the current mouse position isn't sufficient for accessing direcitonal actions due to being close to the screen's edge, then enable `shouldAccountForAbsoluteMousePosition`
+            // If the current mouse position isn't sufficient for accessing direcitonal actions due to being close to the screen's edge, then enable `shouldAccountForAbsoluteMousePosition`
             let closeToMinX = abs(initialMousePosition.x - screenBounds.minX) < Self.directionalActionDistance
             let closeToMaxX = abs(initialMousePosition.x - screenBounds.maxX) < Self.directionalActionDistance
             let closeToMinY = abs(initialMousePosition.y - screenBounds.minY) < Self.directionalActionDistance
@@ -210,8 +210,8 @@ final class MouseInteractionObserver {
     }
 
     private func activateNextCycleAction(_ event: CGEvent) -> ActiveEventMonitor.EventHandling {
-        /// Ensure that the source originates from the HID state ID.
-        /// Otherwise, this event was likely sent from Loop to focus the frontmost click (see `Window.focus` which sends a `SLSEvent` to the window)
+        // Ensure that the source originates from the HID state ID.
+        // Otherwise, this event was likely sent from Loop to focus the frontmost click (see `Window.focus` which sends a `SLSEvent` to the window)
         let sourceID = CGEventSourceStateID(rawValue: Int32(event.getIntegerValueField(.eventSourceStateID)))
         guard sourceID == .hidSystemState else {
             return .forward

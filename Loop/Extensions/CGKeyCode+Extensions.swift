@@ -130,7 +130,7 @@ extension CGKeyCode {
 
     static let kVK_Globe_Emoji: CGKeyCode = 0xB3
 
-    // ISO keyboards only
+    /// ISO keyboards only
     static let kVK_ISO_Section: CGKeyCode = 0x0A
 
     // JIS keyboards only
@@ -144,7 +144,8 @@ extension CGKeyCode {
 // MARK: Base key conversion and computed properties
 
 extension CGKeyCode {
-    // Some keycodes seem to alter when a modifier key (ex. the globe key) is being pressed.
+    /// Some keycodes seem to alter when a modifier key (ex. the globe key) is being pressed.
+    /// This function attempts to try and restore the "original" key.
     func baseKey(flags: NSEvent.ModifierFlags) -> CGKeyCode {
         if self == .kVK_ANSI_KeypadEnter {
             return .kVK_Return
@@ -184,9 +185,9 @@ extension CGKeyCode {
     }
 
     var isFnSpecialKey: Bool {
-        /// See: https://github.com/koekeishiya/skhd/issues/1
+        // See: https://github.com/koekeishiya/skhd/issues/1
         let specialKeys: Set<CGKeyCode> = [
-            .kVK_Delete, /// Usually `kVK_ForwardDelete`, but `baseKey(flags:)` converts that back into `kVK_Delete` if the fn key is also being pressed.
+            .kVK_Delete, // Usually `kVK_ForwardDelete`, but `baseKey(flags:)` converts that back into `kVK_Delete` if the fn key is also being pressed.
             .kVK_Help
         ]
         let allKeys = specialKeys
@@ -214,7 +215,7 @@ extension CGKeyCode {
 // MARK: Stringification of keycodes
 
 extension CGKeyCode {
-    // From https://github.com/sindresorhus/KeyboardShortcuts/ but edited a bit
+    /// From https://github.com/sindresorhus/KeyboardShortcuts/ but edited a bit
     private static let keyToString: [CGKeyCode: String] = [
         .kVK_Return: "↩",
         .kVK_Delete: "⌫",
@@ -276,7 +277,7 @@ extension CGKeyCode {
         .kVK_ANSI_KeypadPlus: "+\u{20e3}"
     ]
 
-    // Make sure to use baseModifier before using this!
+    /// Make sure to use baseModifier before using this!
     private static let modifierToSystemImage: [CGKeyCode: String] = [
         .kVK_Function: "globe",
         .kVK_Shift: "shift",
@@ -293,7 +294,7 @@ extension CGKeyCode {
         }
     }
 
-    // Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
+    /// Big thanks to https://github.com/sindresorhus/KeyboardShortcuts/
     var humanReadable: String? {
         guard
             let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource()?.takeRetainedValue(),

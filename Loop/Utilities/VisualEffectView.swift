@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// SwiftUI view for NSVisualEffect
+/// SwiftUI view for NSVisualEffect
 struct VisualEffectView: NSViewRepresentable {
     let material: NSVisualEffectView.Material
     let blendingMode: NSVisualEffectView.BlendingMode

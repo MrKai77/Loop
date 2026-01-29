@@ -134,7 +134,7 @@ struct Keycorder: View {
 
     /// Handles key presses and updates the current keybind
     func handleKeyDown(with event: NSEvent) {
-        /// Get current selected keys that aren't modifiers
+        // Get current selected keys that aren't modifiers
         let currentKeys = selectionKeybind + [event.keyCode]
             .map { $0.baseKey(flags: event.modifierFlags) }
 
@@ -161,7 +161,7 @@ struct Keycorder: View {
 
         shouldError = false
 
-        /// Make sure we don't go over the key limit
+        // Make sure we don't go over the key limit
         guard finalKeys.count <= keyLimit else {
             errorMessage = "You can only use up to \(keyLimit) keys in a keybind."
             shake()

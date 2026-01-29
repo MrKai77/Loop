@@ -57,7 +57,7 @@ extension AXUIElement {
         return element
     }
 
-    // Only used when experimenting
+    /// Only used when experimenting :)
     func getAttributeNames() -> [String]? {
         var ref: CFArray?
         let error = AXUIElementCopyAttributeNames(self, &ref)

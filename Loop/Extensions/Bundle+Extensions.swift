@@ -7,7 +7,6 @@
 
 import Foundation
 
-// Returns the current build number
 extension Bundle {
     var appName: String {
         getInfo("CFBundleName") ?? "⚠️"

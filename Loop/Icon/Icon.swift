@@ -23,7 +23,6 @@ import SwiftUI
 /// - Black Hole: 2500 Loops
 /// - Summer: 3000 Loops
 /// - Master: 5000 Loops
-
 struct Icon: Hashable, LuminareSelectionData {
     var name: String
     var assetName: String
@@ -35,7 +34,7 @@ struct Icon: Hashable, LuminareSelectionData {
     }
 
     #if RELEASE
-        // Remove developer icon in release builds
+        /// Remove developer icon in release builds
         static let all: [Icon] = [
             .classic,
             .holo,

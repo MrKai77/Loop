@@ -15,7 +15,6 @@ final class MiddleClickTrigger {
     private let closeCallback: (Bool) -> ()
     private let checkIfLoopOpen: () -> Bool
 
-    // State-tracking
     private var monitor: PassiveEventMonitor?
 
     // Defaults

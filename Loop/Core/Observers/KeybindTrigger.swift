@@ -28,10 +28,10 @@ final class KeybindTrigger {
     private var keybindCacheUpdatedAt: ContinuousClock.Instant?
     private let keybindCacheLifetime: ContinuousClock.Duration = .seconds(30)
 
-    // Special events only contain the globe key, as it can also be used as an emoji key.
+    /// Special events only contain the globe key, as it can also be used as an emoji key.
     private let specialEventKeys: [CGKeyCode] = [.kVK_Globe_Emoji]
 
-    // Will be set to `false` if the mouse has been moved by LoopManager.
+    /// Will be set to `false` if the mouse has been moved by LoopManager.
     var canPassthroughNextSpecialEvent = true
 
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
@@ -187,8 +187,8 @@ final class KeybindTrigger {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
 
-                    /// Only consume the event if the last command actually opened Loop.
-                    /// The main reason Loop *wouldn't* open after an `openLoop` call would be because the user has enabled a trigger delay.
+                    // Only consume the event if the last command actually opened Loop.
+                    // The main reason Loop *wouldn't* open after an `openLoop` call would be because the user has enabled a trigger delay.
                     return isLoopOpen ? .consume : .opening
                 }
 

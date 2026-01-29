@@ -33,7 +33,7 @@ enum IconManager {
         }
     }
 
-    // This function is run at startup to set the current icon to the user's set icon.
+    /// This function is run at startup to set the current icon to the user's set icon.
     static func refreshCurrentAppIcon() {
         let iconName = Defaults[.currentIcon]
 

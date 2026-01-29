@@ -37,7 +37,7 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     }
 
     func setupRunLoopSource(eventTap: CFMachPort) {
-        /// Runloop is already running here. In the future, we can investigate running the mach port on another thread.
+        // Runloop is already running here. In the future, we can investigate running the mach port on another thread.
         let runLoop = CFRunLoopGetMain()
 
         if let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0) {

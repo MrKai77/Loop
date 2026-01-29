@@ -144,7 +144,7 @@ enum UpdateError: LocalizedError, Sendable {
         }
     }
 
-    // Convenience constructors
+    /// Convenience constructors
     static func httpError(_ response: HTTPURLResponse) -> UpdateError {
         .http(response.statusCode)
     }

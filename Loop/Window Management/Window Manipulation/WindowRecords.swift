@@ -44,8 +44,8 @@ enum WindowRecords {
     /// - Parameter action: the action to apply onto the window.
     /// - Returns: Whether this action should be recorded with its final frame instead of using the action.
     static func shouldStoreAsFinalFrame(_ action: WindowAction) -> Bool {
-        /// Actions that are stored as frames need to be recorded *after* resize.
-        /// These actions are context-dependent, and cannot simply be called as an action to restore the previous state.
+        // Actions that are stored as frames need to be recorded *after* resize.
+        // These actions are context-dependent, and cannot simply be called as an action to restore the previous state.
         let storeAsFrame = action.direction.willChangeScreen || action.willManipulateExistingWindowFrame
         return storeAsFrame
     }
@@ -55,7 +55,7 @@ enum WindowRecords {
     ///   - window: Window to record
     ///   - action: WindowAction to record
     static func record(_ window: Window, _ action: WindowAction) {
-        /// If the window has not been recorded, record it
+        // If the window has not been recorded, record it
         recordFirstIfNeeded(for: window)
 
         // There is no point in recording undo

@@ -76,7 +76,6 @@ struct RadialMenuActionsGuide: View {
         .animation(luminareAnimation, value: radialMenuActions)
     }
 
-    @ViewBuilder
     private func actionButton(
         action: WindowAction? = nil,
         isActive: Bool,

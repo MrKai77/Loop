@@ -17,7 +17,8 @@ final class WindowDragManager {
 
     private var resizeContext: ResizeContext?
     private var initialWindowFrame: CGRect?
-    // Avoid repeated window resolution attempts during a non-window drag (e.g. in games).
+
+    /// This is to avoid repeated window resolution attempts during a non-window drag (e.g. in games).
     private var didFailToResolveDraggedWindow: Bool = false
 
     private let previewController = PreviewController()
@@ -32,7 +33,7 @@ final class WindowDragManager {
         NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
     }
 
-    // Avoid running global drag logic unless a feature actually depends on it.
+    /// This is to avoid running global drag logic unless a feature actually depends on it.
     private var shouldMonitorDragActions: Bool {
         Defaults[.windowSnapping] ||
             Defaults[.restoreWindowFrameOnDrag] ||

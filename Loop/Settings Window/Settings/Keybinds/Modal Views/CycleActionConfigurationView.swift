@@ -53,7 +53,8 @@ struct CycleActionConfigurationView: View {
                     items: Binding(
                         get: {
                             action.cycle ?? []
-                        }, set: { newValue in
+                        },
+                        set: { newValue in
                             action.cycle = newValue
                         }
                     ),

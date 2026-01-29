@@ -8,11 +8,11 @@
 import Defaults
 import SwiftUI
 
-// Enum that stores all possible resizing options
+/// Enum that stores all possible resizing options
 enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     var id: Self { self }
 
-    // "Empty" actions.
+    /// "Empty" actions.
     /// `noAction` is explicitly chosen or user-bound.
     /// `noSelection` is the default state before any radial menu selection is made.
     case noAction = "NoAction", noSelection = "NoSelection"
@@ -45,30 +45,30 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     case verticalCenterThird = "VerticalCenterThird"
     case bottomThird = "BottomThird", bottomTwoThirds = "BottomTwoThirds"
 
-    // Screen Switching
+    /// Screen Switching
     case nextScreen = "NextScreen", previousScreen = "PreviousScreen", leftScreen = "LeftScreen", rightScreen = "RightScreen", topScreen = "TopScreen", bottomScreen = "BottomScreen"
 
     // Size Adjustment
     case larger = "Larger", smaller = "Smaller"
     case scaleUp = "ScaleUp", scaleDown = "ScaleDown"
 
-    // Shrink
+    /// Shrink
     case shrinkTop = "ShrinkTop", shrinkBottom = "ShrinkBottom", shrinkRight = "ShrinkRight", shrinkLeft = "ShrinkLeft", shrinkHorizontal = "ShrinkHorizontal", shrinkVertical = "ShrinkVertical"
 
-    // Grow
+    /// Grow
     case growTop = "GrowTop", growBottom = "GrowBottom", growRight = "GrowRight", growLeft = "GrowLeft", growHorizontal = "GrowHorizontal", growVertical = "GrowVertical"
 
-    // Move
+    /// Move
     case moveUp = "MoveUp", moveDown = "MoveDown", moveRight = "MoveRight", moveLeft = "MoveLeft"
 
-    // Focus
+    /// Focus
     case focusUp = "FocusUp", focusDown = "FocusDown", focusRight = "FocusRight", focusLeft = "FocusLeft", focusNextInStack = "FocusNextInStack"
 
     // Stash
     case stash = "Stash"
     case unstash = "Unstash"
 
-    // Custom Actions
+    /// Custom Actions
     case custom = "Custom", cycle = "Cycle"
 
     // These are used in the menubar resize submenu & keybind configuration

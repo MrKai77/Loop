@@ -131,7 +131,6 @@ struct StashActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder
     private func tabPicker() -> some View {
         LuminarePicker(
             elements: Tab.allCases,
@@ -148,7 +147,6 @@ struct StashActionConfigurationView: View {
         .luminareRoundingBehavior(top: true, bottom: true)
     }
 
-    @ViewBuilder
     private func actionButtons() -> some View {
         HStack(spacing: 8) {
             Button("Preview") {}
@@ -179,7 +177,6 @@ struct StashActionConfigurationView: View {
         .luminareCornerRadius(8)
     }
 
-    @ViewBuilder
     private func positionConfiguration() -> some View {
         LuminareSection(outerPadding: 0) {
             if action.positionMode ?? .generic == .generic {
@@ -236,7 +233,6 @@ struct StashActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder
     private func sizeConfiguration() -> some View {
         LuminareSection(outerPadding: 0) {
             LuminarePicker(
@@ -302,7 +298,6 @@ struct StashActionConfigurationView: View {
         }
     }
 
-    @ViewBuilder
     private func blurredWindow() -> some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {

@@ -91,7 +91,6 @@ struct RadialMenuActionItemView: View {
         }
     }
 
-    @ViewBuilder
     private var label: some View {
         actionIndicator
             .background {
@@ -113,7 +112,6 @@ struct RadialMenuActionItemView: View {
             }
     }
 
-    @ViewBuilder
     var actionIndicator: some View {
         HStack(spacing: 2) {
             Button {

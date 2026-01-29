@@ -173,17 +173,17 @@ private extension Character {
     var hasEmojiPresentationAsDefault: Bool {
         let scalars = unicodeScalars
 
-        /// Must contain at least one emoji-capable scalar
+        // Must contain at least one emoji-capable scalar
         guard scalars.contains(where: \.properties.isEmoji) else {
             return false
         }
 
-        /// If any scalar defaults to emoji, it's an emoji
+        // If any scalar defaults to emoji, it's an emoji
         if scalars.contains(where: \.properties.isEmojiPresentation) {
             return true
         }
 
-        /// If it contains the emojification codepoint (U+FE0F, Variation Selector-16)
+        // If it contains the emojification codepoint (U+FE0F, Variation Selector-16)
         if scalars.contains(where: { $0.value == 0xFE0F }) {
             return true
         }

@@ -8,7 +8,7 @@
 import SwiftUI
 import UserNotifications
 
-// Thanks https://stackoverflow.com/questions/45226847/unnotificationattachment-failing-to-attach-image
+/// Thanks https://stackoverflow.com/questions/45226847/unnotificationattachment-failing-to-attach-image
 extension UNNotificationAttachment {
     static func create(_ imgData: NSData) -> UNNotificationAttachment? {
         let imageFileIdentifier = UUID().uuidString + ".jpeg"

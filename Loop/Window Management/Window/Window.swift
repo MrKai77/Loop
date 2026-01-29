@@ -183,7 +183,7 @@ final class Window {
 
         try? axWindow.performAction(.raise)
 
-        /// See:  https://github.com/yresk/alt-tab-macos/blob/5b8a9110dbdb9b4802a8a85ee1469427fbc192e8/alt-tab-macos/api-wrappers/AXUIElement.swift#L60
+        // See:  https://github.com/yresk/alt-tab-macos/blob/5b8a9110dbdb9b4802a8a85ee1469427fbc192e8/alt-tab-macos/api-wrappers/AXUIElement.swift#L60
         if let pid = try? axWindow.getPID() {
             _ = SkyLightToolBelt.makeKeyWindow(
                 windowID: cgWindowID,

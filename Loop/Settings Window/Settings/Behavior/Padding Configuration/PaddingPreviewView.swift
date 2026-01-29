@@ -38,7 +38,6 @@ struct PaddingPreviewView: View {
         .animation(luminareAnimation, value: model)
     }
 
-    @ViewBuilder
     func blurredWindow() -> some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {

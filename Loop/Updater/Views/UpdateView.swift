@@ -69,7 +69,6 @@ struct UpdateView: View {
         .frame(width: 500, height: 480)
     }
 
-    @ViewBuilder
     private func theLoopTimesView() -> some View {
         ZStack {
             if colorScheme == .dark {
@@ -132,7 +131,6 @@ struct UpdateView: View {
         }
     }
 
-    @ViewBuilder
     private func versionChangeText() -> some View {
         HStack {
             let currentVersion = VersionDisplay.current

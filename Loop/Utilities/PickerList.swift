@@ -48,7 +48,6 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
         }
     }
 
-    @ViewBuilder
     private func contentStack(reader: ScrollViewProxy) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             if searchResults.isEmpty {
@@ -132,7 +131,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
         let currentIndex = items.firstIndex(where: { $0 == arrowSelection }) ?? (increment ? -1 : items.count)
         let nextIndex = currentIndex + (increment ? 1 : -1)
 
-        /// Ensure nextIndex is valid
+        // Ensure nextIndex is valid
         guard nextIndex >= 0, nextIndex < items.count else {
             Log.error("Invalid nextIndex: \(nextIndex), items count: \(items.count)", category: .pickerList)
             return
@@ -141,7 +140,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
         let newSelection = items[nextIndex]
         arrowSelection = newSelection
 
-        /// Only scroll if the selection is valid and not nil
+        // Only scroll if the selection is valid and not nil
         guard let validSelection = arrowSelection else {
             Log.info("arrowSelection is nil, skipping scroll", category: .pickerList)
             return

@@ -79,14 +79,14 @@ extension Defaults.Keys {
     static let enableRadialMenuCustomization = Defaults.Key<Bool>("enableRadialMenuCustomization", default: false, iCloud: true)
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20, iCloud: true)
 
-    // Excluded apps
+    /// Excluded apps
     static let excludedApps = Key<[URL]>("excludedApps", default: [], iCloud: true)
 
     // About
     #if RELEASE
         static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: false, iCloud: true)
     #else
-        // Development versions should check for development updates by default.
+        /// Development versions should check for development updates by default.
         static let includeDevelopmentVersions = Key<Bool>("includeDevelopmentVersions", default: true, iCloud: true)
     #endif
     static let automaticallyUpdate = Key<Bool>("automaticallyUpdate", default: false, iCloud: true)
@@ -134,16 +134,16 @@ extension Defaults.Keys {
     /// Reset with `defaults delete com.MrKai77.Loop triggerKeyTimeout`
     static let triggerKeyTimeout = Key<Double>("triggerKeyTimeout", default: 0, iCloud: true)
 
-    // Migrator
+    /// Migrator
     static let lastMigratorURL = Key<URL?>("lastMigratorURL", default: nil)
 
-    // StashManager
+    /// StashManager
     static let stashManagerStashedWindows = Key<[CGWindowID: WindowAction]>("stashManagerStashed", default: [:])
 
     // AccentColorController
     static let lastUsedAccentColor1 = Key<Color>("lastUsedAccentColor1", default: .black)
     static let lastUsedAccentColor2 = Key<Color>("lastUsedAccentColor2", default: .black)
 
-    // DataPatcher
+    /// DataPatcher
     static let patchesApplied = Key<DataPatcher.Patches>("patchesApplied", default: [], iCloud: true)
 }

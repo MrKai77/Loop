@@ -70,13 +70,13 @@ enum SkyLightToolBelt {
             return false
         }
 
-        /// `0x01` is left click down, `0x02` is left click up (see `CGEventType`)
+        // `0x01` is left click down, `0x02` is left click up (see `CGEventType`)
         for byte in [0x01, 0x02] {
-            /// Create raw `SLSEvent` data.
-            /// Future consideration: instead of manually creating the bytes here, investigate:
-            /// - Creating a `SLSEvent` (likely analogous to `CGEvent`)
-            /// - Apply an identifier to the event to help Loop differentiate events that originate from itself
-            /// - Converting the `SLSEvent` to data using `SLEventCreateData` in SkyLight
+            // Create raw `SLSEvent` data.
+            // Future consideration: instead of manually creating the bytes here, investigate:
+            // - Creating a `SLSEvent` (likely analogous to `CGEvent`)
+            // - Apply an identifier to the event to help Loop differentiate events that originate from itself
+            // - Converting the `SLSEvent` to data using `SLEventCreateData` in SkyLight
             var bytes = [UInt8](repeating: 0, count: 0xF8)
             bytes[0x04] = 0xF8
             bytes[0x08] = UInt8(byte)

@@ -1,87 +1,128 @@
 --acronyms ID,URL,UUID
 --allman false
---anonymousforeach convert
---assetliterals visual-width
---asynccapturing 
---beforemarks 
---binarygrouping 4,8
---categorymark "MARK: %c"
---classthreshold 0
---closingparen balanced
---closurevoid remove
---commas inline
---conflictmarkers reject
---decimalgrouping 3,6
---doccomments before-declarations
---elseposition same-line
---emptybraces no-space
---enumnamespaces always
---enumthreshold 0
---exponentcase lowercase
---exponentgrouping disabled
---extensionacl on-extension
---extensionlength 0
---extensionmark "MARK: - %t + %c"
---fractiongrouping disabled
+--allow-partial-wrapping true
+--anonymous-for-each convert
+--asset-literals visual-width
+--async-capturing 
+--before-marks 
+--binary-grouping 4,8
+--blank-line-after-switch-case multiline-only
+--call-site-paren balanced
+--category-mark "MARK: %c"
+--class-threshold 0
+--closing-paren balanced
+--closure-void remove
+--complex-attributes preserve
+--computed-var-attributes preserve
+--conditional-assignment after-property
+--conflict-markers reject
+--date-format system
+--decimal-grouping 3,6
+--default-test-suite-attributes 
+--doc-comments before-declarations
+--else-position same-line
+--empty-braces no-space
+--enum-namespaces always
+--enum-threshold 0
+--equatable-macro none
+--exponent-case lowercase
+--exponent-grouping disabled
+--extension-acl on-extension
+--extension-mark "MARK: - %t + %c"
+--extension-threshold 0
+--file-macro "#file"
+--fraction-grouping disabled
 --fragment false
---funcattributes preserve
---generictypes 
---groupedextension "MARK: %c"
---guardelse auto
+--func-attributes preserve
+--generic-types 
+--group-blank-lines true
+--grouped-extension "MARK: %c"
+--guard-else auto
 --header ignore
---hexgrouping 4,8
---hexliteralcase uppercase
+--hex-grouping 4,8
+--hex-literal-case uppercase
 --ifdef indent
---importgrouping alpha
+--import-grouping alpha
 --indent 4
---indentcase false
---indentstrings false
+--indent-case false
+--indent-strings false
+--inferred-types always
+--init-coder-nil false
+--language-mode 0
 --lifecycle 
---lineaftermarks true
+--line-after-marks true
+--line-between-guards false
 --linebreaks lf
---markcategories true
---markextensions always
---marktypes always
---maxwidth none
---modifierorder 
---nevertrailing 
---nospaceoperators ...
---nowrapoperators 
---octalgrouping 4,8
---onelineforeach ignore
---operatorfunc spaced
---organizetypes actor,class,enum,struct
---patternlet hoist
+--mark-categories true
+--mark-class-threshold 0
+--mark-enum-threshold 0
+--mark-extension-threshold 0
+--mark-extensions always
+--mark-struct-threshold 0
+--mark-types always
+--markdown-files ignore
+--max-width none
+--modifier-order 
+--never-trailing 
+--nil-init remove
+--no-space-operators ...
+--no-wrap-operators 
+--non-complex-attributes 
+--octal-grouping 4,8
+--operator-func spaced
+--organization-mode visibility
+--organize-types actor,class,enum,struct
+--pattern-let hoist
+--prefer-synthesized-init-for-internal-structs never
+--preserve-acronyms 
+--preserve-decls 
+--preserved-property-types Package
+--property-types infer-locals-only
 --ranges spaced
---redundanttype infer-locals-only
+--redundant-async tests-only
+--redundant-throws tests-only
 --self init-only
---selfrequired 
---semicolons inline
---shortoptionals except-properties
---smarttabs enabled
---someany true
---stripunusedargs always
---structthreshold 0
---swiftversion 6.0
---tabwidth unspecified
---throwcapturing 
---trailingclosures 
---trimwhitespace always
---typeattributes preserve
---typeblanklines remove
---typemark "MARK: - %t"
---varattributes preserve
---voidtype tuple
---wraparguments preserve
---wrapcollections preserve
---wrapconditions preserve
---wrapeffects preserve
---wrapenumcases always
---wrapparameters default
---wrapreturntype preserve
---wrapternary default
---wraptypealiases preserve
---xcodeindentation disabled
---yodaswap always
---disable wrapMultilineStatementBraces
+--self-required 
+--semicolons inline-only
+--short-optionals except-properties
+--single-line-for-each ignore
+--smart-tabs enabled
+--some-any true
+--sort-swiftui-properties none
+--sorted-patterns 
+--stored-var-attributes preserve
+--strip-unused-args always
+--struct-threshold 0
+--swift-version 6.0
+--tab-width unspecified
+--throw-capturing 
+--timezone system
+--trailing-closures 
+--trailing-commas never
+--trim-whitespace always
+--type-attributes preserve
+--type-blank-lines remove
+--type-body-marks preserve
+--type-delimiter space-after
+--type-mark "MARK: - %t"
+--type-marks 
+--type-order 
+--url-macro none
+--visibility-marks 
+--visibility-order 
+--void-type tuple
+--wrap-arguments before-first
+--wrap-collections preserve
+--wrap-conditions preserve
+--wrap-effects preserve
+--wrap-enum-cases always
+--wrap-parameters default
+--wrap-return-type preserve
+--wrap-string-interpolation default
+--wrap-ternary default
+--wrap-type-aliases preserve
+--xcode-indentation disabled
+--xctest-symbols 
+--yoda-swap always
+--disable genericExtensions,redundantProperty,simplifyGenericConstraints,wrapMultilineStatementBraces,wrapPropertyBodies
 --enable isEmpty

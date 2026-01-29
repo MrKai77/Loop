@@ -30,7 +30,7 @@ final class SystemWindowManager {
 
     // MARK: - Move & Resize
 
-    // This is a direct mapping of the menu items in the "Move & Resize" menu
+    /// This is a direct mapping of the menu items in the "Move & Resize" menu
     @available(macOS 15, *)
     enum MoveAndResize: String {
         // General

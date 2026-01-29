@@ -99,7 +99,7 @@ final class Updater: ObservableObject {
 
             shouldAutoPresentUpdateWindow = true
 
-            /// If the updater has requested that the update window be presented for over 6 hours, automatically present it.
+            // If the updater has requested that the update window be presented for over 6 hours, automatically present it.
             autoPresentUpdateWindowTask = Task {
                 log.info("Will automatically present update window in 6 hours if there is no activity")
 
@@ -173,7 +173,7 @@ final class Updater: ObservableObject {
         shouldAutoPresentUpdateWindow = false
     }
 
-    // Pulls the latest release information from GitHub and updates the app state accordingly.
+    /// Pulls the latest release information from GitHub and updates the app state accordingly.
     func fetchLatestInfo(bypassUpdatesEnabled: Bool = false) async {
         // Don't run update checks while actively downloading
         if downloader.isDownloading == true {
@@ -257,7 +257,7 @@ final class Updater: ObservableObject {
         log.ui("Update window shown")
     }
 
-    // Downloads the update from GitHub and installs it
+    /// Downloads the update from GitHub and installs it
     func downloadAndInstallUpdate() async throws {
         guard let manifest = updateManifest else {
             progressBar = 0

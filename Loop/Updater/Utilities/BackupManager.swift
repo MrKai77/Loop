@@ -129,10 +129,11 @@ actor BackupManager {
             options: [.skipsHiddenFiles]
         ) else { return 0 }
 
-        return Int64(enumerator
-            .compactMap { $0 as? URL }
-            .compactMap { try? $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
-            .reduce(0, +)
+        return Int64(
+            enumerator
+                .compactMap { $0 as? URL }
+                .compactMap { try? $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
+                .reduce(0, +)
         )
     }
 }

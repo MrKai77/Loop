@@ -114,13 +114,13 @@ struct SLSWindowCaptureOptions: OptionSet {
 
     static let ignoreGlobalClipShape = Self(rawValue: 1 << 11)
 
-    // On a retina display, this captures at 1 pt : 4 px
+    /// On a retina display, this captures at 1 pt : 4 px
     static let nominalResolution = Self(rawValue: 1 << 9)
 
-    // Captures at 1 pt : 1px
+    /// Captures at 1 pt : 1px
     static let bestResolution = Self(rawValue: 1 << 8)
 
-    // When Stage Manager is enabled, screenshots can become skewed. This param gets us full-size screenshots regardless
+    /// When Stage Manager is enabled, screenshots can become skewed. This param gets us full-size screenshots regardless
     static let fullSize = Self(rawValue: 1 << 19)
 }
 

@@ -126,7 +126,7 @@ struct SettingsTabIconView: View {
             .frame(width: 22, height: 22)
     }
 
-    // Mimics macOS Tahoe's icon shine
+    /// Mimics macOS Tahoe's icon shine
     private func borderShine(in shape: some InsettableShape) -> some View {
         shape
             .strokeBorder(.white, lineWidth: 1)

@@ -107,7 +107,7 @@ enum MigratorError: LocalizedError {
     }
 }
 
-// Adds functionality for saving, loading, and managing window actions.
+/// Adds functionality for saving, loading, and managing window actions.
 @Loggable(style: .static)
 enum Migrator {
     private static var documentsDirectory: URL? {
@@ -320,7 +320,7 @@ private extension Migrator {
             throw MigratorError.failedToReadFile
         }
 
-        /// First, try to import the general Loop keybinds format.
+        // First, try to import the general Loop keybinds format.
         do {
             let savedData = try importLoopKeybinds(from: data)
             await updateDefaults(with: savedData, onSuccess: onSuccess)
@@ -329,7 +329,7 @@ private extension Migrator {
             log.error("Error importing Loop keybinds: \(error)")
         }
 
-        /// If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
+        // If that fails, try to import the old Loop (pre 1.2.0) keybinds format.
         do {
             let savedData = try importLoopLegacyKeybinds(from: data)
             await updateDefaults(with: savedData, onSuccess: onSuccess)
@@ -338,7 +338,7 @@ private extension Migrator {
             log.error("Error importing Loop (pre 1.2.0) keybinds: \(error)")
         }
 
-        /// If that fails, try to import the Rectangle keybinds format.
+        // If that fails, try to import the Rectangle keybinds format.
         do {
             let savedData = try importRectangleKeybinds(from: data)
             await updateDefaults(with: savedData, onSuccess: onSuccess)

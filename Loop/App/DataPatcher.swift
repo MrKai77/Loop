@@ -67,6 +67,7 @@ enum DataPatcher {
 
 // MARK: - Migrated keys (private)
 
+// swiftformat:disable docComments
 private extension Defaults.Keys {
     // StashManager
     static let stashManagerRevealedWindows = Key<Set<CGWindowID>>("stashManagerRevealed", default: Set<CGWindowID>())

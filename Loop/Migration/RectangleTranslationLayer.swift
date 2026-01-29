@@ -20,7 +20,7 @@ struct RectangleConfig: Codable {
     let shortcuts: [String: RectangleShortcut]
 }
 
-// Encapsulate the functions within an enum to provide a namespace
+/// Encapsulate the functions within an enum to provide a namespace
 enum RectangleTranslationLayer {
     /// Maps Rectangle direction keys to Loop's WindowDirection enum.
     private static let directionMapping: [String: WindowDirection] = [

@@ -28,9 +28,9 @@ final class AccessibilityManager {
                 .notifications(named: .AXPermissionsChanged)
 
             for await _ in notifications {
-                /// It seems like the notification is sent immediately after a state change, sometimes before the actual
-                /// reading from `AXIsProcessTrustedWithOptions` is updated.
-                /// So sleep for 250 milliseconds (this is generous, but just to ensure that the reading will be correct).
+                // It seems like the notification is sent immediately after a state change, sometimes before the actual
+                // reading from `AXIsProcessTrustedWithOptions` is updated.
+                // So sleep for 250 milliseconds (this is generous, but just to ensure that the reading will be correct).
                 try? await Task.sleep(for: .milliseconds(250))
 
                 let status = Self.getStatus()
