@@ -296,8 +296,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+            "state" : "translated",
+            "value" : "%@가 응용 프로그램 폴더에 없습니다. 응용 프로그램 폴더에 업데이트를 설치하시겠습니까?"
           }
         },
         "nl-BE" : {
@@ -543,8 +543,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "A single %1$@ action can only track one window. To stash\nmultiple windows, add additional %2$@ actions."
+            "state" : "translated",
+            "value" : "단일 %1$@ 액션은 하나의 창만 추적할 수 있습니다. 여러 창을 숨기려면 %2$@ 액션을 추가로 설정하세요."
           }
         },
         "nl-BE" : {
@@ -626,8 +626,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Accent opacity"
+            "state" : "translated",
+            "value" : "강조 불투명도"
           }
         },
         "nl-BE" : {
@@ -955,8 +955,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Actions"
+            "state" : "translated",
+            "value" : "액션"
           }
         },
         "nl-BE" : {
@@ -1121,8 +1121,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Allow radial menu customization"
+            "state" : "translated",
+            "value" : "원형 메뉴 사용자화 허용"
           }
         },
         "nl-BE" : {
@@ -1861,8 +1861,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Automatically install updates"
+            "state" : "translated",
+            "value" : "업데이트 자동 설치"
           }
         },
         "nl-BE" : {
@@ -1944,8 +1944,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Background"
+            "state" : "translated",
+            "value" : "배경"
           }
         },
         "nl-BE" : {
@@ -2937,8 +2937,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "취소"
           }
         },
         "nl-BE" : {
@@ -3349,8 +3349,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Clear Keybind"
+            "state" : "translated",
+            "value" : "키 바인딩 지우기"
           }
         },
         "nl-BE" : {
@@ -4260,8 +4260,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Custom Action"
+            "state" : "translated",
+            "value" : "사용자 지정 액션"
           }
         },
         "nl-BE" : {
@@ -4425,8 +4425,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Customize this action's custom frame."
+            "state" : "translated",
+            "value" : "이 액션의 사용자 지정 프레임을 설정합니다."
           }
         },
         "nl-BE" : {
@@ -4590,8 +4590,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Customize what this action cycles through."
+            "state" : "translated",
+            "value" : "이 액션이 순환할 항목을 설정합니다."
           }
         },
         "nl-BE" : {
@@ -5580,8 +5580,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Enable blur"
+            "state" : "translated",
+            "value" : "블러 활성화"
           }
         },
         "nl-BE" : {
@@ -6157,8 +6157,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Failed to resolve linked keybind"
+            "state" : "translated",
+            "value" : "연결된 키 바인딩을 확인하지 못했습니다"
           }
         },
         "nl-BE" : {
@@ -6240,8 +6240,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fill Available Space"
+            "state" : "translated",
+            "value" : "사용 가능한 공간 채우기"
           }
         },
         "nl-BE" : {
@@ -6738,8 +6738,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus Next In Stack"
+            "state" : "translated",
+            "value" : "스택에서 다음으로 포커스 이동"
           }
         },
         "nl-BE" : {
@@ -8429,92 +8429,29 @@
         }
       }
     },
-    "Hide until direction is chosen" : {
-      "extractionState" : "stale",
+    "Hide when no action is selected" : {
+      "comment" : "Toggle label for hiding the radial menu when no action is selected.",
+      "isCommentAutoGenerated" : true,
       "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "إخفاء حتى يتم اختيار الاتجاه"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ausblenden bis eine Richtung gewählt wurde"
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hide until direction is chosen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ocultar hasta que se escoge una dirección"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Masquer jusqu’à ce qu'une action soit choisie"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nascondi il menu finché non si seleziona una direzione"
+            "value" : "Hide when no action is selected"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アクションが選択されるまで非表示"
+            "value" : "アクションが選択されていない場合は非表示"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "방향이 선택될 때까지 숨기기"
-          }
-        },
-        "nl-BE" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verstop tot dat de richting is uitgekozen"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esconder até a direção ser selecionada"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Спрятать до выбора направения"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "仅在选择方向后显示"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "僅在選擇方向後顯示"
+            "value" : "액션이 선택되지 않았을 때 숨기기"
           }
         }
       }
-    },
-    "Hide when no action is selected" : {
-      "comment" : "Toggle label for hiding the radial menu when no action is selected.",
-      "isCommentAutoGenerated" : true
     },
     "Horizontal Center Half" : {
       "comment" : "Window action",
@@ -11195,8 +11132,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install failed"
+            "state" : "translated",
+            "value" : "설치 실패"
           }
         },
         "nl-BE" : {
@@ -11278,8 +11215,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install to Applications"
+            "state" : "translated",
+            "value" : "응용 프로그램 폴더에 설치"
           }
         },
         "nl-BE" : {
@@ -11526,8 +11463,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keep in Current Location"
+            "state" : "translated",
+            "value" : "현재 위치에 유지"
           }
         },
         "nl-BE" : {
@@ -11775,8 +11712,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Larger (Proportional)"
+            "state" : "translated",
+            "value" : "크게 (비율 유지)"
           }
         },
         "nl-BE" : {
@@ -12520,8 +12457,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left-click to step through cycle actions."
+            "state" : "translated",
+            "value" : "왼쪽 클릭으로 순환 액션을 단계별로 이동합니다."
           }
         },
         "nl-BE" : {
@@ -12603,8 +12540,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Link Trigger Key"
+            "state" : "translated",
+            "value" : "트리거 키 연결"
           }
         },
         "nl-BE" : {
@@ -16473,8 +16410,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move to Applications Folder?"
+            "state" : "translated",
+            "value" : "응용 프로그램 폴더로 이동하시겠습니까?"
           }
         },
         "nl-BE" : {
@@ -17134,8 +17071,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No radial menu actions"
+            "state" : "translated",
+            "value" : "원형 메뉴 액션 없음"
           }
         },
         "nl-BE" : {
@@ -21730,8 +21667,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please include at least one modifier key."
+            "state" : "translated",
+            "value" : "하나 이상의 보조 키를 포함해 주세요."
           }
         },
         "nl-BE" : {
@@ -22141,8 +22078,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Press \"Add\" to add an action"
+            "state" : "translated",
+            "value" : "\"추가\"를 눌러 액션을 추가하세요."
           }
         },
         "nl-BE" : {
@@ -22885,8 +22822,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Radial Menu"
+            "state" : "translated",
+            "value" : "원형 메뉴"
           }
         },
         "nl-BE" : {
@@ -22968,8 +22905,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "완료하려면 다시 시작하세요"
+            "state" : "translated",
+            "value" : "완료하려면 다시 실행하세요"
           }
         },
         "nl-BE" : {
@@ -23464,8 +23401,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset keybinds?"
+            "state" : "translated",
+            "value" : "키 바인딩을 초기화하시겠습니까?"
           }
         },
         "nl-BE" : {
@@ -23547,8 +23484,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset radial menu actions"
+            "state" : "translated",
+            "value" : "원형 메뉴 액션 초기화"
           }
         },
         "nl-BE" : {
@@ -23629,8 +23566,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset radial menu actions?"
+            "state" : "translated",
+            "value" : "원형 메뉴 액션을 초기화하시겠습니까?"
           }
         },
         "nl-BE" : {
@@ -27422,8 +27359,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Smaller (Proportional)"
+            "state" : "translated",
+            "value" : "작게 (비율 유지)"
           }
         },
         "nl-BE" : {
@@ -28825,8 +28762,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This action is linked to a keybind. Changes made to this action will affect both."
+            "state" : "translated",
+            "value" : "이 액션은 키 바인딩과 연결되어 있습니다. 이 액션을 변경하면 둘 모두에 적용됩니다."
           }
         },
         "nl-BE" : {
@@ -28908,8 +28845,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This macOS version is no longer supported."
+            "state" : "translated",
+            "value" : "이 macOS 버전은 더 이상 지원되지 않습니다."
           }
         },
         "nl-BE" : {
@@ -28991,8 +28928,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This will reset all keybinds to their original defaults."
+            "state" : "translated",
+            "value" : "모든 키 바인딩이 원래 기본값으로 초기화됩니다."
           }
         },
         "nl-BE" : {
@@ -29074,8 +29011,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This will reset all radial menu actions to their default configuration."
+            "state" : "translated",
+            "value" : "모든 원형 메뉴 액션이 기본 설정으로 초기화됩니다."
           }
         },
         "nl-BE" : {
@@ -30150,8 +30087,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Try again later"
+            "state" : "translated",
+            "value" : "나중에 다시 시도하세요"
           }
         },
         "nl-BE" : {
@@ -30316,8 +30253,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Unlink Trigger Key"
+            "state" : "translated",
+            "value" : "트리거 키 연결 해제"
           }
         },
         "nl-BE" : {
@@ -30564,8 +30501,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Update from: %@"
+            "state" : "translated",
+            "value" : "업데이트 대상: %@"
           }
         },
         "nl-BE" : {
@@ -30812,8 +30749,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates will only be installed when %@ is in the background."
+            "state" : "translated",
+            "value" : "%@가 백그라운드에 있을 때만 업데이트가 설치됩니다."
           }
         },
         "nl-BE" : {
@@ -31306,8 +31243,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "버전 %@"
           }
         },
         "nl-BE" : {
@@ -32383,8 +32320,8 @@
         },
         "ko" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in a keybind."
+            "state" : "translated",
+            "value" : "하나의 키 바인딩에는 최대 %lld 개의 키만 사용할 수 있습니다."
           }
         },
         "nl-BE" : {
