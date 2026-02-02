@@ -130,8 +130,21 @@ extension NSScreen {
         return max(0, bottom - top)
     }
 
+    private func horizontalOverlap(with other: NSScreen) -> CGFloat {
+        let a = frame
+        let b = other.frame
+
+        let left = max(a.minX, b.minX)
+        let right = min(a.maxX, b.maxX)
+        return max(0, right - left)
+    }
+
     private func screensInSameRow(screens: [NSScreen], overlapThreshold: CGFloat = 10.0) -> [NSScreen] {
         screens.filter { verticalOverlap(with: $0) >= overlapThreshold }
+    }
+
+    private func screensInSameColumn(screens: [NSScreen], overlapThreshold: CGFloat = 10.0) -> [NSScreen] {
+        screens.filter { horizontalOverlap(with: $0) >= overlapThreshold }
     }
 
     func leftmostScreenInSameRow(overlapThreshold: CGFloat = 10.0) -> NSScreen {
@@ -172,6 +185,52 @@ extension NSScreen {
         for screen in rightCandidates {
             let overlap = verticalOverlap(with: screen)
             if overlap > bestOverlap || (overlap == bestOverlap && screen.frame.maxX > bestScreen?.frame.maxX ?? -.infinity) {
+                bestScreen = screen
+                bestOverlap = overlap
+            }
+        }
+
+        return bestScreen ?? self
+    }
+
+    func topmostScreenInSameColumn(overlapThreshold: CGFloat = 10.0) -> NSScreen {
+        let sameColumnScreens = screensInSameColumn(screens: NSScreen.screens, overlapThreshold: overlapThreshold)
+
+        let topCandidates = sameColumnScreens.filter { $0.frame.maxY <= self.frame.minY }
+
+        guard !topCandidates.isEmpty else {
+            return self
+        }
+
+        var bestScreen: NSScreen? = nil
+        var bestOverlap: CGFloat = -1
+
+        for screen in topCandidates {
+            let overlap = horizontalOverlap(with: screen)
+            if overlap > bestOverlap || (overlap == bestOverlap && screen.frame.minY < bestScreen?.frame.minY ?? .infinity) {
+                bestScreen = screen
+                bestOverlap = overlap
+            }
+        }
+
+        return bestScreen ?? self
+    }
+
+    func bottommostScreenInSameColumn(overlapThreshold: CGFloat = 10.0) -> NSScreen {
+        let sameColumnScreens = screensInSameColumn(screens: NSScreen.screens, overlapThreshold: overlapThreshold)
+
+        let bottomCandidates = sameColumnScreens.filter { $0.frame.minY >= self.frame.maxY }
+
+        guard !bottomCandidates.isEmpty else {
+            return self
+        }
+
+        var bestScreen: NSScreen? = nil
+        var bestOverlap: CGFloat = -1
+
+        for screen in bottomCandidates {
+            let overlap = horizontalOverlap(with: screen)
+            if overlap > bestOverlap || (overlap == bestOverlap && screen.frame.maxY > bestScreen?.frame.maxY ?? -.infinity) {
                 bestScreen = screen
                 bestOverlap = overlap
             }

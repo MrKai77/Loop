@@ -62,7 +62,8 @@ final class StashManager {
 
     /// Two windows can be stacked along the same edge of the screen as long as there is enough non-overlapping space
     /// to allow the user to easily position the cursor over either window.
-    private let minimumVisibleHeightToKeepWindowStacked: CGFloat = 100
+    /// This applies to vertical space for horizontal edges (left/right) and horizontal space for vertical edges (top/bottom).
+    private let minimumVisibleSizeToKeepWindowStacked: CGFloat = 100
 
     private lazy var store: StashedWindowsStore = {
         let store = StashedWindowsStore()
@@ -373,12 +374,16 @@ private extension StashManager {
                 .mouseMoved, // Normal mouse movement
                 .leftMouseDragged // Dragging items to stashed windows
             ],
-            callback: handleMouseMoved
+            callback: { [weak self] cgEvent in
+                self?.handleMouseMoved(cgEvent: cgEvent)
+            }
         )
         monitor.start()
         mouseMonitor = monitor
 
-        frontmostAppMonitor = Task { @MainActor in
+        frontmostAppMonitor = Task { @MainActor [weak self] in
+            guard let self else { return }
+
             let notifications = NSWorkspace.shared.notificationCenter.notifications(
                 named: NSWorkspace.didActivateApplicationNotification
             )
@@ -395,10 +400,21 @@ private extension StashManager {
 
         log.info("Stopping listening for reveal triggers…")
 
-        mouseMonitor?.stop()
-        mouseMonitor = nil
+        // Cancel tasks first
         frontmostAppMonitor?.cancel()
         frontmostAppMonitor = nil
+
+        // Stop and release the monitor
+        // The monitor's deinit will handle cleanup of the event tap
+        mouseMonitor?.stop()
+
+        // Delay the release to allow the run loop to process the stop
+        let monitor = mouseMonitor
+        mouseMonitor = nil
+
+        DispatchQueue.main.async {
+            _ = monitor // Keep alive until run loop processes the removal
+        }
     }
 
     /// Handles mouse movement events with a debounce to avoid excessive processing.
@@ -523,9 +539,9 @@ private extension StashManager {
                 unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
             } else {
                 let currentFrame = stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-                let tolerance = minimumVisibleHeightToKeepWindowStacked
+                let tolerance = minimumVisibleSizeToKeepWindowStacked
 
-                if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, tolerance: tolerance) {
+                if !isThereEnoughNonOverlappingSpace(between: newFrame, and: currentFrame, edge: windowToStash.action.stashEdge, tolerance: tolerance) {
                     log.info("Trying to stash a window overlapping another one. Replacing…")
                     unstash(stashedWindow, resetFrame: true, resetFrameAnimated: animate)
                 }
@@ -535,21 +551,31 @@ private extension StashManager {
 
     /// Determines whether two rectangles have enough non-overlapping space between them.
     ///
-    /// This function compares the vertical ranges (y-axis) of two rectangles, `rect1` and `rect2`,
-    /// and checks if they are either non-overlapping or sufficiently offset vertically by at least
-    /// a given `tolerance` value. This ensures that if windows are stashed along the same edge of the screen,
-    /// they do not overlap each other and leave enough visible space (as defined by `tolerance`).
+    /// This function checks if windows stashed along the same edge have sufficient separation:
+    /// - For horizontal edges (left/right): compares vertical ranges (y-axis)
+    /// - For vertical edges (top/bottom): compares horizontal ranges (x-axis)
     ///
     /// - Parameters:
     ///   - rect1: The first rectangle representing a stashed window's frame.
     ///   - rect2: The second rectangle representing another window's frame.
-    ///   - tolerance: The minimum number of pixels that must separate the two windows (in the vertical direction).
+    ///   - edge: The edge where windows are stashed (determines which axis to check).
+    ///   - tolerance: The minimum number of pixels that must separate the two windows.
     ///
     /// - Returns: `true` if the two rectangles do not overlap or are separated by at least `tolerance` pixels;
     ///            `false` otherwise.
-    func isThereEnoughNonOverlappingSpace(between rect1: CGRect, and rect2: CGRect, tolerance: CGFloat) -> Bool {
-        let range1 = rect1.minY...rect1.maxY
-        let range2 = rect2.minY...rect2.maxY
+    func isThereEnoughNonOverlappingSpace(between rect1: CGRect, and rect2: CGRect, edge: StashEdge?, tolerance: CGFloat) -> Bool {
+        let range1: ClosedRange<CGFloat>
+        let range2: ClosedRange<CGFloat>
+
+        // For horizontal edges (left/right), check vertical overlap
+        // For vertical edges (top/bottom), check horizontal overlap
+        if edge?.isHorizontal == true {
+            range1 = rect1.minY...rect1.maxY
+            range2 = rect2.minY...rect2.maxY
+        } else {
+            range1 = rect1.minX...rect1.maxX
+            range2 = rect2.minX...rect2.maxX
+        }
 
         return areRangesNonOverlappingByAtLeast(tolerance, range1, range2)
     }
@@ -614,7 +640,7 @@ private extension StashManager {
     }
 
     func getScreenForEdge(currentScreen: NSScreen, edge: StashEdge) -> NSScreen? {
-        // Two screens are considered in the same "row" if they overlap vertically by at least `threshold` points
+        // Two screens are considered in the same "row" or "column" if they overlap by at least `threshold` points
         let threshold: CGFloat = 100
 
         return switch edge {
@@ -622,6 +648,10 @@ private extension StashManager {
             currentScreen.leftmostScreenInSameRow(overlapThreshold: threshold)
         case .right:
             currentScreen.rightmostScreenInSameRow(overlapThreshold: threshold)
+        case .top:
+            currentScreen.topmostScreenInSameColumn(overlapThreshold: threshold)
+        case .bottom:
+            currentScreen.bottommostScreenInSameColumn(overlapThreshold: threshold)
         }
     }
 }

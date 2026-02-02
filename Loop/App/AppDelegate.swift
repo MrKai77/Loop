@@ -31,7 +31,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             await Defaults.iCloud.waitForSyncCompletion()
         }
 
-        if !launchedAsLoginItem {
+        // Show settings window only if not launched as login item AND startHidden is disabled
+        if !launchedAsLoginItem, !Defaults[.startHidden] {
             SettingsWindowManager.shared.show()
         } else {
             // Closing also hides the dock icon if needed.

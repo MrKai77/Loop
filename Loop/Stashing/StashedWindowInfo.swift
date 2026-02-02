@@ -23,14 +23,28 @@ struct StashedWindowInfo: Equatable {
         var frame = WindowFrameResolver.getFrame(for: action, window: window, bounds: bounds)
 
         let minPeekSize: CGFloat = 1
-        let maxPeekSize = frame.width * maxPeekPercent
-        let clampedPeekSize = max(minPeekSize, min(peekSize, maxPeekSize))
 
         switch action.stashEdge {
-        case .left:
-            frame.origin.x = bounds.minX - frame.width + clampedPeekSize
-        case .right:
-            frame.origin.x = bounds.maxX - clampedPeekSize
+        case .left, .right:
+            let maxPeekSize = frame.width * maxPeekPercent
+            let clampedPeekSize = max(minPeekSize, min(peekSize, maxPeekSize))
+
+            if action.stashEdge == .left {
+                frame.origin.x = bounds.minX - frame.width + clampedPeekSize
+            } else {
+                frame.origin.x = bounds.maxX - clampedPeekSize
+            }
+
+        case .top, .bottom:
+            let maxPeekSize = frame.height * maxPeekPercent
+            let clampedPeekSize = max(minPeekSize, min(peekSize, maxPeekSize))
+
+            if action.stashEdge == .top {
+                frame.origin.y = bounds.minY - frame.height + clampedPeekSize
+            } else {
+                frame.origin.y = bounds.maxY - clampedPeekSize
+            }
+
         case .none:
             log.warn("Trying to compute the stash frame for a non-stash related action.")
         }

@@ -11830,6 +11830,16 @@
         }
       }
     },
+    "Start hidden" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start hidden"
+          }
+        }
+      }
+    },
     "Left" : {
       "comment" : "Label for a slider in Loop’s padding settings\nSide of a trigger key",
       "localizations" : {

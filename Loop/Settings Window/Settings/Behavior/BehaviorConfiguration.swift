@@ -13,6 +13,7 @@ struct BehaviorConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
 
     @Default(.launchAtLogin) var launchAtLogin
+    @Default(.startHidden) var startHidden
     @Default(.hideMenuBarIcon) var hideMenuBarIcon
     @Default(.animationConfiguration) var animationConfiguration
     @Default(.windowSnapping) var windowSnapping
@@ -54,6 +55,8 @@ struct BehaviorConfigurationView: View {
     private var generalSection: some View {
         LuminareSection(String(localized: "General", comment: "Section header shown in settings")) {
             LuminareToggle("Launch at login", isOn: $launchAtLogin)
+
+            LuminareToggle("Start hidden", isOn: $startHidden)
 
             LuminareToggle("Hide menu bar icon", isOn: $hideMenuBarIcon)
 
