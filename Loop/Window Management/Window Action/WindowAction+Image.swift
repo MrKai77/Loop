@@ -37,6 +37,8 @@ extension WindowAction {
         switch direction {
         case .noAction:
             .systemImage("questionmark")
+        case .noSelection:
+            nil // No selection state should not display an icon
         case .undo:
             .systemImage("arrow.uturn.backward")
         case .initialFrame:
@@ -93,6 +95,10 @@ extension WindowAction {
             .systemImage("chevron.down")
         case .focusNextInStack:
             .systemImage("rectangle.stack")
+        case .stash:
+            .systemImage("square.stack.3d.down.right")
+        case .unstash:
+            .systemImage("square.stack.3d.up")
         default:
             nil
         }
