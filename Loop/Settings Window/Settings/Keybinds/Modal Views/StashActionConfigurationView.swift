@@ -38,6 +38,7 @@ struct StashActionConfigurationView: View {
     private var anchors: [CustomWindowActionAnchor] {
         [.topLeft, .top, .topRight,
          .left, .center, .right,
+         .left, .none, .right,
          .bottomLeft, .bottom, .bottomRight]
     }
 
@@ -196,7 +197,9 @@ struct StashActionConfigurationView: View {
                     ),
                     columns: 3
                 ) { anchor in
-                    IconView(action: anchor.iconAction)
+                    if let action = anchor.iconAction {
+                        IconView(action: action)
+                    }
                 }
                 .luminareRoundingBehavior(top: true, bottom: true)
             } else {

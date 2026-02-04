@@ -5,11 +5,13 @@
 //  Created by Kai Azim on 2024-01-01.
 //
 
+import Luminare
 import SwiftUI
 
-enum CustomWindowActionAnchor: Int, Codable, CaseIterable, Identifiable {
+enum CustomWindowActionAnchor: Int, Codable, Identifiable, LuminareSelectionData {
     var id: Self { self }
 
+    case none = -1
     case topLeft = 0
     case top = 1
     case topRight = 2
@@ -20,18 +22,23 @@ enum CustomWindowActionAnchor: Int, Codable, CaseIterable, Identifiable {
     case left = 7
     case center = 8
     case macOSCenter = 9
+
+    var isSelectable: Bool {
+        self != .none
+    }
 }
 
 extension CustomWindowActionAnchor {
     private static var iconActionCache: [CustomWindowActionAnchor: WindowAction] = [:]
 
-    var iconAction: WindowAction {
+    var iconAction: WindowAction? {
         // Prevents re-initializing the same action multiple times
         if let cachedAction = CustomWindowActionAnchor.iconActionCache[self] {
             return cachedAction
         }
 
-        let newAction: WindowAction = switch self {
+        let newAction: WindowAction? = switch self {
+        case .none: nil
         case .topLeft: .init(.topLeftQuarter)
         case .top: .init(.topHalf)
         case .topRight: .init(.topRightQuarter)

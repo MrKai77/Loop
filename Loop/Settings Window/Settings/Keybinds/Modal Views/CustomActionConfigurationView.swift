@@ -229,7 +229,9 @@ struct CustomActionConfigurationView: View {
                     ),
                     columns: 3
                 ) { anchor in
-                    IconView(action: anchor.iconAction)
+                    if let action = anchor.iconAction {
+                        IconView(action: action)
+                    }
                 }
                 .luminareRoundingBehavior(bottom: !showMacOSCenterToggle)
 
