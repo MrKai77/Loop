@@ -40,13 +40,14 @@ final class ResizeContext {
         initialFrame: CGRect? = nil,
         screen: NSScreen? = nil,
         bounds: CGRect? = nil,
+        padding: PaddingConfiguration? = nil,
         action: WindowAction = .init(.noSelection),
         parentAction: WindowAction? = nil,
         initialMousePosition: CGPoint = .zero
     ) {
         let frame = initialFrame ?? window?.frame ?? .zero
         let bounds = bounds ?? screen?.cgSafeScreenFrame ?? .zero
-        let padding = PaddingConfiguration.getConfiguredPadding(for: screen)
+        let padding = padding ?? PaddingConfiguration.getConfiguredPadding(for: screen)
 
         self.window = window
         self.cachedTargetFrame = ComputedFrame(raw: frame, normalized: .zero, padded: frame)
