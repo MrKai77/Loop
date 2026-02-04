@@ -35,15 +35,10 @@ struct StashedWindowInfo: Equatable {
                 frame.origin.x = bounds.maxX - clampedPeekSize
             }
 
-        case .top, .bottom:
+        case .bottom:
             let maxPeekSize = frame.height * maxPeekPercent
             let clampedPeekSize = max(minPeekSize, min(peekSize, maxPeekSize))
-
-            if action.stashEdge == .top {
-                frame.origin.y = bounds.minY - frame.height + clampedPeekSize
-            } else {
-                frame.origin.y = bounds.maxY - clampedPeekSize
-            }
+            frame.origin.y = bounds.maxY - clampedPeekSize
 
         case .none:
             log.warn("Trying to compute the stash frame for a non-stash related action.")

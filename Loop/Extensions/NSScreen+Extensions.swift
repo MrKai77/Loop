@@ -193,29 +193,6 @@ extension NSScreen {
         return bestScreen ?? self
     }
 
-    func topmostScreenInSameColumn(overlapThreshold: CGFloat = 10.0) -> NSScreen {
-        let sameColumnScreens = screensInSameColumn(screens: NSScreen.screens, overlapThreshold: overlapThreshold)
-
-        let topCandidates = sameColumnScreens.filter { $0.frame.maxY <= self.frame.minY }
-
-        guard !topCandidates.isEmpty else {
-            return self
-        }
-
-        var bestScreen: NSScreen? = nil
-        var bestOverlap: CGFloat = -1
-
-        for screen in topCandidates {
-            let overlap = horizontalOverlap(with: screen)
-            if overlap > bestOverlap || (overlap == bestOverlap && screen.frame.minY < bestScreen?.frame.minY ?? .infinity) {
-                bestScreen = screen
-                bestOverlap = overlap
-            }
-        }
-
-        return bestScreen ?? self
-    }
-
     func bottommostScreenInSameColumn(overlapThreshold: CGFloat = 10.0) -> NSScreen {
         let sameColumnScreens = screensInSameColumn(screens: NSScreen.screens, overlapThreshold: overlapThreshold)
 

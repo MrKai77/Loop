@@ -62,7 +62,7 @@ final class StashManager {
 
     /// Two windows can be stacked along the same edge of the screen as long as there is enough non-overlapping space
     /// to allow the user to easily position the cursor over either window.
-    /// This applies to vertical space for horizontal edges (left/right) and horizontal space for vertical edges (top/bottom).
+    /// This applies to vertical space for horizontal edges (left/right) and horizontal space for vertical edges (bottom).
     private let minimumVisibleSizeToKeepWindowStacked: CGFloat = 100
 
     private lazy var store: StashedWindowsStore = {
@@ -553,7 +553,7 @@ private extension StashManager {
     ///
     /// This function checks if windows stashed along the same edge have sufficient separation:
     /// - For horizontal edges (left/right): compares vertical ranges (y-axis)
-    /// - For vertical edges (top/bottom): compares horizontal ranges (x-axis)
+    /// - For vertical edges (bottom): compares horizontal ranges (x-axis)
     ///
     /// - Parameters:
     ///   - rect1: The first rectangle representing a stashed window's frame.
@@ -568,7 +568,7 @@ private extension StashManager {
         let range2: ClosedRange<CGFloat>
 
         // For horizontal edges (left/right), check vertical overlap
-        // For vertical edges (top/bottom), check horizontal overlap
+        // For vertical edges (bottom), check horizontal overlap
         if edge?.isHorizontal == true {
             range1 = rect1.minY...rect1.maxY
             range2 = rect2.minY...rect2.maxY
@@ -648,8 +648,6 @@ private extension StashManager {
             currentScreen.leftmostScreenInSameRow(overlapThreshold: threshold)
         case .right:
             currentScreen.rightmostScreenInSameRow(overlapThreshold: threshold)
-        case .top:
-            currentScreen.topmostScreenInSameColumn(overlapThreshold: threshold)
         case .bottom:
             currentScreen.bottommostScreenInSameColumn(overlapThreshold: threshold)
         }

@@ -11,7 +11,6 @@ import Foundation
 enum StashEdge: String, CustomDebugStringConvertible {
     case left
     case right
-    case top
     case bottom
 
     var debugDescription: String {
@@ -23,7 +22,7 @@ enum StashEdge: String, CustomDebugStringConvertible {
     }
 
     var isVertical: Bool {
-        self == .top || self == .bottom
+        self == .bottom
     }
 }
 
@@ -36,8 +35,6 @@ extension WindowAction {
             .left
         case .stash where anchor == .right:
             .right
-        case .stash where anchor == .top:
-            .top
         case .stash where anchor == .bottom:
             .bottom
         case .stash where anchor == .topLeft:

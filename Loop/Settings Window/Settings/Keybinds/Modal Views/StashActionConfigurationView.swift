@@ -36,8 +36,7 @@ struct StashActionConfigurationView: View {
     private let defaultAnchor: CustomWindowActionAnchor = .topLeft
 
     private var anchors: [CustomWindowActionAnchor] {
-        [.topLeft, .top, .topRight,
-         .left, .center, .right,
+        [.topLeft, .none, .topRight,
          .left, .none, .right,
          .bottomLeft, .bottom, .bottomRight]
     }
