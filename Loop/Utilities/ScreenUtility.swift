@@ -120,11 +120,12 @@ enum ScreenUtility {
         direction: NavigationDirection,
         canWrap: Bool = true
     ) -> NSScreen? {
-        let screens = NSScreen.screens
+        let currentDisplayID = currentScreen.displayID
+        let otherScreens = NSScreen.screens.filter { $0.displayID != currentDisplayID }
 
         return navigationUtility.directionalItem(
             from: currentScreen,
-            in: screens,
+            others: otherScreens,
             direction: direction,
             canWrap: canWrap
         )

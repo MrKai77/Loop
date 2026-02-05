@@ -184,7 +184,8 @@ extension LoopManager {
         if !forceClose {
             // If the preview was disabled, the window will already be in the specified action's frame.
             // So only resize the window if the preview is enabled.
-            if Defaults[.previewVisibility] {
+            if Defaults[.previewVisibility],
+               !resizeContext.action.direction.willFocusWindow {
                 Task {
                     _ = try? await WindowActionEngine.shared.apply(context: resizeContext)
                 }
