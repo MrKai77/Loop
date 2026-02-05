@@ -60,7 +60,7 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
         action: WindowAction,
         window: Window?
     ) -> CGRect {
-        guard bounds.width > 0, bounds.height > 0 else { return frame }
+        guard bounds.size.area > 0, frame.size.area > 0 else { return frame }
 
         var result = frame
 

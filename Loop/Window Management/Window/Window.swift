@@ -68,9 +68,9 @@ final class Window {
         try self.init(element: window)
     }
 
-    /// Initialize a window from an entry in a dictionary returned by `CGWindowListCopyWindowInfo`.
+    /// Retrieve a window from an entry in a dictionary returned by `CGWindowListCopyWindowInfo`.
     /// - Parameter windowInfo: The dictionary containing information about the window.
-    convenience init(windowInfo: [String: AnyObject]) throws {
+    static func fromWindowInfo(_ windowInfo: [String: AnyObject]) throws -> Window {
         // First, check if we can initialize a window simply based on its PID.
         guard
             let alpha = windowInfo[kCGWindowAlpha as String] as? Double, alpha > 0.01, // Ignore invisible windows
@@ -85,32 +85,41 @@ final class Window {
         }
 
         let element = AXUIElementCreateApplication(pid)
-        guard let windows: [AXUIElement] = try element.getValue(.windows),
-              !windows.isEmpty
+        guard let windowElements: [AXUIElement] = try element.getValue(.windows),
+              !windowElements.isEmpty
         else {
             throw WindowError.cannotGetWindow
         }
 
         // If there’s only one window, use that as there's no need to grab its frame
-        if windows.count == 1 {
-            try self.init(element: windows[0])
-            return
+        if windowElements.count == 1 {
+            return try Window(element: windowElements[0])
         }
 
-        // Try to match against the frame when there are multiple windows
-        if let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
-           let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary),
-           let match = try windows.first(where: { window in
-               let position: CGPoint? = try window.getValue(.position)
-               let size: CGSize? = try window.getValue(.size)
-               return position == frame.origin && size == frame.size
-           }) {
-            try self.init(element: match)
-            return
+        // If we can retrieve bounds, then filter candidates out by their respective frames.
+        let candidates: [AXUIElement] = if let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
+                                           let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) {
+            windowElements.filter {
+                if let position: CGPoint = try? $0.getValue(.position),
+                   let size: CGSize = try? $0.getValue(.size) {
+                    return position == frame.origin && size == frame.size
+                }
+                return false
+            }
+        } else {
+            windowElements
         }
 
-        // Fallback! initialize from the first available window
-        try self.init(element: windows[0])
+        let windows = candidates.compactMap { try? Window(element: $0) }
+
+        if let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID,
+           let match = windows.first(where: { $0.cgWindowID == windowID }) {
+            return match
+        } else if let first = windows.first {
+            return first
+        }
+
+        return try Window(element: windowElements[0])
     }
 
     var role: NSAccessibility.Role? {
@@ -428,8 +437,7 @@ final class Window {
 
 extension Window: CustomStringConvertible {
     var description: String {
-        let name = nsRunningApplication?.localizedName ?? title ?? "<unknown>"
-        return "Window(id: \(cgWindowID), title: \(name))"
+        "Window(id: \(cgWindowID), app: '\(nsRunningApplication?.localizedName ?? "<unknown>")', title: '\(title ?? "<unknown>"))"
     }
 }
 

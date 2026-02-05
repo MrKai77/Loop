@@ -81,7 +81,7 @@ enum WindowUtility {
 
         var windowList: [Window] = []
         for windowInfo in list {
-            if let window = try? Window(windowInfo: windowInfo) {
+            if let window = try? Window.fromWindowInfo(windowInfo) {
                 windowList.append(window)
             }
         }
