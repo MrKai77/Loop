@@ -54,7 +54,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "%"
           }
         },
@@ -219,7 +219,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "%1$@ %2$@"
           }
         },
@@ -284,8 +284,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+            "state" : "translated",
+            "value" : "%@ non è in Applicazioni. Vuoi installare l'aggiornamento in Applicazioni invece che nella cartella attuale?"
           }
         },
         "ja" : {
@@ -314,8 +314,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+            "state" : "translated",
+            "value" : "%@ не находится в папке \"Приложения\". Хотите установить обновление в папку \"Приложения\"?"
           }
         },
         "zh-Hans" : {
@@ -561,8 +561,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "A single %1$@ action can only track one window. To stash\nmultiple windows, add additional %2$@ actions."
+            "state" : "translated",
+            "value" : "Действие %1$@ может следить только за одним окном. Добавьте дополнительные %2$@ действий, чтобы спрятать несколько окон."
           }
         },
         "zh-Hans" : {
@@ -644,8 +644,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Accent opacity"
+            "state" : "translated",
+            "value" : "Прозрачность акцента"
           }
         },
         "zh-Hans" : {
@@ -973,8 +973,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Actions"
+            "state" : "translated",
+            "value" : "Действия"
           }
         },
         "zh-Hans" : {
@@ -1139,8 +1139,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Allow radial menu customization"
+            "state" : "translated",
+            "value" : "Разрешить изменение радиального меню"
           }
         },
         "zh-Hans" : {
@@ -1292,8 +1292,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Always start cycles from first item"
+            "state" : "translated",
+            "value" : "Start Cycli altijd vanaf de eerste actie"
           }
         },
         "pt-BR" : {
@@ -1849,8 +1849,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Automatically install updates"
+            "state" : "translated",
+            "value" : "Installa automaticamente gli aggiornamenti"
           }
         },
         "ja" : {
@@ -1879,8 +1879,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Automatically install updates"
+            "state" : "translated",
+            "value" : "Автоматически устанавливать обновления"
           }
         },
         "zh-Hans" : {
@@ -1962,8 +1962,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Background"
+            "state" : "translated",
+            "value" : "Фон"
           }
         },
         "zh-Hans" : {
@@ -2860,8 +2860,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "By default, Loop resumes cycles from where you last left off in each window."
+            "state" : "translated",
+            "value" : "Loop gaat standaard in elk venster verder met de cyclus waar je gebleven was."
           }
         },
         "pt-BR" : {
@@ -2955,8 +2955,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "Отменить"
           }
         },
         "zh-Hans" : {
@@ -3285,8 +3285,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Check for Updates…"
+            "state" : "translated",
+            "value" : "Проверить наличие обновлений…"
           }
         },
         "zh-Hans" : {
@@ -3337,8 +3337,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Clear Keybind"
+            "state" : "translated",
+            "value" : "Cancella scorciatoia"
           }
         },
         "ja" : {
@@ -3355,8 +3355,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Clear Keybind"
+            "state" : "translated",
+            "value" : "Toetscombinatie wissen"
           }
         },
         "pt-BR" : {
@@ -3367,8 +3367,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Clear Keybind"
+            "state" : "translated",
+            "value" : "Очистить горячую клавишу"
           }
         },
         "zh-Hans" : {
@@ -3616,8 +3616,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Configure…"
+            "state" : "translated",
+            "value" : "Настроить…"
           }
         },
         "zh-Hans" : {
@@ -3946,8 +3946,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Corner Radius"
+            "state" : "translated",
+            "value" : "Скругление"
           }
         },
         "zh-Hans" : {
@@ -4278,8 +4278,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Custom Action"
+            "state" : "translated",
+            "value" : "Свое действие"
           }
         },
         "zh-Hans" : {
@@ -4443,8 +4443,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Customize this action's custom frame."
+            "state" : "translated",
+            "value" : "Изменить рамку этого действия."
           }
         },
         "zh-Hans" : {
@@ -4596,8 +4596,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Customize what this action cycles through."
+            "state" : "translated",
+            "value" : "Aanpassen door welke Cyclus deze actie gaat."
           }
         },
         "pt-BR" : {
@@ -4608,8 +4608,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Customize what this action cycles through."
+            "state" : "translated",
+            "value" : "Изменить по каким действиям идет цикл."
           }
         },
         "zh-Hans" : {
@@ -4761,8 +4761,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cycle backward with Shift"
+            "state" : "translated",
+            "value" : "Cyclus teruggaan met Shift"
           }
         },
         "pt-BR" : {
@@ -4926,8 +4926,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cycles"
+            "state" : "translated",
+            "value" : "Cycli"
           }
         },
         "pt-BR" : {
@@ -5021,8 +5021,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Default corner radius"
+            "state" : "translated",
+            "value" : "Скругление по умолчанию"
           }
         },
         "zh-Hans" : {
@@ -5598,8 +5598,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Enable blur"
+            "state" : "translated",
+            "value" : "Включить размытие"
           }
         },
         "zh-Hans" : {
@@ -6164,7 +6164,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gelinkte toetsverbinding mislukt"
+            "value" : "Gelinkte toetscombinatie ophalen mislukt"
           }
         },
         "pt-BR" : {
@@ -6175,8 +6175,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Failed to resolve linked keybind"
+            "state" : "translated",
+            "value" : "Не удалось определить связанную клавишу"
           }
         },
         "zh-Hans" : {
@@ -6258,8 +6258,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fill Available Space"
+            "state" : "translated",
+            "value" : "Заполнять доступное место"
           }
         },
         "zh-Hans" : {
@@ -6507,8 +6507,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus"
+            "state" : "translated",
+            "value" : "Фокусировка"
           }
         },
         "zh-Hans" : {
@@ -6756,8 +6756,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus Next In Stack"
+            "state" : "translated",
+            "value" : "Сфокусировать следующий в стеке"
           }
         },
         "zh-Hans" : {
@@ -8431,12 +8431,41 @@
     },
     "Hide when no action is selected" : {
       "comment" : "Toggle label for hiding the radial menu when no action is selected.",
-      "isCommentAutoGenerated" : true,
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hide when no action is selected"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hide when no action is selected"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hide when no action is selected"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hide when no action is selected"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cacher quand aucune action n'est sélectionnée"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nascondi quando non è stata selezionata nessuna azione"
           }
         },
         "ja" : {
@@ -8449,6 +8478,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "액션이 선택되지 않았을 때 숨기기"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbergen wanneer geen actie geselecteerd is"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hide when no action is selected"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скрыть, когда не выбрано действие"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hide when no action is selected"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hide when no action is selected"
           }
         }
       }
@@ -11120,8 +11179,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install failed"
+            "state" : "translated",
+            "value" : "Installazione fallita"
           }
         },
         "ja" : {
@@ -11150,8 +11209,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install failed"
+            "state" : "translated",
+            "value" : "Ошибка установки"
           }
         },
         "zh-Hans" : {
@@ -11203,8 +11262,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install to Applications"
+            "state" : "translated",
+            "value" : "Installa in Applicazioni"
           }
         },
         "ja" : {
@@ -11233,8 +11292,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install to Applications"
+            "state" : "translated",
+            "value" : "Установить в папку \"Приложения\""
           }
         },
         "zh-Hans" : {
@@ -11451,8 +11510,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keep in Current Location"
+            "state" : "translated",
+            "value" : "Mantieni posizione attuale"
           }
         },
         "ja" : {
@@ -11481,8 +11540,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keep in Current Location"
+            "state" : "translated",
+            "value" : "Оставить в текущем месте"
           }
         },
         "zh-Hans" : {
@@ -11730,8 +11789,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Larger (Proportional)"
+            "state" : "translated",
+            "value" : "Больше (Пропорционально)"
           }
         },
         "zh-Hans" : {
@@ -11826,16 +11885,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隨macOS啟動"
-          }
-        }
-      }
-    },
-    "Start hidden" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start hidden"
           }
         }
       }
@@ -12485,8 +12534,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left-click to step through cycle actions."
+            "state" : "translated",
+            "value" : "Левое нажатие, чтобы пройти действия цикла."
           }
         },
         "zh-Hans" : {
@@ -12538,8 +12587,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Link Trigger Key"
+            "state" : "translated",
+            "value" : "Collega tasti di attivazione"
           }
         },
         "ja" : {
@@ -12568,8 +12617,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Link Trigger Key"
+            "state" : "translated",
+            "value" : "Привязать клавишу активации"
           }
         },
         "zh-Hans" : {
@@ -15128,7 +15177,7 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "%lld Loop links"
+                  "value" : "Nog %lld Loop"
                 }
               },
               "other" : {
@@ -16408,8 +16457,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move to Applications Folder?"
+            "state" : "translated",
+            "value" : "Spostare in Applicazioni?"
           }
         },
         "ja" : {
@@ -16438,8 +16487,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move to Applications Folder?"
+            "state" : "translated",
+            "value" : "Переместить в папку \"Приложения\"?"
           }
         },
         "zh-Hans" : {
@@ -17099,8 +17148,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No radial menu actions"
+            "state" : "translated",
+            "value" : "Нет действий радиального меню"
           }
         },
         "zh-Hans" : {
@@ -21665,8 +21714,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please include at least one modifier key."
+            "state" : "translated",
+            "value" : "Includi almeno un tasto modificatore."
           }
         },
         "ja" : {
@@ -21695,8 +21744,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please include at least one modifier key."
+            "state" : "translated",
+            "value" : "Пожалуйста, используйте хотя бы одну специальную клавишу."
           }
         },
         "zh-Hans" : {
@@ -22106,8 +22155,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Press \"Add\" to add an action"
+            "state" : "translated",
+            "value" : "Нажмите \"Добавить\", чтобы добавить действие"
           }
         },
         "zh-Hans" : {
@@ -22436,8 +22485,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Prioritize selected window’s corner radius"
+            "state" : "translated",
+            "value" : "Установить приоритет скругления для выбранного окна"
           }
         },
         "zh-Hans" : {
@@ -22507,7 +22556,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "px"
           }
         },
@@ -22673,8 +22722,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Quit %@"
+            "state" : "translated",
+            "value" : "Stop %@"
           }
         },
         "pt-BR" : {
@@ -22685,8 +22734,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Quit %@"
+            "state" : "translated",
+            "value" : "Выйти из %@"
           }
         },
         "zh-Hans" : {
@@ -22850,8 +22899,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Radial Menu"
+            "state" : "translated",
+            "value" : "Радиальное меню"
           }
         },
         "zh-Hans" : {
@@ -22933,7 +22982,7 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Перезагрузить"
           }
         },
@@ -23429,8 +23478,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset keybinds?"
+            "state" : "translated",
+            "value" : "Сбросить горячие клавиши?"
           }
         },
         "zh-Hans" : {
@@ -23512,8 +23561,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset radial menu actions"
+            "state" : "translated",
+            "value" : "Сбросить действия радиального меню"
           }
         },
         "zh-Hans" : {
@@ -23594,8 +23643,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset radial menu actions?"
+            "state" : "translated",
+            "value" : "Сбросить действия радиального меню?"
           }
         },
         "zh-Hans" : {
@@ -24739,8 +24788,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Second Fourth"
+            "state" : "translated",
+            "value" : "Tweede kwartier"
           }
         },
         "pt-BR" : {
@@ -24821,8 +24870,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Select a keybinds file"
+            "state" : "translated",
+            "value" : "Selecteer een bestand met toetscombinaties"
           }
         },
         "pt-BR" : {
@@ -26382,8 +26431,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink"
+            "state" : "translated",
+            "value" : "Krimpen"
           }
         },
         "pt-BR" : {
@@ -26548,8 +26597,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink Horizontally"
+            "state" : "translated",
+            "value" : "Horizontaal krimpen"
           }
         },
         "pt-BR" : {
@@ -26880,8 +26929,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Shrink Vertically"
+            "state" : "translated",
+            "value" : "Verticaal krimpen"
           }
         },
         "pt-BR" : {
@@ -27375,8 +27424,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Smaller (Proportional)"
+            "state" : "translated",
+            "value" : "Kleiner (proportioneel)"
           }
         },
         "pt-BR" : {
@@ -27387,8 +27436,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Smaller (Proportional)"
+            "state" : "translated",
+            "value" : "Меньше (Пропорционально)"
           }
         },
         "zh-Hans" : {
@@ -27624,8 +27673,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Stage Manager"
+            "state" : "translated",
+            "value" : "State Manager"
           }
         },
         "pt-BR" : {
@@ -27732,6 +27781,88 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "台前調度區域寬度"
+          }
+        }
+      }
+    },
+    "Start hidden" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start hidden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrer masqué"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avvia nascosta"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "起動時に非表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Start hidden"
           }
         }
       }
@@ -28695,8 +28826,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Third Fourth"
+            "state" : "translated",
+            "value" : "Derde kwartier"
           }
         },
         "pt-BR" : {
@@ -28790,8 +28921,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This action is linked to a keybind. Changes made to this action will affect both."
+            "state" : "translated",
+            "value" : "Это действие назначено на горячую клавишу. Изменения в действии повлияют на все."
           }
         },
         "zh-Hans" : {
@@ -28873,8 +29004,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This macOS version is no longer supported."
+            "state" : "translated",
+            "value" : "Эта версия macOS больше не поддерживает."
           }
         },
         "zh-Hans" : {
@@ -28956,8 +29087,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This will reset all keybinds to their original defaults."
+            "state" : "translated",
+            "value" : "Это сбросит все горячие клавиши до значений по умолчанию."
           }
         },
         "zh-Hans" : {
@@ -29039,8 +29170,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This will reset all radial menu actions to their default configuration."
+            "state" : "translated",
+            "value" : "Это сбросит все действия радиального меню до значений по умолчанию."
           }
         },
         "zh-Hans" : {
@@ -29109,8 +29240,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "To save power, window animations are\nunavailable in Low Power Mode."
+            "state" : "translated",
+            "value" : "Om energie te besparen zijn vensteranimaties in beschikbaar in de Low Power modus."
           }
         },
         "pt-BR" : {
@@ -30085,8 +30216,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Try again later"
+            "state" : "translated",
+            "value" : "Riprova più tardi"
           }
         },
         "ja" : {
@@ -30115,8 +30246,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Try again later"
+            "state" : "translated",
+            "value" : "Попробуйте позже"
           }
         },
         "zh-Hans" : {
@@ -30251,8 +30382,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Unlink Trigger Key"
+            "state" : "translated",
+            "value" : "Scollega tasti di attivazione"
           }
         },
         "ja" : {
@@ -30281,8 +30412,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Unlink Trigger Key"
+            "state" : "translated",
+            "value" : "Отвязать клавишу активации"
           }
         },
         "zh-Hans" : {
@@ -30499,8 +30630,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Update from: %@"
+            "state" : "translated",
+            "value" : "Aggiorna da: %@"
           }
         },
         "ja" : {
@@ -30529,8 +30660,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Update from: %@"
+            "state" : "translated",
+            "value" : "Обновиться с %@"
           }
         },
         "zh-Hans" : {
@@ -30682,8 +30813,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates are disabled"
+            "state" : "translated",
+            "value" : "Updates zijn uitgeschakeld"
           }
         },
         "pt-BR" : {
@@ -30747,8 +30878,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates will only be installed when %@ is in the background."
+            "state" : "translated",
+            "value" : "Gli aggiornamenti saranno installati solo quando %@ è in background."
           }
         },
         "ja" : {
@@ -30777,8 +30908,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates will only be installed when %@ is in the background."
+            "state" : "translated",
+            "value" : "Обновления могут быть установлены только когда %@ запущен в фоновом режиме."
           }
         },
         "zh-Hans" : {
@@ -31241,8 +31372,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Versione %@"
           }
         },
         "ja" : {
@@ -31271,8 +31402,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Версия %@"
           }
         },
         "zh-Hans" : {
@@ -32170,7 +32301,7 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "X"
           }
         },
@@ -32318,8 +32449,8 @@
         },
         "it" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in a keybind."
+            "state" : "translated",
+            "value" : "Puoi usare un massimo di %lld tasti in una scorciatoia."
           }
         },
         "ja" : {
@@ -32336,8 +32467,8 @@
         },
         "nl-BE" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in a keybind."
+            "state" : "translated",
+            "value" : "Je kan maximaal %lld toetsen gebruiken in een toetscombinatie."
           }
         },
         "pt-BR" : {
@@ -32348,8 +32479,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in a keybind."
+            "state" : "translated",
+            "value" : "Вы можете использовать до %lld клавиш."
           }
         },
         "zh-Hans" : {
@@ -32696,5 +32827,5 @@
       }
     }
   },
-  "version" : "1.1"
+  "version" : "1.0"
 }

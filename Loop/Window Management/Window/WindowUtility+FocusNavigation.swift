@@ -12,7 +12,7 @@ import SwiftUI
 extension WindowUtility {
     private static var navigationUtility = DirectionalNavigationUtility<Window>(
         minDirectionalSpan: .percentage(10),
-        minStackedArea: .percentage(60),
+        minStackedArea: .percentage(50),
         frameProvider: \.frame
     )
 
@@ -41,7 +41,6 @@ extension WindowUtility {
 
     static func focusNextWindowInStack(from currentWindow: Window?) -> Window? {
         guard let directionalWindow = WindowUtility.nextStackedWindow(from: currentWindow) else {
-            log.info("No window found to focus in stack")
             return nil
         }
 
@@ -91,7 +90,7 @@ extension WindowUtility {
             // Use the generic directional navigation from DirectionalNavigationUtility
             if let nextWindow = navigationUtility.directionalItem(
                 from: currentWindow,
-                in: otherWindows,
+                others: otherWindows,
                 direction: direction,
                 canWrap: true
             ) {
@@ -167,7 +166,7 @@ extension WindowUtility {
         // Use the generic stack cycling from DirectionalNavigationUtility
         if let nextWindow = navigationUtility.cycleInStack(
             from: currentWindow,
-            in: otherWindows
+            others: otherWindows
         ) {
             log.info("Found window to focus in stack: \(nextWindow.description)")
             return nextWindow

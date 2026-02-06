@@ -23,9 +23,10 @@ enum WindowFrameResolver {
     static func getFrame(
         for action: WindowAction,
         window: Window?,
-        bounds: CGRect
+        bounds: CGRect,
+        padding: PaddingConfiguration? = nil
     ) -> CGRect {
-        let context = ResizeContext(window: window, bounds: bounds, action: action)
+        let context = ResizeContext(window: window, bounds: bounds, padding: padding, action: action)
         return getFrame(resizeContext: context).frame
     }
 

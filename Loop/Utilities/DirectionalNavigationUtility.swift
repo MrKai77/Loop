@@ -61,21 +61,21 @@ final class DirectionalNavigationUtility<T> {
     /// Generic directional navigation for any items with a frame (e.g., Windows or Screens)
     /// - Parameters:
     ///   - current: The current item
-    ///   - items: All available items to search through
+    ///   - others: All available items to search through
     ///   - direction: The direction to search
     ///   - canRestartCycle: Whether to wrap around when no items found in direction
     ///   - frameProvider:  Closure that extracts the CGRect frame from an item
     /// - Returns: The next item in the specified direction, or nil
     func directionalItem(
         from current: T,
-        in items: [T],
+        others: [T],
         direction: NavigationDirection,
         canWrap: Bool = true
     ) -> T? {
         let currentFrame = frameProvider(current)
 
         let itemsInSpan = filterItemsBySharedSpan(
-            in: items,
+            in: others,
             axis: direction.axis,
             currentFrame: currentFrame
         )
@@ -94,7 +94,7 @@ final class DirectionalNavigationUtility<T> {
 
         // Wrap around to the furthest item in the opposite direction
         return furthestItemInDirection(
-            in: itemsInSpan.isEmpty ? items : itemsInSpan,
+            in: itemsInSpan.isEmpty ? others : itemsInSpan,
             direction: direction.flipped
         )
     }
@@ -103,18 +103,18 @@ final class DirectionalNavigationUtility<T> {
     /// Only considers items that meet the minStackedArea threshold with the current item.
     /// - Parameters:
     ///   - current: The current item
-    ///   - items: All available items in stack order
+    ///   - others: All available items in stack order
     /// - Returns: The next item in the stack cycle, or nil if not found or wrapping is disabled
     func cycleInStack(
         from current: T,
-        in items: [T]
+        others: [T]
     ) -> T? {
-        guard !items.isEmpty else { return nil }
+        guard !others.isEmpty else { return nil }
 
         let currentFrame = frameProvider(current)
 
         let overlappingItems = filterItemsBySharedArea(
-            in: items,
+            in: others,
             currentFrame: currentFrame
         )
 
@@ -135,7 +135,6 @@ final class DirectionalNavigationUtility<T> {
         items
             .filter { other in
                 let otherFrame = frameProvider(other)
-                guard otherFrame != currentFrame else { return false }
 
                 let sharedAxisPointSpan = switch axis {
                 case .horizontal:
@@ -181,7 +180,6 @@ final class DirectionalNavigationUtility<T> {
         return items
             .filter { other in
                 let otherFrame = frameProvider(other)
-                guard otherFrame != currentFrame else { return false }
 
                 let intersect = otherFrame.intersection(currentFrame)
                 let sharedArea = intersect.size.area
@@ -213,7 +211,6 @@ final class DirectionalNavigationUtility<T> {
         items
             .filter { other in
                 let otherFrame = frameProvider(other)
-                guard otherFrame != currentFrame else { return false }
 
                 // Directional check: consider center as well
                 let currentCenter = currentFrame.center
