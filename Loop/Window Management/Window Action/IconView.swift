@@ -199,13 +199,18 @@ final class IconRenderView: NSView {
             return .frame(fillFrame)
         }
 
-        // And if all else fails...
+        // Fallback icons for actions that can't display calculated frames
 
         if currentAction.direction == .custom, let image = NSImage(systemSymbolName: "slider.horizontal.3", accessibilityDescription: nil) {
             return .image(image)
         }
 
         if currentAction.direction == .cycle, let image = NSImage(systemSymbolName: "repeat", accessibilityDescription: nil) {
+            return .image(image)
+        }
+
+        // Stash icon as fallback when no anchor is selected (can't calculate frame)
+        if currentAction.direction == .stash, let image = NSImage(systemSymbolName: "square.stack.3d.down.right", accessibilityDescription: nil) {
             return .image(image)
         }
 
