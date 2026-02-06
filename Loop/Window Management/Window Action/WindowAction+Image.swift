@@ -95,8 +95,6 @@ extension WindowAction {
             .systemImage("chevron.down")
         case .focusNextInStack:
             .systemImage("rectangle.stack")
-        case .stash:
-            .systemImage("square.stack.3d.down.right")
         case .unstash:
             .systemImage("square.stack.3d.up")
         default:
