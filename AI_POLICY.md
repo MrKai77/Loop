@@ -24,7 +24,7 @@ In a perfect world, AI would produce high-quality, accurate work every time. But
 
 ## AI is Welcome Here
 
-Some parts of Loop have been developed with the help of AI, and our maintainers actively use AI tools as a productive part of their workflow. As a project, we fully welcome AI as a valuable tool!
+Some parts of Loop have been developed with the help of AI, and AI tools are recognized as potentially useful for contributors. As a project, we welcome AI as a tool when used responsibly.
 
 **Our reason for the strict AI policy is not due to an anti-AI stance**, but instead due to the number of highly unqualified people using AI. It's the people, not the tools, that are the problem.
 

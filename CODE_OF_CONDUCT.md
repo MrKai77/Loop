@@ -45,7 +45,7 @@ Tensions can occur between community members even when they are trying their bes
 
 When an incident does occur, it is important to report it promptly. To report a possible violation, **contact [@MrKai77](https://github.com/MrKai77) or [@SenpaiHunters](https://github.com/SenpaiHunters).**
 
-Community Moderators take reports of violations seriously and will make every effort to respond in a timely manner. They will investigate all reports of code of conduct violations, reviewing messages, logs, and recordings, or interviewing witnesses and other participants. Community Moderators will keep investigation and enforcement actions as transparent as possible while prioritizing safety and confidentiality. In order to honor these values, enforcement actions are carried out in private with the involved parties, but communicating to the whole community may be part of a mutually agreed upon resolution.
+Community Moderators take reports of violations seriously and will make every effort to respond in a timely manner. They will investigate all reports of code of conduct violations, reviewing messages, logs, and recordings, or interviewing witnesses and other participants. Community Moderators will keep investigation and enforcement actions as transparent as possible while prioritizing safety and confidentiality. In order to honor these values, enforcement actions are handled directly with the involved parties, but communicating to the whole community may be part of a mutually agreed upon resolution.
 
 ## Addressing and Repairing Harm
 
@@ -53,15 +53,15 @@ If an investigation by the Community Moderators finds that this Code of Conduct 
 
 1) Warning
    1) Event: A violation involving a single incident or series of incidents.
-   2) Consequence: A private, written warning from the Community Moderators.
-   3) Repair: Examples of repair include a private written apology, acknowledgement of responsibility, and seeking clarification on expectations.
+   2) Consequence: A written warning from the Community Moderators.
+   3) Repair: Examples of repair include a written apology, acknowledgement of responsibility, and seeking clarification on expectations.
 2) Temporarily Limited Activities
    1) Event: A repeated incidence of a violation that previously resulted in a warning, or the first incidence of a more serious violation.
-   2) Consequence: A private, written warning with a time-limited cooldown period designed to underscore the seriousness of the situation and give the community members involved time to process the incident. The cooldown period may be limited to particular communication channels or interactions with particular community members.
+   2) Consequence: A written warning with a time-limited cooldown period designed to underscore the seriousness of the situation and give the community members involved time to process the incident. The cooldown period may be limited to particular communication channels or interactions with particular community members.
    3) Repair: Examples of repair may include making an apology, using the cooldown period to reflect on actions and impact, and being thoughtful about re-entering community spaces after the period is over.
 3) Temporary Suspension
    1) Event: A pattern of repeated violation which the Community Moderators have tried to address with warnings, or a single serious violation.
-   2) Consequence: A private written warning with conditions for return from suspension. In general, temporary suspensions give the person being suspended time to reflect upon their behavior and possible corrective actions.
+   2) Consequence: A written warning with conditions for return from suspension. In general, temporary suspensions give the person being suspended time to reflect upon their behavior and possible corrective actions.
    3) Repair: Examples of repair include respecting the spirit of the suspension, meeting the specified conditions for return, and being thoughtful about how to reintegrate with the community when the suspension is lifted.
 4) Permanent Ban
    1) Event: A pattern of repeated code of conduct violations that other steps on the ladder have failed to resolve, or a violation so serious that the Community Moderators determine there is no way to keep the community safe with this person as a member.
