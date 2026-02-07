@@ -16,12 +16,12 @@ These rules apply only to outside contributions to Loop. Maintainers are exempt 
 
 The following are not allowed under this policy:
 
-* Undisclosed AI usage in any part of a contribution.  
-* Pull requests with AI-generated code that is clearly untested, does not build, or targets platforms or environments you cannot run yourself.  
-* AI-generated media of any kind, including images, diagrams, audio, and video.  
-* Bulk-dumped AI output with little or no human editing.  
-* Using AI to repeatedly reframe ideas that have already been rejected by maintainers.  
-* Automatic or scripted generation of pull requests or comments that you do not personally review, understand, and stand behind.
+- Undisclosed AI usage in any part of a contribution.  
+- Pull requests with AI-generated code that is clearly untested, does not build, or targets platforms or environments you cannot run yourself.  
+- AI-generated media of any kind, including images, diagrams, audio, and video.  
+- Bulk-dumped AI output with little or no human editing.  
+- Using AI to repeatedly reframe ideas that have already been rejected by maintainers.  
+- Automatic or scripted generation of pull requests or comments that you do not personally review, understand, and stand behind.
 
 ## Contributor checklist for AI usage
 
