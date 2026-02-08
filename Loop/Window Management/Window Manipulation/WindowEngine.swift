@@ -83,7 +83,7 @@ enum WindowEngine {
                     try await resizeWindow(
                         window,
                         targetFrame: targetFrame,
-                        bounds: context.bounds,
+                        bounds: context.paddedBounds,
                         willChangeScreens: willChangeScreens,
                         animate: shouldAnimate
                     )

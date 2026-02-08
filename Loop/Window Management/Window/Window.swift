@@ -437,7 +437,7 @@ final class Window {
 
 extension Window: CustomStringConvertible {
     var description: String {
-        "Window(id: \(cgWindowID), app: '\(nsRunningApplication?.localizedName ?? "<unknown>")', title: '\(title ?? "<unknown>"))"
+        "Window(id: \(cgWindowID), app: '\(nsRunningApplication?.localizedName ?? "<unknown>")', title: '\(title ?? "<unknown>")')"
     }
 }
 

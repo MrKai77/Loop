@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A0EEE852F381A3A00C40CF4 /* Subtrack in Frameworks */ = {isa = PBXBuildFile; productRef = 2A0EEE842F381A3A00C40CF4 /* Subtrack */; };
 		2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28492A2F22B4B700F6CE42 /* Scribe */; };
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
@@ -105,6 +106,7 @@
 				2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */,
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
 				3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */,
+				2A0EEE852F381A3A00C40CF4 /* Subtrack in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,6 +183,7 @@
 				3ED0A7B82F21DF6800A58629 /* ZIPFoundation */,
 				2A28492A2F22B4B700F6CE42 /* Scribe */,
 				2AF9238D2F540B1300F467FD /* Scribe */,
+				2A0EEE842F381A3A00C40CF4 /* Subtrack */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -253,6 +256,7 @@
 				2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */,
 				3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 				2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */,
+				2A0EEE832F381A3A00C40CF4 /* XCLocalSwiftPackageReference "../Subtrack" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -748,6 +752,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		2A0EEE832F381A3A00C40CF4 /* XCLocalSwiftPackageReference "../Subtrack" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Subtrack;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -784,6 +795,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2A0EEE842F381A3A00C40CF4 /* Subtrack */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Subtrack;
+		};
 		2A28492A2F22B4B700F6CE42 /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Scribe;

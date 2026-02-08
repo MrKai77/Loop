@@ -17,22 +17,25 @@ enum WindowUtility {
     static func userDefinedTargetWindow() -> Window? {
         var result: Window?
 
-        log.info("Getting window at cursor...")
+        if Defaults[.resizeWindowUnderCursor] {
+            log.info("Getting window at cursor...")
 
-        if Defaults[.resizeWindowUnderCursor],
-           let mouseLocation = CGEvent.mouseLocation,
-           let window = windowAtPosition(mouseLocation) {
-            result = window
+            if let mouseLocation = CGEvent.mouseLocation,
+               let window = windowAtPosition(mouseLocation) {
+                result = window
+            }
         }
 
         if result == nil {
             do {
-                log.info("Getting frontmost window...")
-
                 result = try frontmostWindow()
             } catch {
                 log.warn("Failed to get frontmost window: \(error.localizedDescription)")
             }
+        }
+
+        if let result {
+            log.debug("Determined target window: \(result)")
         }
 
         return result
