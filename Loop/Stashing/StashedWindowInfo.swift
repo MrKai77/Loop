@@ -15,12 +15,13 @@ struct StashedWindowInfo: Equatable {
     let screen: NSScreen
     let action: WindowAction
 
-    // MARK: - Frame computation
+    // MARK: - Frame computation    
+    // TODO: Move to WindowFrameResolver
 
     /// Computes the frame for a stashed window.
-    func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) -> CGRect {
+    func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) async -> CGRect {
         let bounds = screen.cgSafeScreenFrame
-        var frame = WindowFrameResolver.getFrame(for: action, window: window, bounds: bounds)
+        var frame = await WindowFrameResolver.getFrame(for: action, window: window, bounds: bounds)
 
         let minPeekSize: CGFloat = 1
 
@@ -47,9 +48,9 @@ struct StashedWindowInfo: Equatable {
         return frame
     }
 
-    func computeRevealedFrame() -> CGRect {
+    func computeRevealedFrame() async -> CGRect {
         let context = ResizeContext(window: window, screen: screen)
         context.setAction(to: action, parent: nil)
-        return context.getTargetFrame().padded
+        return await context.getTargetFrame().padded
     }
 }

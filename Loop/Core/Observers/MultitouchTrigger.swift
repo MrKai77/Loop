@@ -43,7 +43,7 @@ final class MultitouchTrigger {
     private let maxHistoryEntries = 5  // Track last 5 positions for smoothing
 
     private let initialGestureThreshold: CGFloat = 0.025
-    private let gestureRepeatThreshold: CGFloat = 0.2
+    private let gestureRepeatThreshold: CGFloat = 0.25
     private let zoomRepeatThreshold: CGFloat = 0.2
 
     private var inactivityTask: Task<(), Never>?

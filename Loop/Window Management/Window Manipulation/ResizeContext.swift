@@ -82,16 +82,16 @@ final class ResizeContext {
         needsRecompute = true
     }
 
-    func getTargetFrame() -> ComputedFrame {
+    func getTargetFrame() async -> ComputedFrame {
         if needsRecompute {
-            recomputeTargetFrame()
+            await recomputeTargetFrame()
         }
 
         return cachedTargetFrame
     }
 
-    private func recomputeTargetFrame() {
-        let result = WindowFrameResolver.getFrame(resizeContext: self)
+    private func recomputeTargetFrame() async {
+        let result = await WindowFrameResolver.getFrame(resizeContext: self)
 
         let normalized = CGRect(
             x: (result.frame.minX - bounds.minX) / bounds.width,

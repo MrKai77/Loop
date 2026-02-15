@@ -35,63 +35,66 @@ final class PreviewViewModel: ObservableObject {
             overrideCornerRadii = nil
         }
 
-        let isCurrentlyHidden = !isShown
-        var paddedFrame = context.getTargetFrame().padded
-
-        if let bounds = context.screen?.displayBounds {
-            paddedFrame.origin.x -= bounds.minX
-            paddedFrame.origin.y -= bounds.minY
-        }
-
-        // In settings preview, actions that manipulate existing window frames (larger/smaller,
-        // grow/shrink, move) cannot be previewed without a real window.
-        let shouldBecomeVisible = if isSettingsPreview, context.action.willManipulateExistingWindowFrame {
-            false
-        } else {
-            paddedFrame.size.area > 0
-        }
-
-        var newShownState: Bool = isShown
-        var newComputedFrame: CGRect = computedFrame
-
-        // If the window is currently shown, but needs to be hidden
-        if !isCurrentlyHidden, !shouldBecomeVisible {
-            newShownState = false
-        }
-
-        // If the window is currently hidden, but it needs to be shown.
-        else if isCurrentlyHidden, shouldBecomeVisible {
-            if !isScreenSwitch {
-                let startingFrame = computeStartingFrame(
-                    for: Defaults[.previewStartingPosition],
-                    targetFrame: paddedFrame,
-                    context: context
-                )
-
-                // Set starting position without animation
-                computedFrame = startingFrame
+        // Compute new frame in a separate thread
+        Task {
+            let isCurrentlyHidden = !isShown
+            var paddedFrame = await context.getTargetFrame().padded
+            
+            if let bounds = context.screen?.displayBounds {
+                paddedFrame.origin.x -= bounds.minX
+                paddedFrame.origin.y -= bounds.minY
             }
-
-            newShownState = true
-            newComputedFrame = paddedFrame
-        }
-
-        // Window is already visible and should stay visible - update frame
-        else if !isCurrentlyHidden, shouldBecomeVisible {
-            newComputedFrame = paddedFrame
-        }
-
-        if isScreenSwitch {
-            computedFrame = newComputedFrame
-            isShown = newShownState
-        } else {
-            withAnimation(Defaults[.animationConfiguration].previewWindow) {
+            
+            // In settings preview, actions that manipulate existing window frames (larger/smaller,
+            // grow/shrink, move) cannot be previewed without a real window.
+            let shouldBecomeVisible = if isSettingsPreview, context.action.willManipulateExistingWindowFrame {
+                false
+            } else {
+                paddedFrame.size.area > 0
+            }
+            
+            var newShownState: Bool = isShown
+            var newComputedFrame: CGRect = computedFrame
+            
+            // If the window is currently shown, but needs to be hidden
+            if !isCurrentlyHidden, !shouldBecomeVisible {
+                newShownState = false
+            }
+            
+            // If the window is currently hidden, but it needs to be shown.
+            else if isCurrentlyHidden, shouldBecomeVisible {
+                if !isScreenSwitch {
+                    let startingFrame = computeStartingFrame(
+                        for: Defaults[.previewStartingPosition],
+                        targetFrame: paddedFrame,
+                        context: context
+                    )
+                    
+                    // Set starting position without animation
+                    computedFrame = startingFrame
+                }
+                
+                newShownState = true
+                newComputedFrame = paddedFrame
+            }
+            
+            // Window is already visible and should stay visible - update frame
+            else if !isCurrentlyHidden, shouldBecomeVisible {
+                newComputedFrame = paddedFrame
+            }
+            
+            if isScreenSwitch {
                 computedFrame = newComputedFrame
                 isShown = newShownState
+            } else {
+                withAnimation(Defaults[.animationConfiguration].previewWindow) {
+                    computedFrame = newComputedFrame
+                    isShown = newShownState
+                }
             }
+            
+            log.ui("Current previewed frame: \(computedFrame) for \(context.action)")
         }
-
-        log.ui("Current previewed frame: \(computedFrame) for \(context.action)")
     }
 
     private func computeStartingFrame(

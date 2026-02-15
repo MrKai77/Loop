@@ -116,9 +116,10 @@ final class WindowActionEngine {
 
         // Perform the resize
         let appliedFrame = try await WindowEngine.performResize(context: context)
+        let intendedFrame = await context.getTargetFrame().padded
 
         // Return the frame that should be stored (either from system WM or from calculation)
-        return .resized(frame: appliedFrame ?? context.getTargetFrame().padded)
+        return .resized(frame: appliedFrame ?? intendedFrame)
     }
 
     // MARK: - Focus Actions

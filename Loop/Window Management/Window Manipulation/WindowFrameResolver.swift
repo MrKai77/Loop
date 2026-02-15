@@ -25,16 +25,16 @@ enum WindowFrameResolver {
         window: Window?,
         bounds: CGRect,
         padding: PaddingConfiguration? = nil
-    ) -> CGRect {
+    ) async -> CGRect {
         let context = ResizeContext(window: window, bounds: bounds, padding: padding, action: action)
-        return getFrame(resizeContext: context).frame
+        return await getFrame(resizeContext: context).frame
     }
 
     /// Returns the frame for the specified window action using the provided resize context.
     /// The returned frame is non-padded. Use `PaddingConfiguration.apply(to:bounds:action:window:)` to apply padding.
     /// - Parameter resizeContext: the context containing window, screen, bounds, and tracking frame/edge adjustment state.
     /// - Returns: a tuple containing the computed frame and the sides to adjust for grow/shrink actions.
-    static func getFrame(resizeContext: ResizeContext) -> FrameResult {
+    static func getFrame(resizeContext: ResizeContext) async -> FrameResult {
         let action = resizeContext.action
         let bounds = resizeContext.paddedBounds
         let direction = action.direction
@@ -50,7 +50,7 @@ enum WindowFrameResolver {
             nil
         }
 
-        var result: CGRect = calculateTargetFrame(
+        var result: CGRect = await calculateTargetFrame(
             sidesToAdjust: &sidesToAdjust,
             context: resizeContext
         )
@@ -74,7 +74,7 @@ extension WindowFrameResolver {
     private static func calculateTargetFrame(
         sidesToAdjust: inout Edge.Set?,
         context: ResizeContext
-    ) -> CGRect {
+    ) async -> CGRect {
         let bounds = context.paddedBounds
         let action = context.action
         let window = context.window
@@ -139,12 +139,12 @@ extension WindowFrameResolver {
             )
 
         } else if direction.willMove {
-            let frameToResizeFrom = context.getTargetFrame().raw
+            let frameToResizeFrom = await context.getTargetFrame().raw
 
             result = calculatePositionAdjustment(for: action, frameToResizeFrom: frameToResizeFrom)
 
         } else if direction.isCustomizable {
-            result = calculateCustomFrame(for: action, window: window, bounds: bounds)
+            result = await calculateCustomFrame(for: action, window: window, bounds: bounds)
 
         } else if direction == .center {
             result = calculateCenterFrame(window: window, bounds: bounds)
@@ -153,10 +153,10 @@ extension WindowFrameResolver {
             result = calculateMacOSCenterFrame(window: window, bounds: bounds)
 
         } else if direction == .undo, let window {
-            result = getLastActionFrame(window: window, bounds: bounds)
+            result = await getLastActionFrame(window: window, bounds: bounds)
 
         } else if direction == .initialFrame, let window {
-            result = getInitialFrame(window: window)
+            result = await getInitialFrame(window: window)
 
         } else if direction == .maximizeHeight, let window {
             result = getMaximizeHeightFrame(window: window, bounds: bounds, padding: context.padding)
@@ -165,7 +165,7 @@ extension WindowFrameResolver {
             result = getMaximizeWidthFrame(window: window, bounds: bounds, padding: context.padding)
 
         } else if direction == .unstash, let window {
-            result = getInitialFrame(window: window)
+            result = await getInitialFrame(window: window)
 
         } else if direction == .fillAvailableSpace, let window {
             result = getFillAvailableSpaceFrame(window: window)
@@ -198,7 +198,7 @@ extension WindowFrameResolver {
     ///   - window: the window to be manipulated.
     ///   - bounds: the bounds within which the window should be manipulated.
     /// - Returns: the calculated custom frame based on the specified parameters.
-    private static func calculateCustomFrame(for action: WindowAction, window: Window?, bounds: CGRect) -> CGRect {
+    private static func calculateCustomFrame(for action: WindowAction, window: Window?, bounds: CGRect) async -> CGRect {
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         // Size Calculation
@@ -207,7 +207,7 @@ extension WindowFrameResolver {
             result.size = window.size
 
         } else if let sizeMode = action.sizeMode, sizeMode == .initialSize, let window {
-            if let initialFrame = WindowRecords.getInitialFrame(for: window) {
+            if let initialFrame = await WindowRecords.shared.getInitialFrame(for: window) {
                 result.size = initialFrame.size
             }
 
@@ -358,11 +358,11 @@ extension WindowFrameResolver {
     ///   - window: the window for which the last action frame is to be retrieved.
     ///   - bounds: the bounds within which the window should be manipulated.
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
-    private static func getLastActionFrame(window: Window, bounds: CGRect) -> CGRect {
-        if let previousAction = WindowRecords.getLastAction(for: window) {
+    private static func getLastActionFrame(window: Window, bounds: CGRect) async -> CGRect {
+        if let previousAction = await WindowRecords.shared.getLastAction(for: window) {
             log.info("Last action was \(previousAction.description)")
 
-            return WindowFrameResolver.getFrame(
+            return await WindowFrameResolver.getFrame(
                 for: previousAction,
                 window: window,
                 bounds: bounds
@@ -376,8 +376,8 @@ extension WindowFrameResolver {
     /// Retrieves the initial frame for the specified window, based on the initial frame recorded in `WindowRecords`.
     /// - Parameter window: the window for which the initial frame is to be retrieved.
     /// - Returns: the initial frame of the window, or the current frame if no initial frame is found.
-    private static func getInitialFrame(window: Window) -> CGRect {
-        if let initialFrame = WindowRecords.getInitialFrame(for: window) {
+    private static func getInitialFrame(window: Window) async -> CGRect {
+        if let initialFrame = await WindowRecords.shared.getInitialFrame(for: window) {
             return initialFrame
         } else {
             log.info("Didn't find initial frame; using current frame")

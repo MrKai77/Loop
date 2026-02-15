@@ -8,9 +8,11 @@
 import Scribe
 import SwiftUI
 
-@Loggable(style: .static)
-enum WindowRecords {
-    private static var recordsByWindowID: [CGWindowID: WindowRecords.Record] = [:]
+@Loggable
+actor WindowRecords {
+    nonisolated static let shared = WindowRecords()
+
+    private var recordsByWindowID: [CGWindowID: WindowRecords.Record] = [:]
 
     struct Record {
         let initialFrame: CGRect
@@ -24,7 +26,7 @@ enum WindowRecords {
 
     /// Erase all previous records for a window
     /// - Parameter window: Window to erase
-    static func eraseRecords(for window: Window) {
+    func eraseRecords(for window: Window) {
         guard recordsByWindowID[window.cgWindowID] != nil else {
             // Records don't exist
             return
@@ -34,7 +36,7 @@ enum WindowRecords {
         log.success("Erased records for: \(window)")
     }
 
-    static func recordFirstIfNeeded(for window: Window) {
+    func recordFirstIfNeeded(for window: Window) {
         guard recordsByWindowID[window.cgWindowID] == nil else { return }
         recordsByWindowID[window.cgWindowID] = Record(initialFrame: window.frame)
         log.info("Recorded first for: \(window)")
@@ -43,7 +45,7 @@ enum WindowRecords {
     /// Determines if an action should be recorded using its frame instead of the action applied onto it.
     /// - Parameter action: the action to apply onto the window.
     /// - Returns: Whether this action should be recorded with its final frame instead of using the action.
-    static func shouldStoreAsFinalFrame(_ action: WindowAction) -> Bool {
+    func shouldStoreAsFinalFrame(_ action: WindowAction) -> Bool {
         // Actions that are stored as frames need to be recorded *after* resize.
         // These actions are context-dependent, and cannot simply be called as an action to restore the previous state.
         let storeAsFrame = action.direction.willChangeScreen || action.willManipulateExistingWindowFrame
@@ -54,7 +56,7 @@ enum WindowRecords {
     /// - Parameters:
     ///   - window: Window to record
     ///   - action: WindowAction to record
-    static func record(_ window: Window, _ action: WindowAction) {
+    func record(_ window: Window, _ action: WindowAction) {
         // If the window has not been recorded, record it
         recordFirstIfNeeded(for: window)
 
@@ -100,7 +102,7 @@ enum WindowRecords {
     }
 
     /// Removes the last action performed on the specified window. This will NOT remove the first action for the specified window.
-    static func removeLastAction(for window: Window) {
+    func removeLastAction(for window: Window) {
         guard let record = recordsByWindowID[window.cgWindowID],
               record.actions.count > 1
         else {
@@ -117,7 +119,7 @@ enum WindowRecords {
     /// - Parameters:
     ///   - window: Window to check
     /// - Returns: The window action
-    static func getLastAction(for window: Window) -> WindowAction? {
+    func getLastAction(for window: Window) -> WindowAction? {
         guard let record = recordsByWindowID[window.cgWindowID],
               record.actions.count >= 2
         else {
@@ -131,7 +133,7 @@ enum WindowRecords {
     /// - Parameters:
     ///   - window: Window to check
     /// - Returns: The window action
-    static func getCurrentAction(for window: Window) -> WindowAction? {
+    func getCurrentAction(for window: Window) -> WindowAction? {
         guard let record = recordsByWindowID[window.cgWindowID],
               record.actions.count >= 1
         else {
@@ -141,7 +143,7 @@ enum WindowRecords {
         return record.actions[0]
     }
 
-    static func getInitialFrame(for window: Window) -> CGRect? {
+    func getInitialFrame(for window: Window) -> CGRect? {
         recordsByWindowID[window.cgWindowID]?.initialFrame
     }
 }
