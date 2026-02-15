@@ -65,6 +65,28 @@ final class LoopManager {
         },
         checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
     )
+    
+    private(set) lazy var multitouchTrigger = MultitouchTrigger(
+        windowActionCache: windowActionCache,
+        openCallback: { [weak self]  action in
+            Task {
+                await self?.openLoop(startingAction: action)
+            }
+        },
+        closeCallback: { [weak self] forceClose in
+            Task {
+                await self?.closeLoop(forceClose: forceClose)
+            }
+        },
+        changeAction: { [weak self] action in
+            Task {
+                await self?.changeAction(action)
+            }
+        },
+        checkIfLoopOpen: { [weak self] in
+            self?.isLoopActive ?? false
+        }
+    )
 
     private(set) lazy var mouseInteractionObserver = MouseInteractionObserver(
         windowActionCache: windowActionCache,
@@ -98,9 +120,11 @@ final class LoopManager {
                 if status {
                     await keybindTrigger.start()
                     middleClickTrigger.start()
+                    multitouchTrigger.start()
                 } else {
                     keybindTrigger.stop()
                     middleClickTrigger.stop()
+                    multitouchTrigger.stop()
                 }
             }
         }
