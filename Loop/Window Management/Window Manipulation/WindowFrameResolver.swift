@@ -36,7 +36,6 @@ enum WindowFrameResolver {
     /// - Returns: a tuple containing the computed frame and the sides to adjust for grow/shrink actions.
     static func getFrame(resizeContext: ResizeContext) -> FrameResult {
         let action = resizeContext.action
-        let window = resizeContext.window
         let bounds = resizeContext.paddedBounds
         let direction = action.direction
 
@@ -52,11 +51,8 @@ enum WindowFrameResolver {
         }
 
         var result: CGRect = calculateTargetFrame(
-            for: action,
-            window: window,
-            bounds: bounds,
             sidesToAdjust: &sidesToAdjust,
-            resizeContext: resizeContext
+            context: resizeContext
         )
 
         if result.size.width < 0 || result.size.height < 0 || !result.isFinite {
@@ -72,19 +68,17 @@ enum WindowFrameResolver {
 extension WindowFrameResolver {
     /// Calculates the target frame for the specified window action based on the direction, window, bounds, and whether it is a preview.
     /// - Parameters:
-    ///   - action: the window action to calculate the frame for.
-    ///   - window: the window to be manipulated.
-    ///   - bounds: the bounds within which the window should be manipulated.
     ///   - sidesToAdjust: inout parameter for tracking which edges to adjust during grow/shrink actions.
-    ///   - resizeContext: the context tracking frame and edge adjustment state.
+    ///   - context: the context tracking frame and edge adjustment state.
     /// - Returns: the calculated target frame for the specified window action.
     private static func calculateTargetFrame(
-        for action: WindowAction,
-        window: Window?,
-        bounds: CGRect,
         sidesToAdjust: inout Edge.Set?,
-        resizeContext: ResizeContext
+        context: ResizeContext
     ) -> CGRect {
+        let bounds = context.paddedBounds
+        let action = context.action
+        let window = context.window
+
         let direction = action.direction
         var result: CGRect = .zero
 
@@ -97,7 +91,7 @@ extension WindowFrameResolver {
                 return window.frame
             }
 
-            let frameToResizeFrom = resizeContext.cachedTargetFrame.raw
+            let frameToResizeFrom = context.cachedTargetFrame.raw
 
             // Compute which edges to adjust based on edges touching bounds
             let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
@@ -119,7 +113,7 @@ extension WindowFrameResolver {
             }
 
             // This allows for control over each side
-            let frameToResizeFrom = resizeContext.cachedTargetFrame.raw
+            let frameToResizeFrom = context.cachedTargetFrame.raw
 
             // Compute which edges to adjust based on direction
             switch direction {
@@ -145,7 +139,7 @@ extension WindowFrameResolver {
             )
 
         } else if direction.willMove {
-            let frameToResizeFrom = resizeContext.getTargetFrame().raw
+            let frameToResizeFrom = context.getTargetFrame().raw
 
             result = calculatePositionAdjustment(for: action, frameToResizeFrom: frameToResizeFrom)
 
@@ -165,10 +159,10 @@ extension WindowFrameResolver {
             result = getInitialFrame(window: window)
 
         } else if direction == .maximizeHeight, let window {
-            result = getMaximizeHeightFrame(window: window, bounds: bounds)
+            result = getMaximizeHeightFrame(window: window, bounds: bounds, padding: context.padding)
 
         } else if direction == .maximizeWidth, let window {
-            result = getMaximizeWidthFrame(window: window, bounds: bounds)
+            result = getMaximizeWidthFrame(window: window, bounds: bounds, padding: context.padding)
 
         } else if direction == .unstash, let window {
             result = getInitialFrame(window: window)
@@ -395,12 +389,17 @@ extension WindowFrameResolver {
     /// - Parameters:
     ///   - window: the window whose current frame is used as a reference.
     ///   - bounds: the area within which the window should be resized.
+    ///   - padding: the padding that the user has configured to apply to windows.
     /// - Returns: a CGRect representing a frame that maximizes the window's height.
-    private static func getMaximizeHeightFrame(window: Window, bounds: CGRect) -> CGRect {
+    private static func getMaximizeHeightFrame(
+        window: Window,
+        bounds: CGRect,
+        padding: PaddingConfiguration
+    ) -> CGRect {
         CGRect(
-            x: window.frame.minX,
+            x: window.frame.minX - padding.window / 2,
             y: bounds.minY,
-            width: window.frame.width,
+            width: window.frame.width + padding.window,
             height: bounds.height
         )
     }
@@ -409,13 +408,18 @@ extension WindowFrameResolver {
     /// - Parameters:
     ///   - window: the window whose current frame is used as a reference.
     ///   - bounds: the area within which the window should be resized.
+    ///   - padding: the padding that the user has configured to apply to windows.
     /// - Returns: a CGRect representing a frame that maximizes the window's width.
-    private static func getMaximizeWidthFrame(window: Window, bounds: CGRect) -> CGRect {
+    private static func getMaximizeWidthFrame(
+        window: Window,
+        bounds: CGRect,
+        padding: PaddingConfiguration
+    ) -> CGRect {
         CGRect(
             x: bounds.minX,
-            y: window.frame.minY,
+            y: window.frame.minY - padding.window / 2,
             width: bounds.width,
-            height: window.frame.height
+            height: window.frame.height + padding.window
         )
     }
 
