@@ -54,7 +54,7 @@ final class ResizeContext {
         self.screen = screen
         self.bounds = bounds
         self.padding = padding
-        self.paddedBounds = padding.applyToBounds(bounds)
+        self.paddedBounds = padding.applyToBounds(bounds, screen: screen)
         self.action = action
         self.parentAction = parentAction
         self.initialMousePosition = initialMousePosition
@@ -65,7 +65,7 @@ final class ResizeContext {
         self.screen = screen
         bounds = screen?.cgSafeScreenFrame ?? .zero
         padding = PaddingConfiguration.getConfiguredPadding(for: screen)
-        paddedBounds = padding.applyToBounds(bounds)
+        paddedBounds = padding.applyToBounds(bounds, screen: screen)
         needsRecompute = true
     }
 

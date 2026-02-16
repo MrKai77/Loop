@@ -106,6 +106,12 @@ extension Defaults.Keys {
     /// Reset with `defaults delete com.MrKai77.Loop paddingMinimumScreenSize`
     static let paddingMinimumScreenSize = Key<CGFloat>("paddingMinimumScreenSize", default: 0, iCloud: true)
 
+    /// Ignore the notch height when calculating top padding, so the effective
+    /// distance from the screen top matches non-notch displays.
+    /// Adjust with `defaults write com.MrKai77.Loop ignoreNotch -bool true`
+    /// Reset with `defaults delete com.MrKai77.Loop ignoreNotch`
+    static let ignoreNotch = Key<Bool>("ignoreNotch", default: false, iCloud: true)
+
     /// Snap threshold for window snapping, defined in points.
     /// Adjust with `defaults write com.MrKai77.Loop snapThreshold -float x`
     /// Reset with `defaults delete com.MrKai77.Loop snapThreshold`

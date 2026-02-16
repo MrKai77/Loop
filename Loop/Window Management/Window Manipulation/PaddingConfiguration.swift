@@ -37,13 +37,21 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
     }
 
     func applyToBounds(
-        _ bounds: CGRect
+        _ bounds: CGRect,
+        screen: NSScreen? = nil
     ) -> CGRect {
-        bounds
+        let notchOffset: CGFloat = if Defaults[.ignoreNotch], let screen {
+            screen.menubarHeight
+        } else {
+            0
+        }
+        let effectiveTopPadding = max(0, totalTopPadding - notchOffset)
+
+        return bounds
             .padding(.leading, left)
             .padding(.trailing, right)
             .padding(.bottom, bottom)
-            .padding(.top, totalTopPadding)
+            .padding(.top, effectiveTopPadding)
     }
 
     /// Applies padding to a frame that was calculated using non-padded bounds.
