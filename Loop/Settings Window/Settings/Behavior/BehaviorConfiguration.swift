@@ -114,7 +114,7 @@ struct BehaviorConfigurationView: View {
                     if SystemWindowManager.MoveAndResize.snappingEnabled {
                         Text("Enable window snapping")
                             .padding(.trailing, 4)
-                            .luminarePopover(attachedTo: .topTrailing) {
+                            .luminareToolTip(attachedTo: .topTrailing) {
                                 Text("macOS's \"Tile by dragging windows to screen edges\" feature is currently\nenabled, which will conflict with Loop's window snapping functionality.")
                                     .padding(6)
                             }
@@ -130,7 +130,7 @@ struct BehaviorConfigurationView: View {
                 LuminareToggle(isOn: $suppressMissionControlOnTopDrag) {
                     Text("Suppress Mission Control")
                         .padding(.trailing, 4)
-                        .luminarePopover(attachedTo: .topTrailing) {
+                        .luminareToolTip(attachedTo: .topTrailing) {
                             Text("Whether to allow Mission Control to open when windows\nare dragged to the top of the screen.")
                                 .padding(6)
                         }

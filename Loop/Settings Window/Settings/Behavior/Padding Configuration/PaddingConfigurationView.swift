@@ -192,7 +192,7 @@ struct PaddingConfigurationView: View {
             ) {
                 Text("External bar", comment: "Label for a slider in Loop’s padding settings")
                     .padding(.trailing, 4)
-                    .luminarePopover(attachedTo: .topTrailing) {
+                    .luminareToolTip(attachedTo: .topTrailing) {
                         Text("Use this if you are using a custom menubar.")
                             .padding(6)
                     }

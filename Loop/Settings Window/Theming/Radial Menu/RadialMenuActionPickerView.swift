@@ -11,8 +11,6 @@ import SwiftUI
 struct RadialMenuActionPickerView: View {
     @Default(.keybinds) private var keybinds
 
-    private let padding: CGFloat = 12
-
     @State private var searchText = ""
     @State private var searchResults: [RadialMenuAction.ActionType] = []
 
@@ -62,39 +60,45 @@ struct RadialMenuActionPickerView: View {
                 $searchText,
                 placeholder: .init(localized: "Search for a window action", defaultValue: "Search…")
             )
-            .padding(padding)
+            .padding(12)
 
             Divider()
 
-            PickerList(
-                $selection,
-                $searchResults,
-                padding,
-                allSections
-            ) { item in
-                HStack(spacing: 8) {
-                    if let action = item.resolvedAction {
+            ScrollViewReader { proxy in
+                ScrollView(showsIndicators: false) {
+                    PickerList(
+                        selection: $selection,
+                        searchResults: $searchResults,
+                        proxy: proxy,
+                        sections: allSections
+                    ) { item in
                         HStack(spacing: 8) {
-                            IconView(action: action)
+                            if let action = item.resolvedAction {
+                                HStack(spacing: 8) {
+                                    IconView(action: action)
 
-                            Text(action.getName())
-                                .fontWeight(.regular)
-                                .lineLimit(1)
+                                    Text(action.getName())
+                                        .fontWeight(.regular)
+                                        .lineLimit(1)
+                                }
+                            } else {
+                                Image(systemName: "bolt.horizontal.fill")
+                            }
+
+                            Spacer()
+
+                            if item.isKeybindReference {
+                                Image(systemName: "keyboard")
+                                    .foregroundStyle(.secondary)
+                            }
                         }
-                    } else {
-                        Image(systemName: "bolt.horizontal.fill")
+                        .padding(.horizontal, 6)
                     }
-
-                    Spacer()
-
-                    if item.isKeybindReference {
-                        Image(systemName: "keyboard")
-                            .foregroundStyle(.secondary)
-                    }
+                    .padding(8)
+                    .luminareCornerRadius(12)
                 }
             }
         }
-        .frame(width: 300, height: 300)
         .onAppear {
             searchText = ""
             computeSearchResults()

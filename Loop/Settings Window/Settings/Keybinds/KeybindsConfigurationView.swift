@@ -110,7 +110,7 @@ struct KeybindsConfigurationView: View {
                         LuminareToggle(isOn: $cycleModeRestartEnabled) {
                             Text("Always start cycles from first item")
                                 .padding(.trailing, 4)
-                                .luminarePopover(attachedTo: .topTrailing) {
+                                .luminareToolTip(attachedTo: .topTrailing) {
                                     Text("By default, Loop resumes cycles from where you last left off in each window.")
                                         .padding(6)
                                 }

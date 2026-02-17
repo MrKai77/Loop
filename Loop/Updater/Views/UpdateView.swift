@@ -182,7 +182,7 @@ struct UpdateView: View {
                 Text(updater.installState.isFailure ? "Try again later" : "Remind me later")
                     .contentTransition(.numericText())
                     .padding(.trailing, 4)
-                    .luminarePopover(attachedTo: .topTrailing, hidden: updater.installState.errorDescription == nil) {
+                    .luminareToolTip(attachedTo: .topTrailing, hidden: updater.installState.errorDescription == nil) {
                         HStack(spacing: 4) {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(.secondary)

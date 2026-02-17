@@ -249,7 +249,7 @@ struct CustomActionConfigurationView: View {
                         if let infoText = action.direction.infoText {
                             Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
                                 .padding(.trailing, 4)
-                                .luminarePopover(attachedTo: .topTrailing) {
+                                .luminareToolTip(attachedTo: .topTrailing) {
                                     Text(infoText)
                                         .padding(6)
                                 }

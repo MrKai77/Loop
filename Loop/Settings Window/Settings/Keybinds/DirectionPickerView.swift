@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct DirectionPickerView: View {
-    private let padding: CGFloat = 12
-
     @State private var searchText = ""
     @State private var searchResults: [WindowDirection] = []
 
@@ -46,24 +44,30 @@ struct DirectionPickerView: View {
                 $searchText,
                 placeholder: .init(localized: "Search for a window action", defaultValue: "Search…")
             )
-            .padding(padding)
+            .padding(12)
 
             Divider()
 
-            PickerList(
-                $direction,
-                $searchResults,
-                padding,
-                sections + [moreSection]
-            ) { item in
-                HStack(spacing: 8) {
-                    IconView(action: .init(item))
+            ScrollViewReader { proxy in
+                ScrollView(showsIndicators: false) {
+                    PickerList(
+                        selection: $direction,
+                        searchResults: $searchResults,
+                        proxy: proxy,
+                        sections: sections + [moreSection]
+                    ) { item in
+                        HStack(spacing: 8) {
+                            IconView(action: .init(item))
 
-                    Text(item.name)
+                            Text(item.name)
+                        }
+                        .padding(.horizontal, 6)
+                    }
+                    .padding(8)
+                    .luminareCornerRadius(12)
                 }
             }
         }
-        .frame(width: 300, height: 300)
         .onAppear {
             searchText = ""
             computeSearchResults()

@@ -10,7 +10,7 @@ import Scribe
 import SwiftUI
 
 struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identifiable {
-    @EnvironmentObject private var popover: LuminarePopupPanel
+    @Environment(\.luminareDismiss) private var dismiss
     private let eventMonitorManager: PickerListEventMonitorManager = .shared
 
     @Binding var selection: V
@@ -19,36 +19,25 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
     @State private var arrowSelection: V?
     @State private var isInitialRender = true
 
-    private let padding: CGFloat
+    private let proxy: ScrollViewProxy
     private let sections: [PickerSection<V>]
     private let content: (V) -> Content
 
     init(
-        _ selection: Binding<V>,
-        _ searchResults: Binding<[V]>,
-        _ padding: CGFloat,
-        _ sections: [PickerSection<V>],
+        selection: Binding<V>,
+        searchResults: Binding<[V]>,
+        proxy: ScrollViewProxy,
+        sections: [PickerSection<V>],
         @ViewBuilder content: @escaping (V) -> Content
     ) {
         self._selection = selection
         self._searchResults = searchResults
         self.sections = sections
-        self.padding = padding
+        self.proxy = proxy
         self.content = content
     }
 
     var body: some View {
-        ScrollViewReader { reader in
-            ScrollView(showsIndicators: false) {
-                LazyVStack(spacing: padding) {
-                    contentStack(reader: reader)
-                }
-                .padding(padding / 2)
-            }
-        }
-    }
-
-    private func contentStack(reader: ScrollViewProxy) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             if searchResults.isEmpty {
                 sectionsView
@@ -59,7 +48,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
         .onChange(of: searchResults) { _ in arrowSelection = nil }
         .onAppear {
             Task { @MainActor in
-                setupEventMonitor(reader: reader)
+                setupEventMonitor(reader: proxy)
                 isInitialRender = false
             }
         }
@@ -73,16 +62,14 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
                         selection: $selection,
                         arrowSelection: arrowSelection,
                         item: item,
-                        content: content,
-                        padding: padding / 2
+                        content: content
                     )
                     .id(item)
                 }
             } header: {
                 Text(section.title)
                     .foregroundStyle(.secondary)
-                    .padding(.leading, padding / 2)
-                    .padding(.top, padding / 2)
+                    .padding([.top, .horizontal], 6)
             }
         }
     }
@@ -93,8 +80,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
                 selection: $selection,
                 arrowSelection: arrowSelection,
                 item: item,
-                content: content,
-                padding: padding / 2
+                content: content
             )
             .id(item)
         }
@@ -113,10 +99,10 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
             case .kVK_Return:
                 if let arrowSelection {
                     selection = arrowSelection
-                    popover.close()
+                    dismiss()
                 }
             case .kVK_Escape:
-                popover.close()
+                dismiss()
             default:
                 return event
             }
@@ -155,7 +141,7 @@ extension LogCategory {
 }
 
 struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
-    @EnvironmentObject private var popover: LuminarePopupPanel
+    @Environment(\.luminareDismiss) private var dismiss
     @Environment(\.luminareAnimationFast) private var animationFast
 
     @State private var isHovering = false
@@ -163,7 +149,6 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
     let arrowSelection: V?
     let item: V
     let content: (V) -> Content
-    let padding: CGFloat
 
     private var isSelected: Bool {
         selection == item || arrowSelection == item
@@ -172,10 +157,9 @@ struct PopoverPickerItem<Content, V>: View where Content: View, V: Hashable {
     var body: some View {
         Button {
             selection = item
-            popover.resignKey()
+            dismiss()
         } label: {
             content(item)
-                .padding(padding)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(.rect)
         }

@@ -70,11 +70,6 @@ struct RadialMenuActionItemView: View {
             }
         }
         .padding(.horizontal, 12)
-        .onChange(of: isHovering) { _ in
-            if !isHovering {
-                isPickerPresented = false
-            }
-        }
         .onChange(of: action) { newAction in
             externalAction = newAction
 
@@ -93,14 +88,18 @@ struct RadialMenuActionItemView: View {
 
     private var label: some View {
         actionIndicator
-            .background {
-                if isHovering {
+            .background(alignment: .leading) {
+                if isHovering || isPickerPresented {
                     Color.clear
-                        .luminarePopup(
+                        .frame(width: 300 - 24)
+                        .luminarePopover(
                             isPresented: $isPickerPresented,
-                            alignment: .leadingLastTextBaseline
+                            arrowEdge: .top,
+                            shouldHideAnchor: true,
+                            shouldAnimate: false
                         ) {
                             RadialMenuActionPickerView(selection: $action.type)
+                                .frame(width: 300, height: 300)
                         }
                         .luminareSheetClosesOnDefocus(true)
                         .onChange(of: isPickerPresented) { _ in

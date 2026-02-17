@@ -162,7 +162,7 @@ struct AdvancedConfigurationView: View {
             LuminareToggle(isOn: $animateWindowResizes) {
                 Text("Animate window resize")
                     .padding(.trailing, 4)
-                    .luminarePopover(attachedTo: .topTrailing, hidden: !showLowPowerModeWarning) {
+                    .luminareToolTip(attachedTo: .topTrailing, hidden: !showLowPowerModeWarning) {
                         HStack(spacing: 4) {
                             Text("To save power, window animations are\nunavailable in Low Power Mode.")
                                 .multilineTextAlignment(.leading)

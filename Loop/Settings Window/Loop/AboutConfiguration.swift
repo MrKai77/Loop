@@ -265,7 +265,7 @@ struct AboutConfigurationView: View {
             LuminareToggle(isOn: $automaticallyUpdate) {
                 Text("Automatically install updates")
                     .padding(.trailing, automaticallyUpdate ? 4 : 0)
-                    .luminarePopover(attachedTo: .topTrailing, hidden: !automaticallyUpdate) {
+                    .luminareToolTip(attachedTo: .topTrailing, hidden: !automaticallyUpdate) {
                         Text("Updates will only be installed when \(Bundle.main.appName) is in the background.")
                             .padding(6)
                     }

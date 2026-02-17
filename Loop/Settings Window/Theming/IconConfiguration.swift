@@ -179,7 +179,7 @@ struct IconVew: View {
             }
 
             Color.clear
-                .luminarePopover(attachedTo: .topTrailing, hidden: !showLiquidGlassIndicator) {
+                .luminareToolTip(attachedTo: .topTrailing, hidden: !showLiquidGlassIndicator) {
                     Text("Supports macOS Tahoe’s Liquid Glass effects")
                         .padding(6)
                 }

@@ -58,11 +58,6 @@ struct KeybindItemView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .padding(.horizontal, 12)
-        .onChange(of: isHovering) { _ in
-            if !isHovering {
-                isDirectionPickerPresented = false
-            }
-        }
         .onChange(of: action.direction) { _ in
             if action.direction.isCustomizable {
                 isConfiguringCustom = true
@@ -130,17 +125,21 @@ struct KeybindItemView: View {
             .font(.title3)
             .foregroundStyle(isHovering ? .primary : .secondary)
         }
-        .background {
-            if isHovering {
+        .background(alignment: .leading) {
+            if isHovering || isDirectionPickerPresented {
                 Color.clear
-                    .luminarePopup(
+                    .frame(width: 300 - 24)
+                    .luminarePopover(
                         isPresented: $isDirectionPickerPresented,
-                        alignment: .leadingLastTextBaseline
+                        arrowEdge: .top,
+                        shouldHideAnchor: true,
+                        shouldAnimate: false
                     ) {
                         DirectionPickerView(
                             direction: $action.direction,
                             isInCycle: cycleIndex != nil
                         )
+                        .frame(width: 300, height: 300)
                     }
                     .luminareSheetClosesOnDefocus(true)
                     .onChange(of: isDirectionPickerPresented) { _ in
@@ -162,7 +161,7 @@ struct KeybindItemView: View {
                 HStack(spacing: 6) {
                     keycorderSection()
                         .padding(.leading, 4)
-                        .luminarePopover(attachedTo: .topLeading, hidden: !hasDuplicateKeybinds) {
+                        .luminareToolTip(attachedTo: .topLeading, hidden: !hasDuplicateKeybinds) {
                             Text("There are other keybinds that conflict with this key combination.")
                                 .padding(6)
                         }
@@ -206,7 +205,7 @@ struct KeybindItemView: View {
                         .fontWeight(.regular)
                         .lineLimit(1)
                         .padding(.trailing, 4)
-                        .luminarePopover(attachedTo: .topTrailing) {
+                        .luminareToolTip(attachedTo: .topTrailing) {
                             Text(info)
                                 .padding(6)
                         }
