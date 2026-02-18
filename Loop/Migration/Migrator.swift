@@ -219,13 +219,6 @@ private extension Migrator {
 
                 // Handle nested cycle actions if present
                 if var cycle = actions[i]["cycle"] as? [[String: Any]] {
-                    // Sort the cycle actions by direction
-                    cycle.sort { first, second -> Bool in
-                        let firstDir = first["direction"] as? String ?? ""
-                        let secondDir = second["direction"] as? String ?? ""
-                        return firstDir < secondDir
-                    }
-
                     // For each action in the cycle
                     for j in 0 ..< cycle.count {
                         // Sort the keybind array in each cycle action
