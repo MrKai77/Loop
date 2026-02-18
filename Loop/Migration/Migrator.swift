@@ -219,16 +219,12 @@ private extension Migrator {
 
                 // Handle nested cycle actions if present
                 if var cycle = actions[i]["cycle"] as? [[String: Any]] {
-                    // Sort the cycle actions by direction
-                    cycle.sort { first, second -> Bool in
-                        let firstDir = first["direction"] as? String ?? ""
-                        let secondDir = second["direction"] as? String ?? ""
-                        return firstDir < secondDir
-                    }
+                    // Note: cycle order is intentionally preserved here, as users
+                    // define the order of actions within a cycle and rely on it
+                    // when "Always start cycles from first item" is enabled.
 
-                    // For each action in the cycle
+                    // Sort only the keybind array within each cycle action
                     for j in 0 ..< cycle.count {
-                        // Sort the keybind array in each cycle action
                         if var cycleKeybind = cycle[j]["keybind"] as? [CGKeyCode] {
                             cycleKeybind.sort()
                             cycle[j]["keybind"] = cycleKeybind
