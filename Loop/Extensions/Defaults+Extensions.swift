@@ -71,6 +71,7 @@ extension Defaults.Keys {
     static let keybinds = Key<[WindowAction]>("keybinds", default: WindowAction.defaultKeybinds, iCloud: true)
 
     // Advanced
+    static let screenCycleOrder = Key<ScreenCycleOrder>("screenCycleOrder", default: .zPattern, iCloud: true)
     static let useSystemWindowManagerWhenAvailable = Key<Bool>("useSystemWindowManagerWhenAvailable", default: false, iCloud: true)
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false, iCloud: true)
     static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false, iCloud: true)

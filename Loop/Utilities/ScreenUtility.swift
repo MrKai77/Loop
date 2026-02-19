@@ -5,7 +5,33 @@
 //  Created by Kai Azim on 2024-01-11.
 //
 
+import Defaults
 import SwiftUI
+
+enum ScreenCycleOrder: String, Defaults.Serializable, CaseIterable, Identifiable {
+    var id: Self { self }
+
+    case zPattern
+    case clockwise
+
+    var name: LocalizedStringKey {
+        switch self {
+        case .zPattern:
+            "Z-pattern"
+        case .clockwise:
+            "Clockwise"
+        }
+    }
+    
+    var image: Image {
+        switch self {
+        case .zPattern:
+            Image(.arrowTriangleheadSwapRotated)
+        case .clockwise:
+            Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90")
+        }
+    }
+}
 
 enum ScreenUtility {
     private static var navigationUtility = DirectionalNavigationUtility<NSScreen>(
@@ -94,6 +120,16 @@ enum ScreenUtility {
 
     /// Sorts all NSScreens in an order such that the next/previous screen are in positional order.
     private static func getOrderedScreens() -> [NSScreen] {
+        switch Defaults[.screenCycleOrder] {
+        case .zPattern:
+            getOrderedScreensZPattern()
+        case .clockwise:
+            getOrderedScreensClockwise()
+        }
+    }
+
+    /// Z-pattern: left-to-right within each row, top row first.
+    private static func getOrderedScreensZPattern() -> [NSScreen] {
         NSScreen.screens.sorted { screen1, screen2 in
             if screen2.frame.maxY <= screen1.frame.minY {
                 return true
@@ -104,6 +140,83 @@ enum ScreenUtility {
             }
 
             return screen1.frame.minX < screen2.frame.minX
+        }
+    }
+
+    /// Walk tracing outer perimeter first, then inner layers.
+    ///
+    /// The walk prefers to continue straight, then turn clockwise. This ensures the
+    /// outer perimeter is fully traced before the walk turns inward.
+    private static func getOrderedScreensClockwise() -> [NSScreen] {
+        var unvisited = Set(NSScreen.screens)
+        var ordered: [NSScreen] = []
+
+        while !unvisited.isEmpty {
+            // Pick starting screen: topmost, then leftmost
+            guard let start = unvisited.max(by: { s1, s2 in
+                if abs(s1.frame.maxY - s2.frame.maxY) > 1 {
+                    return s1.frame.maxY < s2.frame.maxY
+                }
+                return s1.frame.minX > s2.frame.minX
+            }) else { break }
+
+            var current = start
+            unvisited.remove(current)
+            ordered.append(current)
+
+            var lastDirection: NavigationDirection?
+            while let (next, direction) = nearestUnvisitedScreen(
+                from: current,
+                lastDirection: lastDirection,
+                in: unvisited
+            ) {
+                unvisited.remove(next)
+                ordered.append(next)
+                current = next
+                lastDirection = direction
+            }
+        }
+
+        return ordered
+    }
+
+    /// Tries to find the nearest unvisited screen using momentum-based clockwise priority.
+    /// The direction priority favors continuing straight, then turning clockwise.
+    /// This produces a spiral rather than a snake pattern on large grids.
+    private static func nearestUnvisitedScreen(
+        from current: NSScreen,
+        lastDirection: NavigationDirection?,
+        in unvisited: Set<NSScreen>
+    ) -> (NSScreen, NavigationDirection)? {
+        let directions = clockwisePriority(after: lastDirection)
+        let others = Array(unvisited)
+
+        for direction in directions {
+            if let neighbor = navigationUtility.directionalItem(
+                from: current,
+                others: others,
+                direction: direction,
+                canWrap: false
+            ) {
+                return (neighbor, direction)
+            }
+        }
+
+        return nil
+    }
+
+    /// Returns the direction search order for clockwise traversal with momentum.
+    private static func clockwisePriority(after lastDirection: NavigationDirection?) -> [NavigationDirection] {
+        guard let last = lastDirection else {
+            return [.right, .top, .left, .bottom]
+        }
+
+        // For each direction: [straight, clockwise turn, counter-clockwise turn, reverse]
+        switch last {
+        case .right:  return [.right, .top, .left, .bottom]
+        case .top:    return [.top, .left, .bottom, .right]
+        case .left:   return [.left, .bottom, .right, .top]
+        case .bottom: return [.bottom, .right, .top, .left]
         }
     }
 

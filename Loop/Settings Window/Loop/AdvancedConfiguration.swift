@@ -131,6 +131,7 @@ struct AdvancedConfigurationView: View {
     @Default(.disableCursorInteraction) var disableCursorInteraction
     @Default(.ignoreFullscreen) var ignoreFullscreen
     @Default(.hapticFeedback) var hapticFeedback
+    @Default(.screenCycleOrder) var screenCycleOrder
     @Default(.sizeIncrement) var sizeIncrement
     @Default(.enableRadialMenuCustomization) var enableRadialMenuCustomization
 
@@ -144,6 +145,22 @@ struct AdvancedConfigurationView: View {
     var body: some View {
         Group {
             generalSection
+            
+            LuminareSection("Screen Navigation") {
+                LuminarePicker(
+                    elements: ScreenCycleOrder.allCases,
+                    selection: $screenCycleOrder,
+                    columns: 2
+                ) { order in
+                    HStack(spacing: 6) {
+                        order.image
+                        Text(order.name)
+                    }
+                    .fixedSize()
+                }
+                .luminareRoundingBehavior(top: true, bottom: true)
+            }
+            
             radialMenuSection
             keybindsSection
             permissionsSection
