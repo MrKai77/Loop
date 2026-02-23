@@ -552,15 +552,13 @@ actor UpdateInstaller {
         // Create ~/Applications if needed
         try fileManager.createDirectory(at: userAppsURL, withIntermediateDirectories: true)
 
-        // Remove existing app at destination if present
-        if fileManager.fileExists(atPath: destinationURL.path) {
-            log.info("Removing existing app at destination: \(destinationURL.path)")
-            try fileManager.removeItem(at: destinationURL)
-        }
-
-        // Copy new app to Applications
-        log.info("Copying new version to: \(destinationURL.path)")
-        try fileManager.copyItem(at: appBundle, to: destinationURL)
+        // Reuse the same staging + swap path used for regular updates so only swap
+        // operations touch locations outside Loop's support directory.
+        try await performAtomicInstallationNonPrivileged(
+            from: appBundle,
+            to: destinationURL,
+            manifest: manifest
+        )
 
         // Verify the installation
         try BundleUtilities.verifyBundleStructure(destinationURL)
@@ -568,15 +566,6 @@ actor UpdateInstaller {
 
         // Store the new location for restart
         installedAppURL = destinationURL
-
-        // Remove old app from original location
-        let oldAppURL = Bundle.main.bundleURL
-        log.info("Removing old app from: \(oldAppURL.path)")
-        do {
-            try fileManager.removeItem(at: oldAppURL)
-        } catch {
-            log.warn("Could not remove old app: \(error.localizedDescription)")
-        }
 
         log.success("Successfully installed to Applications folder")
     }
@@ -643,7 +632,8 @@ actor UpdateInstaller {
     ) async throws {
         log.info("Performing atomic installation")
 
-        let stagingURL = stagingURL(for: destinationURL, permissionState: .writable)
+        let stagingURL = SystemPaths.stagingDirectory
+            .appendingPathComponent("\(destinationURL.lastPathComponent).staging", isDirectory: true)
 
         do {
             try await executeAtomicInstallationSteps(
@@ -654,7 +644,7 @@ actor UpdateInstaller {
             )
             log.info("Atomic installation completed successfully")
         } catch {
-            await cleanupStaging(stagingURL)
+            try? fileManager.removeItem(at: stagingURL)
             throw error
         }
     }
@@ -666,7 +656,8 @@ actor UpdateInstaller {
     ) async throws {
         log.info("Performing privileged atomic installation")
 
-        let stagingURL = stagingURL(for: destinationURL, permissionState: installationPermissionState)
+        let stagingURL = SystemPaths.stagingDirectory
+            .appendingPathComponent("\(destinationURL.lastPathComponent).staging", isDirectory: true)
 
         do {
             try copyToStaging(from: sourceURL, to: stagingURL)
@@ -674,7 +665,7 @@ actor UpdateInstaller {
             try await atomicSwapPrivileged(staged: stagingURL, current: destinationURL)
             log.success("Privileged atomic installation completed successfully")
         } catch {
-            await cleanupStaging(stagingURL)
+            try? fileManager.removeItem(at: stagingURL)
             throw error
         }
     }
@@ -704,17 +695,6 @@ actor UpdateInstaller {
             try fileManager.removeItem(at: stagingURL)
         }
         try fileManager.copyItem(at: sourceURL, to: stagingURL)
-    }
-
-    private func stagingURL(for destinationURL: URL, permissionState: InstallationPermissionState) -> URL {
-        switch permissionState {
-        case .writable, .notWritableNoElevationPossible:
-            return destinationURL.appendingPathExtension("staging")
-        case .needsElevation:
-            return SystemPaths.loopDirectory
-                .appendingPathComponent(destinationURL.lastPathComponent, isDirectory: true)
-                .appendingPathExtension("staging")
-        }
     }
 
     private func verifyStaged(_ stagingURL: URL, manifest: UpdateManifest) async throws {
@@ -864,28 +844,34 @@ actor UpdateInstaller {
     }
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {
+        let currentExists = fileManager.fileExists(atPath: current.path)
+
         do {
-            log.info("Moving current app to backup...")
+            if currentExists {
+                log.info("Moving current app to backup...")
 
-            // Ensure the backup directory exists
-            let backupParent = backup.deletingLastPathComponent()
-            try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
+                // Ensure the backup directory exists
+                let backupParent = backup.deletingLastPathComponent()
+                try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
 
-            // Check if backup already exists and remove it if necessary
-            if fileManager.fileExists(atPath: backup.path) {
-                log.warn("Backup already exists at \(backup.path), removing it first")
-                try fileManager.removeItem(at: backup)
+                // Check if backup already exists and remove it if necessary
+                if fileManager.fileExists(atPath: backup.path) {
+                    log.warn("Backup already exists at \(backup.path), removing it first")
+                    try fileManager.removeItem(at: backup)
+                }
+
+                try fileManager.moveItem(at: current, to: backup)
+                log.info("Current app backed up to: \(backup.path)")
+            } else {
+                log.info("No existing app at destination, installing staged app directly")
             }
-
-            try fileManager.moveItem(at: current, to: backup)
-            log.info("Current app backed up to: \(backup.path)")
 
             log.info("Moving staged app to current location...")
             try fileManager.moveItem(at: staged, to: current)
             log.info("New app installed at: \(current.path)")
 
             // Verify the atomic swap was successful
-            try verifySwapSuccess(current: current, backup: backup, staged: staged)
+            try verifySwapSuccess(current: current, backup: backup, staged: staged, expectBackup: currentExists)
             log.success("Atomic swap completed and verified successfully!")
         } catch {
             log.error("Atomic swap failed: \(error)")
@@ -894,36 +880,42 @@ actor UpdateInstaller {
             log.error("Staged exists: \(fileManager.fileExists(atPath: staged.path))")
             log.error("Backup exists: \(fileManager.fileExists(atPath: backup.path))")
 
-            try await backupManager.restoreFromBackup(currentURL: current, backupURL: backup)
+            if currentExists, fileManager.fileExists(atPath: backup.path) {
+                try await backupManager.restoreFromBackup(currentURL: current, backupURL: backup)
+            }
             throw error
         }
     }
 
-    private func verifySwapSuccess(current: URL, backup: URL, staged: URL) throws {
+    private func verifySwapSuccess(current: URL, backup: URL, staged: URL, expectBackup: Bool = true) throws {
         log.debug("Verifying atomic swap success...")
 
-        // 1. Verify backup was created successfully
-        guard fileManager.fileExists(atPath: backup.path) else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup not found at expected location: \(backup.path)")
+        if expectBackup {
+            // 1. Verify backup was created successfully
+            guard fileManager.fileExists(atPath: backup.path) else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup not found at expected location: \(backup.path)")
+            }
+
+            // Verify backup has correct bundle structure
+            try BundleUtilities.verifyBundleStructure(backup)
+            log.debug("Backup bundle structure verified")
+
+            // Verify backup has a valid Info.plist and version
+            let backupInfoPlistURL = backup.appendingPathComponent("Contents/Info.plist")
+            guard fileManager.fileExists(atPath: backupInfoPlistURL.path) else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup app Info.plist not found")
+            }
+
+            guard let backupPlist = NSDictionary(contentsOf: backupInfoPlistURL),
+                  let backupVersion = backupPlist["CFBundleShortVersionString"] as? String,
+                  !backupVersion.isEmpty else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup app version information is invalid")
+            }
+
+            log.debug("Backup version verified: \(backupVersion)")
+        } else {
+            log.debug("No existing destination app to back up before swap")
         }
-
-        // Verify backup has correct bundle structure
-        try BundleUtilities.verifyBundleStructure(backup)
-        log.debug("Backup bundle structure verified")
-
-        // Verify backup has a valid Info.plist and version
-        let backupInfoPlistURL = backup.appendingPathComponent("Contents/Info.plist")
-        guard fileManager.fileExists(atPath: backupInfoPlistURL.path) else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup app Info.plist not found")
-        }
-
-        guard let backupPlist = NSDictionary(contentsOf: backupInfoPlistURL),
-              let backupVersion = backupPlist["CFBundleShortVersionString"] as? String,
-              !backupVersion.isEmpty else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup app version information is invalid")
-        }
-
-        log.debug("Backup version verified: \(backupVersion)")
 
         // 2. Verify new app was installed successfully
         guard fileManager.fileExists(atPath: current.path) else {
@@ -954,23 +946,22 @@ actor UpdateInstaller {
         }
 
         // 4. Verify file sizes are reasonable (basic sanity check)
-        let backupAttributes = try fileManager.attributesOfItem(atPath: backup.path)
         let currentAttributes = try fileManager.attributesOfItem(atPath: current.path)
 
-        guard let backupSize = backupAttributes[.size] as? Int64, backupSize > 0 else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup appears to be empty or invalid")
+        if expectBackup {
+            let backupAttributes = try fileManager.attributesOfItem(atPath: backup.path)
+            guard let backupSize = backupAttributes[.size] as? Int64, backupSize > 0 else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup appears to be empty or invalid")
+            }
+            log.debug("Backup size verified: \(backupSize.formattedBytes)")
         }
 
         guard let currentSize = currentAttributes[.size] as? Int64, currentSize > 0 else {
             throw UpdateError.installationFailed("Atomic swap verification failed: New app appears to be empty or invalid")
         }
 
-        log.debug("File sizes verified - Backup: \(backupSize.formattedBytes), New: \(currentSize.formattedBytes)")
+        log.debug("New app size verified: \(currentSize.formattedBytes)")
         log.debug("Atomic swap verification completed")
-    }
-
-    private func cleanupStaging(_ stagingURL: URL) async {
-        try? fileManager.removeItem(at: stagingURL)
     }
 
     // MARK: - Final Verification

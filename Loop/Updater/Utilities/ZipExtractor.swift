@@ -11,11 +11,11 @@ import ZIPFoundation
 
 @Loggable(style: .static)
 enum ZipExtractor {
-    /// Extracts a ZIP file to a temporary directory
+    /// Extracts a ZIP file to Loop's Application Support extraction directory
     /// - Parameters:
     ///   - zipURL: URL of the ZIP file to extract
     ///   - cancellationCheck: Optional closure to check if operation should be cancelled
-    /// - Returns: URL of the temporary directory containing extracted contents
+    /// - Returns: URL of the extraction directory containing extracted contents
     /// - Throws: `UpdateError` if extraction fails
     static func extract(
         from zipURL: URL,
@@ -25,7 +25,8 @@ enum ZipExtractor {
 
         try validateZipFile(zipURL)
 
-        let tempDir = createTemporaryDirectory()
+        let tempDir = SystemPaths.extractionDirectory
+            .appendingPathComponent("LoopExtraction_\(UUID().uuidString)", isDirectory: true)
 
         do {
             try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
@@ -99,10 +100,6 @@ enum ZipExtractor {
     }
 
     // MARK: - Utilities
-
-    private static func createTemporaryDirectory() -> URL {
-        FileManager.default.temporaryDirectory.appendingPathComponent("LoopExtraction_\(UUID().uuidString)")
-    }
 
     private static func createError(_ message: String, zipURL: URL? = nil) -> UpdateError {
         var fullMessage = message
