@@ -22,12 +22,34 @@ final class UpdaterAuthorizationCoordinator {
         let createStatus = AuthorizationCreate(nil, nil, [.interactionAllowed, .extendRights, .preAuthorize], &authRef)
 
         guard createStatus == errAuthorizationSuccess, let authRef else {
-            throw UpdateError.installationFailed("Could not request installation authorization (OSStatus \(createStatus))")
+            throw UpdateError.installationFailed("Could not request installation authorization: \(authorizationErrorMessage(for: createStatus))")
         }
 
         defer {
             AuthorizationFree(authRef, [.destroyRights])
         }
+
+        var requestedRight = AuthorizationItem(
+            name: kSMRightBlessPrivilegedHelper,
+            valueLength: 0,
+            value: nil,
+            flags: 0
+        )
+        var requestedRights = AuthorizationRights(count: 1, items: &requestedRight)
+
+        let rightsStatus = AuthorizationCopyRights(
+            authRef,
+            &requestedRights,
+            nil,
+            [.interactionAllowed, .extendRights, .preAuthorize],
+            nil
+        )
+
+        guard rightsStatus == errAuthorizationSuccess else {
+            throw UpdateError.installationFailed("Authorization rights request failed: \(authorizationErrorMessage(for: rightsStatus))")
+        }
+
+        log.info("Authorization rights granted for helper bless")
 
         var error: Unmanaged<CFError>?
         let success = SMJobBless(kSMDomainSystemLaunchd, PrivilegedInstallerConstants.helperLabel as CFString, authRef, &error)
@@ -38,5 +60,17 @@ final class UpdaterAuthorizationCoordinator {
         }
 
         log.info("Privileged helper authorization succeeded")
+    }
+
+    private func authorizationErrorMessage(for status: OSStatus) -> String {
+        if status == errAuthorizationCanceled {
+            return "User canceled administrator authorization (OSStatus \(status))"
+        }
+
+        if let message = SecCopyErrorMessageString(status, nil) as String? {
+            return "\(message) (OSStatus \(status))"
+        }
+
+        return "OSStatus \(status)"
     }
 }
