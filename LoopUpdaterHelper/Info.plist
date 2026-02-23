@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIdentifier</key>
+	<string>com.MrKai77.Loop.UpdaterHelper</string>
+	<key>CFBundleExecutable</key>
+	<string>LoopUpdaterHelper</string>
+	<key>CFBundleName</key>
+	<string>LoopUpdaterHelper</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>MachServices</key>
+	<dict>
+		<key>com.MrKai77.Loop.UpdaterHelper</key>
+		<true/>
+	</dict>
+	<key>SMAuthorizedClients</key>
+	<array>
+		<string>identifier "com.MrKai77.Loop" and anchor apple generic and certificate leaf[subject.OU] = "5F967GYF84"</string>
+	</array>
+</dict>
+</plist>

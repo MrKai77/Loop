@@ -11,18 +11,27 @@ import Scribe
 
 @Loggable
 actor UpdateInstaller {
+    enum InstallationPermissionState: Sendable {
+        case writable
+        case needsElevation(reason: String)
+        case notWritableNoElevationPossible(reason: String)
+    }
+
     // MARK: - Properties
 
     private let backupManager: BackupManager
     private let fileManager: FileManager
+    private let authorizationCoordinator: UpdaterAuthorizationCoordinator
 
     private var isCancelled = false
     private var relocateToApplications = false
     private var installedAppURL: URL = Bundle.main.bundleURL
+    private var installationPermissionState: InstallationPermissionState = .writable
 
     init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
         self.backupManager = BackupManager(fileManager: fileManager)
+        self.authorizationCoordinator = UpdaterAuthorizationCoordinator()
     }
 
     func installUpdate(
@@ -103,7 +112,7 @@ actor UpdateInstaller {
         let checks: [(String, () async throws -> ())] = [
             ("disk space", { try await self.verifyDiskSpace(manifest: manifest) }),
             ("current app integrity", { try await self.verifyCurrentAppIntegrity() }),
-            ("installation permissions", { try await self.verifyInstallationPermissions() }),
+            ("installation permissions", { try await self.evaluateInstallationPermissions() }),
             ("conflicting processes", { try await self.checkForConflictingRunningProcesses() }),
             ("app location", { try await self.checkAppLocationAndOfferRelocation() })
         ]
@@ -177,15 +186,32 @@ actor UpdateInstaller {
         log.success("Current application integrity verified")
     }
 
-    private func verifyInstallationPermissions() async throws {
+    private func evaluateInstallationPermissions() async throws {
+        installationPermissionState = try await verifyInstallationPermissions()
+        switch installationPermissionState {
+        case .writable:
+            log.success("Installation permissions verified")
+        case let .needsElevation(reason):
+            log.notice("Installation requires elevation: \(reason)")
+        case let .notWritableNoElevationPossible(reason):
+            log.warn("Installation directory is not writable and cannot be escalated: \(reason)")
+        }
+    }
+
+    private func verifyInstallationPermissions() async throws -> InstallationPermissionState {
         log.info("Verifying installation permissions")
 
         let currentAppURL = Bundle.main.bundleURL
         let parentDirectory = currentAppURL.deletingLastPathComponent()
+        let isApplicationsLocation = parentDirectory.standardizedFileURL.path == "/Applications"
 
         // Check write permissions to parent directory
         guard fileManager.isWritableFile(atPath: parentDirectory.path) else {
-            throw UpdateError.installationFailed("No write permissions to application directory: \(parentDirectory.path)")
+            if isApplicationsLocation {
+                return .needsElevation(reason: "No write permissions to \(parentDirectory.path)")
+            }
+
+            return .notWritableNoElevationPossible(reason: "No write permissions to \(parentDirectory.path)")
         }
 
         // Test by creating a temporary file
@@ -195,10 +221,13 @@ actor UpdateInstaller {
             try "test".write(to: testFile, atomically: true, encoding: .utf8)
             try fileManager.removeItem(at: testFile)
         } catch {
-            throw UpdateError.installationFailed("Cannot write to application directory: \(error.localizedDescription)")
+            if isApplicationsLocation {
+                return .needsElevation(reason: "Cannot write to \(parentDirectory.path): \(error.localizedDescription)")
+            }
+            return .notWritableNoElevationPossible(reason: "Cannot write to \(parentDirectory.path): \(error.localizedDescription)")
         }
 
-        log.success("Installation permissions verified")
+        return .writable
     }
 
     private func checkForConflictingRunningProcesses() async throws {
@@ -408,7 +437,27 @@ actor UpdateInstaller {
 
             // Perform atomic installation to current location
             let currentAppURL = Bundle.main.bundleURL
-            try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
+
+            switch installationPermissionState {
+            case .writable:
+                try await performAtomicInstallationNonPrivileged(from: appBundle, to: currentAppURL, manifest: manifest)
+            case .needsElevation:
+                do {
+                    try await performAtomicInstallationPrivileged(from: appBundle, to: currentAppURL, manifest: manifest)
+                } catch {
+                    if await askUserForApplicationsFallback(after: error.localizedDescription) {
+                        try await performRelocationInstall(from: appBundle, manifest: manifest)
+                    } else {
+                        throw UpdateError.installationFailed("Update requires administrator authorization to modify /Applications.")
+                    }
+                }
+            case let .notWritableNoElevationPossible(reason):
+                if await askUserForApplicationsFallback(after: reason) {
+                    try await performRelocationInstall(from: appBundle, manifest: manifest)
+                } else {
+                    throw UpdateError.installationFailed("Cannot modify current application location: \(reason)")
+                }
+            }
         }
 
         // Post-installation verification
@@ -455,6 +504,33 @@ actor UpdateInstaller {
         log.success("Successfully installed to Applications folder")
     }
 
+    @MainActor
+    private func askUserForApplicationsFallback(after failureReason: String) async -> Bool {
+        let alert = NSAlert()
+        alert.messageText = String(
+            localized: "Administrator Authorization Required",
+            defaultValue: "Administrator Authorization Required"
+        )
+        alert.informativeText = String(
+            localized: "Loop could not install the update in /Applications (\(failureReason)). Would you like to install this update in your ~/Applications folder instead?"
+        )
+        alert.alertStyle = .warning
+        alert.addButton(
+            withTitle: String(
+                localized: "Install in ~/Applications",
+                defaultValue: "Install in ~/Applications"
+            )
+        )
+        alert.addButton(
+            withTitle: String(
+                localized: "Cancel Update",
+                defaultValue: "Cancel Update"
+            )
+        )
+
+        return alert.runModal() == .alertFirstButtonReturn
+    }
+
     private func verifyPreInstallationState() async throws {
         log.info("Verifying pre-installation state")
 
@@ -480,7 +556,7 @@ actor UpdateInstaller {
 
     // MARK: - Atomic Installation
 
-    private func performAtomicInstallation(
+    private func performAtomicInstallationNonPrivileged(
         from sourceURL: URL,
         to destinationURL: URL,
         manifest: UpdateManifest
@@ -497,6 +573,26 @@ actor UpdateInstaller {
                 manifest: manifest
             )
             log.info("Atomic installation completed successfully")
+        } catch {
+            await cleanupStaging(stagingURL)
+            throw error
+        }
+    }
+
+    private func performAtomicInstallationPrivileged(
+        from sourceURL: URL,
+        to destinationURL: URL,
+        manifest: UpdateManifest
+    ) async throws {
+        log.info("Performing privileged atomic installation")
+
+        let stagingURL = destinationURL.appendingPathExtension("staging")
+
+        do {
+            try copyToStaging(from: sourceURL, to: stagingURL)
+            try await verifyStaged(stagingURL, manifest: manifest)
+            try await atomicSwapPrivileged(staged: stagingURL, current: destinationURL)
+            log.success("Privileged atomic installation completed successfully")
         } catch {
             await cleanupStaging(stagingURL)
             throw error
@@ -567,6 +663,30 @@ actor UpdateInstaller {
             staged: stagingURL,
             backup: backupURL
         )
+    }
+
+    private func atomicSwapPrivileged(staged stagingURL: URL, current currentURL: URL) async throws {
+        try checkCancellation()
+
+        log.info("Starting privileged atomic swap")
+        log.info("Current app: \(currentURL.path)")
+        log.info("Staged app: \(stagingURL.path)")
+
+        try await backupManager.prepareForBackup()
+        let backupURL = try await backupManager.createBackupURL()
+
+        do {
+            try await authorizationCoordinator.performPrivilegedAtomicSwap(
+                current: currentURL,
+                staged: stagingURL,
+                backup: backupURL
+            )
+
+            try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
+        } catch {
+            log.error("Privileged atomic swap failed: \(error.localizedDescription)")
+            throw error
+        }
     }
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {
