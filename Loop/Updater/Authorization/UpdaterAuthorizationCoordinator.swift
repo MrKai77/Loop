@@ -17,6 +17,11 @@ final class UpdaterAuthorizationCoordinator {
         try await client.atomicSwap(current: current, staged: staged, backup: backup)
     }
 
+    func performPrivilegedRestore(current: URL, backup: URL) async throws {
+        try authorizeAndBlessHelper()
+        try await client.restoreFromBackup(current: current, backup: backup)
+    }
+
     private func authorizeAndBlessHelper() throws {
         var authRef: AuthorizationRef?
         let createStatus = AuthorizationCreate(nil, nil, [.interactionAllowed, .extendRights, .preAuthorize], &authRef)
@@ -29,21 +34,25 @@ final class UpdaterAuthorizationCoordinator {
             AuthorizationFree(authRef, [.destroyRights])
         }
 
-        var requestedRight = AuthorizationItem(
-            name: kSMRightBlessPrivilegedHelper,
-            valueLength: 0,
-            value: nil,
-            flags: 0
-        )
-        var requestedRights = AuthorizationRights(count: 1, items: &requestedRight)
-
-        let rightsStatus = AuthorizationCopyRights(
-            authRef,
-            &requestedRights,
-            nil,
-            [.interactionAllowed, .extendRights, .preAuthorize],
-            nil
-        )
+        let rightsStatus: OSStatus = kSMRightBlessPrivilegedHelper.withCString { rightName in
+            var requestedRight = AuthorizationItem(
+                name: rightName,
+                valueLength: 0,
+                value: nil,
+                flags: 0
+            )
+            
+            return withUnsafeMutablePointer(to: &requestedRight) { rightPtr in
+                var requestedRights = AuthorizationRights(count: 1, items: rightPtr)
+                return AuthorizationCopyRights(
+                    authRef,
+                    &requestedRights,
+                    nil,
+                    [.interactionAllowed, .extendRights, .preAuthorize],
+                    nil
+                )
+            }
+        }
 
         guard rightsStatus == errAuthorizationSuccess else {
             throw UpdateError.installationFailed("Authorization rights request failed: \(authorizationErrorMessage(for: rightsStatus))")
@@ -52,7 +61,12 @@ final class UpdaterAuthorizationCoordinator {
         log.info("Authorization rights granted for helper bless")
 
         var error: Unmanaged<CFError>?
-        let success = SMJobBless(kSMDomainSystemLaunchd, PrivilegedInstallerConstants.helperLabel as CFString, authRef, &error)
+        let success = SMJobBless(
+            kSMDomainSystemLaunchd,
+            PrivilegedInstallerConstants.helperLabel as CFString,
+            authRef,
+            &error
+        )
 
         guard success else {
             let details = error?.takeRetainedValue().localizedDescription ?? "Unknown authorization failure"

@@ -72,8 +72,9 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
 
     func prepareBackup(_ backupDirectory: String, withReply reply: @escaping (NSError?) -> Void) {
         do {
-            try validateAllowedPath(backupDirectory)
-            try fileManager.createDirectory(atPath: backupDirectory, withIntermediateDirectories: true, attributes: nil)
+            let canonicalBackupDirectory = canonicalPath(for: backupDirectory)
+            try requireLoopSupportPath(canonicalBackupDirectory, argumentName: "backupDirectory")
+            try fileManager.createDirectory(atPath: canonicalBackupDirectory, withIntermediateDirectories: true, attributes: nil)
             reply(nil)
         } catch {
             reply(error as NSError)
@@ -87,13 +88,18 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         withReply reply: @escaping (NSError?) -> Void
     ) {
         do {
-            try validateAllowedPath(currentPath)
-            try validateAllowedPath(stagedPath)
-            try validateAllowedPath(backupPath)
+            let callerBundlePath = try resolveCallerBundlePath()
+            let canonicalCurrentPath = canonicalPath(for: currentPath)
+            let canonicalStagedPath = canonicalPath(for: stagedPath)
+            let canonicalBackupPath = canonicalPath(for: backupPath)
 
-            let currentURL = URL(fileURLWithPath: currentPath)
-            let stagedURL = URL(fileURLWithPath: stagedPath)
-            let backupURL = URL(fileURLWithPath: backupPath)
+            try requireCallerBundlePath(canonicalCurrentPath, callerBundlePath: callerBundlePath, argumentName: "currentPath")
+            try requireLoopSupportPath(canonicalStagedPath, argumentName: "stagedPath")
+            try requireLoopSupportPath(canonicalBackupPath, argumentName: "backupPath")
+
+            let currentURL = URL(fileURLWithPath: canonicalCurrentPath)
+            let stagedURL = URL(fileURLWithPath: canonicalStagedPath)
+            let backupURL = URL(fileURLWithPath: canonicalBackupPath)
 
             let backupParent = backupURL.deletingLastPathComponent()
             try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
@@ -120,8 +126,14 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
 
     func removeItem(_ path: String, withReply reply: @escaping (NSError?) -> Void) {
         do {
-            try validateAllowedPath(path)
-            let url = URL(fileURLWithPath: path)
+            let callerBundlePath = try resolveCallerBundlePath()
+            let canonicalPath = canonicalPath(for: path)
+
+            if canonicalPath != callerBundlePath {
+                try requireLoopSupportPath(canonicalPath, argumentName: "path")
+            }
+
+            let url = URL(fileURLWithPath: canonicalPath)
 
             if fileManager.fileExists(atPath: url.path) {
                 try fileManager.removeItem(at: url)
@@ -133,23 +145,95 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         }
     }
 
-    private func validateAllowedPath(_ rawPath: String) throws {
-        let path = URL(fileURLWithPath: rawPath).standardizedFileURL.path
+    func restoreFromBackup(
+        _ currentPath: String,
+        backupPath: String,
+        withReply reply: @escaping (NSError?) -> Void
+    ) {
+        do {
+            let callerBundlePath = try resolveCallerBundlePath()
+            let canonicalCurrentPath = canonicalPath(for: currentPath)
+            let canonicalBackupPath = canonicalPath(for: backupPath)
 
-        if path == "/Applications" || path.hasPrefix("/Applications/") {
-            return
+            try requireCallerBundlePath(canonicalCurrentPath, callerBundlePath: callerBundlePath, argumentName: "currentPath")
+            try requireLoopSupportPath(canonicalBackupPath, argumentName: "backupPath")
+
+            let currentURL = URL(fileURLWithPath: canonicalCurrentPath)
+            let backupURL = URL(fileURLWithPath: canonicalBackupPath)
+
+            guard fileManager.fileExists(atPath: backupURL.path) else {
+                reply(nil)
+                return
+            }
+
+            if fileManager.fileExists(atPath: currentURL.path) {
+                try fileManager.removeItem(at: currentURL)
+            }
+
+            try fileManager.moveItem(at: backupURL, to: currentURL)
+            reply(nil)
+        } catch {
+            reply(error as NSError)
+        }
+    }
+
+    private func resolveCallerBundlePath() throws -> String {
+        guard let connection = NSXPCConnection.current() else {
+            throw helperError("Unable to resolve current XPC connection")
         }
 
-        let isUserApplications = path.hasPrefix("/Users/") &&
-            (path.contains("/Applications/") || path.hasSuffix("/Applications"))
-        let isLoopSupport = path.hasPrefix("/Users/") && path.contains("/Library/Application Support/Loop")
-
-        if isUserApplications || isLoopSupport {
-            return
+        let pid = connection.processIdentifier
+        guard pid > 0 else {
+            throw helperError("Unable to resolve caller process identifier")
         }
 
-        throw NSError(domain: "LoopUpdaterHelper", code: 1, userInfo: [NSLocalizedDescriptionKey: "Refused privileged operation for disallowed path: \(path)"])
+        guard let app = NSRunningApplication(processIdentifier: pid_t(pid)),
+              let bundleURL = app.bundleURL else {
+            throw helperError("Unable to resolve caller bundle path for pid \(pid)")
+        }
+
+        return canonicalPath(for: bundleURL)
+    }
+
+    private func canonicalPath(for rawPath: String) -> String {
+        canonicalPath(for: URL(fileURLWithPath: rawPath))
+    }
+
+    private func canonicalPath(for url: URL) -> String {
+        url.resolvingSymlinksInPath().standardizedFileURL.path
+    }
+
+    private func requireCallerBundlePath(
+        _ path: String,
+        callerBundlePath: String,
+        argumentName: String
+    ) throws {
+        guard path == callerBundlePath else {
+            throw helperError("Refused privileged operation: \(argumentName) (\(path)) does not match caller bundle path (\(callerBundlePath))")
+        }
+    }
+
+    private func requireLoopSupportPath(_ path: String, argumentName: String) throws {
+        guard isLoopSupportPath(path) else {
+            throw helperError("Refused privileged operation: \(argumentName) is outside Loop support directory (\(path))")
+        }
+    }
+
+    private func isLoopSupportPath(_ path: String) -> Bool {
+        let components = URL(fileURLWithPath: path).pathComponents
+        guard components.count >= 6 else { return false }
+
+        return components[1] == "Users" &&
+            !components[2].isEmpty &&
+            components[3] == "Library" &&
+            components[4] == "Application Support" &&
+            components[5] == "Loop"
+    }
+
+    private func helperError(_ message: String) -> NSError {
+        NSError(domain: "LoopUpdaterHelper", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
     }
 }
 
-PrivilegedInstallerService().run()
+let service = PrivilegedInstallerService()
+service.run()

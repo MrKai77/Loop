@@ -202,33 +202,96 @@ actor UpdateInstaller {
     private func verifyInstallationPermissions() async throws -> InstallationPermissionState {
         log.info("Verifying installation permissions")
 
-        let currentAppURL = Bundle.main.bundleURL
-        let parentDirectory = currentAppURL.deletingLastPathComponent()
-        let isApplicationsLocation = parentDirectory.standardizedFileURL.path == "/Applications"
-
-        // Check write permissions to parent directory
-        guard fileManager.isWritableFile(atPath: parentDirectory.path) else {
-            if isApplicationsLocation {
-                return .needsElevation(reason: "No write permissions to \(parentDirectory.path)")
-            }
-
-            return .notWritableNoElevationPossible(reason: "No write permissions to \(parentDirectory.path)")
-        }
-
-        // Test by creating a temporary file
-        let testFile = parentDirectory.appendingPathComponent("loop_permission_test_\(UUID().uuidString)")
+        let parentDirectory = Bundle.main.bundleURL.deletingLastPathComponent()
+        let parentPath = parentDirectory.standardizedFileURL.path
 
         do {
-            try "test".write(to: testFile, atomically: true, encoding: .utf8)
-            try fileManager.removeItem(at: testFile)
+            try probeDirectoryWriteAccess(parentDirectory)
         } catch {
-            if isApplicationsLocation {
-                return .needsElevation(reason: "Cannot write to \(parentDirectory.path): \(error.localizedDescription)")
-            }
-            return .notWritableNoElevationPossible(reason: "Cannot write to \(parentDirectory.path): \(error.localizedDescription)")
+            return classifyPermissionFailure(error, directoryPath: parentPath)
         }
 
         return .writable
+    }
+
+    private func probeDirectoryWriteAccess(_ directoryURL: URL) throws {
+        let testFile = directoryURL.appendingPathComponent("loop_permission_test_\(UUID().uuidString)")
+        try Data("test".utf8).write(to: testFile, options: .atomic)
+        try fileManager.removeItem(at: testFile)
+    }
+
+    private func classifyPermissionFailure(_ error: Error, directoryPath: String) -> InstallationPermissionState {
+        let normalizedError = error as NSError
+        let errors = errorChain(from: normalizedError)
+        let reason = normalizedError.localizedDescription
+        let message = "Cannot write to \(directoryPath): \(reason)"
+
+        if isNonPermissionWriteFailure(errors) {
+            return .notWritableNoElevationPossible(reason: message)
+        }
+
+        if isPermissionDeniedError(errors) {
+            return .needsElevation(reason: message)
+        }
+
+        return .notWritableNoElevationPossible(reason: message)
+    }
+
+    private func errorChain(from error: NSError) -> [NSError] {
+        var chain: [NSError] = [error]
+        var current = error
+
+        while let underlying = current.userInfo[NSUnderlyingErrorKey] as? NSError {
+            if chain.contains(where: { $0.domain == underlying.domain && $0.code == underlying.code }) {
+                break
+            }
+
+            chain.append(underlying)
+            current = underlying
+        }
+
+        return chain
+    }
+
+    private func isPermissionDeniedError(_ errors: [NSError]) -> Bool {
+        let posixPermissionCodes: Set<Int> = [Int(EACCES), Int(EPERM)]
+        let cocoaPermissionCodes: Set<Int> = [
+            CocoaError.Code.fileWriteNoPermission.rawValue,
+            CocoaError.Code.fileReadNoPermission.rawValue
+        ]
+
+        return errors.contains { nsError in
+            if nsError.domain == NSPOSIXErrorDomain {
+                return posixPermissionCodes.contains(nsError.code)
+            }
+
+            if nsError.domain == NSCocoaErrorDomain {
+                return cocoaPermissionCodes.contains(nsError.code)
+            }
+
+            return false
+        }
+    }
+
+    private func isNonPermissionWriteFailure(_ errors: [NSError]) -> Bool {
+        let posixNonPermissionCodes: Set<Int> = [Int(EROFS), Int(ENOSPC), Int(ENOENT), Int(EIO)]
+        let cocoaNonPermissionCodes: Set<Int> = [
+            CocoaError.Code.fileWriteVolumeReadOnly.rawValue,
+            CocoaError.Code.fileWriteOutOfSpace.rawValue,
+            CocoaError.Code.fileNoSuchFile.rawValue
+        ]
+
+        return errors.contains { nsError in
+            if nsError.domain == NSPOSIXErrorDomain {
+                return posixNonPermissionCodes.contains(nsError.code)
+            }
+
+            if nsError.domain == NSCocoaErrorDomain {
+                return cocoaNonPermissionCodes.contains(nsError.code)
+            }
+
+            return false
+        }
     }
 
     private func checkForConflictingRunningProcesses() async throws {
@@ -403,16 +466,17 @@ actor UpdateInstaller {
     private func validateAppCodeSignature(_ appBundle: URL) async throws {
         log.info("Validating app code signature")
 
-        let flags = SecCSFlags(rawValue: kSecCSStrictValidate | kSecCSCheckAllArchitectures)
+        let creationFlags = SecCSFlags()
+        let validationFlags = SecCSFlags(rawValue: kSecCSStrictValidate | kSecCSCheckAllArchitectures)
 
         var staticCode: SecStaticCode?
-        let createStatus = SecStaticCodeCreateWithPath(appBundle as CFURL, flags, &staticCode)
+        let createStatus = SecStaticCodeCreateWithPath(appBundle as CFURL, creationFlags, &staticCode)
         guard createStatus == errSecSuccess, let staticCode else {
             let message = securityErrorMessage(for: createStatus)
             throw UpdateError.installationFailed("Code signature object creation failed: \(message)")
         }
 
-        let validationStatus = SecStaticCodeCheckValidity(staticCode, flags, nil)
+        let validationStatus = SecStaticCodeCheckValidity(staticCode, validationFlags, nil)
         guard validationStatus == errSecSuccess else {
             let message = securityErrorMessage(for: validationStatus)
             throw UpdateError.installationFailed("Code signature validation failed: \(message)")
@@ -452,14 +516,20 @@ actor UpdateInstaller {
                 do {
                     try await performAtomicInstallationPrivileged(from: appBundle, to: currentAppURL, manifest: manifest)
                 } catch {
-                    if await askUserForApplicationsFallback(after: error.localizedDescription) {
+                    if await askUserForApplicationsFallback(
+                        failedTargetPath: currentAppURL.path,
+                        after: error.localizedDescription
+                    ) {
                         try await performRelocationInstall(from: appBundle, manifest: manifest)
                     } else {
-                        throw UpdateError.installationFailed("Update requires administrator authorization to modify /Applications.")
+                        throw UpdateError.installationFailed("Update requires administrator authorization to modify \(currentAppURL.path).")
                     }
                 }
             case let .notWritableNoElevationPossible(reason):
-                if await askUserForApplicationsFallback(after: reason) {
+                if await askUserForApplicationsFallback(
+                    failedTargetPath: currentAppURL.path,
+                    after: reason
+                ) {
                     try await performRelocationInstall(from: appBundle, manifest: manifest)
                 } else {
                     throw UpdateError.installationFailed("Cannot modify current application location: \(reason)")
@@ -512,14 +582,17 @@ actor UpdateInstaller {
     }
 
     @MainActor
-    private func askUserForApplicationsFallback(after failureReason: String) async -> Bool {
+    private func askUserForApplicationsFallback(
+        failedTargetPath: String,
+        after failureReason: String
+    ) async -> Bool {
         let alert = NSAlert()
         alert.messageText = String(
             localized: "Administrator Authorization Required",
             defaultValue: "Administrator Authorization Required"
         )
         alert.informativeText = String(
-            localized: "Loop could not install the update in /Applications (\(failureReason)). Would you like to install this update in your ~/Applications folder instead?"
+            localized: "Loop could not install the update at \(failedTargetPath) (\(failureReason)). Would you like to install this update in your ~/Applications folder instead?"
         )
         alert.alertStyle = .warning
         alert.addButton(
@@ -570,7 +643,7 @@ actor UpdateInstaller {
     ) async throws {
         log.info("Performing atomic installation")
 
-        let stagingURL = destinationURL.appendingPathExtension("staging")
+        let stagingURL = stagingURL(for: destinationURL, permissionState: .writable)
 
         do {
             try await executeAtomicInstallationSteps(
@@ -593,7 +666,7 @@ actor UpdateInstaller {
     ) async throws {
         log.info("Performing privileged atomic installation")
 
-        let stagingURL = destinationURL.appendingPathExtension("staging")
+        let stagingURL = stagingURL(for: destinationURL, permissionState: installationPermissionState)
 
         do {
             try copyToStaging(from: sourceURL, to: stagingURL)
@@ -622,10 +695,26 @@ actor UpdateInstaller {
 
         log.debug("Copying application to staging area")
 
+        try fileManager.createDirectory(
+            at: stagingURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+
         if fileManager.fileExists(atPath: stagingURL.path) {
             try fileManager.removeItem(at: stagingURL)
         }
         try fileManager.copyItem(at: sourceURL, to: stagingURL)
+    }
+
+    private func stagingURL(for destinationURL: URL, permissionState: InstallationPermissionState) -> URL {
+        switch permissionState {
+        case .writable, .notWritableNoElevationPossible:
+            return destinationURL.appendingPathExtension("staging")
+        case .needsElevation:
+            return SystemPaths.loopDirectory
+                .appendingPathComponent(destinationURL.lastPathComponent, isDirectory: true)
+                .appendingPathExtension("staging")
+        }
     }
 
     private func verifyStaged(_ stagingURL: URL, manifest: UpdateManifest) async throws {
@@ -692,8 +781,57 @@ actor UpdateInstaller {
             try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
         } catch {
             log.error("Privileged atomic swap failed: \(error.localizedDescription)")
-            throw error
+            try await reconcilePrivilegedSwapFailure(
+                current: currentURL,
+                staged: stagingURL,
+                backup: backupURL,
+                originalError: error
+            )
         }
+    }
+
+    private func reconcilePrivilegedSwapFailure(
+        current currentURL: URL,
+        staged stagingURL: URL,
+        backup backupURL: URL,
+        originalError: Error
+    ) async throws {
+        let currentExists = fileManager.fileExists(atPath: currentURL.path)
+        let backupExists = fileManager.fileExists(atPath: backupURL.path)
+
+        if currentExists && backupExists {
+            do {
+                try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
+                log.notice("Privileged swap completed despite transport failure; continuing installation")
+                return
+            } catch {
+                log.warn("Privileged swap state check failed after transport error; attempting recovery restore: \(error.localizedDescription)")
+            }
+        }
+
+        guard backupExists else {
+            throw UpdateError.installationFailed(
+                "Privileged atomic swap failed and no backup was available for recovery: \(originalError.localizedDescription)"
+            )
+        }
+
+        do {
+            try await authorizationCoordinator.performPrivilegedRestore(current: currentURL, backup: backupURL)
+
+            guard fileManager.fileExists(atPath: currentURL.path) else {
+                throw UpdateError.installationFailed("Privileged restore failed: restored app not found at \(currentURL.path)")
+            }
+
+            try validateAppBundle(currentURL, skipVersionCheck: true)
+        } catch {
+            throw UpdateError.installationFailed(
+                "Privileged atomic swap failed and restore was unsuccessful: \(originalError.localizedDescription). Recovery error: \(error.localizedDescription)"
+            )
+        }
+
+        throw UpdateError.installationFailed(
+            "Privileged atomic swap failed. The previous app version was restored successfully."
+        )
     }
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {

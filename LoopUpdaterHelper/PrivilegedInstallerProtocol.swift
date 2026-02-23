@@ -8,6 +8,11 @@ import Foundation
         backupPath: String,
         withReply reply: @escaping (NSError?) -> Void
     )
+    func restoreFromBackup(
+        _ currentPath: String,
+        backupPath: String,
+        withReply reply: @escaping (NSError?) -> Void
+    )
     func removeItem(_ path: String, withReply reply: @escaping (NSError?) -> Void)
 }
 

@@ -5,7 +5,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.MrKai77.Loop.UpdaterHelper</string>
 	<key>CFBundleExecutable</key>
-	<string>LoopUpdaterHelper</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleName</key>
 	<string>LoopUpdaterHelper</string>
 	<key>CFBundlePackageType</key>
