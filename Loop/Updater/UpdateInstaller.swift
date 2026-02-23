@@ -7,6 +7,7 @@
 
 import AppKit
 import Foundation
+import Security
 import Scribe
 
 @Loggable
@@ -402,23 +403,29 @@ actor UpdateInstaller {
     private func validateAppCodeSignature(_ appBundle: URL) async throws {
         log.info("Validating app code signature")
 
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
-        process.arguments = ["--verify", "--verbose", appBundle.path]
+        let flags = SecCSFlags(rawValue: kSecCSStrictValidate | kSecCSCheckAllArchitectures)
 
-        let errorPipe = Pipe()
-        process.standardError = errorPipe
+        var staticCode: SecStaticCode?
+        let createStatus = SecStaticCodeCreateWithPath(appBundle as CFURL, flags, &staticCode)
+        guard createStatus == errSecSuccess, let staticCode else {
+            let message = securityErrorMessage(for: createStatus)
+            throw UpdateError.installationFailed("Code signature object creation failed: \(message)")
+        }
 
-        try process.run()
-        process.waitUntilExit()
-
-        if process.terminationStatus != 0 {
-            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-            let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown codesign error"
-            throw UpdateError.installationFailed("Code signature validation failed: \(errorOutput)")
+        let validationStatus = SecStaticCodeCheckValidity(staticCode, flags, nil)
+        guard validationStatus == errSecSuccess else {
+            let message = securityErrorMessage(for: validationStatus)
+            throw UpdateError.installationFailed("Code signature validation failed: \(message)")
         }
 
         log.success("Code signature validation passed")
+    }
+
+    private func securityErrorMessage(for status: OSStatus) -> String {
+        if let message = SecCopyErrorMessageString(status, nil) as String? {
+            return "\(message) (OSStatus \(status))"
+        }
+        return "OSStatus \(status)"
     }
 
     // MARK: - Safe Installation
