@@ -16,5 +16,4 @@ enum SystemPaths {
     static let loopDirectory: URL = appSupportDirectory.appendingPathComponent("Loop", isDirectory: true)
     static let backupsDirectory: URL = loopDirectory.appendingPathComponent("Backups", isDirectory: true)
     static let stagingDirectory: URL = loopDirectory.appendingPathComponent("Staging", isDirectory: true)
-    static let extractionDirectory: URL = loopDirectory.appendingPathComponent("Extraction", isDirectory: true)
 }

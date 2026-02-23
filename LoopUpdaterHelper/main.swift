@@ -1,8 +1,14 @@
 import AppKit
+import Darwin
 import Foundation
 import Security
 
 final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, PrivilegedInstallerProtocol {
+    private struct PathOwnership {
+        let uid: uid_t
+        let gid: gid_t
+    }
+
     private let listener: NSXPCListener
     private let fileManager = FileManager.default
 
@@ -93,6 +99,7 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
             let currentURL = URL(fileURLWithPath: canonicalCurrentPath)
             let stagedURL = URL(fileURLWithPath: canonicalStagedPath)
             let backupURL = URL(fileURLWithPath: canonicalBackupPath)
+            let stagedOwnership = try ownership(for: canonicalStagedPath)
 
             let backupParent = backupURL.deletingLastPathComponent()
             try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
@@ -102,12 +109,15 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
             }
 
             try fileManager.moveItem(at: currentURL, to: backupURL)
+            try applyOwnershipRecursively(at: backupURL, uid: stagedOwnership.uid, gid: stagedOwnership.gid)
 
             do {
                 try fileManager.moveItem(at: stagedURL, to: currentURL)
+                try applyRootOwnershipRecursively(at: currentURL)
             } catch {
                 try? fileManager.removeItem(at: currentURL)
                 try? fileManager.moveItem(at: backupURL, to: currentURL)
+                try? applyRootOwnershipRecursively(at: currentURL)
                 throw error
             }
             reply(nil)
@@ -142,6 +152,7 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
             }
 
             try fileManager.moveItem(at: backupURL, to: currentURL)
+            try applyRootOwnershipRecursively(at: currentURL)
             reply(nil)
         } catch {
             reply(error as NSError)
@@ -166,17 +177,17 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
 
     private func resolveCallerBundlePath() throws -> String {
         guard let connection = NSXPCConnection.current() else {
-            throw helperError("Unable to resolve current XPC connection")
+            throw PrivilegedInstallerError.currentConnectionUnavailable
         }
 
         let pid = connection.processIdentifier
         guard pid > 0 else {
-            throw helperError("Unable to resolve caller process identifier")
+            throw PrivilegedInstallerError.callerProcessIdentifierUnavailable
         }
 
         guard let app = NSRunningApplication(processIdentifier: pid_t(pid)),
               let bundleURL = app.bundleURL else {
-            throw helperError("Unable to resolve caller bundle path for pid \(pid)")
+            throw PrivilegedInstallerError.callerBundlePathUnavailable(pid: Int32(pid))
         }
 
         return canonicalPath(for: bundleURL)
@@ -190,37 +201,110 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         url.resolvingSymlinksInPath().standardizedFileURL.path
     }
 
+    private var loopSupportPath: String {
+        canonicalPath(for: SystemPaths.loopDirectory)
+    }
+
+    private func ownership(for path: String) throws -> PathOwnership {
+        let attributes = try fileManager.attributesOfItem(atPath: path)
+
+        guard let ownerID = attributes[.ownerAccountID] as? NSNumber,
+              let groupID = attributes[.groupOwnerAccountID] as? NSNumber else {
+            throw PrivilegedInstallerError.ownershipLookupFailed(path: path)
+        }
+
+        return PathOwnership(uid: uid_t(ownerID.uint32Value), gid: gid_t(groupID.uint32Value))
+    }
+
+    private func applyRootOwnershipRecursively(at url: URL) throws {
+        try applyOwnershipRecursively(at: url, uid: 0, gid: 0)
+    }
+
+    private func applyOwnershipRecursively(at rootURL: URL, uid: uid_t, gid: gid_t) throws {
+        try applyOwnership(to: rootURL, uid: uid, gid: gid)
+
+        guard let enumerator = fileManager.enumerator(
+            at: rootURL,
+            includingPropertiesForKeys: nil
+        ) else {
+            return
+        }
+
+        while let itemURL = enumerator.nextObject() as? URL {
+            try applyOwnership(to: itemURL, uid: uid, gid: gid)
+        }
+    }
+
+    private func applyOwnership(to itemURL: URL, uid: uid_t, gid: gid_t) throws {
+        let result: Int32 = itemURL.withUnsafeFileSystemRepresentation { path in
+            guard let path else {
+                return -1
+            }
+            return lchown(path, uid, gid)
+        }
+
+        guard result == 0 else {
+            let errorCode = errno
+            throw PrivilegedInstallerError.ownershipChangeFailed(path: itemURL.path, code: errorCode)
+        }
+    }
+
     private func requireCallerBundlePath(
         _ path: String,
         callerBundlePath: String,
         argumentName: String
     ) throws {
         guard path == callerBundlePath else {
-            throw helperError("Refused privileged operation: \(argumentName) (\(path)) does not match caller bundle path (\(callerBundlePath))")
+            throw PrivilegedInstallerError.callerBundlePathMismatch(
+                argument: argumentName,
+                providedPath: path,
+                expectedPath: callerBundlePath
+            )
         }
     }
 
     private func requireLoopSupportPath(_ path: String, argumentName: String) throws {
         guard isLoopSupportPath(path) else {
-            throw helperError("Refused privileged operation: \(argumentName) is outside Loop support directory (\(path))")
+            throw PrivilegedInstallerError.pathOutsideLoopSupport(argument: argumentName, providedPath: path)
         }
     }
 
     private func isLoopSupportPath(_ path: String) -> Bool {
-        let components = URL(fileURLWithPath: path).pathComponents
-        guard components.count >= 6 else {
-            return false
-        }
-
-        return components[1] == "Users" &&
-            !components[2].isEmpty &&
-            components[3] == "Library" &&
-            components[4] == "Application Support" &&
-            components[5] == "Loop"
+        isPath(path, inside: loopSupportPath)
     }
 
-    private func helperError(_ message: String) -> NSError {
-        NSError(domain: "LoopUpdaterHelper", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
+    private func isPath(_ path: String, inside root: String) -> Bool {
+        path == root || path.hasPrefix("\(root)/")
+    }
+}
+
+private enum PrivilegedInstallerError: LocalizedError {
+    case currentConnectionUnavailable
+    case callerProcessIdentifierUnavailable
+    case callerBundlePathUnavailable(pid: Int32)
+    case ownershipLookupFailed(path: String)
+    case ownershipChangeFailed(path: String, code: Int32)
+    case callerBundlePathMismatch(argument: String, providedPath: String, expectedPath: String)
+    case pathOutsideLoopSupport(argument: String, providedPath: String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .currentConnectionUnavailable:
+            return "Unable to resolve current XPC connection"
+        case .callerProcessIdentifierUnavailable:
+            return "Unable to resolve caller process identifier"
+        case let .callerBundlePathUnavailable(pid):
+            return "Unable to resolve caller bundle path for pid \(pid)"
+        case let .ownershipLookupFailed(path):
+            return "Could not resolve ownership for \(path)"
+        case let .ownershipChangeFailed(path, code):
+            let message = String(cString: strerror(code))
+            return "Failed to set ownership for \(path): \(message) (\(code))"
+        case let .callerBundlePathMismatch(argument, providedPath, expectedPath):
+            return "Refused privileged operation: \(argument) (\(providedPath)) does not match caller bundle path (\(expectedPath))"
+        case let .pathOutsideLoopSupport(argument, providedPath):
+            return "Refused privileged operation: \(argument) is outside Loop support directory (\(providedPath))"
+        }
     }
 }
 

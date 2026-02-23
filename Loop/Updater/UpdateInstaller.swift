@@ -113,7 +113,6 @@ actor UpdateInstaller {
         let checks: [(String, () async throws -> ())] = [
             ("disk space", { try await self.verifyDiskSpace(manifest: manifest) }),
             ("current app integrity", { try await self.verifyCurrentAppIntegrity() }),
-            ("installation permissions", { try await self.evaluateInstallationPermissions() }),
             ("conflicting processes", { try await self.checkForConflictingRunningProcesses() }),
             ("app location", { try await self.checkAppLocationAndOfferRelocation() })
         ]
@@ -185,113 +184,6 @@ actor UpdateInstaller {
     private func verifyCurrentAppIntegrity() async throws {
         try validateAppBundle(Bundle.main.bundleURL, skipVersionCheck: true)
         log.success("Current application integrity verified")
-    }
-
-    private func evaluateInstallationPermissions() async throws {
-        installationPermissionState = try await verifyInstallationPermissions()
-        switch installationPermissionState {
-        case .writable:
-            log.success("Installation permissions verified")
-        case let .needsElevation(reason):
-            log.notice("Installation requires elevation: \(reason)")
-        case let .notWritableNoElevationPossible(reason):
-            log.warn("Installation directory is not writable and cannot be escalated: \(reason)")
-        }
-    }
-
-    private func verifyInstallationPermissions() async throws -> InstallationPermissionState {
-        log.info("Verifying installation permissions")
-
-        let parentDirectory = Bundle.main.bundleURL.deletingLastPathComponent()
-        let parentPath = parentDirectory.standardizedFileURL.path
-
-        do {
-            try probeDirectoryWriteAccess(parentDirectory)
-        } catch {
-            return classifyPermissionFailure(error, directoryPath: parentPath)
-        }
-
-        return .writable
-    }
-
-    private func probeDirectoryWriteAccess(_ directoryURL: URL) throws {
-        let testFile = directoryURL.appendingPathComponent("loop_permission_test_\(UUID().uuidString)")
-        try Data("test".utf8).write(to: testFile, options: .atomic)
-        try fileManager.removeItem(at: testFile)
-    }
-
-    private func classifyPermissionFailure(_ error: Error, directoryPath: String) -> InstallationPermissionState {
-        let normalizedError = error as NSError
-        let errors = errorChain(from: normalizedError)
-        let reason = normalizedError.localizedDescription
-        let message = "Cannot write to \(directoryPath): \(reason)"
-
-        if isNonPermissionWriteFailure(errors) {
-            return .notWritableNoElevationPossible(reason: message)
-        }
-
-        if isPermissionDeniedError(errors) {
-            return .needsElevation(reason: message)
-        }
-
-        return .notWritableNoElevationPossible(reason: message)
-    }
-
-    private func errorChain(from error: NSError) -> [NSError] {
-        var chain: [NSError] = [error]
-        var current = error
-
-        while let underlying = current.userInfo[NSUnderlyingErrorKey] as? NSError {
-            if chain.contains(where: { $0.domain == underlying.domain && $0.code == underlying.code }) {
-                break
-            }
-
-            chain.append(underlying)
-            current = underlying
-        }
-
-        return chain
-    }
-
-    private func isPermissionDeniedError(_ errors: [NSError]) -> Bool {
-        let posixPermissionCodes: Set<Int> = [Int(EACCES), Int(EPERM)]
-        let cocoaPermissionCodes: Set<Int> = [
-            CocoaError.Code.fileWriteNoPermission.rawValue,
-            CocoaError.Code.fileReadNoPermission.rawValue
-        ]
-
-        return errors.contains { nsError in
-            if nsError.domain == NSPOSIXErrorDomain {
-                return posixPermissionCodes.contains(nsError.code)
-            }
-
-            if nsError.domain == NSCocoaErrorDomain {
-                return cocoaPermissionCodes.contains(nsError.code)
-            }
-
-            return false
-        }
-    }
-
-    private func isNonPermissionWriteFailure(_ errors: [NSError]) -> Bool {
-        let posixNonPermissionCodes: Set<Int> = [Int(EROFS), Int(ENOSPC), Int(ENOENT), Int(EIO)]
-        let cocoaNonPermissionCodes: Set<Int> = [
-            CocoaError.Code.fileWriteVolumeReadOnly.rawValue,
-            CocoaError.Code.fileWriteOutOfSpace.rawValue,
-            CocoaError.Code.fileNoSuchFile.rawValue
-        ]
-
-        return errors.contains { nsError in
-            if nsError.domain == NSPOSIXErrorDomain {
-                return posixNonPermissionCodes.contains(nsError.code)
-            }
-
-            if nsError.domain == NSCocoaErrorDomain {
-                return cocoaNonPermissionCodes.contains(nsError.code)
-            }
-
-            return false
-        }
     }
 
     private func checkForConflictingRunningProcesses() async throws {
@@ -731,7 +623,7 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        _ = try await backupManager.prepareForBackup()
+        try await backupManager.prepareForBackup()
         let backupURL = try await backupManager.createBackupURL()
 
         try await performSwapOperation(
@@ -748,7 +640,7 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        let backupCleanupReport = try await backupManager.prepareForBackup()
+        try await backupManager.prepareForBackup()
         let backupURL = try await backupManager.createBackupURL()
 
         try await authorizationCoordinator.withPrivilegedSession { session in
@@ -760,6 +652,7 @@ actor UpdateInstaller {
                 )
 
                 try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
+                try verifyPrivilegedInstalledOwnership(current: currentURL)
             } catch {
                 log.error("Privileged atomic swap failed: \(error.localizedDescription)")
                 try await reconcilePrivilegedSwapFailure(
@@ -770,11 +663,6 @@ actor UpdateInstaller {
                     session: session
                 )
             }
-
-            await performPrivilegedBackupPruneFallback(
-                permissionDeniedPaths: backupCleanupReport.permissionDeniedPaths,
-                session: session
-            )
         }
     }
 
@@ -821,26 +709,6 @@ actor UpdateInstaller {
         throw UpdateError.installationFailed(
             "Privileged atomic swap failed. The previous app version was restored successfully."
         )
-    }
-
-    private func performPrivilegedBackupPruneFallback(
-        permissionDeniedPaths: [URL],
-        session: UpdaterAuthorizationCoordinator.PrivilegedSession
-    ) async {
-        guard !permissionDeniedPaths.isEmpty else {
-            return
-        }
-
-        log.info("Attempting privileged cleanup for \(permissionDeniedPaths.count) protected backup item(s)")
-
-        for backupPath in permissionDeniedPaths {
-            do {
-                try await session.removeItem(backupPath)
-                log.info("Removed protected backup item using existing privileged session: \(backupPath.lastPathComponent)")
-            } catch {
-                log.warn("Failed privileged cleanup for backup item \(backupPath.lastPathComponent): \(error.localizedDescription)")
-            }
-        }
     }
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {
@@ -962,6 +830,22 @@ actor UpdateInstaller {
 
         log.debug("New app size verified: \(currentSize.formattedBytes)")
         log.debug("Atomic swap verification completed")
+    }
+
+    private func verifyPrivilegedInstalledOwnership(current currentURL: URL) throws {
+        let attributes = try fileManager.attributesOfItem(atPath: currentURL.path)
+
+        guard let ownerID = attributes[.ownerAccountID] as? NSNumber else {
+            throw UpdateError.installationFailed(
+                "Privileged install verification failed: could not read owner for \(currentURL.path)"
+            )
+        }
+
+        guard ownerID.intValue == 0 else {
+            throw UpdateError.installationFailed(
+                "Privileged install verification failed: expected root ownership at \(currentURL.path), found uid \(ownerID.intValue)"
+            )
+        }
     }
 
     // MARK: - Final Verification
