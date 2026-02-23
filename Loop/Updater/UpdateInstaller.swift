@@ -751,7 +751,7 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        try await backupManager.prepareForBackup()
+        _ = try await backupManager.prepareForBackup()
         let backupURL = try await backupManager.createBackupURL()
 
         try await performSwapOperation(
@@ -768,24 +768,32 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        try await backupManager.prepareForBackup()
+        let backupCleanupReport = try await backupManager.prepareForBackup()
         let backupURL = try await backupManager.createBackupURL()
 
-        do {
-            try await authorizationCoordinator.performPrivilegedAtomicSwap(
-                current: currentURL,
-                staged: stagingURL,
-                backup: backupURL
-            )
+        try await authorizationCoordinator.withPrivilegedSession { session in
+            do {
+                try await session.atomicSwap(
+                    current: currentURL,
+                    staged: stagingURL,
+                    backup: backupURL
+                )
 
-            try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
-        } catch {
-            log.error("Privileged atomic swap failed: \(error.localizedDescription)")
-            try await reconcilePrivilegedSwapFailure(
-                current: currentURL,
-                staged: stagingURL,
-                backup: backupURL,
-                originalError: error
+                try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
+            } catch {
+                log.error("Privileged atomic swap failed: \(error.localizedDescription)")
+                try await reconcilePrivilegedSwapFailure(
+                    current: currentURL,
+                    staged: stagingURL,
+                    backup: backupURL,
+                    originalError: error,
+                    session: session
+                )
+            }
+
+            await performPrivilegedBackupPruneFallback(
+                permissionDeniedPaths: backupCleanupReport.permissionDeniedPaths,
+                session: session
             )
         }
     }
@@ -794,7 +802,8 @@ actor UpdateInstaller {
         current currentURL: URL,
         staged stagingURL: URL,
         backup backupURL: URL,
-        originalError: Error
+        originalError: Error,
+        session: UpdaterAuthorizationCoordinator.PrivilegedSession
     ) async throws {
         let currentExists = fileManager.fileExists(atPath: currentURL.path)
         let backupExists = fileManager.fileExists(atPath: backupURL.path)
@@ -816,7 +825,7 @@ actor UpdateInstaller {
         }
 
         do {
-            try await authorizationCoordinator.performPrivilegedRestore(current: currentURL, backup: backupURL)
+            try await session.restoreFromBackup(current: currentURL, backup: backupURL)
 
             guard fileManager.fileExists(atPath: currentURL.path) else {
                 throw UpdateError.installationFailed("Privileged restore failed: restored app not found at \(currentURL.path)")
@@ -832,6 +841,26 @@ actor UpdateInstaller {
         throw UpdateError.installationFailed(
             "Privileged atomic swap failed. The previous app version was restored successfully."
         )
+    }
+
+    private func performPrivilegedBackupPruneFallback(
+        permissionDeniedPaths: [URL],
+        session: UpdaterAuthorizationCoordinator.PrivilegedSession
+    ) async {
+        guard !permissionDeniedPaths.isEmpty else {
+            return
+        }
+
+        log.info("Attempting privileged cleanup for \(permissionDeniedPaths.count) protected backup item(s)")
+
+        for backupPath in permissionDeniedPaths {
+            do {
+                try await session.removeItem(backupPath)
+                log.info("Removed protected backup item using existing privileged session: \(backupPath.lastPathComponent)")
+            } catch {
+                log.warn("Failed privileged cleanup for backup item \(backupPath.lastPathComponent): \(error.localizedDescription)")
+            }
+        }
     }
 
     private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {

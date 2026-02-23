@@ -1,22 +1,28 @@
 import Foundation
 
+// NOTE: Keep this protocol in sync with Loop/Updater/Authorization/PrivilegedInstallerProtocol.swift.
 @objc protocol PrivilegedInstallerProtocol {
-    func prepareBackup(_ backupDirectory: String, withReply reply: @escaping (NSError?) -> Void)
     func atomicSwap(
         _ currentPath: String,
         stagedPath: String,
         backupPath: String,
         withReply reply: @escaping (NSError?) -> Void
     )
+
     func restoreFromBackup(
         _ currentPath: String,
         backupPath: String,
         withReply reply: @escaping (NSError?) -> Void
     )
-    func removeItem(_ path: String, withReply reply: @escaping (NSError?) -> Void)
+
+    func removeItem(
+        _ path: String,
+        withReply reply: @escaping (NSError?) -> Void
+    )
 }
 
 enum PrivilegedInstallerConstants {
-    static let helperLabel = "com.MrKai77.Loop.UpdaterHelper"
+    static let serviceName = "com.MrKai77.Loop.UpdaterJob"
     static let appBundleIdentifier = "com.MrKai77.Loop"
+    static let authorizedClientRequirement = "identifier \"com.MrKai77.Loop\" and anchor apple generic and certificate leaf[subject.OU] = \"5F967GYF84\""
 }

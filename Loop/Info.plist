@@ -13,10 +13,5 @@
 			</array>
 		</dict>
 	</array>
-	<key>SMPrivilegedExecutables</key>
-	<dict>
-		<key>com.MrKai77.Loop.UpdaterHelper</key>
-		<string>identifier "com.MrKai77.Loop.UpdaterHelper" and anchor apple generic and certificate leaf[subject.OU] = "5F967GYF84"</string>
-	</dict>
 </dict>
 </plist>

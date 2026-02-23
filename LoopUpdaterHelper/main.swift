@@ -3,12 +3,16 @@ import Foundation
 import Security
 
 final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, PrivilegedInstallerProtocol {
+    private let listener: NSXPCListener
     private let fileManager = FileManager.default
-    private let authorizedClientRequirement = "identifier \"com.MrKai77.Loop\" and anchor apple generic and certificate leaf[subject.OU] = \"5F967GYF84\""
+
+    init(serviceName: String) {
+        listener = NSXPCListener(machServiceName: serviceName)
+        super.init()
+        listener.delegate = self
+    }
 
     func run() {
-        let listener = NSXPCListener(machServiceName: PrivilegedInstallerConstants.helperLabel)
-        listener.delegate = self
         listener.resume()
         RunLoop.current.run()
     }
@@ -51,7 +55,7 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
 
         var requirement: SecRequirement?
         let requirementStatus = SecRequirementCreateWithString(
-            authorizedClientRequirement as CFString,
+            PrivilegedInstallerConstants.authorizedClientRequirement as CFString,
             SecCSFlags(),
             &requirement
         )
@@ -68,17 +72,6 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         }
 
         return true
-    }
-
-    func prepareBackup(_ backupDirectory: String, withReply reply: @escaping (NSError?) -> Void) {
-        do {
-            let canonicalBackupDirectory = canonicalPath(for: backupDirectory)
-            try requireLoopSupportPath(canonicalBackupDirectory, argumentName: "backupDirectory")
-            try fileManager.createDirectory(atPath: canonicalBackupDirectory, withIntermediateDirectories: true, attributes: nil)
-            reply(nil)
-        } catch {
-            reply(error as NSError)
-        }
     }
 
     func atomicSwap(
@@ -117,28 +110,6 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
                 try? fileManager.moveItem(at: backupURL, to: currentURL)
                 throw error
             }
-
-            reply(nil)
-        } catch {
-            reply(error as NSError)
-        }
-    }
-
-    func removeItem(_ path: String, withReply reply: @escaping (NSError?) -> Void) {
-        do {
-            let callerBundlePath = try resolveCallerBundlePath()
-            let canonicalPath = canonicalPath(for: path)
-
-            if canonicalPath != callerBundlePath {
-                try requireLoopSupportPath(canonicalPath, argumentName: "path")
-            }
-
-            let url = URL(fileURLWithPath: canonicalPath)
-
-            if fileManager.fileExists(atPath: url.path) {
-                try fileManager.removeItem(at: url)
-            }
-
             reply(nil)
         } catch {
             reply(error as NSError)
@@ -171,6 +142,22 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
             }
 
             try fileManager.moveItem(at: backupURL, to: currentURL)
+            reply(nil)
+        } catch {
+            reply(error as NSError)
+        }
+    }
+
+    func removeItem(_ path: String, withReply reply: @escaping (NSError?) -> Void) {
+        do {
+            let canonicalItemPath = canonicalPath(for: path)
+            try requireLoopSupportPath(canonicalItemPath, argumentName: "path")
+
+            let itemURL = URL(fileURLWithPath: canonicalItemPath)
+            if fileManager.fileExists(atPath: itemURL.path) {
+                try fileManager.removeItem(at: itemURL)
+            }
+
             reply(nil)
         } catch {
             reply(error as NSError)
@@ -221,7 +208,9 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
 
     private func isLoopSupportPath(_ path: String) -> Bool {
         let components = URL(fileURLWithPath: path).pathComponents
-        guard components.count >= 6 else { return false }
+        guard components.count >= 6 else {
+            return false
+        }
 
         return components[1] == "Users" &&
             !components[2].isEmpty &&
@@ -235,5 +224,5 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
     }
 }
 
-let service = PrivilegedInstallerService()
+let service = PrivilegedInstallerService(serviceName: PrivilegedInstallerConstants.serviceName)
 service.run()

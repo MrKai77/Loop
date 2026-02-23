@@ -48,7 +48,7 @@
 		A894B0C52C4B31AA00B4CE6F /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E6D1FC2A4155DC005751D4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		B1AA00012F30000100AABBCC /* LoopUpdaterHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "com.MrKai77.Loop.UpdaterHelper"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1AA00012F30000100AABBCC /* LoopUpdaterHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LoopUpdaterHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1AA00802F30000100AABBCC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F06D76892DFF7A77007EEDA9 /* SkyLight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyLight.framework; path = ../../../../System/Library/PrivateFrameworks/SkyLight.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -188,7 +188,7 @@
 			name = LoopUpdaterHelper;
 			packageProductDependencies = (
 			);
-			productName = "com.MrKai77.Loop.UpdaterHelper";
+			productName = LoopUpdaterHelper;
 			productReference = B1AA00012F30000100AABBCC /* LoopUpdaterHelper */;
 			productType = "com.apple.product-type.tool";
 		};
@@ -378,10 +378,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-					MACOSX_DEPLOYMENT_TARGET = 13.0;
-					ONLY_ACTIVE_ARCH = NO;
-					PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
-					PRODUCT_NAME = "$(TARGET_NAME)";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -550,10 +550,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-					MACOSX_DEPLOYMENT_TARGET = 13.0;
-					ONLY_ACTIVE_ARCH = YES;
-					PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
-					PRODUCT_NAME = "$(TARGET_NAME)";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -588,10 +588,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-					MACOSX_DEPLOYMENT_TARGET = 13.0;
-					ONLY_ACTIVE_ARCH = NO;
-					PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
-					PRODUCT_NAME = "$(TARGET_NAME)";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -620,21 +620,9 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LoopUpdaterHelper/Info.plist;
-				INSTALL_PATH = /Library/PrivilegedHelperTools;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-sectcreate",
-					__TEXT,
-					__info_plist,
-					"$(SRCROOT)/LoopUpdaterHelper/Info.plist",
-					"-sectcreate",
-					__TEXT,
-					__launchd_plist,
-					"$(SRCROOT)/LoopUpdaterHelper/Launchd.plist",
-					);
-					PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
-					PRODUCT_NAME = "com.MrKai77.Loop.UpdaterHelper";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
+				PRODUCT_NAME = LoopUpdaterHelper;
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
@@ -662,21 +650,9 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LoopUpdaterHelper/Info.plist;
-				INSTALL_PATH = /Library/PrivilegedHelperTools;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-sectcreate",
-					__TEXT,
-					__info_plist,
-					"$(SRCROOT)/LoopUpdaterHelper/Info.plist",
-					"-sectcreate",
-					__TEXT,
-					__launchd_plist,
-					"$(SRCROOT)/LoopUpdaterHelper/Launchd.plist",
-					);
-					PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
-					PRODUCT_NAME = "com.MrKai77.Loop.UpdaterHelper";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
+				PRODUCT_NAME = LoopUpdaterHelper;
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
@@ -705,21 +681,9 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = LoopUpdaterHelper/Info.plist;
-				INSTALL_PATH = /Library/PrivilegedHelperTools;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-sectcreate",
-					__TEXT,
-					__info_plist,
-					"$(SRCROOT)/LoopUpdaterHelper/Info.plist",
-					"-sectcreate",
-					__TEXT,
-					__launchd_plist,
-					"$(SRCROOT)/LoopUpdaterHelper/Launchd.plist",
-					);
-					PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
-					PRODUCT_NAME = "com.MrKai77.Loop.UpdaterHelper";
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
+				PRODUCT_NAME = LoopUpdaterHelper;
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;

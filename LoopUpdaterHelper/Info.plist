@@ -10,14 +10,5 @@
 	<string>LoopUpdaterHelper</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
-	<key>MachServices</key>
-	<dict>
-		<key>com.MrKai77.Loop.UpdaterHelper</key>
-		<true/>
-	</dict>
-	<key>SMAuthorizedClients</key>
-	<array>
-		<string>identifier "com.MrKai77.Loop" and anchor apple generic and certificate leaf[subject.OU] = "5F967GYF84"</string>
-	</array>
 </dict>
 </plist>

@@ -8,6 +8,22 @@
 import Foundation
 import Scribe
 
+struct BackupCleanupReport: Sendable {
+    let permissionDeniedPaths: [URL]
+    let removedCount: Int
+    let remainingSize: Int64
+    let otherFailures: [String]
+
+    static func noCleanup(remainingSize: Int64) -> Self {
+        Self(
+            permissionDeniedPaths: [],
+            removedCount: 0,
+            remainingSize: remainingSize,
+            otherFailures: []
+        )
+    }
+}
+
 @Loggable
 actor BackupManager {
     private let fileManager: FileManager
@@ -28,16 +44,19 @@ actor BackupManager {
 
     // MARK: - Public Interface
 
-    /// Ensures backup directory exists and cleans up old backups if size exceeds limit
-    func prepareForBackup() async throws {
+    /// Ensures backup directory exists and tries to clean up old backups if size exceeds limit.
+    /// Cleanup is best-effort so stale protected backups never block a new update.
+    func prepareForBackup() async throws -> BackupCleanupReport {
         try fileManager.createDirectory(at: backupDirectory, withIntermediateDirectories: true)
 
         let backupSize = try calculateDirectorySize(backupDirectory)
 
-        guard backupSize > Self.maxBackupSize else { return }
+        guard backupSize > Self.maxBackupSize else {
+            return .noCleanup(remainingSize: backupSize)
+        }
 
         log.info("Backup directory exceeds 100MB (\(backupSize.formattedBytes)), cleaning up old backups")
-        try await cleanupOldBackups(currentSize: backupSize, maxSize: Self.maxBackupSize)
+        return cleanupOldBackupsBestEffort(currentSize: backupSize, maxSize: Self.maxBackupSize)
     }
 
     /// Creates a unique backup URL for the current app version
@@ -84,21 +103,60 @@ actor BackupManager {
 
     // MARK: - Private Methods
 
-    private func cleanupOldBackups(currentSize: Int64, maxSize: Int64) async throws {
-        let backups = try getBackupsSortedByDate()
+    private func cleanupOldBackupsBestEffort(currentSize: Int64, maxSize: Int64) -> BackupCleanupReport {
+        let backups: [(URL, Date)]
+        do {
+            backups = try getBackupsSortedByDate()
+        } catch {
+            let message = "Unable to enumerate backups for cleanup: \(error.localizedDescription)"
+            log.warn(message)
+            return BackupCleanupReport(
+                permissionDeniedPaths: [],
+                removedCount: 0,
+                remainingSize: currentSize,
+                otherFailures: [message]
+            )
+        }
+
         var remainingSize = currentSize
+        var removedCount = 0
+        var permissionDeniedPaths: [URL] = []
+        var otherFailures: [String] = []
 
         for (backupURL, _) in backups {
             guard remainingSize > maxSize else { break }
 
-            let backupItemSize = try calculateDirectorySize(backupURL)
-            try fileManager.removeItem(at: backupURL)
-            remainingSize -= backupItemSize
+            let backupItemSize = (try? calculateDirectorySize(backupURL)) ?? 0
 
-            log.info("Removed old backup: \(backupURL.lastPathComponent) (\(backupItemSize.formattedBytes))")
+            do {
+                try fileManager.removeItem(at: backupURL)
+                remainingSize -= backupItemSize
+                removedCount += 1
+                log.info("Removed old backup: \(backupURL.lastPathComponent) (\(backupItemSize.formattedBytes))")
+            } catch {
+                let failureMessage = "Could not remove old backup \(backupURL.lastPathComponent): \(error.localizedDescription)"
+                log.warn(failureMessage)
+
+                if isPermissionDenied(error) {
+                    permissionDeniedPaths.append(backupURL)
+                } else {
+                    otherFailures.append(failureMessage)
+                }
+            }
         }
 
-        log.info("Backup cleanup completed, new size: \(remainingSize.formattedBytes)")
+        if remainingSize > maxSize {
+            log.warn("Backup cleanup incomplete (\(remainingSize.formattedBytes) > \(maxSize.formattedBytes)); continuing update")
+        } else {
+            log.info("Backup cleanup completed, new size: \(remainingSize.formattedBytes)")
+        }
+
+        return BackupCleanupReport(
+            permissionDeniedPaths: permissionDeniedPaths,
+            removedCount: removedCount,
+            remainingSize: remainingSize,
+            otherFailures: otherFailures
+        )
     }
 
     private func getBackupsSortedByDate() throws -> [(URL, Date)] {
@@ -135,5 +193,42 @@ actor BackupManager {
                 .compactMap { try? $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
                 .reduce(0, +)
         )
+    }
+
+    private func isPermissionDenied(_ error: Error) -> Bool {
+        let posixPermissionCodes: Set<Int> = [Int(EACCES), Int(EPERM)]
+        let cocoaPermissionCodes: Set<Int> = [
+            CocoaError.Code.fileWriteNoPermission.rawValue,
+            CocoaError.Code.fileReadNoPermission.rawValue
+        ]
+
+        let errors = errorChain(from: error as NSError)
+        return errors.contains { nsError in
+            if nsError.domain == NSPOSIXErrorDomain {
+                return posixPermissionCodes.contains(nsError.code)
+            }
+
+            if nsError.domain == NSCocoaErrorDomain {
+                return cocoaPermissionCodes.contains(nsError.code)
+            }
+
+            return false
+        }
+    }
+
+    private func errorChain(from error: NSError) -> [NSError] {
+        var chain: [NSError] = [error]
+        var current = error
+
+        while let underlying = current.userInfo[NSUnderlyingErrorKey] as? NSError {
+            if chain.contains(where: { $0.domain == underlying.domain && $0.code == underlying.code }) {
+                break
+            }
+
+            chain.append(underlying)
+            current = underlying
+        }
+
+        return chain
     }
 }
