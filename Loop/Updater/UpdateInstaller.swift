@@ -7,8 +7,8 @@
 
 import AppKit
 import Foundation
-import Security
 import Scribe
+import Security
 
 @Loggable
 actor UpdateInstaller {
@@ -113,6 +113,7 @@ actor UpdateInstaller {
         let checks: [(String, () async throws -> ())] = [
             ("disk space", { try await self.verifyDiskSpace(manifest: manifest) }),
             ("current app integrity", { try await self.verifyCurrentAppIntegrity() }),
+            ("installation permissions", { try await self.verifyInstallationPermissions() }),
             ("conflicting processes", { try await self.checkForConflictingRunningProcesses() }),
             ("app location", { try await self.checkAppLocationAndOfferRelocation() })
         ]
@@ -184,6 +185,68 @@ actor UpdateInstaller {
     private func verifyCurrentAppIntegrity() async throws {
         try validateAppBundle(Bundle.main.bundleURL, skipVersionCheck: true)
         log.success("Current application integrity verified")
+    }
+
+    private func verifyInstallationPermissions() async throws {
+        log.info("Verifying installation permissions")
+
+        let currentAppURL = Bundle.main.bundleURL
+        let parentDirectory = currentAppURL.deletingLastPathComponent()
+
+        guard fileManager.isWritableFile(atPath: parentDirectory.path) else {
+            installationPermissionState = permissionStateForRestrictedInstallLocation(
+                baseReason: "No write permissions to application directory: \(parentDirectory.path)"
+            )
+            return
+        }
+
+        let testFile = parentDirectory.appendingPathComponent("loop_permission_test_\(UUID().uuidString)")
+
+        do {
+            try "test".write(to: testFile, atomically: true, encoding: .utf8)
+            try fileManager.removeItem(at: testFile)
+            installationPermissionState = .writable
+            log.success("Installation permissions verified")
+        } catch {
+            try? fileManager.removeItem(at: testFile)
+
+            guard isExplicitPermissionError(error) else {
+                throw UpdateError.installationFailed("Cannot verify installation permissions: \(error.localizedDescription)")
+            }
+
+            installationPermissionState = permissionStateForRestrictedInstallLocation(
+                baseReason: "Cannot write to application directory: \(error.localizedDescription)"
+            )
+        }
+    }
+
+    private func permissionStateForRestrictedInstallLocation(baseReason: String) -> InstallationPermissionState {
+        switch authorizationCoordinator.privilegedHelperReadiness() {
+        case .available:
+            .needsElevation(reason: baseReason)
+        case let .unavailable(helperReason):
+            .notWritableNoElevationPossible(reason: "\(baseReason). \(helperReason)")
+        }
+    }
+
+    private func isExplicitPermissionError(_ error: Error) -> Bool {
+        let nsError = error as NSError
+
+        if nsError.domain == NSCocoaErrorDomain {
+            let cocoaPermissionCodes: Set<Int> = [
+                NSFileReadNoPermissionError,
+                NSFileWriteNoPermissionError,
+                NSFileWriteVolumeReadOnlyError
+            ]
+            return cocoaPermissionCodes.contains(nsError.code)
+        }
+
+        if nsError.domain == NSPOSIXErrorDomain,
+           let code = POSIXErrorCode(rawValue: Int32(nsError.code)) {
+            return code == .EACCES || code == .EPERM || code == .EROFS
+        }
+
+        return false
     }
 
     private func checkForConflictingRunningProcesses() async throws {
@@ -676,7 +739,7 @@ actor UpdateInstaller {
         let currentExists = fileManager.fileExists(atPath: currentURL.path)
         let backupExists = fileManager.fileExists(atPath: backupURL.path)
 
-        if currentExists && backupExists {
+        if currentExists, backupExists {
             do {
                 try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
                 log.notice("Privileged swap completed despite transport failure; continuing installation")

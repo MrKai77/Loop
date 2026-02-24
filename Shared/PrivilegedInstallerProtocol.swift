@@ -5,18 +5,18 @@ import Foundation
         _ currentURL: URL,
         stagedURL: URL,
         backupURL: URL,
-        withReply reply: @escaping (NSError?) -> Void
+        withReply reply: @escaping (NSError?) -> ()
     )
 
     func restoreFromBackup(
         _ currentURL: URL,
         backupURL: URL,
-        withReply reply: @escaping (NSError?) -> Void
+        withReply reply: @escaping (NSError?) -> ()
     )
 
     func removeItem(
         _ itemURL: URL,
-        withReply reply: @escaping (NSError?) -> Void
+        withReply reply: @escaping (NSError?) -> ()
     )
 }
 

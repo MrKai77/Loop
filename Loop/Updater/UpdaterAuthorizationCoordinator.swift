@@ -1,10 +1,15 @@
 import Foundation
+import Scribe
 import Security
 import ServiceManagement
-import Scribe
 
 @Loggable
 final class UpdaterAuthorizationCoordinator {
+    enum PrivilegedHelperReadiness: Sendable {
+        case available
+        case unavailable(reason: String)
+    }
+
     final class PrivilegedSession {
         private unowned let coordinator: UpdaterAuthorizationCoordinator
         private let serviceName: String
@@ -34,10 +39,13 @@ final class UpdaterAuthorizationCoordinator {
         }
     }
 
-    private actor ContinuationCompletion {
+    private final class ContinuationCompletion: @unchecked Sendable {
+        private let lock = NSLock()
         private var didComplete = false
 
         func tryComplete() -> Bool {
+            lock.lock()
+            defer { lock.unlock() }
             guard !didComplete else { return false }
             didComplete = true
             return true
@@ -50,6 +58,15 @@ final class UpdaterAuthorizationCoordinator {
 
     init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
+    }
+
+    func privilegedHelperReadiness() -> PrivilegedHelperReadiness {
+        do {
+            _ = try helperExecutableURL()
+            return .available
+        } catch {
+            return .unavailable(reason: error.localizedDescription)
+        }
     }
 
     func withPrivilegedSession<T>(
@@ -108,15 +125,14 @@ final class UpdaterAuthorizationCoordinator {
     private func performXPCOperation(serviceName: String, operation: PrivilegedOperation) async throws {
         try await withCheckedThrowingContinuation { continuation in
             let completion = ContinuationCompletion()
-            let finish: @Sendable (Result<Void, Error>) -> Void = { result in
-                Task {
-                    guard await completion.tryComplete() else { return }
-                    switch result {
-                    case .success:
-                        continuation.resume(returning: ())
-                    case let .failure(error):
-                        continuation.resume(throwing: error)
-                    }
+            // Keep completion synchronous so connection invalidation cannot win the race after success.
+            let finish: @Sendable (Result<(), Error>) -> () = { result in
+                guard completion.tryComplete() else { return }
+                switch result {
+                case .success:
+                    continuation.resume(returning: ())
+                case let .failure(error):
+                    continuation.resume(throwing: error)
                 }
             }
 
@@ -134,8 +150,8 @@ final class UpdaterAuthorizationCoordinator {
             guard let proxy = connection.remoteObjectProxyWithErrorHandler({ error in
                 finish(.failure(UpdateError.installationFailed("Privileged installer \(operation.name) transport failed: \(error.localizedDescription)")))
             }) as? PrivilegedInstallerProtocol else {
-                connection.invalidate()
                 finish(.failure(UpdateError.installationFailed("Failed to connect to privileged installer helper")))
+                connection.invalidate()
                 return
             }
 
@@ -182,6 +198,8 @@ final class UpdaterAuthorizationCoordinator {
         let getStatus = rightName.withCString { AuthorizationRightGet($0, nil) }
         if getStatus == errAuthorizationDenied {
             let setStatus = rightName.withCString { rightNameCString in
+                // Mirrors Sparkle's code. If kSMRightModifySystemDaemons is added,
+                // the permission prompt changes, seems to change the wording.
                 AuthorizationRightSet(
                     authRef,
                     rightNameCString,
@@ -352,15 +370,15 @@ private enum PrivilegedOperation {
     var name: String {
         switch self {
         case .atomicSwap:
-            return "atomic swap"
+            "atomic swap"
         case .restore:
-            return "restore"
+            "restore"
         case .removeItem:
-            return "remove item"
+            "remove item"
         }
     }
 
-    func invoke(on proxy: PrivilegedInstallerProtocol, reply: @escaping (NSError?) -> Void) {
+    func invoke(on proxy: PrivilegedInstallerProtocol, reply: @escaping (NSError?) -> ()) {
         switch self {
         case let .atomicSwap(currentURL, stagedURL, backupURL):
             proxy.atomicSwap(
@@ -392,13 +410,13 @@ private enum PrivilegedPathRole {
     var description: String {
         switch self {
         case .currentAppBundle:
-            return "current app bundle path"
+            "current app bundle path"
         case .stagedBundle:
-            return "staged bundle path"
+            "staged bundle path"
         case .backupBundle:
-            return "backup bundle path"
+            "backup bundle path"
         case .cleanupTarget:
-            return "cleanup target path"
+            "cleanup target path"
         }
     }
 }
