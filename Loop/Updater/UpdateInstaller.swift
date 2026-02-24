@@ -536,13 +536,13 @@ actor UpdateInstaller {
             defaultValue: "Administrator Authorization Required"
         )
         alert.informativeText = String(
-            localized: "Loop could not install the update at \(failedTargetPath) (\(failureReason)). Would you like to install this update in your ~/Applications folder instead?"
+            localized: "Loop could not install the update at \(failedTargetPath) (\(failureReason)). Would you like to install this update in your Applications folder instead?"
         )
         alert.alertStyle = .warning
         alert.addButton(
             withTitle: String(
-                localized: "Install in ~/Applications",
-                defaultValue: "Install in ~/Applications"
+                localized: "Install in Your Applications Folder",
+                defaultValue: "Install in Your Applications Folder"
             )
         )
         alert.addButton(
@@ -615,9 +615,21 @@ actor UpdateInstaller {
             .appendingPathComponent("\(destinationURL.lastPathComponent).staging", isDirectory: true)
 
         do {
-            try copyToStaging(from: sourceURL, to: stagingURL)
-            try await verifyStaged(stagingURL, manifest: manifest)
-            try await atomicSwapPrivileged(staged: stagingURL, current: destinationURL)
+            log.info("Requesting administrator authorization for privileged installation")
+
+            try await authorizationCoordinator.withPrivilegedSession { session in
+                log.success("Administrator authorization granted; privileged session established")
+
+                try copyToStaging(from: sourceURL, to: stagingURL)
+                log.info("Verifying staged application immediately before privileged swap")
+                try await verifyStaged(stagingURL, manifest: manifest)
+                try await atomicSwapPrivileged(
+                    staged: stagingURL,
+                    current: destinationURL,
+                    session: session
+                )
+            }
+
             log.success("Privileged atomic installation completed successfully")
         } catch {
             try? fileManager.removeItem(at: stagingURL)
@@ -696,7 +708,11 @@ actor UpdateInstaller {
         )
     }
 
-    private func atomicSwapPrivileged(staged stagingURL: URL, current currentURL: URL) async throws {
+    private func atomicSwapPrivileged(
+        staged stagingURL: URL,
+        current currentURL: URL,
+        session: UpdaterAuthorizationCoordinator.PrivilegedSession
+    ) async throws {
         try checkCancellation()
 
         log.info("Starting privileged atomic swap")
@@ -706,26 +722,25 @@ actor UpdateInstaller {
         try await backupManager.prepareForBackup()
         let backupURL = try await backupManager.createBackupURL()
 
-        try await authorizationCoordinator.withPrivilegedSession { session in
-            do {
-                try await session.atomicSwap(
-                    current: currentURL,
-                    staged: stagingURL,
-                    backup: backupURL
-                )
+        do {
+            log.info("Invoking privileged helper atomic swap")
+            try await session.atomicSwap(
+                current: currentURL,
+                staged: stagingURL,
+                backup: backupURL
+            )
 
-                try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
-                try verifyPrivilegedInstalledOwnership(current: currentURL)
-            } catch {
-                log.error("Privileged atomic swap failed: \(error.localizedDescription)")
-                try await reconcilePrivilegedSwapFailure(
-                    current: currentURL,
-                    staged: stagingURL,
-                    backup: backupURL,
-                    originalError: error,
-                    session: session
-                )
-            }
+            try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
+            try verifyPrivilegedInstalledOwnership(current: currentURL)
+        } catch {
+            log.error("Privileged atomic swap failed: \(error.localizedDescription)")
+            try await reconcilePrivilegedSwapFailure(
+                current: currentURL,
+                staged: stagingURL,
+                backup: backupURL,
+                originalError: error,
+                session: session
+            )
         }
     }
 
