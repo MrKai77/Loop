@@ -2,20 +2,20 @@ import Foundation
 
 @objc protocol PrivilegedInstallerProtocol {
     func atomicSwap(
-        _ currentPath: String,
-        stagedPath: String,
-        backupPath: String,
+        _ currentURL: URL,
+        stagedURL: URL,
+        backupURL: URL,
         withReply reply: @escaping (NSError?) -> Void
     )
 
     func restoreFromBackup(
-        _ currentPath: String,
-        backupPath: String,
+        _ currentURL: URL,
+        backupURL: URL,
         withReply reply: @escaping (NSError?) -> Void
     )
 
     func removeItem(
-        _ path: String,
+        _ itemURL: URL,
         withReply reply: @escaping (NSError?) -> Void
     )
 }

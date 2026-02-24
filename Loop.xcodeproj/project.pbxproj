@@ -10,6 +10,7 @@
 		2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28492A2F22B4B700F6CE42 /* Scribe */; };
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
+		2A6A87F52F4D25DB004E995D /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A6A87F42F4D25DB004E995D /* Scribe */; };
 		2A8EDDBC2F23743B005457F8 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A8EDDBB2F23743B005457F8 /* Scribe */; };
 		3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED0A7B82F21DF6800A58629 /* ZIPFoundation */; };
 		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
@@ -108,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A6A87F52F4D25DB004E995D /* Scribe in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +200,7 @@
 			);
 			name = LoopUpdaterHelper;
 			packageProductDependencies = (
+				2A6A87F42F4D25DB004E995D /* Scribe */,
 			);
 			productName = LoopUpdaterHelper;
 			productReference = B1AA00012F30000100AABBCC /* LoopUpdaterHelper */;
@@ -791,6 +794,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */;
 			productName = Luminare;
+		};
+		2A6A87F42F4D25DB004E995D /* Scribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2A8EDDBA2F23743B005457F8 /* XCRemoteSwiftPackageReference "Scribe" */;
+			productName = Scribe;
 		};
 		2A8EDDBB2F23743B005457F8 /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;

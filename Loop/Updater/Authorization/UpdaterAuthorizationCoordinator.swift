@@ -55,7 +55,7 @@ final class UpdaterAuthorizationCoordinator {
     func withPrivilegedSession<T>(
         _ body: (PrivilegedSession) async throws -> T
     ) async throws -> T {
-        let helperPath = try helperExecutablePath()
+        let helperURL = try helperExecutableURL()
 
         var authRef: AuthorizationRef?
         let createStatus = AuthorizationCreate(nil, nil, [], &authRef)
@@ -73,7 +73,7 @@ final class UpdaterAuthorizationCoordinator {
         try requestInstallerAuthorizationRight(authRef)
 
         let serviceName = PrivilegedInstallerConstants.serviceName
-        let jobDictionary = makeJobDictionary(serviceName: serviceName, helperPath: helperPath)
+        let jobDictionary = makeJobDictionary(serviceName: serviceName, helperPath: helperURL.path)
 
         try submit(jobDictionary, authRef: authRef)
         defer {
@@ -156,22 +156,23 @@ final class UpdaterAuthorizationCoordinator {
         }
     }
 
-    private func helperExecutablePath() throws -> String {
+    private func helperExecutableURL() throws -> URL {
         let helperURL = Bundle.main.bundleURL
             .appendingPathComponent("Contents/Library/LaunchServices", isDirectory: true)
             .appendingPathComponent(PrivilegedInstallerConstants.helperExecutableName, isDirectory: false)
 
-        let path = canonicalPath(for: helperURL)
+        let canonicalHelperURL = helperURL.resolvingSymlinksInPath().standardizedFileURL
+        let helperPath = canonicalHelperURL.path
 
-        guard fileManager.fileExists(atPath: path) else {
-            throw UpdateError.installationFailed("Privileged installer executable was not found at \(path)")
+        guard fileManager.fileExists(atPath: helperPath) else {
+            throw UpdateError.installationFailed("Privileged installer executable was not found at \(helperPath)")
         }
 
-        guard fileManager.isExecutableFile(atPath: path) else {
-            throw UpdateError.installationFailed("Privileged installer executable is not executable at \(path)")
+        guard fileManager.isExecutableFile(atPath: helperPath) else {
+            throw UpdateError.installationFailed("Privileged installer executable is not executable at \(helperPath)")
         }
 
-        return path
+        return canonicalHelperURL
     }
 
     private func requestInstallerAuthorizationRight(_ authRef: AuthorizationRef) throws {
@@ -284,66 +285,50 @@ final class UpdaterAuthorizationCoordinator {
     }
 
     private func makeAtomicSwapOperation(current: URL, staged: URL, backup: URL) throws -> PrivilegedOperation {
-        let currentPath = canonicalPath(for: current)
-        let stagedPath = canonicalPath(for: staged)
-        let backupPath = canonicalPath(for: backup)
+        try validateCurrentBundlePath(current, pathRole: .currentAppBundle)
+        try validateLoopSupportPath(staged, pathRole: .stagedBundle)
+        try validateLoopSupportPath(backup, pathRole: .backupBundle)
 
-        try validateCurrentBundlePath(currentPath, pathRole: .currentAppBundle)
-        try validateLoopSupportPath(stagedPath, pathRole: .stagedBundle)
-        try validateLoopSupportPath(backupPath, pathRole: .backupBundle)
-
-        let backupDirectory = URL(fileURLWithPath: backupPath).deletingLastPathComponent()
+        let backupDirectory = backup.deletingLastPathComponent()
         try fileManager.createDirectory(at: backupDirectory, withIntermediateDirectories: true)
 
-        return .atomicSwap(currentPath: currentPath, stagedPath: stagedPath, backupPath: backupPath)
+        return .atomicSwap(currentURL: current, stagedURL: staged, backupURL: backup)
     }
 
     private func makeRestoreOperation(current: URL, backup: URL) throws -> PrivilegedOperation {
-        let currentPath = canonicalPath(for: current)
-        let backupPath = canonicalPath(for: backup)
+        try validateCurrentBundlePath(current, pathRole: .currentAppBundle)
+        try validateLoopSupportPath(backup, pathRole: .backupBundle)
 
-        try validateCurrentBundlePath(currentPath, pathRole: .currentAppBundle)
-        try validateLoopSupportPath(backupPath, pathRole: .backupBundle)
-
-        return .restore(currentPath: currentPath, backupPath: backupPath)
+        return .restore(currentURL: current, backupURL: backup)
     }
 
     private func makeRemoveItemOperation(path: URL) throws -> PrivilegedOperation {
-        let itemPath = canonicalPath(for: path)
-        try validateLoopSupportPath(itemPath, pathRole: .cleanupTarget)
-        return .removeItem(path: itemPath)
+        try validateLoopSupportPath(path, pathRole: .cleanupTarget)
+        return .removeItem(itemURL: path)
     }
 
-    private func canonicalPath(for url: URL) -> String {
-        url.resolvingSymlinksInPath().standardizedFileURL.path
+    private var currentBundleURL: URL {
+        Bundle.main.bundleURL
     }
 
-    private var currentBundlePath: String {
-        canonicalPath(for: Bundle.main.bundleURL)
+    private var loopSupportURL: URL {
+        SystemPaths.loopDirectory
     }
 
-    private var loopSupportPath: String {
-        canonicalPath(for: SystemPaths.loopDirectory)
-    }
-
-    private func validateCurrentBundlePath(_ path: String, pathRole: PrivilegedPathRole) throws {
-        guard path == currentBundlePath else {
+    private func validateCurrentBundlePath(_ url: URL, pathRole: PrivilegedPathRole) throws {
+        guard SystemPaths.isSamePath(url, currentBundleURL) else {
             throw UpdateError.installationFailed(
-                "Privileged installer \(pathRole.description) must match current app path. Received: \(path)"
+                "Privileged installer \(pathRole.description) must match current app path. Received: \(url.path)"
             )
         }
     }
 
-    private func validateLoopSupportPath(_ path: String, pathRole: PrivilegedPathRole) throws {
-        guard isPath(path, inside: loopSupportPath) else {
+    private func validateLoopSupportPath(_ url: URL, pathRole: PrivilegedPathRole) throws {
+        guard SystemPaths.isPath(url, inside: loopSupportURL) else {
             throw UpdateError.installationFailed(
-                "Privileged installer \(pathRole.description) must be inside Loop support directory. Received: \(path)"
+                "Privileged installer \(pathRole.description) must be inside Loop support directory. Received: \(url.path)"
             )
         }
-    }
-
-    private func isPath(_ path: String, inside root: String) -> Bool {
-        path == root || path.hasPrefix("\(root)/")
     }
 
     private func authorizationErrorMessage(for status: OSStatus) -> String {
@@ -360,9 +345,9 @@ final class UpdaterAuthorizationCoordinator {
 }
 
 private enum PrivilegedOperation {
-    case atomicSwap(currentPath: String, stagedPath: String, backupPath: String)
-    case restore(currentPath: String, backupPath: String)
-    case removeItem(path: String)
+    case atomicSwap(currentURL: URL, stagedURL: URL, backupURL: URL)
+    case restore(currentURL: URL, backupURL: URL)
+    case removeItem(itemURL: URL)
 
     var name: String {
         switch self {
@@ -377,23 +362,23 @@ private enum PrivilegedOperation {
 
     func invoke(on proxy: PrivilegedInstallerProtocol, reply: @escaping (NSError?) -> Void) {
         switch self {
-        case let .atomicSwap(currentPath, stagedPath, backupPath):
+        case let .atomicSwap(currentURL, stagedURL, backupURL):
             proxy.atomicSwap(
-                currentPath,
-                stagedPath: stagedPath,
-                backupPath: backupPath,
+                currentURL,
+                stagedURL: stagedURL,
+                backupURL: backupURL,
                 withReply: reply
             )
 
-        case let .restore(currentPath, backupPath):
+        case let .restore(currentURL, backupURL):
             proxy.restoreFromBackup(
-                currentPath,
-                backupPath: backupPath,
+                currentURL,
+                backupURL: backupURL,
                 withReply: reply
             )
 
-        case let .removeItem(path):
-            proxy.removeItem(path, withReply: reply)
+        case let .removeItem(itemURL):
+            proxy.removeItem(itemURL, withReply: reply)
         }
     }
 }

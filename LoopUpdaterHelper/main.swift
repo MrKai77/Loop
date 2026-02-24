@@ -2,7 +2,9 @@ import AppKit
 import Darwin
 import Foundation
 import Security
+import Scribe
 
+@Loggable
 final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, PrivilegedInstallerProtocol {
     private struct PathOwnership {
         let uid: uid_t
@@ -55,7 +57,7 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         let guestStatus = SecCodeCopyGuestWithAttributes(nil, attributes, SecCSFlags(), &code)
 
         guard guestStatus == errSecSuccess, let code else {
-            NSLog("LoopUpdaterHelper: Failed to copy guest code for pid \(pid), status \(guestStatus)")
+            log.error("Failed to copy guest code for pid \(pid), status \(guestStatus)")
             return false
         }
 
@@ -67,13 +69,13 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         )
 
         guard requirementStatus == errSecSuccess, let requirement else {
-            NSLog("LoopUpdaterHelper: Failed creating requirement, status \(requirementStatus)")
+            log.error("Failed creating requirement, status \(requirementStatus)")
             return false
         }
 
         let validationStatus = SecCodeCheckValidity(code, SecCSFlags(), requirement)
         guard validationStatus == errSecSuccess else {
-            NSLog("LoopUpdaterHelper: Code signature requirement check failed for pid \(pid), status \(validationStatus)")
+            log.error("Code signature requirement check failed for pid \(pid), status \(validationStatus)")
             return false
         }
 
@@ -81,25 +83,19 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
     }
 
     func atomicSwap(
-        _ currentPath: String,
-        stagedPath: String,
-        backupPath: String,
+        _ currentURL: URL,
+        stagedURL: URL,
+        backupURL: URL,
         withReply reply: @escaping (NSError?) -> Void
     ) {
         do {
-            let callerBundlePath = try resolveCallerBundlePath()
-            let canonicalCurrentPath = canonicalPath(for: currentPath)
-            let canonicalStagedPath = canonicalPath(for: stagedPath)
-            let canonicalBackupPath = canonicalPath(for: backupPath)
+            let callerBundleURL = try resolveCallerBundleURL()
 
-            try requireCallerBundlePath(canonicalCurrentPath, callerBundlePath: callerBundlePath, argumentName: "currentPath")
-            try requireLoopSupportPath(canonicalStagedPath, argumentName: "stagedPath")
-            try requireLoopSupportPath(canonicalBackupPath, argumentName: "backupPath")
+            try requireCallerBundlePath(currentURL, callerBundleURL: callerBundleURL, argumentName: "currentURL")
+            try requireLoopSupportPath(stagedURL, argumentName: "stagedURL")
+            try requireLoopSupportPath(backupURL, argumentName: "backupURL")
 
-            let currentURL = URL(fileURLWithPath: canonicalCurrentPath)
-            let stagedURL = URL(fileURLWithPath: canonicalStagedPath)
-            let backupURL = URL(fileURLWithPath: canonicalBackupPath)
-            let stagedOwnership = try ownership(for: canonicalStagedPath)
+            let stagedOwnership = try ownership(for: stagedURL)
 
             let backupParent = backupURL.deletingLastPathComponent()
             try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
@@ -127,20 +123,15 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
     }
 
     func restoreFromBackup(
-        _ currentPath: String,
-        backupPath: String,
+        _ currentURL: URL,
+        backupURL: URL,
         withReply reply: @escaping (NSError?) -> Void
     ) {
         do {
-            let callerBundlePath = try resolveCallerBundlePath()
-            let canonicalCurrentPath = canonicalPath(for: currentPath)
-            let canonicalBackupPath = canonicalPath(for: backupPath)
+            let callerBundleURL = try resolveCallerBundleURL()
 
-            try requireCallerBundlePath(canonicalCurrentPath, callerBundlePath: callerBundlePath, argumentName: "currentPath")
-            try requireLoopSupportPath(canonicalBackupPath, argumentName: "backupPath")
-
-            let currentURL = URL(fileURLWithPath: canonicalCurrentPath)
-            let backupURL = URL(fileURLWithPath: canonicalBackupPath)
+            try requireCallerBundlePath(currentURL, callerBundleURL: callerBundleURL, argumentName: "currentURL")
+            try requireLoopSupportPath(backupURL, argumentName: "backupURL")
 
             guard fileManager.fileExists(atPath: backupURL.path) else {
                 reply(nil)
@@ -159,12 +150,10 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         }
     }
 
-    func removeItem(_ path: String, withReply reply: @escaping (NSError?) -> Void) {
+    func removeItem(_ itemURL: URL, withReply reply: @escaping (NSError?) -> Void) {
         do {
-            let canonicalItemPath = canonicalPath(for: path)
-            try requireLoopSupportPath(canonicalItemPath, argumentName: "path")
+            try requireLoopSupportPath(itemURL, argumentName: "itemURL")
 
-            let itemURL = URL(fileURLWithPath: canonicalItemPath)
             if fileManager.fileExists(atPath: itemURL.path) {
                 try fileManager.removeItem(at: itemURL)
             }
@@ -175,7 +164,7 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         }
     }
 
-    private func resolveCallerBundlePath() throws -> String {
+    private func resolveCallerBundleURL() throws -> URL {
         guard let connection = NSXPCConnection.current() else {
             throw PrivilegedInstallerError.currentConnectionUnavailable
         }
@@ -190,27 +179,19 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
             throw PrivilegedInstallerError.callerBundlePathUnavailable(pid: Int32(pid))
         }
 
-        return canonicalPath(for: bundleURL)
+        return bundleURL.resolvingSymlinksInPath().standardizedFileURL
     }
 
-    private func canonicalPath(for rawPath: String) -> String {
-        canonicalPath(for: URL(fileURLWithPath: rawPath))
+    private var loopSupportURL: URL {
+        SystemPaths.loopDirectory
     }
 
-    private func canonicalPath(for url: URL) -> String {
-        url.resolvingSymlinksInPath().standardizedFileURL.path
-    }
-
-    private var loopSupportPath: String {
-        canonicalPath(for: SystemPaths.loopDirectory)
-    }
-
-    private func ownership(for path: String) throws -> PathOwnership {
-        let attributes = try fileManager.attributesOfItem(atPath: path)
+    private func ownership(for url: URL) throws -> PathOwnership {
+        let attributes = try fileManager.attributesOfItem(atPath: url.path)
 
         guard let ownerID = attributes[.ownerAccountID] as? NSNumber,
               let groupID = attributes[.groupOwnerAccountID] as? NSNumber else {
-            throw PrivilegedInstallerError.ownershipLookupFailed(path: path)
+            throw PrivilegedInstallerError.ownershipLookupFailed(url: url)
         }
 
         return PathOwnership(uid: uid_t(ownerID.uint32Value), gid: gid_t(groupID.uint32Value))
@@ -245,36 +226,32 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
 
         guard result == 0 else {
             let errorCode = errno
-            throw PrivilegedInstallerError.ownershipChangeFailed(path: itemURL.path, code: errorCode)
+            throw PrivilegedInstallerError.ownershipChangeFailed(url: itemURL, code: errorCode)
         }
     }
 
     private func requireCallerBundlePath(
-        _ path: String,
-        callerBundlePath: String,
+        _ url: URL,
+        callerBundleURL: URL,
         argumentName: String
     ) throws {
-        guard path == callerBundlePath else {
+        guard SystemPaths.isSamePath(url, callerBundleURL) else {
             throw PrivilegedInstallerError.callerBundlePathMismatch(
                 argument: argumentName,
-                providedPath: path,
-                expectedPath: callerBundlePath
+                providedURL: url,
+                expectedURL: callerBundleURL
             )
         }
     }
 
-    private func requireLoopSupportPath(_ path: String, argumentName: String) throws {
-        guard isLoopSupportPath(path) else {
-            throw PrivilegedInstallerError.pathOutsideLoopSupport(argument: argumentName, providedPath: path)
+    private func requireLoopSupportPath(_ url: URL, argumentName: String) throws {
+        guard isLoopSupportPath(url) else {
+            throw PrivilegedInstallerError.pathOutsideLoopSupport(argument: argumentName, providedURL: url)
         }
     }
 
-    private func isLoopSupportPath(_ path: String) -> Bool {
-        isPath(path, inside: loopSupportPath)
-    }
-
-    private func isPath(_ path: String, inside root: String) -> Bool {
-        path == root || path.hasPrefix("\(root)/")
+    private func isLoopSupportPath(_ url: URL) -> Bool {
+        SystemPaths.isPath(url, inside: loopSupportURL)
     }
 }
 
@@ -282,10 +259,10 @@ private enum PrivilegedInstallerError: LocalizedError {
     case currentConnectionUnavailable
     case callerProcessIdentifierUnavailable
     case callerBundlePathUnavailable(pid: Int32)
-    case ownershipLookupFailed(path: String)
-    case ownershipChangeFailed(path: String, code: Int32)
-    case callerBundlePathMismatch(argument: String, providedPath: String, expectedPath: String)
-    case pathOutsideLoopSupport(argument: String, providedPath: String)
+    case ownershipLookupFailed(url: URL)
+    case ownershipChangeFailed(url: URL, code: Int32)
+    case callerBundlePathMismatch(argument: String, providedURL: URL, expectedURL: URL)
+    case pathOutsideLoopSupport(argument: String, providedURL: URL)
     
     var errorDescription: String? {
         switch self {
@@ -295,15 +272,15 @@ private enum PrivilegedInstallerError: LocalizedError {
             return "Unable to resolve caller process identifier"
         case let .callerBundlePathUnavailable(pid):
             return "Unable to resolve caller bundle path for pid \(pid)"
-        case let .ownershipLookupFailed(path):
-            return "Could not resolve ownership for \(path)"
-        case let .ownershipChangeFailed(path, code):
+        case let .ownershipLookupFailed(url):
+            return "Could not resolve ownership for \(url.path)"
+        case let .ownershipChangeFailed(url, code):
             let message = String(cString: strerror(code))
-            return "Failed to set ownership for \(path): \(message) (\(code))"
-        case let .callerBundlePathMismatch(argument, providedPath, expectedPath):
-            return "Refused privileged operation: \(argument) (\(providedPath)) does not match caller bundle path (\(expectedPath))"
-        case let .pathOutsideLoopSupport(argument, providedPath):
-            return "Refused privileged operation: \(argument) is outside Loop support directory (\(providedPath))"
+            return "Failed to set ownership for \(url.path): \(message) (\(code))"
+        case let .callerBundlePathMismatch(argument, providedURL, expectedURL):
+            return "Refused privileged operation: \(argument) (\(providedURL.path)) does not match caller bundle path (\(expectedURL.path))"
+        case let .pathOutsideLoopSupport(argument, providedURL):
+            return "Refused privileged operation: \(argument) is outside Loop support directory (\(providedURL.path))"
         }
     }
 }
