@@ -37,6 +37,10 @@ enum SystemPaths {
         loopDirectory.appendingPathComponent("Staging", isDirectory: true)
     )
 
+    static let rollbackDirectory: URL = canonical(
+        loopDirectory.appendingPathComponent("Rollback.noindex", isDirectory: true)
+    )
+
     private static func canonical(_ url: URL) -> URL {
         url.resolvingSymlinksInPath().standardizedFileURL
     }

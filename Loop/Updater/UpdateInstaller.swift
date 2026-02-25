@@ -698,14 +698,15 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        try await backupManager.prepareForBackup()
-        let backupURL = try await backupManager.createBackupURL()
+        let backupURL = try createTransientRollbackURL()
 
         try await performSwapOperation(
             current: currentURL,
             staged: stagingURL,
             backup: backupURL
         )
+
+        await archiveRollbackSnapshotIfPresent(at: backupURL)
     }
 
     private func atomicSwapPrivileged(
@@ -719,8 +720,7 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        try await backupManager.prepareForBackup()
-        let backupURL = try await backupManager.createBackupURL()
+        let backupURL = try createTransientRollbackURL()
 
         do {
             log.info("Invoking privileged helper atomic swap")
@@ -732,6 +732,7 @@ actor UpdateInstaller {
 
             try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
             try verifyPrivilegedInstalledOwnership(current: currentURL)
+            await archiveRollbackSnapshotIfPresent(at: backupURL)
         } catch {
             log.error("Privileged atomic swap failed: \(error.localizedDescription)")
             try await reconcilePrivilegedSwapFailure(
@@ -827,10 +828,27 @@ actor UpdateInstaller {
             log.error("Backup exists: \(fileManager.fileExists(atPath: backup.path))")
 
             if currentExists, fileManager.fileExists(atPath: backup.path) {
-                try await backupManager.restoreFromBackup(currentURL: current, backupURL: backup)
+                try restoreFromRollbackSnapshot(currentURL: current, backupURL: backup)
             }
             throw error
         }
+    }
+
+    private func restoreFromRollbackSnapshot(currentURL: URL, backupURL: URL) throws {
+        log.info("Attempting to restore from rollback snapshot")
+
+        guard fileManager.fileExists(atPath: backupURL.path) else {
+            log.warn("Rollback snapshot not found at \(backupURL.path)")
+            return
+        }
+
+        if fileManager.fileExists(atPath: currentURL.path) {
+            try fileManager.removeItem(at: currentURL)
+        }
+
+        try fileManager.moveItem(at: backupURL, to: currentURL)
+        try BundleUtilities.verifyBundleStructure(currentURL)
+        log.success("Restored application from rollback snapshot")
     }
 
     private func verifySwapSuccess(current: URL, backup: URL, staged: URL, expectBackup: Bool = true) throws {
@@ -923,6 +941,41 @@ actor UpdateInstaller {
             throw UpdateError.installationFailed(
                 "Privileged install verification failed: expected root ownership at \(currentURL.path), found uid \(ownerID.intValue)"
             )
+        }
+    }
+
+    private func createTransientRollbackURL() throws -> URL {
+        let rollbackRoot = SystemPaths.rollbackDirectory
+        try fileManager.createDirectory(at: rollbackRoot, withIntermediateDirectories: true)
+
+        let timestampFormatter = DateFormatter()
+        timestampFormatter.dateFormat = "yyyyMMdd_HHmmss"
+        let timestamp = timestampFormatter.string(from: Date())
+        let currentVersion = Bundle.main.appVersion ?? "unknown"
+
+        let rollbackURL = rollbackRoot.appendingPathComponent(
+            "rollback_\(currentVersion)_\(timestamp)",
+            isDirectory: true
+        )
+
+        guard !fileManager.fileExists(atPath: rollbackURL.path) else {
+            throw UpdateError.installationFailed(
+                "Rollback path already exists for timestamp \(timestamp)"
+            )
+        }
+
+        return rollbackURL
+    }
+
+    private func archiveRollbackSnapshotIfPresent(at rollbackURL: URL) async {
+        guard fileManager.fileExists(atPath: rollbackURL.path) else {
+            return
+        }
+
+        do {
+            _ = try await backupManager.backup(fileURL: rollbackURL)
+        } catch {
+            log.warn("Could not archive rollback snapshot at \(rollbackURL.path): \(error.localizedDescription)")
         }
     }
 
