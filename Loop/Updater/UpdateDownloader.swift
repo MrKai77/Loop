@@ -284,7 +284,7 @@ private enum FileOperations {
         try? FileManager.default.removeItem(at: finalURL)
         try FileManager.default.moveItem(at: tempFinalURL, to: finalURL)
 
-        log.info("File moved successfully - Final Location: \(finalURL.path), Filename: \(finalURL.lastPathComponent)")
+        log.info("File moved successfully to: \(finalURL.path)")
 
         return finalURL
     }

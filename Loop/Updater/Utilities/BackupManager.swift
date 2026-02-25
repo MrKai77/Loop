@@ -35,7 +35,7 @@ actor BackupManager {
         try fileManager.createDirectory(at: backupDirectory, withIntermediateDirectories: true)
         purgeNonZipBackups()
 
-        let backupSize = try calculateDirectorySize(backupDirectory)
+        let backupSize = try fileManager.calculateDirectorySize(backupDirectory)
 
         guard backupSize > Self.maxBackupSize else {
             return
@@ -148,7 +148,7 @@ actor BackupManager {
         for (backupURL, _) in backups {
             guard remainingSize > maxSize else { break }
 
-            let backupItemSize = (try? calculateDirectorySize(backupURL)) ?? 0
+            let backupItemSize = (try? fileManager.calculateDirectorySize(backupURL)) ?? 0
 
             do {
                 try fileManager.removeItem(at: backupURL)
@@ -200,26 +200,4 @@ actor BackupManager {
         restoreStagingRoot.appendingPathComponent("BackupRestore_\(UUID().uuidString)", isDirectory: true)
     }
 
-    private func calculateDirectorySize(_ url: URL) throws -> Int64 {
-        var isDirectory: ObjCBool = false
-        guard fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory) else { return 0 }
-
-        if !isDirectory.boolValue {
-            let attributes = try fileManager.attributesOfItem(atPath: url.path)
-            return (attributes[.size] as? Int64) ?? 0
-        }
-
-        guard let enumerator = fileManager.enumerator(
-            at: url,
-            includingPropertiesForKeys: [.fileSizeKey],
-            options: [.skipsHiddenFiles]
-        ) else { return 0 }
-
-        return Int64(
-            enumerator
-                .compactMap { $0 as? URL }
-                .compactMap { try? $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
-                .reduce(0, +)
-        )
-    }
 }

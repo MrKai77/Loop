@@ -167,7 +167,7 @@ actor UpdateInstaller {
     private func verifyDiskSpace(manifest _: UpdateManifest) async throws {
         log.info("Verifying disk space requirements")
 
-        let currentAppSize = try calculateAppSize(Bundle.main.bundleURL)
+        let currentAppSize = try fileManager.calculateDirectorySize(Bundle.main.bundleURL)
         let requiredSpace = currentAppSize * 3 // Current app + backup + new app
 
         let availableSpace = try getAvailableDiskSpace()
@@ -531,25 +531,16 @@ actor UpdateInstaller {
         after failureReason: String
     ) async -> Bool {
         let alert = NSAlert()
-        alert.messageText = String(
-            localized: "Administrator Authorization Required",
-            defaultValue: "Administrator Authorization Required"
-        )
+        alert.messageText = String(localized: "Administrator Authorization Required")
         alert.informativeText = String(
-            localized: "Loop could not install the update at \(failedTargetPath) (\(failureReason)). Would you like to install this update in your Applications folder instead?"
+            localized: "\(Bundle.main.appName) could not install the update at \(failedTargetPath) (\(failureReason)). Would you like to install this update in your Applications folder instead?"
         )
         alert.alertStyle = .warning
         alert.addButton(
-            withTitle: String(
-                localized: "Install in Your Applications Folder",
-                defaultValue: "Install in Your Applications Folder"
-            )
+            withTitle: String(localized: "Install in Your Applications Folder")
         )
         alert.addButton(
-            withTitle: String(
-                localized: "Cancel Update",
-                defaultValue: "Cancel Update"
-            )
+            withTitle: String(localized: "Cancel Update")
         )
 
         return alert.runModal() == .alertFirstButtonReturn
@@ -730,9 +721,7 @@ actor UpdateInstaller {
                 backup: backupURL
             )
 
-            try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
-            try verifyPrivilegedInstalledOwnership(current: currentURL)
-            await archiveRollbackSnapshotIfPresent(at: backupURL)
+            try verifyPrivilegedSwapCompletion(current: currentURL, backup: backupURL, staged: stagingURL)
         } catch {
             log.error("Privileged atomic swap failed: \(error.localizedDescription)")
             try await reconcilePrivilegedSwapFailure(
@@ -743,6 +732,8 @@ actor UpdateInstaller {
                 session: session
             )
         }
+
+        await archiveRollbackSnapshotIfPresent(at: backupURL)
     }
 
     private func reconcilePrivilegedSwapFailure(
@@ -757,11 +748,11 @@ actor UpdateInstaller {
 
         if currentExists, backupExists {
             do {
-                try verifySwapSuccess(current: currentURL, backup: backupURL, staged: stagingURL)
-                log.notice("Privileged swap completed despite transport failure; continuing installation")
+                try verifyPrivilegedSwapCompletion(current: currentURL, backup: backupURL, staged: stagingURL)
+                log.notice("Privileged swap and ownership validation completed despite transport failure; continuing installation")
                 return
             } catch {
-                log.warn("Privileged swap state check failed after transport error; attempting recovery restore: \(error.localizedDescription)")
+                log.warn("Privileged swap state or ownership check failed after transport error; attempting recovery restore: \(error.localizedDescription)")
             }
         }
 
@@ -910,22 +901,27 @@ actor UpdateInstaller {
         }
 
         // 4. Verify file sizes are reasonable (basic sanity check)
-        let currentAttributes = try fileManager.attributesOfItem(atPath: current.path)
+        let currentSize = try fileManager.calculateDirectorySize(current)
 
         if expectBackup {
-            let backupAttributes = try fileManager.attributesOfItem(atPath: backup.path)
-            guard let backupSize = backupAttributes[.size] as? Int64, backupSize > 0 else {
+            let backupSize = try fileManager.calculateDirectorySize(backup)
+            guard backupSize > 0 else {
                 throw UpdateError.installationFailed("Atomic swap verification failed: Backup appears to be empty or invalid")
             }
             log.debug("Backup size verified: \(backupSize.formattedBytes)")
         }
 
-        guard let currentSize = currentAttributes[.size] as? Int64, currentSize > 0 else {
+        guard currentSize > 0 else {
             throw UpdateError.installationFailed("Atomic swap verification failed: New app appears to be empty or invalid")
         }
 
         log.debug("New app size verified: \(currentSize.formattedBytes)")
         log.debug("Atomic swap verification completed")
+    }
+
+    private func verifyPrivilegedSwapCompletion(current: URL, backup: URL, staged: URL) throws {
+        try verifySwapSuccess(current: current, backup: backup, staged: staged)
+        try verifyPrivilegedInstalledOwnership(current: current)
     }
 
     private func verifyPrivilegedInstalledOwnership(current currentURL: URL) throws {
@@ -1055,23 +1051,6 @@ actor UpdateInstaller {
         guard !isCancelled else {
             throw UpdateError.installationFailed("Installation cancelled")
         }
-    }
-
-    private func calculateAppSize(_ appURL: URL) throws -> Int64 {
-        var totalSize: Int64 = 0
-
-        let enumerator = fileManager.enumerator(
-            at: appURL,
-            includingPropertiesForKeys: [.fileSizeKey],
-            options: [.skipsHiddenFiles]
-        )
-
-        while let fileURL = enumerator?.nextObject() as? URL {
-            let resourceValues = try fileURL.resourceValues(forKeys: [.fileSizeKey])
-            totalSize += Int64(resourceValues.fileSize ?? 0)
-        }
-
-        return totalSize
     }
 
     private func getAvailableDiskSpace() throws -> Int64 {
