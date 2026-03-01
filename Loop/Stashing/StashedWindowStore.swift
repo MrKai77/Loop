@@ -90,7 +90,9 @@ final class StashedWindowsStore {
             // not be returned by WindowEngine.windowList until the user goes to that space.
             let notification = NSWorkspace.activeSpaceDidChangeNotification
             spaceObserver = NSWorkspace.shared.notificationCenter
-                .addObserver(forName: notification, object: nil, queue: .main, using: onSpaceChanged)
+                .addObserver(forName: notification, object: nil, queue: .main) { [weak self] notification in
+                    self?.onSpaceChanged(notification)
+                }
         }
     }
 

@@ -52,9 +52,12 @@ enum WindowUtility {
     /// - Returns: The window at the given position, if any
     static func windowAtPosition(_ position: CGPoint) -> Window? {
         do {
+            let element = AXUIElement.systemWide
+            AXUIElementSetMessagingTimeout(element, 0.1)
+
             // If we can find the window at a point using the Accessibility API, return it
-            if let element = try AXUIElement.systemWide.getElementAtPosition(position),
-               let windowElement: AXUIElement = try element.getValue(.window) {
+            if let targetElement = try element.getElementAtPosition(position),
+               let windowElement: AXUIElement = try targetElement.getValue(.window) {
                 return try Window(element: windowElement)
             }
         } catch {

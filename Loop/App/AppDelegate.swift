@@ -81,13 +81,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             $0.bundleIdentifier == bundleId && $0.processIdentifier != currentProcessId
         }
 
-        guard !otherLoopInstances.isEmpty else {
-            log.info("No other Loop instances found")
-            return
-        }
-
-        log.info("Found \(otherLoopInstances.count) other Loop instance(s), terminating them to prevent accessibility conflicts. TCC operations will be delayed.")
-
         for instance in otherLoopInstances {
             log.info("Terminating Loop instance (PID: \(instance.processIdentifier))")
             instance.terminate()
@@ -102,9 +95,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
-
-        // Give the other instances time to terminate cleanly
-        Thread.sleep(forTimeInterval: 1.0)
     }
 
     /// Applies baseline logging configuration for Scribe.

@@ -40,8 +40,10 @@ final class Window {
     init(element: AXUIElement) throws {
         self.axWindow = element
         self.cgWindowID = try element.getWindowID()
-        let pid = try axWindow.getPID()
-        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first { $0.processIdentifier == pid }
+        guard let pid = try axWindow.getPID() else {
+            throw WindowError.cannotGetWindow
+        }
+        self.nsRunningApplication = NSRunningApplication(processIdentifier: pid)
 
         guard role != .sheet else {
             throw WindowError.sheetWindow
@@ -62,6 +64,7 @@ final class Window {
     /// - Parameter pid: The PID of the app to get the window from
     convenience init(pid: pid_t) throws {
         let element = AXUIElementCreateApplication(pid)
+        AXUIElementSetMessagingTimeout(element, 0.1)
         guard let window: AXUIElement = try element.getValue(.focusedWindow) else {
             throw WindowError.cannotGetWindow
         }
@@ -85,6 +88,7 @@ final class Window {
         }
 
         let element = AXUIElementCreateApplication(pid)
+        AXUIElementSetMessagingTimeout(element, 0.1)
         guard let windowElements: [AXUIElement] = try element.getValue(.windows),
               !windowElements.isEmpty
         else {
@@ -162,6 +166,7 @@ final class Window {
                     return false
                 }
                 let appWindow = AXUIElementCreateApplication(pid)
+                AXUIElementSetMessagingTimeout(appWindow, 0.1)
                 let result: Bool? = try appWindow.getValue(.enhancedUserInterface)
                 return result ?? false
             } catch {
@@ -175,6 +180,7 @@ final class Window {
                     return
                 }
                 let appWindow = AXUIElementCreateApplication(pid)
+                AXUIElementSetMessagingTimeout(appWindow, 0.1)
                 try appWindow.setValue(.enhancedUserInterface, value: newValue)
             } catch {
                 log.error("Failed to set enhancedUserInterface: \(error.localizedDescription)")

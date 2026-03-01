@@ -101,10 +101,10 @@ final class SystemWindowManager {
                         return menuItem
                     }
                 } else {
-                    let menuItemsWithSubmenu = windowMenuItems.filter { $0.children.first?.children != nil }.map(\.children.first)
+                    let menuItemsWithSubmenu = windowMenuItems.compactMap { $0.children.first?.children != nil ? $0.children.first : nil }
 
                     for item in menuItemsWithSubmenu {
-                        if let menuItem = try item?.children.first(where: {
+                        if let menuItem = try item.children.first(where: {
                             guard let identifier = try $0.getValue(.identifier) as String? else { return false }
                             return identifier == rawValue
                         }) {

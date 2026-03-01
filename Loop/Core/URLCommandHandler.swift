@@ -459,7 +459,7 @@ final class URLCommandHandler {
         }
 
         // Remove the last empty line if it exists
-        if items.last?.isEmpty == true {
+        if items.last?.isEmpty ?? false {
             items.removeLast()
         }
 
