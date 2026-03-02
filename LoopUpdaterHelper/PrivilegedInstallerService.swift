@@ -12,14 +12,20 @@ import Scribe
 import Security
 
 @Loggable
-final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, PrivilegedInstallerProtocol {
-    private struct PathOwnership {
-        let uid: uid_t
-        let gid: gid_t
+final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate {
+    struct TrustedClientContext {
+        let clientPID: pid_t
+        let clientUID: uid_t
+        let clientGID: gid_t
+        let clientBundleURL: URL
+        let loopSupportRoot: URL
+        let stagingRoot: URL
+        let rollbackRoot: URL
     }
 
     private let listener: NSXPCListener
-    private let fileManager = FileManager.default
+    private let connectionStateLock = NSLock()
+    private var activeConnectionPID: pid_t?
 
     init(serviceName: String) {
         self.listener = NSXPCListener(machServiceName: serviceName)
@@ -35,35 +41,79 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
     }
 
     func listener(_: NSXPCListener, shouldAcceptNewConnection newConnection: NSXPCConnection) -> Bool {
-        log.info("Received new XPC connection request (pid: \(newConnection.processIdentifier))")
+        let pid = newConnection.processIdentifier
+        log.info("Received new XPC connection request (pid: \(pid))")
 
-        guard isAllowedClient(connection: newConnection) else {
-            log.warn("Rejected XPC connection (pid: \(newConnection.processIdentifier))")
+        guard let context = trustedClientContext(for: newConnection) else {
+            log.warn("Rejected XPC connection (pid: \(pid))")
             return false
         }
 
+        guard reserveActiveConnection(for: pid) else {
+            log.warn("Rejected XPC connection (pid: \(pid)) because another connection is already active")
+            return false
+        }
+
+        newConnection.invalidationHandler = { [weak self] in
+            self?.releaseActiveConnection(for: pid, reason: "invalidation")
+        }
+        newConnection.interruptionHandler = { [weak self] in
+            self?.releaseActiveConnection(for: pid, reason: "interruption")
+        }
         newConnection.exportedInterface = NSXPCInterface(with: PrivilegedInstallerProtocol.self)
-        newConnection.exportedObject = self
+        newConnection.exportedObject = PrivilegedInstaller(context: context)
         newConnection.resume()
-        log.success("Accepted XPC connection (pid: \(newConnection.processIdentifier))")
+        log.success("Accepted XPC connection (pid: \(pid), uid: \(context.clientUID))")
 
         return true
     }
 
-    private func isAllowedClient(connection: NSXPCConnection) -> Bool {
+    /// Builds per-connection trusted context from authenticated process identity and uid-derived paths.
+    private func trustedClientContext(for connection: NSXPCConnection) -> TrustedClientContext? {
         let pid = connection.processIdentifier
         guard pid > 0 else {
             log.warn("Rejecting client with invalid pid: \(pid)")
-            return false
+            return nil
         }
 
-        guard let app = NSRunningApplication(processIdentifier: pid_t(pid)),
+        guard let app = NSRunningApplication(processIdentifier: pid),
               app.bundleIdentifier == PrivilegedInstallerConstants.appBundleIdentifier else {
             log.warn("Rejecting client pid \(pid) due to bundle identifier mismatch")
-            return false
+            return nil
         }
 
-        return validateCodeSignature(forProcessID: pid_t(pid))
+        guard validateCodeSignature(forProcessID: pid) else {
+            return nil
+        }
+
+        guard let bundleURL = app.bundleURL else {
+            log.warn("Rejecting client pid \(pid) because bundle URL could not be resolved")
+            return nil
+        }
+
+        let clientUID = connection.effectiveUserIdentifier
+        guard let accountInfo = userAccountInfo(for: clientUID) else {
+            log.warn("Rejecting client pid \(pid) because home directory for uid \(clientUID) could not be resolved")
+            return nil
+        }
+
+        let homeDirectory = accountInfo.homeDirectory
+        let clientGID = accountInfo.primaryGroupID
+        let canonicalBundleURL = LoopSupportPaths.canonical(bundleURL)
+        let canonicalHomeDirectory = LoopSupportPaths.canonical(homeDirectory)
+        let loopSupportRoot = LoopSupportPaths.loopDirectory(homeDirectory: canonicalHomeDirectory)
+        let stagingRoot = LoopSupportPaths.stagingDirectory(homeDirectory: canonicalHomeDirectory)
+        let rollbackRoot = LoopSupportPaths.rollbackDirectory(homeDirectory: canonicalHomeDirectory)
+
+        return TrustedClientContext(
+            clientPID: pid,
+            clientUID: clientUID,
+            clientGID: clientGID,
+            clientBundleURL: canonicalBundleURL,
+            loopSupportRoot: loopSupportRoot,
+            stagingRoot: stagingRoot,
+            rollbackRoot: rollbackRoot
+        )
     }
 
     private func validateCodeSignature(forProcessID pid: pid_t) -> Bool {
@@ -98,175 +148,46 @@ final class PrivilegedInstallerService: NSObject, NSXPCListenerDelegate, Privile
         return true
     }
 
-    func atomicSwap(
-        _ currentURL: URL,
-        stagedURL: URL,
-        backupURL: URL,
-        withReply reply: @escaping (NSError?) -> ()
-    ) {
-        Task {
-            do {
-                try await performAtomicSwap(currentURL: currentURL, stagedURL: stagedURL, backupURL: backupURL)
-                reply(nil)
-            } catch {
-                log.error("Privileged atomic swap failed: \(error.localizedDescription)")
-                reply(error as NSError)
-            }
+    /// Resolves a user's home directory and primary group from the system account database.
+    private func userAccountInfo(for uid: uid_t) -> (homeDirectory: URL, primaryGroupID: gid_t)? {
+        guard let passwdEntry = getpwuid(uid) else {
+            return nil
         }
+
+        let homePath = String(cString: passwdEntry.pointee.pw_dir)
+        guard !homePath.isEmpty else {
+            return nil
+        }
+
+        return (
+            homeDirectory: URL(fileURLWithPath: homePath, isDirectory: true),
+            primaryGroupID: passwdEntry.pointee.pw_gid
+        )
     }
 
-    func restoreFromBackup(
-        _ currentURL: URL,
-        backupURL: URL,
-        withReply reply: @escaping (NSError?) -> ()
-    ) {
-        Task {
-            do {
-                try await performRestoreFromBackup(currentURL: currentURL, backupURL: backupURL)
-                reply(nil)
-            } catch {
-                log.error("Privileged restore failed: \(error.localizedDescription)")
-                reply(error as NSError)
-            }
+    /// Reserves a single active connection slot to prevent overlapping privileged sessions.
+    private func reserveActiveConnection(for pid: pid_t) -> Bool {
+        connectionStateLock.lock()
+        defer { connectionStateLock.unlock() }
+
+        guard activeConnectionPID == nil else {
+            return false
         }
+
+        activeConnectionPID = pid
+        return true
     }
 
-    func removeItem(_ itemURL: URL, withReply reply: @escaping (NSError?) -> ()) {
-        Task {
-            do {
-                try await performRemoveItem(itemURL)
-                reply(nil)
-            } catch {
-                log.error("Privileged remove item failed: \(error.localizedDescription)")
-                reply(error as NSError)
-            }
-        }
-    }
+    /// Releases the active connection slot when that connection ends.
+    private func releaseActiveConnection(for pid: pid_t, reason: String) {
+        connectionStateLock.lock()
+        defer { connectionStateLock.unlock() }
 
-    private func performAtomicSwap(currentURL: URL, stagedURL: URL, backupURL: URL) async throws {
-        log.info("Starting privileged atomic swap")
-        log.info("Current app: \(currentURL.path)")
-        log.info("Staged app: \(stagedURL.path)")
-        log.info("Backup app: \(backupURL.path)")
-
-        let stagedOwnership = try ownership(for: stagedURL)
-        log.success("Resolved staged ownership (uid: \(stagedOwnership.uid), gid: \(stagedOwnership.gid))")
-
-        let backupParent = backupURL.deletingLastPathComponent()
-        try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
-        log.success("Backup directory ready at \(backupParent.path)")
-
-        if fileManager.fileExists(atPath: backupURL.path) {
-            try fileManager.removeItem(at: backupURL)
-            log.success("Removed existing backup at \(backupURL.path)")
-        }
-
-        try fileManager.moveItem(at: currentURL, to: backupURL)
-        log.success("Moved current app to backup location")
-        try applyOwnershipRecursively(at: backupURL, uid: stagedOwnership.uid, gid: stagedOwnership.gid)
-        log.success("Applied staged ownership to backup")
-
-        do {
-            try fileManager.moveItem(at: stagedURL, to: currentURL)
-            log.success("Moved staged app into current location")
-            try applyRootOwnershipRecursively(at: currentURL)
-            log.success("Applied root ownership to installed app")
-        } catch {
-            log.warn("Swap failed after backup move; attempting rollback")
-            try? fileManager.removeItem(at: currentURL)
-            try? fileManager.moveItem(at: backupURL, to: currentURL)
-            try? applyRootOwnershipRecursively(at: currentURL)
-            log.success("Rollback to backup completed")
-            throw error
-        }
-
-        log.success("Privileged atomic swap completed")
-    }
-
-    private func performRestoreFromBackup(currentURL: URL, backupURL: URL) async throws {
-        log.info("Starting privileged restore from backup")
-        log.info("Current app: \(currentURL.path)")
-        log.info("Backup app: \(backupURL.path)")
-
-        guard fileManager.fileExists(atPath: backupURL.path) else {
-            log.info("No backup found at \(backupURL.path); restore is a no-op")
+        guard activeConnectionPID == pid else {
             return
         }
 
-        if fileManager.fileExists(atPath: currentURL.path) {
-            try fileManager.removeItem(at: currentURL)
-            log.success("Removed current app before restore")
-        }
-
-        try fileManager.moveItem(at: backupURL, to: currentURL)
-        try applyRootOwnershipRecursively(at: currentURL)
-        log.success("Privileged restore completed")
-    }
-
-    private func performRemoveItem(_ itemURL: URL) async throws {
-        log.info("Starting privileged remove item for \(itemURL.path)")
-
-        if fileManager.fileExists(atPath: itemURL.path) {
-            try fileManager.removeItem(at: itemURL)
-            log.success("Removed item at \(itemURL.path)")
-        } else {
-            log.info("Item not found at \(itemURL.path); remove is a no-op")
-        }
-
-        log.success("Privileged remove item completed")
-    }
-
-    private func ownership(for url: URL) throws -> PathOwnership {
-        let attributes = try fileManager.attributesOfItem(atPath: url.path)
-
-        guard let ownerID = attributes[.ownerAccountID] as? NSNumber,
-              let groupID = attributes[.groupOwnerAccountID] as? NSNumber else {
-            throw PrivilegedInstallerError.ownershipLookupFailed(url: url)
-        }
-
-        return PathOwnership(uid: uid_t(ownerID.uint32Value), gid: gid_t(groupID.uint32Value))
-    }
-
-    private func applyRootOwnershipRecursively(at url: URL) throws {
-        log.info("Applying root ownership recursively at \(url.path)")
-        try applyOwnershipRecursively(at: url, uid: 0, gid: 0)
-        log.success("Applied root ownership recursively at \(url.path)")
-    }
-
-    private func applyOwnershipRecursively(at rootURL: URL, uid: uid_t, gid: gid_t) throws {
-        var itemCount = 0
-        try applyOwnership(to: rootURL, uid: uid, gid: gid)
-        itemCount += 1
-
-        guard let enumerator = fileManager.enumerator(
-            at: rootURL,
-            includingPropertiesForKeys: nil
-        ) else {
-            log.success("Applied ownership to \(itemCount) items under \(rootURL.path)")
-            return
-        }
-
-        while let itemURL = enumerator.nextObject() as? URL {
-            try applyOwnership(to: itemURL, uid: uid, gid: gid)
-            itemCount += 1
-        }
-
-        log.success("Applied ownership to \(itemCount) items under \(rootURL.path)")
-    }
-
-    private func applyOwnership(to itemURL: URL, uid: uid_t, gid: gid_t) throws {
-        let result: Int32 = itemURL.withUnsafeFileSystemRepresentation { path in
-            guard let path else {
-                return -1
-            }
-            return lchown(path, uid, gid)
-        }
-
-        guard result == 0 else {
-            let errorCode = errno
-            throw PrivilegedInstallerError.ownershipChangeFailed(url: itemURL, code: errorCode)
-        }
-
-        log.success("Applied ownership to \(itemURL.path) (uid: \(uid), gid: \(gid))")
+        activeConnectionPID = nil
+        log.info("Released active XPC connection state for pid \(pid) (\(reason))")
     }
 }

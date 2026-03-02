@@ -19,22 +19,15 @@ final class UpdaterAuthorizationCoordinator {
             self.serviceName = serviceName
         }
 
-        func atomicSwap(current: URL, staged: URL, backup: URL) async throws {
-            let operation = try coordinator.makeAtomicSwapOperation(
-                current: current,
-                staged: staged,
-                backup: backup
-            )
+        /// Invokes the helper atomic swap using a rollback token instead of caller-provided paths.
+        func atomicSwap(rollbackID: String) async throws {
+            let operation = PrivilegedOperation.atomicSwap(rollbackID: rollbackID)
             try await coordinator.performXPCOperation(serviceName: serviceName, operation: operation)
         }
 
-        func restoreFromBackup(current: URL, backup: URL) async throws {
-            let operation = try coordinator.makeRestoreOperation(current: current, backup: backup)
-            try await coordinator.performXPCOperation(serviceName: serviceName, operation: operation)
-        }
-
-        func removeItem(_ path: URL) async throws {
-            let operation = try coordinator.makeRemoveItemOperation(path: path)
+        /// Invokes helper restore for the rollback token selected by the caller.
+        func restoreFromBackup(rollbackID: String) async throws {
+            let operation = PrivilegedOperation.restore(rollbackID: rollbackID)
             try await coordinator.performXPCOperation(serviceName: serviceName, operation: operation)
         }
     }
@@ -104,24 +97,6 @@ final class UpdaterAuthorizationCoordinator {
         return try await body(session)
     }
 
-    func performPrivilegedAtomicSwap(current: URL, staged: URL, backup: URL) async throws {
-        try await withPrivilegedSession { session in
-            try await session.atomicSwap(current: current, staged: staged, backup: backup)
-        }
-    }
-
-    func performPrivilegedRestore(current: URL, backup: URL) async throws {
-        try await withPrivilegedSession { session in
-            try await session.restoreFromBackup(current: current, backup: backup)
-        }
-    }
-
-    func performPrivilegedRemoveItem(_ path: URL) async throws {
-        try await withPrivilegedSession { session in
-            try await session.removeItem(path)
-        }
-    }
-
     private func performXPCOperation(serviceName: String, operation: PrivilegedOperation) async throws {
         try await withCheckedThrowingContinuation { continuation in
             let completion = ContinuationCompletion()
@@ -155,12 +130,11 @@ final class UpdaterAuthorizationCoordinator {
                 return
             }
 
-            operation.invoke(on: proxy) { error in
-                if let error {
-                    finish(.failure(UpdateError.installationFailed(error.localizedDescription)))
-                } else {
-                    finish(.success(()))
-                }
+            do {
+                try operation.invoke(on: proxy)
+                connection.invalidate()
+            } catch {
+                finish(.failure(UpdateError.installationFailed(error.localizedDescription)))
                 connection.invalidate()
             }
 
@@ -193,7 +167,7 @@ final class UpdaterAuthorizationCoordinator {
 
     private func requestInstallerAuthorizationRight(_ authRef: AuthorizationRef) throws {
         let rightName = installerAuthorizationRightName()
-        let prompt = installerAuthorizationPrompt()
+        let prompt = "\(Bundle.main.appName) needs administrator permission to install this update."
 
         let getStatus = rightName.withCString { AuthorizationRightGet($0, nil) }
         if getStatus == errAuthorizationDenied {
@@ -251,10 +225,6 @@ final class UpdaterAuthorizationCoordinator {
         return "\(bundleIdentifier).updater-auth"
     }
 
-    private func installerAuthorizationPrompt() -> String {
-        "\(Bundle.main.appName) needs administrator permission to install this update."
-    }
-
     private func makeJobDictionary(serviceName: String, helperPath: String) -> [String: Any] {
         [
             "Label": serviceName,
@@ -302,53 +272,6 @@ final class UpdaterAuthorizationCoordinator {
         log.warn("Failed to remove privileged updater job \(serviceName): \(details)")
     }
 
-    private func makeAtomicSwapOperation(current: URL, staged: URL, backup: URL) throws -> PrivilegedOperation {
-        try validateCurrentBundlePath(current, pathRole: .currentAppBundle)
-        try validateLoopSupportPath(staged, pathRole: .stagedBundle)
-        try validateLoopSupportPath(backup, pathRole: .backupBundle)
-
-        let backupDirectory = backup.deletingLastPathComponent()
-        try fileManager.createDirectory(at: backupDirectory, withIntermediateDirectories: true)
-
-        return .atomicSwap(currentURL: current, stagedURL: staged, backupURL: backup)
-    }
-
-    private func makeRestoreOperation(current: URL, backup: URL) throws -> PrivilegedOperation {
-        try validateCurrentBundlePath(current, pathRole: .currentAppBundle)
-        try validateLoopSupportPath(backup, pathRole: .backupBundle)
-
-        return .restore(currentURL: current, backupURL: backup)
-    }
-
-    private func makeRemoveItemOperation(path: URL) throws -> PrivilegedOperation {
-        try validateLoopSupportPath(path, pathRole: .cleanupTarget)
-        return .removeItem(itemURL: path)
-    }
-
-    private var currentBundleURL: URL {
-        Bundle.main.bundleURL
-    }
-
-    private var loopSupportURL: URL {
-        SystemPaths.loopDirectory
-    }
-
-    private func validateCurrentBundlePath(_ url: URL, pathRole: PrivilegedPathRole) throws {
-        guard SystemPaths.isSamePath(url, currentBundleURL) else {
-            throw UpdateError.installationFailed(
-                "Privileged installer \(pathRole.description) must match current app path. Received: \(url.path)"
-            )
-        }
-    }
-
-    private func validateLoopSupportPath(_ url: URL, pathRole: PrivilegedPathRole) throws {
-        guard SystemPaths.isPath(url, inside: loopSupportURL) else {
-            throw UpdateError.installationFailed(
-                "Privileged installer \(pathRole.description) must be inside Loop support directory. Received: \(url.path)"
-            )
-        }
-    }
-
     private func authorizationErrorMessage(for status: OSStatus) -> String {
         if status == errAuthorizationCanceled {
             return "User canceled administrator authorization (OSStatus \(status))"
@@ -363,9 +286,8 @@ final class UpdaterAuthorizationCoordinator {
 }
 
 private enum PrivilegedOperation {
-    case atomicSwap(currentURL: URL, stagedURL: URL, backupURL: URL)
-    case restore(currentURL: URL, backupURL: URL)
-    case removeItem(itemURL: URL)
+    case atomicSwap(rollbackID: String)
+    case restore(rollbackID: String)
 
     var name: String {
         switch self {
@@ -373,50 +295,16 @@ private enum PrivilegedOperation {
             "atomic swap"
         case .restore:
             "restore"
-        case .removeItem:
-            "remove item"
         }
     }
 
-    func invoke(on proxy: PrivilegedInstallerProtocol, reply: @escaping (NSError?) -> ()) {
+    /// Dispatches the selected privileged operation on the typed helper proxy.
+    func invoke(on proxy: PrivilegedInstallerProtocol) throws {
         switch self {
-        case let .atomicSwap(currentURL, stagedURL, backupURL):
-            proxy.atomicSwap(
-                currentURL,
-                stagedURL: stagedURL,
-                backupURL: backupURL,
-                withReply: reply
-            )
-
-        case let .restore(currentURL, backupURL):
-            proxy.restoreFromBackup(
-                currentURL,
-                backupURL: backupURL,
-                withReply: reply
-            )
-
-        case let .removeItem(itemURL):
-            proxy.removeItem(itemURL, withReply: reply)
-        }
-    }
-}
-
-private enum PrivilegedPathRole {
-    case currentAppBundle
-    case stagedBundle
-    case backupBundle
-    case cleanupTarget
-
-    var description: String {
-        switch self {
-        case .currentAppBundle:
-            "current app bundle path"
-        case .stagedBundle:
-            "staged bundle path"
-        case .backupBundle:
-            "backup bundle path"
-        case .cleanupTarget:
-            "cleanup target path"
+        case let .atomicSwap(rollbackID):
+            try proxy.atomicSwap(rollbackID: rollbackID)
+        case let .restore(rollbackID):
+            try proxy.restoreFromBackup(rollbackID: rollbackID)
         }
     }
 }

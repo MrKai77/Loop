@@ -42,7 +42,7 @@ final class HTTPClient: Sendable {
         }
 
         guard (200...299).contains(httpResponse.statusCode) else {
-            throw UpdateError.httpError(httpResponse)
+            throw UpdateError.http(httpResponse.statusCode)
         }
 
         return data

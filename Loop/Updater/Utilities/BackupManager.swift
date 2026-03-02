@@ -13,8 +13,9 @@ import ZIPFoundation
 actor BackupManager {
     private let fileManager: FileManager
 
-    private var backupDirectory: URL { SystemPaths.backupsDirectory }
-    private var restoreStagingRoot: URL { SystemPaths.stagingDirectory }
+    private var homeDirectory: URL { LoopSupportPaths.canonical(fileManager.homeDirectoryForCurrentUser) }
+    private var backupDirectory: URL { LoopSupportPaths.backupsDirectory(homeDirectory: homeDirectory) }
+    private var restoreStagingRoot: URL { LoopSupportPaths.stagingDirectory(homeDirectory: homeDirectory) }
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -79,7 +80,8 @@ actor BackupManager {
             throw UpdateError.installationFailed("No zip backups are available to restore")
         }
 
-        let restoreWorkspace = restoreWorkspaceURL()
+        let restoreWorkspace = restoreStagingRoot
+            .appendingPathComponent("BackupRestore_\(UUID().uuidString)", isDirectory: true)
 
         do {
             if fileManager.fileExists(atPath: restoreWorkspace.path) {
@@ -194,10 +196,6 @@ actor BackupManager {
         }
 
         return backupArchiveURL
-    }
-
-    private func restoreWorkspaceURL() -> URL {
-        restoreStagingRoot.appendingPathComponent("BackupRestore_\(UUID().uuidString)", isDirectory: true)
     }
 
 }

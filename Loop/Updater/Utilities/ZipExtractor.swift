@@ -25,7 +25,8 @@ enum ZipExtractor {
 
         try validateZipFile(zipURL)
 
-        let tempDir = createTemporaryDirectory()
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("LoopExtraction_\(UUID().uuidString)")
 
         do {
             try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
@@ -99,10 +100,6 @@ enum ZipExtractor {
     }
 
     // MARK: - Utilities
-
-    private static func createTemporaryDirectory() -> URL {
-        FileManager.default.temporaryDirectory.appendingPathComponent("LoopExtraction_\(UUID().uuidString)")
-    }
 
     private static func createError(_ message: String, zipURL: URL? = nil) -> UpdateError {
         var fullMessage = message

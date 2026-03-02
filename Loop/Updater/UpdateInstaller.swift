@@ -29,6 +29,18 @@ actor UpdateInstaller {
     private var installedAppURL: URL = Bundle.main.bundleURL
     private var installationPermissionState: InstallationPermissionState = .writable
 
+    private var userHomeDirectory: URL {
+        LoopSupportPaths.canonical(fileManager.homeDirectoryForCurrentUser)
+    }
+
+    private var stagingRootDirectory: URL {
+        LoopSupportPaths.stagingDirectory(homeDirectory: userHomeDirectory)
+    }
+
+    private var rollbackRootDirectory: URL {
+        LoopSupportPaths.rollbackDirectory(homeDirectory: userHomeDirectory)
+    }
+
     init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
         self.backupManager = BackupManager(fileManager: fileManager)
@@ -578,7 +590,7 @@ actor UpdateInstaller {
     ) async throws {
         log.info("Performing atomic installation")
 
-        let stagingURL = SystemPaths.stagingDirectory
+        let stagingURL = stagingRootDirectory
             .appendingPathComponent("\(destinationURL.lastPathComponent).staging", isDirectory: true)
 
         do {
@@ -602,7 +614,7 @@ actor UpdateInstaller {
     ) async throws {
         log.info("Performing privileged atomic installation")
 
-        let stagingURL = SystemPaths.stagingDirectory
+        let stagingURL = stagingRootDirectory
             .appendingPathComponent("\(destinationURL.lastPathComponent).staging", isDirectory: true)
 
         do {
@@ -689,7 +701,8 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        let backupURL = try createTransientRollbackURL()
+        let rollbackID = try createTransientRollbackID()
+        let backupURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
 
         try await performSwapOperation(
             current: currentURL,
@@ -711,15 +724,12 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        let backupURL = try createTransientRollbackURL()
+        let rollbackID = try createTransientRollbackID()
+        let backupURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
 
         do {
             log.info("Invoking privileged helper atomic swap")
-            try await session.atomicSwap(
-                current: currentURL,
-                staged: stagingURL,
-                backup: backupURL
-            )
+            try await session.atomicSwap(rollbackID: rollbackID)
 
             try verifyPrivilegedSwapCompletion(current: currentURL, backup: backupURL, staged: stagingURL)
         } catch {
@@ -727,7 +737,7 @@ actor UpdateInstaller {
             try await reconcilePrivilegedSwapFailure(
                 current: currentURL,
                 staged: stagingURL,
-                backup: backupURL,
+                rollbackID: rollbackID,
                 originalError: error,
                 session: session
             )
@@ -739,10 +749,11 @@ actor UpdateInstaller {
     private func reconcilePrivilegedSwapFailure(
         current currentURL: URL,
         staged stagingURL: URL,
-        backup backupURL: URL,
+        rollbackID: String,
         originalError: Error,
         session: UpdaterAuthorizationCoordinator.PrivilegedSession
     ) async throws {
+        let backupURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
         let currentExists = fileManager.fileExists(atPath: currentURL.path)
         let backupExists = fileManager.fileExists(atPath: backupURL.path)
 
@@ -763,7 +774,7 @@ actor UpdateInstaller {
         }
 
         do {
-            try await session.restoreFromBackup(current: currentURL, backup: backupURL)
+            try await session.restoreFromBackup(rollbackID: rollbackID)
 
             guard fileManager.fileExists(atPath: currentURL.path) else {
                 throw UpdateError.installationFailed("Privileged restore failed: restored app not found at \(currentURL.path)")
@@ -940,27 +951,25 @@ actor UpdateInstaller {
         }
     }
 
-    private func createTransientRollbackURL() throws -> URL {
-        let rollbackRoot = SystemPaths.rollbackDirectory
+    /// Generates a unique rollback token and verifies its destination does not already exist.
+    private func createTransientRollbackID() throws -> String {
+        let rollbackRoot = rollbackRootDirectory
         try fileManager.createDirectory(at: rollbackRoot, withIntermediateDirectories: true)
 
         let timestampFormatter = DateFormatter()
         timestampFormatter.dateFormat = "yyyyMMdd_HHmmss"
         let timestamp = timestampFormatter.string(from: Date())
         let currentVersion = Bundle.main.appVersion ?? "unknown"
-
-        let rollbackURL = rollbackRoot.appendingPathComponent(
-            "rollback_\(currentVersion)_\(timestamp)",
-            isDirectory: true
-        )
+        let rollbackID = "rollback_\(currentVersion)_\(timestamp)_\(UUID().uuidString.lowercased())"
+        let rollbackURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
 
         guard !fileManager.fileExists(atPath: rollbackURL.path) else {
             throw UpdateError.installationFailed(
-                "Rollback path already exists for timestamp \(timestamp)"
+                "Rollback path already exists for generated ID \(rollbackID)"
             )
         }
 
-        return rollbackURL
+        return rollbackID
     }
 
     private func archiveRollbackSnapshotIfPresent(at rollbackURL: URL) async {

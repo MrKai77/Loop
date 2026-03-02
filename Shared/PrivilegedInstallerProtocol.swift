@@ -1,23 +1,11 @@
 import Foundation
 
 @objc protocol PrivilegedInstallerProtocol {
-    func atomicSwap(
-        _ currentURL: URL,
-        stagedURL: URL,
-        backupURL: URL,
-        withReply reply: @escaping (NSError?) -> ()
-    )
+    /// Performs a privileged swap using a validated rollback token-derived path set.
+    func atomicSwap(rollbackID: String) throws
 
-    func restoreFromBackup(
-        _ currentURL: URL,
-        backupURL: URL,
-        withReply reply: @escaping (NSError?) -> ()
-    )
-
-    func removeItem(
-        _ itemURL: URL,
-        withReply reply: @escaping (NSError?) -> ()
-    )
+    /// Restores the current app from the rollback snapshot identified by the rollback token.
+    func restoreFromBackup(rollbackID: String) throws
 }
 
 enum PrivilegedInstallerConstants {
