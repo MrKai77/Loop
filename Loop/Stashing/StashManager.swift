@@ -181,7 +181,7 @@ extension StashManager {
                 else {
                     return
                 }
-                
+
                 onWindowResized(action: action, window: window, screen: screen)
             }
         } else if action.direction.willGrow

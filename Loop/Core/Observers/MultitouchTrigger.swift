@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2026-01-30.
 //
 
-import Subsurface
 import Scribe
+import Subsurface
 import SwiftUI
 
 @Loggable
@@ -27,7 +27,7 @@ final class MultitouchTrigger {
     private var maxTouchesInCurrentGesture: Int = 0
     private var isCurrentGestureRejected = false
     private var didOpenLoopWithThisGesture = false
-    
+
     private var lastTriggeredActionIndex: Int?
     private var lastTriggeredDistance: CGFloat = 0
     private var lastTriggeredZoomDistance: CGFloat = 0
@@ -40,7 +40,7 @@ final class MultitouchTrigger {
     }
 
     private var positionHistory: [PositionHistoryEntry] = []
-    private let maxHistoryEntries = 5  // Track last 5 positions for smoothing
+    private let maxHistoryEntries = 5 // Track last 5 positions for smoothing
 
     private let initialGestureThreshold: CGFloat = 0.025
     private let gestureRepeatThreshold: CGFloat = 0.25
@@ -122,7 +122,7 @@ final class MultitouchTrigger {
         guard let originInfo = originGestureInfo, let lastInfo = lastGestureInfo else {
             // Check if cursor is over a titlebar before activating
             guard isCursorOverTitlebar() else {
-                isCurrentGestureRejected = true  // Mark as rejected to skip future events
+                isCurrentGestureRejected = true // Mark as rejected to skip future events
                 return
             }
 
@@ -132,7 +132,7 @@ final class MultitouchTrigger {
             lastGestureInfo = info
             lastTriggeredActionIndex = nil
             lastTriggeredDistance = 0
-            lastTriggeredZoomDistance = info.distance  // Initialize to current finger distance
+            lastTriggeredZoomDistance = info.distance // Initialize to current finger distance
             gestureBlocker.start()
 
             // Reset position history for new gesture
@@ -179,7 +179,7 @@ final class MultitouchTrigger {
         if let oldFingerDistance = fingerDistanceFromHistory() {
             // Use position history for stable detection
             let distanceChange = fingerDistance - oldFingerDistance
-            isZooming = distanceChange > initialGestureThreshold  // Use initial threshold for sensitive detection
+            isZooming = distanceChange > initialGestureThreshold // Use initial threshold for sensitive detection
         } else if positionHistory.count >= 1 {
             // Use last frame's distance if history is building up
             let lastFingerDistance = lastInfo.distance
@@ -206,7 +206,7 @@ final class MultitouchTrigger {
             lastTriggeredActionIndex = centerActionIndex
             lastTriggeredDistance = fingerDistance
             triggerAction(at: centerActionIndex, from: actions[...])
-            return  // Don't process directional actions while zooming
+            return // Don't process directional actions while zooming
         }
 
         // Process directional actions (swiping)
@@ -238,13 +238,13 @@ final class MultitouchTrigger {
            magFromOrigin > 0 {
             let magMovement = hypot(movementDirection.width, movementDirection.height)
 
-            if magMovement >= initialGestureThreshold {  // Only if meaningful movement occurred
+            if magMovement >= initialGestureThreshold { // Only if meaningful movement occurred
                 let dotProduct = movementDirection.width * vectorFromOrigin.width +
                     movementDirection.height * vectorFromOrigin.height
                 let cosAngle = dotProduct / (magFromOrigin * magMovement)
 
                 // Negative dot product means moving toward origin (opposite direction)
-                if cosAngle < -0.5 {  // ~120 degree threshold
+                if cosAngle < -0.5 { // ~120 degree threshold
                     originGestureInfo = info
                     lastTriggeredActionIndex = nil
                     lastTriggeredDistance = 0
@@ -325,7 +325,7 @@ final class MultitouchTrigger {
         lastGestureInfo = nil
         maxTouchesInCurrentGesture = 0
         didOpenLoopWithThisGesture = false
-        positionHistory.removeAll()  // Clear history on gesture end
+        positionHistory.removeAll() // Clear history on gesture end
     }
 
     private func averagePosition(of touches: [MTContact]) -> CGPoint {
@@ -382,7 +382,7 @@ final class MultitouchTrigger {
     /// - Parameter cardinalBias: How much larger cardinals are relative to diagonals.
     ///   A value of 0.1 makes cardinal zones 10% wider and diagonal zones 10% narrower than uniform (0.0 = equal sizes, 1.0 = diagonals disappear).
     private func indexWithCardinalBias(angle: CGFloat, actionCount: Int, cardinalBias: CGFloat = 0.1) -> Int {
-        let baseAngleSpan = (.pi * 2) / CGFloat(actionCount)  // 45° for 8 actions
+        let baseAngleSpan = (.pi * 2) / CGFloat(actionCount) // 45° for 8 actions
         let halfAngleSpan = baseAngleSpan / 2.0
 
         // Match the original centered mapping (boundaries at ±22.5° for 8 actions)

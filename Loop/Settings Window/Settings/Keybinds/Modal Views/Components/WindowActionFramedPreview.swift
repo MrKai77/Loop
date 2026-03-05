@@ -5,15 +5,15 @@
 //  Created by Kai Azim on 2026-02-15.
 //
 
-import SwiftUI
 import Luminare
+import SwiftUI
 
 struct WindowActionFramedPreview: View {
     @ObservedObject private var accentColorController: AccentColorController = .shared
     @Environment(\.luminareAnimation) private var luminareAnimation
     @State private var frame: CGRect = .zero
     let action: WindowAction
-    
+
     var body: some View {
         ScreenView(isBlurred: action.sizeMode != .custom) {
             GeometryReader { geo in
@@ -42,7 +42,7 @@ struct WindowActionFramedPreview: View {
             }
         }
     }
-    
+
     private var blurredWindow: some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {

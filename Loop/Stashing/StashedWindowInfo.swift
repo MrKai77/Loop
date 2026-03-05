@@ -15,7 +15,8 @@ struct StashedWindowInfo: Equatable {
     let screen: NSScreen
     let action: WindowAction
 
-    // MARK: - Frame computation    
+    // MARK: - Frame computation
+
     // TODO: Move to WindowFrameResolver
 
     /// Computes the frame for a stashed window.
