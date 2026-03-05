@@ -91,9 +91,10 @@ final class Updater: ObservableObject {
                         try await downloadAndInstallUpdate()
                         await relaunchAfterUpdate()
                     }
+                } else {
+                    log.info("Automatic updates enabled, but Loop is active. Skipping installation.")
                 }
 
-                log.info("Automatic updates enabled, but Loop is active. Skipping installation.")
                 return
             }
 
@@ -260,8 +261,13 @@ final class Updater: ObservableObject {
     /// Downloads the update from GitHub and installs it
     func downloadAndInstallUpdate() async throws {
         guard let manifest = updateManifest else {
+            let error = UpdateError.installationFailed(
+                "No update information is available. Please check for updates again and retry."
+            )
+            log.error("Cannot start installation: update manifest is missing")
             progressBar = 0
-            return
+            installState = .failed(error)
+            throw error
         }
 
         installState = .installing
