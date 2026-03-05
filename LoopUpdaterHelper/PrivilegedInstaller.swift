@@ -36,8 +36,26 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
         self.fileManager = fileManager
     }
 
+    func atomicSwap(rollbackID: String, withReply reply: @escaping (NSError?) -> ()) {
+        do {
+            try executeAtomicSwap(rollbackID: rollbackID)
+            reply(nil)
+        } catch {
+            reply(error as NSError)
+        }
+    }
+
+    func restoreFromBackup(rollbackID: String, withReply reply: @escaping (NSError?) -> ()) {
+        do {
+            try executeRestoreFromBackup(rollbackID: rollbackID)
+            reply(nil)
+        } catch {
+            reply(error as NSError)
+        }
+    }
+
     /// Executes a privileged atomic swap using rollback-token-derived paths in user Application Support.
-    func atomicSwap(rollbackID: String) throws {
+    private func executeAtomicSwap(rollbackID: String) throws {
         let operation = "atomic swap"
 
         do {
@@ -63,7 +81,7 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
     }
 
     /// Restores the current app directly from rollback-token-derived backup path in user Application Support.
-    func restoreFromBackup(rollbackID: String) throws {
+    private func executeRestoreFromBackup(rollbackID: String) throws {
         let operation = "restore"
 
         do {

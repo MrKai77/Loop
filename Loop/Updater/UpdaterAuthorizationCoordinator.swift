@@ -130,11 +130,13 @@ final class UpdaterAuthorizationCoordinator {
                 return
             }
 
-            do {
-                try operation.invoke(on: proxy)
-                connection.invalidate()
-            } catch {
-                finish(.failure(UpdateError.installationFailed(error.localizedDescription)))
+            // NSXPC reports remote failures via callbacks; direct throwing proxy calls can raise uncaught Objective-C exceptions.
+            operation.invoke(on: proxy) { error in
+                if let error {
+                    finish(.failure(UpdateError.installationFailed(error.localizedDescription)))
+                } else {
+                    finish(.success(()))
+                }
                 connection.invalidate()
             }
 
@@ -299,12 +301,12 @@ private enum PrivilegedOperation {
     }
 
     /// Dispatches the selected privileged operation on the typed helper proxy.
-    func invoke(on proxy: PrivilegedInstallerProtocol) throws {
+    func invoke(on proxy: PrivilegedInstallerProtocol, reply: @escaping (NSError?) -> ()) {
         switch self {
         case let .atomicSwap(rollbackID):
-            try proxy.atomicSwap(rollbackID: rollbackID)
+            proxy.atomicSwap(rollbackID: rollbackID, withReply: reply)
         case let .restore(rollbackID):
-            try proxy.restoreFromBackup(rollbackID: rollbackID)
+            proxy.restoreFromBackup(rollbackID: rollbackID, withReply: reply)
         }
     }
 }
