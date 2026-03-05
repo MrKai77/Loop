@@ -14,12 +14,14 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
     private struct AtomicSwapPaths {
         let currentURL: URL
         let stagedURL: URL
-        let backupURL: URL
+        let rollbackContainerURL: URL
+        let backupBundleURL: URL
     }
 
     private struct RestorePaths {
         let currentURL: URL
-        let backupURL: URL
+        let rollbackContainerURL: URL
+        let backupBundleURL: URL
     }
 
     private static let maxRollbackIDLength = 128
@@ -54,6 +56,15 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
         }
     }
 
+    func removeCurrentBundle(withReply reply: @escaping (NSError?) -> ()) {
+        do {
+            try executeRemoveCurrentBundle()
+            reply(nil)
+        } catch {
+            reply(error as NSError)
+        }
+    }
+
     /// Executes a privileged atomic swap using rollback-token-derived paths in user Application Support.
     private func executeAtomicSwap(rollbackID: String) throws {
         let operation = "atomic swap"
@@ -72,7 +83,8 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             try performAtomicSwap(
                 currentURL: paths.currentURL,
                 stagedURL: paths.stagedURL,
-                backupURL: paths.backupURL
+                rollbackContainerURL: paths.rollbackContainerURL,
+                backupBundleURL: paths.backupBundleURL
             )
         } catch {
             log.error("Privileged \(operation) failed for rollbackID \(rollbackID): \(error.localizedDescription)")
@@ -90,25 +102,38 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
                 operation: operation
             )
 
-            guard fileManager.fileExists(atPath: paths.backupURL.path) else {
-                log.info("No backup found at \(paths.backupURL.path); privileged restore is a no-op")
+            guard fileManager.fileExists(atPath: paths.backupBundleURL.path) else {
+                log.info("No backup found at \(paths.backupBundleURL.path); privileged restore is a no-op")
                 return
             }
 
             try validateBundleForInstall(
-                at: paths.backupURL,
+                at: paths.backupBundleURL,
                 operation: operation,
                 rollbackID: rollbackID
             )
 
             try performRestoreFromBackup(
                 currentURL: paths.currentURL,
-                backupURL: paths.backupURL
+                backupBundleURL: paths.backupBundleURL
             )
         } catch {
             log.error("Privileged \(operation) failed for rollbackID \(rollbackID): \(error.localizedDescription)")
             throw error
         }
+    }
+
+    /// Removes the authenticated client's current app bundle path.
+    private func executeRemoveCurrentBundle() throws {
+        let currentBundleURL = LoopSupportPaths.canonical(context.clientBundleURL)
+
+        guard fileManager.fileExists(atPath: currentBundleURL.path) else {
+            log.info("No current app bundle found at \(currentBundleURL.path); privileged cleanup is a no-op")
+            return
+        }
+
+        try fileManager.removeItem(at: currentBundleURL)
+        log.success("Removed current app bundle at \(currentBundleURL.path)")
     }
 
     /// Derives and validates atomic swap paths from trusted connection context and rollback token.
@@ -125,8 +150,14 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
                 isDirectory: true
             )
         )
-        let backupURL = LoopSupportPaths.canonical(
+        let rollbackContainerURL = LoopSupportPaths.canonical(
             context.rollbackRoot.appendingPathComponent(rollbackID, isDirectory: true)
+        )
+        let backupBundleURL = LoopSupportPaths.canonical(
+            rollbackContainerURL.appendingPathComponent(
+                context.clientBundleURL.lastPathComponent,
+                isDirectory: true
+            )
         )
 
         try ensurePathInside(
@@ -138,7 +169,15 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             expectedDescription: "Loop staging directory"
         )
         try ensurePathInside(
-            backupURL,
+            rollbackContainerURL,
+            root: context.rollbackRoot,
+            operation: operation,
+            rollbackID: rollbackID,
+            role: "rollback container",
+            expectedDescription: "Loop rollback directory"
+        )
+        try ensurePathInside(
+            backupBundleURL,
             root: context.rollbackRoot,
             operation: operation,
             rollbackID: rollbackID,
@@ -149,7 +188,8 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
         return AtomicSwapPaths(
             currentURL: currentURL,
             stagedURL: stagedURL,
-            backupURL: backupURL
+            rollbackContainerURL: rollbackContainerURL,
+            backupBundleURL: backupBundleURL
         )
     }
 
@@ -161,12 +201,26 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
         try validateRollbackID(rollbackID, operation: operation)
 
         let currentURL = LoopSupportPaths.canonical(context.clientBundleURL)
-        let backupURL = LoopSupportPaths.canonical(
+        let rollbackContainerURL = LoopSupportPaths.canonical(
             context.rollbackRoot.appendingPathComponent(rollbackID, isDirectory: true)
+        )
+        let backupBundleURL = LoopSupportPaths.canonical(
+            rollbackContainerURL.appendingPathComponent(
+                context.clientBundleURL.lastPathComponent,
+                isDirectory: true
+            )
         )
 
         try ensurePathInside(
-            backupURL,
+            rollbackContainerURL,
+            root: context.rollbackRoot,
+            operation: operation,
+            rollbackID: rollbackID,
+            role: "rollback container",
+            expectedDescription: "Loop rollback directory"
+        )
+        try ensurePathInside(
+            backupBundleURL,
             root: context.rollbackRoot,
             operation: operation,
             rollbackID: rollbackID,
@@ -176,7 +230,8 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
 
         return RestorePaths(
             currentURL: currentURL,
-            backupURL: backupURL
+            rollbackContainerURL: rollbackContainerURL,
+            backupBundleURL: backupBundleURL
         )
     }
 
@@ -330,28 +385,35 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
     }
 
     /// Moves current app to backup and installs the staged app atomically with rollback on failure.
-    private func performAtomicSwap(currentURL: URL, stagedURL: URL, backupURL: URL) throws {
+    private func performAtomicSwap(
+        currentURL: URL,
+        stagedURL: URL,
+        rollbackContainerURL: URL,
+        backupBundleURL: URL
+    ) throws {
         log.info("Starting privileged atomic swap")
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagedURL.path)")
-        log.info("Backup app: \(backupURL.path)")
+        log.info("Rollback container: \(rollbackContainerURL.path)")
+        log.info("Backup app: \(backupBundleURL.path)")
 
         let backupUID = context.clientUID
         let backupGID = context.clientGID
         log.success("Using backup ownership uid/gid from authenticated client (uid: \(backupUID), gid: \(backupGID))")
 
-        let backupParent = backupURL.deletingLastPathComponent()
-        try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
-        log.success("Backup directory ready at \(backupParent.path)")
+        try fileManager.createDirectory(at: rollbackContainerURL, withIntermediateDirectories: true)
+        log.success("Backup directory ready at \(rollbackContainerURL.path)")
+        try applyOwnership(to: rollbackContainerURL, uid: backupUID, gid: backupGID)
+        log.success("Applied client ownership to rollback container")
 
-        if fileManager.fileExists(atPath: backupURL.path) {
-            try fileManager.removeItem(at: backupURL)
-            log.success("Removed existing backup at \(backupURL.path)")
+        if fileManager.fileExists(atPath: backupBundleURL.path) {
+            try fileManager.removeItem(at: backupBundleURL)
+            log.success("Removed existing backup at \(backupBundleURL.path)")
         }
 
-        try fileManager.moveItem(at: currentURL, to: backupURL)
+        try fileManager.moveItem(at: currentURL, to: backupBundleURL)
         log.success("Moved current app to backup location")
-        try applyOwnershipRecursively(at: backupURL, uid: backupUID, gid: backupGID)
+        try applyOwnershipRecursively(at: backupBundleURL, uid: backupUID, gid: backupGID)
         log.success("Applied client ownership to backup")
 
         do {
@@ -362,7 +424,7 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
         } catch {
             log.warn("Swap failed after backup move; attempting rollback")
             try? fileManager.removeItem(at: currentURL)
-            try? fileManager.moveItem(at: backupURL, to: currentURL)
+            try? fileManager.moveItem(at: backupBundleURL, to: currentURL)
             try? applyRootOwnershipRecursively(at: currentURL)
             log.success("Rollback to backup completed")
             throw error
@@ -372,17 +434,17 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
     }
 
     /// Restores the app from backup and reapplies root ownership.
-    private func performRestoreFromBackup(currentURL: URL, backupURL: URL) throws {
+    private func performRestoreFromBackup(currentURL: URL, backupBundleURL: URL) throws {
         log.info("Starting privileged restore from backup")
         log.info("Current app: \(currentURL.path)")
-        log.info("Backup app: \(backupURL.path)")
+        log.info("Backup app: \(backupBundleURL.path)")
 
         if fileManager.fileExists(atPath: currentURL.path) {
             try fileManager.removeItem(at: currentURL)
             log.success("Removed current app before restore")
         }
 
-        try fileManager.moveItem(at: backupURL, to: currentURL)
+        try fileManager.moveItem(at: backupBundleURL, to: currentURL)
         try applyRootOwnershipRecursively(at: currentURL)
         log.success("Privileged restore completed")
     }

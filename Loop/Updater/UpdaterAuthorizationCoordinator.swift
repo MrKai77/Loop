@@ -12,23 +12,29 @@ final class UpdaterAuthorizationCoordinator {
 
     final class PrivilegedSession {
         private unowned let coordinator: UpdaterAuthorizationCoordinator
-        private let serviceName: String
+        private let connection: NSXPCConnection
 
-        fileprivate init(coordinator: UpdaterAuthorizationCoordinator, serviceName: String) {
+        fileprivate init(coordinator: UpdaterAuthorizationCoordinator, connection: NSXPCConnection) {
             self.coordinator = coordinator
-            self.serviceName = serviceName
+            self.connection = connection
         }
 
         /// Invokes the helper atomic swap using a rollback token instead of caller-provided paths.
         func atomicSwap(rollbackID: String) async throws {
             let operation = PrivilegedOperation.atomicSwap(rollbackID: rollbackID)
-            try await coordinator.performXPCOperation(serviceName: serviceName, operation: operation)
+            try await coordinator.performXPCOperation(connection: connection, operation: operation)
         }
 
         /// Invokes helper restore for the rollback token selected by the caller.
         func restoreFromBackup(rollbackID: String) async throws {
             let operation = PrivilegedOperation.restore(rollbackID: rollbackID)
-            try await coordinator.performXPCOperation(serviceName: serviceName, operation: operation)
+            try await coordinator.performXPCOperation(connection: connection, operation: operation)
+        }
+
+        /// Removes the authenticated client's current app bundle.
+        func removeCurrentBundle() async throws {
+            let operation = PrivilegedOperation.removeCurrentBundle
+            try await coordinator.performXPCOperation(connection: connection, operation: operation)
         }
     }
 
@@ -93,16 +99,31 @@ final class UpdaterAuthorizationCoordinator {
         // Give launchd a brief moment to bootstrap the helper listener.
         try await Task.sleep(for: .milliseconds(250))
 
-        let session = PrivilegedSession(coordinator: self, serviceName: serviceName)
+        let connection = NSXPCConnection(machServiceName: serviceName, options: .privileged)
+        connection.remoteObjectInterface = NSXPCInterface(with: PrivilegedInstallerProtocol.self)
+        connection.resume()
+
+        defer {
+            connection.invalidationHandler = nil
+            connection.interruptionHandler = nil
+            connection.invalidate()
+        }
+
+        let session = PrivilegedSession(coordinator: self, connection: connection)
         return try await body(session)
     }
 
-    private func performXPCOperation(serviceName: String, operation: PrivilegedOperation) async throws {
+    private func performXPCOperation(connection: NSXPCConnection, operation: PrivilegedOperation) async throws {
         try await withCheckedThrowingContinuation { continuation in
             let completion = ContinuationCompletion()
-            // Keep completion synchronous so connection invalidation cannot win the race after success.
-            let finish: @Sendable (Result<(), Error>) -> () = { result in
+            var timeoutTask: Task<(), Never>?
+
+            // Keep completion synchronous so competing callbacks cannot resume more than once.
+            let finish: (Result<(), Error>) -> () = { result in
                 guard completion.tryComplete() else { return }
+                timeoutTask?.cancel()
+                connection.interruptionHandler = nil
+                connection.invalidationHandler = nil
                 switch result {
                 case .success:
                     continuation.resume(returning: ())
@@ -111,22 +132,21 @@ final class UpdaterAuthorizationCoordinator {
                 }
             }
 
-            let connection = NSXPCConnection(machServiceName: serviceName, options: .privileged)
-            connection.remoteObjectInterface = NSXPCInterface(with: PrivilegedInstallerProtocol.self)
             connection.interruptionHandler = {
+                self.log.warn("Privileged installer \(operation.name) interrupted during shared session")
                 finish(.failure(UpdateError.installationFailed("Privileged installer \(operation.name) interrupted")))
             }
             connection.invalidationHandler = {
+                self.log.warn("Privileged installer \(operation.name) invalidated during shared session")
                 finish(.failure(UpdateError.installationFailed("Privileged installer \(operation.name) invalidated")))
             }
 
-            connection.resume()
-
             guard let proxy = connection.remoteObjectProxyWithErrorHandler({ error in
+                self.log.warn("Privileged installer \(operation.name) transport failed during shared session: \(error.localizedDescription)")
                 finish(.failure(UpdateError.installationFailed("Privileged installer \(operation.name) transport failed: \(error.localizedDescription)")))
             }) as? PrivilegedInstallerProtocol else {
+                self.log.warn("Failed to connect to privileged installer helper for \(operation.name)")
                 finish(.failure(UpdateError.installationFailed("Failed to connect to privileged installer helper")))
-                connection.invalidate()
                 return
             }
 
@@ -137,13 +157,17 @@ final class UpdaterAuthorizationCoordinator {
                 } else {
                     finish(.success(()))
                 }
-                connection.invalidate()
             }
 
-            Task {
-                try await Task.sleep(for: self.operationTimeout)
+            timeoutTask = Task {
+                do {
+                    try await Task.sleep(for: self.operationTimeout)
+                } catch {
+                    return
+                }
+
+                self.log.warn("Privileged installer \(operation.name) timed out during shared session")
                 finish(.failure(UpdateError.installationFailed("Privileged installer \(operation.name) timed out")))
-                connection.invalidate()
             }
         }
     }
@@ -290,6 +314,7 @@ final class UpdaterAuthorizationCoordinator {
 private enum PrivilegedOperation {
     case atomicSwap(rollbackID: String)
     case restore(rollbackID: String)
+    case removeCurrentBundle
 
     var name: String {
         switch self {
@@ -297,6 +322,8 @@ private enum PrivilegedOperation {
             "atomic swap"
         case .restore:
             "restore"
+        case .removeCurrentBundle:
+            "remove current bundle"
         }
     }
 
@@ -307,6 +334,8 @@ private enum PrivilegedOperation {
             proxy.atomicSwap(rollbackID: rollbackID, withReply: reply)
         case let .restore(rollbackID):
             proxy.restoreFromBackup(rollbackID: rollbackID, withReply: reply)
+        case .removeCurrentBundle:
+            proxy.removeCurrentBundle(withReply: reply)
         }
     }
 }

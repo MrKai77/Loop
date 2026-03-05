@@ -12,6 +12,11 @@ import Foundation
         rollbackID: String,
         withReply reply: @escaping (NSError?) -> ()
     )
+
+    /// Removes the authenticated client's current app bundle.
+    func removeCurrentBundle(
+        withReply reply: @escaping (NSError?) -> ()
+    )
 }
 
 enum PrivilegedInstallerConstants {

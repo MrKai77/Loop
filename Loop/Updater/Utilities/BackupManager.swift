@@ -70,42 +70,6 @@ actor BackupManager {
         }
     }
 
-    /// Prepares the latest backup archive for restore by unzipping to staging.
-    /// - Returns: URL of the restored app bundle inside staging.
-    func prepareToRestoreLastVersion() async throws -> URL {
-        try await prepareForBackup()
-
-        let backupArchives = try getBackupArchivesSortedByDate()
-        guard let latestArchiveURL = backupArchives.last?.0 else {
-            throw UpdateError.installationFailed("No zip backups are available to restore")
-        }
-
-        let restoreWorkspace = restoreStagingRoot
-            .appendingPathComponent("BackupRestore_\(UUID().uuidString)", isDirectory: true)
-
-        do {
-            if fileManager.fileExists(atPath: restoreWorkspace.path) {
-                try fileManager.removeItem(at: restoreWorkspace)
-            }
-
-            try fileManager.createDirectory(at: restoreWorkspace, withIntermediateDirectories: true)
-
-            let archive = try Archive(url: latestArchiveURL, accessMode: .read)
-            for entry in archive where !entry.path.contains(/__MACOSX/) {
-                _ = try archive.extract(entry, to: restoreWorkspace.appendingPathComponent(entry.path))
-            }
-
-            let appBundleURL = try BundleUtilities.findAppBundle(in: restoreWorkspace)
-            try BundleUtilities.verifyBundleStructure(appBundleURL)
-            return appBundleURL
-        } catch {
-            try? fileManager.removeItem(at: restoreWorkspace)
-            throw UpdateError.installationFailed(
-                "Could not prepare backup restore from \(latestArchiveURL.lastPathComponent): \(error.localizedDescription)"
-            )
-        }
-    }
-
     // MARK: - Private Methods
 
     /// Used to purge old backups from Loop 1.4.x, which stored `.app`s instead of `.zip`s.
