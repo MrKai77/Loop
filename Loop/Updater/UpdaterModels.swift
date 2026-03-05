@@ -143,7 +143,6 @@ enum UpdateError: LocalizedError, Sendable {
             return false
         }
     }
-
 }
 
 // MARK: - GitHubRelease Model
