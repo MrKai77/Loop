@@ -25,7 +25,8 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
     }
 
     private static let maxRollbackIDLength = 128
-    private static let allowedRollbackIDScalars = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-")
+    private static let allowedRollbackIDScalars = CharacterSet.alphanumerics
+        .union(CharacterSet(charactersIn: "._-"))
 
     private let context: PrivilegedInstallerService.TrustedClientContext
     private let fileManager: FileManager

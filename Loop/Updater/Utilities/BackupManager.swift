@@ -15,7 +15,6 @@ actor BackupManager {
 
     private var homeDirectory: URL { LoopSupportPaths.canonical(fileManager.homeDirectoryForCurrentUser) }
     private var backupDirectory: URL { LoopSupportPaths.backupsDirectory(homeDirectory: homeDirectory) }
-    private var restoreStagingRoot: URL { LoopSupportPaths.stagingDirectory(homeDirectory: homeDirectory) }
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
