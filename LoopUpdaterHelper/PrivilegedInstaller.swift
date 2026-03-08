@@ -424,10 +424,21 @@ final class PrivilegedInstaller: NSObject, PrivilegedInstallerProtocol {
             log.success("Applied root ownership to installed app")
         } catch {
             log.warn("Swap failed after backup move; attempting rollback")
-            try? fileManager.removeItem(at: currentURL)
-            try? fileManager.moveItem(at: backupBundleURL, to: currentURL)
-            try? applyRootOwnershipRecursively(at: currentURL)
-            log.success("Rollback to backup completed")
+
+            do {
+                if fileManager.fileExists(atPath: currentURL.path) {
+                    try fileManager.removeItem(at: currentURL)
+                    log.info("Removed partially installed app before rollback restore")
+                }
+
+                try fileManager.moveItem(at: backupBundleURL, to: currentURL)
+                log.info("Moved backup app back into current location")
+                try applyRootOwnershipRecursively(at: currentURL)
+                log.success("Rollback to backup completed")
+            } catch {
+                log.error("Rollback to backup failed: \(error.localizedDescription)")
+            }
+
             throw error
         }
 

@@ -1,3 +1,10 @@
+//
+//  LoopSupportPaths.swift
+//  Loop
+//
+//  Created by Kai Azim on 2026-02-23.
+//
+
 import Foundation
 
 enum LoopSupportPaths {

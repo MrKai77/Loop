@@ -1,3 +1,10 @@
+//
+//  UpdaterAuthorizationCoordinator.swift
+//  Loop
+//
+//  Created by Kai Azim on 2026-02-23.
+//
+
 import Foundation
 import Scribe
 import Security
