@@ -8,21 +8,43 @@
 import AppKit
 import Foundation
 import Scribe
+import Security
 
 @Loggable
 actor UpdateInstaller {
+    enum InstallationPermissionState: Sendable {
+        case writable
+        case needsElevation(reason: String)
+        case notWritableNoElevationPossible(reason: String)
+    }
+
     // MARK: - Properties
 
     private let backupManager: BackupManager
     private let fileManager: FileManager
+    private let authorizationCoordinator: UpdaterAuthorizationCoordinator
 
     private var isCancelled = false
     private var relocateToApplications = false
     private var installedAppURL: URL = Bundle.main.bundleURL
+    private var installationPermissionState: InstallationPermissionState = .writable
+
+    private var userHomeDirectory: URL {
+        LoopSupportPaths.canonical(fileManager.homeDirectoryForCurrentUser)
+    }
+
+    private var stagingRootDirectory: URL {
+        LoopSupportPaths.stagingDirectory(homeDirectory: userHomeDirectory)
+    }
+
+    private var rollbackRootDirectory: URL {
+        LoopSupportPaths.rollbackDirectory(homeDirectory: userHomeDirectory)
+    }
 
     init(fileManager: FileManager = .default) {
         self.fileManager = fileManager
         self.backupManager = BackupManager(fileManager: fileManager)
+        self.authorizationCoordinator = UpdaterAuthorizationCoordinator()
     }
 
     func installUpdate(
@@ -157,7 +179,7 @@ actor UpdateInstaller {
     private func verifyDiskSpace(manifest _: UpdateManifest) async throws {
         log.info("Verifying disk space requirements")
 
-        let currentAppSize = try calculateAppSize(Bundle.main.bundleURL)
+        let currentAppSize = try fileManager.calculateDirectorySize(Bundle.main.bundleURL)
         let requiredSpace = currentAppSize * 3 // Current app + backup + new app
 
         let availableSpace = try getAvailableDiskSpace()
@@ -183,22 +205,60 @@ actor UpdateInstaller {
         let currentAppURL = Bundle.main.bundleURL
         let parentDirectory = currentAppURL.deletingLastPathComponent()
 
-        // Check write permissions to parent directory
         guard fileManager.isWritableFile(atPath: parentDirectory.path) else {
-            throw UpdateError.installationFailed("No write permissions to application directory: \(parentDirectory.path)")
+            installationPermissionState = permissionStateForRestrictedInstallLocation(
+                baseReason: "No write permissions to application directory: \(parentDirectory.path)"
+            )
+            return
         }
 
-        // Test by creating a temporary file
         let testFile = parentDirectory.appendingPathComponent("loop_permission_test_\(UUID().uuidString)")
 
         do {
             try "test".write(to: testFile, atomically: true, encoding: .utf8)
             try fileManager.removeItem(at: testFile)
+            installationPermissionState = .writable
+            log.success("Installation permissions verified")
         } catch {
-            throw UpdateError.installationFailed("Cannot write to application directory: \(error.localizedDescription)")
+            try? fileManager.removeItem(at: testFile)
+
+            guard isExplicitPermissionError(error) else {
+                throw UpdateError.installationFailed("Cannot verify installation permissions: \(error.localizedDescription)")
+            }
+
+            installationPermissionState = permissionStateForRestrictedInstallLocation(
+                baseReason: "Cannot write to application directory: \(error.localizedDescription)"
+            )
+        }
+    }
+
+    private func permissionStateForRestrictedInstallLocation(baseReason: String) -> InstallationPermissionState {
+        switch authorizationCoordinator.privilegedHelperReadiness() {
+        case .available:
+            .needsElevation(reason: baseReason)
+        case let .unavailable(helperReason):
+            .notWritableNoElevationPossible(reason: "\(baseReason). \(helperReason)")
+        }
+    }
+
+    private func isExplicitPermissionError(_ error: Error) -> Bool {
+        let nsError = error as NSError
+
+        if nsError.domain == NSCocoaErrorDomain {
+            let cocoaPermissionCodes: Set<Int> = [
+                NSFileReadNoPermissionError,
+                NSFileWriteNoPermissionError,
+                NSFileWriteVolumeReadOnlyError
+            ]
+            return cocoaPermissionCodes.contains(nsError.code)
         }
 
-        log.success("Installation permissions verified")
+        if nsError.domain == NSPOSIXErrorDomain,
+           let code = POSIXErrorCode(rawValue: Int32(nsError.code)) {
+            return code == .EACCES || code == .EPERM || code == .EROFS
+        }
+
+        return false
     }
 
     private func checkForConflictingRunningProcesses() async throws {
@@ -373,23 +433,30 @@ actor UpdateInstaller {
     private func validateAppCodeSignature(_ appBundle: URL) async throws {
         log.info("Validating app code signature")
 
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
-        process.arguments = ["--verify", "--verbose", appBundle.path]
+        let creationFlags = SecCSFlags()
+        let validationFlags = SecCSFlags(rawValue: kSecCSStrictValidate | kSecCSCheckAllArchitectures)
 
-        let errorPipe = Pipe()
-        process.standardError = errorPipe
+        var staticCode: SecStaticCode?
+        let createStatus = SecStaticCodeCreateWithPath(appBundle as CFURL, creationFlags, &staticCode)
+        guard createStatus == errSecSuccess, let staticCode else {
+            let message = securityErrorMessage(for: createStatus)
+            throw UpdateError.installationFailed("Code signature object creation failed: \(message)")
+        }
 
-        try process.run()
-        process.waitUntilExit()
-
-        if process.terminationStatus != 0 {
-            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-            let errorOutput = String(data: errorData, encoding: .utf8) ?? "Unknown codesign error"
-            throw UpdateError.installationFailed("Code signature validation failed: \(errorOutput)")
+        let validationStatus = SecStaticCodeCheckValidity(staticCode, validationFlags, nil)
+        guard validationStatus == errSecSuccess else {
+            let message = securityErrorMessage(for: validationStatus)
+            throw UpdateError.installationFailed("Code signature validation failed: \(message)")
         }
 
         log.success("Code signature validation passed")
+    }
+
+    private func securityErrorMessage(for status: OSStatus) -> String {
+        if let message = SecCopyErrorMessageString(status, nil) as String? {
+            return "\(message) (OSStatus \(status))"
+        }
+        return "OSStatus \(status)"
     }
 
     // MARK: - Safe Installation
@@ -408,7 +475,64 @@ actor UpdateInstaller {
 
             // Perform atomic installation to current location
             let currentAppURL = Bundle.main.bundleURL
-            try await performAtomicInstallation(from: appBundle, to: currentAppURL, manifest: manifest)
+
+            switch installationPermissionState {
+            case .writable:
+                try await performAtomicInstallationNonPrivileged(from: appBundle, to: currentAppURL, manifest: manifest)
+            case .needsElevation:
+                log.info("Requesting administrator authorization for privileged installation")
+                var enteredPrivilegedSession = false
+                do {
+                    try await authorizationCoordinator.withPrivilegedSession { session in
+                        enteredPrivilegedSession = true
+                        log.success("Administrator authorization granted; privileged session established")
+
+                        do {
+                            try await performAtomicInstallationPrivilegedWithSession(
+                                from: appBundle,
+                                to: currentAppURL,
+                                manifest: manifest,
+                                session: session
+                            )
+                        } catch {
+                            if await askUserForApplicationsFallback(
+                                failedTargetPath: currentAppURL.path,
+                                after: error.localizedDescription
+                            ) {
+                                try await performRelocationInstall(
+                                    from: appBundle,
+                                    manifest: manifest,
+                                    cleanupSession: session
+                                )
+                            } else {
+                                throw UpdateError.installationFailed("Update requires administrator authorization to modify \(currentAppURL.path).")
+                            }
+                        }
+                    }
+                } catch {
+                    guard !enteredPrivilegedSession else {
+                        throw error
+                    }
+
+                    if await askUserForApplicationsFallback(
+                        failedTargetPath: currentAppURL.path,
+                        after: error.localizedDescription
+                    ) {
+                        try await performRelocationInstall(from: appBundle, manifest: manifest)
+                    } else {
+                        throw UpdateError.installationFailed("Update requires administrator authorization to modify \(currentAppURL.path).")
+                    }
+                }
+            case let .notWritableNoElevationPossible(reason):
+                if await askUserForApplicationsFallback(
+                    failedTargetPath: currentAppURL.path,
+                    after: reason
+                ) {
+                    try await performRelocationInstall(from: appBundle, manifest: manifest)
+                } else {
+                    throw UpdateError.installationFailed("Cannot modify current application location: \(reason)")
+                }
+            }
         }
 
         // Post-installation verification
@@ -417,24 +541,31 @@ actor UpdateInstaller {
         log.success("Safe installation completed")
     }
 
-    private func performRelocationInstall(from appBundle: URL, manifest: UpdateManifest) async throws {
+    private func performRelocationInstall(
+        from appBundle: URL,
+        manifest: UpdateManifest,
+        cleanupSession: UpdaterAuthorizationCoordinator.PrivilegedSession? = nil
+    ) async throws {
         log.info("Installing to Applications folder")
 
-        let userAppsURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications")
-        let destinationURL = userAppsURL.appendingPathComponent("Loop.app")
+        let sourceAppURL = LoopSupportPaths.canonical(Bundle.main.bundleURL)
+        let userAppsURL = LoopSupportPaths.canonical(
+            fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications", isDirectory: true)
+        )
+        let destinationURL = LoopSupportPaths.canonical(
+            userAppsURL.appendingPathComponent("Loop.app", isDirectory: true)
+        )
 
         // Create ~/Applications if needed
         try fileManager.createDirectory(at: userAppsURL, withIntermediateDirectories: true)
 
-        // Remove existing app at destination if present
-        if fileManager.fileExists(atPath: destinationURL.path) {
-            log.info("Removing existing app at destination: \(destinationURL.path)")
-            try fileManager.removeItem(at: destinationURL)
-        }
-
-        // Copy new app to Applications
-        log.info("Copying new version to: \(destinationURL.path)")
-        try fileManager.copyItem(at: appBundle, to: destinationURL)
+        // Reuse the same staging + swap path used for regular updates so only swap
+        // operations touch locations outside Loop's support directory.
+        try await performAtomicInstallationNonPrivileged(
+            from: appBundle,
+            to: destinationURL,
+            manifest: manifest
+        )
 
         // Verify the installation
         try BundleUtilities.verifyBundleStructure(destinationURL)
@@ -443,16 +574,77 @@ actor UpdateInstaller {
         // Store the new location for restart
         installedAppURL = destinationURL
 
-        // Remove old app from original location
-        let oldAppURL = Bundle.main.bundleURL
-        log.info("Removing old app from: \(oldAppURL.path)")
-        do {
-            try fileManager.removeItem(at: oldAppURL)
-        } catch {
-            log.warn("Could not remove old app: \(error.localizedDescription)")
-        }
+        await cleanupOldRelocatedCopyIfNeeded(
+            source: sourceAppURL,
+            destination: destinationURL,
+            cleanupSession: cleanupSession
+        )
 
         log.success("Successfully installed to Applications folder")
+    }
+
+    private func cleanupOldRelocatedCopyIfNeeded(
+        source sourceAppURL: URL,
+        destination destinationURL: URL,
+        cleanupSession: UpdaterAuthorizationCoordinator.PrivilegedSession?
+    ) async {
+        let canonicalSource = LoopSupportPaths.canonical(sourceAppURL)
+        let canonicalDestination = LoopSupportPaths.canonical(destinationURL)
+
+        guard canonicalSource != canonicalDestination else {
+            log.debug("Skipping relocation cleanup because source and destination are identical")
+            return
+        }
+
+        guard fileManager.fileExists(atPath: canonicalSource.path) else {
+            log.debug("Skipping relocation cleanup because source app copy no longer exists at \(canonicalSource.path)")
+            return
+        }
+
+        do {
+            try fileManager.trashItem(at: canonicalSource, resultingItemURL: nil)
+            log.info("Moved previous app copy to Trash after relocation: \(canonicalSource.path)")
+            return
+        } catch {
+            guard isExplicitPermissionError(error) else {
+                log.warn("Failed to remove previous app copy after relocation at \(canonicalSource.path): \(error.localizedDescription)")
+                return
+            }
+
+            guard let cleanupSession else {
+                log.debug("No pre-existing privileged session available for relocation cleanup; previous app copy remains at \(canonicalSource.path)")
+                return
+            }
+
+            log.info("Could not move previous app copy to Trash due to permissions; attempting privileged cleanup with existing session")
+            do {
+                try await cleanupSession.removeCurrentBundle()
+                log.info("Privileged cleanup removed previous app copy after relocation")
+            } catch {
+                log.debug("Existing privileged session could not remove previous app copy: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    @MainActor
+    private func askUserForApplicationsFallback(
+        failedTargetPath: String,
+        after failureReason: String
+    ) async -> Bool {
+        let alert = NSAlert()
+        alert.messageText = String(localized: "Administrator Authorization Required")
+        alert.informativeText = String(
+            localized: "\(Bundle.main.appName) could not install the update at \(failedTargetPath) (\(failureReason)). Would you like to install this update in your Applications folder instead?"
+        )
+        alert.alertStyle = .warning
+        alert.addButton(
+            withTitle: String(localized: "Install in Your Applications Folder")
+        )
+        alert.addButton(
+            withTitle: String(localized: "Cancel Update")
+        )
+
+        return alert.runModal() == .alertFirstButtonReturn
     }
 
     private func verifyPreInstallationState() async throws {
@@ -480,14 +672,15 @@ actor UpdateInstaller {
 
     // MARK: - Atomic Installation
 
-    private func performAtomicInstallation(
+    private func performAtomicInstallationNonPrivileged(
         from sourceURL: URL,
         to destinationURL: URL,
         manifest: UpdateManifest
     ) async throws {
         log.info("Performing atomic installation")
 
-        let stagingURL = destinationURL.appendingPathExtension("staging")
+        let stagingURL = stagingRootDirectory
+            .appendingPathComponent("\(destinationURL.lastPathComponent).staging", isDirectory: true)
 
         do {
             try await executeAtomicInstallationSteps(
@@ -498,7 +691,32 @@ actor UpdateInstaller {
             )
             log.info("Atomic installation completed successfully")
         } catch {
-            await cleanupStaging(stagingURL)
+            try? fileManager.removeItem(at: stagingURL)
+            throw error
+        }
+    }
+
+    private func performAtomicInstallationPrivilegedWithSession(
+        from sourceURL: URL,
+        to destinationURL: URL,
+        manifest: UpdateManifest,
+        session: UpdaterAuthorizationCoordinator.PrivilegedSession
+    ) async throws {
+        let stagingURL = stagingRootDirectory
+            .appendingPathComponent("\(destinationURL.lastPathComponent).staging", isDirectory: true)
+
+        do {
+            try copyToStaging(from: sourceURL, to: stagingURL)
+            log.info("Verifying staged application immediately before privileged swap")
+            try await verifyStaged(stagingURL, manifest: manifest)
+            try await atomicSwapPrivileged(
+                staged: stagingURL,
+                current: destinationURL,
+                session: session
+            )
+            log.success("Privileged atomic installation completed successfully")
+        } catch {
+            try? fileManager.removeItem(at: stagingURL)
             throw error
         }
     }
@@ -518,6 +736,11 @@ actor UpdateInstaller {
         try checkCancellation()
 
         log.debug("Copying application to staging area")
+
+        try fileManager.createDirectory(
+            at: stagingURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
 
         if fileManager.fileExists(atPath: stagingURL.path) {
             try fileManager.removeItem(at: stagingURL)
@@ -559,77 +782,215 @@ actor UpdateInstaller {
         log.info("Current app: \(currentURL.path)")
         log.info("Staged app: \(stagingURL.path)")
 
-        try await backupManager.prepareForBackup()
-        let backupURL = try await backupManager.createBackupURL()
+        let rollbackID = try createTransientRollbackID()
+        let rollbackContainerURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
+        let backupBundleURL = rollbackContainerURL.appendingPathComponent(
+            currentURL.lastPathComponent,
+            isDirectory: true
+        )
 
         try await performSwapOperation(
             current: currentURL,
             staged: stagingURL,
-            backup: backupURL
+            backupBundle: backupBundleURL
+        )
+
+        await archiveRollbackSnapshotIfPresent(at: rollbackContainerURL)
+    }
+
+    private func atomicSwapPrivileged(
+        staged stagingURL: URL,
+        current currentURL: URL,
+        session: UpdaterAuthorizationCoordinator.PrivilegedSession
+    ) async throws {
+        try checkCancellation()
+
+        log.info("Starting privileged atomic swap")
+        log.info("Current app: \(currentURL.path)")
+        log.info("Staged app: \(stagingURL.path)")
+
+        let rollbackID = try createTransientRollbackID()
+        let rollbackContainerURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
+        let backupBundleURL = rollbackContainerURL.appendingPathComponent(
+            currentURL.lastPathComponent,
+            isDirectory: true
+        )
+
+        do {
+            log.info("Invoking privileged helper atomic swap")
+            try await session.atomicSwap(rollbackID: rollbackID)
+
+            try verifyPrivilegedSwapCompletion(current: currentURL, backupBundle: backupBundleURL, staged: stagingURL)
+        } catch {
+            log.error("Privileged atomic swap failed: \(error.localizedDescription)")
+            try await reconcilePrivilegedSwapFailure(
+                current: currentURL,
+                staged: stagingURL,
+                rollbackID: rollbackID,
+                originalError: error,
+                session: session
+            )
+        }
+
+        await archiveRollbackSnapshotIfPresent(at: rollbackContainerURL)
+    }
+
+    private func reconcilePrivilegedSwapFailure(
+        current currentURL: URL,
+        staged stagingURL: URL,
+        rollbackID: String,
+        originalError: Error,
+        session: UpdaterAuthorizationCoordinator.PrivilegedSession
+    ) async throws {
+        let rollbackContainerURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
+        let backupBundleURL = rollbackContainerURL.appendingPathComponent(
+            currentURL.lastPathComponent,
+            isDirectory: true
+        )
+        let currentExists = fileManager.fileExists(atPath: currentURL.path)
+        let backupExists = fileManager.fileExists(atPath: backupBundleURL.path)
+
+        if currentExists, backupExists {
+            do {
+                try verifyPrivilegedSwapCompletion(current: currentURL, backupBundle: backupBundleURL, staged: stagingURL)
+                log.notice("Privileged swap and ownership validation completed despite transport failure; continuing installation")
+                return
+            } catch {
+                log.warn("Privileged swap state or ownership check failed after transport error; attempting recovery restore: \(error.localizedDescription)")
+            }
+        }
+
+        guard backupExists else {
+            guard currentExists else {
+                throw UpdateError.installationFailed(
+                    "Privileged atomic swap failed and no backup was available for recovery: \(originalError.localizedDescription)"
+                )
+            }
+
+            do {
+                try validateAppBundle(currentURL, skipVersionCheck: true)
+                try verifyPrivilegedInstalledOwnership(current: currentURL)
+            } catch {
+                throw UpdateError.installationFailed(
+                    "Privileged atomic swap failed, backup snapshot was unavailable, and restored app verification failed: \(originalError.localizedDescription). Verification error: \(error.localizedDescription)"
+                )
+            }
+
+            throw UpdateError.installationFailed(
+                "Privileged atomic swap failed. The previous app version was restored successfully."
+            )
+        }
+
+        do {
+            log.notice("Attempting privileged rollback recovery using the existing authorized session")
+            try await session.restoreFromBackup(rollbackID: rollbackID)
+
+            guard fileManager.fileExists(atPath: currentURL.path) else {
+                throw UpdateError.installationFailed("Privileged restore failed: restored app not found at \(currentURL.path)")
+            }
+
+            try validateAppBundle(currentURL, skipVersionCheck: true)
+        } catch {
+            throw UpdateError.installationFailed(
+                "Privileged atomic swap failed and restore was unsuccessful: \(originalError.localizedDescription). Recovery error: \(error.localizedDescription)"
+            )
+        }
+
+        throw UpdateError.installationFailed(
+            "Privileged atomic swap failed. The previous app version was restored successfully."
         )
     }
 
-    private func performSwapOperation(current: URL, staged: URL, backup: URL) async throws {
+    private func performSwapOperation(current: URL, staged: URL, backupBundle: URL) async throws {
+        let currentExists = fileManager.fileExists(atPath: current.path)
+
         do {
-            log.info("Moving current app to backup...")
+            if currentExists {
+                log.info("Moving current app to backup...")
 
-            // Ensure the backup directory exists
-            let backupParent = backup.deletingLastPathComponent()
-            try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
+                // Ensure the backup directory exists
+                let backupParent = backupBundle.deletingLastPathComponent()
+                try fileManager.createDirectory(at: backupParent, withIntermediateDirectories: true)
 
-            // Check if backup already exists and remove it if necessary
-            if fileManager.fileExists(atPath: backup.path) {
-                log.warn("Backup already exists at \(backup.path), removing it first")
-                try fileManager.removeItem(at: backup)
+                // Check if backup already exists and remove it if necessary
+                if fileManager.fileExists(atPath: backupBundle.path) {
+                    log.warn("Backup already exists at \(backupBundle.path), removing it first")
+                    try fileManager.removeItem(at: backupBundle)
+                }
+
+                try fileManager.moveItem(at: current, to: backupBundle)
+                log.info("Current app backed up to: \(backupBundle.path)")
+            } else {
+                log.info("No existing app at destination, installing staged app directly")
             }
-
-            try fileManager.moveItem(at: current, to: backup)
-            log.info("Current app backed up to: \(backup.path)")
 
             log.info("Moving staged app to current location...")
             try fileManager.moveItem(at: staged, to: current)
             log.info("New app installed at: \(current.path)")
 
             // Verify the atomic swap was successful
-            try verifySwapSuccess(current: current, backup: backup, staged: staged)
+            try verifySwapSuccess(current: current, backupBundle: backupBundle, staged: staged, expectBackup: currentExists)
             log.success("Atomic swap completed and verified successfully!")
         } catch {
             log.error("Atomic swap failed: \(error)")
-            log.error("Current: \(current.path), Staged: \(staged.path), Backup: \(backup.path)")
+            log.error("Current: \(current.path), Staged: \(staged.path), Backup: \(backupBundle.path)")
             log.error("Current exists: \(fileManager.fileExists(atPath: current.path))")
             log.error("Staged exists: \(fileManager.fileExists(atPath: staged.path))")
-            log.error("Backup exists: \(fileManager.fileExists(atPath: backup.path))")
+            log.error("Backup exists: \(fileManager.fileExists(atPath: backupBundle.path))")
 
-            try await backupManager.restoreFromBackup(currentURL: current, backupURL: backup)
+            if currentExists, fileManager.fileExists(atPath: backupBundle.path) {
+                try restoreFromRollbackSnapshot(currentURL: current, backupBundleURL: backupBundle)
+            }
             throw error
         }
     }
 
-    private func verifySwapSuccess(current: URL, backup: URL, staged: URL) throws {
+    private func restoreFromRollbackSnapshot(currentURL: URL, backupBundleURL: URL) throws {
+        log.info("Attempting to restore from rollback snapshot")
+
+        guard fileManager.fileExists(atPath: backupBundleURL.path) else {
+            log.warn("Rollback snapshot not found at \(backupBundleURL.path)")
+            return
+        }
+
+        if fileManager.fileExists(atPath: currentURL.path) {
+            try fileManager.removeItem(at: currentURL)
+        }
+
+        try fileManager.moveItem(at: backupBundleURL, to: currentURL)
+        try BundleUtilities.verifyBundleStructure(currentURL)
+        log.success("Restored application from rollback snapshot")
+    }
+
+    private func verifySwapSuccess(current: URL, backupBundle: URL, staged: URL, expectBackup: Bool = true) throws {
         log.debug("Verifying atomic swap success...")
 
-        // 1. Verify backup was created successfully
-        guard fileManager.fileExists(atPath: backup.path) else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup not found at expected location: \(backup.path)")
+        if expectBackup {
+            // 1. Verify backup was created successfully
+            guard fileManager.fileExists(atPath: backupBundle.path) else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup not found at expected location: \(backupBundle.path)")
+            }
+
+            // Verify backup has correct bundle structure
+            try BundleUtilities.verifyBundleStructure(backupBundle)
+            log.debug("Backup bundle structure verified")
+
+            // Verify backup has a valid Info.plist and version
+            let backupInfoPlistURL = backupBundle.appendingPathComponent("Contents/Info.plist")
+            guard fileManager.fileExists(atPath: backupInfoPlistURL.path) else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup app Info.plist not found")
+            }
+
+            guard let backupPlist = NSDictionary(contentsOf: backupInfoPlistURL),
+                  let backupVersion = backupPlist["CFBundleShortVersionString"] as? String,
+                  !backupVersion.isEmpty else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup app version information is invalid")
+            }
+
+            log.debug("Backup version verified: \(backupVersion)")
+        } else {
+            log.debug("No existing destination app to back up before swap")
         }
-
-        // Verify backup has correct bundle structure
-        try BundleUtilities.verifyBundleStructure(backup)
-        log.debug("Backup bundle structure verified")
-
-        // Verify backup has a valid Info.plist and version
-        let backupInfoPlistURL = backup.appendingPathComponent("Contents/Info.plist")
-        guard fileManager.fileExists(atPath: backupInfoPlistURL.path) else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup app Info.plist not found")
-        }
-
-        guard let backupPlist = NSDictionary(contentsOf: backupInfoPlistURL),
-              let backupVersion = backupPlist["CFBundleShortVersionString"] as? String,
-              !backupVersion.isEmpty else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup app version information is invalid")
-        }
-
-        log.debug("Backup version verified: \(backupVersion)")
 
         // 2. Verify new app was installed successfully
         guard fileManager.fileExists(atPath: current.path) else {
@@ -660,23 +1021,76 @@ actor UpdateInstaller {
         }
 
         // 4. Verify file sizes are reasonable (basic sanity check)
-        let backupAttributes = try fileManager.attributesOfItem(atPath: backup.path)
-        let currentAttributes = try fileManager.attributesOfItem(atPath: current.path)
+        let currentSize = try fileManager.calculateDirectorySize(current)
 
-        guard let backupSize = backupAttributes[.size] as? Int64, backupSize > 0 else {
-            throw UpdateError.installationFailed("Atomic swap verification failed: Backup appears to be empty or invalid")
+        if expectBackup {
+            let backupSize = try fileManager.calculateDirectorySize(backupBundle)
+            guard backupSize > 0 else {
+                throw UpdateError.installationFailed("Atomic swap verification failed: Backup appears to be empty or invalid")
+            }
+            log.debug("Backup size verified: \(backupSize.formattedBytes)")
         }
 
-        guard let currentSize = currentAttributes[.size] as? Int64, currentSize > 0 else {
+        guard currentSize > 0 else {
             throw UpdateError.installationFailed("Atomic swap verification failed: New app appears to be empty or invalid")
         }
 
-        log.debug("File sizes verified - Backup: \(backupSize.formattedBytes), New: \(currentSize.formattedBytes)")
+        log.debug("New app size verified: \(currentSize.formattedBytes)")
         log.debug("Atomic swap verification completed")
     }
 
-    private func cleanupStaging(_ stagingURL: URL) async {
-        try? fileManager.removeItem(at: stagingURL)
+    private func verifyPrivilegedSwapCompletion(current: URL, backupBundle: URL, staged: URL) throws {
+        try verifySwapSuccess(current: current, backupBundle: backupBundle, staged: staged)
+        try verifyPrivilegedInstalledOwnership(current: current)
+    }
+
+    private func verifyPrivilegedInstalledOwnership(current currentURL: URL) throws {
+        let attributes = try fileManager.attributesOfItem(atPath: currentURL.path)
+
+        guard let ownerID = attributes[.ownerAccountID] as? NSNumber else {
+            throw UpdateError.installationFailed(
+                "Privileged install verification failed: could not read owner for \(currentURL.path)"
+            )
+        }
+
+        guard ownerID.intValue == 0 else {
+            throw UpdateError.installationFailed(
+                "Privileged install verification failed: expected root ownership at \(currentURL.path), found uid \(ownerID.intValue)"
+            )
+        }
+    }
+
+    /// Generates a unique rollback token and verifies its destination does not already exist.
+    private func createTransientRollbackID() throws -> String {
+        let rollbackRoot = rollbackRootDirectory
+        try fileManager.createDirectory(at: rollbackRoot, withIntermediateDirectories: true)
+
+        let timestampFormatter = DateFormatter()
+        timestampFormatter.dateFormat = "yyyyMMdd_HHmmss"
+        let timestamp = timestampFormatter.string(from: Date())
+        let currentVersion = Bundle.main.appVersion ?? "unknown"
+        let rollbackID = "rollback_\(currentVersion)_\(timestamp)_\(UUID().uuidString.lowercased())"
+        let rollbackURL = rollbackRootDirectory.appendingPathComponent(rollbackID, isDirectory: true)
+
+        guard !fileManager.fileExists(atPath: rollbackURL.path) else {
+            throw UpdateError.installationFailed(
+                "Rollback path already exists for generated ID \(rollbackID)"
+            )
+        }
+
+        return rollbackID
+    }
+
+    private func archiveRollbackSnapshotIfPresent(at rollbackURL: URL) async {
+        guard fileManager.fileExists(atPath: rollbackURL.path) else {
+            return
+        }
+
+        do {
+            _ = try await backupManager.backup(fileURL: rollbackURL)
+        } catch {
+            log.warn("Could not archive rollback snapshot at \(rollbackURL.path): \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Final Verification
@@ -755,23 +1169,6 @@ actor UpdateInstaller {
         guard !isCancelled else {
             throw UpdateError.installationFailed("Installation cancelled")
         }
-    }
-
-    private func calculateAppSize(_ appURL: URL) throws -> Int64 {
-        var totalSize: Int64 = 0
-
-        let enumerator = fileManager.enumerator(
-            at: appURL,
-            includingPropertiesForKeys: [.fileSizeKey],
-            options: [.skipsHiddenFiles]
-        )
-
-        while let fileURL = enumerator?.nextObject() as? URL {
-            let resourceValues = try fileURL.resourceValues(forKeys: [.fileSizeKey])
-            totalSize += Int64(resourceValues.fileSize ?? 0)
-        }
-
-        return totalSize
     }
 
     private func getAvailableDiskSpace() throws -> Int64 {

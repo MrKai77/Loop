@@ -10,11 +10,35 @@
 		2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28492A2F22B4B700F6CE42 /* Scribe */; };
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
-		2A8EDDBC2F23743B005457F8 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A8EDDBB2F23743B005457F8 /* Scribe */; };
+		2AF9238E2F540B1300F467FD /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AF9238D2F540B1300F467FD /* Scribe */; };
+		2AF923902F540B2200F467FD /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AF9238F2F540B2200F467FD /* Scribe */; };
 		3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED0A7B82F21DF6800A58629 /* ZIPFoundation */; };
-		A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A883642E298B7288005D6C19 /* ServiceManagement.framework */; };
+		B1AA00412F30000100AABBCC /* LoopUpdaterHelper in CopyFiles */ = {isa = PBXBuildFile; fileRef = B1AA00012F30000100AABBCC /* LoopUpdaterHelper */; };
 		F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06D76892DFF7A77007EEDA9 /* SkyLight.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B1AA00512F30000100AABBCC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8E59C2D297F5E9A0064D4BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B1AA00112F30000100AABBCC;
+			remoteInfo = LoopUpdaterHelper;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B1AA00612F30000100AABBCC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchServices;
+			dstSubfolderSpec = 1;
+			files = (
+				B1AA00412F30000100AABBCC /* LoopUpdaterHelper in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A848130C2BD1A8D100B02E93 /* .github */ = {isa = PBXFileReference; lastKnownFileType = folder; path = .github; sourceTree = "<group>"; };
@@ -23,10 +47,20 @@
 		A894B0C52C4B31AA00B4CE6F /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		A8E59C35297F5E9A0064D4BA /* Loop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E6D1FC2A4155DC005751D4 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		B1AA00012F30000100AABBCC /* LoopUpdaterHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LoopUpdaterHelper; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1AA00802F30000100AABBCC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F06D76892DFF7A77007EEDA9 /* SkyLight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyLight.framework; path = ../../../../System/Library/PrivateFrameworks/SkyLight.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2A6A87F22F4D20F4004E995D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				LoopSupportPaths.swift,
+				PrivilegedInstallerProtocol.swift,
+			);
+			target = B1AA00112F30000100AABBCC /* LoopUpdaterHelper */;
+		};
 		A8C751FF2D7BA98600B58784 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -48,7 +82,9 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		2A6A87F02F4D20D2004E995D /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (2A6A87F22F4D20F4004E995D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 		A8C751AC2D7BA98600B58784 /* Loop */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A8C751FF2D7BA98600B58784 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Loop; sourceTree = "<group>"; };
+		B1AA00022F30000100AABBCC /* LoopUpdaterHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LoopUpdaterHelper; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,11 +94,18 @@
 			files = (
 				2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */,
 				2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */,
-				2A8EDDBC2F23743B005457F8 /* Scribe in Frameworks */,
+				2AF9238E2F540B1300F467FD /* Scribe in Frameworks */,
 				2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */,
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
-				A883642F298B7288005D6C19 /* ServiceManagement.framework in Frameworks */,
 				3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1AA00102F30000100AABBCC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AF923902F540B2200F467FD /* Scribe in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +117,7 @@
 			children = (
 				F06D76892DFF7A77007EEDA9 /* SkyLight.framework */,
 				A883642E298B7288005D6C19 /* ServiceManagement.framework */,
+				B1AA00802F30000100AABBCC /* Security.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -86,8 +130,10 @@
 				A86AFD7529888B29008F4892 /* README.md */,
 				A894B0C52C4B31AA00B4CE6F /* CONTRIBUTING.md */,
 				A8C751AC2D7BA98600B58784 /* Loop */,
+				B1AA00022F30000100AABBCC /* LoopUpdaterHelper */,
 				A8E59C36297F5E9A0064D4BA /* Products */,
 				A883642D298B7288005D6C19 /* Frameworks */,
+				2A6A87F02F4D20D2004E995D /* Shared */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				A8E59C35297F5E9A0064D4BA /* Loop.app */,
+				B1AA00012F30000100AABBCC /* LoopUpdaterHelper */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,13 +155,16 @@
 			buildPhases = (
 				A8E59C31297F5E9A0064D4BA /* Sources */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
+				B1AA00612F30000100AABBCC /* CopyFiles */,
 				A8E59C33297F5E9A0064D4BA /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B1AA00712F30000100AABBCC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				2A6A87F02F4D20D2004E995D /* Shared */,
 				A8C751AC2D7BA98600B58784 /* Loop */,
 			);
 			name = Loop;
@@ -123,11 +173,34 @@
 				2A28B62B2EE5057C00A1E26B /* Luminare */,
 				3ED0A7B82F21DF6800A58629 /* ZIPFoundation */,
 				2A28492A2F22B4B700F6CE42 /* Scribe */,
-				2A8EDDBB2F23743B005457F8 /* Scribe */,
+				2AF9238D2F540B1300F467FD /* Scribe */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B1AA00112F30000100AABBCC /* LoopUpdaterHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1AA00212F30000100AABBCC /* Build configuration list for PBXNativeTarget "LoopUpdaterHelper" */;
+			buildPhases = (
+				B1AA00122F30000100AABBCC /* Sources */,
+				B1AA00102F30000100AABBCC /* Frameworks */,
+				B1AA00132F30000100AABBCC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B1AA00022F30000100AABBCC /* LoopUpdaterHelper */,
+			);
+			name = LoopUpdaterHelper;
+			packageProductDependencies = (
+				2AF9238F2F540B2200F467FD /* Scribe */,
+			);
+			productName = LoopUpdaterHelper;
+			productReference = B1AA00012F30000100AABBCC /* LoopUpdaterHelper */;
+			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
@@ -141,6 +214,9 @@
 				TargetAttributes = {
 					A8E59C34297F5E9A0064D4BA = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					B1AA00112F30000100AABBCC = {
+						CreatedOnToolsVersion = 16.0;
 					};
 				};
 			};
@@ -169,19 +245,27 @@
 				2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */,
 				2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */,
 				3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
-				2A8EDDBA2F23743B005457F8 /* XCRemoteSwiftPackageReference "Scribe" */,
+				2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				A8E59C34297F5E9A0064D4BA /* Loop */,
+				B1AA00112F30000100AABBCC /* LoopUpdaterHelper */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		A8E59C33297F5E9A0064D4BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1AA00132F30000100AABBCC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -198,7 +282,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B1AA00122F30000100AABBCC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B1AA00712F30000100AABBCC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B1AA00112F30000100AABBCC /* LoopUpdaterHelper */;
+			targetProxy = B1AA00512F30000100AABBCC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2AC87FA52F09E3A600082F90 /* Development */ = {
@@ -515,6 +614,98 @@
 			};
 			name = Release;
 		};
+		B1AA00312F30000100AABBCC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LoopUpdaterHelper/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
+				PRODUCT_NAME = LoopUpdaterHelper;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B1AA00322F30000100AABBCC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LoopUpdaterHelper/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
+				PRODUCT_NAME = LoopUpdaterHelper;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B1AA00332F30000100AABBCC /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AUTOMATION_APPLE_EVENTS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LoopUpdaterHelper/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.UpdaterHelper;
+				PRODUCT_NAME = LoopUpdaterHelper;
+				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
+				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
+				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;
+				RUNTIME_EXCEPTION_DEBUGGING_TOOL = NO;
+				RUNTIME_EXCEPTION_DISABLE_EXECUTABLE_PAGE_PROTECTION = NO;
+				RUNTIME_EXCEPTION_DISABLE_LIBRARY_VALIDATION = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Development;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -538,6 +729,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		B1AA00212F30000100AABBCC /* Build configuration list for PBXNativeTarget "LoopUpdaterHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1AA00312F30000100AABBCC /* Debug */,
+				B1AA00322F30000100AABBCC /* Release */,
+				B1AA00332F30000100AABBCC /* Development */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -557,7 +758,7 @@
 				kind = branch;
 			};
 		};
-		2A8EDDBA2F23743B005457F8 /* XCRemoteSwiftPackageReference "Scribe" */ = {
+		2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SenpaiHunters/Scribe";
 			requirement = {
@@ -590,9 +791,14 @@
 			package = 2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */;
 			productName = Luminare;
 		};
-		2A8EDDBB2F23743B005457F8 /* Scribe */ = {
+		2AF9238D2F540B1300F467FD /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2A8EDDBA2F23743B005457F8 /* XCRemoteSwiftPackageReference "Scribe" */;
+			package = 2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */;
+			productName = Scribe;
+		};
+		2AF9238F2F540B2200F467FD /* Scribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */;
 			productName = Scribe;
 		};
 		3ED0A7B82F21DF6800A58629 /* ZIPFoundation */ = {

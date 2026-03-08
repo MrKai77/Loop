@@ -11,6 +11,8 @@ import Scribe
 
 @Loggable(style: .static)
 enum ChecksumVerifier {
+    private static let chunkSize = 1_048_576 // 1 MiB
+
     static func verifyFile(_ fileURL: URL, expectedChecksum: String) async throws {
         log.debug("Starting checksum calculation for file: \(fileURL.path)")
         let actualChecksum = try await calculateSHA256(fileURL)
@@ -26,15 +28,40 @@ enum ChecksumVerifier {
 
     @concurrent
     private static func calculateSHA256(_ fileURL: URL) async throws -> String {
-        log.debug("Calculating SHA256 for file - File: \(fileURL.path), Exists: \(FileManager.default.fileExists(atPath: fileURL.path))")
+        let filePath = fileURL.path
+        let fileManager = FileManager.default
+        log.debug("Calculating SHA256 (streaming) for file: \(filePath)")
 
-        let data = try Data(contentsOf: fileURL)
-        log.debug("File data loaded - Size: \(data.count) bytes, File: \(fileURL.lastPathComponent)")
+        guard fileManager.fileExists(atPath: filePath) else {
+            throw UpdateError.installationFailed("Checksum validation failed: file not found at \(filePath)")
+        }
 
-        let digest = SHA256.hash(data: data)
-        let checksum = digest.compactMap { String(format: "%02x", $0) }.joined()
+        guard fileManager.isReadableFile(atPath: filePath) else {
+            throw UpdateError.installationFailed("Checksum validation failed: file is not readable at \(filePath)")
+        }
 
-        log.debug("SHA256 calculation complete - Checksum: \(checksum), File: \(fileURL.lastPathComponent)")
+        let fileHandle = try FileHandle(forReadingFrom: fileURL)
+        defer {
+            try? fileHandle.close()
+        }
+
+        var hasher = SHA256()
+        var totalBytesProcessed: Int64 = 0
+
+        while true {
+            let data = try fileHandle.read(upToCount: chunkSize) ?? Data()
+            if data.isEmpty {
+                break
+            }
+
+            hasher.update(data: data)
+            totalBytesProcessed += Int64(data.count)
+        }
+
+        let digest = hasher.finalize()
+        let checksum = digest.map { String(format: "%02x", $0) }.joined()
+
+        log.debug("SHA256 calculation complete - Checksum: \(checksum), File: \(fileURL.lastPathComponent), Bytes: \(totalBytesProcessed)")
         return checksum
     }
 }

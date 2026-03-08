@@ -19,6 +19,7 @@ final class UpdateDownloader: NSObject {
     private var completionClosure: ((Result<URL, Error>) -> ())?
     private(set) var isDownloading = false
     private var performanceTracker: PerformanceTracker = .init()
+    private var loopSupportDirectory: URL { LoopSupportPaths.loopDirectory(homeDirectory: FileManager.default.homeDirectoryForCurrentUser) }
 
     deinit {
         downloadTask?.cancel()
@@ -44,7 +45,7 @@ final class UpdateDownloader: NSObject {
         log.info("Starting download - URL: \(manifest.downloadUrl), Version: \(manifest.version)")
 
         try FileManager.default.createDirectory(
-            at: SystemPaths.loopDirectory,
+            at: loopSupportDirectory,
             withIntermediateDirectories: true
         )
 
@@ -102,7 +103,7 @@ final class UpdateDownloader: NSObject {
             finalURL = try FileOperations.moveDownloadedFile(
                 from: location,
                 originalURL: originalURL,
-                to: SystemPaths.loopDirectory
+                to: loopSupportDirectory
             )
             try FileValidator.validateDownloadedFile(at: finalURL)
         } catch {
@@ -284,7 +285,7 @@ private enum FileOperations {
         try? FileManager.default.removeItem(at: finalURL)
         try FileManager.default.moveItem(at: tempFinalURL, to: finalURL)
 
-        log.info("File moved successfully - Final Location: \(finalURL.path), Filename: \(finalURL.lastPathComponent)")
+        log.info("File moved successfully to: \(finalURL.path)")
 
         return finalURL
     }

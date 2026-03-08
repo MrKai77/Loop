@@ -143,11 +143,6 @@ enum UpdateError: LocalizedError, Sendable {
             return false
         }
     }
-
-    /// Convenience constructors
-    static func httpError(_ response: HTTPURLResponse) -> UpdateError {
-        .http(response.statusCode)
-    }
 }
 
 // MARK: - GitHubRelease Model

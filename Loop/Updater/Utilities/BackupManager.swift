@@ -7,12 +7,14 @@
 
 import Foundation
 import Scribe
+import ZIPFoundation
 
 @Loggable
 actor BackupManager {
     private let fileManager: FileManager
 
-    private var backupDirectory: URL { SystemPaths.backupsDirectory }
+    private var homeDirectory: URL { LoopSupportPaths.canonical(fileManager.homeDirectoryForCurrentUser) }
+    private var backupDirectory: URL { LoopSupportPaths.backupsDirectory(homeDirectory: homeDirectory) }
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -28,85 +30,115 @@ actor BackupManager {
 
     // MARK: - Public Interface
 
-    /// Ensures backup directory exists and cleans up old backups if size exceeds limit
+    /// Ensures backup directory exists, removes non-zip backup items, and cleans old archives when needed.
     func prepareForBackup() async throws {
         try fileManager.createDirectory(at: backupDirectory, withIntermediateDirectories: true)
+        purgeNonZipBackups()
 
-        let backupSize = try calculateDirectorySize(backupDirectory)
+        let backupSize = try fileManager.calculateDirectorySize(backupDirectory)
 
-        guard backupSize > Self.maxBackupSize else { return }
-
-        log.info("Backup directory exceeds 100MB (\(backupSize.formattedBytes)), cleaning up old backups")
-        try await cleanupOldBackups(currentSize: backupSize, maxSize: Self.maxBackupSize)
-    }
-
-    /// Creates a unique backup URL for the current app version
-    /// - Returns: URL where the backup should be stored
-    func createBackupURL() throws -> URL {
-        let baseTimestamp = Self.dateFormatter.string(from: Date())
-        let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
-
-        var backupName = "backup_\(currentVersion)_\(baseTimestamp)"
-        var backupURL = backupDirectory.appendingPathComponent(backupName)
-
-        // If collision detected, add microseconds and retry up to 10 times
-        var attempt = 0
-        while fileManager.fileExists(atPath: backupURL.path), attempt < 10 {
-            attempt += 1
-            let microTimestamp = String(format: "%06d", Int(Date().timeIntervalSince1970 * 1_000_000) % 1_000_000)
-            backupName = "install_backup_\(currentVersion)_\(baseTimestamp)_\(microTimestamp)"
-            backupURL = backupDirectory.appendingPathComponent(backupName)
-        }
-
-        // Final check for collision
-        guard !fileManager.fileExists(atPath: backupURL.path) else {
-            throw UpdateError.installationFailed("Could not generate unique install backup name after \(attempt) attempts")
-        }
-
-        return backupURL
-    }
-
-    /// Restores the application from a backup after a failed installation
-    /// - Parameters:
-    ///   - currentURL: The current (possibly corrupted) app location
-    ///   - backupURL: The backup location to restore from
-    func restoreFromBackup(currentURL: URL, backupURL: URL) throws {
-        guard fileManager.fileExists(atPath: backupURL.path) else {
-            log.warn("No backup found to restore from at: \(backupURL.path)")
+        guard backupSize > Self.maxBackupSize else {
             return
         }
 
-        log.info("Attempting to restore from backup...")
-        try? fileManager.removeItem(at: currentURL)
-        try? fileManager.moveItem(at: backupURL, to: currentURL)
-        log.info("Restored from backup")
+        log.info("Backup directory exceeds 100MB (\(backupSize.formattedBytes)), cleaning up old backups")
+        cleanupOldBackupsBestEffort(currentSize: backupSize, maxSize: Self.maxBackupSize)
+    }
+
+    /// Archives a rollback bundle into a persistent zip backup.
+    /// - Parameter fileURL: Path of the rollback bundle to archive.
+    /// - Returns: URL of the created zip archive.
+    func backup(fileURL: URL) async throws -> URL {
+        try await prepareForBackup()
+
+        guard fileManager.fileExists(atPath: fileURL.path) else {
+            throw UpdateError.installationFailed("Backup source does not exist at \(fileURL.path)")
+        }
+
+        let archiveURL = try createBackupArchiveURL()
+        do {
+            try fileManager.zipItem(at: fileURL, to: archiveURL, shouldKeepParent: true)
+            try fileManager.removeItem(at: fileURL)
+            log.info("Created backup archive: \(archiveURL.lastPathComponent)")
+            return archiveURL
+        } catch {
+            try? fileManager.removeItem(at: archiveURL)
+            throw UpdateError.installationFailed(
+                "Could not create backup archive \(archiveURL.lastPathComponent): \(error.localizedDescription)"
+            )
+        }
     }
 
     // MARK: - Private Methods
 
-    private func cleanupOldBackups(currentSize: Int64, maxSize: Int64) async throws {
-        let backups = try getBackupsSortedByDate()
+    /// Used to purge old backups from Loop 1.4.x, which stored `.app`s instead of `.zip`s.
+    private func purgeNonZipBackups() {
+        let backupItems: [URL]
+        do {
+            backupItems = try fileManager.contentsOfDirectory(
+                at: backupDirectory,
+                includingPropertiesForKeys: nil
+            )
+        } catch {
+            log.warn("Unable to enumerate backups for zip filtering: \(error.localizedDescription)")
+            return
+        }
+
+        for backupItem in backupItems {
+            guard backupItem.pathExtension.lowercased() != "zip" else {
+                continue
+            }
+
+            do {
+                try fileManager.removeItem(at: backupItem)
+                log.info("Removed non-zip backup item: \(backupItem.lastPathComponent)")
+            } catch {
+                log.warn("Could not remove non-zip backup item \(backupItem.lastPathComponent): \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func cleanupOldBackupsBestEffort(currentSize: Int64, maxSize: Int64) {
+        let backups: [(URL, Date)]
+        do {
+            backups = try getBackupArchivesSortedByDate()
+        } catch {
+            let message = "Unable to enumerate backups for cleanup: \(error.localizedDescription)"
+            log.warn(message)
+            return
+        }
+
         var remainingSize = currentSize
 
         for (backupURL, _) in backups {
             guard remainingSize > maxSize else { break }
 
-            let backupItemSize = try calculateDirectorySize(backupURL)
-            try fileManager.removeItem(at: backupURL)
-            remainingSize -= backupItemSize
+            let backupItemSize = (try? fileManager.calculateDirectorySize(backupURL)) ?? 0
 
-            log.info("Removed old backup: \(backupURL.lastPathComponent) (\(backupItemSize.formattedBytes))")
+            do {
+                try fileManager.removeItem(at: backupURL)
+                remainingSize -= backupItemSize
+                log.info("Removed old backup: \(backupURL.lastPathComponent) (\(backupItemSize.formattedBytes))")
+            } catch {
+                let failureMessage = "Could not remove old backup \(backupURL.lastPathComponent): \(error.localizedDescription)"
+                log.warn(failureMessage)
+            }
         }
 
-        log.info("Backup cleanup completed, new size: \(remainingSize.formattedBytes)")
+        if remainingSize > maxSize {
+            log.warn("Backup cleanup incomplete (\(remainingSize.formattedBytes) > \(maxSize.formattedBytes)); continuing update")
+        } else {
+            log.info("Backup cleanup completed, new size: \(remainingSize.formattedBytes)")
+        }
     }
 
-    private func getBackupsSortedByDate() throws -> [(URL, Date)] {
+    private func getBackupArchivesSortedByDate() throws -> [(URL, Date)] {
         try fileManager.contentsOfDirectory(
             at: backupDirectory,
             includingPropertiesForKeys: [.creationDateKey],
             options: [.skipsHiddenFiles]
         )
+        .filter { $0.pathExtension.lowercased() == "zip" }
         .compactMap { url -> (URL, Date)? in
             guard let date = try? url.resourceValues(forKeys: [.creationDateKey]).creationDate else { return nil }
             return (url, date)
@@ -114,26 +146,18 @@ actor BackupManager {
         .sorted { $0.1 < $1.1 }
     }
 
-    private func calculateDirectorySize(_ url: URL) throws -> Int64 {
-        var isDirectory: ObjCBool = false
-        guard fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory) else { return 0 }
+    private func createBackupArchiveURL() throws -> URL {
+        let baseTimestamp = Self.dateFormatter.string(from: Date())
+        let currentVersion = Bundle.main.appVersion ?? "unknown"
 
-        if !isDirectory.boolValue {
-            let attributes = try fileManager.attributesOfItem(atPath: url.path)
-            return (attributes[.size] as? Int64) ?? 0
+        let backupArchiveURL = backupDirectory
+            .appendingPathComponent("backup_\(currentVersion)_\(baseTimestamp)")
+            .appendingPathExtension("zip")
+
+        guard !fileManager.fileExists(atPath: backupArchiveURL.path) else {
+            throw UpdateError.installationFailed("Could not generate unique backup archive name")
         }
 
-        guard let enumerator = fileManager.enumerator(
-            at: url,
-            includingPropertiesForKeys: [.fileSizeKey],
-            options: [.skipsHiddenFiles]
-        ) else { return 0 }
-
-        return Int64(
-            enumerator
-                .compactMap { $0 as? URL }
-                .compactMap { try? $0.resourceValues(forKeys: [.fileSizeKey]).fileSize }
-                .reduce(0, +)
-        )
+        return backupArchiveURL
     }
 }
