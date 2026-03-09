@@ -13,6 +13,7 @@ import Scribe
 @Loggable
 class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     let id = UUID()
+    var retainedSelf: Unmanaged<BaseEventTapMonitor>?
 
     private var eventTap: CFMachPort?
     private var runLoop: CFRunLoop?
@@ -34,6 +35,9 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
             CFMachPortInvalidate(eventTap)
             self.eventTap = nil
         }
+
+        retainedSelf?.release()
+        retainedSelf = nil
     }
 
     func setupRunLoopSource(eventTap: CFMachPort) {
@@ -50,20 +54,20 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
 
     func start() {
         guard let eventTap else { return }
+        isEnabled = true
 
         log.info("Starting BaseEventTapMonitor with ID \(id)")
 
         CGEvent.tapEnable(tap: eventTap, enable: true)
-        isEnabled = true
     }
 
     func stop() {
         guard let eventTap else { return }
+        isEnabled = false
 
         log.info("Stopping BaseEventTapMonitor with ID \(id)")
 
         CGEvent.tapEnable(tap: eventTap, enable: false)
-        isEnabled = false
     }
 
     static func == (lhs: BaseEventTapMonitor, rhs: BaseEventTapMonitor) -> Bool {

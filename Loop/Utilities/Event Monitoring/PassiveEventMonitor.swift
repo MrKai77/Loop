@@ -38,7 +38,10 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
 
             // If disabled, attempt to restart the event tap
             if event.type == .tapDisabledByTimeout || event.type == .tapDisabledByUserInput {
-                observer.start()
+                if observer.isEnabled {
+                    observer.start()
+                }
+
                 return Unmanaged.passUnretained(event)
             }
 
@@ -46,7 +49,10 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
             observer.eventCallback(event)
             return Unmanaged.passUnretained(event)
         }
-        let userInfo = Unmanaged.passUnretained(self).toOpaque()
+
+        let retained = Unmanaged.passRetained(self as BaseEventTapMonitor)
+        self.retainedSelf = retained
+        let userInfo = retained.toOpaque()
 
         if let eventTap = CGEvent.tapCreate(
             tap: tapLocation,

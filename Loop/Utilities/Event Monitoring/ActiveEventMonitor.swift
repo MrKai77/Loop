@@ -62,13 +62,19 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
 
             // If disabled, simply pass the event through, but attempt to restart the event tap.
             if event.type == .tapDisabledByTimeout || event.type == .tapDisabledByUserInput {
-                observer.start()
+                if observer.isEnabled {
+                    observer.start()
+                }
+
                 return Unmanaged.passUnretained(event)
             }
 
             return observer.handleEvent(event: event)
         }
-        let userInfo = Unmanaged.passUnretained(self).toOpaque()
+
+        let retained = Unmanaged.passRetained(self as BaseEventTapMonitor)
+        self.retainedSelf = retained
+        let userInfo = retained.toOpaque()
 
         if let eventTap = CGEvent.tapCreate(
             tap: tapLocation,
