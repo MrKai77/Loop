@@ -10,8 +10,6 @@ import Luminare
 import SwiftUI
 
 struct ExcludedAppsConfigurationView: View {
-    @Environment(\.luminareAnimation) private var luminareAnimation
-
     @Default(.excludedApps) private var excludedApps
     @State private var selectedApps = Set<URL>()
 

@@ -27,8 +27,6 @@ final class LoopManager {
 
     private(set) var isLoopActive: Bool = false
 
-    private var lastLoopTime: Date = .now
-
     private lazy var triggerKeyTimeoutTimer = TriggerKeyTimeoutTimer(
         closeCallback: { [weak self] forceClose in
             Task { await self?.closeLoop(forceClose: forceClose) }

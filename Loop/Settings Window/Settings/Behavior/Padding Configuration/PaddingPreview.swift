@@ -1,5 +1,5 @@
 //
-//  PaddingPreviewView.swift
+//  PaddingPreview.swift
 //  Loop
 //
 //  Created by Kai Azim on 2024-02-01.
@@ -8,7 +8,7 @@
 import Luminare
 import SwiftUI
 
-struct PaddingPreviewView: View {
+struct PaddingPreview: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
 
     @Binding var model: PaddingConfiguration

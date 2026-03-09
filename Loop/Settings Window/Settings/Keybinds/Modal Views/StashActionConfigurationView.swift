@@ -12,7 +12,6 @@ import SwiftUI
 
 struct StashActionConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
-    @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
@@ -299,14 +298,5 @@ struct StashActionConfigurationView: View {
                 )
             }
         }
-    }
-
-    private func blurredWindow() -> some View {
-        VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
-            .overlay {
-                RoundedRectangle(cornerRadius: 12 - 5)
-                    .strokeBorder(accentColorController.color1, lineWidth: 2)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 12 - 5))
     }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct ScreenView<Content>: View where Content: View {
+struct ScreenView<Content>: View where Content: View {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.luminareTintColor) private var tintColor
     @Environment(\.luminareAnimationFast) private var animationFast
@@ -24,7 +24,7 @@ public struct ScreenView<Content>: View where Content: View {
         topTrailingRadius: 12
     )
 
-    public init(
+    init(
         isBlurred: Bool = false,
         @ViewBuilder content: @escaping () -> Content
     ) {
@@ -32,7 +32,7 @@ public struct ScreenView<Content>: View where Content: View {
         self.content = content
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             GeometryReader { proxy in
                 if let image {
