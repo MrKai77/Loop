@@ -12,7 +12,7 @@ import SwiftUI
 @Loggable
 final class MultitouchTrigger {
     private let windowActionCache: WindowActionCache
-    private let openCallback: (WindowAction) async throws -> ()
+    private let openCallback: (WindowAction, Window) async throws -> ()
     private let closeCallback: (Bool) -> ()
     private let changeAction: (WindowAction) -> ()
     private let checkIfLoopOpen: () -> Bool
@@ -39,10 +39,11 @@ final class MultitouchTrigger {
     private var positionHistory: [PositionHistoryEntry] = []
     private let maxHistoryEntries = 5 // Track last 5 positions for smoothing
 
-    private let initialGestureThreshold: CGFloat = 0.025
+    private let initialSlideThreshold: CGFloat = 0.025
+    private let slideRepeatThreshold: CGFloat = 0.25
+
     private let initialZoomThreshold: CGFloat = 0.1
-    private let gestureRepeatThreshold: CGFloat = 0.25
-    private let zoomRepeatThreshold: CGFloat = 0.2
+    private let zoomRepeatThreshold: CGFloat = 0.25
 
     private var inactivityTask: Task<(), Never>?
     private let gestureBlocker: GestureBlocker = .init()
@@ -51,12 +52,12 @@ final class MultitouchTrigger {
         RadialMenuAction.userConfiguredActions
     }
 
-    private let subtrack = SubsurfaceMonitor()
+    private let gestureMonitor = SubsurfaceMonitor()
     private static let failedToResolveKeybindAction: WindowAction = .init(.noAction) // This helps to keep a stable ID
 
     init(
         windowActionCache: WindowActionCache,
-        openCallback: @escaping (WindowAction) async throws -> (),
+        openCallback: @escaping (WindowAction, Window) async throws -> (),
         closeCallback: @escaping (Bool) -> (),
         changeAction: @escaping (WindowAction) -> (),
         checkIfLoopOpen: @escaping () -> Bool
@@ -70,7 +71,7 @@ final class MultitouchTrigger {
 
     func start() {
         Task {
-            for await (_, touchData) in subtrack.contacts() {
+            for await (_, touchData) in gestureMonitor.contacts() {
                 resetInactivityTimer()
 
                 let palmFiltered = touchData.filter { $0.finger != nil && $0.hand != nil }
@@ -88,11 +89,11 @@ final class MultitouchTrigger {
             }
         }
 
-        subtrack.start()
+        gestureMonitor.start()
     }
 
     func stop() {
-        subtrack.stop()
+        gestureMonitor.stop()
         resetGesture()
     }
 
@@ -119,12 +120,13 @@ final class MultitouchTrigger {
 
         guard let originInfo = originGestureInfo, let lastInfo = lastGestureInfo else {
             // Check if cursor is over a titlebar before activating
-            guard isCursorOverTitlebar() else {
+            let window = isCursorOverTitlebarOfWindow()
+            let loopWasAlreadyOpen = checkIfLoopOpen()
+
+            guard window != nil || loopWasAlreadyOpen else {
                 isCurrentGestureRejected = true // Mark as rejected to skip future events
                 return
             }
-
-            let loopWasAlreadyOpen = checkIfLoopOpen()
 
             originGestureInfo = info
             lastGestureInfo = info
@@ -136,9 +138,9 @@ final class MultitouchTrigger {
             positionHistory.removeAll()
 
             // Only open Loop if it wasn't already open
-            if !loopWasAlreadyOpen {
+            if let window, !loopWasAlreadyOpen {
                 do {
-                    try await openCallback(.init(.noSelection))
+                    try await openCallback(.init(.noSelection), window)
                     didOpenLoopWithThisGesture = true
                 } catch {
                     gestureBlocker.stop()
@@ -207,7 +209,7 @@ final class MultitouchTrigger {
            magFromOrigin > 0 {
             let magMovement = hypot(movementDirection.width, movementDirection.height)
 
-            if magMovement >= initialGestureThreshold { // Only if meaningful movement occurred
+            if magMovement >= initialSlideThreshold { // Only if meaningful movement occurred
                 let dotProduct = movementDirection.width * vectorFromOrigin.width +
                     movementDirection.height * vectorFromOrigin.height
                 let cosAngle = dotProduct / (magFromOrigin * magMovement)
@@ -231,7 +233,7 @@ final class MultitouchTrigger {
         }
 
         // Use lower threshold for initial gesture when no action is selected
-        let threshold: CGFloat = lastTriggeredActionIndex == nil ? initialGestureThreshold : gestureRepeatThreshold
+        let threshold: CGFloat = lastTriggeredActionIndex == nil ? initialSlideThreshold : slideRepeatThreshold
         guard translationMagFromLast >= threshold else { return }
 
         lastGestureInfo = info
@@ -267,7 +269,7 @@ final class MultitouchTrigger {
         if let lastIndex = lastTriggeredActionIndex {
             if newIndex == lastIndex {
                 // Same action - only trigger if we've moved further from origin
-                guard currentDistance >= lastTriggeredDistance + gestureRepeatThreshold else { return }
+                guard currentDistance >= lastTriggeredDistance + slideRepeatThreshold else { return }
             }
         }
 
@@ -367,23 +369,13 @@ final class MultitouchTrigger {
         }
     }
 
-    private func isCursorOverTitlebar() -> Bool {
-        // If Loop is already open, intercept all gestures regardless of cursor position
-        if checkIfLoopOpen() {
-            return true
-        }
-
+    private func isCursorOverTitlebarOfWindow() -> Window? {
         // Get current cursor position
         let cursorPosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
 
         // Get window at cursor position using existing WindowUtility
         guard let window = WindowUtility.windowAtPosition(cursorPosition) else {
-            return false
-        }
-
-        // Respect app exclusion settings
-        if window.isAppExcluded {
-            return false
+            return nil
         }
 
         // Assume large titlebar variant
@@ -395,7 +387,7 @@ final class MultitouchTrigger {
         let isInTitlebar = cursorPosition.y >= titlebarMinY && cursorPosition.y <= titlebarMaxY
 
         // Check if cursor is within titlebar region
-        return isInTitlebar
+        return isInTitlebar ? window : nil
     }
 
     private func triggerAction(at index: Int, from actions: ArraySlice<RadialMenuAction>) {

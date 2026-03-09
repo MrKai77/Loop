@@ -68,9 +68,9 @@ final class LoopManager {
 
     private(set) lazy var multitouchTrigger = MultitouchTrigger(
         windowActionCache: windowActionCache,
-        openCallback: { [weak self] action in
+        openCallback: { [weak self] action, window in
             guard let self else { return }
-            try await self.openLoop(startingAction: action)
+            try await openLoop(startingAction: action, window: window)
         },
         closeCallback: { [weak self] forceClose in
             Task {
@@ -150,7 +150,7 @@ enum LoopManagerError: LocalizedError {
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    private func openLoop(startingAction: WindowAction) async throws {
+    private func openLoop(startingAction: WindowAction, window: Window? = nil) async throws {
         guard AccessibilityManager.shared.isGranted else {
             throw LoopManagerError.accessibilityNotGranted
         }
@@ -167,7 +167,7 @@ extension LoopManager {
             return
         }
 
-        let window = WindowUtility.userDefinedTargetWindow()
+        let window = window ?? WindowUtility.userDefinedTargetWindow()
 
         guard window?.isAppExcluded != true else {
             throw LoopManagerError.appExcluded
