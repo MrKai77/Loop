@@ -39,7 +39,7 @@ final class LoopManager {
         windowActionCache: windowActionCache,
         openCallback: { [weak self] action in
             Task {
-                await self?.openLoop(startingAction: action)
+                try? await self?.openLoop(startingAction: action)
             }
         },
         closeCallback: { [weak self] forceClose in
@@ -55,7 +55,7 @@ final class LoopManager {
     private(set) lazy var middleClickTrigger = MiddleClickTrigger(
         openCallback: { [weak self] action in
             Task {
-                await self?.openLoop(startingAction: action)
+                try? await self?.openLoop(startingAction: action)
             }
         },
         closeCallback: { [weak self] forceClose in
@@ -69,9 +69,8 @@ final class LoopManager {
     private(set) lazy var multitouchTrigger = MultitouchTrigger(
         windowActionCache: windowActionCache,
         openCallback: { [weak self] action in
-            Task {
-                await self?.openLoop(startingAction: action)
-            }
+            guard let self else { return }
+            try await self.openLoop(startingAction: action)
         },
         closeCallback: { [weak self] forceClose in
             Task {
@@ -131,12 +130,29 @@ final class LoopManager {
     }
 }
 
+enum LoopManagerError: LocalizedError {
+    case accessibilityNotGranted
+    case appExcluded
+    case fullscreenWindow
+
+    var errorDescription: String? {
+        switch self {
+        case .accessibilityNotGranted:
+            "Cannot open Loop: accessibility permission not granted"
+        case .appExcluded:
+            "Cannot open Loop: app is excluded"
+        case .fullscreenWindow:
+            "Cannot open Loop: target window is fullscreen"
+        }
+    }
+}
+
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    private func openLoop(startingAction: WindowAction) async {
+    private func openLoop(startingAction: WindowAction) async throws {
         guard AccessibilityManager.shared.isGranted else {
-            return
+            throw LoopManagerError.accessibilityNotGranted
         }
 
         guard !isLoopActive else {
@@ -153,11 +169,12 @@ extension LoopManager {
 
         let window = WindowUtility.userDefinedTargetWindow()
 
-        guard
-            window?.isAppExcluded != true,
-            (window?.fullscreen ?? false && Defaults[.ignoreFullscreen]) == false
-        else {
-            return
+        guard window?.isAppExcluded != true else {
+            throw LoopManagerError.appExcluded
+        }
+
+        guard (window?.fullscreen ?? false && Defaults[.ignoreFullscreen]) == false else {
+            throw LoopManagerError.fullscreenWindow
         }
 
         log.info("Opening Loop with starting action: \(startingAction.description) and target window: \(window?.description ?? "(none)")")

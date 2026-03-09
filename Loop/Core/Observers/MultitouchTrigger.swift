@@ -12,7 +12,7 @@ import SwiftUI
 @Loggable
 final class MultitouchTrigger {
     private let windowActionCache: WindowActionCache
-    private let openCallback: (WindowAction) -> ()
+    private let openCallback: (WindowAction) async throws -> ()
     private let closeCallback: (Bool) -> ()
     private let changeAction: (WindowAction) -> ()
     private let checkIfLoopOpen: () -> Bool
@@ -30,12 +30,9 @@ final class MultitouchTrigger {
 
     private var lastTriggeredActionIndex: Int?
     private var lastTriggeredDistance: CGFloat = 0
-    private var lastTriggeredZoomDistance: CGFloat = 0
 
     private struct PositionHistoryEntry {
         let avgPosition: CGPoint
-        let touch1Position: CGPoint
-        let touch2Position: CGPoint
         let timestamp: TimeInterval
     }
 
@@ -43,6 +40,7 @@ final class MultitouchTrigger {
     private let maxHistoryEntries = 5 // Track last 5 positions for smoothing
 
     private let initialGestureThreshold: CGFloat = 0.025
+    private let initialZoomThreshold: CGFloat = 0.1
     private let gestureRepeatThreshold: CGFloat = 0.25
     private let zoomRepeatThreshold: CGFloat = 0.2
 
@@ -58,7 +56,7 @@ final class MultitouchTrigger {
 
     init(
         windowActionCache: WindowActionCache,
-        openCallback: @escaping (WindowAction) -> (),
+        openCallback: @escaping (WindowAction) async throws -> (),
         closeCallback: @escaping (Bool) -> (),
         changeAction: @escaping (WindowAction) -> (),
         checkIfLoopOpen: @escaping () -> Bool
@@ -83,7 +81,7 @@ final class MultitouchTrigger {
                 }
 
                 if palmFiltered.count == 2, maxTouchesInCurrentGesture == 2 {
-                    handleTwoFingerGesture(with: palmFiltered)
+                    await handleTwoFingerGesture(with: palmFiltered)
                 } else {
                     resetGesture()
                 }
@@ -108,7 +106,7 @@ final class MultitouchTrigger {
         }
     }
 
-    private func handleTwoFingerGesture(with touches: [MTContact]) {
+    private func handleTwoFingerGesture(with touches: [MTContact]) async {
         // Skip processing if this gesture sequence was already rejected
         guard !isCurrentGestureRejected else {
             return
@@ -132,7 +130,6 @@ final class MultitouchTrigger {
             lastGestureInfo = info
             lastTriggeredActionIndex = nil
             lastTriggeredDistance = 0
-            lastTriggeredZoomDistance = info.distance // Initialize to current finger distance
             gestureBlocker.start()
 
             // Reset position history for new gesture
@@ -140,31 +137,22 @@ final class MultitouchTrigger {
 
             // Only open Loop if it wasn't already open
             if !loopWasAlreadyOpen {
-                didOpenLoopWithThisGesture = true
-                openCallback(.init(.noSelection))
+                do {
+                    try await openCallback(.init(.noSelection))
+                    didOpenLoopWithThisGesture = true
+                } catch {
+                    gestureBlocker.stop()
+                    isCurrentGestureRejected = true
+                    return
+                }
             }
 
             return
         }
 
-        // Check for zoom-in gesture first (independent of translation)
-        let touch1 = touches[0]
-        let touch2 = touches[1]
-
-        let pos1 = CGPoint(
-            x: CGFloat(touch1.normalizedVector.position.x),
-            y: CGFloat(touch1.normalizedVector.position.y)
-        )
-        let pos2 = CGPoint(
-            x: CGFloat(touch2.normalizedVector.position.x),
-            y: CGFloat(touch2.normalizedVector.position.y)
-        )
-
         // Update position history for stable direction detection at low velocities
         positionHistory.append(PositionHistoryEntry(
             avgPosition: info.position,
-            touch1Position: pos1,
-            touch2Position: pos2,
             timestamp: Date.timeIntervalSinceReferenceDate
         ))
         if positionHistory.count > maxHistoryEntries {
@@ -174,21 +162,8 @@ final class MultitouchTrigger {
         // Calculate zoom distance (finger spread)
         let fingerDistance = info.distance
 
-        // Check if fingers are spreading apart by comparing distances
-        let isZooming: Bool
-        if let oldFingerDistance = fingerDistanceFromHistory() {
-            // Use position history for stable detection
-            let distanceChange = fingerDistance - oldFingerDistance
-            isZooming = distanceChange > initialGestureThreshold // Use initial threshold for sensitive detection
-        } else if positionHistory.count >= 1 {
-            // Use last frame's distance if history is building up
-            let lastFingerDistance = lastInfo.distance
-            let distanceChange = fingerDistance - lastFingerDistance
-            isZooming = distanceChange > initialGestureThreshold
-        } else {
-            // First frame: no zoom detection yet
-            isZooming = false
-        }
+        // Check if fingers are spreading apart compared to gesture start
+        let isZooming = (fingerDistance - originInfo.distance) > initialZoomThreshold
 
         // Prioritize zoom gestures over directional gestures
         if isZooming {
@@ -217,13 +192,6 @@ final class MultitouchTrigger {
 
         let translationMagFromLast = hypot(deltaPositionFromLast.width, deltaPositionFromLast.height)
 
-        // Use lower threshold for initial gesture when no action is selected
-        let threshold: CGFloat = lastTriggeredActionIndex == nil ? initialGestureThreshold : gestureRepeatThreshold
-        guard translationMagFromLast >= threshold else { return }
-
-        lastGestureInfo = info
-
-        // Detect backward movement using position history
         let vectorFromOrigin = CGSize(
             width: info.position.x - originInfo.position.x,
             height: info.position.y - originInfo.position.y
@@ -233,8 +201,9 @@ final class MultitouchTrigger {
 
         var didReset = false
 
-        // Use position history for stable direction detection
-        if let movementDirection = directionFromHistory(to: info.position),
+        // Only check backward motion if an action has been triggered (otherwise there's nothing to "undo")
+        if lastTriggeredActionIndex != nil,
+           let movementDirection = directionFromHistory(to: info.position),
            magFromOrigin > 0 {
             let magMovement = hypot(movementDirection.width, movementDirection.height)
 
@@ -246,36 +215,34 @@ final class MultitouchTrigger {
                 // Negative dot product means moving toward origin (opposite direction)
                 if cosAngle < -0.5 { // ~120 degree threshold
                     originGestureInfo = info
+                    lastGestureInfo = info
                     lastTriggeredActionIndex = nil
                     lastTriggeredDistance = 0
-                    lastTriggeredZoomDistance = 0
                     didReset = true
-                    print("RESET (history)")
+                    changeAction(.init(.noSelection))
                 }
             }
         }
 
-        // Clear history after reset so new origin has clean slate
+        // If we just reset, clear history and return early, so that the user can start a fresh direction
         if didReset {
             positionHistory.removeAll()
+            return
         }
 
-        // Calculate angle from origin or movement direction if we just reset
-        let angleFromOrigin: CGFloat
-        let currentDistance: CGFloat
+        // Use lower threshold for initial gesture when no action is selected
+        let threshold: CGFloat = lastTriggeredActionIndex == nil ? initialGestureThreshold : gestureRepeatThreshold
+        guard translationMagFromLast >= threshold else { return }
 
-        if didReset {
-            // Use movement direction since we're at the new origin
-            angleFromOrigin = atan2(-deltaPositionFromLast.height, deltaPositionFromLast.width) + .pi / 2
-            currentDistance = translationMagFromLast
-        } else {
-            let deltaPositionFromOrigin = CGSize(
-                width: info.position.x - originInfo.position.x,
-                height: info.position.y - originInfo.position.y
-            )
-            angleFromOrigin = atan2(-deltaPositionFromOrigin.height, deltaPositionFromOrigin.width) + .pi / 2
-            currentDistance = hypot(deltaPositionFromOrigin.width, deltaPositionFromOrigin.height)
-        }
+        lastGestureInfo = info
+
+        // Calculate angle from origin
+        let deltaPositionFromOrigin = CGSize(
+            width: info.position.x - originInfo.position.x,
+            height: info.position.y - originInfo.position.y
+        )
+        let angleFromOrigin = atan2(-deltaPositionFromOrigin.height, deltaPositionFromOrigin.width) + .pi / 2
+        let currentDistance = hypot(deltaPositionFromOrigin.width, deltaPositionFromOrigin.height)
 
         var normalizedAngle = angleFromOrigin
         if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
@@ -352,19 +319,6 @@ final class MultitouchTrigger {
             width: currentPosition.x - oldestEntry.avgPosition.x,
             height: currentPosition.y - oldestEntry.avgPosition.y
         )
-    }
-
-    /// Calculates finger spread from position history
-    /// Returns nil if insufficient history available
-    private func fingerDistanceFromHistory() -> CGFloat? {
-        guard let oldestEntry = positionHistory.first else { return nil }
-
-        let oldDistance = hypot(
-            oldestEntry.touch2Position.x - oldestEntry.touch1Position.x,
-            oldestEntry.touch2Position.y - oldestEntry.touch1Position.y
-        )
-
-        return oldDistance
     }
 
     private func distance(between touches: [MTContact]) -> CGFloat {
@@ -448,20 +402,6 @@ final class MultitouchTrigger {
         let action = actions[index]
 
         let resolvedAction: WindowAction = switch action.type {
-        case let .custom(windowAction):
-            windowAction
-        case let .keybindReference(id):
-            windowActionCache.actionsByIdentifier[id] ?? Self.failedToResolveKeybindAction
-        }
-
-        changeAction(resolvedAction)
-    }
-
-    private func triggerCenterAction() {
-        // The center action is the last item in radialMenuActions
-        guard let centerAction = radialMenuActions.last else { return }
-
-        let resolvedAction: WindowAction = switch centerAction.type {
         case let .custom(windowAction):
             windowAction
         case let .keybindReference(id):
