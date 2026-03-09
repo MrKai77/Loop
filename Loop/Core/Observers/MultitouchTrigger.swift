@@ -43,7 +43,7 @@ final class MultitouchTrigger {
     private let slideRepeatThreshold: CGFloat = 0.25
 
     private let initialZoomThreshold: CGFloat = 0.1
-    private let zoomRepeatThreshold: CGFloat = 0.25
+    private let zoomRepeatThreshold: CGFloat = 0.4
 
     private var inactivityTask: Task<(), Never>?
     private let gestureBlocker: GestureBlocker = .init()
