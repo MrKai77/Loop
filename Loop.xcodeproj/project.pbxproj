@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28492A2F22B4B700F6CE42 /* Scribe */; };
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
-		2AF9238E2F540B1300F467FD /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AF9238D2F540B1300F467FD /* Scribe */; };
-		2AF923902F540B2200F467FD /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AF9238F2F540B2200F467FD /* Scribe */; };
-		2A74ABA32F3E65A100EBF95C /* Subsurface in Frameworks */ = {isa = PBXBuildFile; productRef = 2A74ABA22F3E65A100EBF95C /* Subsurface */; };
+		2A847DFC2F5E49E90099E02A /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A847DFB2F5E49E90099E02A /* Scribe */; };
+		2A847DFF2F5E4A080099E02A /* Subsurface in Frameworks */ = {isa = PBXBuildFile; productRef = 2A847DFE2F5E4A080099E02A /* Subsurface */; };
+		2A847E012F5E4A0E0099E02A /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A847E002F5E4A0E0099E02A /* Scribe */; };
 		3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED0A7B82F21DF6800A58629 /* ZIPFoundation */; };
 		B1AA00412F30000100AABBCC /* LoopUpdaterHelper in CopyFiles */ = {isa = PBXBuildFile; fileRef = B1AA00012F30000100AABBCC /* LoopUpdaterHelper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06D76892DFF7A77007EEDA9 /* SkyLight.framework */; };
@@ -100,11 +99,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A847DFC2F5E49E90099E02A /* Scribe in Frameworks */,
+				2A847DFF2F5E4A080099E02A /* Subsurface in Frameworks */,
 				2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */,
-				2A74ABA32F3E65A100EBF95C /* Subsurface in Frameworks */,
 				2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */,
-				2AF9238E2F540B1300F467FD /* Scribe in Frameworks */,
-				2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */,
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
 				3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */,
 			);
@@ -114,7 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AF923902F540B2200F467FD /* Scribe in Frameworks */,
+				2A847E012F5E4A0E0099E02A /* Scribe in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,9 +179,8 @@
 				2A28B6282EE5050C00A1E26B /* Defaults */,
 				2A28B62B2EE5057C00A1E26B /* Luminare */,
 				3ED0A7B82F21DF6800A58629 /* ZIPFoundation */,
-				2A28492A2F22B4B700F6CE42 /* Scribe */,
-				2A8EDDBB2F23743B005457F8 /* Scribe */,
-				2A74ABA22F3E65A100EBF95C /* Subsurface */
+				2A847DFB2F5E49E90099E02A /* Scribe */,
+				2A847DFE2F5E4A080099E02A /* Subsurface */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -206,7 +203,7 @@
 			);
 			name = LoopUpdaterHelper;
 			packageProductDependencies = (
-				2AF9238F2F540B2200F467FD /* Scribe */,
+				2A847E002F5E4A0E0099E02A /* Scribe */,
 			);
 			productName = LoopUpdaterHelper;
 			productReference = B1AA00012F30000100AABBCC /* LoopUpdaterHelper */;
@@ -255,8 +252,8 @@
 				2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */,
 				2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */,
 				3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
-				2A0EEE832F381A3A00C40CF4 /* XCLocalSwiftPackageReference "../Subtrack" */,
-				2A8EDDBA2F23743B005457F8 /* XCRemoteSwiftPackageReference "Scribe" */,
+				2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */,
+				2A847DFD2F5E4A080099E02A /* XCRemoteSwiftPackageReference "Subsurface" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -752,13 +749,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		2A74ABA12F3E65A100EBF95C /* XCLocalSwiftPackageReference "../Subsurface" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../Subsurface;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -776,9 +766,17 @@
 				kind = branch;
 			};
 		};
-		2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */ = {
+		2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SenpaiHunters/Scribe";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		2A847DFD2F5E4A080099E02A /* XCRemoteSwiftPackageReference "Subsurface" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MrKai77/Subsurface";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -795,10 +793,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2A28492A2F22B4B700F6CE42 /* Scribe */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Scribe;
-		};
 		2A28B6282EE5050C00A1E26B /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */;
@@ -809,18 +803,19 @@
 			package = 2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */;
 			productName = Luminare;
 		};
-		2A74ABA22F3E65A100EBF95C /* Subsurface */ = {
+		2A847DFB2F5E49E90099E02A /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Subsurface;
-		};
-		2AF9238D2F540B1300F467FD /* Scribe */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */;
+			package = 2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */;
 			productName = Scribe;
 		};
-		2AF9238F2F540B2200F467FD /* Scribe */ = {
+		2A847DFE2F5E4A080099E02A /* Subsurface */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */;
+			package = 2A847DFD2F5E4A080099E02A /* XCRemoteSwiftPackageReference "Subsurface" */;
+			productName = Subsurface;
+		};
+		2A847E002F5E4A0E0099E02A /* Scribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */;
 			productName = Scribe;
 		};
 		3ED0A7B82F21DF6800A58629 /* ZIPFoundation */ = {
