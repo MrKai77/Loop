@@ -32,6 +32,9 @@ final class ResizeContext {
     /// Used to open radial menu at the correct position.
     private(set) var initialMousePosition: CGPoint = .zero
 
+    var resolvedWindowProperties: Window.ResolvedProperties?
+    private(set) var resolvedRecord: WindowRecords.ResolvedRecord?
+
     private(set) var cachedTargetFrame: ComputedFrame = .zero
     private var needsRecompute: Bool = false
 
@@ -59,6 +62,10 @@ final class ResizeContext {
         self.parentAction = parentAction
         self.initialMousePosition = initialMousePosition
         self.needsRecompute = !action.direction.isNoOp
+
+        if let window {
+            self.resolvedWindowProperties = Window.ResolvedProperties(from: window)
+        }
     }
 
     func setScreen(to screen: NSScreen?) {
@@ -71,6 +78,13 @@ final class ResizeContext {
 
     func setWindow(to window: Window?) {
         self.window = window
+
+        if let window {
+            resolvedWindowProperties = Window.ResolvedProperties(from: window)
+        } else {
+            resolvedWindowProperties = nil
+        }
+
         needsRecompute = true
 
         log.info("Set window to \(window?.description ?? "nil")")
@@ -80,6 +94,11 @@ final class ResizeContext {
         action = newAction
         parentAction = newParentAction
         needsRecompute = true
+    }
+
+    func resolveRecords() async {
+        guard let window else { return }
+        resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
     }
 
     func getTargetFrame() -> ComputedFrame {
@@ -104,7 +123,7 @@ final class ResizeContext {
             frame: result.frame,
             paddedBounds: paddedBounds,
             action: action,
-            window: window
+            resolvedWindowProperties: resolvedWindowProperties
         )
 
         cachedTargetFrame = ComputedFrame(
@@ -113,6 +132,7 @@ final class ResizeContext {
             padded: paddedFrame
         )
         needsRecompute = false
+
         log.info("Computed target frame - raw: \(cachedTargetFrame.raw), normalized: \(cachedTargetFrame.normalized) padded: \(cachedTargetFrame.padded), for action: \(action)")
     }
 }

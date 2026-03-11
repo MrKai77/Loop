@@ -58,6 +58,7 @@ final class WindowActionEngine {
     ) async throws -> Result {
         let context = ResizeContext(window: window, screen: screen)
         context.setAction(to: action, parent: nil)
+        await context.resolveRecords()
         return try await apply(context: context)
     }
 

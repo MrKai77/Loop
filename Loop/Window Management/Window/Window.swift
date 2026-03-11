@@ -446,3 +446,19 @@ extension Window: Equatable {
         lhs.cgWindowID == rhs.cgWindowID
     }
 }
+
+// MARK: - ResolvedProperties
+
+extension Window {
+    /// Pre-resolved snapshot of a window's AX properties for synchronous access.
+    /// Avoids repeated IPC round-trips when multiple properties are needed.
+    struct ResolvedProperties {
+        let frame: CGRect
+        let isResizable: Bool
+
+        init(from window: Window) {
+            self.frame = window.frame // 2 AX calls (position + size)
+            self.isResizable = window.isResizable // 1 AX call
+        }
+    }
+}

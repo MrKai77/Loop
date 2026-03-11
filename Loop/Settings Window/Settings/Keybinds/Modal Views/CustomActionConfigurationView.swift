@@ -61,7 +61,6 @@ struct CustomActionConfigurationView: View {
                         if action.sizeMode == .custom {
                             let frame = WindowFrameResolver.getFrame(
                                 for: action,
-                                window: nil,
                                 bounds: CGRect(origin: .zero, size: geo.size)
                             )
 

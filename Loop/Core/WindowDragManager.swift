@@ -98,7 +98,7 @@ final class WindowDragManager {
                hasWindowResized(window.frame, initialFrame) {
                 if hasWindowMoved(window.frame, initialFrame) {
                     if Defaults[.restoreWindowFrameOnDrag] {
-                        restoreInitialWindowSize(window)
+                        await restoreInitialWindowSize(window)
                     }
 
                     if Defaults[.windowSnapping] {
@@ -116,7 +116,7 @@ final class WindowDragManager {
                 }
 
                 StashManager.shared.onWindowManipulated(window.cgWindowID)
-                WindowRecords.eraseRecords(for: window)
+                await WindowRecords.shared.eraseRecords(for: window)
             }
         }
     }
@@ -194,10 +194,10 @@ final class WindowDragManager {
             !initialFrame.bottomRightPoint.approximatelyEqual(to: windowFrame.bottomRightPoint)
     }
 
-    private func restoreInitialWindowSize(_ window: Window) {
+    private func restoreInitialWindowSize(_ window: Window) async {
         let startFrame = window.frame
 
-        guard let initialFrame = WindowRecords.getInitialFrame(for: window) else {
+        guard let initialFrame = await WindowRecords.shared.getInitialFrame(for: window) else {
             return
         }
 
@@ -224,7 +224,7 @@ final class WindowDragManager {
             }
         }
 
-        WindowRecords.eraseRecords(for: window)
+        await WindowRecords.shared.eraseRecords(for: window)
     }
 
     private func processSnapAction() {

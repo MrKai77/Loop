@@ -33,22 +33,14 @@ enum WindowEngine {
         log.info("Resizing \(window) to \(targetFrame)")
 
         // Record first frame if needed
-        WindowRecords.recordFirstIfNeeded(for: window)
+        await WindowRecords.shared.recordFirstIfNeeded(for: window)
 
-        let storeAsFrame = WindowRecords.shouldStoreAsFinalFrame(context.action)
+        let storeAsFrame = WindowRecords.shared.shouldStoreAsFinalFrame(context.action)
 
         // If this action doesn't require storage as a frame, then record it beforehand.
         // Otherwise, this action will be recorded *after* resizing, such that its final frame is considered if undoing.
         if !storeAsFrame {
-            WindowRecords.record(window, context.action)
-        }
-
-        defer {
-            if context.action.direction == .undo {
-                WindowRecords.removeLastAction(for: window)
-            } else if storeAsFrame {
-                WindowRecords.record(window, context.action)
-            }
+            await WindowRecords.shared.record(window, context.action)
         }
 
         let useSystemWM: Bool = if #available(macOS 15, *) {
@@ -97,8 +89,15 @@ enum WindowEngine {
             }
         }
 
+        // Record post-resize actions (replaces former defer block)
+        if context.action.direction == .undo {
+            await WindowRecords.shared.removeLastAction(for: window)
+        } else if storeAsFrame {
+            await WindowRecords.shared.record(window, context.action)
+        }
+
         if let screen = context.screen {
-            StashManager.shared.onWindowResized(
+            await StashManager.shared.onWindowResized(
                 action: context.action,
                 window: window,
                 screen: screen
@@ -117,7 +116,7 @@ enum WindowEngine {
     ) async -> Bool {
         var action = action
 
-        if action.direction == .undo, let lastAction = WindowRecords.getLastAction(for: window) {
+        if action.direction == .undo, let lastAction = await WindowRecords.shared.getLastAction(for: window) {
             action = lastAction
         }
 

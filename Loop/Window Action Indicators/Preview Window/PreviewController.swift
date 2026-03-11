@@ -17,7 +17,7 @@ final class PreviewController: WindowActionIndicator {
 
     func open(context: ResizeContext) {
         guard let screen = context.screen else {
-            log.error("Screen not defined in context")
+            log.debug("Screen not defined in context")
             return
         }
 
