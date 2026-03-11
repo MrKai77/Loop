@@ -75,12 +75,12 @@ enum WindowEngine {
                     try await resizeWindow(
                         window,
                         targetFrame: targetFrame,
-                        bounds: context.bounds,
+                        bounds: context.paddedBounds,
                         willChangeScreens: willChangeScreens,
                         animate: shouldAnimate
                     )
                 } catch {
-                    print(error)
+                    log.error(error.localizedDescription)
                 }
 
                 if Defaults[.moveCursorWithWindow] {
