@@ -12,40 +12,32 @@ struct ActionPreview: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
     @ObservedObject private var accentColorController: AccentColorController = .shared
 
-    @State private var cachedFrame: CGRect = .zero
     let action: WindowAction
 
     var body: some View {
         GeometryReader { proxy in
+            let frame = frame(in: proxy)
+
             blurredWindow()
-                .frame(width: cachedFrame.width, height: cachedFrame.height)
-                .offset(x: cachedFrame.minX, y: cachedFrame.minY)
-                .animation(luminareAnimation, value: cachedFrame)
-                .onChange(of: action, initial: false) {
-                    recomputeCachedFrame(size: proxy.size)
-                }
-                .onChange(of: proxy.size, initial: false) {
-                    recomputeCachedFrame(size: proxy.size)
-                }
+                .frame(width: frame.width, height: frame.height)
+                .offset(x: frame.minX, y: frame.minY)
+                .animation(luminareAnimation, value: frame)
         }
     }
 
     private func blurredWindow() -> some View {
         VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
             .overlay {
-                RoundedRectangle(cornerRadius: 12 - 5)
+                RoundedRectangle(cornerRadius: 7)
                     .strokeBorder(accentColorController.color1, lineWidth: 2)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 12 - 5))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
     }
 
-    private func recomputeCachedFrame(size: CGSize) {
-        Task {
-            cachedFrame = await WindowFrameResolver.getFrame(
-                for: action,
-                window: nil,
-                bounds: CGRect(origin: .zero, size: size)
-            )
-        }
+    private func frame(in proxy: GeometryProxy) -> CGRect {
+        WindowFrameResolver.getFrame(
+            for: action,
+            bounds: CGRect(origin: .zero, size: proxy.size)
+        )
     }
 }

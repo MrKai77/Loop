@@ -97,4 +97,19 @@ extension WindowAction {
             nil
         }
     }
+
+    var backupImage: WindowActionImage? {
+        switch direction {
+        case .custom:
+            .systemImage("slider.horizontal.3")
+        case .cycle:
+            .systemImage("repeat")
+        case .stash:
+            .systemImage("archivebox.fill")
+        case .unstash:
+            .systemImage("arrow.uturn.backward")
+        default:
+            nil
+        }
+    }
 }
