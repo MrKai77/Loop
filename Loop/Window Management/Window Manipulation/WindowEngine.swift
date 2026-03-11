@@ -96,6 +96,8 @@ enum WindowEngine {
             await WindowRecords.shared.record(window, context.action)
         }
 
+        await context.refreshResolvedState()
+
         if let screen = context.screen {
             await StashManager.shared.onWindowResized(
                 action: context.action,

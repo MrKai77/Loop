@@ -456,6 +456,11 @@ extension Window {
         let frame: CGRect
         let isResizable: Bool
 
+        init(frame: CGRect, isResizable: Bool) {
+            self.frame = frame
+            self.isResizable = isResizable
+        }
+
         init(from window: Window) {
             self.frame = window.frame // 2 AX calls (position + size)
             self.isResizable = window.isResizable // 1 AX call

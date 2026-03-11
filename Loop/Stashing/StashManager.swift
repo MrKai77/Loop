@@ -82,15 +82,15 @@ final class StashManager {
         store.restore()
     }
 
-    func onApplicationWillTerminate() {
-        // Move back all stashed windows back into the screen before closing the app:
-        Task {
-            await restoreAllStashedWindows(animate: false)
-        }
-    }
-
     func onWindowManipulated(_ id: CGWindowID) {
         unmanage(windowID: id)
+    }
+
+    func shutdown() async {
+        mouseMovedTask?.cancel()
+        mouseMovedTask = nil
+        stopListeningToRevealTriggers()
+        await restoreAllStashedWindows(animate: false)
     }
 
     func onConfigurationChanged() {
@@ -136,17 +136,6 @@ final class StashManager {
 
     func getRevealedFrameForStashedWindow(id: CGWindowID) -> CGRect? {
         store.stashed[id]?.computeRevealedFrame()
-    }
-
-    deinit {
-        mouseMovedTask?.cancel()
-        stopListeningToRevealTriggers()
-        Task { [store] in
-            // Capture store to avoid referencing self in deinit
-            for stashedWindow in store.stashed.values {
-                stashedWindow.window.setFrame(stashedWindow.computeRevealedFrame())
-            }
-        }
     }
 }
 
@@ -260,7 +249,9 @@ extension StashManager {
     }
 
     func restoreAllStashedWindows(animate: Bool) async {
-        for stashedWindowID in store.stashed.keys {
+        let stashedWindowIDs = Array(store.stashed.keys)
+
+        for stashedWindowID in stashedWindowIDs {
             await unstash(stashedWindowID, resetFrame: true, resetFrameAnimated: animate)
         }
     }

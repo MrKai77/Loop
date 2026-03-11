@@ -84,6 +84,7 @@ final class ResizeContext {
         } else {
             resolvedWindowProperties = nil
         }
+        resolvedRecord = nil
 
         needsRecompute = true
 
@@ -96,9 +97,40 @@ final class ResizeContext {
         needsRecompute = true
     }
 
-    func resolveRecords() async {
-        guard let window else { return }
+    func refreshResolvedState() async {
+        guard let window else {
+            resolvedWindowProperties = nil
+            resolvedRecord = nil
+            return
+        }
+
+        if let resolvedWindowProperties {
+            // Only re-compute the frame, instead of also computing isResizable
+            self.resolvedWindowProperties = .init(
+                frame: window.frame,
+                isResizable: resolvedWindowProperties.isResizable
+            )
+        } else {
+            resolvedWindowProperties = Window.ResolvedProperties(from: window)
+        }
+
         resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
+    }
+
+    func derivedContext(action newAction: WindowAction, bounds newBounds: CGRect) -> ResizeContext {
+        let context = ResizeContext(
+            window: window,
+            initialFrame: resolvedWindowProperties?.frame,
+            screen: screen,
+            bounds: newBounds,
+            padding: .zero,
+            action: newAction,
+            initialMousePosition: initialMousePosition
+        )
+        context.resolvedWindowProperties = resolvedWindowProperties
+        context.resolvedRecord = resolvedRecord
+        context.sidesToAdjust = sidesToAdjust
+        return context
     }
 
     func getTargetFrame() -> ComputedFrame {

@@ -38,7 +38,7 @@ enum WindowFrameResolver {
         padding: PaddingConfiguration? = nil
     ) async -> CGRect {
         let context = ResizeContext(window: window, bounds: bounds, padding: padding, action: action)
-        await context.resolveRecords()
+        await context.refreshResolvedState()
         return getFrame(resizeContext: context).frame
     }
 
@@ -165,7 +165,7 @@ extension WindowFrameResolver {
             result = calculateMacOSCenterFrame(bounds: bounds, windowProperties: properties)
 
         } else if direction == .undo, let properties {
-            result = getLastActionFrame(bounds: bounds, record: context.resolvedRecord, windowProperties: properties)
+            result = getLastActionFrame(context: context, bounds: bounds, windowProperties: properties)
 
         } else if direction == .initialFrame, let properties {
             result = getInitialFrame(record: context.resolvedRecord, windowProperties: properties)
@@ -368,18 +368,16 @@ extension WindowFrameResolver {
 
     /// Retrieves the last action frame for the specified window, based on the last action recorded in `WindowRecords`.
     /// - Parameters:
+    ///   - context: the current resize context, used to preserve window and record snapshots across recursive resolution.
     ///   - bounds: the bounds within which the window should be manipulated.
-    ///   - record: pre-resolved window records.
     ///   - windowProperties: pre-resolved window properties.
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
-    private static func getLastActionFrame(bounds: CGRect, record: WindowRecords.ResolvedRecord?, windowProperties: Window.ResolvedProperties) -> CGRect {
-        if let previousAction = record?.lastAction {
+    private static func getLastActionFrame(context: ResizeContext, bounds: CGRect, windowProperties: Window.ResolvedProperties) -> CGRect {
+        if let previousAction = context.resolvedRecord?.lastAction {
             log.info("Last action was \(previousAction.description)")
 
-            // Sync recursive call — no records needed for the previous action's frame calculation
-            let context = ResizeContext(bounds: bounds, action: previousAction)
-            context.resolvedWindowProperties = windowProperties
-            return getFrame(resizeContext: context).frame
+            let recursiveContext = context.derivedContext(action: previousAction, bounds: bounds)
+            return getFrame(resizeContext: recursiveContext).frame
         } else {
             log.info("Didn't find frame to undo; using current frame")
             return windowProperties.frame

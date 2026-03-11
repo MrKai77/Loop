@@ -157,7 +157,7 @@ extension LoopManager {
             initialFrame: initialFrame,
             initialMousePosition: NSEvent.mouseLocation
         )
-        await resizeContext.resolveRecords()
+        await resizeContext.refreshResolvedState()
 
         if !Defaults[.disableCursorInteraction] {
             mouseInteractionObserver.start(initialMousePosition: resizeContext.initialMousePosition)
@@ -379,7 +379,7 @@ extension LoopManager {
 
         if newAction != resizeContext.action || newAction.canRepeat {
             resizeContext.setAction(to: newAction, parent: newParentAction)
-            await resizeContext.resolveRecords()
+            await resizeContext.refreshResolvedState()
             indicatorService.openAndUpdate(context: resizeContext)
 
             Task {
