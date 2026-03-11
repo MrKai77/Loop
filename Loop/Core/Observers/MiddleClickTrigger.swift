@@ -52,6 +52,7 @@ final class MiddleClickTrigger {
         stop()
 
         let monitor = PassiveEventMonitor(
+            "middle_click_trigger",
             events: [.otherMouseDown, .otherMouseUp],
             callback: handleOtherMouseKeypress
         )

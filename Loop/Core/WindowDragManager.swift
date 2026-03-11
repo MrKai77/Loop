@@ -58,11 +58,13 @@ final class WindowDragManager {
 
     private func setupListeners() {
         let leftMouseDraggedMonitor = PassiveEventMonitor(
+            "snapping_left_mouse_dragged_monitor",
             events: [.leftMouseDragged],
             callback: leftMouseDragged
         )
 
         let leftMouseUpMonitor = PassiveEventMonitor(
+            "snapping_left_mouse_up_monitor",
             events: [.leftMouseUp],
             callback: leftMouseUp
         )

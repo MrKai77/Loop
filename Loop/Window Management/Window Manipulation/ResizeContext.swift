@@ -104,16 +104,7 @@ final class ResizeContext {
             return
         }
 
-        if let resolvedWindowProperties {
-            // Only re-compute the frame, instead of also computing isResizable
-            self.resolvedWindowProperties = .init(
-                frame: window.frame,
-                isResizable: resolvedWindowProperties.isResizable
-            )
-        } else {
-            resolvedWindowProperties = Window.ResolvedProperties(from: window)
-        }
-
+        resolvedWindowProperties = Window.ResolvedProperties(from: window)
         resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
     }
 

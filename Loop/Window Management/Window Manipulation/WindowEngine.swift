@@ -33,14 +33,21 @@ enum WindowEngine {
         log.info("Resizing \(window) to \(targetFrame)")
 
         // Record first frame if needed
-        await WindowRecords.shared.recordFirstIfNeeded(for: window)
+        await WindowRecords.shared.recordFirstIfNeeded(
+            for: window,
+            resolvedProperties: context.resolvedWindowProperties
+        )
 
         let storeAsFrame = WindowRecords.shared.shouldStoreAsFinalFrame(context.action)
 
         // If this action doesn't require storage as a frame, then record it beforehand.
         // Otherwise, this action will be recorded *after* resizing, such that its final frame is considered if undoing.
         if !storeAsFrame {
-            await WindowRecords.shared.record(window, context.action)
+            await WindowRecords.shared.record(
+                window,
+                resolvedProperties: context.resolvedWindowProperties,
+                context.action
+            )
         }
 
         let useSystemWM: Bool = if #available(macOS 15, *) {
@@ -63,8 +70,10 @@ enum WindowEngine {
                 systemWMFrame = window.frame
             }
         } else {
-            // Otherwise, we obviously need to disable fullscreen to resize the window
-            window.fullscreen = false
+            if context.resolvedWindowProperties?.isFullscreen ?? true {
+                // Otherwise, we obviously need to disable fullscreen to resize the window
+                window.fullscreen = false
+            }
 
             if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
                 await resizeOwnWindow(targetFrame: targetFrame)
@@ -93,7 +102,11 @@ enum WindowEngine {
         if context.action.direction == .undo {
             await WindowRecords.shared.removeLastAction(for: window)
         } else if storeAsFrame {
-            await WindowRecords.shared.record(window, context.action)
+            await WindowRecords.shared.record(
+                window,
+                resolvedProperties: context.resolvedWindowProperties,
+                context.action
+            )
         }
 
         await context.refreshResolvedState()

@@ -368,6 +368,7 @@ private extension StashManager {
         log.info("Listening for reveal triggers…")
 
         let monitor = PassiveEventMonitor(
+            "stash_mouse_movement_monitor",
             events: [
                 .mouseMoved, // Normal mouse movement
                 .leftMouseDragged // Dragging items to stashed windows
