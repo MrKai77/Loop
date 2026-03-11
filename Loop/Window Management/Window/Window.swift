@@ -57,22 +57,22 @@ final class Window {
             self.pid = pid
             self.nsRunningApplication = NSRunningApplication(processIdentifier: pid)
         }
-        
+
         guard role != .sheet else {
             throw WindowError.sheetWindow
         }
-        
+
         let invalidBundleIdentifiers: [String] = [
             "com.apple.PIPAgent", // PIP windows
             "com.apple.notificationcenterui" // Widgets & Notification Center
         ]
-        
+
         if let bundleIdentifier = nsRunningApplication?.bundleIdentifier,
            invalidBundleIdentifiers.contains(bundleIdentifier) {
             throw WindowError.blockedBundleID
         }
     }
-    
+
     /// Initialize a window from a PID. The frontmost app with the given PID will be used.
     /// - Parameter pid: The PID of the app to get the window from
     convenience init(pid: pid_t) throws {
@@ -97,24 +97,24 @@ final class Window {
         else {
             throw WindowError.filteredOutFromWindowInfo
         }
-        
+
         if let level = windowInfo[kCGWindowLayer as String] as? Int,
            level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
             throw WindowError.filteredOutFromWindowInfo
         }
-        
+
         let element = AXUIElementCreateApplication(pid)
         guard let windowElements: [AXUIElement] = try element.getValue(.windows),
               !windowElements.isEmpty
         else {
             throw WindowError.cannotGetWindow
         }
-        
+
         // If there’s only one window, use that as there's no need to grab its frame
         if windowElements.count == 1 {
             return try Window(element: windowElements[0], pid: pid)
         }
-        
+
         // If we can retrieve bounds, then filter candidates out by their respective frames.
         let candidates: [AXUIElement] = if let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
                                            let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) {
@@ -128,7 +128,7 @@ final class Window {
         } else {
             windowElements
         }
-        
+
         let windows = candidates.compactMap { try? Window(element: $0, pid: pid) }
 
         if let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID,
@@ -137,7 +137,7 @@ final class Window {
         } else if let first = windows.first {
             return first
         }
-        
+
         return try Window(element: windowElements[0], pid: pid)
     }
 
