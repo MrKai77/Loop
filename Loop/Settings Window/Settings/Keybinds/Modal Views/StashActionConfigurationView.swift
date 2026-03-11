@@ -60,22 +60,7 @@ struct StashActionConfigurationView: View {
     var body: some View {
         VStack(spacing: 12) {
             ScreenView(isBlurred: action.sizeMode != .custom) {
-                GeometryReader { geo in
-                    ZStack {
-                        if action.sizeMode == .custom {
-                            let frame = WindowFrameResolver.getFrame(
-                                for: action,
-                                bounds: CGRect(origin: .zero, size: geo.size)
-                            )
-
-                            blurredWindow()
-                                .frame(width: frame.width, height: frame.height)
-                                .offset(x: frame.origin.x, y: frame.origin.y)
-                                .animation(luminareAnimation, value: frame)
-                        }
-                    }
-                    .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                }
+                ActionPreview(action: action)
             }
             .onChange(of: action) { windowAction = $0 }
 
