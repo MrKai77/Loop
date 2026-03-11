@@ -499,12 +499,10 @@ private extension StashManager {
         // Hide the window if the cursor is neither over the revealedFrame nor the stashedFrame.
         let tolerance: CGFloat = 15
         let revealedFrame = window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
-        // TODO: Cache the stashed frame to prevent repeated stashed frame resolutions
         let stashedFrame = await window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
         return !revealedFrame.contains(location) && !stashedFrame.contains(location)
     }
 
-    // TODO: Cache the stashed frame to prevent repeated stashed frame resolutions
     /// Checks if the mouse is currently hovering over the stashed frame of a window.
     private func isMouseOverStashed(window: StashedWindowInfo, location: CGPoint) async -> Bool {
         let stashedFrame = await window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
