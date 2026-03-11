@@ -33,31 +33,46 @@ enum WindowError: LocalizedError {
 final class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
+    let pid: pid_t
     let nsRunningApplication: NSRunningApplication?
 
     /// Initialize a window from an AXUIElement
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
-    init(element: AXUIElement) throws {
+    init(
+        element: AXUIElement,
+        pid: pid_t? = nil,
+        nsRunningApplication: NSRunningApplication? = nil
+    ) throws {
         self.axWindow = element
         self.cgWindowID = try element.getWindowID()
-        let pid = try axWindow.getPID()
-        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first { $0.processIdentifier == pid }
 
+        if let nsRunningApplication {
+            self.pid = nsRunningApplication.processIdentifier
+            self.nsRunningApplication = nsRunningApplication
+        } else if let pid {
+            self.pid = pid
+            self.nsRunningApplication = NSRunningApplication(processIdentifier: pid)
+        } else {
+            let pid = try axWindow.getPID()
+            self.pid = pid
+            self.nsRunningApplication = NSRunningApplication(processIdentifier: pid)
+        }
+        
         guard role != .sheet else {
             throw WindowError.sheetWindow
         }
-
+        
         let invalidBundleIdentifiers: [String] = [
             "com.apple.PIPAgent", // PIP windows
             "com.apple.notificationcenterui" // Widgets & Notification Center
         ]
-
+        
         if let bundleIdentifier = nsRunningApplication?.bundleIdentifier,
            invalidBundleIdentifiers.contains(bundleIdentifier) {
             throw WindowError.blockedBundleID
         }
     }
-
+    
     /// Initialize a window from a PID. The frontmost app with the given PID will be used.
     /// - Parameter pid: The PID of the app to get the window from
     convenience init(pid: pid_t) throws {
@@ -65,7 +80,11 @@ final class Window {
         guard let window: AXUIElement = try element.getValue(.focusedWindow) else {
             throw WindowError.cannotGetWindow
         }
-        try self.init(element: window)
+        try self.init(
+            element: window,
+            pid: pid,
+            nsRunningApplication: nil
+        )
     }
 
     /// Retrieve a window from an entry in a dictionary returned by `CGWindowListCopyWindowInfo`.
@@ -78,24 +97,24 @@ final class Window {
         else {
             throw WindowError.filteredOutFromWindowInfo
         }
-
+        
         if let level = windowInfo[kCGWindowLayer as String] as? Int,
            level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
             throw WindowError.filteredOutFromWindowInfo
         }
-
+        
         let element = AXUIElementCreateApplication(pid)
         guard let windowElements: [AXUIElement] = try element.getValue(.windows),
               !windowElements.isEmpty
         else {
             throw WindowError.cannotGetWindow
         }
-
+        
         // If there’s only one window, use that as there's no need to grab its frame
         if windowElements.count == 1 {
-            return try Window(element: windowElements[0])
+            return try Window(element: windowElements[0], pid: pid)
         }
-
+        
         // If we can retrieve bounds, then filter candidates out by their respective frames.
         let candidates: [AXUIElement] = if let boundsDict = windowInfo[kCGWindowBounds as String] as? [String: CGFloat],
                                            let frame = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) {
@@ -109,8 +128,8 @@ final class Window {
         } else {
             windowElements
         }
-
-        let windows = candidates.compactMap { try? Window(element: $0) }
+        
+        let windows = candidates.compactMap { try? Window(element: $0, pid: pid) }
 
         if let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID,
            let match = windows.first(where: { $0.cgWindowID == windowID }) {
@@ -118,8 +137,8 @@ final class Window {
         } else if let first = windows.first {
             return first
         }
-
-        return try Window(element: windowElements[0])
+        
+        return try Window(element: windowElements[0], pid: pid)
     }
 
     var role: NSAccessibility.Role? {
@@ -158,9 +177,6 @@ final class Window {
     var enhancedUserInterface: Bool {
         get {
             do {
-                guard let pid = try axWindow.getPID() else {
-                    return false
-                }
                 let appWindow = AXUIElementCreateApplication(pid)
                 let result: Bool? = try appWindow.getValue(.enhancedUserInterface)
                 return result ?? false
@@ -171,9 +187,6 @@ final class Window {
         }
         set {
             do {
-                guard let pid = try axWindow.getPID() else {
-                    return
-                }
                 let appWindow = AXUIElementCreateApplication(pid)
                 try appWindow.setValue(.enhancedUserInterface, value: newValue)
             } catch {
