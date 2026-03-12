@@ -55,8 +55,7 @@ struct CustomActionConfigurationView: View {
     var body: some View {
         VStack(spacing: 12) {
             ScreenView(isBlurred: action.sizeMode != .custom) {
-                let currentAction = action
-                ActionPreview(action: currentAction)
+                ActionPreview(action: action)
             }
             .onChange(of: action) { windowAction = $0 }
 

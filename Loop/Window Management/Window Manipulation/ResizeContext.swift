@@ -97,6 +97,7 @@ final class ResizeContext {
         needsRecompute = true
     }
 
+    /// Re-fetches the window's AX properties and record snapshot from the actor.
     func refreshResolvedState() async {
         guard let window else {
             resolvedWindowProperties = nil
@@ -108,6 +109,8 @@ final class ResizeContext {
         resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
     }
 
+    /// Creates a lightweight child context that shares this context's resolved state but uses a different action and bounds.
+    /// Used for recursive frame resolution (e.g. undo) without additional AX calls.
     func derivedContext(action newAction: WindowAction, bounds newBounds: CGRect) -> ResizeContext {
         let context = ResizeContext(
             window: window,

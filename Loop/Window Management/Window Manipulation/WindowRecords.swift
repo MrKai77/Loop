@@ -47,6 +47,10 @@ actor WindowRecords {
         log.success("Erased records for: \(window)")
     }
 
+    /// Records the window's initial frame if no record exists yet.
+    /// - Parameters:
+    ///   - window: the window to record.
+    ///   - resolvedProperties: pre-resolved properties to avoid redundant AX calls. Falls back to `window.frame` if nil.
     func recordFirstIfNeeded(for window: Window, resolvedProperties: Window.ResolvedProperties?) {
         guard recordsByWindowID[window.cgWindowID] == nil else { return }
         recordsByWindowID[window.cgWindowID] = Record(initialFrame: resolvedProperties?.frame ?? window.frame)
@@ -63,10 +67,11 @@ actor WindowRecords {
         return storeAsFrame
     }
 
-    /// Record a window's action in the records array
+    /// Record a window's action in the records array.
     /// - Parameters:
-    ///   - window: Window to record
-    ///   - action: WindowAction to record
+    ///   - window: Window to record.
+    ///   - resolvedProperties: pre-resolved properties to avoid redundant AX calls. Falls back to `window.frame` if nil.
+    ///   - action: WindowAction to record.
     func record(_ window: Window, resolvedProperties: Window.ResolvedProperties?, _ action: WindowAction) {
         // If the window has not been recorded, record it
         recordFirstIfNeeded(for: window, resolvedProperties: resolvedProperties)

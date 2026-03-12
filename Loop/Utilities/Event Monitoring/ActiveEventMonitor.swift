@@ -19,6 +19,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
 
     /// Initializes an `ActiveEventMonitor`, with a simplified callback.
     /// - Parameters:
+    ///   - name: a human-readable identifier used in log messages.
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
@@ -41,6 +42,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
 
     /// Initializes an `ActiveEventMonitor`.
     /// - Parameters:
+    ///   - name: a human-readable identifier used in log messages.
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.

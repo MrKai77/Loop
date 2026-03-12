@@ -86,6 +86,7 @@ final class StashManager {
         unmanage(windowID: id)
     }
 
+    /// Cancels all monitoring and restores every stashed window to its initial frame.
     func shutdown() async {
         mouseMovedTask?.cancel()
         mouseMovedTask = nil
