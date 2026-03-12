@@ -112,8 +112,8 @@ final class ResizeContext {
     /// Creates a lightweight child context that shares this context's resolved state but uses a different action and bounds.
     /// Used for recursive frame resolution (e.g. undo) without additional AX calls.
     func derivedContext(action newAction: WindowAction, bounds newBounds: CGRect) -> ResizeContext {
+        // Pass window: nil to skip eager AX resolution in init; we overwrite with the parent's (the currently stored) snapshot.
         let context = ResizeContext(
-            window: window,
             initialFrame: resolvedWindowProperties?.frame,
             screen: screen,
             bounds: newBounds,
@@ -121,6 +121,7 @@ final class ResizeContext {
             action: newAction,
             initialMousePosition: initialMousePosition
         )
+        context.window = window
         context.resolvedWindowProperties = resolvedWindowProperties
         context.resolvedRecord = resolvedRecord
         context.sidesToAdjust = sidesToAdjust
