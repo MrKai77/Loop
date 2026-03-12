@@ -102,9 +102,12 @@ enum WindowEngine {
         if context.action.direction == .undo {
             await WindowRecords.shared.removeLastAction(for: window)
         } else if storeAsFrame {
+            // Pass nil for resolvedProperties so that record() reads the "live"
+            // post-resize frame via window.frame, rather than the stale
+            // pre-resize snapshot.
             await WindowRecords.shared.record(
                 window,
-                resolvedProperties: context.resolvedWindowProperties,
+                resolvedProperties: nil,
                 context.action
             )
         }
