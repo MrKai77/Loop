@@ -9,23 +9,42 @@ import Foundation
 
 extension WindowDirection {
     private struct EdgeZoneDirections {
-        let nearCorner: WindowDirection   // ~0-1% from start edge
-        let half: WindowDirection         // ~1-6.3% from start edge
-        let third: WindowDirection        // ~6.3-33% from start edge
-        let centerDefault: WindowDirection // 33-67% center zone default
-        let farThird: WindowDirection     // ~6.3-33% from end edge
-        let farHalf: WindowDirection      // ~1-6.3% from end edge
-        let farCorner: WindowDirection    // ~0-1% from end edge
-        /// (third/twoThirds) pairs for cycling in the center zone
+        /// < 1.05% - Extreme start corner (e.g., Top-Left)
+        let nearCorner: WindowDirection
+
+        /// 1.05% - 6.31% - Start half (e.g., Top Half)
+        let half: WindowDirection
+
+        /// 6.31% - 33.33% - Start third (e.g., Top Third)
+        let third: WindowDirection
+
+        /// 33.33% - 66.67% - Default center zone action (e.g., Full Edge Half)
+        let edgeHalf: WindowDirection
+
+        /// 33.33% - 66.67% - Center zone action when coming from a side zone
+        let centerThird: WindowDirection
+
+        /// 66.67% - 93.68% - End third (e.g., Bottom Third)
+        let farThird: WindowDirection
+
+        /// 93.68% - 98.95% - End half (e.g., Bottom Half)
+        let farHalf: WindowDirection
+
+        /// > 98.95% - Extreme end corner (e.g., Bottom-Left)
+        let farCorner: WindowDirection
+
+        /// Center zone actions available when cycling from `nearCorner`
         let cycleNear: (third: WindowDirection, twoThirds: WindowDirection)
+
+        /// Center zone actions available when cycling from `farCorner`
         let cycleFar: (third: WindowDirection, twoThirds: WindowDirection)
 
-        /// Left edge: Y axis, corners are top-left/bottom-left
         static let leftEdge = EdgeZoneDirections(
             nearCorner: .topLeftQuarter,
             half: .topHalf,
             third: .topThird,
-            centerDefault: .verticalCenterThird,
+            edgeHalf: .leftHalf,
+            centerThird: .verticalCenterThird,
             farThird: .bottomThird,
             farHalf: .bottomHalf,
             farCorner: .bottomLeftQuarter,
@@ -33,12 +52,12 @@ extension WindowDirection {
             cycleFar: (third: .bottomThird, twoThirds: .bottomTwoThirds)
         )
 
-        /// Right edge: Y axis, corners are top-right/bottom-right
         static let rightEdge = EdgeZoneDirections(
             nearCorner: .topRightQuarter,
             half: .topHalf,
             third: .topThird,
-            centerDefault: .verticalCenterThird,
+            edgeHalf: .rightHalf,
+            centerThird: .verticalCenterThird,
             farThird: .bottomThird,
             farHalf: .bottomHalf,
             farCorner: .bottomRightQuarter,
@@ -46,12 +65,12 @@ extension WindowDirection {
             cycleFar: (third: .bottomThird, twoThirds: .bottomTwoThirds)
         )
 
-        /// Bottom edge: X axis, corners are bottom-left/bottom-right
         static let bottomEdge = EdgeZoneDirections(
             nearCorner: .bottomLeftQuarter,
             half: .leftHalf,
             third: .leftThird,
-            centerDefault: .horizontalCenterThird,
+            edgeHalf: .bottomHalf,
+            centerThird: .horizontalCenterThird,
             farThird: .rightThird,
             farHalf: .rightHalf,
             farCorner: .bottomRightQuarter,
@@ -66,28 +85,32 @@ extension WindowDirection {
         screenFrame: CGRect,
         ignoredFrame: CGRect
     ) -> WindowDirection {
-        var newDirection: WindowDirection = .noAction
-
         if mouseLocation.x < ignoredFrame.minX {
-            newDirection = WindowDirection.processEdgeSnap(
+            return WindowDirection.processEdgeSnap(
                 mousePos: mouseLocation.y,
                 axisMax: screenFrame.maxY,
                 axisLength: screenFrame.height,
                 currentDirection: currentDirection,
                 zones: .leftEdge
             )
-        } else if mouseLocation.x > ignoredFrame.maxX {
-            newDirection = WindowDirection.processEdgeSnap(
+        }
+
+        if mouseLocation.x > ignoredFrame.maxX {
+            return WindowDirection.processEdgeSnap(
                 mousePos: mouseLocation.y,
                 axisMax: screenFrame.maxY,
                 axisLength: screenFrame.height,
                 currentDirection: currentDirection,
                 zones: .rightEdge
             )
-        } else if mouseLocation.y < ignoredFrame.minY {
-            newDirection = WindowDirection.processTopSnap(mouseLocation, screenFrame)
-        } else if mouseLocation.y > ignoredFrame.maxY {
-            newDirection = WindowDirection.processEdgeSnap(
+        } 
+        
+        if mouseLocation.y < ignoredFrame.minY {
+            return WindowDirection.processTopSnap(mouseLocation, screenFrame)
+        } 
+        
+        if mouseLocation.y > ignoredFrame.maxY {
+            return WindowDirection.processEdgeSnap(
                 mousePos: mouseLocation.x,
                 axisMax: screenFrame.maxX,
                 axisLength: screenFrame.width,
@@ -96,7 +119,7 @@ extension WindowDirection {
             )
         }
 
-        return newDirection
+        return .noAction
     }
 
     private static func processEdgeSnap(
@@ -136,15 +159,36 @@ extension WindowDirection {
             return zones.farThird
         }
 
-        // Center zone: default third, cycle to two-thirds
-        if currentDirection == zones.cycleNear.third || currentDirection == zones.cycleNear.twoThirds {
+        // Center zone: results are stable once set.
+        // If already showing a center-zone result, keep it.
+        let centerResults: [WindowDirection] = [
+            zones.edgeHalf,
+            zones.cycleNear.twoThirds, zones.cycleFar.twoThirds,
+            zones.centerThird
+        ]
+        if centerResults.contains(currentDirection) {
+            return currentDirection
+        }
+
+        // From a corner → twoThirds
+        if currentDirection == zones.nearCorner {
             return zones.cycleNear.twoThirds
         }
-        if currentDirection == zones.cycleFar.third || currentDirection == zones.cycleFar.twoThirds {
+        if currentDirection == zones.farCorner {
             return zones.cycleFar.twoThirds
         }
 
-        return zones.centerDefault
+        // From a half/third outer zone → centerThird
+        let outerZones: [WindowDirection] = [
+            zones.half, zones.farHalf,
+            zones.third, zones.farThird
+        ]
+        if outerZones.contains(currentDirection) {
+            return zones.centerThird
+        }
+
+        // Default: the edge's own half
+        return zones.edgeHalf
     }
 
     private static func processTopSnap(
