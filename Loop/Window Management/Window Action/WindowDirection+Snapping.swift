@@ -161,12 +161,34 @@ extension WindowDirection {
 
         // Center zone: results are stable once set.
         // If already showing a center-zone result, keep it.
-        let centerResults: [WindowDirection] = [
-            zones.edgeHalf,
-            zones.cycleNear.twoThirds, zones.cycleFar.twoThirds,
-            zones.centerThird
-        ]
-        if centerResults.contains(currentDirection) {
+        // Center zone results with sticky or transition logic
+        if currentDirection == zones.edgeHalf {
+            return currentDirection
+        }
+
+        let centerMid = axisMax - (axisLength * 0.5)
+        let threshold = axisLength * 0.05 // 5% of screen dimension
+
+        if currentDirection == zones.centerThird {
+            if mousePos < centerMid - threshold {
+                return zones.cycleNear.twoThirds
+            } else if mousePos > centerMid + threshold {
+                return zones.cycleFar.twoThirds
+            }
+            return currentDirection
+        }
+
+        if currentDirection == zones.cycleNear.twoThirds {
+            if mousePos > centerMid {
+                return zones.centerThird
+            }
+            return currentDirection
+        }
+
+        if currentDirection == zones.cycleFar.twoThirds {
+            if mousePos < centerMid {
+                return zones.centerThird
+            }
             return currentDirection
         }
 
