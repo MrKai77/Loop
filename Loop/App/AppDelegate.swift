@@ -13,6 +13,7 @@ import UserNotifications
 @Loggable
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let urlCommandHandler = URLCommandHandler()
+    private lazy var loopServer = LoopServer(handler: urlCommandHandler)
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -69,6 +70,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             forEventClass: AEEventClass(kInternetEventClass),
             andEventID: AEEventID(kAEGetURL)
         )
+
+        // Start the Unix socket server for loop-cli
+        loopServer.start()
     }
 
     /// Terminates any other running instances of Loop to prevent accessibility permission conflicts.
@@ -141,6 +145,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_: Notification) {
+        loopServer.stop()
         StashManager.shared.onApplicationWillTerminate()
     }
 
