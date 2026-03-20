@@ -206,6 +206,11 @@ extension WindowDirection {
             zones.third, zones.farThird
         ]
         if outerZones.contains(currentDirection) {
+            if mousePos < centerMid - threshold {
+                return zones.cycleNear.twoThirds
+            } else if mousePos > centerMid + threshold {
+                return zones.cycleFar.twoThirds
+            }
             return zones.centerThird
         }
 
