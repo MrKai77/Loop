@@ -33,10 +33,11 @@ final class ResizeContext {
     private(set) var initialMousePosition: CGPoint = .zero
 
     var resolvedWindowProperties: Window.ResolvedProperties?
-    private(set) var resolvedRecord: WindowRecords.ResolvedRecord?
+    var resolvedRecord: WindowRecords.ResolvedRecord?
 
     private(set) var cachedTargetFrame: ComputedFrame = .zero
     private var needsRecompute: Bool = false
+    var lastAppliedFrame: CGRect?
 
     init(
         window: Window? = nil,
@@ -62,10 +63,6 @@ final class ResizeContext {
         self.parentAction = parentAction
         self.initialMousePosition = initialMousePosition
         self.needsRecompute = !action.direction.isNoOp
-
-        if let window {
-            self.resolvedWindowProperties = Window.ResolvedProperties(from: window)
-        }
     }
 
     func setScreen(to screen: NSScreen?) {
@@ -73,18 +70,15 @@ final class ResizeContext {
         bounds = screen?.cgSafeScreenFrame ?? .zero
         padding = PaddingConfiguration.getConfiguredPadding(for: screen)
         paddedBounds = padding.applyToBounds(bounds, screen: screen)
+        lastAppliedFrame = nil
         needsRecompute = true
     }
 
     func setWindow(to window: Window?) {
         self.window = window
-
-        if let window {
-            resolvedWindowProperties = Window.ResolvedProperties(from: window)
-        } else {
-            resolvedWindowProperties = nil
-        }
+        resolvedWindowProperties = nil
         resolvedRecord = nil
+        lastAppliedFrame = nil
 
         needsRecompute = true
 

@@ -390,9 +390,10 @@ final class Window {
 
     func setFrame(
         _ rect: CGRect,
-        sizeFirst: Bool = false
+        sizeFirst: Bool = false,
+        resolvedProperties: ResolvedProperties? = nil
     ) {
-        let enhancedUI = enhancedUserInterface
+        let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
@@ -414,9 +415,10 @@ final class Window {
     @concurrent
     func setFrameAnimated(
         _ rect: CGRect,
-        bounds: CGRect
+        bounds: CGRect,
+        resolvedProperties: ResolvedProperties? = nil
     ) async throws {
-        let enhancedUI = enhancedUserInterface
+        let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
@@ -469,11 +471,23 @@ extension Window {
         let frame: CGRect
         let isResizable: Bool
         let isFullscreen: Bool
+        let isEnhancedUserInterface: Bool
 
         init(from window: Window) {
             self.frame = window.frame // 2 AX calls (position + size)
             self.isResizable = window.isResizable // 1 AX call
             self.isFullscreen = window.fullscreen // 1 AX call
+            self.isEnhancedUserInterface = window.enhancedUserInterface // 1 AX call on app element
+        }
+
+        /// Creates a new snapshot with an updated frame, preserving stable properties.
+        /// Used after a resize to avoid re-reading from AX.
+        /// `isFullscreen` is always false post-resize, as we exited fullscreen to perform the resize.
+        init(updating frame: CGRect, from other: ResolvedProperties) {
+            self.frame = frame
+            self.isResizable = other.isResizable
+            self.isFullscreen = false
+            self.isEnhancedUserInterface = other.isEnhancedUserInterface
         }
     }
 }

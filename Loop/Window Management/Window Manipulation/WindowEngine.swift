@@ -15,18 +15,18 @@ import SwiftUI
 enum WindowEngine {
     /// Performs the actual resize operation on a window.
     /// This is an internal method - callers should use `WindowActionEngine.apply()` instead.
-    static func performResize(context: ResizeContext) async throws -> CGRect? {
+    static func performResize(context: ResizeContext) async throws {
         // Immediately return for no-op or focus-only actions
         guard let window = context.window,
               !context.action.direction.isNoOp,
               !context.action.direction.willFocusWindow
         else {
-            return nil
+            return
         }
 
         // Quick actions are handled by WindowActionEngine
         let quickActions: [WindowDirection] = [.hide, .minimize, .fullscreen, .minimizeOthers]
-        guard !quickActions.contains(context.action.direction) else { return nil }
+        guard !quickActions.contains(context.action.direction) else { return }
 
         let willChangeScreens = ScreenUtility.screenContaining(window) != context.screen
         let targetFrame = context.getTargetFrame().padded
@@ -60,15 +60,10 @@ enum WindowEngine {
             await window.focus()
         }
 
-        var systemWMFrame: CGRect?
-
         // Attempt system window manager if possible
         if !willChangeScreens, useSystemWM,
            #available(macOS 15, *),
            await resizeWithSystemWindowManager(window: window, to: context.action) {
-            if !Defaults[.previewVisibility] {
-                systemWMFrame = window.frame
-            }
         } else {
             if context.resolvedWindowProperties?.isFullscreen ?? true {
                 // Otherwise, we obviously need to disable fullscreen to resize the window
@@ -78,7 +73,11 @@ enum WindowEngine {
             if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
                 await resizeOwnWindow(targetFrame: targetFrame)
             } else {
-                let shouldAnimate = shouldAnimateResize(for: window, willChangeScreens: willChangeScreens)
+                let shouldAnimate = shouldAnimateResize(
+                    for: window,
+                    willChangeScreens: willChangeScreens,
+                    resolvedProperties: context.resolvedWindowProperties
+                )
 
                 do {
                     try await resizeWindow(
@@ -86,7 +85,8 @@ enum WindowEngine {
                         targetFrame: targetFrame,
                         bounds: context.paddedBounds,
                         willChangeScreens: willChangeScreens,
-                        animate: shouldAnimate
+                        animate: shouldAnimate,
+                        resolvedProperties: context.resolvedWindowProperties
                     )
                 } catch {
                     log.error(error.localizedDescription)
@@ -112,7 +112,16 @@ enum WindowEngine {
             )
         }
 
-        await context.refreshResolvedState()
+        // Update the snapshot
+        let actualFrame = window.frame
+        if let existing = context.resolvedWindowProperties {
+            context.resolvedWindowProperties = Window.ResolvedProperties(
+                updating: actualFrame,
+                from: existing
+            )
+        }
+        context.lastAppliedFrame = actualFrame
+        context.resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
 
         if let screen = context.screen {
             await StashManager.shared.onWindowResized(
@@ -121,8 +130,6 @@ enum WindowEngine {
                 screen: screen
             )
         }
-
-        return systemWMFrame
     }
 
     // MARK: - System Window Manager
@@ -155,8 +162,12 @@ enum WindowEngine {
 
     // MARK: - Animation Checks
 
-    private static func shouldAnimateResize(for window: Window, willChangeScreens: Bool) -> Bool {
-        if window.enhancedUserInterface { return false }
+    private static func shouldAnimateResize(
+        for window: Window,
+        willChangeScreens: Bool,
+        resolvedProperties: Window.ResolvedProperties?
+    ) -> Bool {
+        if resolvedProperties?.isEnhancedUserInterface ?? window.enhancedUserInterface { return false }
         if !willChangeScreens, #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable] {
             return SystemWindowManager.MoveAndResize.enableAnimations
         }
@@ -187,12 +198,13 @@ enum WindowEngine {
         targetFrame: CGRect,
         bounds: CGRect,
         willChangeScreens: Bool,
-        animate: Bool
+        animate: Bool,
+        resolvedProperties: Window.ResolvedProperties? = nil
     ) async throws {
         if animate {
-            try await window.setFrameAnimated(targetFrame, bounds: bounds)
+            try await window.setFrameAnimated(targetFrame, bounds: bounds, resolvedProperties: resolvedProperties)
         } else {
-            window.setFrame(targetFrame, sizeFirst: willChangeScreens)
+            window.setFrame(targetFrame, sizeFirst: willChangeScreens, resolvedProperties: resolvedProperties)
             try Task.checkCancellation()
         }
 

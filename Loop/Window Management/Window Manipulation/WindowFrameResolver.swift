@@ -103,7 +103,7 @@ extension WindowFrameResolver {
                 return properties.frame
             }
 
-            let frameToResizeFrom = context.cachedTargetFrame.raw
+            let frameToResizeFrom = context.lastAppliedFrame ?? context.cachedTargetFrame.raw
 
             // Compute which edges to adjust based on edges touching bounds
             let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
@@ -125,7 +125,7 @@ extension WindowFrameResolver {
             }
 
             // This allows for control over each side
-            let frameToResizeFrom = context.cachedTargetFrame.raw
+            let frameToResizeFrom = context.lastAppliedFrame ?? context.cachedTargetFrame.raw
 
             // Compute which edges to adjust based on direction
             switch direction {

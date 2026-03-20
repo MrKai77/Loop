@@ -376,8 +376,9 @@ extension LoopManager {
         }
 
         if newAction != resizeContext.action || newAction.canRepeat {
+            let previousActionWasNoOp = resizeContext.action.direction.isNoOp
             resizeContext.setAction(to: newAction, parent: newParentAction)
-            if !Defaults[.previewVisibility] {
+            if !Defaults[.previewVisibility], !previousActionWasNoOp {
                 await resizeContext.refreshResolvedState()
             }
             indicatorService.openAndUpdate(context: resizeContext)

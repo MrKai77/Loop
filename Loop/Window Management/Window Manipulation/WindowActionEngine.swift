@@ -29,18 +29,13 @@ final class WindowActionEngine {
         let success: Bool
         /// For focus actions that change the target window
         let newTargetWindow: Window?
-        /// For resize actions via system WM that may update the frame
-        let updatedFrame: CGRect?
 
-        static let noOp = Result(success: true, newTargetWindow: nil, updatedFrame: nil)
-        static let failed = Result(success: false, newTargetWindow: nil, updatedFrame: nil)
+        static let noOp = Result(success: true, newTargetWindow: nil)
+        static let failed = Result(success: false, newTargetWindow: nil)
+        static let resized = Result(success: true, newTargetWindow: nil)
 
         static func focused(_ window: Window?) -> Result {
-            Result(success: window != nil, newTargetWindow: window, updatedFrame: nil)
-        }
-
-        static func resized(frame: CGRect?) -> Result {
-            Result(success: true, newTargetWindow: nil, updatedFrame: frame)
+            Result(success: window != nil, newTargetWindow: window)
         }
     }
 
@@ -115,11 +110,8 @@ final class WindowActionEngine {
             return result
         }
 
-        // Perform the resize
-        let appliedFrame = try await WindowEngine.performResize(context: context)
-
-        // Return the frame that should be stored (either from system WM or from calculation)
-        return .resized(frame: appliedFrame ?? context.getTargetFrame().padded)
+        try await WindowEngine.performResize(context: context)
+        return .resized
     }
 
     // MARK: - Focus Actions
