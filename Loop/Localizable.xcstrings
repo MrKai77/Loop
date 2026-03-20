@@ -270,9 +270,87 @@
     "%@ could not install the update at %@ (%@). Would you like to install this update in your Applications folder instead?" : {
       "comment" : "Informative text displayed in an alert when the Loop is unable to install an update due to insufficient administrator permissions. The first argument is the name of the main app. The second argument is the path where the update failed to install. The third argument is the error.",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ n’a pas pu installer la mise à jour dans %2$@ (%3$@). Voulez-vous plutôt installer cette mise à jour dans votre dossier Applications ?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ non può installare l'aggiornamento in %2$@ (%3$@). Vuoi installare l'aggiornamento nella cartella Applicazioni invece che in quella attuale?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ は %2$@（%3$@）でアップデートをインストールできませんでした。代わりにアプリケーションフォルダにインストールしますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ kon de update niet installeren op %2$@ (%3$@). Wil je de update in de Applicaties-folder installeren?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
           }
         }
@@ -361,8 +439,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+            "state" : "translated",
+            "value" : "%@不在你的應用程式資料夾中。你想要將更新安裝到應用程式資料夾嗎？"
           }
         }
       }
@@ -626,8 +704,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "A single %1$@ action can only track one window. To stash\nmultiple windows, add additional %2$@ actions."
+            "state" : "translated",
+            "value" : "單個%1$@操作只能應用於單個視窗。要收納多個視窗，請添加更多%2$@操作。"
           }
         }
       }
@@ -715,8 +793,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Accent opacity"
+            "state" : "translated",
+            "value" : "強調色不透明度"
           }
         }
       }
@@ -1068,8 +1146,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Actions"
+            "state" : "translated",
+            "value" : "操作"
           }
         }
       }
@@ -1165,7 +1243,92 @@
     },
     "Administrator Authorization Required" : {
       "comment" : "Text in the message field of a warning alert displayed when installation to the user's Applications folder fails.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisation de l'administrateur requise"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Richiesta l'autorizzazione dell'amministratore"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理者の認証が必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator-authorisatie verplicht"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Требуются права администратора"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Administrator Authorization Required"
+          }
+        }
+      }
     },
     "Allow radial menu customization" : {
       "comment" : "A toggle that allows users to enable or disable the ability to customize the actions available in the radial menu.",
@@ -1250,8 +1413,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Allow radial menu customization"
+            "state" : "translated",
+            "value" : "允許自訂環形菜單"
           }
         }
       }
@@ -1956,7 +2119,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "中鍵單擊時延遲觸發"
+            "value" : "按下滾輪時延遲觸發"
           }
         }
       }
@@ -2044,8 +2207,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Automatically install updates"
+            "state" : "translated",
+            "value" : "自動安裝更新"
           }
         }
       }
@@ -2133,8 +2296,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Background"
+            "state" : "translated",
+            "value" : "背景"
           }
         }
       }
@@ -3127,7 +3290,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "needs_review",
-            "value" : "Cancel"
+            "value" : "Abbrechen"
           }
         },
         "en" : {
@@ -3198,15 +3361,100 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cancel"
+            "state" : "translated",
+            "value" : "取消"
           }
         }
       }
     },
     "Cancel Update" : {
       "comment" : "Button title to cancel the update installation.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cancel Update"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Update abbrechen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Update"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cancel Update"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler la mise à jour"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annulla aggiornamento"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートをキャンセル"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cancel Update"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update annuleren"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cancel Update"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cancel Update"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменить обновление"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cancel Update"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Cancel Update"
+          }
+        }
+      }
     },
     "Center" : {
       "comment" : "Window action",
@@ -3556,8 +3804,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Check for Updates…"
+            "state" : "translated",
+            "value" : "檢查更新…"
           }
         }
       }
@@ -3644,8 +3892,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Clear Keybind"
+            "state" : "translated",
+            "value" : "清除按鍵綁定"
           }
         }
       }
@@ -3911,8 +4159,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Configure…"
+            "state" : "translated",
+            "value" : "設定…"
           }
         }
       }
@@ -4621,8 +4869,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Custom Action"
+            "state" : "translated",
+            "value" : "自訂操作"
           }
         }
       }
@@ -4798,8 +5046,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Customize this action's custom frame."
+            "state" : "translated",
+            "value" : "自訂該操作的邊框位置。"
           }
         }
       }
@@ -4887,7 +5135,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "自訂此按鍵綁定觸發的操作。"
+            "value" : "自訂該按鍵綁定觸發的操作。"
           }
         }
       }
@@ -4975,8 +5223,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Customize what this action cycles through."
+            "state" : "translated",
+            "value" : "自訂該操作的循環內容。"
           }
         }
       }
@@ -5949,7 +6197,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "雙擊以觸發"
+            "value" : "按兩下來觸發"
           }
         }
       }
@@ -6037,8 +6285,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Enable blur"
+            "state" : "translated",
+            "value" : "啟用模糊"
           }
         }
       }
@@ -6215,7 +6463,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "請確保選擇的文件格式正確。"
+            "value" : "請確保選定的檔案格式正確。"
           }
         }
       }
@@ -6656,8 +6904,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Failed to resolve linked keybind"
+            "state" : "translated",
+            "value" : "無法解析關聯的按鍵綁定"
           }
         }
       }
@@ -6745,8 +6993,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fill Available Space"
+            "state" : "translated",
+            "value" : "填充可用空白"
           }
         }
       }
@@ -7013,7 +7261,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦"
+            "value" : "取得焦點"
           }
         }
       }
@@ -7102,7 +7350,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦下方"
+            "value" : "取得下方焦點"
           }
         }
       }
@@ -7191,7 +7439,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦左側"
+            "value" : "取得左側焦點"
           }
         }
       }
@@ -7279,8 +7527,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Focus Next In Stack"
+            "state" : "translated",
+            "value" : "取得下一個焦點"
           }
         }
       }
@@ -7369,7 +7617,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦右側"
+            "value" : "取得右側焦點"
           }
         }
       }
@@ -7458,7 +7706,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "聚焦上方"
+            "value" : "取得上方焦點"
           }
         }
       }
@@ -7546,7 +7794,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在更改視窗大小時給予焦點"
+            "value" : "在更改視窗大小時取得焦點"
           }
         }
       }
@@ -9055,7 +9303,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "隱藏菜單欄圖標"
+            "value" : "隱藏選單列圖標"
           }
         }
       }
@@ -9143,8 +9391,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Hide when no action is selected"
+            "state" : "translated",
+            "value" : "未選定操作時隱藏"
           }
         }
       }
@@ -12056,15 +12304,100 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install failed"
+            "state" : "translated",
+            "value" : "安裝失敗"
           }
         }
       }
     },
     "Install in Your Applications Folder" : {
       "comment" : "Label for a button that allows the user to install the update in their Applications folder.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installer dans votre dossier Applications"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installa nella cartella Applicazioni"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリケーションフォルダにインストール"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installeren in je Applicaties-folder"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установить в папку Приложения"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Install in Your Applications Folder"
+          }
+        }
+      }
     },
     "Install to Applications" : {
       "comment" : "Title of the first button in an alert that asks if the user wants to install an update to their Applications folder.",
@@ -12149,8 +12482,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install to Applications"
+            "state" : "translated",
+            "value" : "安裝到應用程式資料夾"
           }
         }
       }
@@ -12415,8 +12748,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keep in Current Location"
+            "state" : "translated",
+            "value" : "安裝到當前位置"
           }
         }
       }
@@ -12682,8 +13015,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Larger (Proportional)"
+            "state" : "translated",
+            "value" : "擴大一點（按比例）"
           }
         }
       }
@@ -13481,8 +13814,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Left-click to step through cycle actions."
+            "state" : "translated",
+            "value" : "按一下來遍歷循環操作。"
           }
         }
       }
@@ -13570,8 +13903,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Link Trigger Key"
+            "state" : "translated",
+            "value" : "關聯觸發鍵"
           }
         }
       }
@@ -16935,7 +17268,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "中鍵單擊以觸發"
+            "value" : "按下滾輪來觸發"
           }
         }
       }
@@ -17734,8 +18067,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move to Applications Folder?"
+            "state" : "translated",
+            "value" : "要移動到應用程式資料夾嗎？"
           }
         }
       }
@@ -18443,8 +18776,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "No radial menu actions"
+            "state" : "translated",
+            "value" : "無環形菜單操作"
           }
         }
       }
@@ -20022,13 +20355,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "乡下应用而已，更不更新都一样"
+            "value" : "更新阿拉还真无得啊，乡毋宁啷个晓得嘞"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "鄉下應用而已，更不更新都一樣"
+            "value" : "你知影咩，更新無喔，我跟你講啦"
           }
         }
       }
@@ -22756,7 +23089,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "請在系統設置中開啟。"
+            "value" : "請在系統設置中打開。"
           }
         }
       }
@@ -23375,8 +23708,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please include at least one modifier key."
+            "state" : "translated",
+            "value" : "請包括至少一個修飾鍵。"
           }
         }
       }
@@ -23640,7 +23973,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "點按“添加”以添加循環內容"
+            "value" : "點按“添加”來添加循環內容"
           }
         }
       }
@@ -23728,7 +24061,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "點按“添加”以添加按鍵綁定"
+            "value" : "點按“添加”來添加按鍵綁定"
           }
         }
       }
@@ -23816,8 +24149,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Press \"Add\" to add an action"
+            "state" : "translated",
+            "value" : "點按“添加”來添加操作"
           }
         }
       }
@@ -23905,7 +24238,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "點按“添加”以添加應用程式"
+            "value" : "點按“添加”來添加應用程式"
           }
         }
       }
@@ -24437,8 +24770,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Quit %@"
+            "state" : "translated",
+            "value" : "退出%@"
           }
         }
       }
@@ -24614,8 +24947,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Radial Menu"
+            "state" : "translated",
+            "value" : "環形菜單"
           }
         }
       }
@@ -24703,8 +25036,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "重新啟動以完成"
+            "state" : "translated",
+            "value" : "重新啟動來完成更新"
           }
         }
       }
@@ -25235,8 +25568,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset keybinds?"
+            "state" : "translated",
+            "value" : "要重置所有按鍵綁定嗎？"
           }
         }
       }
@@ -25324,8 +25657,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset radial menu actions"
+            "state" : "translated",
+            "value" : "重置環形菜單操作"
           }
         }
       }
@@ -25412,8 +25745,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Reset radial menu actions?"
+            "state" : "translated",
+            "value" : "要重置所有環形菜單操作嗎？"
           }
         }
       }
@@ -26742,7 +27075,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "選擇按鍵綁定文件"
+            "value" : "選定按鍵綁定檔案"
           }
         }
       }
@@ -29481,8 +29814,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Smaller (Proportional)"
+            "state" : "translated",
+            "value" : "縮小一點（按比例）"
           }
         }
       }
@@ -29912,8 +30245,8 @@
         },
         "ru" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Start hidden"
+            "state" : "translated",
+            "value" : "Запускать скрытым"
           }
         },
         "zh-Hans" : {
@@ -29924,8 +30257,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Start hidden"
+            "state" : "translated",
+            "value" : "開始隱藏"
           }
         }
       }
@@ -31074,8 +31407,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This action is linked to a keybind. Changes made to this action will affect both."
+            "state" : "translated",
+            "value" : "該操作關聯了按鍵綁定。對該操作的改動將同時影響兩邊。"
           }
         }
       }
@@ -31163,8 +31496,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This macOS version is no longer supported."
+            "state" : "translated",
+            "value" : "該macOS版本不再受支持。"
           }
         }
       }
@@ -31252,8 +31585,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This will reset all keybinds to their original defaults."
+            "state" : "translated",
+            "value" : "這將重置所有按鍵綁定為默認值。"
           }
         }
       }
@@ -31341,8 +31674,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This will reset all radial menu actions to their default configuration."
+            "state" : "translated",
+            "value" : "這將重置所有環形菜單操作為默認設定。"
           }
         }
       }
@@ -32495,8 +32828,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Try again later"
+            "state" : "translated",
+            "value" : "請過會兒再試"
           }
         }
       }
@@ -32673,8 +33006,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Unlink Trigger Key"
+            "state" : "translated",
+            "value" : "取消關聯觸發鍵"
           }
         }
       }
@@ -32939,8 +33272,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Update from: %@"
+            "state" : "translated",
+            "value" : "自%@更新"
           }
         }
       }
@@ -33205,8 +33538,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates will only be installed when %@ is in the background."
+            "state" : "translated",
+            "value" : "只有在%@處於後台時才會安裝更新。"
           }
         }
       }
@@ -33647,7 +33980,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "如果你正在使用自訂菜單欄，請選擇此選項。"
+            "value" : "如果你正在使用自訂選單列，請選擇該選項。"
           }
         }
       }
@@ -33735,8 +34068,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "%@版本"
           }
         }
       }
@@ -34890,8 +35223,8 @@
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in a keybind."
+            "state" : "translated",
+            "value" : "你最多只能使用%lld個按鍵組成按鍵綁定。"
           }
         }
       }
@@ -34979,7 +35312,7 @@
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你最多只能使用%lld個按鍵作為觸發鍵。"
+            "value" : "你最多只能使用%lld個按鍵組成觸發鍵。"
           }
         }
       }
@@ -35250,5 +35583,5 @@
       }
     }
   },
-  "version" : "1.1"
+  "version" : "1.0"
 }
