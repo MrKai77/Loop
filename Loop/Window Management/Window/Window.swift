@@ -394,6 +394,7 @@ final class Window {
         resolvedProperties: ResolvedProperties? = nil
     ) {
         let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
+        let shouldSetSize = resolvedProperties?.isResizable ?? true
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
@@ -401,11 +402,15 @@ final class Window {
             enhancedUserInterface = false
         }
 
-        if sizeFirst {
+        if sizeFirst && shouldSetSize {
             size = rect.size
         }
+
         position = rect.origin
-        size = rect.size
+        
+        if shouldSetSize {
+            size = rect.size
+        }
 
         if enhancedUI {
             enhancedUserInterface = true
@@ -419,6 +424,7 @@ final class Window {
         resolvedProperties: ResolvedProperties? = nil
     ) async throws {
         let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
+        let shouldSetSize = resolvedProperties?.isResizable ?? true
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
@@ -432,7 +438,8 @@ final class Window {
                 let animation = WindowTransformAnimation(
                     rect,
                     window: self,
-                    bounds: bounds
+                    bounds: bounds,
+                    shouldSetSize: shouldSetSize
                 ) { error in
                     if let error {
                         continuation.resume(throwing: error)

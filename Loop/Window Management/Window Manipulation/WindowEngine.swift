@@ -209,7 +209,7 @@ enum WindowEngine {
         }
 
         if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
-            window.setFrame(targetFrame)
+            window.setFrame(targetFrame, resolvedProperties: resolvedProperties)
             try Task.checkCancellation()
         }
 
