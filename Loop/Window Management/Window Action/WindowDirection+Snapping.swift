@@ -103,12 +103,12 @@ extension WindowDirection {
                 currentDirection: currentDirection,
                 zones: .rightEdge
             )
-        } 
-        
+        }
+
         if mouseLocation.y < ignoredFrame.minY {
             return WindowDirection.processTopSnap(mouseLocation, screenFrame)
-        } 
-        
+        }
+
         if mouseLocation.y > ignoredFrame.maxY {
             return WindowDirection.processEdgeSnap(
                 mousePos: mouseLocation.x,
