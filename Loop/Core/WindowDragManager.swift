@@ -252,11 +252,6 @@ final class WindowDragManager {
         let oldDirection = resizeContext?.action.direction ?? .noAction
 
         if !ignoredFrame.contains(currentMousePosition) {
-            // Refresh accent colors in case user has enabled the wallpaper processor
-            Task {
-                await AccentColorController.shared.refresh()
-            }
-
             let newDirection = WindowDirection.getSnapDirection(
                 mouseLocation: currentMousePosition,
                 currentDirection: oldDirection,
@@ -266,6 +261,11 @@ final class WindowDragManager {
 
             // Only update if direction actually changed
             if newDirection != oldDirection {
+                // Refresh accent colors in case user has enabled the wallpaper processor
+                Task {
+                    await AccentColorController.shared.refresh()
+                }
+
                 log.info("Window snapping direction changed: \(newDirection.debugDescription)")
 
                 resizeContext?.setScreen(to: screen)
