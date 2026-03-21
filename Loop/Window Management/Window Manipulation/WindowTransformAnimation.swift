@@ -116,11 +116,11 @@ final class WindowTransformAnimation: NSAnimation {
         }
 
         if lastWindowFrame.origin != newFrame.origin {
-            window.position = newFrame.origin
+            window.setPosition(newFrame.origin)
         }
 
-        if shouldSetSize && lastWindowFrame.size != newFrame.size {
-            window.size = newFrame.size
+        if shouldSetSize, lastWindowFrame.size != newFrame.size {
+            window.setSize(newFrame.size)
         }
 
         lastWindowFrame = window.frame

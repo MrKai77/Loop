@@ -99,7 +99,7 @@ final class StashManager {
             Task {
                 let frame = await stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
                 // Don't animate when configuration changes
-                stashedWindow.window.setFrame(frame)
+                await stashedWindow.window.setFrame(frame)
             }
         }
     }
@@ -242,7 +242,7 @@ extension StashManager {
                     bounds: .zero
                 )
             } else {
-                window.window.setFrame(initialFrame)
+                await window.window.setFrame(initialFrame)
             }
         }
 
@@ -291,7 +291,7 @@ private extension StashManager {
                 bounds: .zero
             )
         } else {
-            window.window.setFrame(frame)
+            await window.window.setFrame(frame)
         }
 
         store.markWindowAsRevealed(window.window.cgWindowID)
@@ -314,7 +314,7 @@ private extension StashManager {
                 bounds: .zero
             )
         } else {
-            window.window.setFrame(frame)
+            await window.window.setFrame(frame)
         }
 
         store.markWindowAsHidden(window.window.cgWindowID)

@@ -165,10 +165,13 @@ final class WindowDragManager {
             }
 
             initialWindowFrame = window.frame
-            resizeContext = ResizeContext(
+
+            let context = ResizeContext(
                 window: window,
                 initialMousePosition: currentMousePosition
             )
+            await context.refreshResolvedState()
+            self.resizeContext = context
 
             log.info("Determined window being dragged: \(window.description)")
         }
@@ -207,9 +210,9 @@ final class WindowDragManager {
             var newWindowFrame = window.frame
             newWindowFrame.size = initialFrame.size
             newWindowFrame = newWindowFrame.pushInside(screen.displayBounds)
-            window.setFrame(newWindowFrame)
+            await window.setFrame(newWindowFrame)
         } else {
-            window.size = initialFrame.size
+            window.setSize(initialFrame.size)
         }
 
         // If the window doesn't contain the cursor, keep the original maxX
@@ -217,12 +220,12 @@ final class WindowDragManager {
             var newFrame = window.frame
 
             newFrame.origin.x = startFrame.maxX - newFrame.width
-            window.setFrame(newFrame)
+            await window.setFrame(newFrame)
 
             // If it still doesn't contain the cursor, move the window to be centered with the cursor
             if !newFrame.contains(currentMousePosition) {
                 newFrame.origin.x = currentMousePosition.x - (newFrame.width / 2)
-                window.setFrame(newFrame)
+                await window.setFrame(newFrame)
             }
         }
 

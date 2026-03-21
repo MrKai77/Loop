@@ -333,20 +333,26 @@ final class Window {
     }
 
     var position: CGPoint {
-        get {
-            do {
-                guard let result: CGPoint = try axWindow.getValue(.position) else {
-                    return .zero
-                }
-                return result
-            } catch {
-                log.error("Failed to get position: \(error.localizedDescription)")
+        do {
+            guard let result: CGPoint = try axWindow.getValue(.position) else {
                 return .zero
             }
+            return result
+        } catch {
+            log.error("Failed to get position: \(error.localizedDescription)")
+            return .zero
         }
-        set {
+    }
+
+    func setPosition(_ point: CGPoint) {
+        if nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
+            Task { @MainActor in
+                guard let win = NSApp.keyWindow else { return }
+                win.setFrameOrigin(CGRect(origin: point, size: win.frame.size).flipY(screen: .screens[0]).origin)
+            }
+        } else {
             do {
-                try axWindow.setValue(.position, value: newValue)
+                try axWindow.setValue(.position, value: point)
             } catch {
                 log.error("Failed to set position: \(error.localizedDescription)")
             }
@@ -354,20 +360,26 @@ final class Window {
     }
 
     var size: CGSize {
-        get {
-            do {
-                guard let result: CGSize = try axWindow.getValue(.size) else {
-                    return .zero
-                }
-                return result
-            } catch {
-                log.error("Failed to get size: \(error.localizedDescription)")
+        do {
+            guard let result: CGSize = try axWindow.getValue(.size) else {
                 return .zero
             }
+            return result
+        } catch {
+            log.error("Failed to get size: \(error.localizedDescription)")
+            return .zero
         }
-        set {
+    }
+
+    func setSize(_ size: CGSize) {
+        if nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
+            Task { @MainActor in
+                guard let win = NSApp.keyWindow else { return }
+                win.setFrame(CGRect(origin: win.frame.origin, size: size), display: false)
+            }
+        } else {
             do {
-                try axWindow.setValue(.size, value: newValue)
+                try axWindow.setValue(.size, value: size)
             } catch {
                 log.error("Failed to set size: \(error.localizedDescription)")
             }
@@ -388,11 +400,34 @@ final class Window {
         CGRect(origin: position, size: size)
     }
 
+    /// Returns `true` and applies the frame using AppKit if this window belongs to Loop itself.
+    /// AX APIs are unavailable for our own process, so we delegate to `NSWindow` instead.
+    @MainActor
+    @discardableResult
+    private func applyOwnWindowFrame(_ rect: CGRect) -> Bool {
+        guard nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier else {
+            return false
+        }
+        guard let window = NSApp.keyWindow else {
+            log.info("Failed to get own main window to resize")
+            return true
+        }
+        NSAnimationContext.runAnimationGroup { context in
+            context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
+            window.animator().setFrame(rect.flipY(screen: .screens[0]), display: false)
+        }
+        return true
+    }
+
     func setFrame(
         _ rect: CGRect,
         sizeFirst: Bool = false,
         resolvedProperties: ResolvedProperties? = nil
-    ) {
+    ) async {
+        guard await !MainActor.run(resultType: Bool.self, body: { applyOwnWindowFrame(rect) }) else {
+            return
+        }
+
         let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
         let shouldSetSize = resolvedProperties?.isResizable ?? true
 
@@ -402,14 +437,14 @@ final class Window {
             enhancedUserInterface = false
         }
 
-        if sizeFirst && shouldSetSize {
-            size = rect.size
+        if sizeFirst, shouldSetSize {
+            setSize(rect.size)
         }
 
-        position = rect.origin
-        
+        setPosition(rect.origin)
+
         if shouldSetSize {
-            size = rect.size
+            setSize(rect.size)
         }
 
         if enhancedUI {
@@ -423,6 +458,10 @@ final class Window {
         bounds: CGRect,
         resolvedProperties: ResolvedProperties? = nil
     ) async throws {
+        guard await !MainActor.run(resultType: Bool.self, body: { applyOwnWindowFrame(rect) }) else {
+            return
+        }
+
         let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
         let shouldSetSize = resolvedProperties?.isResizable ?? true
 

@@ -88,7 +88,7 @@ final class WindowActionEngine {
 
         // Await the task and clean up
         let result = try await task.value
-        
+
         await MainActor.run {
             _ = actionTasks.removeValue(forKey: windowID)
         }

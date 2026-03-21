@@ -48,8 +48,10 @@ final class SettingsWindowManager: ObservableObject {
         }
     }
 
-    @Published var showInspector: Bool = true {
+    @Published var showInspector: Bool = Defaults[.showSettingsInspector] {
         didSet {
+            Defaults[.showSettingsInspector] = showInspector
+
             if showInspector {
                 startTimer()
             } else {

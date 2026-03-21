@@ -28,6 +28,10 @@ enum WindowEngine {
         let quickActions: [WindowDirection] = [.hide, .minimize, .fullscreen, .minimizeOthers]
         guard !quickActions.contains(context.action.direction) else { return }
 
+        if context.resolvedWindowProperties == nil {
+            await context.refreshResolvedState()
+        }
+
         let willChangeScreens = ScreenUtility.screenContaining(window) != context.screen
         let targetFrame = context.getTargetFrame().padded
         log.info("Resizing \(window) to \(targetFrame)")
@@ -70,31 +74,27 @@ enum WindowEngine {
                 window.fullscreen = false
             }
 
-            if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
-                await resizeOwnWindow(targetFrame: targetFrame)
-            } else {
-                let shouldAnimate = shouldAnimateResize(
-                    for: window,
+            let shouldAnimate = shouldAnimateResize(
+                for: window,
+                willChangeScreens: willChangeScreens,
+                resolvedProperties: context.resolvedWindowProperties
+            )
+
+            do {
+                try await resizeWindow(
+                    window,
+                    targetFrame: targetFrame,
+                    bounds: context.paddedBounds,
                     willChangeScreens: willChangeScreens,
+                    animate: shouldAnimate,
                     resolvedProperties: context.resolvedWindowProperties
                 )
+            } catch {
+                log.error(error.localizedDescription)
+            }
 
-                do {
-                    try await resizeWindow(
-                        window,
-                        targetFrame: targetFrame,
-                        bounds: context.paddedBounds,
-                        willChangeScreens: willChangeScreens,
-                        animate: shouldAnimate,
-                        resolvedProperties: context.resolvedWindowProperties
-                    )
-                } catch {
-                    log.error(error.localizedDescription)
-                }
-
-                if Defaults[.moveCursorWithWindow] {
-                    CGWarpMouseCursorPosition(targetFrame.center)
-                }
+            if Defaults[.moveCursorWithWindow] {
+                CGWarpMouseCursorPosition(targetFrame.center)
             }
         }
 
@@ -178,21 +178,6 @@ enum WindowEngine {
 
     // MARK: - Window Resize
 
-    @MainActor
-    private static func resizeOwnWindow(targetFrame: CGRect) {
-        guard let window = NSApp.keyWindow ?? NSApp.windows.first(where: {
-            $0.level.rawValue <= NSWindow.Level.floating.rawValue
-        }) else {
-            log.info("Failed to get own main window to resize")
-            return
-        }
-
-        NSAnimationContext.runAnimationGroup { context in
-            context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
-            window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
-        }
-    }
-
     private static func resizeWindow(
         _ window: Window,
         targetFrame: CGRect,
@@ -204,12 +189,12 @@ enum WindowEngine {
         if animate {
             try await window.setFrameAnimated(targetFrame, bounds: bounds, resolvedProperties: resolvedProperties)
         } else {
-            window.setFrame(targetFrame, sizeFirst: willChangeScreens, resolvedProperties: resolvedProperties)
+            await window.setFrame(targetFrame, sizeFirst: willChangeScreens, resolvedProperties: resolvedProperties)
             try Task.checkCancellation()
         }
 
         if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
-            window.setFrame(targetFrame, resolvedProperties: resolvedProperties)
+            await window.setFrame(targetFrame, resolvedProperties: resolvedProperties)
             try Task.checkCancellation()
         }
 
@@ -225,6 +210,6 @@ enum WindowEngine {
         if windowFrame.maxX > bounds.maxX { windowFrame.origin.x = bounds.maxX - windowFrame.width }
         if windowFrame.maxY > bounds.maxY { windowFrame.origin.y = bounds.maxY - windowFrame.height }
 
-        window.position = windowFrame.origin
+        window.setPosition(windowFrame.origin)
     }
 }
