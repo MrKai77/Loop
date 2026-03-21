@@ -21,6 +21,7 @@ import SwiftUI
 final class WindowActionEngine {
     static let shared = WindowActionEngine()
 
+    @MainActor
     private var actionTasks: [CGWindowID: Task<Result, any Error>] = [:]
 
     /// Result of applying a window action
@@ -73,7 +74,7 @@ final class WindowActionEngine {
         }
 
         // Cancel any existing action on this window
-        actionTasks[windowID]?.cancel()
+        await actionTasks[windowID]?.cancel()
 
         // Create a task for this action
         let task = Task {
@@ -81,11 +82,16 @@ final class WindowActionEngine {
             try Task.checkCancellation()
             return result
         }
-        actionTasks[windowID] = task
+        await MainActor.run {
+            actionTasks[windowID] = task
+        }
 
         // Await the task and clean up
         let result = try await task.value
-        actionTasks.removeValue(forKey: windowID)
+        
+        await MainActor.run {
+            _ = actionTasks.removeValue(forKey: windowID)
+        }
 
         return result
     }
