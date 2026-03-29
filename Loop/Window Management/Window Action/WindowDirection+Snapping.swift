@@ -85,13 +85,22 @@ extension WindowDirection {
         screenFrame: CGRect,
         ignoredFrame: CGRect
     ) -> WindowDirection {
+        // Only enable thirds on the primary (longer) axis of the screen.
+        // If the aspect ratio is close to square (within 4:3), enable thirds on both axes.
+        // Otherwise, only the longer axis gets thirds; the shorter axis stays simple.
+        let aspectRatio = screenFrame.width / screenFrame.height
+        let isNearSquare = aspectRatio >= 3.0 / 4.0 && aspectRatio <= 4.0 / 3.0
+        let verticalSimple = !isNearSquare && screenFrame.width > screenFrame.height
+        let horizontalSimple = !isNearSquare && screenFrame.height > screenFrame.width
+
         if mouseLocation.x < ignoredFrame.minX {
             return WindowDirection.processEdgeSnap(
                 mousePos: mouseLocation.y,
                 axisMax: screenFrame.maxY,
                 axisLength: screenFrame.height,
                 currentDirection: currentDirection,
-                zones: .leftEdge
+                zones: .leftEdge,
+                simpleMode: verticalSimple
             )
         }
 
@@ -101,7 +110,8 @@ extension WindowDirection {
                 axisMax: screenFrame.maxY,
                 axisLength: screenFrame.height,
                 currentDirection: currentDirection,
-                zones: .rightEdge
+                zones: .rightEdge,
+                simpleMode: verticalSimple
             )
         }
 
@@ -115,7 +125,8 @@ extension WindowDirection {
                 axisMax: screenFrame.maxX,
                 axisLength: screenFrame.width,
                 currentDirection: currentDirection,
-                zones: .bottomEdge
+                zones: .bottomEdge,
+                simpleMode: horizontalSimple
             )
         }
 
@@ -127,11 +138,23 @@ extension WindowDirection {
         axisMax: CGFloat,
         axisLength: CGFloat,
         currentDirection: WindowDirection,
-        zones: EdgeZoneDirections
+        zones: EdgeZoneDirections,
+        simpleMode: Bool
     ) -> WindowDirection {
         // Near edge ~0%-1% (0 to 1/95): corner
         if mousePos < axisMax - (axisLength * 94 / 95) {
             return zones.nearCorner
+        }
+
+        // Far edge ~99%-100% (94/95 to 1): corner
+        if mousePos > axisMax - (axisLength * 1 / 95) {
+            return zones.farCorner
+        }
+
+        // Simple mode: this is the shorter axis, so only corners + edge half.
+        // No thirds, halves, or cycling logic needed.
+        if simpleMode {
+            return zones.edgeHalf
         }
 
         // Near edge ~1%-6.3% (1/95 to 6/95): half
@@ -144,11 +167,6 @@ extension WindowDirection {
             return zones.third
         }
 
-        // Far edge ~99%-100% (94/95 to 1): corner
-        if mousePos > axisMax - (axisLength * 1 / 95) {
-            return zones.farCorner
-        }
-
         // Far edge ~93.7%-99% (89/95 to 94/95): half
         if mousePos > axisMax - (axisLength * 6 / 95) {
             return zones.farHalf
@@ -159,15 +177,14 @@ extension WindowDirection {
             return zones.farThird
         }
 
-        // Center zone: results are stable once set.
-        // If already showing a center-zone result, keep it.
-        // Center zone results with sticky or transition logic
+        // Center zone cycling logic.
+        let centerMid = axisMax - (axisLength * 0.5)
+        let threshold = axisLength * 0.05 // 5% of screen dimension
+
+        // Keep the default edge-half stable once it has been selected.
         if currentDirection == zones.edgeHalf {
             return currentDirection
         }
-
-        let centerMid = axisMax - (axisLength * 0.5)
-        let threshold = axisLength * 0.05 // 5% of screen dimension
 
         if currentDirection == zones.centerThird {
             if mousePos < centerMid - threshold {
