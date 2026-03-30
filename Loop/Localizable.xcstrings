@@ -4076,6 +4076,12 @@
         }
       }
     },
+    "Command Line Interface" : {
+      "comment" : "Section header shown in settings"
+    },
+    "Command-Line Tool Error" : {
+
+    },
     "Configure…" : {
       "comment" : "Button label that opens a view to configure padding settings.",
       "localizations" : {
@@ -12220,6 +12226,9 @@
           }
         }
       }
+    },
+    "Install CLI" : {
+
     },
     "Install failed" : {
       "comment" : "The text that appears when the update fails to install.",
@@ -24952,6 +24961,9 @@
           }
         }
       }
+    },
+    "Re-install CLI" : {
+
     },
     "Relaunch to complete" : {
       "comment" : "A button title that appears when an update is being installed, instructing the user to relaunch the app to complete the installation.",
