@@ -14,7 +14,7 @@ import UserNotifications
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let loopCommandHandler = LoopCommandHandler()
     private lazy var loopSocketManager = LoopSocketManager(handler: loopCommandHandler)
-    private var pendingSettingsWindowOpen: Task<Void, Never>?
+    private var pendingSettingsWindowOpen: Task<(), Never>?
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -146,22 +146,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         guard !hasVisibleWindows else {
             return false
         }
-        
+
         scheduleSettingsWindowOpen()
         return true
     }
-    
+
     func applicationWillTerminate(_: Notification) {
         loopSocketManager.stop()
         StashManager.shared.onApplicationWillTerminate()
     }
-    
+
     func application(_: NSApplication, open urls: [URL]) {
         for url in urls {
             processIncomingURL(url)
         }
     }
-    
+
     private func processIncomingURL(_ url: URL, replyEvent: NSAppleEventDescriptor? = nil) {
         cancelPendingSettingsWindowOpen()
         log.info("Received URL: \(url)")
