@@ -12,7 +12,7 @@ import Security
 
 @Loggable
 actor UpdateInstaller {
-    enum InstallationPermissionState: Sendable {
+    enum InstallationPermissionState {
         case writable
         case needsElevation(reason: String)
         case notWritableNoElevationPossible(reason: String)
@@ -1181,7 +1181,7 @@ actor UpdateInstaller {
 
 // MARK: - AppLocation
 
-enum AppLocation: CustomStringConvertible, Sendable {
+enum AppLocation: CustomStringConvertible {
     case systemApplications
     case userApplications
     case other(String)
