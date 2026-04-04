@@ -190,6 +190,32 @@ enum SkyLightToolBelt {
         return nil
     }
 
+    /// Forces the system to re-resolve icon appearance variants by flushing the Dock's icon cache.
+    /// Re-saves the current `SLSIconAppearanceConfiguration`, causing the Dock to re-read the
+    /// bundle's `.icon` file (which supports light/dark/clear variants).
+    /// https://www.granola.ai/blog/so-you-think-its-easy-to-change-an-app-icon
+    static func refreshIconAppearanceCache() {
+        guard let cls = NSClassFromString("SLSIconAppearanceConfiguration") as? NSObject.Type else {
+            log.error("SLSIconAppearanceConfiguration class not found")
+            return
+        }
+
+        let fetchSelector = NSSelectorFromString("fetchCurrentIconAppearanceConfiguration")
+        guard cls.responds(to: fetchSelector),
+              let config = cls.perform(fetchSelector)?.takeUnretainedValue() as? NSObject else {
+            log.error("Failed to fetch icon appearance configuration")
+            return
+        }
+
+        let saveSelector = NSSelectorFromString("save")
+        guard config.responds(to: saveSelector) else {
+            log.error("Icon appearance configuration does not respond to save")
+            return
+        }
+
+        config.perform(saveSelector)
+    }
+
     /// Checks if the current window in a `SLSWindowIterator` is valid for Loop to use.
     /// - Parameter iterator: The `SLSWindowIterator` object
     /// - Returns: Whether this window is valid.

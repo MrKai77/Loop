@@ -29,6 +29,10 @@ struct Icon: Hashable, LuminareSelectionData {
     var unlockTime: Int
     var unlockMessage: String?
 
+    var isDefault: Bool {
+        assetName == Bundle.main.infoDictionary?["CFBundleIconName"] as? String
+    }
+
     var isSelectable: Bool {
         IconManager.returnUnlockedIcons().contains(self)
     }
@@ -50,8 +54,6 @@ struct Icon: Hashable, LuminareSelectionData {
             .summer,
             .master
         ]
-
-        static let `default` = Icon.classic
     #else
         static let all: [Icon] = [
             .developer,
@@ -69,8 +71,6 @@ struct Icon: Hashable, LuminareSelectionData {
             .summer,
             .master
         ]
-
-        static let `default` = Icon.developer
     #endif
 }
 
