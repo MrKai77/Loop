@@ -13,5 +13,7 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSDockTilePlugIn</key>
+	<string>LoopDockTile.plugin</string>
 </dict>
 </plist>

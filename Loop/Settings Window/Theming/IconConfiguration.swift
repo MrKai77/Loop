@@ -163,7 +163,7 @@ struct IconVew: View {
     @State private var loopsLeft: Int = -1
 
     private var showLiquidGlassIndicator: Bool {
-        if #available(macOS 26.0, *), icon == Icon.default {
+        if #available(macOS 26.0, *), icon.isDefault {
             true
         } else {
             false

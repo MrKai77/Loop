@@ -10,6 +10,8 @@
 		2A28492B2F22B4B700F6CE42 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28492A2F22B4B700F6CE42 /* Scribe */; };
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
 		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
+		2A86890D2F80968A005B521B /* LoopDockTile.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A8689072F809625005B521B /* LoopDockTile.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2AE091C72F81A22800EF6149 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE091C62F81A22800EF6149 /* Scribe */; };
 		2AF9238E2F540B1300F467FD /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AF9238D2F540B1300F467FD /* Scribe */; };
 		2AF923902F540B2200F467FD /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AF9238F2F540B2200F467FD /* Scribe */; };
 		3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED0A7B82F21DF6800A58629 /* ZIPFoundation */; };
@@ -18,6 +20,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2A8689102F809800005B521B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8E59C2D297F5E9A0064D4BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2A8689062F809625005B521B;
+			remoteInfo = LoopDockTile;
+		};
 		B1AA00512F30000100AABBCC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A8E59C2D297F5E9A0064D4BA /* Project object */;
@@ -28,6 +37,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		2A86890C2F80967B005B521B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2A86890D2F80968A005B521B /* LoopDockTile.plugin in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B1AA00612F30000100AABBCC /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -41,6 +60,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2A8689072F809625005B521B /* LoopDockTile.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopDockTile.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		A848130C2BD1A8D100B02E93 /* .github */ = {isa = PBXFileReference; lastKnownFileType = folder; path = .github; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A883642E298B7288005D6C19 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
@@ -90,11 +110,20 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2A6A87F02F4D20D2004E995D /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (2A6A87F22F4D20F4004E995D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
+		2A86890E2F809700005B521B /* LoopDockTile */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LoopDockTile; sourceTree = "<group>"; };
 		A8C751AC2D7BA98600B58784 /* Loop */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A8C751FF2D7BA98600B58784 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Loop; sourceTree = "<group>"; };
 		B1AA00022F30000100AABBCC /* LoopUpdaterHelper */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (2A5DD5CC2F5D270C0077AB3C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LoopUpdaterHelper; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2A8689042F809625005B521B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AE091C72F81A22800EF6149 /* Scribe in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A8E59C32297F5E9A0064D4BA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -138,6 +167,7 @@
 				A894B0C52C4B31AA00B4CE6F /* CONTRIBUTING.md */,
 				A8C751AC2D7BA98600B58784 /* Loop */,
 				B1AA00022F30000100AABBCC /* LoopUpdaterHelper */,
+				2A86890E2F809700005B521B /* LoopDockTile */,
 				A8E59C36297F5E9A0064D4BA /* Products */,
 				A883642D298B7288005D6C19 /* Frameworks */,
 				2A6A87F02F4D20D2004E995D /* Shared */,
@@ -149,6 +179,7 @@
 			children = (
 				A8E59C35297F5E9A0064D4BA /* Loop.app */,
 				B1AA00012F30000100AABBCC /* LoopUpdaterHelper */,
+				2A8689072F809625005B521B /* LoopDockTile.plugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,6 +187,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2A8689062F809625005B521B /* LoopDockTile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A8689082F809625005B521B /* Build configuration list for PBXNativeTarget "LoopDockTile" */;
+			buildPhases = (
+				2A8689032F809625005B521B /* Sources */,
+				2A8689042F809625005B521B /* Frameworks */,
+				2A8689052F809625005B521B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				2A86890E2F809700005B521B /* LoopDockTile */,
+			);
+			name = LoopDockTile;
+			packageProductDependencies = (
+				2AE091C62F81A22800EF6149 /* Scribe */,
+			);
+			productName = LoopDockTile;
+			productReference = 2A8689072F809625005B521B /* LoopDockTile.plugin */;
+			productType = "com.apple.product-type.bundle";
+		};
 		A8E59C34297F5E9A0064D4BA /* Loop */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A8E59C44297F5E9B0064D4BA /* Build configuration list for PBXNativeTarget "Loop" */;
@@ -163,12 +217,14 @@
 				A8E59C31297F5E9A0064D4BA /* Sources */,
 				A8E59C32297F5E9A0064D4BA /* Frameworks */,
 				B1AA00612F30000100AABBCC /* CopyFiles */,
+				2A86890C2F80967B005B521B /* CopyFiles */,
 				A8E59C33297F5E9A0064D4BA /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				B1AA00712F30000100AABBCC /* PBXTargetDependency */,
+				2A8689112F809800005B521B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				2A6A87F02F4D20D2004E995D /* Shared */,
@@ -219,6 +275,9 @@
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
+					2A8689062F809625005B521B = {
+						CreatedOnToolsVersion = 26.4;
+					};
 					A8E59C34297F5E9A0064D4BA = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -260,11 +319,19 @@
 			targets = (
 				A8E59C34297F5E9A0064D4BA /* Loop */,
 				B1AA00112F30000100AABBCC /* LoopUpdaterHelper */,
+				2A8689062F809625005B521B /* LoopDockTile */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2A8689052F809625005B521B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A8E59C33297F5E9A0064D4BA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -282,6 +349,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2A8689032F809625005B521B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A8E59C31297F5E9A0064D4BA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -299,6 +373,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2A8689112F809800005B521B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2A8689062F809625005B521B /* LoopDockTile */;
+			targetProxy = 2A8689102F809800005B521B /* PBXContainerItemProxy */;
+		};
 		B1AA00712F30000100AABBCC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = B1AA00112F30000100AABBCC /* LoopUpdaterHelper */;
@@ -307,6 +386,75 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		2A8689092F809625005B521B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.DockTile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Debug;
+		};
+		2A86890A2F809625005B521B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.DockTile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Release;
+		};
+		2A86890B2F809625005B521B /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.Loop.DockTile;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Development;
+		};
 		2AC87FA52F09E3A600082F90 /* Development */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = A8C751AC2D7BA98600B58784 /* Loop */;
@@ -719,6 +867,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2A8689082F809625005B521B /* Build configuration list for PBXNativeTarget "LoopDockTile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A8689092F809625005B521B /* Debug */,
+				2A86890A2F809625005B521B /* Release */,
+				2A86890B2F809625005B521B /* Development */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A8E59C30297F5E9A0064D4BA /* Build configuration list for PBXProject "Loop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -800,6 +958,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */;
 			productName = Luminare;
+		};
+		2AE091C62F81A22800EF6149 /* Scribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2AF9238C2F540B1300F467FD /* XCRemoteSwiftPackageReference "Scribe" */;
+			productName = Scribe;
 		};
 		2AF9238D2F540B1300F467FD /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;
