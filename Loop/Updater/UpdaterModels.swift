@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - UpdateChannel
 
-enum UpdateChannel: String, Sendable, CaseIterable {
+enum UpdateChannel: String, CaseIterable {
     case stable
     case development
 
@@ -37,7 +37,7 @@ enum UpdateChannel: String, Sendable, CaseIterable {
 
 // MARK: - UpdateManifest
 
-struct UpdateManifest: Sendable {
+struct UpdateManifest {
     let version: String
     let buildNumber: Int
     let downloadUrl: String
@@ -48,25 +48,25 @@ struct UpdateManifest: Sendable {
     let publishedAt: Date
     let size: Int64
 
-    struct ReleaseNotes: Sendable {
+    struct ReleaseNotes {
         let title: String
         let body: String
     }
 
-    struct Compatibility: Sendable {
+    struct Compatibility {
         let minimumOS: OperatingSystemVersion?
         let maximumOS: OperatingSystemVersion?
         let supportedArchitectures: [SystemInfo.Architecture]
     }
 
-    struct Checksums: Sendable {
+    struct Checksums {
         let zip: String
     }
 }
 
 // MARK: - UpdateProgress
 
-struct UpdateProgress: Sendable {
+struct UpdateProgress {
     let phase: UpdatePhase
     let percentage: Double
     let bytesDownloaded: Int64
@@ -74,7 +74,7 @@ struct UpdateProgress: Sendable {
     let estimatedTimeRemaining: TimeInterval?
     let downloadSpeed: Double?
 
-    enum UpdatePhase: String, Sendable {
+    enum UpdatePhase: String {
         case checking, downloading, extracting, verifying, installing, cleaning, completed, failed
     }
 
@@ -97,7 +97,7 @@ struct UpdateProgress: Sendable {
 
 // MARK: - UpdateError
 
-enum UpdateError: LocalizedError, Sendable {
+enum UpdateError: LocalizedError {
     case network(Error)
     case invalidManifest(String? = nil)
     case checksumMismatch

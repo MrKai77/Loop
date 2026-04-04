@@ -124,5 +124,5 @@
 --xcode-indentation disabled
 --xctest-symbols 
 --yoda-swap always
---disable genericExtensions,redundantProperty,simplifyGenericConstraints,wrapMultilineStatementBraces,wrapPropertyBodies
+--disable genericExtensions,redundantVariable,simplifyGenericConstraints,wrapMultilineStatementBraces,wrapPropertyBodies
 --enable isEmpty

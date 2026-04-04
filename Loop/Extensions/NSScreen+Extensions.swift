@@ -33,9 +33,9 @@ extension NSScreen {
         // excluding points on the maxX/maxY edges. So we cannot use frame.contains(_:)
         return screens.first {
             mouseLocation.x >= $0.frame.minX &&
-            mouseLocation.x <= $0.frame.maxX &&
-            mouseLocation.y >= $0.frame.minY &&
-            mouseLocation.y <= $0.frame.maxY
+                mouseLocation.x <= $0.frame.maxX &&
+                mouseLocation.y >= $0.frame.minY &&
+                mouseLocation.y <= $0.frame.maxY
         }
     }
 
