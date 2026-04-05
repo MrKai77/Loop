@@ -190,7 +190,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     ///
     /// - Parameter context: the resize context containing the pre-computed target frame.
     /// - Returns: the angle to show in the radial menu, or `nil` if the action does not have a radial menu angle.
-    func radialMenuAngle(context: ResizeContext) async -> Angle? {
+    func radialMenuAngle(context: ResizeContext) -> Angle? {
         guard
             direction.frameMultiplyValues != nil,
             direction.hasRadialMenuAngle
@@ -198,7 +198,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
             return nil
         }
 
-        let targetFrame = await context.getTargetFrame().normalized
+        let targetFrame = context.getTargetFrame().normalized
         let angle = CGPoint(x: 0.5, y: 0.5).angle(to: targetFrame.center)
         let result: Angle = angle * -1
 

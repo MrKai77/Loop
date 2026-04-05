@@ -108,13 +108,11 @@ final class RadialMenuViewModel: ObservableObject {
         currentAction = context.action
         parentAction = context.parentAction
 
-        Task {
-            await recomputeAngle(context: context)
-        }
+        recomputeAngle(context: context)
     }
 
-    private func recomputeAngle(context: ResizeContext) async {
-        guard let targetAngle = await calculateTargetAngle(context: context) else {
+    private func recomputeAngle(context: ResizeContext) {
+        guard let targetAngle = calculateTargetAngle(context: context) else {
             return
         }
 
@@ -127,7 +125,7 @@ final class RadialMenuViewModel: ObservableObject {
         }
     }
 
-    private func calculateTargetAngle(context: ResizeContext) async -> Angle? {
+    private func calculateTargetAngle(context: ResizeContext) -> Angle? {
         // Check directional radial menu actions first
         if let index = directionalRadialMenuActions.firstIndex(where: { $0.associatedActionId == effectiveWindowAction.id }) {
             let actionAngleSpan = 360.0 / CGFloat(directionalRadialMenuActions.count)
@@ -135,7 +133,7 @@ final class RadialMenuViewModel: ObservableObject {
         }
 
         // Otherwise, default to the current action's radial menu angle
-        return await currentAction.radialMenuAngle(context: context)
+        return currentAction.radialMenuAngle(context: context)
     }
 
     private func shouldAnimateTransition(closestAngle: Angle) -> Bool {

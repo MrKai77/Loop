@@ -88,16 +88,12 @@ final class IconRenderView: NSView {
     ) {
         guard action != currentAction else { return }
         currentAction = action
-        Task {
-            await updatePath(duration: animated ? 0.2 : 0.0)
-        }
+        updatePath(duration: animated ? 0.2 : 0.0)
     }
 
     override func layout() {
         super.layout()
-        Task {
-            await updatePath(duration: 0.0)
-        }
+        updatePath(duration: 0.0)
     }
 
     override func viewDidChangeEffectiveAppearance() {
@@ -133,7 +129,7 @@ final class IconRenderView: NSView {
         }
     }
 
-    private func updatePath(duration: CFTimeInterval) async {
+    private func updatePath(duration: CFTimeInterval) {
         strokeLayer.frame = bounds
         fillLayer.frame = bounds
 
@@ -143,7 +139,7 @@ final class IconRenderView: NSView {
         let fillInset = strokeInset + inset
         let fillBounds = bounds.insetBy(dx: fillInset, dy: fillInset)
 
-        guard let displayMode = await determineDisplayMode(fillBounds: fillBounds) else {
+        guard let displayMode = determineDisplayMode(fillBounds: fillBounds) else {
             fillLayer.opacity = 0
             imageLayer.opacity = 0
             return
@@ -181,12 +177,12 @@ final class IconRenderView: NSView {
         strokeLayer.path = strokePath
     }
 
-    private func determineDisplayMode(fillBounds: CGRect) async -> DisplayMode? {
+    private func determineDisplayMode(fillBounds: CGRect) -> DisplayMode? {
         if let image = currentAction.image {
             return .image(image.nsImage)
         }
 
-        let frame = await WindowFrameResolver.getFrame(
+        let frame = WindowFrameResolver.getFrame(
             for: currentAction,
             bounds: .init(origin: .zero, size: .init(width: 1, height: 1)),
             padding: .zero

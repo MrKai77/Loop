@@ -17,8 +17,6 @@ struct StashedWindowInfo: Equatable {
 
     // MARK: - Frame computation
 
-    // TODO: Move to WindowFrameResolver
-
     /// Computes the frame for a stashed window.
     func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) async -> CGRect {
         let bounds = screen.cgSafeScreenFrame
