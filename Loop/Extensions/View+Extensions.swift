@@ -28,25 +28,4 @@ extension View {
             }
         }
     }
-
-    @inlinable
-    @ViewBuilder
-    func onChange<V>(
-        of value: V,
-        initial: Bool,
-        action: @escaping (V) -> ()
-    ) -> some View where V: Equatable {
-        if initial {
-            onChange(of: value) { newValue in
-                action(newValue)
-            }
-            .onAppear {
-                action(value)
-            }
-        } else {
-            onChange(of: value) { newValue in
-                action(newValue)
-            }
-        }
-    }
 }

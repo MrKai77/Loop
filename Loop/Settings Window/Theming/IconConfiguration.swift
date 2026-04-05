@@ -99,8 +99,6 @@ struct IconConfigurationView: View {
     @Environment(\.openURL) var openURL
     @StateObject private var model = IconConfigurationModel()
 
-    let suggestNewIconLink = URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!
-
     @Default(.currentIcon) var currentIcon
     @Default(.showDockIcon) var showDockIcon
     @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked
@@ -163,7 +161,7 @@ struct IconVew: View {
     @State private var loopsLeft: Int = -1
 
     private var showLiquidGlassIndicator: Bool {
-        if #available(macOS 26.0, *), icon == Icon.default {
+        if #available(macOS 26.0, *), icon.isDefault {
             true
         } else {
             false

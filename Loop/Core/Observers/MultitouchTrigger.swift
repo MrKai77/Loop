@@ -419,7 +419,7 @@ private final class GestureBlocker {
             CGEventType(rawValue: UInt32(NSEvent.EventType.smartMagnify.rawValue))
         ].compactMap(\.self)
 
-        monitor = ActiveEventMonitor(events: eventTypes) { _ in .ignore }
+        monitor = ActiveEventMonitor("gesture_blocker", events: eventTypes) { _ in .ignore }
         monitor?.start()
     }
 

@@ -163,7 +163,7 @@ struct BehaviorConfigurationView: View {
             LuminareSlider(
                 String(localized: "Peek size", comment: "Thickness of the visible portion of the window when stashed"),
                 value: $stashedWindowVisiblePadding.doubleBinding,
-                in: 1...200,
+                in: 1...100,
                 format: .number.precision(.fractionLength(0...0)),
                 clampsUpper: false,
                 suffix: Text("px", comment: "Unit symbol: pixels")
@@ -172,7 +172,7 @@ struct BehaviorConfigurationView: View {
             LuminareToggle("Shift focus when stashed", isOn: $shiftFocusWhenStashed)
         }
         .onChange(of: stashedWindowVisiblePadding) { _ in
-            StashManager.shared.onConfigurationChanged()
+            Task { await StashManager.shared.onConfigurationChanged() }
         }
     }
 }

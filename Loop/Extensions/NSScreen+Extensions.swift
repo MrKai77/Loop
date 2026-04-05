@@ -28,7 +28,15 @@ extension NSScreen {
     static var screenWithMouse: NSScreen? {
         let mouseLocation = NSEvent.mouseLocation
         let screens = NSScreen.screens
-        return screens.first { $0.frame.contains(mouseLocation) }
+
+        // CGRect.contains uses half-open intervals [minX, maxX) × [minY, maxY),
+        // excluding points on the maxX/maxY edges. So we cannot use frame.contains(_:)
+        return screens.first {
+            mouseLocation.x >= $0.frame.minX &&
+                mouseLocation.x <= $0.frame.maxX &&
+                mouseLocation.y >= $0.frame.minY &&
+                mouseLocation.y <= $0.frame.maxY
+        }
     }
 
     var cgSafeScreenFrame: CGRect {

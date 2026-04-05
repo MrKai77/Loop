@@ -12,7 +12,7 @@ import ServiceManagement
 
 @Loggable
 final class UpdaterAuthorizationCoordinator {
-    enum PrivilegedHelperReadiness: Sendable {
+    enum PrivilegedHelperReadiness {
         case available
         case unavailable(reason: String)
     }

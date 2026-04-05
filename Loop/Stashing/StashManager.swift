@@ -82,23 +82,26 @@ final class StashManager {
         store.restore()
     }
 
-    func onApplicationWillTerminate() {
-        Task {
-            // Move back all stashed windows back into the screen before closing the app
-            await restoreAllStashedWindows(animate: false)
-        }
-    }
-
     func onWindowManipulated(_ id: CGWindowID) {
         unmanage(windowID: id)
     }
 
-    func onConfigurationChanged() {
-        Task {
+    /// Cancels all monitoring and restores every stashed window to its initial frame.
+    func shutdown() async {
+        mouseMovedTask?.cancel()
+        mouseMovedTask = nil
+        stopListeningToRevealTriggers()
+        await restoreAllStashedWindows(animate: false)
+    }
+
+    func onConfigurationChanged() async {
+        await withTaskGroup(of: Void.self) { group in
             for stashedWindow in store.stashed.values {
-                let frame = await stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-                // Don't animate when configuration changes
-                stashedWindow.window.setFrame(frame)
+                group.addTask {
+                    let frame = await stashedWindow.computeStashedFrame(peekSize: self.stashedWindowVisiblePadding)
+                    // Don't animate when configuration changes
+                    await stashedWindow.window.setFrame(frame)
+                }
             }
         }
     }
@@ -134,8 +137,8 @@ final class StashManager {
         return true
     }
 
-    func getRevealedFrameForStashedWindow(id: CGWindowID) async -> CGRect? {
-        await store.stashed[id]?.computeRevealedFrame()
+    func getRevealedFrameForStashedWindow(id: CGWindowID) -> CGRect? {
+        store.stashed[id]?.computeRevealedFrame()
     }
 }
 
@@ -153,37 +156,28 @@ extension StashManager: StashedWindowsStoreDelegate {
 
 extension StashManager {
     /// Handles `windowResized` notification for the specified window and action.
-    func onWindowResized(action: WindowAction, window: Window, screen: NSScreen) {
+    func onWindowResized(action: WindowAction, window: Window, screen: NSScreen) async {
         if let edge = action.stashEdge {
             // Treat all screens as a unified virtual space. `getScreenForEdge` determines the appropriate screen based on the edge:
             // the leftmost screen for `.left` or the rightmost screen for `.right`. If the window's current screen differs from the target screen,
             // the function recursively adjusts the window's position to ensure it is stashed on the correct screen.
             if let screenForEdge = getScreenForEdge(currentScreen: screen, edge: edge), screen != screenForEdge {
                 log.info("Attempting to stash window on the \(edge.debugDescription) edge, but \(screen.localizedName) is not the \(edge.debugDescription)most screen. Redirecting to the correct screen.")
-                onWindowResized(action: action, window: window, screen: screenForEdge)
+                await onWindowResized(action: action, window: window, screen: screenForEdge)
             } else {
                 let windowToStash = StashedWindowInfo(window: window, screen: screen, action: action)
 
-                Task {
-                    await stash(windowToStash)
-                }
+                await stash(windowToStash)
             }
         } else if action.direction == .unstash {
             // No need to reset the frame here: the frame has already been moved to the stash area
             // by the code that sent the windowResized notification.
-            Task {
-                await unstash(window.cgWindowID, resetFrame: false, resetFrameAnimated: animate)
-            }
+            await unstash(window.cgWindowID, resetFrame: false, resetFrameAnimated: animate)
         } else if action.direction == .undo {
-            Task {
-                guard let action = await WindowRecords.shared.getCurrentAction(for: window),
-                      action.direction != .undo
-                else {
-                    return
-                }
+            guard let action = await WindowRecords.shared.getCurrentAction(for: window) else { return }
+            guard action.direction != .undo else { return }
 
-                onWindowResized(action: action, window: window, screen: screen)
-            }
+            await onWindowResized(action: action, window: window, screen: screen)
         } else if action.direction.willGrow
             || action.direction.willShrink
             || action.direction.willAdjustSize {
@@ -243,14 +237,12 @@ extension StashManager {
             )
 
             if resetFrameAnimated {
-                Task {
-                    try? await window.window.setFrameAnimated(
-                        initialFrame,
-                        bounds: .zero
-                    )
-                }
+                try? await window.window.setFrameAnimated(
+                    initialFrame,
+                    bounds: .zero
+                )
             } else {
-                window.window.setFrame(initialFrame)
+                await window.window.setFrame(initialFrame)
             }
         }
 
@@ -258,7 +250,9 @@ extension StashManager {
     }
 
     func restoreAllStashedWindows(animate: Bool) async {
-        for stashedWindowID in store.stashed.keys {
+        let stashedWindowIDs = Array(store.stashed.keys)
+
+        for stashedWindowID in stashedWindowIDs {
             await unstash(stashedWindowID, resetFrame: true, resetFrameAnimated: animate)
         }
     }
@@ -283,7 +277,7 @@ private extension StashManager {
             }
         }
 
-        let frame = await window.computeRevealedFrame()
+        let frame = window.computeRevealedFrame()
 
         if shiftFocusWhenStashed {
             Task { @MainActor in
@@ -297,7 +291,7 @@ private extension StashManager {
                 bounds: .zero
             )
         } else {
-            window.window.setFrame(frame)
+            await window.window.setFrame(frame)
         }
 
         store.markWindowAsRevealed(window.window.cgWindowID)
@@ -320,7 +314,7 @@ private extension StashManager {
                 bounds: .zero
             )
         } else {
-            window.window.setFrame(frame)
+            await window.window.setFrame(frame)
         }
 
         store.markWindowAsHidden(window.window.cgWindowID)
@@ -375,6 +369,7 @@ private extension StashManager {
         log.info("Listening for reveal triggers…")
 
         let monitor = PassiveEventMonitor(
+            "stash_mouse_movement_monitor",
             events: [
                 .mouseMoved, // Normal mouse movement
                 .leftMouseDragged // Dragging items to stashed windows
@@ -505,7 +500,7 @@ private extension StashManager {
     private func shouldHide(window: StashedWindowInfo, for location: CGPoint) async -> Bool {
         // Hide the window if the cursor is neither over the revealedFrame nor the stashedFrame.
         let tolerance: CGFloat = 15
-        let revealedFrame = await window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
+        let revealedFrame = window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
         let stashedFrame = await window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
         return !revealedFrame.contains(location) && !stashedFrame.contains(location)
     }
@@ -529,7 +524,7 @@ private extension StashManager {
     /// If there is not enough space, the stashed window will be unstashed (i.e., made fully visible and removed from the stash)
     /// and replaced by `windowToStash`
     func unstashOverlappingWindows(_ windowToStash: StashedWindowInfo) async {
-        let newFrame = await windowToStash.computeRevealedFrame()
+        let newFrame = windowToStash.computeRevealedFrame()
 
         for (id, stashedWindow) in store.stashed {
             // windowToStash is already managed by StashManager. Can't overlap with itself.

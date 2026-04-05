@@ -49,9 +49,9 @@ struct StashedWindowInfo: Equatable {
         return frame
     }
 
-    func computeRevealedFrame() async -> CGRect {
+    func computeRevealedFrame() -> CGRect {
         let context = ResizeContext(window: window, screen: screen)
         context.setAction(to: action, parent: nil)
-        return await context.getTargetFrame().padded
+        return context.getTargetFrame().padded
     }
 }

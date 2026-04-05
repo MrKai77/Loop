@@ -14,12 +14,16 @@ import SwiftUI
 final class PreviewController: WindowActionIndicator {
     private let viewModel: PreviewViewModel = .init(isSettingsPreview: false)
     private var controller: NSWindowController?
+    private var closeTask: Task<(), Never>?
 
     func open(context: ResizeContext) {
         guard let screen = context.screen else {
-            log.error("Screen not defined in context")
+            log.debug("Screen not defined in context")
             return
         }
+
+        closeTask?.cancel()
+        closeTask = nil
 
         if let window = controller?.window {
             var didScreenSwitch = false
@@ -59,15 +63,17 @@ final class PreviewController: WindowActionIndicator {
     }
 
     func close() {
-        guard let windowController = controller else { return }
-        controller = nil
-
-        Task {
+        guard controller != nil else { return }
+        closeTask?.cancel()
+        closeTask = Task { [weak self] in
+            guard let self else { return }
             viewModel.setIsShown(false)
             try? await Task.sleep(for: .seconds(0.4))
-            windowController.window?.orderOut(nil)
-            windowController.close()
-
+            guard !Task.isCancelled else { return }
+            controller?.window?.orderOut(nil)
+            controller?.close()
+            controller = nil
+            closeTask = nil
             log.ui("Controller closed")
         }
     }

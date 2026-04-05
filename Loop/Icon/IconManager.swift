@@ -42,17 +42,30 @@ enum IconManager {
             return
         }
 
+        let isDefault = IconManager.currentAppIcon.isDefault
+
+        // Notify the dock tile plugin first so it updates immediately
+        DistributedNotificationCenter.default().post(
+            name: .init("com.MrKai77.Loop.iconChanged"),
+            object: nil,
+            userInfo: [
+                "iconName": iconName,
+                "isDefault": isDefault
+            ]
+        )
+
         #if !DEBUG
             // Changing the app's actual icon on a developer build can cause Xcode to have incremental codesign issues.
             // To prevent this, we only change the icon on release builds.
-            NSWorkspace.shared.setIcon(image, forFile: Bundle.main.bundlePath, options: [])
-        #endif
+            if isDefault {
+                NSWorkspace.shared.setIcon(nil, forFile: Bundle.main.bundlePath, options: [])
+            } else {
+                NSWorkspace.shared.setIcon(image, forFile: Bundle.main.bundlePath, options: [])
+            }
 
-        if Defaults[.currentIcon] == Icon.default.assetName {
-            NSApp.applicationIconImage = nil
-        } else {
-            NSApp.applicationIconImage = image
-        }
+            deleteDockIconCache()
+            SkyLightToolBelt.refreshIconAppearanceCache()
+        #endif
 
         log.info("Set app icon to: \(iconName)")
     }
@@ -84,6 +97,21 @@ enum IconManager {
             content.categoryIdentifier = "icon_unlocked"
 
             AppDelegate.sendNotification(content)
+        }
+    }
+
+    /// Best-effort deletion of the Dock's icon cache file, forcing it to rebuild on next access.
+    private static func deleteDockIconCache() {
+        // The cache lives in the per-user cache dir (/C/), sibling to the temp dir (/T/)
+        let cacheURL = FileManager.default.temporaryDirectory
+            .deletingLastPathComponent()
+            .appendingPathComponent("C/com.apple.dock.iconcache")
+
+        do {
+            try FileManager.default.removeItem(at: cacheURL)
+            log.debug("Deleted dock icon cache")
+        } catch {
+            log.debug("Failed to delete dock icon cache: \(error.localizedDescription)")
         }
     }
 

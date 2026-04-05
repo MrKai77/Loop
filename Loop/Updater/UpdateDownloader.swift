@@ -308,7 +308,7 @@ private enum FileValidator {
 
 // MARK: - DownloadError
 
-enum DownloadError: LocalizedError, Sendable {
+enum DownloadError: LocalizedError {
     case downloadInProgress
     case invalidURL(String)
     case environmentError(String)

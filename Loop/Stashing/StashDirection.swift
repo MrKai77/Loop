@@ -20,10 +20,6 @@ enum StashEdge: String, CustomDebugStringConvertible {
     var isHorizontal: Bool {
         self == .left || self == .right
     }
-
-    var isVertical: Bool {
-        self == .bottom
-    }
 }
 
 // MARK: - Helpers

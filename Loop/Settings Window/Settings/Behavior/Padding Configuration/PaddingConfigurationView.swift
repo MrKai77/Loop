@@ -11,7 +11,6 @@ import SwiftUI
 
 struct PaddingConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
-    @Environment(\.luminareAnimationFast) private var luminareAnimationFast
     @Default(.enablePadding) private var enablePadding
 
     @State var paddingModel = Defaults[.padding]
@@ -22,7 +21,7 @@ struct PaddingConfigurationView: View {
     var body: some View {
         VStack(spacing: 12) {
             ScreenView {
-                PaddingPreviewView($paddingModel)
+                PaddingPreview($paddingModel)
             }
             .disabled(!enablePadding)
 

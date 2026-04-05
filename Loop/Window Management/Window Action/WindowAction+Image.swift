@@ -97,4 +97,21 @@ extension WindowAction {
             nil
         }
     }
+
+    /// Used in icons when a default image doesn't exist for this
+    /// action, and a valid frame couldn't be computed.
+    var backupImage: WindowActionImage? {
+        switch direction {
+        case .custom:
+            .systemImage("slider.horizontal.3")
+        case .cycle:
+            .systemImage("repeat")
+        case .stash:
+            .systemImage("archivebox.fill")
+        case .unstash:
+            .systemImage("arrow.uturn.backward")
+        default:
+            nil
+        }
+    }
 }

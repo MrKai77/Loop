@@ -58,11 +58,13 @@ final class WindowDragManager {
 
     private func setupListeners() {
         let leftMouseDraggedMonitor = PassiveEventMonitor(
+            "snapping_left_mouse_dragged_monitor",
             events: [.leftMouseDragged],
             callback: leftMouseDragged
         )
 
         let leftMouseUpMonitor = PassiveEventMonitor(
+            "snapping_left_mouse_up_monitor",
             events: [.leftMouseUp],
             callback: leftMouseUp
         )
@@ -163,10 +165,13 @@ final class WindowDragManager {
             }
 
             initialWindowFrame = window.frame
-            resizeContext = ResizeContext(
+
+            let context = ResizeContext(
                 window: window,
                 initialMousePosition: currentMousePosition
             )
+            await context.refreshResolvedState()
+            self.resizeContext = context
 
             log.info("Determined window being dragged: \(window.description)")
         }
@@ -205,9 +210,9 @@ final class WindowDragManager {
             var newWindowFrame = window.frame
             newWindowFrame.size = initialFrame.size
             newWindowFrame = newWindowFrame.pushInside(screen.displayBounds)
-            window.setFrame(newWindowFrame)
+            await window.setFrame(newWindowFrame)
         } else {
-            window.size = initialFrame.size
+            window.setSize(initialFrame.size)
         }
 
         // If the window doesn't contain the cursor, keep the original maxX
@@ -215,12 +220,12 @@ final class WindowDragManager {
             var newFrame = window.frame
 
             newFrame.origin.x = startFrame.maxX - newFrame.width
-            window.setFrame(newFrame)
+            await window.setFrame(newFrame)
 
             // If it still doesn't contain the cursor, move the window to be centered with the cursor
             if !newFrame.contains(currentMousePosition) {
                 newFrame.origin.x = currentMousePosition.x - (newFrame.width / 2)
-                window.setFrame(newFrame)
+                await window.setFrame(newFrame)
             }
         }
 
@@ -247,11 +252,6 @@ final class WindowDragManager {
         let oldDirection = resizeContext?.action.direction ?? .noAction
 
         if !ignoredFrame.contains(currentMousePosition) {
-            // Refresh accent colors in case user has enabled the wallpaper processor
-            Task {
-                await AccentColorController.shared.refresh()
-            }
-
             let newDirection = WindowDirection.getSnapDirection(
                 mouseLocation: currentMousePosition,
                 currentDirection: oldDirection,
@@ -261,6 +261,11 @@ final class WindowDragManager {
 
             // Only update if direction actually changed
             if newDirection != oldDirection {
+                // Refresh accent colors in case user has enabled the wallpaper processor
+                Task {
+                    await AccentColorController.shared.refresh()
+                }
+
                 log.info("Window snapping direction changed: \(newDirection.debugDescription)")
 
                 resizeContext?.setScreen(to: screen)

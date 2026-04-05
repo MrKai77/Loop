@@ -27,8 +27,6 @@ final class LoopManager {
 
     private(set) var isLoopActive: Bool = false
 
-    private var lastLoopTime: Date = .now
-
     private lazy var triggerKeyTimeoutTimer = TriggerKeyTimeoutTimer(
         closeCallback: { [weak self] forceClose in
             Task { await self?.closeLoop(forceClose: forceClose) }
@@ -198,6 +196,7 @@ extension LoopManager {
             initialFrame: initialFrame,
             initialMousePosition: NSEvent.mouseLocation
         )
+        await resizeContext.refreshResolvedState()
 
         if !Defaults[.disableCursorInteraction] {
             mouseInteractionObserver.start(initialMousePosition: resizeContext.initialMousePosition)
@@ -418,7 +417,11 @@ extension LoopManager {
         }
 
         if newAction != resizeContext.action || newAction.canRepeat {
+            let previousActionWasNoOp = resizeContext.action.direction.isNoOp
             resizeContext.setAction(to: newAction, parent: newParentAction)
+            if !Defaults[.previewVisibility], !previousActionWasNoOp {
+                await resizeContext.refreshResolvedState()
+            }
             indicatorService.openAndUpdate(context: resizeContext)
 
             Task {

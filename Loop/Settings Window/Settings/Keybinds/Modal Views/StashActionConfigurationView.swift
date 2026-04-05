@@ -12,7 +12,6 @@ import SwiftUI
 
 struct StashActionConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
-    @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
@@ -60,8 +59,10 @@ struct StashActionConfigurationView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            WindowActionFramedPreview(action: action)
-                .onChange(of: action) { windowAction = $0 }
+            ScreenView(isBlurred: action.sizeMode != .custom) {
+                ActionPreview(action: action)
+            }
+            .onChange(of: action) { windowAction = $0 }
 
             configurationSections()
             actionButtons()

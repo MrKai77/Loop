@@ -14,7 +14,6 @@ struct PreviewView: View {
     @ObservedObject private var viewModel: PreviewViewModel
 
     @Default(.previewPadding) private var previewPadding
-    @Default(.padding) private var padding
     @Default(.previewCornerRadius) private var previewCornerRadius
     @Default(.previewBorderThickness) private var previewBorderThickness
     @Default(.previewBackgroundEnableBlur) private var previewEnableBlur
