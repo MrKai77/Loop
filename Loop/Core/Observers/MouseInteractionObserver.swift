@@ -72,6 +72,7 @@ final class MouseInteractionObserver {
         latestMousePosition = initialMousePosition
 
         let mouseMovementMonitor = PassiveEventMonitor(
+            "mouse_movement_monitor",
             events: [
                 .mouseMoved, // switch action when mouse is moved
                 .otherMouseDragged // switch action when mouse is moved with the middle mouse button clicked
@@ -82,6 +83,7 @@ final class MouseInteractionObserver {
         self.mouseMovementMonitor = mouseMovementMonitor
 
         let leftClickMonitor = ActiveEventMonitor(
+            "left_click_monitor",
             events: [.leftMouseDown], // Increment a cycle action on a left click
             callback: activateNextCycleAction
         )

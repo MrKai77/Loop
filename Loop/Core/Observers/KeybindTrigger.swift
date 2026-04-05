@@ -78,7 +78,10 @@ final class KeybindTrigger {
 
         eventMonitor?.stop()
 
-        let eventMonitor = ActiveEventMonitor(events: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event -> ActiveEventMonitor.EventHandling in
+        let eventMonitor = ActiveEventMonitor(
+            "keybind_trigger",
+            events: [.keyDown, .keyUp, .flagsChanged]
+        ) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
 
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))

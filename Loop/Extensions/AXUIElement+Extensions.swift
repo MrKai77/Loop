@@ -126,7 +126,7 @@ extension AXUIElement {
         }
     }
 
-    func getPID() throws -> pid_t? {
+    func getPID() throws -> pid_t {
         var pid: pid_t = 0
         let error = AXUIElementGetPid(self, &pid)
 

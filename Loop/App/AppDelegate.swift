@@ -15,6 +15,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let loopCommandHandler = LoopCommandHandler()
     private lazy var loopSocketManager = LoopSocketManager(handler: loopCommandHandler)
     private var pendingSettingsWindowOpen: Task<(), Never>?
+    private var shutdownTask: Task<(), Never>?
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -151,9 +152,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 
-    func applicationWillTerminate(_: Notification) {
-        loopSocketManager.stop()
-        StashManager.shared.onApplicationWillTerminate()
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if shutdownTask != nil {
+            return .terminateLater
+        }
+
+        shutdownTask = Task { @MainActor in
+            loopSocketManager.stop()
+            await StashManager.shared.shutdown()
+            self.shutdownTask = nil
+            sender.reply(toApplicationShouldTerminate: true)
+        }
+
+        return .terminateLater
     }
 
     func application(_: NSApplication, open urls: [URL]) {

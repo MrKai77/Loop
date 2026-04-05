@@ -15,11 +15,13 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
 
     ///  Initializes a `PassiveEventMonitor`.
     /// - Parameters:
+    ///   - name: a human-readable identifier used in log messages.
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement:  whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events:  the events to capture within this event monitor.
     ///   - callback:  a callback to process the received event.
     init(
+        _ name: String,
         tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
@@ -56,7 +58,7 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
             callback: callback,
             userInfo: userInfo
         ) {
-            setupRunLoopSource(eventTap: eventTap)
+            setupRunLoopSource(eventTap: eventTap, readableIdentifier: name)
         } else {
             log.info("Failed to create event tap")
         }

@@ -11,7 +11,6 @@ import SwiftUI
 
 struct CustomActionConfigurationView: View {
     @Environment(\.luminareAnimation) private var luminareAnimation
-    @ObservedObject private var accentColorController: AccentColorController = .shared
 
     @Binding var windowAction: WindowAction
     @Binding var isPresented: Bool
@@ -56,23 +55,7 @@ struct CustomActionConfigurationView: View {
     var body: some View {
         VStack(spacing: 12) {
             ScreenView(isBlurred: action.sizeMode != .custom) {
-                GeometryReader { geo in
-                    ZStack {
-                        if action.sizeMode == .custom {
-                            let frame = WindowFrameResolver.getFrame(
-                                for: action,
-                                window: nil,
-                                bounds: CGRect(origin: .zero, size: geo.size)
-                            )
-
-                            blurredWindow()
-                                .frame(width: frame.width, height: frame.height)
-                                .offset(x: frame.origin.x, y: frame.origin.y)
-                                .animation(luminareAnimation, value: frame)
-                        }
-                    }
-                    .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-                }
+                ActionPreview(action: action)
             }
             .onChange(of: action) { windowAction = $0 }
 
@@ -357,14 +340,5 @@ struct CustomActionConfigurationView: View {
                 )
             }
         }
-    }
-
-    private func blurredWindow() -> some View {
-        VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
-            .overlay {
-                RoundedRectangle(cornerRadius: 12 - 5)
-                    .strokeBorder(accentColorController.color1, lineWidth: 2)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 12 - 5))
     }
 }

@@ -10,11 +10,8 @@ import Luminare
 import SwiftUI
 
 struct RadialMenuActionItemView: View {
-    @EnvironmentObject private var windowModel: SettingsWindowManager
     @Environment(\.luminareItemBeingHovered) private var isHovering
-    @Environment(\.luminareAnimation) var luminareAnimation
 
-    @Default(.radialMenuActions) private var radialMenuActions
     @Default(.keybinds) private var keybinds
 
     @State private var action: RadialMenuAction

@@ -184,7 +184,6 @@ final class IconRenderView: NSView {
 
         let frame = WindowFrameResolver.getFrame(
             for: currentAction,
-            window: nil,
             bounds: .init(origin: .zero, size: .init(width: 1, height: 1)),
             padding: .zero
         ).flipY(maxY: 1)
@@ -200,14 +199,8 @@ final class IconRenderView: NSView {
             return .frame(fillFrame)
         }
 
-        // And if all else fails...
-
-        if currentAction.direction == .custom, let image = NSImage(systemSymbolName: "slider.horizontal.3", accessibilityDescription: nil) {
-            return .image(image)
-        }
-
-        if currentAction.direction == .cycle, let image = NSImage(systemSymbolName: "repeat", accessibilityDescription: nil) {
-            return .image(image)
+        if let image = currentAction.backupImage {
+            return .image(image.nsImage)
         }
 
         return nil

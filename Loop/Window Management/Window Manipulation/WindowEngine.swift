@@ -15,40 +15,43 @@ import SwiftUI
 enum WindowEngine {
     /// Performs the actual resize operation on a window.
     /// This is an internal method - callers should use `WindowActionEngine.apply()` instead.
-    static func performResize(context: ResizeContext) async throws -> CGRect? {
+    static func performResize(context: ResizeContext) async throws {
         // Immediately return for no-op or focus-only actions
         guard let window = context.window,
               !context.action.direction.isNoOp,
               !context.action.direction.willFocusWindow
         else {
-            return nil
+            return
         }
 
         // Quick actions are handled by WindowActionEngine
         let quickActions: [WindowDirection] = [.hide, .minimize, .fullscreen, .minimizeOthers]
-        guard !quickActions.contains(context.action.direction) else { return nil }
+        guard !quickActions.contains(context.action.direction) else { return }
+
+        if context.resolvedWindowProperties == nil {
+            await context.refreshResolvedState()
+        }
 
         let willChangeScreens = ScreenUtility.screenContaining(window) != context.screen
         let targetFrame = context.getTargetFrame().padded
         log.info("Resizing \(window) to \(targetFrame)")
 
         // Record first frame if needed
-        WindowRecords.recordFirstIfNeeded(for: window)
+        await WindowRecords.shared.recordFirstIfNeeded(
+            for: window,
+            resolvedProperties: context.resolvedWindowProperties
+        )
 
-        let storeAsFrame = WindowRecords.shouldStoreAsFinalFrame(context.action)
+        let storeAsFrame = WindowRecords.shared.shouldStoreAsFinalFrame(context.action)
 
         // If this action doesn't require storage as a frame, then record it beforehand.
         // Otherwise, this action will be recorded *after* resizing, such that its final frame is considered if undoing.
         if !storeAsFrame {
-            WindowRecords.record(window, context.action)
-        }
-
-        defer {
-            if context.action.direction == .undo {
-                WindowRecords.removeLastAction(for: window)
-            } else if storeAsFrame {
-                WindowRecords.record(window, context.action)
-            }
+            await WindowRecords.shared.record(
+                window,
+                resolvedProperties: context.resolvedWindowProperties,
+                context.action
+            )
         }
 
         let useSystemWM: Bool = if #available(macOS 15, *) {
@@ -61,51 +64,72 @@ enum WindowEngine {
             await window.focus()
         }
 
-        var systemWMFrame: CGRect?
-
         // Attempt system window manager if possible
         if !willChangeScreens, useSystemWM,
            #available(macOS 15, *),
            await resizeWithSystemWindowManager(window: window, to: context.action) {
-            if !Defaults[.previewVisibility] {
-                systemWMFrame = window.frame
-            }
         } else {
-            // Otherwise, we obviously need to disable fullscreen to resize the window
-            window.fullscreen = false
+            if context.resolvedWindowProperties?.isFullscreen ?? true {
+                // Otherwise, we obviously need to disable fullscreen to resize the window
+                window.fullscreen = false
+            }
 
-            if window.nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
-                await resizeOwnWindow(targetFrame: targetFrame)
-            } else {
-                let shouldAnimate = shouldAnimateResize(for: window, willChangeScreens: willChangeScreens)
+            let shouldAnimate = shouldAnimateResize(
+                for: window,
+                willChangeScreens: willChangeScreens,
+                resolvedProperties: context.resolvedWindowProperties
+            )
 
-                do {
-                    try await resizeWindow(
-                        window,
-                        targetFrame: targetFrame,
-                        bounds: context.bounds,
-                        willChangeScreens: willChangeScreens,
-                        animate: shouldAnimate
-                    )
-                } catch {
-                    print(error)
-                }
+            do {
+                try await resizeWindow(
+                    window,
+                    targetFrame: targetFrame,
+                    bounds: context.paddedBounds,
+                    willChangeScreens: willChangeScreens,
+                    animate: shouldAnimate,
+                    resolvedProperties: context.resolvedWindowProperties
+                )
+            } catch {
+                log.error(error.localizedDescription)
+            }
 
-                if Defaults[.moveCursorWithWindow] {
-                    CGWarpMouseCursorPosition(targetFrame.center)
-                }
+            if Defaults[.moveCursorWithWindow] {
+                CGWarpMouseCursorPosition(targetFrame.center)
             }
         }
 
+        // Record post-resize actions (replaces former defer block)
+        if context.action.direction == .undo {
+            await WindowRecords.shared.removeLastAction(for: window)
+        } else if storeAsFrame {
+            // Pass nil for resolvedProperties so that record() reads the "live"
+            // post-resize frame via window.frame, rather than the stale
+            // pre-resize snapshot.
+            await WindowRecords.shared.record(
+                window,
+                resolvedProperties: nil,
+                context.action
+            )
+        }
+
+        // Update the snapshot
+        let actualFrame = window.frame
+        if let existing = context.resolvedWindowProperties {
+            context.resolvedWindowProperties = Window.ResolvedProperties(
+                updating: actualFrame,
+                from: existing
+            )
+        }
+        context.lastAppliedFrame = actualFrame
+        context.resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
+
         if let screen = context.screen {
-            StashManager.shared.onWindowResized(
+            await StashManager.shared.onWindowResized(
                 action: context.action,
                 window: window,
                 screen: screen
             )
         }
-
-        return systemWMFrame
     }
 
     // MARK: - System Window Manager
@@ -117,7 +141,7 @@ enum WindowEngine {
     ) async -> Bool {
         var action = action
 
-        if action.direction == .undo, let lastAction = WindowRecords.getLastAction(for: window) {
+        if action.direction == .undo, let lastAction = await WindowRecords.shared.getLastAction(for: window) {
             action = lastAction
         }
 
@@ -138,8 +162,12 @@ enum WindowEngine {
 
     // MARK: - Animation Checks
 
-    private static func shouldAnimateResize(for window: Window, willChangeScreens: Bool) -> Bool {
-        if window.enhancedUserInterface { return false }
+    private static func shouldAnimateResize(
+        for window: Window,
+        willChangeScreens: Bool,
+        resolvedProperties: Window.ResolvedProperties?
+    ) -> Bool {
+        if resolvedProperties?.isEnhancedUserInterface ?? window.enhancedUserInterface { return false }
         if !willChangeScreens, #available(macOS 15, *), Defaults[.useSystemWindowManagerWhenAvailable] {
             return SystemWindowManager.MoveAndResize.enableAnimations
         }
@@ -150,37 +178,23 @@ enum WindowEngine {
 
     // MARK: - Window Resize
 
-    @MainActor
-    private static func resizeOwnWindow(targetFrame: CGRect) {
-        guard let window = NSApp.keyWindow ?? NSApp.windows.first(where: {
-            $0.level.rawValue <= NSWindow.Level.floating.rawValue
-        }) else {
-            log.info("Failed to get own main window to resize")
-            return
-        }
-
-        NSAnimationContext.runAnimationGroup { context in
-            context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
-            window.animator().setFrame(targetFrame.flipY(screen: .screens[0]), display: false)
-        }
-    }
-
     private static func resizeWindow(
         _ window: Window,
         targetFrame: CGRect,
         bounds: CGRect,
         willChangeScreens: Bool,
-        animate: Bool
+        animate: Bool,
+        resolvedProperties: Window.ResolvedProperties? = nil
     ) async throws {
         if animate {
-            try await window.setFrameAnimated(targetFrame, bounds: bounds)
+            try await window.setFrameAnimated(targetFrame, bounds: bounds, resolvedProperties: resolvedProperties)
         } else {
-            window.setFrame(targetFrame, sizeFirst: willChangeScreens)
+            await window.setFrame(targetFrame, sizeFirst: willChangeScreens, resolvedProperties: resolvedProperties)
             try Task.checkCancellation()
         }
 
         if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
-            window.setFrame(targetFrame)
+            await window.setFrame(targetFrame, resolvedProperties: resolvedProperties)
             try Task.checkCancellation()
         }
 
@@ -190,12 +204,12 @@ enum WindowEngine {
     // MARK: - Size Constraints
 
     private static func handleSizeConstrainedWindow(window: Window, bounds: CGRect) {
-        guard bounds != .zero else { return }
+        guard !window.isOwnWindow, bounds != .zero else { return }
 
         var windowFrame = window.frame
         if windowFrame.maxX > bounds.maxX { windowFrame.origin.x = bounds.maxX - windowFrame.width }
         if windowFrame.maxY > bounds.maxY { windowFrame.origin.y = bounds.maxY - windowFrame.height }
 
-        window.position = windowFrame.origin
+        window.setPosition(windowFrame.origin)
     }
 }

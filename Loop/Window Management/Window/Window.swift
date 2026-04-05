@@ -33,15 +33,34 @@ enum WindowError: LocalizedError {
 final class Window {
     let axWindow: AXUIElement
     let cgWindowID: CGWindowID
+    let pid: pid_t
     let nsRunningApplication: NSRunningApplication?
+
+    var isOwnWindow: Bool {
+        nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier
+    }
 
     /// Initialize a window from an AXUIElement
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
-    init(element: AXUIElement) throws {
+    init(
+        element: AXUIElement,
+        pid: pid_t? = nil,
+        nsRunningApplication: NSRunningApplication? = nil
+    ) throws {
         self.axWindow = element
         self.cgWindowID = try element.getWindowID()
-        let pid = try axWindow.getPID()
-        self.nsRunningApplication = NSWorkspace.shared.runningApplications.first { $0.processIdentifier == pid }
+
+        if let nsRunningApplication {
+            self.pid = nsRunningApplication.processIdentifier
+            self.nsRunningApplication = nsRunningApplication
+        } else if let pid {
+            self.pid = pid
+            self.nsRunningApplication = NSRunningApplication(processIdentifier: pid)
+        } else {
+            let pid = try axWindow.getPID()
+            self.pid = pid
+            self.nsRunningApplication = NSRunningApplication(processIdentifier: pid)
+        }
 
         guard role != .sheet else {
             throw WindowError.sheetWindow
@@ -65,7 +84,11 @@ final class Window {
         guard let window: AXUIElement = try element.getValue(.focusedWindow) else {
             throw WindowError.cannotGetWindow
         }
-        try self.init(element: window)
+        try self.init(
+            element: window,
+            pid: pid,
+            nsRunningApplication: nil
+        )
     }
 
     /// Retrieve a window from an entry in a dictionary returned by `CGWindowListCopyWindowInfo`.
@@ -93,7 +116,7 @@ final class Window {
 
         // If there’s only one window, use that as there's no need to grab its frame
         if windowElements.count == 1 {
-            return try Window(element: windowElements[0])
+            return try Window(element: windowElements[0], pid: pid)
         }
 
         // If we can retrieve bounds, then filter candidates out by their respective frames.
@@ -110,7 +133,7 @@ final class Window {
             windowElements
         }
 
-        let windows = candidates.compactMap { try? Window(element: $0) }
+        let windows = candidates.compactMap { try? Window(element: $0, pid: pid) }
 
         if let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID,
            let match = windows.first(where: { $0.cgWindowID == windowID }) {
@@ -119,7 +142,7 @@ final class Window {
             return first
         }
 
-        return try Window(element: windowElements[0])
+        return try Window(element: windowElements[0], pid: pid)
     }
 
     var role: NSAccessibility.Role? {
@@ -158,9 +181,6 @@ final class Window {
     var enhancedUserInterface: Bool {
         get {
             do {
-                guard let pid = try axWindow.getPID() else {
-                    return false
-                }
                 let appWindow = AXUIElementCreateApplication(pid)
                 let result: Bool? = try appWindow.getValue(.enhancedUserInterface)
                 return result ?? false
@@ -171,9 +191,6 @@ final class Window {
         }
         set {
             do {
-                guard let pid = try axWindow.getPID() else {
-                    return
-                }
                 let appWindow = AXUIElementCreateApplication(pid)
                 try appWindow.setValue(.enhancedUserInterface, value: newValue)
             } catch {
@@ -320,20 +337,26 @@ final class Window {
     }
 
     var position: CGPoint {
-        get {
-            do {
-                guard let result: CGPoint = try axWindow.getValue(.position) else {
-                    return .zero
-                }
-                return result
-            } catch {
-                log.error("Failed to get position: \(error.localizedDescription)")
+        do {
+            guard let result: CGPoint = try axWindow.getValue(.position) else {
                 return .zero
             }
+            return result
+        } catch {
+            log.error("Failed to get position: \(error.localizedDescription)")
+            return .zero
         }
-        set {
+    }
+
+    func setPosition(_ point: CGPoint) {
+        if isOwnWindow {
+            Task { @MainActor in
+                guard let win = NSApp.keyWindow else { return }
+                win.setFrameOrigin(CGRect(origin: point, size: win.frame.size).flipY(screen: .screens[0]).origin)
+            }
+        } else {
             do {
-                try axWindow.setValue(.position, value: newValue)
+                try axWindow.setValue(.position, value: point)
             } catch {
                 log.error("Failed to set position: \(error.localizedDescription)")
             }
@@ -341,20 +364,26 @@ final class Window {
     }
 
     var size: CGSize {
-        get {
-            do {
-                guard let result: CGSize = try axWindow.getValue(.size) else {
-                    return .zero
-                }
-                return result
-            } catch {
-                log.error("Failed to get size: \(error.localizedDescription)")
+        do {
+            guard let result: CGSize = try axWindow.getValue(.size) else {
                 return .zero
             }
+            return result
+        } catch {
+            log.error("Failed to get size: \(error.localizedDescription)")
+            return .zero
         }
-        set {
+    }
+
+    func setSize(_ size: CGSize) {
+        if isOwnWindow {
+            Task { @MainActor in
+                guard let win = NSApp.keyWindow else { return }
+                win.setFrame(CGRect(origin: win.frame.origin, size: size), display: false)
+            }
+        } else {
             do {
-                try axWindow.setValue(.size, value: newValue)
+                try axWindow.setValue(.size, value: size)
             } catch {
                 log.error("Failed to set size: \(error.localizedDescription)")
             }
@@ -375,11 +404,36 @@ final class Window {
         CGRect(origin: position, size: size)
     }
 
+    /// Returns `true` and applies the frame using AppKit if this window belongs to Loop itself.
+    /// AX APIs are unavailable for our own process, so we delegate to `NSWindow` instead.
+    @MainActor
+    @discardableResult
+    private func applyOwnWindowFrame(_ rect: CGRect) -> Bool {
+        guard isOwnWindow else {
+            return false
+        }
+        guard let window = NSApp.keyWindow else {
+            log.info("Failed to get own main window to resize")
+            return true
+        }
+        NSAnimationContext.runAnimationGroup { context in
+            context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
+            window.animator().setFrame(rect.flipY(screen: .screens[0]), display: false)
+        }
+        return true
+    }
+
     func setFrame(
         _ rect: CGRect,
-        sizeFirst: Bool = false
-    ) {
-        let enhancedUI = enhancedUserInterface
+        sizeFirst: Bool = false,
+        resolvedProperties: ResolvedProperties? = nil
+    ) async {
+        guard await !MainActor.run(resultType: Bool.self, body: { applyOwnWindowFrame(rect) }) else {
+            return
+        }
+
+        let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
+        let shouldSetSize = resolvedProperties?.isResizable ?? true
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
@@ -387,11 +441,15 @@ final class Window {
             enhancedUserInterface = false
         }
 
-        if sizeFirst {
-            size = rect.size
+        if sizeFirst, shouldSetSize {
+            setSize(rect.size)
         }
-        position = rect.origin
-        size = rect.size
+
+        setPosition(rect.origin)
+
+        if shouldSetSize {
+            setSize(rect.size)
+        }
 
         if enhancedUI {
             enhancedUserInterface = true
@@ -401,9 +459,15 @@ final class Window {
     @concurrent
     func setFrameAnimated(
         _ rect: CGRect,
-        bounds: CGRect
+        bounds: CGRect,
+        resolvedProperties: ResolvedProperties? = nil
     ) async throws {
-        let enhancedUI = enhancedUserInterface
+        guard await !MainActor.run(resultType: Bool.self, body: { applyOwnWindowFrame(rect) }) else {
+            return
+        }
+
+        let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
+        let shouldSetSize = resolvedProperties?.isResizable ?? true
 
         if enhancedUI {
             let appName = nsRunningApplication?.localizedName
@@ -417,7 +481,8 @@ final class Window {
                 let animation = WindowTransformAnimation(
                     rect,
                     window: self,
-                    bounds: bounds
+                    bounds: bounds,
+                    shouldSetSize: shouldSetSize
                 ) { error in
                     if let error {
                         continuation.resume(throwing: error)
@@ -444,5 +509,35 @@ extension Window: CustomStringConvertible {
 extension Window: Equatable {
     static func == (lhs: Window, rhs: Window) -> Bool {
         lhs.cgWindowID == rhs.cgWindowID
+    }
+}
+
+// MARK: - ResolvedProperties
+
+extension Window {
+    /// Pre-resolved snapshot of a window's AX properties for synchronous access.
+    /// Avoids repeated IPC round-trips when multiple properties are needed.
+    struct ResolvedProperties {
+        let frame: CGRect
+        let isResizable: Bool
+        let isFullscreen: Bool
+        let isEnhancedUserInterface: Bool
+
+        init(from window: Window) {
+            self.frame = window.frame // 2 AX calls (position + size)
+            self.isResizable = window.isResizable // 1 AX call
+            self.isFullscreen = window.fullscreen // 1 AX call
+            self.isEnhancedUserInterface = window.enhancedUserInterface // 1 AX call on app element
+        }
+
+        /// Creates a new snapshot with an updated frame, preserving stable properties.
+        /// Used after a resize to avoid re-reading from AX.
+        /// `isFullscreen` is always false post-resize, as we exited fullscreen to perform the resize.
+        init(updating frame: CGRect, from other: ResolvedProperties) {
+            self.frame = frame
+            self.isResizable = other.isResizable
+            self.isFullscreen = false
+            self.isEnhancedUserInterface = other.isEnhancedUserInterface
+        }
     }
 }

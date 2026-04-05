@@ -8,10 +8,15 @@
 import Defaults
 import Foundation
 
+/// A safe, identifiable wrapper around `ActionType`.
+/// This avoids duplicate IDs when the same action or keybind appears more than once in the radial menu.
+/// By giving each wrapped value its own custom ID, we keep identities stable across updates and
+/// can correctly distinguish duplicate items within the menu.
 struct RadialMenuAction: Identifiable, Codable, Hashable, Defaults.Serializable {
     let id: UUID
     var type: ActionType
 
+    /// Used to describe the "link" to an existing keybind, or to contain a WindowAction.
     enum ActionType: Identifiable, Codable, Hashable {
         case custom(WindowAction)
         case keybindReference(UUID)

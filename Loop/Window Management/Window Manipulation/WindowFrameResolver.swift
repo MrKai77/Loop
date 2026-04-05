@@ -13,8 +13,8 @@ import SwiftUI
 enum WindowFrameResolver {
     typealias FrameResult = (frame: CGRect, sidesToAdjust: Edge.Set?)
 
-    /// Convenience method that calculates a frame without requiring an external resize context.
-    /// Use this for UI previews, icon generation, and other cases that don't need to track resize state.
+    /// Sync convenience that doesn't resolve window properties, nor records.
+    /// Use this for UI previews, icon generation, stash frame computation, and recursive calls.
     /// - Parameters:
     ///   - action: the window action to calculate the frame for.
     ///   - window: the window to be manipulated (can be nil for UI previews).
@@ -22,11 +22,23 @@ enum WindowFrameResolver {
     /// - Returns: the computed frame (raw, without padding).
     static func getFrame(
         for action: WindowAction,
-        window: Window?,
         bounds: CGRect,
         padding: PaddingConfiguration? = nil
     ) -> CGRect {
+        let context = ResizeContext(window: nil, bounds: bounds, padding: padding, action: action)
+        return getFrame(resizeContext: context).frame
+    }
+
+    /// Async convenience that resolves both window properties and records.
+    /// Use this when the action may need record data (e.g. `.initialFrame`).
+    static func getFrame(
+        for action: WindowAction,
+        window: Window?,
+        bounds: CGRect,
+        padding: PaddingConfiguration? = nil
+    ) async -> CGRect {
         let context = ResizeContext(window: window, bounds: bounds, padding: padding, action: action)
+        await context.refreshResolvedState()
         return getFrame(resizeContext: context).frame
     }
 
@@ -77,7 +89,7 @@ extension WindowFrameResolver {
     ) -> CGRect {
         let bounds = context.paddedBounds
         let action = context.action
-        let window = context.window
+        let properties = context.resolvedWindowProperties
 
         let direction = action.direction
         var result: CGRect = .zero
@@ -87,11 +99,11 @@ extension WindowFrameResolver {
 
         } else if direction.willAdjustSize {
             // Can't grow or shrink a window that is not resizable
-            if let window, !window.isResizable {
-                return window.frame
+            if let properties, !properties.isResizable {
+                return properties.frame
             }
 
-            let frameToResizeFrom = context.cachedTargetFrame.raw
+            let frameToResizeFrom = context.lastAppliedFrame ?? context.cachedTargetFrame.raw
 
             // Compute which edges to adjust based on edges touching bounds
             let edgesTouchingBounds = frameToResizeFrom.getEdgesTouchingBounds(bounds)
@@ -108,12 +120,12 @@ extension WindowFrameResolver {
 
         } else if direction.willShrink || direction.willGrow {
             // Can't grow or shrink a window that is not resizable
-            if let window, !window.isResizable {
-                return window.frame
+            if let properties, !properties.isResizable {
+                return properties.frame
             }
 
             // This allows for control over each side
-            let frameToResizeFrom = context.cachedTargetFrame.raw
+            let frameToResizeFrom = context.lastAppliedFrame ?? context.cachedTargetFrame.raw
 
             // Compute which edges to adjust based on direction
             switch direction {
@@ -144,31 +156,31 @@ extension WindowFrameResolver {
             result = calculatePositionAdjustment(for: action, frameToResizeFrom: frameToResizeFrom)
 
         } else if direction.isCustomizable {
-            result = calculateCustomFrame(for: action, window: window, bounds: bounds)
+            result = calculateCustomFrame(for: action, bounds: bounds, record: context.resolvedRecord, windowProperties: properties)
 
         } else if direction == .center {
-            result = calculateCenterFrame(window: window, bounds: bounds)
+            result = calculateCenterFrame(bounds: bounds, windowProperties: properties)
 
         } else if direction == .macOSCenter {
-            result = calculateMacOSCenterFrame(window: window, bounds: bounds)
+            result = calculateMacOSCenterFrame(bounds: bounds, windowProperties: properties)
 
-        } else if direction == .undo, let window {
-            result = getLastActionFrame(window: window, bounds: bounds)
+        } else if direction == .undo, let properties {
+            result = getLastActionFrame(context: context, bounds: bounds, windowProperties: properties)
 
-        } else if direction == .initialFrame, let window {
-            result = getInitialFrame(window: window)
+        } else if direction == .initialFrame, let properties {
+            result = getInitialFrame(record: context.resolvedRecord, windowProperties: properties)
 
-        } else if direction == .maximizeHeight, let window {
-            result = getMaximizeHeightFrame(window: window, bounds: bounds, padding: context.padding)
+        } else if direction == .maximizeHeight, let properties {
+            result = getMaximizeHeightFrame(bounds: bounds, padding: context.padding, windowProperties: properties)
 
-        } else if direction == .maximizeWidth, let window {
-            result = getMaximizeWidthFrame(window: window, bounds: bounds, padding: context.padding)
+        } else if direction == .maximizeWidth, let properties {
+            result = getMaximizeWidthFrame(bounds: bounds, padding: context.padding, windowProperties: properties)
 
-        } else if direction == .unstash, let window {
-            result = getInitialFrame(window: window)
+        } else if direction == .unstash, let properties {
+            result = getInitialFrame(record: context.resolvedRecord, windowProperties: properties)
 
-        } else if direction == .fillAvailableSpace, let window {
-            result = getFillAvailableSpaceFrame(window: window)
+        } else if direction == .fillAvailableSpace, let window = context.window {
+            result = getFillAvailableSpaceFrame(window: window, windowProperties: properties)
         }
 
         return result
@@ -195,26 +207,27 @@ extension WindowFrameResolver {
     /// Calculates the user-specified custom frame relative to the provided bounds.
     /// - Parameters:
     ///   - action: the window action containing custom frame parameters.
-    ///   - window: the window to be manipulated.
     ///   - bounds: the bounds within which the window should be manipulated.
+    ///   - record: pre-resolved window records for initial frame lookup.
+    ///   - windowProperties: pre-resolved window properties (frame, isResizable).
     /// - Returns: the calculated custom frame based on the specified parameters.
-    private static func calculateCustomFrame(for action: WindowAction, window: Window?, bounds: CGRect) -> CGRect {
+    private static func calculateCustomFrame(for action: WindowAction, bounds: CGRect, record: WindowRecords.ResolvedRecord?, windowProperties: Window.ResolvedProperties?) -> CGRect {
         var result = CGRect(origin: bounds.origin, size: .zero)
 
         // Size Calculation
 
-        if let sizeMode = action.sizeMode, sizeMode == .preserveSize, let window {
-            result.size = window.size
+        if let sizeMode = action.sizeMode, sizeMode == .preserveSize, let windowProperties {
+            result.size = windowProperties.frame.size
 
-        } else if let sizeMode = action.sizeMode, sizeMode == .initialSize, let window {
-            if let initialFrame = WindowRecords.getInitialFrame(for: window) {
+        } else if let sizeMode = action.sizeMode, sizeMode == .initialSize, windowProperties != nil {
+            if let initialFrame = record?.initialFrame {
                 result.size = initialFrame.size
             }
 
         } else { // sizeMode would be custom
             switch action.unit {
             case .pixels:
-                if window == nil {
+                if windowProperties == nil {
                     let mainScreen = NSScreen.main ?? NSScreen.screens[0]
                     result.size.width = (CGFloat(action.width ?? .zero) / mainScreen.frame.width) * bounds.width
                     result.size.height = (CGFloat(action.height ?? .zero) / mainScreen.frame.height) * bounds.height
@@ -238,7 +251,7 @@ extension WindowFrameResolver {
         if let positionMode = action.positionMode, positionMode == .coordinates {
             switch action.unit {
             case .pixels:
-                if window == nil {
+                if windowProperties == nil {
                     let mainScreen = NSScreen.main ?? NSScreen.screens[0]
                     result.origin.x = (CGFloat(action.xPoint ?? .zero) / mainScreen.frame.width) * bounds.width
                     result.origin.y = (CGFloat(action.yPoint ?? .zero) / mainScreen.frame.height) * bounds.height
@@ -290,14 +303,14 @@ extension WindowFrameResolver {
         return result
     }
 
-    /// Calculates the center frame for the window based on the provided bounds. The window's size will not be manipulated if a valid window is passed in.
+    /// Calculates the center frame for the window based on the provided bounds. The window's size will not be manipulated if valid properties are passed in.
     /// - Parameters:
-    ///   - window: the window to be centered. If `nil`, the center frame will be calculated based on the bounds (and therefore resized)
     ///   - bounds: the bounds within which the window should be centered.
+    ///   - windowProperties: pre-resolved window properties. If `nil`, the center frame will be calculated based on the bounds (and therefore resized).
     /// - Returns: the calculated center frame for the window.
-    private static func calculateCenterFrame(window: Window?, bounds: CGRect) -> CGRect {
-        let windowSize: CGSize = if let window {
-            window.size
+    private static func calculateCenterFrame(bounds: CGRect, windowProperties: Window.ResolvedProperties?) -> CGRect {
+        let windowSize: CGSize = if let windowProperties {
+            windowProperties.frame.size
         } else {
             .init(width: bounds.width / 2, height: bounds.height / 2)
         }
@@ -311,18 +324,18 @@ extension WindowFrameResolver {
         )
     }
 
-    /// Calculates the "macOS center" frame for the window based on the provided bounds. The window's size will not be manipulated if a valid window is passed in.
+    /// Calculates the "macOS center" frame for the window based on the provided bounds. The window's size will not be manipulated if valid properties are passed in.
     ///
     /// What is a "macOS center"? It is a center frame that is also shifted upwards by a certain amount, determined by the height of the window and the screen height.
     /// Fun fact: this behavior can also be reproduced in your own NSWindows by calling its `center()` method!
     ///
     /// - Parameters:
-    ///   - window: the window to be centered. If `nil`, the center frame will be calculated based on the bounds (and therefore resized)
     ///   - bounds: the bounds within which the window should be centered.
+    ///   - windowProperties: pre-resolved window properties. If `nil`, the center frame will be calculated based on the bounds (and therefore resized).
     /// - Returns: the calculated "macOS center" frame for the window.
-    private static func calculateMacOSCenterFrame(window: Window?, bounds: CGRect) -> CGRect {
-        let windowSize: CGSize = if let window {
-            window.size
+    private static func calculateMacOSCenterFrame(bounds: CGRect, windowProperties: Window.ResolvedProperties?) -> CGRect {
+        let windowSize: CGSize = if let windowProperties {
+            windowProperties.frame.size
         } else {
             .init(width: bounds.width / 2, height: bounds.height / 2)
         }
@@ -355,80 +368,82 @@ extension WindowFrameResolver {
 
     /// Retrieves the last action frame for the specified window, based on the last action recorded in `WindowRecords`.
     /// - Parameters:
-    ///   - window: the window for which the last action frame is to be retrieved.
+    ///   - context: the current resize context, used to preserve window and record snapshots across recursive resolution.
     ///   - bounds: the bounds within which the window should be manipulated.
+    ///   - windowProperties: pre-resolved window properties.
     /// - Returns: the frame of the last action performed on the window, or the current frame if no last action is found.
-    private static func getLastActionFrame(window: Window, bounds: CGRect) -> CGRect {
-        if let previousAction = WindowRecords.getLastAction(for: window) {
+    private static func getLastActionFrame(context: ResizeContext, bounds: CGRect, windowProperties: Window.ResolvedProperties) -> CGRect {
+        if let previousAction = context.resolvedRecord?.lastAction {
             log.info("Last action was \(previousAction.description)")
 
-            return WindowFrameResolver.getFrame(
-                for: previousAction,
-                window: window,
-                bounds: bounds
-            )
+            let recursiveContext = context.derivedContext(action: previousAction, bounds: bounds)
+            return getFrame(resizeContext: recursiveContext).frame
         } else {
             log.info("Didn't find frame to undo; using current frame")
-            return window.frame
+            return windowProperties.frame
         }
     }
 
     /// Retrieves the initial frame for the specified window, based on the initial frame recorded in `WindowRecords`.
-    /// - Parameter window: the window for which the initial frame is to be retrieved.
+    /// - Parameters:
+    ///   - record: pre-resolved window records.
+    ///   - windowProperties: pre-resolved window properties.
     /// - Returns: the initial frame of the window, or the current frame if no initial frame is found.
-    private static func getInitialFrame(window: Window) -> CGRect {
-        if let initialFrame = WindowRecords.getInitialFrame(for: window) {
+    private static func getInitialFrame(record: WindowRecords.ResolvedRecord?, windowProperties: Window.ResolvedProperties) -> CGRect {
+        if let initialFrame = record?.initialFrame {
             return initialFrame
         } else {
             log.info("Didn't find initial frame; using current frame")
-            return window.frame
+            return windowProperties.frame
         }
     }
 
     /// Computes a new window frame with the maximum height that fits within the given bounds.
     /// - Parameters:
-    ///   - window: the window whose current frame is used as a reference.
     ///   - bounds: the area within which the window should be resized.
     ///   - padding: the padding that the user has configured to apply to windows.
+    ///   - windowProperties: pre-resolved window properties.
     /// - Returns: a CGRect representing a frame that maximizes the window's height.
     private static func getMaximizeHeightFrame(
-        window: Window,
         bounds: CGRect,
-        padding: PaddingConfiguration
+        padding: PaddingConfiguration,
+        windowProperties: Window.ResolvedProperties
     ) -> CGRect {
         CGRect(
-            x: window.frame.minX - padding.window / 2,
+            x: windowProperties.frame.minX - padding.window / 2,
             y: bounds.minY,
-            width: window.frame.width + padding.window,
+            width: windowProperties.frame.width + padding.window,
             height: bounds.height
         )
     }
 
     /// Computes a new window frame with the maximum width that fits within the given bounds.
     /// - Parameters:
-    ///   - window: the window whose current frame is used as a reference.
     ///   - bounds: the area within which the window should be resized.
     ///   - padding: the padding that the user has configured to apply to windows.
+    ///   - windowProperties: pre-resolved window properties.
     /// - Returns: a CGRect representing a frame that maximizes the window's width.
     private static func getMaximizeWidthFrame(
-        window: Window,
         bounds: CGRect,
-        padding: PaddingConfiguration
+        padding: PaddingConfiguration,
+        windowProperties: Window.ResolvedProperties
     ) -> CGRect {
         CGRect(
             x: bounds.minX,
-            y: window.frame.minY - padding.window / 2,
+            y: windowProperties.frame.minY - padding.window / 2,
             width: bounds.width,
-            height: window.frame.height + padding.window
+            height: windowProperties.frame.height + padding.window
         )
     }
 
     /// Computes a new window frame that takes up the most area, without overlapping with other windows.
     /// Other windows that already overlap with the current window will be ignored.
-    /// - Parameter window: the window whose current frame is used as a reference.
+    /// - Parameters:
+    ///   - window: the window, needed for `ScreenUtility.screenContaining`.
+    ///   - windowProperties: pre-resolved window properties.
     /// - Returns: a CGRect representing a frame that makes a window fill the most available space.
-    private static func getFillAvailableSpaceFrame(window: Window) -> CGRect {
-        let currentFrame = window.frame
+    private static func getFillAvailableSpaceFrame(window: Window, windowProperties: Window.ResolvedProperties?) -> CGRect {
+        let currentFrame = windowProperties?.frame ?? window.frame
 
         guard let screen = ScreenUtility.screenContaining(window) ?? NSScreen.main else { return currentFrame }
         let screenFrame = screen.cgSafeScreenFrame

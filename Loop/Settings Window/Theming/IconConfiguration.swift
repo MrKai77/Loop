@@ -99,8 +99,6 @@ struct IconConfigurationView: View {
     @Environment(\.openURL) var openURL
     @StateObject private var model = IconConfigurationModel()
 
-    let suggestNewIconLink = URL(string: "https://github.com/MrKai77/Loop/issues/new/choose")!
-
     @Default(.currentIcon) var currentIcon
     @Default(.showDockIcon) var showDockIcon
     @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked

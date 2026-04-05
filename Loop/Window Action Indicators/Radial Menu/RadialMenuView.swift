@@ -25,10 +25,6 @@ struct RadialMenuView: View {
         self.viewModel = viewModel
     }
 
-    private var shouldAppearActive: Bool {
-        !viewModel.isSettingsPreview || (viewModel.isSettingsPreview && appearsActive)
-    }
-
     var body: some View {
         ZStack {
             if #available(macOS 26.0, *) {

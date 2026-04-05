@@ -19,17 +19,20 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
 
     /// Initializes an `ActiveEventMonitor`, with a simplified callback.
     /// - Parameters:
+    ///   - name: a human-readable identifier used in log messages.
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
     ///   - callback: a callback to process received events. Return `forward` to pass the event along, `ignore` to block the event from reaching downstream receivers.
     convenience init(
+        _ name: String,
         tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
         callback: @escaping (CGEvent) -> EventHandling
     ) {
         self.init(
+            name,
             tapLocation: tapLocation,
             placement: placement,
             events: events,
@@ -39,11 +42,13 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
 
     /// Initializes an `ActiveEventMonitor`.
     /// - Parameters:
+    ///   - name: a human-readable identifier used in log messages.
     ///   - tapLocation: the location at which this event tap will be placed.
     ///   - placement: whether to add this monitor as a head or tail relative to other event monitors within this tap.
     ///   - events: the events to capture within this event monitor.
     ///   - callback: a callback to process and potentially alter received events.
     init(
+        _ name: String,
         tapLocation: CGEventTapLocation = .cgSessionEventTap,
         placement: CGEventTapPlacement = .tailAppendEventTap,
         events: [CGEventType],
@@ -78,7 +83,7 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
             callback: callback,
             userInfo: userInfo
         ) {
-            setupRunLoopSource(eventTap: eventTap)
+            setupRunLoopSource(eventTap: eventTap, readableIdentifier: name)
         } else {
             log.info("Failed to create event tap")
         }

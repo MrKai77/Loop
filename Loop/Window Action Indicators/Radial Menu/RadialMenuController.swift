@@ -14,11 +14,16 @@ import SwiftUI
 final class RadialMenuController: WindowActionIndicator {
     private var viewModel: RadialMenuViewModel = .init(isSettingsPreview: false)
     private var controller: NSWindowController?
+    private var closeTask: Task<(), Never>?
 
     func open(context: ResizeContext) {
         defer { viewModel.updateContext(with: context) }
 
+        closeTask?.cancel()
+        closeTask = nil
+
         if let window = controller?.window {
+            viewModel.setIsShown(true, animationDuration: 0.1)
             window.orderFrontRegardless()
             return
         }
@@ -68,15 +73,17 @@ final class RadialMenuController: WindowActionIndicator {
     }
 
     func close() {
-        guard let windowController = controller else { return }
-        controller = nil
-
-        Task {
+        guard controller != nil else { return }
+        closeTask?.cancel()
+        closeTask = Task { [weak self] in
+            guard let self else { return }
             viewModel.setIsShown(false, animationDuration: 0.15)
             try? await Task.sleep(for: .seconds(0.15))
-            windowController.window?.orderOut(nil)
-            windowController.close()
-
+            guard !Task.isCancelled else { return }
+            controller?.window?.orderOut(nil)
+            controller?.close()
+            controller = nil
+            closeTask = nil
             log.ui("Controller closed")
         }
     }

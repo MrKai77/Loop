@@ -13,6 +13,7 @@ final class WindowTransformAnimation: NSAnimation {
     private let originalFrame: CGRect
     private let window: Window
     private let bounds: CGRect
+    private let shouldSetSize: Bool
     private var didCallCompletionHandler: Bool = false
     private let completionHandler: (Error?) -> ()
 
@@ -26,12 +27,14 @@ final class WindowTransformAnimation: NSAnimation {
         _ newRect: CGRect,
         window: Window,
         bounds: CGRect,
+        shouldSetSize: Bool,
         completionHandler: @escaping (Error?) -> ()
     ) {
         self.targetFrame = newRect
         self.originalFrame = window.frame
         self.window = window
         self.bounds = bounds
+        self.shouldSetSize = shouldSetSize
         self.completionHandler = completionHandler
         super.init(duration: 0.3, animationCurve: .easeOut)
         self.frameRate = Float(NSScreen.main?.displayMode?.refreshRate ?? 60.0)
@@ -113,11 +116,11 @@ final class WindowTransformAnimation: NSAnimation {
         }
 
         if lastWindowFrame.origin != newFrame.origin {
-            window.position = newFrame.origin
+            window.setPosition(newFrame.origin)
         }
 
-        if lastWindowFrame.size != newFrame.size {
-            window.size = newFrame.size
+        if shouldSetSize, lastWindowFrame.size != newFrame.size {
+            window.setSize(newFrame.size)
         }
 
         lastWindowFrame = window.frame

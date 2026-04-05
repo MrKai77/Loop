@@ -53,7 +53,7 @@ struct RadialMenuActionsGuide: View {
             }
 
             RadialLayout {
-                ForEach(Array(radialMenuActions.dropLast()), id: \.id) { action in
+                ForEach(radialActions, id: \.id) { action in
                     if let resolved = action.resolved {
                         actionButton(
                             action: resolved,

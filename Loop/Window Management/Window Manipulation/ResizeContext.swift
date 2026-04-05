@@ -32,8 +32,12 @@ final class ResizeContext {
     /// Used to open radial menu at the correct position.
     private(set) var initialMousePosition: CGPoint = .zero
 
+    var resolvedWindowProperties: Window.ResolvedProperties?
+    var resolvedRecord: WindowRecords.ResolvedRecord?
+
     private(set) var cachedTargetFrame: ComputedFrame = .zero
     private var needsRecompute: Bool = false
+    var lastAppliedFrame: CGRect?
 
     init(
         window: Window? = nil,
@@ -66,11 +70,16 @@ final class ResizeContext {
         bounds = screen?.cgSafeScreenFrame ?? .zero
         padding = PaddingConfiguration.getConfiguredPadding(for: screen)
         paddedBounds = padding.applyToBounds(bounds, screen: screen)
+        lastAppliedFrame = nil
         needsRecompute = true
     }
 
     func setWindow(to window: Window?) {
         self.window = window
+        resolvedWindowProperties = nil
+        resolvedRecord = nil
+        lastAppliedFrame = nil
+
         needsRecompute = true
 
         log.info("Set window to \(window?.description ?? "nil")")
@@ -80,6 +89,37 @@ final class ResizeContext {
         action = newAction
         parentAction = newParentAction
         needsRecompute = true
+    }
+
+    /// Re-fetches the window's AX properties and record snapshot from the actor.
+    func refreshResolvedState() async {
+        guard let window else {
+            resolvedWindowProperties = nil
+            resolvedRecord = nil
+            return
+        }
+
+        resolvedWindowProperties = Window.ResolvedProperties(from: window)
+        resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
+    }
+
+    /// Creates a lightweight child context that shares this context's resolved state but uses a different action and bounds.
+    /// Used for recursive frame resolution (e.g. undo) without additional AX calls.
+    func derivedContext(action newAction: WindowAction, bounds newBounds: CGRect) -> ResizeContext {
+        // Pass window: nil to skip eager AX resolution in init; we overwrite with the parent's (the currently stored) snapshot.
+        let context = ResizeContext(
+            initialFrame: resolvedWindowProperties?.frame,
+            screen: screen,
+            bounds: newBounds,
+            padding: .zero,
+            action: newAction,
+            initialMousePosition: initialMousePosition
+        )
+        context.window = window
+        context.resolvedWindowProperties = resolvedWindowProperties
+        context.resolvedRecord = resolvedRecord
+        context.sidesToAdjust = sidesToAdjust
+        return context
     }
 
     func getTargetFrame() -> ComputedFrame {
@@ -104,7 +144,7 @@ final class ResizeContext {
             frame: result.frame,
             paddedBounds: paddedBounds,
             action: action,
-            window: window
+            resolvedWindowProperties: resolvedWindowProperties
         )
 
         cachedTargetFrame = ComputedFrame(
@@ -113,6 +153,7 @@ final class ResizeContext {
             padded: paddedFrame
         )
         needsRecompute = false
+
         log.info("Computed target frame - raw: \(cachedTargetFrame.raw), normalized: \(cachedTargetFrame.normalized) padded: \(cachedTargetFrame.padded), for action: \(action)")
     }
 }
