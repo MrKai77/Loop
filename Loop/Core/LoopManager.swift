@@ -75,9 +75,9 @@ final class LoopManager {
                 await self?.closeLoop(forceClose: forceClose)
             }
         },
-        changeAction: { [weak self] action in
+        changeAction: { [weak self] action, reverse in
             Task {
-                await self?.changeAction(action)
+                await self?.changeAction(action, reverse: reverse)
             }
         },
         checkIfLoopOpen: { [weak self] in
@@ -257,7 +257,8 @@ extension LoopManager {
         _ newAction: WindowAction,
         triggeredFromScreenChange: Bool = false,
         disableHapticFeedback: Bool = false,
-        canAdvanceCycle: Bool = true
+        canAdvanceCycle: Bool = true,
+        reverse: Bool = false
     ) async {
         guard
             isLoopActive,
@@ -286,7 +287,7 @@ extension LoopManager {
             // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
             // This should be set to false when the mouse is moved to prevent rapid cycling.
             if canAdvanceCycle {
-                newAction = await getNextCycleAction(newAction)
+                newAction = await getNextCycleAction(newAction, reverse: reverse)
             } else {
                 if let cycle = newAction.cycle, !cycle.contains(resizeContext.action) {
                     newAction = cycle.first ?? .init(.noAction)
@@ -444,7 +445,7 @@ extension LoopManager {
         }
     }
 
-    private func getNextCycleAction(_ action: WindowAction) async -> WindowAction {
+    private func getNextCycleAction(_ action: WindowAction, reverse: Bool) async -> WindowAction {
         guard let currentCycle = action.cycle else {
             return action
         }
@@ -457,7 +458,7 @@ extension LoopManager {
             && Defaults[.triggerKey].contains(.kVK_Shift) == false
             && Defaults[.cycleBackwardsOnShiftPressed]
 
-        let shouldCycleBackwards = allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift)
+        let shouldCycleBackwards = reverse || (allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift))
         var currentIndex: Int? = nil
 
         if Defaults[.cycleModeRestartEnabled],

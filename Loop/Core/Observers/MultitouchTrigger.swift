@@ -14,52 +14,35 @@ final class MultitouchTrigger {
     private let windowActionCache: WindowActionCache
     private let openCallback: (WindowAction, Window) async throws -> ()
     private let closeCallback: (Bool) -> ()
-    private let changeAction: (WindowAction) -> ()
+    private let changeAction: (WindowAction, Bool) -> ()
     private let checkIfLoopOpen: () -> Bool
 
-    struct GestureInfo {
-        let position: CGPoint
-        let distance: CGFloat
-    }
+    private let gestureMonitor = SubsurfaceMonitor()
+    private let gestureRecognizer = SubsurfaceGestureRecognizer(fingerCount: 2)
+    private let gestureBlocker: MultitouchGestureBlocker = .init()
 
-    private var originGestureInfo: GestureInfo?
-    private var lastGestureInfo: GestureInfo?
-    private var maxTouchesInCurrentGesture: Int = 0
-    private var isCurrentGestureRejected = false
     private var didOpenLoopWithThisGesture = false
+    private var isGestureRejected = false
 
     private var lastTriggeredActionIndex: Int?
     private var lastTriggeredDistance: CGFloat = 0
 
-    private struct PositionHistoryEntry {
-        let avgPosition: CGPoint
-        let timestamp: TimeInterval
-    }
-
-    private var positionHistory: [PositionHistoryEntry] = []
-    private let maxHistoryEntries = 5 // Track last 5 positions for smoothing
-
-    private let initialSlideThreshold: CGFloat = 0.025
-    private let slideRepeatThreshold: CGFloat = 0.25
-
-    private let initialZoomThreshold: CGFloat = 0.1
-    private let zoomRepeatThreshold: CGFloat = 0.4
-
-    private var inactivityTask: Task<(), Never>?
-    private let gestureBlocker: GestureBlocker = .init()
+    private let panActivationThreshold: CGFloat = 0.3
+    private let panCycleStepSize: CGFloat = 0.1
+    private let pinchActivationThreshold: CGFloat = 0.4
+    private let pinchCycleStepSize: CGFloat = 0.6
 
     private var radialMenuActions: [RadialMenuAction] {
         RadialMenuAction.userConfiguredActions
     }
 
-    private let gestureMonitor = SubsurfaceMonitor()
-    private static let failedToResolveKeybindAction: WindowAction = .init(.noAction) // This helps to keep a stable ID
+    private static let failedToResolveKeybindAction: WindowAction = .init(.noAction)
 
     init(
         windowActionCache: WindowActionCache,
         openCallback: @escaping (WindowAction, Window) async throws -> (),
         closeCallback: @escaping (Bool) -> (),
-        changeAction: @escaping (WindowAction) -> (),
+        changeAction: @escaping (WindowAction, Bool) -> (),
         checkIfLoopOpen: @escaping () -> Bool
     ) {
         self.windowActionCache = windowActionCache
@@ -70,295 +53,155 @@ final class MultitouchTrigger {
     }
 
     func start() {
+        gestureMonitor.start()
+
         Task {
-            for await (_, touchData) in gestureMonitor.contacts() {
-                resetInactivityTimer()
-
-                let palmFiltered = touchData.filter { $0.finger != nil && $0.hand != nil }
-
-                if palmFiltered.count != maxTouchesInCurrentGesture,
-                   palmFiltered.isEmpty || palmFiltered.count > maxTouchesInCurrentGesture {
-                    maxTouchesInCurrentGesture = palmFiltered.count
-                }
-
-                if palmFiltered.count == 2, maxTouchesInCurrentGesture == 2 {
-                    await handleTwoFingerGesture(with: palmFiltered)
-                } else {
-                    resetGesture()
+            for await event in gestureRecognizer.events(from: gestureMonitor) {
+                switch event {
+                case let .pan(pan):
+                    await handlePan(pan)
+                case let .pinch(pinch):
+                    await handlePinch(pinch)
+                case .rotation:
+                    break
                 }
             }
         }
-
-        gestureMonitor.start()
     }
 
     func stop() {
         gestureMonitor.stop()
-        resetGesture()
+        gestureRecognizer.reset()
+        resetLoopState()
     }
 
-    private func resetInactivityTimer() {
-        inactivityTask?.cancel()
+    private func handlePan(_ pan: SubsurfaceGestureEvent.PanEvent) async {
+        switch pan.phase {
+        case .began:
+            await handleGestureBegan()
 
-        inactivityTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(250))
-            if Task.isCancelled { return }
-            self?.resetGesture()
+        case .changed:
+            guard !isGestureRejected else { return }
+
+            let angleFromOrigin = pan.angle + .pi / 2
+            var normalizedAngle = angleFromOrigin
+            if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
+
+            let actions = radialMenuActions.dropLast()
+            guard actions.count > 1 else { return }
+
+            let newIndex: Int
+            if actions.count == 8 {
+                newIndex = indexWithCardinalBias(angle: normalizedAngle, actionCount: actions.count)
+            } else {
+                let actionAngleSpan = (.pi * 2) / CGFloat(actions.count)
+                let halfAngleSpan = actionAngleSpan / 2.0
+                newIndex = Int((normalizedAngle + halfAngleSpan) / actionAngleSpan) % actions.count
+            }
+
+            // Determine if we're cycling the same action backward (pulling back)
+            let isSameAction = lastTriggeredActionIndex == newIndex
+            let isReversing = isSameAction && pan.distance < lastTriggeredDistance - panCycleStepSize
+
+            if isSameAction {
+                guard abs(pan.distance - lastTriggeredDistance) >= panCycleStepSize else { return }
+            }
+
+            lastTriggeredActionIndex = newIndex
+            lastTriggeredDistance = pan.distance
+            triggerAction(at: newIndex, from: actions, reverse: isReversing)
+
+        case .ended, .cancelled:
+            resetLoopState()
+
+        default:
+            break
         }
     }
 
-    private func handleTwoFingerGesture(with touches: [MTContact]) async {
-        // Skip processing if this gesture sequence was already rejected
-        guard !isCurrentGestureRejected else {
-            return
-        }
+    private func handlePinch(_ pinch: SubsurfaceGestureEvent.PinchEvent) async {
+        switch pinch.phase {
+        case .began:
+            await handleGestureBegan()
 
-        let info = GestureInfo(
-            position: averagePosition(of: touches),
-            distance: distance(between: touches)
-        )
+        case .changed:
+            guard !isGestureRejected else { return }
 
-        guard let originInfo = originGestureInfo, let lastInfo = lastGestureInfo else {
-            // Check if cursor is over a titlebar before activating
-            let window = isCursorOverTitlebarOfWindow()
-            let loopWasAlreadyOpen = checkIfLoopOpen()
-
-            guard window != nil || loopWasAlreadyOpen else {
-                isCurrentGestureRejected = true // Mark as rejected to skip future events
-                return
-            }
-
-            originGestureInfo = info
-            lastGestureInfo = info
-            lastTriggeredActionIndex = nil
-            lastTriggeredDistance = 0
-            gestureBlocker.start()
-
-            // Reset position history for new gesture
-            positionHistory.removeAll()
-
-            // Only open Loop if it wasn't already open
-            if let window, !loopWasAlreadyOpen {
-                do {
-                    try await openCallback(.init(.noSelection), window)
-                    didOpenLoopWithThisGesture = true
-                } catch {
-                    gestureBlocker.stop()
-                    isCurrentGestureRejected = true
-                    return
-                }
-            }
-
-            return
-        }
-
-        // Update position history for stable direction detection at low velocities
-        positionHistory.append(PositionHistoryEntry(
-            avgPosition: info.position,
-            timestamp: Date.timeIntervalSinceReferenceDate
-        ))
-        if positionHistory.count > maxHistoryEntries {
-            positionHistory.removeFirst()
-        }
-
-        // Calculate zoom distance (finger spread)
-        let fingerDistance = info.distance
-
-        // Check if fingers are spreading apart compared to gesture start
-        let isZooming = (fingerDistance - originInfo.distance) > initialZoomThreshold
-
-        // Prioritize zoom gestures over directional gestures
-        if isZooming {
             let actions = radialMenuActions
             let centerActionIndex = actions.count - 1
+            let isSameAction = lastTriggeredActionIndex == centerActionIndex
+            let isReversing = isSameAction && pinch.scale < lastTriggeredDistance - pinchCycleStepSize
 
-            // Trigger center action if it's a new action or moved significantly further
-            if let lastIndex = lastTriggeredActionIndex {
-                if lastIndex == centerActionIndex {
-                    // Same action - only trigger if we've spread fingers further
-                    guard fingerDistance >= lastTriggeredDistance + zoomRepeatThreshold else { return }
-                }
+            if isSameAction {
+                guard abs(pinch.scale - lastTriggeredDistance) >= pinchCycleStepSize else { return }
+            } else {
+                guard abs(pinch.scale - 1.0) >= pinchActivationThreshold else { return }
             }
 
             lastTriggeredActionIndex = centerActionIndex
-            lastTriggeredDistance = fingerDistance
-            triggerAction(at: centerActionIndex, from: actions[...])
-            return // Don't process directional actions while zooming
+            lastTriggeredDistance = pinch.scale
+            triggerAction(at: centerActionIndex, from: actions[...], reverse: isReversing)
+
+        case .ended, .cancelled:
+            resetLoopState()
+
+        default:
+            break
         }
-
-        // Process directional actions (swiping)
-        let deltaPositionFromLast = CGSize(
-            width: info.position.x - lastInfo.position.x,
-            height: info.position.y - lastInfo.position.y
-        )
-
-        let translationMagFromLast = hypot(deltaPositionFromLast.width, deltaPositionFromLast.height)
-
-        let vectorFromOrigin = CGSize(
-            width: info.position.x - originInfo.position.x,
-            height: info.position.y - originInfo.position.y
-        )
-
-        let magFromOrigin = hypot(vectorFromOrigin.width, vectorFromOrigin.height)
-
-        var didReset = false
-
-        // Only check backward motion if an action has been triggered (otherwise there's nothing to "undo")
-        if lastTriggeredActionIndex != nil,
-           let movementDirection = directionFromHistory(to: info.position),
-           magFromOrigin > 0 {
-            let magMovement = hypot(movementDirection.width, movementDirection.height)
-
-            if magMovement >= initialSlideThreshold { // Only if meaningful movement occurred
-                let dotProduct = movementDirection.width * vectorFromOrigin.width +
-                    movementDirection.height * vectorFromOrigin.height
-                let cosAngle = dotProduct / (magFromOrigin * magMovement)
-
-                // Negative dot product means moving toward origin (opposite direction)
-                if cosAngle < -0.5 { // ~120 degree threshold
-                    originGestureInfo = info
-                    lastGestureInfo = info
-                    lastTriggeredActionIndex = nil
-                    lastTriggeredDistance = 0
-                    didReset = true
-                    changeAction(.init(.noSelection))
-                }
-            }
-        }
-
-        // If we just reset, clear history and return early, so that the user can start a fresh direction
-        if didReset {
-            positionHistory.removeAll()
-            return
-        }
-
-        // Use lower threshold for initial gesture when no action is selected
-        let threshold: CGFloat = lastTriggeredActionIndex == nil ? initialSlideThreshold : slideRepeatThreshold
-        guard translationMagFromLast >= threshold else { return }
-
-        lastGestureInfo = info
-
-        // Calculate angle from origin
-        let deltaPositionFromOrigin = CGSize(
-            width: info.position.x - originInfo.position.x,
-            height: info.position.y - originInfo.position.y
-        )
-        let angleFromOrigin = atan2(-deltaPositionFromOrigin.height, deltaPositionFromOrigin.width) + .pi / 2
-        let currentDistance = hypot(deltaPositionFromOrigin.width, deltaPositionFromOrigin.height)
-
-        var normalizedAngle = angleFromOrigin
-        if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
-
-        let actions = radialMenuActions.dropLast()
-        guard actions.count > 1 else { return }
-
-        let newIndex: Int
-        if actions.count == 8 {
-            // For exactly 8 actions, bias toward cardinal directions
-            // Cardinal directions are at indices 0, 2, 4, 6 (N, E, S, W)
-            // Diagonal directions are at indices 1, 3, 5, 7 (NE, SE, SW, NW)
-            newIndex = indexWithCardinalBias(angle: normalizedAngle, actionCount: actions.count)
-        } else {
-            // Standard even distribution for other action counts
-            let actionAngleSpan = (.pi * 2) / CGFloat(actions.count)
-            let halfAngleSpan = actionAngleSpan / 2.0
-            newIndex = Int((normalizedAngle + halfAngleSpan) / actionAngleSpan) % actions.count
-        }
-
-        // Only trigger if it's a new action OR we've moved significantly further in the same direction
-        if let lastIndex = lastTriggeredActionIndex {
-            if newIndex == lastIndex {
-                // Same action - only trigger if we've moved further from origin
-                guard currentDistance >= lastTriggeredDistance + slideRepeatThreshold else { return }
-            }
-        }
-
-        lastTriggeredActionIndex = newIndex
-        lastTriggeredDistance = currentDistance
-        triggerAction(at: newIndex, from: actions)
     }
 
-    func resetGesture() {
-        isCurrentGestureRejected = false
+    private func handleGestureBegan() async {
+        let window = isCursorOverTitlebarOfWindow()
+        let loopWasAlreadyOpen = checkIfLoopOpen()
 
-        guard lastGestureInfo != nil else {
+        guard window != nil || loopWasAlreadyOpen else {
+            isGestureRejected = true
             return
         }
 
-        // Only close Loop if this gesture was responsible for opening it
+        isGestureRejected = false
+        lastTriggeredActionIndex = nil
+        lastTriggeredDistance = 0
+        gestureBlocker.start()
+
+        if let window, !loopWasAlreadyOpen {
+            do {
+                try await openCallback(.init(.noSelection), window)
+                didOpenLoopWithThisGesture = true
+            } catch {
+                gestureBlocker.stop()
+                isGestureRejected = true
+            }
+        }
+    }
+
+    private func resetLoopState() {
         if didOpenLoopWithThisGesture {
             closeCallback(false)
         }
 
         gestureBlocker.stop()
-        lastGestureInfo = nil
-        maxTouchesInCurrentGesture = 0
         didOpenLoopWithThisGesture = false
-        positionHistory.removeAll() // Clear history on gesture end
+        isGestureRejected = false
+        lastTriggeredActionIndex = nil
+        lastTriggeredDistance = 0
     }
 
-    private func averagePosition(of touches: [MTContact]) -> CGPoint {
-        let sum = touches.reduce(into: CGPoint.zero) { result, touch in
-            result.x += CGFloat(touch.normalizedVector.position.x)
-            result.y += CGFloat(touch.normalizedVector.position.y)
-        }
-
-        return CGPoint(
-            x: sum.x / CGFloat(touches.count),
-            y: sum.y / CGFloat(touches.count)
-        )
-    }
-
-    /// Calculates movement direction from position history
-    /// Returns nil if insufficient history available
-    private func directionFromHistory(to currentPosition: CGPoint) -> CGSize? {
-        guard positionHistory.count >= 3 else { return nil }
-
-        // Use oldest available position for maximum stability
-        let oldestEntry = positionHistory.first!
-
-        return CGSize(
-            width: currentPosition.x - oldestEntry.avgPosition.x,
-            height: currentPosition.y - oldestEntry.avgPosition.y
-        )
-    }
-
-    private func distance(between touches: [MTContact]) -> CGFloat {
-        guard touches.count == 2 else { return 0 }
-
-        let p1 = CGPoint(x: CGFloat(touches[0].normalizedVector.position.x), y: CGFloat(touches[0].normalizedVector.position.y))
-        let p2 = CGPoint(x: CGFloat(touches[1].normalizedVector.position.x), y: CGFloat(touches[1].normalizedVector.position.y))
-
-        return hypot(p2.x - p1.x, p2.y - p1.y)
-    }
-
-    /// Maps an angle to an action index with bias toward cardinal directions.
-    /// For 8 actions, cardinal directions (N, E, S, W) get wider angular ranges,
-    /// requiring users to explicitly aim for ~45° to trigger diagonal actions.
-    /// - Parameter cardinalBias: How much larger cardinals are relative to diagonals.
-    ///   A value of 0.1 makes cardinal zones 10% wider and diagonal zones 10% narrower than uniform (0.0 = equal sizes, 1.0 = diagonals disappear).
     private func indexWithCardinalBias(angle: CGFloat, actionCount: Int, cardinalBias: CGFloat = 0.1) -> Int {
-        let baseAngleSpan = (.pi * 2) / CGFloat(actionCount) // 45° for 8 actions
+        let baseAngleSpan = (.pi * 2) / CGFloat(actionCount)
         let halfAngleSpan = baseAngleSpan / 2.0
 
-        // Match the original centered mapping (boundaries at ±22.5° for 8 actions)
         let adjustedAngle = (angle + halfAngleSpan).truncatingRemainder(dividingBy: .pi * 2)
-
-        // Determine which 45° segment we're in (modulo handles angle == 2π)
         let rawSegment = Int(adjustedAngle / baseAngleSpan) % actionCount
 
-        // Calculate position within the segment (0.0 to 1.0)
         let segmentAngle = adjustedAngle.truncatingRemainder(dividingBy: baseAngleSpan)
         let normalizedPosition = segmentAngle / baseAngleSpan
 
-        // Cardinal directions are at even indices (0, 2, 4, 6)
         let isCurrentCardinal = rawSegment % 2 == 0
 
         if isCurrentCardinal {
-            // Cardinal keeps its entire segment
             return rawSegment
         } else {
-            // Diagonal segment - cede edges to adjacent cardinals
             if normalizedPosition < cardinalBias / 2 {
                 return (rawSegment - 1 + actionCount) % actionCount
             } else if normalizedPosition > 1.0 - cardinalBias / 2 {
@@ -370,15 +213,12 @@ final class MultitouchTrigger {
     }
 
     private func isCursorOverTitlebarOfWindow() -> Window? {
-        // Get current cursor position
         let cursorPosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
 
-        // Get window at cursor position using existing WindowUtility
         guard let window = WindowUtility.windowAtPosition(cursorPosition) else {
             return nil
         }
 
-        // Assume large titlebar variant
         let titlebarHeight: CGFloat = 52.0
 
         let titlebarMinY = window.frame.minY
@@ -386,11 +226,10 @@ final class MultitouchTrigger {
 
         let isInTitlebar = cursorPosition.y >= titlebarMinY && cursorPosition.y <= titlebarMaxY
 
-        // Check if cursor is within titlebar region
         return isInTitlebar ? window : nil
     }
 
-    private func triggerAction(at index: Int, from actions: ArraySlice<RadialMenuAction>) {
+    private func triggerAction(at index: Int, from actions: ArraySlice<RadialMenuAction>, reverse: Bool = false) {
         let action = actions[index]
 
         let resolvedAction: WindowAction = switch action.type {
@@ -400,33 +239,6 @@ final class MultitouchTrigger {
             windowActionCache.actionsByIdentifier[id] ?? Self.failedToResolveKeybindAction
         }
 
-        changeAction(resolvedAction)
-    }
-}
-
-@Loggable
-private final class GestureBlocker {
-    private var monitor: ActiveEventMonitor?
-
-    func start() {
-        log.info("Starting gesture blocker")
-
-        let eventTypes: [CGEventType] = [
-            .scrollWheel,
-            CGEventType(rawValue: UInt32(NSEvent.EventType.gesture.rawValue)),
-            CGEventType(rawValue: UInt32(NSEvent.EventType.magnify.rawValue)),
-            CGEventType(rawValue: UInt32(NSEvent.EventType.rotate.rawValue)),
-            CGEventType(rawValue: UInt32(NSEvent.EventType.smartMagnify.rawValue))
-        ].compactMap(\.self)
-
-        monitor = ActiveEventMonitor("gesture_blocker", events: eventTypes) { _ in .ignore }
-        monitor?.start()
-    }
-
-    func stop() {
-        monitor?.stop()
-        monitor = nil
-
-        log.info("Stopped gesture blocker")
+        changeAction(resolvedAction, reverse)
     }
 }
