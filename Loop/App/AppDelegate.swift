@@ -141,6 +141,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         shutdownTask = Task { @MainActor in
             await StashManager.shared.shutdown()
+            self.shutdownTask = nil
             sender.reply(toApplicationShouldTerminate: true)
         }
 

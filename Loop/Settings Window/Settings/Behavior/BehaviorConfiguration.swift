@@ -172,7 +172,7 @@ struct BehaviorConfigurationView: View {
             LuminareToggle("Shift focus when stashed", isOn: $shiftFocusWhenStashed)
         }
         .onChange(of: stashedWindowVisiblePadding) { _ in
-            StashManager.shared.onConfigurationChanged()
+            Task { await StashManager.shared.onConfigurationChanged() }
         }
     }
 }

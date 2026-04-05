@@ -94,12 +94,14 @@ final class StashManager {
         await restoreAllStashedWindows(animate: false)
     }
 
-    func onConfigurationChanged() {
-        for stashedWindow in store.stashed.values {
-            Task {
-                let frame = await stashedWindow.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
-                // Don't animate when configuration changes
-                await stashedWindow.window.setFrame(frame)
+    func onConfigurationChanged() async {
+        await withTaskGroup(of: Void.self) { group in
+            for stashedWindow in store.stashed.values {
+                group.addTask {
+                    let frame = await stashedWindow.computeStashedFrame(peekSize: self.stashedWindowVisiblePadding)
+                    // Don't animate when configuration changes
+                    await stashedWindow.window.setFrame(frame)
+                }
             }
         }
     }
@@ -165,9 +167,7 @@ extension StashManager {
             } else {
                 let windowToStash = StashedWindowInfo(window: window, screen: screen, action: action)
 
-                Task {
-                    await stash(windowToStash)
-                }
+                await stash(windowToStash)
             }
         } else if action.direction == .unstash {
             // No need to reset the frame here: the frame has already been moved to the stash area

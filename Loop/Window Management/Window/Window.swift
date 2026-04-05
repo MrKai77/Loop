@@ -36,6 +36,10 @@ final class Window {
     let pid: pid_t
     let nsRunningApplication: NSRunningApplication?
 
+    var isOwnWindow: Bool {
+        nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier
+    }
+
     /// Initialize a window from an AXUIElement
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
     init(
@@ -345,7 +349,7 @@ final class Window {
     }
 
     func setPosition(_ point: CGPoint) {
-        if nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
+        if isOwnWindow {
             Task { @MainActor in
                 guard let win = NSApp.keyWindow else { return }
                 win.setFrameOrigin(CGRect(origin: point, size: win.frame.size).flipY(screen: .screens[0]).origin)
@@ -372,7 +376,7 @@ final class Window {
     }
 
     func setSize(_ size: CGSize) {
-        if nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier {
+        if isOwnWindow {
             Task { @MainActor in
                 guard let win = NSApp.keyWindow else { return }
                 win.setFrame(CGRect(origin: win.frame.origin, size: size), display: false)
@@ -405,7 +409,7 @@ final class Window {
     @MainActor
     @discardableResult
     private func applyOwnWindowFrame(_ rect: CGRect) -> Bool {
-        guard nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier else {
+        guard isOwnWindow else {
             return false
         }
         guard let window = NSApp.keyWindow else {

@@ -204,7 +204,7 @@ enum WindowEngine {
     // MARK: - Size Constraints
 
     private static func handleSizeConstrainedWindow(window: Window, bounds: CGRect) {
-        guard bounds != .zero else { return }
+        guard !window.isOwnWindow, bounds != .zero else { return }
 
         var windowFrame = window.frame
         if windowFrame.maxX > bounds.maxX { windowFrame.origin.x = bounds.maxX - windowFrame.width }
