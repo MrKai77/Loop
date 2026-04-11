@@ -9,20 +9,35 @@ import AppKit
 import Defaults
 import Scribe
 
+/// Describes how Loop was triggered, so window-targeting can adapt.
+enum TriggerSource {
+    case keyboard
+    case mouse
+    case urlCommand
+}
+
 /// This enum is in charge of fetching windows in the user's workspace, which will be used by Loop.
 @Loggable(style: .static)
 enum WindowUtility {
-    /// Get the target window, depending on the user's preferences. This could be the frontmost window, or the window under the cursor.
+    /// Get the target window, depending on the user's preferences and the trigger source.
+    /// When ``resizeWindowUnderCursor`` is enabled together with
+    /// ``resizeWindowUnderCursorOnlyOnMouseTrigger``, keyboard triggers
+    /// will always fall back to the frontmost (focused) window.
+    /// - Parameter triggerSource: How Loop was activated (keyboard, mouse, or URL command).
     /// - Returns: The target window
-    static func userDefinedTargetWindow() -> Window? {
+    static func userDefinedTargetWindow(triggerSource: TriggerSource = .keyboard) -> Window? {
         var result: Window?
 
-        log.info("Getting window at cursor...")
+        let shouldUseWindowUnderCursor = Defaults[.resizeWindowUnderCursor]
+            && (!Defaults[.resizeWindowUnderCursorOnlyOnMouseTrigger] || triggerSource == .mouse)
 
-        if Defaults[.resizeWindowUnderCursor],
-           let mouseLocation = CGEvent.mouseLocation,
-           let window = windowAtPosition(mouseLocation) {
-            result = window
+        if shouldUseWindowUnderCursor {
+            log.info("Getting window at cursor...")
+
+            if let mouseLocation = CGEvent.mouseLocation,
+               let window = windowAtPosition(mouseLocation) {
+                result = window
+            }
         }
 
         if result == nil {

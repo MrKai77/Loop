@@ -37,7 +37,7 @@ final class LoopManager {
         windowActionCache: windowActionCache,
         openCallback: { [weak self] action in
             Task {
-                await self?.openLoop(startingAction: action)
+                await self?.openLoop(startingAction: action, triggerSource: .keyboard)
             }
         },
         closeCallback: { [weak self] forceClose in
@@ -53,7 +53,7 @@ final class LoopManager {
     private(set) lazy var middleClickTrigger = MiddleClickTrigger(
         openCallback: { [weak self] action in
             Task {
-                await self?.openLoop(startingAction: action)
+                await self?.openLoop(startingAction: action, triggerSource: .mouse)
             }
         },
         closeCallback: { [weak self] forceClose in
@@ -108,7 +108,7 @@ final class LoopManager {
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    private func openLoop(startingAction: WindowAction) async {
+    private func openLoop(startingAction: WindowAction, triggerSource: TriggerSource = .keyboard) async {
         guard AccessibilityManager.shared.isGranted else {
             return
         }
@@ -125,7 +125,7 @@ extension LoopManager {
             return
         }
 
-        let window = WindowUtility.userDefinedTargetWindow()
+        let window = WindowUtility.userDefinedTargetWindow(triggerSource: triggerSource)
 
         guard
             window?.isAppExcluded != true,

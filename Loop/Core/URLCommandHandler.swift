@@ -484,7 +484,7 @@ final class URLCommandHandler {
 
         if let keybind = keybinds.first(where: { $0.name?.lowercased() == keybindName.lowercased() }) {
             writeToOutput("[URLHandler] Executing keybind: \(keybind.name ?? "unnamed")")
-            if let window = WindowUtility.userDefinedTargetWindow(),
+            if let window = WindowUtility.userDefinedTargetWindow(triggerSource: .urlCommand),
                let screen = NSScreen.main {
                 Task {
                     _ = try await WindowActionEngine.shared.apply(
@@ -610,7 +610,7 @@ final class URLCommandHandler {
     /// - Parameter visibleWindows: Array of visible windows to choose from
     /// - Returns: The most appropriate window or nil if none found
     private func findTargetWindow(from visibleWindows: [Window]) -> Window? {
-        if let targetWindow = WindowUtility.userDefinedTargetWindow() {
+        if let targetWindow = WindowUtility.userDefinedTargetWindow(triggerSource: .urlCommand) {
             writeToOutput("[URLHandler] Using WindowEngine.getTargetWindow(): \(targetWindow.title ?? "unknown")")
             return targetWindow
         }

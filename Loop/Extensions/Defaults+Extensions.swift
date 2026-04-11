@@ -52,6 +52,7 @@ extension Defaults.Keys {
     static let useScreenWithCursor = Key<Bool>("useScreenWithCursor", default: true, iCloud: true)
     static let moveCursorWithWindow = Key<Bool>("moveCursorWithWindow", default: false, iCloud: true)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false, iCloud: true)
+    static let resizeWindowUnderCursorOnlyOnMouseTrigger = Key<Bool>("resizeWindowUnderCursorOnlyOnMouseTrigger", default: false, iCloud: true)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true, iCloud: true)
     static let respectStageManager = Key<Bool>("respectStageManager", default: true, iCloud: true)
     static let stageStripSize = Key<CGFloat>("stageStripSize", default: 150, iCloud: true)

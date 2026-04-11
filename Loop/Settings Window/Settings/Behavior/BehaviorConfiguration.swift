@@ -23,6 +23,7 @@ struct BehaviorConfigurationView: View {
     @Default(.useScreenWithCursor) var useScreenWithCursor
     @Default(.moveCursorWithWindow) var moveCursorWithWindow
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
+    @Default(.resizeWindowUnderCursorOnlyOnMouseTrigger) var resizeWindowUnderCursorOnlyOnMouseTrigger
     @Default(.focusWindowOnResize) var focusWindowOnResize
     @Default(.respectStageManager) var respectStageManager
     @Default(.stageStripSize) var stageStripSize
@@ -46,6 +47,7 @@ struct BehaviorConfigurationView: View {
             luminareAnimation,
             value: [
                 resizeWindowUnderCursor,
+                resizeWindowUnderCursorOnlyOnMouseTrigger,
                 windowSnapping,
                 respectStageManager
             ]
@@ -100,9 +102,13 @@ struct BehaviorConfigurationView: View {
 
             LuminareToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)
 
-            // If the system WM is enabled, the window under the cursor requires focus.
-            if resizeWindowUnderCursor, !useSystemWindowManagerWhenAvailable {
-                LuminareToggle("Focus window on resize", isOn: $focusWindowOnResize)
+            if resizeWindowUnderCursor {
+                LuminareToggle("Only with mouse trigger", isOn: $resizeWindowUnderCursorOnlyOnMouseTrigger)
+
+                // If the system WM is enabled, the window under the cursor requires focus.
+                if !useSystemWindowManagerWhenAvailable {
+                    LuminareToggle("Focus window on resize", isOn: $focusWindowOnResize)
+                }
             }
         }
     }
