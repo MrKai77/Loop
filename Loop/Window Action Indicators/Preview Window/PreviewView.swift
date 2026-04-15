@@ -24,7 +24,7 @@ struct PreviewView: View {
     }
 
     private var cornerRadii: RectangleCornerRadii {
-        viewModel.overrideCornerRadii?.inset(by: previewPadding) ?? RectangleCornerRadii(
+        viewModel.overrideCornerRadii ?? RectangleCornerRadii(
             topLeading: previewCornerRadius,
             bottomLeading: previewCornerRadius,
             bottomTrailing: previewCornerRadius,
