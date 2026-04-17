@@ -24,6 +24,7 @@ final class LoopManager {
     private let updater = Updater.shared
 
     private var accessibilityCheckerTask: Task<(), Never>?
+    private var gestureToggleTask: Task<(), Never>?
 
     private(set) var isLoopActive: Bool = false
 
@@ -117,10 +118,24 @@ final class LoopManager {
                 if status {
                     await keybindTrigger.start()
                     middleClickTrigger.start()
-                    multitouchTrigger.start()
+                    if Defaults[.enableGestures] {
+                        multitouchTrigger.start()
+                    }
                 } else {
                     keybindTrigger.stop()
                     middleClickTrigger.stop()
+                    multitouchTrigger.stop()
+                }
+            }
+        }
+
+        gestureToggleTask = Task(priority: .background) { [weak self] in
+            for await enabled in Defaults.updates(.enableGestures) {
+                guard let self, !Task.isCancelled else { break }
+
+                if enabled, AccessibilityManager.shared.isGranted {
+                    multitouchTrigger.start()
+                } else {
                     multitouchTrigger.stop()
                 }
             }

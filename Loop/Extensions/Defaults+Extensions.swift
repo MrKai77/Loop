@@ -70,6 +70,10 @@ extension Defaults.Keys {
     static let cycleBackwardsOnShiftPressed = Key<Bool>("cycleBackwardsOnShiftPressed", default: true, iCloud: true)
     static let keybinds = Key<[WindowAction]>("keybinds", default: WindowAction.defaultKeybinds, iCloud: true)
 
+    // Gestures
+    static let enableGestures = Key<Bool>("enableGestures", default: false, iCloud: true)
+    static let gestureBindings = Key<[GestureBinding]>("gestureBindings", default: GestureBinding.defaultBindings, iCloud: true)
+
     // Advanced
     static let useSystemWindowManagerWhenAvailable = Key<Bool>("useSystemWindowManagerWhenAvailable", default: false, iCloud: true)
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false, iCloud: true)
@@ -140,6 +144,12 @@ extension Defaults.Keys {
     /// Adjust with `defaults write com.MrKai77.Loop triggerKeyTimeout -float x`
     /// Reset with `defaults delete com.MrKai77.Loop triggerKeyTimeout`
     static let triggerKeyTimeout = Key<Double>("triggerKeyTimeout", default: 0, iCloud: true)
+    
+    /// Height of the titlebar activation zone for gesture bindings, defined in points.
+    /// Gestures with the `.titlebar` activation zone will only trigger when the cursor is within this distance from the top of a window.
+    /// Adjust with `defaults write com.MrKai77.Loop gestureTitlebarHeight -float x`
+    /// Reset with `defaults delete com.MrKai77.Loop gestureTitlebarHeight`
+    static let gestureTitlebarHeight = Key<CGFloat>("gestureTitlebarHeight", default: 52, iCloud: true)
 
     // Migrator
 

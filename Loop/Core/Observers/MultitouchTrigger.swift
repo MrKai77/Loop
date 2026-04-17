@@ -5,6 +5,7 @@
 //  Created by Kai Azim on 2026-01-30.
 //
 
+import Defaults
 import Scribe
 import Subsurface
 import SwiftUI
@@ -18,14 +19,13 @@ final class MultitouchTrigger {
     private let checkIfLoopOpen: () -> Bool
 
     private let gestureMonitor = SubsurfaceMonitor()
-    private let gestureRecognizer = SubsurfaceGestureRecognizer(fingerCount: 2)
     private let gestureBlocker: MultitouchGestureBlocker = .init()
 
-    private var didOpenLoopWithThisGesture = false
-    private var isGestureRejected = false
+    private var recognizersByFingerCount: [Int: SubsurfaceGestureRecognizer] = [:]
+    private var eventTasksByFingerCount: [Int: Task<Void, Never>] = [:]
+    private var gestureStatesByFingerCount: [Int: GestureState] = [:]
 
-    private var lastTriggeredActionIndex: Int?
-    private var lastTriggeredDistance: CGFloat = 0
+    private var bindingsObservationTask: Task<Void, Never>?
 
     private let panActivationThreshold: CGFloat = 0.3
     private let panCycleStepSize: CGFloat = 0.1
@@ -37,6 +37,13 @@ final class MultitouchTrigger {
     }
 
     private static let failedToResolveKeybindAction: WindowAction = .init(.noAction)
+
+    private struct GestureState {
+        var didOpenLoopWithThisGesture = false
+        var isGestureRejected = false
+        var lastTriggeredActionIndex: Int?
+        var lastTriggeredDistance: CGFloat = 0
+    }
 
     init(
         windowActionCache: WindowActionCache,
@@ -54,14 +61,64 @@ final class MultitouchTrigger {
 
     func start() {
         gestureMonitor.start()
+        rebuildRecognizers()
 
-        Task {
-            for await event in gestureRecognizer.events(from: gestureMonitor) {
+        bindingsObservationTask = Task { [weak self] in
+            for await _ in Defaults.updates(.gestureBindings) {
+                guard !Task.isCancelled, let self else { break }
+                self.rebuildRecognizers()
+            }
+        }
+    }
+
+    func stop() {
+        bindingsObservationTask?.cancel()
+        bindingsObservationTask = nil
+
+        for (fingerCount, _) in eventTasksByFingerCount {
+            stopRecognizer(for: fingerCount)
+        }
+
+        eventTasksByFingerCount.removeAll()
+        recognizersByFingerCount.removeAll()
+        gestureStatesByFingerCount.removeAll()
+
+        gestureMonitor.stop()
+    }
+
+    private func rebuildRecognizers() {
+        let bindings = Defaults[.gestureBindings]
+        let neededFingerCounts = Set(bindings.map(\.fingerCount))
+        let currentFingerCounts = Set(recognizersByFingerCount.keys)
+
+        // Remove stale recognizers
+        for fingerCount in currentFingerCounts.subtracting(neededFingerCounts) {
+            stopRecognizer(for: fingerCount)
+            recognizersByFingerCount.removeValue(forKey: fingerCount)
+            eventTasksByFingerCount.removeValue(forKey: fingerCount)
+            gestureStatesByFingerCount.removeValue(forKey: fingerCount)
+        }
+
+        // Add new recognizers
+        for fingerCount in neededFingerCounts.subtracting(currentFingerCounts) {
+            startRecognizer(for: fingerCount)
+        }
+    }
+
+    private func startRecognizer(for fingerCount: Int) {
+        let recognizer = SubsurfaceGestureRecognizer(fingerCount: fingerCount)
+        recognizersByFingerCount[fingerCount] = recognizer
+        gestureStatesByFingerCount[fingerCount] = GestureState()
+
+        eventTasksByFingerCount[fingerCount] = Task { [weak self] in
+            guard let self else { return }
+            for await event in recognizer.events(from: gestureMonitor) {
+                guard !Task.isCancelled else { break }
                 switch event {
                 case let .pan(pan):
-                    await handlePan(pan)
+                    await self.handlePan(pan, fingerCount: fingerCount)
                 case let .pinch(pinch):
-                    await handlePinch(pinch)
+                    await self.handlePinch(pinch, fingerCount: fingerCount)
                 case .rotation:
                     break
                 }
@@ -69,19 +126,37 @@ final class MultitouchTrigger {
         }
     }
 
-    func stop() {
-        gestureMonitor.stop()
-        gestureRecognizer.reset()
-        resetLoopState()
+    private func stopRecognizer(for fingerCount: Int) {
+        eventTasksByFingerCount[fingerCount]?.cancel()
+        recognizersByFingerCount[fingerCount]?.reset()
+        if let state = gestureStatesByFingerCount[fingerCount], state.didOpenLoopWithThisGesture {
+            closeCallback(false)
+        }
+        gestureBlocker.stop()
     }
 
-    private func handlePan(_ pan: SubsurfaceGestureEvent.PanEvent) async {
+    private func handlePan(_ pan: SubsurfaceGestureEvent.PanEvent, fingerCount: Int) async {
+        let bindings = Defaults[.gestureBindings]
+        let panBindings = bindings.filter { $0.gestureType.isPan && $0.fingerCount == fingerCount }
+
+        if let radialMenuBinding = panBindings.first(where: { $0.gestureType == .radialMenu }) {
+            await handleRadialMenuPan(pan, fingerCount: fingerCount, binding: radialMenuBinding)
+        } else if let directionalBinding = matchDirectionalPanBinding(angle: pan.angle, from: panBindings) {
+            await handleDirectionalPan(pan, fingerCount: fingerCount, binding: directionalBinding)
+        }
+    }
+
+    private func handleRadialMenuPan(
+        _ pan: SubsurfaceGestureEvent.PanEvent,
+        fingerCount: Int,
+        binding: GestureBinding
+    ) async {
         switch pan.phase {
         case .began:
-            await handleGestureBegan()
+            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard !isGestureRejected else { return }
+            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
 
             let angleFromOrigin = pan.angle + .pi / 2
             var normalizedAngle = angleFromOrigin
@@ -99,92 +174,244 @@ final class MultitouchTrigger {
                 newIndex = Int((normalizedAngle + halfAngleSpan) / actionAngleSpan) % actions.count
             }
 
-            // Determine if we're cycling the same action backward (pulling back)
-            let isSameAction = lastTriggeredActionIndex == newIndex
-            let isReversing = isSameAction && pan.distance < lastTriggeredDistance - panCycleStepSize
+            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
+            let isSameAction = state.lastTriggeredActionIndex == newIndex
+            let isReversing = isSameAction && pan.distance < state.lastTriggeredDistance - panCycleStepSize
 
             if isSameAction {
-                guard abs(pan.distance - lastTriggeredDistance) >= panCycleStepSize else { return }
+                guard abs(pan.distance - state.lastTriggeredDistance) >= panCycleStepSize else { return }
             }
 
-            lastTriggeredActionIndex = newIndex
-            lastTriggeredDistance = pan.distance
-            triggerAction(at: newIndex, from: actions, reverse: isReversing)
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = newIndex
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pan.distance
+            triggerRadialMenuAction(at: newIndex, from: actions, reverse: isReversing)
 
         case .ended, .cancelled:
-            resetLoopState()
+            resetLoopState(for: fingerCount)
 
         default:
             break
         }
     }
 
-    private func handlePinch(_ pinch: SubsurfaceGestureEvent.PinchEvent) async {
-        switch pinch.phase {
+    private func handleDirectionalPan(
+        _ pan: SubsurfaceGestureEvent.PanEvent,
+        fingerCount: Int,
+        binding: GestureBinding
+    ) async {
+        switch pan.phase {
         case .began:
-            await handleGestureBegan()
+            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard !isGestureRejected else { return }
+            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
+
+            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
+            let isSameAction = state.lastTriggeredActionIndex == 0
+            let isReversing = isSameAction && pan.distance < state.lastTriggeredDistance - panCycleStepSize
+
+            if isSameAction {
+                guard abs(pan.distance - state.lastTriggeredDistance) >= panCycleStepSize else { return }
+            }
+
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = 0
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pan.distance
+            triggerSingleAction(from: binding, reverse: isReversing)
+
+        case .ended, .cancelled:
+            resetLoopState(for: fingerCount)
+
+        default:
+            break
+        }
+    }
+
+    private func handlePinch(_ pinch: SubsurfaceGestureEvent.PinchEvent, fingerCount: Int) async {
+        let bindings = Defaults[.gestureBindings]
+
+        // If a radial menu binding exists at this finger count, pinch triggers the center action
+        if let radialMenuBinding = bindings.first(where: { $0.gestureType == .radialMenu && $0.fingerCount == fingerCount }) {
+            await handleRadialMenuPinch(pinch, fingerCount: fingerCount, binding: radialMenuBinding)
+        } else if let pinchBinding = bindings.first(where: { $0.gestureType == .pinch && $0.fingerCount == fingerCount }) {
+            await handleSingleActionPinch(pinch, fingerCount: fingerCount, binding: pinchBinding)
+        }
+    }
+
+    /// Pinch within a radial menu binding, triggers the center (last) radial menu action.
+    private func handleRadialMenuPinch(
+        _ pinch: SubsurfaceGestureEvent.PinchEvent,
+        fingerCount: Int,
+        binding: GestureBinding
+    ) async {
+        switch pinch.phase {
+        case .began:
+            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
+
+        case .changed:
+            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
 
             let actions = radialMenuActions
             let centerActionIndex = actions.count - 1
-            let isSameAction = lastTriggeredActionIndex == centerActionIndex
-            let isReversing = isSameAction && pinch.scale < lastTriggeredDistance - pinchCycleStepSize
+
+            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
+            let isSameAction = state.lastTriggeredActionIndex == centerActionIndex
+            let isReversing = isSameAction && pinch.scale < state.lastTriggeredDistance - pinchCycleStepSize
 
             if isSameAction {
-                guard abs(pinch.scale - lastTriggeredDistance) >= pinchCycleStepSize else { return }
+                guard abs(pinch.scale - state.lastTriggeredDistance) >= pinchCycleStepSize else { return }
             } else {
                 guard abs(pinch.scale - 1.0) >= pinchActivationThreshold else { return }
             }
 
-            lastTriggeredActionIndex = centerActionIndex
-            lastTriggeredDistance = pinch.scale
-            triggerAction(at: centerActionIndex, from: actions[...], reverse: isReversing)
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = centerActionIndex
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pinch.scale
+            triggerRadialMenuAction(at: centerActionIndex, from: actions[...], reverse: isReversing)
 
         case .ended, .cancelled:
-            resetLoopState()
+            resetLoopState(for: fingerCount)
 
         default:
             break
         }
     }
 
-    private func handleGestureBegan() async {
-        let window = isCursorOverTitlebarOfWindow()
+    /// Standalone pinch binding, triggers the binding's configured action.
+    private func handleSingleActionPinch(
+        _ pinch: SubsurfaceGestureEvent.PinchEvent,
+        fingerCount: Int,
+        binding: GestureBinding
+    ) async {
+        switch pinch.phase {
+        case .began:
+            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
+
+        case .changed:
+            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
+
+            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
+            let isSameAction = state.lastTriggeredActionIndex == 0
+            let isReversing = isSameAction && pinch.scale < state.lastTriggeredDistance - pinchCycleStepSize
+
+            if isSameAction {
+                guard abs(pinch.scale - state.lastTriggeredDistance) >= pinchCycleStepSize else { return }
+            } else {
+                guard abs(pinch.scale - 1.0) >= pinchActivationThreshold else { return }
+            }
+
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = 0
+            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pinch.scale
+            triggerSingleAction(from: binding, reverse: isReversing)
+
+        case .ended, .cancelled:
+            resetLoopState(for: fingerCount)
+
+        default:
+            break
+        }
+    }
+
+    private func handleGestureBegan(fingerCount: Int, binding: GestureBinding) async {
+        let window = findTargetWindow(for: binding)
         let loopWasAlreadyOpen = checkIfLoopOpen()
 
         guard window != nil || loopWasAlreadyOpen else {
-            isGestureRejected = true
+            gestureStatesByFingerCount[fingerCount]?.isGestureRejected = true
             return
         }
 
-        isGestureRejected = false
-        lastTriggeredActionIndex = nil
-        lastTriggeredDistance = 0
+        gestureStatesByFingerCount[fingerCount]?.isGestureRejected = false
+        gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = nil
+        gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = 0
         gestureBlocker.start()
 
         if let window, !loopWasAlreadyOpen {
             do {
                 try await openCallback(.init(.noSelection), window)
-                didOpenLoopWithThisGesture = true
+                gestureStatesByFingerCount[fingerCount]?.didOpenLoopWithThisGesture = true
             } catch {
                 gestureBlocker.stop()
-                isGestureRejected = true
+                gestureStatesByFingerCount[fingerCount]?.isGestureRejected = true
             }
         }
     }
 
-    private func resetLoopState() {
-        if didOpenLoopWithThisGesture {
+    private func resetLoopState(for fingerCount: Int) {
+        if gestureStatesByFingerCount[fingerCount]?.didOpenLoopWithThisGesture == true {
             closeCallback(false)
         }
 
         gestureBlocker.stop()
-        didOpenLoopWithThisGesture = false
-        isGestureRejected = false
-        lastTriggeredActionIndex = nil
-        lastTriggeredDistance = 0
+        gestureStatesByFingerCount[fingerCount] = GestureState()
+    }
+
+    private func findTargetWindow(for binding: GestureBinding) -> Window? {
+        let cursorPosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
+
+        guard let window = WindowUtility.windowAtPosition(cursorPosition) else {
+            return nil
+        }
+
+        switch binding.activationZone {
+        case .titlebar:
+            let titlebarHeight: CGFloat = Defaults[.gestureTitlebarHeight]
+            let titlebarMinY = window.frame.minY
+            let titlebarMaxY = window.frame.minY + titlebarHeight
+            let isInTitlebar = cursorPosition.y >= titlebarMinY && cursorPosition.y <= titlebarMaxY
+            return isInTitlebar ? window : nil
+
+        case .anywhere:
+            return window
+        }
+    }
+
+    private func triggerRadialMenuAction(at index: Int, from actions: ArraySlice<RadialMenuAction>, reverse: Bool = false) {
+        let action = actions[index]
+
+        let resolvedAction: WindowAction = switch action.type {
+        case let .custom(windowAction):
+            windowAction
+        case let .keybindReference(id):
+            windowActionCache.actionsByIdentifier[id] ?? Self.failedToResolveKeybindAction
+        }
+
+        changeAction(resolvedAction, reverse)
+    }
+
+    private func triggerSingleAction(from binding: GestureBinding, reverse: Bool = false) {
+        let resolvedAction: WindowAction
+
+        switch binding.action {
+        case .radialMenuActions:
+            return
+        case let .singleAction(actionType):
+            switch actionType {
+            case let .custom(windowAction):
+                resolvedAction = windowAction
+            case let .keybindReference(id):
+                resolvedAction = windowActionCache.actionsByIdentifier[id] ?? Self.failedToResolveKeybindAction
+            }
+        }
+
+        changeAction(resolvedAction, reverse)
+    }
+
+    private func matchDirectionalPanBinding(angle: CGFloat, from bindings: [GestureBinding]) -> GestureBinding? {
+        let angleFromOrigin = angle + .pi / 2
+        var normalizedAngle = angleFromOrigin
+        if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
+
+        let direction: GestureBinding.GestureType
+        if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
+            direction = .panUp
+        } else if normalizedAngle >= .pi / 4 && normalizedAngle < 3 * .pi / 4 {
+            direction = .panRight
+        } else if normalizedAngle >= 3 * .pi / 4 && normalizedAngle < 5 * .pi / 4 {
+            direction = .panDown
+        } else {
+            direction = .panLeft
+        }
+
+        return bindings.first { $0.gestureType == direction }
     }
 
     private func indexWithCardinalBias(angle: CGFloat, actionCount: Int, cardinalBias: CGFloat = 0.1) -> Int {
@@ -210,35 +437,5 @@ final class MultitouchTrigger {
                 return rawSegment
             }
         }
-    }
-
-    private func isCursorOverTitlebarOfWindow() -> Window? {
-        let cursorPosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
-
-        guard let window = WindowUtility.windowAtPosition(cursorPosition) else {
-            return nil
-        }
-
-        let titlebarHeight: CGFloat = 52.0
-
-        let titlebarMinY = window.frame.minY
-        let titlebarMaxY = window.frame.minY + titlebarHeight
-
-        let isInTitlebar = cursorPosition.y >= titlebarMinY && cursorPosition.y <= titlebarMaxY
-
-        return isInTitlebar ? window : nil
-    }
-
-    private func triggerAction(at index: Int, from actions: ArraySlice<RadialMenuAction>, reverse: Bool = false) {
-        let action = actions[index]
-
-        let resolvedAction: WindowAction = switch action.type {
-        case let .custom(windowAction):
-            windowAction
-        case let .keybindReference(id):
-            windowActionCache.actionsByIdentifier[id] ?? Self.failedToResolveKeybindAction
-        }
-
-        changeAction(resolvedAction, reverse)
     }
 }
