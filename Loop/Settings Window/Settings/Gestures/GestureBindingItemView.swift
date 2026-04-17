@@ -208,9 +208,9 @@ struct GestureBindingItemView: View {
     private var resolvedAction: WindowAction? {
         switch binding.action {
         case .radialMenuActions:
-            return nil
+            nil
         case let .singleAction(actionType):
-            return actionType.resolvedAction
+            actionType.resolvedAction
         }
     }
 

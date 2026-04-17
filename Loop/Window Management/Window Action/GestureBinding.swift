@@ -36,7 +36,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
         case panUp, panDown, panLeft, panRight
         /// Pinch gesture.
         case pinch
-        
+
         var displayName: String {
             switch self {
             case .radialMenu: "Radial Menu"
@@ -47,7 +47,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
             case .pinch: "Pinch"
             }
         }
-        
+
         var image: Image {
             switch self {
             case .radialMenu: Image(.loop)
@@ -88,15 +88,15 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
     enum ActivationZone: String, Codable, Hashable, CaseIterable {
         case titlebar
         case anywhere
-        
+
         var displayName: String {
             switch self {
             case .titlebar: "Titlebar"
-                
+
             case .anywhere: "Anywhere"
             }
         }
-        
+
         var systemImage: String {
             switch self {
             case .titlebar: "menubar.rectangle"
@@ -133,7 +133,7 @@ extension GestureBinding {
     static func conflictingIDs(in bindings: [GestureBinding]) -> Set<UUID> {
         var result = Set<UUID>()
         for i in bindings.indices {
-            for j in (i + 1)..<bindings.count {
+            for j in (i + 1) ..< bindings.count {
                 if bindings[i].conflicts(with: bindings[j]) {
                     result.insert(bindings[i].id)
                     result.insert(bindings[j].id)

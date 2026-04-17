@@ -22,10 +22,10 @@ final class MultitouchTrigger {
     private let gestureBlocker: MultitouchGestureBlocker = .init()
 
     private var recognizersByFingerCount: [Int: SubsurfaceGestureRecognizer] = [:]
-    private var eventTasksByFingerCount: [Int: Task<Void, Never>] = [:]
+    private var eventTasksByFingerCount: [Int: Task<(), Never>] = [:]
     private var gestureStatesByFingerCount: [Int: GestureState] = [:]
 
-    private var bindingsObservationTask: Task<Void, Never>?
+    private var bindingsObservationTask: Task<(), Never>?
 
     private let panActivationThreshold: CGFloat = 0.3
     private let panCycleStepSize: CGFloat = 0.1
@@ -66,7 +66,7 @@ final class MultitouchTrigger {
         bindingsObservationTask = Task { [weak self] in
             for await _ in Defaults.updates(.gestureBindings) {
                 guard !Task.isCancelled, let self else { break }
-                self.rebuildRecognizers()
+                rebuildRecognizers()
             }
         }
     }
@@ -116,9 +116,9 @@ final class MultitouchTrigger {
                 guard !Task.isCancelled else { break }
                 switch event {
                 case let .pan(pan):
-                    await self.handlePan(pan, fingerCount: fingerCount)
+                    await handlePan(pan, fingerCount: fingerCount)
                 case let .pinch(pinch):
-                    await self.handlePinch(pinch, fingerCount: fingerCount)
+                    await handlePinch(pinch, fingerCount: fingerCount)
                 case .rotation:
                     break
                 }
@@ -400,15 +400,14 @@ final class MultitouchTrigger {
         var normalizedAngle = angleFromOrigin
         if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
 
-        let direction: GestureBinding.GestureType
-        if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
-            direction = .panUp
-        } else if normalizedAngle >= .pi / 4 && normalizedAngle < 3 * .pi / 4 {
-            direction = .panRight
-        } else if normalizedAngle >= 3 * .pi / 4 && normalizedAngle < 5 * .pi / 4 {
-            direction = .panDown
+        let direction: GestureBinding.GestureType = if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
+            .panUp
+        } else if normalizedAngle >= .pi / 4, normalizedAngle < 3 * .pi / 4 {
+            .panRight
+        } else if normalizedAngle >= 3 * .pi / 4, normalizedAngle < 5 * .pi / 4 {
+            .panDown
         } else {
-            direction = .panLeft
+            .panLeft
         }
 
         return bindings.first { $0.gestureType == direction }

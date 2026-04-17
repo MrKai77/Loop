@@ -144,7 +144,7 @@ extension Defaults.Keys {
     /// Adjust with `defaults write com.MrKai77.Loop triggerKeyTimeout -float x`
     /// Reset with `defaults delete com.MrKai77.Loop triggerKeyTimeout`
     static let triggerKeyTimeout = Key<Double>("triggerKeyTimeout", default: 0, iCloud: true)
-    
+
     /// Height of the titlebar activation zone for gesture bindings, defined in points.
     /// Gestures with the `.titlebar` activation zone will only trigger when the cursor is within this distance from the top of a window.
     /// Adjust with `defaults write com.MrKai77.Loop gestureTitlebarHeight -float x`

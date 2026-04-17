@@ -5,8 +5,8 @@
 //  Created by Kai Azim on 2026-04-16.
 //
 
-import SwiftUI
 import Luminare
+import SwiftUI
 
 struct GestureConfigPopoverView: View {
     @State private var binding: GestureBinding
@@ -49,13 +49,13 @@ struct GestureConfigPopoverView: View {
                 }
                 .labelsHidden()
             }
-            
+
             LuminareCompose("Fingers") {
                 HStack {
                     TextField("", value: $binding.fingerCount, format: .number)
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 40)
-                    
+
                     Stepper("", value: $binding.fingerCount, in: 2...5)
                         .labelsHidden()
                 }
