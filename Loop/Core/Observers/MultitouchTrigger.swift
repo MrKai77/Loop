@@ -371,7 +371,7 @@ final class MultitouchTrigger {
         case let .custom(windowAction):
             windowAction
         case let .keybindReference(id):
-            windowActionCache.actionsByIdentifier[id] ?? Self.failedToResolveKeybindAction
+            resolveKeybindReference(id)
         }
 
         changeAction(resolvedAction, reverse)
@@ -388,11 +388,19 @@ final class MultitouchTrigger {
             case let .custom(windowAction):
                 resolvedAction = windowAction
             case let .keybindReference(id):
-                resolvedAction = windowActionCache.actionsByIdentifier[id] ?? Self.failedToResolveKeybindAction
+                resolvedAction = resolveKeybindReference(id)
             }
         }
 
         changeAction(resolvedAction, reverse)
+    }
+
+    private func resolveKeybindReference(_ id: UUID) -> WindowAction {
+        if let cached = windowActionCache.actionsByIdentifier[id] {
+            return cached
+        }
+        log.warn("Gesture references keybind \(id) that no longer exists")
+        return Self.failedToResolveKeybindAction
     }
 
     private func matchDirectionalPanBinding(angle: CGFloat, from bindings: [GestureBinding]) -> GestureBinding? {
