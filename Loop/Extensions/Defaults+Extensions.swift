@@ -149,7 +149,7 @@ extension Defaults.Keys {
     /// Gestures with the `.titlebar` activation zone will only trigger when the cursor is within this distance from the top of a window.
     /// Adjust with `defaults write com.MrKai77.Loop gestureTitlebarHeight -float x`
     /// Reset with `defaults delete com.MrKai77.Loop gestureTitlebarHeight`
-    static let gestureTitlebarHeight = Key<CGFloat>("gestureTitlebarHeight", default: 52, iCloud: true)
+    static let gestureTitlebarHeight = Key<CGFloat>("gestureTitlebarHeight", default: 32, iCloud: true)
 
     // Migrator
 
