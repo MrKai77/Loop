@@ -8,12 +8,19 @@
 import AppKit
 import Scribe
 
+/// Reference-counted because the blocker is shared across in-flight
+/// gestures: one gesture ending mustn't disable blocking for others still
+/// active. `start()` is also idempotent so duplicate calls don't leak the
+/// previous `ActiveEventMonitor` (it self-retains via `Unmanaged.passRetained`).
 @Loggable
 final class MultitouchGestureBlocker {
     private var monitor: ActiveEventMonitor?
+    private var activeCount: Int = 0
 
     func start() {
-        stop()
+        activeCount += 1
+        guard monitor == nil else { return }
+
         log.info("Starting gesture blocker")
 
         let eventTypes: [CGEventType] = [
@@ -29,6 +36,9 @@ final class MultitouchGestureBlocker {
     }
 
     func stop() {
+        activeCount = max(0, activeCount - 1)
+        guard activeCount == 0 else { return }
+
         monitor?.stop()
         monitor = nil
 
