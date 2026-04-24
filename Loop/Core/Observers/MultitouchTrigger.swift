@@ -21,10 +21,7 @@ final class MultitouchTrigger {
     private let gestureMonitor = SubsurfaceMonitor()
     private let gestureBlocker: MultitouchGestureBlocker = .init()
 
-    private var recognizersByFingerCount: [Int: SubsurfaceGestureRecognizer] = [:]
-    private var eventTasksByFingerCount: [Int: Task<(), Never>] = [:]
-    private var gestureStatesByFingerCount: [Int: GestureState] = [:]
-
+    private var recognizers: [Int: RecognizerEntry] = [:]
     private var bindingsObservationTask: Task<(), Never>?
 
     private let panActivationThreshold: CGFloat = 0.3
@@ -53,6 +50,26 @@ final class MultitouchTrigger {
         var lastCommitPinchOffset: CGFloat = 0
         /// `+1` outward, `-1` inward; locked at activation.
         var pinchDirection: Int = 0
+    }
+
+    /// Snapshot of the bindings that apply at this finger count, so handlers
+    /// don't fire actions against a binding the user has just deleted.
+    private struct RecognizerEntry {
+        let recognizer: SubsurfaceGestureRecognizer
+        var task: Task<(), Never>?
+        var state: GestureState
+        var radialMenuBinding: GestureBinding?
+        var directionalBindings: [GestureBinding]
+        var pinchBinding: GestureBinding?
+
+        static func categorize(
+            _ bindings: [GestureBinding]
+        ) -> (radial: GestureBinding?, directionals: [GestureBinding], pinch: GestureBinding?) {
+            let radial = bindings.first { $0.gestureType == .radialMenu }
+            let directionals = bindings.filter(\.gestureType.isDirectionalPan)
+            let pinch = bindings.first { $0.gestureType == .pinch }
+            return (radial, directionals, pinch)
+        }
     }
 
     init(
@@ -85,42 +102,54 @@ final class MultitouchTrigger {
         bindingsObservationTask?.cancel()
         bindingsObservationTask = nil
 
-        for (fingerCount, _) in eventTasksByFingerCount {
+        for fingerCount in Array(recognizers.keys) {
             stopRecognizer(for: fingerCount)
         }
-
-        eventTasksByFingerCount.removeAll()
-        recognizersByFingerCount.removeAll()
-        gestureStatesByFingerCount.removeAll()
+        recognizers.removeAll()
 
         gestureMonitor.stop()
     }
 
     private func rebuildRecognizers() {
-        let bindings = Defaults[.gestureBindings]
-        let neededFingerCounts = Set(bindings.map(\.fingerCount))
-        let currentFingerCounts = Set(recognizersByFingerCount.keys)
+        let bindingsByFingerCount = Dictionary(grouping: Defaults[.gestureBindings], by: \.fingerCount)
+        let neededFingerCounts = Set(bindingsByFingerCount.keys)
 
         // Remove stale recognizers
-        for fingerCount in currentFingerCounts.subtracting(neededFingerCounts) {
+        for fingerCount in Array(recognizers.keys) where !neededFingerCounts.contains(fingerCount) {
             stopRecognizer(for: fingerCount)
-            recognizersByFingerCount.removeValue(forKey: fingerCount)
-            eventTasksByFingerCount.removeValue(forKey: fingerCount)
-            gestureStatesByFingerCount.removeValue(forKey: fingerCount)
+            recognizers.removeValue(forKey: fingerCount)
         }
 
-        // Add new recognizers
-        for fingerCount in neededFingerCounts.subtracting(currentFingerCounts) {
-            startRecognizer(for: fingerCount)
+        // Add new recognizers or refresh cached bindings on existing ones.
+        for (fingerCount, bindings) in bindingsByFingerCount {
+            let (radial, directionals, pinch) = RecognizerEntry.categorize(bindings)
+            if recognizers[fingerCount] == nil {
+                startRecognizer(for: fingerCount, radial: radial, directionals: directionals, pinch: pinch)
+            } else {
+                recognizers[fingerCount]?.radialMenuBinding = radial
+                recognizers[fingerCount]?.directionalBindings = directionals
+                recognizers[fingerCount]?.pinchBinding = pinch
+            }
         }
     }
 
-    private func startRecognizer(for fingerCount: Int) {
+    private func startRecognizer(
+        for fingerCount: Int,
+        radial: GestureBinding?,
+        directionals: [GestureBinding],
+        pinch: GestureBinding?
+    ) {
         let recognizer = SubsurfaceGestureRecognizer(fingerCount: fingerCount)
-        recognizersByFingerCount[fingerCount] = recognizer
-        gestureStatesByFingerCount[fingerCount] = GestureState()
+        recognizers[fingerCount] = RecognizerEntry(
+            recognizer: recognizer,
+            task: nil,
+            state: GestureState(),
+            radialMenuBinding: radial,
+            directionalBindings: directionals,
+            pinchBinding: pinch
+        )
 
-        eventTasksByFingerCount[fingerCount] = Task { [weak self] in
+        let task = Task { [weak self] in
             guard let self else { return }
             for await event in recognizer.events(from: gestureMonitor) {
                 guard !Task.isCancelled else { break }
@@ -134,24 +163,25 @@ final class MultitouchTrigger {
                 }
             }
         }
+        recognizers[fingerCount]?.task = task
     }
 
     private func stopRecognizer(for fingerCount: Int) {
-        eventTasksByFingerCount[fingerCount]?.cancel()
-        recognizersByFingerCount[fingerCount]?.reset()
-        if let state = gestureStatesByFingerCount[fingerCount], state.didOpenLoopWithThisGesture {
+        guard let entry = recognizers[fingerCount] else { return }
+        entry.task?.cancel()
+        entry.recognizer.reset()
+        if entry.state.didOpenLoopWithThisGesture {
             closeCallback(false)
         }
         gestureBlocker.stop()
     }
 
     private func handlePan(_ pan: SubsurfaceGestureEvent.PanEvent, fingerCount: Int) async {
-        let bindings = Defaults[.gestureBindings]
-        let panBindings = bindings.filter { $0.gestureType.isPan && $0.fingerCount == fingerCount }
+        guard let entry = recognizers[fingerCount] else { return }
 
-        if let radialMenuBinding = panBindings.first(where: { $0.gestureType == .radialMenu }) {
+        if let radialMenuBinding = entry.radialMenuBinding {
             await handleRadialMenuPan(pan, fingerCount: fingerCount, binding: radialMenuBinding)
-        } else if let directionalBinding = matchDirectionalPanBinding(angle: pan.angle, from: panBindings) {
+        } else if let directionalBinding = matchDirectionalPanBinding(angle: pan.angle, from: entry.directionalBindings) {
             await handleDirectionalPan(pan, fingerCount: fingerCount, binding: directionalBinding)
         }
     }
@@ -166,7 +196,7 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
+            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             let angleFromOrigin = pan.angle + .pi / 2
             var normalizedAngle = angleFromOrigin
@@ -211,7 +241,7 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
+            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             commitPan(
                 &state,
@@ -231,12 +261,12 @@ final class MultitouchTrigger {
     }
 
     private func handlePinch(_ pinch: SubsurfaceGestureEvent.PinchEvent, fingerCount: Int) async {
-        let bindings = Defaults[.gestureBindings]
+        guard let entry = recognizers[fingerCount] else { return }
 
         // If a radial menu binding exists at this finger count, pinch triggers the center action
-        if let radialMenuBinding = bindings.first(where: { $0.gestureType == .radialMenu && $0.fingerCount == fingerCount }) {
+        if let radialMenuBinding = entry.radialMenuBinding {
             await handleRadialMenuPinch(pinch, fingerCount: fingerCount, binding: radialMenuBinding)
-        } else if let pinchBinding = bindings.first(where: { $0.gestureType == .pinch && $0.fingerCount == fingerCount }) {
+        } else if let pinchBinding = entry.pinchBinding {
             await handleSingleActionPinch(pinch, fingerCount: fingerCount, binding: pinchBinding)
         }
     }
@@ -252,7 +282,7 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
+            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             let actions = radialMenuActions
             guard !actions.isEmpty else { return }
@@ -286,7 +316,7 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
+            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             commitPinch(
                 &state,
@@ -310,35 +340,35 @@ final class MultitouchTrigger {
         let loopWasAlreadyOpen = checkIfLoopOpen()
 
         guard window != nil || loopWasAlreadyOpen else {
-            gestureStatesByFingerCount[fingerCount]?.isGestureRejected = true
+            recognizers[fingerCount]?.state.isGestureRejected = true
             return
         }
 
-        gestureStatesByFingerCount[fingerCount]?.isGestureRejected = false
-        gestureStatesByFingerCount[fingerCount]?.lastCommittedAction = nil
-        gestureStatesByFingerCount[fingerCount]?.lastCommitPanDistance = 0
-        gestureStatesByFingerCount[fingerCount]?.lastCommitPinchOffset = 0
-        gestureStatesByFingerCount[fingerCount]?.pinchDirection = 0
+        recognizers[fingerCount]?.state.isGestureRejected = false
+        recognizers[fingerCount]?.state.lastCommittedAction = nil
+        recognizers[fingerCount]?.state.lastCommitPanDistance = 0
+        recognizers[fingerCount]?.state.lastCommitPinchOffset = 0
+        recognizers[fingerCount]?.state.pinchDirection = 0
         gestureBlocker.start()
 
         if let window, !loopWasAlreadyOpen {
             do {
                 try await openCallback(.init(.noSelection), window)
-                gestureStatesByFingerCount[fingerCount]?.didOpenLoopWithThisGesture = true
+                recognizers[fingerCount]?.state.didOpenLoopWithThisGesture = true
             } catch {
                 gestureBlocker.stop()
-                gestureStatesByFingerCount[fingerCount]?.isGestureRejected = true
+                recognizers[fingerCount]?.state.isGestureRejected = true
             }
         }
     }
 
     private func resetLoopState(for fingerCount: Int) {
-        if gestureStatesByFingerCount[fingerCount]?.didOpenLoopWithThisGesture == true {
+        if recognizers[fingerCount]?.state.didOpenLoopWithThisGesture == true {
             closeCallback(false)
         }
 
         gestureBlocker.stop()
-        gestureStatesByFingerCount[fingerCount] = GestureState()
+        recognizers[fingerCount]?.state = GestureState()
     }
 
     private func findTargetWindow(for binding: GestureBinding) -> Window? {
@@ -374,7 +404,7 @@ final class MultitouchTrigger {
             guard distance >= panActivationThreshold else { return }
             state.lastCommittedAction = newKey
             state.lastCommitPanDistance = distance
-            gestureStatesByFingerCount[fingerCount] = state
+            recognizers[fingerCount]?.state = state
             fire(false)
             return
         }
@@ -383,17 +413,17 @@ final class MultitouchTrigger {
             let delta = distance - state.lastCommitPanDistance
             if delta >= panCycleStepSize {
                 state.lastCommitPanDistance = distance
-                gestureStatesByFingerCount[fingerCount] = state
+                recognizers[fingerCount]?.state = state
                 fire(false)
             } else if delta <= -panCycleStepSize {
                 state.lastCommitPanDistance = distance
-                gestureStatesByFingerCount[fingerCount] = state
+                recognizers[fingerCount]?.state = state
                 fire(true)
             }
         } else {
             state.lastCommittedAction = newKey
             state.lastCommitPanDistance = distance
-            gestureStatesByFingerCount[fingerCount] = state
+            recognizers[fingerCount]?.state = state
             fire(false)
         }
     }
@@ -410,7 +440,7 @@ final class MultitouchTrigger {
             state.pinchDirection = scale >= 1.0 ? 1 : -1
             state.lastCommittedAction = newKey
             state.lastCommitPinchOffset = (scale - 1.0) * CGFloat(state.pinchDirection)
-            gestureStatesByFingerCount[fingerCount] = state
+            recognizers[fingerCount]?.state = state
             fire(false)
             return
         }
@@ -419,11 +449,11 @@ final class MultitouchTrigger {
         let delta = offset - state.lastCommitPinchOffset
         if delta >= pinchCycleStepSize {
             state.lastCommitPinchOffset = offset
-            gestureStatesByFingerCount[fingerCount] = state
+            recognizers[fingerCount]?.state = state
             fire(false)
         } else if delta <= -pinchCycleStepSize {
             state.lastCommitPinchOffset = offset
-            gestureStatesByFingerCount[fingerCount] = state
+            recognizers[fingerCount]?.state = state
             fire(true)
         }
     }
