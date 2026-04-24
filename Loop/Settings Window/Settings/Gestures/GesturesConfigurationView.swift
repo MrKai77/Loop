@@ -31,9 +31,6 @@ struct GesturesConfigurationView: View {
             bindingsSection
                 .disabled(!enableGestures)
         }
-        // GestureBinding's synthesized Hashable covers its mutable fields,
-        // so editing a selected binding rehashes the stored struct and the
-        // Set goes stale. Reconcile by id after every change.
         .onChange(of: gestureBindings) { newValue in
             let bindingsByID = Dictionary(uniqueKeysWithValues: newValue.map { ($0.id, $0) })
             let selectedIDs = model.selectedBindings.map(\.id)

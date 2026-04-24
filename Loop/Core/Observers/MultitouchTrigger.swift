@@ -11,6 +11,7 @@ import Subsurface
 import SwiftUI
 
 @Loggable
+@MainActor
 final class MultitouchTrigger {
     private let windowActionCache: WindowActionCache
     private let openCallback: (WindowAction, Window) async throws -> ()
@@ -158,7 +159,7 @@ final class MultitouchTrigger {
                     await handlePan(pan, fingerCount: fingerCount)
                 case let .pinch(pinch):
                     await handlePinch(pinch, fingerCount: fingerCount)
-                case .rotation:
+                case .determining, .rotation:
                     break
                 }
             }
