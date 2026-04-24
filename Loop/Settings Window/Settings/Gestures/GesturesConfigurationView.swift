@@ -31,6 +31,14 @@ struct GesturesConfigurationView: View {
             bindingsSection
                 .disabled(!enableGestures)
         }
+        // GestureBinding's synthesized Hashable covers its mutable fields,
+        // so editing a selected binding rehashes the stored struct and the
+        // Set goes stale. Reconcile by id after every change.
+        .onChange(of: gestureBindings) { newValue in
+            let bindingsByID = Dictionary(uniqueKeysWithValues: newValue.map { ($0.id, $0) })
+            let selectedIDs = model.selectedBindings.map(\.id)
+            model.selectedBindings = Set(selectedIDs.compactMap { bindingsByID[$0] })
+        }
     }
 
     private var settingsSection: some View {
@@ -51,7 +59,8 @@ struct GesturesConfigurationView: View {
                 .luminareRoundingBehavior(topLeading: true)
 
                 Button("Remove", role: .destructive) {
-                    gestureBindings.removeAll(where: model.selectedBindings.contains)
+                    let selectedIDs = Set(model.selectedBindings.map(\.id))
+                    gestureBindings.removeAll { selectedIDs.contains($0.id) }
                 }
                 .luminareRoundingBehavior(topTrailing: true)
                 .disabled(model.selectedBindings.isEmpty)
