@@ -121,6 +121,27 @@ enum SkyLightToolBelt {
         }
     }
 
+    /// Returns the display ID containing the given point, using the same tie-breaking
+    /// WindowServer uses at display boundaries.
+    /// - Parameter cgPoint: The point in the CoreGraphics coordinate system.
+    /// - Returns: The matching `CGDirectDisplayID`, or `nil` if the point isn't on any
+    ///   managed display.
+    static func bestManagedDisplayID(forCGPoint cgPoint: CGPoint) -> CGDirectDisplayID? {
+        guard let SLSMainConnectionID = SkyLightSymbolLoader.SLSMainConnectionID,
+              let SLSCopyBestManagedDisplayForPoint = SkyLightSymbolLoader.SLSCopyBestManagedDisplayForPoint
+        else {
+            return nil
+        }
+
+        guard let uuidString = SLSCopyBestManagedDisplayForPoint(SLSMainConnectionID(), cgPoint)?.takeRetainedValue(),
+              let uuid = CFUUIDCreateFromString(nil, uuidString)
+        else {
+            return nil
+        }
+
+        let displayID = CGDisplayGetDisplayIDFromUUID(uuid)
+        return displayID != 0 ? displayID : nil
+    }
     /// Captures images for each of the windows that are passed in.
     /// - Parameter windowIDs: The `CGWindowID`s for each of the windows to capture.
     /// - Returns: An array of `CGImage`s for each window, in the same order as the windows that were passed in.
