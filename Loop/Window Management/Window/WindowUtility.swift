@@ -51,6 +51,12 @@ enum WindowUtility {
     /// - Parameter position: The position to check for
     /// - Returns: The window at the given position, if any
     static func windowAtPosition(_ position: CGPoint) -> Window? {
+        // Try SkyLight first, as it is faster and doesn't deadlock on own process
+        if let windowID = SkyLightToolBelt.windowIDAtPosition(position),
+           let window = try? Window.fromWindowID(windowID) {
+            return window
+        }
+
         do {
             // If we can find the window at a point using the Accessibility API, return it
             if let element = try AXUIElement.systemWide.getElementAtPosition(position),

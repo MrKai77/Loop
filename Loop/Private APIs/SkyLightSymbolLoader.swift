@@ -81,6 +81,17 @@ extension SkyLightSymbolLoader {
     @available(macOS 26.0, *)
     static let SLSWindowIteratorGetResolvedCornerRadii: SLSWindowIteratorGetResolvedCornerRadiiFunc? = loadSymbol("SLSWindowIteratorGetResolvedCornerRadii")
 
+    typealias SLSFindWindowByGeometryFunc = @convention(c) (
+        _ cid: SLSConnectionID,
+        _ filterWindowID: CGWindowID,
+        _ flags: Int32,
+        _ reserved: Int32,
+        _ screenPoint: UnsafePointer<CGPoint>,
+        _ outWindowPoint: UnsafeMutablePointer<CGPoint>,
+        _ outWindowID: UnsafeMutablePointer<CGWindowID>,
+        _ outWindowCID: UnsafeMutablePointer<Int32>
+    ) -> CGError
+    static let SLSFindWindowByGeometry: SLSFindWindowByGeometryFunc? = loadSymbol("SLSFindWindowByGeometry")
 
     /// Returns the UUID (`CFString`) of the display containing `point`, using the same
     /// tie-breaking WindowServer uses internally. `nil` if no managed display contains it.

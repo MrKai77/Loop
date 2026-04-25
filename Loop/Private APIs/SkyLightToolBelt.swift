@@ -124,8 +124,7 @@ enum SkyLightToolBelt {
     /// Returns the display ID containing the given point, using the same tie-breaking
     /// WindowServer uses at display boundaries.
     /// - Parameter cgPoint: The point in the CoreGraphics coordinate system.
-    /// - Returns: The matching `CGDirectDisplayID`, or `nil` if the point isn't on any
-    ///   managed display.
+    /// - Returns: The matching `CGDirectDisplayID`, or `nil` if the point isn't on any managed display.
     static func bestManagedDisplayID(forCGPoint cgPoint: CGPoint) -> CGDirectDisplayID? {
         guard let SLSMainConnectionID = SkyLightSymbolLoader.SLSMainConnectionID,
               let SLSCopyBestManagedDisplayForPoint = SkyLightSymbolLoader.SLSCopyBestManagedDisplayForPoint
@@ -142,6 +141,28 @@ enum SkyLightToolBelt {
         let displayID = CGDisplayGetDisplayIDFromUUID(uuid)
         return displayID != 0 ? displayID : nil
     }
+
+    /// Finds the topmost window at a given screen position.
+    /// - Parameter position: The screen position to check.
+    /// - Returns: The `CGWindowID` of the window at the position, or `nil` if none found.
+    static func windowIDAtPosition(_ position: CGPoint) -> CGWindowID? {
+        guard let SLSMainConnectionID = SkyLightSymbolLoader.SLSMainConnectionID,
+              let SLSFindWindowByGeometry = SkyLightSymbolLoader.SLSFindWindowByGeometry
+        else {
+            return nil
+        }
+
+        let cid = SLSMainConnectionID()
+        var screenPoint = position
+        var windowPoint = CGPoint.zero
+        var hitWindowID: CGWindowID = 0
+        var windowCID: Int32 = 0
+
+        _ = SLSFindWindowByGeometry(cid, 0, 1, 0, &screenPoint, &windowPoint, &hitWindowID, &windowCID)
+
+        return hitWindowID != 0 ? hitWindowID : nil
+    }
+
     /// Captures images for each of the windows that are passed in.
     /// - Parameter windowIDs: The `CGWindowID`s for each of the windows to capture.
     /// - Returns: An array of `CGImage`s for each window, in the same order as the windows that were passed in.
