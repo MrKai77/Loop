@@ -28,9 +28,9 @@ final class MultitouchTrigger {
     private var bindingsObservationTask: Task<(), Never>?
 
     private let panActivationThreshold: CGFloat = 0.3
-    private let panCycleStepSize: CGFloat = 0.1
+    private let panCycleStepSize: CGFloat = 0.2
     private let pinchActivationThreshold: CGFloat = 0.4
-    private let pinchCycleStepSize: CGFloat = 0.6
+    private let pinchCycleStepSize: CGFloat = 0.7
 
     private var radialMenuActions: [RadialMenuAction] {
         RadialMenuAction.userConfiguredActions

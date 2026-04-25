@@ -13,6 +13,7 @@ final class MultitouchGestureBlocker {
     private var monitor: ActiveEventMonitor?
 
     func start() {
+        stop()
         log.info("Starting gesture blocker")
 
         let eventTypes: [CGEventType] = [
