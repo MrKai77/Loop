@@ -38,11 +38,21 @@ final class MultitouchTrigger {
 
     private static let failedToResolveKeybindAction: WindowAction = .init(.noAction)
 
+    private enum ActionKey: Hashable {
+        case radialSlot(Int)
+        case radialCenter
+        case binding(UUID)
+    }
+
     private struct GestureState {
         var didOpenLoopWithThisGesture = false
         var isGestureRejected = false
-        var lastTriggeredActionIndex: Int?
-        var lastTriggeredDistance: CGFloat = 0
+        var lastCommittedAction: ActionKey?
+        var lastCommitPanDistance: CGFloat = 0
+        /// Signed by `pinchDirection` so pinch-in advances are positive deltas.
+        var lastCommitPinchOffset: CGFloat = 0
+        /// `+1` outward, `-1` inward; locked at activation.
+        var pinchDirection: Int = 0
     }
 
     init(
@@ -156,7 +166,7 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
+            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
 
             let angleFromOrigin = pan.angle + .pi / 2
             var normalizedAngle = angleFromOrigin
@@ -174,17 +184,14 @@ final class MultitouchTrigger {
                 newIndex = Int((normalizedAngle + halfAngleSpan) / actionAngleSpan) % actions.count
             }
 
-            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
-            let isSameAction = state.lastTriggeredActionIndex == newIndex
-            let isReversing = isSameAction && pan.distance < state.lastTriggeredDistance - panCycleStepSize
-
-            if isSameAction {
-                guard abs(pan.distance - state.lastTriggeredDistance) >= panCycleStepSize else { return }
+            commitPan(
+                &state,
+                distance: pan.distance,
+                newKey: .radialSlot(newIndex),
+                fingerCount: fingerCount
+            ) { reverse in
+                triggerRadialMenuAction(at: newIndex, from: actions, reverse: reverse)
             }
-
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = newIndex
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pan.distance
-            triggerRadialMenuAction(at: newIndex, from: actions, reverse: isReversing)
 
         case .ended, .cancelled:
             resetLoopState(for: fingerCount)
@@ -204,19 +211,16 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
+            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
 
-            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
-            let isSameAction = state.lastTriggeredActionIndex == 0
-            let isReversing = isSameAction && pan.distance < state.lastTriggeredDistance - panCycleStepSize
-
-            if isSameAction {
-                guard abs(pan.distance - state.lastTriggeredDistance) >= panCycleStepSize else { return }
+            commitPan(
+                &state,
+                distance: pan.distance,
+                newKey: .binding(binding.id),
+                fingerCount: fingerCount
+            ) { reverse in
+                triggerSingleAction(from: binding, reverse: reverse)
             }
-
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = 0
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pan.distance
-            triggerSingleAction(from: binding, reverse: isReversing)
 
         case .ended, .cancelled:
             resetLoopState(for: fingerCount)
@@ -248,24 +252,20 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
+            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
 
             let actions = radialMenuActions
+            guard !actions.isEmpty else { return }
             let centerActionIndex = actions.count - 1
 
-            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
-            let isSameAction = state.lastTriggeredActionIndex == centerActionIndex
-            let isReversing = isSameAction && pinch.scale < state.lastTriggeredDistance - pinchCycleStepSize
-
-            if isSameAction {
-                guard abs(pinch.scale - state.lastTriggeredDistance) >= pinchCycleStepSize else { return }
-            } else {
-                guard abs(pinch.scale - 1.0) >= pinchActivationThreshold else { return }
+            commitPinch(
+                &state,
+                scale: pinch.scale,
+                newKey: .radialCenter,
+                fingerCount: fingerCount
+            ) { reverse in
+                triggerRadialMenuAction(at: centerActionIndex, from: actions[...], reverse: reverse)
             }
-
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = centerActionIndex
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pinch.scale
-            triggerRadialMenuAction(at: centerActionIndex, from: actions[...], reverse: isReversing)
 
         case .ended, .cancelled:
             resetLoopState(for: fingerCount)
@@ -286,21 +286,16 @@ final class MultitouchTrigger {
             await handleGestureBegan(fingerCount: fingerCount, binding: binding)
 
         case .changed:
-            guard gestureStatesByFingerCount[fingerCount]?.isGestureRejected != true else { return }
+            guard var state = gestureStatesByFingerCount[fingerCount], !state.isGestureRejected else { return }
 
-            let state = gestureStatesByFingerCount[fingerCount] ?? GestureState()
-            let isSameAction = state.lastTriggeredActionIndex == 0
-            let isReversing = isSameAction && pinch.scale < state.lastTriggeredDistance - pinchCycleStepSize
-
-            if isSameAction {
-                guard abs(pinch.scale - state.lastTriggeredDistance) >= pinchCycleStepSize else { return }
-            } else {
-                guard abs(pinch.scale - 1.0) >= pinchActivationThreshold else { return }
+            commitPinch(
+                &state,
+                scale: pinch.scale,
+                newKey: .binding(binding.id),
+                fingerCount: fingerCount
+            ) { reverse in
+                triggerSingleAction(from: binding, reverse: reverse)
             }
-
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = 0
-            gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = pinch.scale
-            triggerSingleAction(from: binding, reverse: isReversing)
 
         case .ended, .cancelled:
             resetLoopState(for: fingerCount)
@@ -320,8 +315,10 @@ final class MultitouchTrigger {
         }
 
         gestureStatesByFingerCount[fingerCount]?.isGestureRejected = false
-        gestureStatesByFingerCount[fingerCount]?.lastTriggeredActionIndex = nil
-        gestureStatesByFingerCount[fingerCount]?.lastTriggeredDistance = 0
+        gestureStatesByFingerCount[fingerCount]?.lastCommittedAction = nil
+        gestureStatesByFingerCount[fingerCount]?.lastCommitPanDistance = 0
+        gestureStatesByFingerCount[fingerCount]?.lastCommitPinchOffset = 0
+        gestureStatesByFingerCount[fingerCount]?.pinchDirection = 0
         gestureBlocker.start()
 
         if let window, !loopWasAlreadyOpen {
@@ -364,7 +361,75 @@ final class MultitouchTrigger {
         }
     }
 
+    /// Commit distance only advances when an action fires, so sub-step
+    /// jitter can't drift it past the reverse threshold.
+    private func commitPan(
+        _ state: inout GestureState,
+        distance: CGFloat,
+        newKey: ActionKey,
+        fingerCount: Int,
+        fire: (_ reverse: Bool) -> ()
+    ) {
+        if state.lastCommittedAction == nil {
+            guard distance >= panActivationThreshold else { return }
+            state.lastCommittedAction = newKey
+            state.lastCommitPanDistance = distance
+            gestureStatesByFingerCount[fingerCount] = state
+            fire(false)
+            return
+        }
+
+        if state.lastCommittedAction == newKey {
+            let delta = distance - state.lastCommitPanDistance
+            if delta >= panCycleStepSize {
+                state.lastCommitPanDistance = distance
+                gestureStatesByFingerCount[fingerCount] = state
+                fire(false)
+            } else if delta <= -panCycleStepSize {
+                state.lastCommitPanDistance = distance
+                gestureStatesByFingerCount[fingerCount] = state
+                fire(true)
+            }
+        } else {
+            state.lastCommittedAction = newKey
+            state.lastCommitPanDistance = distance
+            gestureStatesByFingerCount[fingerCount] = state
+            fire(false)
+        }
+    }
+
+    private func commitPinch(
+        _ state: inout GestureState,
+        scale: CGFloat,
+        newKey: ActionKey,
+        fingerCount: Int,
+        fire: (_ reverse: Bool) -> ()
+    ) {
+        if state.lastCommittedAction != newKey {
+            guard abs(scale - 1.0) >= pinchActivationThreshold else { return }
+            state.pinchDirection = scale >= 1.0 ? 1 : -1
+            state.lastCommittedAction = newKey
+            state.lastCommitPinchOffset = (scale - 1.0) * CGFloat(state.pinchDirection)
+            gestureStatesByFingerCount[fingerCount] = state
+            fire(false)
+            return
+        }
+
+        let offset = (scale - 1.0) * CGFloat(state.pinchDirection)
+        let delta = offset - state.lastCommitPinchOffset
+        if delta >= pinchCycleStepSize {
+            state.lastCommitPinchOffset = offset
+            gestureStatesByFingerCount[fingerCount] = state
+            fire(false)
+        } else if delta <= -pinchCycleStepSize {
+            state.lastCommitPinchOffset = offset
+            gestureStatesByFingerCount[fingerCount] = state
+            fire(true)
+        }
+    }
+
     private func triggerRadialMenuAction(at index: Int, from actions: ArraySlice<RadialMenuAction>, reverse: Bool = false) {
+        guard actions.indices.contains(index) else { return }
         let action = actions[index]
 
         let resolvedAction: WindowAction = switch action.type {
