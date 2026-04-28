@@ -25,7 +25,7 @@ final class MultitouchTrigger {
     private var recognizers: [Int: RecognizerEntry] = [:]
     private var bindingsObservationTask: Task<(), Never>?
 
-    private let panActivationThreshold: CGFloat = 0.3
+    private let panActivationThreshold: CGFloat = 0.1
     private let panCycleStepSize: CGFloat = 0.2
     private let pinchActivationThreshold: CGFloat = 0.4
     private let pinchCycleStepSize: CGFloat = 0.7
@@ -45,11 +45,11 @@ final class MultitouchTrigger {
     private struct GestureState {
         var didOpenLoopWithThisGesture = false
         var isGestureRejected = false
+        var hasActivated = false
+        var pendingTargetWindow: Window?
         var lastCommittedAction: ActionKey?
         var lastCommitPanDistance: CGFloat = 0
-        /// Signed by `pinchDirection` so pinch-in advances are positive deltas.
         var lastCommitPinchOffset: CGFloat = 0
-        /// `+1` outward, `-1` inward; locked at activation.
         var pinchDirection: Int = 0
     }
 
@@ -193,13 +193,16 @@ final class MultitouchTrigger {
         binding: GestureBinding
     ) async {
         switch pan.phase {
-        case .began:
-            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
-
-        case .changed:
+        case .began, .changed:
+            if pan.phase == .began {
+                handleGestureBegan(fingerCount: fingerCount, binding: binding)
+            }
+            guard await activateGestureIfNeeded(fingerCount: fingerCount, panDistance: pan.distance) else { return }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
-            let angleFromOrigin = pan.angle + .pi / 2
+            // Subsurface emits y-up angles (counterclockwise from +x); the radial
+            // menu wants 0 = up, growing clockwise. Mirror via `pi/2 - angle`.
+            let angleFromOrigin = .pi / 2 - pan.angle
             var normalizedAngle = angleFromOrigin
             if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
 
@@ -238,10 +241,11 @@ final class MultitouchTrigger {
         binding: GestureBinding
     ) async {
         switch pan.phase {
-        case .began:
-            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
-
-        case .changed:
+        case .began, .changed:
+            if pan.phase == .began {
+                handleGestureBegan(fingerCount: fingerCount, binding: binding)
+            }
+            guard await activateGestureIfNeeded(fingerCount: fingerCount, panDistance: pan.distance) else { return }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             commitPan(
@@ -279,10 +283,11 @@ final class MultitouchTrigger {
         binding: GestureBinding
     ) async {
         switch pinch.phase {
-        case .began:
-            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
-
-        case .changed:
+        case .began, .changed:
+            if pinch.phase == .began {
+                handleGestureBegan(fingerCount: fingerCount, binding: binding)
+            }
+            guard await activateGestureIfNeeded(fingerCount: fingerCount, pinchScale: pinch.scale) else { return }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             let actions = radialMenuActions
@@ -313,10 +318,11 @@ final class MultitouchTrigger {
         binding: GestureBinding
     ) async {
         switch pinch.phase {
-        case .began:
-            await handleGestureBegan(fingerCount: fingerCount, binding: binding)
-
-        case .changed:
+        case .began, .changed:
+            if pinch.phase == .began {
+                handleGestureBegan(fingerCount: fingerCount, binding: binding)
+            }
+            guard await activateGestureIfNeeded(fingerCount: fingerCount, pinchScale: pinch.scale) else { return }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             commitPinch(
@@ -336,7 +342,9 @@ final class MultitouchTrigger {
         }
     }
 
-    private func handleGestureBegan(fingerCount: Int, binding: GestureBinding) async {
+    /// Resolves the target window and starts blocking trackpad events. Loop itself
+    /// isn't opened until the gesture crosses the activation threshold in a `.changed` event.
+    private func handleGestureBegan(fingerCount: Int, binding: GestureBinding) {
         let window = findTargetWindow(for: binding)
         let loopWasAlreadyOpen = checkIfLoopOpen()
 
@@ -345,22 +353,43 @@ final class MultitouchTrigger {
             return
         }
 
-        recognizers[fingerCount]?.state.isGestureRejected = false
-        recognizers[fingerCount]?.state.lastCommittedAction = nil
-        recognizers[fingerCount]?.state.lastCommitPanDistance = 0
-        recognizers[fingerCount]?.state.lastCommitPinchOffset = 0
-        recognizers[fingerCount]?.state.pinchDirection = 0
+        var state = GestureState()
+        state.pendingTargetWindow = window
+        // Loop is already on screen, so no activation threshold to cross.
+        state.hasActivated = loopWasAlreadyOpen
+        recognizers[fingerCount]?.state = state
         gestureBlocker.start()
+    }
 
-        if let window, !loopWasAlreadyOpen {
+    /// Gates `.changed` events until the gesture's pan distance / pinch scale
+    /// crosses the configured activation threshold, then opens Loop on the
+    /// target window resolved at `.began`.
+    private func activateGestureIfNeeded(
+        fingerCount: Int,
+        panDistance: CGFloat? = nil,
+        pinchScale: CGFloat? = nil
+    ) async -> Bool {
+        guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return false }
+        if state.hasActivated { return true }
+
+        if let panDistance, panDistance < panActivationThreshold { return false }
+        if let pinchScale, abs(pinchScale - 1.0) < pinchActivationThreshold { return false }
+
+        if let window = state.pendingTargetWindow {
             do {
                 try await openCallback(.init(.noSelection), window)
-                recognizers[fingerCount]?.state.didOpenLoopWithThisGesture = true
+                state.didOpenLoopWithThisGesture = true
             } catch {
+                state.isGestureRejected = true
+                recognizers[fingerCount]?.state = state
                 gestureBlocker.stop()
-                recognizers[fingerCount]?.state.isGestureRejected = true
+                return false
             }
         }
+
+        state.hasActivated = true
+        recognizers[fingerCount]?.state = state
+        return true
     }
 
     private func resetLoopState(for fingerCount: Int) {
@@ -393,7 +422,9 @@ final class MultitouchTrigger {
     }
 
     /// Commit distance only advances when an action fires, so sub-step
-    /// jitter can't drift it past the reverse threshold.
+    /// jitter can't drift it past the reverse threshold. Activation is gated
+    /// upstream by `activateGestureIfNeeded`, so the first commit fires
+    /// immediately to seed Loop's initial active action.
     private func commitPan(
         _ state: inout GestureState,
         distance: CGFloat,
@@ -401,15 +432,6 @@ final class MultitouchTrigger {
         fingerCount: Int,
         fire: (_ reverse: Bool) -> ()
     ) {
-        if state.lastCommittedAction == nil {
-            guard distance >= panActivationThreshold else { return }
-            state.lastCommittedAction = newKey
-            state.lastCommitPanDistance = distance
-            recognizers[fingerCount]?.state = state
-            fire(false)
-            return
-        }
-
         if state.lastCommittedAction == newKey {
             let delta = distance - state.lastCommitPanDistance
             if delta >= panCycleStepSize {
@@ -437,7 +459,6 @@ final class MultitouchTrigger {
         fire: (_ reverse: Bool) -> ()
     ) {
         if state.lastCommittedAction != newKey {
-            guard abs(scale - 1.0) >= pinchActivationThreshold else { return }
             state.pinchDirection = scale >= 1.0 ? 1 : -1
             state.lastCommittedAction = newKey
             state.lastCommitPinchOffset = (scale - 1.0) * CGFloat(state.pinchDirection)
@@ -500,7 +521,7 @@ final class MultitouchTrigger {
     }
 
     private func matchDirectionalPanBinding(angle: CGFloat, from bindings: [GestureBinding]) -> GestureBinding? {
-        let angleFromOrigin = angle + .pi / 2
+        let angleFromOrigin = .pi / 2 - angle
         var normalizedAngle = angleFromOrigin
         if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
 

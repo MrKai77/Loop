@@ -11,7 +11,7 @@ jobs:
       pull-requests: write
     steps:
       - name: ⬇️ Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 🌎 Crowdin InfoPlist.strings Download
         uses: crowdin/github-action@v2
@@ -62,7 +62,7 @@ jobs:
       pull-requests: write
     steps:
       - name: ⬇️ Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: l10n
 

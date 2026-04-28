@@ -18,7 +18,7 @@ jobs:
       pull-requests: write
     steps:
       - name: ⬇️ Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -44,7 +44,7 @@ jobs:
           echo "FROM_TAG=$FROM_TAG" >> $GITHUB_ENV
 
       - name: 🔧 Select Xcode
-        run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
+        run: sudo xcode-select -s "/Applications/Xcode_26.4.app"
 
       - name: 🎟️ Install Development & Developer ID Certificate
         env:
@@ -122,14 +122,14 @@ jobs:
           ditto -c -k --sequesterRsrc --keepParent "dist/Loop.app" "dist/Loop.zip"
 
       - name: ⬆️ Upload Loop
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Loop
           path: dist/Loop.zip
 
       - name: 💬 Comment on PR with build link
         if: "${{ !inputs.release-new-build }}"
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const branch = context.ref.replace('refs/heads/', '');
@@ -167,7 +167,7 @@ jobs:
             console.log(`Commented on PR #${pr.number}`);
 
       - name: 🏷️ Create/update tag
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         if: "${{ inputs.release-new-build }}"
         with:
           script: |
@@ -187,7 +187,7 @@ jobs:
             })
 
       - name: 📰 Build Changelog
-        uses: mikepenz/release-changelog-builder-action@v4
+        uses: mikepenz/release-changelog-builder-action@v6
         if: "${{ inputs.release-new-build }}"
         with:
           outputFile: CHANGELOG.md
