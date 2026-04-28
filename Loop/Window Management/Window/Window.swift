@@ -14,6 +14,7 @@ enum WindowError: LocalizedError {
     case blockedBundleID
     case cannotGetWindow
     case filteredOutFromWindowInfo
+    case invalidWindowLevel(CGWindowLevel)
 
     var errorDescription: String? {
         switch self {
@@ -25,6 +26,8 @@ enum WindowError: LocalizedError {
             "Could not get the element's window"
         case .filteredOutFromWindowInfo:
             "Filtered out from window info"
+        case let .invalidWindowLevel(level):
+            "Invalid window: level \(level) is outside the manageable range"
         }
     }
 }
@@ -35,6 +38,11 @@ final class Window {
     let cgWindowID: CGWindowID
     let pid: pid_t
     let nsRunningApplication: NSRunningApplication?
+
+    private static let invalidBundleIDs: Set<String> = [
+        "com.apple.PIPAgent", // PIP windows
+        "com.apple.notificationcenterui" // Widgets & Notification Center
+    ]
 
     var isOwnWindow: Bool {
         nsRunningApplication?.bundleIdentifier == Bundle.main.bundleIdentifier
@@ -66,13 +74,13 @@ final class Window {
             throw WindowError.sheetWindow
         }
 
-        let invalidBundleIdentifiers: [String] = [
-            "com.apple.PIPAgent", // PIP windows
-            "com.apple.notificationcenterui" // Widgets & Notification Center
-        ]
+        if let level = SkyLightToolBelt.getWindowLevel(windowID: cgWindowID),
+           level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
+            throw WindowError.invalidWindowLevel(level)
+        }
 
         if let bundleIdentifier = nsRunningApplication?.bundleIdentifier,
-           invalidBundleIdentifiers.contains(bundleIdentifier) {
+           Self.invalidBundleIDs.contains(bundleIdentifier) {
             throw WindowError.blockedBundleID
         }
     }
@@ -114,9 +122,9 @@ final class Window {
             throw WindowError.filteredOutFromWindowInfo
         }
 
-        if let level = windowInfo[kCGWindowLayer as String] as? Int,
+        if let level = windowInfo[kCGWindowLayer as String] as? CGWindowLevel,
            level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
-            throw WindowError.filteredOutFromWindowInfo
+            throw WindowError.invalidWindowLevel(level)
         }
 
         let element = AXUIElementCreateApplication(pid)

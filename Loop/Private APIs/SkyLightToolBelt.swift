@@ -189,6 +189,28 @@ enum SkyLightToolBelt {
         return images
     }
 
+    /// Retrieves the CGWindowLevel for a specific window.
+    /// - Parameter windowID: The `CGWindowID` of the window to query.
+    /// - Returns: The window's level, or `nil` if the lookup failed.
+    static func getWindowLevel(windowID: CGWindowID) -> CGWindowLevel? {
+        guard let SLSMainConnectionID = SkyLightSymbolLoader.SLSMainConnectionID,
+              let SLSGetWindowLevel = SkyLightSymbolLoader.SLSGetWindowLevel
+        else {
+            log.error("Failed to load SkyLight symbols in \(#function)")
+            return nil
+        }
+
+        var level: Int32 = 0
+        let status = SLSGetWindowLevel(SLSMainConnectionID(), windowID, &level)
+
+        guard status == .success else {
+            log.error("Failed to get window level for \(windowID): \(status.rawValue)")
+            return nil
+        }
+
+        return level
+    }
+
     /// Retrieves the corner radii for a specific window.
     /// - Parameter windowID: The `CGWindowID` of the window
     /// - Returns: The corner radii of the window if the operation was successful, or `nil` otherwise.

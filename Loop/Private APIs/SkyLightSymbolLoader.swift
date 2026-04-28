@@ -104,6 +104,9 @@ extension SkyLightSymbolLoader {
     typealias SLSSetWindowBackgroundBlurRadiusFunc = @convention(c) (_ connection: SLSConnectionID, _ wid: CGWindowID, _ radius: Int) -> OSStatus
     static let SLSSetWindowBackgroundBlurRadius: SLSSetWindowBackgroundBlurRadiusFunc? = loadSymbol("SLSSetWindowBackgroundBlurRadius")
 
+    typealias SLSGetWindowLevelFunc = @convention(c) (_ cid: SLSConnectionID, _ wid: CGWindowID, _ outLevel: UnsafeMutablePointer<Int32>) -> CGError
+    static let SLSGetWindowLevel: SLSGetWindowLevelFunc? = loadSymbol("SLSGetWindowLevel")
+
     /// Options are described by `SLSWindowCaptureOptions`
     typealias SLSHWCaptureWindowListFunc = @convention(c) (_ cid: SLSConnectionID, _ windowList: UnsafeMutablePointer<CGWindowID>, _ windowCount: Int, _ options: UInt32) -> Unmanaged<CFArray>
     static let SLSHWCaptureWindowList: SLSHWCaptureWindowListFunc? = loadSymbol("SLSHWCaptureWindowList")
