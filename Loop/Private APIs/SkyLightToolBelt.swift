@@ -158,7 +158,8 @@ enum SkyLightToolBelt {
         var hitWindowID: CGWindowID = 0
         var windowCID: Int32 = 0
 
-        _ = SLSFindWindowByGeometry(cid, 0, 1, 0, &screenPoint, &windowPoint, &hitWindowID, &windowCID)
+        let status = SLSFindWindowByGeometry(cid, 0, 1, 0, &screenPoint, &windowPoint, &hitWindowID, &windowCID)
+        guard status == .success else { return nil }
 
         return hitWindowID != 0 ? hitWindowID : nil
     }
