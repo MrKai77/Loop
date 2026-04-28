@@ -91,6 +91,18 @@ final class Window {
         )
     }
 
+    /// Retrieve a window from a `CGWindowID`.
+    /// - Parameter windowID: The window ID to look up.
+    static func fromWindowID(_ windowID: CGWindowID) throws -> Window {
+        guard let windowInfoList = CGWindowListCopyWindowInfo([.optionIncludingWindow], windowID) as? [[String: AnyObject]],
+              let windowInfo = windowInfoList.first
+        else {
+            throw WindowError.cannotGetWindow
+        }
+
+        return try fromWindowInfo(windowInfo)
+    }
+
     /// Retrieve a window from an entry in a dictionary returned by `CGWindowListCopyWindowInfo`.
     /// - Parameter windowInfo: The dictionary containing information about the window.
     static func fromWindowInfo(_ windowInfo: [String: AnyObject]) throws -> Window {

@@ -29,6 +29,13 @@ extension NSScreen {
         let mouseLocation = NSEvent.mouseLocation
         let screens = NSScreen.screens
 
+        // Ask SkyLight first so we match WindowServer's tie-breaking at display boundaries.
+        if let primary = screens.first,
+           let displayID = SkyLightToolBelt.bestManagedDisplayID(forCGPoint: mouseLocation.flipY(screen: primary)),
+           let match = screens.first(where: { $0.displayID == displayID }) {
+            return match
+        }
+
         // CGRect.contains uses half-open intervals [minX, maxX) × [minY, maxY),
         // excluding points on the maxX/maxY edges. So we cannot use frame.contains(_:)
         return screens.first {
