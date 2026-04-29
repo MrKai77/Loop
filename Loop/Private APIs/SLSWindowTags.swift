@@ -10,10 +10,10 @@ import Foundation
 /// Tags returned by `SLSWindowIteratorGetTags`.
 ///
 /// Bit positions and names are sourced from SkyLight's internal short-name debug table
-/// at `__cstring 0x1871fa9a2+`, which is the main bit-position-ordered list
+/// at `__cstring 0x1871fa9a2+` on 26.3.1 (25D771280a), which is the main bit-position-ordered list
 /// the binary itself uses. Older NUIKit headers (https://github.com/NUIKit/CGSInternal)
-/// describe a partly-stale layout, and the current SkyLight has inserted/renamed several Hi
-/// bits since NUIKit was last updated.
+/// were also used as reference, however it describes a partly-stale layout, and the current
+/// SkyLight has inserted/renamed several Hi bits since NUIKit was last updated.
 struct SLSWindowTags: OptionSet {
     let rawValue: UInt64
 
@@ -124,12 +124,8 @@ struct SLSWindowTags: OptionSet {
 
     // MARK: - Hi bits (UInt64 bits 32...63)
 
-    // NOTE: these positions are different from NUIKit's `CGSWindow.h`. Apple has inserted
-    // new bits at the start of the Hi range and shifted/added several others. Names here
-    // come from SkyLight's internal short-debug-name table.
-
-    /// The window's owning application is "window-manager-aware", i.e. it participates in
-    /// WindowServer's window management protocol. Set on virtually every modern Cocoa app.
+    /// Likely relates to the system's built-in window management (Stage Manager and the built-in WM);
+    /// probably marks windows whose owning app cooperates with those features?
     static let windowManagerAware = Self(rawValue: 1 << 32)
 
     /// The window follows the user across the currently-focused document space. Disqualified

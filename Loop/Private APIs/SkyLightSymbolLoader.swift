@@ -72,7 +72,7 @@ extension SkyLightSymbolLoader {
     typealias SLSWindowIteratorGetTagsFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt64
     static let SLSWindowIteratorGetTags: SLSWindowIteratorGetTagsFunc? = loadSymbol("SLSWindowIteratorGetTags")
 
-    // As of macOS 26.4, `SLSWindowIteratorGetAttributes` will always return `0` based on disassembly.
+    // As of macOS 26.3, `SLSWindowIteratorGetAttributes` will always return `0` based on disassembly.
     // Unused in Loop at the moment.
 //    typealias SLSWindowIteratorGetAttributesFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt64
 //    static let SLSWindowIteratorGetAttributes: SLSWindowIteratorGetAttributesFunc? = loadSymbol("SLSWindowIteratorGetAttributes")
