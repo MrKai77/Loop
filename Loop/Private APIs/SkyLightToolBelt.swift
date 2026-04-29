@@ -286,8 +286,7 @@ enum SkyLightToolBelt {
     /// - Returns: Whether this window is valid.
     private static func checkIfWindowIsValid(_ iterator: CFTypeRef) -> Bool {
         guard let SLSWindowIteratorGetParentID = SkyLightSymbolLoader.SLSWindowIteratorGetParentID,
-              let SLSWindowIteratorGetTags = SkyLightSymbolLoader.SLSWindowIteratorGetTags,
-              let SLSWindowIteratorGetAttributes = SkyLightSymbolLoader.SLSWindowIteratorGetAttributes
+              let SLSWindowIteratorGetTags = SkyLightSymbolLoader.SLSWindowIteratorGetTags
         else {
             log.error("Failed to load SkyLight symbols in \(#function)")
             return false
@@ -300,14 +299,6 @@ enum SkyLightToolBelt {
         }
 
         let tags = SLSWindowTags(rawValue: SLSWindowIteratorGetTags(iterator))
-        let attributes: UInt32 = SLSWindowIteratorGetAttributes(iterator)
-
-        // Currently known what 0x2 and 0x400_0000_0000_0000 are.
-        if (attributes & 0x2) != 0 || (tags.rawValue & 0x400_0000_0000_0000) != 0,
-           tags.contains(.document) || (tags.contains(.floating) && tags.contains(.modal)) {
-            return true
-        }
-
-        return false
+        return tags.contains(.document) || tags.contains(.floating)
     }
 }

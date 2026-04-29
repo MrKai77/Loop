@@ -72,8 +72,10 @@ extension SkyLightSymbolLoader {
     typealias SLSWindowIteratorGetTagsFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt64
     static let SLSWindowIteratorGetTags: SLSWindowIteratorGetTagsFunc? = loadSymbol("SLSWindowIteratorGetTags")
 
-    typealias SLSWindowIteratorGetAttributesFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt32
-    static let SLSWindowIteratorGetAttributes: SLSWindowIteratorGetAttributesFunc? = loadSymbol("SLSWindowIteratorGetAttributes")
+    // As of macOS 26.4, `SLSWindowIteratorGetAttributes` will always return `0` based on disassembly.
+    // Unused in Loop at the moment.
+//    typealias SLSWindowIteratorGetAttributesFunc = @convention(c) (_ iterator: CFTypeRef) -> UInt64
+//    static let SLSWindowIteratorGetAttributes: SLSWindowIteratorGetAttributesFunc? = loadSymbol("SLSWindowIteratorGetAttributes")
 
     /// All four corner radii values returned in the array will be identical to each other, as seen in: https://gist.github.com/MrKai77/654975cc2a35cfa5328a7c0a90a01fde
     @available(macOS 26.0, *)
@@ -120,17 +122,6 @@ extension SkyLightSymbolLoader {
 }
 
 typealias SLSConnectionID = UInt32
-
-struct SLSWindowTags: OptionSet {
-    let rawValue: UInt64
-
-    static let document = Self(rawValue: 1 << 0)
-    static let floating = Self(rawValue: 1 << 1)
-    static let attached = Self(rawValue: 1 << 7)
-    static let sticky = Self(rawValue: 1 << 11)
-    static let ignoresCycle = Self(rawValue: 1 << 18)
-    static let modal = Self(rawValue: 1 << 31)
-}
 
 struct SLSWindowCaptureOptions: OptionSet {
     let rawValue: UInt32
