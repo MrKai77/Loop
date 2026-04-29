@@ -29,7 +29,7 @@ struct PreviewView: View {
            inset != .zero {
             return inset
         }
-        
+
         // Fall back to the user's default radius
         return RectangleCornerRadii(
             topLeading: previewCornerRadius,

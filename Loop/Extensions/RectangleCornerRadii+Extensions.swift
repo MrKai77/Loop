@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension RectangleCornerRadii {
-    static let zero: RectangleCornerRadii = RectangleCornerRadii(
+    static let zero: RectangleCornerRadii = .init(
         topLeading: 0,
         bottomLeading: 0,
         bottomTrailing: 0,
