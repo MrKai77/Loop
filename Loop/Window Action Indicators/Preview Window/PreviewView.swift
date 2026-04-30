@@ -24,7 +24,14 @@ struct PreviewView: View {
     }
 
     private var cornerRadii: RectangleCornerRadii {
-        viewModel.overrideCornerRadii?.inset(by: previewPadding) ?? RectangleCornerRadii(
+        // Prefer the window's own radii, but skip if the padded inset would be sharp.
+        if let inset = viewModel.overrideCornerRadii?.inset(by: previewPadding),
+           inset != .zero {
+            return inset
+        }
+
+        // Fall back to the user's default radius
+        return RectangleCornerRadii(
             topLeading: previewCornerRadius,
             bottomLeading: previewCornerRadius,
             bottomTrailing: previewCornerRadius,

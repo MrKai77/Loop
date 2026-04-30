@@ -189,6 +189,28 @@ enum SkyLightToolBelt {
         return images
     }
 
+    /// Retrieves the CGWindowLevel for a specific window.
+    /// - Parameter windowID: The `CGWindowID` of the window to query.
+    /// - Returns: The window's level, or `nil` if the lookup failed.
+    static func getWindowLevel(windowID: CGWindowID) -> CGWindowLevel? {
+        guard let SLSMainConnectionID = SkyLightSymbolLoader.SLSMainConnectionID,
+              let SLSGetWindowLevel = SkyLightSymbolLoader.SLSGetWindowLevel
+        else {
+            log.error("Failed to load SkyLight symbols in \(#function)")
+            return nil
+        }
+
+        var level: Int32 = 0
+        let status = SLSGetWindowLevel(SLSMainConnectionID(), windowID, &level)
+
+        guard status == .success else {
+            log.error("Failed to get window level for \(windowID): \(status.rawValue)")
+            return nil
+        }
+
+        return level
+    }
+
     /// Retrieves the corner radii for a specific window.
     /// - Parameter windowID: The `CGWindowID` of the window
     /// - Returns: The corner radii of the window if the operation was successful, or `nil` otherwise.
@@ -264,8 +286,7 @@ enum SkyLightToolBelt {
     /// - Returns: Whether this window is valid.
     private static func checkIfWindowIsValid(_ iterator: CFTypeRef) -> Bool {
         guard let SLSWindowIteratorGetParentID = SkyLightSymbolLoader.SLSWindowIteratorGetParentID,
-              let SLSWindowIteratorGetTags = SkyLightSymbolLoader.SLSWindowIteratorGetTags,
-              let SLSWindowIteratorGetAttributes = SkyLightSymbolLoader.SLSWindowIteratorGetAttributes
+              let SLSWindowIteratorGetTags = SkyLightSymbolLoader.SLSWindowIteratorGetTags
         else {
             log.error("Failed to load SkyLight symbols in \(#function)")
             return false
@@ -278,14 +299,6 @@ enum SkyLightToolBelt {
         }
 
         let tags = SLSWindowTags(rawValue: SLSWindowIteratorGetTags(iterator))
-        let attributes: UInt32 = SLSWindowIteratorGetAttributes(iterator)
-
-        // Currently known what 0x2 and 0x400_0000_0000_0000 are.
-        if (attributes & 0x2) != 0 || (tags.rawValue & 0x400_0000_0000_0000) != 0,
-           tags.contains(.document) || (tags.contains(.floating) && tags.contains(.modal)) {
-            return true
-        }
-
-        return false
+        return tags.contains(.document) || tags.contains(.floating)
     }
 }
