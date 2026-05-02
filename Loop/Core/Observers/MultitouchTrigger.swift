@@ -25,7 +25,6 @@ final class MultitouchTrigger {
     private var recognizers: [Int: RecognizerEntry] = [:]
     private var bindingsObservationTask: Task<(), Never>?
 
-    private let panActivationThreshold: CGFloat = 0.1
     private let panCycleStepSize: CGFloat = 0.2
     private let pinchActivationThreshold: CGFloat = 0.4
     private let pinchCycleStepSize: CGFloat = 0.7
@@ -197,7 +196,7 @@ final class MultitouchTrigger {
             if pan.phase == .began {
                 handleGestureBegan(fingerCount: fingerCount, binding: binding)
             }
-            guard await activateGestureIfNeeded(fingerCount: fingerCount, panDistance: pan.distance) else { return }
+            guard await activateGestureIfNeeded(fingerCount: fingerCount) else { return }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             // Subsurface emits y-up angles (counterclockwise from +x); the radial
@@ -245,7 +244,7 @@ final class MultitouchTrigger {
             if pan.phase == .began {
                 handleGestureBegan(fingerCount: fingerCount, binding: binding)
             }
-            guard await activateGestureIfNeeded(fingerCount: fingerCount, panDistance: pan.distance) else { return }
+            guard await activateGestureIfNeeded(fingerCount: fingerCount) else { return }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             commitPan(
@@ -361,18 +360,16 @@ final class MultitouchTrigger {
         gestureBlocker.start()
     }
 
-    /// Gates `.changed` events until the gesture's pan distance / pinch scale
-    /// crosses the configured activation threshold, then opens Loop on the
-    /// target window resolved at `.began`.
+    /// Opens Loop on the target window resolved at `.began`. Pinch gestures still
+    /// gate on `pinchActivationThreshold`; pan gestures activate on the first
+    /// `.began` event Subsurface emits.
     private func activateGestureIfNeeded(
         fingerCount: Int,
-        panDistance: CGFloat? = nil,
         pinchScale: CGFloat? = nil
     ) async -> Bool {
         guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return false }
         if state.hasActivated { return true }
 
-        if let panDistance, panDistance < panActivationThreshold { return false }
         if let pinchScale, abs(pinchScale - 1.0) < pinchActivationThreshold { return false }
 
         if let window = state.pendingTargetWindow {
