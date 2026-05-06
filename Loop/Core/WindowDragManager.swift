@@ -56,7 +56,17 @@ final class WindowDragManager {
         }
     }
 
+    func shutdown() {
+        accessibilityCheckerTask?.cancel()
+        accessibilityCheckerTask = nil
+        removeListeners()
+        resetDragState()
+        previewController.close()
+    }
+
     private func setupListeners() {
+        removeListeners()
+
         let leftMouseDraggedMonitor = PassiveEventMonitor(
             "snapping_left_mouse_dragged_monitor",
             events: [.leftMouseDragged],

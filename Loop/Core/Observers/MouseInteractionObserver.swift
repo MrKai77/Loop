@@ -54,6 +54,8 @@ final class MouseInteractionObserver {
     }
 
     func start(initialMousePosition: CGPoint) {
+        stop()
+
         screenBounds = NSScreen.screens.first(where: { $0.frame.contains(initialMousePosition) })?.frame
 
         if let screenBounds {

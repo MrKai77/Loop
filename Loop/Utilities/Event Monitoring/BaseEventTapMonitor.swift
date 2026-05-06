@@ -21,25 +21,11 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     private(set) var isEnabled: Bool = false
 
     deinit {
-        if isEnabled {
-            stop()
-        }
-
-        // Clean up run loop source and event tap
-        if let runLoop, let runLoopSource {
-            CFRunLoopRemoveSource(runLoop, runLoopSource, .commonModes)
-            self.runLoopSource = nil
-        }
-
-        if let eventTap {
-            CFMachPortInvalidate(eventTap)
-            self.eventTap = nil
-        }
+        tearDownEventTap()
     }
 
     func setupRunLoopSource(eventTap: CFMachPort, readableIdentifier: String) {
-        // Runloop is already running here. In the future, we can investigate running the mach port on another thread.
-        let runLoop = CFRunLoopGetMain()
+        let runLoop = EventTapThread.shared.runLoop
         self.readableIdentifier = readableIdentifier
 
         if let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0) {
@@ -47,6 +33,7 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
             self.runLoop = runLoop
             self.runLoopSource = runLoopSource
             CFRunLoopAddSource(runLoop, runLoopSource, .commonModes)
+            CFRunLoopWakeUp(runLoop)
         }
     }
 
@@ -64,7 +51,7 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     }
 
     func stop() {
-        guard let eventTap else { return }
+        guard eventTap != nil else { return }
 
         if let readableIdentifier {
             log.info("Stopping BaseEventTapMonitor '\(readableIdentifier)'")
@@ -72,11 +59,58 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
             log.info("Stopping BaseEventTapMonitor with ID \(id)")
         }
 
-        CGEvent.tapEnable(tap: eventTap, enable: false)
-        isEnabled = false
+        tearDownEventTap()
     }
 
     static func == (lhs: BaseEventTapMonitor, rhs: BaseEventTapMonitor) -> Bool {
         lhs.id == rhs.id
+    }
+
+    private func tearDownEventTap() {
+        guard eventTap != nil || runLoopSource != nil else { return }
+
+        let eventTap = eventTap
+        let runLoop = runLoop
+        let runLoopSource = runLoopSource
+
+        self.eventTap = nil
+        self.runLoop = nil
+        self.runLoopSource = nil
+        isEnabled = false
+
+        guard let runLoop else {
+            if let eventTap {
+                CGEvent.tapEnable(tap: eventTap, enable: false)
+                CFMachPortInvalidate(eventTap)
+            }
+            return
+        }
+
+        let cleanup = {
+            if let eventTap {
+                CGEvent.tapEnable(tap: eventTap, enable: false)
+            }
+
+            if let runLoopSource {
+                CFRunLoopRemoveSource(runLoop, runLoopSource, .commonModes)
+            }
+
+            if let eventTap {
+                CFMachPortInvalidate(eventTap)
+            }
+        }
+
+        if CFRunLoopGetCurrent() == runLoop {
+            cleanup()
+            return
+        }
+
+        let finished = DispatchSemaphore(value: 0)
+        CFRunLoopPerformBlock(runLoop, CFRunLoopMode.commonModes.rawValue) {
+            cleanup()
+            finished.signal()
+        }
+        CFRunLoopWakeUp(runLoop)
+        finished.wait()
     }
 }

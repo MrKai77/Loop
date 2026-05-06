@@ -139,8 +139,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return .terminateLater
         }
 
+        // LoopManager and WindowDragManager are explicitly shut down so that their
+        // event monitors are stopped immediately (in case they are active)
+        LoopManager.shared.shutdown()
+        WindowDragManager.shared.shutdown()
+
         shutdownTask = Task { @MainActor in
-            await StashManager.shared.shutdown()
+            let didFinishStashShutdown = await runStashShutdownWithTimeout(.seconds(3))
+            if !didFinishStashShutdown {
+                log.warn("Timed out while restoring stashed windows during termination. Continuing shutdown.")
+            }
+
             self.shutdownTask = nil
             sender.reply(toApplicationShouldTerminate: true)
         }
@@ -152,5 +161,41 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         for url in urls {
             urlCommandHandler.handle(url)
         }
+    }
+
+    private func runStashShutdownWithTimeout(_ duration: Duration) async -> Bool {
+        return await withCheckedContinuation { continuation in
+            let reply = OneShotContinuation(continuation)
+
+            let shutdownTask = Task { @MainActor in
+                await StashManager.shared.shutdown()
+                reply.resume(returning: true)
+            }
+
+            Task {
+                try? await Task.sleep(for: duration)
+                shutdownTask.cancel()
+                reply.resume(returning: false)
+            }
+        }
+    }
+}
+
+private final class OneShotContinuation<T>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var didResume = false
+    private let continuation: CheckedContinuation<T, Never>
+
+    init(_ continuation: CheckedContinuation<T, Never>) {
+        self.continuation = continuation
+    }
+
+    func resume(returning result: T) {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard !didResume else { return }
+        didResume = true
+        continuation.resume(returning: result)
     }
 }
