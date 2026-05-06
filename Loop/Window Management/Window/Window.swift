@@ -476,13 +476,15 @@ final class Window {
         }
     }
 
-    @concurrent
+    @MainActor
     func setFrameAnimated(
         _ rect: CGRect,
         bounds: CGRect,
         resolvedProperties: ResolvedProperties? = nil
     ) async throws {
-        guard await !MainActor.run(resultType: Bool.self, body: { applyOwnWindowFrame(rect) }) else {
+        try Task.checkCancellation()
+
+        guard !applyOwnWindowFrame(rect) else {
             return
         }
 
@@ -496,22 +498,20 @@ final class Window {
         }
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(), Error>) in
-            Task {
-                try Task.checkCancellation()
-                let animation = WindowTransformAnimation(
-                    rect,
-                    window: self,
-                    bounds: bounds,
-                    shouldSetSize: shouldSetSize
-                ) { error in
-                    if let error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(returning: ())
-                    }
+            let animation = WindowTransformAnimation(
+                rect,
+                window: self,
+                bounds: bounds,
+                shouldSetSize: shouldSetSize
+            ) { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
                 }
-                await animation.start()
             }
+
+            animation.start()
         }
 
         if enhancedUI {
