@@ -26,6 +26,12 @@ final class LoopManager {
 
     private var accessibilityCheckerTask: Task<(), Never>?
 
+    /// Opening prepares resizeContext asynchronously. We track that setup separately
+    /// so rapid trigger events cannot act on the previous/default context.
+    private var isLoopOpening: Bool = false
+    private var pendingOpeningAction: WindowAction?
+    private var shouldCancelOpening: Bool = false
+
     private(set) var isLoopActive: Bool = false {
         didSet {
             let value = isLoopActive
@@ -131,6 +137,9 @@ final class LoopManager {
         mouseInteractionObserver.stop()
         triggerKeyTimeoutTimer.cancel()
 
+        isLoopOpening = false
+        pendingOpeningAction = nil
+        shouldCancelOpening = false
         isLoopActive = false
         hasParentCycleActionMirror.withLock { $0 = false }
     }
@@ -141,6 +150,13 @@ final class LoopManager {
 extension LoopManager {
     private func openLoop(startingAction: WindowAction) async {
         guard AccessibilityManager.shared.isGranted else {
+            return
+        }
+
+        guard !isLoopOpening else {
+            if startingAction.direction != .noSelection {
+                pendingOpeningAction = startingAction
+            }
             return
         }
 
@@ -165,8 +181,16 @@ extension LoopManager {
             return
         }
 
-        isLoopActive = true
+        isLoopOpening = true
+        pendingOpeningAction = nil
+        shouldCancelOpening = false
         hasParentCycleActionMirror.withLock { $0 = false }
+
+        defer {
+            isLoopOpening = false
+            pendingOpeningAction = nil
+            shouldCancelOpening = false
+        }
 
         log.info("Opening Loop with starting action: \(startingAction.description) and target window: \(window?.description ?? "(none)")")
 
@@ -191,18 +215,27 @@ extension LoopManager {
         )
         await resizeContext.refreshResolvedState()
 
+        guard !shouldCancelOpening else {
+            return
+        }
+
         if !Defaults[.disableCursorInteraction] {
             mouseInteractionObserver.start(initialMousePosition: resizeContext.initialMousePosition)
         }
 
+        isLoopActive = true
         indicatorService.openAndUpdate(context: resizeContext)
 
-        await changeAction(startingAction, disableHapticFeedback: true)
+        await changeAction(pendingOpeningAction ?? startingAction, disableHapticFeedback: true)
 
         triggerKeyTimeoutTimer.start()
     }
 
     private func closeLoop(forceClose: Bool) async {
+        if isLoopOpening {
+            shouldCancelOpening = true
+        }
+
         guard isLoopActive == true else { return }
         log.info("Closing Loop (force closed: \(forceClose))")
 
