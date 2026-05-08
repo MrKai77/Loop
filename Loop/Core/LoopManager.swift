@@ -124,6 +124,8 @@ final class LoopManager {
         accessibilityCheckerTask?.cancel()
         accessibilityCheckerTask = nil
 
+        indicatorService.closeAll()
+
         keybindTrigger.stop()
         middleClickTrigger.stop()
         mouseInteractionObserver.stop()
