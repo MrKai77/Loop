@@ -177,7 +177,7 @@ extension LoopManager {
 
         let initialFrame: CGRect = if let window {
             // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
-            StashManager.shared.getRevealedFrameForStashedWindow(
+            await StashManager.shared.getRevealedFrameForStashedWindow(
                 id: window.cgWindowID
             ) ?? window.frame
         } else {

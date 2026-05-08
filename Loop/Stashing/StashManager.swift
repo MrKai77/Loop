@@ -137,8 +137,8 @@ final class StashManager {
         return true
     }
 
-    func getRevealedFrameForStashedWindow(id: CGWindowID) -> CGRect? {
-        store.stashed[id]?.computeRevealedFrame()
+    func getRevealedFrameForStashedWindow(id: CGWindowID) async -> CGRect? {
+        await store.stashed[id]?.computeRevealedFrame()
     }
 }
 
@@ -277,7 +277,7 @@ private extension StashManager {
             }
         }
 
-        let frame = window.computeRevealedFrame()
+        let frame = await window.computeRevealedFrame()
 
         if shiftFocusWhenStashed {
             Task { @MainActor in
@@ -500,7 +500,7 @@ private extension StashManager {
     private func shouldHide(window: StashedWindowInfo, for location: CGPoint) async -> Bool {
         // Hide the window if the cursor is neither over the revealedFrame nor the stashedFrame.
         let tolerance: CGFloat = 15
-        let revealedFrame = window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
+        let revealedFrame = await window.computeRevealedFrame().insetBy(dx: -tolerance, dy: -tolerance)
         let stashedFrame = await window.computeStashedFrame(peekSize: stashedWindowVisiblePadding)
         return !revealedFrame.contains(location) && !stashedFrame.contains(location)
     }
@@ -524,7 +524,7 @@ private extension StashManager {
     /// If there is not enough space, the stashed window will be unstashed (i.e., made fully visible and removed from the stash)
     /// and replaced by `windowToStash`
     func unstashOverlappingWindows(_ windowToStash: StashedWindowInfo) async {
-        let newFrame = windowToStash.computeRevealedFrame()
+        let newFrame = await windowToStash.computeRevealedFrame()
 
         for (id, stashedWindow) in store.stashed {
             // windowToStash is already managed by StashManager. Can't overlap with itself.
