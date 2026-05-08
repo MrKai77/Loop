@@ -191,10 +191,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     /// - Parameter context: the resize context containing the pre-computed target frame.
     /// - Returns: the angle to show in the radial menu, or `nil` if the action does not have a radial menu angle.
     func radialMenuAngle(context: ResizeContext) -> Angle? {
-        guard
-            direction.frameMultiplyValues != nil,
-            direction.hasRadialMenuAngle
-        else {
+        guard direction.hasRadialMenuAngle else {
             return nil
         }
 

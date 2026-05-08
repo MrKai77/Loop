@@ -68,7 +68,7 @@ final class RadialMenuViewModel: ObservableObject {
         }
 
         // Otherwise, default to the action's settings
-        return currentAction.direction.hasRadialMenuAngle != true || currentAction.direction.isCustomizable == true
+        return currentAction.direction.hasRadialMenuAngle != true || (currentAction.direction.isCustomizable == true && currentAction.direction != .stash)
     }
 
     var radialMenuImage: Image? {

@@ -73,6 +73,56 @@ enum WindowFrameResolver {
 
         return (result, sidesToAdjust)
     }
+
+    static func getRevealedFrame(resizeContext: ResizeContext) -> CGRect {
+        resizeContext.getTargetFrame().padded
+    }
+
+    static func getRevealedFrame(for action: WindowAction, window: Window, screen: NSScreen) async -> CGRect {
+        let context = ResizeContext(window: window, screen: screen, action: action)
+        await context.refreshResolvedState()
+        return getRevealedFrame(resizeContext: context)
+    }
+
+    static func getStashedFrame(for action: WindowAction, window: Window, screen: NSScreen, peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) async -> CGRect {
+        let bounds = screen.cgSafeScreenFrame
+        let revealedFrame = await getFrame(for: action, window: window, bounds: bounds)
+
+        return getStashedFrame(
+            for: action,
+            revealedFrame: revealedFrame,
+            bounds: bounds,
+            peekSize: peekSize,
+            maxPeekPercent: maxPeekPercent
+        )
+    }
+
+    static func getStashedFrame(for action: WindowAction, revealedFrame: CGRect, bounds: CGRect, peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) -> CGRect {
+        var frame = revealedFrame
+        let minPeekSize: CGFloat = 1
+
+        switch action.stashEdge {
+        case .left, .right:
+            let maxPeekSize = frame.width * maxPeekPercent
+            let clampedPeekSize = max(minPeekSize, min(peekSize, maxPeekSize))
+
+            if action.stashEdge == .left {
+                frame.origin.x = bounds.minX - frame.width + clampedPeekSize
+            } else {
+                frame.origin.x = bounds.maxX - clampedPeekSize
+            }
+
+        case .bottom:
+            let maxPeekSize = frame.height * maxPeekPercent
+            let clampedPeekSize = max(minPeekSize, min(peekSize, maxPeekSize))
+            frame.origin.y = bounds.maxY - clampedPeekSize
+
+        case .none:
+            break
+        }
+
+        return frame
+    }
 }
 
 // MARK: - Calculators

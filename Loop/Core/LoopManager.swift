@@ -287,7 +287,6 @@ extension LoopManager {
     ) async {
         guard
             isLoopActive,
-            resizeContext.action.id != newAction.id || newAction.canRepeat,
             let currentScreen = resizeContext.screen ?? resolveAndStoreTargetScreen(
                 action: newAction,
                 window: resizeContext.window
@@ -296,15 +295,19 @@ extension LoopManager {
             return
         }
 
+        if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
+            return
+        }
+
+        guard resizeContext.action.id != newAction.id || newAction.canRepeat else {
+            return
+        }
+
         var newAction: WindowAction = newAction
         var newParentAction: WindowAction? = nil
 
         triggerKeyTimeoutTimer.cancel()
         triggerKeyTimeoutTimer.start()
-
-        if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
-            return
-        }
 
         if newAction.direction == .cycle {
             newParentAction = newAction
