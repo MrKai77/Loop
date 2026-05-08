@@ -12,6 +12,8 @@ import Scribe
 /// Base class to share common functionality. DO NOT USE DIRECTLY!
 @Loggable
 class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
+    private static let teardownTimeout: DispatchTimeInterval = .milliseconds(250)
+
     let id = UUID()
 
     private var eventTap: CFMachPort?
@@ -72,32 +74,30 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
         let eventTap = eventTap
         let runLoop = runLoop
         let runLoopSource = runLoopSource
+        let readableIdentifier = readableIdentifier
 
         self.eventTap = nil
         self.runLoop = nil
         self.runLoopSource = nil
         isEnabled = false
 
-        guard let runLoop else {
-            if let eventTap {
-                CGEvent.tapEnable(tap: eventTap, enable: false)
-                CFMachPortInvalidate(eventTap)
-            }
-            return
-        }
-
         let cleanup = {
-            if let eventTap {
+            if let eventTap, CFMachPortIsValid(eventTap) {
                 CGEvent.tapEnable(tap: eventTap, enable: false)
             }
 
-            if let runLoopSource {
+            if let runLoop, let runLoopSource, CFRunLoopSourceIsValid(runLoopSource) {
                 CFRunLoopRemoveSource(runLoop, runLoopSource, .commonModes)
             }
 
-            if let eventTap {
+            if let eventTap, CFMachPortIsValid(eventTap) {
                 CFMachPortInvalidate(eventTap)
             }
+        }
+
+        guard let runLoop else {
+            cleanup()
+            return
         }
 
         if CFRunLoopGetCurrent() == runLoop {
@@ -106,11 +106,25 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
         }
 
         let finished = DispatchSemaphore(value: 0)
+        let monitor = self
         CFRunLoopPerformBlock(runLoop, CFRunLoopMode.commonModes.rawValue) {
             cleanup()
+
+            // Keep callback userInfo valid until the tap is torn down
+            _ = monitor
+
             finished.signal()
         }
         CFRunLoopWakeUp(runLoop)
-        finished.wait()
+
+        if finished.wait(timeout: .now() + Self.teardownTimeout) == .timedOut {
+            if let eventTap, CFMachPortIsValid(eventTap) {
+                CGEvent.tapEnable(tap: eventTap, enable: false)
+                CFMachPortInvalidate(eventTap)
+            }
+
+            let identifier = readableIdentifier ?? id.uuidString
+            log.warn("Timed out while tearing down event tap '\(identifier)'. Invalidated it from the caller thread.")
+        }
     }
 }
