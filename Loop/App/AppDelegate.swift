@@ -164,7 +164,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func runStashShutdownWithTimeout(_ duration: Duration) async -> Bool {
-        return await withCheckedContinuation { continuation in
+        await withCheckedContinuation { continuation in
             let reply = OneShotContinuation(continuation)
 
             let shutdownTask = Task { @MainActor in
