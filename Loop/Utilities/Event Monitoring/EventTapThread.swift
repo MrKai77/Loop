@@ -10,7 +10,7 @@ import Foundation
 
 /// Owns the run loop used by global event taps.
 final class EventTapThread: Thread {
-    static let shared = EventTapThread(name: "Loop.EventTapThread")
+    static let shared = EventTapThread(name: "\(Bundle.main.bundleID).EventTapThread")
 
     private let startLock = NSLock()
     private let runLoopReady = DispatchGroup()
