@@ -14,11 +14,52 @@ struct StashedWindowInfo: Equatable {
     let window: Window
     let screen: NSScreen
     let action: WindowAction
+    let revealedFrame: CGRect
+    let stashedFrame: CGRect
 
     // MARK: - Frame computation
 
+    static func create(window: Window, screen: NSScreen, action: WindowAction, peekSize: CGFloat) async -> StashedWindowInfo {
+        let revealedFrame = await computeRevealedFrame(window: window, screen: screen, action: action)
+        let stashedFrame = await computeStashedFrame(window: window, screen: screen, action: action, peekSize: peekSize)
+
+        return StashedWindowInfo(
+            window: window,
+            screen: screen,
+            action: action,
+            revealedFrame: revealedFrame,
+            stashedFrame: stashedFrame
+        )
+    }
+
+    func updatingStashedFrame(peekSize: CGFloat) async -> StashedWindowInfo {
+        let stashedFrame = await Self.computeStashedFrame(
+            window: window,
+            screen: screen,
+            action: action,
+            peekSize: peekSize
+        )
+
+        return StashedWindowInfo(
+            window: window,
+            screen: screen,
+            action: action,
+            revealedFrame: revealedFrame,
+            stashedFrame: stashedFrame
+        )
+    }
+
+    func updatingFrames(screen: NSScreen, peekSize: CGFloat) async -> StashedWindowInfo {
+        await Self.create(
+            window: window,
+            screen: screen,
+            action: action,
+            peekSize: peekSize
+        )
+    }
+
     /// Computes the frame for a stashed window.
-    func computeStashedFrame(peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) async -> CGRect {
+    private static func computeStashedFrame(window: Window, screen: NSScreen, action: WindowAction, peekSize: CGFloat, maxPeekPercent: CGFloat = 0.2) async -> CGRect {
         let bounds = screen.cgSafeScreenFrame
         var frame = await WindowFrameResolver.getFrame(for: action, window: window, bounds: bounds)
 
@@ -41,13 +82,13 @@ struct StashedWindowInfo: Equatable {
             frame.origin.y = bounds.maxY - clampedPeekSize
 
         case .none:
-            log.warn("Trying to compute the stash frame for a non-stash related action.")
+            break
         }
 
         return frame
     }
 
-    func computeRevealedFrame() async -> CGRect {
+    private static func computeRevealedFrame(window: Window, screen: NSScreen, action: WindowAction) async -> CGRect {
         let context = ResizeContext(window: window, screen: screen)
         context.setAction(to: action, parent: nil)
         await context.refreshResolvedState()

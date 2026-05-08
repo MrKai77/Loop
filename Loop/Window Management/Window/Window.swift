@@ -496,6 +496,11 @@ final class Window {
             log.info("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.")
             enhancedUserInterface = false
         }
+        defer {
+            if enhancedUI {
+                enhancedUserInterface = true
+            }
+        }
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(), Error>) in
             let animation = WindowTransformAnimation(
@@ -512,10 +517,6 @@ final class Window {
             }
 
             animation.start()
-        }
-
-        if enhancedUI {
-            enhancedUserInterface = true
         }
     }
 }
