@@ -106,13 +106,15 @@ final class WindowTransformAnimation: NSAnimation {
 
         if shouldSetSize, lastWindowFrame.size != requestedFrame.size {
             window.setSize(requestedFrame.size)
-            let actualFrame = window.frame
-            newFrame = WindowEngine.anchoredFrame(
-                for: actualFrame.size,
-                within: requestedFrame,
-                targetEdges: targetEdges,
-                bounds: bounds
-            )
+            if bounds != .zero {
+                let actualFrame = window.frame
+                newFrame = WindowEngine.anchoredFrame(
+                    for: actualFrame.size,
+                    within: requestedFrame,
+                    targetEdges: targetEdges,
+                    bounds: bounds
+                )
+            }
         } else if bounds != .zero {
             newFrame = newFrame.pushInside(bounds)
         }
