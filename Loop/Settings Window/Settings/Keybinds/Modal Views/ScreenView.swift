@@ -18,10 +18,10 @@ struct ScreenView<Content>: View where Content: View {
     @State private var image: NSImage?
 
     private let screenShape = UnevenRoundedRectangle(
-        topLeadingRadius: 12,
+        topLeadingRadius: 8,
         bottomLeadingRadius: 0,
         bottomTrailingRadius: 0,
-        topTrailingRadius: 12
+        topTrailingRadius: 8
     )
 
     init(

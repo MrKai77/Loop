@@ -86,25 +86,22 @@ struct RadialMenuActionItemView: View {
     private var label: some View {
         actionIndicator
             .background(alignment: .leading) {
-                if isHovering || isPickerPresented {
-                    Color.clear
-                        .frame(width: 300 - 24)
-                        .luminarePopover(
-                            isPresented: $isPickerPresented,
-                            arrowEdge: .top,
-                            shouldHideAnchor: true,
-                            shouldAnimate: false
-                        ) {
-                            RadialMenuActionPickerView(selection: $action.type)
-                                .frame(width: 300, height: 300)
+                Color.clear
+                    .frame(width: 300 - 24)
+                    .luminarePopover(
+                        isPresented: $isPickerPresented,
+                        arrowEdge: .top,
+                        shouldHideAnchor: true,
+                        shouldAnimate: false
+                    ) {
+                        RadialMenuActionPickerView(selection: $action.type)
+                            .frame(width: 300, height: 300)
+                    }
+                    .onChange(of: isPickerPresented) { _ in
+                        if !isPickerPresented {
+                            PickerListEventMonitorManager.shared.removeAllMonitors()
                         }
-                        .luminareSheetClosesOnDefocus(true)
-                        .onChange(of: isPickerPresented) { _ in
-                            if !isPickerPresented {
-                                PickerListEventMonitorManager.shared.removeAllMonitors()
-                            }
-                        }
-                }
+                    }
             }
     }
 
@@ -164,10 +161,7 @@ struct RadialMenuActionItemView: View {
                             Image(systemName: "slider.horizontal.3")
                         }
                         .buttonStyle(.plain)
-                        .luminareModalWithPredefinedSheetStyle(
-                            isPresented: $isConfiguringCustom,
-                            isCompact: false
-                        ) {
+                        .luminareModal(isPresented: $isConfiguringCustom) {
                             if resolvedAction.direction == .custom {
                                 CustomActionConfigurationView(
                                     action: actionBinding,
@@ -182,6 +176,7 @@ struct RadialMenuActionItemView: View {
                                 .frame(width: 400)
                             }
                         }
+                        .luminareCornerRadius(24)
                         .help("Customize this action's custom frame.")
                     }
 
@@ -192,16 +187,14 @@ struct RadialMenuActionItemView: View {
                             Image(systemName: "repeat")
                         }
                         .buttonStyle(.plain)
-                        .luminareModalWithPredefinedSheetStyle(
-                            isPresented: $isConfiguringCycle,
-                            isCompact: false
-                        ) {
+                        .luminareModal(isPresented: $isConfiguringCycle) {
                             CycleActionConfigurationView(
                                 action: actionBinding,
                                 isPresented: $isConfiguringCycle
                             )
                             .frame(width: 400)
                         }
+                        .luminareCornerRadius(24)
                         .help("Customize what this action cycles through.")
                     }
                 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// Animate a window's resize!
+@MainActor
 final class WindowTransformAnimation: NSAnimation {
     private var targetFrame: CGRect
     private let originalFrame: CGRect
@@ -53,7 +54,6 @@ final class WindowTransformAnimation: NSAnimation {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @MainActor
     override func start() {
         super.start()
     }

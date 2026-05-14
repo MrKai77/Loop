@@ -34,7 +34,7 @@ struct BehaviorConfigurationView: View {
     @State private var isPaddingConfigurationViewPresented = false
 
     var body: some View {
-        Group {
+        LuminareForm {
             generalSection
             windowSection
             cursorSection
@@ -81,10 +81,11 @@ struct BehaviorConfigurationView: View {
                 LuminareButton("Padding", "Configure…") {
                     isPaddingConfigurationViewPresented = true
                 }
-                .luminareModalWithPredefinedSheetStyle(isPresented: $isPaddingConfigurationViewPresented, isCompact: false) {
+                .luminareModal(isPresented: $isPaddingConfigurationViewPresented) {
                     PaddingConfigurationView(isPresented: $isPaddingConfigurationViewPresented)
                         .frame(width: 400)
                 }
+                .luminareModalCornerRadius(24)
             }
         }
     }

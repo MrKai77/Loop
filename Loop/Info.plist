@@ -13,6 +13,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSAutoFillRequiresTextContentTypeForOneTimeCodeOnMac</key>
+	<true/>
 	<key>NSDockTilePlugIn</key>
 	<string>LoopDockTile.plugin</string>
 </dict>

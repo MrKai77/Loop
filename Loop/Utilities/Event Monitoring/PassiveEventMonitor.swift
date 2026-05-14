@@ -52,9 +52,7 @@ final class PassiveEventMonitor: BaseEventTapMonitor {
             return Unmanaged.passUnretained(event)
         }
 
-        let retained = Unmanaged.passRetained(self as BaseEventTapMonitor)
-        self.retainedSelf = retained
-        let userInfo = retained.toOpaque()
+        let userInfo = Unmanaged.passUnretained(self).toOpaque()
 
         if let eventTap = CGEvent.tapCreate(
             tap: tapLocation,

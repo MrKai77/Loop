@@ -17,7 +17,6 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
     @Binding var searchResults: [V]
 
     @State private var arrowSelection: V?
-    @State private var isInitialRender = true
 
     private let proxy: ScrollViewProxy
     private let sections: [PickerSection<V>]
@@ -38,7 +37,7 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        LazyVStack(alignment: .leading, spacing: 4) {
             if searchResults.isEmpty {
                 sectionsView
             } else {
@@ -47,15 +46,12 @@ struct PickerList<Content, V>: View where Content: View, V: Hashable, V: Identif
         }
         .onChange(of: searchResults) { _ in arrowSelection = nil }
         .onAppear {
-            Task { @MainActor in
-                setupEventMonitor(reader: proxy)
-                isInitialRender = false
-            }
+            setupEventMonitor(reader: proxy)
         }
     }
 
     private var sectionsView: some View {
-        ForEach(sections.prefix(isInitialRender ? 1 : sections.count)) { section in
+        ForEach(sections) { section in
             Section {
                 ForEach(section.items, id: \.self) { item in
                     PopoverPickerItem(

@@ -11,6 +11,7 @@ import Scribe
 import SwiftUI
 
 protocol StashedWindowsStoreDelegate: AnyObject {
+    var stashedWindowVisiblePadding: CGFloat { get }
     func onStashedWindowsRestored()
 }
 
@@ -25,12 +26,12 @@ final class StashedWindowsStore {
 
     /// Hold data from `Defaults[.stashManagerStashedWindows]` for windows that failed to be restored.
     private var failedToRestore: [CGWindowID: WindowAction] = [:]
-    private var spaceObserver: NSObjectProtocol?
+    private var spaceObserverTask: Task<(), Never>?
 
     // MARK: - Public methods
 
-    func restore() {
-        restoreStashedWindows()
+    func restore() async {
+        await restoreStashedWindows()
     }
 
     func isWindowRevealed(_ id: CGWindowID) -> Bool {
@@ -63,13 +64,13 @@ final class StashedWindowsStore {
 
     // MARK: Private methods
 
-    private func restoreStashedWindows() {
+    private func restoreStashedWindows() async {
         let windows = WindowUtility.windowList()
         let defaultStashedWindows = Defaults[.stashManagerStashedWindows]
         var restoredStashedWindows: [CGWindowID: StashedWindowInfo] = [:]
 
         for (windowId, direction) in defaultStashedWindows {
-            guard let stashedWindow = getStashedWindow(for: windowId, in: windows, action: direction) else {
+            guard let stashedWindow = await getStashedWindow(for: windowId, in: windows, action: direction) else {
                 failedToRestore[windowId] = direction
                 continue
             }
@@ -88,20 +89,27 @@ final class StashedWindowsStore {
 
             // Window restoration usually fail because the window is on another space and will
             // not be returned by WindowEngine.windowList until the user goes to that space.
-            let notification = NSWorkspace.activeSpaceDidChangeNotification
-            spaceObserver = NSWorkspace.shared.notificationCenter
-                .addObserver(forName: notification, object: nil, queue: .main, using: onSpaceChanged)
+            spaceObserverTask = Task { [weak self] in
+                let notifications = NSWorkspace.shared.notificationCenter.notifications(
+                    named: NSWorkspace.activeSpaceDidChangeNotification
+                )
+
+                for await _ in notifications {
+                    guard !Task.isCancelled else { return }
+                    await self?.onSpaceChanged()
+                }
+            }
         }
     }
 
-    private func onSpaceChanged(_: Notification) {
+    private func onSpaceChanged() async {
         let windows = WindowUtility.windowList()
         var restored = 0
 
         log.info("Space changed. Attempting to restore windows.")
 
         for (windowId, direction) in failedToRestore {
-            guard let stashedWindow = getStashedWindow(for: windowId, in: windows, action: direction) else {
+            guard let stashedWindow = await getStashedWindow(for: windowId, in: windows, action: direction) else {
                 continue
             }
 
@@ -114,15 +122,22 @@ final class StashedWindowsStore {
             delegate?.onStashedWindowsRestored()
         }
 
-        if let spaceObserver, failedToRestore.isEmpty {
-            NSWorkspace.shared.notificationCenter.removeObserver(spaceObserver)
+        if failedToRestore.isEmpty {
+            spaceObserverTask?.cancel()
+            spaceObserverTask = nil
         }
     }
 
-    private func getStashedWindow(for windowId: CGWindowID, in windows: [Window], action: WindowAction) -> StashedWindowInfo? {
+    private func getStashedWindow(for windowId: CGWindowID, in windows: [Window], action: WindowAction) async -> StashedWindowInfo? {
         guard let window = windows.first(where: { $0.cgWindowID == windowId }) else { return nil }
         guard let screen = ScreenUtility.screenContaining(window) ?? NSScreen.main else { return nil }
+        guard let peekSize = delegate?.stashedWindowVisiblePadding else { return nil }
 
-        return StashedWindowInfo(window: window, screen: screen, action: action)
+        return await StashedWindowInfo.create(
+            window: window,
+            screen: screen,
+            action: action,
+            peekSize: peekSize
+        )
     }
 }

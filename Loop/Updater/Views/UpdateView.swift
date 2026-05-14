@@ -67,6 +67,8 @@ struct UpdateView: View {
             footerView()
         }
         .frame(width: 500, height: 480)
+        .padding(.top, 38) // titlebar
+        .luminareBackground()
     }
 
     private func theLoopTimesView() -> some View {
@@ -236,6 +238,7 @@ struct UpdateView: View {
             }
             .allowsHitTesting(updater.installState.isUpdateButtonInteractive)
         }
+        .buttonStyle(.luminare(overrideUseMainStyle: true))
         .luminareCornerRadius(8)
         .padding(12)
         .animation(luminareAnimation, value: updater.installState)

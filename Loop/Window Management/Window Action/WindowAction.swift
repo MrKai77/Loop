@@ -114,6 +114,48 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     // MARK: - Methods
 
+    var iconResolvedAction: WindowAction {
+        if direction == .cycle, let first = cycle?.first {
+            first
+        } else {
+            self
+        }
+    }
+
+    struct SemanticKey: Hashable {
+        let direction: WindowDirection
+        let keybind: Set<CGKeyCode>
+        let bypassTriggerKey: Bool?
+        let name: String?
+        let unit: CustomWindowActionUnit?
+        let anchor: CustomWindowActionAnchor?
+        let sizeMode: CustomWindowActionSizeMode?
+        let width: Double?
+        let height: Double?
+        let positionMode: CustomWindowActionPositionMode?
+        let xPoint: Double?
+        let yPoint: Double?
+        let cycle: [Self]?
+    }
+
+    var semanticKey: SemanticKey {
+        .init(
+            direction: direction,
+            keybind: keybind,
+            bypassTriggerKey: bypassTriggerKey,
+            name: name,
+            unit: unit,
+            anchor: anchor,
+            sizeMode: sizeMode,
+            width: width,
+            height: height,
+            positionMode: positionMode,
+            xPoint: xPoint,
+            yPoint: yPoint,
+            cycle: cycle?.map(\.semanticKey)
+        )
+    }
+
     /// Retrieves the name of the action, either from the `name` property or from the `direction` enum.
     /// - Returns: the name of the action.
     func getName() -> String {
@@ -191,10 +233,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     /// - Parameter context: the resize context containing the pre-computed target frame.
     /// - Returns: the angle to show in the radial menu, or `nil` if the action does not have a radial menu angle.
     func radialMenuAngle(context: ResizeContext) -> Angle? {
-        guard
-            direction.frameMultiplyValues != nil,
-            direction.hasRadialMenuAngle
-        else {
+        guard direction.hasRadialMenuAngle else {
             return nil
         }
 

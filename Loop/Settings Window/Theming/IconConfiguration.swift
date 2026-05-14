@@ -104,47 +104,49 @@ struct IconConfigurationView: View {
     @Default(.notificationWhenIconUnlocked) var notificationWhenIconUnlocked
 
     var body: some View {
-        LuminareSection {
-            LuminarePicker(
-                elements: Icon.all,
-                selection: Binding(
-                    get: { IconManager.currentAppIcon },
-                    set: {
-                        currentIcon = $0.assetName
-
-                        Task {
-                            IconManager.refreshCurrentAppIcon()
+        LuminareForm {
+            LuminareSection {
+                LuminarePicker(
+                    elements: Icon.all,
+                    selection: Binding(
+                        get: { IconManager.currentAppIcon },
+                        set: {
+                            currentIcon = $0.assetName
+                            
+                            Task {
+                                IconManager.refreshCurrentAppIcon()
+                            }
                         }
-                    }
-                )
-            ) { icon in
-                IconVew(model: model, icon: icon)
-                    .aspectRatio(1, contentMode: .fit)
-                    .alert(isPresented: $model.showingLockedAlert) {
-                        Alert(
-                            title: Text(.init(localized: "Locked icon alert title", defaultValue: "Icon Locked")),
-                            message: Text(model.selectedLockedMessage),
-                            dismissButton: .default(Text("OK"))
-                        )
-                    }
+                    )
+                ) { icon in
+                    IconVew(model: model, icon: icon)
+                        .aspectRatio(1, contentMode: .fit)
+                        .alert(isPresented: $model.showingLockedAlert) {
+                            Alert(
+                                title: Text(.init(localized: "Locked icon alert title", defaultValue: "Icon Locked")),
+                                message: Text(model.selectedLockedMessage),
+                                dismissButton: .default(Text("OK"))
+                            )
+                        }
+                }
+                .luminareRoundingBehavior(top: true, bottom: true)
             }
-            .luminareRoundingBehavior(top: true, bottom: true)
-        }
-
-        LuminareSection(String(localized: "Options", comment: "Section header shown in settings")) {
-            LuminareToggle("Show in dock", isOn: $showDockIcon)
-            LuminareToggle(
-                "Notify when unlocking new icons",
-                isOn: Binding(
-                    get: {
-                        notificationWhenIconUnlocked
-                    },
-                    set: {
-                        notificationWhenIconUnlocked = $0
-                        model.handleNotificationChange()
-                    }
+            
+            LuminareSection(String(localized: "Options", comment: "Section header shown in settings")) {
+                LuminareToggle("Show in dock", isOn: $showDockIcon)
+                LuminareToggle(
+                    "Notify when unlocking new icons",
+                    isOn: Binding(
+                        get: {
+                            notificationWhenIconUnlocked
+                        },
+                        set: {
+                            notificationWhenIconUnlocked = $0
+                            model.handleNotificationChange()
+                        }
+                    )
                 )
-            )
+            }
         }
     }
 }

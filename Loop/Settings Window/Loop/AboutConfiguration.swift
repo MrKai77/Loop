@@ -176,10 +176,12 @@ struct AboutConfigurationView: View {
     }
 
     var body: some View {
-        iconHeader
-        updateSection
-        communitySection
-        creditsSection
+        LuminareForm {
+            iconHeader
+            updateSection
+            communitySection
+            creditsSection
+        }
     }
 
     private var iconHeader: some View {
@@ -223,9 +225,14 @@ struct AboutConfigurationView: View {
                         hasFixedHeight: true
                     )
                     .luminareRoundingBehavior(top: true, bottom: true)
-                    .popover(isPresented: $model.didCompleteCopyToClipboard) {
+                    .luminareSurfaceStyle(.flat)
+                    .luminarePopover(
+                        isPresented: $model.didCompleteCopyToClipboard,
+                        arrowEdge: .bottom,
+                        shouldHideAnchor: true
+                    ) {
                         Text("Copied!")
-                            .padding(4)
+                            .padding(6)
                     }
                 }
             }
@@ -238,27 +245,29 @@ struct AboutConfigurationView: View {
 
     private var updateSection: some View {
         LuminareSection {
-            Button {
-                Task {
-                    await updater.fetchLatestInfo(bypassUpdatesEnabled: true)
-
-                    switch updater.updateState {
-                    case .available:
-                        await updater.showUpdateWindowIfEligible()
-                    case .unavailable:
-                        await model.showUpdatesUnavailableText()
-                    case .osNotSupported:
-                        break
+            LuminareButtonRow {
+                Button {
+                    Task {
+                        await updater.fetchLatestInfo(bypassUpdatesEnabled: true)
+                        
+                        switch updater.updateState {
+                        case .available:
+                            await updater.showUpdateWindowIfEligible()
+                        case .unavailable:
+                            await model.showUpdatesUnavailableText()
+                        case .osNotSupported:
+                            break
+                        }
                     }
+                } label: {
+                    Text(.init(updateButtonText))
+                        .contentTransition(.numericText())
+                        .animation(luminareAnimation, value: updateButtonText)
                 }
-            } label: {
-                Text(.init(updateButtonText))
-                    .contentTransition(.numericText())
-                    .animation(luminareAnimation, value: updateButtonText)
+                .disabled(!updateButtonEnabled)
+                .onHover { model.isHoveringOverUpdateButton = $0 }
             }
             .luminareRoundingBehavior(top: true)
-            .disabled(!updateButtonEnabled)
-            .onHover { model.isHoveringOverUpdateButton = $0 }
 
             LuminareToggle("Include development versions", isOn: $includeDevelopmentVersions)
 
@@ -281,11 +290,10 @@ struct AboutConfigurationView: View {
             )
             .padding(8)
 
-            HStack(spacing: 4) {
+            LuminareButtonRow {
                 Button("Send Feedback") {
                     openURL(URL(string: "https://github.com/MrKai77/Loop")!)
                 }
-                .luminareRoundingBehavior(bottomLeading: true)
 
                 Button("Join Discord") {
                     openURL(URL(string: "https://discord.gg/2CZ2N6PKjq")!)
@@ -294,8 +302,8 @@ struct AboutConfigurationView: View {
                 Button("Donate") {
                     openURL(URL(string: "https://github.com/sponsors/MrKai77")!)
                 }
-                .luminareRoundingBehavior(bottomTrailing: true)
             }
+            .luminareRoundingBehavior(bottom: true)
         }
     }
 
@@ -348,6 +356,7 @@ struct AboutConfigurationView: View {
                 hasFixedHeight: true
             )
             .luminareRoundingBehavior(top: true, bottom: true)
+            .luminareSurfaceStyle(.flat)
         }
         .padding(12)
     }

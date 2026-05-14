@@ -10,7 +10,6 @@ import Luminare
 import SwiftUI
 
 struct KeybindItemView: View {
-    @Environment(\.luminareItemBeingHovered) private var isHovering
     @Environment(\.luminareAnimation) var luminareAnimation
 
     @Default(.triggerKey) private var triggerKey
@@ -81,10 +80,7 @@ struct KeybindItemView: View {
                         Image(systemName: "slider.horizontal.3")
                     }
                     .buttonStyle(.plain)
-                    .luminareModalWithPredefinedSheetStyle(
-                        isPresented: $isConfiguringCustom,
-                        isCompact: false
-                    ) {
+                    .luminareModal(isPresented: $isConfiguringCustom) {
                         if action.direction == .custom {
                             CustomActionConfigurationView(
                                 action: $action,
@@ -99,6 +95,7 @@ struct KeybindItemView: View {
                             .frame(width: 400)
                         }
                     }
+                    .luminareModalCornerRadius(24)
                     .help("Customize this action's custom frame.")
                 }
 
@@ -109,45 +106,40 @@ struct KeybindItemView: View {
                         Image(systemName: "repeat")
                     }
                     .buttonStyle(.plain)
-                    .luminareModalWithPredefinedSheetStyle(
-                        isPresented: $isConfiguringCycle,
-                        isCompact: false
-                    ) {
+                    .luminareModal(isPresented: $isConfiguringCycle) {
                         CycleActionConfigurationView(
                             action: $action,
                             isPresented: $isConfiguringCycle
                         )
                         .frame(width: 400)
                     }
+                    .luminareModalCornerRadius(24)
                     .help("Customize what this action cycles through.")
                 }
             }
             .font(.title3)
-            .foregroundStyle(isHovering ? .primary : .secondary)
+            .foregroundStyle(.secondary)
         }
         .background(alignment: .leading) {
-            if isHovering || isDirectionPickerPresented {
-                Color.clear
-                    .frame(width: 300 - 24)
-                    .luminarePopover(
-                        isPresented: $isDirectionPickerPresented,
-                        arrowEdge: .top,
-                        shouldHideAnchor: true,
-                        shouldAnimate: false
-                    ) {
-                        DirectionPickerView(
-                            direction: $action.direction,
-                            isInCycle: cycleIndex != nil
-                        )
-                        .frame(width: 300, height: 300)
+            Color.clear
+                .frame(width: 300 - 24)
+                .luminarePopover(
+                    isPresented: $isDirectionPickerPresented,
+                    arrowEdge: .top,
+                    shouldHideAnchor: true,
+                    shouldAnimate: false
+                ) {
+                    DirectionPickerView(
+                        direction: $action.direction,
+                        isInCycle: cycleIndex != nil
+                    )
+                    .frame(width: 300, height: 300)
+                }
+                .onChange(of: isDirectionPickerPresented) { _ in
+                    if !isDirectionPickerPresented {
+                        PickerListEventMonitorManager.shared.removeAllMonitors()
                     }
-                    .luminareSheetClosesOnDefocus(true)
-                    .onChange(of: isDirectionPickerPresented) { _ in
-                        if !isDirectionPickerPresented {
-                            PickerListEventMonitorManager.shared.removeAllMonitors()
-                        }
-                    }
-            }
+                }
         }
     }
 
@@ -156,7 +148,7 @@ struct KeybindItemView: View {
             if let cycleIndex {
                 Text("\(cycleIndex)")
                     .frame(width: 27, height: 27)
-                    .luminarePlateau()
+                    .luminareSurface()
             } else {
                 HStack(spacing: 6) {
                     keycorderSection()
@@ -237,7 +229,7 @@ struct KeybindItemView: View {
                 .font(.callout)
                 .padding(6)
                 .frame(height: 27)
-                .luminarePlateau()
+                .luminareSurface()
 
                 Image(systemName: "plus")
                     .foregroundStyle(.secondary)

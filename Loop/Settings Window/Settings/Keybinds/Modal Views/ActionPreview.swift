@@ -26,7 +26,7 @@ struct ActionPreview: View {
     }
 
     private func blurredWindow() -> some View {
-        VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
+        VisualEffectView(material: .hudWindow, blendingMode: .withinWindow, state: .active)
             .overlay {
                 RoundedRectangle(cornerRadius: 7)
                     .strokeBorder(accentColorController.color1, lineWidth: 2)

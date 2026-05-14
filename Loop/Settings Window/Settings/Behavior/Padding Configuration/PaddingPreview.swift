@@ -39,7 +39,7 @@ struct PaddingPreview: View {
     }
 
     func blurredWindow() -> some View {
-        VisualEffectView(material: .hudWindow, blendingMode: .withinWindow)
+        VisualEffectView(material: .hudWindow, blendingMode: .withinWindow, state: .active)
             .overlay {
                 RoundedRectangle(cornerRadius: 5)
                     .strokeBorder(.white.opacity(0.1), lineWidth: 2)

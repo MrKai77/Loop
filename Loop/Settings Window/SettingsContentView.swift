@@ -28,7 +28,7 @@ struct SettingsContentView: View {
                 LuminareSidebarSection("Settings", selection: $model.currentTab, items: SettingsTab.settingsTabs)
                 LuminareSidebarSection("\(Bundle.main.appName)", selection: $model.currentTab, items: SettingsTab.loopTabs)
             }
-            .frame(width: 240)
+            .frame(width: 230)
             .padding(.top, titleBarHeight)
             .luminareBackground()
 

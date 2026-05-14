@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import os
 import Scribe
 import SwiftUI
 
@@ -26,7 +27,28 @@ final class LoopManager {
     private var accessibilityCheckerTask: Task<(), Never>?
     private var gestureToggleTask: Task<(), Never>?
 
-    private(set) var isLoopActive: Bool = false
+    /// Opening prepares resizeContext asynchronously. We track that setup separately
+    /// so rapid trigger events cannot act on the previous/default context.
+    private var isLoopOpening: Bool = false
+    private var pendingOpeningAction: WindowAction?
+    private var shouldCancelOpening: Bool = false
+
+    private(set) var isLoopActive: Bool = false {
+        didSet {
+            let value = isLoopActive
+            isLoopActiveMirror.withLock { $0 = value }
+        }
+    }
+
+    private let isLoopActiveMirror = OSAllocatedUnfairLock<Bool>(initialState: false)
+    nonisolated var isLoopActiveAtomic: Bool {
+        isLoopActiveMirror.withLock { $0 }
+    }
+
+    private let hasParentCycleActionMirror = OSAllocatedUnfairLock<Bool>(initialState: false)
+    nonisolated var hasParentCycleActionAtomic: Bool {
+        hasParentCycleActionMirror.withLock { $0 }
+    }
 
     private lazy var triggerKeyTimeoutTimer = TriggerKeyTimeoutTimer(
         closeCallback: { [weak self] forceClose in
@@ -47,7 +69,7 @@ final class LoopManager {
             }
         },
         checkIfLoopOpen: { [weak self] in
-            self?.isLoopActive ?? false
+            self?.isLoopActiveAtomic ?? false
         }
     )
 
@@ -62,7 +84,7 @@ final class LoopManager {
                 await self?.closeLoop(forceClose: forceClose)
             }
         },
-        checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
+        checkIfLoopOpen: { [weak self] in self?.isLoopActiveAtomic ?? false }
     )
 
     private(set) lazy var multitouchTrigger = MultitouchTrigger(
@@ -103,9 +125,9 @@ final class LoopManager {
             }
         },
         canSelectNextCycleitem: { [weak self] in
-            self?.resizeContext.parentAction != nil
+            self?.hasParentCycleActionAtomic ?? false
         },
-        checkIfLoopOpen: { [weak self] in self?.isLoopActive ?? false }
+        checkIfLoopOpen: { [weak self] in self?.isLoopActiveAtomic ?? false }
     )
 
     func start() {
@@ -141,6 +163,27 @@ final class LoopManager {
             }
         }
     }
+
+    func shutdown() {
+        accessibilityCheckerTask?.cancel()
+        accessibilityCheckerTask = nil
+        gestureToggleTask?.cancel()
+        gestureToggleTask = nil
+
+        indicatorService.closeAll()
+
+        keybindTrigger.stop()
+        middleClickTrigger.stop()
+        mouseInteractionObserver.stop()
+        multitouchTrigger.stop()
+        triggerKeyTimeoutTimer.cancel()
+
+        isLoopOpening = false
+        pendingOpeningAction = nil
+        shouldCancelOpening = false
+        isLoopActive = false
+        hasParentCycleActionMirror.withLock { $0 = false }
+    }
 }
 
 enum LoopManagerError: LocalizedError {
@@ -168,6 +211,13 @@ extension LoopManager {
             throw LoopManagerError.accessibilityNotGranted
         }
 
+        guard !isLoopOpening else {
+            if startingAction.direction != .noSelection {
+                pendingOpeningAction = startingAction
+            }
+            return
+        }
+
         guard !isLoopActive else {
             // If using Karabiner-Elements, TriggerKeybindObserver may call openLoop twice, as key events arrive in quick succession.
             // This happens because Karabiner-Elements sends modifier keys and other keys as separate, rapid events.
@@ -190,6 +240,17 @@ extension LoopManager {
             throw LoopManagerError.fullscreenWindow
         }
 
+        isLoopOpening = true
+        pendingOpeningAction = nil
+        shouldCancelOpening = false
+        hasParentCycleActionMirror.withLock { $0 = false }
+
+        defer {
+            isLoopOpening = false
+            pendingOpeningAction = nil
+            shouldCancelOpening = false
+        }
+
         log.info("Opening Loop with starting action: \(startingAction.description) and target window: \(window?.description ?? "(none)")")
 
         // Refresh accent colors in case user has enabled the wallpaper processor
@@ -199,7 +260,7 @@ extension LoopManager {
 
         let initialFrame: CGRect = if let window {
             // In case of a stashed window, use the revealed frame instead to prevent issue with frame calculation later.
-            StashManager.shared.getRevealedFrameForStashedWindow(
+            await StashManager.shared.getRevealedFrameForStashedWindow(
                 id: window.cgWindowID
             ) ?? window.frame
         } else {
@@ -213,24 +274,33 @@ extension LoopManager {
         )
         await resizeContext.refreshResolvedState()
 
+        guard !shouldCancelOpening else {
+            return
+        }
+
         if !Defaults[.disableCursorInteraction] {
             mouseInteractionObserver.start(initialMousePosition: resizeContext.initialMousePosition)
         }
 
+        isLoopActive = true
         indicatorService.openAndUpdate(context: resizeContext)
 
-        isLoopActive = true
-        await changeAction(startingAction, disableHapticFeedback: true)
+        await changeAction(pendingOpeningAction ?? startingAction, disableHapticFeedback: true)
 
         triggerKeyTimeoutTimer.start()
     }
 
     private func closeLoop(forceClose: Bool) async {
+        if isLoopOpening {
+            shouldCancelOpening = true
+        }
+
         guard isLoopActive == true else { return }
         log.info("Closing Loop (force closed: \(forceClose))")
 
         indicatorService.closeAll()
         isLoopActive = false
+        hasParentCycleActionMirror.withLock { $0 = false }
 
         triggerKeyTimeoutTimer.cancel()
         mouseInteractionObserver.stop()
@@ -277,7 +347,6 @@ extension LoopManager {
     ) async {
         guard
             isLoopActive,
-            resizeContext.action.id != newAction.id || newAction.canRepeat,
             let currentScreen = resizeContext.screen ?? resolveAndStoreTargetScreen(
                 action: newAction,
                 window: resizeContext.window
@@ -286,15 +355,19 @@ extension LoopManager {
             return
         }
 
+        if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
+            return
+        }
+
+        guard resizeContext.action.id != newAction.id || newAction.canRepeat else {
+            return
+        }
+
         var newAction: WindowAction = newAction
         var newParentAction: WindowAction? = nil
 
         triggerKeyTimeoutTimer.cancel()
         triggerKeyTimeoutTimer.start()
-
-        if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
-            return
-        }
 
         if newAction.direction == .cycle {
             newParentAction = newAction
@@ -369,7 +442,7 @@ extension LoopManager {
                     if let lastAction = await WindowRecords.shared.getCurrentAction(for: targetWindow),
                        lastAction.getName() != screenSwitchingCustomActionName,
                        !lastAction.forceProportionalFrameOnScreenChange {
-                        resizeContext.setAction(to: lastAction, parent: nil)
+                        setResizeAction(to: lastAction, parent: nil)
                     } else {
                         let currentFrame = targetWindow.frame
 
@@ -384,7 +457,7 @@ extension LoopManager {
                             height: currentFrame.height / adjustedBounds.height
                         )
 
-                        resizeContext.setAction(
+                        setResizeAction(
                             to: .init(
                                 .custom,
                                 keybind: [],
@@ -401,7 +474,7 @@ extension LoopManager {
                         )
                     }
                 } else {
-                    resizeContext.setAction(to: .init(.center), parent: nil)
+                    setResizeAction(to: .init(.center), parent: nil)
                 }
             }
 
@@ -409,7 +482,7 @@ extension LoopManager {
             indicatorService.openAndUpdate(context: resizeContext)
 
             if let parent = newParentAction {
-                resizeContext.setAction(to: newAction, parent: newParentAction)
+                setResizeAction(to: newAction, parent: newParentAction)
                 await changeAction(parent, triggeredFromScreenChange: true)
             } else {
                 if !Defaults[.previewVisibility] {
@@ -434,7 +507,7 @@ extension LoopManager {
 
         if newAction != resizeContext.action || newAction.canRepeat {
             let previousActionWasNoOp = resizeContext.action.direction.isNoOp
-            resizeContext.setAction(to: newAction, parent: newParentAction)
+            setResizeAction(to: newAction, parent: newParentAction)
             if !Defaults[.previewVisibility], !previousActionWasNoOp {
                 await resizeContext.refreshResolvedState()
             }
@@ -514,6 +587,11 @@ extension LoopManager {
         if Defaults[.hapticFeedback] {
             NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
         }
+    }
+
+    private func setResizeAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
+        resizeContext.setAction(to: newAction, parent: newParentAction)
+        hasParentCycleActionMirror.withLock { $0 = newParentAction != nil }
     }
 
     /// Resolves the target screen for `screenToResizeOn`.

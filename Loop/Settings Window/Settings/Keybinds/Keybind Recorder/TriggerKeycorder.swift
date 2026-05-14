@@ -57,6 +57,7 @@ struct TriggerKeycorder: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .opacity(shouldShowChangeButton ? 0 : 1)
         }
+        .buttonStyle(.luminare(overrideUseMainStyle: true))
         .onGeometryChange(for: CGFloat.self, of: \.size.width) { totalWidth = $0 }
     }
 

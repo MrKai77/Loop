@@ -371,7 +371,7 @@ final class Window {
     func setPosition(_ point: CGPoint) {
         if isOwnWindow {
             Task { @MainActor in
-                guard let win = NSApp.keyWindow else { return }
+                guard let win = ownNSWindow() else { return }
                 win.setFrameOrigin(CGRect(origin: point, size: win.frame.size).flipY(screen: .screens[0]).origin)
             }
         } else {
@@ -398,7 +398,7 @@ final class Window {
     func setSize(_ size: CGSize) {
         if isOwnWindow {
             Task { @MainActor in
-                guard let win = NSApp.keyWindow else { return }
+                guard let win = ownNSWindow() else { return }
                 win.setFrame(CGRect(origin: win.frame.origin, size: size), display: false)
             }
         } else {
@@ -432,7 +432,7 @@ final class Window {
         guard isOwnWindow else {
             return false
         }
-        guard let window = NSApp.keyWindow else {
+        guard let window = ownNSWindow() else {
             log.info("Failed to get own main window to resize")
             return true
         }
@@ -440,6 +440,40 @@ final class Window {
             context.timingFunction = CAMediaTimingFunction(controlPoints: 0.33, 1, 0.68, 1)
             window.animator().setFrame(rect.flipY(screen: .screens[0]), display: false)
         }
+        return true
+    }
+
+    @MainActor
+    private func ownNSWindow() -> NSWindow? {
+        NSApp.keyWindow ?? NSApp.mainWindow
+    }
+
+    @discardableResult
+    private func applyOwnWindowFrameSynchronously(_ rect: CGRect) -> Bool {
+        guard isOwnWindow else {
+            return false
+        }
+
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                guard let window = ownNSWindow() else {
+                    log.info("Failed to get own main window to resize")
+                    return
+                }
+                window.setFrame(rect.flipY(screen: .screens[0]), display: false)
+            }
+        } else {
+            DispatchQueue.main.sync {
+                MainActor.assumeIsolated {
+                    guard let window = ownNSWindow() else {
+                        log.info("Failed to get own main window to resize")
+                        return
+                    }
+                    window.setFrame(rect.flipY(screen: .screens[0]), display: false)
+                }
+            }
+        }
+
         return true
     }
 
@@ -476,13 +510,12 @@ final class Window {
         }
     }
 
-    @concurrent
-    func setFrameAnimated(
+    func setFrameSynchronously(
         _ rect: CGRect,
-        bounds: CGRect,
+        sizeFirst: Bool = false,
         resolvedProperties: ResolvedProperties? = nil
-    ) async throws {
-        guard await !MainActor.run(resultType: Bool.self, body: { applyOwnWindowFrame(rect) }) else {
+    ) {
+        guard !applyOwnWindowFrameSynchronously(rect) else {
             return
         }
 
@@ -495,27 +528,62 @@ final class Window {
             enhancedUserInterface = false
         }
 
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(), Error>) in
-            Task {
-                try Task.checkCancellation()
-                let animation = WindowTransformAnimation(
-                    rect,
-                    window: self,
-                    bounds: bounds,
-                    shouldSetSize: shouldSetSize
-                ) { error in
-                    if let error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(returning: ())
-                    }
-                }
-                await animation.start()
-            }
+        if sizeFirst, shouldSetSize {
+            setSize(rect.size)
+        }
+
+        setPosition(rect.origin)
+
+        if shouldSetSize {
+            setSize(rect.size)
         }
 
         if enhancedUI {
             enhancedUserInterface = true
+        }
+    }
+
+    @MainActor
+    func setFrameAnimated(
+        _ rect: CGRect,
+        bounds: CGRect,
+        resolvedProperties: ResolvedProperties? = nil
+    ) async throws {
+        try Task.checkCancellation()
+
+        guard !applyOwnWindowFrame(rect) else {
+            return
+        }
+
+        let enhancedUI = resolvedProperties?.isEnhancedUserInterface ?? enhancedUserInterface
+        let shouldSetSize = resolvedProperties?.isResizable ?? true
+
+        if enhancedUI {
+            let appName = nsRunningApplication?.localizedName
+            log.info("\(appName ?? "This app")'s enhanced UI will be temporarily disabled while resizing.")
+            enhancedUserInterface = false
+        }
+        defer {
+            if enhancedUI {
+                enhancedUserInterface = true
+            }
+        }
+
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(), Error>) in
+            let animation = WindowTransformAnimation(
+                rect,
+                window: self,
+                bounds: bounds,
+                shouldSetSize: shouldSetSize
+            ) { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+
+            animation.start()
         }
     }
 }

@@ -13,6 +13,7 @@ struct RadialMenuActionPickerView: View {
 
     @State private var searchText = ""
     @State private var searchResults: [RadialMenuAction.ActionType] = []
+    @FocusState private var isSearchFocused: Bool
 
     @Binding private var selection: RadialMenuAction.ActionType
 
@@ -56,10 +57,12 @@ struct RadialMenuActionPickerView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            CustomTextField(
-                $searchText,
-                placeholder: .init(localized: "Search for a window action", defaultValue: "Search…")
+            TextField(
+                String(localized: "Search for a window action", defaultValue: "Search…"),
+                text: $searchText
             )
+            .textFieldStyle(.plain)
+            .focused($isSearchFocused)
             .padding(12)
 
             Divider()
@@ -102,6 +105,9 @@ struct RadialMenuActionPickerView: View {
         .onAppear {
             searchText = ""
             computeSearchResults()
+            Task { @MainActor in
+                isSearchFocused = true
+            }
         }
         .onDisappear {
             searchText = ""

@@ -14,8 +14,13 @@ import SwiftUI
 /// - a simple frame preview is used for more general actions such as right half, maximize, and center, as well as custom keybinds when available.
 /// - finally, a default icon is used for cycle actions and actions without a specific icon or frame representation as backup (just in case, they shouldn't be needed in practice).
 struct IconView: NSViewRepresentable {
-    private let action: WindowAction
+    private let source: Source
     private let size: CGSize
+
+    private enum Source {
+        case action(WindowAction)
+        case direction(WindowDirection)
+    }
 
     init(
         action: WindowAction,
@@ -24,18 +29,24 @@ struct IconView: NSViewRepresentable {
             height: 14
         )
     ) {
-        self.action = action
+        self.source = .action(action)
+        self.size = size
+    }
+
+    init(
+        direction: WindowDirection,
+        size: CGSize = .init(
+            width: 18,
+            height: 14
+        )
+    ) {
+        self.source = .direction(direction)
         self.size = size
     }
 
     func makeNSView(context _: Context) -> IconRenderView {
         let view = IconRenderView()
-
-        if action.direction == .cycle, let first = action.cycle?.first {
-            view.setAction(to: first, animated: false)
-        } else {
-            view.setAction(to: action, animated: false)
-        }
+        setSource(on: view, animated: false)
 
         view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -47,16 +58,22 @@ struct IconView: NSViewRepresentable {
     }
 
     func updateNSView(_ view: IconRenderView, context _: Context) {
-        if action.direction == .cycle, let first = action.cycle?.first {
-            view.setAction(to: first, animated: true)
-        } else {
-            view.setAction(to: action, animated: true)
+        setSource(on: view, animated: true)
+    }
+
+    private func setSource(on view: IconRenderView, animated: Bool) {
+        switch source {
+        case let .action(action):
+            view.setAction(to: action, animated: animated)
+        case let .direction(direction):
+            view.setDirection(to: direction, animated: animated)
         }
     }
 }
 
 final class IconRenderView: NSView {
-    private var currentAction: WindowAction = .init(.noAction)
+    private var currentAction: WindowAction?
+    private var currentSemanticKey: WindowAction.SemanticKey?
     private var lastDisplayMode: DisplayMode?
 
     private let strokeLayer = CAShapeLayer()
@@ -86,7 +103,22 @@ final class IconRenderView: NSView {
         to action: WindowAction,
         animated: Bool
     ) {
-        guard action != currentAction else { return }
+        let action = action.iconResolvedAction
+        guard action.semanticKey != currentSemanticKey else { return }
+
+        currentSemanticKey = action.semanticKey
+        currentAction = action
+        updatePath(duration: animated ? 0.2 : 0.0)
+    }
+
+    func setDirection(
+        to direction: WindowDirection,
+        animated: Bool
+    ) {
+        let action = WindowAction(direction)
+        guard action.semanticKey != currentSemanticKey else { return }
+
+        currentSemanticKey = action.semanticKey
         currentAction = action
         updatePath(duration: animated ? 0.2 : 0.0)
     }
@@ -178,6 +210,8 @@ final class IconRenderView: NSView {
     }
 
     private func determineDisplayMode(fillBounds: CGRect) -> DisplayMode? {
+        guard let currentAction else { return nil }
+
         if let image = currentAction.image {
             return .image(image.nsImage)
         }

@@ -18,6 +18,7 @@ struct StashActionConfigurationView: View {
 
     @State private var action: WindowAction
     @State private var currentTab: Tab = .position
+    @State private var isDeferringExternalCommit = false
 
     private enum Tab: LocalizedStringKey, CaseIterable {
         case position = "Position", size = "Unstashed Size"
@@ -58,14 +59,17 @@ struct StashActionConfigurationView: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
+        LuminareForm {
             ScreenView(isBlurred: action.sizeMode != .custom) {
                 ActionPreview(action: action)
             }
-            .onChange(of: action) { windowAction = $0 }
 
             configurationSections()
             actionButtons()
+        }
+        .onChange(of: action) { newValue in
+            guard !isDeferringExternalCommit else { return }
+            windowAction = newValue
         }
     }
 
@@ -81,7 +85,7 @@ struct StashActionConfigurationView: View {
             tabPicker()
         }
 
-        Group {
+        LuminareSection(outerPadding: 0) {
             if currentTab == .position {
                 positionConfiguration()
             } else {
@@ -159,11 +163,12 @@ struct StashActionConfigurationView: View {
                 Text("Close", comment: "Label for a button that closes a modal window")
             }
         }
+        .buttonStyle(.luminare(overrideUseMainStyle: true))
         .luminareCornerRadius(8)
     }
 
     private func positionConfiguration() -> some View {
-        LuminareSection(outerPadding: 0) {
+        Group {
             if action.positionMode ?? .generic == .generic {
                 LuminarePicker(
                     elements: anchors,
@@ -198,7 +203,9 @@ struct StashActionConfigurationView: View {
                     in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
                     format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
-                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
+                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                    onEditingChanged: handleSliderEditingChanged,
+                    onEditingCommit: commitSliderChanges
                 )
 
                 LuminareSlider(
@@ -214,14 +221,16 @@ struct StashActionConfigurationView: View {
                     in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
                     format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
-                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
+                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                    onEditingChanged: handleSliderEditingChanged,
+                    onEditingCommit: commitSliderChanges
                 )
             }
         }
     }
 
     private func sizeConfiguration() -> some View {
-        LuminareSection(outerPadding: 0) {
+        Group {
             LuminarePicker(
                 elements: sizeModes,
                 selection: Binding(
@@ -263,7 +272,9 @@ struct StashActionConfigurationView: View {
                     in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
                     format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                    onEditingChanged: handleSliderEditingChanged,
+                    onEditingCommit: commitSliderChanges
                 )
 
                 LuminareSlider(
@@ -279,9 +290,20 @@ struct StashActionConfigurationView: View {
                     in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
                     format: .number.precision(actionUnit.fractionLength),
                     clampsUpper: false,
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix)
+                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                    onEditingChanged: handleSliderEditingChanged,
+                    onEditingCommit: commitSliderChanges
                 )
             }
         }
+    }
+
+    private func handleSliderEditingChanged(_ isEditing: Bool) {
+        isDeferringExternalCommit = isEditing
+    }
+
+    private func commitSliderChanges() {
+        isDeferringExternalCommit = false
+        windowAction = action
     }
 }

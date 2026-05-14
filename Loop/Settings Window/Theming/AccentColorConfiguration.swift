@@ -24,66 +24,77 @@ struct AccentColorConfigurationView: View {
     @State private var syncWallpaperTask: Task<(), Never>?
 
     var body: some View {
-        LuminareSection {
-            LuminarePicker(
-                elements: AccentColorOption.allCases,
-                selection: $accentColorMode.animation(luminareAnimation),
-                columns: 3
-            ) { option in
-                VStack(spacing: 6) {
-                    Spacer()
-
-                    option.image
-                    Text(option.text)
-
-                    Spacer()
+        LuminareForm {
+            LuminareSection {
+                accentColorModePicker
+                
+                LuminareToggle("Gradient", isOn: $useGradient)
+                
+                if accentColorMode == .wallpaper {
+                    syncWallpaperButton
                 }
-                .font(.title3)
-                .frame(height: 90)
             }
-            .luminareRoundingBehavior(top: true)
-            .environment(\.appearsActive, true) // Keep on active state to show accent color
-
-            LuminareToggle("Gradient", isOn: $useGradient)
-
-            if accentColorMode == .wallpaper {
-                Button(action: syncWallpaper) {
-                    HStack {
-                        Text("Sync Wallpaper")
-
-                        if didSyncWallpaper {
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(.green)
-                                .bold()
-                        }
-                    }
-                }
-                .luminareRoundingBehavior(bottom: true)
-            }
-        }
-
-        if accentColorMode == .custom {
-            LuminareSection(String(localized: "Color", comment: "Section header shown in settings")) {
-                LuminareColorPicker(
-                    color: $customAccentColor,
-                    style: .textFieldWithColorWell()
-                )
-                .luminareRoundingBehavior(top: true, bottom: true)
-
-                if useGradient {
+            
+            if accentColorMode == .custom {
+                LuminareSection(String(localized: "Color", comment: "Section header shown in settings")) {
                     LuminareColorPicker(
-                        color: $gradientColor,
+                        color: $customAccentColor,
                         style: .textFieldWithColorWell()
                     )
                     .luminareRoundingBehavior(top: true, bottom: true)
+                    
+                    if useGradient {
+                        LuminareColorPicker(
+                            color: $gradientColor,
+                            style: .textFieldWithColorWell()
+                        )
+                        .luminareRoundingBehavior(top: true, bottom: true)
+                    }
+                }
+                .luminareModalClosesOnDefocus()
+                .animation(luminareAnimation, value: useGradient)
+            }
+        }
+        .animation(luminareAnimation, value: accentColorMode)
+    }
+    
+    private var accentColorModePicker: some View {
+        LuminarePicker(
+            elements: AccentColorOption.allCases,
+            selection: $accentColorMode,
+            columns: 3
+        ) { option in
+            VStack(spacing: 6) {
+                Spacer()
+                
+                option.image
+                Text(option.text)
+                
+                Spacer()
+            }
+            .font(.title3)
+            .frame(height: 90)
+        }
+        .luminareRoundingBehavior(top: true)
+        .environment(\.appearsActive, true) // Keep on active state to show accent color
+    }
+    
+    private var syncWallpaperButton: some View {
+        Button(action: syncWallpaper) {
+            HStack {
+                Text("Sync Wallpaper")
+                
+                if didSyncWallpaper {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(.green)
+                        .bold()
                 }
             }
-            .luminareSheetClosesOnDefocus()
-            .animation(luminareAnimation, value: useGradient)
         }
+        .luminareRoundingBehavior(bottom: true)
     }
 
-    func syncWallpaper() {
+    private func syncWallpaper() {
         if syncWallpaperTask != nil {
             return
         }

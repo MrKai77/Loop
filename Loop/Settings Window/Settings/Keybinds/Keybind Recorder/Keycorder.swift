@@ -49,7 +49,7 @@ struct Keycorder: View {
                     .fixedSize(horizontal: true, vertical: false)
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .luminarePlateau()
+                    .luminareSurface()
             } else {
                 HStack(spacing: 4) {
                     // First show modifiers in order
@@ -68,7 +68,7 @@ struct Keycorder: View {
                     }
                     .frame(width: 27, height: 27)
                     .font(.callout)
-                    .luminarePlateau(isHovering: isHovering)
+                    .luminareSurface(isHovering: isHovering)
                 }
                 .contentShape(.rect)
             }
@@ -101,6 +101,8 @@ struct Keycorder: View {
         .buttonStyle(.plain)
         // Don't allow the button to be pressed if more than one keybind is selected in the list
         .allowsHitTesting(model.selectedKeybinds.count <= 1)
+        .luminareFilledStates(.all)
+        .luminareBorderedStates(.all)
     }
 
     func startObservingKeys() {
