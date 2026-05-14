@@ -21,12 +21,8 @@ struct GesturesConfigurationView: View {
     @Default(.gestureBindings) private var gestureBindings
     @Default(.gestureTitlebarHeight) private var gestureTitlebarHeight
 
-    private var conflictingIDs: Set<UUID> {
-        GestureBinding.conflictingIDs(in: gestureBindings)
-    }
-
     var body: some View {
-        Group {
+        LuminareForm {
             settingsSection
             bindingsSection
                 .disabled(!enableGestures)
@@ -46,33 +42,29 @@ struct GesturesConfigurationView: View {
 
     private var bindingsSection: some View {
         LuminareSection(String(localized: "Gesture Bindings", comment: "Section header shown in gestures settings")) {
-            HStack(spacing: 4) {
+            LuminareButtonRow {
                 Button("Add") {
                     gestureBindings.insert(
                         GestureBinding(),
                         at: 0
                     )
                 }
-                .luminareRoundingBehavior(topLeading: true)
 
                 Button("Remove", role: .destructive) {
                     let selectedIDs = Set(model.selectedBindings.map(\.id))
                     gestureBindings.removeAll { selectedIDs.contains($0.id) }
                 }
-                .luminareRoundingBehavior(topTrailing: true)
                 .disabled(model.selectedBindings.isEmpty)
                 .keyboardShortcut(.delete)
             }
+            .luminareRoundingBehavior(top: true)
 
             LuminareList(
                 items: $gestureBindings,
                 selection: $model.selectedBindings,
                 id: \.id
             ) { binding in
-                GestureBindingItemView(
-                    binding,
-                    hasConflict: conflictingIDs.contains(binding.wrappedValue.id)
-                )
+                GestureBindingItemView(binding)
             } emptyView: {
                 HStack {
                     Spacer()

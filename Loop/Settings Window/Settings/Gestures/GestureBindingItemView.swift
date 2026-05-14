@@ -10,24 +10,21 @@ import Luminare
 import SwiftUI
 
 struct GestureBindingItemView: View {
-    @Environment(\.luminareItemBeingHovered) private var isHovering
     @Environment(\.luminareAnimation) var luminareAnimation
 
     @Default(.keybinds) private var keybinds
 
     @State private var binding: GestureBinding
     @Binding private var externalBinding: GestureBinding
-    private let hasConflict: Bool
 
     @State private var isActionPickerPresented = false
     @State private var isGestureConfigPresented = false
     @State private var isConfiguringCustom = false
     @State private var isConfiguringCycle = false
 
-    init(_ binding: Binding<GestureBinding>, hasConflict: Bool = false) {
+    init(_ binding: Binding<GestureBinding>) {
         self.binding = binding.wrappedValue
         self._externalBinding = binding
-        self.hasConflict = hasConflict
     }
 
     var body: some View {
@@ -35,44 +32,77 @@ struct GestureBindingItemView: View {
             gestureConfiguration
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            label
+            actionSelection
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .padding(.horizontal, 12)
+        .onChange(of: resolvedAction?.direction) { _ in
+            if resolvedAction?.direction.isCustomizable == true {
+                isConfiguringCustom = true
+            }
+            if resolvedAction?.direction == .cycle {
+                isConfiguringCycle = true
+            }
+        }
         .onChange(of: binding) { externalBinding = $0 }
     }
 
-    private var label: some View {
+    private var gestureConfiguration: some View {
+        Button {
+            isGestureConfigPresented = true
+        } label: {
+            Text(gestureConfigurationText)
+                .fontWeight(.regular)
+                .lineLimit(1)
+                .padding(.horizontal, 4)
+                .contentShape(.rect)
+        }
+        .luminareContentSize(contentMode: .fit, hasFixedHeight: true)
+        .luminareRoundingBehavior(top: true, bottom: true)
+        .luminareFilledStates([.hovering, .pressed])
+        .luminareBorderedStates(.hovering)
+        .luminareMinHeight(24)
+        .help("Customize this gesture binding.")
+        .padding(.leading, -4)
+        .luminarePopover(
+            isPresented: $isGestureConfigPresented,
+            arrowEdge: .top,
+            attachmentAnchor: .topLeading,
+            shouldHideAnchor: true,
+            shouldAnimate: false
+        ) {
+            GestureConfigPopoverView(binding: $binding)
+                .frame(width: 300)
+        }
+    }
+
+    private var actionSelection: some View {
         actionIndicator
-            .background(alignment: .trailing) {
-                if isHovering || isActionPickerPresented {
-                    Color.clear
-                        .frame(width: 300 - 24)
-                        .luminarePopover(
-                            isPresented: $isActionPickerPresented,
-                            arrowEdge: .top,
-                            shouldHideAnchor: true,
-                            shouldAnimate: false
-                        ) {
-                            RadialMenuActionPickerView(selection: actionTypeBinding)
-                                .frame(width: 300, height: 300)
-                        }
-                        .luminareSheetClosesOnDefocus(true)
-                        .onChange(of: isActionPickerPresented) { _ in
-                            if !isActionPickerPresented {
-                                PickerListEventMonitorManager.shared.removeAllMonitors()
-                            }
-                        }
+            .luminarePopover(
+                isPresented: $isActionPickerPresented,
+                arrowEdge: .top,
+                attachmentAnchor: .topTrailing,
+                shouldHideAnchor: true,
+                shouldAnimate: false
+            ) {
+                RadialMenuActionPickerView(selection: actionTypeBinding)
+                    .frame(width: 300, height: 300)
+            }
+            .onChange(of: isActionPickerPresented) { _ in
+                if !isActionPickerPresented {
+                    PickerListEventMonitorManager.shared.removeAllMonitors()
                 }
             }
     }
 
-    var actionIndicator: some View {
+    private var actionIndicator: some View {
         HStack(spacing: 2) {
             if case .radialMenuActions = binding.action {
                 HStack(spacing: 4) {
                     Image(.loop)
                     Text("Open Radial Menu")
+                        .fontWeight(.regular)
+                        .lineLimit(1)
                 }
                 .padding(.horizontal, 4)
                 .foregroundStyle(.secondary)
@@ -92,6 +122,8 @@ struct GestureBindingItemView: View {
                                 .foregroundStyle(.secondary)
 
                             Text("No Action")
+                                .fontWeight(.regular)
+                                .lineLimit(1)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -102,6 +134,7 @@ struct GestureBindingItemView: View {
                 .luminareFilledStates([.hovering, .pressed])
                 .luminareBorderedStates(.hovering)
                 .luminareMinHeight(24)
+                .help("Customize this gesture's action.")
                 .padding(.leading, -4)
             }
 
@@ -114,10 +147,7 @@ struct GestureBindingItemView: View {
                             Image(systemName: "slider.horizontal.3")
                         }
                         .buttonStyle(.plain)
-                        .luminareModalWithPredefinedSheetStyle(
-                            isPresented: $isConfiguringCustom,
-                            isCompact: false
-                        ) {
+                        .luminareModal(isPresented: $isConfiguringCustom) {
                             if resolvedAction.direction == .custom {
                                 CustomActionConfigurationView(
                                     action: actionBinding,
@@ -132,6 +162,7 @@ struct GestureBindingItemView: View {
                                 .frame(width: 400)
                             }
                         }
+                        .luminareModalCornerRadius(24)
                         .help("Customize this action's custom frame.")
                     }
 
@@ -142,59 +173,23 @@ struct GestureBindingItemView: View {
                             Image(systemName: "repeat")
                         }
                         .buttonStyle(.plain)
-                        .luminareModalWithPredefinedSheetStyle(
-                            isPresented: $isConfiguringCycle,
-                            isCompact: false
-                        ) {
+                        .luminareModal(isPresented: $isConfiguringCycle) {
                             CycleActionConfigurationView(
                                 action: actionBinding,
                                 isPresented: $isConfiguringCycle
                             )
                             .frame(width: 400)
                         }
+                        .luminareModalCornerRadius(24)
                         .help("Customize what this action cycles through.")
                     }
                 }
             }
             .font(.title3)
-            .foregroundStyle(isHovering ? .primary : .secondary)
+            .foregroundStyle(.secondary)
         }
     }
 
-    private var gestureConfiguration: some View {
-        Button {
-            isGestureConfigPresented = true
-        } label: {
-            Text(gestureConfigurationText)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-        }
-        .buttonStyle(.plain)
-        .luminarePlateau()
-        .luminareRoundingBehavior(top: true, bottom: true)
-        .padding(.trailing, 4)
-        .luminareToolTip(attachedTo: .topTrailing, hidden: !hasConflict) {
-            Text("This gesture conflicts with another binding.")
-                .padding(6)
-        }
-        .luminareTint(overridingWith: .red)
-        .background(alignment: .leading) {
-            if isHovering || isGestureConfigPresented {
-                Color.clear
-                    .frame(width: 270 - 24)
-                    .luminarePopover(
-                        isPresented: $isGestureConfigPresented,
-                        arrowEdge: .top,
-                        shouldHideAnchor: true,
-                        shouldAnimate: false
-                    ) {
-                        GestureConfigPopoverView(binding: $binding)
-                            .frame(width: 270)
-                    }
-                    .luminareSheetClosesOnDefocus(true)
-            }
-        }
-    }
 
     private var gestureConfigurationText: String {
         switch binding.gestureType {

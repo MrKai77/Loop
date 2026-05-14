@@ -75,5 +75,6 @@ struct GestureConfigPopoverView: View {
         .onChange(of: binding) { externalBinding = $0 }
         .luminareFilledStates(.none)
         .luminareBorderedStates(.none)
+        .padding(8)
     }
 }
