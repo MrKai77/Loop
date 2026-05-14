@@ -64,10 +64,13 @@ enum WindowEngine {
             await window.focus()
         }
 
+        let finalFrame: CGRect
+
         // Attempt system window manager if possible
         if !willChangeScreens, useSystemWM,
            #available(macOS 15, *),
            await resizeWithSystemWindowManager(window: window, to: context.action) {
+            finalFrame = window.frame
         } else {
             if context.resolvedWindowProperties?.isFullscreen ?? true {
                 // Otherwise, we obviously need to disable fullscreen to resize the window
@@ -81,7 +84,7 @@ enum WindowEngine {
             )
 
             do {
-                try await resizeWindow(
+                finalFrame = try await resizeWindow(
                     window,
                     targetFrame: targetFrame,
                     bounds: context.paddedBounds,
@@ -91,6 +94,7 @@ enum WindowEngine {
                 )
             } catch {
                 log.error(error.localizedDescription)
+                finalFrame = window.frame
             }
 
             if Defaults[.moveCursorWithWindow] {
@@ -98,29 +102,26 @@ enum WindowEngine {
             }
         }
 
+        let postResizeProperties = context.resolvedWindowProperties.map {
+            Window.ResolvedProperties(updating: finalFrame, from: $0)
+        }
+
         // Record post-resize actions (replaces former defer block)
         if context.action.direction == .undo {
             await WindowRecords.shared.removeLastAction(for: window)
         } else if storeAsFrame {
-            // Pass nil for resolvedProperties so that record() reads the "live"
-            // post-resize frame via window.frame, rather than the stale
-            // pre-resize snapshot.
             await WindowRecords.shared.record(
                 window,
-                resolvedProperties: nil,
+                resolvedProperties: postResizeProperties,
                 context.action
             )
         }
 
         // Update the snapshot
-        let actualFrame = window.frame
-        if let existing = context.resolvedWindowProperties {
-            context.resolvedWindowProperties = Window.ResolvedProperties(
-                updating: actualFrame,
-                from: existing
-            )
+        if let postResizeProperties {
+            context.resolvedWindowProperties = postResizeProperties
         }
-        context.lastAppliedFrame = actualFrame
+        context.lastAppliedFrame = finalFrame
         context.resolvedRecord = await WindowRecords.ResolvedRecord(for: window)
 
         if let screen = context.screen {
@@ -185,43 +186,66 @@ enum WindowEngine {
         willChangeScreens: Bool,
         animate: Bool,
         resolvedProperties: Window.ResolvedProperties? = nil
-    ) async throws {
+    ) async throws -> CGRect {
+        let actualFrame: CGRect
+
         if animate {
             try await window.setFrameAnimated(targetFrame, bounds: bounds, resolvedProperties: resolvedProperties)
+            actualFrame = window.frame
         } else {
             await window.setFrame(targetFrame, sizeFirst: willChangeScreens, resolvedProperties: resolvedProperties)
             try Task.checkCancellation()
+
+            var frameAfterResize = window.frame
+            if !frameAfterResize.approximatelyEqual(to: targetFrame) {
+                await window.setFrame(targetFrame, resolvedProperties: resolvedProperties)
+                try Task.checkCancellation()
+                frameAfterResize = window.frame
+            }
+            actualFrame = frameAfterResize
         }
 
-        if !animate, !window.frame.approximatelyEqual(to: targetFrame) {
-            await window.setFrame(targetFrame, resolvedProperties: resolvedProperties)
-            try Task.checkCancellation()
-        }
-
-        handleSizeConstrainedWindow(window: window, targetFrame: targetFrame, bounds: bounds)
+        return handleSizeConstrainedWindow(
+            window: window,
+            actualFrame: actualFrame,
+            targetFrame: targetFrame,
+            bounds: bounds
+        )
     }
 
     // MARK: - Size Constraints
 
-    private static func handleSizeConstrainedWindow(window: Window, targetFrame: CGRect, bounds: CGRect) {
-        guard !window.isOwnWindow, bounds != .zero else { return }
-
-        var windowFrame = window.frame
-        let targetEdges = targetFrame.getEdgesTouchingBounds(bounds)
+    private static func handleSizeConstrainedWindow(
+        window: Window,
+        actualFrame: CGRect,
+        targetFrame: CGRect,
+        bounds: CGRect
+    ) -> CGRect {
+        guard !window.isOwnWindow, bounds != .zero else {
+            return actualFrame
+        }
 
         // Some windows have size constraints such as fixed aspect ratios, fixed width,
         // fixed height, etc. When that happens, preserve the intended anchor by
         // re-positioning the resulting frame after the resize completes.
-        if !windowFrame.size.approximatelyEqual(to: targetFrame.size, tolerance: 2) {
-            windowFrame = anchoredFrame(
-                for: windowFrame.size,
-                within: targetFrame,
-                targetEdges: targetEdges,
-                bounds: bounds
-            )
+        guard !actualFrame.size.approximatelyEqual(to: targetFrame.size, tolerance: 2) else {
+            return actualFrame
         }
 
-        window.setPosition(windowFrame.origin)
+        let targetEdges = targetFrame.getEdgesTouchingBounds(bounds)
+        let correctedFrame = anchoredFrame(
+            for: actualFrame.size,
+            within: targetFrame,
+            targetEdges: targetEdges,
+            bounds: bounds
+        )
+
+        guard !actualFrame.origin.approximatelyEqual(to: correctedFrame.origin, tolerance: 1) else {
+            return actualFrame
+        }
+
+        window.setPosition(correctedFrame.origin)
+        return correctedFrame
     }
 
     static func anchoredFrame(
@@ -253,5 +277,22 @@ enum WindowEngine {
         }
 
         return frame.pushInside(bounds)
+    }
+
+    static func shouldAnchorDuringAnimation(
+        actualSize: CGSize,
+        requestedSize: CGSize,
+        tolerance: CGFloat = 2
+    ) -> Bool {
+        guard !actualSize.approximatelyEqual(to: requestedSize, tolerance: tolerance) else {
+            return false
+        }
+
+        // Only compensate during animation when the app ended up smaller than the
+        // requested frame (fixed aspect ratio, fixed width, fixed height, etc.).
+        // If the app stays larger because of a minimum size, preserving the
+        // requested motion avoids visible jitter while shrinking/moving.
+        return actualSize.width <= requestedSize.width + tolerance &&
+            actualSize.height <= requestedSize.height + tolerance
     }
 }
