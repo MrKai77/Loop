@@ -61,6 +61,19 @@ extension CGSize {
             height: height
         )
     }
+
+    func fitting(aspectRatio: CGFloat) -> CGSize {
+        guard width > 0, height > 0, aspectRatio > 0 else {
+            return self
+        }
+
+        let sizeAspectRatio = width / height
+        if sizeAspectRatio > aspectRatio {
+            return CGSize(width: height * aspectRatio, height: height)
+        } else {
+            return CGSize(width: width, height: width / aspectRatio)
+        }
+    }
 }
 
 extension CGRect {

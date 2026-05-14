@@ -289,9 +289,9 @@ enum WindowEngine {
         }
 
         // Only compensate during animation when the app ended up smaller than the
-        // requested frame (fixed aspect ratio, fixed width, fixed height, etc.).
+        // requested frame (fixed aspect ratio, fixed width, fixed height, etc.)
         // If the app stays larger because of a minimum size, preserving the
-        // requested motion avoids visible jitter while shrinking/moving.
+        // requested motion avoids visible jitter while shrinking/moving
         return actualSize.width <= requestedSize.width + tolerance &&
             actualSize.height <= requestedSize.height + tolerance
     }
