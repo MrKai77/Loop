@@ -27,14 +27,14 @@ struct AccentColorConfigurationView: View {
         LuminareForm {
             LuminareSection {
                 accentColorModePicker
-                
+
                 LuminareToggle("Gradient", isOn: $useGradient)
-                
+
                 if accentColorMode == .wallpaper {
                     syncWallpaperButton
                 }
             }
-            
+
             if accentColorMode == .custom {
                 LuminareSection(String(localized: "Color", comment: "Section header shown in settings")) {
                     LuminareColorPicker(
@@ -42,7 +42,7 @@ struct AccentColorConfigurationView: View {
                         style: .textFieldWithColorWell()
                     )
                     .luminareRoundingBehavior(top: true, bottom: true)
-                    
+
                     if useGradient {
                         LuminareColorPicker(
                             color: $gradientColor,
@@ -57,7 +57,7 @@ struct AccentColorConfigurationView: View {
         }
         .animation(luminareAnimation, value: accentColorMode)
     }
-    
+
     private var accentColorModePicker: some View {
         LuminarePicker(
             elements: AccentColorOption.allCases,
@@ -66,10 +66,10 @@ struct AccentColorConfigurationView: View {
         ) { option in
             VStack(spacing: 6) {
                 Spacer()
-                
+
                 option.image
                 Text(option.text)
-                
+
                 Spacer()
             }
             .font(.title3)
@@ -78,12 +78,12 @@ struct AccentColorConfigurationView: View {
         .luminareRoundingBehavior(top: true)
         .environment(\.appearsActive, true) // Keep on active state to show accent color
     }
-    
+
     private var syncWallpaperButton: some View {
         Button(action: syncWallpaper) {
             HStack {
                 Text("Sync Wallpaper")
-                
+
                 if didSyncWallpaper {
                     Image(systemName: "checkmark")
                         .foregroundStyle(.green)

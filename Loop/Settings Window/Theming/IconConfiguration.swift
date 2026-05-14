@@ -112,7 +112,7 @@ struct IconConfigurationView: View {
                         get: { IconManager.currentAppIcon },
                         set: {
                             currentIcon = $0.assetName
-                            
+
                             Task {
                                 IconManager.refreshCurrentAppIcon()
                             }
@@ -131,7 +131,7 @@ struct IconConfigurationView: View {
                 }
                 .luminareRoundingBehavior(top: true, bottom: true)
             }
-            
+
             LuminareSection(String(localized: "Options", comment: "Section header shown in settings")) {
                 LuminareToggle("Show in dock", isOn: $showDockIcon)
                 LuminareToggle(

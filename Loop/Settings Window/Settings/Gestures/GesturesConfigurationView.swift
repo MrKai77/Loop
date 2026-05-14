@@ -24,7 +24,7 @@ struct GesturesConfigurationView: View {
     var body: some View {
         LuminareForm {
             settingsSection
-            
+
             if enableGestures {
                 bindingsSection
             }

@@ -190,7 +190,6 @@ struct GestureBindingItemView: View {
         }
     }
 
-
     private var gestureConfigurationText: String {
         switch binding.gestureType {
         case .radialMenu:

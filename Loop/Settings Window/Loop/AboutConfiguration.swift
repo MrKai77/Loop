@@ -249,7 +249,7 @@ struct AboutConfigurationView: View {
                 Button {
                     Task {
                         await updater.fetchLatestInfo(bypassUpdatesEnabled: true)
-                        
+
                         switch updater.updateState {
                         case .available:
                             await updater.showUpdateWindowIfEligible()
