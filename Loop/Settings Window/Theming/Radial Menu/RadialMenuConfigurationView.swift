@@ -12,7 +12,7 @@ import SwiftUI
 struct RadialMenuConfigurationView: View {
     @EnvironmentObject private var windowModel: SettingsWindowManager
     @Environment(\.luminareAnimation) private var luminareAnimation
-    
+
     @Default(.radialMenuVisibility) private var radialMenuVisibility
     @Default(.radialMenuCornerRadius) private var radialMenuCornerRadius
     @Default(.radialMenuThickness) private var radialMenuThickness
@@ -24,7 +24,7 @@ struct RadialMenuConfigurationView: View {
         LuminareForm {
             LuminareSection {
                 LuminareToggle("Radial menu", isOn: $radialMenuVisibility)
-                
+
                 if radialMenuVisibility {
                     LuminareSlider(
                         "Corner radius",
@@ -40,7 +40,7 @@ struct RadialMenuConfigurationView: View {
                             radialMenuThickness = radialMenuCornerRadius - 1
                         }
                     }
-                    
+
                     LuminareSlider(
                         "Thickness",
                         value: $radialMenuThickness.doubleBinding,
@@ -58,7 +58,7 @@ struct RadialMenuConfigurationView: View {
                 }
             }
             .animation(luminareAnimation, value: radialMenuVisibility)
-            
+
             if enableRadialMenuCustomization {
                 LuminareSection(
                     String(localized: "Actions", comment: "Header for radial menu section shown in settings"),
@@ -68,7 +68,7 @@ struct RadialMenuConfigurationView: View {
                         Button("Add") {
                             radialMenuActions.insert(.custom(.init(.noAction)), at: 0)
                         }
-                        
+
                         Button("Remove", role: .destructive) {
                             radialMenuActions.removeAll(where: selectedRadialMenuActions.contains)
                         }
@@ -76,7 +76,7 @@ struct RadialMenuConfigurationView: View {
                         .keyboardShortcut(.delete)
                     }
                     .luminareRoundingBehavior(top: true)
-                    
+
                     LuminareList(
                         items: $radialMenuActions,
                         selection: $selectedRadialMenuActions,

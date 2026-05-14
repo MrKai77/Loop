@@ -20,7 +20,7 @@ struct ExcludedAppsConfigurationView: View {
                     Button("Add") {
                         showAppChooser()
                     }
-                    
+
                     Button("Remove", role: .destructive) {
                         excludedApps.removeAll { selectedApps.contains($0) }
                     }
@@ -28,7 +28,7 @@ struct ExcludedAppsConfigurationView: View {
                     .keyboardShortcut(.delete)
                 }
                 .luminareRoundingBehavior(top: true)
-                
+
                 LuminareList(
                     items: $excludedApps,
                     selection: $selectedApps,

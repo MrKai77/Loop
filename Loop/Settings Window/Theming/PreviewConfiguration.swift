@@ -31,7 +31,7 @@ struct PreviewConfigurationView: View {
                         },
                         set: {
                             previewVisibility = $0
-                            
+
                             if !previewVisibility {
                                 moveCursorWithWindow = false
                             }
@@ -46,7 +46,7 @@ struct PreviewConfigurationView: View {
                         }
                         .animation(luminareAnimation, value: previewVisibility)
                 }
-                
+
                 LuminareSlider(
                     "Padding",
                     value: $previewPadding.doubleBinding,
@@ -56,7 +56,7 @@ struct PreviewConfigurationView: View {
                     clampsLower: true,
                     suffix: Text("px", comment: "Unit symbol: pixels")
                 )
-                
+
                 // On macOS Sequoia and below, simply show the corner radius slider.
                 if #unavailable(macOS 26) {
                     LuminareSlider(
@@ -69,7 +69,7 @@ struct PreviewConfigurationView: View {
                         suffix: Text("px", comment: "Unit symbol: pixels")
                     )
                 }
-                
+
                 LuminareSlider(
                     "Border thickness",
                     value: $previewBorderThickness.doubleBinding,
@@ -80,7 +80,7 @@ struct PreviewConfigurationView: View {
                     suffix: Text("px", comment: "Unit symbol: pixels")
                 )
             }
-            
+
             // On macOS Tahoe and above, Loop has the ability to read the selected window's corner radius.
             // So display it in a separate section, with the option to configure this functionality.
             if #available(macOS 26, *) {
@@ -89,7 +89,7 @@ struct PreviewConfigurationView: View {
                         "Prioritize selected window’s corner radius",
                         isOn: $previewUseWindowCornerRadius
                     )
-                    
+
                     LuminareSlider(
                         previewUseWindowCornerRadius ? "Default corner radius" : "Corner radius",
                         value: $previewCornerRadius.doubleBinding,
@@ -102,10 +102,10 @@ struct PreviewConfigurationView: View {
                 }
                 .animation(luminareAnimation, value: previewUseWindowCornerRadius)
             }
-            
+
             LuminareSection("Background") {
                 LuminareToggle("Enable blur", isOn: $previewBackgroundEnableBlur)
-                
+
                 LuminareSlider(
                     "Accent opacity",
                     value: $previewBackgroundAccentOpacity.doubleBinding,
