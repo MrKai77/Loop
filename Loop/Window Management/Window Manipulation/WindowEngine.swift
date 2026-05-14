@@ -198,18 +198,60 @@ enum WindowEngine {
             try Task.checkCancellation()
         }
 
-        handleSizeConstrainedWindow(window: window, bounds: bounds)
+        handleSizeConstrainedWindow(window: window, targetFrame: targetFrame, bounds: bounds)
     }
 
     // MARK: - Size Constraints
 
-    private static func handleSizeConstrainedWindow(window: Window, bounds: CGRect) {
+    private static func handleSizeConstrainedWindow(window: Window, targetFrame: CGRect, bounds: CGRect) {
         guard !window.isOwnWindow, bounds != .zero else { return }
 
         var windowFrame = window.frame
-        if windowFrame.maxX > bounds.maxX { windowFrame.origin.x = bounds.maxX - windowFrame.width }
-        if windowFrame.maxY > bounds.maxY { windowFrame.origin.y = bounds.maxY - windowFrame.height }
+        let targetEdges = targetFrame.getEdgesTouchingBounds(bounds)
+
+        // Some windows have size constraints such as fixed aspect ratios, fixed width,
+        // fixed height, etc. When that happens, preserve the intended anchor by
+        // re-positioning the resulting frame after the resize completes.
+        if !windowFrame.size.approximatelyEqual(to: targetFrame.size, tolerance: 2) {
+            windowFrame = anchoredFrame(
+                for: windowFrame.size,
+                within: targetFrame,
+                targetEdges: targetEdges,
+                bounds: bounds
+            )
+        }
 
         window.setPosition(windowFrame.origin)
+    }
+
+    static func anchoredFrame(
+        for actualSize: CGSize,
+        within requestedFrame: CGRect,
+        targetEdges: Edge.Set,
+        bounds: CGRect
+    ) -> CGRect {
+        var frame = CGRect(origin: requestedFrame.origin, size: actualSize)
+
+        if targetEdges.contains(.leading), targetEdges.contains(.trailing) {
+            frame.origin.x = requestedFrame.midX - actualSize.width / 2
+        } else if targetEdges.contains(.leading) {
+            frame.origin.x = requestedFrame.minX
+        } else if targetEdges.contains(.trailing) {
+            frame.origin.x = requestedFrame.maxX - actualSize.width
+        } else {
+            frame.origin.x = requestedFrame.midX - actualSize.width / 2
+        }
+
+        if targetEdges.contains(.top), targetEdges.contains(.bottom) {
+            frame.origin.y = requestedFrame.midY - actualSize.height / 2
+        } else if targetEdges.contains(.top) {
+            frame.origin.y = requestedFrame.minY
+        } else if targetEdges.contains(.bottom) {
+            frame.origin.y = requestedFrame.maxY - actualSize.height
+        } else {
+            frame.origin.y = requestedFrame.midY - actualSize.height / 2
+        }
+
+        return frame.pushInside(bounds)
     }
 }

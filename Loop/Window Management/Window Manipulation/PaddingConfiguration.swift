@@ -76,6 +76,7 @@ struct PaddingConfiguration: Codable, Defaults.Serializable, Hashable {
         if let resolvedWindowProperties, !resolvedWindowProperties.isResizable {
             let centeredFrame = resolvedWindowProperties.frame.size
                 .center(inside: result)
+                .pushInside(bounds)
 
             return centeredFrame
         }
