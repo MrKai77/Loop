@@ -24,9 +24,12 @@ struct GesturesConfigurationView: View {
     var body: some View {
         LuminareForm {
             settingsSection
-            bindingsSection
-                .disabled(!enableGestures)
+            
+            if enableGestures {
+                bindingsSection
+            }
         }
+        .animation(luminareAnimation, value: enableGestures)
         .onChange(of: gestureBindings) { newValue in
             let bindingsByID = Dictionary(uniqueKeysWithValues: newValue.map { ($0.id, $0) })
             let selectedIDs = model.selectedBindings.map(\.id)

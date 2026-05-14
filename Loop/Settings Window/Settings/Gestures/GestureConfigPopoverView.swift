@@ -52,9 +52,7 @@ struct GestureConfigPopoverView: View {
 
             LuminareCompose("Fingers") {
                 HStack {
-                    TextField("", value: $binding.fingerCount, format: .number)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 40)
+                    Text("\(binding.fingerCount)")
 
                     Stepper("", value: $binding.fingerCount, in: 2...5)
                         .labelsHidden()
