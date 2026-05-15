@@ -131,6 +131,8 @@ final class LoopManager {
     )
 
     func start() {
+        multitouchTrigger.prepare()
+
         accessibilityCheckerTask = Task(priority: .background) { [weak self] in
             for await status in AccessibilityManager.shared.stream(initial: true) {
                 guard let self, !Task.isCancelled else {
@@ -175,7 +177,7 @@ final class LoopManager {
         keybindTrigger.stop()
         middleClickTrigger.stop()
         mouseInteractionObserver.stop()
-        multitouchTrigger.stop()
+        multitouchTrigger.shutdown()
         triggerKeyTimeoutTimer.cancel()
 
         isLoopOpening = false

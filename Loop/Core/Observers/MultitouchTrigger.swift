@@ -24,6 +24,8 @@ final class MultitouchTrigger {
 
     private var recognizers: [Int: RecognizerEntry] = [:]
     private var bindingsObservationTask: Task<(), Never>?
+    private var systemGestureReconciliationTask: Task<(), Never>?
+    private var isStarted = false
 
     private let panCycleStepSize: CGFloat = 0.2
     private let pinchActivationThreshold: CGFloat = 0.4
@@ -84,9 +86,20 @@ final class MultitouchTrigger {
         self.closeCallback = closeCallback
         self.changeAction = changeAction
         self.checkIfLoopOpen = checkIfLoopOpen
+
+        prepare()
+    }
+
+    func prepare() {
+        reconcileSystemGestures()
+        startSystemGestureReconciliation()
     }
 
     func start() {
+        guard !isStarted else { return }
+        isStarted = true
+
+        prepare()
         gestureMonitor.start()
         rebuildRecognizers()
 
@@ -99,6 +112,10 @@ final class MultitouchTrigger {
     }
 
     func stop() {
+        guard isStarted else { return }
+        isStarted = false
+
+        reconcileSystemGestures()
         bindingsObservationTask?.cancel()
         bindingsObservationTask = nil
 
@@ -108,6 +125,38 @@ final class MultitouchTrigger {
         recognizers.removeAll()
 
         gestureMonitor.stop()
+    }
+
+    func shutdown() {
+        stop()
+        systemGestureReconciliationTask?.cancel()
+        systemGestureReconciliationTask = nil
+        SystemGestureManager.restore()
+    }
+
+    private func startSystemGestureReconciliation() {
+        guard systemGestureReconciliationTask == nil else { return }
+
+        systemGestureReconciliationTask = Task(priority: .background) { [weak self] in
+            let updates = Defaults.updates(
+                .enableGestures,
+                .disableConflictingSystemGestures,
+                .gestureBindings
+            )
+
+            for await _ in updates {
+                guard !Task.isCancelled, let self else { break }
+                reconcileSystemGestures()
+            }
+        }
+    }
+
+    private nonisolated func reconcileSystemGestures() {
+        SystemGestureManager.reconcile(
+            enableGestures: Defaults[.enableGestures],
+            disableConflicts: Defaults[.disableConflictingSystemGestures],
+            bindings: Defaults[.gestureBindings]
+        )
     }
 
     private func rebuildRecognizers() {
@@ -407,7 +456,17 @@ final class MultitouchTrigger {
 
         switch binding.activationZone {
         case .titlebar:
-            let titlebarHeight: CGFloat = Defaults[.gestureTitlebarHeight]
+            let minimumTitlebarHeight = Defaults[.gestureTitlebarHeight]
+
+            let titlebarHeight: CGFloat = if #available(macOS 26.0, *),
+                                             let cornerRadius = SkyLightToolBelt.getCornerRadii(windowID: window.cgWindowID)?.topLeading {
+                max(2 * cornerRadius, minimumTitlebarHeight)
+            } else {
+                minimumTitlebarHeight
+            }
+
+            log.info("Detected titlebar height of \(titlebarHeight)")
+
             let titlebarMinY = window.frame.minY
             let titlebarMaxY = window.frame.minY + titlebarHeight
             let isInTitlebar = cursorPosition.y >= titlebarMinY && cursorPosition.y <= titlebarMaxY
