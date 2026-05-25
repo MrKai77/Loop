@@ -160,7 +160,10 @@ final class MultitouchTrigger {
     }
 
     private func rebuildRecognizers() {
-        let bindingsByFingerCount = Dictionary(grouping: Defaults[.gestureBindings], by: \.fingerCount)
+        let allBindings = Defaults[.gestureBindings]
+        let conflictingIDs = GestureBinding.conflictingIDs(in: allBindings)
+        let activeBindings = allBindings.filter { !conflictingIDs.contains($0.id) }
+        let bindingsByFingerCount = Dictionary(grouping: activeBindings, by: \.fingerCount)
         let neededFingerCounts = Set(bindingsByFingerCount.keys)
 
         // Remove stale recognizers

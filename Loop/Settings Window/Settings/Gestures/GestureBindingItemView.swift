@@ -13,6 +13,7 @@ struct GestureBindingItemView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
 
     @Default(.keybinds) private var keybinds
+    @Default(.gestureBindings) private var gestureBindings
 
     @State private var binding: GestureBinding
     @Binding private var externalBinding: GestureBinding
@@ -27,9 +28,18 @@ struct GestureBindingItemView: View {
         self._externalBinding = binding
     }
 
+    private var hasConflict: Bool {
+        GestureBinding.conflictingIDs(in: gestureBindings).contains(binding.id)
+    }
+
     var body: some View {
         ZStack {
             gestureConfiguration
+                .luminareToolTip(attachedTo: .topLeading, hidden: !hasConflict) {
+                    Text("There are other gesture bindings that conflict with this gesture.")
+                        .padding(6)
+                }
+                .luminareTint(overridingWith: .red)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             actionSelection
@@ -62,6 +72,7 @@ struct GestureBindingItemView: View {
         .luminareFilledStates([.hovering, .pressed])
         .luminareBorderedStates(.hovering)
         .luminareMinHeight(24)
+        .opacity(hasConflict ? 0.5 : 1)
         .help("Customize this gesture binding.")
         .padding(.leading, -4)
         .luminarePopover(
