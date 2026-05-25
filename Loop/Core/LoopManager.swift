@@ -536,7 +536,7 @@ extension LoopManager {
     }
 
     private func getNextCycleAction(_ action: WindowAction, reverse: Bool) async -> WindowAction {
-        guard let currentCycle = action.cycle else {
+        guard let currentCycle = action.cycle, !currentCycle.isEmpty else {
             return action
         }
 
@@ -549,11 +549,12 @@ extension LoopManager {
             && Defaults[.cycleBackwardsOnShiftPressed]
 
         let shouldCycleBackwards = reverse || (allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift))
+        let freshStart = shouldCycleBackwards ? (currentCycle.last ?? currentCycle[0]) : currentCycle[0]
         var currentIndex: Int? = nil
 
         if Defaults[.cycleModeRestartEnabled],
            resizeContext.action.direction == .noSelection || !currentCycle.contains(resizeContext.action) {
-            return currentCycle[0]
+            return freshStart
         }
 
         // If the current action is noSelection, we can preserve the index from the last action.
@@ -568,7 +569,7 @@ extension LoopManager {
         }
 
         guard var nextIndex = currentIndex else {
-            return currentCycle[0]
+            return freshStart
         }
 
         nextIndex += shouldCycleBackwards ? -1 : 1
