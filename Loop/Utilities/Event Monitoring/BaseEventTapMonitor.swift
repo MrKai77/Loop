@@ -110,16 +110,25 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
         self.runLoopSource = nil
         isEnabled = false
 
+        // Disable immediately to stop new events, but invalidate and remove the source
+        // on the tap thread so CF's port bookkeeping stays consistent.
         if let eventTap, CFMachPortIsValid(eventTap) {
             CGEvent.tapEnable(tap: eventTap, enable: false)
-            CFMachPortInvalidate(eventTap)
         }
 
-        guard let runLoop, let runLoopSource else { return }
+        guard let runLoop, let runLoopSource else {
+            if let eventTap, CFMachPortIsValid(eventTap) {
+                CFMachPortInvalidate(eventTap)
+            }
+            return
+        }
 
         // Keep the tap callback's refcon pointer valid until any in-flight callback finishes
         let monitor = self
         CFRunLoopPerformBlock(runLoop, CFRunLoopMode.commonModes as CFTypeRef) {
+            if let eventTap, CFMachPortIsValid(eventTap) {
+                CFMachPortInvalidate(eventTap)
+            }
             CFRunLoopRemoveSource(runLoop, runLoopSource, .commonModes)
             _ = monitor
         }
