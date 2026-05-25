@@ -5,6 +5,7 @@
 //  Created by Kai Azim on 2023-10-05.
 //
 
+import Darwin
 import Defaults
 import Scribe
 import SwiftUI
@@ -13,6 +14,9 @@ import UserNotifications
 @Loggable
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let urlCommandHandler = URLCommandHandler()
+
+    private static let terminateNotificationName = Notification.Name("com.MrKai77.Loop.terminate")
+    private var terminateObserver: Any?
 
     private var launchedAsLoginItem: Bool {
         guard let event = NSAppleEventManager.shared().currentAppleEvent else { return false }
@@ -24,8 +28,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         configureLogging()
 
-        // Check for and terminate other running Loop instances to prevent accessibility conflicts
-        terminateOtherLoopInstances()
+        // Register before broadcasting so other instances can receive the signal
+        registerTerminateObserver()
 
         Task {
             await Defaults.iCloud.waitForSyncCompletion()
@@ -42,25 +46,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         DataPatcher.run()
         IconManager.refreshCurrentAppIcon()
         LaunchAtLoginManager.shared.start()
-        LoopManager.shared.start()
-        WindowDragManager.shared.addObservers()
-        StashManager.shared.start()
-
-        Task {
-            // Wait to let the app settle and to prevent overwhelming the user
-            try? await Task.sleep(for: .seconds(5))
-
-            await Updater.shared.fetchLatestInfo()
-            await Updater.shared.showUpdateWindowIfEligible()
-        }
 
         UNUserNotificationCenter.current().delegate = self
         AppDelegate.requestNotificationAuthorization()
-
-        Task {
-            try? await Task.sleep(for: .seconds(1.5))
-            AccessibilityManager.requestAccess()
-        }
 
         // Register for URL handling
         NSAppleEventManager.shared().setEventHandler(
@@ -69,42 +57,92 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             forEventClass: AEEventClass(kInternetEventClass),
             andEventID: AEEventID(kAEGetURL)
         )
+
+        let stalePIDs = broadcastTerminateToOtherInstances()
+
+        // Wait for other instances to fully exit before installing event taps to prevent conflicts
+        Task { @MainActor in
+            await waitForInstancesToExit(pids: stalePIDs, timeout: .seconds(3))
+            LoopManager.shared.start()
+            WindowDragManager.shared.addObservers()
+            StashManager.shared.start()
+            AccessibilityManager.requestAccess()
+
+            // Wait for the app to settle before showing the update window
+            try? await Task.sleep(for: .seconds(5))
+            await Updater.shared.fetchLatestInfo()
+            await Updater.shared.showUpdateWindowIfEligible()
+        }
     }
 
-    /// Terminates any other running instances of Loop to prevent accessibility permission conflicts.
-    private func terminateOtherLoopInstances() {
-        let currentProcessId = ProcessInfo.processInfo.processIdentifier
+    /// Subscribes to the terminate notification so this instance shuts down when a newer Loop instance launches.
+    private func registerTerminateObserver() {
+        terminateObserver = DistributedNotificationCenter.default().addObserver(
+            forName: Self.terminateNotificationName,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self else { return }
+
+            // Ignore our own broadcast (for obvious reasons)
+            if let senderPID = notification.userInfo?["pid"] as? Int,
+               senderPID == Int(ProcessInfo.processInfo.processIdentifier) {
+                return
+            }
+
+            log.info("Received terminate broadcast from newer Loop instance, shutting down")
+            NSApp.terminate(nil)
+        }
+    }
+
+    /// Sends the terminate notification to any other running Loop instances, and returns their PIDs.
+    @discardableResult
+    private func broadcastTerminateToOtherInstances() -> [pid_t] {
+        let currentPID = ProcessInfo.processInfo.processIdentifier
         let bundleId = Bundle.main.bundleIdentifier ?? "com.MrKai77.Loop"
 
-        let runningApps = NSWorkspace.shared.runningApplications
-        let otherLoopInstances = runningApps.filter {
-            $0.bundleIdentifier == bundleId && $0.processIdentifier != currentProcessId
+        let otherInstances = NSWorkspace.shared.runningApplications.filter {
+            $0.bundleIdentifier == bundleId && $0.processIdentifier != currentPID
         }
 
-        guard !otherLoopInstances.isEmpty else {
+        guard !otherInstances.isEmpty else {
             log.info("No other Loop instances found")
-            return
+            return []
         }
 
-        log.info("Found \(otherLoopInstances.count) other Loop instance(s), terminating them to prevent accessibility conflicts. TCC operations will be delayed.")
+        log.info("Found \(otherInstances.count) other Loop instance(s), broadcasting terminate notification")
 
-        for instance in otherLoopInstances {
-            log.info("Terminating Loop instance (PID: \(instance.processIdentifier))")
-            instance.terminate()
+        DistributedNotificationCenter.default().post(
+            name: Self.terminateNotificationName,
+            object: nil,
+            userInfo: ["pid": Int(currentPID)]
+        )
 
-            // If the instance doesn't terminate within 2 seconds, force terminate
-            Task {
-                try? await Task.sleep(for: .seconds(2))
+        return otherInstances.map(\.processIdentifier)
+    }
 
-                if instance.isTerminated == false {
-                    log.warn("Force terminating Loop instance (PID: \(instance.processIdentifier))")
-                    instance.forceTerminate()
-                }
+    /// Waits until all provided PIDs have exited, or until the timeout is reached.
+    private func waitForInstancesToExit(pids: [pid_t], timeout: Duration) async {
+        guard !pids.isEmpty else { return }
+
+        let deadline = ContinuousClock.now + timeout
+
+        while ContinuousClock.now < deadline {
+            let allGone = pids.allSatisfy { NSRunningApplication(processIdentifier: $0) == nil }
+            if allGone {
+                log.info("All prior Loop instances have exited")
+                return
+            }
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+
+        let surviving = pids.filter { NSRunningApplication(processIdentifier: $0) != nil }
+        if !surviving.isEmpty {
+            log.warn("Timed out waiting for prior Loop instances to exit, force killing \(surviving.count) instance(s)")
+            for pid in surviving {
+                kill(pid, SIGKILL)
             }
         }
-
-        // Give the other instances time to terminate cleanly
-        Thread.sleep(forTimeInterval: 1.0)
     }
 
     /// Applies baseline logging configuration for Scribe.

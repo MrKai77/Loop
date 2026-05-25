@@ -65,12 +65,20 @@ final class ActiveEventMonitor: BaseEventTapMonitor {
             }
             let observer = Unmanaged<ActiveEventMonitor>.fromOpaque(refcon).takeUnretainedValue()
 
-            // If disabled, simply pass the event through, but attempt to restart the event tap.
-            if event.type == .tapDisabledByTimeout || event.type == .tapDisabledByUserInput {
+            if event.type == .tapDisabledByTimeout {
+                // Tap timed out, schedule a restart on the tap thread so the circuit breaker can run
                 if observer.isEnabled {
-                    observer.start()
+                    let tapRunLoop = EventTapThread.shared.runLoop
+                    CFRunLoopPerformBlock(tapRunLoop, CFRunLoopMode.commonModes as CFTypeRef) {
+                        observer.attemptRestart()
+                    }
+                    CFRunLoopWakeUp(tapRunLoop)
                 }
+                return Unmanaged.passUnretained(event)
+            }
 
+            if event.type == .tapDisabledByUserInput {
+                // Explicitly disabled by the user/system, don't auto-restart
                 return Unmanaged.passUnretained(event)
             }
 
