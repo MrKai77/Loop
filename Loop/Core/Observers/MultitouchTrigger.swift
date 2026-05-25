@@ -27,6 +27,10 @@ final class MultitouchTrigger {
     private var systemGestureReconciliationTask: Task<(), Never>?
     private var isStarted = false
 
+    /// Window most recently targeted by a `canRepeat` gesture binding.
+    /// Allows the user keep shrinking/growing a window after the cursor has fallen off its (now smaller) frame.
+    private var lastRepeatableWindow: Window?
+
     private let panCycleStepSize: CGFloat = 0.2
     private let pinchActivationThreshold: CGFloat = 0.4
     private let pinchCycleStepSize: CGFloat = 0.7
@@ -125,6 +129,7 @@ final class MultitouchTrigger {
         recognizers.removeAll()
 
         gestureMonitor.stop()
+        lastRepeatableWindow = nil
     }
 
     func shutdown() {
@@ -396,12 +401,20 @@ final class MultitouchTrigger {
     /// Resolves the target window and starts blocking trackpad events. Loop itself
     /// isn't opened until the gesture crosses the activation threshold in a `.changed` event.
     private func handleGestureBegan(fingerCount: Int, binding: GestureBinding) {
-        let window = findTargetWindow(for: binding)
+        var window = findTargetWindow(for: binding)
+        if window == nil, resolvedWindowAction(from: binding)?.canRepeat == true {
+            window = lastRepeatableWindow
+        }
+
         let loopWasAlreadyOpen = checkIfLoopOpen()
 
         guard window != nil || loopWasAlreadyOpen else {
             recognizers[fingerCount]?.state.isGestureRejected = true
             return
+        }
+
+        if let window, resolvedWindowAction(from: binding)?.canRepeat == true {
+            lastRepeatableWindow = window
         }
 
         var state = GestureState()
@@ -553,21 +566,16 @@ final class MultitouchTrigger {
         changeAction(resolvedAction, reverse)
     }
 
-    private func triggerSingleAction(from binding: GestureBinding, reverse: Bool = false) {
-        let resolvedAction: WindowAction
-
-        switch binding.action {
-        case .radialMenuActions:
-            return
-        case let .singleAction(actionType):
-            switch actionType {
-            case let .custom(windowAction):
-                resolvedAction = windowAction
-            case let .keybindReference(id):
-                resolvedAction = resolveKeybindReference(id)
-            }
+    private func resolvedWindowAction(from binding: GestureBinding) -> WindowAction? {
+        guard case let .singleAction(actionType) = binding.action else { return nil }
+        switch actionType {
+        case let .custom(action): return action
+        case let .keybindReference(id): return resolveKeybindReference(id)
         }
+    }
 
+    private func triggerSingleAction(from binding: GestureBinding, reverse: Bool = false) {
+        guard let resolvedAction = resolvedWindowAction(from: binding) else { return }
         changeAction(resolvedAction, reverse)
     }
 
