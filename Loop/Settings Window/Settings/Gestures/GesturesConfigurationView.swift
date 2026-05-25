@@ -40,10 +40,10 @@ struct GesturesConfigurationView: View {
 
     private var settingsSection: some View {
         LuminareSection {
-            LuminareToggle("Enable gestures", isOn: $enableGestures)
+            LuminareToggle(String(localized: "Enable gestures", comment: "Toggle in gestures settings"), isOn: $enableGestures)
 
             if enableGestures {
-                LuminareToggle("Disable conflicting system gestures", isOn: $disableConflictingSystemGestures)
+                LuminareToggle(String(localized: "Disable conflicting system gestures", comment: "Toggle in gestures settings"), isOn: $disableConflictingSystemGestures)
             }
         }
     }
@@ -51,14 +51,14 @@ struct GesturesConfigurationView: View {
     private var gesturesSection: some View {
         LuminareSection(String(localized: "Gestures", comment: "Section header shown in gestures settings")) {
             LuminareButtonRow {
-                Button("Add") {
+                Button(String(localized: "Add", comment: "Button to add a new gesture")) {
                     gestures.insert(
                         Gesture(),
                         at: 0
                     )
                 }
 
-                Button("Remove", role: .destructive) {
+                Button(String(localized: "Remove", comment: "Button to remove selected gestures"), role: .destructive) {
                     let selectedIDs = Set(model.selectedGestures.map(\.id))
                     gestures.removeAll { selectedIDs.contains($0.id) }
                 }
@@ -77,9 +77,9 @@ struct GesturesConfigurationView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        Text("No gestures")
+                        Text(String(localized: "No gestures", comment: "Empty state title in gestures settings"))
                             .font(.title3)
-                        Text("Press \"Add\" to add a gesture")
+                        Text(String(localized: "Press \"Add\" to add a gesture", comment: "Empty state subtitle in gestures settings"))
                             .font(.caption)
                     }
                     Spacer()

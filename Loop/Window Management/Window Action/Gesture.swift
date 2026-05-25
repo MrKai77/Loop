@@ -41,13 +41,13 @@ struct Gesture: Identifiable, Codable, Hashable, Defaults.Serializable {
 
         var displayName: String {
             switch self {
-            case .radialMenu: "Radial Menu"
-            case .panUp: "Swipe Up"
-            case .panDown: "Swipe Down"
-            case .panLeft: "Swipe Left"
-            case .panRight: "Swipe Right"
-            case .pinch: "Pinch"
-            case .spread: "Spread"
+            case .radialMenu: String(localized: "Radial Menu", comment: "Gesture kind: opens the radial menu via swipe/pinch/spread")
+            case .panUp: String(localized: "Swipe Up", comment: "Gesture kind: directional swipe")
+            case .panDown: String(localized: "Swipe Down", comment: "Gesture kind: directional swipe")
+            case .panLeft: String(localized: "Swipe Left", comment: "Gesture kind: directional swipe")
+            case .panRight: String(localized: "Swipe Right", comment: "Gesture kind: directional swipe")
+            case .pinch: String(localized: "Pinch", comment: "Gesture kind: fingers move together")
+            case .spread: String(localized: "Spread", comment: "Gesture kind: fingers move apart")
             }
         }
 
@@ -95,9 +95,8 @@ struct Gesture: Identifiable, Codable, Hashable, Defaults.Serializable {
 
         var displayName: String {
             switch self {
-            case .titlebar: "Titlebar"
-
-            case .anywhere: "Anywhere"
+            case .titlebar: String(localized: "Titlebar Only", comment: "Gesture activation zone restricted to a window's titlebar")
+            case .anywhere: String(localized: "Anywhere", comment: "Gesture activation zone covers the entire window")
             }
         }
 
@@ -106,6 +105,21 @@ struct Gesture: Identifiable, Codable, Hashable, Defaults.Serializable {
             case .titlebar: "menubar.rectangle"
             case .anywhere: "rectangle.dashed"
             }
+        }
+    }
+}
+
+// MARK: - Disabled state
+
+extension Gesture {
+    /// True when this gesture's action resolves to `noAction`. Disabled gestures
+    /// are skipped at runtime and rendered greyed-out in settings.
+    var isDisabled: Bool {
+        switch action {
+        case .radialMenuActions:
+            false
+        case let .singleAction(actionType):
+            (actionType.resolvedAction?.direction ?? .noAction) == .noAction
         }
     }
 }
