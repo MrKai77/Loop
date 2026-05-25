@@ -493,7 +493,8 @@ final class MultitouchTrigger {
             return nil
         }
 
-        switch binding.activationZone {
+        // 2-finger gestures are always titlebar-only to avoid system gesture conflicts.
+        switch binding.fingerCount <= 2 ? .titlebar : binding.activationZone {
         case .titlebar:
             let minimumTitlebarHeight = Defaults[.gestureTitlebarHeight]
 

@@ -56,6 +56,9 @@ struct GestureConfigPopoverView: View {
 
                     Stepper("", value: $binding.fingerCount, in: 2...5)
                         .labelsHidden()
+                        .onChange(of: binding.fingerCount) { count in
+                            if count <= 2 { binding.activationZone = .titlebar }
+                        }
                 }
             }
 
@@ -67,7 +70,9 @@ struct GestureConfigPopoverView: View {
                     }
                 }
                 .labelsHidden()
+                .disabled(binding.fingerCount <= 2)
             }
+            .help(binding.fingerCount <= 2 ? "2-finger gestures are restricted to the titlebar to avoid conflicting with system gestures." : "")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .onChange(of: binding) { externalBinding = $0 }
