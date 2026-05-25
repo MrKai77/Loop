@@ -1,5 +1,5 @@
 //
-//  GestureBindingItemView.swift
+//  GestureItemView.swift
 //  Loop
 //
 //  Created by Kai Azim on 2026-04-16.
@@ -9,27 +9,27 @@ import Defaults
 import Luminare
 import SwiftUI
 
-struct GestureBindingItemView: View {
+struct GestureItemView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
 
     @Default(.keybinds) private var keybinds
-    @Default(.gestureBindings) private var gestureBindings
+    @Default(.gestures) private var gestures
 
-    @State private var binding: GestureBinding
-    @Binding private var externalBinding: GestureBinding
+    @State private var gesture: Gesture
+    @Binding private var externalGesture: Gesture
 
     @State private var isActionPickerPresented = false
     @State private var isGestureConfigPresented = false
     @State private var isConfiguringCustom = false
     @State private var isConfiguringCycle = false
 
-    init(_ binding: Binding<GestureBinding>) {
-        self.binding = binding.wrappedValue
-        self._externalBinding = binding
+    init(_ gesture: Binding<Gesture>) {
+        self.gesture = gesture.wrappedValue
+        self._externalGesture = gesture
     }
 
     private var hasConflict: Bool {
-        GestureBinding.conflictingIDs(in: gestureBindings).contains(binding.id)
+        Gesture.conflictingIDs(in: gestures).contains(gesture.id)
     }
 
     var body: some View {
@@ -43,7 +43,7 @@ struct GestureBindingItemView: View {
                 }
             }
             .luminareToolTip(attachedTo: .topLeading, hidden: !hasConflict) {
-                Text("There are other gesture bindings that conflict with this gesture.")
+                Text("There are other gestures that conflict with this gesture.")
                     .padding(6)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -60,7 +60,7 @@ struct GestureBindingItemView: View {
                 isConfiguringCycle = true
             }
         }
-        .onChange(of: binding) { externalBinding = $0 }
+        .onChange(of: gesture) { externalGesture = $0 }
     }
 
     private var gestureConfiguration: some View {
@@ -79,7 +79,7 @@ struct GestureBindingItemView: View {
         .luminareBorderedStates(.hovering)
         .luminareMinHeight(24)
         .opacity(hasConflict ? 0.5 : 1)
-        .help("Customize this gesture binding.")
+        .help("Customize this gesture.")
         .padding(.leading, -4)
         .luminarePopover(
             isPresented: $isGestureConfigPresented,
@@ -88,7 +88,7 @@ struct GestureBindingItemView: View {
             shouldHideAnchor: true,
             shouldAnimate: false
         ) {
-            GestureConfigPopoverView(binding: $binding)
+            GestureConfigPopoverView(gesture: $gesture)
                 .frame(width: 300)
         }
     }
@@ -114,7 +114,7 @@ struct GestureBindingItemView: View {
 
     private var actionIndicator: some View {
         HStack(spacing: 2) {
-            if case .radialMenuActions = binding.action {
+            if case .radialMenuActions = gesture.action {
                 HStack(spacing: 4) {
                     Image(.loop)
                     Text("Open Radial Menu")
@@ -208,16 +208,16 @@ struct GestureBindingItemView: View {
     }
 
     private var gestureConfigurationText: String {
-        switch binding.gestureType {
+        switch gesture.kind {
         case .radialMenu:
-            "\(binding.fingerCount)-finger Gesture"
+            "\(gesture.fingerCount)-finger Gesture"
         default:
-            "\(binding.fingerCount)-finger \(binding.gestureType.displayName)"
+            "\(gesture.fingerCount)-finger \(gesture.kind.displayName)"
         }
     }
 
     private var resolvedAction: WindowAction? {
-        switch binding.action {
+        switch gesture.action {
         case .radialMenuActions:
             nil
         case let .singleAction(actionType):
@@ -228,13 +228,13 @@ struct GestureBindingItemView: View {
     private var actionTypeBinding: Binding<RadialMenuAction.ActionType> {
         Binding(
             get: {
-                if case let .singleAction(actionType) = binding.action {
+                if case let .singleAction(actionType) = gesture.action {
                     return actionType
                 }
                 return .custom(.init(.noAction))
             },
             set: { newValue in
-                binding.action = .singleAction(newValue)
+                gesture.action = .singleAction(newValue)
             }
         )
     }
@@ -245,10 +245,10 @@ struct GestureBindingItemView: View {
                 resolvedAction ?? .init(.noAction)
             },
             set: { newAction in
-                if case let .singleAction(actionType) = binding.action {
+                if case let .singleAction(actionType) = gesture.action {
                     switch actionType {
                     case .custom:
-                        binding.action = .singleAction(.custom(newAction))
+                        gesture.action = .singleAction(.custom(newAction))
                     case let .keybindReference(id):
                         if let index = Defaults[.keybinds].firstIndex(where: { $0.id == id }) {
                             keybinds[index] = newAction

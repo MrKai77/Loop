@@ -10,7 +10,7 @@ import Luminare
 import SwiftUI
 
 final class GesturesConfigurationModel: ObservableObject {
-    @Published var selectedBindings = Set<GestureBinding>()
+    @Published var selectedGestures = Set<Gesture>()
 }
 
 struct GesturesConfigurationView: View {
@@ -19,7 +19,7 @@ struct GesturesConfigurationView: View {
 
     @Default(.enableGestures) private var enableGestures
     @Default(.disableConflictingSystemGestures) private var disableConflictingSystemGestures
-    @Default(.gestureBindings) private var gestureBindings
+    @Default(.gestures) private var gestures
     @Default(.gestureTitlebarHeight) private var gestureTitlebarHeight
 
     var body: some View {
@@ -27,14 +27,14 @@ struct GesturesConfigurationView: View {
             settingsSection
 
             if enableGestures {
-                bindingsSection
+                gesturesSection
             }
         }
         .animation(luminareAnimation, value: enableGestures)
-        .onChange(of: gestureBindings) { newValue in
-            let bindingsByID = Dictionary(uniqueKeysWithValues: newValue.map { ($0.id, $0) })
-            let selectedIDs = model.selectedBindings.map(\.id)
-            model.selectedBindings = Set(selectedIDs.compactMap { bindingsByID[$0] })
+        .onChange(of: gestures) { newValue in
+            let gesturesByID = Dictionary(uniqueKeysWithValues: newValue.map { ($0.id, $0) })
+            let selectedIDs = model.selectedGestures.map(\.id)
+            model.selectedGestures = Set(selectedIDs.compactMap { gesturesByID[$0] })
         }
     }
 
@@ -48,38 +48,38 @@ struct GesturesConfigurationView: View {
         }
     }
 
-    private var bindingsSection: some View {
-        LuminareSection(String(localized: "Gesture Bindings", comment: "Section header shown in gestures settings")) {
+    private var gesturesSection: some View {
+        LuminareSection(String(localized: "Gestures", comment: "Section header shown in gestures settings")) {
             LuminareButtonRow {
                 Button("Add") {
-                    gestureBindings.insert(
-                        GestureBinding(),
+                    gestures.insert(
+                        Gesture(),
                         at: 0
                     )
                 }
 
                 Button("Remove", role: .destructive) {
-                    let selectedIDs = Set(model.selectedBindings.map(\.id))
-                    gestureBindings.removeAll { selectedIDs.contains($0.id) }
+                    let selectedIDs = Set(model.selectedGestures.map(\.id))
+                    gestures.removeAll { selectedIDs.contains($0.id) }
                 }
-                .disabled(model.selectedBindings.isEmpty)
+                .disabled(model.selectedGestures.isEmpty)
                 .keyboardShortcut(.delete)
             }
             .luminareRoundingBehavior(top: true)
 
             LuminareList(
-                items: $gestureBindings,
-                selection: $model.selectedBindings,
+                items: $gestures,
+                selection: $model.selectedGestures,
                 id: \.id
-            ) { binding in
-                GestureBindingItemView(binding)
+            ) { gesture in
+                GestureItemView(gesture)
             } emptyView: {
                 HStack {
                     Spacer()
                     VStack {
-                        Text("No gesture bindings")
+                        Text("No gestures")
                             .font(.title3)
-                        Text("Press \"Add\" to add a gesture binding")
+                        Text("Press \"Add\" to add a gesture")
                             .font(.caption)
                     }
                     Spacer()

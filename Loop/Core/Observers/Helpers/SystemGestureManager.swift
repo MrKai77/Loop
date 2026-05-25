@@ -195,7 +195,7 @@ final class SystemGestureManager {
     static func reconcile(
         enableGestures: Bool,
         disableConflicts: Bool,
-        bindings: [GestureBinding]
+        gestures: [Gesture]
     ) {
         var backups = Defaults[.systemGesturePreferenceBackups]
         var managedValues = Defaults[.systemGestureManagedValues]
@@ -203,7 +203,7 @@ final class SystemGestureManager {
         Self().reconcile(
             enableGestures: enableGestures,
             disableConflicts: disableConflicts,
-            bindings: bindings,
+            gestures: gestures,
             backups: &backups,
             managedValues: &managedValues
         )
@@ -215,7 +215,7 @@ final class SystemGestureManager {
     func reconcile(
         enableGestures: Bool,
         disableConflicts: Bool,
-        bindings: [GestureBinding],
+        gestures: [Gesture],
         backups: inout [String: SystemGesturePreferenceValue],
         managedValues: inout [String: SystemGesturePreferenceValue]
     ) {
@@ -227,7 +227,7 @@ final class SystemGestureManager {
             return
         }
 
-        let desiredValues = desiredValues(for: bindings, backups: backups, managedValues: managedValues)
+        let desiredValues = desiredValues(for: gestures, backups: backups, managedValues: managedValues)
         guard !desiredValues.isEmpty else {
             restoreAll(backups: &backups, managedValues: &managedValues)
             return
@@ -352,12 +352,12 @@ final class SystemGestureManager {
     }
 
     private func desiredValues(
-        for bindings: [GestureBinding],
+        for gestures: [Gesture],
         backups: [String: SystemGesturePreferenceValue],
         managedValues: [String: SystemGesturePreferenceValue]
     ) -> [SystemGesturePreferenceIdentifier: SystemGesturePreferenceValue] {
-        let hasThreeFingerGesture = bindings.contains { $0.fingerCount == 3 }
-        let hasFourFingerGesture = bindings.contains { $0.fingerCount == 4 }
+        let hasThreeFingerGesture = gestures.contains { $0.fingerCount == 3 }
+        let hasFourFingerGesture = gestures.contains { $0.fingerCount == 4 }
 
         guard hasThreeFingerGesture || hasFourFingerGesture else { return [:] }
 

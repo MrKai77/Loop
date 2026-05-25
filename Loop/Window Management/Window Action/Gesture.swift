@@ -1,5 +1,5 @@
 //
-//  GestureBinding.swift
+//  Gesture.swift
 //  Loop
 //
 //  Created by Kai Azim on 2026-04-16.
@@ -8,28 +8,28 @@
 import Defaults
 import SwiftUI
 
-struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
+struct Gesture: Identifiable, Codable, Hashable, Defaults.Serializable {
     let id: UUID
     var fingerCount: Int
-    var gestureType: GestureType
-    var action: GestureAction
+    var kind: Kind
+    var action: Action
     var activationZone: ActivationZone
 
     init(
         id: UUID = .init(),
         fingerCount: Int = 2,
-        gestureType: GestureType = .radialMenu,
-        action: GestureAction = .radialMenuActions,
+        kind: Kind = .radialMenu,
+        action: Action = .radialMenuActions,
         activationZone: ActivationZone = .titlebar
     ) {
         self.id = id
         self.fingerCount = fingerCount
-        self.gestureType = gestureType
+        self.kind = kind
         self.action = action
         self.activationZone = activationZone
     }
 
-    enum GestureType: Codable, Hashable, CaseIterable {
+    enum Kind: Codable, Hashable, CaseIterable {
         /// Pan gesture that maps angle to radial menu directional slots.
         case radialMenu
         /// Directional pan gestures that trigger a single action.
@@ -82,7 +82,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
         }
     }
 
-    enum GestureAction: Codable, Hashable {
+    enum Action: Codable, Hashable {
         /// Uses `RadialMenuAction.userConfiguredActions` for radial menu pan mode.
         case radialMenuActions
         /// A single action, either custom or referencing a keybind.
@@ -112,35 +112,35 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
 
 // MARK: - Conflict Detection
 
-extension GestureBinding {
-    /// Two bindings conflict when they have the same finger count and their gesture types overlap.
-    /// Radial menu consumes both pan and pinch, so it conflicts with ANY other binding at the same finger count.
-    func conflicts(with other: GestureBinding) -> Bool {
+extension Gesture {
+    /// Two gestures conflict when they have the same finger count and their kinds overlap.
+    /// Radial menu consumes both pan and pinch, so it conflicts with ANY other gesture at the same finger count.
+    func conflicts(with other: Gesture) -> Bool {
         guard id != other.id, fingerCount == other.fingerCount else {
             return false
         }
 
         // Radial menu uses both pan and pinch, so it conflicts with everything at the same finger count
-        if gestureType == .radialMenu || other.gestureType == .radialMenu {
+        if kind == .radialMenu || other.kind == .radialMenu {
             return true
         }
 
-        // Same gesture type always conflicts
-        if gestureType == other.gestureType {
+        // Same kind always conflicts
+        if kind == other.kind {
             return true
         }
 
         return false
     }
 
-    /// Returns the IDs of all bindings that conflict with at least one other binding in the array.
-    static func conflictingIDs(in bindings: [GestureBinding]) -> Set<UUID> {
+    /// Returns the IDs of all gestures that conflict with at least one other gesture in the array.
+    static func conflictingIDs(in gestures: [Gesture]) -> Set<UUID> {
         var result = Set<UUID>()
-        for i in bindings.indices {
-            for j in (i + 1) ..< bindings.count {
-                if bindings[i].conflicts(with: bindings[j]) {
-                    result.insert(bindings[i].id)
-                    result.insert(bindings[j].id)
+        for i in gestures.indices {
+            for j in (i + 1) ..< gestures.count {
+                if gestures[i].conflicts(with: gestures[j]) {
+                    result.insert(gestures[i].id)
+                    result.insert(gestures[j].id)
                 }
             }
         }
@@ -150,17 +150,17 @@ extension GestureBinding {
 
 // MARK: - Defaults
 
-extension GestureBinding {
-    static let defaultBindings: [GestureBinding] = [
-        GestureBinding(
+extension Gesture {
+    static let defaults: [Gesture] = [
+        Gesture(
             fingerCount: 2,
-            gestureType: .radialMenu,
+            kind: .radialMenu,
             action: .radialMenuActions,
             activationZone: .titlebar
         ),
-        GestureBinding(
+        Gesture(
             fingerCount: 2,
-            gestureType: .pinch,
+            kind: .pinch,
             action: .singleAction(.custom(
                 WindowAction(
                     "\(WindowDirection.maximize.name) + \(WindowDirection.macOSCenter.name)",

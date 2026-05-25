@@ -72,7 +72,7 @@ extension Defaults.Keys {
 
     // Gestures
     static let enableGestures = Key<Bool>("enableGestures", default: false, iCloud: true)
-    static let gestureBindings = Key<[GestureBinding]>("gestureBindings", default: GestureBinding.defaultBindings, iCloud: true)
+    static let gestures = Key<[Gesture]>("gestures", default: Gesture.defaults, iCloud: true)
     static let disableConflictingSystemGestures = Key<Bool>("disableConflictingSystemGestures", default: true, iCloud: true)
     static let systemGesturePreferenceBackups = Key<[String: SystemGesturePreferenceValue]>("systemGesturePreferenceBackups", default: [:], iCloud: false)
     static let systemGestureManagedValues = Key<[String: SystemGesturePreferenceValue]>("systemGestureManagedValues", default: [:], iCloud: false)
@@ -148,7 +148,7 @@ extension Defaults.Keys {
     /// Reset with `defaults delete com.MrKai77.Loop triggerKeyTimeout`
     static let triggerKeyTimeout = Key<Double>("triggerKeyTimeout", default: 0, iCloud: true)
 
-    /// Height of the titlebar activation zone for gesture bindings, defined in points.
+    /// Height of the titlebar activation zone for gestures, defined in points.
     /// Gestures with the `.titlebar` activation zone will only trigger when the cursor is within this distance from the top of a window.
     /// Adjust with `defaults write com.MrKai77.Loop gestureTitlebarHeight -float x`
     /// Reset with `defaults delete com.MrKai77.Loop gestureTitlebarHeight`
