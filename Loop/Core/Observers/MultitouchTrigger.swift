@@ -51,6 +51,9 @@ final class MultitouchTrigger {
         var didOpenLoopWithThisGesture = false
         var isGestureRejected = false
         var hasActivated = false
+        var hasGestureBegun = false
+        /// Locked once direction is detected so mid-gesture scale crossings don't switch bindings
+        var resolvedPinchBinding: GestureBinding?
         var pendingTargetWindow: Window?
         var lastCommittedAction: ActionKey?
         var lastCommitPanDistance: CGFloat = 0
@@ -67,14 +70,16 @@ final class MultitouchTrigger {
         var radialMenuBinding: GestureBinding?
         var directionalBindings: [GestureBinding]
         var pinchBinding: GestureBinding?
+        var spreadBinding: GestureBinding?
 
         static func categorize(
             _ bindings: [GestureBinding]
-        ) -> (radial: GestureBinding?, directionals: [GestureBinding], pinch: GestureBinding?) {
+        ) -> (radial: GestureBinding?, directionals: [GestureBinding], pinch: GestureBinding?, spread: GestureBinding?) {
             let radial = bindings.first { $0.gestureType == .radialMenu }
             let directionals = bindings.filter(\.gestureType.isDirectionalPan)
             let pinch = bindings.first { $0.gestureType == .pinch }
-            return (radial, directionals, pinch)
+            let spread = bindings.first { $0.gestureType == .spread }
+            return (radial, directionals, pinch, spread)
         }
     }
 
@@ -179,13 +184,14 @@ final class MultitouchTrigger {
 
         // Add new recognizers or refresh cached bindings on existing ones.
         for (fingerCount, bindings) in bindingsByFingerCount {
-            let (radial, directionals, pinch) = RecognizerEntry.categorize(bindings)
+            let (radial, directionals, pinch, spread) = RecognizerEntry.categorize(bindings)
             if recognizers[fingerCount] == nil {
-                startRecognizer(for: fingerCount, radial: radial, directionals: directionals, pinch: pinch)
+                startRecognizer(for: fingerCount, radial: radial, directionals: directionals, pinch: pinch, spread: spread)
             } else {
                 recognizers[fingerCount]?.radialMenuBinding = radial
                 recognizers[fingerCount]?.directionalBindings = directionals
                 recognizers[fingerCount]?.pinchBinding = pinch
+                recognizers[fingerCount]?.spreadBinding = spread
             }
         }
     }
@@ -194,7 +200,8 @@ final class MultitouchTrigger {
         for fingerCount: Int,
         radial: GestureBinding?,
         directionals: [GestureBinding],
-        pinch: GestureBinding?
+        pinch: GestureBinding?,
+        spread: GestureBinding?
     ) {
         let recognizer = SubsurfaceGestureRecognizer(fingerCount: fingerCount)
         recognizers[fingerCount] = RecognizerEntry(
@@ -203,7 +210,8 @@ final class MultitouchTrigger {
             state: GestureState(),
             radialMenuBinding: radial,
             directionalBindings: directionals,
-            pinchBinding: pinch
+            pinchBinding: pinch,
+            spreadBinding: spread
         )
 
         let task = Task { [weak self] in
@@ -324,11 +332,57 @@ final class MultitouchTrigger {
     private func handlePinch(_ pinch: SubsurfaceGestureEvent.PinchEvent, fingerCount: Int) async {
         guard let entry = recognizers[fingerCount] else { return }
 
-        // If a radial menu binding exists at this finger count, pinch triggers the center action
+        // Radial menu pinch triggers the center action regardless of direction
         if let radialMenuBinding = entry.radialMenuBinding {
             await handleRadialMenuPinch(pinch, fingerCount: fingerCount, binding: radialMenuBinding)
-        } else if let pinchBinding = entry.pinchBinding {
-            await handleSingleActionPinch(pinch, fingerCount: fingerCount, binding: pinchBinding)
+            return
+        }
+
+        switch pinch.phase {
+        case .began:
+            // Direction unknown — reset state but defer handleGestureBegan until first .changed
+            recognizers[fingerCount]?.state = GestureState()
+
+        case .changed:
+            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
+
+            // Lock in the binding on the first .changed that reveals direction
+            if !state.hasGestureBegun {
+                let binding = pinch.scale >= 1.0 ? entry.spreadBinding : entry.pinchBinding
+                guard let binding else {
+                    state.isGestureRejected = true
+                    recognizers[fingerCount]?.state = state
+                    return
+                }
+                handleGestureBegan(fingerCount: fingerCount, binding: binding)
+                recognizers[fingerCount]?.state.hasGestureBegun = true
+                recognizers[fingerCount]?.state.resolvedPinchBinding = binding
+            }
+
+            guard let state = recognizers[fingerCount]?.state, !state.isGestureRejected,
+                  let binding = state.resolvedPinchBinding else { return }
+            guard await activateGestureIfNeeded(fingerCount: fingerCount, pinchScale: pinch.scale) else { return }
+            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
+
+            commitPinch(
+                &state,
+                scale: pinch.scale,
+                newKey: .binding(binding.id),
+                fingerCount: fingerCount
+            ) { reverse in
+                triggerSingleAction(from: binding, reverse: reverse)
+            }
+
+            if let window = recognizers[fingerCount]?.state.pendingTargetWindow,
+               resolvedWindowAction(from: binding)?.canRepeat == true {
+                lastRepeatableWindow = window
+            }
+
+        case .ended, .cancelled:
+            resetLoopState(for: fingerCount)
+
+        default:
+            break
         }
     }
 
@@ -357,37 +411,6 @@ final class MultitouchTrigger {
                 fingerCount: fingerCount
             ) { reverse in
                 triggerRadialMenuAction(at: centerActionIndex, from: actions[...], reverse: reverse)
-            }
-
-        case .ended, .cancelled:
-            resetLoopState(for: fingerCount)
-
-        default:
-            break
-        }
-    }
-
-    /// Standalone pinch binding, triggers the binding's configured action.
-    private func handleSingleActionPinch(
-        _ pinch: SubsurfaceGestureEvent.PinchEvent,
-        fingerCount: Int,
-        binding: GestureBinding
-    ) async {
-        switch pinch.phase {
-        case .began, .changed:
-            if pinch.phase == .began {
-                handleGestureBegan(fingerCount: fingerCount, binding: binding)
-            }
-            guard await activateGestureIfNeeded(fingerCount: fingerCount, pinchScale: pinch.scale) else { return }
-            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
-
-            commitPinch(
-                &state,
-                scale: pinch.scale,
-                newKey: .binding(binding.id),
-                fingerCount: fingerCount
-            ) { reverse in
-                triggerSingleAction(from: binding, reverse: reverse)
             }
 
         case .ended, .cancelled:

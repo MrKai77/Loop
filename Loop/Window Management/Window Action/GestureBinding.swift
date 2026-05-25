@@ -34,8 +34,10 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
         case radialMenu
         /// Directional pan gestures that trigger a single action.
         case panUp, panDown, panLeft, panRight
-        /// Pinch gesture.
+        /// Pinch gesture (fingers together, scale < 1).
         case pinch
+        /// Spread gesture (fingers apart, scale > 1).
+        case spread
 
         var displayName: String {
             switch self {
@@ -45,6 +47,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
             case .panLeft: "Swipe Left"
             case .panRight: "Swipe Right"
             case .pinch: "Pinch"
+            case .spread: "Spread"
             }
         }
 
@@ -56,6 +59,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
             case .panLeft: Image(systemName: "arrow.left")
             case .panRight: Image(systemName: "arrow.right")
             case .pinch: Image(systemName: "arrow.down.left.and.arrow.up.right")
+            case .spread: Image(systemName: "arrow.up.right.and.arrow.down.left")
             }
         }
 
@@ -63,7 +67,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
             switch self {
             case .radialMenu, .panUp, .panDown, .panLeft, .panRight:
                 true
-            case .pinch:
+            case .pinch, .spread:
                 false
             }
         }
