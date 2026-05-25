@@ -58,8 +58,8 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
             case .panDown: Image(systemName: "arrow.down")
             case .panLeft: Image(systemName: "arrow.left")
             case .panRight: Image(systemName: "arrow.right")
-            case .pinch: Image(systemName: "arrow.down.left.and.arrow.up.right")
-            case .spread: Image(systemName: "arrow.up.right.and.arrow.down.left")
+            case .pinch: Image(systemName: "arrow.up.right.and.arrow.down.left")
+            case .spread: Image(systemName: "arrow.down.left.and.arrow.up.right")
             }
         }
 

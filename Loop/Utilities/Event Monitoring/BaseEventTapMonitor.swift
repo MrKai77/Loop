@@ -38,7 +38,7 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     func setupRunLoopSource(eventTap: CFMachPort, readableIdentifier: String) {
         let runLoop = EventTapThread.shared.runLoop
         self.readableIdentifier = readableIdentifier
-        self.refconRetainOutstanding = true
+        refconRetainOutstanding = true
 
         if let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0) {
             self.eventTap = eventTap

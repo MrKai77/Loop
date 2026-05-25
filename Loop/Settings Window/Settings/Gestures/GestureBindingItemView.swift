@@ -34,13 +34,19 @@ struct GestureBindingItemView: View {
 
     var body: some View {
         ZStack {
-            gestureConfiguration
-                .luminareToolTip(attachedTo: .topLeading, hidden: !hasConflict) {
-                    Text("There are other gesture bindings that conflict with this gesture.")
-                        .padding(6)
+            Group {
+                if hasConflict {
+                    gestureConfiguration
+                        .luminareTint(overridingWith: .red)
+                } else {
+                    gestureConfiguration
                 }
-                .luminareTint(overridingWith: .red)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .luminareToolTip(attachedTo: .topLeading, hidden: !hasConflict) {
+                Text("There are other gesture bindings that conflict with this gesture.")
+                    .padding(6)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             actionSelection
                 .frame(maxWidth: .infinity, alignment: .trailing)
