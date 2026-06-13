@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B6282EE5050C00A1E26B /* Defaults */; };
-		2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2A28B62B2EE5057C00A1E26B /* Luminare */; };
 		2A847DFC2F5E49E90099E02A /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A847DFB2F5E49E90099E02A /* Scribe */; };
 		2A847DFF2F5E4A080099E02A /* Subsurface in Frameworks */ = {isa = PBXBuildFile; productRef = 2A847DFE2F5E4A080099E02A /* Subsurface */; };
 		2A847E012F5E4A0E0099E02A /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2A847E002F5E4A0E0099E02A /* Scribe */; };
 		2A86890D2F80968A005B521B /* LoopDockTile.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2A8689072F809625005B521B /* LoopDockTile.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2AAC0B022FDD30370047C801 /* Luminare in Frameworks */ = {isa = PBXBuildFile; productRef = 2AAC0B012FDD30370047C801 /* Luminare */; };
 		2AE091C72F81A22800EF6149 /* Scribe in Frameworks */ = {isa = PBXBuildFile; productRef = 2AE091C62F81A22800EF6149 /* Scribe */; };
 		3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED0A7B82F21DF6800A58629 /* ZIPFoundation */; };
 		B1AA00412F30000100AABBCC /* LoopUpdaterHelper in CopyFiles */ = {isa = PBXBuildFile; fileRef = B1AA00012F30000100AABBCC /* LoopUpdaterHelper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -129,9 +129,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2A847DFC2F5E49E90099E02A /* Scribe in Frameworks */,
+				2AAC0B022FDD30370047C801 /* Luminare in Frameworks */,
 				2A847DFF2F5E4A080099E02A /* Subsurface in Frameworks */,
 				2A28B6292EE5050C00A1E26B /* Defaults in Frameworks */,
-				2A28B62C2EE5057C00A1E26B /* Luminare in Frameworks */,
 				F06D768A2DFF7A77007EEDA9 /* SkyLight.framework in Frameworks */,
 				3ED0A7B92F21DF6800A58629 /* ZIPFoundation in Frameworks */,
 			);
@@ -233,10 +233,10 @@
 			name = Loop;
 			packageProductDependencies = (
 				2A28B6282EE5050C00A1E26B /* Defaults */,
-				2A28B62B2EE5057C00A1E26B /* Luminare */,
 				3ED0A7B82F21DF6800A58629 /* ZIPFoundation */,
 				2A847DFB2F5E49E90099E02A /* Scribe */,
 				2A847DFE2F5E4A080099E02A /* Subsurface */,
+				2AAC0B012FDD30370047C801 /* Luminare */,
 			);
 			productName = WindowManager;
 			productReference = A8E59C35297F5E9A0064D4BA /* Loop.app */;
@@ -309,10 +309,10 @@
 			mainGroup = A8E59C2C297F5E9A0064D4BA;
 			packageReferences = (
 				2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */,
-				2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */,
 				3ED0A7B72F21DF6800A58629 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 				2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */,
 				2A847DFD2F5E4A080099E02A /* XCRemoteSwiftPackageReference "Subsurface" */,
+				2AAC0B002FDD30370047C801 /* XCLocalSwiftPackageReference "../Luminare" */,
 			);
 			productRefGroup = A8E59C36297F5E9A0064D4BA /* Products */;
 			projectDirPath = "";
@@ -910,6 +910,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		2AAC0B002FDD30370047C801 /* XCLocalSwiftPackageReference "../Luminare" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Luminare;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -917,14 +924,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 9.0.0;
-			};
-		};
-		2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mrkai77/luminare";
-			requirement = {
-				branch = main;
-				kind = branch;
 			};
 		};
 		2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */ = {
@@ -959,17 +958,7 @@
 			package = 2A28B6272EE5050C00A1E26B /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
 		};
-		2A28B62B2EE5057C00A1E26B /* Luminare */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2A28B62A2EE5057C00A1E26B /* XCRemoteSwiftPackageReference "luminare" */;
-			productName = Luminare;
-		};
 		2A847DFB2F5E49E90099E02A /* Scribe */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */;
-			productName = Scribe;
-		};
-		2AE091C62F81A22800EF6149 /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */;
 			productName = Scribe;
@@ -980,6 +969,15 @@
 			productName = Subsurface;
 		};
 		2A847E002F5E4A0E0099E02A /* Scribe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */;
+			productName = Scribe;
+		};
+		2AAC0B012FDD30370047C801 /* Luminare */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Luminare;
+		};
+		2AE091C62F81A22800EF6149 /* Scribe */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2A847DFA2F5E49E90099E02A /* XCRemoteSwiftPackageReference "Scribe" */;
 			productName = Scribe;
