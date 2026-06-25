@@ -29,7 +29,7 @@ struct GestureItemView: View {
     }
 
     private var hasConflict: Bool {
-        Gesture.conflictingIDs(in: gestures).contains(gesture.id)
+        Gesture.conflictingEnabledIDs(in: gestures).contains(gesture.id)
     }
 
     private var isDisabled: Bool {

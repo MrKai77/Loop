@@ -172,8 +172,9 @@ final class MultitouchTrigger {
 
     private func rebuildRecognizers() {
         let allGestures = Defaults[.gestures]
-        let conflictingIDs = Gesture.conflictingIDs(in: allGestures)
-        let activeGestures = allGestures.filter { !conflictingIDs.contains($0.id) && !$0.isDisabled }
+        let enabledGestures = allGestures.filter { !$0.isDisabled }
+        let conflictingIDs = Gesture.conflictingEnabledIDs(in: allGestures)
+        let activeGestures = enabledGestures.filter { !conflictingIDs.contains($0.id) }
         let gesturesByFingerCount = Dictionary(grouping: activeGestures, by: \.fingerCount)
         let neededFingerCounts = Set(gesturesByFingerCount.keys)
 

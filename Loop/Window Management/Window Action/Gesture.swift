@@ -127,6 +127,11 @@ extension Gesture {
 // MARK: - Conflict Detection
 
 extension Gesture {
+    /// Returns the IDs of enabled gestures that conflict with at least one other enabled gesture.
+    static func conflictingEnabledIDs(in gestures: [Gesture]) -> Set<UUID> {
+        conflictingIDs(in: gestures.filter { !$0.isDisabled })
+    }
+
     /// Two gestures conflict when they have the same finger count and their kinds overlap.
     /// Radial menu consumes both pan and pinch, so it conflicts with ANY other gesture at the same finger count.
     func conflicts(with other: Gesture) -> Bool {
@@ -170,20 +175,6 @@ extension Gesture {
             fingerCount: 2,
             kind: .radialMenu,
             action: .radialMenuActions,
-            activationZone: .titlebar
-        ),
-        Gesture(
-            fingerCount: 2,
-            kind: .pinch,
-            action: .singleAction(.custom(
-                WindowAction(
-                    "\(WindowDirection.maximize.name) + \(WindowDirection.macOSCenter.name)",
-                    cycle: [
-                        .init(.maximize),
-                        .init(.macOSCenter)
-                    ]
-                )
-            )),
             activationZone: .titlebar
         )
     ]
