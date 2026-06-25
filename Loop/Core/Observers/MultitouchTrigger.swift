@@ -532,17 +532,15 @@ final class MultitouchTrigger {
         switch gesture.fingerCount <= 2 ? .titlebar : gesture.activationZone {
         case .titlebar:
             let minimumTitlebarHeight = Defaults[.gestureTitlebarHeight]
-            let titlebarHeight: CGFloat
-            
-            if #available(macOS 26, *) {
+            let titlebarHeight: CGFloat = if #available(macOS 26, *) {
                 if #unavailable(macOS 27),
-                    let cornerRadius = SkyLightToolBelt.getCornerRadii(windowID: window.cgWindowID)?.topLeading {
-                    titlebarHeight = max(2 * cornerRadius, minimumTitlebarHeight)
+                   let cornerRadius = SkyLightToolBelt.getCornerRadii(windowID: window.cgWindowID)?.topLeading {
+                    max(2 * cornerRadius, minimumTitlebarHeight)
                 } else {
-                    titlebarHeight = minimumTitlebarHeight
+                    minimumTitlebarHeight
                 }
             } else {
-                titlebarHeight = minimumTitlebarHeight
+                minimumTitlebarHeight
             }
 
             log.info("Detected titlebar height of \(titlebarHeight)")
