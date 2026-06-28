@@ -15,21 +15,21 @@ struct GestureItemView: View {
     @Default(.keybinds) private var keybinds
     @Default(.gestures) private var gestures
 
-    @State private var gesture: Gesture
-    @Binding private var externalGesture: Gesture
+    @State private var gesture: GestureBinding
+    @Binding private var externalGesture: GestureBinding
 
     @State private var isActionPickerPresented = false
     @State private var isGestureConfigPresented = false
     @State private var isConfiguringCustom = false
     @State private var isConfiguringCycle = false
 
-    init(_ gesture: Binding<Gesture>) {
+    init(_ gesture: Binding<GestureBinding>) {
         self.gesture = gesture.wrappedValue
         self._externalGesture = gesture
     }
 
     private var hasConflict: Bool {
-        Gesture.conflictingEnabledIDs(in: gestures).contains(gesture.id)
+        GestureBinding.conflictingEnabledIDs(in: gestures).contains(gesture.id)
     }
 
     private var isDisabled: Bool {

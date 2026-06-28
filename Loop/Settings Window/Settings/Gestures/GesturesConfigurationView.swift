@@ -10,7 +10,7 @@ import Luminare
 import SwiftUI
 
 final class GesturesConfigurationModel: ObservableObject {
-    @Published var selectedGestures = Set<Gesture>()
+    @Published var selectedGestures = Set<GestureBinding>()
 }
 
 struct GesturesConfigurationView: View {
@@ -53,7 +53,7 @@ struct GesturesConfigurationView: View {
             LuminareButtonRow {
                 Button(String(localized: "Add", comment: "Button to add a new gesture")) {
                     gestures.insert(
-                        Gesture(),
+                        GestureBinding(),
                         at: 0
                     )
                 }

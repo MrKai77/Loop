@@ -9,15 +9,15 @@ import Luminare
 import SwiftUI
 
 struct GestureConfigPopoverView: View {
-    @State private var gesture: Gesture
-    @Binding private var externalGesture: Gesture
+    @State private var gesture: GestureBinding
+    @Binding private var externalGesture: GestureBinding
 
-    init(gesture: Binding<Gesture>) {
+    init(gesture: Binding<GestureBinding>) {
         self.gesture = gesture.wrappedValue
         self._externalGesture = gesture
     }
 
-    private var kindBinding: Binding<Gesture.Kind> {
+    private var kindBinding: Binding<GestureBinding.Kind> {
         Binding(
             get: { gesture.kind },
             set: { newKind in
@@ -35,9 +35,11 @@ struct GestureConfigPopoverView: View {
 
     var body: some View {
         LuminareSection {
+            GestureTrackpadPreview(gesture: gesture)
+
             LuminareCompose(String(localized: "Gesture Type", comment: "Label in the gesture configuration popover")) {
                 Picker("", selection: kindBinding) {
-                    ForEach(Array(Gesture.Kind.allCases.enumerated()), id: \.element) { _, kind in
+                    ForEach(Array(GestureBinding.Kind.allCases.enumerated()), id: \.element) { _, kind in
                         HStack {
                             kind.image
                                 .frame(width: 12)
@@ -64,7 +66,7 @@ struct GestureConfigPopoverView: View {
 
             LuminareCompose(String(localized: "Activation Zone", comment: "Label for the activation zone picker in the gesture configuration popover")) {
                 Picker("", selection: $gesture.activationZone) {
-                    ForEach(Gesture.ActivationZone.allCases, id: \.self) { zone in
+                    ForEach(GestureBinding.ActivationZone.allCases, id: \.self) { zone in
                         Label(zone.displayName, systemImage: zone.systemImage)
                             .tag(zone)
                     }

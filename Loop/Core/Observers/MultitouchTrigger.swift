@@ -53,7 +53,7 @@ final class MultitouchTrigger {
         var hasActivated = false
         var hasGestureBegun = false
         /// The gesture currently driving this stroke. Swapped on direction reversal
-        var resolvedGesture: Gesture?
+        var resolvedGesture: GestureBinding?
         var pendingTargetWindow: Window?
         var lastCommittedAction: ActionKey?
         var lastCommitPanDistance: CGFloat = 0
@@ -67,14 +67,14 @@ final class MultitouchTrigger {
         let recognizer: SubsurfaceGestureRecognizer
         var task: Task<(), Never>?
         var state: GestureState
-        var radialMenuGesture: Gesture?
-        var directionalGestures: [Gesture]
-        var pinchGesture: Gesture?
-        var spreadGesture: Gesture?
+        var radialMenuGesture: GestureBinding?
+        var directionalGestures: [GestureBinding]
+        var pinchGesture: GestureBinding?
+        var spreadGesture: GestureBinding?
 
         static func categorize(
-            _ gestures: [Gesture]
-        ) -> (radial: Gesture?, directionals: [Gesture], pinch: Gesture?, spread: Gesture?) {
+            _ gestures: [GestureBinding]
+        ) -> (radial: GestureBinding?, directionals: [GestureBinding], pinch: GestureBinding?, spread: GestureBinding?) {
             let radial = gestures.first { $0.kind == .radialMenu }
             let directionals = gestures.filter(\.kind.isDirectionalPan)
             let pinch = gestures.first { $0.kind == .pinch }
@@ -173,7 +173,7 @@ final class MultitouchTrigger {
     private func rebuildRecognizers() {
         let allGestures = Defaults[.gestures]
         let enabledGestures = allGestures.filter { !$0.isDisabled }
-        let conflictingIDs = Gesture.conflictingEnabledIDs(in: allGestures)
+        let conflictingIDs = GestureBinding.conflictingEnabledIDs(in: allGestures)
         let activeGestures = enabledGestures.filter { !conflictingIDs.contains($0.id) }
         let gesturesByFingerCount = Dictionary(grouping: activeGestures, by: \.fingerCount)
         let neededFingerCounts = Set(gesturesByFingerCount.keys)
@@ -200,10 +200,10 @@ final class MultitouchTrigger {
 
     private func startRecognizer(
         for fingerCount: Int,
-        radial: Gesture?,
-        directionals: [Gesture],
-        pinch: Gesture?,
-        spread: Gesture?
+        radial: GestureBinding?,
+        directionals: [GestureBinding],
+        pinch: GestureBinding?,
+        spread: GestureBinding?
     ) {
         let recognizer = SubsurfaceGestureRecognizer(fingerCount: fingerCount)
         recognizers[fingerCount] = RecognizerEntry(
@@ -256,7 +256,7 @@ final class MultitouchTrigger {
     private func handleRadialMenuPan(
         _ pan: SubsurfaceGestureEvent.PanEvent,
         fingerCount: Int,
-        gesture: Gesture
+        gesture: GestureBinding
     ) async {
         switch pan.phase {
         case .began, .changed:
@@ -304,7 +304,7 @@ final class MultitouchTrigger {
     private func handleDirectionalPan(
         _ pan: SubsurfaceGestureEvent.PanEvent,
         fingerCount: Int,
-        gesture: Gesture
+        gesture: GestureBinding
     ) async {
         guard let entry = recognizers[fingerCount] else { return }
 
@@ -421,7 +421,7 @@ final class MultitouchTrigger {
     private func handleRadialMenuPinch(
         _ pinch: SubsurfaceGestureEvent.PinchEvent,
         fingerCount: Int,
-        gesture: Gesture
+        gesture: GestureBinding
     ) async {
         switch pinch.phase {
         case .began, .changed:
@@ -457,7 +457,7 @@ final class MultitouchTrigger {
 
     /// Resolves the target window and starts blocking trackpad events. Loop itself
     /// isn't opened until the gesture crosses the activation threshold in a `.changed` event.
-    private func handleGestureBegan(fingerCount: Int, gesture: Gesture) {
+    private func handleGestureBegan(fingerCount: Int, gesture: GestureBinding) {
         var window = findTargetWindow(for: gesture)
         if window == nil, resolvedWindowAction(from: gesture)?.canRepeat == true {
             window = lastRepeatableWindow
@@ -522,7 +522,7 @@ final class MultitouchTrigger {
         recognizers[fingerCount]?.state = GestureState()
     }
 
-    private func findTargetWindow(for gesture: Gesture) -> Window? {
+    private func findTargetWindow(for gesture: GestureBinding) -> Window? {
         let cursorPosition = NSEvent.mouseLocation.flipY(screen: NSScreen.screens[0])
 
         guard let window = WindowUtility.windowAtPosition(cursorPosition) else {
@@ -654,10 +654,10 @@ final class MultitouchTrigger {
     }
 
     private func oppositeDirectionalPanGesture(
-        of current: Gesture,
-        in directionals: [Gesture]
-    ) -> Gesture? {
-        let opposite: Gesture.Kind? = switch current.kind {
+        of current: GestureBinding,
+        in directionals: [GestureBinding]
+    ) -> GestureBinding? {
+        let opposite: GestureBinding.Kind? = switch current.kind {
         case .panUp: .panDown
         case .panDown: .panUp
         case .panLeft: .panRight
@@ -668,14 +668,14 @@ final class MultitouchTrigger {
         return directionals.first { $0.kind == opposite }
     }
 
-    private func isCycleAction(_ gesture: Gesture) -> Bool {
+    private func isCycleAction(_ gesture: GestureBinding) -> Bool {
         resolvedWindowAction(from: gesture)?.direction == .cycle
     }
 
     private func handlePanReversal(
         fingerCount: Int,
-        currentGesture: Gesture,
-        oppositeGesture: Gesture?,
+        currentGesture: GestureBinding,
+        oppositeGesture: GestureBinding?,
         distance: CGFloat
     ) {
         if let oppositeGesture {
@@ -698,8 +698,8 @@ final class MultitouchTrigger {
 
     private func handlePinchReversal(
         fingerCount: Int,
-        currentGesture: Gesture,
-        oppositeGesture: Gesture?,
+        currentGesture: GestureBinding,
+        oppositeGesture: GestureBinding?,
         distance: CGFloat
     ) {
         if let oppositeGesture {
@@ -738,7 +738,7 @@ final class MultitouchTrigger {
         changeAction(resolvedAction, reverse)
     }
 
-    private func resolvedWindowAction(from gesture: Gesture) -> WindowAction? {
+    private func resolvedWindowAction(from gesture: GestureBinding) -> WindowAction? {
         guard case let .singleAction(actionType) = gesture.action else { return nil }
         switch actionType {
         case let .custom(action): return action
@@ -746,7 +746,7 @@ final class MultitouchTrigger {
         }
     }
 
-    private func triggerSingleAction(from gesture: Gesture, reverse: Bool = false) {
+    private func triggerSingleAction(from gesture: GestureBinding, reverse: Bool = false) {
         guard let resolvedAction = resolvedWindowAction(from: gesture) else { return }
         changeAction(resolvedAction, reverse)
     }
@@ -759,12 +759,12 @@ final class MultitouchTrigger {
         return Self.failedToResolveKeybindAction
     }
 
-    private func matchDirectionalPanGesture(angle: CGFloat, from gestures: [Gesture]) -> Gesture? {
+    private func matchDirectionalPanGesture(angle: CGFloat, from gestures: [GestureBinding]) -> GestureBinding? {
         let angleFromOrigin = .pi / 2 - angle
         var normalizedAngle = angleFromOrigin
         if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
 
-        let direction: Gesture.Kind = if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
+        let direction: GestureBinding.Kind = if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
             .panUp
         } else if normalizedAngle >= .pi / 4, normalizedAngle < 3 * .pi / 4 {
             .panRight

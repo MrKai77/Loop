@@ -195,7 +195,7 @@ final class SystemGestureManager {
     static func reconcile(
         enableGestures: Bool,
         disableConflicts: Bool,
-        gestures: [Gesture]
+        gestures: [GestureBinding]
     ) {
         var backups = Defaults[.systemGesturePreferenceBackups]
         var managedValues = Defaults[.systemGestureManagedValues]
@@ -215,7 +215,7 @@ final class SystemGestureManager {
     func reconcile(
         enableGestures: Bool,
         disableConflicts: Bool,
-        gestures: [Gesture],
+        gestures: [GestureBinding],
         backups: inout [String: SystemGesturePreferenceValue],
         managedValues: inout [String: SystemGesturePreferenceValue]
     ) {
@@ -352,7 +352,7 @@ final class SystemGestureManager {
     }
 
     private func desiredValues(
-        for gestures: [Gesture],
+        for gestures: [GestureBinding],
         backups: [String: SystemGesturePreferenceValue],
         managedValues: [String: SystemGesturePreferenceValue]
     ) -> [SystemGesturePreferenceIdentifier: SystemGesturePreferenceValue] {

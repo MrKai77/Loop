@@ -72,7 +72,7 @@ extension Defaults.Keys {
 
     // Gestures
     static let enableGestures = Key<Bool>("enableGestures", default: false, iCloud: true)
-    static let gestures = Key<[Gesture]>("gestures", default: Gesture.defaults, iCloud: true)
+    static let gestures = Key<[GestureBinding]>("gestures", default: GestureBinding.defaults, iCloud: true)
     static let disableConflictingSystemGestures = Key<Bool>("disableConflictingSystemGestures", default: true, iCloud: true)
     static let systemGesturePreferenceBackups = Key<[String: SystemGesturePreferenceValue]>("systemGesturePreferenceBackups", default: [:], iCloud: false)
     static let systemGestureManagedValues = Key<[String: SystemGesturePreferenceValue]>("systemGestureManagedValues", default: [:], iCloud: false)

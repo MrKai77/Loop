@@ -1,5 +1,5 @@
 //
-//  Gesture.swift
+//  GestureBinding.swift
 //  Loop
 //
 //  Created by Kai Azim on 2026-04-16.
@@ -8,7 +8,7 @@
 import Defaults
 import SwiftUI
 
-struct Gesture: Identifiable, Codable, Hashable, Defaults.Serializable {
+struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
     let id: UUID
     var fingerCount: Int
     var kind: Kind
@@ -111,7 +111,7 @@ struct Gesture: Identifiable, Codable, Hashable, Defaults.Serializable {
 
 // MARK: - Disabled state
 
-extension Gesture {
+extension GestureBinding {
     /// True when this gesture's action resolves to `noAction`. Disabled gestures
     /// are skipped at runtime and rendered greyed-out in settings.
     var isDisabled: Bool {
@@ -126,15 +126,15 @@ extension Gesture {
 
 // MARK: - Conflict Detection
 
-extension Gesture {
+extension GestureBinding {
     /// Returns the IDs of enabled gestures that conflict with at least one other enabled gesture.
-    static func conflictingEnabledIDs(in gestures: [Gesture]) -> Set<UUID> {
+    static func conflictingEnabledIDs(in gestures: [GestureBinding]) -> Set<UUID> {
         conflictingIDs(in: gestures.filter { !$0.isDisabled })
     }
 
     /// Two gestures conflict when they have the same finger count and their kinds overlap.
     /// Radial menu consumes both pan and pinch, so it conflicts with ANY other gesture at the same finger count.
-    func conflicts(with other: Gesture) -> Bool {
+    func conflicts(with other: GestureBinding) -> Bool {
         guard id != other.id, fingerCount == other.fingerCount else {
             return false
         }
@@ -153,7 +153,7 @@ extension Gesture {
     }
 
     /// Returns the IDs of all gestures that conflict with at least one other gesture in the array.
-    static func conflictingIDs(in gestures: [Gesture]) -> Set<UUID> {
+    static func conflictingIDs(in gestures: [GestureBinding]) -> Set<UUID> {
         var result = Set<UUID>()
         for i in gestures.indices {
             for j in (i + 1) ..< gestures.count {
@@ -169,9 +169,9 @@ extension Gesture {
 
 // MARK: - Defaults
 
-extension Gesture {
-    static let defaults: [Gesture] = [
-        Gesture(
+extension GestureBinding {
+    static let defaults: [GestureBinding] = [
+        GestureBinding(
             fingerCount: 2,
             kind: .radialMenu,
             action: .radialMenuActions,
