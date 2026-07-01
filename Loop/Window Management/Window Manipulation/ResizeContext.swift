@@ -131,6 +131,13 @@ final class ResizeContext {
     }
 
     private func recomputeTargetFrame() {
+        // Clear the recompute guard *before* resolving so this method is re-entrancy safe:
+        // if `WindowFrameResolver.getFrame` ever reads `getTargetFrame()` on this same
+        // context while it is still being computed, the guard is already clear and the
+        // re-entrant call returns the cached frame instead of recomputing and recursing
+        // until the stack overflows.
+        needsRecompute = false
+
         let result = WindowFrameResolver.getFrame(resizeContext: self)
 
         let normalized = CGRect(
@@ -152,7 +159,6 @@ final class ResizeContext {
             normalized: normalized,
             padded: paddedFrame
         )
-        needsRecompute = false
 
         log.info("Computed target frame - raw: \(cachedTargetFrame.raw), normalized: \(cachedTargetFrame.normalized) padded: \(cachedTargetFrame.padded), for action: \(action)")
     }

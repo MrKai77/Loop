@@ -201,7 +201,12 @@ extension WindowFrameResolver {
             )
 
         } else if direction.willMove {
-            let frameToResizeFrom = context.getTargetFrame().raw
+            // Read the last applied frame (falling back to the cached target) instead of
+            // `context.getTargetFrame()`. `getTargetFrame()` would recompute this very
+            // context and re-enter here, recursing until the stack overflows. Matching the
+            // grow/shrink branches above also keeps moves anchored to the window's actual
+            // position rather than a theoretical (possibly clamped-away) target frame.
+            let frameToResizeFrom = context.lastAppliedFrame ?? context.cachedTargetFrame.raw
 
             result = calculatePositionAdjustment(for: action, frameToResizeFrom: frameToResizeFrom)
 
