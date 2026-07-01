@@ -474,7 +474,8 @@ extension LoopManager {
     }
 
     private func getNextCycleAction(_ action: WindowAction) async -> WindowAction {
-        guard let currentCycle = action.cycle else {
+        // `currentCycle[0]` below would trap on an empty cycle.
+        guard let currentCycle = action.cycle, !currentCycle.isEmpty else {
             return action
         }
 
