@@ -217,7 +217,15 @@ final class KeybindTrigger {
             }
         }
 
-        // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
+        // While Loop is open and the trigger is still held, the user is mid-chord: consume any
+        // unmatched keyDown so stray characters (e.g. the "2" in a `trigger+2+arrow` chord that
+        // isn't bound to an action) don't leak into the focused app. Gated on `containsTrigger`
+        // and `.keyDown` so key releases — and keys typed after releasing the trigger — still forward.
+        if checkIfLoopOpen(), containsTrigger, type == .keyDown {
+            return .consume
+        }
+
+        // If this wasn't a valid keybind, forward the key event to the frontmost app.
         return .forward
     }
 
