@@ -186,7 +186,7 @@ struct GestureItemView: View {
             if case .radialMenuActions = gesture.action {
                 HStack(spacing: 4) {
                     Image(.loop)
-                    Text(String(localized: "Open Radial Menu", comment: "Label shown for a gesture configured to open the radial menu"))
+                    Text(String(localized: "Radial Menu", comment: "Label shown for a gesture configured to open the radial menu"))
                         .fontWeight(.regular)
                         .lineLimit(1)
                 }

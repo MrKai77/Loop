@@ -1353,6 +1353,9 @@
         }
       }
     },
+    "All" : {
+      "comment" : "Gesture kind: all gesture types; opens the radial menu"
+    },
     "Allow radial menu customization" : {
       "comment" : "A toggle that allows users to enable or disable the ability to customize the actions available in the radial menu.",
       "localizations" : {
@@ -23587,9 +23590,6 @@
         }
       }
     },
-    "Open Radial Menu" : {
-      "comment" : "Label shown for a gesture configured to open the radial menu"
-    },
     "Options" : {
       "comment" : "Section header shown in settings",
       "localizations" : {
@@ -25191,7 +25191,7 @@
       }
     },
     "Radial Menu" : {
-      "comment" : "Gesture kind: opens the radial menu via swipe/pinch/spread\nSection header shown in settings",
+      "comment" : "Label shown for a gesture configured to open the radial menu\nSection header shown in settings",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

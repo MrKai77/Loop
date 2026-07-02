@@ -41,7 +41,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
 
         var displayName: String {
             switch self {
-            case .radialMenu: String(localized: "Radial Menu", comment: "Gesture kind: opens the radial menu via swipe/pinch/spread")
+            case .radialMenu: String(localized: "All", comment: "Gesture kind: all gesture types; opens the radial menu")
             case .panUp: String(localized: "Swipe Up", comment: "Gesture kind: directional swipe")
             case .panDown: String(localized: "Swipe Down", comment: "Gesture kind: directional swipe")
             case .panLeft: String(localized: "Swipe Left", comment: "Gesture kind: directional swipe")
