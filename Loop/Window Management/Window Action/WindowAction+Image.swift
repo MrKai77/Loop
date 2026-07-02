@@ -11,6 +11,7 @@ import SwiftUI
 enum WindowActionImage {
     case systemImage(String)
     case resource(ImageResource)
+    case number(Int)
 
     var image: Image {
         switch self {
@@ -18,6 +19,8 @@ enum WindowActionImage {
             Image(systemName: string)
         case let .resource(resource):
             Image(resource)
+        case .number:
+            Image(nsImage: nsImage)
         }
     }
 
@@ -28,13 +31,51 @@ enum WindowActionImage {
             return image?.withSymbolConfiguration(.init(pointSize: 20, weight: .bold)) ?? image ?? NSImage()
         case let .resource(resource):
             return NSImage(resource: resource)
+        case let .number(number):
+            return Self.numberImage(number)
         }
+    }
+
+    private static func numberImage(_ number: Int) -> NSImage {
+        let size = CGSize(width: 22, height: 16)
+        let image = NSImage(size: size)
+
+        image.lockFocus()
+        defer {
+            image.unlockFocus()
+            image.isTemplate = true
+        }
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.monospacedDigitSystemFont(ofSize: 14, weight: .bold),
+            .foregroundColor: NSColor.black,
+            .paragraphStyle: paragraphStyle
+        ]
+
+        let text = "\(number)" as NSString
+        let textSize = text.size(withAttributes: attributes)
+        let textRect = CGRect(
+            x: 0,
+            y: (size.height - textSize.height) / 2,
+            width: size.width,
+            height: textSize.height
+        )
+        text.draw(in: textRect, withAttributes: attributes)
+
+        return image
     }
 }
 
 extension WindowAction {
     var image: WindowActionImage? {
-        switch direction {
+        if let desktopNumber = direction.spaceDestination?.desktopNumber {
+            return .number(Int(desktopNumber))
+        }
+
+        return switch direction {
         case .noAction:
             .systemImage("questionmark")
         case .undo:
@@ -51,9 +92,9 @@ extension WindowAction {
             .systemImage("arrow.up.and.down")
         case .maximizeWidth:
             .systemImage("arrow.left.and.right")
-        case .nextScreen:
+        case .nextScreen, .nextSpace:
             .systemImage("arrow.forward")
-        case .previousScreen:
+        case .previousScreen, .previousSpace:
             .systemImage("arrow.backward")
         case .leftScreen:
             .systemImage("arrow.left.to.line")

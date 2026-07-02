@@ -138,4 +138,10 @@ struct SLSWindowCaptureOptions: OptionSet {
     static let fullSize = Self(rawValue: 1 << 19)
 }
 
+enum SLSSpaceMask: Int32 {
+    case onScreenManaged = 5
+    case offScreenManaged = 6
+    case allManaged = 7
+}
+
 let kCPSUserGenerated: UInt32 = 0x200

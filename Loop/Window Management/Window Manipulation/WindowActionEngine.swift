@@ -111,6 +111,12 @@ final class WindowActionEngine {
             return handleFocusAction(context.action, currentWindow: context.window)
         }
 
+        // Cross-space throws
+        if let window = context.window, let destination = direction.spaceDestination {
+            await throwWindow(window, to: destination)
+            return .noOp
+        }
+
         // Quick actions that don't require resize logic
         if let result = handleQuickAction(context.action, window: context.window) {
             return result
@@ -180,5 +186,51 @@ final class WindowActionEngine {
         for window in windowsToMinimize {
             window.minimized = true
         }
+    }
+
+    // MARK: - Cross-Space Window Throw
+
+    enum SpaceDestination {
+        case previousSpace
+        case nextSpace
+        case desktop(UInt)
+
+        var description: String {
+            switch self {
+            case .previousSpace: "previous space"
+            case .nextSpace: "next space"
+            case let .desktop(n): "desktop \(n)"
+            }
+        }
+
+        var desktopNumber: UInt? {
+            if case let .desktop(number) = self {
+                return number
+            }
+            return nil
+        }
+    }
+
+    private func throwWindow(_ window: Window, to space: SpaceDestination) async {
+        guard #available(macOS 14.0, *) else {
+            log.error("Cross-space window movement requires macOS 14.0 or later")
+            return
+        }
+
+        let targetSpace: SkyLightToolBelt.ManagedSpace? = switch space {
+        case .previousSpace:
+            SkyLightToolBelt.desktopSpace(forWindow: window.cgWindowID, offset: -1)
+        case .nextSpace:
+            SkyLightToolBelt.desktopSpace(forWindow: window.cgWindowID, offset: 1)
+        case let .desktop(number):
+            SkyLightToolBelt.desktopSpace(forWindow: window.cgWindowID, desktopNumber: number)
+        }
+
+        guard let targetSpace else {
+            log.error("Could not resolve target \(space.description) for window \(window.cgWindowID)")
+            return
+        }
+
+        SkyLightToolBelt.moveWindow(window.cgWindowID, toSpace: targetSpace.id)
     }
 }

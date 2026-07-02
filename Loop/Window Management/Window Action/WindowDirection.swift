@@ -48,6 +48,13 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     /// Screen Switching
     case nextScreen = "NextScreen", previousScreen = "PreviousScreen", leftScreen = "LeftScreen", rightScreen = "RightScreen", topScreen = "TopScreen", bottomScreen = "BottomScreen"
 
+    /// Space Switching (move the window to another Mission Control space).
+    case nextSpace = "NextSpace", previousSpace = "PreviousSpace"
+    case moveToSpace1 = "MoveToSpace1", moveToSpace2 = "MoveToSpace2", moveToSpace3 = "MoveToSpace3", moveToSpace4 = "MoveToSpace4"
+    case moveToSpace5 = "MoveToSpace5", moveToSpace6 = "MoveToSpace6", moveToSpace7 = "MoveToSpace7", moveToSpace8 = "MoveToSpace8"
+    case moveToSpace9 = "MoveToSpace9", moveToSpace10 = "MoveToSpace10", moveToSpace11 = "MoveToSpace11", moveToSpace12 = "MoveToSpace12"
+    case moveToSpace13 = "MoveToSpace13", moveToSpace14 = "MoveToSpace14", moveToSpace15 = "MoveToSpace15", moveToSpace16 = "MoveToSpace16"
+
     // Size Adjustment
     case larger = "Larger", smaller = "Smaller"
     case scaleUp = "ScaleUp", scaleDown = "ScaleDown"
@@ -79,6 +86,19 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     static var verticalThirds: [WindowDirection] { [.topThird, .topTwoThirds, .verticalCenterThird, .bottomTwoThirds, .bottomThird] }
     static var horizontalFourths: [WindowDirection] { [.firstFourth, .secondFourth, .thirdFourth, .fourthFourth, .leftThreeFourths, .rightThreeFourths] }
     static var screenSwitching: [WindowDirection] { [.nextScreen, .previousScreen, .leftScreen, .rightScreen, .topScreen, .bottomScreen] }
+    static var spaceSwitching: [WindowDirection] {
+        [
+            .nextSpace, .previousSpace,
+            .moveToSpace1, .moveToSpace2, .moveToSpace3, .moveToSpace4,
+            .moveToSpace5, .moveToSpace6, .moveToSpace7, .moveToSpace8,
+            .moveToSpace9, .moveToSpace10, .moveToSpace11, .moveToSpace12,
+            .moveToSpace13, .moveToSpace14, .moveToSpace15, .moveToSpace16
+        ]
+    }
+
+    static var relativeSpaceSwitching: [WindowDirection] { [.nextSpace, .previousSpace] }
+    static var numberedSpaceSwitching: [WindowDirection] { Array(spaceSwitching.dropFirst(relativeSpaceSwitching.count)) }
+
     static var sizeAdjustment: [WindowDirection] { [.larger, .smaller, .scaleUp, .scaleDown] }
     static var shrink: [WindowDirection] { [.shrinkTop, .shrinkBottom, .shrinkRight, .shrinkLeft, .shrinkHorizontal, .shrinkVertical] }
     static var grow: [WindowDirection] { [.growTop, .growBottom, .growRight, .growLeft, .growHorizontal, .growVertical] }
@@ -89,6 +109,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
     // Computed properties for checking conditions
     var isNoOp: Bool { [.noSelection, .noAction].contains(self) }
     var willChangeScreen: Bool { WindowDirection.screenSwitching.contains(self) }
+    var willChangeSpace: Bool { WindowDirection.spaceSwitching.contains(self) }
     var willAdjustSize: Bool { WindowDirection.sizeAdjustment.contains(self) }
     var willShrink: Bool { WindowDirection.shrink.contains(self) }
     var willGrow: Bool { WindowDirection.grow.contains(self) }
@@ -99,7 +120,7 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
 
     var hasRadialMenuAngle: Bool {
         let noAngleActions: [WindowDirection] = [.noAction, .noSelection, .minimize, .minimizeOthers, .hide, .initialFrame, .undo, .cycle]
-        return !(noAngleActions.contains(self) || shouldFillRadialMenu || willChangeScreen || willAdjustSize || willShrink || willGrow || willMove || willFocusWindow)
+        return !(noAngleActions.contains(self) || shouldFillRadialMenu || willChangeScreen || willChangeSpace || willAdjustSize || willShrink || willGrow || willMove || willFocusWindow)
     }
 
     var shouldFillRadialMenu: Bool {
@@ -152,6 +173,31 @@ enum WindowDirection: String, CaseIterable, Identifiable, Codable {
         case .focusRight: .right
         case .focusUp: .top
         case .focusDown: .bottom
+        default: nil
+        }
+    }
+
+    /// If this direction targets a Mission Control space, returns the resolved destination.
+    var spaceDestination: WindowActionEngine.SpaceDestination? {
+        switch self {
+        case .nextSpace: .nextSpace
+        case .previousSpace: .previousSpace
+        case .moveToSpace1: .desktop(1)
+        case .moveToSpace2: .desktop(2)
+        case .moveToSpace3: .desktop(3)
+        case .moveToSpace4: .desktop(4)
+        case .moveToSpace5: .desktop(5)
+        case .moveToSpace6: .desktop(6)
+        case .moveToSpace7: .desktop(7)
+        case .moveToSpace8: .desktop(8)
+        case .moveToSpace9: .desktop(9)
+        case .moveToSpace10: .desktop(10)
+        case .moveToSpace11: .desktop(11)
+        case .moveToSpace12: .desktop(12)
+        case .moveToSpace13: .desktop(13)
+        case .moveToSpace14: .desktop(14)
+        case .moveToSpace15: .desktop(15)
+        case .moveToSpace16: .desktop(16)
         default: nil
         }
     }

@@ -190,7 +190,7 @@ final class IconRenderView: NSView {
             animatePath(layer: fillLayer, to: newPath, duration: duration)
         case let .image(image):
             imageLayer.contents = processImage(image, color: .textColor)
-            imageLayer.frame = getImageBounds()
+            imageLayer.frame = getImageBounds(for: image)
             animateAlpha(layer: fillLayer, to: 0, duration: duration)
             animateAlpha(layer: imageLayer, to: 1, duration: duration)
         }
@@ -290,14 +290,28 @@ final class IconRenderView: NSView {
         return sizedImage
     }
 
-    private func getImageBounds() -> NSRect {
+    private func getImageBounds(for image: NSImage) -> NSRect {
         let insetBounds = bounds.insetBy(dx: strokeWidth, dy: strokeWidth)
-        let side = min(insetBounds.width, insetBounds.height)
+        let imageAspectRatio = image.size.width / max(image.size.height, 1)
+        let boundsAspectRatio = insetBounds.width / max(insetBounds.height, 1)
+
+        let imageSize = if imageAspectRatio > boundsAspectRatio {
+            CGSize(
+                width: insetBounds.width,
+                height: insetBounds.width / imageAspectRatio
+            )
+        } else {
+            CGSize(
+                width: insetBounds.height * imageAspectRatio,
+                height: insetBounds.height
+            )
+        }
+
         let squareRect = CGRect(
-            x: insetBounds.midX - side / 2,
-            y: insetBounds.midY - side / 2,
-            width: side,
-            height: side
+            x: insetBounds.midX - imageSize.width / 2,
+            y: insetBounds.midY - imageSize.height / 2,
+            width: imageSize.width,
+            height: imageSize.height
         )
         return squareRect
     }

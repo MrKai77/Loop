@@ -111,6 +111,15 @@ extension WindowDirection {
             String(localized: "Top Screen", comment: "Window action")
         case .bottomScreen:
             String(localized: "Bottom Screen", comment: "Window action")
+        case .nextSpace:
+            String(localized: "Move to Next Space", comment: "Window action")
+        case .previousSpace:
+            String(localized: "Move to Previous Space", comment: "Window action")
+        case .moveToSpace1, .moveToSpace2, .moveToSpace3, .moveToSpace4,
+             .moveToSpace5, .moveToSpace6, .moveToSpace7, .moveToSpace8,
+             .moveToSpace9, .moveToSpace10, .moveToSpace11, .moveToSpace12,
+             .moveToSpace13, .moveToSpace14, .moveToSpace15, .moveToSpace16:
+            moveToDesktopName
         case .larger:
             String(localized: "Larger", comment: "Window action")
         case .smaller:
@@ -170,5 +179,13 @@ extension WindowDirection {
         case .cycle:
             String(localized: "Cycle", comment: "Window action")
         }
+    }
+
+    private var moveToDesktopName: String {
+        let desktopNumber = Int(spaceDestination?.desktopNumber ?? 0)
+        return String(
+            localized: "Move to Desktop \(desktopNumber)",
+            comment: "Window action; moves the current window to the Mission Control desktop identified by the number."
+        )
     }
 }

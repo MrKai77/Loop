@@ -179,14 +179,20 @@ struct PickerSection<V>: Identifiable, Hashable where V: Hashable, V: Identifiab
 
 extension PickerSection where V == WindowDirection {
     static var windowDirections: [PickerSection<WindowDirection>] {
-        [
+        let spaceSwitching = visibleSpaceSwitchingDirections()
+        let spaceSwitchingSections: [PickerSection<WindowDirection>] = spaceSwitching.isEmpty ? [] : [
+            .init(String(localized: "Space Switching", comment: "Section header in the action picker of the Keybinds tab"), spaceSwitching)
+        ]
+
+        return [
             .init(String(localized: "General", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.general),
             .init(String(localized: "Halves", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.halves),
             .init(String(localized: "Quarters", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.quarters),
             .init(String(localized: "Horizontal Thirds", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.horizontalThirds),
             .init(String(localized: "Vertical Thirds", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.verticalThirds),
             .init(String(localized: "Horizontal Fourths", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.horizontalFourths),
-            .init(String(localized: "Screen Switching", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.screenSwitching),
+            .init(String(localized: "Screen Switching", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.screenSwitching)
+        ] + spaceSwitchingSections + [
             .init(String(localized: "Size Adjustment", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.sizeAdjustment),
             .init(String(localized: "Shrink", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.shrink),
             .init(String(localized: "Grow", comment: "Section header in the action picker of the Keybinds tab"), WindowDirection.grow),
@@ -195,5 +201,21 @@ extension PickerSection where V == WindowDirection {
             .init(String(localized: "Stash", comment: "Section header in the action picker of the Keybinds tab"), [WindowDirection.stash, WindowDirection.unstash]),
             .init(String(localized: "Go Back", comment: "Section header in the action picker of the Keybinds tab"), [WindowDirection.initialFrame, WindowDirection.undo])
         ]
+    }
+
+    private static func visibleSpaceSwitchingDirections() -> [WindowDirection] {
+        guard #available(macOS 14.0, *) else {
+            return []
+        }
+
+        let maximumDesktopCount = SkyLightToolBelt.maximumDesktopCount()
+        guard maximumDesktopCount > 1 else {
+            return []
+        }
+
+        let visibleNumberedActions = WindowDirection.numberedSpaceSwitching
+            .prefix(maximumDesktopCount)
+
+        return WindowDirection.relativeSpaceSwitching + visibleNumberedActions
     }
 }

@@ -11,6 +11,53 @@ import SwiftUI
 /// A wrapper for functions defined in `SkyLightSymbolLoader`
 @Loggable(style: .static)
 enum SkyLightToolBelt {
+    struct ManagedDisplay {
+        let identifier: UUID
+        let spaces: [ManagedSpace]
+        let currentSpace: ManagedSpace
+
+        init?(dictionary: NSDictionary) {
+            guard
+                let identifier = UUID(uuidString: dictionary["Display Identifier"] as? String ?? ""),
+                let spaces = (dictionary["Spaces"] as? [NSDictionary])?.compactMap({ ManagedSpace(dictionary: $0) }),
+                let currentSpace = ManagedSpace(dictionary: dictionary["Current Space"] as? NSDictionary)
+            else {
+                return nil
+            }
+
+            self.identifier = identifier
+            self.spaces = spaces
+            self.currentSpace = currentSpace
+        }
+    }
+
+    struct ManagedSpace {
+        let id: UInt64
+        let managedID: UInt64
+        let type: UInt64
+        let uuid: UUID?
+
+        var isDesktop: Bool {
+            type == 0
+        }
+
+        init?(dictionary: NSDictionary?) {
+            guard
+                let dictionary,
+                let id = dictionary["id64"] as? UInt64,
+                let managedID = dictionary["ManagedSpaceID"] as? UInt64,
+                let type = dictionary["type"] as? UInt64
+            else {
+                return nil
+            }
+
+            self.id = id
+            self.managedID = managedID
+            self.type = type
+            self.uuid = UUID(uuidString: dictionary["uuid"] as? String ?? "")
+        }
+    }
+
     /// Brings the window’s owning process to the front using SkyLight APIs.
     /// - Parameters:
     ///   - windowID: The `CGWindowID` of the window to make the frontmost process.
@@ -209,6 +256,116 @@ enum SkyLightToolBelt {
         }
 
         return level
+    }
+
+    /// Moves the window to a Mission Control desktop space.
+    /// - Parameters:
+    ///   - windowID: The `CGWindowID` of the window to move.
+    ///   - spaceID: The target managed space id64.
+    /// - Returns: Whether the window is on, or was moved to, the target space.
+    @available(macOS 14.0, *)
+    @discardableResult
+    static func moveWindow(_ windowID: CGWindowID, toSpace spaceID: UInt64) -> Bool {
+        if copySpaces(forWindows: [windowID]).contains(spaceID) {
+            return true
+        }
+
+        let moved = SkyLightBridgedSPI.moveWindow(windowID, toSpace: spaceID)
+        if !moved {
+            log.error("SkyLight bridged window movement is unavailable")
+        }
+
+        return moved
+    }
+
+    /// Returns all managed displays and their spaces in Mission Control order.
+    @available(macOS 14.0, *)
+    static func copyDisplaysWithSpaces() -> [ManagedDisplay] {
+        guard let result = SkyLightBridgedSPI.copyManagedDisplaySpaces() else {
+            log.error("SkyLight bridged display space lookup is unavailable")
+            return []
+        }
+
+        return result.compactMap(ManagedDisplay.init(dictionary:))
+    }
+
+    /// Returns the largest number of regular desktop spaces on any managed display.
+    @available(macOS 14.0, *)
+    static func maximumDesktopCount() -> Int {
+        copyDisplaysWithSpaces()
+            .map { display in
+                display.spaces.filter(\.isDesktop).count
+            }
+            .max() ?? 0
+    }
+
+    /// Returns the managed space ids for the given windows.
+    @available(macOS 14.0, *)
+    static func copySpaces(forWindows windowIDs: [CGWindowID]) -> [UInt64] {
+        guard let numbers = SkyLightBridgedSPI.copySpaces(forWindows: windowIDs, options: .allManaged) else {
+            log.error("SkyLight bridged window space lookup is unavailable")
+            return []
+        }
+
+        return numbers.map { UInt64(truncating: $0) }
+    }
+
+    /// Returns the first managed space id for a window, or `nil` if SkyLight cannot resolve it.
+    @available(macOS 14.0, *)
+    static func copySpace(forWindow windowID: CGWindowID) -> UInt64? {
+        let spaceID = copySpaces(forWindows: [windowID]).first ?? 0
+        return spaceID == 0 ? nil : spaceID
+    }
+
+    /// Resolves the desktop space adjacent to the window's current desktop.
+    /// - Parameters:
+    ///   - windowID: The target window.
+    ///   - offset: `-1` for previous desktop, `1` for next desktop.
+    @available(macOS 14.0, *)
+    static func desktopSpace(forWindow windowID: CGWindowID, offset: Int) -> ManagedSpace? {
+        guard offset != 0,
+              let currentSpaceID = copySpace(forWindow: windowID),
+              let display = copyDisplaysWithSpaces().first(where: { display in
+                  display.spaces.contains { $0.id == currentSpaceID }
+              })
+        else {
+            return nil
+        }
+
+        let desktops = display.spaces.filter(\.isDesktop)
+        guard let currentIndex = desktops.firstIndex(where: { $0.id == currentSpaceID }) else {
+            log.error("Window \(windowID) is not on a regular desktop space")
+            return nil
+        }
+
+        let targetIndex = currentIndex + offset
+        guard desktops.indices.contains(targetIndex) else {
+            return nil
+        }
+
+        return desktops[targetIndex]
+    }
+
+    /// Resolves a 1-based desktop number on the display hosting the window's current space.
+    @available(macOS 14.0, *)
+    static func desktopSpace(forWindow windowID: CGWindowID, desktopNumber: UInt) -> ManagedSpace? {
+        guard desktopNumber > 0,
+              let currentSpaceID = copySpace(forWindow: windowID),
+              let display = copyDisplaysWithSpaces().first(where: { display in
+                  display.spaces.contains { $0.id == currentSpaceID }
+              })
+        else {
+            return nil
+        }
+
+        let desktops = display.spaces.filter(\.isDesktop)
+        let targetIndex = Int(desktopNumber - 1)
+
+        guard desktops.indices.contains(targetIndex) else {
+            return nil
+        }
+
+        return desktops[targetIndex]
     }
 
     /// Retrieves the corner radii for a specific window.

@@ -13,9 +13,8 @@ struct GestureTrackpadPreview: View {
     private let trackpadCornerRadius: CGFloat = 16
     private let trackpadInset: CGFloat = 13
     private let movementDistance: CGFloat = 30
-    private let previewDuration = 1.9
-    private let loopPauseDuration = 0.25
-    private let radialMenuSegmentCount = 6
+    private let previewDuration: CGFloat = 1.9
+    private let loopPauseDuration: CGFloat = 0.25
 
     var body: some View {
         TimelineView(.animation) { context in
@@ -114,15 +113,17 @@ struct GestureTrackpadPreview: View {
     }
 
     private func elapsedTime(for date: Date) -> TimeInterval {
-        let activeDuration = gesture.kind == .radialMenu ? previewDuration * Double(radialMenuSegmentCount) : previewDuration
+        let activeDuration = gesture.kind == .radialMenu
+            ? previewDuration * Double(GesturePreviewSample.radialMenuPreviewKinds.count)
+            : previewDuration
         let loopDuration = activeDuration + loopPauseDuration
         return date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: loopDuration)
     }
 
     private func opacity(for phase: CGFloat) -> CGFloat {
-        let fadeInEnd = CGFloat(0.35 / 1.9)
-        let moveEnd = CGFloat(1.2 / 1.9)
-        let fadeOutEnd = CGFloat(1.45 / 1.9)
+        let fadeInEnd = CGFloat(0.35 / previewDuration)
+        let moveEnd = CGFloat(1.2 / previewDuration)
+        let fadeOutEnd = CGFloat(1.45 / previewDuration)
 
         if phase < fadeInEnd {
             return easeOut(phase / fadeInEnd)
@@ -136,8 +137,8 @@ struct GestureTrackpadPreview: View {
     }
 
     private func movementProgress(for phase: CGFloat) -> CGFloat {
-        let fadeInEnd = CGFloat(0.35 / 1.9)
-        let moveEnd = CGFloat(1.2 / 1.9)
+        let fadeInEnd = CGFloat(0.35 / previewDuration)
+        let moveEnd = CGFloat(1.2 / previewDuration)
 
         guard phase >= fadeInEnd else { return 0 }
         guard phase < moveEnd else { return 1 }
@@ -157,23 +158,24 @@ struct GestureTrackpadPreview: View {
 }
 
 private struct GesturePreviewSample {
+    static let radialMenuPreviewKinds: [GestureBinding.Kind] = [
+        .pinch,
+        .spread,
+        .panUp,
+        .panDown,
+        .panLeft,
+        .panRight
+    ]
+
     let kind: GestureBinding.Kind
     let localPhase: CGFloat
 
     init(kind: GestureBinding.Kind, elapsedTime: TimeInterval, previewDuration: TimeInterval) {
         if kind == .radialMenu {
-            let radialMenuPreviewKinds: [GestureBinding.Kind] = [
-                .pinch,
-                .spread,
-                .panUp,
-                .panDown,
-                .panLeft,
-                .panRight
-            ]
-            let activeElapsedTime = min(elapsedTime, previewDuration * Double(radialMenuPreviewKinds.count))
+            let activeElapsedTime = min(elapsedTime, previewDuration * Double(Self.radialMenuPreviewKinds.count))
             let segmentProgress = activeElapsedTime / previewDuration
-            let segment = min(Int(segmentProgress), radialMenuPreviewKinds.count - 1)
-            self.kind = radialMenuPreviewKinds[segment]
+            let segment = min(Int(segmentProgress), Self.radialMenuPreviewKinds.count - 1)
+            self.kind = Self.radialMenuPreviewKinds[segment]
             self.localPhase = CGFloat(segmentProgress - Double(segment))
         } else {
             self.kind = kind

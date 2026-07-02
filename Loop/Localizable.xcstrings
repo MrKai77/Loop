@@ -335,8 +335,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%1$@ could not install the update at %2$@ (%3$@). Would you like to install this update in your Applications folder instead?"
+            "state" : "translated",
+            "value" : "%1$@ não conseguiu instalar a atualização em %2$@ (%3$@). Gostaria de instalar a atualização para sua pasta Aplicativos?"
           }
         },
         "ru" : {
@@ -424,8 +424,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "%@ is not in your Applications folder. Would you like to install the update to your Applications folder instead?"
+            "state" : "translated",
+            "value" : "%@ não está na sua pasta Aplicativos. Gostaria de instalar a atualização para sua pasta Aplicativos?"
           }
         },
         "ru" : {
@@ -706,8 +706,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "A single %1$@ action can only track one window. To stash\nmultiple windows, add additional %2$@ actions."
+            "state" : "translated",
+            "value" : "Uma ação %1$@ pode rastrear apenas uma janela. Para ocultar múltiplas janelas, adicione ações %2$@ adicionais."
           }
         },
         "ru" : {
@@ -795,8 +795,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Accent opacity"
+            "state" : "translated",
+            "value" : "Opacidade da cor de destaque"
           }
         },
         "ru" : {
@@ -1329,8 +1329,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Administrator Authorization Required"
+            "state" : "translated",
+            "value" : "Autorização de Administrador Necessária"
           }
         },
         "ru" : {
@@ -1848,7 +1848,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Animatie snelheid"
+            "value" : "Animatiesnelheid"
           }
         },
         "pl" : {
@@ -2027,7 +2027,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Padding bevatten"
+            "value" : "Opvulling gebruiken"
           }
         },
         "pl" : {
@@ -2215,8 +2215,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Automatically install updates"
+            "state" : "translated",
+            "value" : "Instalar atualizações automaticamente"
           }
         },
         "ru" : {
@@ -2304,8 +2304,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Background"
+            "state" : "translated",
+            "value" : "Plano de fundo"
           }
         },
         "ru" : {
@@ -2470,7 +2470,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bodem"
+            "value" : "Onder"
           }
         },
         "pl" : {
@@ -2558,7 +2558,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bodem cyclus"
+            "value" : "Onderste helft"
           }
         },
         "pl" : {
@@ -2825,7 +2825,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kwartier rechtsonder"
+            "value" : "Kwart rechtsonder"
           }
         },
         "pl" : {
@@ -3315,7 +3315,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Abbrechen"
           }
         },
@@ -3404,7 +3404,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Update abbrechen"
           }
         },
@@ -3458,8 +3458,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Cancel Update"
+            "state" : "translated",
+            "value" : "Cancelar atualização"
           }
         },
         "ru" : {
@@ -3900,8 +3900,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Clear Keybind"
+            "state" : "translated",
+            "value" : "Limpar atalho"
           }
         },
         "ru" : {
@@ -6302,8 +6302,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Enable blur"
+            "state" : "translated",
+            "value" : "Habilitar desfoque"
           }
         },
         "ru" : {
@@ -7013,8 +7013,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Fill Available Space"
+            "state" : "translated",
+            "value" : "Preencher o espaço disponível"
           }
         },
         "ru" : {
@@ -9420,8 +9420,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Hide when no action is selected"
+            "state" : "translated",
+            "value" : "Ocultar quando nenhuma ação for selecionada"
           }
         },
         "ru" : {
@@ -12333,8 +12333,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install failed"
+            "state" : "translated",
+            "value" : "Falha na instalação"
           }
         },
         "ru" : {
@@ -12422,8 +12422,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install in Your Applications Folder"
+            "state" : "translated",
+            "value" : "Instalar na sua pasta Aplicativos"
           }
         },
         "ru" : {
@@ -12511,8 +12511,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Install to Applications"
+            "state" : "translated",
+            "value" : "Instalar em Aplicativos"
           }
         },
         "ru" : {
@@ -12777,8 +12777,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Keep in Current Location"
+            "state" : "translated",
+            "value" : "Manter na localização atual"
           }
         },
         "ru" : {
@@ -13121,7 +13121,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open op login"
+            "value" : "Starten bij login"
           }
         },
         "pl" : {
@@ -13298,7 +13298,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Linker Cyclus"
+            "value" : "Linkerhelft"
           }
         },
         "pl" : {
@@ -13932,8 +13932,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Link Trigger Key"
+            "state" : "translated",
+            "value" : "Vincular Tecla de Ativação"
           }
         },
         "ru" : {
@@ -16842,7 +16842,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "macOS Centrum"
+            "value" : "macOS-midden"
           }
         },
         "pl" : {
@@ -18096,8 +18096,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Move to Applications Folder?"
+            "state" : "translated",
+            "value" : "Mover para a pasta Aplicativos?"
           }
         },
         "ru" : {
@@ -18116,6 +18116,273 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "要移動到應用程式資料夾嗎？"
+          }
+        }
+      }
+    },
+    "Move to Desktop %lld" : {
+      "comment" : "Window action; moves the current window to the Mission Control desktop identified by the number.",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer sur le bureau %lld"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デスクトップ%lldへ移動"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Desktop %lld"
+          }
+        }
+      }
+    },
+    "Move to Next Space" : {
+      "comment" : "Window action",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to Next Space"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espace suivant"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のスペース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Next Space"
+          }
+        }
+      }
+    },
+    "Move to Previous Space" : {
+      "comment" : "Window action",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espace précédent"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前のスペース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Move to Previous Space"
           }
         }
       }
@@ -22845,7 +23112,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Niks oom door te bladeren"
+            "value" : "Niks om door te bladeren"
           }
         },
         "pl" : {
@@ -23746,8 +24013,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Please include at least one modifier key."
+            "state" : "translated",
+            "value" : "Por favor, inclua pelo menos uma tecla modificadora."
           }
         },
         "ru" : {
@@ -25077,7 +25344,7 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Reiniciar para concluir"
           }
         },
@@ -26216,7 +26483,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rechtse Cyclus"
+            "value" : "Rechterhelft"
           }
         },
         "pl" : {
@@ -26827,7 +27094,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "画面切り替え"
+            "value" : "画面移動"
           }
         },
         "ko" : {
@@ -28439,7 +28706,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deel feedback op onze GitHub-pagina, waar je ons bugs kunt laten weten, functies kunt voorstellen of andere waardevolle input kunt geven. We accepteren ook donaties als je vindt dat Loop je werkstroom heeft verbeterd :)"
+            "value" : "Deel feedback op onze GitHub-pagina, waar je ons bugs kunt laten weten, functies kunt voorstellen of andere waardevolle input kunt geven. We accepteren ook donaties als je vindt dat Loop je werkproces heeft verbeterd :)"
           }
         },
         "pl" : {
@@ -30070,6 +30337,95 @@
         }
       }
     },
+    "Space Switching" : {
+      "comment" : "Section header in the action picker of the Keybinds tab",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Space Switching"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changement d'espace"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スペース移動"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "nl-BE" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Space Switching"
+          }
+        }
+      }
+    },
     "Spread" : {
       "comment" : "Gesture kind: fingers move apart"
     },
@@ -30215,7 +30571,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stage strook grootte"
+            "value" : "Stage strookgrootte"
           }
         },
         "pl" : {
@@ -30314,8 +30670,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Start hidden"
+            "state" : "translated",
+            "value" : "Iniciar oculto"
           }
         },
         "ru" : {
@@ -31568,8 +31924,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "This macOS version is no longer supported."
+            "state" : "translated",
+            "value" : "Esta versão do macOS não é mais suportada."
           }
         },
         "ru" : {
@@ -32003,7 +32359,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bovenste cyclus"
+            "value" : "Bovenste helft"
           }
         },
         "pl" : {
@@ -32181,7 +32537,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kwartier linksboven"
+            "value" : "Kwart linksboven"
           }
         },
         "pl" : {
@@ -32270,7 +32626,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kwartier rechtsboven"
+            "value" : "Kwart rechtsboven"
           }
         },
         "pl" : {
@@ -32903,8 +33259,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Try again later"
+            "state" : "translated",
+            "value" : "Tente novamente mais tarde"
           }
         },
         "ru" : {
@@ -33081,8 +33437,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Unlink Trigger Key"
+            "state" : "translated",
+            "value" : "Desvincular Tecla de Ativação"
           }
         },
         "ru" : {
@@ -33347,8 +33703,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Update from: %@"
+            "state" : "translated",
+            "value" : "Atualizar da versão: %@"
           }
         },
         "ru" : {
@@ -33613,8 +33969,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Updates will only be installed when %@ is in the background."
+            "state" : "translated",
+            "value" : "As atualizações apenas serão instaladas quando o %@ estiver em segundo plano."
           }
         },
         "ru" : {
@@ -33779,7 +34135,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gebruik macOS centrum"
+            "value" : "Gebruik macOS-midden"
           }
         },
         "pl" : {
@@ -34089,7 +34445,7 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Version %@"
           }
         },
@@ -34143,8 +34499,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Version %@"
+            "state" : "translated",
+            "value" : "Versão %@"
           }
         },
         "ru" : {
@@ -34843,7 +35199,7 @@
         "nl-BE" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Venster gaten"
+            "value" : "Ruimte tussen vensters"
           }
         },
         "pl" : {
@@ -35298,8 +35654,8 @@
         },
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "You can only use up to %lld keys in a keybind."
+            "state" : "translated",
+            "value" : "Você pode usar no máximo %lld teclas em um atalho."
           }
         },
         "ru" : {
