@@ -114,7 +114,7 @@ final class MultitouchTrigger {
         rebuildRecognizers()
 
         gesturesObservationTask = Task { [weak self] in
-            // Watch keybinds too, so gestures referencing a deleted or no-action keybind get filtered out by `rebuildRecognizers`
+            // Watch keybinds too, so gestures referencing a deleted keybind stay in sync.
             for await _ in Defaults.updates(.gestures, .keybinds) {
                 guard !Task.isCancelled, let self else { break }
                 rebuildRecognizers()
@@ -173,9 +173,8 @@ final class MultitouchTrigger {
 
     private func rebuildRecognizers() {
         let allGestures = Defaults[.gestures]
-        let enabledGestures = allGestures.filter { !$0.isDisabled }
-        let conflictingIDs = GestureBinding.conflictingEnabledIDs(in: allGestures)
-        let activeGestures = enabledGestures.filter { !conflictingIDs.contains($0.id) }
+        let conflictingIDs = GestureBinding.conflictingActionableIDs(in: allGestures)
+        let activeGestures = allGestures.filter { !conflictingIDs.contains($0.id) }
         let gesturesByFingerCount = Dictionary(grouping: activeGestures, by: \.fingerCount)
         let neededFingerCounts = Set(gesturesByFingerCount.keys)
 

@@ -139,12 +139,10 @@ extension GestureBinding {
     }
 }
 
-// MARK: - Disabled state
+// MARK: - No Action
 
 extension GestureBinding {
-    /// True when this gesture's action resolves to `noAction`. Disabled gestures
-    /// are skipped at runtime and rendered greyed-out in settings.
-    var isDisabled: Bool {
+    var resolvesToNoAction: Bool {
         switch action {
         case .radialMenuActions:
             false
@@ -157,9 +155,9 @@ extension GestureBinding {
 // MARK: - Conflict Detection
 
 extension GestureBinding {
-    /// Returns the IDs of enabled gestures that conflict with at least one other enabled gesture.
-    static func conflictingEnabledIDs(in gestures: [GestureBinding]) -> Set<UUID> {
-        conflictingIDs(in: gestures.filter { !$0.isDisabled })
+    /// Returns IDs for actionable gestures that conflict with at least one other actionable gesture.
+    static func conflictingActionableIDs(in gestures: [GestureBinding]) -> Set<UUID> {
+        conflictingIDs(in: gestures.filter { !$0.resolvesToNoAction })
     }
 
     /// Two gestures conflict when they have the same finger count and their kinds overlap.

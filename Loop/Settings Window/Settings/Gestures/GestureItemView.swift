@@ -29,7 +29,7 @@ struct GestureItemView: View {
     }
 
     private var hasConflict: Bool {
-        GestureBinding.conflictingEnabledIDs(in: gestures).contains(gesture.id)
+        GestureBinding.conflictingActionableIDs(in: gestures).contains(gesture.id)
     }
 
     private var resolvedAction: WindowAction? {
