@@ -18,7 +18,6 @@ struct GesturesConfigurationView: View {
     @StateObject private var model = GesturesConfigurationModel()
 
     @Default(.enableGestures) private var enableGestures
-    @Default(.disableConflictingSystemGestures) private var disableConflictingSystemGestures
     @Default(.gestures) private var gestures
     @Default(.gestureTitlebarHeight) private var gestureTitlebarHeight
 
@@ -41,10 +40,6 @@ struct GesturesConfigurationView: View {
     private var settingsSection: some View {
         LuminareSection {
             LuminareToggle(String(localized: "Enable trackpad gestures", comment: "Toggle in gestures settings"), isOn: $enableGestures)
-
-            if enableGestures {
-                LuminareToggle(String(localized: "Disable conflicting system gestures", comment: "Toggle in gestures settings"), isOn: $disableConflictingSystemGestures)
-            }
         }
     }
 

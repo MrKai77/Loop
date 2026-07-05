@@ -5882,9 +5882,6 @@
     "Direction" : {
       "comment" : "Label for the swipe direction picker in the gesture configuration modal"
     },
-    "Disable conflicting system gestures" : {
-      "comment" : "Toggle in gestures settings"
-    },
     "Disable cursor interaction" : {
       "localizations" : {
         "ar" : {
