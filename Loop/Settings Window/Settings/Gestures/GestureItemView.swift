@@ -158,7 +158,7 @@ struct GestureItemView: View {
             shouldAnimate: false
         ) {
             GestureConfigPopoverView(gesture: $gesture)
-                .frame(width: 300)
+                .frame(width: 320)
         }
     }
 

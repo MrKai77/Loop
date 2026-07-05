@@ -47,31 +47,15 @@ struct GestureTrackpadPreview: View {
             }
         }
         .aspectRatio(16.0 / 9.0, contentMode: .fill)
-        .accessibilityHidden(true)
     }
 
     private var trackpadShape: some View {
         RoundedRectangle(cornerRadius: trackpadCornerRadius)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        Color(nsColor: .controlBackgroundColor).opacity(0.92),
-                        Color(nsColor: .windowBackgroundColor).opacity(0.68)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
+            .foregroundStyle(.black.opacity(0.05))
             .overlay {
                 RoundedRectangle(cornerRadius: trackpadCornerRadius)
-                    .strokeBorder(.white.opacity(0.16), lineWidth: 1)
+                    .strokeBorder(.tertiary, lineWidth: 1)
             }
-            .overlay {
-                RoundedRectangle(cornerRadius: trackpadCornerRadius - 4)
-                    .strokeBorder(.black.opacity(0.2), lineWidth: 1)
-                    .padding(3)
-            }
-            .shadow(color: .black.opacity(0.2), radius: 8, y: 3)
     }
 
     private func fingerDot(radius: CGFloat) -> some View {
