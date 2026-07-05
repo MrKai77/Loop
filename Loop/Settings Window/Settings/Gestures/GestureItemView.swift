@@ -32,25 +32,6 @@ struct GestureItemView: View {
         GestureBinding.conflictingEnabledIDs(in: gestures).contains(gesture.id)
     }
 
-    private var isDisabled: Bool {
-        gesture.isDisabled
-    }
-
-    private var gestureConfigurationText: String {
-        switch gesture.kind {
-        case .radialMenu:
-            String(
-                localized: "\(gesture.fingerCount)-finger Swipe, Pinch, or Spread",
-                comment: "Label describing how to activate a radial menu gesture. Argument is the finger count."
-            )
-        default:
-            String(
-                localized: "\(gesture.fingerCount)-finger \(gesture.kind.displayName)",
-                comment: "Label describing a gesture. First argument is the finger count, second is the gesture kind name (e.g. 'Pinch', 'Swipe Up')."
-            )
-        }
-    }
-
     private var resolvedAction: WindowAction? {
         switch gesture.action {
         case .radialMenuActions:
@@ -113,7 +94,6 @@ struct GestureItemView: View {
             actionSelection
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .opacity(isDisabled ? 0.5 : 1)
         .padding(.horizontal, 12)
         .onChange(of: resolvedAction?.direction) { _ in
             if resolvedAction?.direction.isCustomizable == true {
@@ -131,7 +111,7 @@ struct GestureItemView: View {
             isGestureConfigPresented = true
         } label: {
             VStack(alignment: .leading, spacing: 2) {
-                Text(gestureConfigurationText)
+                Text(gesture.displayName)
                     .fontWeight(.regular)
                     .lineLimit(1)
 
@@ -150,16 +130,14 @@ struct GestureItemView: View {
         .opacity(hasConflict ? 0.5 : 1)
         .help(String(localized: "Customize this gesture.", comment: "Help text shown when hovering a gesture configuration button"))
         .padding(.leading, -4)
-        .luminarePopover(
-            isPresented: $isGestureConfigPresented,
-            arrowEdge: .top,
-            attachmentAnchor: .topLeading,
-            shouldHideAnchor: true,
-            shouldAnimate: false
-        ) {
-            GestureConfigPopoverView(gesture: $gesture)
-                .frame(width: 320)
+        .luminareModal(isPresented: $isGestureConfigPresented) {
+            GestureConfigurationView(
+                gesture: $gesture,
+                isPresented: $isGestureConfigPresented
+            )
+            .frame(width: 380)
         }
+        .luminareModalCornerRadius(24)
     }
 
     private var actionSelection: some View {

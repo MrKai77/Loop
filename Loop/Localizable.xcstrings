@@ -625,7 +625,7 @@
       }
     },
     "%lld-finger %@" : {
-      "comment" : "Label describing a gesture. First argument is the finger count, second is the gesture kind name (e.g. 'Pinch', 'Swipe Up').",
+      "comment" : "Default title describing a gesture. First argument is the finger count, second is the gesture kind name (e.g. 'Pinch', 'Swipe Up').",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -635,11 +635,8 @@
         }
       }
     },
-    "%lld-finger Swipe, Pinch, or Spread" : {
-      "comment" : "Label describing how to activate a radial menu gesture. Argument is the finger count."
-    },
-    "2-finger gestures are restricted to the titlebar to avoid conflicting with system gestures." : {
-      "comment" : "Help text shown when the activation zone picker is disabled for 2-finger gestures"
+    "%lld-finger Swipe or Zoom" : {
+      "comment" : "Default title describing how to activate a radial menu gesture. Argument is the finger count."
     },
     "A single %@ action can only track one window. To stash\nmultiple windows, add additional %@ actions." : {
       "comment" : "Information in a popover displaying how a stash action can only keep track of a single window. Both %1$@ and %2$@ are replaced with the language's localization of the \"Stash\" action.",
@@ -1172,9 +1169,6 @@
         }
       }
     },
-    "Activation Zone" : {
-      "comment" : "Label for the activation zone picker in the gesture configuration popover"
-    },
     "Add" : {
       "comment" : "Button to add a new gesture",
       "localizations" : {
@@ -1352,9 +1346,6 @@
           }
         }
       }
-    },
-    "All" : {
-      "comment" : "Gesture kind: all gesture types; opens the radial menu"
     },
     "Allow radial menu customization" : {
       "comment" : "A toggle that allows users to enable or disable the ability to customize the actions available in the radial menu.",
@@ -2418,6 +2409,9 @@
           }
         }
       }
+    },
+    "Both" : {
+      "comment" : "Gesture kind: swipe and zoom gestures; opens the radial menu\nGesture tab label: swipe and zoom gestures"
     },
     "Bottom" : {
       "comment" : "Label for a slider in Loop’s padding settings",
@@ -5885,6 +5879,9 @@
         }
       }
     },
+    "Direction" : {
+      "comment" : "Label for the swipe direction picker in the gesture configuration modal"
+    },
     "Disable conflicting system gestures" : {
       "comment" : "Toggle in gestures settings"
     },
@@ -6240,6 +6237,9 @@
         }
       }
     },
+    "Down" : {
+      "comment" : "Swipe direction picker option: down"
+    },
     "Enable blur" : {
       "comment" : "Text for enabling the blur effect on the preview.",
       "localizations" : {
@@ -6329,7 +6329,7 @@
         }
       }
     },
-    "Enable gestures" : {
+    "Enable trackpad gestures" : {
       "comment" : "Toggle in gestures settings"
     },
     "Enable window snapping" : {
@@ -8110,8 +8110,8 @@
         }
       }
     },
-    "Gesture Type" : {
-      "comment" : "Label in the gesture configuration popover"
+    "Gesture" : {
+      "comment" : "Label for the zoom gesture picker in the gesture configuration modal"
     },
     "Gestures" : {
       "comment" : "Section header shown in gestures settings"
@@ -13160,7 +13160,7 @@
       }
     },
     "Left" : {
-      "comment" : "Label for a slider in Loop’s padding settings\nSide of a trigger key",
+      "comment" : "Label for a slider in Loop’s padding settings\nSide of a trigger key\nSwipe direction picker option: left",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -23946,7 +23946,7 @@
       }
     },
     "Pinch" : {
-      "comment" : "Gesture kind: fingers move together"
+      "comment" : "Gesture kind: fingers move together\nZoom gesture picker option: pinch"
     },
     "Please include at least one modifier key." : {
       "comment" : "An error message displayed when a custom keybind is created but does not include at least one modifier key.",
@@ -26342,7 +26342,7 @@
       }
     },
     "Right" : {
-      "comment" : "Label for a slider in Loop’s padding settings\nSide of a trigger key",
+      "comment" : "Label for a slider in Loop’s padding settings\nSide of a trigger key\nSwipe direction picker option: right",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -30427,7 +30427,7 @@
       }
     },
     "Spread" : {
-      "comment" : "Gesture kind: fingers move apart"
+      "comment" : "Gesture kind: fingers move apart\nZoom gesture picker option: spread"
     },
     "Stage Manager" : {
       "comment" : "Section header shown in settings",
@@ -30960,6 +30960,9 @@
           }
         }
       }
+    },
+    "Swipe" : {
+      "comment" : "Gesture tab label: swipe"
     },
     "Swipe Down" : {
       "comment" : "Gesture kind: directional swipe"
@@ -33638,6 +33641,9 @@
         }
       }
     },
+    "Up" : {
+      "comment" : "Swipe direction picker option: up"
+    },
     "Update from: %@" : {
       "comment" : "A label at the bottom of the update view that indicates the current app version and a message suggesting an update. The argument is the current app version.",
       "localizations" : {
@@ -36030,6 +36036,9 @@
           }
         }
       }
+    },
+    "Zoom" : {
+      "comment" : "Gesture tab label: zoom"
     }
   },
   "version" : "1.1"

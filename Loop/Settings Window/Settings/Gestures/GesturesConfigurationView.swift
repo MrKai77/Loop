@@ -40,7 +40,7 @@ struct GesturesConfigurationView: View {
 
     private var settingsSection: some View {
         LuminareSection {
-            LuminareToggle(String(localized: "Enable gestures", comment: "Toggle in gestures settings"), isOn: $enableGestures)
+            LuminareToggle(String(localized: "Enable trackpad gestures", comment: "Toggle in gestures settings"), isOn: $enableGestures)
 
             if enableGestures {
                 LuminareToggle(String(localized: "Disable conflicting system gestures", comment: "Toggle in gestures settings"), isOn: $disableConflictingSystemGestures)

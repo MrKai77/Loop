@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
     let id: UUID
+    var name: String?
     var fingerCount: Int
     var kind: Kind
     var action: Action
@@ -17,12 +18,14 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
 
     init(
         id: UUID = .init(),
+        name: String? = nil,
         fingerCount: Int = 2,
         kind: Kind = .radialMenu,
         action: Action = .radialMenuActions,
         activationZone: ActivationZone = .titlebar
     ) {
         self.id = id
+        self.name = name
         self.fingerCount = fingerCount
         self.kind = kind
         self.action = action
@@ -41,7 +44,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
 
         var displayName: String {
             switch self {
-            case .radialMenu: String(localized: "All", comment: "Gesture kind: all gesture types; opens the radial menu")
+            case .radialMenu: String(localized: "Both", comment: "Gesture kind: swipe and zoom gestures; opens the radial menu")
             case .panUp: String(localized: "Swipe Up", comment: "Gesture kind: directional swipe")
             case .panDown: String(localized: "Swipe Down", comment: "Gesture kind: directional swipe")
             case .panLeft: String(localized: "Swipe Left", comment: "Gesture kind: directional swipe")
@@ -106,6 +109,33 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
             case .anywhere: "rectangle.dashed"
             }
         }
+    }
+}
+
+// MARK: - Naming
+
+extension GestureBinding {
+    var defaultName: String {
+        switch kind {
+        case .radialMenu:
+            String(
+                localized: "\(fingerCount)-finger Swipe or Zoom",
+                comment: "Default title describing how to activate a radial menu gesture. Argument is the finger count."
+            )
+        default:
+            String(
+                localized: "\(fingerCount)-finger \(kind.displayName)",
+                comment: "Default title describing a gesture. First argument is the finger count, second is the gesture kind name (e.g. 'Pinch', 'Swipe Up')."
+            )
+        }
+    }
+
+    var displayName: String {
+        if let name, !name.isEmpty {
+            return name
+        }
+
+        return defaultName
     }
 }
 
