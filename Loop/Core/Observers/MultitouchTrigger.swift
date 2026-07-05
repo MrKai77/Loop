@@ -204,7 +204,11 @@ final class MultitouchTrigger {
         pinch: GestureBinding?,
         spread: GestureBinding?
     ) {
-        let recognizer = SubsurfaceGestureRecognizer(fingerCount: fingerCount)
+        let recognizer = SubsurfaceGestureRecognizer(
+            fingerCount: fingerCount,
+            requiresExactFingerCountToContinue: true
+        )
+
         recognizers[fingerCount] = RecognizerEntry(
             recognizer: recognizer,
             task: nil,
