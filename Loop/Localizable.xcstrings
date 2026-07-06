@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "%" : {
       "comment" : "Unit symbol: percentage",
       "localizations" : {

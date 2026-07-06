@@ -117,36 +117,22 @@ struct GestureConfigurationView: View {
                 .luminareRoundingBehavior(top: true, bottom: gesture.kind == .radialMenu)
 
                 if GestureTab(kind: gesture.kind) == .swipe {
-                    LuminareCompose(String(localized: "Direction", comment: "Label for the swipe direction picker in the gesture configuration modal")) {
-                        Picker("", selection: swipeDirectionBinding) {
-                            ForEach(SwipeDirection.allCases, id: \.self) { direction in
-                                Label {
-                                    Text(direction.displayName)
-                                } icon: {
-                                    direction.image
-                                }
-                                .tag(direction)
-                            }
-                        }
-                        .labelsHidden()
-                        .buttonStyle(.plain)
+                    LuminarePickerMenu(
+                        "Direction",
+                        selection: swipeDirectionBinding,
+                        items: SwipeDirection.allCases
+                    ) { direction in
+                        Text("\(direction.image) \(direction.displayName)")
                     }
                 }
 
                 if GestureTab(kind: gesture.kind) == .zoom {
-                    LuminareCompose(String(localized: "Gesture", comment: "Label for the zoom gesture picker in the gesture configuration modal")) {
-                        Picker("", selection: zoomGestureBinding) {
-                            ForEach(ZoomGesture.allCases, id: \.self) { zoomGesture in
-                                Label {
-                                    Text(zoomGesture.displayName)
-                                } icon: {
-                                    zoomGesture.image
-                                }
-                                .tag(zoomGesture)
-                            }
-                        }
-                        .labelsHidden()
-                        .buttonStyle(.plain)
+                    LuminarePickerMenu(
+                        "Gesture",
+                        selection: zoomGestureBinding,
+                        items: ZoomGesture.allCases
+                    ) { gesture in
+                        Text("\(gesture.image) \(gesture.displayName)")
                     }
                 }
             }
