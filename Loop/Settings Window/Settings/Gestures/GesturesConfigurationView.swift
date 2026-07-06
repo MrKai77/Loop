@@ -20,6 +20,10 @@ struct GesturesConfigurationView: View {
     @Default(.enableGestures) private var enableGestures
     @Default(.gestures) private var gestures
     @Default(.gestureTitlebarHeight) private var gestureTitlebarHeight
+    
+    private var conflictingGestureIDs: Set<UUID> {
+        GestureBinding.conflictingActionableIDs(in: gestures)
+    }
 
     var body: some View {
         LuminareForm {
@@ -70,7 +74,10 @@ struct GesturesConfigurationView: View {
                 selection: $model.selectedGestures,
                 id: \.id
             ) { gesture in
-                GestureItemView(gesture)
+                GestureItemView(
+                    gesture,
+                    hasConflict: conflictingGestureIDs.contains(gesture.wrappedValue.id)
+                )
             } emptyView: {
                 HStack {
                     Spacer()

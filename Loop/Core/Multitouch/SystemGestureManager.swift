@@ -182,14 +182,21 @@ final class SystemGestureManager {
         }
     }
 
+    struct PreferenceLedger {
+        var backups: [String: SystemGesturePreferenceValue]
+        var managedValues: [String: SystemGesturePreferenceValue]
+    }
+
     static func restore() {
-        var backups = Defaults[.systemGesturePreferenceBackups]
-        var managedValues = Defaults[.systemGestureManagedValues]
+        var ledger = PreferenceLedger(
+            backups: Defaults[.systemGesturePreferenceBackups],
+            managedValues: Defaults[.systemGestureManagedValues]
+        )
 
-        Self().restoreAll(backups: &backups, managedValues: &managedValues)
+        Self().restoreAll(&ledger)
 
-        Defaults[.systemGesturePreferenceBackups] = backups
-        Defaults[.systemGestureManagedValues] = managedValues
+        Defaults[.systemGesturePreferenceBackups] = ledger.backups
+        Defaults[.systemGestureManagedValues] = ledger.managedValues
     }
 
     static func reconcile(
@@ -197,46 +204,45 @@ final class SystemGestureManager {
         disableConflicts: Bool,
         gestures: [GestureBinding]
     ) {
-        var backups = Defaults[.systemGesturePreferenceBackups]
-        var managedValues = Defaults[.systemGestureManagedValues]
+        var ledger = PreferenceLedger(
+            backups: Defaults[.systemGesturePreferenceBackups],
+            managedValues: Defaults[.systemGestureManagedValues]
+        )
 
         Self().reconcile(
             enableGestures: enableGestures,
             disableConflicts: disableConflicts,
             gestures: gestures,
-            backups: &backups,
-            managedValues: &managedValues
+            ledger: &ledger
         )
 
-        Defaults[.systemGesturePreferenceBackups] = backups
-        Defaults[.systemGestureManagedValues] = managedValues
+        Defaults[.systemGesturePreferenceBackups] = ledger.backups
+        Defaults[.systemGestureManagedValues] = ledger.managedValues
     }
 
     func reconcile(
         enableGestures: Bool,
         disableConflicts: Bool,
         gestures: [GestureBinding],
-        backups: inout [String: SystemGesturePreferenceValue],
-        managedValues: inout [String: SystemGesturePreferenceValue]
+        ledger: inout PreferenceLedger
     ) {
-        normalizeStoredValues(&backups)
-        normalizeStoredValues(&managedValues)
+        normalizeStoredValues(&ledger.backups)
+        normalizeStoredValues(&ledger.managedValues)
 
         guard enableGestures, disableConflicts else {
-            restoreAll(backups: &backups, managedValues: &managedValues)
+            restoreAll(&ledger)
             return
         }
 
-        let desiredValues = desiredValues(for: gestures, backups: backups, managedValues: managedValues)
+        let desiredValues = desiredValues(for: gestures, backups: ledger.backups, managedValues: ledger.managedValues)
         guard !desiredValues.isEmpty else {
-            restoreAll(backups: &backups, managedValues: &managedValues)
+            restoreAll(&ledger)
             return
         }
 
         restoreNoLongerManagedValues(
             desiredValues: desiredValues,
-            backups: &backups,
-            managedValues: &managedValues
+            ledger: &ledger
         )
 
         var touchedDomains = Set<String>()
@@ -245,29 +251,29 @@ final class SystemGestureManager {
         for (identifier, desiredValue) in desiredValues {
             let currentValue = identifier.get()
             let desiredValue = identifier.normalized(desiredValue)
-            let lastManagedValue = managedValues[identifier.compositeKey].map(identifier.normalized)
+            let lastManagedValue = ledger.managedValues[identifier.compositeKey].map(identifier.normalized)
 
             if currentValue != lastManagedValue, currentValue != desiredValue {
-                backups[identifier.compositeKey] = currentValue
+                ledger.backups[identifier.compositeKey] = currentValue
             }
 
-            let backupValue = backups[identifier.compositeKey].map(identifier.normalized)
+            let backupValue = ledger.backups[identifier.compositeKey].map(identifier.normalized)
             guard currentValue != desiredValue else {
                 if backupValue != nil {
-                    managedValues[identifier.compositeKey] = desiredValue
+                    ledger.managedValues[identifier.compositeKey] = desiredValue
                 } else {
-                    managedValues.removeValue(forKey: identifier.compositeKey)
+                    ledger.managedValues.removeValue(forKey: identifier.compositeKey)
                 }
                 continue
             }
 
             guard backupValue != nil else {
-                managedValues.removeValue(forKey: identifier.compositeKey)
+                ledger.managedValues.removeValue(forKey: identifier.compositeKey)
                 continue
             }
 
             identifier.set(desiredValue)
-            managedValues[identifier.compositeKey] = desiredValue
+            ledger.managedValues[identifier.compositeKey] = desiredValue
             touchedDomains.insert(identifier.domain)
             touchedDock = touchedDock || identifier.isDockDomain
             touchedTrackpad = touchedTrackpad || identifier.isTrackpadDomain
@@ -282,38 +288,33 @@ final class SystemGestureManager {
         }
     }
 
-    private func restoreAll(
-        backups: inout [String: SystemGesturePreferenceValue],
-        managedValues: inout [String: SystemGesturePreferenceValue]
-    ) {
-        normalizeStoredValues(&backups)
-        normalizeStoredValues(&managedValues)
+    private func restoreAll(_ ledger: inout PreferenceLedger) {
+        normalizeStoredValues(&ledger.backups)
+        normalizeStoredValues(&ledger.managedValues)
 
-        let identifiers = Set(backups.keys)
-            .union(managedValues.keys)
+        let identifiers = Set(ledger.backups.keys)
+            .union(ledger.managedValues.keys)
             .compactMap(SystemGesturePreferenceIdentifier.init(compositeKey:))
-        restore(identifiers, backups: &backups, managedValues: &managedValues)
-        backups.removeAll()
-        managedValues.removeAll()
+        restore(identifiers, ledger: &ledger)
+        ledger.backups.removeAll()
+        ledger.managedValues.removeAll()
     }
 
     private func restoreNoLongerManagedValues(
         desiredValues: [SystemGesturePreferenceIdentifier: SystemGesturePreferenceValue],
-        backups: inout [String: SystemGesturePreferenceValue],
-        managedValues: inout [String: SystemGesturePreferenceValue]
+        ledger: inout PreferenceLedger
     ) {
         let desiredKeys = Set(desiredValues.keys.map(\.compositeKey))
-        let staleIdentifiers = managedValues.keys
+        let staleIdentifiers = ledger.managedValues.keys
             .filter { !desiredKeys.contains($0) }
             .compactMap(SystemGesturePreferenceIdentifier.init(compositeKey:))
 
-        restore(staleIdentifiers, backups: &backups, managedValues: &managedValues)
+        restore(staleIdentifiers, ledger: &ledger)
     }
 
     private func restore(
         _ identifiers: [SystemGesturePreferenceIdentifier],
-        backups: inout [String: SystemGesturePreferenceValue],
-        managedValues: inout [String: SystemGesturePreferenceValue]
+        ledger: inout PreferenceLedger
     ) {
         guard !identifiers.isEmpty else { return }
 
@@ -322,14 +323,14 @@ final class SystemGestureManager {
         var touchedTrackpad = false
 
         for identifier in identifiers {
-            guard let backupValue = backups[identifier.compositeKey].map(identifier.normalized) else {
-                managedValues.removeValue(forKey: identifier.compositeKey)
+            guard let backupValue = ledger.backups[identifier.compositeKey].map(identifier.normalized) else {
+                ledger.managedValues.removeValue(forKey: identifier.compositeKey)
                 continue
             }
 
             identifier.set(backupValue)
-            backups.removeValue(forKey: identifier.compositeKey)
-            managedValues.removeValue(forKey: identifier.compositeKey)
+            ledger.backups.removeValue(forKey: identifier.compositeKey)
+            ledger.managedValues.removeValue(forKey: identifier.compositeKey)
             touchedDomains.insert(identifier.domain)
             touchedDock = touchedDock || identifier.isDockDomain
             touchedTrackpad = touchedTrackpad || identifier.isTrackpadDomain

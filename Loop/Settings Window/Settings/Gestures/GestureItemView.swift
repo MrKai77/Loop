@@ -13,23 +13,20 @@ struct GestureItemView: View {
     @Environment(\.luminareAnimation) var luminareAnimation
 
     @Default(.keybinds) private var keybinds
-    @Default(.gestures) private var gestures
 
     @State private var gesture: GestureBinding
     @Binding private var externalGesture: GestureBinding
+    private let hasConflict: Bool
 
     @State private var isActionPickerPresented = false
     @State private var isGestureConfigPresented = false
     @State private var isConfiguringCustom = false
     @State private var isConfiguringCycle = false
 
-    init(_ gesture: Binding<GestureBinding>) {
+    init(_ gesture: Binding<GestureBinding>, hasConflict: Bool) {
         self.gesture = gesture.wrappedValue
         self._externalGesture = gesture
-    }
-
-    private var hasConflict: Bool {
-        GestureBinding.conflictingActionableIDs(in: gestures).contains(gesture.id)
+        self.hasConflict = hasConflict
     }
 
     private var resolvedAction: WindowAction? {

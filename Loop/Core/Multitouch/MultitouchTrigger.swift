@@ -237,12 +237,13 @@ final class MultitouchTrigger {
 
         switch swipe.phase {
         case .began, .changed:
-            if recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
+            guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
+
+            if !session.hasGestureBegun {
                 guard let matchedGesture else { return }
                 handleGestureBegan(fingerCount: fingerCount, gesture: matchedGesture)
                 recognizerRegistry.session(for: fingerCount)?.setResolvedGesture(matchedGesture)
             }
-            guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
 
             guard await activateGestureIfNeeded(fingerCount: fingerCount) else { return }
             guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
