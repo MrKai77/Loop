@@ -20,7 +20,7 @@ struct GesturesConfigurationView: View {
     @Default(.enableGestures) private var enableGestures
     @Default(.gestures) private var gestures
     @Default(.gestureTitlebarHeight) private var gestureTitlebarHeight
-    
+
     private var conflictingGestureIDs: Set<UUID> {
         GestureBinding.conflictingActionableIDs(in: gestures)
     }
