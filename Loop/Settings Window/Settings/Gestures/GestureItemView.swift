@@ -77,19 +77,12 @@ struct GestureItemView: View {
 
     var body: some View {
         ZStack {
-            Group {
-                if hasConflict {
-                    gestureConfiguration
-                        .luminareTint(overridingWith: .red)
-                } else {
-                    gestureConfiguration
+            gestureConfiguration
+                .luminareToolTip(attachedTo: .topTrailing, hidden: !hasConflict) {
+                    Text(String(localized: "There are other gestures that conflict with this gesture.", comment: "Tooltip shown on a conflicting gesture in settings"))
+                        .padding(6)
                 }
-            }
-            .luminareToolTip(attachedTo: .topLeading, hidden: !hasConflict) {
-                Text(String(localized: "There are other gestures that conflict with this gesture.", comment: "Tooltip shown on a conflicting gesture in settings"))
-                    .padding(6)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             actionSelection
                 .frame(maxWidth: .infinity, alignment: .trailing)
