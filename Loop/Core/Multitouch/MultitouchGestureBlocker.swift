@@ -18,8 +18,10 @@ final class MultitouchGestureBlocker {
     private var activeCount: Int = 0
 
     func start() {
-        activeCount += 1
-        guard monitor == nil else { return }
+        if monitor != nil {
+            activeCount += 1
+            return
+        }
 
         log.info("Starting gesture blocker")
 
@@ -32,16 +34,27 @@ final class MultitouchGestureBlocker {
             CGEventType(rawValue: UInt32(NSEvent.EventType.smartMagnify.rawValue))
         ].compactMap(\.self)
 
-        monitor = ActiveEventMonitor("gesture_blocker", events: eventTypes) { _ in .ignore }
-        monitor?.start()
+        let newMonitor = ActiveEventMonitor("gesture_blocker", events: eventTypes) { _ in .ignore }
+        newMonitor.start()
+
+        guard newMonitor.isEnabled else {
+            log.warn("Failed to start gesture blocker")
+            newMonitor.stop()
+            return
+        }
+
+        monitor = newMonitor
+        activeCount = 1
     }
 
     func stop() {
-        activeCount = max(0, activeCount - 1)
+        guard let monitor else { return }
+
+        activeCount -= 1
         guard activeCount == 0 else { return }
 
-        monitor?.stop()
-        monitor = nil
+        monitor.stop()
+        self.monitor = nil
 
         log.info("Stopped gesture blocker")
     }
