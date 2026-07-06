@@ -4185,6 +4185,9 @@
         }
       }
     },
+    "Continue the swipe or magnify gesture to step through cycle actions." : {
+      "comment" : "Section footer shown in settings"
+    },
     "Contributors on GitHub" : {
       "localizations" : {
         "ar" : {

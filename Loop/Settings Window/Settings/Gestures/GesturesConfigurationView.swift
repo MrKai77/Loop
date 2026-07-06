@@ -44,7 +44,10 @@ struct GesturesConfigurationView: View {
     }
 
     private var gesturesSection: some View {
-        LuminareSection(String(localized: "Gestures", comment: "Section header shown in gestures settings")) {
+        LuminareSection(
+            String(localized: "Gestures", comment: "Section header shown in gestures settings"),
+            String(localized: "Continue the swipe or magnify gesture to step through cycle actions.", comment: "Section footer shown in settings")
+        ) {
             LuminareButtonRow {
                 Button(String(localized: "Add", comment: "Button to add a new gesture")) {
                     gestures.insert(
