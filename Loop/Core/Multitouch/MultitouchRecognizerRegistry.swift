@@ -24,9 +24,10 @@ final class MultitouchRecognizerRegistry {
             _ gestures: [GestureBinding]
         ) -> (radial: GestureBinding?, directionals: [GestureBinding], magnifyIn: GestureBinding?, magnifyOut: GestureBinding?) {
             let radial = gestures.first { $0.kind == .radialMenu }
-            let directionals = gestures.filter(\.kind.isDirectionalSwipe)
-            let magnifyIn = gestures.first { $0.kind == .magnifyIn }
-            let magnifyOut = gestures.first { $0.kind == .magnifyOut }
+            let gesturesByPriority = gestures.sortedByActionability
+            let directionals = gesturesByPriority.filter(\.kind.isDirectionalSwipe)
+            let magnifyIn = gesturesByPriority.first { $0.kind == .magnifyIn }
+            let magnifyOut = gesturesByPriority.first { $0.kind == .magnifyOut }
             return (radial, directionals, magnifyIn, magnifyOut)
         }
     }
@@ -136,5 +137,17 @@ final class MultitouchRecognizerRegistry {
         entry.task?.cancel()
         entry.recognizer.reset()
         return StopResult(didOpenLoopWithGesture: entry.session.didOpenLoopWithThisGesture)
+    }
+}
+
+private extension Array where Element == GestureBinding {
+    var sortedByActionability: [GestureBinding] {
+        sorted {
+            if $0.resolvesToNoAction != $1.resolvesToNoAction {
+                return !$0.resolvesToNoAction
+            }
+
+            return false
+        }
     }
 }
