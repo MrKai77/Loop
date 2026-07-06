@@ -34,9 +34,9 @@ final class MultitouchTrigger {
     private var systemGestureReconciliationTask: Task<(), Never>?
     private var isStarted = false
 
-    private let panCycleStepSize: CGFloat = 0.15
-    private let pinchActivationThreshold: CGFloat = 0.3
-    private let pinchCycleStepSize: CGFloat = 0.15
+    private let swipeCycleStepSize: CGFloat = 0.15
+    private let magnifyActivationThreshold: CGFloat = 0.3
+    private let magnifyCycleStepSize: CGFloat = 0.15
     private let cardinalBiasedRadialMenuActionCount = 8
 
     private var radialMenuActions: [RadialMenuAction] {
@@ -144,10 +144,10 @@ final class MultitouchTrigger {
 
     private func handleGestureEvent(_ event: SubsurfaceGestureEvent, fingerCount: Int) async {
         switch event {
-        case let .pan(pan):
-            await handlePan(pan, fingerCount: fingerCount)
-        case let .pinch(pinch):
-            await handlePinch(pinch, fingerCount: fingerCount)
+        case let .swipe(swipe):
+            await handleSwipe(swipe, fingerCount: fingerCount)
+        case let .magnify(magnify):
+            await handleMagnify(magnify, fingerCount: fingerCount)
         case .determining:
             await handleEarlyRadialMenuGesture(phase: .determining, fingerCount: fingerCount)
         case .unresolvedEnded:
@@ -157,17 +157,17 @@ final class MultitouchTrigger {
         }
     }
 
-    private func handlePan(_ pan: SubsurfaceGestureEvent.PanEvent, fingerCount: Int) async {
+    private func handleSwipe(_ swipe: SubsurfaceGestureEvent.SwipeEvent, fingerCount: Int) async {
         guard let entry = recognizerRegistry.entry(for: fingerCount) else { return }
 
         if let radialMenuGesture = entry.radialMenuGesture {
-            await handleRadialMenuPan(pan, fingerCount: fingerCount, gesture: radialMenuGesture)
+            await handleRadialMenuSwipe(swipe, fingerCount: fingerCount, gesture: radialMenuGesture)
         } else {
-            let direction = directionalPanKind(angle: pan.angle)
-            let directionalGesture = matchDirectionalPanGesture(kind: direction, from: entry.directionalGestures)
+            let direction = directionalSwipeKind(angle: swipe.angle)
+            let directionalGesture = matchDirectionalSwipeGesture(kind: direction, from: entry.directionalGestures)
             if directionalGesture != nil || entry.session.hasGestureBegun {
-                await handleDirectionalPan(
-                    pan,
+                await handleDirectionalSwipe(
+                    swipe,
                     fingerCount: fingerCount,
                     direction: direction,
                     matchedGesture: directionalGesture
@@ -176,20 +176,20 @@ final class MultitouchTrigger {
         }
     }
 
-    private func handleRadialMenuPan(
-        _ pan: SubsurfaceGestureEvent.PanEvent,
+    private func handleRadialMenuSwipe(
+        _ swipe: SubsurfaceGestureEvent.SwipeEvent,
         fingerCount: Int,
         gesture: GestureBinding
     ) async {
-        switch pan.phase {
+        switch swipe.phase {
         case .began, .changed:
-            if pan.phase == .began, recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
+            if swipe.phase == .began, recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
                 handleGestureBegan(fingerCount: fingerCount, gesture: gesture)
             }
             guard await activateGestureIfNeeded(fingerCount: fingerCount) else { return }
             guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
 
-            let normalizedAngle = normalizedAngle(fromSubsurfaceAngle: pan.angle)
+            let normalizedAngle = normalizedAngle(fromSubsurfaceAngle: swipe.angle)
             let actions = radialMenuActions.dropLast()
             guard actions.count > 1 else { return }
 
@@ -202,10 +202,10 @@ final class MultitouchTrigger {
                 newIndex = Int((normalizedAngle + halfAngleSpan) / actionAngleSpan) % actions.count
             }
 
-            session.commitPan(
-                distance: pan.distance,
+            session.commitSwipe(
+                distance: swipe.distance,
                 newKey: .radialSlot(newIndex),
-                step: panCycleStepSize
+                step: swipeCycleStepSize
             ) { reverse in
                 triggerRadialMenuAction(at: newIndex, from: actions, reverse: reverse)
             }
@@ -218,15 +218,15 @@ final class MultitouchTrigger {
         }
     }
 
-    private func handleDirectionalPan(
-        _ pan: SubsurfaceGestureEvent.PanEvent,
+    private func handleDirectionalSwipe(
+        _ swipe: SubsurfaceGestureEvent.SwipeEvent,
         fingerCount: Int,
         direction: GestureBinding.Kind,
         matchedGesture: GestureBinding?
     ) async {
         guard let entry = recognizerRegistry.entry(for: fingerCount) else { return }
 
-        switch pan.phase {
+        switch swipe.phase {
         case .began, .changed:
             if recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
                 guard let matchedGesture else { return }
@@ -241,24 +241,24 @@ final class MultitouchTrigger {
 
             if direction != activeGesture.kind {
                 if let matchedGesture {
-                    switchPanGesture(fingerCount: fingerCount, to: matchedGesture, distance: pan.distance)
-                } else if direction == oppositeDirectionalPanKind(of: activeGesture.kind) {
-                    handlePanReversal(
+                    switchSwipeGesture(fingerCount: fingerCount, to: matchedGesture, distance: swipe.distance)
+                } else if direction == oppositeDirectionalSwipeKind(of: activeGesture.kind) {
+                    handleSwipeReversal(
                         fingerCount: fingerCount,
                         currentGesture: activeGesture,
-                        oppositeGesture: oppositeDirectionalPanGesture(of: activeGesture, in: entry.directionalGestures),
-                        distance: pan.distance
+                        oppositeGesture: oppositeDirectionalSwipeGesture(of: activeGesture, in: entry.directionalGestures),
+                        distance: swipe.distance
                     )
                 } else {
-                    cancelPanGesture(fingerCount: fingerCount)
+                    cancelSwipeGesture(fingerCount: fingerCount)
                 }
                 return
             }
 
-            session.commitPan(
-                distance: pan.distance,
+            session.commitSwipe(
+                distance: swipe.distance,
                 newKey: .gesture(activeGesture.id),
-                step: panCycleStepSize
+                step: swipeCycleStepSize
             ) { reverse in
                 triggerSingleAction(from: activeGesture, reverse: reverse)
             }
@@ -271,25 +271,25 @@ final class MultitouchTrigger {
         }
     }
 
-    private func handlePinch(_ pinch: SubsurfaceGestureEvent.PinchEvent, fingerCount: Int) async {
+    private func handleMagnify(_ magnify: SubsurfaceGestureEvent.MagnifyEvent, fingerCount: Int) async {
         guard let entry = recognizerRegistry.entry(for: fingerCount) else { return }
 
-        // Radial menu pinch triggers the center action regardless of direction
+        // Radial menu magnify triggers the center action regardless of direction.
         if let radialMenuGesture = entry.radialMenuGesture {
-            await handleRadialMenuPinch(pinch, fingerCount: fingerCount, gesture: radialMenuGesture)
+            await handleRadialMenuMagnify(magnify, fingerCount: fingerCount, gesture: radialMenuGesture)
             return
         }
 
-        switch pinch.phase {
+        switch magnify.phase {
         case .began, .changed:
-            if pinch.phase == .began,
+            if magnify.phase == .began,
                recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
                 recognizerRegistry.session(for: fingerCount)?.reset()
             }
             guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
 
             if !session.hasGestureBegun {
-                let initialGesture = pinch.distance >= pinch.originDistance ? entry.spreadGesture : entry.pinchGesture
+                let initialGesture = magnify.distance >= magnify.originDistance ? entry.magnifyOutGesture : entry.magnifyInGesture
                 guard let initialGesture else {
                     return
                 }
@@ -303,29 +303,29 @@ final class MultitouchTrigger {
             }
             guard await activateGestureIfNeeded(
                 fingerCount: fingerCount,
-                pinchDisplacement: pinch.distance - pinch.originDistance,
-                pinchActivationThreshold: pinchCycleStepSize
+                magnifyDisplacement: magnify.distance - magnify.originDistance,
+                magnifyActivationThreshold: magnifyCycleStepSize
             ) else {
                 return
             }
             guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
 
-            if pinchReversalDetected(currentGesture: activeGesture, pinch: pinch) {
-                let opposite = activeGesture.kind == .pinch ? entry.spreadGesture : entry.pinchGesture
-                handlePinchReversal(
+            if magnifyReversalDetected(currentGesture: activeGesture, magnify: magnify) {
+                let opposite = activeGesture.kind == .magnifyIn ? entry.magnifyOutGesture : entry.magnifyInGesture
+                handleMagnifyReversal(
                     fingerCount: fingerCount,
                     currentGesture: activeGesture,
                     oppositeGesture: opposite,
-                    distance: pinch.distance
+                    distance: magnify.distance
                 )
                 return
             }
 
-            session.commitPinch(
-                distance: pinch.distance,
-                originDistance: pinch.originDistance,
+            session.commitMagnify(
+                distance: magnify.distance,
+                originDistance: magnify.originDistance,
                 newKey: .gesture(activeGesture.id),
-                step: pinchCycleStepSize,
+                step: magnifyCycleStepSize,
                 canRepeat: canRepeatGestureAction(activeGesture)
             ) { reverse in
                 triggerSingleAction(from: activeGesture, reverse: reverse)
@@ -344,20 +344,20 @@ final class MultitouchTrigger {
         }
     }
 
-    /// Pinch within a radial menu gesture, triggers the center (last) radial menu action.
-    private func handleRadialMenuPinch(
-        _ pinch: SubsurfaceGestureEvent.PinchEvent,
+    /// Magnify within a radial menu gesture triggers the center (last) radial menu action.
+    private func handleRadialMenuMagnify(
+        _ magnify: SubsurfaceGestureEvent.MagnifyEvent,
         fingerCount: Int,
         gesture: GestureBinding
     ) async {
-        switch pinch.phase {
+        switch magnify.phase {
         case .began, .changed:
-            if pinch.phase == .began, recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
+            if magnify.phase == .began, recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
                 handleGestureBegan(fingerCount: fingerCount, gesture: gesture)
             }
             guard await activateGestureIfNeeded(
                 fingerCount: fingerCount,
-                pinchDisplacement: pinch.distance - pinch.originDistance
+                magnifyDisplacement: magnify.distance - magnify.originDistance
             ) else { return }
             guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
 
@@ -365,10 +365,10 @@ final class MultitouchTrigger {
             guard !actions.isEmpty else { return }
             let centerActionIndex = actions.count - 1
 
-            session.commitRadialPinch(
-                distance: pinch.distance,
-                originDistance: pinch.originDistance,
-                step: pinchCycleStepSize
+            session.commitRadialMagnify(
+                distance: magnify.distance,
+                originDistance: magnify.originDistance,
+                step: magnifyCycleStepSize
             ) { reverse in
                 triggerRadialMenuAction(at: centerActionIndex, from: actions[...], reverse: reverse)
             }
@@ -421,19 +421,19 @@ final class MultitouchTrigger {
         }
     }
 
-    /// Opens Loop on the target window resolved at `.began`. Pinch and spread gestures
-    /// gate on their respective activation thresholds; pan gestures activate on the first
+    /// Opens Loop on the target window resolved at `.began`. Magnify In and magnifyOut gestures
+    /// gate on the magnify activation threshold; swipe gestures activate on the first
     /// `.began` event Subsurface emits.
     private func activateGestureIfNeeded(
         fingerCount: Int,
-        pinchDisplacement: CGFloat? = nil,
-        pinchActivationThreshold: CGFloat? = nil
+        magnifyDisplacement: CGFloat? = nil,
+        magnifyActivationThreshold: CGFloat? = nil
     ) async -> Bool {
         guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return false }
         if session.hasActivated { return true }
 
-        if let pinchDisplacement,
-           abs(pinchDisplacement) < (pinchActivationThreshold ?? self.pinchActivationThreshold) {
+        if let magnifyDisplacement,
+           abs(magnifyDisplacement) < (magnifyActivationThreshold ?? self.magnifyActivationThreshold) {
             return false
         }
 
@@ -465,38 +465,38 @@ final class MultitouchTrigger {
         recognizerRegistry.session(for: fingerCount)?.reset()
     }
 
-    private func pinchReversalDetected(
+    private func magnifyReversalDetected(
         currentGesture: GestureBinding,
-        pinch: SubsurfaceGestureEvent.PinchEvent
+        magnify: SubsurfaceGestureEvent.MagnifyEvent
     ) -> Bool {
         switch currentGesture.kind {
-        case .pinch:
-            pinch.distance >= pinch.originDistance
-        case .spread:
-            pinch.distance <= pinch.originDistance
+        case .magnifyIn:
+            magnify.distance >= magnify.originDistance
+        case .magnifyOut:
+            magnify.distance <= magnify.originDistance
         default:
             false
         }
     }
 
-    private func oppositeDirectionalPanGesture(
+    private func oppositeDirectionalSwipeGesture(
         of current: GestureBinding,
         in directionals: [GestureBinding]
     ) -> GestureBinding? {
-        guard let opposite = oppositeDirectionalPanKind(of: current.kind) else { return nil }
+        guard let opposite = oppositeDirectionalSwipeKind(of: current.kind) else { return nil }
         return directionals.first { $0.kind == opposite }
     }
 
-    private func oppositeDirectionalPanKind(of kind: GestureBinding.Kind) -> GestureBinding.Kind? {
+    private func oppositeDirectionalSwipeKind(of kind: GestureBinding.Kind) -> GestureBinding.Kind? {
         switch kind {
-        case .panUp:
-            .panDown
-        case .panDown:
-            .panUp
-        case .panLeft:
-            .panRight
-        case .panRight:
-            .panLeft
+        case .swipeUp:
+            .swipeDown
+        case .swipeDown:
+            .swipeUp
+        case .swipeLeft:
+            .swipeRight
+        case .swipeRight:
+            .swipeLeft
         default:
             nil
         }
@@ -511,13 +511,13 @@ final class MultitouchTrigger {
         return action.canRepeat || action.direction == .cycle
     }
 
-    private func switchPanGesture(
+    private func switchSwipeGesture(
         fingerCount: Int,
         to gesture: GestureBinding,
         distance: CGFloat
     ) {
         guard let session = recognizerRegistry.session(for: fingerCount) else { return }
-        session.switchPanGesture(to: gesture, distance: distance)
+        session.switchSwipeGesture(to: gesture, distance: distance)
         triggerSingleAction(from: gesture, reverse: false)
 
         if let window = session.pendingTargetWindow,
@@ -526,17 +526,17 @@ final class MultitouchTrigger {
         }
     }
 
-    private func cancelPanGesture(fingerCount: Int) {
+    private func cancelSwipeGesture(fingerCount: Int) {
         resetLoopState(for: fingerCount, forceClose: true)
     }
 
-    private func cancelPinchGesture(
+    private func cancelMagnifyGesture(
         fingerCount: Int
     ) {
         resetLoopState(for: fingerCount, forceClose: true)
     }
 
-    private func handlePanReversal(
+    private func handleSwipeReversal(
         fingerCount: Int,
         currentGesture: GestureBinding,
         oppositeGesture: GestureBinding?,
@@ -544,7 +544,7 @@ final class MultitouchTrigger {
     ) {
         if let oppositeGesture {
             guard let session = recognizerRegistry.session(for: fingerCount) else { return }
-            session.switchPanGesture(to: oppositeGesture, distance: distance)
+            session.switchSwipeGesture(to: oppositeGesture, distance: distance)
             triggerSingleAction(from: oppositeGesture, reverse: false)
 
             if let window = session.pendingTargetWindow,
@@ -553,13 +553,13 @@ final class MultitouchTrigger {
             }
         } else if isCycleAction(currentGesture) {
             triggerSingleAction(from: currentGesture, reverse: true)
-            recognizerRegistry.session(for: fingerCount)?.updateLastCommitPanDistance(distance)
+            recognizerRegistry.session(for: fingerCount)?.updateLastCommitSwipeDistance(distance)
         } else {
-            cancelPanGesture(fingerCount: fingerCount)
+            cancelSwipeGesture(fingerCount: fingerCount)
         }
     }
 
-    private func handlePinchReversal(
+    private func handleMagnifyReversal(
         fingerCount: Int,
         currentGesture: GestureBinding,
         oppositeGesture: GestureBinding?,
@@ -569,8 +569,8 @@ final class MultitouchTrigger {
             guard let session = recognizerRegistry.session(for: fingerCount) else { return }
             // Direction is fixed by the new gesture's gesture type, not by current finger distance,
             // since the user may not yet have crossed neutral when reversing
-            let direction = oppositeGesture.kind == .spread ? 1 : -1
-            session.switchPinchGesture(to: oppositeGesture, distance: distance, direction: direction)
+            let direction = oppositeGesture.kind == .magnifyOut ? 1 : -1
+            session.switchMagnifyGesture(to: oppositeGesture, distance: distance, direction: direction)
             triggerSingleAction(from: oppositeGesture, reverse: false)
 
             if let window = session.pendingTargetWindow,
@@ -579,9 +579,9 @@ final class MultitouchTrigger {
             }
         } else if isCycleAction(currentGesture) {
             triggerSingleAction(from: currentGesture, reverse: true)
-            recognizerRegistry.session(for: fingerCount)?.updateLastCommitPinchDistance(distance)
+            recognizerRegistry.session(for: fingerCount)?.updateLastCommitMagnifyDistance(distance)
         } else {
-            cancelPinchGesture(fingerCount: fingerCount)
+            cancelMagnifyGesture(fingerCount: fingerCount)
         }
     }
 
@@ -620,21 +620,21 @@ final class MultitouchTrigger {
         return Self.failedToResolveKeybindAction
     }
 
-    private func matchDirectionalPanGesture(kind: GestureBinding.Kind, from gestures: [GestureBinding]) -> GestureBinding? {
+    private func matchDirectionalSwipeGesture(kind: GestureBinding.Kind, from gestures: [GestureBinding]) -> GestureBinding? {
         gestures.first { $0.kind == kind }
     }
 
-    private func directionalPanKind(angle: CGFloat) -> GestureBinding.Kind {
+    private func directionalSwipeKind(angle: CGFloat) -> GestureBinding.Kind {
         let normalizedAngle = normalizedAngle(fromSubsurfaceAngle: angle)
 
         if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
-            return .panUp
+            return .swipeUp
         } else if normalizedAngle >= .pi / 4, normalizedAngle < 3 * .pi / 4 {
-            return .panRight
+            return .swipeRight
         } else if normalizedAngle >= 3 * .pi / 4, normalizedAngle < 5 * .pi / 4 {
-            return .panDown
+            return .swipeDown
         } else {
-            return .panLeft
+            return .swipeLeft
         }
     }
 

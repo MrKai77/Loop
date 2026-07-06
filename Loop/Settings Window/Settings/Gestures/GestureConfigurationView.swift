@@ -37,19 +37,19 @@ struct GestureConfigurationView: View {
         )
     }
 
-    private var tabBinding: Binding<GestureTab> {
+    private var categoryBinding: Binding<GestureCategory> {
         Binding(
-            get: { GestureTab(kind: gesture.kind) },
-            set: { tab in
-                switch tab {
+            get: { GestureCategory(kind: gesture.kind) },
+            set: { category in
+                switch category {
                 case .all:
                     kindBinding.wrappedValue = .radialMenu
                 case .swipe:
-                    if !gesture.kind.isDirectionalPan {
-                        kindBinding.wrappedValue = .panRight
+                    if !gesture.kind.isDirectionalSwipe {
+                        kindBinding.wrappedValue = .swipeRight
                     }
-                case .zoom:
-                    kindBinding.wrappedValue = .pinch
+                case .magnify:
+                    kindBinding.wrappedValue = .magnifyIn
                 }
             }
         )
@@ -62,9 +62,9 @@ struct GestureConfigurationView: View {
         )
     }
 
-    private var zoomGestureBinding: Binding<ZoomGesture> {
+    private var magnifyGestureBinding: Binding<MagnifyGesture> {
         Binding(
-            get: { ZoomGesture(kind: gesture.kind) ?? .pinch },
+            get: { MagnifyGesture(kind: gesture.kind) ?? .magnifyIn },
             set: { kindBinding.wrappedValue = $0.kind }
         )
     }
@@ -102,21 +102,21 @@ struct GestureConfigurationView: View {
 
             LuminareSection {
                 LuminarePicker(
-                    compactElements: GestureTab.allCases,
-                    selection: tabBinding
-                ) { tab in
+                    compactElements: GestureCategory.allCases,
+                    selection: categoryBinding
+                ) { category in
                     HStack(spacing: 6) {
-                        tab.image
+                        category.image
                             .frame(width: 12)
 
-                        Text(tab.displayName)
+                        Text(category.displayName)
                     }
                     .fixedSize()
                 }
                 .luminareContentSize(hasFixedHeight: true)
                 .luminareRoundingBehavior(top: true, bottom: gesture.kind == .radialMenu)
 
-                if GestureTab(kind: gesture.kind) == .swipe {
+                if GestureCategory(kind: gesture.kind) == .swipe {
                     LuminarePickerMenu(
                         "Direction",
                         selection: swipeDirectionBinding,
@@ -126,13 +126,13 @@ struct GestureConfigurationView: View {
                     }
                 }
 
-                if GestureTab(kind: gesture.kind) == .zoom {
+                if GestureCategory(kind: gesture.kind) == .magnify {
                     LuminarePickerMenu(
                         "Gesture",
-                        selection: zoomGestureBinding,
-                        items: ZoomGesture.allCases
-                    ) { gesture in
-                        Text("\(gesture.image) \(gesture.displayName)")
+                        selection: magnifyGestureBinding,
+                        items: MagnifyGesture.allCases
+                    ) { magnifyGesture in
+                        Text("\(magnifyGesture.image) \(magnifyGesture.displayName)")
                     }
                 }
             }
@@ -180,30 +180,30 @@ struct GestureConfigurationView: View {
     }
 }
 
-private enum GestureTab: CaseIterable, Equatable {
+private enum GestureCategory: CaseIterable, Equatable {
     case all
     case swipe
-    case zoom
+    case magnify
 
     init(kind: GestureBinding.Kind) {
         switch kind {
         case .radialMenu:
             self = .all
-        case .panUp, .panDown, .panLeft, .panRight:
+        case .swipeUp, .swipeDown, .swipeLeft, .swipeRight:
             self = .swipe
-        case .pinch, .spread:
-            self = .zoom
+        case .magnifyIn, .magnifyOut:
+            self = .magnify
         }
     }
 
     var displayName: String {
         switch self {
         case .all:
-            String(localized: "Both", comment: "Gesture tab label: swipe and zoom gestures")
+            String(localized: "Both", comment: "Gesture category label: swipe and magnify gestures")
         case .swipe:
-            String(localized: "Swipe", comment: "Gesture tab label: swipe")
-        case .zoom:
-            String(localized: "Zoom", comment: "Gesture tab label: zoom")
+            String(localized: "Swipe", comment: "Gesture category label: swipe")
+        case .magnify:
+            String(localized: "Magnify", comment: "Gesture category label: magnify")
         }
     }
 
@@ -213,7 +213,7 @@ private enum GestureTab: CaseIterable, Equatable {
             Image(.loop)
         case .swipe:
             Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
-        case .zoom:
+        case .magnify:
             Image(systemName: "arrow.down.left.and.arrow.up.right")
         }
     }
@@ -227,15 +227,15 @@ private enum SwipeDirection: CaseIterable {
 
     init?(kind: GestureBinding.Kind) {
         switch kind {
-        case .panUp:
+        case .swipeUp:
             self = .up
-        case .panDown:
+        case .swipeDown:
             self = .down
-        case .panLeft:
+        case .swipeLeft:
             self = .left
-        case .panRight:
+        case .swipeRight:
             self = .right
-        case .radialMenu, .pinch, .spread:
+        case .radialMenu, .magnifyIn, .magnifyOut:
             return nil
         }
     }
@@ -243,13 +243,13 @@ private enum SwipeDirection: CaseIterable {
     var kind: GestureBinding.Kind {
         switch self {
         case .up:
-            .panUp
+            .swipeUp
         case .down:
-            .panDown
+            .swipeDown
         case .left:
-            .panLeft
+            .swipeLeft
         case .right:
-            .panRight
+            .swipeRight
         }
     }
 
@@ -271,36 +271,36 @@ private enum SwipeDirection: CaseIterable {
     }
 }
 
-private enum ZoomGesture: CaseIterable {
-    case pinch
-    case spread
+private enum MagnifyGesture: CaseIterable {
+    case magnifyIn
+    case magnifyOut
 
     init?(kind: GestureBinding.Kind) {
         switch kind {
-        case .pinch:
-            self = .pinch
-        case .spread:
-            self = .spread
-        case .radialMenu, .panUp, .panDown, .panLeft, .panRight:
+        case .magnifyIn:
+            self = .magnifyIn
+        case .magnifyOut:
+            self = .magnifyOut
+        case .radialMenu, .swipeUp, .swipeDown, .swipeLeft, .swipeRight:
             return nil
         }
     }
 
     var kind: GestureBinding.Kind {
         switch self {
-        case .pinch:
-            .pinch
-        case .spread:
-            .spread
+        case .magnifyIn:
+            .magnifyIn
+        case .magnifyOut:
+            .magnifyOut
         }
     }
 
     var displayName: String {
         switch self {
-        case .pinch:
-            String(localized: "Pinch", comment: "Zoom gesture picker option: pinch")
-        case .spread:
-            String(localized: "Spread", comment: "Zoom gesture picker option: spread")
+        case .magnifyIn:
+            String(localized: "Magnify In", comment: "Magnify gesture picker option: magnifyIn")
+        case .magnifyOut:
+            String(localized: "Magnify Out", comment: "Magnify gesture picker option: magnifyOut")
         }
     }
 

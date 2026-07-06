@@ -33,51 +33,51 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
     }
 
     enum Kind: Codable, Hashable, CaseIterable {
-        /// Pan gesture that maps angle to radial menu directional slots.
+        /// Swipe gesture that maps angle to radial menu directional slots.
         case radialMenu
-        /// Directional pan gestures that trigger a single action.
-        case panUp, panDown, panLeft, panRight
-        /// Pinch gesture (fingers together, scale < 1).
-        case pinch
-        /// Spread gesture (fingers apart, scale > 1).
-        case spread
+        /// Directional swipe gestures that trigger a single action.
+        case swipeUp, swipeDown, swipeLeft, swipeRight
+        /// Magnify In gesture (fingers together, scale < 1).
+        case magnifyIn
+        /// Magnify Out gesture (fingers apart, scale > 1).
+        case magnifyOut
 
         var displayName: String {
             switch self {
-            case .radialMenu: String(localized: "Both", comment: "Gesture kind: swipe and zoom gestures; opens the radial menu")
-            case .panUp: String(localized: "Swipe Up", comment: "Gesture kind: directional swipe")
-            case .panDown: String(localized: "Swipe Down", comment: "Gesture kind: directional swipe")
-            case .panLeft: String(localized: "Swipe Left", comment: "Gesture kind: directional swipe")
-            case .panRight: String(localized: "Swipe Right", comment: "Gesture kind: directional swipe")
-            case .pinch: String(localized: "Pinch", comment: "Gesture kind: fingers move together")
-            case .spread: String(localized: "Spread", comment: "Gesture kind: fingers move apart")
+            case .radialMenu: String(localized: "Both", comment: "Gesture kind: swipe and magnify gestures; opens the radial menu")
+            case .swipeUp: String(localized: "Swipe Up", comment: "Gesture kind: directional swipe")
+            case .swipeDown: String(localized: "Swipe Down", comment: "Gesture kind: directional swipe")
+            case .swipeLeft: String(localized: "Swipe Left", comment: "Gesture kind: directional swipe")
+            case .swipeRight: String(localized: "Swipe Right", comment: "Gesture kind: directional swipe")
+            case .magnifyIn: String(localized: "Magnify In", comment: "Gesture kind: magnify inward")
+            case .magnifyOut: String(localized: "Magnify Out", comment: "Gesture kind: magnify outward")
             }
         }
 
         var image: Image {
             switch self {
             case .radialMenu: Image(.loop)
-            case .panUp: Image(systemName: "arrow.up")
-            case .panDown: Image(systemName: "arrow.down")
-            case .panLeft: Image(systemName: "arrow.left")
-            case .panRight: Image(systemName: "arrow.right")
-            case .pinch: Image(systemName: "arrow.up.right.and.arrow.down.left")
-            case .spread: Image(systemName: "arrow.down.left.and.arrow.up.right")
+            case .swipeUp: Image(systemName: "arrow.up")
+            case .swipeDown: Image(systemName: "arrow.down")
+            case .swipeLeft: Image(systemName: "arrow.left")
+            case .swipeRight: Image(systemName: "arrow.right")
+            case .magnifyIn: Image(systemName: "arrow.up.right.and.arrow.down.left")
+            case .magnifyOut: Image(systemName: "arrow.down.left.and.arrow.up.right")
             }
         }
 
-        var isPan: Bool {
+        var isSwipe: Bool {
             switch self {
-            case .radialMenu, .panUp, .panDown, .panLeft, .panRight:
+            case .radialMenu, .swipeUp, .swipeDown, .swipeLeft, .swipeRight:
                 true
-            case .pinch, .spread:
+            case .magnifyIn, .magnifyOut:
                 false
             }
         }
 
-        var isDirectionalPan: Bool {
+        var isDirectionalSwipe: Bool {
             switch self {
-            case .panUp, .panDown, .panLeft, .panRight:
+            case .swipeUp, .swipeDown, .swipeLeft, .swipeRight:
                 true
             default:
                 false
@@ -86,7 +86,7 @@ struct GestureBinding: Identifiable, Codable, Hashable, Defaults.Serializable {
     }
 
     enum Action: Codable, Hashable {
-        /// Uses `RadialMenuAction.userConfiguredActions` for radial menu pan mode.
+        /// Uses `RadialMenuAction.userConfiguredActions` for radial menu swipe mode.
         case radialMenuActions
         /// A single action, either custom or referencing a keybind.
         case singleAction(RadialMenuAction.ActionType)
@@ -119,13 +119,13 @@ extension GestureBinding {
         switch kind {
         case .radialMenu:
             String(
-                localized: "\(fingerCount)-finger Swipe or Zoom",
+                localized: "\(fingerCount)-finger Swipe or Magnify",
                 comment: "Default title describing how to activate a radial menu gesture. Argument is the finger count."
             )
         default:
             String(
                 localized: "\(fingerCount)-finger \(kind.displayName)",
-                comment: "Default title describing a gesture. First argument is the finger count, second is the gesture kind name (e.g. 'Pinch', 'Swipe Up')."
+                comment: "Default title describing a gesture. First argument is the finger count, second is the gesture kind name (e.g. 'Magnify In', 'Swipe Up')."
             )
         }
     }
@@ -161,13 +161,13 @@ extension GestureBinding {
     }
 
     /// Two gestures conflict when they have the same finger count and their kinds overlap.
-    /// Radial menu consumes both pan and pinch, so it conflicts with ANY other gesture at the same finger count.
+    /// Radial menu consumes both swipe and magnify, so it conflicts with ANY other gesture at the same finger count.
     func conflicts(with other: GestureBinding) -> Bool {
         guard id != other.id, fingerCount == other.fingerCount else {
             return false
         }
 
-        // Radial menu uses both pan and pinch, so it conflicts with everything at the same finger count
+        // Radial menu uses both swipe and magnify, so it conflicts with everything at the same finger count.
         if kind == .radialMenu || other.kind == .radialMenu {
             return true
         }

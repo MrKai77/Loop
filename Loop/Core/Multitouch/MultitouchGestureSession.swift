@@ -24,9 +24,9 @@ final class MultitouchGestureSession {
     private(set) var pendingTargetWindow: Window?
 
     private var lastCommittedAction: ActionKey?
-    private var lastCommitPanDistance: CGFloat = 0
-    private var lastCommitPinchDistance: CGFloat = 0
-    private var pinchDirection: Int = 0
+    private var lastCommitSwipeDistance: CGFloat = 0
+    private var lastCommitMagnifyDistance: CGFloat = 0
+    private var magnificationDirection: Int = 0
 
     func reset() {
         didOpenLoopWithThisGesture = false
@@ -36,9 +36,9 @@ final class MultitouchGestureSession {
         resolvedGesture = nil
         pendingTargetWindow = nil
         lastCommittedAction = nil
-        lastCommitPanDistance = 0
-        lastCommitPinchDistance = 0
-        pinchDirection = 0
+        lastCommitSwipeDistance = 0
+        lastCommitMagnifyDistance = 0
+        magnificationDirection = 0
     }
 
     func begin(
@@ -74,29 +74,29 @@ final class MultitouchGestureSession {
     /// jitter can't drift it past the reverse threshold. Activation is gated
     /// upstream by `activateGestureIfNeeded`, so the first commit fires
     /// immediately to seed Loop's initial active action :)
-    func commitPan(
+    func commitSwipe(
         distance: CGFloat,
         newKey: ActionKey,
         step: CGFloat,
         fire: (_ reverse: Bool) -> ()
     ) {
         if lastCommittedAction == newKey {
-            let delta = distance - lastCommitPanDistance
+            let delta = distance - lastCommitSwipeDistance
             if delta >= step {
-                lastCommitPanDistance = distance
+                lastCommitSwipeDistance = distance
                 fire(false)
             } else if delta <= -step {
-                lastCommitPanDistance = distance
+                lastCommitSwipeDistance = distance
                 fire(true)
             }
         } else {
             lastCommittedAction = newKey
-            lastCommitPanDistance = distance
+            lastCommitSwipeDistance = distance
             fire(false)
         }
     }
 
-    func commitRadialPinch(
+    func commitRadialMagnify(
         distance: CGFloat,
         originDistance: CGFloat,
         step: CGFloat,
@@ -104,22 +104,22 @@ final class MultitouchGestureSession {
     ) {
         if lastCommittedAction != .radialCenter {
             lastCommittedAction = .radialCenter
-            lastCommitPinchDistance = distance
+            lastCommitMagnifyDistance = distance
             fire(distance < originDistance)
             return
         }
 
-        let delta = distance - lastCommitPinchDistance
+        let delta = distance - lastCommitMagnifyDistance
         if delta >= step {
-            lastCommitPinchDistance = distance
+            lastCommitMagnifyDistance = distance
             fire(false)
         } else if delta <= -step {
-            lastCommitPinchDistance = distance
+            lastCommitMagnifyDistance = distance
             fire(true)
         }
     }
 
-    func commitPinch(
+    func commitMagnify(
         distance: CGFloat,
         originDistance: CGFloat,
         newKey: ActionKey,
@@ -128,21 +128,21 @@ final class MultitouchGestureSession {
         fire: (_ reverse: Bool) -> ()
     ) {
         if lastCommittedAction != newKey {
-            pinchDirection = distance >= originDistance ? 1 : -1
+            magnificationDirection = distance >= originDistance ? 1 : -1
             lastCommittedAction = newKey
-            lastCommitPinchDistance = distance
+            lastCommitMagnifyDistance = distance
             fire(false)
             return
         }
 
         guard canRepeat else { return }
 
-        let delta = (distance - lastCommitPinchDistance) * CGFloat(pinchDirection)
+        let delta = (distance - lastCommitMagnifyDistance) * CGFloat(magnificationDirection)
         if delta >= step {
-            lastCommitPinchDistance = distance
+            lastCommitMagnifyDistance = distance
             fire(false)
         } else if delta <= -step {
-            lastCommitPinchDistance = distance
+            lastCommitMagnifyDistance = distance
             fire(true)
         }
     }
@@ -151,24 +151,24 @@ final class MultitouchGestureSession {
         resolvedGesture = gesture
     }
 
-    func switchPanGesture(to gesture: GestureBinding, distance: CGFloat) {
+    func switchSwipeGesture(to gesture: GestureBinding, distance: CGFloat) {
         resolvedGesture = gesture
         lastCommittedAction = .gesture(gesture.id)
-        lastCommitPanDistance = distance
+        lastCommitSwipeDistance = distance
     }
 
-    func switchPinchGesture(to gesture: GestureBinding, distance: CGFloat, direction: Int) {
+    func switchMagnifyGesture(to gesture: GestureBinding, distance: CGFloat, direction: Int) {
         resolvedGesture = gesture
         lastCommittedAction = .gesture(gesture.id)
-        pinchDirection = direction
-        lastCommitPinchDistance = distance
+        magnificationDirection = direction
+        lastCommitMagnifyDistance = distance
     }
 
-    func updateLastCommitPanDistance(_ distance: CGFloat) {
-        lastCommitPanDistance = distance
+    func updateLastCommitSwipeDistance(_ distance: CGFloat) {
+        lastCommitSwipeDistance = distance
     }
 
-    func updateLastCommitPinchDistance(_ distance: CGFloat) {
-        lastCommitPinchDistance = distance
+    func updateLastCommitMagnifyDistance(_ distance: CGFloat) {
+        lastCommitMagnifyDistance = distance
     }
 }
