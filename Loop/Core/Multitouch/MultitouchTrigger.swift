@@ -14,7 +14,7 @@ import SwiftUI
 @MainActor
 final class MultitouchTrigger {
     private let windowActionCache: WindowActionCache
-    private let openCallback: (WindowAction, Window) async throws -> ()
+    private let openCallback: (WindowAction, Window) async throws -> LoopOpenResult
     private let closeCallback: (Bool) -> ()
     private let changeAction: (WindowAction, Bool) -> ()
     private let checkIfLoopOpen: () -> Bool
@@ -31,6 +31,7 @@ final class MultitouchTrigger {
     private let targetResolver = MultitouchTargetResolver()
 
     private var gesturesObservationTask: Task<(), Never>?
+    private var radialMenuActionsObservationTask: Task<(), Never>?
     private var systemGestureReconciliationTask: Task<(), Never>?
     private var isStarted = false
 
@@ -39,15 +40,13 @@ final class MultitouchTrigger {
     private let magnifyCycleStepSize: CGFloat = 0.15
     private let cardinalBiasedRadialMenuActionCount = 8
 
-    private var radialMenuActions: [RadialMenuAction] {
-        RadialMenuAction.userConfiguredActions
-    }
+    private var radialMenuActions = RadialMenuAction.userConfiguredActions
 
     private static let failedToResolveKeybindAction: WindowAction = .init(.noAction)
 
     init(
         windowActionCache: WindowActionCache,
-        openCallback: @escaping (WindowAction, Window) async throws -> (),
+        openCallback: @escaping (WindowAction, Window) async throws -> LoopOpenResult,
         closeCallback: @escaping (Bool) -> (),
         changeAction: @escaping (WindowAction, Bool) -> (),
         checkIfLoopOpen: @escaping () -> Bool
@@ -73,12 +72,20 @@ final class MultitouchTrigger {
         prepare()
         gestureMonitor.start()
         rebuildRecognizers()
+        radialMenuActions = RadialMenuAction.userConfiguredActions
 
         gesturesObservationTask = Task { [weak self] in
             // Watch keybinds too, so gestures referencing a deleted keybind stay in sync.
             for await _ in Defaults.updates(.gestures, .keybinds) {
                 guard !Task.isCancelled, let self else { break }
                 rebuildRecognizers()
+            }
+        }
+
+        radialMenuActionsObservationTask = Task { [weak self] in
+            for await _ in Defaults.updates(.enableRadialMenuCustomization, .radialMenuActions) {
+                guard !Task.isCancelled, let self else { break }
+                radialMenuActions = RadialMenuAction.userConfiguredActions
             }
         }
     }
@@ -90,6 +97,8 @@ final class MultitouchTrigger {
         reconcileSystemGestures()
         gesturesObservationTask?.cancel()
         gesturesObservationTask = nil
+        radialMenuActionsObservationTask?.cancel()
+        radialMenuActionsObservationTask = nil
 
         handleStopResults(recognizerRegistry.stopAll())
 
@@ -440,8 +449,8 @@ final class MultitouchTrigger {
         var openedLoop = false
         if let window = session.pendingTargetWindow {
             do {
-                try await openCallback(.init(.noSelection), window)
-                openedLoop = true
+                let result = try await openCallback(.init(.noSelection), window)
+                openedLoop = result == .opened
             } catch {
                 if recognizerRegistry.contains(session: session, for: fingerCount) {
                     session.reject()

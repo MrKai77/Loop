@@ -90,8 +90,8 @@ final class LoopManager {
     private(set) lazy var multitouchTrigger = MultitouchTrigger(
         windowActionCache: windowActionCache,
         openCallback: { [weak self] action, window in
-            guard let self else { return }
-            try await openLoop(startingAction: action, window: window)
+            guard let self else { return .cancelled }
+            return try await openLoop(startingAction: action, window: window)
         },
         closeCallback: { [weak self] forceClose in
             Task {
@@ -205,10 +205,17 @@ enum LoopManagerError: LocalizedError {
     }
 }
 
+enum LoopOpenResult {
+    case opened
+    case alreadyOpening
+    case alreadyOpen
+    case cancelled
+}
+
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    private func openLoop(startingAction: WindowAction, window: Window? = nil) async throws {
+    private func openLoop(startingAction: WindowAction, window: Window? = nil) async throws -> LoopOpenResult {
         guard AccessibilityManager.shared.isGranted else {
             throw LoopManagerError.accessibilityNotGranted
         }
@@ -217,7 +224,7 @@ extension LoopManager {
             if startingAction.direction != .noSelection {
                 pendingOpeningAction = startingAction
             }
-            return
+            return .alreadyOpening
         }
 
         guard !isLoopActive else {
@@ -229,7 +236,7 @@ extension LoopManager {
                 await changeAction(startingAction, disableHapticFeedback: true)
             }
 
-            return
+            return .alreadyOpen
         }
 
         let window = window ?? WindowUtility.userDefinedTargetWindow()
@@ -277,7 +284,7 @@ extension LoopManager {
         await resizeContext.refreshResolvedState()
 
         guard !shouldCancelOpening else {
-            return
+            return .cancelled
         }
 
         if !Defaults[.disableCursorInteraction] {
@@ -290,6 +297,7 @@ extension LoopManager {
         await changeAction(pendingOpeningAction ?? startingAction, disableHapticFeedback: true)
 
         triggerKeyTimeoutTimer.start()
+        return .opened
     }
 
     private func closeLoop(forceClose: Bool) async {

@@ -38,15 +38,19 @@ class BaseEventTapMonitor: EventMonitorProtocol, Identifiable, Equatable {
     func setupRunLoopSource(eventTap: CFMachPort, readableIdentifier: String) {
         let runLoop = EventTapThread.shared.runLoop
         self.readableIdentifier = readableIdentifier
-        refconRetainOutstanding = true
 
-        if let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0) {
-            self.eventTap = eventTap
-            self.runLoop = runLoop
-            self.runLoopSource = runLoopSource
-            CFRunLoopAddSource(runLoop, runLoopSource, .commonModes)
-            CFRunLoopWakeUp(runLoop)
+        guard let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0) else {
+            CFMachPortInvalidate(eventTap)
+            Unmanaged.passUnretained(self).release()
+            return
         }
+
+        refconRetainOutstanding = true
+        self.eventTap = eventTap
+        self.runLoop = runLoop
+        self.runLoopSource = runLoopSource
+        CFRunLoopAddSource(runLoop, runLoopSource, .commonModes)
+        CFRunLoopWakeUp(runLoop)
     }
 
     func start() {
