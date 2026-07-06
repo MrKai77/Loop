@@ -254,8 +254,17 @@ final class MultitouchTrigger {
 
         if let radialMenuGesture = entry.radialMenuGesture {
             await handleRadialMenuPan(pan, fingerCount: fingerCount, gesture: radialMenuGesture)
-        } else if let directionalGesture = matchDirectionalPanGesture(angle: pan.angle, from: entry.directionalGestures) {
-            await handleDirectionalPan(pan, fingerCount: fingerCount, gesture: directionalGesture)
+        } else {
+            let direction = directionalPanKind(angle: pan.angle)
+            let directionalGesture = matchDirectionalPanGesture(kind: direction, from: entry.directionalGestures)
+            if directionalGesture != nil || entry.state.hasGestureBegun {
+                await handleDirectionalPan(
+                    pan,
+                    fingerCount: fingerCount,
+                    direction: direction,
+                    matchedGesture: directionalGesture
+                )
+            }
         }
     }
 
@@ -305,28 +314,37 @@ final class MultitouchTrigger {
     private func handleDirectionalPan(
         _ pan: SubsurfaceGestureEvent.PanEvent,
         fingerCount: Int,
-        gesture: GestureBinding
+        direction: GestureBinding.Kind,
+        matchedGesture: GestureBinding?
     ) async {
         guard let entry = recognizers[fingerCount] else { return }
 
         switch pan.phase {
         case .began, .changed:
-            if pan.phase == .began, recognizers[fingerCount]?.state.hasGestureBegun != true {
-                handleGestureBegan(fingerCount: fingerCount, gesture: gesture)
-                recognizers[fingerCount]?.state.resolvedGesture = gesture
+            if recognizers[fingerCount]?.state.hasGestureBegun != true {
+                guard let matchedGesture else { return }
+                handleGestureBegan(fingerCount: fingerCount, gesture: matchedGesture)
+                recognizers[fingerCount]?.state.resolvedGesture = matchedGesture
             }
+            guard let state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
+
             guard await activateGestureIfNeeded(fingerCount: fingerCount) else { return }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
+            guard let activeGesture = state.resolvedGesture ?? matchedGesture else { return }
 
-            let activeGesture = state.resolvedGesture ?? gesture
-
-            if panReversalDetected(state, distance: pan.distance) {
-                handlePanReversal(
-                    fingerCount: fingerCount,
-                    currentGesture: activeGesture,
-                    oppositeGesture: oppositeDirectionalPanGesture(of: activeGesture, in: entry.directionalGestures),
-                    distance: pan.distance
-                )
+            if direction != activeGesture.kind {
+                if let matchedGesture {
+                    switchPanGesture(fingerCount: fingerCount, to: matchedGesture, distance: pan.distance)
+                } else if direction == oppositeDirectionalPanKind(of: activeGesture.kind) {
+                    handlePanReversal(
+                        fingerCount: fingerCount,
+                        currentGesture: activeGesture,
+                        oppositeGesture: oppositeDirectionalPanGesture(of: activeGesture, in: entry.directionalGestures),
+                        distance: pan.distance
+                    )
+                } else {
+                    cancelPanGesture(fingerCount: fingerCount)
+                }
                 return
             }
 
@@ -357,18 +375,16 @@ final class MultitouchTrigger {
         }
 
         switch pinch.phase {
-        case .began:
-            // Direction unknown, reset state but defer handleGestureBegan until first .changed
-            recognizers[fingerCount]?.state = GestureState()
-
-        case .changed:
-            guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
+        case .began, .changed:
+            if pinch.phase == .began,
+               recognizers[fingerCount]?.state.hasGestureBegun != true {
+                recognizers[fingerCount]?.state = GestureState()
+            }
+            guard let state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
             if !state.hasGestureBegun {
                 let initialGesture = pinch.distance >= pinch.originDistance ? entry.spreadGesture : entry.pinchGesture
                 guard let initialGesture else {
-                    state.isGestureRejected = true
-                    recognizers[fingerCount]?.state = state
                     return
                 }
                 handleGestureBegan(fingerCount: fingerCount, gesture: initialGesture)
@@ -377,14 +393,19 @@ final class MultitouchTrigger {
             }
 
             guard let state = recognizers[fingerCount]?.state, !state.isGestureRejected,
-                  let activeGesture = state.resolvedGesture else { return }
+                  let activeGesture = state.resolvedGesture else {
+                return
+            }
             guard await activateGestureIfNeeded(
                 fingerCount: fingerCount,
-                pinchDisplacement: pinch.distance - pinch.originDistance
-            ) else { return }
+                pinchDisplacement: pinch.distance - pinch.originDistance,
+                pinchActivationThreshold: pinchCycleStepSize
+            ) else {
+                return
+            }
             guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return }
 
-            if pinchReversalDetected(state, distance: pinch.distance) {
+            if pinchReversalDetected(currentGesture: activeGesture, pinch: pinch) {
                 let opposite = activeGesture.kind == .pinch ? entry.spreadGesture : entry.pinchGesture
                 handlePinchReversal(
                     fingerCount: fingerCount,
@@ -400,7 +421,8 @@ final class MultitouchTrigger {
                 distance: pinch.distance,
                 originDistance: pinch.originDistance,
                 newKey: .gesture(activeGesture.id),
-                fingerCount: fingerCount
+                fingerCount: fingerCount,
+                canRepeat: canRepeatGestureAction(activeGesture)
             ) { reverse in
                 triggerSingleAction(from: activeGesture, reverse: reverse)
             }
@@ -511,12 +533,14 @@ final class MultitouchTrigger {
     /// `.began` event Subsurface emits.
     private func activateGestureIfNeeded(
         fingerCount: Int,
-        pinchDisplacement: CGFloat? = nil
+        pinchDisplacement: CGFloat? = nil,
+        pinchActivationThreshold: CGFloat? = nil
     ) async -> Bool {
         guard var state = recognizers[fingerCount]?.state, !state.isGestureRejected else { return false }
         if state.hasActivated { return true }
 
-        if let pinchDisplacement, abs(pinchDisplacement) < pinchActivationThreshold {
+        if let pinchDisplacement,
+           abs(pinchDisplacement) < (pinchActivationThreshold ?? self.pinchActivationThreshold) {
             return false
         }
 
@@ -537,9 +561,9 @@ final class MultitouchTrigger {
         return true
     }
 
-    private func resetLoopState(for fingerCount: Int) {
+    private func resetLoopState(for fingerCount: Int, forceClose: Bool = false) {
         if recognizers[fingerCount]?.state.didOpenLoopWithThisGesture == true {
-            closeCallback(false)
+            closeCallback(forceClose)
         }
 
         gestureBlocker.stop()
@@ -643,6 +667,7 @@ final class MultitouchTrigger {
         originDistance: CGFloat,
         newKey: ActionKey,
         fingerCount: Int,
+        canRepeat: Bool,
         fire: (_ reverse: Bool) -> ()
     ) {
         if state.lastCommittedAction != newKey {
@@ -653,6 +678,8 @@ final class MultitouchTrigger {
             fire(false)
             return
         }
+
+        guard canRepeat else { return }
 
         let delta = (distance - state.lastCommitPinchDistance) * CGFloat(state.pinchDirection)
         if delta >= pinchCycleStepSize {
@@ -666,34 +693,78 @@ final class MultitouchTrigger {
         }
     }
 
-    private func panReversalDetected(_ state: GestureState, distance: CGFloat) -> Bool {
-        state.lastCommittedAction != nil
-            && (distance - state.lastCommitPanDistance) <= -panCycleStepSize
-    }
-
-    private func pinchReversalDetected(_ state: GestureState, distance: CGFloat) -> Bool {
-        guard state.lastCommittedAction != nil, state.pinchDirection != 0 else { return false }
-        let delta = (distance - state.lastCommitPinchDistance) * CGFloat(state.pinchDirection)
-        return delta <= -pinchCycleStepSize
+    private func pinchReversalDetected(
+        currentGesture: GestureBinding,
+        pinch: SubsurfaceGestureEvent.PinchEvent
+    ) -> Bool {
+        switch currentGesture.kind {
+        case .pinch:
+            return pinch.distance >= pinch.originDistance
+        case .spread:
+            return pinch.distance <= pinch.originDistance
+        default:
+            return false
+        }
     }
 
     private func oppositeDirectionalPanGesture(
         of current: GestureBinding,
         in directionals: [GestureBinding]
     ) -> GestureBinding? {
-        let opposite: GestureBinding.Kind? = switch current.kind {
-        case .panUp: .panDown
-        case .panDown: .panUp
-        case .panLeft: .panRight
-        case .panRight: .panLeft
-        default: nil
-        }
-        guard let opposite else { return nil }
+        guard let opposite = oppositeDirectionalPanKind(of: current.kind) else { return nil }
         return directionals.first { $0.kind == opposite }
+    }
+
+    private func oppositeDirectionalPanKind(of kind: GestureBinding.Kind) -> GestureBinding.Kind? {
+        switch kind {
+        case .panUp:
+            return .panDown
+        case .panDown:
+            return .panUp
+        case .panLeft:
+            return .panRight
+        case .panRight:
+            return .panLeft
+        default:
+            return nil
+        }
     }
 
     private func isCycleAction(_ gesture: GestureBinding) -> Bool {
         resolvedWindowAction(from: gesture)?.direction == .cycle
+    }
+
+    private func canRepeatGestureAction(_ gesture: GestureBinding) -> Bool {
+        guard let action = resolvedWindowAction(from: gesture) else { return false }
+        return action.canRepeat || action.direction == .cycle
+    }
+
+    private func switchPanGesture(
+        fingerCount: Int,
+        to gesture: GestureBinding,
+        distance: CGFloat
+    ) {
+        guard var state = recognizers[fingerCount]?.state else { return }
+        state.resolvedGesture = gesture
+        state.lastCommittedAction = .gesture(gesture.id)
+        state.lastCommitPanDistance = distance
+        recognizers[fingerCount]?.state = state
+        triggerSingleAction(from: gesture, reverse: false)
+
+        if let window = state.pendingTargetWindow,
+           resolvedWindowAction(from: gesture)?.canRepeat == true {
+            lastRepeatableWindow = window
+        }
+    }
+
+    private func cancelPanGesture(fingerCount: Int) {
+        resetLoopState(for: fingerCount, forceClose: true)
+    }
+
+    private func cancelPinchGesture(
+        fingerCount: Int
+    ) {
+        resetLoopState(for: fingerCount, forceClose: true)
     }
 
     private func handlePanReversal(
@@ -717,6 +788,8 @@ final class MultitouchTrigger {
         } else if isCycleAction(currentGesture) {
             triggerSingleAction(from: currentGesture, reverse: true)
             recognizers[fingerCount]?.state.lastCommitPanDistance = distance
+        } else {
+            cancelPanGesture(fingerCount: fingerCount)
         }
     }
 
@@ -745,6 +818,8 @@ final class MultitouchTrigger {
         } else if isCycleAction(currentGesture) {
             triggerSingleAction(from: currentGesture, reverse: true)
             recognizers[fingerCount]?.state.lastCommitPinchDistance = distance
+        } else {
+            cancelPinchGesture(fingerCount: fingerCount)
         }
     }
 
@@ -783,20 +858,22 @@ final class MultitouchTrigger {
         return Self.failedToResolveKeybindAction
     }
 
-    private func matchDirectionalPanGesture(angle: CGFloat, from gestures: [GestureBinding]) -> GestureBinding? {
+    private func matchDirectionalPanGesture(kind: GestureBinding.Kind, from gestures: [GestureBinding]) -> GestureBinding? {
+        gestures.first { $0.kind == kind }
+    }
+
+    private func directionalPanKind(angle: CGFloat) -> GestureBinding.Kind {
         let normalizedAngle = normalizedAngle(fromSubsurfaceAngle: angle)
 
-        let direction: GestureBinding.Kind = if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
-            .panUp
+        if normalizedAngle >= 7 * .pi / 4 || normalizedAngle < .pi / 4 {
+            return .panUp
         } else if normalizedAngle >= .pi / 4, normalizedAngle < 3 * .pi / 4 {
-            .panRight
+            return .panRight
         } else if normalizedAngle >= 3 * .pi / 4, normalizedAngle < 5 * .pi / 4 {
-            .panDown
+            return .panDown
         } else {
-            .panLeft
+            return .panLeft
         }
-
-        return gestures.first { $0.kind == direction }
     }
 
     private func normalizedAngle(fromSubsurfaceAngle angle: CGFloat) -> CGFloat {
