@@ -109,6 +109,7 @@ final class MultitouchRecognizerRegistry {
     ) {
         let recognizer = SubsurfaceGestureRecognizer(
             fingerCount: fingerCount,
+            recognizedGestureTypes: [.swipe, .magnify],
             requiresExactFingerCountToContinue: true
         )
 

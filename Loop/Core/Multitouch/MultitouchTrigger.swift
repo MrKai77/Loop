@@ -36,7 +36,7 @@ final class MultitouchTrigger {
     private var isStarted = false
 
     let swipeCycleStepSize: CGFloat = 0.15
-    let magnifyStepSize: CGFloat = 0.3
+    let magnifyStepSize: CGFloat = 0.2
     let cardinalBiasedRadialMenuActionCount = 8
 
     var radialMenuActions = RadialMenuAction.userConfiguredActions
@@ -208,12 +208,13 @@ final class MultitouchTrigger {
         magnifyDisplacement: CGFloat? = nil
     ) async -> Bool {
         guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return false }
-        if session.hasActivated { return true }
 
         if let magnifyDisplacement,
            abs(magnifyDisplacement) < magnifyStepSize {
             return false
         }
+
+        if session.hasActivated { return true }
 
         var openedLoop = false
         if let window = session.pendingTargetWindow {
@@ -241,6 +242,7 @@ final class MultitouchTrigger {
 
         gestureBlocker.stop()
         recognizerRegistry.session(for: fingerCount)?.reset()
+        targetResolver.resetGestureState()
     }
 }
 
