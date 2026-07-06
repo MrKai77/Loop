@@ -42,7 +42,6 @@ final class MultitouchGestureSession {
     }
 
     func begin(
-        gesture _: GestureBinding,
         targetWindow: Window?,
         loopWasAlreadyOpen: Bool
     ) -> Bool {
@@ -123,7 +122,7 @@ final class MultitouchGestureSession {
         gesture: GestureBinding,
         distance: CGFloat,
         step: CGFloat,
-        canRepeat: Bool,
+        allowsRapidRepeat: Bool,
         fire: (_ reverse: Bool) -> ()
     ) {
         let newKey = ActionKey.gesture(gesture.id)
@@ -136,7 +135,7 @@ final class MultitouchGestureSession {
             return
         }
 
-        guard canRepeat,
+        guard allowsRapidRepeat,
               let magnificationDirection = magnificationKind?.magnificationDirection
         else {
             return

@@ -36,8 +36,7 @@ final class MultitouchTrigger {
     private var isStarted = false
 
     let swipeCycleStepSize: CGFloat = 0.15
-    let magnifyActivationThreshold: CGFloat = 0.3
-    let magnifyCycleStepSize: CGFloat = 0.15
+    let magnifyStepSize: CGFloat = 0.3
     let cardinalBiasedRadialMenuActionCount = 8
 
     var radialMenuActions = RadialMenuAction.userConfiguredActions
@@ -164,17 +163,17 @@ final class MultitouchTrigger {
     /// Resolves the target window and starts blocking trackpad events. Loop itself
     /// isn't opened until the gesture crosses the activation threshold in a `.changed` event.
     func handleGestureBegan(fingerCount: Int, gesture: GestureBinding) {
-        let canRepeat = resolvedWindowAction(from: gesture)?.canRepeat == true
-        let window = targetResolver.targetWindow(for: gesture, canRepeat: canRepeat)
+        let allowsRapidRepeat = resolvedWindowAction(from: gesture)?.allowsRapidRepeat == true
+        let window = targetResolver.targetWindow(for: gesture, allowsRapidRepeat: allowsRapidRepeat)
 
         let loopWasAlreadyOpen = checkIfLoopOpen()
 
         guard let session = recognizerRegistry.session(for: fingerCount) else { return }
-        guard session.begin(gesture: gesture, targetWindow: window, loopWasAlreadyOpen: loopWasAlreadyOpen) else {
+        guard session.begin(targetWindow: window, loopWasAlreadyOpen: loopWasAlreadyOpen) else {
             return
         }
 
-        targetResolver.rememberRepeatableWindow(window, canRepeat: canRepeat)
+        targetResolver.rememberRepeatableWindow(window, allowsRapidRepeat: allowsRapidRepeat)
 
         gestureBlocker.start()
     }
@@ -206,14 +205,13 @@ final class MultitouchTrigger {
     /// `.began` event Subsurface emits.
     func activateGestureIfNeeded(
         fingerCount: Int,
-        magnifyDisplacement: CGFloat? = nil,
-        magnifyActivationThreshold: CGFloat? = nil
+        magnifyDisplacement: CGFloat? = nil
     ) async -> Bool {
         guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return false }
         if session.hasActivated { return true }
 
         if let magnifyDisplacement,
-           abs(magnifyDisplacement) < (magnifyActivationThreshold ?? self.magnifyActivationThreshold) {
+           abs(magnifyDisplacement) < magnifyStepSize {
             return false
         }
 

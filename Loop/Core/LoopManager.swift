@@ -363,11 +363,9 @@ extension LoopManager {
             return
         }
 
-        if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
-            return
-        }
+        let allowsRepeatedSelection = newAction.allowsRepeatedSelection
 
-        guard resizeContext.action.id != newAction.id || newAction.canRepeat else {
+        guard resizeContext.action.id != newAction.id || allowsRepeatedSelection else {
             return
         }
 
@@ -406,6 +404,11 @@ extension LoopManager {
         } else {
             // By removing the parent cycle action, a left click will not advance the user's previously set cycle.
             newParentAction = nil
+        }
+
+        if let stashedWindow = StashManager.shared.stashedWindow(for: newAction, on: currentScreen) {
+            resizeContext.setWindow(to: stashedWindow.window)
+            await resizeContext.refreshResolvedState()
         }
 
         if newAction.direction.willChangeScreen {
@@ -513,7 +516,7 @@ extension LoopManager {
             performHapticFeedback()
         }
 
-        if newAction != resizeContext.action || newAction.canRepeat {
+        if newAction != resizeContext.action || allowsRepeatedSelection {
             let previousActionWasNoOp = resizeContext.action.direction.isNoOp
             setResizeAction(to: newAction, parent: newParentAction)
             if !Defaults[.previewVisibility], !previousActionWasNoOp {

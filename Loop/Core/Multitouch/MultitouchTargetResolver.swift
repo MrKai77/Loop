@@ -20,16 +20,16 @@ final class MultitouchTargetResolver {
         lastRepeatableWindow = nil
     }
 
-    func targetWindow(for gesture: GestureBinding, canRepeat: Bool) -> Window? {
+    func targetWindow(for gesture: GestureBinding, allowsRapidRepeat: Bool) -> Window? {
         let window = findTargetWindow(for: gesture)
-        if window == nil, canRepeat {
+        if window == nil, allowsRapidRepeat {
             return lastRepeatableWindow
         }
         return window
     }
 
-    func rememberRepeatableWindow(_ window: Window?, canRepeat: Bool) {
-        guard let window, canRepeat else { return }
+    func rememberRepeatableWindow(_ window: Window?, allowsRapidRepeat: Bool) {
+        guard let window, allowsRapidRepeat else { return }
         lastRepeatableWindow = window
     }
 

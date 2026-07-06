@@ -46,8 +46,7 @@ extension MultitouchTrigger {
 
             guard await activateGestureIfNeeded(
                 fingerCount: fingerCount,
-                magnifyDisplacement: magnify.distance - magnify.originDistance,
-                magnifyActivationThreshold: magnifyCycleStepSize
+                magnifyDisplacement: magnify.distance - magnify.originDistance
             ),
                 let session = recognizerRegistry.session(for: fingerCount),
                 !session.isGestureRejected
@@ -66,22 +65,22 @@ extension MultitouchTrigger {
                 return
             }
 
-            let canRepeatAction = resolvedWindowAction(from: activeGesture).map {
-                $0.canRepeat || $0.direction == .cycle
+            let allowsRapidRepeatAction = resolvedWindowAction(from: activeGesture).map {
+                $0.allowsRapidRepeat || $0.direction == .cycle
             } ?? false
 
             session.commitMagnify(
                 gesture: activeGesture,
                 distance: magnify.distance,
-                step: magnifyCycleStepSize,
-                canRepeat: canRepeatAction
+                step: magnifyStepSize,
+                allowsRapidRepeat: allowsRapidRepeatAction
             ) { reverse in
                 triggerSingleAction(from: activeGesture, reverse: reverse)
             }
 
             if let window = session.pendingTargetWindow,
-               resolvedWindowAction(from: activeGesture)?.canRepeat == true {
-                targetResolver.rememberRepeatableWindow(window, canRepeat: true)
+               resolvedWindowAction(from: activeGesture)?.allowsRapidRepeat == true {
+                targetResolver.rememberRepeatableWindow(window, allowsRapidRepeat: true)
             }
 
         case .ended, .cancelled:
@@ -116,7 +115,7 @@ extension MultitouchTrigger {
             session.commitRadialMagnify(
                 distance: magnify.distance,
                 originDistance: magnify.originDistance,
-                step: magnifyCycleStepSize
+                step: magnifyStepSize
             ) { reverse in
                 triggerRadialMenuAction(at: centerActionIndex, from: actions[...], reverse: reverse)
             }
@@ -155,8 +154,8 @@ extension MultitouchTrigger {
             triggerSingleAction(from: oppositeGesture, reverse: false)
 
             if let window = session.pendingTargetWindow,
-               resolvedWindowAction(from: oppositeGesture)?.canRepeat == true {
-                targetResolver.rememberRepeatableWindow(window, canRepeat: true)
+               resolvedWindowAction(from: oppositeGesture)?.allowsRapidRepeat == true {
+                targetResolver.rememberRepeatableWindow(window, allowsRapidRepeat: true)
             }
         } else if isCycleAction(currentGesture) {
             triggerSingleAction(from: currentGesture, reverse: true)

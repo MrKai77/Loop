@@ -178,8 +178,8 @@ extension MultitouchTrigger {
         triggerSingleAction(from: gesture, reverse: false)
 
         if let window = session.pendingTargetWindow,
-           resolvedWindowAction(from: gesture)?.canRepeat == true {
-            targetResolver.rememberRepeatableWindow(window, canRepeat: true)
+           resolvedWindowAction(from: gesture)?.allowsRapidRepeat == true {
+            targetResolver.rememberRepeatableWindow(window, allowsRapidRepeat: true)
         }
     }
 
@@ -196,8 +196,8 @@ extension MultitouchTrigger {
             triggerSingleAction(from: oppositeGesture, reverse: false)
 
             if let window = session.pendingTargetWindow,
-               resolvedWindowAction(from: oppositeGesture)?.canRepeat == true {
-                targetResolver.rememberRepeatableWindow(window, canRepeat: true)
+               resolvedWindowAction(from: oppositeGesture)?.allowsRapidRepeat == true {
+                targetResolver.rememberRepeatableWindow(window, allowsRapidRepeat: true)
             }
         } else if isCycleAction(currentGesture) {
             triggerSingleAction(from: currentGesture, reverse: true)

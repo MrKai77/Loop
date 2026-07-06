@@ -186,7 +186,7 @@ final class KeybindTrigger {
                 // Try an match directly with the action keys first, then fallback to just the key code.
                 // This prevents failures when the user is tapping the keys in rapid succession.
                 if let action = windowActionCache.actionsByKeybind[actionKeys] {
-                    if !isARepeat || action.canRepeat {
+                    if !isARepeat || action.allowsRapidRepeat {
                         openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
                     }
 
@@ -204,7 +204,7 @@ final class KeybindTrigger {
                     return .opening
                 }
             } else if let bypassedAction = windowActionCache.bypassedActionsByKeybind[allPressedKeysBaseModifiers] {
-                if !isARepeat || bypassedAction.canRepeat {
+                if !isARepeat || bypassedAction.allowsRapidRepeat {
                     openLoop(startingAction: bypassedAction, overrideExistingTriggerDelayTimerAction: true)
                 }
 

@@ -445,7 +445,7 @@ final class Window {
 
     @MainActor
     private func ownNSWindow() -> NSWindow? {
-        NSApp.keyWindow ?? NSApp.mainWindow
+        NSApp.windows.first { $0.windowNumber == cgWindowID } ?? NSApp.keyWindow ?? NSApp.mainWindow
     }
 
     @discardableResult

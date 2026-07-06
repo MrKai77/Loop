@@ -105,12 +105,15 @@ struct GestureItemView: View {
                     .fontWeight(.regular)
                     .lineLimit(1)
 
-                Text(gesture.activationZone.displayName)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if gesture.activationZone == .titlebar {
+                    Text(gesture.activationZone.displayName)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             .padding(.horizontal, 4)
             .contentShape(.rect)
+            .animation(luminareAnimation, value: gesture.activationZone)
         }
         .luminareContentSize(contentMode: .fit, hasFixedHeight: true)
         .luminareRoundingBehavior(top: true, bottom: true)
