@@ -55,7 +55,7 @@ final class MultitouchTargetResolver {
                 minimumTitlebarHeight
             }
 
-            log.info("Detected titlebar height of \(titlebarHeight)")
+            log.debug("Detected titlebar height of \(titlebarHeight)")
 
             let titlebarMinY = window.frame.minY
             let titlebarMaxY = window.frame.minY + titlebarHeight

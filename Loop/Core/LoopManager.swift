@@ -154,7 +154,7 @@ final class LoopManager {
         }
 
         gestureToggleTask = Task(priority: .background) { [weak self] in
-            for await enabled in Defaults.updates(.enableGestures) {
+            for await enabled in Defaults.updates(.enableGestures, initial: false) {
                 guard let self, !Task.isCancelled else { break }
 
                 if enabled, AccessibilityManager.shared.isGranted {

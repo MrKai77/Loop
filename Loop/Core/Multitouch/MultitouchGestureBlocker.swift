@@ -28,6 +28,7 @@ final class MultitouchGestureBlocker {
             CGEventType(rawValue: UInt32(NSEvent.EventType.gesture.rawValue)),
             CGEventType(rawValue: UInt32(NSEvent.EventType.magnify.rawValue)),
             CGEventType(rawValue: UInt32(NSEvent.EventType.rotate.rawValue)),
+            CGEventType(rawValue: UInt32(NSEvent.EventType.swipe.rawValue)),
             CGEventType(rawValue: UInt32(NSEvent.EventType.smartMagnify.rawValue))
         ].compactMap(\.self)
 
