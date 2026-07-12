@@ -14,6 +14,7 @@ enum WindowError: LocalizedError {
     case blockedBundleID
     case cannotGetWindow
     case filteredOutFromWindowInfo
+    case invalidWindowTags
     case invalidWindowLevel(CGWindowLevel)
 
     var errorDescription: String? {
@@ -26,6 +27,8 @@ enum WindowError: LocalizedError {
             "Could not get the element's window"
         case .filteredOutFromWindowInfo:
             "Filtered out from window info"
+        case .invalidWindowTags:
+            "Invalid window tags"
         case let .invalidWindowLevel(level):
             "Invalid window: level \(level) is outside the manageable range"
         }
@@ -50,10 +53,24 @@ final class Window {
 
     /// Initialize a window from an AXUIElement
     /// - Parameter element: The AXUIElement to initialize the window with. If it is not a window, an error will be thrown
-    init(
+    convenience init(
         element: AXUIElement,
         pid: pid_t? = nil,
         nsRunningApplication: NSRunningApplication? = nil
+    ) throws {
+        try self.init(
+            element: element,
+            pid: pid,
+            nsRunningApplication: nsRunningApplication,
+            knownWindowLevel: nil
+        )
+    }
+
+    private init(
+        element: AXUIElement,
+        pid: pid_t?,
+        nsRunningApplication: NSRunningApplication?,
+        knownWindowLevel: CGWindowLevel?
     ) throws {
         self.axWindow = element
         self.cgWindowID = try element.getWindowID()
@@ -74,9 +91,13 @@ final class Window {
             throw WindowError.sheetWindow
         }
 
-        if let level = SkyLightToolBelt.getWindowLevel(windowID: cgWindowID),
-           level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
+        if let level = knownWindowLevel ?? SkyLightToolBelt.getWindowLevel(windowID: cgWindowID),
+           level < kCGNormalWindowLevel || level >= kCGPopUpMenuWindowLevel {
             throw WindowError.invalidWindowLevel(level)
+        }
+
+        guard SkyLightToolBelt.areWindowTagsValid(windowID: cgWindowID) else {
+            throw WindowError.invalidWindowTags
         }
 
         if let bundleIdentifier = nsRunningApplication?.bundleIdentifier,
@@ -122,9 +143,10 @@ final class Window {
             throw WindowError.filteredOutFromWindowInfo
         }
 
-        if let level = windowInfo[kCGWindowLayer as String] as? CGWindowLevel,
-           level < kCGNormalWindowLevel || level > kCGDraggingWindowLevel {
-            throw WindowError.invalidWindowLevel(level)
+        let knownWindowLevel = windowInfo[kCGWindowLayer as String] as? CGWindowLevel
+        if let knownWindowLevel,
+           knownWindowLevel < kCGNormalWindowLevel || knownWindowLevel >= kCGPopUpMenuWindowLevel {
+            throw WindowError.invalidWindowLevel(knownWindowLevel)
         }
 
         let element = AXUIElementCreateApplication(pid)
@@ -136,7 +158,17 @@ final class Window {
 
         // If there’s only one window, use that as there's no need to grab its frame
         if windowElements.count == 1 {
-            return try Window(element: windowElements[0], pid: pid)
+            let window = try Window(
+                element: windowElements[0],
+                pid: pid,
+                nsRunningApplication: nil,
+                knownWindowLevel: knownWindowLevel
+            )
+            if let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID,
+               window.cgWindowID != windowID {
+                throw WindowError.cannotGetWindow
+            }
+            return window
         }
 
         // If we can retrieve bounds, then filter candidates out by their respective frames.
@@ -153,16 +185,30 @@ final class Window {
             windowElements
         }
 
-        let windows = candidates.compactMap { try? Window(element: $0, pid: pid) }
+        let windows = candidates.compactMap {
+            try? Window(
+                element: $0,
+                pid: pid,
+                nsRunningApplication: nil,
+                knownWindowLevel: knownWindowLevel
+            )
+        }
 
-        if let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID,
-           let match = windows.first(where: { $0.cgWindowID == windowID }) {
+        if let windowID = windowInfo[kCGWindowNumber as String] as? CGWindowID {
+            guard let match = windows.first(where: { $0.cgWindowID == windowID }) else {
+                throw WindowError.cannotGetWindow
+            }
             return match
         } else if let first = windows.first {
             return first
         }
 
-        return try Window(element: windowElements[0], pid: pid)
+        return try Window(
+            element: windowElements[0],
+            pid: pid,
+            nsRunningApplication: nil,
+            knownWindowLevel: knownWindowLevel
+        )
     }
 
     var role: NSAccessibility.Role? {
