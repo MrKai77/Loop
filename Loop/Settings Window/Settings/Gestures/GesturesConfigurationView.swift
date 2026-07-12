@@ -18,6 +18,7 @@ struct GesturesConfigurationView: View {
     @StateObject private var model = GesturesConfigurationModel()
 
     @Default(.enableGestures) private var enableGestures
+    @Default(.showRadialMenuImmediatelyOnTouch) private var showRadialMenuImmediatelyOnTouch
     @Default(.gestures) private var gestures
     @Default(.gestureTitlebarHeight) private var gestureTitlebarHeight
 
@@ -44,6 +45,13 @@ struct GesturesConfigurationView: View {
     private var settingsSection: some View {
         LuminareSection {
             LuminareToggle(String(localized: "Enable trackpad gestures", comment: "Toggle in gestures settings"), isOn: $enableGestures)
+
+            if enableGestures {
+                LuminareToggle(
+                    String(localized: "Show radial menu immediately on touch", comment: "Toggle to show the radial menu before a trackpad gesture is recognized"),
+                    isOn: $showRadialMenuImmediatelyOnTouch
+                )
+            }
         }
     }
 

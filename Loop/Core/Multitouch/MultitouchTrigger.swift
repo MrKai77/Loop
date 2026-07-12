@@ -183,7 +183,10 @@ final class MultitouchTrigger {
         phase: SubsurfaceGesturePhase,
         fingerCount: Int
     ) async {
-        guard !Defaults[.hideOnNoSelection],
+        // Radial-menu gestures may intentionally preview Loop while Subsurface is still
+        // determining the gesture. Otherwise, activation waits for a recognized swipe or magnify.
+        guard Defaults[.showRadialMenuImmediatelyOnTouch],
+              !Defaults[.hideOnNoSelection],
               let gesture = recognizerRegistry.entry(for: fingerCount)?.radialMenuGesture else { return }
 
         switch phase {

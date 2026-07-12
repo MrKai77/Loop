@@ -29008,6 +29008,9 @@
         }
       }
     },
+    "Show radial menu immediately on touch" : {
+      "comment" : "Toggle to show the radial menu before a trackpad gesture is recognized"
+    },
     "Shrink" : {
       "comment" : "Section header in the action picker of the Keybinds tab",
       "localizations" : {

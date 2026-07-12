@@ -73,6 +73,7 @@ extension Defaults.Keys {
 
     // Gestures
     static let enableGestures = Key<Bool>("enableGestures", default: false)
+    static let showRadialMenuImmediatelyOnTouch = Key<Bool>("showRadialMenuImmediatelyOnTouch", default: false)
     static let gestures = Key<[GestureBinding]>("gestures", default: GestureBinding.defaults)
     static let systemGesturePreferenceBackups = Key<[String: SystemGesturePreferenceValue]>("systemGesturePreferenceBackups", default: [:], iCloud: false)
     static let systemGestureManagedValues = Key<[String: SystemGesturePreferenceValue]>("systemGestureManagedValues", default: [:], iCloud: false)
@@ -264,6 +265,7 @@ enum DefaultsiCloudSyncRegistrar {
         Defaults.iCloud.add(.keybinds)
 
         Defaults.iCloud.add(.enableGestures)
+        Defaults.iCloud.add(.showRadialMenuImmediatelyOnTouch)
         Defaults.iCloud.add(.gestures)
 
         Defaults.iCloud.add(.useSystemWindowManagerWhenAvailable)
