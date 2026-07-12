@@ -46,8 +46,8 @@ extension MultitouchTrigger {
 
             guard hasCrossedActivationThreshold(magnify),
                   await activateGestureIfNeeded(fingerCount: fingerCount),
-                let session = recognizerRegistry.session(for: fingerCount),
-                !session.isGestureRejected
+                  let session = recognizerRegistry.session(for: fingerCount),
+                  !session.isGestureRejected
             else {
                 return
             }
