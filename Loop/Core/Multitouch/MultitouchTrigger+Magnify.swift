@@ -44,10 +44,8 @@ extension MultitouchTrigger {
                 return
             }
 
-            guard await activateGestureIfNeeded(
-                fingerCount: fingerCount,
-                magnifyDisplacement: magnify.distance - magnify.originDistance
-            ),
+            guard hasCrossedActivationThreshold(magnify),
+                  await activateGestureIfNeeded(fingerCount: fingerCount),
                 let session = recognizerRegistry.session(for: fingerCount),
                 !session.isGestureRejected
             else {
@@ -102,10 +100,9 @@ extension MultitouchTrigger {
             if magnify.phase == .began, recognizerRegistry.session(for: fingerCount)?.hasGestureBegun != true {
                 handleGestureBegan(fingerCount: fingerCount, gesture: gesture)
             }
-            guard await activateGestureIfNeeded(
-                fingerCount: fingerCount,
-                magnifyDisplacement: magnify.distance - magnify.originDistance
-            ) else { return }
+            guard hasCrossedActivationThreshold(magnify),
+                  await activateGestureIfNeeded(fingerCount: fingerCount)
+            else { return }
             guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return }
 
             let actions = radialMenuActions
@@ -140,6 +137,10 @@ extension MultitouchTrigger {
         default:
             false
         }
+    }
+
+    private func hasCrossedActivationThreshold(_ magnify: SubsurfaceGestureEvent.MagnifyEvent) -> Bool {
+        abs(magnify.distance - magnify.originDistance) >= magnifyStepSize
     }
 
     private func handleMagnifyReversal(

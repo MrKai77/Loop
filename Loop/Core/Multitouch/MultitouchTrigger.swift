@@ -161,9 +161,9 @@ final class MultitouchTrigger {
         }
     }
 
-    /// Resolves the target window and starts blocking trackpad events. Radial-menu gestures
-    /// can intentionally open Loop during `.determining` when immediate touch preview is enabled;
-    /// other gestures wait for their activation threshold.
+    /// Begins a gesture session by resolving its target window and blocking trackpad events.
+    /// Radial-menu sessions begin during `.determining`; directional swipe and magnify sessions
+    /// begin after Subsurface recognizes the gesture. Opening Loop may still be gated separately.
     func handleGestureBegan(fingerCount: Int, gesture: GestureBinding) {
         let allowsRapidRepeat = resolvedWindowAction(from: gesture)?.allowsRapidRepeat == true
         let window = targetResolver.targetWindow(for: gesture, allowsRapidRepeat: allowsRapidRepeat)
@@ -184,10 +184,9 @@ final class MultitouchTrigger {
         phase: SubsurfaceGesturePhase,
         fingerCount: Int
     ) async {
-        // Radial-menu gestures may intentionally preview Loop while Subsurface is still
-        // determining the gesture. Otherwise, activation waits for a recognized swipe or magnify.
-        guard !Defaults[.hideOnNoSelectionForGestures],
-              let gesture = recognizerRegistry.entry(for: fingerCount)?.radialMenuGesture else { return }
+        // Radial-menu gestures intentionally activate while Subsurface is still determining
+        // the gesture. The presentation policy decides whether the no-selection state is visible.
+        guard let gesture = recognizerRegistry.entry(for: fingerCount)?.radialMenuGesture else { return }
 
         switch phase {
         case .determining, .began, .changed:
@@ -204,19 +203,11 @@ final class MultitouchTrigger {
         }
     }
 
-    /// Opens Loop on the target window resolved at `.began`. Radial-menu gestures may call this
-    /// from `.determining` for an intentional preview; magnify gestures still gate on their
-    /// displacement threshold and directional swipes activate on `.began`.
-    func activateGestureIfNeeded(
-        fingerCount: Int,
-        magnifyDisplacement: CGFloat? = nil
-    ) async -> Bool {
+    /// Opens Loop on the target window captured when the gesture session began. Radial-menu
+    /// gestures call this during `.determining`, though the no-selection state may remain hidden;
+    /// directional swipes activate on `.began`, while magnify gestures gate on displacement.
+    func activateGestureIfNeeded(fingerCount: Int) async -> Bool {
         guard let session = recognizerRegistry.session(for: fingerCount), !session.isGestureRejected else { return false }
-
-        if let magnifyDisplacement,
-           abs(magnifyDisplacement) < magnifyStepSize {
-            return false
-        }
 
         if session.hasActivated { return true }
 

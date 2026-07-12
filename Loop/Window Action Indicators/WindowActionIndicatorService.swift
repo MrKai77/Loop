@@ -19,6 +19,9 @@ final class WindowActionIndicatorService {
     ) {
         if hideOnNoSelection,
            context.action.direction == .noSelection {
+            // The radial menu caches its selected action across presentations, so it must receive
+            // `.noSelection`. The preview has no selection state and should only be closed here.
+            radialMenuController.update(context: context)
             closeAll()
             return
         }
