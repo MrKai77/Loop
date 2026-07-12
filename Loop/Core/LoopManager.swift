@@ -32,6 +32,7 @@ final class LoopManager {
     private var isLoopOpening: Bool = false
     private var pendingOpeningAction: WindowAction?
     private var shouldCancelOpening: Bool = false
+    private var hideIndicatorOnNoSelection = false
 
     private(set) var isLoopActive: Bool = false {
         didSet {
@@ -60,7 +61,10 @@ final class LoopManager {
         windowActionCache: windowActionCache,
         openCallback: { [weak self] action in
             Task {
-                try? await self?.openLoop(startingAction: action)
+                try? await self?.openLoop(
+                    startingAction: action,
+                    hideIndicatorOnNoSelection: Defaults[.hideOnNoSelectionForKeybinds]
+                )
             }
         },
         closeCallback: { [weak self] forceClose in
@@ -76,7 +80,10 @@ final class LoopManager {
     private(set) lazy var middleClickTrigger = MiddleClickTrigger(
         openCallback: { [weak self] action in
             Task {
-                try? await self?.openLoop(startingAction: action)
+                try? await self?.openLoop(
+                    startingAction: action,
+                    hideIndicatorOnNoSelection: Defaults[.hideOnNoSelectionForKeybinds]
+                )
             }
         },
         closeCallback: { [weak self] forceClose in
@@ -91,7 +98,11 @@ final class LoopManager {
         windowActionCache: windowActionCache,
         openCallback: { [weak self] action, window in
             guard let self else { return .cancelled }
-            return try await openLoop(startingAction: action, window: window)
+            return try await openLoop(
+                startingAction: action,
+                window: window,
+                hideIndicatorOnNoSelection: Defaults[.hideOnNoSelectionForGestures]
+            )
         },
         closeCallback: { [weak self] forceClose in
             Task {
@@ -213,7 +224,11 @@ enum LoopOpenResult {
 // MARK: - Opening/Closing Loop
 
 extension LoopManager {
-    private func openLoop(startingAction: WindowAction, window: Window? = nil) async throws -> LoopOpenResult {
+    private func openLoop(
+        startingAction: WindowAction,
+        window: Window? = nil,
+        hideIndicatorOnNoSelection: Bool
+    ) async throws -> LoopOpenResult {
         guard AccessibilityManager.shared.isGranted else {
             throw LoopManagerError.accessibilityNotGranted
         }
@@ -248,6 +263,7 @@ extension LoopManager {
         }
 
         isLoopOpening = true
+        self.hideIndicatorOnNoSelection = hideIndicatorOnNoSelection
         pendingOpeningAction = nil
         shouldCancelOpening = false
         hasParentCycleActionMirror.withLock { $0 = false }
@@ -290,7 +306,7 @@ extension LoopManager {
         }
 
         isLoopActive = true
-        indicatorService.openAndUpdate(context: resizeContext)
+        indicatorService.openAndUpdate(context: resizeContext, hideOnNoSelection: hideIndicatorOnNoSelection)
 
         await changeAction(pendingOpeningAction ?? startingAction, disableHapticFeedback: true)
 
@@ -490,7 +506,7 @@ extension LoopManager {
             }
 
             resizeContext.setScreen(to: newScreen)
-            indicatorService.openAndUpdate(context: resizeContext)
+            indicatorService.openAndUpdate(context: resizeContext, hideOnNoSelection: hideIndicatorOnNoSelection)
 
             if let parent = newParentAction {
                 setResizeAction(to: newAction, parent: newParentAction)
@@ -522,7 +538,7 @@ extension LoopManager {
             if !Defaults[.previewVisibility], !previousActionWasNoOp {
                 await resizeContext.refreshResolvedState()
             }
-            indicatorService.openAndUpdate(context: resizeContext)
+            indicatorService.openAndUpdate(context: resizeContext, hideOnNoSelection: hideIndicatorOnNoSelection)
 
             Task {
                 if !Defaults[.previewVisibility] {
@@ -627,7 +643,7 @@ extension LoopManager {
 
         if !resizeContext.action.direction.isNoOp {
             // If a screen was previously not selected, then the preview needs to be opened.
-            indicatorService.openAndUpdate(context: resizeContext)
+            indicatorService.openAndUpdate(context: resizeContext, hideOnNoSelection: hideIndicatorOnNoSelection)
         }
 
         return targetScreen

@@ -161,8 +161,9 @@ final class MultitouchTrigger {
         }
     }
 
-    /// Resolves the target window and starts blocking trackpad events. Loop itself
-    /// isn't opened until the gesture crosses the activation threshold in a `.changed` event.
+    /// Resolves the target window and starts blocking trackpad events. Radial-menu gestures
+    /// can intentionally open Loop during `.determining` when immediate touch preview is enabled;
+    /// other gestures wait for their activation threshold.
     func handleGestureBegan(fingerCount: Int, gesture: GestureBinding) {
         let allowsRapidRepeat = resolvedWindowAction(from: gesture)?.allowsRapidRepeat == true
         let window = targetResolver.targetWindow(for: gesture, allowsRapidRepeat: allowsRapidRepeat)
@@ -185,8 +186,7 @@ final class MultitouchTrigger {
     ) async {
         // Radial-menu gestures may intentionally preview Loop while Subsurface is still
         // determining the gesture. Otherwise, activation waits for a recognized swipe or magnify.
-        guard Defaults[.showRadialMenuImmediatelyOnTouch],
-              !Defaults[.hideOnNoSelection],
+        guard !Defaults[.hideOnNoSelectionForGestures],
               let gesture = recognizerRegistry.entry(for: fingerCount)?.radialMenuGesture else { return }
 
         switch phase {
@@ -204,9 +204,9 @@ final class MultitouchTrigger {
         }
     }
 
-    /// Opens Loop on the target window resolved at `.began`. Magnify In and magnifyOut gestures
-    /// gate on the magnify activation threshold; swipe gestures activate on the first
-    /// `.began` event Subsurface emits.
+    /// Opens Loop on the target window resolved at `.began`. Radial-menu gestures may call this
+    /// from `.determining` for an intentional preview; magnify gestures still gate on their
+    /// displacement threshold and directional swipes activate on `.began`.
     func activateGestureIfNeeded(
         fingerCount: Int,
         magnifyDisplacement: CGFloat? = nil

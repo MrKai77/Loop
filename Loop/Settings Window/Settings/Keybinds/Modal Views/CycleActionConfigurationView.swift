@@ -66,15 +66,11 @@ struct CycleActionConfigurationView: View {
                     )
                     .environmentObject(KeybindsConfigurationModel())
                 } emptyView: {
-                    HStack {
-                        Spacer()
-                        VStack {
-                            Text("Nothing to cycle through")
-                                .font(.title3)
-                            Text("Press \"Add\" to add a cycle item")
-                                .font(.caption)
-                        }
-                        Spacer()
+                    VStack {
+                        Text("Nothing to cycle through")
+                            .font(.title3)
+                        Text("Press \"Add\" to add a cycle item")
+                            .font(.caption)
                     }
                     .foregroundStyle(.secondary)
                     .padding()

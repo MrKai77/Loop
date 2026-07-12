@@ -73,7 +73,6 @@ extension Defaults.Keys {
 
     // Gestures
     static let enableGestures = Key<Bool>("enableGestures", default: false)
-    static let showRadialMenuImmediatelyOnTouch = Key<Bool>("showRadialMenuImmediatelyOnTouch", default: false)
     static let gestures = Key<[GestureBinding]>("gestures", default: GestureBinding.defaults)
     static let systemGesturePreferenceBackups = Key<[String: SystemGesturePreferenceValue]>("systemGesturePreferenceBackups", default: [:], iCloud: false)
     static let systemGestureManagedValues = Key<[String: SystemGesturePreferenceValue]>("systemGestureManagedValues", default: [:], iCloud: false)
@@ -83,7 +82,7 @@ extension Defaults.Keys {
     static let animateWindowResizes = Key<Bool>("animateWindowResizes", default: false)
     static let disableCursorInteraction = Key<Bool>("disableCursorInteraction", default: false)
     static let ignoreFullscreen = Key<Bool>("ignoreFullscreen", default: false)
-    static let hideOnNoSelection = Key<Bool>("hideOnNoSelection", default: false)
+    static let hideOnNoSelectionForKeybinds = Key<Bool>("hideOnNoSelectionForKeybinds", default: false)
     static let hapticFeedback = Defaults.Key<Bool>("hapticFeedback", default: true)
     static let enableRadialMenuCustomization = Defaults.Key<Bool>("enableRadialMenuCustomization", default: false)
     static let sizeIncrement = Key<CGFloat>("sizeIncrement", default: 20)
@@ -104,6 +103,11 @@ extension Defaults.Keys {
 // MARK: - Hidden Settings
 
 extension Defaults.Keys {
+    /// Hide the radial menu whenever a trackpad gesture has no selected action.
+    /// Adjust with `defaults write com.MrKai77.Loop hideOnNoSelectionForGestures -bool false`
+    /// Reset with `defaults delete com.MrKai77.Loop hideOnNoSelectionForGestures`
+    static let hideOnNoSelectionForGestures = Key<Bool>("hideOnNoSelectionForGestures", default: true)
+
     /// Lock radial menu to the center of the screen
     /// Adjust with `defaults write com.MrKai77.Loop lockRadialMenuToCenter -bool true`
     /// Reset with `defaults delete com.MrKai77.Loop lockRadialMenuToCenter`
@@ -265,14 +269,13 @@ enum DefaultsiCloudSyncRegistrar {
         Defaults.iCloud.add(.keybinds)
 
         Defaults.iCloud.add(.enableGestures)
-        Defaults.iCloud.add(.showRadialMenuImmediatelyOnTouch)
         Defaults.iCloud.add(.gestures)
 
         Defaults.iCloud.add(.useSystemWindowManagerWhenAvailable)
         Defaults.iCloud.add(.animateWindowResizes)
         Defaults.iCloud.add(.disableCursorInteraction)
         Defaults.iCloud.add(.ignoreFullscreen)
-        Defaults.iCloud.add(.hideOnNoSelection)
+        Defaults.iCloud.add(.hideOnNoSelectionForKeybinds)
         Defaults.iCloud.add(.hapticFeedback)
         Defaults.iCloud.add(.enableRadialMenuCustomization)
         Defaults.iCloud.add(.sizeIncrement)

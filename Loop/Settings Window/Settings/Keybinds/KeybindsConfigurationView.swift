@@ -27,6 +27,7 @@ struct KeybindsConfigurationView: View {
     @Default(.doubleClickToTrigger) private var doubleClickToTrigger
     @Default(.middleClickTriggersLoop) private var middleClickTriggersLoop
     @Default(.enableTriggerDelayOnMiddleClick) private var enableTriggerDelayOnMiddleClick
+    @Default(.hideOnNoSelectionForKeybinds) private var hideOnNoSelectionForKeybinds
     @Default(.keybinds) private var keybinds
 
     /// If the user has "enabled" the trigger delay.
@@ -83,7 +84,7 @@ struct KeybindsConfigurationView: View {
 
     private var settingsSection: some View {
         Group {
-            LuminareSection(String(localized: "Settings", comment: "Section header shown in settings")) {
+            LuminareSection {
                 LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
 
                 LuminareSlider(
@@ -94,6 +95,11 @@ struct KeybindsConfigurationView: View {
                     format: .number.precision(.fractionLength(1...1)),
                     clampsUpper: false,
                     suffix: Text("s", comment: "Unit symbol: seconds")
+                )
+
+                LuminareToggle(
+                    String(localized: "Hide when no action is selected", comment: "Toggle to hide the radial menu whenever no action is selected"),
+                    isOn: $hideOnNoSelectionForKeybinds
                 )
 
                 LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
@@ -148,15 +154,11 @@ struct KeybindsConfigurationView: View {
                 KeybindItemView(keybind)
                     .environmentObject(model)
             } emptyView: {
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text("No keybinds")
-                            .font(.title3)
-                        Text("Press \"Add\" to add a keybind")
-                            .font(.caption)
-                    }
-                    Spacer()
+                VStack {
+                    Text("No keybinds")
+                        .font(.title3)
+                    Text("Press \"Add\" to add a keybind")
+                        .font(.caption)
                 }
                 .foregroundStyle(.secondary)
                 .padding()

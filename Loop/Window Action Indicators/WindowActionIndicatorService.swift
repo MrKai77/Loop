@@ -13,8 +13,12 @@ final class WindowActionIndicatorService {
     private let radialMenuController = RadialMenuController()
     private let previewController = PreviewController()
 
-    func openAndUpdate(context: ResizeContext) {
-        if Defaults[.hideOnNoSelection], context.action.direction == .noSelection {
+    func openAndUpdate(
+        context: ResizeContext,
+        hideOnNoSelection: Bool
+    ) {
+        if hideOnNoSelection,
+           context.action.direction == .noSelection {
             closeAll()
             return
         }

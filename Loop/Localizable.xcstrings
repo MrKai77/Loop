@@ -9356,7 +9356,7 @@
       }
     },
     "Hide when no action is selected" : {
-      "comment" : "Toggle label for hiding the radial menu when no action is selected.",
+      "comment" : "Toggle to hide the radial menu whenever no action is selected",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -29007,9 +29007,6 @@
           }
         }
       }
-    },
-    "Show radial menu immediately on touch" : {
-      "comment" : "Toggle to show the radial menu before a trackpad gesture is recognized"
     },
     "Shrink" : {
       "comment" : "Section header in the action picker of the Keybinds tab",
