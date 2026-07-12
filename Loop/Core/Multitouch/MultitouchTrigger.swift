@@ -64,6 +64,7 @@ final class MultitouchTrigger {
         isStarted = true
 
         startSystemGestureReconciliation()
+        reconcileSystemGestures()
         gestureMonitor.start()
         rebuildRecognizers()
         radialMenuActions = RadialMenuAction.userConfiguredActions
@@ -124,9 +125,9 @@ final class MultitouchTrigger {
         }
     }
 
-    private nonisolated func reconcileSystemGestures() {
+    private func reconcileSystemGestures() {
         SystemGestureManager.reconcile(
-            enableGestures: Defaults[.enableGestures],
+            enableGestures: isStarted && Defaults[.enableGestures],
             disableConflicts: Defaults[.disableConflictingSystemGestures],
             gestures: Defaults[.gestures]
         )
