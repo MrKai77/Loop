@@ -43,15 +43,31 @@ struct SettingsContentView: View {
 
                     Spacer()
 
-                    Button {
-                        model.showInspector.toggle()
-                    } label: {
-                        Image(systemName: "sidebar.right")
-                            .animation(animation, value: model.showInspector)
+                    if #available(macOS 26.0, *) {
+                        // mimics the toolbar buttons on macOS 26+.
+                        // ideally this would use a native NSToolbar, but there doesn't seem to be a clean
+                        // way to position a button beside the detail/inspector separator :/
+                        Button {
+                            model.showInspector.toggle()
+                        } label: {
+                            Image(systemName: "sidebar.right")
+                                .font(.title3)
+                                .animation(animation, value: model.showInspector)
+                                .frame(width: 28, height: 28)
+                        }
+                        .buttonBorderShape(.circle)
+                        .buttonStyle(.glass(.regular.interactive()))
+                        .tint(.clear)
+                    } else {
+                        Button {
+                            model.showInspector.toggle()
+                        } label: {
+                            Image(systemName: "sidebar.right")
+                                .animation(animation, value: model.showInspector)
+                        }
+                        .luminareContentSize(aspectRatio: 1, contentMode: .fit, hasFixedHeight: true)
                     }
-                    .luminareContentSize(aspectRatio: 1, contentMode: .fit, hasFixedHeight: true)
                 }
-                .drawingGroup()
             }
             .frame(width: 390)
 
