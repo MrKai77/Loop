@@ -20,6 +20,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4C4F4F50544553540000000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8E59C2D297F5E9A0064D4BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A8E59C34297F5E9A0064D4BA;
+			remoteInfo = Loop;
+		};
 		2A8689102F809800005B521B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A8E59C2D297F5E9A0064D4BA /* Project object */;
@@ -60,6 +67,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C4F4F505445535400000002 /* LoopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A8689072F809625005B521B /* LoopDockTile.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopDockTile.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		A848130C2BD1A8D100B02E93 /* .github */ = {isa = PBXFileReference; lastKnownFileType = folder; path = .github; sourceTree = "<group>"; };
 		A86AFD7529888B29008F4892 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -109,6 +117,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		4C4F4F50544553540000000B /* LoopTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LoopTests; sourceTree = "<group>"; };
 		2A6A87F02F4D20D2004E995D /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (2A6A87F22F4D20F4004E995D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 		2A86890E2F809700005B521B /* LoopDockTile */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LoopDockTile; sourceTree = "<group>"; };
 		A8C751AC2D7BA98600B58784 /* Loop */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A8C751FF2D7BA98600B58784 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Loop; sourceTree = "<group>"; };
@@ -116,6 +125,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4C4F4F505445535400000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2A8689042F809625005B521B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -166,6 +182,7 @@
 				A86AFD7529888B29008F4892 /* README.md */,
 				A894B0C52C4B31AA00B4CE6F /* CONTRIBUTING.md */,
 				A8C751AC2D7BA98600B58784 /* Loop */,
+				4C4F4F50544553540000000B /* LoopTests */,
 				B1AA00022F30000100AABBCC /* LoopUpdaterHelper */,
 				2A86890E2F809700005B521B /* LoopDockTile */,
 				A8E59C36297F5E9A0064D4BA /* Products */,
@@ -178,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				A8E59C35297F5E9A0064D4BA /* Loop.app */,
+				4C4F4F505445535400000002 /* LoopTests.xctest */,
 				B1AA00012F30000100AABBCC /* LoopUpdaterHelper */,
 				2A8689072F809625005B521B /* LoopDockTile.plugin */,
 			);
@@ -187,6 +205,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4C4F4F505445535400000001 /* LoopTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C4F4F50544553540000000C /* Build configuration list for PBXNativeTarget "LoopTests" */;
+			buildPhases = (
+				4C4F4F505445535400000003 /* Sources */,
+				4C4F4F505445535400000004 /* Frameworks */,
+				4C4F4F505445535400000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C4F4F505445535400000009 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4C4F4F50544553540000000B /* LoopTests */,
+			);
+			name = LoopTests;
+			packageProductDependencies = (
+			);
+			productName = LoopTests;
+			productReference = 4C4F4F505445535400000002 /* LoopTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		2A8689062F809625005B521B /* LoopDockTile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2A8689082F809625005B521B /* Build configuration list for PBXNativeTarget "LoopDockTile" */;
@@ -275,6 +316,10 @@
 				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
+					4C4F4F505445535400000001 = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = A8E59C34297F5E9A0064D4BA;
+					};
 					2A8689062F809625005B521B = {
 						CreatedOnToolsVersion = 26.4;
 					};
@@ -318,6 +363,7 @@
 			projectRoot = "";
 			targets = (
 				A8E59C34297F5E9A0064D4BA /* Loop */,
+				4C4F4F505445535400000001 /* LoopTests */,
 				B1AA00112F30000100AABBCC /* LoopUpdaterHelper */,
 				2A8689062F809625005B521B /* LoopDockTile */,
 			);
@@ -325,6 +371,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4C4F4F505445535400000005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2A8689052F809625005B521B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -349,6 +402,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4C4F4F505445535400000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2A8689032F809625005B521B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -373,6 +433,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4C4F4F505445535400000009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A8E59C34297F5E9A0064D4BA /* Loop */;
+			targetProxy = 4C4F4F50544553540000000A /* PBXContainerItemProxy */;
+		};
 		2A8689112F809800005B521B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2A8689062F809625005B521B /* LoopDockTile */;
@@ -386,6 +451,51 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		4C4F4F505445535400000006 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.LoopTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Loop.app/Contents/MacOS/Loop";
+			};
+			name = Debug;
+		};
+		4C4F4F505445535400000007 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.LoopTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Loop.app/Contents/MacOS/Loop";
+			};
+			name = Release;
+		};
+		4C4F4F505445535400000008 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5F967GYF84;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MrKai77.LoopTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Loop.app/Contents/MacOS/Loop";
+			};
+			name = Development;
+		};
 		2A8689092F809625005B521B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -867,6 +977,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4C4F4F50544553540000000C /* Build configuration list for PBXNativeTarget "LoopTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C4F4F505445535400000006 /* Debug */,
+				4C4F4F505445535400000007 /* Release */,
+				4C4F4F505445535400000008 /* Development */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2A8689082F809625005B521B /* Build configuration list for PBXNativeTarget "LoopDockTile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

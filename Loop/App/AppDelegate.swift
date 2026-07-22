@@ -26,6 +26,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_: Notification) {
+        // Unit tests load Loop as their host application so they can use `@testable import Loop`.
+        // Running the normal launch sequence in that host would show Accessibility prompts, start
+        // helpers, and modify the developer's real application state before any test executes.
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
+
         configureLogging()
 
         // Register before broadcasting so other instances can receive the signal

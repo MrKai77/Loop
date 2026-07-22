@@ -60,12 +60,25 @@
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
+   <!-- LoopTests uses @testable import Loop, so the shared test action must use Debug and list the
+        LoopTests target explicitly for both Xcode and xcodebuild to execute the regression suite. -->
    <TestAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4C4F4F505445535400000001"
+               BuildableName = "LoopTests.xctest"
+               BlueprintName = "LoopTests"
+               ReferencedContainer = "container:Loop.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
