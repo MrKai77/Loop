@@ -60,7 +60,10 @@ enum WindowEngine {
             false
         }
 
-        if Defaults[.focusWindowOnResize] || useSystemWM {
+        // ChromiumPWAResizeWorkaround (#1131) — remove with that type.
+        let shouldFocus = useSystemWM
+            || (Defaults[.focusWindowOnResize] && !ChromiumPWAResizeWorkaround.shouldSkipFocus(for: window))
+        if shouldFocus {
             await window.focus()
         }
 
@@ -191,6 +194,11 @@ enum WindowEngine {
 
         if animate {
             try await window.setFrameAnimated(targetFrame, bounds: bounds, resolvedProperties: resolvedProperties)
+            actualFrame = window.frame
+        } else if ChromiumPWAResizeWorkaround.applies(to: window) {
+            // ChromiumPWAResizeWorkaround (#1131) — remove with that type.
+            ChromiumPWAResizeWorkaround.resize(window, to: targetFrame)
+            try Task.checkCancellation()
             actualFrame = window.frame
         } else {
             await window.setFrame(targetFrame, sizeFirst: willChangeScreens, resolvedProperties: resolvedProperties)
