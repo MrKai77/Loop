@@ -9,6 +9,10 @@
 //    NSAccessibility Request Received → NSInvalidArgumentException →
 //    app_shim_controller Channel error → clean terminate.
 //
+//  Upstream:
+//  - Public (dup): https://issues.chromium.org/issues/539984770
+//  - Canonical (restricted): https://issues.chromium.org/issues/537448007
+//
 //  TO REMOVE when Chromium fixes this:
 //  1. Delete this file.
 //  2. Delete every call site that references `ChromiumPWAResizeWorkaround`
