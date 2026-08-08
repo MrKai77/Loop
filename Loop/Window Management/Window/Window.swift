@@ -615,8 +615,7 @@ extension Window {
             self.frame = window.frame // 2 AX calls (position + size)
             self.isResizable = window.isResizable // 1 AX call
             self.isFullscreen = window.fullscreen // 1 AX call
-            // ChromiumPWAResizeWorkaround (#1131) — remove with that type.
-            self.isEnhancedUserInterface = ChromiumPWAResizeWorkaround.resolvedEnhancedUserInterface(for: window)
+            self.isEnhancedUserInterface = window.enhancedUserInterface // 1 AX call on app element
         }
 
         /// Creates a new snapshot with an updated frame, preserving stable properties.

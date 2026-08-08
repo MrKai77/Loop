@@ -117,19 +117,22 @@ enum SkyLightToolBelt {
             return false
         }
 
+        // Synthetic left-click (down then up) delivered by window id. Ported from AltTab /
+        // Hammerspoon / yabai. Aim just outside the window so it becomes key without
+        // clicking content. Do not fill windowLocation with 0xFF — those bytes decode as
+        // NaN and can terminate Chromium PWA app-shim Mojo connections (#1131).
+        // Buffer is 0x100 (record length stays 0xf8) to avoid WindowServer OOB reads on
+        // newer macOS when encoding the event record.
+        var offContentPoint = CGPoint(x: -1, y: -1)
+
         // `0x01` is left click down, `0x02` is left click up (see `CGEventType`)
         for byte in [0x01, 0x02] {
-            // Create raw `SLSEvent` data.
-            // Future consideration: instead of manually creating the bytes here, investigate:
-            // - Creating a `SLSEvent` (likely analogous to `CGEvent`)
-            // - Apply an identifier to the event to help Loop differentiate events that originate from itself
-            // - Converting the `SLSEvent` to data using `SLEventCreateData` in SkyLight
-            var bytes = [UInt8](repeating: 0, count: 0xF8)
+            var bytes = [UInt8](repeating: 0, count: 0x100)
             bytes[0x04] = 0xF8
             bytes[0x08] = UInt8(byte)
             bytes[0x3A] = 0x10
             memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
-            memset(&bytes[0x20], 0xFF, 0x10)
+            memcpy(&bytes[0x20], &offContentPoint, MemoryLayout<CGPoint>.size)
             let cgStatus = bytes.withUnsafeMutableBufferPointer { pointer in
                 SLPSPostEventRecordTo(&psn, &pointer.baseAddress!.pointee)
             }
