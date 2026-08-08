@@ -92,11 +92,34 @@ enum SkyLightToolBelt {
     }
 
     ///
+    /// Byte layout for the synthetic `CGSEventRecord` posted by `makeKeyWindow`.
+    /// Offsets match CGSInternal's CGSEvent.h / yabai / AltTab.
+    private enum MakeKeyWindowEvent {
+        /// Allocated buffer size. The record's declared length stays `recordLength`;
+        /// we allocate a little more because newer macOS WindowServer encoding can
+        /// read past the record (see AltTab / paneru#123).
+        static let bufferSize = 0x100
+        static let lengthOffset = 0x04
+        static let recordLength: UInt8 = 0xF8
+        static let eventTypeOffset = 0x08
+        static let leftMouseDown: UInt8 = 0x01
+        static let leftMouseUp: UInt8 = 0x02
+        /// Window-relative click point. Just outside the frame so the window becomes
+        /// key without hitting content. Must be finite — `0xFF` fill decodes as NaN
+        /// and can terminate Chromium PWA app-shim Mojo connections (#1131).
+        static let windowLocationOffset = 0x20
+        static let offContentPoint = CGPoint(x: -1, y: -1)
+        static let unknownFlagOffset = 0x3A
+        static let unknownFlagValue: UInt8 = 0x10
+        static let windowIdOffset = 0x3C
+    }
+
     /// Focuses a window. This will attempt to bring the window to the front and make it the active window.
     /// Note that this first sets the process as frontmost, *then* sends a left click event to the window itself.
     ///
-    /// This method uses a private API to focus the window.
-    /// The code for this method is derived from the Amethyst source code. Details of its implementation can be found [here](https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468)
+    /// Uses a private API. Derived from Hammerspoon / yabai / AltTab
+    /// (https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468,
+    /// https://github.com/lwouis/alt-tab-macos/commit/782f1fe2e7272f185526e3e69eadd08c241fe050).
     ///
     /// - Parameters:
     ///   - windowID: The `CGWindowID` of the window to focus.
@@ -117,22 +140,16 @@ enum SkyLightToolBelt {
             return false
         }
 
-        // Synthetic left-click (down then up) delivered by window id. Ported from AltTab /
-        // Hammerspoon / yabai. Aim just outside the window so it becomes key without
-        // clicking content. Do not fill windowLocation with 0xFF — those bytes decode as
-        // NaN and can terminate Chromium PWA app-shim Mojo connections (#1131).
-        // Buffer is 0x100 (record length stays 0xf8) to avoid WindowServer OOB reads on
-        // newer macOS when encoding the event record.
-        var offContentPoint = CGPoint(x: -1, y: -1)
+        var offContentPoint = MakeKeyWindowEvent.offContentPoint
 
-        // `0x01` is left click down, `0x02` is left click up (see `CGEventType`)
-        for byte in [0x01, 0x02] {
-            var bytes = [UInt8](repeating: 0, count: 0x100)
-            bytes[0x04] = 0xF8
-            bytes[0x08] = UInt8(byte)
-            bytes[0x3A] = 0x10
-            memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
-            memcpy(&bytes[0x20], &offContentPoint, MemoryLayout<CGPoint>.size)
+        for eventType in [MakeKeyWindowEvent.leftMouseDown, MakeKeyWindowEvent.leftMouseUp] {
+            var bytes = [UInt8](repeating: 0, count: MakeKeyWindowEvent.bufferSize)
+            bytes[MakeKeyWindowEvent.lengthOffset] = MakeKeyWindowEvent.recordLength
+            bytes[MakeKeyWindowEvent.eventTypeOffset] = eventType
+            bytes[MakeKeyWindowEvent.unknownFlagOffset] = MakeKeyWindowEvent.unknownFlagValue
+            memcpy(&bytes[MakeKeyWindowEvent.windowIdOffset], &wid, MemoryLayout<UInt32>.size)
+            memcpy(&bytes[MakeKeyWindowEvent.windowLocationOffset], &offContentPoint, MemoryLayout<CGPoint>.size)
+
             let cgStatus = bytes.withUnsafeMutableBufferPointer { pointer in
                 SLPSPostEventRecordTo(&psn, &pointer.baseAddress!.pointee)
             }
