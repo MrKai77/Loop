@@ -60,6 +60,17 @@ extension Defaults.Keys {
     static let shiftFocusWhenStashed = Key<Bool>("shiftFocusWhenStashed", default: true, iCloud: true)
     static let cycleModeRestartEnabled = Key<Bool>("cycleModeRestartEnabled", default: false, iCloud: true)
 
+    // Alt-Drag & Interactive Manipulation
+    static let altDragEnabled = Key<Bool>("altDragEnabled", default: true, iCloud: true)
+    static let altDragModifier = Key<AltDragModifier>("altDragModifier", default: .option, iCloud: true)
+    static let altDragResizeButton = Key<AltDragResizeButton>("altDragResizeButton", default: .rightClick, iCloud: true)
+    static let magneticEdgeSnapping = Key<Bool>("magneticEdgeSnapping", default: true, iCloud: true)
+    static let magneticWindowSnapping = Key<Bool>("magneticWindowSnapping", default: true, iCloud: true)
+    static let magneticSnapThreshold = Key<CGFloat>("magneticSnapThreshold", default: 12, iCloud: true)
+    static let gridSnappingEnabled = Key<Bool>("gridSnappingEnabled", default: false, iCloud: true)
+    static let gridColumns = Key<Int>("gridColumns", default: 4, iCloud: true)
+    static let gridRows = Key<Int>("gridRows", default: 2, iCloud: true)
+
     // Keybinds
     static let triggerKey = Key<Set<CGKeyCode>>("trigger", default: [.kVK_Function], iCloud: true)
     static let sideDependentTriggerKey = Key<Bool>("sideDependentTriggerKey", default: true, iCloud: true)

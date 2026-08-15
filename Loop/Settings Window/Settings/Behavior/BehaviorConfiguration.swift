@@ -31,11 +31,24 @@ struct BehaviorConfigurationView: View {
     @Default(.animateStashedWindows) var animateStashedWindows
     @Default(.shiftFocusWhenStashed) var shiftFocusWhenStashed
 
+    // Alt-Drag & Snapping
+    @Default(.altDragEnabled) var altDragEnabled
+    @Default(.altDragModifier) var altDragModifier
+    @Default(.altDragResizeButton) var altDragResizeButton
+    @Default(.magneticEdgeSnapping) var magneticEdgeSnapping
+    @Default(.magneticWindowSnapping) var magneticWindowSnapping
+    @Default(.magneticSnapThreshold) var magneticSnapThreshold
+    @Default(.gridSnappingEnabled) var gridSnappingEnabled
+    @Default(.gridColumns) var gridColumns
+    @Default(.gridRows) var gridRows
+
     @State private var isPaddingConfigurationViewPresented = false
 
     var body: some View {
         LuminareForm {
             generalSection
+            altDragSection
+            magneticSnappingSection
             windowSection
             cursorSection
             windowSnappingSection
@@ -47,7 +60,9 @@ struct BehaviorConfigurationView: View {
             value: [
                 resizeWindowUnderCursor,
                 windowSnapping,
-                respectStageManager
+                respectStageManager,
+                altDragEnabled,
+                gridSnappingEnabled
             ]
         )
     }
@@ -67,6 +82,69 @@ struct BehaviorConfigurationView: View {
             ) { item in
                 Text(item.name)
                     .monospaced()
+            }
+        }
+    }
+
+    private var altDragSection: some View {
+        LuminareSection(String(localized: "Modifier Move & Resize", comment: "Section header shown in settings")) {
+            LuminareToggle("Enable modifier + mouse drag", isOn: $altDragEnabled)
+
+            if altDragEnabled {
+                LuminareSliderPicker(
+                    "Modifier key",
+                    AltDragModifier.allCases,
+                    selection: $altDragModifier
+                ) { item in
+                    Text(item.name)
+                }
+
+                LuminareSliderPicker(
+                    "Resize gesture",
+                    AltDragResizeButton.allCases,
+                    selection: $altDragResizeButton
+                ) { item in
+                    Text(item.name)
+                }
+            }
+        }
+    }
+
+    private var magneticSnappingSection: some View {
+        LuminareSection(String(localized: "Magnetic Snapping & Grid", comment: "Section header shown in settings")) {
+            LuminareToggle("Snap to screen edges", isOn: $magneticEdgeSnapping)
+
+            LuminareToggle("Snap to neighbor windows", isOn: $magneticWindowSnapping)
+
+            if magneticEdgeSnapping || magneticWindowSnapping {
+                LuminareSlider(
+                    "Snap distance",
+                    value: $magneticSnapThreshold.doubleBinding,
+                    in: 4...30,
+                    format: .number.precision(.fractionLength(0...0)),
+                    clampsUpper: false,
+                    suffix: Text("px", comment: "Unit symbol: pixels")
+                )
+            }
+
+            LuminareToggle("Snap to grid", isOn: $gridSnappingEnabled)
+
+            if gridSnappingEnabled {
+                LuminareSlider(
+                    "Grid columns",
+                    value: $gridColumns.doubleBinding,
+                    in: 1...12,
+                    format: .number.precision(.fractionLength(0...0)),
+                    clampsUpper: false
+                )
+
+                LuminareSlider(
+                    "Grid rows",
+                    value: $gridRows.doubleBinding,
+                    in: 1...8,
+                    format: .number.precision(.fractionLength(0...0)),
+                    clampsUpper: false
+                )
             }
         }
     }

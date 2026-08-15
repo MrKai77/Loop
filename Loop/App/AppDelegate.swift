@@ -65,6 +65,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             await waitForInstancesToExit(pids: stalePIDs, timeout: .seconds(3))
             LoopManager.shared.start()
             WindowDragManager.shared.addObservers()
+            AltDragManager.shared.addObservers()
             StashManager.shared.start()
             AccessibilityManager.requestAccess()
 
@@ -172,10 +173,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
-        // LoopManager and WindowDragManager are explicitly shut down so that their
+        // LoopManager, WindowDragManager, and AltDragManager are explicitly shut down so that their
         // event monitors are stopped immediately (in case they are active)
         LoopManager.shared.shutdown()
         WindowDragManager.shared.shutdown()
+        AltDragManager.shared.shutdown()
         StashManager.shared.shutdown()
         return .terminateNow
     }

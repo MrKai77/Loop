@@ -15,3 +15,12 @@ extension Binding where Value == CGFloat {
         )
     }
 }
+
+extension Binding where Value == Int {
+    var doubleBinding: Binding<Double> {
+        Binding<Double>(
+            get: { Double(wrappedValue) },
+            set: { wrappedValue = Int($0) }
+        )
+    }
+}
