@@ -1,0 +1,51 @@
+name: Build Custom Loop Fork
+
+on:
+  push:
+    branches:
+      - fork-main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Loop App
+    runs-on: macos-15
+
+    steps:
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: 🛠️ Build Loop Target
+        run: |
+          xcodebuild build \
+            -project Loop.xcodeproj \
+            -scheme "Loop" \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -derivedDataPath build/ \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
+
+      - name: 🥡 Package Application
+        run: |
+          mkdir -p dist
+          APP_PATH=$(find build/Build/Products/Release -name "Loop.app" -type d | head -n 1)
+          echo "Found built app at: $APP_PATH"
+          cp -R "$APP_PATH" dist/Loop.app
+          # Ad-hoc sign the bundle so macOS allows launching
+          codesign --force --deep --sign - "dist/Loop.app"
+          ditto -c -k --sequesterRsrc --keepParent "dist/Loop.app" "dist/Loop.zip"
+
+      - name: ⬆️ Upload Loop.app Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Loop-Custom-Build
+          path: dist/Loop.zip
+          retention-days: 30
