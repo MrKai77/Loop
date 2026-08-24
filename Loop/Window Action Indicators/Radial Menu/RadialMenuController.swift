@@ -12,9 +12,12 @@ import SwiftUI
 @Loggable
 @MainActor
 final class RadialMenuController: WindowActionIndicator {
+    private let windowSize: CGFloat = 100 + 80
+
     private var viewModel: RadialMenuViewModel = .init(isSettingsPreview: false)
     private var controller: NSWindowController?
     private var closeTask: Task<(), Never>?
+    private var displayedScreen: NSScreen?
 
     func open(context: ResizeContext) {
         defer { viewModel.updateContext(with: context) }
@@ -23,6 +26,7 @@ final class RadialMenuController: WindowActionIndicator {
         closeTask = nil
 
         if let window = controller?.window {
+            updatePositionIfNeeded(at: NSEvent.mouseLocation)
             viewModel.setIsShown(true, animationDuration: 0.1)
             window.orderFrontRegardless()
             return
@@ -30,7 +34,6 @@ final class RadialMenuController: WindowActionIndicator {
 
         let mouseX: CGFloat = context.initialMousePosition.x
         let mouseY: CGFloat = context.initialMousePosition.y
-        let windowSize: CGFloat = 100 + 80
 
         let panel = ActivePanel(
             contentRect: .zero,
@@ -57,19 +60,39 @@ final class RadialMenuController: WindowActionIndicator {
                     y: screenFrame.midY - windowSize / 2
                 )
             )
+            displayedScreen = screen
         } else {
             // Position at the mouse cursor
-            panel.setFrameOrigin(
-                NSPoint(
-                    x: mouseX - windowSize / 2,
-                    y: mouseY - windowSize / 2
-                )
-            )
+            setPanelOrigin(panel, at: CGPoint(x: mouseX, y: mouseY))
+            displayedScreen = NSScreen.screenWithMouse
         }
 
         panel.orderFrontRegardless()
 
         log.ui("Initialized controller")
+    }
+
+    /// Moves the radial menu to the cursor only when it has entered a different
+    /// display. Keeping the existing position within a display preserves Loop's
+    /// normal radial-menu interaction, while the opt-in setting makes the menu
+    /// usable across a multi-display desktop.
+    func updatePositionIfNeeded(at mousePosition: CGPoint) {
+        guard
+            Defaults[.moveRadialMenuAcrossScreens],
+            !Defaults[.lockRadialMenuToCenter],
+            let panel = controller?.window,
+            let currentScreen = NSScreen.screenWithMouse
+        else {
+            return
+        }
+
+        let previousScreen = displayedScreen ?? panel.screen
+        guard let previousScreen, !previousScreen.isSameScreen(currentScreen) else {
+            return
+        }
+
+        setPanelOrigin(panel, at: mousePosition)
+        displayedScreen = currentScreen
     }
 
     func close() {
@@ -83,8 +106,19 @@ final class RadialMenuController: WindowActionIndicator {
             controller?.window?.orderOut(nil)
             controller?.close()
             controller = nil
+            displayedScreen = nil
             closeTask = nil
             log.ui("Controller closed")
         }
+    }
+
+    /// Centers the fixed-size radial panel on a global AppKit mouse position.
+    private func setPanelOrigin(_ panel: NSWindow, at mousePosition: CGPoint) {
+        panel.setFrameOrigin(
+            NSPoint(
+                x: mousePosition.x - windowSize / 2,
+                y: mousePosition.y - windowSize / 2
+            )
+        )
     }
 }

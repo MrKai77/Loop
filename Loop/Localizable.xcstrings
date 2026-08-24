@@ -17895,6 +17895,9 @@
         }
       }
     },
+    "Move radial menu across screens" : {
+
+    },
     "Move Right" : {
       "comment" : "Window action",
       "localizations" : {
@@ -34785,6 +34788,9 @@
           }
         }
       }
+    },
+    "When the cursor enters another display while Loop is active, move the radial menu there and restart direction selection." : {
+
     },
     "Whether to allow Mission Control to open when windows\nare dragged to the top of the screen." : {
       "comment" : "A tooltip that explains the purpose of the \"Suppress Mission Control\" toggle in the Behavior Configuration view.",

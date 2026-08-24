@@ -28,6 +28,16 @@ final class WindowActionIndicatorService {
         }
     }
 
+    /// Repositions the radial menu when the cursor enters a different display.
+    ///
+    /// The radial menu normally remains anchored to the location where Loop was
+    /// triggered. This update is intentionally separate from `openAndUpdate` so
+    /// mouse movement can relocate the menu even when the selected action does
+    /// not change.
+    func updateRadialMenuPosition(at mousePosition: CGPoint) {
+        radialMenuController.updatePositionIfNeeded(at: mousePosition)
+    }
+
     func closeAll() {
         radialMenuController.close()
         previewController.close()
