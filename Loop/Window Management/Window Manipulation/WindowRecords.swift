@@ -28,10 +28,12 @@ actor WindowRecords {
     struct ResolvedRecord {
         let initialFrame: CGRect?
         let lastAction: WindowAction?
+        let currentAction: WindowAction?
 
         init(for window: Window) async {
             self.initialFrame = await WindowRecords.shared.getInitialFrame(for: window)
             self.lastAction = await WindowRecords.shared.getLastAction(for: window)
+            self.currentAction = await WindowRecords.shared.getCurrentAction(for: window)
         }
     }
 

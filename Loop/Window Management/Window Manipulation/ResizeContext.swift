@@ -15,6 +15,12 @@ import SwiftUI
 /// along with the window, screen, and bounds information needed to compute frames.
 @Loggable
 final class ResizeContext {
+    struct PreparedWindowTarget {
+        fileprivate let window: Window?
+        fileprivate let resolvedWindowProperties: Window.ResolvedProperties?
+        fileprivate let resolvedRecord: WindowRecords.ResolvedRecord?
+    }
+
     private(set) var window: Window?
 
     private(set) var screen: NSScreen?
@@ -37,6 +43,7 @@ final class ResizeContext {
 
     private(set) var cachedTargetFrame: ComputedFrame = .zero
     private var needsRecompute: Bool = false
+    private var cycleProgressStore = CycleProgressStore()
     var lastAppliedFrame: CGRect?
 
     init(
@@ -74,15 +81,73 @@ final class ResizeContext {
         needsRecompute = true
     }
 
-    func setWindow(to window: Window?) {
+    /// Resolves the state needed before switching target windows
+    static func prepareWindowTarget(_ window: Window?) async -> PreparedWindowTarget {
+        let resolvedWindowProperties = window.map(Window.ResolvedProperties.init(from:))
+        let resolvedRecord: WindowRecords.ResolvedRecord? = if let window {
+            await WindowRecords.ResolvedRecord(for: window)
+        } else {
+            nil
+        }
+
+        return PreparedWindowTarget(
+            window: window,
+            resolvedWindowProperties: resolvedWindowProperties,
+            resolvedRecord: resolvedRecord
+        )
+    }
+
+    /// Switches to a prepared target window and its resolved state
+    func commitWindowTarget(_ target: PreparedWindowTarget) {
+        let window = target.window
+
+        let previousTargetWindowID = self.window?.cgWindowID
+        let nextTargetWindowID = window?.cgWindowID
+
         self.window = window
-        resolvedWindowProperties = nil
-        resolvedRecord = nil
+        resolvedWindowProperties = target.resolvedWindowProperties
+        resolvedRecord = target.resolvedRecord
         lastAppliedFrame = nil
 
         needsRecompute = true
 
+        if previousTargetWindowID != nextTargetWindowID {
+            // CGWindowID 0 is reserved for the nil target
+            cycleProgressStore.reset(for: previousTargetWindowID ?? 0)
+        }
+
         log.info("Set window to \(window?.description ?? "nil")")
+    }
+
+    func proposeCycleSelection(
+        in cycleAction: WindowAction,
+        seededBy seedAction: WindowAction?,
+        restartAtBeginning: Bool,
+        direction: CycleProgressStore.Direction
+    ) -> CycleProgressStore.Selection? {
+        cycleProgressStore.proposeSelection(
+            for: window?.cgWindowID ?? 0,
+            in: cycleAction,
+            seededBy: seedAction,
+            restartAtBeginning: restartAtBeginning,
+            direction: direction
+        )
+    }
+
+    @discardableResult
+    func acceptCycleSelection(
+        _ selection: CycleProgressStore.Selection,
+        in cycleAction: WindowAction
+    ) -> Bool {
+        cycleProgressStore.accept(
+            selection,
+            for: window?.cgWindowID ?? 0,
+            in: cycleAction
+        )
+    }
+
+    func resetCycleProgress() {
+        cycleProgressStore.reset()
     }
 
     func setAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
