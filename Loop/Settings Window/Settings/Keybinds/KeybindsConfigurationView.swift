@@ -68,42 +68,41 @@ struct KeybindsConfigurationView: View {
         .luminareBorderedStates(.none)
     }
 
+    @ViewBuilder
     private var settingsSection: some View {
-        Group {
-            LuminareSection(String(localized: "Settings", comment: "Section header shown in settings")) {
-                LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
+        LuminareSection(String(localized: "Settings", comment: "Section header shown in settings")) {
+            LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
 
-                LuminareSlider(
-                    "Trigger delay",
-                    value: $triggerDelay,
-                    in: 0...1,
-                    step: 0.1,
-                    format: .number.precision(.fractionLength(1...1)),
-                    clampsUpper: false,
-                    suffix: Text("s", comment: "Unit symbol: seconds")
-                )
+            LuminareSlider(
+                "Trigger delay",
+                value: $triggerDelay,
+                in: 0...1,
+                step: 0.1,
+                format: .number.precision(.fractionLength(1...1)),
+                clampsUpper: false,
+                suffix: Text("s", comment: "Unit symbol: seconds")
+            )
 
-                LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
-                LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
+            LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
+            LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
 
-                if showMiddleClickTriggerDelayOption {
-                    LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
-                }
+            if showMiddleClickTriggerDelayOption {
+                LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
+            }
+        }
+
+        LuminareSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
+            LuminareToggle(isOn: $cycleModeRestartEnabled) {
+                Text("Always start cycles from first item")
+                    .padding(.trailing, 4)
+                    .luminareToolTip(attachedTo: .topTrailing) {
+                        Text("By default, Loop resumes cycles from where you last left off in each window.")
+                            .padding(6)
+                    }
             }
 
-            LuminareSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
-                LuminareToggle(isOn: $cycleModeRestartEnabled) {
-                    Text("Always start cycles from first item")
-                        .padding(.trailing, 4)
-                        .luminareToolTip(attachedTo: .topTrailing) {
-                            Text("By default, Loop resumes cycles from where you last left off in each window.")
-                                .padding(6)
-                        }
-                }
-
-                if !isShiftUsedByTriggerKey {
-                    LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
-                }
+            if !isShiftUsedByTriggerKey {
+                LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
             }
         }
     }

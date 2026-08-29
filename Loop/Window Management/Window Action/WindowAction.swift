@@ -160,12 +160,12 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     /// - Returns: the name of the action.
     func getName() -> String {
         if let name, !name.isEmpty, hasCustomizableName {
-            return name
+            name
         } else {
-            return direction.name
+            direction.name
         }
     }
-    
+
     /// Determines if an action is eligible for custom names set by the user.
     var hasCustomizableName: Bool {
         direction == .custom || direction == .stash || direction == .cycle

@@ -181,177 +181,175 @@ struct CustomActionConfigurationView: View {
         .luminareCornerRadius(8)
     }
 
+    @ViewBuilder
     private func positionConfiguration() -> some View {
-        Group {
-            LuminareToggle(
-                "Use coordinates",
-                isOn: Binding(
-                    get: {
-                        action.positionMode == .coordinates
-                    },
-                    set: { newValue in
-                        withAnimation(luminareAnimation) {
-                            action.positionMode = newValue ? .coordinates : .generic
-                        }
+        LuminareToggle(
+            "Use coordinates",
+            isOn: Binding(
+                get: {
+                    action.positionMode == .coordinates
+                },
+                set: { newValue in
+                    withAnimation(luminareAnimation) {
+                        action.positionMode = newValue ? .coordinates : .generic
                     }
-                )
+                }
             )
+        )
 
-            if action.positionMode ?? .generic == .generic {
-                LuminarePicker(
-                    elements: anchors,
-                    selection: Binding(
-                        get: {
-                            // since center/macOS center use the same icon on the picker
-                            if action.anchor == .macOSCenter {
-                                return .center
-                            }
-
-                            return action.anchor ?? .center
-                        },
-                        set: { newValue in
-                            withAnimation(luminareAnimation) {
-                                action.anchor = newValue
-                            }
-                        }
-                    ),
-                    columns: 3
-                ) { anchor in
-                    if let action = anchor.iconAction {
-                        IconView(action: action)
-                    }
-                }
-                .luminareRoundingBehavior(bottom: !showMacOSCenterToggle)
-
-                if showMacOSCenterToggle {
-                    LuminareToggle(
-                        isOn: Binding(
-                            get: {
-                                action.anchor == .macOSCenter
-                            },
-                            set: {
-                                action.anchor = $0 ? .macOSCenter : .center
-                            }
-                        )
-                    ) {
-                        if let infoText = action.direction.infoText {
-                            Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
-                                .padding(.trailing, 4)
-                                .luminareToolTip(attachedTo: .topTrailing) {
-                                    Text(infoText)
-                                        .padding(6)
-                                }
-                        } else {
-                            Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
-                        }
-                    }
-                }
-            } else {
-                LuminareSlider(
-                    String(localized: "X", comment: "X axis label"),
-                    value: Binding(
-                        get: {
-                            action.xPoint ?? 0
-                        },
-                        set: {
-                            action.xPoint = actionUnit.roundIfNeeded($0)
-                        }
-                    ),
-                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
-                    format: .number.precision(actionUnit.fractionLength),
-                    clampsUpper: false,
-                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    onEditingChanged: handleSliderEditingChanged,
-                    onEditingCommit: commitSliderChanges
-                )
-
-                LuminareSlider(
-                    String(localized: "Y", comment: "Y axis label"),
-                    value: Binding(
-                        get: {
-                            action.yPoint ?? 0
-                        },
-                        set: {
-                            action.yPoint = actionUnit.roundIfNeeded($0)
-                        }
-                    ),
-                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
-                    format: .number.precision(actionUnit.fractionLength),
-                    clampsUpper: false,
-                    suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    onEditingChanged: handleSliderEditingChanged,
-                    onEditingCommit: commitSliderChanges
-                )
-            }
-        }
-    }
-
-    private func sizeConfiguration() -> some View {
-        Group {
+        if action.positionMode ?? .generic == .generic {
             LuminarePicker(
-                elements: CustomWindowActionSizeMode.allCases,
+                elements: anchors,
                 selection: Binding(
                     get: {
-                        action.sizeMode ?? .custom
+                        // since center/macOS center use the same icon on the picker
+                        if action.anchor == .macOSCenter {
+                            return .center
+                        }
+
+                        return action.anchor ?? .center
                     },
                     set: { newValue in
                         withAnimation(luminareAnimation) {
-                            action.sizeMode = newValue
+                            action.anchor = newValue
                         }
                     }
                 ),
                 columns: 3
-            ) { mode in
-                VStack(spacing: 4) {
-                    mode.image
-                    Text(mode.name)
+            ) { anchor in
+                if let action = anchor.iconAction {
+                    IconView(action: action)
                 }
-                .padding(.vertical, 15)
-                .compositingGroup()
             }
-            .luminareContentSize(hasFixedHeight: true)
-            .luminareRoundingBehavior(
-                top: true,
-                bottom: action.sizeMode != .custom
+            .luminareRoundingBehavior(bottom: !showMacOSCenterToggle)
+
+            if showMacOSCenterToggle {
+                LuminareToggle(
+                    isOn: Binding(
+                        get: {
+                            action.anchor == .macOSCenter
+                        },
+                        set: {
+                            action.anchor = $0 ? .macOSCenter : .center
+                        }
+                    )
+                ) {
+                    if let infoText = action.direction.infoText {
+                        Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
+                            .padding(.trailing, 4)
+                            .luminareToolTip(attachedTo: .topTrailing) {
+                                Text(infoText)
+                                    .padding(6)
+                            }
+                    } else {
+                        Text("Use macOS center", comment: "Toggle to enable macOS-style centering in custom actions")
+                    }
+                }
+            }
+        } else {
+            LuminareSlider(
+                String(localized: "X", comment: "X axis label"),
+                value: Binding(
+                    get: {
+                        action.xPoint ?? 0
+                    },
+                    set: {
+                        action.xPoint = actionUnit.roundIfNeeded($0)
+                    }
+                ),
+                in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                format: .number.precision(actionUnit.fractionLength),
+                clampsUpper: false,
+                suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                onEditingChanged: handleSliderEditingChanged,
+                onEditingCommit: commitSliderChanges
             )
 
-            if action.sizeMode ?? .custom == .custom {
-                LuminareSlider(
-                    "Width",
-                    value: Binding(
-                        get: {
-                            action.width ?? 100
-                        },
-                        set: {
-                            action.width = actionUnit.roundIfNeeded($0)
-                        }
-                    ),
-                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
-                    format: .number.precision(actionUnit.fractionLength),
-                    clampsUpper: false,
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    onEditingChanged: handleSliderEditingChanged,
-                    onEditingCommit: commitSliderChanges
-                )
+            LuminareSlider(
+                String(localized: "Y", comment: "Y axis label"),
+                value: Binding(
+                    get: {
+                        action.yPoint ?? 0
+                    },
+                    set: {
+                        action.yPoint = actionUnit.roundIfNeeded($0)
+                    }
+                ),
+                in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                format: .number.precision(actionUnit.fractionLength),
+                clampsUpper: false,
+                suffix: Text(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                onEditingChanged: handleSliderEditingChanged,
+                onEditingCommit: commitSliderChanges
+            )
+        }
+    }
 
-                LuminareSlider(
-                    "Height",
-                    value: Binding(
-                        get: {
-                            action.height ?? 100
-                        },
-                        set: {
-                            action.height = actionUnit.roundIfNeeded($0)
-                        }
-                    ),
-                    in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
-                    format: .number.precision(actionUnit.fractionLength),
-                    clampsUpper: false,
-                    suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
-                    onEditingChanged: handleSliderEditingChanged,
-                    onEditingCommit: commitSliderChanges
-                )
+    @ViewBuilder
+    private func sizeConfiguration() -> some View {
+        LuminarePicker(
+            elements: CustomWindowActionSizeMode.allCases,
+            selection: Binding(
+                get: {
+                    action.sizeMode ?? .custom
+                },
+                set: { newValue in
+                    withAnimation(luminareAnimation) {
+                        action.sizeMode = newValue
+                    }
+                }
+            ),
+            columns: 3
+        ) { mode in
+            VStack(spacing: 4) {
+                mode.image
+                Text(mode.name)
             }
+            .padding(.vertical, 15)
+            .compositingGroup()
+        }
+        .luminareContentSize(hasFixedHeight: true)
+        .luminareRoundingBehavior(
+            top: true,
+            bottom: action.sizeMode != .custom
+        )
+
+        if action.sizeMode ?? .custom == .custom {
+            LuminareSlider(
+                "Width",
+                value: Binding(
+                    get: {
+                        action.width ?? 100
+                    },
+                    set: {
+                        action.width = actionUnit.roundIfNeeded($0)
+                    }
+                ),
+                in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.width),
+                format: .number.precision(actionUnit.fractionLength),
+                clampsUpper: false,
+                suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                onEditingChanged: handleSliderEditingChanged,
+                onEditingCommit: commitSliderChanges
+            )
+
+            LuminareSlider(
+                "Height",
+                value: Binding(
+                    get: {
+                        action.height ?? 100
+                    },
+                    set: {
+                        action.height = actionUnit.roundIfNeeded($0)
+                    }
+                ),
+                in: actionUnit == .percentage ? 0...100 : 0...Double(screenSize.height),
+                format: .number.precision(actionUnit.fractionLength),
+                clampsUpper: false,
+                suffix: .init(action.unit?.suffix ?? CustomWindowActionUnit.percentage.suffix),
+                onEditingChanged: handleSliderEditingChanged,
+                onEditingCommit: commitSliderChanges
+            )
         }
     }
 
