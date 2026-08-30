@@ -35,49 +35,6 @@ enum KeybindResolver {
         let bypassedActionsByKeybind: [Set<CGKeyCode>: WindowAction]
     }
 
-    enum ActionSource: Equatable {
-        case trigger
-        case bypassTrigger
-    }
-
-    enum ActionCategory: Equatable {
-        case cycle
-        case repeatableNonCycle
-        case nonRepeatable
-
-        init(action: WindowAction) {
-            if action.direction == .cycle {
-                self = .cycle
-            } else if action.canRepeat {
-                self = .repeatableNonCycle
-            } else {
-                self = .nonRepeatable
-            }
-        }
-
-        fileprivate var canActivateOnRepeat: Bool {
-            self == .repeatableNonCycle
-        }
-    }
-
-    enum Activation: Equatable {
-        case activate
-        case suppressAutorepeat
-    }
-
-    enum Match: Equatable {
-        case none
-        case escape
-        case triggerReleasedWhileOpen
-        case triggerOnly
-        case action(
-            WindowAction,
-            source: ActionSource,
-            category: ActionCategory,
-            activation: Activation
-        )
-    }
-
     enum Effect: Equatable {
         case none
         case open(
@@ -118,7 +75,6 @@ enum KeybindResolver {
     }
 
     struct Decision {
-        let match: Match
         let effect: Effect
         let handling: HandlingIntent
     }
@@ -139,19 +95,17 @@ enum KeybindResolver {
         if input.isLoopOpen {
             if input.pressedKeys.contains(.kVK_Escape) {
                 return .init(
-                    match: .escape,
                     effect: .close(force: true, notifyDoubleClickKeyUp: false),
                     handling: .consume
                 )
             }
 
             if input.eventType == .keyUp {
-                return .init(match: .none, effect: .none, handling: .forward)
+                return .init(effect: .none, handling: .forward)
             }
 
             if input.eventType != .keyDown, !containsTrigger {
                 return .init(
-                    match: .triggerReleasedWhileOpen,
                     effect: .close(force: false, notifyDoubleClickKeyUp: false),
                     handling: .forward
                 )
@@ -159,21 +113,19 @@ enum KeybindResolver {
         }
 
         guard input.eventType != .keyUp else {
-            return .init(match: .none, effect: .none, handling: .forward)
+            return .init(effect: .none, handling: .forward)
         }
 
         if containsTrigger {
             if let action = input.actionsByKeybind[actionKeys] {
                 return actionDecision(
                     action,
-                    source: .trigger,
                     isRepeat: input.isRepeat
                 )
             }
 
             if allPressedKeys == triggerKeys {
                 return .init(
-                    match: .triggerOnly,
                     effect: .open(
                         action: .init(.noSelection),
                         overrideExistingTriggerDelayAction: !input.isRepeat
@@ -184,12 +136,10 @@ enum KeybindResolver {
         } else if let action = input.bypassedActionsByKeybind[allPressedKeysBaseModifiers] {
             return actionDecision(
                 action,
-                source: .bypassTrigger,
                 isRepeat: input.isRepeat
             )
         } else {
             return .init(
-                match: .none,
                 effect: .close(
                     force: false,
                     notifyDoubleClickKeyUp: allPressedKeys.isEmpty
@@ -198,33 +148,21 @@ enum KeybindResolver {
             )
         }
 
-        return .init(match: .none, effect: .none, handling: .forward)
+        return .init(effect: .none, handling: .forward)
     }
 
     private static func actionDecision(
         _ action: WindowAction,
-        source: ActionSource,
         isRepeat: Bool
     ) -> Decision {
-        let category = ActionCategory(action: action)
-        let activation: Activation = !isRepeat || category.canActivateOnRepeat
-            ? .activate
-            : .suppressAutorepeat
-        let effect: Effect = switch activation {
-        case .activate:
-            .open(action: action, overrideExistingTriggerDelayAction: true)
-        case .suppressAutorepeat:
-            .none
-        }
+        let shouldActivate = !isRepeat || (
+            action.direction != .cycle && action.canRepeat
+        )
 
         return .init(
-            match: .action(
-                action,
-                source: source,
-                category: category,
-                activation: activation
-            ),
-            effect: effect,
+            effect: shouldActivate
+                ? .open(action: action, overrideExistingTriggerDelayAction: true)
+                : .none,
             handling: .consumeIfLoopOpenOtherwiseOpening
         )
     }

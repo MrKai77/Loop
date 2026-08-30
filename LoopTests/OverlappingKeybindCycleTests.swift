@@ -162,7 +162,14 @@ struct OverlappingKeybindCycleTests {
                     bypassedActionsByKeybind: [:]
                 )
             )
-            let cycleAction = try #require(matchedCycleAction(decision.match))
+            let matchedAction = try #require(openedAction(decision.effect))
+
+            guard matchedAction.direction == .cycle else {
+                resizeContext.setAction(to: matchedAction, parent: nil)
+                return matchedAction
+            }
+
+            let cycleAction = matchedAction
             let proposedAction = resizeContext.proposeCycleAction(
                 in: cycleAction,
                 restartAtBeginningWhenInterrupted: true,
@@ -176,8 +183,10 @@ struct OverlappingKeybindCycleTests {
             return action
         }
 
-        private func matchedCycleAction(_ match: KeybindResolver.Match) -> WindowAction? {
-            guard case let .action(action, _, .cycle, .activate) = match else {
+        private func openedAction(
+            _ effect: KeybindResolver.Effect
+        ) -> WindowAction? {
+            guard case let .open(action, _) = effect else {
                 return nil
             }
             return action

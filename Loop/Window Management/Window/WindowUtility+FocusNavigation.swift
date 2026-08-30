@@ -16,50 +16,12 @@ extension WindowUtility {
         frameProvider: \.frame
     )
 
-    /// Focuses the next window in the specified direction.
-    /// - Parameters:
-    ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
-    ///   - direction: The direction to search for the next window (focusUp, focusDown, focusLeft, focusRight)
-    static func focusWindow(from currentWindow: Window?, direction: NavigationDirection) -> Window? {
-        guard let directionalWindow = WindowUtility.directionalWindow(
-            from: currentWindow,
-            direction: direction
-        ) else {
-            log.info("No window found to focus in direction \(direction)")
-            return nil
-        }
-
-        let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
-        log.info("Focusing window: \(nextWindowTitle)")
-
-        Task { @MainActor in
-            directionalWindow.focus()
-        }
-
-        return directionalWindow
-    }
-
-    static func focusNextWindowInStack(from currentWindow: Window?) -> Window? {
-        guard let directionalWindow = WindowUtility.nextStackedWindow(from: currentWindow) else {
-            return nil
-        }
-
-        let nextWindowTitle = directionalWindow.nsRunningApplication?.localizedName ?? directionalWindow.title ?? "<unknown>"
-        log.info("Focusing window: \(nextWindowTitle)")
-
-        Task { @MainActor in
-            directionalWindow.focus()
-        }
-
-        return directionalWindow
-    }
-
     /// Finds the next window to focus in the specified direction.
     /// - Parameters:
     ///   - currentWindow: The currently focused window to navigate from, or nil to navigate from screen center
     ///   - edge: The direction to search for the next window (leading, trailing, top, bottom)
     /// - Returns: The next window in the specified direction, or `nil` if no suitable window is found
-    private static func directionalWindow(
+    static func directionalWindow(
         from currentWindow: Window?,
         direction: NavigationDirection
     ) -> Window? {
@@ -128,7 +90,7 @@ extension WindowUtility {
     /// - Parameters:
     ///   - currentWindow: The currently focused window to cycle from
     /// - Returns: The next window in the stack cycle, or `nil` if no suitable window is found
-    private static func nextStackedWindow(
+    static func nextStackedWindow(
         from currentWindow: Window?
     ) -> Window? {
         let allWindows = windowList()

@@ -489,16 +489,13 @@ extension LoopManager {
             indicatorService.openAndUpdate(context: resizeContext)
 
             Task { [weak self, originatingContext] in
-                if !Defaults[.previewVisibility] {
-                    _ = try? await WindowActionEngine.shared.apply(context: originatingContext)
-                }
-
                 // If the action is to focus a window in a specific direction, find and activate that window
                 // This can work even without a current window (navigates from screen center)
                 if newAction.direction.willFocusWindow {
-                    let result = try? await WindowActionEngine.shared.apply(context: originatingContext)
-
-                    if let newTargetWindow = result?.newTargetWindow {
+                    if let newTargetWindow = WindowActionEngine.shared.resolveFocusTarget(
+                        newAction,
+                        currentWindow: originatingContext.window
+                    ) {
                         let preparedTarget = await ResizeContext.prepareWindowTarget(newTargetWindow)
 
                         guard let self,
@@ -510,7 +507,11 @@ extension LoopManager {
                         }
 
                         originatingContext.commitWindowTarget(preparedTarget)
+                        log.info("Focusing window: \(newTargetWindow.description)")
+                        newTargetWindow.focus()
                     }
+                } else if !Defaults[.previewVisibility] {
+                    _ = try? await WindowActionEngine.shared.apply(context: originatingContext)
                 }
             }
 

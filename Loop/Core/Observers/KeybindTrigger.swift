@@ -37,8 +37,8 @@ final class KeybindTrigger {
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
     private var sideDependentTriggerKey: Bool { Defaults[.sideDependentTriggerKey] }
-
     private lazy var triggerDelayTimer = TriggerDelayTimer(openCallback: openCallback)
+
     private lazy var doubleClickTimer = DoubleClickTimer { [weak self] action in
         guard let self else { return }
 
@@ -181,7 +181,6 @@ final class KeybindTrigger {
                 bypassedActionsByKeybind: windowActionCache.bypassedActionsByKeybind
             )
         )
-
         switch decision.effect {
         case .none:
             break
@@ -200,7 +199,10 @@ final class KeybindTrigger {
         return decision.handling.resolve(isLoopOpenAfterEffect: checkIfLoopOpen())
     }
 
-    private func openLoop(startingAction: WindowAction, overrideExistingTriggerDelayTimerAction: Bool) {
+    private func openLoop(
+        startingAction: WindowAction,
+        overrideExistingTriggerDelayTimerAction: Bool
+    ) {
         if checkIfLoopOpen() {
             openCallback(startingAction) // Only update Loop to the latest WindowAction
         } else {
@@ -221,7 +223,6 @@ final class KeybindTrigger {
         triggerDelayTimer.cancel()
         closeCallback(forceClose)
         pressedKeys = []
-        effectiveEventFlags = []
     }
 
     private func startTriggerDelayTimer(

@@ -138,7 +138,10 @@ final class ResizeContext {
         )
     }
 
-    func setAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
+    func setAction(
+        to newAction: WindowAction,
+        parent newParentAction: WindowAction?
+    ) {
         cycleActionCoordinator.recordActionTransition(
             from: action,
             currentParentAction: parentAction,

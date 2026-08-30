@@ -49,33 +49,14 @@ struct KeybindResolverTests {
             actions: actions
         )
 
-        try expectAction(
-            singleDown,
-            action: singleCycle,
-            source: .trigger,
-            category: .cycle,
-            activation: .activate
-        )
-        try expectAction(
-            chordDown,
-            action: chordCycle,
-            source: .trigger,
-            category: .cycle,
-            activation: .activate
-        )
-        #expect(chordKeyUp.match == .none)
+        try expectOpen(singleDown.effect, action: singleCycle, overridesDelayAction: true)
+        try expectOpen(chordDown.effect, action: chordCycle, overridesDelayAction: true)
         #expect(chordKeyUp.effect == .none)
         #expect(chordKeyUp.handling == .forward)
-        try expectAction(
-            chordRepressed,
-            action: chordCycle,
-            source: .trigger,
-            category: .cycle,
-            activation: .activate
-        )
+        try expectOpen(chordRepressed.effect, action: chordCycle, overridesDelayAction: true)
     }
 
-    @Test func cycleAutorepeatIsSuppressed() throws {
+    @Test func cycleAutorepeatIsSuppressed() {
         let cycle = WindowAction([
             .init(.leftHalf),
             .init(.rightHalf)
@@ -87,18 +68,11 @@ struct KeybindResolverTests {
             actions: [[keyA]: cycle]
         )
 
-        try expectAction(
-            decision,
-            action: cycle,
-            source: .trigger,
-            category: .cycle,
-            activation: .suppressAutorepeat
-        )
         #expect(decision.effect == .none)
         #expect(decision.handling == .consumeIfLoopOpenOtherwiseOpening)
     }
 
-    @Test func nonRepeatableActionAutorepeatIsSuppressed() throws {
+    @Test func nonRepeatableActionAutorepeatIsSuppressed() {
         let action = WindowAction(.leftHalf)
         let decision = resolve(
             eventType: .keyDown,
@@ -107,14 +81,8 @@ struct KeybindResolverTests {
             actions: [[keyA]: action]
         )
 
-        try expectAction(
-            decision,
-            action: action,
-            source: .trigger,
-            category: .nonRepeatable,
-            activation: .suppressAutorepeat
-        )
         #expect(decision.effect == .none)
+        #expect(decision.handling == .consumeIfLoopOpenOtherwiseOpening)
     }
 
     @Test func repeatableActionActivatesOnAutorepeat() throws {
@@ -126,14 +94,8 @@ struct KeybindResolverTests {
             actions: [[keyA]: action]
         )
 
-        try expectAction(
-            decision,
-            action: action,
-            source: .trigger,
-            category: .repeatableNonCycle,
-            activation: .activate
-        )
         try expectOpen(decision.effect, action: action, overridesDelayAction: true)
+        #expect(decision.handling == .consumeIfLoopOpenOtherwiseOpening)
     }
 
     @Test func bypassActionActivatesWithoutTheTriggerKey() throws {
@@ -146,14 +108,8 @@ struct KeybindResolverTests {
             bypassedActions: [[keyA]: action]
         )
 
-        try expectAction(
-            decision,
-            action: action,
-            source: .bypassTrigger,
-            category: .nonRepeatable,
-            activation: .activate
-        )
         try expectOpen(decision.effect, action: action, overridesDelayAction: true)
+        #expect(decision.handling == .consumeIfLoopOpenOtherwiseOpening)
     }
 
     @Test func sideIndependentTriggerAcceptsTheOppositeModifierSide() throws {
@@ -166,13 +122,8 @@ struct KeybindResolverTests {
             actions: [[keyA]: action]
         )
 
-        try expectAction(
-            decision,
-            action: action,
-            source: .trigger,
-            category: .nonRepeatable,
-            activation: .activate
-        )
+        try expectOpen(decision.effect, action: action, overridesDelayAction: true)
+        #expect(decision.handling == .consumeIfLoopOpenOtherwiseOpening)
     }
 
     @Test func sideDependentTriggerRejectsTheOppositeModifierSide() {
@@ -185,7 +136,6 @@ struct KeybindResolverTests {
             actions: [[keyA]: action]
         )
 
-        #expect(decision.match == .none)
         #expect(decision.effect == .close(force: false, notifyDoubleClickKeyUp: false))
         #expect(decision.handling == .forward)
     }
@@ -196,7 +146,6 @@ struct KeybindResolverTests {
             pressedKeys: [.kVK_Escape]
         )
 
-        #expect(decision.match == .escape)
         #expect(decision.effect == .close(force: true, notifyDoubleClickKeyUp: false))
         #expect(decision.handling == .consume)
     }
@@ -208,7 +157,6 @@ struct KeybindResolverTests {
             modifierKeys: []
         )
 
-        #expect(decision.match == .triggerReleasedWhileOpen)
         #expect(decision.effect == .close(force: false, notifyDoubleClickKeyUp: false))
         #expect(decision.handling == .forward)
     }
@@ -220,7 +168,6 @@ struct KeybindResolverTests {
             isLoopOpen: false
         )
 
-        #expect(decision.match == .triggerOnly)
         let opened = try #require(openEffect(decision.effect))
         #expect(opened.action.direction == .noSelection)
         #expect(opened.overridesDelayAction)
@@ -235,7 +182,6 @@ struct KeybindResolverTests {
             isLoopOpen: false
         )
 
-        #expect(decision.match == .none)
         #expect(decision.effect == .close(force: false, notifyDoubleClickKeyUp: true))
         #expect(decision.handling == .forward)
     }
@@ -267,20 +213,6 @@ struct KeybindResolverTests {
         )
     }
 
-    private func expectAction(
-        _ decision: KeybindResolver.Decision,
-        action expectedAction: WindowAction,
-        source expectedSource: KeybindResolver.ActionSource,
-        category expectedCategory: KeybindResolver.ActionCategory,
-        activation expectedActivation: KeybindResolver.Activation
-    ) throws {
-        let match = try #require(actionMatch(decision.match))
-        #expect(match.action.id == expectedAction.id)
-        #expect(match.source == expectedSource)
-        #expect(match.category == expectedCategory)
-        #expect(match.activation == expectedActivation)
-    }
-
     private func expectOpen(
         _ effect: KeybindResolver.Effect,
         action expectedAction: WindowAction,
@@ -289,20 +221,6 @@ struct KeybindResolverTests {
         let open = try #require(openEffect(effect))
         #expect(open.action.id == expectedAction.id)
         #expect(open.overridesDelayAction == overridesDelayAction)
-    }
-
-    private func actionMatch(
-        _ match: KeybindResolver.Match
-    ) -> (
-        action: WindowAction,
-        source: KeybindResolver.ActionSource,
-        category: KeybindResolver.ActionCategory,
-        activation: KeybindResolver.Activation
-    )? {
-        guard case let .action(action, source, category, activation) = match else {
-            return nil
-        }
-        return (action, source, category, activation)
     }
 
     private func openEffect(
