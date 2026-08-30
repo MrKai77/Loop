@@ -537,7 +537,7 @@ extension LoopManager {
             whenEnabled: Defaults[.cycleModeRestartEnabled],
             currentAction: resizeContext.action,
             currentParentAction: resizeContext.parentAction,
-            previousParentAction: resizeContext.previousParentAction,
+            keybindSequenceOriginAction: resizeContext.keybindSequenceOriginAction,
             in: action
         )
         let seedAction: WindowAction? = if restartAtBeginning {

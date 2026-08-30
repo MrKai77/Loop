@@ -1,0 +1,199 @@
+//
+//  OverlappingKeybindCycleTests.swift
+//  LoopTests
+//
+//  Created by Kai Azim on 2026-08-29.
+//
+
+import CoreGraphics
+@testable import Loop
+import Testing
+
+struct OverlappingKeybindCycleTests {
+    private let triggerKey: Set<CGKeyCode> = [.kVK_Control]
+    private let firstKey: CGKeyCode = .kVK_LeftArrow
+    private let secondKey: CGKeyCode = .kVK_RightArrow
+    private let thirdKey: CGKeyCode = .kVK_DownArrow
+    private let unrelatedKey: CGKeyCode = .kVK_UpArrow
+
+    @Test func dualKeyCycleAdvancesWhenItsPrefixIsAlsoBound() throws {
+        var fixture = makeDualKeyFixture()
+
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey])
+        let firstSelection = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey])
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey])
+        let secondSelection = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey])
+
+        #expect(firstSelection.id == fixture.firstChordAction.id)
+        #expect(secondSelection.id == fixture.secondChordAction.id)
+    }
+
+    @Test func dualKeyCycleRestartsAfterAnUnrelatedCycle() throws {
+        var fixture = makeDualKeyFixture()
+
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey])
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey])
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey])
+        let secondSelection = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey])
+        _ = try fixture.scenario.activate(pressedKeys: [unrelatedKey])
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey])
+        let restartedSelection = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey])
+
+        #expect(secondSelection.id == fixture.secondChordAction.id)
+        #expect(restartedSelection.id == fixture.firstChordAction.id)
+    }
+
+    @Test func tripleKeyCycleAdvancesWhenEachPrefixIsBound() throws {
+        var fixture = makeTripleKeyFixture()
+
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey])
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey])
+        let firstSelection = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey, thirdKey])
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey])
+        _ = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey])
+        let secondSelection = try fixture.scenario.activate(pressedKeys: [firstKey, secondKey, thirdKey])
+
+        #expect(firstSelection.id == fixture.firstChordAction.id)
+        #expect(secondSelection.id == fixture.secondChordAction.id)
+    }
+
+    private func makeDualKeyFixture() -> Fixture {
+        let prefixCycle = WindowAction(
+            cycle: [
+                .init(.leftHalf),
+                .init(.rightHalf)
+            ],
+            keybind: [firstKey]
+        )
+        let firstChordAction = WindowAction(.topHalf)
+        let secondChordAction = WindowAction(.bottomHalf)
+        let chordCycle = WindowAction(
+            cycle: [
+                firstChordAction,
+                secondChordAction
+            ],
+            keybind: [firstKey, secondKey]
+        )
+        let unrelatedCycle = WindowAction(
+            cycle: [
+                .init(.topLeftQuarter),
+                .init(.bottomRightQuarter)
+            ],
+            keybind: [unrelatedKey]
+        )
+        let actions: [Set<CGKeyCode>: WindowAction] = [
+            [firstKey]: prefixCycle,
+            [firstKey, secondKey]: chordCycle,
+            [unrelatedKey]: unrelatedCycle
+        ]
+
+        return Fixture(
+            scenario: Scenario(
+                triggerKey: triggerKey,
+                actions: actions
+            ),
+            firstChordAction: firstChordAction,
+            secondChordAction: secondChordAction
+        )
+    }
+
+    private func makeTripleKeyFixture() -> Fixture {
+        let prefixCycle = WindowAction(
+            cycle: [
+                .init(.leftHalf),
+                .init(.rightHalf)
+            ],
+            keybind: [firstKey]
+        )
+        let intermediateCycle = WindowAction(
+            cycle: [
+                .init(.topLeftQuarter),
+                .init(.bottomRightQuarter)
+            ],
+            keybind: [firstKey, secondKey]
+        )
+        let firstChordAction = WindowAction(.topHalf)
+        let secondChordAction = WindowAction(.bottomHalf)
+        let chordCycle = WindowAction(
+            cycle: [
+                firstChordAction,
+                secondChordAction
+            ],
+            keybind: [firstKey, secondKey, thirdKey]
+        )
+        let actions: [Set<CGKeyCode>: WindowAction] = [
+            [firstKey]: prefixCycle,
+            [firstKey, secondKey]: intermediateCycle,
+            [firstKey, secondKey, thirdKey]: chordCycle
+        ]
+
+        return Fixture(
+            scenario: Scenario(
+                triggerKey: triggerKey,
+                actions: actions
+            ),
+            firstChordAction: firstChordAction,
+            secondChordAction: secondChordAction
+        )
+    }
+
+    private struct Fixture {
+        var scenario: Scenario
+        let firstChordAction: WindowAction
+        let secondChordAction: WindowAction
+    }
+
+    private struct Scenario {
+        let triggerKey: Set<CGKeyCode>
+        let actions: [Set<CGKeyCode>: WindowAction]
+
+        var resizeContext = ResizeContext()
+
+        mutating func activate(pressedKeys: Set<CGKeyCode>) throws -> WindowAction {
+            let decision = KeybindResolver.resolve(
+                .init(
+                    eventType: .keyDown,
+                    isRepeat: false,
+                    pressedKeys: pressedKeys,
+                    modifierKeys: triggerKey,
+                    trigger: .init(keys: triggerKey, isSideDependent: false),
+                    isLoopOpen: true,
+                    actionsByKeybind: actions,
+                    bypassedActionsByKeybind: [:]
+                )
+            )
+            let cycleAction = try #require(matchedCycleAction(decision.match))
+            let children = try #require(cycleAction.cycle)
+            let currentActionBelongsToCycle = children.contains { $0.id == resizeContext.action.id }
+            let restartAtBeginning = CycleProgressStore.shouldRestartAtBeginning(
+                whenEnabled: true,
+                currentAction: resizeContext.action,
+                currentParentAction: resizeContext.parentAction,
+                keybindSequenceOriginAction: resizeContext.keybindSequenceOriginAction,
+                in: cycleAction
+            )
+            let seedAction = restartAtBeginning
+                ? nil
+                : currentActionBelongsToCycle ? resizeContext.action : nil
+            let proposedSelection = resizeContext.proposeCycleSelection(
+                in: cycleAction,
+                seededBy: seedAction,
+                restartAtBeginning: restartAtBeginning,
+                direction: .forward
+            )
+            let selection = try #require(proposedSelection)
+            let accepted = resizeContext.acceptCycleSelection(selection, in: cycleAction)
+
+            #expect(accepted)
+            resizeContext.setAction(to: selection.action, parent: cycleAction)
+            return selection.action
+        }
+
+        private func matchedCycleAction(_ match: KeybindResolver.Match) -> WindowAction? {
+            guard case let .action(action, _, .cycle, .activate) = match else {
+                return nil
+            }
+            return action
+        }
+    }
+}

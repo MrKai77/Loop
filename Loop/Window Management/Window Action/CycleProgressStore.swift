@@ -44,11 +44,20 @@ struct CycleProgressStore {
     static func shouldRestartAtBeginning(
         whenEnabled isEnabled: Bool,
         currentAction: WindowAction,
-        in children: [WindowAction]
+        currentParentAction: WindowAction?,
+        keybindSequenceOriginAction: WindowAction?,
+        in cycleAction: WindowAction
     ) -> Bool {
-        isEnabled && (
-            currentAction.direction == .noSelection ||
-                !children.contains { $0.id == currentAction.id }
+        let currentKeybind = currentParentAction?.keybind ?? currentAction.keybind
+        let isRepeatingLongerKeybind = keybindSequenceOriginAction?.id == cycleAction.id
+            && !currentKeybind.isEmpty
+            && currentKeybind.isStrictSubset(of: cycleAction.keybind)
+
+        return isEnabled && (
+            !isRepeatingLongerKeybind && (
+                currentAction.direction == .noSelection ||
+                    cycleAction.cycle?.contains { $0.id == currentAction.id } != true
+            )
         )
     }
 

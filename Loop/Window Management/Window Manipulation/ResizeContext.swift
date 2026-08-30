@@ -31,6 +31,7 @@ final class ResizeContext {
 
     private(set) var action: WindowAction = .init(.noSelection)
     private(set) var parentAction: WindowAction?
+    private(set) var keybindSequenceOriginAction: WindowAction?
 
     /// Used for larger/smaller actions where the sides to adjust need to persist across frame calculations
     var sidesToAdjust: Edge.Set?
@@ -151,6 +152,15 @@ final class ResizeContext {
     }
 
     func setAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
+        let currentBindingAction = parentAction ?? action
+        let nextBindingAction = newParentAction ?? newAction
+        let continuesKeybindSequence = !currentBindingAction.keybind.isEmpty
+            && currentBindingAction.keybind.isStrictSubset(of: nextBindingAction.keybind)
+
+        if !continuesKeybindSequence {
+            keybindSequenceOriginAction = currentBindingAction
+        }
+
         action = newAction
         parentAction = newParentAction
         needsRecompute = true

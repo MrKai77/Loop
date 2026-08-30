@@ -17,26 +17,62 @@ struct CycleProgressStoreTests {
         let second = WindowAction(.rightHalf)
         let outside = WindowAction(.maximize)
         let children = [first, second]
+        let cycle = WindowAction(children)
+        let prefixCycle = WindowAction(cycle: [outside], keybind: [.kVK_LeftArrow])
+        let dualKeyCycle = WindowAction(
+            cycle: children,
+            keybind: [.kVK_LeftArrow, .kVK_RightArrow]
+        )
+        let unrelatedCycle = WindowAction(cycle: [outside], keybind: [.kVK_UpArrow])
 
         #expect(CycleProgressStore.shouldRestartAtBeginning(
             whenEnabled: true,
             currentAction: outside,
-            in: children
+            currentParentAction: nil,
+            keybindSequenceOriginAction: nil,
+            in: cycle
         ))
         #expect(CycleProgressStore.shouldRestartAtBeginning(
             whenEnabled: true,
             currentAction: .init(.noSelection),
-            in: children
+            currentParentAction: nil,
+            keybindSequenceOriginAction: nil,
+            in: cycle
         ))
         #expect(!CycleProgressStore.shouldRestartAtBeginning(
             whenEnabled: true,
             currentAction: first,
-            in: children
+            currentParentAction: cycle,
+            keybindSequenceOriginAction: nil,
+            in: cycle
         ))
         #expect(!CycleProgressStore.shouldRestartAtBeginning(
             whenEnabled: false,
             currentAction: outside,
-            in: children
+            currentParentAction: nil,
+            keybindSequenceOriginAction: nil,
+            in: cycle
+        ))
+        #expect(CycleProgressStore.shouldRestartAtBeginning(
+            whenEnabled: true,
+            currentAction: outside,
+            currentParentAction: prefixCycle,
+            keybindSequenceOriginAction: nil,
+            in: dualKeyCycle
+        ))
+        #expect(!CycleProgressStore.shouldRestartAtBeginning(
+            whenEnabled: true,
+            currentAction: outside,
+            currentParentAction: prefixCycle,
+            keybindSequenceOriginAction: dualKeyCycle,
+            in: dualKeyCycle
+        ))
+        #expect(CycleProgressStore.shouldRestartAtBeginning(
+            whenEnabled: true,
+            currentAction: outside,
+            currentParentAction: prefixCycle,
+            keybindSequenceOriginAction: unrelatedCycle,
+            in: dualKeyCycle
         ))
     }
 
