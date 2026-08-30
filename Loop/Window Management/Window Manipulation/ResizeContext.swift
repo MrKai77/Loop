@@ -101,20 +101,12 @@ final class ResizeContext {
     func commitWindowTarget(_ target: PreparedWindowTarget) {
         let window = target.window
 
-        let previousTargetWindowID = self.window?.cgWindowID
-        let nextTargetWindowID = window?.cgWindowID
-
         self.window = window
         resolvedWindowProperties = target.resolvedWindowProperties
         resolvedRecord = target.resolvedRecord
         lastAppliedFrame = nil
 
         needsRecompute = true
-
-        if previousTargetWindowID != nextTargetWindowID {
-            // CGWindowID 0 is reserved for the nil target
-            cycleActionCoordinator.resetProgress(for: previousTargetWindowID ?? 0)
-        }
 
         log.info("Set window to \(window?.description ?? "nil")")
     }
@@ -144,10 +136,6 @@ final class ResizeContext {
             for: window?.cgWindowID ?? 0,
             in: cycleAction
         )
-    }
-
-    func resetCycleProgress() {
-        cycleActionCoordinator.resetProgress()
     }
 
     func setAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {

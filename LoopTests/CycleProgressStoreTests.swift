@@ -11,6 +11,7 @@ import Testing
 
 struct CycleProgressStoreTests {
     private let targetA: CGWindowID = 1
+    private let targetB: CGWindowID = 2
 
     @Test func restartBeginsAtTheFirstChildEvenWithStoredProgress() throws {
         let first = WindowAction(.leftHalf)
@@ -169,7 +170,7 @@ struct CycleProgressStoreTests {
         #expect(selection.index == 0)
     }
 
-    @Test func targetChangeClearsThePreviousWindowsCursor() throws {
+    @Test func targetWindowsKeepIndependentCursors() throws {
         let first = WindowAction(.leftHalf)
         let second = WindowAction(.maximize)
         let third = WindowAction(.rightHalf)
@@ -182,41 +183,18 @@ struct CycleProgressStoreTests {
             cycle: cycle,
             restartAtBeginning: true
         )
-        store.reset(for: targetA)
-
-        let reseeded = try selection(
-            from: &store,
-            target: targetA,
-            cycle: cycle,
-            seededBy: second
-        )
-
-        #expect(reseeded.action.id == third.id)
-    }
-
-    @Test func shutdownClearsCycleProgress() throws {
-        let first = WindowAction(.leftHalf)
-        let second = WindowAction(.maximize)
-        let third = WindowAction(.rightHalf)
-        let cycle = WindowAction([first, second, third])
-        var store = CycleProgressStore()
-
+        _ = try commitNext(in: &store, target: targetA, cycle: cycle)
         _ = try commitNext(
             in: &store,
-            target: targetA,
+            target: targetB,
             cycle: cycle,
             restartAtBeginning: true
         )
-        store.reset()
+        let nextA = try selection(from: &store, target: targetA, cycle: cycle)
+        let nextB = try selection(from: &store, target: targetB, cycle: cycle)
 
-        let reseeded = try selection(
-            from: &store,
-            target: targetA,
-            cycle: cycle,
-            seededBy: second
-        )
-
-        #expect(reseeded.action.id == third.id)
+        #expect(nextA.action.id == third.id)
+        #expect(nextB.action.id == second.id)
     }
 
     @Test func singleChildCycleRemainsOnItsOnlyChild() throws {

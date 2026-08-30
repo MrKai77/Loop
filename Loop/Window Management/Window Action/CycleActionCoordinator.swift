@@ -85,14 +85,6 @@ struct CycleActionCoordinator {
         }
     }
 
-    mutating func resetProgress(for targetWindowID: CGWindowID) {
-        progressStore.reset(for: targetWindowID)
-    }
-
-    mutating func resetProgress() {
-        progressStore.reset()
-    }
-
     static func shouldRestartAtBeginning(
         whenEnabled isEnabled: Bool,
         currentAction: WindowAction,

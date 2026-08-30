@@ -130,14 +130,6 @@ struct CycleProgressStore {
         return acceptedAction
     }
 
-    mutating func reset(for targetWindowID: CGWindowID) {
-        cursors = cursors.filter { $0.key.targetWindowID != targetWindowID }
-    }
-
-    mutating func reset() {
-        cursors.removeAll()
-    }
-
     private func validatedIndex(for cursor: Cursor, in children: [WindowAction]) -> Int? {
         if children.indices.contains(cursor.lastKnownIndex),
            children[cursor.lastKnownIndex].id == cursor.childActionID {

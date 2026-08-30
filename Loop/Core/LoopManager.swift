@@ -145,7 +145,6 @@ final class LoopManager {
         shouldCancelOpening = false
         isLoopActive = false
         hasParentCycleActionMirror.withLock { $0 = false }
-        resizeContext.resetCycleProgress()
     }
 }
 
