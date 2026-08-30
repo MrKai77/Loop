@@ -63,9 +63,9 @@ struct KeybindResolverTests {
             category: .cycle,
             activation: .activate
         )
-        #expect(isNoMatch(chordKeyUp.match))
-        #expect(hasNoEffect(chordKeyUp.effect))
-        #expect(isForward(chordKeyUp.handling))
+        #expect(chordKeyUp.match == .none)
+        #expect(chordKeyUp.effect == .none)
+        #expect(chordKeyUp.handling == .forward)
         try expectAction(
             chordRepressed,
             action: chordCycle,
@@ -94,8 +94,8 @@ struct KeybindResolverTests {
             category: .cycle,
             activation: .suppressAutorepeat
         )
-        #expect(hasNoEffect(decision.effect))
-        #expect(isConsumeIfOpen(decision.handling))
+        #expect(decision.effect == .none)
+        #expect(decision.handling == .consumeIfLoopOpenOtherwiseOpening)
     }
 
     @Test func nonRepeatableActionAutorepeatIsSuppressed() throws {
@@ -114,7 +114,7 @@ struct KeybindResolverTests {
             category: .nonRepeatable,
             activation: .suppressAutorepeat
         )
-        #expect(hasNoEffect(decision.effect))
+        #expect(decision.effect == .none)
     }
 
     @Test func repeatableActionActivatesOnAutorepeat() throws {
@@ -185,9 +185,9 @@ struct KeybindResolverTests {
             actions: [[keyA]: action]
         )
 
-        #expect(isNoMatch(decision.match))
-        #expect(isGracefulClose(decision.effect, notifiesDoubleClick: false))
-        #expect(isForward(decision.handling))
+        #expect(decision.match == .none)
+        #expect(decision.effect == .close(force: false, notifyDoubleClickKeyUp: false))
+        #expect(decision.handling == .forward)
     }
 
     @Test func escapeForceClosesAnOpenSession() {
@@ -196,9 +196,9 @@ struct KeybindResolverTests {
             pressedKeys: [.kVK_Escape]
         )
 
-        #expect(isEscape(decision.match))
-        #expect(isForcedClose(decision.effect))
-        #expect(isConsume(decision.handling))
+        #expect(decision.match == .escape)
+        #expect(decision.effect == .close(force: true, notifyDoubleClickKeyUp: false))
+        #expect(decision.handling == .consume)
     }
 
     @Test func triggerReleaseGracefullyClosesAnOpenSession() {
@@ -208,9 +208,9 @@ struct KeybindResolverTests {
             modifierKeys: []
         )
 
-        #expect(isTriggerRelease(decision.match))
-        #expect(isGracefulClose(decision.effect, notifiesDoubleClick: false))
-        #expect(isForward(decision.handling))
+        #expect(decision.match == .triggerReleasedWhileOpen)
+        #expect(decision.effect == .close(force: false, notifyDoubleClickKeyUp: false))
+        #expect(decision.handling == .forward)
     }
 
     @Test func triggerAloneOpensWithoutASelectedAction() throws {
@@ -220,11 +220,11 @@ struct KeybindResolverTests {
             isLoopOpen: false
         )
 
-        #expect(isTriggerOnly(decision.match))
+        #expect(decision.match == .triggerOnly)
         let opened = try #require(openEffect(decision.effect))
         #expect(opened.action.direction == .noSelection)
         #expect(opened.overridesDelayAction)
-        #expect(isOpening(decision.handling))
+        #expect(decision.handling == .opening)
     }
 
     @Test func emptyUnmatchedInputNotifiesTheDoubleClickTimer() {
@@ -235,9 +235,9 @@ struct KeybindResolverTests {
             isLoopOpen: false
         )
 
-        #expect(isNoMatch(decision.match))
-        #expect(isGracefulClose(decision.effect, notifiesDoubleClick: true))
-        #expect(isForward(decision.handling))
+        #expect(decision.match == .none)
+        #expect(decision.effect == .close(force: false, notifyDoubleClickKeyUp: true))
+        #expect(decision.handling == .forward)
     }
 
     private func resolve(
@@ -312,60 +312,5 @@ struct KeybindResolverTests {
             return nil
         }
         return (action, overridesDelayAction)
-    }
-
-    private func isNoMatch(_ match: KeybindResolver.Match) -> Bool {
-        if case .none = match { true } else { false }
-    }
-
-    private func isEscape(_ match: KeybindResolver.Match) -> Bool {
-        if case .escape = match { true } else { false }
-    }
-
-    private func isTriggerRelease(_ match: KeybindResolver.Match) -> Bool {
-        if case .triggerReleasedWhileOpen = match { true } else { false }
-    }
-
-    private func isTriggerOnly(_ match: KeybindResolver.Match) -> Bool {
-        if case .triggerOnly = match { true } else { false }
-    }
-
-    private func hasNoEffect(_ effect: KeybindResolver.Effect) -> Bool {
-        if case .none = effect { true } else { false }
-    }
-
-    private func isForcedClose(_ effect: KeybindResolver.Effect) -> Bool {
-        if case let .close(force, notifyDoubleClickKeyUp) = effect {
-            force && !notifyDoubleClickKeyUp
-        } else {
-            false
-        }
-    }
-
-    private func isGracefulClose(
-        _ effect: KeybindResolver.Effect,
-        notifiesDoubleClick: Bool
-    ) -> Bool {
-        if case let .close(force, notifyDoubleClickKeyUp) = effect {
-            !force && notifyDoubleClickKeyUp == notifiesDoubleClick
-        } else {
-            false
-        }
-    }
-
-    private func isForward(_ handling: KeybindResolver.HandlingIntent) -> Bool {
-        if case .forward = handling { true } else { false }
-    }
-
-    private func isConsume(_ handling: KeybindResolver.HandlingIntent) -> Bool {
-        if case .consume = handling { true } else { false }
-    }
-
-    private func isOpening(_ handling: KeybindResolver.HandlingIntent) -> Bool {
-        if case .opening = handling { true } else { false }
-    }
-
-    private func isConsumeIfOpen(_ handling: KeybindResolver.HandlingIntent) -> Bool {
-        if case .consumeIfLoopOpenOtherwiseOpening = handling { true } else { false }
     }
 }

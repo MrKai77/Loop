@@ -41,26 +41,6 @@ struct CycleProgressStore {
 
     private var cursors: [Key: Cursor] = [:]
 
-    static func shouldRestartAtBeginning(
-        whenEnabled isEnabled: Bool,
-        currentAction: WindowAction,
-        currentParentAction: WindowAction?,
-        keybindSequenceOriginAction: WindowAction?,
-        in cycleAction: WindowAction
-    ) -> Bool {
-        let currentKeybind = currentParentAction?.keybind ?? currentAction.keybind
-        let isRepeatingLongerKeybind = keybindSequenceOriginAction?.id == cycleAction.id
-            && !currentKeybind.isEmpty
-            && currentKeybind.isStrictSubset(of: cycleAction.keybind)
-
-        return isEnabled && (
-            !isRepeatingLongerKeybind && (
-                currentAction.direction == .noSelection ||
-                    cycleAction.cycle?.contains { $0.id == currentAction.id } != true
-            )
-        )
-    }
-
     /// Returns the next child without updating progress.
     ///
     /// Restarts at the first child when requested. Otherwise, uses stored progress before `seedAction`.
@@ -107,20 +87,19 @@ struct CycleProgressStore {
         return Selection(action: children[0], index: 0, key: key)
     }
 
-    /// Records a selection only if it still matches the current cycle
-    @discardableResult
-    mutating func accept(
+    /// Records and returns a selection only if it still matches the current cycle
+    mutating func commit(
         _ selection: Selection,
         for targetWindowID: CGWindowID,
         in cycleAction: WindowAction
-    ) -> Bool {
+    ) -> WindowAction? {
         let key = Key(
             targetWindowID: targetWindowID,
             parentCycleActionID: cycleAction.id
         )
 
         guard key == selection.key else {
-            return false
+            return nil
         }
 
         guard cycleAction.direction == .cycle,
@@ -128,7 +107,7 @@ struct CycleProgressStore {
               !children.isEmpty
         else {
             cursors[key] = nil
-            return false
+            return nil
         }
 
         let acceptedIndex: Int? = if children.indices.contains(selection.index),
@@ -140,14 +119,15 @@ struct CycleProgressStore {
 
         guard let acceptedIndex else {
             cursors[key] = nil
-            return false
+            return nil
         }
 
+        let acceptedAction = children[acceptedIndex]
         cursors[key] = Cursor(
-            childActionID: selection.action.id,
+            childActionID: acceptedAction.id,
             lastKnownIndex: acceptedIndex
         )
-        return true
+        return acceptedAction
     }
 
     mutating func reset(for targetWindowID: CGWindowID) {

@@ -31,7 +31,7 @@ final class LoopManager {
     private var isLoopOpening: Bool = false
     private var pendingOpeningAction: WindowAction?
     private var shouldCancelOpening: Bool = false
-    private var actionGeneration: UInt64 = 0
+    private var actionRevision: UInt64 = 0
 
     private(set) var isLoopActive: Bool = false {
         didSet {
@@ -128,7 +128,7 @@ final class LoopManager {
     }
 
     func shutdown() {
-        invalidatePendingActionResults()
+        actionRevision += 1
 
         accessibilityCheckerTask?.cancel()
         accessibilityCheckerTask = nil
@@ -212,7 +212,7 @@ extension LoopManager {
             .zero
         }
 
-        invalidatePendingActionResults()
+        actionRevision += 1
         resizeContext = ResizeContext(
             window: window,
             initialFrame: initialFrame,
@@ -237,7 +237,7 @@ extension LoopManager {
     }
 
     private func closeLoop(forceClose: Bool) async {
-        invalidatePendingActionResults()
+        actionRevision += 1
 
         if isLoopOpening {
             shouldCancelOpening = true
@@ -305,7 +305,7 @@ extension LoopManager {
         }
 
         if StashManager.shared.handleIfStashed(newAction, screen: currentScreen) {
-            invalidatePendingActionResults()
+            actionRevision += 1
             return
         }
 
@@ -313,11 +313,12 @@ extension LoopManager {
             return
         }
 
-        let originatingGeneration = beginActionGeneration()
+        actionRevision += 1
+        let originatingRevision = actionRevision
 
         var newAction: WindowAction = newAction
         var newParentAction: WindowAction? = nil
-        var cycleSelection: CycleProgressStore.Selection?
+        var cycleProposal: CycleActionCoordinator.Proposal?
 
         triggerKeyTimeoutTimer.cancel()
         triggerKeyTimeoutTimer.start()
@@ -328,9 +329,8 @@ extension LoopManager {
             // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
             // This should be set to false when the mouse is moved to prevent rapid cycling.
             if canAdvanceCycle {
-                let nextCycleAction = getNextCycleAction(newAction)
-                newAction = nextCycleAction.action
-                cycleSelection = nextCycleAction.selection
+                cycleProposal = proposeNextCycleAction(newAction)
+                newAction = cycleProposal?.action ?? newAction
             } else {
                 if let cycle = newAction.cycle, !cycle.contains(resizeContext.action) {
                     newAction = cycle.first ?? .init(.noAction)
@@ -351,14 +351,19 @@ extension LoopManager {
                 return
             }
 
-            // Accept before the screen or target changes, even if the child is already current
-            if let cycleSelection,
-               let newParentAction,
-               !resizeContext.acceptCycleSelection(cycleSelection, in: newParentAction) {
-                return
+            // Commit before the screen or target changes, even if the child is already current
+            if let cycleProposal, let newParentAction {
+                guard let committedAction = resizeContext.commitCycleAction(
+                    cycleProposal,
+                    in: newParentAction
+                ) else {
+                    return
+                }
+
+                newAction = committedAction
             }
 
-            if cycleSelection != nil,
+            if cycleProposal != nil,
                newAction == resizeContext.action,
                !newAction.direction.willChangeScreen,
                !newAction.canRepeat,
@@ -498,10 +503,9 @@ extension LoopManager {
                         let preparedTarget = await ResizeContext.prepareWindowTarget(newTargetWindow)
 
                         guard let self,
-                              canCommitPreparedTarget(
-                                  to: originatingContext,
-                                  generation: originatingGeneration
-                              )
+                              isLoopActive,
+                              resizeContext === originatingContext,
+                              actionRevision == originatingRevision
                         else {
                             return
                         }
@@ -515,14 +519,9 @@ extension LoopManager {
         }
     }
 
-    private func getNextCycleAction(
+    private func proposeNextCycleAction(
         _ action: WindowAction
-    ) -> (action: WindowAction, selection: CycleProgressStore.Selection?) {
-        // `currentCycle[0]` below would trap on an empty cycle.
-        guard let currentCycle = action.cycle, !currentCycle.isEmpty else {
-            return (action, nil)
-        }
-
+    ) -> CycleActionCoordinator.Proposal? {
         // Allow cycling backwards only if:
         // - Shift is not part of the action's keybind (eligibleForReverseCycle)
         // - Shift is not part of the trigger key
@@ -532,34 +531,11 @@ extension LoopManager {
             && Defaults[.cycleBackwardsOnShiftPressed]
 
         let shouldCycleBackwards = allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift)
-        let currentActionBelongsToCycle = currentCycle.contains { $0.id == resizeContext.action.id }
-        let restartAtBeginning = CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: Defaults[.cycleModeRestartEnabled],
-            currentAction: resizeContext.action,
-            currentParentAction: resizeContext.parentAction,
-            keybindSequenceOriginAction: resizeContext.keybindSequenceOriginAction,
-            in: action
-        )
-        let seedAction: WindowAction? = if restartAtBeginning {
-            nil
-        } else if currentActionBelongsToCycle {
-            resizeContext.action
-        } else {
-            resizeContext.resolvedRecord?.currentAction
-        }
-
-        let selection = resizeContext.proposeCycleSelection(
+        return resizeContext.proposeCycleAction(
             in: action,
-            seededBy: seedAction,
-            restartAtBeginning: restartAtBeginning,
+            restartAtBeginningWhenInterrupted: Defaults[.cycleModeRestartEnabled],
             direction: shouldCycleBackwards ? .backward : .forward
         )
-
-        guard let selection else {
-            return (action, nil)
-        }
-
-        return (selection.action, selection)
     }
 
     private func performHapticFeedback() {
@@ -571,20 +547,6 @@ extension LoopManager {
     private func setResizeAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
         resizeContext.setAction(to: newAction, parent: newParentAction)
         hasParentCycleActionMirror.withLock { $0 = newParentAction != nil }
-    }
-
-    @discardableResult
-    private func beginActionGeneration() -> UInt64 {
-        actionGeneration &+= 1
-        return actionGeneration
-    }
-
-    private func invalidatePendingActionResults() {
-        actionGeneration &+= 1
-    }
-
-    private func canCommitPreparedTarget(to context: ResizeContext, generation: UInt64) -> Bool {
-        isLoopActive && resizeContext === context && actionGeneration == generation
     }
 
     /// Resolves the target screen for `screenToResizeOn`.

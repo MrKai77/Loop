@@ -65,7 +65,7 @@ enum KeybindResolver {
         case suppressAutorepeat
     }
 
-    enum Match {
+    enum Match: Equatable {
         case none
         case escape
         case triggerReleasedWhileOpen
@@ -78,7 +78,7 @@ enum KeybindResolver {
         )
     }
 
-    enum Effect {
+    enum Effect: Equatable {
         case none
         case open(
             action: WindowAction,
@@ -90,7 +90,7 @@ enum KeybindResolver {
         )
     }
 
-    enum HandlingIntent {
+    enum HandlingIntent: Equatable {
         case forward
         case consume
         case opening
@@ -111,7 +111,7 @@ enum KeybindResolver {
         }
     }
 
-    enum ResolvedHandling {
+    enum ResolvedHandling: Equatable {
         case forward
         case consume
         case opening

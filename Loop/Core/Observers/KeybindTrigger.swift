@@ -153,12 +153,6 @@ final class KeybindTrigger {
         canPassthroughNextSpecialEvent = true
     }
 
-    enum PerformKeybindResult {
-        case consume
-        case forward
-        case opening
-    }
-
     /// Determines if an event corresponds to a valid Loop action.
     /// - Parameters:
     ///   - type: the type of this event.
@@ -171,7 +165,7 @@ final class KeybindTrigger {
         isARepeat: Bool,
         flags: CGEventFlags,
         isLoopOpen: Bool
-    ) -> PerformKeybindResult {
+    ) -> KeybindResolver.ResolvedHandling {
         let decision = KeybindResolver.resolve(
             .init(
                 eventType: type,
@@ -203,16 +197,7 @@ final class KeybindTrigger {
             closeLoop(forceClose: force)
         }
 
-        return switch decision.handling {
-        case .forward:
-            .forward
-        case .consume:
-            .consume
-        case .opening:
-            .opening
-        case .consumeIfLoopOpenOtherwiseOpening:
-            checkIfLoopOpen() ? .consume : .opening
-        }
+        return decision.handling.resolve(isLoopOpenAfterEffect: checkIfLoopOpen())
     }
 
     private func openLoop(startingAction: WindowAction, overrideExistingTriggerDelayTimerAction: Bool) {

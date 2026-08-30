@@ -163,30 +163,17 @@ struct OverlappingKeybindCycleTests {
                 )
             )
             let cycleAction = try #require(matchedCycleAction(decision.match))
-            let children = try #require(cycleAction.cycle)
-            let currentActionBelongsToCycle = children.contains { $0.id == resizeContext.action.id }
-            let restartAtBeginning = CycleProgressStore.shouldRestartAtBeginning(
-                whenEnabled: true,
-                currentAction: resizeContext.action,
-                currentParentAction: resizeContext.parentAction,
-                keybindSequenceOriginAction: resizeContext.keybindSequenceOriginAction,
-                in: cycleAction
-            )
-            let seedAction = restartAtBeginning
-                ? nil
-                : currentActionBelongsToCycle ? resizeContext.action : nil
-            let proposedSelection = resizeContext.proposeCycleSelection(
+            let proposedAction = resizeContext.proposeCycleAction(
                 in: cycleAction,
-                seededBy: seedAction,
-                restartAtBeginning: restartAtBeginning,
+                restartAtBeginningWhenInterrupted: true,
                 direction: .forward
             )
-            let selection = try #require(proposedSelection)
-            let accepted = resizeContext.acceptCycleSelection(selection, in: cycleAction)
+            let proposal = try #require(proposedAction)
+            let committedAction = resizeContext.commitCycleAction(proposal, in: cycleAction)
+            let action = try #require(committedAction)
 
-            #expect(accepted)
-            resizeContext.setAction(to: selection.action, parent: cycleAction)
-            return selection.action
+            resizeContext.setAction(to: action, parent: cycleAction)
+            return action
         }
 
         private func matchedCycleAction(_ match: KeybindResolver.Match) -> WindowAction? {

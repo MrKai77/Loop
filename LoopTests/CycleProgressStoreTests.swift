@@ -12,83 +12,19 @@ import Testing
 struct CycleProgressStoreTests {
     private let targetA: CGWindowID = 1
 
-    @Test func restartPolicyOnlyRestartsInterruptedCyclesWhenEnabled() {
-        let first = WindowAction(.leftHalf)
-        let second = WindowAction(.rightHalf)
-        let outside = WindowAction(.maximize)
-        let children = [first, second]
-        let cycle = WindowAction(children)
-        let prefixCycle = WindowAction(cycle: [outside], keybind: [.kVK_LeftArrow])
-        let dualKeyCycle = WindowAction(
-            cycle: children,
-            keybind: [.kVK_LeftArrow, .kVK_RightArrow]
-        )
-        let unrelatedCycle = WindowAction(cycle: [outside], keybind: [.kVK_UpArrow])
-
-        #expect(CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: true,
-            currentAction: outside,
-            currentParentAction: nil,
-            keybindSequenceOriginAction: nil,
-            in: cycle
-        ))
-        #expect(CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: true,
-            currentAction: .init(.noSelection),
-            currentParentAction: nil,
-            keybindSequenceOriginAction: nil,
-            in: cycle
-        ))
-        #expect(!CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: true,
-            currentAction: first,
-            currentParentAction: cycle,
-            keybindSequenceOriginAction: nil,
-            in: cycle
-        ))
-        #expect(!CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: false,
-            currentAction: outside,
-            currentParentAction: nil,
-            keybindSequenceOriginAction: nil,
-            in: cycle
-        ))
-        #expect(CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: true,
-            currentAction: outside,
-            currentParentAction: prefixCycle,
-            keybindSequenceOriginAction: nil,
-            in: dualKeyCycle
-        ))
-        #expect(!CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: true,
-            currentAction: outside,
-            currentParentAction: prefixCycle,
-            keybindSequenceOriginAction: dualKeyCycle,
-            in: dualKeyCycle
-        ))
-        #expect(CycleProgressStore.shouldRestartAtBeginning(
-            whenEnabled: true,
-            currentAction: outside,
-            currentParentAction: prefixCycle,
-            keybindSequenceOriginAction: unrelatedCycle,
-            in: dualKeyCycle
-        ))
-    }
-
     @Test func restartBeginsAtTheFirstChildEvenWithStoredProgress() throws {
         let first = WindowAction(.leftHalf)
         let second = WindowAction(.rightHalf)
         let cycle = WindowAction([first, second])
         var store = CycleProgressStore()
 
-        _ = try acceptNext(
+        _ = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
             restartAtBeginning: true
         )
-        let secondSelection = try acceptNext(
+        let secondSelection = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle
@@ -113,7 +49,7 @@ struct CycleProgressStoreTests {
         var store = CycleProgressStore()
 
         let selections = try (0 ..< 4).map { index in
-            try acceptNext(
+            try commitNext(
                 in: &store,
                 target: targetA,
                 cycle: cycle,
@@ -132,19 +68,19 @@ struct CycleProgressStoreTests {
         let cycle = WindowAction([first, second, third])
         var store = CycleProgressStore()
 
-        let initial = try acceptNext(
+        let initial = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
             restartAtBeginning: true
         )
-        let wrapped = try acceptNext(
+        let wrapped = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
             direction: .backward
         )
-        let previous = try acceptNext(
+        let previous = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
@@ -165,13 +101,13 @@ struct CycleProgressStoreTests {
         let cycleB = WindowAction([firstB, secondB])
         var store = CycleProgressStore()
 
-        _ = try acceptNext(
+        _ = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycleA,
             restartAtBeginning: true
         )
-        let seededB = try acceptNext(
+        let seededB = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycleB,
@@ -194,7 +130,7 @@ struct CycleProgressStoreTests {
         var cycle = WindowAction([first, second, third])
         var store = CycleProgressStore()
 
-        _ = try acceptNext(
+        _ = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
@@ -214,13 +150,13 @@ struct CycleProgressStoreTests {
         var cycle = WindowAction([first, removed, third])
         var store = CycleProgressStore()
 
-        _ = try acceptNext(
+        _ = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
             restartAtBeginning: true
         )
-        _ = try acceptNext(in: &store, target: targetA, cycle: cycle)
+        _ = try commitNext(in: &store, target: targetA, cycle: cycle)
         cycle.cycle = [first, third]
         let selection = try selection(
             from: &store,
@@ -240,7 +176,7 @@ struct CycleProgressStoreTests {
         let cycle = WindowAction([first, second, third])
         var store = CycleProgressStore()
 
-        _ = try acceptNext(
+        _ = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
@@ -265,7 +201,7 @@ struct CycleProgressStoreTests {
         let cycle = WindowAction([first, second, third])
         var store = CycleProgressStore()
 
-        _ = try acceptNext(
+        _ = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
@@ -288,13 +224,13 @@ struct CycleProgressStoreTests {
         let cycle = WindowAction([only])
         var store = CycleProgressStore()
 
-        let first = try acceptNext(
+        let first = try commitNext(
             in: &store,
             target: targetA,
             cycle: cycle,
             restartAtBeginning: true
         )
-        let forward = try acceptNext(in: &store, target: targetA, cycle: cycle)
+        let forward = try commitNext(in: &store, target: targetA, cycle: cycle)
         let backward = try selection(
             from: &store,
             target: targetA,
@@ -326,7 +262,7 @@ struct CycleProgressStoreTests {
         return try #require(selection)
     }
 
-    private func acceptNext(
+    private func commitNext(
         in store: inout CycleProgressStore,
         target: CGWindowID,
         cycle: WindowAction,
@@ -342,8 +278,8 @@ struct CycleProgressStoreTests {
             restartAtBeginning: restartAtBeginning,
             direction: direction
         )
-        let accepted = store.accept(selection, for: target, in: cycle)
-        #expect(accepted)
+        let committedAction = store.commit(selection, for: target, in: cycle)
+        #expect(committedAction?.id == selection.action.id)
         return selection
     }
 }

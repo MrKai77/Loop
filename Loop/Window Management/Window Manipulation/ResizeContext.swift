@@ -31,7 +31,6 @@ final class ResizeContext {
 
     private(set) var action: WindowAction = .init(.noSelection)
     private(set) var parentAction: WindowAction?
-    private(set) var keybindSequenceOriginAction: WindowAction?
 
     /// Used for larger/smaller actions where the sides to adjust need to persist across frame calculations
     var sidesToAdjust: Edge.Set?
@@ -44,7 +43,7 @@ final class ResizeContext {
 
     private(set) var cachedTargetFrame: ComputedFrame = .zero
     private var needsRecompute: Bool = false
-    private var cycleProgressStore = CycleProgressStore()
+    private var cycleActionCoordinator = CycleActionCoordinator()
     var lastAppliedFrame: CGRect?
 
     init(
@@ -114,52 +113,50 @@ final class ResizeContext {
 
         if previousTargetWindowID != nextTargetWindowID {
             // CGWindowID 0 is reserved for the nil target
-            cycleProgressStore.reset(for: previousTargetWindowID ?? 0)
+            cycleActionCoordinator.resetProgress(for: previousTargetWindowID ?? 0)
         }
 
         log.info("Set window to \(window?.description ?? "nil")")
     }
 
-    func proposeCycleSelection(
+    func proposeCycleAction(
         in cycleAction: WindowAction,
-        seededBy seedAction: WindowAction?,
-        restartAtBeginning: Bool,
+        restartAtBeginningWhenInterrupted: Bool,
         direction: CycleProgressStore.Direction
-    ) -> CycleProgressStore.Selection? {
-        cycleProgressStore.proposeSelection(
+    ) -> CycleActionCoordinator.Proposal? {
+        cycleActionCoordinator.proposeAction(
             for: window?.cgWindowID ?? 0,
             in: cycleAction,
-            seededBy: seedAction,
-            restartAtBeginning: restartAtBeginning,
+            currentAction: action,
+            currentParentAction: parentAction,
+            recordedAction: resolvedRecord?.currentAction,
+            restartAtBeginningWhenInterrupted: restartAtBeginningWhenInterrupted,
             direction: direction
         )
     }
 
-    @discardableResult
-    func acceptCycleSelection(
-        _ selection: CycleProgressStore.Selection,
+    func commitCycleAction(
+        _ proposal: CycleActionCoordinator.Proposal,
         in cycleAction: WindowAction
-    ) -> Bool {
-        cycleProgressStore.accept(
-            selection,
+    ) -> WindowAction? {
+        cycleActionCoordinator.commit(
+            proposal,
             for: window?.cgWindowID ?? 0,
             in: cycleAction
         )
     }
 
     func resetCycleProgress() {
-        cycleProgressStore.reset()
+        cycleActionCoordinator.resetProgress()
     }
 
     func setAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
-        let currentBindingAction = parentAction ?? action
-        let nextBindingAction = newParentAction ?? newAction
-        let continuesKeybindSequence = !currentBindingAction.keybind.isEmpty
-            && currentBindingAction.keybind.isStrictSubset(of: nextBindingAction.keybind)
-
-        if !continuesKeybindSequence {
-            keybindSequenceOriginAction = currentBindingAction
-        }
+        cycleActionCoordinator.recordActionTransition(
+            from: action,
+            currentParentAction: parentAction,
+            to: newAction,
+            newParentAction: newParentAction
+        )
 
         action = newAction
         parentAction = newParentAction
