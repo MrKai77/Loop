@@ -41,6 +41,17 @@ struct CycleProgressStore {
 
     private var cursors: [Key: Cursor] = [:]
 
+    static func shouldRestartAtBeginning(
+        whenEnabled isEnabled: Bool,
+        currentAction: WindowAction,
+        in children: [WindowAction]
+    ) -> Bool {
+        isEnabled && (
+            currentAction.direction == .noSelection ||
+                !children.contains { $0.id == currentAction.id }
+        )
+    }
+
     /// Returns the next child without updating progress.
     ///
     /// Restarts at the first child when requested. Otherwise, uses stored progress before `seedAction`.

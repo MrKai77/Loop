@@ -35,12 +35,12 @@ enum KeybindResolver {
         let bypassedActionsByKeybind: [Set<CGKeyCode>: WindowAction]
     }
 
-    enum ActionSource {
+    enum ActionSource: Equatable {
         case trigger
         case bypassTrigger
     }
 
-    enum ActionCategory {
+    enum ActionCategory: Equatable {
         case cycle
         case repeatableNonCycle
         case nonRepeatable
@@ -60,7 +60,7 @@ enum KeybindResolver {
         }
     }
 
-    enum Activation {
+    enum Activation: Equatable {
         case activate
         case suppressAutorepeat
     }

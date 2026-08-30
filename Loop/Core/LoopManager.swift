@@ -533,8 +533,13 @@ extension LoopManager {
 
         let shouldCycleBackwards = allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift)
         let currentActionBelongsToCycle = currentCycle.contains { $0.id == resizeContext.action.id }
-        let restartAtBeginning = Defaults[.cycleModeRestartEnabled]
-            && (resizeContext.action.direction == .noSelection || !currentActionBelongsToCycle)
+        let restartAtBeginning = CycleProgressStore.shouldRestartAtBeginning(
+            whenEnabled: Defaults[.cycleModeRestartEnabled],
+            currentAction: resizeContext.action,
+            currentParentAction: resizeContext.parentAction,
+            previousParentAction: resizeContext.previousParentAction,
+            in: action
+        )
         let seedAction: WindowAction? = if restartAtBeginning {
             nil
         } else if currentActionBelongsToCycle {
