@@ -173,7 +173,7 @@ struct OverlappingKeybindCycleTests {
             let proposedAction = resizeContext.proposeCycleAction(
                 in: cycleAction,
                 restartAtBeginningWhenInterrupted: true,
-                direction: .forward
+                mode: .advance(.forward)
             )
             let proposal = try #require(proposedAction)
             let committedAction = resizeContext.commitCycleAction(proposal, in: cycleAction)

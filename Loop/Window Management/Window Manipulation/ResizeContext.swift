@@ -82,6 +82,7 @@ final class ResizeContext {
     }
 
     /// Resolves the state needed before switching target windows
+    @concurrent
     static func prepareWindowTarget(_ window: Window?) async -> PreparedWindowTarget {
         let resolvedWindowProperties = window.map(Window.ResolvedProperties.init(from:))
         let resolvedRecord: WindowRecords.ResolvedRecord? = if let window {
@@ -114,7 +115,7 @@ final class ResizeContext {
     func proposeCycleAction(
         in cycleAction: WindowAction,
         restartAtBeginningWhenInterrupted: Bool,
-        direction: CycleProgressStore.Direction
+        mode: CycleActionCoordinator.SelectionMode
     ) -> CycleActionCoordinator.Proposal? {
         cycleActionCoordinator.proposeAction(
             for: window?.cgWindowID ?? 0,
@@ -123,7 +124,7 @@ final class ResizeContext {
             currentParentAction: parentAction,
             recordedAction: resolvedRecord?.currentAction,
             restartAtBeginningWhenInterrupted: restartAtBeginningWhenInterrupted,
-            direction: direction
+            mode: mode
         )
     }
 

@@ -184,6 +184,7 @@ extension LoopManager {
             return
         }
 
+        actionRevision += 1
         isLoopOpening = true
         pendingOpeningAction = nil
         shouldCancelOpening = false
@@ -211,7 +212,6 @@ extension LoopManager {
             .zero
         }
 
-        actionRevision += 1
         resizeContext = ResizeContext(
             window: window,
             initialFrame: initialFrame,
@@ -236,7 +236,9 @@ extension LoopManager {
     }
 
     private func closeLoop(forceClose: Bool) async {
-        actionRevision += 1
+        if forceClose {
+            actionRevision += 1
+        }
 
         if isLoopOpening {
             shouldCancelOpening = true
@@ -324,22 +326,11 @@ extension LoopManager {
 
         if newAction.direction == .cycle {
             newParentAction = newAction
-
-            // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
-            // This should be set to false when the mouse is moved to prevent rapid cycling.
-            if canAdvanceCycle {
-                cycleProposal = proposeNextCycleAction(newAction)
-                newAction = cycleProposal?.action ?? newAction
-            } else {
-                if let cycle = newAction.cycle, !cycle.contains(resizeContext.action) {
-                    newAction = cycle.first ?? .init(.noAction)
-                } else {
-                    newAction = resizeContext.action
-                }
-
-                if newAction == resizeContext.action {
-                    return
-                }
+            cycleProposal = proposeCycleAction(newAction, canAdvance: canAdvanceCycle)
+            if let cycleProposal {
+                newAction = cycleProposal.action
+            } else if !canAdvanceCycle {
+                newAction = .init(.noAction)
             }
 
             // Prevents an endless loop of cycling screens. example: when a cycle only consists of:
@@ -364,10 +355,14 @@ extension LoopManager {
 
             if cycleProposal != nil,
                newAction == resizeContext.action,
-               !newAction.direction.willChangeScreen,
-               !newAction.canRepeat,
+               !canAdvanceCycle || (
+                   !newAction.direction.willChangeScreen &&
+                       !newAction.canRepeat
+               ),
                let newParentAction {
-                setResizeAction(to: resizeContext.action, parent: newParentAction)
+                if resizeContext.parentAction != newParentAction {
+                    setResizeAction(to: resizeContext.action, parent: newParentAction)
+                }
                 return
             }
         } else {
@@ -492,14 +487,13 @@ extension LoopManager {
                 // If the action is to focus a window in a specific direction, find and activate that window
                 // This can work even without a current window (navigates from screen center)
                 if newAction.direction.willFocusWindow {
-                    if let newTargetWindow = WindowActionEngine.shared.resolveFocusTarget(
+                    if let newTargetWindow = await WindowActionEngine.shared.resolveFocusTarget(
                         newAction,
                         currentWindow: originatingContext.window
                     ) {
                         let preparedTarget = await ResizeContext.prepareWindowTarget(newTargetWindow)
 
                         guard let self,
-                              isLoopActive,
                               resizeContext === originatingContext,
                               actionRevision == originatingRevision
                         else {
@@ -519,8 +513,9 @@ extension LoopManager {
         }
     }
 
-    private func proposeNextCycleAction(
-        _ action: WindowAction
+    private func proposeCycleAction(
+        _ action: WindowAction,
+        canAdvance: Bool
     ) -> CycleActionCoordinator.Proposal? {
         // Allow cycling backwards only if:
         // - Shift is not part of the action's keybind (eligibleForReverseCycle)
@@ -530,11 +525,18 @@ extension LoopManager {
             && Defaults[.triggerKey].contains(.kVK_Shift) == false
             && Defaults[.cycleBackwardsOnShiftPressed]
 
-        let shouldCycleBackwards = allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift)
+        let mode: CycleActionCoordinator.SelectionMode = if canAdvance {
+            allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift)
+                ? .advance(.backward)
+                : .advance(.forward)
+        } else {
+            .selectCurrent
+        }
+
         return resizeContext.proposeCycleAction(
             in: action,
             restartAtBeginningWhenInterrupted: Defaults[.cycleModeRestartEnabled],
-            direction: shouldCycleBackwards ? .backward : .forward
+            mode: mode
         )
     }
 

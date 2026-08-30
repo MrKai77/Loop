@@ -130,6 +130,39 @@ struct CycleProgressStore {
         return acceptedAction
     }
 
+    mutating func proposeCurrentSelection(
+        for targetWindowID: CGWindowID,
+        in cycleAction: WindowAction,
+        seededBy seedAction: WindowAction?
+    ) -> Selection? {
+        let key = Key(
+            targetWindowID: targetWindowID,
+            parentCycleActionID: cycleAction.id
+        )
+
+        guard cycleAction.direction == .cycle,
+              let children = cycleAction.cycle,
+              !children.isEmpty
+        else {
+            cursors[key] = nil
+            return nil
+        }
+
+        if let seedAction,
+           let cursor = cursors[key],
+           cursor.childActionID == seedAction.id,
+           let index = validatedIndex(for: cursor, in: children) {
+            return Selection(action: children[index], index: index, key: key)
+        }
+
+        if let seedAction,
+           let index = children.firstIndex(where: { $0.id == seedAction.id }) {
+            return Selection(action: children[index], index: index, key: key)
+        }
+
+        return Selection(action: children[0], index: 0, key: key)
+    }
+
     private func validatedIndex(for cursor: Cursor, in children: [WindowAction]) -> Int? {
         if children.indices.contains(cursor.lastKnownIndex),
            children[cursor.lastKnownIndex].id == cursor.childActionID {

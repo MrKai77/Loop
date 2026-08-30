@@ -8,6 +8,11 @@
 import CoreGraphics
 
 struct CycleActionCoordinator {
+    enum SelectionMode {
+        case advance(CycleProgressStore.Direction)
+        case selectCurrent
+    }
+
     struct Proposal {
         let action: WindowAction
 
@@ -24,7 +29,7 @@ struct CycleActionCoordinator {
         currentParentAction: WindowAction?,
         recordedAction: WindowAction?,
         restartAtBeginningWhenInterrupted: Bool,
-        direction: CycleProgressStore.Direction
+        mode: SelectionMode
     ) -> Proposal? {
         let currentActionBelongsToCycle = cycleAction.cycle?.contains {
             $0.id == currentAction.id
@@ -43,14 +48,24 @@ struct CycleActionCoordinator {
         } else {
             recordedAction
         }
+        let selection: CycleProgressStore.Selection? = switch mode {
+        case let .advance(direction):
+            progressStore.proposeSelection(
+                for: targetWindowID,
+                in: cycleAction,
+                seededBy: seedAction,
+                restartAtBeginning: restartAtBeginning,
+                direction: direction
+            )
+        case .selectCurrent:
+            progressStore.proposeCurrentSelection(
+                for: targetWindowID,
+                in: cycleAction,
+                seededBy: currentActionBelongsToCycle ? currentAction : nil
+            )
+        }
 
-        guard let selection = progressStore.proposeSelection(
-            for: targetWindowID,
-            in: cycleAction,
-            seededBy: seedAction,
-            restartAtBeginning: restartAtBeginning,
-            direction: direction
-        ) else {
+        guard let selection else {
             return nil
         }
 

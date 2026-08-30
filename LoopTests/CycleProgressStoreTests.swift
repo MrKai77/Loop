@@ -222,6 +222,34 @@ struct CycleProgressStoreTests {
         #expect([first.index, forward.index, backward.index] == [0, 0, 0])
     }
 
+    @Test func selectingDuplicateChildPreservesSelectedOccurrence() throws {
+        let repeated = WindowAction(.leftHalf)
+        let middle = WindowAction(.maximize)
+        let cycle = WindowAction([repeated, middle, repeated])
+        var store = CycleProgressStore()
+
+        _ = try commitNext(
+            in: &store,
+            target: targetA,
+            cycle: cycle,
+            restartAtBeginning: true
+        )
+        _ = try commitNext(in: &store, target: targetA, cycle: cycle)
+        _ = try commitNext(in: &store, target: targetA, cycle: cycle)
+        let currentSelection = store.proposeCurrentSelection(
+            for: targetA,
+            in: cycle,
+            seededBy: repeated
+        )
+        let selected = try #require(currentSelection)
+        _ = store.commit(selected, for: targetA, in: cycle)
+
+        let next = try selection(from: &store, target: targetA, cycle: cycle)
+
+        #expect(selected.index == 2)
+        #expect(next.index == 0)
+    }
+
     private func selection(
         from store: inout CycleProgressStore,
         target: CGWindowID,

@@ -108,7 +108,7 @@ final class WindowActionEngine {
 
         // Focus actions: find and focus the target window
         if direction.willFocusWindow {
-            return handleFocusAction(context.action, currentWindow: context.window)
+            return await handleFocusAction(context.action, currentWindow: context.window)
         }
 
         // Cross-space throws
@@ -128,7 +128,8 @@ final class WindowActionEngine {
 
     // MARK: - Focus Actions
 
-    func resolveFocusTarget(_ action: WindowAction, currentWindow: Window?) -> Window? {
+    @concurrent
+    func resolveFocusTarget(_ action: WindowAction, currentWindow: Window?) async -> Window? {
         if action.direction == .focusNextInStack {
             WindowUtility.nextStackedWindow(from: currentWindow)
         } else if let focusDirection = action.direction.focusDirection {
@@ -138,8 +139,8 @@ final class WindowActionEngine {
         }
     }
 
-    private func handleFocusAction(_ action: WindowAction, currentWindow: Window?) -> Result {
-        let newTargetWindow = resolveFocusTarget(action, currentWindow: currentWindow)
+    private func handleFocusAction(_ action: WindowAction, currentWindow: Window?) async -> Result {
+        let newTargetWindow = await resolveFocusTarget(action, currentWindow: currentWindow)
 
         if let newTargetWindow {
             Task { @MainActor in
