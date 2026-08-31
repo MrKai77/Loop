@@ -105,7 +105,12 @@ final class LoopManager {
         canSelectNextCycleitem: { [weak self] in
             self?.hasParentCycleActionAtomic ?? false
         },
-        checkIfLoopOpen: { [weak self] in self?.isLoopActiveAtomic ?? false }
+        checkIfLoopOpen: { [weak self] in self?.isLoopActiveAtomic ?? false },
+        screenDidChange: { [weak self] mousePosition in
+            Task { @MainActor in
+                self?.indicatorService.updateRadialMenuPosition(at: mousePosition)
+            }
+        }
     )
 
     func start() {
@@ -285,6 +290,16 @@ extension LoopManager {
         disableHapticFeedback: Bool = false,
         canAdvanceCycle: Bool = true
     ) async {
+        // When the opt-in cross-display radial interaction is active, the
+        // destination display becomes the action's target as soon as the
+        // cursor enters it. This keeps the preview and final window operation
+        // aligned with the radial menu's new location.
+        if Defaults[.moveRadialMenuAcrossScreens],
+           let cursorScreen = NSScreen.screenWithMouse,
+           resizeContext.screen?.isSameScreen(cursorScreen) != true {
+            resizeContext.setScreen(to: cursorScreen)
+        }
+
         guard
             isLoopActive,
             let currentScreen = resizeContext.screen ?? resolveAndStoreTargetScreen(

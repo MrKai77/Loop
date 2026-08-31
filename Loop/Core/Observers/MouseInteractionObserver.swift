@@ -20,6 +20,7 @@ final class MouseInteractionObserver {
     private let selectNextCycleItem: () -> ()
     private let canSelectNextCycleitem: () -> Bool
     private let checkIfLoopOpen: () -> Bool
+    private let screenDidChange: (CGPoint) -> ()
 
     private var mouseMovementMonitor: PassiveEventMonitor?
     private var leftClickMonitor: ActiveEventMonitor?
@@ -29,6 +30,7 @@ final class MouseInteractionObserver {
     private var previousDistanceToMouse: CGFloat = .zero
 
     private var screenBounds: CGRect?
+    private var interactionScreen: NSScreen?
     private var shouldAccountForAbsoluteMousePosition: Bool = false
     private var initialMousePosition: CGPoint = .zero
     private var latestMousePosition: CGPoint = .zero
@@ -44,31 +46,26 @@ final class MouseInteractionObserver {
         changeAction: @escaping (WindowAction) -> (),
         selectNextCycleItem: @escaping () -> (),
         canSelectNextCycleitem: @escaping () -> Bool,
-        checkIfLoopOpen: @escaping () -> Bool
+        checkIfLoopOpen: @escaping () -> Bool,
+        screenDidChange: @escaping (CGPoint) -> ()
     ) {
         self.windowActionCache = windowActionCache
         self.changeAction = changeAction
         self.selectNextCycleItem = selectNextCycleItem
         self.canSelectNextCycleitem = canSelectNextCycleitem
         self.checkIfLoopOpen = checkIfLoopOpen
+        self.screenDidChange = screenDidChange
     }
 
     func start(initialMousePosition: CGPoint) {
         stop()
 
-        screenBounds = NSScreen.screens.first(where: { $0.frame.contains(initialMousePosition) })?.frame
-
-        if let screenBounds {
-            // If the current mouse position isn't sufficient for accessing direcitonal actions due to being close to the screen's edge, then enable `shouldAccountForAbsoluteMousePosition`
-            let closeToMinX = abs(initialMousePosition.x - screenBounds.minX) < Self.directionalActionDistance
-            let closeToMaxX = abs(initialMousePosition.x - screenBounds.maxX) < Self.directionalActionDistance
-            let closeToMinY = abs(initialMousePosition.y - screenBounds.minY) < Self.directionalActionDistance
-            let closeToMaxY = abs(initialMousePosition.y - screenBounds.maxY) < Self.directionalActionDistance
-
-            if closeToMinX || closeToMaxX || closeToMinY || closeToMaxY {
-                shouldAccountForAbsoluteMousePosition = true
-            }
-        }
+        // Resolve the screen from the position captured when Loop was opened.
+        // The cursor may move before the event monitor finishes starting, so
+        // using the current cursor screen here could skip the first transition.
+        interactionScreen = NSScreen.screens.first(where: { $0.frame.contains(initialMousePosition) })
+            ?? NSScreen.screenWithMouse
+        updateScreenTracking(for: interactionScreen, mousePosition: initialMousePosition)
 
         self.initialMousePosition = initialMousePosition
         latestMousePosition = initialMousePosition
@@ -106,6 +103,7 @@ final class MouseInteractionObserver {
         previousDistanceToMouse = .zero
 
         screenBounds = nil
+        interactionScreen = nil
         shouldAccountForAbsoluteMousePosition = false
         initialMousePosition = .zero
         latestMousePosition = .zero
@@ -118,6 +116,13 @@ final class MouseInteractionObserver {
 
         Task {
             let currentMousePosition = computeLatestMousePosition(event)
+
+            if rebaseInteractionIfNeeded(at: currentMousePosition) {
+                screenDidChange(currentMousePosition)
+                changeAction(.init(.noSelection))
+                return
+            }
+
             let angleToMouse = initialMousePosition.angle(to: currentMousePosition) + .radians(.pi / 2)
             let distanceToMouse = initialMousePosition.distance(to: currentMousePosition)
 
@@ -164,6 +169,51 @@ final class MouseInteractionObserver {
                 changeAction(.init(.noSelection))
             }
         }
+    }
+
+    /// Starts a fresh radial interaction when the cursor enters another display.
+    ///
+    /// Without rebasing, the direction would continue to be calculated from the
+    /// original display, so the destination display could only be reached by
+    /// carrying an already-selected action across the desktop.
+    private func rebaseInteractionIfNeeded(at mousePosition: CGPoint) -> Bool {
+        guard
+            Defaults[.moveRadialMenuAcrossScreens],
+            let currentScreen = NSScreen.screenWithMouse,
+            let interactionScreen,
+            !currentScreen.isSameScreen(interactionScreen)
+        else {
+            return false
+        }
+
+        self.interactionScreen = currentScreen
+        updateScreenTracking(for: currentScreen, mousePosition: mousePosition)
+
+        initialMousePosition = mousePosition
+        latestMousePosition = mousePosition
+        previousAngleToMouse = .zero
+        previousDistanceToMouse = .zero
+        return true
+    }
+
+    /// Updates edge handling for the display containing the interaction origin.
+    private func updateScreenTracking(for screen: NSScreen?, mousePosition: CGPoint) {
+        screenBounds = screen?.frame
+        shouldAccountForAbsoluteMousePosition = false
+
+        guard let screenBounds else {
+            return
+        }
+
+        // If the current mouse position is close to a screen edge, macOS can
+        // clamp the cursor. Retain Loop's existing edge compensation after a
+        // cross-display rebase as well.
+        let closeToMinX = abs(mousePosition.x - screenBounds.minX) < Self.directionalActionDistance
+        let closeToMaxX = abs(mousePosition.x - screenBounds.maxX) < Self.directionalActionDistance
+        let closeToMinY = abs(mousePosition.y - screenBounds.minY) < Self.directionalActionDistance
+        let closeToMaxY = abs(mousePosition.y - screenBounds.maxY) < Self.directionalActionDistance
+
+        shouldAccountForAbsoluteMousePosition = closeToMinX || closeToMaxX || closeToMinY || closeToMaxY
     }
 
     /// Computes a resolved mouse position, compensating for macOS cursor clamping at screen edges.

@@ -22,6 +22,7 @@ struct BehaviorConfigurationView: View {
     @Default(.useSystemWindowManagerWhenAvailable) var useSystemWindowManagerWhenAvailable
     @Default(.useScreenWithCursor) var useScreenWithCursor
     @Default(.moveCursorWithWindow) var moveCursorWithWindow
+    @Default(.moveRadialMenuAcrossScreens) var moveRadialMenuAcrossScreens
     @Default(.resizeWindowUnderCursor) var resizeWindowUnderCursor
     @Default(.focusWindowOnResize) var focusWindowOnResize
     @Default(.respectStageManager) var respectStageManager
@@ -97,6 +98,15 @@ struct BehaviorConfigurationView: View {
             // so moving the cursor would be unusable.
             if previewVisibility {
                 LuminareToggle("Move cursor with window", isOn: $moveCursorWithWindow)
+            }
+
+            LuminareToggle(isOn: $moveRadialMenuAcrossScreens) {
+                Text("Move radial menu across screens")
+                    .padding(.trailing, 4)
+                    .luminareToolTip(attachedTo: .topTrailing) {
+                        Text("When the cursor enters another display while Loop is active, move the radial menu there and restart direction selection.")
+                            .padding(6)
+                    }
             }
 
             LuminareToggle("Resize window under cursor", isOn: $resizeWindowUnderCursor)

@@ -51,6 +51,7 @@ extension Defaults.Keys {
     static let padding = Key<PaddingConfiguration>("padding", default: .zero, iCloud: true)
     static let useScreenWithCursor = Key<Bool>("useScreenWithCursor", default: true, iCloud: true)
     static let moveCursorWithWindow = Key<Bool>("moveCursorWithWindow", default: false, iCloud: true)
+    static let moveRadialMenuAcrossScreens = Key<Bool>("moveRadialMenuAcrossScreens", default: false, iCloud: true)
     static let resizeWindowUnderCursor = Key<Bool>("resizeWindowUnderCursor", default: false, iCloud: true)
     static let focusWindowOnResize = Key<Bool>("focusWindowOnResize", default: true, iCloud: true)
     static let respectStageManager = Key<Bool>("respectStageManager", default: true, iCloud: true)
