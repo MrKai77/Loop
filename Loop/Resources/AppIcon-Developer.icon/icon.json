@@ -1,9 +1,11 @@
 {
-  "color-space-for-untagged-svg-colors" : "display-p3",
+  "features" : [
+    "refractivity"
+  ],
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.34497,0.74512,0.96094,1.00000",
-      "display-p3:0.20801,0.42456,0.94580,1.00000"
+      "display-p3:0.29000,0.64300,1.00000,1.00000",
+      "srgb:0.14900,0.45100,1.00000,1.00000"
     ]
   },
   "groups" : [
@@ -25,13 +27,30 @@
       }
     },
     {
-      "blur-material" : 0.2,
+      "blend-mode-specializations" : [
+        {
+          "value" : "hard-light"
+        },
+        {
+          "appearance" : "dark",
+          "value" : "hard-light"
+        },
+        {
+          "appearance" : "tinted",
+          "value" : "plus-lighter"
+        }
+      ],
+      "blur-material" : null,
       "hidden" : false,
       "layers" : [
         {
-          "blend-mode" : "lighten",
+          "blend-mode" : "normal",
+          "fill" : {
+            "solid" : "display-p3:0.88627,0.93725,0.99216,1.00000"
+          },
+          "hidden" : false,
           "image-name" : "1 – Layer.svg",
-          "name" : "1 – Layer",
+          "name" : "iPad",
           "opacity-specializations" : [
             {
               "appearance" : "dark",
@@ -42,36 +61,131 @@
               "value" : 0.75
             }
           ]
+        },
+        {
+          "blend-mode-specializations" : [
+            {
+              "value" : "plus-lighter"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "plus-lighter"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "display-p3:0.88627,0.93725,0.99216,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "display-p3:0.88627,0.93725,0.99216,1.00000"
+              }
+            }
+          ],
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "1 – Layer.svg",
+          "name" : "iPad",
+          "opacity-specializations" : [
+            {
+              "value" : 0
+            },
+            {
+              "appearance" : "dark",
+              "value" : 0.36
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 0
+            }
+          ]
         }
       ],
+      "lighting" : "individual",
+      "opacity-specializations" : [
+        {
+          "value" : 0.68
+        },
+        {
+          "appearance" : "dark",
+          "value" : 0.8
+        },
+        {
+          "appearance" : "tinted",
+          "value" : 1
+        }
+      ],
+      "refractivity" : {
+        "depth" : 0.14,
+        "enabled" : true,
+        "strength" : 0.38
+      },
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 0.75
       },
+      "specular" : true,
       "translucency-specializations" : [
         {
           "value" : {
             "enabled" : true,
-            "value" : 0.5
+            "value" : 0.56
           }
         },
         {
           "appearance" : "dark",
           "value" : {
             "enabled" : true,
-            "value" : 0.5
+            "value" : 0.56
+          }
+        },
+        {
+          "appearance" : "tinted",
+          "value" : {
+            "enabled" : true,
+            "value" : 0.8
           }
         }
       ]
     },
     {
-      "blur-material" : null,
+      "blend-mode" : "plus-lighter",
+      "hidden" : false,
       "layers" : [
         {
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "linear-gradient" : [
+                  "display-p3:0.34100,0.65900,0.98400,1.00000",
+                  "srgb:0.29400,0.54100,0.98800,1.00000"
+                ]
+              }
+            }
+          ],
           "glass" : true,
-          "image-name" : "1 – Layer 4.svg",
-          "name" : "1 – Layer 4",
-          "opacity" : 0.75
+          "image-name" : "1.grid.svg",
+          "name" : "Grid",
+          "opacity" : 0.5
+        }
+      ],
+      "lighting" : "individual",
+      "name" : "Group",
+      "opacity-specializations" : [
+        {
+          "value" : 0.2
+        },
+        {
+          "appearance" : "dark",
+          "value" : 0.6
+        },
+        {
+          "appearance" : "tinted",
+          "value" : 0.4
         }
       ],
       "shadow" : {
@@ -81,11 +195,14 @@
       "specular" : false,
       "translucency" : {
         "enabled" : true,
-        "value" : 0.75
+        "value" : 0
       }
     }
   ],
   "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
     "squares" : "shared"
   }
 }
