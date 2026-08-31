@@ -52,6 +52,7 @@ struct SettingsContentView: View {
                         } label: {
                             Image(systemName: "sidebar.right")
                                 .font(.title3)
+                                .foregroundStyle(Color.primary) // HierarchicalShapeStyle.primary incorrectly resolves to white in light mode, so we use Color.primary
                                 .animation(animation, value: model.showInspector)
                                 .frame(width: 28, height: 28)
                         }

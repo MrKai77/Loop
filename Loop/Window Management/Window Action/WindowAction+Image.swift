@@ -84,9 +84,9 @@ extension WindowAction {
             .systemImage("backward.end.fill")
         case .hide:
             .systemImage("eye.slash")
-        case .minimize:
-            .systemImage("arrow.down.right.and.arrow.up.left")
-        case .minimizeOthers:
+        case .fullscreen:
+            .systemImage("arrow.up.left.and.arrow.down.right")
+        case .minimize, .minimizeOthers:
             .systemImage("arrow.down.right.and.arrow.up.left")
         case .maximizeHeight:
             .systemImage("arrow.up.and.down")

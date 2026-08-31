@@ -91,12 +91,42 @@ enum SkyLightToolBelt {
         return true
     }
 
+    /// Byte layout for the `CGSEventRecord` posted by `makeKeyWindow`.
+    /// Offsets are from CGSInternal's CGSEvent.h:
+    /// https://github.com/NUIKit/CGSInternal/blob/master/CGSEvent.h
+    private enum MakeKeyWindowEvent {
+        /// Allocated buffer size. The record itself remains `recordLength` bytes; the extra zeroed padding
+        /// prevents WindowServer encoding from reading beyond the allocation on macOS 14.7.4 and later.
+        /// See:
+        /// https://github.com/karinushka/paneru/issues/123
+        static let bufferSize = 0x100
+        /// The record's declared length.
+        static let lengthOffset = 0x04
+        static let recordLength: UInt8 = 0xF8
+        /// The `CGSEventType`, matching the public `CGEventType` values. A mouse-down is enough to make the
+        /// window key; omitting mouse-up prevents the event from activating a control. Thanks to AltTab for
+        /// testing this behavior:
+        /// https://github.com/lwouis/alt-tab-macos/commit/ec30bb13084e68cb3cde32ec415fdba1fd92876e
+        static let eventTypeOffset = 0x08
+        static let leftMouseDown: UInt8 = 0x01 // kCGEventLeftMouseDown
+        /// The window-relative event point. This must be finite: filling these bytes with `0xFF` produces NaN,
+        /// which can terminate Chromium PWA app-shim Mojo connections (#1132). It must also be far from the
+        /// frame, since we (and AltTab) found that `(-1, -1)` can land in the resize region on macOS 27 and expand the
+        /// window. A far bottom-right point avoids both issues and favors less interactive content if an app clamps it.
+        static let windowLocationOffset = 0x20
+        static let offContentPoint = CGPoint(x: 300_000, y: 300_000)
+        /// The target `CGWindowID`. The event is delivered by id, not by the point above.
+        static let windowIdOffset = 0x3C
+        /// Undocumented flag retained from the upstream implementations.
+        static let unknownFlagOffset = 0x3A
+        static let unknownFlagValue: UInt8 = 0x10
+    }
+
+    /// Makes a window key within its owning process by posting a synthetic left-mouse-down event.
     ///
-    /// Focuses a window. This will attempt to bring the window to the front and make it the active window.
-    /// Note that this first sets the process as frontmost, *then* sends a left click event to the window itself.
-    ///
-    /// This method uses a private API to focus the window.
-    /// The code for this method is derived from the Amethyst source code. Details of its implementation can be found [here](https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468)
+    /// Uses a private API. Derived from Hammerspoon / yabai / AltTab
+    /// (https://github.com/Hammerspoon/hammerspoon/issues/370#issuecomment-545545468,
+    /// https://github.com/lwouis/alt-tab-macos/commit/ec30bb13084e68cb3cde32ec415fdba1fd92876e).
     ///
     /// - Parameters:
     ///   - windowID: The `CGWindowID` of the window to focus.
@@ -117,27 +147,22 @@ enum SkyLightToolBelt {
             return false
         }
 
-        // `0x01` is left click down, `0x02` is left click up (see `CGEventType`)
-        for byte in [0x01, 0x02] {
-            // Create raw `SLSEvent` data.
-            // Future consideration: instead of manually creating the bytes here, investigate:
-            // - Creating a `SLSEvent` (likely analogous to `CGEvent`)
-            // - Apply an identifier to the event to help Loop differentiate events that originate from itself
-            // - Converting the `SLSEvent` to data using `SLEventCreateData` in SkyLight
-            var bytes = [UInt8](repeating: 0, count: 0xF8)
-            bytes[0x04] = 0xF8
-            bytes[0x08] = UInt8(byte)
-            bytes[0x3A] = 0x10
-            memcpy(&bytes[0x3C], &wid, MemoryLayout<UInt32>.size)
-            memset(&bytes[0x20], 0xFF, 0x10)
-            let cgStatus = bytes.withUnsafeMutableBufferPointer { pointer in
-                SLPSPostEventRecordTo(&psn, &pointer.baseAddress!.pointee)
-            }
+        var offContentPoint = MakeKeyWindowEvent.offContentPoint
 
-            guard cgStatus == .success else {
-                log.error("Failed to click frontmost process with status: \(cgStatus.rawValue)")
-                return false
-            }
+        var bytes = [UInt8](repeating: 0, count: MakeKeyWindowEvent.bufferSize)
+        bytes[MakeKeyWindowEvent.lengthOffset] = MakeKeyWindowEvent.recordLength
+        bytes[MakeKeyWindowEvent.eventTypeOffset] = MakeKeyWindowEvent.leftMouseDown
+        bytes[MakeKeyWindowEvent.unknownFlagOffset] = MakeKeyWindowEvent.unknownFlagValue
+        memcpy(&bytes[MakeKeyWindowEvent.windowIdOffset], &wid, MemoryLayout<CGWindowID>.size)
+        memcpy(&bytes[MakeKeyWindowEvent.windowLocationOffset], &offContentPoint, MemoryLayout<CGPoint>.size)
+
+        let cgStatus = bytes.withUnsafeMutableBufferPointer { pointer in
+            SLPSPostEventRecordTo(&psn, &pointer.baseAddress!.pointee)
+        }
+
+        guard cgStatus == .success else {
+            log.error("Failed to post key-window event with status: \(cgStatus.rawValue)")
+            return false
         }
 
         return true

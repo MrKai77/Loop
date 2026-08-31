@@ -33,6 +33,7 @@ final class LoopManager {
     private var pendingOpeningAction: WindowAction?
     private var shouldCancelOpening: Bool = false
     private var hideIndicatorOnNoSelection = false
+    private var actionRevision: UInt64 = 0
 
     private(set) var isLoopActive: Bool = false {
         didSet {
@@ -176,6 +177,8 @@ final class LoopManager {
     }
 
     func shutdown() {
+        actionRevision += 1
+
         accessibilityCheckerTask?.cancel()
         accessibilityCheckerTask = nil
         gestureToggleTask?.cancel()
@@ -262,6 +265,7 @@ extension LoopManager {
             throw LoopManagerError.fullscreenWindow
         }
 
+        actionRevision += 1
         isLoopOpening = true
         self.hideIndicatorOnNoSelection = hideIndicatorOnNoSelection
         pendingOpeningAction = nil
@@ -315,6 +319,10 @@ extension LoopManager {
     }
 
     private func closeLoop(forceClose: Bool) async {
+        if forceClose {
+            actionRevision += 1
+        }
+
         if isLoopOpening {
             shouldCancelOpening = true
         }
@@ -369,11 +377,13 @@ extension LoopManager {
         canAdvanceCycle: Bool = true,
         reverse: Bool = false
     ) async {
+        let originatingContext = resizeContext
+
         guard
             isLoopActive,
-            let currentScreen = resizeContext.screen ?? resolveAndStoreTargetScreen(
+            let currentScreen = originatingContext.screen ?? resolveAndStoreTargetScreen(
                 action: newAction,
-                window: resizeContext.window
+                window: originatingContext.window
             )
         else {
             return
@@ -381,33 +391,31 @@ extension LoopManager {
 
         let allowsRepeatedSelection = newAction.allowsRepeatedSelection
 
-        guard resizeContext.action.id != newAction.id || allowsRepeatedSelection else {
+        guard originatingContext.action.id != newAction.id || allowsRepeatedSelection else {
             return
         }
 
+        actionRevision += 1
+        let originatingRevision = actionRevision
+
         var newAction: WindowAction = newAction
         var newParentAction: WindowAction? = nil
+        var cycleProposal: CycleActionCoordinator.Proposal?
 
         triggerKeyTimeoutTimer.cancel()
         triggerKeyTimeoutTimer.start()
 
         if newAction.direction == .cycle {
             newParentAction = newAction
-
-            // The ability to advance a cycle is only available when the action is triggered via a keybind or a left click on the mouse.
-            // This should be set to false when the mouse is moved to prevent rapid cycling.
-            if canAdvanceCycle {
-                newAction = await getNextCycleAction(newAction, reverse: reverse)
-            } else {
-                if let cycle = newAction.cycle, !cycle.contains(resizeContext.action) {
-                    newAction = cycle.first ?? .init(.noAction)
-                } else {
-                    newAction = resizeContext.action
-                }
-
-                if newAction == resizeContext.action {
-                    return
-                }
+            cycleProposal = proposeCycleAction(
+                newAction,
+                canAdvance: canAdvanceCycle,
+                reverse: reverse
+            )
+            if let cycleProposal {
+                newAction = cycleProposal.action
+            } else if !canAdvanceCycle {
+                newAction = .init(.noAction)
             }
 
             // Prevents an endless loop of cycling screens. example: when a cycle only consists of:
@@ -417,14 +425,46 @@ extension LoopManager {
                 performHapticFeedback()
                 return
             }
+
+            // Commit before the screen or target changes, even if the child is already current
+            if let cycleProposal, let newParentAction {
+                guard let committedAction = resizeContext.commitCycleAction(
+                    cycleProposal,
+                    in: newParentAction
+                ) else {
+                    return
+                }
+
+                newAction = committedAction
+            }
+
+            if cycleProposal != nil,
+               newAction == resizeContext.action,
+               !canAdvanceCycle || (
+                   !newAction.direction.willChangeScreen &&
+                       !newAction.allowsRepeatedSelection
+               ),
+               let newParentAction {
+                if resizeContext.parentAction != newParentAction {
+                    setResizeAction(to: resizeContext.action, parent: newParentAction)
+                }
+                return
+            }
         } else {
             // By removing the parent cycle action, a left click will not advance the user's previously set cycle.
             newParentAction = nil
         }
 
         if let stashedWindow = StashManager.shared.stashedWindow(for: newAction, on: currentScreen) {
-            resizeContext.setWindow(to: stashedWindow.window)
-            await resizeContext.refreshResolvedState()
+            let preparedTarget = await ResizeContext.prepareWindowTarget(stashedWindow.window)
+
+            guard resizeContext === originatingContext,
+                  actionRevision == originatingRevision
+            else {
+                return
+            }
+
+            originatingContext.commitWindowTarget(preparedTarget)
         }
 
         if newAction.direction.willChangeScreen {
@@ -528,11 +568,11 @@ extension LoopManager {
             return
         }
 
-        if !disableHapticFeedback {
-            performHapticFeedback()
-        }
-
         if newAction != resizeContext.action || allowsRepeatedSelection {
+            if !disableHapticFeedback {
+                performHapticFeedback()
+            }
+
             let previousActionWasNoOp = resizeContext.action.direction.isNoOp
             setResizeAction(to: newAction, parent: newParentAction)
             if !Defaults[.previewVisibility], !previousActionWasNoOp {
@@ -540,19 +580,29 @@ extension LoopManager {
             }
             indicatorService.openAndUpdate(context: resizeContext, hideOnNoSelection: hideIndicatorOnNoSelection)
 
-            Task {
-                if !Defaults[.previewVisibility] {
-                    _ = try await WindowActionEngine.shared.apply(context: resizeContext)
-                }
-
+            Task { [weak self, originatingContext] in
                 // If the action is to focus a window in a specific direction, find and activate that window
                 // This can work even without a current window (navigates from screen center)
                 if newAction.direction.willFocusWindow {
-                    let result = try await WindowActionEngine.shared.apply(context: resizeContext)
+                    if let newTargetWindow = await WindowActionEngine.shared.resolveFocusTarget(
+                        newAction,
+                        currentWindow: originatingContext.window
+                    ) {
+                        let preparedTarget = await ResizeContext.prepareWindowTarget(newTargetWindow)
 
-                    if let newTargetWindow = result.newTargetWindow {
-                        resizeContext.setWindow(to: newTargetWindow)
+                        guard let self,
+                              resizeContext === originatingContext,
+                              actionRevision == originatingRevision
+                        else {
+                            return
+                        }
+
+                        originatingContext.commitWindowTarget(preparedTarget)
+                        log.info("Focusing window: \(newTargetWindow.description)")
+                        newTargetWindow.focus()
                     }
+                } else if !Defaults[.previewVisibility] {
+                    _ = try? await WindowActionEngine.shared.apply(context: originatingContext)
                 }
             }
 
@@ -560,11 +610,11 @@ extension LoopManager {
         }
     }
 
-    private func getNextCycleAction(_ action: WindowAction, reverse: Bool) async -> WindowAction {
-        guard let currentCycle = action.cycle, !currentCycle.isEmpty else {
-            return action
-        }
-
+    private func proposeCycleAction(
+        _ action: WindowAction,
+        canAdvance: Bool,
+        reverse: Bool
+    ) -> CycleActionCoordinator.Proposal? {
         // Allow cycling backwards only if:
         // - Shift is not part of the action's keybind (eligibleForReverseCycle)
         // - Shift is not part of the trigger key
@@ -573,42 +623,19 @@ extension LoopManager {
             && Defaults[.triggerKey].contains(.kVK_Shift) == false
             && Defaults[.cycleBackwardsOnShiftPressed]
 
-        let shouldCycleBackwards = reverse || (allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift))
-        let freshStart = shouldCycleBackwards ? (currentCycle.last ?? currentCycle[0]) : currentCycle[0]
-        var currentIndex: Int? = nil
-
-        if Defaults[.cycleModeRestartEnabled],
-           resizeContext.action.direction == .noSelection || !currentCycle.contains(resizeContext.action) {
-            return freshStart
-        }
-
-        // If the current action is noSelection, we can preserve the index from the last action.
-        // This would initially be done by reading the window's records, then would continue by finding the next index from the currentAction.
-        if resizeContext.action.direction == .noSelection,
-           !currentCycle.contains(resizeContext.action),
-           let window = resizeContext.window,
-           let latestRecord = await WindowRecords.shared.getCurrentAction(for: window) {
-            currentIndex = currentCycle.firstIndex(of: latestRecord)
+        let mode: CycleActionCoordinator.SelectionMode = if canAdvance {
+            reverse || (allowReverseCycle && keybindTrigger.effectiveEventFlags.contains(.maskShift))
+                ? .advance(.backward)
+                : .advance(.forward)
         } else {
-            currentIndex = currentCycle.firstIndex(of: resizeContext.action)
+            .selectCurrent
         }
 
-        guard var nextIndex = currentIndex else {
-            return freshStart
-        }
-
-        nextIndex += shouldCycleBackwards ? -1 : 1
-
-        // Wrap around the cycle index if we've reached the end or gone before the start.
-        if nextIndex >= currentCycle.count {
-            nextIndex = 0
-        }
-
-        if nextIndex < 0 {
-            nextIndex = currentCycle.count - 1
-        }
-
-        return currentCycle[nextIndex]
+        return resizeContext.proposeCycleAction(
+            in: action,
+            restartAtBeginningWhenInterrupted: Defaults[.cycleModeRestartEnabled],
+            mode: mode
+        )
     }
 
     private func performHapticFeedback() {

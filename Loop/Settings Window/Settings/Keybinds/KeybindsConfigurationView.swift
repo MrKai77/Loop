@@ -35,11 +35,6 @@ struct KeybindsConfigurationView: View {
         Defaults[.triggerDelay] != 0
     }
 
-    /// Is there at least one keybind action that is a cycle?
-    private var isCycleActionPresentInKeybinds: Bool {
-        keybinds.contains(where: { $0.cycle != nil })
-    }
-
     /// Is Shift used in the trigger key?
     private var isShiftUsedByTriggerKey: Bool {
         triggerKey.map(\.baseModifier).contains(.kVK_Shift)
@@ -47,14 +42,6 @@ struct KeybindsConfigurationView: View {
 
     private var showMiddleClickTriggerDelayOption: Bool {
         middleClickTriggersLoop && useTriggerDelay
-    }
-
-    private var showCycleRestartOption: Bool {
-        isCycleActionPresentInKeybinds
-    }
-
-    private var showCycleBackwardsOption: Bool {
-        isCycleActionPresentInKeybinds && !isShiftUsedByTriggerKey
     }
 
     var body: some View {
@@ -68,7 +55,7 @@ struct KeybindsConfigurationView: View {
             value: [
                 showMiddleClickTriggerDelayOption,
                 cycleModeRestartEnabled,
-                showCycleBackwardsOption
+                isShiftUsedByTriggerKey
             ]
         )
     }
@@ -82,51 +69,46 @@ struct KeybindsConfigurationView: View {
         .luminareBorderedStates(.none)
     }
 
+    @ViewBuilder
     private var settingsSection: some View {
-        Group {
-            LuminareSection {
-                LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
+        LuminareSection(String(localized: "Settings", comment: "Section header shown in settings")) {
+            LuminareToggle("Treat left and right keys differently", isOn: $sideDependentTriggerKey)
 
-                LuminareSlider(
-                    "Trigger delay",
-                    value: $triggerDelay,
-                    in: 0...1,
-                    step: 0.1,
-                    format: .number.precision(.fractionLength(1...1)),
-                    clampsUpper: false,
-                    suffix: Text("s", comment: "Unit symbol: seconds")
-                )
+            LuminareSlider(
+                "Trigger delay",
+                value: $triggerDelay,
+                in: 0...1,
+                step: 0.1,
+                format: .number.precision(.fractionLength(1...1)),
+                clampsUpper: false,
+                suffix: Text("s", comment: "Unit symbol: seconds")
+            )
 
-                LuminareToggle(
-                    String(localized: "Hide when no action is selected", comment: "Toggle to hide the radial menu whenever no action is selected"),
-                    isOn: $hideOnNoSelectionForKeybinds
-                )
+            LuminareToggle(
+                String(localized: "Hide when no action is selected", comment: "Toggle to hide the radial menu whenever no action is selected"),
+                isOn: $hideOnNoSelectionForKeybinds
+            )
 
-                LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
-                LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
+            LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
+            LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
 
-                if showMiddleClickTriggerDelayOption {
-                    LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
-                }
+            if showMiddleClickTriggerDelayOption {
+                LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
+            }
+        }
+
+        LuminareSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
+            LuminareToggle(isOn: $cycleModeRestartEnabled) {
+                Text("Always start cycles from first item")
+                    .padding(.trailing, 4)
+                    .luminareToolTip(attachedTo: .topTrailing) {
+                        Text("By default, Loop resumes cycles from where you last left off in each window.")
+                            .padding(6)
+                    }
             }
 
-            if showCycleRestartOption || showCycleBackwardsOption {
-                LuminareSection(String(localized: "Cycles", comment: "Section header shown in settings")) {
-                    if showCycleRestartOption {
-                        LuminareToggle(isOn: $cycleModeRestartEnabled) {
-                            Text("Always start cycles from first item")
-                                .padding(.trailing, 4)
-                                .luminareToolTip(attachedTo: .topTrailing) {
-                                    Text("By default, Loop resumes cycles from where you last left off in each window.")
-                                        .padding(6)
-                                }
-                        }
-                    }
-
-                    if showCycleBackwardsOption {
-                        LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
-                    }
-                }
+            if !isShiftUsedByTriggerKey {
+                LuminareToggle("Cycle backward with Shift", isOn: $cycleBackwardsOnShiftPressed)
             }
         }
     }

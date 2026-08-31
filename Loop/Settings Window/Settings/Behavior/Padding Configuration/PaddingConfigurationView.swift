@@ -133,89 +133,87 @@ struct PaddingConfigurationView: View {
         )
     }
 
+    @ViewBuilder
     func screenSidesPaddingConfiguration() -> some View {
-        Group {
-            LuminareSlider(
-                String(localized: "Top", comment: "Label for a slider in Loop’s padding settings"),
-                value: $paddingModel.top.doubleBinding,
-                in: range,
-                format: .number.precision(.fractionLength(0...1)),
-                clampsUpper: false,
-                suffix: Text("px", comment: "Unit symbol: pixels"),
-                onEditingChanged: handleSliderEditingChanged,
-                onEditingCommit: commitSliderChanges
-            )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
+        LuminareSlider(
+            String(localized: "Top", comment: "Label for a slider in Loop’s padding settings"),
+            value: $paddingModel.top.doubleBinding,
+            in: range,
+            format: .number.precision(.fractionLength(0...1)),
+            clampsUpper: false,
+            suffix: Text("px", comment: "Unit symbol: pixels"),
+            onEditingChanged: handleSliderEditingChanged,
+            onEditingCommit: commitSliderChanges
+        )
+        .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
-                String(localized: "Bottom", comment: "Label for a slider in Loop’s padding settings"),
-                value: $paddingModel.bottom.doubleBinding,
-                in: range,
-                format: .number.precision(.fractionLength(0...1)),
-                clampsUpper: false,
-                suffix: Text("px", comment: "Unit symbol: pixels"),
-                onEditingChanged: handleSliderEditingChanged,
-                onEditingCommit: commitSliderChanges
-            )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
+        LuminareSlider(
+            String(localized: "Bottom", comment: "Label for a slider in Loop’s padding settings"),
+            value: $paddingModel.bottom.doubleBinding,
+            in: range,
+            format: .number.precision(.fractionLength(0...1)),
+            clampsUpper: false,
+            suffix: Text("px", comment: "Unit symbol: pixels"),
+            onEditingChanged: handleSliderEditingChanged,
+            onEditingCommit: commitSliderChanges
+        )
+        .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
-                String(localized: "Right", comment: "Label for a slider in Loop’s padding settings"),
-                value: $paddingModel.right.doubleBinding,
-                in: range,
-                format: .number.precision(.fractionLength(0...1)),
-                clampsUpper: false,
-                suffix: Text("px", comment: "Unit symbol: pixels"),
-                onEditingChanged: handleSliderEditingChanged,
-                onEditingCommit: commitSliderChanges
-            )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
+        LuminareSlider(
+            String(localized: "Right", comment: "Label for a slider in Loop’s padding settings"),
+            value: $paddingModel.right.doubleBinding,
+            in: range,
+            format: .number.precision(.fractionLength(0...1)),
+            clampsUpper: false,
+            suffix: Text("px", comment: "Unit symbol: pixels"),
+            onEditingChanged: handleSliderEditingChanged,
+            onEditingCommit: commitSliderChanges
+        )
+        .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
-                String(localized: "Left", comment: "Label for a slider in Loop’s padding settings"),
-                value: $paddingModel.left.doubleBinding,
-                in: range,
-                format: .number.precision(.fractionLength(0...1)),
-                clampsUpper: false,
-                suffix: Text("px", comment: "Unit symbol: pixels"),
-                onEditingChanged: handleSliderEditingChanged,
-                onEditingCommit: commitSliderChanges
-            )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
-        }
+        LuminareSlider(
+            String(localized: "Left", comment: "Label for a slider in Loop’s padding settings"),
+            value: $paddingModel.left.doubleBinding,
+            in: range,
+            format: .number.precision(.fractionLength(0...1)),
+            clampsUpper: false,
+            suffix: Text("px", comment: "Unit symbol: pixels"),
+            onEditingChanged: handleSliderEditingChanged,
+            onEditingCommit: commitSliderChanges
+        )
+        .luminareSliderLayout(.compact(textBoxWidth: 76))
     }
 
+    @ViewBuilder
     func screenInsetsPaddingConfiguration() -> some View {
-        Group {
-            LuminareSlider(
-                String(localized: "Window gaps", comment: "Label for a slider in Loop’s padding settings"),
-                value: $paddingModel.window.doubleBinding,
-                in: range,
-                format: .number.precision(.fractionLength(0...1)),
-                clampsUpper: false,
-                suffix: Text("px", comment: "Unit symbol: pixels"),
-                onEditingChanged: handleSliderEditingChanged,
-                onEditingCommit: commitSliderChanges
-            )
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
+        LuminareSlider(
+            String(localized: "Window gaps", comment: "Label for a slider in Loop’s padding settings"),
+            value: $paddingModel.window.doubleBinding,
+            in: range,
+            format: .number.precision(.fractionLength(0...1)),
+            clampsUpper: false,
+            suffix: Text("px", comment: "Unit symbol: pixels"),
+            onEditingChanged: handleSliderEditingChanged,
+            onEditingCommit: commitSliderChanges
+        )
+        .luminareSliderLayout(.compact(textBoxWidth: 76))
 
-            LuminareSlider(
-                value: $paddingModel.externalBar.doubleBinding,
-                in: range,
-                format: .number.precision(.fractionLength(0...1)),
-                suffix: Text("px", comment: "Unit symbol: pixels"),
-                onEditingChanged: handleSliderEditingChanged,
-                onEditingCommit: commitSliderChanges
-            ) {
-                Text("External bar", comment: "Label for a slider in Loop’s padding settings")
-                    .padding(.trailing, 4)
-                    .luminareToolTip(attachedTo: .topTrailing) {
-                        Text("Use this if you are using a custom menubar.")
-                            .padding(6)
-                    }
-            }
-            .luminareSliderLayout(.compact(textBoxWidth: 76))
+        LuminareSlider(
+            value: $paddingModel.externalBar.doubleBinding,
+            in: range,
+            format: .number.precision(.fractionLength(0...1)),
+            suffix: Text("px", comment: "Unit symbol: pixels"),
+            onEditingChanged: handleSliderEditingChanged,
+            onEditingCommit: commitSliderChanges
+        ) {
+            Text("External bar", comment: "Label for a slider in Loop’s padding settings")
+                .padding(.trailing, 4)
+                .luminareToolTip(attachedTo: .topTrailing) {
+                    Text("Use this if you are using a custom menubar.")
+                        .padding(6)
+                }
         }
+        .luminareSliderLayout(.compact(textBoxWidth: 76))
     }
 
     private func handleSliderEditingChanged(_ isEditing: Bool) {

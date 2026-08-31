@@ -40,25 +40,25 @@ Loop is a macOS app that simplifies window management for you. You can effortles
 
 The Radial Menu allows you to manipulate windows using your mouse/trackpad. Hold down the trigger key and move your cursor in the desired direction to move and resize the window.
 
-<div><video controls src="https://github.com/user-attachments/assets/658f7043-79a1-4690-83b6-a714fe6245c8" muted="false"></video></div>
+<div><video controls src="https://github.com/user-attachments/assets/a1e28631-091d-4abe-8f6e-bbb3f1399e84" muted="false"></video></div>
 
 ### Preview
 
 The preview window enables you to see the resize action *before* committing to it.
 
-<div><video controls src="https://github.com/user-attachments/assets/5ecb3ae8-f295-406f-b968-31e539f4a098" muted="false"></video></div>
+<div><video controls src="https://github.com/user-attachments/assets/2afdecea-39e8-4f25-8c12-9cfc8aacbe2e" muted="false"></video></div>
 
 ### Keyboard Shortcuts
 
 Loop allows you to assign any key in tandem with the trigger key to initiate a window manipulation action.
 
-<div><video controls src="https://github.com/user-attachments/assets/d865329f-0533-4eeb-829d-9aa6159f454b" muted="false"></video></div>
+<div><video controls src="https://github.com/user-attachments/assets/61c4a414-c5c4-4308-a533-4d5698578307" muted="false"></video></div>
 
 ### Cycles
 
 Loop can become very powerful when paired with cycles. These enable you to perform multiple window manipulations in quick succession by pressing the same key combination repeatedly, or by left-clicking repeatedly!
 
-<div><video controls src="https://github.com/user-attachments/assets/1adb1325-775d-4687-9085-71c7f775d65d" muted="false"></video></div>
+<div><video controls src="https://github.com/user-attachments/assets/b4aee6d4-5110-447e-8ece-0cbeec864a08" muted="false"></video></div>
 
 ### Stash
 
@@ -72,13 +72,13 @@ Hide windows at the screen edge to declutter your workspace. Hover near the edge
 
 The radial menu is fully customizable in terms of width, shape, and color. It is also completely optional and can be disabled. Both the cursor interaction and the radial menu itself are independently toggleable.
 
-<div><video controls src="https://github.com/user-attachments/assets/b2d3f6c8-dd68-4ac2-a30a-19f36a8fd94d" muted="false"></video></div>
+<div><video controls src="https://github.com/user-attachments/assets/f95349fd-cbb3-4c83-a687-d7fea4345bc6" muted="false"></video></div>
 
 #### Preview
 
 Adjust the padding, corner radius, border color, and border width of the optional preview window.
 
-<div><video controls src="https://github.com/user-attachments/assets/fc107861-8125-42c2-b987-2fff554078d5" muted="false"></video></div>
+<div><video controls src="https://github.com/user-attachments/assets/0cf27809-1fa3-4230-88be-5c60636fd885" muted="false"></video></div>
 
 ## Usage
 

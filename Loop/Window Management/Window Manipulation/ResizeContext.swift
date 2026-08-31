@@ -15,6 +15,12 @@ import SwiftUI
 /// along with the window, screen, and bounds information needed to compute frames.
 @Loggable
 final class ResizeContext {
+    struct PreparedWindowTarget {
+        fileprivate let window: Window?
+        fileprivate let resolvedWindowProperties: Window.ResolvedProperties?
+        fileprivate let resolvedRecord: WindowRecords.ResolvedRecord?
+    }
+
     private(set) var window: Window?
 
     private(set) var screen: NSScreen?
@@ -37,6 +43,7 @@ final class ResizeContext {
 
     private(set) var cachedTargetFrame: ComputedFrame = .zero
     private var needsRecompute: Bool = false
+    private var cycleActionCoordinator = CycleActionCoordinator()
     var lastAppliedFrame: CGRect?
 
     init(
@@ -74,10 +81,30 @@ final class ResizeContext {
         needsRecompute = true
     }
 
-    func setWindow(to window: Window?) {
+    /// Resolves the state needed before switching target windows
+    @concurrent
+    static func prepareWindowTarget(_ window: Window?) async -> PreparedWindowTarget {
+        let resolvedWindowProperties = window.map(Window.ResolvedProperties.init(from:))
+        let resolvedRecord: WindowRecords.ResolvedRecord? = if let window {
+            await WindowRecords.ResolvedRecord(for: window)
+        } else {
+            nil
+        }
+
+        return PreparedWindowTarget(
+            window: window,
+            resolvedWindowProperties: resolvedWindowProperties,
+            resolvedRecord: resolvedRecord
+        )
+    }
+
+    /// Switches to a prepared target window and its resolved state
+    func commitWindowTarget(_ target: PreparedWindowTarget) {
+        let window = target.window
+
         self.window = window
-        resolvedWindowProperties = nil
-        resolvedRecord = nil
+        resolvedWindowProperties = target.resolvedWindowProperties
+        resolvedRecord = target.resolvedRecord
         lastAppliedFrame = nil
 
         needsRecompute = true
@@ -85,7 +112,44 @@ final class ResizeContext {
         log.info("Set window to \(window?.description ?? "nil")")
     }
 
-    func setAction(to newAction: WindowAction, parent newParentAction: WindowAction?) {
+    func proposeCycleAction(
+        in cycleAction: WindowAction,
+        restartAtBeginningWhenInterrupted: Bool,
+        mode: CycleActionCoordinator.SelectionMode
+    ) -> CycleActionCoordinator.Proposal? {
+        cycleActionCoordinator.proposeAction(
+            for: window?.cgWindowID ?? 0,
+            in: cycleAction,
+            currentAction: action,
+            currentParentAction: parentAction,
+            recordedAction: resolvedRecord?.currentAction,
+            restartAtBeginningWhenInterrupted: restartAtBeginningWhenInterrupted,
+            mode: mode
+        )
+    }
+
+    func commitCycleAction(
+        _ proposal: CycleActionCoordinator.Proposal,
+        in cycleAction: WindowAction
+    ) -> WindowAction? {
+        cycleActionCoordinator.commit(
+            proposal,
+            for: window?.cgWindowID ?? 0,
+            in: cycleAction
+        )
+    }
+
+    func setAction(
+        to newAction: WindowAction,
+        parent newParentAction: WindowAction?
+    ) {
+        cycleActionCoordinator.recordActionTransition(
+            from: action,
+            currentParentAction: parentAction,
+            to: newAction,
+            newParentAction: newParentAction
+        )
+
         action = newAction
         parentAction = newParentAction
         needsRecompute = true
