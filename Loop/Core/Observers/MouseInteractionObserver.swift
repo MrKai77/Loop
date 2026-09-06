@@ -77,7 +77,9 @@ final class MouseInteractionObserver {
             "mouse_movement_monitor",
             events: [
                 .mouseMoved, // switch action when mouse is moved
-                .otherMouseDragged // switch action when mouse is moved with the middle mouse button clicked
+                .leftMouseDragged, // switch action when mouse is moved with the left mouse button clicked (e.g. while dragging window)
+                .otherMouseDragged, // switch action when mouse is moved with the middle mouse button clicked
+                .rightMouseDragged // switch action when mouse is moved with the right mouse button clicked
             ],
             callback: processNewMouseLocation
         )
