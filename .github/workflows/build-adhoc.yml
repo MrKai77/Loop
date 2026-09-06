@@ -21,8 +21,7 @@ jobs:
             -derivedDataPath build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcbeautify || true
+            CODE_SIGNING_ALLOWED=NO || true
 
       - name: ✍️ Ad-Hoc Code Sign
         run: |
