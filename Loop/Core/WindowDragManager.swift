@@ -142,22 +142,20 @@ final class WindowDragManager {
     }
 
     private func leftMouseUp(_: CGEvent) {
-        guard Defaults[.windowSnapping] else {
-            return
-        }
-
         Task {
-            previewController.close()
+            if Defaults[.windowSnapping] {
+                previewController.close()
 
-            if let context = resizeContext,
-               !context.action.direction.isNoOp,
-               let window = context.window,
-               let initialFrame = initialWindowFrame,
-               hasWindowMoved(window.frame, initialFrame) {
-                do {
-                    _ = try await WindowActionEngine.shared.apply(context: context)
-                } catch {
-                    log.error("Failed to snap window: \(error.localizedDescription)")
+                if let context = resizeContext,
+                   !context.action.direction.isNoOp,
+                   let window = context.window,
+                   let initialFrame = initialWindowFrame,
+                   hasWindowMoved(window.frame, initialFrame) {
+                    do {
+                        _ = try await WindowActionEngine.shared.apply(context: context)
+                    } catch {
+                        log.error("Failed to snap window: \(error.localizedDescription)")
+                    }
                 }
             }
 
