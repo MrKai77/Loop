@@ -94,3 +94,82 @@ final class MiddleClickTrigger {
         }
     }
 }
+//
+//  RightClickWhileDraggingTrigger.swift
+//  Loop
+//
+
+import AppKit
+import Defaults
+import Scribe
+
+/// Reads right-click events using an ActiveEventMonitor, and triggers Loop open/close callbacks
+/// if the user is currently dragging a window (as determined by WindowDragManager).
+@Loggable
+final class RightClickWhileDraggingTrigger {
+    // Callbacks
+    private let openCallback: (WindowAction) -> ()
+    private let closeCallback: (Bool) -> ()
+    private let checkIfLoopOpen: () -> Bool
+
+    private var monitor: ActiveEventMonitor?
+
+    // Defaults
+    private var rightClickTriggersLoopWhileDragging: Bool { Defaults[.rightClickTriggersLoopWhileDragging] }
+
+    /// Initializes a ``RightClickWhileDraggingTrigger``.
+    /// - Parameters:
+    ///   - openCallback: what to do when the right mouse button is pressed while dragging, and Loop should be activated.
+    ///   - closeCallback: what to do when the right mouse button is released, and Loop should be closed.
+    init(
+        openCallback: @escaping (WindowAction) -> (),
+        closeCallback: @escaping (Bool) -> (),
+        checkIfLoopOpen: @escaping () -> Bool
+    ) {
+        self.openCallback = openCallback
+        self.closeCallback = closeCallback
+        self.checkIfLoopOpen = checkIfLoopOpen
+    }
+
+    func start() {
+        stop()
+
+        let monitor = ActiveEventMonitor(
+            "right_click_dragging_trigger",
+            events: [.rightMouseDown, .rightMouseUp],
+            callback: handleRightClick
+        )
+        monitor.start()
+
+        self.monitor = monitor
+    }
+
+    func stop() {
+        monitor?.stop()
+        monitor = nil
+    }
+
+    // MARK: Private
+
+    private func handleRightClick(_ event: CGEvent) -> ActiveEventMonitor.EventHandling {
+        guard rightClickTriggersLoopWhileDragging else { return .forward }
+
+        if event.type == .rightMouseDown {
+            if WindowDragManager.shared.isDraggingWindow {
+                Task { @MainActor in
+                    openCallback(.init(.noSelection))
+                }
+                return .ignore
+            }
+        } else if event.type == .rightMouseUp {
+            if checkIfLoopOpen() {
+                Task { @MainActor in
+                    closeCallback(false)
+                }
+                return .ignore
+            }
+        }
+
+        return .forward
+    }
+}

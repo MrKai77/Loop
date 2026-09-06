@@ -87,6 +87,20 @@ final class LoopManager {
         checkIfLoopOpen: { [weak self] in self?.isLoopActiveAtomic ?? false }
     )
 
+    private(set) lazy var rightClickWhileDraggingTrigger = RightClickWhileDraggingTrigger(
+        openCallback: { [weak self] action in
+            Task {
+                await self?.openLoop(startingAction: action)
+            }
+        },
+        closeCallback: { [weak self] forceClose in
+            Task {
+                await self?.closeLoop(forceClose: forceClose)
+            }
+        },
+        checkIfLoopOpen: { [weak self] in self?.isLoopActiveAtomic ?? false }
+    )
+
     private(set) lazy var mouseInteractionObserver = MouseInteractionObserver(
         windowActionCache: windowActionCache,
         changeAction: { [weak self] newAction in
@@ -119,9 +133,11 @@ final class LoopManager {
                 if status {
                     await keybindTrigger.start()
                     middleClickTrigger.start()
+                    rightClickWhileDraggingTrigger.start()
                 } else {
                     keybindTrigger.stop()
                     middleClickTrigger.stop()
+                    rightClickWhileDraggingTrigger.stop()
                 }
             }
         }
@@ -137,6 +153,7 @@ final class LoopManager {
 
         keybindTrigger.stop()
         middleClickTrigger.stop()
+        rightClickWhileDraggingTrigger.stop()
         mouseInteractionObserver.stop()
         triggerKeyTimeoutTimer.cancel()
 

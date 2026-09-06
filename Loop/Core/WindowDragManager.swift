@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import os
 import Scribe
 import SwiftUI
 
@@ -37,7 +38,14 @@ final class WindowDragManager {
     private var shouldMonitorDragActions: Bool {
         Defaults[.windowSnapping] ||
             Defaults[.restoreWindowFrameOnDrag] ||
-            !Defaults[.stashManagerStashedWindows].isEmpty
+            !Defaults[.stashManagerStashedWindows].isEmpty ||
+            Defaults[.rightClickTriggersLoopWhileDragging]
+    }
+
+    private let isDraggingWindowMirror = OSAllocatedUnfairLock<Bool>(initialState: false)
+
+    nonisolated var isDraggingWindow: Bool {
+        isDraggingWindowMirror.withLock { $0 }
     }
 
     func addObservers() {
@@ -182,6 +190,7 @@ final class WindowDragManager {
             )
             await context.refreshResolvedState()
             self.resizeContext = context
+            self.isDraggingWindowMirror.withLock { $0 = true }
 
             log.info("Determined window being dragged: \(window.description)")
         }
@@ -189,6 +198,7 @@ final class WindowDragManager {
 
     private func resetDragState() {
         resizeContext = nil
+        isDraggingWindowMirror.withLock { $0 = false }
         didFailToResolveDraggedWindow = false
         initialWindowFrame = nil
         determineDraggedWindowTask?.cancel()

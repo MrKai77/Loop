@@ -26,6 +26,7 @@ struct KeybindsConfigurationView: View {
     @Default(.cycleBackwardsOnShiftPressed) private var cycleBackwardsOnShiftPressed
     @Default(.doubleClickToTrigger) private var doubleClickToTrigger
     @Default(.middleClickTriggersLoop) private var middleClickTriggersLoop
+    @Default(.rightClickTriggersLoopWhileDragging) private var rightClickTriggersLoopWhileDragging
     @Default(.enableTriggerDelayOnMiddleClick) private var enableTriggerDelayOnMiddleClick
     @Default(.keybinds) private var keybinds
 
@@ -85,6 +86,7 @@ struct KeybindsConfigurationView: View {
 
             LuminareToggle("Double-click to trigger", isOn: $doubleClickToTrigger)
             LuminareToggle("Middle-click to trigger", isOn: $middleClickTriggersLoop)
+            LuminareToggle("Trigger by Mouse right click while moving window", isOn: $rightClickTriggersLoopWhileDragging)
 
             if showMiddleClickTriggerDelayOption {
                 LuminareToggle("Apply trigger delay on middle-click", isOn: $enableTriggerDelayOnMiddleClick)
