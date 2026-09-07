@@ -117,10 +117,11 @@ final class RightClickWhileDraggingTrigger {
     // Defaults
     private var rightClickTriggersLoopWhileDragging: Bool { Defaults[.rightClickTriggersLoopWhileDragging] }
 
-    /// Initializes a ``RightClickWhileDraggingTrigger``.
+    /// Initializes a `RightClickWhileDraggingTrigger`.
     /// - Parameters:
-    ///   - openCallback: what to do when the right mouse button is pressed while dragging, and Loop should be activated.
-    ///   - closeCallback: what to do when the right mouse button is released, and Loop should be closed.
+    ///   - openCallback: A closure that is executed when the right mouse button is pressed while dragging, indicating Loop should be activated.
+    ///   - closeCallback: A closure that is executed when the right mouse button is released, indicating Loop should be closed.
+    ///   - checkIfLoopOpen: A closure that returns a Boolean value indicating whether Loop is currently open.
     init(
         openCallback: @escaping (WindowAction) -> (),
         closeCallback: @escaping (Bool) -> (),
@@ -131,6 +132,9 @@ final class RightClickWhileDraggingTrigger {
         self.checkIfLoopOpen = checkIfLoopOpen
     }
 
+    /// Starts the active event monitor to begin listening for right-click events.
+    ///
+    /// This method will stop any existing monitor before starting a new one.
     func start() {
         stop()
 
@@ -144,6 +148,7 @@ final class RightClickWhileDraggingTrigger {
         self.monitor = monitor
     }
 
+    /// Stops the active event monitor and stops listening for right-click events.
     func stop() {
         monitor?.stop()
         monitor = nil
@@ -151,6 +156,9 @@ final class RightClickWhileDraggingTrigger {
 
     // MARK: Private
 
+    /// Processes captured right-click events and triggers Loop actions if a window is being dragged.
+    /// - Parameter event: The captured `CGEvent` to process.
+    /// - Returns: An `ActiveEventMonitor.EventHandling` value indicating whether the event should be forwarded to the system or ignored (swallowed).
     private func handleRightClick(_ event: CGEvent) -> ActiveEventMonitor.EventHandling {
         guard rightClickTriggersLoopWhileDragging else { return .forward }
 

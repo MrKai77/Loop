@@ -87,6 +87,7 @@ final class LoopManager {
         checkIfLoopOpen: { [weak self] in self?.isLoopActiveAtomic ?? false }
     )
 
+    /// The trigger responsible for reading right-click events when dragging a window.
     private(set) lazy var rightClickWhileDraggingTrigger = RightClickWhileDraggingTrigger(
         openCallback: { [weak self] action in
             Task {

@@ -42,8 +42,11 @@ final class WindowDragManager {
             Defaults[.rightClickTriggersLoopWhileDragging]
     }
 
+    /// A thread-safe mirror of the current dragging state, used to provide synchronous access across threads.
     private let isDraggingWindowMirror = OSAllocatedUnfairLock<Bool>(initialState: false)
 
+    /// A Boolean value indicating whether the user is currently dragging a window by its title bar.
+    /// This property is thread-safe and can be accessed synchronously from any context.
     nonisolated var isDraggingWindow: Bool {
         isDraggingWindowMirror.withLock { $0 }
     }
