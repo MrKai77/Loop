@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import os
 import Scribe
 import SwiftUI
 
@@ -37,7 +38,17 @@ final class WindowDragManager {
     private var shouldMonitorDragActions: Bool {
         Defaults[.windowSnapping] ||
             Defaults[.restoreWindowFrameOnDrag] ||
-            !Defaults[.stashManagerStashedWindows].isEmpty
+            !Defaults[.stashManagerStashedWindows].isEmpty ||
+            Defaults[.rightClickTriggersLoopWhileDragging]
+    }
+
+    /// A thread-safe mirror of the current dragging state, used to provide synchronous access across threads.
+    private let isDraggingWindowMirror = OSAllocatedUnfairLock<Bool>(initialState: false)
+
+    /// A Boolean value indicating whether the user is currently dragging a window by its title bar.
+    /// This property is thread-safe and can be accessed synchronously from any context.
+    nonisolated var isDraggingWindow: Bool {
+        isDraggingWindowMirror.withLock { $0 }
     }
 
     func addObservers() {
@@ -134,22 +145,20 @@ final class WindowDragManager {
     }
 
     private func leftMouseUp(_: CGEvent) {
-        guard Defaults[.windowSnapping] else {
-            return
-        }
-
         Task {
-            previewController.close()
+            if Defaults[.windowSnapping] {
+                previewController.close()
 
-            if let context = resizeContext,
-               !context.action.direction.isNoOp,
-               let window = context.window,
-               let initialFrame = initialWindowFrame,
-               hasWindowMoved(window.frame, initialFrame) {
-                do {
-                    _ = try await WindowActionEngine.shared.apply(context: context)
-                } catch {
-                    log.error("Failed to snap window: \(error.localizedDescription)")
+                if let context = resizeContext,
+                   !context.action.direction.isNoOp,
+                   let window = context.window,
+                   let initialFrame = initialWindowFrame,
+                   hasWindowMoved(window.frame, initialFrame) {
+                    do {
+                        _ = try await WindowActionEngine.shared.apply(context: context)
+                    } catch {
+                        log.error("Failed to snap window: \(error.localizedDescription)")
+                    }
                 }
             }
 
@@ -182,6 +191,7 @@ final class WindowDragManager {
             )
             await context.refreshResolvedState()
             self.resizeContext = context
+            self.isDraggingWindowMirror.withLock { $0 = true }
 
             log.info("Determined window being dragged: \(window.description)")
         }
@@ -189,6 +199,7 @@ final class WindowDragManager {
 
     private func resetDragState() {
         resizeContext = nil
+        isDraggingWindowMirror.withLock { $0 = false }
         didFailToResolveDraggedWindow = false
         initialWindowFrame = nil
         determineDraggedWindowTask?.cancel()

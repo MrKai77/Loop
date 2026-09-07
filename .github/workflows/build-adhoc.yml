@@ -1,0 +1,41 @@
+name: Build Ad-Hoc Loop
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Ad-Hoc
+    runs-on: macos-latest
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Build Loop
+        run: |
+          set -o pipefail && xcodebuild \
+            build \
+            -project Loop.xcodeproj/ \
+            -scheme "Loop" \
+            -destination 'generic/platform=macOS' \
+            -configuration Release \
+            -derivedDataPath build \
+            -skipMacroValidation \
+            -skipPackagePluginValidation \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO || true
+
+      - name: ✍️ Ad-Hoc Code Sign
+        run: |
+          codesign --force --deep --sign - build/Build/Products/Release/Loop.app
+
+      - name: 🤏 Compress Loop
+        run: |
+          mkdir -p dist
+          ditto -c -k --sequesterRsrc --keepParent "build/Build/Products/Release/Loop.app" "dist/Loop.zip"
+
+      - name: ⬆️ Upload Loop
+        uses: actions/upload-artifact@v4
+        with:
+          name: Loop-Custom-Build
+          path: dist/Loop.zip
