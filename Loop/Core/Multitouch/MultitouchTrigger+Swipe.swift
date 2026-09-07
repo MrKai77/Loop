@@ -223,8 +223,7 @@ extension MultitouchTrigger {
 
     private func normalizedAngle(fromSubsurfaceAngle angle: CGFloat) -> CGFloat {
         // Subsurface emits y-up angles (counterclockwise from +x); Loop uses 0 = up, growing clockwise.
-        let angleFromOrigin = .pi / 2 - angle
-        var normalizedAngle = angleFromOrigin
+        var normalizedAngle = (.pi / 2 - angle).truncatingRemainder(dividingBy: 2 * .pi)
         if normalizedAngle < 0 { normalizedAngle += 2 * .pi }
         return normalizedAngle
     }

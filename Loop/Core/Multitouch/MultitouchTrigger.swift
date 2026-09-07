@@ -219,8 +219,8 @@ final class MultitouchTrigger {
             } catch {
                 if recognizerRegistry.contains(session: session, for: fingerCount) {
                     session.reject()
+                    gestureBlocker.stop()
                 }
-                gestureBlocker.stop()
                 return false
             }
         }
