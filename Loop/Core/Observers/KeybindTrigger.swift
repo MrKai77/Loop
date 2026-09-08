@@ -37,11 +37,8 @@ final class KeybindTrigger {
     private var useTriggerDelay: Bool { Defaults[.triggerDelay] > 0.1 }
     private var doubleClickToTrigger: Bool { Defaults[.doubleClickToTrigger] }
     private var sideDependentTriggerKey: Bool { Defaults[.sideDependentTriggerKey] }
-    private var triggerKey: Set<CGKeyCode> {
-        sideDependentTriggerKey ? Defaults[.triggerKey] : Defaults[.triggerKey].baseModifiers
-    }
-
     private lazy var triggerDelayTimer = TriggerDelayTimer(openCallback: openCallback)
+
     private lazy var doubleClickTimer = DoubleClickTimer { [weak self] action in
         guard let self else { return }
 
@@ -76,7 +73,7 @@ final class KeybindTrigger {
             return
         }
 
-        eventMonitor?.stop()
+        stop()
 
         let eventMonitor = ActiveEventMonitor(
             "keybind_trigger",
@@ -84,55 +81,66 @@ final class KeybindTrigger {
         ) { [weak self] event -> ActiveEventMonitor.EventHandling in
             guard let self else { return .forward }
 
-            let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
-                .baseKey(flags: .init(rawValue: UInt(event.flags.rawValue)))
-
-            var filteredFlags = event.flags
-            if keyCode.isFnSpecialKey, !effectiveEventFlags.contains(.maskSecondaryFn) {
-                filteredFlags.remove(.maskSecondaryFn)
-            }
-
-            let isLoopOpen = checkIfLoopOpen()
-            effectiveEventFlags = filteredFlags
-
-            if event.type == .keyUp {
-                pressedKeys.remove(keyCode)
-            } else if event.type == .keyDown {
-                pressedKeys.insert(keyCode)
-            }
-
-            // Special events such as the emoji key
-            if specialEventKeys.contains(keyCode) {
-                let canPassthrough = canPassthroughNextSpecialEvent
-                canPassthroughNextSpecialEvent = true // reset
-                return canPassthrough ? .forward : .ignore
-            }
-
-            // If this is a valid event, don't passthrough
-            let result = performKeybind(
-                type: event.type,
-                isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
-                flags: filteredFlags,
-                isLoopOpen: isLoopOpen
-            )
-
-            if result == .consume {
-                log.debug("Blocked event")
-                return .ignore
-            }
-
-            // If this shouldn't consume the event, and Loop isn't in the process of opening (possibly due to trigger delays),
-            // check if it was a system keybind (ex. screenshot), and in that case, passthrough and force-close Loop
-            refreshSystemKeybindCacheIfNeeded()
-            if result != .opening, event.type == .keyDown, systemKeybindCache.contains(pressedKeys) {
-                closeLoop(forceClose: true)
-            }
-
-            return .forward
+            return handle(event)
         }
 
         eventMonitor.start()
         self.eventMonitor = eventMonitor
+    }
+
+    private func handle(_ event: CGEvent) -> ActiveEventMonitor.EventHandling {
+        let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
+            .baseKey(flags: .init(rawValue: UInt(event.flags.rawValue)))
+
+        var filteredFlags = event.flags
+        if keyCode.isFnSpecialKey, !effectiveEventFlags.contains(.maskSecondaryFn) {
+            filteredFlags.remove(.maskSecondaryFn)
+        }
+
+        let isLoopOpen = checkIfLoopOpen()
+        effectiveEventFlags = filteredFlags
+
+        if event.type == .keyUp {
+            pressedKeys.remove(keyCode)
+        } else if event.type == .keyDown {
+            pressedKeys.insert(keyCode)
+        }
+
+        // Special events such as the emoji key
+        if specialEventKeys.contains(keyCode) {
+            let canPassthrough = canPassthroughNextSpecialEvent
+            canPassthroughNextSpecialEvent = true // reset
+            return canPassthrough ? .forward : .ignore
+        }
+
+        let eventType: KeybindResolver.EventType? = switch event.type {
+        case .keyDown: .keyDown
+        case .keyUp: .keyUp
+        case .flagsChanged: .flagsChanged
+        default: nil
+        }
+        guard let eventType else { return .forward }
+
+        let result = performKeybind(
+            type: eventType,
+            isARepeat: event.getIntegerValueField(.keyboardEventAutorepeat) == 1,
+            flags: filteredFlags,
+            isLoopOpen: isLoopOpen
+        )
+
+        if result == .consume {
+            log.debug("Blocked event")
+            return .ignore
+        }
+
+        // If this shouldn't consume the event, and Loop isn't in the process of opening (possibly due to trigger delays),
+        // check if it was a system keybind (ex. screenshot), and in that case, passthrough and force-close Loop
+        refreshSystemKeybindCacheIfNeeded()
+        if result != .opening, event.type == .keyDown, systemKeybindCache.contains(pressedKeys) {
+            closeLoop(forceClose: true)
+        }
+
+        return .forward
     }
 
     func stop() {
@@ -141,13 +149,8 @@ final class KeybindTrigger {
 
         // Reset states
         pressedKeys = []
+        effectiveEventFlags = []
         canPassthroughNextSpecialEvent = true
-    }
-
-    enum PerformKeybindResult {
-        case consume
-        case forward
-        case opening
     }
 
     /// Determines if an event corresponds to a valid Loop action.
@@ -157,71 +160,49 @@ final class KeybindTrigger {
     ///   - flags: modifier flags associated with this event.
     ///   - isLoopOpen: whether Loop is currently open.
     /// - Returns: whether this event was processed by Loop.
-    private func performKeybind(type: CGEventType, isARepeat: Bool, flags: CGEventFlags, isLoopOpen: Bool) -> PerformKeybindResult {
-        let flagKeys = sideDependentTriggerKey ? flags.keyCodes : flags.keyCodes.baseModifiers
-        let allPressedKeys: Set<CGKeyCode> = pressedKeys.union(flagKeys)
-
-        let containsTrigger = allPressedKeys.isSuperset(of: triggerKey)
-        let actionKeys: Set<CGKeyCode> = Set(allPressedKeys.subtracting(triggerKey).map(\.baseModifier))
-        let allPressedKeysBaseModifiers: Set<CGKeyCode> = Set(allPressedKeys.map(\.baseModifier))
-
-        if isLoopOpen {
-            if pressedKeys.contains(.kVK_Escape) {
-                closeLoop(forceClose: true)
-                return .consume
+    private func performKeybind(
+        type: KeybindResolver.EventType,
+        isARepeat: Bool,
+        flags: CGEventFlags,
+        isLoopOpen: Bool
+    ) -> KeybindResolver.ResolvedHandling {
+        let decision = KeybindResolver.resolve(
+            .init(
+                eventType: type,
+                isRepeat: isARepeat,
+                pressedKeys: pressedKeys,
+                modifierKeys: flags.keyCodes,
+                trigger: .init(
+                    keys: Defaults[.triggerKey],
+                    isSideDependent: sideDependentTriggerKey
+                ),
+                isLoopOpen: isLoopOpen,
+                actionsByKeybind: windowActionCache.actionsByKeybind,
+                bypassedActionsByKeybind: windowActionCache.bypassedActionsByKeybind
+            )
+        )
+        switch decision.effect {
+        case .none:
+            break
+        case let .open(action, overrideExistingTriggerDelayAction):
+            openLoop(
+                startingAction: action,
+                overrideExistingTriggerDelayTimerAction: overrideExistingTriggerDelayAction
+            )
+        case let .close(force, notifyDoubleClickKeyUp):
+            if notifyDoubleClickKeyUp {
+                doubleClickTimer.handleKeyUp()
             }
-
-            if type == .keyUp {
-                return .forward
-            }
-
-            if type != .keyDown, !containsTrigger {
-                closeLoop(forceClose: false)
-                return .forward
-            }
+            closeLoop(forceClose: force)
         }
 
-        if type != .keyUp { // keyDown for flagsChanged
-            if containsTrigger {
-                // Try an match directly with the action keys first, then fallback to just the key code.
-                // This prevents failures when the user is tapping the keys in rapid succession.
-                if let action = windowActionCache.actionsByKeybind[actionKeys] {
-                    if !isARepeat || action.canRepeat {
-                        openLoop(startingAction: action, overrideExistingTriggerDelayTimerAction: true)
-                    }
-
-                    // Only consume the event if the last command actually opened Loop.
-                    // The main reason Loop *wouldn't* open after an `openLoop` call would be because the user has enabled a trigger delay.
-                    return checkIfLoopOpen() ? .consume : .opening
-                }
-
-                // Only trigger Loop without an action if the only pressed keys perfectly matches the trigger key.
-                if allPressedKeys == triggerKey {
-                    openLoop(
-                        startingAction: .init(.noSelection),
-                        overrideExistingTriggerDelayTimerAction: !isARepeat
-                    )
-                    return .opening
-                }
-            } else if let bypassedAction = windowActionCache.bypassedActionsByKeybind[allPressedKeysBaseModifiers] {
-                if !isARepeat || bypassedAction.canRepeat {
-                    openLoop(startingAction: bypassedAction, overrideExistingTriggerDelayTimerAction: true)
-                }
-
-                return checkIfLoopOpen() ? .consume : .opening
-            } else {
-                if allPressedKeys.isEmpty {
-                    doubleClickTimer.handleKeyUp()
-                }
-                closeLoop(forceClose: false)
-            }
-        }
-
-        // If this wasn't a valid keybind, return false, which will then forward the key event to the frontmost app
-        return .forward
+        return decision.handling.resolve(isLoopOpenAfterEffect: checkIfLoopOpen())
     }
 
-    private func openLoop(startingAction: WindowAction, overrideExistingTriggerDelayTimerAction: Bool) {
+    private func openLoop(
+        startingAction: WindowAction,
+        overrideExistingTriggerDelayTimerAction: Bool
+    ) {
         if checkIfLoopOpen() {
             openCallback(startingAction) // Only update Loop to the latest WindowAction
         } else {

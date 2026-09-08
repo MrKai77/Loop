@@ -76,7 +76,7 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
 
     /// Initializes a cycle `WindowAction`. Used for user-defined cycles.
     /// - Parameters:
-    ///   - name: the name of the cycle. If `nil`, a default name will be used (eg. "Custom Cycle").
+    ///   - name: the name of the cycle. If `nil`, a default name will be used (eg. "Cycle").
     ///   - cycle: the cycle of window actions. This is an array of `WindowAction` that will be cycled through when the action is triggered.
     ///   - keybind: the keybinds associated with this action.
     init(_ name: String? = nil, cycle: [WindowAction], keybind: Set<CGKeyCode> = []) {
@@ -159,31 +159,16 @@ struct WindowAction: Codable, Identifiable, Hashable, Equatable, Defaults.Serial
     /// Retrieves the name of the action, either from the `name` property or from the `direction` enum.
     /// - Returns: the name of the action.
     func getName() -> String {
-        var result = ""
-
-        if direction == .custom {
-            result = if let name, !name.isEmpty {
-                name
-            } else {
-                .init(localized: .init("Custom Action", defaultValue: "Custom Action"))
-            }
-        } else if direction == .stash {
-            result = if let name, !name.isEmpty {
-                name
-            } else {
-                .init(localized: .init("Stash", defaultValue: "Stash"))
-            }
-        } else if direction == .cycle {
-            result = if let name, !name.isEmpty {
-                name
-            } else {
-                .init(localized: .init("Custom Cycle", defaultValue: "Custom Cycle"))
-            }
+        if let name, !name.isEmpty, hasCustomizableName {
+            name
         } else {
-            result = direction.name
+            direction.name
         }
+    }
 
-        return result
+    /// Determines if an action is eligible for custom names set by the user.
+    var hasCustomizableName: Bool {
+        direction == .custom || direction == .stash || direction == .cycle
     }
 
     /// Determines if the action will manipulate the existing window frame, rather than setting an entirely new frame from scratch.

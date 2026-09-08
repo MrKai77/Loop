@@ -222,30 +222,19 @@ final class Window {
     /// Focus the window.
     @MainActor
     func focus() {
-        // First activate the application to ensure proper window management context
-        if let runningApplication = nsRunningApplication {
-            runningApplication.activate(options: .activateIgnoringOtherApps)
+        let fronted = SkyLightToolBelt.makeFrontProcess(
+            windowID: cgWindowID,
+            pid: pid
+        )
+
+        if !fronted {
+            nsRunningApplication?.activate(options: .activateIgnoringOtherApps)
         }
 
-        try? axWindow.performAction(.raise)
-
-        // See:  https://github.com/yresk/alt-tab-macos/blob/5b8a9110dbdb9b4802a8a85ee1469427fbc192e8/alt-tab-macos/api-wrappers/AXUIElement.swift#L60
-        if let pid = try? axWindow.getPID() {
-            _ = SkyLightToolBelt.makeKeyWindow(
-                windowID: cgWindowID,
-                pid: pid
-            )
-
-            _ = SkyLightToolBelt.makeFrontProcess(
-                windowID: cgWindowID,
-                pid: pid
-            )
-
-            _ = SkyLightToolBelt.makeKeyWindow(
-                windowID: cgWindowID,
-                pid: pid
-            )
-        }
+        _ = SkyLightToolBelt.makeKeyWindow(
+            windowID: cgWindowID,
+            pid: pid
+        )
 
         try? axWindow.performAction(.raise)
     }

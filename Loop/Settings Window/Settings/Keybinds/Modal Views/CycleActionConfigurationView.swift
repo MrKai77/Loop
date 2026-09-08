@@ -26,9 +26,12 @@ struct CycleActionConfigurationView: View {
     var body: some View {
         LuminareForm {
             LuminareSection(outerPadding: 0) {
-                LuminareTextField("Cycle Keybind", text: Binding(get: { action.name ?? "" }, set: { action.name = $0 }))
-                    .luminareFilledStates(.none)
-                    .luminareBorderedStates(.none)
+                LuminareTextField(
+                    WindowDirection.cycle.name,
+                    text: Binding(get: { action.name ?? "" }, set: { action.name = $0 })
+                )
+                .luminareFilledStates(.none)
+                .luminareBorderedStates(.none)
             }
 
             LuminareSection(outerPadding: 0) {
