@@ -68,18 +68,18 @@ final class Window {
 
     private init(
         element: AXUIElement,
-        pid: pid_t?,
-        nsRunningApplication: NSRunningApplication?,
+        pid _pid: pid_t?,
+        nsRunningApplication _nsRunningApplication: NSRunningApplication?,
         knownWindowLevel: CGWindowLevel?
     ) throws {
         self.axWindow = element
         self.cgWindowID = try element.getWindowID()
 
-        if let nsRunningApplication {
-            self.pid = nsRunningApplication.processIdentifier
-            self.nsRunningApplication = nsRunningApplication
-        } else if let pid {
-            self.pid = pid
+        if let _nsRunningApplication {
+            self.pid = _nsRunningApplication.processIdentifier
+            self.nsRunningApplication = _nsRunningApplication
+        } else if let _pid {
+            self.pid = _pid
             self.nsRunningApplication = NSRunningApplication(processIdentifier: pid)
         } else {
             let pid = try axWindow.getPID()
