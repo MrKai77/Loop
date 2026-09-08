@@ -185,6 +185,24 @@ final class SystemGestureManager {
     struct PreferenceLedger {
         var backups: [String: SystemGesturePreferenceValue]
         var managedValues: [String: SystemGesturePreferenceValue]
+
+        var hasDisabledSystemGestures: Bool {
+            managedValues.contains { key, managedValue in
+                guard let identifier = SystemGesturePreferenceIdentifier(compositeKey: key),
+                      identifier.isTrackpadDomain || identifier.isDockDomain,
+                      let backup = backups[key]
+                else { return false }
+
+                switch (identifier.normalized(backup), identifier.normalized(managedValue)) {
+                case (.bool(true), .bool(false)):
+                    return true
+                case let (.int(previous), .int(current)):
+                    return previous > 0 && current == 0
+                default:
+                    return false
+                }
+            }
+        }
     }
 
     static func restore() {
