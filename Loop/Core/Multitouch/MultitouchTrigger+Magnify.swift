@@ -81,7 +81,12 @@ extension MultitouchTrigger {
                 targetResolver.rememberRepeatableWindow(window, allowsRapidRepeat: true)
             }
 
-        case .ended, .cancelled:
+        case let .ended(reason):
+            resetLoopState(
+                for: fingerCount,
+                forceClose: reason == .fingerCountChanged(.increased)
+            )
+        case .cancelled:
             resetLoopState(for: fingerCount)
 
         default:
@@ -117,7 +122,12 @@ extension MultitouchTrigger {
                 triggerRadialMenuAction(at: centerActionIndex, from: actions[...], reverse: reverse)
             }
 
-        case .ended, .cancelled:
+        case let .ended(reason):
+            resetLoopState(
+                for: fingerCount,
+                forceClose: reason == .fingerCountChanged(.increased)
+            )
+        case .cancelled:
             resetLoopState(for: fingerCount)
 
         default:

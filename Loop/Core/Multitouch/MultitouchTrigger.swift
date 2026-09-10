@@ -195,7 +195,7 @@ final class MultitouchTrigger {
             }
             _ = await activateGestureIfNeeded(fingerCount: fingerCount)
 
-        case .ended, .cancelled:
+        case .ended(_), .cancelled:
             resetLoopState(for: fingerCount)
 
         default:

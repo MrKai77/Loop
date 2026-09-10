@@ -68,7 +68,12 @@ extension MultitouchTrigger {
                 triggerRadialMenuAction(at: newIndex, from: actions, reverse: reverse)
             }
 
-        case .ended, .cancelled:
+        case let .ended(reason):
+            resetLoopState(
+                for: fingerCount,
+                forceClose: reason == .fingerCountChanged(.increased)
+            )
+        case .cancelled:
             resetLoopState(for: fingerCount)
 
         default:
@@ -128,7 +133,12 @@ extension MultitouchTrigger {
                 triggerSingleAction(from: activeGesture, reverse: reverse)
             }
 
-        case .ended, .cancelled:
+        case let .ended(reason):
+            resetLoopState(
+                for: fingerCount,
+                forceClose: reason == .fingerCountChanged(.increased)
+            )
+        case .cancelled:
             resetLoopState(for: fingerCount)
 
         default:
