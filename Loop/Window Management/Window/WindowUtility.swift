@@ -54,10 +54,17 @@ enum WindowUtility {
     /// - Parameter position: The position to check for
     /// - Returns: The window at the given position, if any
     static func windowAtPosition(_ position: CGPoint) -> Window? {
-        // Try SkyLight first, as it is faster and doesn't deadlock on own process
-        if let windowID = SkyLightToolBelt.windowIDAtPosition(position),
-           let window = try? Window.fromWindowID(windowID) {
-            return window
+        do {
+            // Try SkyLight first, as it is faster and doesn't deadlock on own process
+            if let windowID = SkyLightToolBelt.windowIDAtPosition(position) {
+                return try Window.fromWindowID(windowID)
+            }
+        } catch {
+            if let windowError = error as? WindowError,
+               case .blockedBundleID = windowError {
+                // no sense in looking deeper if we find a valid-but-blocked window
+                return nil
+            }
         }
 
         do {
@@ -67,6 +74,12 @@ enum WindowUtility {
                 return try Window(element: windowElement)
             }
         } catch {
+            if let windowError = error as? WindowError,
+               case .blockedBundleID = windowError {
+                // no sense in looking deeper if we find a valid-but-blocked window
+                return nil
+            }
+
             log.warn("Failed to determine element at position: \(error.localizedDescription)")
         }
 

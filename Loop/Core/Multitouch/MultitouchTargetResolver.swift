@@ -69,8 +69,6 @@ final class MultitouchTargetResolver {
                 minimumTitlebarHeight
             }
 
-            log.debug("Detected titlebar height of \(titlebarHeight)")
-
             let titlebarMinY = window.frame.minY
             let titlebarMaxY = window.frame.minY + titlebarHeight
             let isInTitlebar = cursorPosition.y >= titlebarMinY && cursorPosition.y <= titlebarMaxY
