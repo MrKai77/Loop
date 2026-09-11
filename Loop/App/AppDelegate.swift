@@ -27,6 +27,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_: Notification) {
         configureLogging()
+        DefaultsiCloudSyncRegistrar.register()
 
         // Register before broadcasting so other instances can receive the signal
         registerTerminateObserver()
