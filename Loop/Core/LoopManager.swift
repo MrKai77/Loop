@@ -129,10 +129,20 @@ final class LoopManager {
                 await self?.changeAction(newAction, canAdvanceCycle: false)
             }
         },
-        selectNextCycleItem: { [weak self] in
+        advanceSelectedAction: { [weak self] selectedAction in
             Task {
-                if let parent = self?.resizeContext.parentAction {
-                    await self?.changeAction(parent, disableHapticFeedback: true)
+                if let selectedAction {
+                    await self?.changeAction(
+                        selectedAction,
+                        disableHapticFeedback: true,
+                        canAdvanceCycle: false
+                    )
+                } else if let parent = self?.resizeContext.parentAction {
+                    await self?.changeAction(
+                        parent,
+                        disableHapticFeedback: true,
+                        canAdvanceCycle: true
+                    )
                 }
             }
         },
